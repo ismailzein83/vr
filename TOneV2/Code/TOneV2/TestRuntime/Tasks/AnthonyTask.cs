@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.BusinessProcess;
 using Vanrise.Caching.Runtime;
+using Vanrise.Common.Business;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 
@@ -45,6 +46,12 @@ namespace TestRuntime.Tasks
 
             CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(cachingDistributorRuntimeService);
+
+            DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingExecutorRuntimeService);
+
+            DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingDistributorRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();

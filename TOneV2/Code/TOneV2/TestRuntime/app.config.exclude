@@ -81,6 +81,16 @@
           <runtimeService name="Big Data Runtime Service" type="Vanrise.Common.Business.BigDataRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
+      <runtimeServiceGroup name="group8" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Data Grouping Distributor Runtime Service" type="Vanrise.Common.Business.DataGroupingDistributorRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <runtimeServiceGroup name="group9" nbOfRuntimeInstances="3">
+        <runtimeServices>
+          <runtimeService name="Data Grouping Executor Runtime Service" type="Vanrise.Common.Business.DataGroupingExecutorRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
     </runtimeServiceGroups>
   </vanriseRuntime>
 
@@ -136,6 +146,7 @@
     <add key="TOneWhS_CDR_DBConnStringKey" value="TOneCDRDBConnString"/>
     <add key="TOneWhS_Routing_DBConnStringKey" value="RoutingDBConnStringTemplateKey"/>
     <add key="IntegrationConnStringKey" value="TransactionDBConnString"/>
+    <add key="DataGroupingDBConnStringKey" value="TransactionDBConnString"/>
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="StatisticManagement_LockRetryInterval" value="00:00:05"/>
     <add key="TOneWhS_SPL_DBConnStringKey" value="ConfigurationDBConnString"/>

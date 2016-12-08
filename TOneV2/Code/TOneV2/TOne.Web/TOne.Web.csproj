@@ -138,6 +138,12 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.BP.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
     </Reference>
