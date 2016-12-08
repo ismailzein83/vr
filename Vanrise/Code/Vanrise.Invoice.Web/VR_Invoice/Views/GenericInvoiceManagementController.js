@@ -59,13 +59,14 @@
         function getFilterObject() {
             var partnerObject;
             if (partnerSelectorAPI !=undefined)
-             partnerObject = partnerSelectorAPI.getData();
+                partnerObject = partnerSelectorAPI.getData();
             var filter = {
                 mainGridColumns: $scope.invoiceTypeEntity.MainGridRuntimeColumns,
                 subSections: $scope.invoiceTypeEntity.InvoiceType.Settings.SubSections,
                 invoiceGridActions: $scope.invoiceTypeEntity.InvoiceType.Settings.InvoiceGridSettings.InvoiceGridActions,
                 invoiceActions:$scope.invoiceTypeEntity.InvoiceType.Settings.InvoiceActions,
-                InvoiceTypeId:invoiceTypeId,
+                InvoiceTypeId: invoiceTypeId,
+                invoiceItemGroupings: $scope.invoiceTypeEntity.InvoiceType.Settings.ItemGroupings,
                 query: {
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,

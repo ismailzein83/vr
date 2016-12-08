@@ -17,5 +17,7 @@ namespace Vanrise.Invoice.Entities
         public string Name { get; set; }
 
         public dynamic Details { get; set; }
+      
     }
+   
 }

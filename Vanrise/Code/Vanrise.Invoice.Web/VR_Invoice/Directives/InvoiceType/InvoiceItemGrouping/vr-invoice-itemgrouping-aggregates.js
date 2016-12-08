@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceGroupingitemAggregates", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceGroupingItemService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceGroupingItemService) {
+app.directive("vrInvoiceItemgroupingAggregates", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceItemGroupingService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceItemGroupingService) {
 
         var directiveDefinitionObject = {
 
@@ -13,7 +13,7 @@ app.directive("vrInvoiceGroupingitemAggregates", ["UtilsService", "VRNotificatio
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new AggregateGroupingItem($scope, ctrl, $attrs);
+                var ctor = new AggregateItemGrouping($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoiceGroupingitemAggregates", ["UtilsService", "VRNotificatio
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGroupingItem/Templates/AggregateGroupingItemTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceItemGrouping/Templates/AggregateItemGroupingTemplate.html"
 
         };
 
-        function AggregateGroupingItem($scope, ctrl, $attrs) {
+        function AggregateItemGrouping($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -39,15 +39,15 @@ app.directive("vrInvoiceGroupingitemAggregates", ["UtilsService", "VRNotificatio
                     return "You Should add at least one part.";
                 };
 
-                ctrl.addAggregateGroupingItem = function () {
-                    var onAggregateGroupingItemAdded = function (aggregateGroupingItem) {
-                        ctrl.datasource.push({ Entity: aggregateGroupingItem });
+                ctrl.addAggregateItemGrouping = function () {
+                    var onAggregateItemGroupingAdded = function (aggregateItemGrouping) {
+                        ctrl.datasource.push({ Entity: aggregateItemGrouping });
                     };
 
-                    VR_Invoice_InvoiceGroupingItemService.addGroupingItemAggregate(onAggregateGroupingItemAdded, getContext());
+                    VR_Invoice_InvoiceItemGroupingService.addItemGroupingAggregate(onAggregateItemGroupingAdded, getContext());
                 };
 
-                ctrl.removeAggregateGroupingItem = function (dataItem) {
+                ctrl.removeAggregateItemGrouping = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -59,24 +59,24 @@ app.directive("vrInvoiceGroupingitemAggregates", ["UtilsService", "VRNotificatio
                 var api = {};
 
                 api.getData = function () {
-                    var aggregateGroupingItems;
+                    var aggregateItemGroupings;
                     if (ctrl.datasource != undefined) {
-                        aggregateGroupingItems = [];
+                        aggregateItemGroupings = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            aggregateGroupingItems.push(currentItem.Entity);
+                            aggregateItemGroupings.push(currentItem.Entity);
                         }
                     }
-                    return aggregateGroupingItems;
+                    return aggregateItemGroupings;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.aggregateGroupingItems != undefined) {
-                            for (var i = 0; i < payload.aggregateGroupingItems.length; i++) {
-                                var aggregateGroupingItem = payload.aggregateGroupingItems[i];
-                                ctrl.datasource.push({ Entity: aggregateGroupingItem });
+                        if (payload.aggregateItemGroupings != undefined) {
+                            for (var i = 0; i < payload.aggregateItemGroupings.length; i++) {
+                                var aggregateItemGrouping = payload.aggregateItemGroupings[i];
+                                ctrl.datasource.push({ Entity: aggregateItemGrouping });
                             }
                         }
                     }
@@ -90,7 +90,7 @@ app.directive("vrInvoiceGroupingitemAggregates", ["UtilsService", "VRNotificatio
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editAggregateGroupingItem,
+                    clicked: editAggregateItemGrouping,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -98,13 +98,13 @@ app.directive("vrInvoiceGroupingitemAggregates", ["UtilsService", "VRNotificatio
                 };
             }
 
-            function editAggregateGroupingItem(aggregateGroupingItemObj) {
-                var onAggregateGroupingItemUpdated = function (aggregateGroupingItem) {
-                    var index = ctrl.datasource.indexOf(aggregateGroupingItemObj);
-                    ctrl.datasource[index] = { Entity: aggregateGroupingItem };
+            function editAggregateItemGrouping(aggregateItemGroupingObj) {
+                var onAggregateItemGroupingUpdated = function (aggregateItemGrouping) {
+                    var index = ctrl.datasource.indexOf(aggregateItemGroupingObj);
+                    ctrl.datasource[index] = { Entity: aggregateItemGrouping };
                 };
 
-                VR_Invoice_InvoiceGroupingItemService.editGroupingItemAggregate(onAggregateGroupingItemUpdated, aggregateGroupingItemObj.Entity, getContext());
+                VR_Invoice_InvoiceItemGroupingService.editItemGroupingAggregate(onAggregateItemGroupingUpdated, aggregateItemGroupingObj.Entity, getContext());
             }
             function getContext() {
                 return context;

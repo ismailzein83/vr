@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 
@@ -42,7 +43,13 @@ namespace Vanrise.Invoice.Business
             IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
             return dataManager.GetInvoiceItemsByItemSetNames(invoiceId, itemSetNames);
         }
-      
+
+
+        public IDataRetrievalResult<GroupingInvoiceItemDetail> GetFilteredGroupingInvoiceItems(DataRetrievalInput<GroupingInvoiceItemQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new GroupingInvoiceItemRequestHandler());
+        }
+
         #endregion
 
         #region Private Classes
@@ -56,7 +63,6 @@ namespace Vanrise.Invoice.Business
             {
                 return entity;
             }
-
             public override IEnumerable<Entities.InvoiceItemDetail> RetrieveAllData(DataRetrievalInput<InvoiceItemQuery> input)
             {
 
@@ -93,7 +99,6 @@ namespace Vanrise.Invoice.Business
 
                 return detailedResults;
             }
-
             public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(InvoiceType invoiceType, Guid uniqueSectionID)
             {
                 List<InvoiceSubSectionGridColumn> gridColumns = null;
@@ -140,6 +145,25 @@ namespace Vanrise.Invoice.Business
                 return gridColumns;
             }
         }
+
+        private class GroupingInvoiceItemRequestHandler : BigDataRequestHandler<GroupingInvoiceItemQuery, Entities.GroupingInvoiceItemDetail, Entities.GroupingInvoiceItemDetail>
+        {
+            public GroupingInvoiceItemRequestHandler()
+            {
+            }
+            public override GroupingInvoiceItemDetail EntityDetailMapper(Entities.GroupingInvoiceItemDetail entity)
+            {
+                return entity;
+            }
+            public override IEnumerable<Entities.GroupingInvoiceItemDetail> RetrieveAllData(DataRetrievalInput<GroupingInvoiceItemQuery> input)
+            {
+                return new InvoiceItemGroupingManager().GetFilteredGroupingInvoiceItems(input.Query);
+            }
+        }
+
+
+
+
         #endregion
 
     }

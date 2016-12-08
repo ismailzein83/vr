@@ -19,14 +19,14 @@ namespace Vanrise.Invoice.Entities
         public InvoiceSerialNumberSettings InvoiceSerialNumberSettings { get; set; }
         public List<InvoiceSubSection> SubSections { get; set; }
 
-        public List<GroupingItem> GroupingItems { get; set; }
+        public List<ItemGrouping> ItemGroupings { get; set; }
         public InvoiceTypeSecurity Security { get; set; }
 
     }
 
-    public class GroupingItem
+    public class ItemGrouping
     {
-        public Guid GroupingItemId { get; set; }
+        public Guid ItemGroupingId { get; set; }
         public string ItemSetName { get; set; }
         public List<DimensionItemField> DimensionItemFields { get; set; }
         public List<AggregateItemField> AggregateItemFields { get; set; }

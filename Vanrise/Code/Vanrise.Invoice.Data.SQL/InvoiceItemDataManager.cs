@@ -19,11 +19,12 @@ namespace Vanrise.Invoice.Data.SQL
         {
 
         }
+
+        #endregion
         public IEnumerable<InvoiceItem> GetFilteredInvoiceItems(Vanrise.Entities.DataRetrievalInput<InvoiceItemQuery> input)
         {
             return GetItemsSP("VR_Invoice.sp_InvoiceItem_GetFiltered", InvoiceMapper, input.Query.InvoiceId, input.Query.ItemSetName);
         }
-        #endregion
         public void SaveInvoiceItems(long invoiceId, List<GeneratedInvoiceItemSet> invoiceItemSets)
         {
 

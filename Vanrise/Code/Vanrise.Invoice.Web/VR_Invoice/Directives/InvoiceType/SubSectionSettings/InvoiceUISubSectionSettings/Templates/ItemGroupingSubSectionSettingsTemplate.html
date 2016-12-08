@@ -1,24 +1,9 @@
-﻿<vr-row>
-    <vr-columns width="1/2row">
-        <vr-select datasource="scopeModel.groupingItems"
-                   datatextfield="Name"
-                   datavaluefield="GroupingItemId"
-                   selectedvalues="scopeModel.selectedGroupingItem"
-                   entityname="Grouping Item"
-                   isrequired="true"
-                   label="Grouping Item"
-                   onselectitem="scopeModel.onGroupingItemSelectionChanged"
-                   hideremoveicon>
-        </vr-select>
-    </vr-columns>
-</vr-row>
-
-<vr-tabs>
+﻿
     <vr-tab header="'Grid Dimensions'">
 
         <vr-row>
             <vr-columns width="1/2row">
-                <vr-select datasource="scopeModel.dimensionsGroupingItems"
+                <vr-select datasource="scopeModel.dimensionsItemGroupings"
                            datatextfield="FieldDescription"
                            datavaluefield="DimensionItemFieldId"
                            selectedvalues="scopeModel.selectedDimensions"
@@ -48,10 +33,10 @@
 
     </vr-tab>
     <vr-tab header="'Grid Measures'">
-       
+
         <vr-row>
             <vr-columns width="1/2row">
-                <vr-select datasource="scopeModel.measuresGroupingItems"
+                <vr-select datasource="scopeModel.measuresItemGroupings"
                            datatextfield="FieldDescription"
                            datavaluefield="MeasureItemFieldId"
                            selectedvalues="scopeModel.selectedMeasures"
@@ -63,7 +48,7 @@
                            hideselectedvaluessection
                            ismultipleselection>
                 </vr-select>
-                </vr-columns>
+            </vr-columns>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
@@ -80,5 +65,8 @@
         </vr-row>
 
     </vr-tab>
-</vr-tabs>
+    <vr-tab header="'Sub Sections'">
+        <vr-invoicetype-invoicesubsectionsettings-itemgrouping-subsections on-ready="scopeModel.onItemGroupingSubSectionsReady"></vr-invoicetype-invoicesubsectionsettings-itemgrouping-subsections>
+    </vr-tab>
+
 

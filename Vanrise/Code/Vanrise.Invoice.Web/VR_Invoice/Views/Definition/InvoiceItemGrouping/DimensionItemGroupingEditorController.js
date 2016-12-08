@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DimensionGroupingItemEditorControlle.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    DimensionItemGroupingEditorControlle.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function DimensionGroupingItemEditorControlle($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function DimensionItemGroupingEditorControlle($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var dimensions = [];
         var dimensionEntity;
@@ -47,15 +47,15 @@
 
             function addDimension() {
                 var dimensionObj = builDimensionObjFromScope();
-                if ($scope.onDimensionGroupingItemAdded != undefined) {
-                    $scope.onDimensionGroupingItemAdded(dimensionObj);
+                if ($scope.onDimensionItemGroupingAdded != undefined) {
+                    $scope.onDimensionItemGroupingAdded(dimensionObj);
                 }
                 $scope.modalContext.closeModal();
             }
             function updateDimension() {
                 var dimensionObj = builDimensionObjFromScope();
-                if ($scope.onDimensionGroupingItemUpdated != undefined) {
-                    $scope.onDimensionGroupingItemUpdated(dimensionObj);
+                if ($scope.onDimensionItemGroupingUpdated != undefined) {
+                    $scope.onDimensionItemGroupingUpdated(dimensionObj);
                 }
                 $scope.modalContext.closeModal();
             }
@@ -101,6 +101,6 @@
         }
 
     }
-    appControllers.controller('VR_Invoice_DimensionGroupingItemEditorController', DimensionGroupingItemEditorControlle);
+    appControllers.controller('VR_Invoice_DimensionItemGroupingEditorController', DimensionItemGroupingEditorControlle);
 
 })(appControllers);

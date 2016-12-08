@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoicesubsectionsettingsGroupingitem", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsGroupingitem", ["UtilsServi
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new GroupingItemSubSection($scope, ctrl, $attrs);
+                var ctor = new ItemGroupingSubSection($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,26 +21,28 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsGroupingitem", ["UtilsServi
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/MainExtensions/Templates/GroupingItemSubSectionTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/Templates/ItemGroupingSubSectionSettingsTemplate.html"
 
         };
 
-        function GroupingItemSubSection($scope, ctrl, $attrs) {
+        function ItemGroupingSubSection($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var context;
 
+
+            var itemGroupingSubSectionsAPI;
+            var itemGroupingSubSectionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var context;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.groupingItems = [];
-                $scope.scopeModel.dimensionsGroupingItems = [];
-                $scope.scopeModel.measuresGroupingItems = [];
+
+                $scope.scopeModel.dimensionsItemGroupings = [];
+                $scope.scopeModel.measuresItemGroupings = [];
                 $scope.scopeModel.measures = [];
                 $scope.scopeModel.dimensions = [];
                 $scope.scopeModel.selectedDimensions = [];
                 $scope.scopeModel.selectedMeasures = [];
 
-                $scope.scopeModel.onSelectDimensionItem = function(dimension)
-                {
+                $scope.scopeModel.onSelectDimensionItem = function (dimension) {
                     var dataItem = {
                         DimensionItemFieldId: dimension.DimensionItemFieldId,
                         FieldDescription: dimension.FieldDescription,
@@ -78,19 +80,12 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsGroupingitem", ["UtilsServi
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
                 }
 
-                $scope.scopeModel.onGroupingItemSelectionChanged = function(selectedGroupItem)
-                {
-                    if (context != undefined && selectedGroupItem != undefined)
-                    {
-                        $scope.scopeModel.dimensions.length = 0;
-                        $scope.scopeModel.measures.length = 0;
-                        $scope.scopeModel.selectedDimensions.length = 0;
-                        $scope.scopeModel.selectedMeasures.length = 0;
-                        $scope.scopeModel.dimensionsGroupingItems = context.getGroupingDimensions(selectedGroupItem.GroupingItemId);
-                        $scope.scopeModel.measuresGroupingItems = context.getGroupingMeasures(selectedGroupItem.GroupingItemId);
-                    }
-                }
+                
+                $scope.scopeModel.onItemGroupingSubSectionsReady = function (api) {
+                    itemGroupingSubSectionsAPI = api;
+                    itemGroupingSubSectionsReadyPromiseDeferred.resolve();
 
+                };
                 defineAPI();
             }
 
@@ -98,66 +93,63 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsGroupingitem", ["UtilsServi
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
+              
                     if (payload != undefined) {
                         context = payload.context;
-                        var invoiceSubSectionSettingsEntity = payload.invoiceSubSectionSettingsEntity;
-                        if (context != undefined)
-                        {
-                            $scope.scopeModel.groupingItems = context.getGroupingItemsInfo();
+                        var subSectionSettingsEntity = payload.subSectionSettingsEntity;
+                        var groupItemId = context.getItemGroupingId();
+                        if (groupItemId != undefined) {
+                            $scope.scopeModel.dimensionsItemGroupings = context.getGroupingDimensions(groupItemId);
+                            $scope.scopeModel.measuresItemGroupings = context.getGroupingMeasures(groupItemId);
                         }
-                        if(invoiceSubSectionSettingsEntity != undefined)
-                        {
-                            $scope.scopeModel.selectedGroupingItem = UtilsService.getItemByVal($scope.scopeModel.groupingItems, invoiceSubSectionSettingsEntity.GroupingItemId, "GroupingItemId");
-                            if ($scope.scopeModel.selectedGroupingItem != undefined)
-                            {
-                                $scope.scopeModel.dimensionsGroupingItems = context.getGroupingDimensions($scope.scopeModel.selectedGroupingItem.GroupingItemId);
-                                $scope.scopeModel.measuresGroupingItems = context.getGroupingMeasures($scope.scopeModel.selectedGroupingItem.GroupingItemId);
-                            }
-                           
-                            for(var i =0;i<invoiceSubSectionSettingsEntity.GridDimesions.length;i++)
-                            {
-                                var gridDimension = invoiceSubSectionSettingsEntity.GridDimesions[i];
+                        if (subSectionSettingsEntity != undefined) {
+                            for (var i = 0; i < subSectionSettingsEntity.GridDimesions.length; i++) {
+                                var gridDimension = subSectionSettingsEntity.GridDimesions[i];
                                 addSelectedDimension(gridDimension);
                             }
-                            for (var j = 0; j < invoiceSubSectionSettingsEntity.GridMeasures.length; j++) {
-                                var gridMeasure = invoiceSubSectionSettingsEntity.GridMeasures[j];
+                            for (var j = 0; j < subSectionSettingsEntity.GridMeasures.length; j++) {
+                                var gridMeasure = subSectionSettingsEntity.GridMeasures[j];
                                 addSelectedMeasure(gridMeasure);
                             }
-                            function addSelectedDimension(gridDimension)
-                            {
-                                console.log($scope.scopeModel.dimensionsGroupingItems);
-                                console.log(gridDimension);
-                                var groupItemDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsGroupingItems, gridDimension.DimensionId, "DimensionItemFieldId");
-                                if (groupItemDimension != undefined)
-                                {
+                            function addSelectedDimension(gridDimension) {
+
+                                var groupItemDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, gridDimension.DimensionId, "DimensionItemFieldId");
+                                if (groupItemDimension != undefined) {
                                     $scope.scopeModel.selectedDimensions.push(groupItemDimension);
                                     $scope.scopeModel.dimensions.push({
                                         DimensionItemFieldId: gridDimension.DimensionId,
                                         FieldDescription: gridDimension.Header,
                                         FieldName: groupItemDimension.FieldName,
                                     });
-                                    
+
                                 }
-                             
+
                             }
                             function addSelectedMeasure(gridMeasure) {
-                                var groupItemMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresGroupingItems, gridMeasure.MeasureId, "MeasureItemFieldId");
-                                if (groupItemMeasure != undefined)
-                                {
+                                var groupItemMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, gridMeasure.MeasureId, "MeasureItemFieldId");
+                                if (groupItemMeasure != undefined) {
                                     $scope.scopeModel.selectedMeasures.push(groupItemMeasure);
                                     $scope.scopeModel.measures.push({
                                         MeasureItemFieldId: gridMeasure.MeasureId,
                                         FieldDescription: gridMeasure.Header,
                                         FieldName: groupItemMeasure.FieldName,
                                     });
-                                    
+
                                 }
                             }
                         }
 
                     }
                     var promises = [];
+
+                    var itemGroupingSubSectionsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    itemGroupingSubSectionsReadyPromiseDeferred.promise.then(function () {
+                        var itemGroupingDirectivePayload = { context: getContext() };
+                        if (subSectionSettingsEntity != undefined)
+                            itemGroupingDirectivePayload.subSections = subSectionSettingsEntity.SubSections;
+                        VRUIUtilsService.callDirectiveLoad(itemGroupingSubSectionsAPI, itemGroupingDirectivePayload, itemGroupingSubSectionsDeferredLoadPromiseDeferred);
+                    });
+                    promises.push(itemGroupingSubSectionsDeferredLoadPromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -185,17 +177,26 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsGroupingitem", ["UtilsServi
                                 Header: measure.FieldDescription,
                             });
                         }
-                    } 
+                    }
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.GroupingItemSection ,Vanrise.Invoice.MainExtensions",
-                        GroupingItemId: $scope.scopeModel.selectedGroupingItem.GroupingItemId,
                         GridDimesions:dimensions,
-                        GridMeasures: measures
+                        GridMeasures: measures,
+                        SubSections: itemGroupingSubSectionsAPI.getData()
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function getContext()
+            {
+                var currentContext = context;
+                if(currentContext ==undefined)
+                {
+                    currentContext ={};
+                }
+               
+                return currentContext;
             }
         }
 

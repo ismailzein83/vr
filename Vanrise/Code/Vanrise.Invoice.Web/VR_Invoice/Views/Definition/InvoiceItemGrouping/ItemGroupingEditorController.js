@@ -2,12 +2,12 @@
 
     'use strict';
 
-    GroupingItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    ItemGroupingEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function GroupingItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function ItemGroupingEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var context;
-        var groupingItemEntity;
+        var itemGroupingEntity;
 
         var isEditMode;
 
@@ -24,9 +24,9 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
                 context = parameters.context;
-                groupingItemEntity = parameters.groupingItemEntity;
+                itemGroupingEntity = parameters.itemGroupingEntity;
             }
-            isEditMode = (groupingItemEntity != undefined);
+            isEditMode = (itemGroupingEntity != undefined);
         }
 
         function defineScope() {
@@ -41,33 +41,33 @@
             };
 
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateGroupingItem() : addGroupingItem();
+                return (isEditMode) ? updateItemGrouping() : addItemGrouping();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
 
-            function builGroupingItemObjFromScope() {
+            function builItemGroupingObjFromScope() {
                 return {
-                    GroupingItemId: groupingItemEntity != undefined ? groupingItemEntity.GroupingItemId : UtilsService.guid(),
-                    ItemSetName: $scope.scopeModel.groupingItemName,
+                    ItemGroupingId: itemGroupingEntity != undefined ? itemGroupingEntity.ItemGroupingId : UtilsService.guid(),
+                    ItemSetName: $scope.scopeModel.itemGroupingName,
                     DimensionItemFields: dimensionsAPI.getData(),
                     AggregateItemFields: aggregatesAPI.getData()
                 };
             }
 
-            function addGroupingItem() {
-                var groupingItemObj = builGroupingItemObjFromScope();
-                if ($scope.onGroupingItemAdded != undefined) {
-                    $scope.onGroupingItemAdded(groupingItemObj);
+            function addItemGrouping() {
+                var itemGroupingObj = builItemGroupingObjFromScope();
+                if ($scope.onItemGroupingAdded != undefined) {
+                    $scope.onItemGroupingAdded(itemGroupingObj);
                 }
                 $scope.modalContext.closeModal();
             }
 
-            function updateGroupingItem() {
-                var groupingItemObj = builGroupingItemObjFromScope();
-                if ($scope.onGroupingItemUpdated != undefined) {
-                    $scope.onGroupingItemUpdated(groupingItemObj);
+            function updateItemGrouping() {
+                var itemGroupingObj = builItemGroupingObjFromScope();
+                if ($scope.onItemGroupingUpdated != undefined) {
+                    $scope.onItemGroupingUpdated(itemGroupingObj);
                 }
                 $scope.modalContext.closeModal();
             }
@@ -78,20 +78,20 @@
             loadAllControls();
             function loadAllControls() {
                 function setTitle() {
-                    if (isEditMode && groupingItemEntity != undefined)
-                        $scope.title = UtilsService.buildTitleForUpdateEditor(groupingItemEntity.ItemSetName, 'Grouping Item');
+                    if (isEditMode && itemGroupingEntity != undefined)
+                        $scope.title = UtilsService.buildTitleForUpdateEditor(itemGroupingEntity.ItemSetName, 'Grouping Item');
                     else
                         $scope.title = UtilsService.buildTitleForAddEditor('Grouping Item');
                 }
                 function loadStaticData() {
-                    if (groupingItemEntity != undefined) {
-                        $scope.scopeModel.groupingItemName = groupingItemEntity.ItemSetName;
+                    if (itemGroupingEntity != undefined) {
+                        $scope.scopeModel.itemGroupingName = itemGroupingEntity.ItemSetName;
                     }
                 }
                 function loadDimensionsDirective() {
                     var dimensionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     dimensionsReadyPromiseDeferred.promise.then(function () {
-                        var dimensionPayload = groupingItemEntity != undefined ? { dimensionGroupingItems: groupingItemEntity.DimensionItemFields } : undefined;
+                        var dimensionPayload = itemGroupingEntity != undefined ? { dimensionItemGroupings: itemGroupingEntity.DimensionItemFields } : undefined;
                         VRUIUtilsService.callDirectiveLoad(dimensionsAPI, dimensionPayload, dimensionsLoadPromiseDeferred);
                     });
                     return dimensionsLoadPromiseDeferred.promise;
@@ -99,7 +99,7 @@
                 function loadAggregatesDirective() {
                     var aggregatesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     aggregatesReadyPromiseDeferred.promise.then(function () {
-                        var aggregatesPayload = groupingItemEntity != undefined ? { aggregateGroupingItems: groupingItemEntity.AggregateItemFields } : undefined;
+                        var aggregatesPayload = itemGroupingEntity != undefined ? { aggregateItemGroupings: itemGroupingEntity.AggregateItemFields } : undefined;
                         VRUIUtilsService.callDirectiveLoad(aggregatesAPI, aggregatesPayload, aggregatesLoadPromiseDeferred);
                     });
                     return aggregatesLoadPromiseDeferred.promise;
@@ -116,6 +116,6 @@
         }
 
     }
-    appControllers.controller('VR_Invoice_GroupingItemEditorController', GroupingItemEditorController);
+    appControllers.controller('VR_Invoice_ItemGroupingEditorController', ItemGroupingEditorController);
 
 })(appControllers);

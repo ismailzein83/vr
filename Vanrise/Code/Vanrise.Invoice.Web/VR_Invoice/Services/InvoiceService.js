@@ -3,7 +3,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
     function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, VR_Invoice_InvoiceActionService) {
 
 
-        function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions) {
+        function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings) {
             if (subSections == null)
                 return;
             if (dataItem.menuActions != undefined)
@@ -37,6 +37,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                             invoiceTypeId: invoiceTypeId,
                             settings: subSection.Settings,
                             invoiceId: invoice.Entity.InvoiceId,
+                            invoiceItemGroupings: invoiceItemGroupings
                         };
                         return invoice.invoiceItemGridAPI.load(invoiceItemGridPayload);
                     };

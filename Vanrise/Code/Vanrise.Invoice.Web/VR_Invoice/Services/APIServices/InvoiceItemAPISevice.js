@@ -10,9 +10,12 @@
         function GetFilteredInvoiceItems(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetFilteredInvoiceItems"), input);
         }
-
+        function GetFilteredGroupingInvoiceItems(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetFilteredGroupingInvoiceItems"), input);
+        }
         return ({
-            GetFilteredInvoiceItems: GetFilteredInvoiceItems
+            GetFilteredInvoiceItems: GetFilteredInvoiceItems,
+            GetFilteredGroupingInvoiceItems: GetFilteredGroupingInvoiceItems
         });
     }
 

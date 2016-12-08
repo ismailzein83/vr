@@ -1,84 +1,86 @@
 ﻿"use strict";
-app.service('VR_Invoice_InvoiceGroupingItemService', ['VRModalService',
+app.service('VR_Invoice_InvoiceItemGroupingService', ['VRModalService',
     function (VRModalService) {
 
-        function addGroupingItem(onGroupingItemAdded) {
+        function addItemGrouping(onItemGroupingAdded) {
             var settings = {
 
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onGroupingItemAdded = onGroupingItemAdded;
+                modalScope.onItemGroupingAdded = onItemGroupingAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGroupingItem/GroupingItemEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemGrouping/ItemGroupingEditor.html', null, settings);
         }
-        function editGroupingItem(onGroupingItemUpdated, groupingItemEntity) {
+        function editItemGrouping(onItemGroupingUpdated, itemGroupingEntity) {
             var settings = {
 
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onGroupingItemUpdated = onGroupingItemUpdated;
+                modalScope.onItemGroupingUpdated = onItemGroupingUpdated;
             };
             var parameters = {
-                groupingItemEntity: groupingItemEntity
+                itemGroupingEntity: itemGroupingEntity
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGroupingItem/GroupingItemEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemGrouping/ItemGroupingEditor.html', parameters, settings);
         }
 
-        function addGroupingItemDimension(onDimensionGroupingItemAdded) {
+        function addItemGroupingDimension(onDimensionItemGroupingAdded) {
             var settings = {
 
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onDimensionGroupingItemAdded = onDimensionGroupingItemAdded;
+                modalScope.onDimensionItemGroupingAdded = onDimensionItemGroupingAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGroupingItem/DimensionGroupingItemEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemGrouping/DimensionItemGroupingEditor.html', null, settings);
         }
-        function editGroupingItemDimension(onDimensionGroupingItemUpdated, dimensionEntity) {
+        function editItemGroupingDimension(onDimensionItemGroupingUpdated, dimensionEntity) {
             var settings = {
 
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onDimensionGroupingItemUpdated = onDimensionGroupingItemUpdated;
+                modalScope.onDimensionItemGroupingUpdated = onDimensionItemGroupingUpdated;
             };
             var parameters = {
                 dimensionEntity: dimensionEntity
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGroupingItem/DimensionGroupingItemEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemGrouping/DimensionItemGroupingEditor.html', parameters, settings);
         }
 
-        function addGroupingItemAggregate(onAggregateGroupingItemAdded) {
+        function addItemGroupingAggregate(onAggregateItemGroupingAdded) {
             var settings = {
 
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAggregateGroupingItemAdded = onAggregateGroupingItemAdded;
+                modalScope.onAggregateItemGroupingAdded = onAggregateItemGroupingAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGroupingItem/AggregateGroupingItemEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemGrouping/AggregateItemGroupingEditor.html', null, settings);
         }
-        function editGroupingItemAggregate(onAggregateGroupingIteUpdated, aggregateEntity) {
+        function editItemGroupingAggregate(onAggregateItemGroupingUpdated, aggregateEntity) {
             var settings = {
 
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAggregateGroupingIteUpdated = onAggregateGroupingIteUpdated;
+                modalScope.onAggregateItemGroupingUpdated = onAggregateItemGroupingUpdated;
             };
             var parameters = {
                 aggregateEntity: aggregateEntity
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGroupingItem/AggregateGroupingItemEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceItemGrouping/AggregateItemGroupingEditor.html', parameters, settings);
         }
+
+
         return ({
-            addGroupingItem: addGroupingItem,
-            editGroupingItem: editGroupingItem,
-            addGroupingItemDimension: addGroupingItemDimension,
-            editGroupingItemDimension: editGroupingItemDimension,
-            addGroupingItemAggregate: addGroupingItemAggregate,
-            editGroupingItemAggregate: editGroupingItemAggregate
+            addItemGrouping: addItemGrouping,
+            editItemGrouping: editItemGrouping,
+            addItemGroupingDimension: addItemGroupingDimension,
+            editItemGroupingDimension: editItemGroupingDimension,
+            addItemGroupingAggregate: addItemGroupingAggregate,
+            editItemGroupingAggregate: editItemGroupingAggregate
         });
     }]);

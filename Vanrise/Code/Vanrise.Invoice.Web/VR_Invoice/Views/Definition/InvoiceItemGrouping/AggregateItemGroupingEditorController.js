@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AggregateGroupingItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    AggregateItemGroupingEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function AggregateGroupingItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function AggregateItemGroupingEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var aggregates = [];
         var aggregateEntity;
@@ -13,6 +13,8 @@
         var fieldTypeAPI;
         var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var aggregateTypeAPI;
+        var aggregateTypeReadyDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -30,6 +32,11 @@
                 fieldTypeAPI = api;
                 fieldTypeReadyDeferred.resolve();
             };
+            $scope.scopeModel.onAggregateTypeSelectorReady = function (api) {
+                aggregateTypeAPI = api;
+                aggregateTypeReadyDeferred.resolve();
+            };
+            
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateAggregate() : addAggregate();
             };
@@ -41,21 +48,22 @@
                     AggregateItemFieldId: aggregateEntity != undefined ? aggregateEntity.AggregateItemFieldId : UtilsService.guid(),
                     FieldDescription: $scope.scopeModel.fieldDescription,
                     FieldName: $scope.scopeModel.fieldName,
-                    FieldType: fieldTypeAPI.getData()
+                    FieldType: fieldTypeAPI.getData(),
+                    AggregateType: aggregateTypeAPI.getSelectedIds()
                 };
             }
 
             function addAggregate() {
                 var aggregateObj = builAggregateObjFromScope();
-                if ($scope.onAggregateGroupingItemAdded != undefined) {
-                    $scope.onAggregateGroupingItemAdded(aggregateObj);
+                if ($scope.onAggregateItemGroupingAdded != undefined) {
+                    $scope.onAggregateItemGroupingAdded(aggregateObj);
                 }
                 $scope.modalContext.closeModal();
             }
             function updateAggregate() {
                 var aggregateObj = builAggregateObjFromScope();
-                if ($scope.onAggregateGroupingItemUpdated != undefined) {
-                    $scope.onAggregateGroupingItemUpdated(aggregateObj);
+                if ($scope.onAggregateItemGroupingUpdated != undefined) {
+                    $scope.onAggregateItemGroupingUpdated(aggregateObj);
                 }
                 $scope.modalContext.closeModal();
             }
@@ -89,7 +97,15 @@
                     });
                     return fieldTypeLoadDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldTypeDirective]).then(function () {
+                function loadAggregateTypeDirective() {
+                    var aggregateTypeLoadDeferred = UtilsService.createPromiseDeferred();
+                    aggregateTypeReadyDeferred.promise.then(function () {
+                        var aggregateTypePayload = aggregateEntity != undefined ? { selectedIds: aggregateEntity.AggregateType } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(aggregateTypeAPI, aggregateTypePayload, aggregateTypeLoadDeferred);
+                    });
+                    return aggregateTypeLoadDeferred.promise;
+                }
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldTypeDirective, loadAggregateTypeDirective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -101,6 +117,6 @@
         }
 
     }
-    appControllers.controller('VR_Invoice_AggregateGroupingItemEditorController', AggregateGroupingItemEditorController);
+    appControllers.controller('VR_Invoice_AggregateItemGroupingEditorController', AggregateItemGroupingEditorController);
 
 })(appControllers);

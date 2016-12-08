@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="BillingPeriodInfoManager.cs" />
     <Compile Include="Context\ExtendedSettingsBillingPeriodContext.cs" />
+    <Compile Include="Context\GetMeasureValueContext.cs" />
+    <Compile Include="Context\GroupingInvoiceItemQueryContext.cs" />
     <Compile Include="Context\InitialPeriodInfoContext.cs" />
     <Compile Include="Context\InvoiceGenerationContext.cs" />
     <Compile Include="Context\InvoiceItemConcatenatedPartContext.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="Context\StartDateCalculationMethodContext.cs" />
     <Compile Include="Extensions\InvoiceItemSubSection.cs" />
     <Compile Include="Extensions\InvoiceTypeExtendedSettingsInfoContext.cs" />
+    <Compile Include="InvoiceItemGroupingManager.cs" />
     <Compile Include="InvoiceItemManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoiceTypeConfigsManager.cs" />

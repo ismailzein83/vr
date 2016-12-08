@@ -34,6 +34,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
             var invoiceActions=[];
             var invoiceGridActions = [];
             var mainGridColumns = [];
+            var invoiceItemGroupings;
             function initializeController() {
 
                 $scope.datastore = [];
@@ -71,6 +72,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     query = payload.query;
                                     invoiceGridActions = payload.invoiceGridActions;
                                     invoiceTypeId = payload.InvoiceTypeId;
+                                    invoiceItemGroupings = payload.invoiceItemGroupings;
                                     //defineMenuActions(payload.invoiceGridActions);
                                 }
                                 gridAPI.retrieveData(query).then(function () {
@@ -86,7 +88,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
 
                         directiveAPI.onGenerateInvoice = function (invoice) {
                             buildGridFields(invoice);
-                            VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(invoice, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
+                            VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(invoice, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
                             gridAPI.itemAdded(invoice);
                         };
 
@@ -100,7 +102,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var dataItem = response.Data[i];
                                     buildGridFields(dataItem);
-                                    VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
+                                    VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
                                 }
                             }
                             onResponseReady(response);

@@ -26,6 +26,36 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceTypeEditor.html', parameters, settings);
         }
 
+
+        function addGroupItemSubSection(onItemGroupingSubSectionAdded, context) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onItemGroupingSubSectionAdded = onItemGroupingSubSectionAdded;
+            };
+            var parameters = {
+                context: context
+            };
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/ItemGroupingSubSectionEditor.html', parameters, settings);
+        }
+
+        function editGroupItemSubSection(subSectionEntity, onItemGroupingSubSectionUpdated, context) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onItemGroupingSubSectionUpdated = onItemGroupingSubSectionUpdated;
+            };
+            var parameters = {
+                subSectionEntity: subSectionEntity,
+                context: context
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/ItemGroupingSubSectionEditor.html', parameters, settings);
+        }
+
+
         function addInvoiceItemSubSection(onInvoiceItemSubSectionAdded, context) {
             var settings = {
 
@@ -149,5 +179,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             editSubReport: editSubReport,
             addInvoiceItemSubSection: addInvoiceItemSubSection,
             editInvoiceItemSubSection: editInvoiceItemSubSection,
+            editGroupItemSubSection: editGroupItemSubSection,
+            addGroupItemSubSection: addGroupItemSubSection
         });
     }]);

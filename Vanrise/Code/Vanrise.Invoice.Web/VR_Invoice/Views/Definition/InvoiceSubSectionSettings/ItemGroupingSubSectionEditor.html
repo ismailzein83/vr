@@ -1,0 +1,25 @@
+﻿<div vr-modalcontent ng-controller="VR_Invoice_ItemGroupingSubSectionEditorController" width="'35%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formSubSectionEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.sectionTitle" label="Section Title" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-invoicetype-invoicesubsectionsettings-itemgrouping-subsectionsettings on-ready="scopeModel.onItemGroupingSubSectionSettingsReady"></vr-invoicetype-invoicesubsectionsettings-itemgrouping-subsectionsettings>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formSubSectionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

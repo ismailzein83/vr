@@ -1,8 +1,8 @@
-﻿<vr-button type="Add" data-onclick="ctrl.addDimensionGroupingItem" standalone></vr-button>
+﻿<vr-button type="Add" data-onclick="ctrl.addAggregateItemGrouping" standalone></vr-button>
 
 <vr-validator validate="ctrl.isValid()">
     <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeDimensionGroupingItem" hidegridmenu>
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeAggregateItemGrouping" hidegridmenu>
         <vr-datagridcolumn headertext="'Description'" field="'Entity.FieldDescription'" widthfactor="10" disablesorting></vr-datagridcolumn>
 
     </vr-datagrid>

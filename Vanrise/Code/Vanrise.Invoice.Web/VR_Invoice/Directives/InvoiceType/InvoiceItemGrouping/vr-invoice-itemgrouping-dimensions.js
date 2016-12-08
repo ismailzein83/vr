@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceGroupingitemDimensions", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceGroupingItemService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceGroupingItemService) {
+app.directive("vrInvoiceItemgroupingDimensions", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceItemGroupingService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceItemGroupingService) {
 
         var directiveDefinitionObject = {
 
@@ -13,7 +13,7 @@ app.directive("vrInvoiceGroupingitemDimensions", ["UtilsService", "VRNotificatio
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new DimensionGroupingItem($scope, ctrl, $attrs);
+                var ctor = new DimensionItemGrouping($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoiceGroupingitemDimensions", ["UtilsService", "VRNotificatio
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGroupingItem/Templates/DimensionGroupingItemTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceItemGrouping/Templates/DimensionItemGroupingTemplate.html"
 
         };
 
-        function DimensionGroupingItem($scope, ctrl, $attrs) {
+        function DimensionItemGrouping($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -39,15 +39,15 @@ app.directive("vrInvoiceGroupingitemDimensions", ["UtilsService", "VRNotificatio
                     return "You Should add at least one part.";
                 };
 
-                ctrl.addDimensionGroupingItem = function () {
-                    var onDimensionGroupingItemAdded = function (dimensionGroupingItem) {
-                        ctrl.datasource.push({ Entity: dimensionGroupingItem });
+                ctrl.addDimensionItemGrouping = function () {
+                    var onDimensionItemGroupingAdded = function (dimensionItemGrouping) {
+                        ctrl.datasource.push({ Entity: dimensionItemGrouping });
                     };
 
-                    VR_Invoice_InvoiceGroupingItemService.addGroupingItemDimension(onDimensionGroupingItemAdded, getContext());
+                    VR_Invoice_InvoiceItemGroupingService.addItemGroupingDimension(onDimensionItemGroupingAdded, getContext());
                 };
 
-                ctrl.removeDimensionGroupingItem = function (dataItem) {
+                ctrl.removeDimensionItemGrouping = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -59,24 +59,24 @@ app.directive("vrInvoiceGroupingitemDimensions", ["UtilsService", "VRNotificatio
                 var api = {};
 
                 api.getData = function () {
-                    var dimensionGroupingItems;
+                    var dimensionItemGroupings;
                     if (ctrl.datasource != undefined) {
-                        dimensionGroupingItems = [];
+                        dimensionItemGroupings = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            dimensionGroupingItems.push(currentItem.Entity);
+                            dimensionItemGroupings.push(currentItem.Entity);
                         }
                     }
-                    return dimensionGroupingItems;
+                    return dimensionItemGroupings;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.dimensionGroupingItems != undefined) {
-                            for (var i = 0; i < payload.dimensionGroupingItems.length; i++) {
-                                var dimensionGroupingItem = payload.dimensionGroupingItems[i];
-                                ctrl.datasource.push({ Entity: dimensionGroupingItem });
+                        if (payload.dimensionItemGroupings != undefined) {
+                            for (var i = 0; i < payload.dimensionItemGroupings.length; i++) {
+                                var dimensionItemGrouping = payload.dimensionItemGroupings[i];
+                                ctrl.datasource.push({ Entity: dimensionItemGrouping });
                             }
                         }
                     }
@@ -90,7 +90,7 @@ app.directive("vrInvoiceGroupingitemDimensions", ["UtilsService", "VRNotificatio
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editDimensionGroupingItem,
+                    clicked: editDimensionItemGrouping,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -98,13 +98,13 @@ app.directive("vrInvoiceGroupingitemDimensions", ["UtilsService", "VRNotificatio
                 };
             }
 
-            function editDimensionGroupingItem(dimensionGroupingItemObj) {
-                var onDimensionGroupingItemUpdated = function (dimensionGroupingItem) {
-                    var index = ctrl.datasource.indexOf(dimensionGroupingItemObj);
-                    ctrl.datasource[index] = { Entity: dimensionGroupingItem };
+            function editDimensionItemGrouping(dimensionItemGroupingObj) {
+                var onDimensionItemGroupingUpdated = function (dimensionItemGrouping) {
+                    var index = ctrl.datasource.indexOf(dimensionItemGroupingObj);
+                    ctrl.datasource[index] = { Entity: dimensionItemGrouping };
                 };
 
-                VR_Invoice_InvoiceGroupingItemService.editGroupingItemDimension(onDimensionGroupingItemUpdated, dimensionGroupingItemObj.Entity, getContext());
+                VR_Invoice_InvoiceItemGroupingService.editItemGroupingDimension(onDimensionItemGroupingUpdated, dimensionItemGroupingObj.Entity, getContext());
             }
             function getContext() {
                 return context;
