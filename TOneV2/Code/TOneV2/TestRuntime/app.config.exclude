@@ -86,7 +86,7 @@
           <runtimeService name="Data Grouping Distributor Runtime Service" type="Vanrise.Common.Business.DataGroupingDistributorRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
-      <runtimeServiceGroup name="group9" nbOfRuntimeInstances="3">
+      <runtimeServiceGroup name="group9" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="Data Grouping Executor Runtime Service" type="Vanrise.Common.Business.DataGroupingExecutorRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
         </runtimeServices>
