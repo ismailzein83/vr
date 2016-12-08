@@ -60,6 +60,7 @@
       <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
     </sco:Collection>
@@ -82,11 +83,6 @@
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
     <vbw:GenerateDateTimeRanges sap2010:WorkflowViewState.IdRef="GenerateDateTimeRanges_1">
-      <vbw:GenerateDateTimeRanges.ChunkTime>
-        <InArgument x:TypeArguments="vbe:ChunkTime">
-          <mca:CSharpValue x:TypeArguments="vbe:ChunkTime">Input.ChunkTime</mca:CSharpValue>
-        </InArgument>
-      </vbw:GenerateDateTimeRanges.ChunkTime>
       <vbw:GenerateDateTimeRanges.DateTimeRanges>
         <OutArgument x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">
           <mca:CSharpReference x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">DateTimeRanges</mca:CSharpReference>
@@ -97,6 +93,11 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
         </InArgument>
       </vbw:GenerateDateTimeRanges.From>
+      <vbw:GenerateDateTimeRanges.TimeSpan>
+        <InArgument x:TypeArguments="x:TimeSpan">
+          <mca:CSharpValue x:TypeArguments="x:TimeSpan">new TimeSpan(0, Vanrise.Common.Utilities.GetEnumAttribute&lt;ReprocessChunkTimeEnum,ReprocessChunkTimeAttribute&gt;(Input.ChunkTime).Value,0)</mca:CSharpValue>
+        </InArgument>
+      </vbw:GenerateDateTimeRanges.TimeSpan>
       <vbw:GenerateDateTimeRanges.To>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
@@ -115,7 +116,7 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <ParallelForEach x:TypeArguments="ve:DateTimeRange">
+    <ParallelForEach x:TypeArguments="ve:DateTimeRange" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_4">
       <ParallelForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(ve:DateTimeRange)">DateTimeRanges.Reverse()</mca:CSharpValue>
@@ -244,7 +245,6 @@
           </If>
         </Sequence>
       </ActivityAction>
-      <sap2010:WorkflowViewState.IdRef>ParallelForEach`1_4</sap2010:WorkflowViewState.IdRef>
     </ParallelForEach>
     <If sap2010:WorkflowViewState.IdRef="If_3">
       <If.Condition>
@@ -440,7 +440,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXEMDvAMOAgEBRzNHNgIBA0gzSDYCAQJNBVMgAwHaBFQFaSIDAbUEagV1DgMBogR2BfgBFwMBvAL5AQWzAwoCAQ+0AwW6AyACAQRQC1CFAQMB3ARNYE2AAQMB2wRmC2ZXAwHRBFcLV10DAcgEYQthWQMBvwRcC1x4AwG2BHILcl4DAawEbQttYAMBowR5C3l6AwGZBIABCfUBFAMBvQL8AQv8AWACARCAAgmxAxQCARm3Awu3A4UBAgEGtANgtAOAAQIBBYYBC5EBJgMB/gOSAQukARwDAeIDpQELsAEUAwHHA7EBC/QBEAMBvgKBAguMAioDAakCjQILmAIUAwGWApkCC7ADHQIBGo4BEY4BiwEDAYwEiQERiQGRAQMB/wOVARGcASADAfEDoQERoQGEAQMB5AOSAXySAYIBAwHjA60BEa0BZAMB1QOoARGoAWoDAcgDtAERtAGxAQMBvwK4AQ++ASMDAbkDwQEP8gEaAwHMAokCEYkCaAMBswKEAhGEAngDAaoClQIRlQJ9AwGgApACEZACbQMBlwKcAhGcApABAwGNAqMCD64DGgIBG7sBFbsB3AEDAboDwgERzQEaAwGeA84BEdkBGgMBgwPaARHlARoDAegC5gER8QEsAwHNAqYCP6YCQgIBHKgCEbMCLAMB9AG0AhG/Ai4DAdsBwAIRywIsAwHCAcwCEa0DFgIBHcoBF8oBsAEDAawDxQEXxQGSAQMBnwPWARfWAXsDAZED0QEX0QFrAwGEA+IBF+IBdQMB9gLdARfdAWsDAekC7gEX7gGRAQMB2wLpARfpAa0CAwHOArACF7ACkQEDAYECqwIXqwKfAQMB9QG8Ahe8AoYBAwHoAbcCF7cCZgMB3AHIAhfIApEBAwHPAcMCF8MCnwEDAcMBzwIXzwJtAgEe0wIVqwMnAgEq1gIb1gKMAQMBtgHdAhmpAyQCASveAhvpAjYDAZsB6gIb/AIsAgF//QIbqAMgAgEs5gIh5gKbAQMBqQHhAiHhAroBAwGcAe0CIfQCIAMBjgH5AiH5ApwBAwGBAeoCjAHqApIBAwGAAYADIYADywECAS2EAx+KAzMCAXGNAx+mAyoCATqHAyWHA4MCAgFyjgMhmQMqAgFWmgMhpQM8AgE7lgMnlgN9AgFkkQMnkQOBAQIBV6IDJ6IDoQECAUmdAyedA4sCAgE8</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXEQDvAMOAgEBSDNINgIBA0kzSTYCAQJOBVQgAwHaBFUFaiIDAbUEawV2DgMBogR3BfgBFwMBvAL5AQWzAwoCAQ+0AwW6AyACAQRRC1GFAQMB3AROYE6AAQMB2wRnC2dXAwHRBF0LXVkDAcgEWAtYeAMBvwRiC2LYAQMBtgRzC3NeAwGsBG4LbmADAaMEegt6egMBmQSBAQn2ARQDAb0C/AEL/AFgAgEQgAIJsQMUAgEZtwMLtwOFAQIBBrQDYLQDgAECAQWHAQuSASYDAf4DkwELpQEcAwHiA6YBC7EBFAMBxwOyAQv1ARADAb4CgQILjAIqAwGpAo0CC5gCFAMBlgKZAguwAx0CARqPARGPAYsBAwGMBIoBEYoBkQEDAf8DlgERnQEgAwHxA6IBEaIBhAEDAeQDkwF8kwGCAQMB4wOuARGuAWQDAdUDqQERqQFqAwHIA7UBEbUBsQEDAb8CuQEPvwEjAwG5A8IBD/MBGgMBzAKJAhGJAmgDAbMChAIRhAJ4AwGqApUCEZUCfQMBoAKQAhGQAm0DAZcCnAIRnAKQAQMBjQKjAg+uAxoCARu8ARW8AdwBAwG6A8MBEc4BGgMBngPPARHaARoDAYMD2wER5gEaAwHoAucBEfIBLAMBzQKmAj+mAkICARyoAhGzAiwDAfQBtAIRvwIuAwHbAcACEcsCLAMBwgHMAhGtAxYCAR3LARfLAbABAwGsA8YBF8YBkgEDAZ8D1wEX1wF7AwGRA9IBF9IBawMBhAPjARfjAXUDAfYC3gEX3gFrAwHpAu8BF+8BkQEDAdsC6gEX6gGtAgMBzgKwAhewApEBAwGBAqsCF6sCnwEDAfUBvAIXvAKGAQMB6AG3Ahe3AmYDAdwByAIXyAKRAQMBzwHDAhfDAp8BAwHDAc8CF88CbQIBHtMCFasDJwIBKtYCG9YCjAEDAbYB3QIZqQMkAgEr3gIb6QI2AwGbAeoCG/wCLAIBf/0CG6gDIAIBLOYCIeYCmwEDAakB4QIh4QK6AQMBnAHtAiH0AiADAY4B+QIh+QKcAQMBgQHqAowB6gKSAQMBgAGAAyGAA8sBAgEthAMfigMzAgFxjQMfpgMqAgE6hwMlhwODAgIBco4DIZkDKgIBVpoDIaUDPAIBO5YDJ5YDfQIBZJEDJ5EDgQECAVeiAyeiA6EBAgFJnQMnnQOLAgIBPA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

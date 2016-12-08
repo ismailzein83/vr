@@ -1,4 +1,4 @@
-﻿app.constant('ChunkTimeEnum', {
+﻿app.constant('ReprocessChunkTimeEnum', {
     FiveMinutes: { value: 0, description: '5 Minutes' },
     TenMinutes: { value: 1, description: '10 Minutes' },
     FifteenMinutes: { value: 2, description: '15 Minutes' },

@@ -175,7 +175,6 @@
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
     <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
-    <Content Include="BusinessProcess\Constants\ChunkTimeEnum.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-information-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-warning-item-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\Templates\EmptyTemplate.html" />

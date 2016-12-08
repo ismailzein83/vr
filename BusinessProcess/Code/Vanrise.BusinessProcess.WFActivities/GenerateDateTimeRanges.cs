@@ -16,7 +16,7 @@ namespace Vanrise.BusinessProcess.WFActivities
         public InArgument<DateTime> To { get; set; }
 
         [RequiredArgument]
-        public InArgument<ChunkTime> ChunkTime { get; set; }
+        public InArgument<TimeSpan> TimeSpan { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<DateTimeRange>> DateTimeRanges { get; set; }
@@ -25,10 +25,9 @@ namespace Vanrise.BusinessProcess.WFActivities
         {
             DateTime from = this.From.Get(context);
             DateTime to = this.To.Get(context);
-            ChunkTime chunkTime = this.ChunkTime.Get(context);
+            TimeSpan timeSpan = this.TimeSpan.Get(context);
 
-            var chunkTimeAttribute = Vanrise.Common.Utilities.GetEnumAttribute<ChunkTime, ChunkTimeAttribute>(chunkTime);
-            int intervalInMinutes = chunkTimeAttribute.Value;
+            double intervalInMinutes = timeSpan.TotalMinutes;
             List<DateTimeRange> dateTimeRanges = new List<DateTimeRange>();
 
             DateTime endDate = from;
@@ -39,7 +38,7 @@ namespace Vanrise.BusinessProcess.WFActivities
                 startDate = endDate;
 
                 DateTime tempToDate = endDate.AddMinutes(intervalInMinutes);
-                
+
                 if (tempToDate > to)
                     endDate = to;
                 else

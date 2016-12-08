@@ -16,7 +16,7 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public DateTime ToTime { get; set; }
 
-        public ChunkTime ChunkTime { get; set; }
+        public ReprocessChunkTimeEnum ChunkTime { get; set; }
 
         public override string GetTitle()
         {

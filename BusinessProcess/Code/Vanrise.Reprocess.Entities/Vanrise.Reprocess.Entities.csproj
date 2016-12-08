@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReprocessChunkTimeEnum.cs" />
     <Compile Include="GenericDataRecordBatch.cs" />
     <Compile Include="IReprocessBatch.cs" />
     <Compile Include="IReprocessStageActivator.cs" />

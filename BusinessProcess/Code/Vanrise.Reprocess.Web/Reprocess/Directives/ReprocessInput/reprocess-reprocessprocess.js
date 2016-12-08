@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'ChunkTimeEnum',
-    function (UtilsService, VRUIUtilsService, VRValidationService, ChunkTimeEnum) {
+app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'ReprocessChunkTimeEnum',
+    function (UtilsService, VRUIUtilsService, VRValidationService, ReprocessChunkTimeEnum) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -60,7 +60,7 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                 };
 
                 api.load = function (payload) {
-                    $scope.chunkTimes = UtilsService.getArrayEnum(ChunkTimeEnum);
+                    $scope.chunkTimes = UtilsService.getArrayEnum(ReprocessChunkTimeEnum);
 
                     var promises = [];
 
