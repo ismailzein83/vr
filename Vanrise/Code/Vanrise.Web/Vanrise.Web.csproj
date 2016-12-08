@@ -1158,6 +1158,8 @@
     <None Include="Client\Themes\theme-extented-blue.css.exclude" />
     <None Include="Client\Themes\theme-extented-red.css.exclude" />
     <None Include="Client\Themes\theme-extented-green.css.exclude" />
+    <Content Include="Client\Themes\theme-extented-cloudXPoint.css" />
+    <Content Include="Client\Themes\theme-extented-nTegra.css" />
     <Content Include="Client\Themes\theme-extented.css" />
     <Content Include="Client\Themes\theme.css" />
     <Content Include="Client\Styles\waves.css" />
