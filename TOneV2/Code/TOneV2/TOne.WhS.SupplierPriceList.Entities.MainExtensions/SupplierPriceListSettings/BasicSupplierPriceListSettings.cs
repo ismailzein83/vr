@@ -12,12 +12,12 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
     public enum CodeLayout { CodeOnEachRow = 0, Delimitedcode = 1 }
     public class BasicSupplierPriceListSettings : Entities.SupplierPriceListSettings
     {
-        public override Guid ConfigId { get { return new Guid("6B36007E-3333-40D3-B574-510C8338E6C0"); }}
-     
+        public override Guid ConfigId { get { return new Guid("6B36007E-3333-40D3-B574-510C8338E6C0"); } }
+
         #region Properties
         public ListMapping CodeListMapping { get; set; }
         public ListMapping NormalRateListMapping { get; set; }
-        public string  DateTimeFormat { get; set; }
+        public string DateTimeFormat { get; set; }
         public List<OtherRateListMapping> OtherRateListMapping { get; set; }
         public List<FlaggedServiceListMapping> FlaggedServiceListMapping { get; set; }
         public bool IncludeServices { get; set; }
@@ -26,7 +26,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         public bool HasCodeRange { get; set; }
         public char RangeSeparator { get; set; }
         public bool IsCommaDecimalSeparator { get; set; }
-       
+
         #endregion
 
         #region Override
@@ -56,7 +56,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
             ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, excelConversionSettings, true, this.IsCommaDecimalSeparator);
             return ConvertToPriceListItem(convertedExcel);
         }
-      
+
         #endregion
 
         #region Private Methods
@@ -67,7 +67,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                 PriceListCodes = BuildPriceListCodes(convertedExcel),
                 PriceListRates = BuildPriceListRates(convertedExcel),
                 PriceListOtherRates = BuildPriceListOtherRates(convertedExcel),
-                PriceListServices =  BuildPriceListFlaggedServices(convertedExcel)
+                PriceListServices = BuildPriceListFlaggedServices(convertedExcel),
+                IncludeServices = this.IncludeServices
             };
         }
         private List<PriceListCode> BuildPriceListCodes(ConvertedExcel convertedExcel)
@@ -107,7 +108,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                 priceListCodes.Add(new PriceListCode
                                 {
                                     ZoneName = zone,
-                                    Code = codeGroup != null? codeGroup:null,
+                                    Code = codeGroup != null ? codeGroup : null,
                                     EffectiveDate = result
                                 });
                                 continue;
@@ -209,7 +210,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                 rate = Convert.ToDecimal(rateField.FieldValue);
                             priceListRates.Add(new PriceListRate
                             {
-                                ZoneName = zoneField.FieldValue !=null? zoneField.FieldValue.ToString() : null,
+                                ZoneName = zoneField.FieldValue != null ? zoneField.FieldValue.ToString() : null,
                                 Rate = rate,
                                 EffectiveDate = result
                             });
@@ -224,10 +225,10 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         {
             Dictionary<int, List<PriceListRate>> otherRatesByRateType = null;
 
-            if(this.OtherRateListMapping != null)
+            if (this.OtherRateListMapping != null)
             {
                 otherRatesByRateType = new Dictionary<int, List<PriceListRate>>();
-                foreach(var list in this.OtherRateListMapping)
+                foreach (var list in this.OtherRateListMapping)
                 {
                     ConvertedExcelList RateConvertedExcelList;
                     if (convertedExcel.Lists.TryGetValue(list.RateListMapping.ListName, out RateConvertedExcelList))
@@ -251,12 +252,12 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                     if (rateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
                                         rate = Convert.ToDecimal(rateField.FieldValue);
 
-                                   PriceListRate priceListRate = new PriceListRate
-                                    {
-                                        ZoneName = zoneField.FieldValue != null ? zoneField.FieldValue.ToString() : null,
-                                        Rate = rate,
-                                        EffectiveDate = result
-                                    };
+                                    PriceListRate priceListRate = new PriceListRate
+                                     {
+                                         ZoneName = zoneField.FieldValue != null ? zoneField.FieldValue.ToString() : null,
+                                         Rate = rate,
+                                         EffectiveDate = result
+                                     };
 
                                     List<PriceListRate> priceListRates = null;
 
@@ -265,7 +266,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                     {
                                         priceListRates = new List<PriceListRate> { priceListRate };
                                         otherRatesByRateType.Add(list.RateTypeId, priceListRates);
-                                    }else
+                                    }
+                                    else
                                     {
                                         priceListRates.Add(priceListRate);
                                         otherRatesByRateType[list.RateTypeId] = priceListRates;
@@ -306,15 +308,15 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                 string zoneName = zoneField.FieldValue != null && !String.IsNullOrWhiteSpace(zoneField.FieldValue.ToString()) ? zoneField.FieldValue.ToString() : null;
                                 //if (zoneName == null || !priceListZoneServices.Any(x => zoneName.ToLower().Equals(x.ZoneName.ToLower()) && x.ZoneServiceConfigId == list.ZoneServiceConfigId))
                                 // {
-                                     PriceListZoneService priceListZoneService = new PriceListZoneService
-                                     {
-                                         ZoneName =zoneName,
-                                         ZoneServiceConfigId = list.ZoneServiceConfigId,
-                                         EffectiveDate = result
-                                     };
-                                     priceListZoneServices.Add(priceListZoneService);
-                               //  }
-                               
+                                PriceListZoneService priceListZoneService = new PriceListZoneService
+                                {
+                                    ZoneName = zoneName,
+                                    ZoneServiceConfigId = list.ZoneServiceConfigId,
+                                    EffectiveDate = result
+                                };
+                                priceListZoneServices.Add(priceListZoneService);
+                                //  }
+
                             }
                         }
                     }

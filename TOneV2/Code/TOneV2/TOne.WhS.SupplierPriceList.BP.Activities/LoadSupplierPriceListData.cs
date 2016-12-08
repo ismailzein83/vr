@@ -40,6 +40,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public OutArgument<IEnumerable<int>> ImportedServiceTypeIds { get; set; }
 
         [RequiredArgument]
+        public OutArgument<bool> IncludeServices { get; set; }
+
+        [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
@@ -186,6 +189,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             ImportedRates.Set(context, importedRatesList);
             ImportedRateTypeIds.Set(context, convertedPriceList.PriceListOtherRates.Keys);
             ImportedServiceTypeIds.Set(context, convertedPriceList.PriceListServices.Select(item => item.ZoneServiceConfigId).Distinct());
+            IncludeServices.Set(context, convertedPriceList.IncludeServices);
             MinimumDate.Set(context, minimumDate);
 
             TimeSpan spent = DateTime.Now.Subtract(startReading);

@@ -29,6 +29,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
 
+        public bool IncludeServices { get; set; }
+
     }
 
     public class ProcessCountryZonesServicesOutput
@@ -66,6 +68,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
+        public InArgument<bool> IncludeServices { get; set; }
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<NewZoneService>> NewZonesServices { get; set; }
 
         [RequiredArgument]
@@ -85,10 +90,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             if (inputArgument.ExistingZonesByZoneId != null)
                 existingZones = inputArgument.ExistingZonesByZoneId.Select(item => item.Value);
 
-            if (inputArgument.ImportedZones.All(itm => itm.ImportedZoneServiceGroup == null))
+            if (inputArgument.IncludeServices == false)
                 return new ProcessCountryZonesServicesOutput() { 
                  ChangedZonesServices = new List<ChangedZoneService>(),
-                 NewZonesServices = new List<NewZoneService>()};
+                 NewZonesServices = new List<NewZoneService>()
+                };
 
             ProcessCountryZonesServicesContext processCountryZonesServicesContext = new ProcessCountryZonesServicesContext()
             {
@@ -128,7 +134,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 PriceListDate = this.PriceListDate.Get(context),
                 ImportedServiceTypeIds = this.ImportedServiceTypeIds.Get(context),
                 NotImportedZones = this.NotImportedZones.Get(context),
-                ExistingZonesServices = this.ExistingZonesServices.Get(context)
+                ExistingZonesServices = this.ExistingZonesServices.Get(context),
+                IncludeServices = this.IncludeServices.Get(context)
             };
         }
 
