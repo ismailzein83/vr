@@ -14,9 +14,8 @@ namespace TOne.WhS.Sales.Business
 
 		public RatePlanContext()
 		{
-			var ratePlanManager = new RatePlanManager();
-			TOne.WhS.BusinessEntity.Entities.SaleAreaSettingsData saleAreaSettings = ratePlanManager.GetSaleAreaSettingsData();
-			_retroactiveDate = DateTime.Now.Date.AddDays(-saleAreaSettings.RetroactiveDayOffset);
+			int retroactiveDayOffset = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetSaleAreaRetroactiveDayOffset();
+			_retroactiveDate = DateTime.Now.Date.AddDays(-retroactiveDayOffset);
 		}
 
 		public SalePriceListOwnerType OwnerType { get; set; }
