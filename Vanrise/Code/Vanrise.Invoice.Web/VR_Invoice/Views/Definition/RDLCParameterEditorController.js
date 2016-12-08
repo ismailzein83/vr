@@ -6,7 +6,7 @@
 
     function RDLCParameterEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
-        var context = [];
+        var context;
         var parameterEntity;
 
         var isEditMode;

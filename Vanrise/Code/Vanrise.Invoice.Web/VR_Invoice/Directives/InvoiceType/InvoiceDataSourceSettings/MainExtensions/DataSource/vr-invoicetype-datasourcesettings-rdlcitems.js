@@ -58,9 +58,9 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                 api.load = function (payload) {
                     ctrl.listItems.length = 0;
                     if (payload != undefined) {
-                        if (payload.ItemSetNames != undefined) {
-                            for (var i = 0; i < payload.ItemSetNames.length; i++) {
-                                var itemSetName = payload.ItemSetNames[i];
+                        if (payload.dataSourceEntity && payload.dataSourceEntity.ItemSetNames != undefined) {
+                            for (var i = 0; i < payload.dataSourceEntity.ItemSetNames.length; i++) {
+                                var itemSetName = payload.dataSourceEntity.ItemSetNames[i];
                                 ctrl.listItems.push(itemSetName);
                             }
                         }

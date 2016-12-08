@@ -58,6 +58,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
                 var api = {};
 
                 api.load = function (payload) {
+                
                     var invoiceActionEntity;
                     if (payload != undefined) {
                         invoiceActionEntity = payload.invoiceActionEntity;
@@ -69,7 +70,10 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
                     var promises = [];
                     var mainReportDataSourcesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     mainReportDataSourcesDirectiveReadyPromiseDeferred.promise.then(function () {
-                        var mainReportDataSourcesDirectivePayload = invoiceActionEntity != undefined ? { dataSources: invoiceActionEntity.MainReportDataSources } : undefined;
+                        var mainReportDataSourcesDirectivePayload = { context: getContext() };
+                        if (invoiceActionEntity != undefined) {
+                            mainReportDataSourcesDirectivePayload.dataSources = invoiceActionEntity.MainReportDataSources;
+                        }
                         VRUIUtilsService.callDirectiveLoad(mainReportDataSourcesDirectiveAPI, mainReportDataSourcesDirectivePayload, mainReportDataSourcesLoadPromiseDeferred);
                     });
                     promises.push(mainReportDataSourcesLoadPromiseDeferred.promise);

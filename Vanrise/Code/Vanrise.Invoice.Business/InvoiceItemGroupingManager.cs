@@ -26,7 +26,7 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Private Methods
-        private List<GroupingInvoiceItemDetail> ApplyFinalGroupingAndFiltering(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, IEnumerable<InvoiceItem> invoiceItems, List<Guid> requestedDimensionIds, List<Guid> measureIds, List<InvoiceGroupingDimensionFilter> dimensionFilters, ItemGrouping itemGrouping)
+        public List<GroupingInvoiceItemDetail> ApplyFinalGroupingAndFiltering(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, IEnumerable<InvoiceItem> invoiceItems, List<Guid> requestedDimensionIds, List<Guid> measureIds, List<InvoiceGroupingDimensionFilter> dimensionFilters, ItemGrouping itemGrouping)
         {
             List<GroupingInvoiceItemDetail> records = new List<GroupingInvoiceItemDetail>();
 

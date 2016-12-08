@@ -6,7 +6,7 @@
 
     function rdlcsubReportEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
-        var context = [];
+        var context;
         var subReportEntity;
 
         var isEditMode;

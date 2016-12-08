@@ -91,7 +91,9 @@
                 function loadDataSourceSettingsDirective() {
                     var dataSourceSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     dataSourceSettingsReadyPromiseDeferred.promise.then(function () {
-                        var dataSourcePayload = dataSourceEntity != undefined ? { dataSourceEntity: dataSourceEntity.Settings } : undefined;
+                        var dataSourcePayload = { context: getContext() };
+                        if (dataSourceEntity != undefined)
+                            dataSourcePayload.dataSourceEntity = dataSourceEntity.Settings;
                         VRUIUtilsService.callDirectiveLoad(dataSourceSettingsAPI, dataSourcePayload, dataSourceSettingsLoadPromiseDeferred);
                     });
                     return dataSourceSettingsLoadPromiseDeferred.promise;
@@ -116,6 +118,15 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
             }
+        }
+        function getContext()
+        {
+            var currentContext = context;
+            if(currentContext == undefined)
+            {
+                currentContext = {};
+            }
+            return currentContext;
         }
 
     }

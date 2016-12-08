@@ -208,6 +208,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\Templates\InvoiceActionsGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\vr-invoicetype-invoiceactions-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\vr-invoicetype-invoiceactions.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\ItemGroupingDataSourceSettings.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\vr-invoicetype-datasourcesettings-itemgrouping.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceExtendedSettings\vr-invoicetype-extendedsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\IsLockedInvoiceFilterConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-islockedinvoice.js" />

@@ -75,8 +75,10 @@ app.directive("vrInvoicetypeDatasources", ["UtilsService", "VRNotificationServic
                 };
 
                 api.load = function (payload) {
+               
                     if (payload != undefined) {
                         context = payload.context;
+                     
                         if (payload.dataSources != undefined) {
                             for (var i = 0; i < payload.dataSources.length; i++) {
                                 var dataSource = payload.dataSources[i];
@@ -111,7 +113,11 @@ app.directive("vrInvoicetypeDatasources", ["UtilsService", "VRNotificationServic
             }
             function getContext()
             {
-                return context;
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                
+                return currentContext;
             }
         }
 

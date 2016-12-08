@@ -152,6 +152,7 @@ namespace Vanrise.Invoice.Business
                     var gridAttribute = column.FieldType.GetGridColumnAttribute();
                     gridAttribute.HeaderText = column.Header;
                     gridAttribute.Field = column.FieldName;
+                    gridAttribute.Tag = column.FieldName;
                     gridColumnAttributes.Add(gridAttribute);
                 }
             }

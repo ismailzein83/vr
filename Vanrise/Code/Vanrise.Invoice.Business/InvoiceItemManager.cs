@@ -47,6 +47,11 @@ namespace Vanrise.Invoice.Business
 
         public IDataRetrievalResult<GroupingInvoiceItemDetail> GetFilteredGroupingInvoiceItems(DataRetrievalInput<GroupingInvoiceItemQuery> input)
         {
+            if (input.SortByColumnName != null && input.SortByColumnName.Contains("MeasureValues"))
+            {
+                string[] measureProperty = input.SortByColumnName.Split('.');
+                input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
+            }
             return BigDataManager.Instance.RetrieveData(input, new GroupingInvoiceItemRequestHandler());
         }
 

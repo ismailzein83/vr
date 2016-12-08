@@ -33,7 +33,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
             var directivePayload;
-
+            var context;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -49,7 +49,8 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var directivePayload = { context: getContext() };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -58,6 +59,7 @@
                 var serviceSettings;
 
                 api.load = function (payload) {
+                  
                     selectorAPI.clearDataSource();
 
                     var promises = [];
@@ -65,6 +67,7 @@
 
                     if (payload != undefined) {
                         dataSourceEntity = payload.dataSourceEntity;
+                        context = payload.context;
                     }
 
                     if (dataSourceEntity != undefined) {
@@ -95,7 +98,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = dataSourceEntity;
+                            var directivePayload = { context: getContext(), dataSourceEntity: dataSourceEntity };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -120,6 +123,13 @@
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
+            }
+            function getContext()
+            {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
 

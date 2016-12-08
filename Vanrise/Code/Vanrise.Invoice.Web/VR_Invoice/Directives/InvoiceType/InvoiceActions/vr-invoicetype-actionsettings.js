@@ -59,6 +59,7 @@
                 var serviceSettings;
 
                 api.load = function (payload) {
+                   
                     selectorAPI.clearDataSource();
 
                     var promises = [];
