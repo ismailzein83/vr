@@ -55,6 +55,14 @@ namespace QM.BusinessEntity.Web.Controllers
             return manager.UpdateSupplier(supplier);
         }
 
+        [HttpPost]
+        [Route("DeleteSupplier")]
+        public UpdateOperationOutput<SupplierDetail> DeleteSupplier(Supplier supplier)
+        {
+            SupplierManager manager = new SupplierManager();
+            return manager.DeleteSupplier(supplier);
+        }
+
         [HttpGet]
         [Route("GetSupplierSourceTemplates")]
         public IEnumerable<SourceSupplierReaderConfig> GetSupplierSourceTemplates()

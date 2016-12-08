@@ -24,9 +24,18 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(QM_BE_ModuleConfig.moduleName, controllerName, ['AddSupplier']));
         }
 
+        function HasDeleteSupplierPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(QM_BE_ModuleConfig.moduleName, controllerName, ['DeleteSupplier']));
+        }
+
         function UpdateSupplier(supplierObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, controllerName, "UpdateSupplier"), supplierObject);
         }
+
+        function DeleteSupplier(supplierObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_BE_ModuleConfig.moduleName, controllerName, "DeleteSupplier"), supplierObject);
+        }
+
         function HasEditSupplierPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(QM_BE_ModuleConfig.moduleName, controllerName, ['UpdateSupplier']));
         }
@@ -66,10 +75,12 @@
             HasUploadSupplierPermission: HasUploadSupplierPermission,
             HasEditSupplierPermission: HasEditSupplierPermission,
             HasAddSupplierPermission: HasAddSupplierPermission,
+            HasDeleteSupplierPermission: HasDeleteSupplierPermission,
             GetFilteredSuppliers: GetFilteredSuppliers,
             GetSupplier: GetSupplier,
             AddSupplier: AddSupplier,
             UpdateSupplier: UpdateSupplier,
+            DeleteSupplier: DeleteSupplier,
             GetSupplierSourceTemplates: GetSupplierSourceTemplates,
             GetSuppliersInfo: GetSuppliersInfo,
             DownloadImportSupplierTemplate: DownloadImportSupplierTemplate,

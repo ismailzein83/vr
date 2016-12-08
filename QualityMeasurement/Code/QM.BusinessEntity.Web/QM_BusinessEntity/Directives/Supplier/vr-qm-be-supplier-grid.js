@@ -27,6 +27,7 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
 
     function SupplierGrid($scope, ctrl, $attrs) {
         var gridAPI;
+        var queryGrid;
 
         function initializeController() {
             $scope.suppliers = [];
@@ -39,6 +40,7 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                        queryGrid = query;
                         return gridAPI.retrieveData(query);
                     }
 
@@ -69,12 +71,21 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
                 name: "Edit",
                 clicked: editSupplier,
                 haspermission: hasEditSupplierPermission
+            },
+            {
+                name: "Delete",
+                clicked: deleteSupplier,
+                haspermission: hasDeleteSupplierPermission
             }
             ];
         }
 
         function hasEditSupplierPermission() {
             return QM_BE_SupplierAPIService.HasEditSupplierPermission();
+        }
+
+        function hasDeleteSupplierPermission() {
+            return QM_BE_SupplierAPIService.HasDeleteSupplierPermission();
         }
 
         function editSupplier(supplier) {
@@ -84,6 +95,21 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
             QM_BE_SupplierService.editSupplier(supplier.Entity.SupplierId, onSupplierUpdated);
         }
 
+        function deleteSupplier(supplier) {
+            var onSupplierDeleted = function (deletedItem) {
+                QM_BE_SupplierAPIService.DeleteSupplier(deletedItem);
+            };
+
+            return QM_BE_SupplierService.deleteSupplier(supplier.Entity, onSupplierDeleted)
+               .then(function () {
+                })
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               }).finally(function () {
+                   gridAPI.retrieveData(queryGrid);
+                   defineMenuActions();
+               });
+        }
 
         this.initializeController = initializeController;
     }

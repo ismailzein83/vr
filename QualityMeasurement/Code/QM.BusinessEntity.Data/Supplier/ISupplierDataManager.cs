@@ -14,6 +14,7 @@ namespace QM.BusinessEntity.Data
         bool Insert(Supplier supplier);
 
         bool Update(Supplier supplier);
+        bool Delete(Supplier supplier);
         void InsertSupplierFromeSource(Supplier supplier);
 
         void UpdateSupplierFromeSource(Supplier supplier);

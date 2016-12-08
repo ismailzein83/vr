@@ -33,7 +33,12 @@ namespace QM.BusinessEntity.Data.SQL
         {
             return GetItemsSP("[QM_BE].[sp_Supplier_GetAll]", SupplierMapper);
         }
-       
+
+        public bool Delete(Supplier supplier)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Delete]", supplier.SupplierId);
+            return (recordsEffected > 0);
+        }
 
         public bool Insert(Supplier supplier)
         {

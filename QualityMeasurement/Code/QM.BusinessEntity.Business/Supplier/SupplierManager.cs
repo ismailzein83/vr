@@ -103,7 +103,30 @@ namespace QM.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-        
+
+        public Vanrise.Entities.UpdateOperationOutput<SupplierDetail> DeleteSupplier(Supplier supplier)
+        {
+            ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+
+            bool updateActionSucc = dataManager.Delete(supplier);
+            Vanrise.Entities.UpdateOperationOutput<SupplierDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SupplierDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
+                SupplierDetail supplierDetail = SupplierDetailMapper(supplier);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = supplierDetail;
+            }
+            else
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            return updateOperationOutput;
+        }
+
         public void AddSupplierFromSource(Supplier supplier)
         {
             AssignSupplierId(supplier);
