@@ -600,6 +600,9 @@
     <Content Include="Images\menu-icons\busines intel.png" />
     <Content Include="Images\menu-icons\Business Entities.png" />
     <Content Include="Images\menu-icons\NOC.png" />
+    <Content Include="Images\menu-icons\other.png" />
+    <Content Include="Images\menu-icons\plug.png" />
+    <Content Include="Images\menu-icons\Sale Area.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
