@@ -74,6 +74,7 @@
     <Compile Include="BalanceAlertThresholdUpdate\CalculateNextAlertThresholds.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\LoadBalanceInfos.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\UpdateBalanceRuleInfos.cs" />
+    <Compile Include="Contexts.cs" />
     <Compile Include="CreateAction.cs" />
     <Compile Include="GetAlertRuleType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,9 +14,10 @@ namespace Vanrise.Notification.Entities
 
         int? AlertRuleId { get; }
 
-        Decimal? NextAlertThreshold { get;}
+        Decimal? NextAlertThreshold { get; }
 
         Decimal? LastExecutedAlertThreshold { get; }
+        int? ThresholdActionIndex { get; }
     }
 
     public class VREntityBalanceInfoBatch

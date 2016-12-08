@@ -52,7 +52,8 @@ namespace Vanrise.AccountBalance.Business.Extensions
                     AccountId = liveBalance.AccountId,
                     AccountTypeId = liveBalance.AccountTypeId,
                     AlertRuleId = balanceRuleInfo.AlertRuleId,
-                    NextAlertThreshold = balanceRuleInfo.NextAlertThreshold
+                    NextAlertThreshold = balanceRuleInfo.NextAlertThreshold,
+                    ThresholdActionIndex = balanceRuleInfo.ThresholdActionIndex
                 };
                 lstLiveBalanceNextThresholdUpdateEntity.Add(balanceEntity);
             }

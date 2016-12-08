@@ -14,6 +14,7 @@ namespace Vanrise.AccountBalance.Entities
         public decimal InitialBalance { get; set; }
         public Decimal UsageBalance { get; set; }
         public int? AlertRuleID { get; set; }
+        public int? ThresholdIndex { get; set; }
         public Decimal CurrentBalance { get; set; }
         public int CurrencyId { get; set; }
         public decimal? LastExecutedThreshold { get; set; }
@@ -37,6 +38,12 @@ namespace Vanrise.AccountBalance.Entities
         public int? AlertRuleId
         {
             get { return this.AlertRuleID; }
+        }
+
+
+        public int? ThresholdActionIndex
+        {
+            get { return this.ThresholdIndex; }
         }
     }
 }

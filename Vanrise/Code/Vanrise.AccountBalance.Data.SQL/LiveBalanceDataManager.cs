@@ -173,7 +173,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 AlertRuleID = GetReaderValue<int?>(reader, "AlertRuleID"),
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
                 NextThreshold = GetReaderValue<decimal?>(reader, "NextAlertThreshold"),
-                LastExecutedThreshold = GetReaderValue<decimal?>(reader, "LastExecutedActionThreshold")
+                LastExecutedThreshold = GetReaderValue<decimal?>(reader, "LastExecutedActionThreshold"),
+                ThresholdIndex = GetReaderValue<int?>(reader, "ThresholdActionIndex")
             };
         }
         private LiveBalanceAccountInfo LiveBalanceAccountInfoMapper(IDataReader reader)
@@ -283,6 +284,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             dr["AccountID"] = updateEntity.AccountId;
             dr["NextAlertThreshold"] = updateEntity.NextAlertThreshold;
             dr["AlertRuleId"] = updateEntity.AlertRuleId;
+            dr["ThresholdActionIndex"] = updateEntity.ThresholdActionIndex;
         }
 
         DataTable GetLiveBalanceThresholdUpdateTable()
@@ -292,6 +294,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AccountID", typeof(long));
             dt.Columns.Add("NextAlertThreshold", typeof(decimal));
             dt.Columns.Add("AlertRuleId", typeof(int));
+            dt.Columns.Add("ThresholdActionIndex", typeof(int));
             return dt;
         }
     }

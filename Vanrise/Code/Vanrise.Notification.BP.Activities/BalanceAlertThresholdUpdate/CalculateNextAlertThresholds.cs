@@ -50,6 +50,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                 int? currentAlertRuleId = entityBalanceInfo.AlertRuleId;
 
                                 decimal? finalNextThreshold = default(decimal?);
+                                int? thresholdIndex = default(int?);
                                 long? finalAlertRuleId;
 
 
@@ -68,13 +69,15 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                 {
                                     VRBalanceAlertRuleSettings balanceAlertRuleSettings = matchedRule.Settings.ExtendedSettings as VRBalanceAlertRuleSettings;
 
-                                    foreach (VRBalanceAlertThresholdAction balanceAlertThresholdAction in balanceAlertRuleSettings.ThresholdActions)
+                                    for (int i = 0; i < balanceAlertRuleSettings.ThresholdActions.Count; i++)
                                     {
+                                        VRBalanceAlertThresholdAction balanceAlertThresholdAction = balanceAlertRuleSettings.ThresholdActions[i];
                                         VRBalanceAlertThresholdContext vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext { EntityBalanceInfo = entityBalanceInfo };
                                         decimal ruleThresholdValue = balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext);
                                         if (currentNextThreshold != ruleThresholdValue && entityBalanceInfo.CurrentBalance < ruleThresholdValue)
                                         {
                                             finalNextThreshold = ruleThresholdValue;
+                                            thresholdIndex = i;
                                             break;
                                         }
                                     }
@@ -86,7 +89,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                     {
                                         AlertRuleId = finalAlertRuleId,
                                         EntityBalanceInfo = entityBalanceInfo,
-                                        NextAlertThreshold = finalNextThreshold
+                                        NextAlertThreshold = finalNextThreshold,
+                                        ThresholdActionIndex = thresholdIndex
                                     };
                                     updateRuleInfoPayloadBatch.Items.Add(updateRuleInfoPayload);
                                 }
@@ -115,35 +119,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                 this.OutputQueue.Set(context, new MemoryQueue<VRBalanceUpdateRuleInfoPayloadBatch>());
             base.OnBeforeExecute(context, handle);
         }
-
-
+        
     }
 
-    #region Contexts Implementation
-    class VRBalanceAlertRuleCreateRuleTargetContext : IVRBalanceAlertRuleCreateRuleTargetContext
-    {
-
-        public IVREntityBalanceInfo EntityBalanceInfo
-        {
-            get;
-            set;
-        }
-
-        public VRBalanceAlertRuleTypeSettings RuleTypeSettings
-        {
-            get;
-            set;
-        }
-    }
-
-    public class VRBalanceAlertThresholdContext : IVRBalanceAlertThresholdContext
-    {
-        public IVREntityBalanceInfo EntityBalanceInfo
-        {
-            get;
-            set;
-        }
-    }
-
-    #endregion
 }
