@@ -1,0 +1,17 @@
+﻿<vr-panel ng-controller="WhS_BE_SingleSwitchManagementController" vr-loader="isLoading">
+    <vr-form name="formSwitchEditor">
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-whs-be-switch-editor on-ready="onSwitchEditorReady"></vr-whs-be-switch-editor>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formSwitchEditor" data-onclick="scopeModel.saveSwitch" haspermission="scopeModel.hasSaveSwitchPermission"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+
+</vr-panel>

@@ -362,6 +362,8 @@
     <Content Include="WhS_BusinessEntity\Directives\SupplierZoneService\vr-whs-be-supplierzoneservice-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\PurchasePricingRuleCriteriaTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\vr-whs-be-purchasepricingrulecriteria.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Switch\Templates\SwitchFormEditor.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\TechnicalSettings\Templates\BETechnicalSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\TechnicalSettings\vr-whs-be-technical-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierCode\Templates\SupplierCodeGridTemplate.html" />
@@ -511,7 +513,9 @@
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\Switch\SingleSwitchManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\Switch\SingleSwitchManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagementController.js" />
