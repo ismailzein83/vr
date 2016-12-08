@@ -39,10 +39,10 @@ namespace TOne.WhS.CodePreparation.Business
             return dataManager.UpdateCodePreparationStatus(sellingNumberPlanId, CodePreparationStatus.Canceled);
         }
 
-        public CPSettingsData GetCPSettings()
+        public int GetCPEffectiveDateDayOffset()
         {
-            SettingManager settingManager = new SettingManager();
-            return settingManager.GetSetting<CPSettingsData>(Constants.CPSettings);
+			var configManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
+			return configManager.GetSaleAreaEffectiveDateDayOffset();
         }
     }
 }

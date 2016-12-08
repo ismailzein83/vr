@@ -18,7 +18,7 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
     		compile: function (element, attrs) {
 
     		},
-    		templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SaleAreaSettings/Templates/SaleAreaSettingsTemplate.html"
+    		templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Settings/Templates/SaleAreaSettingsTemplate.html"
     	};
 
     	function settingEditorCtor(ctrl, $scope, $attrs) {

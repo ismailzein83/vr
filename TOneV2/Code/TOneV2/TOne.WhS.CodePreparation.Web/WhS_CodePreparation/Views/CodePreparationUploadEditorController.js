@@ -83,9 +83,9 @@
 
         function loadEffectiveDate() {
 
-            return WhS_CP_CodePrepAPIService.GetCPSettings().then(function (response) {
+        	return WhS_CP_CodePrepAPIService.GetCPEffectiveDateDayOffset().then(function (effectiveDateDayOffset) {
                 var effectiveDate = new Date();
-                effectiveDate.setDate(effectiveDate.getDate() + response.EffectiveDateOffset);
+                effectiveDate.setDate(effectiveDate.getDate() + effectiveDateDayOffset);
                 $scope.effectiveDate = effectiveDate;
             });
         }

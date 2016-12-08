@@ -9,133 +9,167 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class ConfigManager
-    {
-        #region Public Methods
+	public class ConfigManager
+	{
+		#region Public Methods
 
-        public int GetOffPeakRateTypeId()
-        {
-            BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
+		public int GetOffPeakRateTypeId()
+		{
+			BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
 
-            if (setting.RateTypeConfiguration == null)
-                throw new NullReferenceException("setting.RateTypeConfiguration");
+			if (setting.RateTypeConfiguration == null)
+				throw new NullReferenceException("setting.RateTypeConfiguration");
 
-            return setting.RateTypeConfiguration.OffPeakRateTypeId;
-        }
-        public int GetWeekendRateTypeId()
-        {
-            BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
+			return setting.RateTypeConfiguration.OffPeakRateTypeId;
+		}
+		public int GetWeekendRateTypeId()
+		{
+			BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
 
-            if (setting.RateTypeConfiguration == null)
-                throw new NullReferenceException("setting.RateTypeConfiguration");
+			if (setting.RateTypeConfiguration == null)
+				throw new NullReferenceException("setting.RateTypeConfiguration");
 
-            return setting.RateTypeConfiguration.WeekendRateTypeId;
-        }
-        public int GetHolidayRateTypeId()
-        {
-            BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
+			return setting.RateTypeConfiguration.WeekendRateTypeId;
+		}
+		public int GetHolidayRateTypeId()
+		{
+			BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
 
-            if (setting.RateTypeConfiguration == null)
-                throw new NullReferenceException("setting.RateTypeConfiguration");
+			if (setting.RateTypeConfiguration == null)
+				throw new NullReferenceException("setting.RateTypeConfiguration");
 
-            return setting.RateTypeConfiguration.HolidayRateTypeId;
-        }
+			return setting.RateTypeConfiguration.HolidayRateTypeId;
+		}
 
-        public CDPNIdentification GetGeneralCDPNIndentification()
-        {
-            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
-            if (!switchCDRMappingConfiguration.GeneralIdentification.HasValue)
-                throw new NullReferenceException("switchCDRMappingConfiguration.GeneralIdentification");
+		public CDPNIdentification GetGeneralCDPNIndentification()
+		{
+			SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+			if (!switchCDRMappingConfiguration.GeneralIdentification.HasValue)
+				throw new NullReferenceException("switchCDRMappingConfiguration.GeneralIdentification");
 
-            return switchCDRMappingConfiguration.GeneralIdentification.Value;
-        }
-        public CDPNIdentification GetCustomerCDPNIndentification()
-        {
-            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
-            if (!switchCDRMappingConfiguration.CustomerIdentification.HasValue)
-                throw new NullReferenceException("switchCDRMappingConfiguration.CustomerIdentification");
+			return switchCDRMappingConfiguration.GeneralIdentification.Value;
+		}
+		public CDPNIdentification GetCustomerCDPNIndentification()
+		{
+			SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+			if (!switchCDRMappingConfiguration.CustomerIdentification.HasValue)
+				throw new NullReferenceException("switchCDRMappingConfiguration.CustomerIdentification");
 
-            return switchCDRMappingConfiguration.CustomerIdentification.Value;
-        }
-        public CDPNIdentification GetSupplierCDPNIndentification()
-        {
-            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
-            if (!switchCDRMappingConfiguration.SupplierIdentification.HasValue)
-                throw new NullReferenceException("switchCDRMappingConfiguration.SupplierIdentification");
+			return switchCDRMappingConfiguration.CustomerIdentification.Value;
+		}
+		public CDPNIdentification GetSupplierCDPNIndentification()
+		{
+			SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+			if (!switchCDRMappingConfiguration.SupplierIdentification.HasValue)
+				throw new NullReferenceException("switchCDRMappingConfiguration.SupplierIdentification");
 
-            return switchCDRMappingConfiguration.SupplierIdentification.Value;
-        }
-        public CDPNIdentification GetSaleZoneCDPNIndentification()
-        {
-            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
-            if (!switchCDRMappingConfiguration.SaleZoneIdentification.HasValue)
-                throw new NullReferenceException("switchCDRMappingConfiguration.SaleZoneIdentification");
+			return switchCDRMappingConfiguration.SupplierIdentification.Value;
+		}
+		public CDPNIdentification GetSaleZoneCDPNIndentification()
+		{
+			SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+			if (!switchCDRMappingConfiguration.SaleZoneIdentification.HasValue)
+				throw new NullReferenceException("switchCDRMappingConfiguration.SaleZoneIdentification");
 
-            return switchCDRMappingConfiguration.SaleZoneIdentification.Value;
-        }
-        public CDPNIdentification GetSupplierZoneCDPNIndentification()
-        {
-            SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
-            if (!switchCDRMappingConfiguration.SupplierZoneIdentification.HasValue)
-                throw new NullReferenceException("switchCDRMappingConfiguration.SupplierZoneIdentification");
+			return switchCDRMappingConfiguration.SaleZoneIdentification.Value;
+		}
+		public CDPNIdentification GetSupplierZoneCDPNIndentification()
+		{
+			SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
+			if (!switchCDRMappingConfiguration.SupplierZoneIdentification.HasValue)
+				throw new NullReferenceException("switchCDRMappingConfiguration.SupplierZoneIdentification");
 
-            return switchCDRMappingConfiguration.SupplierZoneIdentification.Value;
-        }
+			return switchCDRMappingConfiguration.SupplierZoneIdentification.Value;
+		}
 
-        public CachingExpirationIntervals GetCachingExpirationIntervals()
-        {
-            BusinessEntitySettingsData businessEntitySettingsData = GetBusinessEntitySettingsData();
-            if (businessEntitySettingsData.CachingExpirationIntervals == null)
-                throw new NullReferenceException("businessEntitySettingsData.CachingExpirationIntervals");
+		public CachingExpirationIntervals GetCachingExpirationIntervals()
+		{
+			BusinessEntitySettingsData businessEntitySettingsData = GetBusinessEntitySettingsData();
+			if (businessEntitySettingsData.CachingExpirationIntervals == null)
+				throw new NullReferenceException("businessEntitySettingsData.CachingExpirationIntervals");
 
-            return businessEntitySettingsData.CachingExpirationIntervals;
-        }
+			return businessEntitySettingsData.CachingExpirationIntervals;
+		}
 
-        #endregion
+		public int GetSaleAreaEffectiveDateDayOffset()
+		{
+			SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+			return saleAreaSettings.EffectiveDateDayOffset;
+		}
+		public int GetSaleAreaRetroactiveDayOffset()
+		{
+			SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+			return saleAreaSettings.RetroactiveDayOffset;
+		}
+		public int GetPurchaseAreaRetroactiveDayOffset()
+		{
+			PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+			return purchaseAreaSettings.RetroactiveDayOffset;
+		}
 
-        #region Private Method
+		#endregion
 
-        private BusinessEntityTechnicalSettingsData GetBusinessEntitySettingData()
-        {
-            SettingManager settingManager = new SettingManager();
-            BusinessEntityTechnicalSettingsData setting = settingManager.GetSetting<BusinessEntityTechnicalSettingsData>(BusinessEntityTechnicalSettingsData.BusinessEntityTechnicalSettings);
+		#region Private Methods
 
-            if (setting == null)
-                throw new NullReferenceException("BusinessEntityTechnicalSettingsData");
+		private BusinessEntityTechnicalSettingsData GetBusinessEntitySettingData()
+		{
+			SettingManager settingManager = new SettingManager();
+			BusinessEntityTechnicalSettingsData setting = settingManager.GetSetting<BusinessEntityTechnicalSettingsData>(BusinessEntityTechnicalSettingsData.BusinessEntityTechnicalSettings);
 
-            return setting;
-        }
+			if (setting == null)
+				throw new NullReferenceException("BusinessEntityTechnicalSettingsData");
 
-        private CDRImportSettings GetCDRImportSettings()
-        {
-            SettingManager settingManager = new SettingManager();
-            CDRImportSettings cdrImportSettings = settingManager.GetSetting<CDRImportSettings>(Constants.CDRImportSettings);
+			return setting;
+		}
 
-            if (cdrImportSettings == null)
-                throw new NullReferenceException("cdrImportSettings");
+		private CDRImportSettings GetCDRImportSettings()
+		{
+			SettingManager settingManager = new SettingManager();
+			CDRImportSettings cdrImportSettings = settingManager.GetSetting<CDRImportSettings>(Constants.CDRImportSettings);
 
-            return cdrImportSettings;
-        }
-        private SwitchCDRMappingConfiguration GetSwitchCDRMappingConfiguration()
-        {
-            CDRImportSettings cdrImportSettings = GetCDRImportSettings();
-            if (cdrImportSettings.SwitchCDRMappingConfiguration == null)
-                throw new NullReferenceException("cdrImportSettings.SwitchCDRMappingConfiguration");
+			if (cdrImportSettings == null)
+				throw new NullReferenceException("cdrImportSettings");
 
-            return cdrImportSettings.SwitchCDRMappingConfiguration;
-        }
+			return cdrImportSettings;
+		}
 
-        private BusinessEntitySettingsData GetBusinessEntitySettingsData()
-        {
-            SettingManager settingManager = new SettingManager();
-            BusinessEntitySettingsData businessEntitySettingsData = settingManager.GetSetting<BusinessEntitySettingsData>(Constants.BusinessEntitySettingsData);
+		private SwitchCDRMappingConfiguration GetSwitchCDRMappingConfiguration()
+		{
+			CDRImportSettings cdrImportSettings = GetCDRImportSettings();
+			if (cdrImportSettings.SwitchCDRMappingConfiguration == null)
+				throw new NullReferenceException("cdrImportSettings.SwitchCDRMappingConfiguration");
 
-            if (businessEntitySettingsData == null)
-                throw new NullReferenceException("businessEntitySettingsData");
+			return cdrImportSettings.SwitchCDRMappingConfiguration;
+		}
 
-            return businessEntitySettingsData;
-        }
+		private BusinessEntitySettingsData GetBusinessEntitySettingsData()
+		{
+			SettingManager settingManager = new SettingManager();
+			BusinessEntitySettingsData businessEntitySettingsData = settingManager.GetSetting<BusinessEntitySettingsData>(Constants.BusinessEntitySettingsData);
 
-        #endregion
-    }
+			if (businessEntitySettingsData == null)
+				throw new NullReferenceException("businessEntitySettingsData");
+
+			return businessEntitySettingsData;
+		}
+
+		private T GetSettings<T>(string constant) where T : Vanrise.Entities.SettingData
+		{
+			var settingManager = new SettingManager();
+			T settings = settingManager.GetSetting<T>(constant);
+			if (settings == null)
+				throw new NullReferenceException("settings");
+			return settings;
+		}
+		private SaleAreaSettingsData GetSaleAreaSettings()
+		{
+			return GetSettings<SaleAreaSettingsData>(Constants.SaleAreaSettings);
+		}
+		private PurchaseAreaSettingsData GetPurchaseAreaSettings()
+		{
+			return GetSettings<PurchaseAreaSettingsData>(Constants.PurchaseAreaSettings);
+		}
+
+		#endregion
+	}
 }

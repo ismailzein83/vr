@@ -177,8 +177,6 @@
     <Content Include="WhS_CodePreparation\Directives\CodePreview\vr-cp-codepreview-grid.js" />
     <Content Include="WhS_CodePreparation\Directives\CountryPreview\Templates\CodePreparationCountryPreviewGridTemplate.html" />
     <Content Include="WhS_CodePreparation\Directives\CountryPreview\vr-cp-countrypreview-grid.js" />
-    <Content Include="WhS_CodePreparation\Directives\CPSettings\Templates\CPSettingsTemplate.html" />
-    <Content Include="WhS_CodePreparation\Directives\CPSettings\vr-cp-settings-editor.js" />
     <Content Include="WhS_CodePreparation\Directives\RatePreview\Templates\CodePreparationRatePreviewGridTemplate.html" />
     <Content Include="WhS_CodePreparation\Directives\RatePreview\vr-cp-ratepreview-grid.js" />
     <Content Include="WhS_CodePreparation\Directives\ZonePreview\Templates\CodePreparationZonePreviewGridTemplate.html" />

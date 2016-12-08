@@ -58,7 +58,6 @@
     <Compile Include="ChangedData\ChangedRate.cs" />
     <Compile Include="ChangedData\ChangedZone.cs" />
     <Compile Include="AddedCode.cs" />
-    <Compile Include="CPSettings\CPSettingsData.cs" />
     <Compile Include="ExistingRate.cs" />
     <Compile Include="ExistingRateGroup.cs" />
     <Compile Include="ExistingZoneRoutingProducts.cs" />

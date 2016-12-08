@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.CodePreparation.Business
 {
-    public static class Constants
-    {
-        public const string CPSettings = "WhS.CodePreparation";
+	public static class Constants
+	{
 
-        
-    }
+	}
 }

@@ -13,70 +13,63 @@ using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class BEDBeforeRetroActiveMinDateCondition : BusinessRuleCondition
-    {
+	public class BEDBeforeRetroActiveMinDateCondition : BusinessRuleCondition
+	{
+		public override bool ShouldValidate(IRuleTarget target)
+		{
+			return (target as ImportedDataByZone != null);
+		}
 
-        public override bool ShouldValidate(IRuleTarget target)
-        {
-            return (target as ImportedDataByZone != null);
-        }
+		public override bool Validate(IBusinessRuleConditionValidateContext context)
+		{
+			ImportedDataByZone zone = context.Target as ImportedDataByZone;
 
-        public override bool Validate(IBusinessRuleConditionValidateContext context)
-        {
+			int retroactiveDayOffset = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetPurchaseAreaRetroactiveDayOffset();
+			DateTime minimumRetroActiveDate = DateTime.Today.AddDays(-retroactiveDayOffset).Date;
 
-            ImportedDataByZone zone = context.Target as ImportedDataByZone;
+			foreach (var importedCode in zone.ImportedCodes)
+			{
+				if (importedCode.BED < minimumRetroActiveDate)
+					return false;
+			}
 
-            SettingManager settingManager = new SettingManager();
-            SupplierPriceListSettingsData saleAreaSettingsData = settingManager.GetSetting<SupplierPriceListSettingsData>(TOne.WhS.SupplierPriceList.Business.Constants.SupplierPriceListSettings);
-            if (saleAreaSettingsData != null)
-            {
-                int retroActiveMinDateOffset = saleAreaSettingsData.RetroActiveMinDate;
-                DateTime minimumRetroActiveDate =  DateTime.Today.AddDays(-retroActiveMinDateOffset).Date;
-                foreach (var importedCode in zone.ImportedCodes)
-                {
-                    if (importedCode.BED < minimumRetroActiveDate)
-                       return false;
-                }
+			foreach (var importedNormalRate in zone.ImportedNormalRates)
+			{
+				if (importedNormalRate.BED < minimumRetroActiveDate)
+					return false;
+			}
 
-                foreach (var importedNormalRate in zone.ImportedNormalRates)
-                {
-                    if (importedNormalRate.BED < minimumRetroActiveDate)
-                        return false;
-                }
+			foreach (var importedOtherRate in zone.ImportedOtherRates)
+			{
+				if (importedOtherRate.Value.Count > 0)
+				{
+					foreach (var otherRate in importedOtherRate.Value)
+					{
+						if (otherRate.BED < minimumRetroActiveDate)
+							return false;
+					}
+				}
+			}
 
-                foreach (var importedOtherRate in zone.ImportedOtherRates)
-                {
-                    if (importedOtherRate.Value.Count > 0)
-                    {
-                        foreach (var otherRate in importedOtherRate.Value)
-                        {
-                            if (otherRate.BED < minimumRetroActiveDate)
-                                return false;
-                        }
-                    }
-                }
+			foreach (var importedZoneServiceGroup in zone.ImportedZoneServicesToValidate)
+			{
+				if (importedZoneServiceGroup.Value.Count > 0)
+				{
+					foreach (var serviceGroup in importedZoneServiceGroup.Value)
+					{
+						if (serviceGroup.BED < minimumRetroActiveDate)
+							return false;
+					}
+				}
+			}
 
-                foreach (var importedZoneServiceGroup in zone.ImportedZoneServicesToValidate)
-                {
-                    if (importedZoneServiceGroup.Value.Count > 0)
-                    {
-                        foreach (var serviceGroup in importedZoneServiceGroup.Value)
-                        {
-                            if (serviceGroup.BED < minimumRetroActiveDate)
-                                return false;
-                        }
-                    }
-                }
 
-            }
+			return true;
+		}
 
-            return true;
-        }
-
-        public override string GetMessage(IRuleTarget target)
-        {
-            return string.Format("Zone {0} has a code, rate, or service with BED less than minimum retro active date", (target as ImportedDataByZone).ZoneName);
-        }
-
-    }
+		public override string GetMessage(IRuleTarget target)
+		{
+			return string.Format("Zone {0} has a code, rate, or service with BED less than minimum retro active date", (target as ImportedDataByZone).ZoneName);
+		}
+	}
 }
