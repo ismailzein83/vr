@@ -25,7 +25,7 @@ namespace Vanrise.Common.Business
             SmtpClient client = new SmtpClient();
             client.Port = emailSettingData.Port;
             client.Host = emailSettingData.Host;
-            client.Timeout = emailSettingData.Timeout;
+            client.Timeout = emailSettingData.TimeoutInSeconds * 1000;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
             client.Credentials = new System.Net.NetworkCredential(emailSettingData.SenderEmail, emailSettingData.SenderPassword);
