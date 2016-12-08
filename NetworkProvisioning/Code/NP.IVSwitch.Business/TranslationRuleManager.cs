@@ -32,51 +32,49 @@ namespace NP.IVSwitch.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTranslationRules.ToBigResult(input, filterExpression, TranslationRuleDetailMapper));
         }
 
-        public Vanrise.Entities.InsertOperationOutput<TranslationRuleDetail> AddTranslationRule(TranslationRule translationRuleItem)
+        public InsertOperationOutput<TranslationRuleDetail> AddTranslationRule(TranslationRule translationRuleItem)
         {
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TranslationRuleDetail>();
-
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-
+            var insertOperationOutput = new InsertOperationOutput<TranslationRuleDetail>
+            {
+                Result = InsertOperationResult.Failed,
+                InsertedObject = null
+            };
             ITranslationRuleDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<ITranslationRuleDataManager>();
-
-            int translationRuleId = -1;
+            Helper.SetSwitchConfig(dataManager);
+            int translationRuleId;
 
             if (dataManager.Insert(translationRuleItem, out  translationRuleId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = TranslationRuleDetailMapper(this.GetTranslationRule(translationRuleId));
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = TranslationRuleDetailMapper(GetTranslationRule(translationRuleId));
             }
             else
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
             }
-
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<TranslationRuleDetail> UpdateTranslationRule(TranslationRule translationRuleItem)
+        public UpdateOperationOutput<TranslationRuleDetail> UpdateTranslationRule(TranslationRule translationRuleItem)
         {
-            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<TranslationRuleDetail>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
+            var updateOperationOutput = new UpdateOperationOutput<TranslationRuleDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
             ITranslationRuleDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<ITranslationRuleDataManager>();
-
+            Helper.SetSwitchConfig(dataManager);
             if (dataManager.Update(translationRuleItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = TranslationRuleDetailMapper(this.GetTranslationRule(translationRuleItem.TranslationRuleId));
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = TranslationRuleDetailMapper(GetTranslationRule(translationRuleItem.TranslationRuleId));
             }
             else
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
-
             return updateOperationOutput;
         }
 
