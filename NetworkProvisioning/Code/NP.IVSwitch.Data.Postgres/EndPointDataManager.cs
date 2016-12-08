@@ -396,16 +396,15 @@ namespace NP.IVSwitch.Data.Postgres
         {
             if (endPointInfoList.Count == 0)
             {
-                int groupId = 0, nextGroupId = 0;
-
+                int groupId, nextGroupId;
                 String cmdText = @"Select max(group_id) as group_id
                                 from users
                                 where account_id = @account_id";
-                int groupIdIncremented = GetItemText(cmdText, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) =>
+                int? groupIdIncrementedTemp = (int?)ExecuteScalarText(cmdText, cmd =>
                 {
                     cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                 });
-
+                int groupIdIncremented = groupIdIncrementedTemp ?? 0;
                 if (groupIdIncremented != 0)
                 {
                     groupId = groupIdIncremented - endPoint.AccountId;
@@ -415,52 +414,38 @@ namespace NP.IVSwitch.Data.Postgres
                                 Select  group_id as  group_id,  lead(group_id) OVER (ORDER BY group_id ) as next_group_id   
                                 from user_groups)  x
                                  where  group_id = @group_id;";
-
-                    nextGroupId = GetItemText(cmdText2, (reader) => { return GetReaderValue<int>(reader, "next_group_id"); }, (cmd) =>
+                    int? nextGroupResult = (int?)ExecuteScalarText(cmdText2, cmd =>
                     {
                         cmd.Parameters.AddWithValue("@group_id", groupId);
                     });
-
+                    nextGroupId = nextGroupResult ?? 0;
                     if (nextGroupId == 0)
                     {
-                        //insert new record
                         String cmdText3 = @"INSERT INTO user_groups(description)
 	                                        VALUES('Dummy Group')
                                             returning group_id;";
-
-                        object nextGroupIdObject = ExecuteScalarText(cmdText3, (cmd) => { });
-
-                        nextGroupId = Convert.ToInt32(nextGroupIdObject);
+                        nextGroupId = (int)ExecuteScalarText(cmdText3, cmd => { });
                     }
-
                 }
-
                 else
                 {
                     String cmdText2 = @"Select  group_id
                                    from user_groups 
                                    order by group_id
                                    limit 1 ";
-
-                    nextGroupId = GetItemText(cmdText2, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) => { });
+                    nextGroupId = (int)ExecuteScalarText(cmdText2, cmd => { });
                 }
-
-
                 return nextGroupId + endPoint.AccountId;
-
             }
-
             else
             {
-
                 String cmdText = @"Select group_id  
                                    from users
                                    where user_id = @user_id";
-                int groupId = GetItemText(cmdText, (reader) => { return GetReaderValue<int>(reader, "group_id"); }, (cmd) =>
+                int groupId = (int)ExecuteScalarText(cmdText, cmd =>
                 {
                     cmd.Parameters.AddWithValue("@user_id", endPointInfoList[0].EndPointId);
                 });
-
                 return groupId;
             }
         }

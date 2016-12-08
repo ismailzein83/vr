@@ -19,7 +19,6 @@ namespace NP.IVSwitch.Data.Postgres
         }
         private Route RouteMapper(IDataReader reader)
         {
-
             Route route = new Route
             {
                 RouteId = (int)reader["route_id"],
@@ -78,16 +77,10 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
             }
            );
-            bool succ = (recordsEffected > 0);
-            if (succ)
-            {
-                CheckTariffTable();
-                return true;
-            }
-            return false;
+            return recordsEffected > 0;
         }
 
-        private int? InsertRoutes(Route route, int groupId)
+        private int? InsertRoutes(Route route, int groupId, int tariffId)
         {
             String cmdText = @"INSERT INTO routes(account_id,description,group_id,tariff_id,
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time, host,port,transport_mode_id,
@@ -101,7 +94,7 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@account_id", route.AccountId);
                 cmd.Parameters.AddWithValue("@description", route.Description);
                 cmd.Parameters.AddWithValue("@group_id", groupId);
-                cmd.Parameters.AddWithValue("@tariff_id", route.TariffId);
+                cmd.Parameters.AddWithValue("@tariff_id", tariffId);
                 cmd.Parameters.AddWithValue("@log_alias", route.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", route.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", route.TransRuleId);
@@ -116,21 +109,13 @@ namespace NP.IVSwitch.Data.Postgres
             }
                 );
         }
-        public bool Insert(Route route, out int insertedId)
+        public int? Insert(Route route)
         {
             int groupId = GetGroupId(route);
-            int? routeId = InsertRoutes(route, groupId);
-
-            insertedId = -1;
-            if (routeId.HasValue)
-            {
-                insertedId = Convert.ToInt32(routeId);
-                CheckTariffTable();
-                return true;
-            }
-            return false;
+            int tariffId = CheckTariffTable();
+            return InsertRoutes(route, groupId, tariffId);
         }
-        private void CheckTariffTable()
+        private int CheckTariffTable()
         {
             String cmdText = @" select tariff_id
                                 from tariffs
@@ -139,13 +124,14 @@ namespace NP.IVSwitch.Data.Postgres
             if (!tariffId.HasValue)
             {
                 string insertCmd = @"insert into tariffs (tariff_name, description) 
-                                select  'Global' ,'Global' 
-                                where not exists(select 1 from tariffs where tariff_name = 'Global')
-                                returning tariff_id";
+                                                select  'Global' ,'Global' 
+                                                where not exists(select 1 from tariffs where tariff_name = 'Global')
+                                                returning tariff_id";
                 tariffId = (int?)ExecuteScalarText(insertCmd, null);
                 TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString, IvSwitchSync.OwnerName);
                 tariffDataManager.CreateGlobalTable(tariffId.Value);
             }
+            return tariffId.Value;
         }
 
         private void MapEnum(Route route, out int currentState, out int transportPortId)
