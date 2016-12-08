@@ -42,7 +42,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override ActionSeverity GetSeverity()
         {
-            return ActionSeverity.Information;
+            return ActionSeverity.Warning;
         }
     }
 }
