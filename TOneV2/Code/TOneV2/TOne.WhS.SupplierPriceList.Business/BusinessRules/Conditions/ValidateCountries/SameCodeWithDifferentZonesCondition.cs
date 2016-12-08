@@ -25,7 +25,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             foreach (var importedCode in country.ImportedCodes)
             {
-                if (country.ImportedCodes.Where(x => x.Code == importedCode.Code && x.ZoneName != importedCode.ZoneName).Count() > 0)
+                if (country.ImportedCodes.Where(x => x.Code == importedCode.Code && !x.ZoneName.Equals(importedCode.ZoneName, StringComparison.InvariantCultureIgnoreCase)).Count() > 0)
                     return false;
             }
 

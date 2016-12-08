@@ -85,6 +85,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             if (inputArgument.ExistingZonesByZoneId != null)
                 existingZones = inputArgument.ExistingZonesByZoneId.Select(item => item.Value);
 
+            if (inputArgument.ImportedZones.All(itm => itm.ImportedZoneServiceGroup == null))
+                return new ProcessCountryZonesServicesOutput() { 
+                 ChangedZonesServices = new List<ChangedZoneService>(),
+                 NewZonesServices = new List<NewZoneService>()};
+
             ProcessCountryZonesServicesContext processCountryZonesServicesContext = new ProcessCountryZonesServicesContext()
             {
                 ImportedZones = inputArgument.ImportedZones,

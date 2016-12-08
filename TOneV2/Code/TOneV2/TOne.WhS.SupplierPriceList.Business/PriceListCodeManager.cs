@@ -86,7 +86,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     CloseExistingOverlapedCodes(importedCode, matchExistingCodes, out shouldNotAddCode, out recentCodeZoneName);
                     if (!shouldNotAddCode)
                     {
-                        if (recentCodeZoneName != null && importedCode.ZoneName != recentCodeZoneName)
+                        if (recentCodeZoneName != null && !importedCode.ZoneName.Equals(recentCodeZoneName, StringComparison.InvariantCultureIgnoreCase))
                         {
                             importedCode.ChangeType = CodeChangeType.Moved;
                             importedCode.ProcessInfo.RecentZoneName = recentCodeZoneName;
@@ -273,7 +273,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         private bool SameCodes(ImportedCode importedCode, ExistingCode existingCode)
         {
             return importedCode.BED == existingCode.CodeEntity.BED
-                && importedCode.ZoneName == existingCode.ParentZone.ZoneEntity.Name;
+                && importedCode.ZoneName.Equals(existingCode.ParentZone.ZoneEntity.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private IEnumerable<ExistingCode> GetExistingCodesToClose(int countryId, SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes,

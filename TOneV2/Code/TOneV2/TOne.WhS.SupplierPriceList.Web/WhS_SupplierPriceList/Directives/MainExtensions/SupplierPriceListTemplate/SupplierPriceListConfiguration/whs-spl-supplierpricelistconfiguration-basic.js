@@ -46,6 +46,7 @@
             $scope.intPutFieldMappings;
             function initializeController() {
                 $scope.scopeModel = {};
+
                 $scope.scopeModel.onRateTabsReady = function (api) {
                     rateTabsAPI = api;
                     rateTabsAPI.setTabSelected(0);
@@ -206,9 +207,12 @@
                             $scope.scopeModel.delimiterValue = configDetails.Delimiter;
                             $scope.scopeModel.isCommaDecimalSeparator = configDetails.IsCommaDecimalSeparator;
                             $scope.scopeModel.selectedCodeLayout = UtilsService.getItemByVal($scope.scopeModel.codeLayouts, configDetails.CodeLayout, "value");
+                            $scope.scopeModel.includeServices = configDetails.IncludeServices;
                             loadOtherRateListMapping(promises);
                             loadFlaggedServiceListMapping(promises)
                         }
+                        else
+                            $scope.scopeModel.includeServices = true;
                     }
                     promises.push(loadRateTypeSelector());
                     promises.push(loadFlaggedServiceSelector());
@@ -369,6 +373,7 @@
                         NormalRateListMapping: listNormalRateMapping,
                         OtherRateListMapping: otherRatesListMappings,
                         FlaggedServiceListMapping: flaggedServiceListMapping,
+                        IncludeServices : $scope.scopeModel.includeServices,
                         DateTimeFormat: $scope.scopeModel.dateTimeFormat,
                         CodeLayout: $scope.scopeModel.selectedCodeLayout != undefined ? $scope.scopeModel.selectedCodeLayout.value : undefined,
                         HasCodeRange: $scope.scopeModel.hasCodeRange,

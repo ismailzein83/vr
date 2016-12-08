@@ -1,4 +1,4 @@
-﻿<vr-tabs >
+﻿<vr-tabs>
     <vr-tab header="'Codes'" tabobject="scopeModel.codeTabObject">
         <vr-excelconversion-listmapping on-ready="scopeModel.onCodeListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
     </vr-tab>
@@ -12,15 +12,18 @@
             </vr-columns>
         </vr-row>
 
-            <vr-tabs on-ready="scopeModel.onRateTabsReady">
-                <vr-tab ng-repeat="rate in scopeModel.rateTypesSelected" header="'{{rate.Name}}'">
-                    <vr-excelconversion-listmapping on-ready="rate.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
-                </vr-tab>
-            </vr-tabs>
-</vr-tab>
-    <vr-tab header="'Services'" >
+        <vr-tabs on-ready="scopeModel.onRateTabsReady">
+            <vr-tab ng-repeat="rate in scopeModel.rateTypesSelected" header="'{{rate.Name}}'">
+                <vr-excelconversion-listmapping on-ready="rate.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+            </vr-tab>
+        </vr-tabs>
+    </vr-tab>
+    <vr-tab header="'Services'">
         <vr-row>
             <vr-whs-be-flaggedservice-selector on-ready="scopeModel.onFlaggedServiceSelectorReady" label="Flagged Services" hideselectedvaluessection ismultipleselection onselectitem="    scopeModel.onSelectFlaggedService" ondeselectitem="    scopeModel.onDeselectFlaggedService" normal-col-num="6"></vr-whs-be-flaggedservice-selector>
+            <vr-columns colnum="6">
+                <vr-switch value="scopeModel.includeServices" label="Include Services"> </vr-switch>
+            </vr-columns>
         </vr-row>
 
         <vr-tabs on-ready="scopeModel.onServiceTabsReady">
@@ -36,7 +39,7 @@
 <vr-row>
     <vr-columns width="1/2row">
         <vr-select datatextfield="description" datavaluefield="value" label="Code Layout"
-                    selectedvalues="scopeModel.selectedCodeLayout" datasource="scopeModel.codeLayouts" isrequired="true" onselectionchanged="scopeModel.onCodeLayoutSelectionChanged"></vr-select>
+                   selectedvalues="scopeModel.selectedCodeLayout" datasource="scopeModel.codeLayouts" isrequired="true" onselectionchanged="scopeModel.onCodeLayoutSelectionChanged"></vr-select>
     </vr-columns>
     <vr-columns width="1/2row" ng-if="scopeModel.selectedCodeLayout!=undefined && scopeModel.showDelimiter">
         <vr-textbox label="Delimiter" value="scopeModel.delimiterValue" isrequired="true" customvalidate="scopeModel.validate()"></vr-textbox>

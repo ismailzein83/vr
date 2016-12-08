@@ -20,6 +20,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         public string  DateTimeFormat { get; set; }
         public List<OtherRateListMapping> OtherRateListMapping { get; set; }
         public List<FlaggedServiceListMapping> FlaggedServiceListMapping { get; set; }
+        public bool IncludeServices { get; set; }
         public CodeLayout CodeLayout { get; set; }
         public char Delimiter { get; set; }
         public bool HasCodeRange { get; set; }
@@ -45,7 +46,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     excelConversionSettings.ListMappings.Add(list.RateListMapping);
                 }
             }
-            if (this.FlaggedServiceListMapping != null)
+            if (this.IncludeServices == true && this.FlaggedServiceListMapping != null)
             {
                 foreach (var list in this.FlaggedServiceListMapping)
                 {
