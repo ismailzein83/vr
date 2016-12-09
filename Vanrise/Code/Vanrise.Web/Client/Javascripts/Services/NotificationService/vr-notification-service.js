@@ -18,7 +18,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
 
     function showConfirmation(message) {
         var settings = {
-            width: "40%"
+            size: "small"
         };
         var deferred = $q.defer();
         settings.onScopeReady = function (modalScope) {
