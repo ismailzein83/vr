@@ -1,14 +1,14 @@
 ﻿<vr-tabs>
     <vr-tab header="'Rate Settings'">
         <vr-row>
+			<vr-columns width="1/2row">
+				<vr-textbox label="New Rate Day Offset" type="number" value="scopeModel.newRateDayOffset" minvalue="0" isrequired="true"></vr-textbox>
+			</vr-columns>
             <vr-columns width="1/2row">
                 <vr-textbox label="Increased Rate Day Offset" type="number" value="scopeModel.increasedRateDayOffset" minvalue="0" isrequired="true"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/2row">
                 <vr-textbox label="Decreased Rate Day Offset" type="number" value="scopeModel.decreasedRateDayOffset" minvalue="0" isrequired="true"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/2row">
-                <vr-textbox label="New Service Day Offset" type="number" value="scopeModel.newServiceDayOffset" minvalue="0" isrequired="true"></vr-textbox>
             </vr-columns>
         </vr-row>
     </vr-tab>

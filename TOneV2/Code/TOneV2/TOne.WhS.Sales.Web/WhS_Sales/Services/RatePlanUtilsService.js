@@ -30,7 +30,7 @@
                 dataItem.CurrentRateNewEED = (dataItem.CurrentRateEED != null) ? dataItem.CurrentRateEED : dataItem.ZoneEED;
 
                 var zoneBED = UtilsService.createDateFromString(dataItem.ZoneBED);
-                var newRateBED = (dataItem.CurrentRate == null || Number(dataItem.NewRate) > dataItem.CurrentRate) ? getNowPlusDays(settings.increasedRateDayOffset) : getNowPlusDays(settings.decreasedRateDayOffset);
+                var newRateBED = getNewRateBED(dataItem.CurrentRate, dataItem.NewRate, settings);
                 dataItem.NewRateBED = (newRateBED > zoneBED) ? newRateBED : zoneBED;
             }
             else {
@@ -40,6 +40,26 @@
 
             if (dataItem.NewRateEED == null)
                 dataItem.NewRateEED = dataItem.ZoneEED;
+        }
+        function getNewRateBED(currentRate, newRate, settings) {
+        	var dayOffset = 0;
+
+        	if (currentRate == undefined) {
+        		dayOffset = settings.newRateDayOffset;
+        	}
+        	else {
+        		var currentRateAsNumber = Number(currentRate);
+        		var newRateAsNumber = Number(newRate);
+
+        		if (newRateAsNumber > currentRateAsNumber) {
+        			dayOffset = settings.increasedRateDayOffset;
+        		}
+        		else if (newRateAsNumber < currentRateAsNumber) {
+        			dayOffset = settings.decreasedRateDayOffset;
+        		}
+        	}
+
+        	return getNowPlusDays(dayOffset);
         }
         function getNowPlusDays(daysToAdd) {
         	var dayOfToday = new Date().getDate();

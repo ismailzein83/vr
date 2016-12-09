@@ -27,9 +27,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         var routingProductTab;
         var otherRatesTab;
 
+        var newRateDayOffset = 0;
         var increasedRateDayOffset = 0;
         var decreasedRateDayOffset = 0;
-        var newServiceDayOffset = 0;
 
         function initializeController() {
             $scope.zoneItems = [];
@@ -60,6 +60,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             $scope.onNewRateBlurred = function (dataItem) {
                 dataItem.IsDirty = true;
                 var settings = {
+                	newRateDayOffset: newRateDayOffset,
                     increasedRateDayOffset: increasedRateDayOffset,
                     decreasedRateDayOffset: decreasedRateDayOffset
                 };
@@ -139,6 +140,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     var query = {
                         zoneItem: zoneItem,
                         settings: {
+                        	newRateDayOffset: newRateDayOffset,
                             increasedRateDayOffset: increasedRateDayOffset,
                             decreasedRateDayOffset: decreasedRateDayOffset
                         }
@@ -174,13 +176,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function setDayOffsets(settings) {
                 if (settings == undefined)
-                    return;
-                if (settings.IncreasedRateDayOffset != undefined)
-                    increasedRateDayOffset = Number(settings.IncreasedRateDayOffset);
-                if (settings.DecreasedRateDayOffset != undefined)
-                    decreasedRateDayOffset = Number(settings.DecreasedRateDayOffset);
-                if (settings.NewServiceDayOffset != undefined)
-                    newServiceDayOffset = Number(settings.NewServiceDayOffset);
+                	return;
+                if (settings.NewRateDayOffset != null) {
+                	newRateDayOffset = Number(settings.NewRateDayOffset);
+                }
+                if (settings.IncreasedRateDayOffset != null) {
+                	increasedRateDayOffset = Number(settings.IncreasedRateDayOffset);
+                }
+                if (settings.DecreasedRateDayOffset != null) {
+                	decreasedRateDayOffset = Number(settings.DecreasedRateDayOffset);
+                }
             }
 
             api.getZoneDrafts = function () {

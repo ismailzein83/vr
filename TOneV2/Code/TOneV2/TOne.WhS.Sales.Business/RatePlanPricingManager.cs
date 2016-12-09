@@ -158,9 +158,7 @@ namespace TOne.WhS.Sales.Business
 
 			foreach (CalculatedZoneRate calculatedRate in calculatedRates)
 			{
-				newRateBED = (!calculatedRate.CurrentRate.HasValue || calculatedRate.CalculatedRate > calculatedRate.CurrentRate.Value) ?
-					effectiveOn.AddDays(ratePlanSettings.IncreasedRateDayOffset) :
-					effectiveOn.AddDays(ratePlanSettings.DecreasedRateDayOffset);
+				newRateBED = GetNewRateBED(calculatedRate.CurrentRate, calculatedRate.CalculatedRate, effectiveOn, ratePlanSettings);
 
 				DraftRateToChange newRate = new DraftRateToChange()
 				{
@@ -197,6 +195,26 @@ namespace TOne.WhS.Sales.Business
 			}
 
 			return newDraft;
+		}
+
+		private DateTime GetNewRateBED(decimal? currentRate, decimal calculatedRate, DateTime effectiveOn, RatePlanSettingsData ratePlanSettings)
+		{
+			int dayOffset = 0;
+
+			if (!currentRate.HasValue)
+			{
+				dayOffset = ratePlanSettings.NewRateDayOffset;
+			}
+			else if (calculatedRate > currentRate.Value)
+			{
+				dayOffset = ratePlanSettings.IncreasedRateDayOffset;
+			}
+			else if (calculatedRate < currentRate.Value)
+			{
+				dayOffset = ratePlanSettings.DecreasedRateDayOffset;
+			}
+
+			return effectiveOn.AddDays(dayOffset);
 		}
 	}
 }

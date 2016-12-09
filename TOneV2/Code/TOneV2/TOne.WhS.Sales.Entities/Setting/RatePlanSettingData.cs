@@ -7,10 +7,12 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class RatePlanSettingsData : SettingData
-    {
-        public int IncreasedRateDayOffset { get; set; }
-        public int DecreasedRateDayOffset { get; set; }
-        public int NewServiceDayOffset { get; set; }
-    }
+	public class RatePlanSettingsData : SettingData
+	{
+		public int NewRateDayOffset { get; set; }
+
+		public int IncreasedRateDayOffset { get; set; }
+
+		public int DecreasedRateDayOffset { get; set; }
+	}
 }

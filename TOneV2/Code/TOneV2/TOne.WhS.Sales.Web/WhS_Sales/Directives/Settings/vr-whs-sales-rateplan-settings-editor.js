@@ -30,18 +30,18 @@ app.directive('vrWhsSalesRateplanSettingsEditor', [function () {
 
             api.load = function (payload) {
                 if (payload != undefined && payload.data != null) {
-                    $scope.scopeModel.increasedRateDayOffset = payload.data.IncreasedRateDayOffset;
+                	$scope.scopeModel.newRateDayOffset = payload.data.NewRateDayOffset;
+                	$scope.scopeModel.increasedRateDayOffset = payload.data.IncreasedRateDayOffset;
                     $scope.scopeModel.decreasedRateDayOffset = payload.data.DecreasedRateDayOffset;
-                    $scope.scopeModel.newServiceDayOffset = payload.data.NewServiceDayOffset;
                 }
             };
 
             api.getData = function () {
                 return {
                     $type: "TOne.WhS.Sales.Entities.RatePlanSettingsData, TOne.WhS.Sales.Entities",
+                    NewRateDayOffset: $scope.scopeModel.newRateDayOffset,
                     IncreasedRateDayOffset: $scope.scopeModel.increasedRateDayOffset,
-                    DecreasedRateDayOffset: $scope.scopeModel.decreasedRateDayOffset,
-                    NewServiceDayOffset: $scope.scopeModel.newServiceDayOffset
+                    DecreasedRateDayOffset: $scope.scopeModel.decreasedRateDayOffset
                 };
             };
 
