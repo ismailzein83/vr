@@ -23,7 +23,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			IEnumerable<int> customerIdsToEmail = CustomerIdsToEmail.Get(context);
 
 			if (customerIdsToEmail == null || customerIdsToEmail.Count() == 0)
-				return;
+				throw new Vanrise.Entities.MissingArgumentValidationException("Failed to notify Customers: No Customers were selected");
 
 			var customerNames = new List<string>();
 			var carrierAccountManager = new CarrierAccountManager();
@@ -31,12 +31,10 @@ namespace TOne.WhS.Sales.BP.Activities
 			foreach (int customerId in customerIdsToEmail)
 			{
 				string customerName = carrierAccountManager.GetCarrierAccountName(customerId);
-				if (customerName != null)
-					customerNames.Add(customerName);
+				if (customerName == null)
+					throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Name of Customer '{0}' was not found", customerId));
+				customerNames.Add(customerName);
 			}
-
-			if (customerNames.Count == 0)
-				return;
 
 			string message = (customerNames.Count > 1) ? "Sale Pricelists have been emailed to Customers: {0}" : "Sale Pricelist has been emailed to Customer: {0}";
 			context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, string.Join(",", customerNames));

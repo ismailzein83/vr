@@ -22,16 +22,12 @@ namespace TOne.WhS.Sales.BP.Activities
 
 		protected override void Execute(CodeActivityContext context)
 		{
-			
 			IEnumerable<int> customerIds = CustomerIds.Get(context);
-            int  initiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
-            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-
-			if (customerIds == null || customerIds.Count() == 0)
-				throw new Vanrise.Entities.MissingArgumentValidationException("Failed to notify Customers: No Customers were selected");
+			int initiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
+			long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 
 			NotificationManager notificationManager = new NotificationManager();
-            notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
+			notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
 		}
 	}
 }
