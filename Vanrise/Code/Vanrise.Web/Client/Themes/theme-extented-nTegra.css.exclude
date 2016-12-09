@@ -1,1 +1,222 @@
-﻿
+﻿.login-btn {
+    background-color: #2E509B!important;
+    border-color: #2E509B!important;
+    color: #FFF;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.bgcolor-0{   
+    background-color: #2E509B !important;
+}
+.bgcolor-grad-0{
+  background: -webkit-linear-gradient(bottom, #BCBCBC , #2E509B); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #2E509B); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC, #2E509B); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #2E509B); /*Standard*/
+}
+.bgcolor-1{   
+    background-color: #496796 !important;
+}
+.bgcolor-grad-1{
+  background: -webkit-linear-gradient(bottom,#BCBCBC, #496796); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #496796); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC, #496796); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #496796); /*Standard*/
+}
+.bgcolor-2{   
+    background-color: #2E509B !important;
+}
+.bgcolor-grad-2{
+  background: -webkit-linear-gradient(bottom,#BCBCBC, #2E509B); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #2E509B); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC, #2E509B); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #2E509B); /*Standard*/
+}
+.bgcolor-3{   
+    background-color: #496796 !important;
+}
+.bgcolor-grad-3{
+  background: -webkit-linear-gradient(bottom,#BCBCBC, #496796); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #496796); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#496796); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #496796); /*Standard*/
+}
+.bgcolor-4{   
+    background-color: #2E509B !important;
+}
+.bgcolor-grad-4{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#2E509B); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #2E509B); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#2E509B); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #2E509B); /*Standard*/
+}
+.bgcolor-5{   
+    background-color: #496796 !important;
+}
+.bgcolor-grad-5{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#496796); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #496796); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#496796); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #496796); /*Standard*/
+}
+.bgcolor-6{   
+    background-color: #2E509B !important;
+}
+.bgcolor-grad-6{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#2E509B); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #2E509B); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#2E509B); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #2E509B); /*Standard*/
+}
+.bgcolor-7{   
+    background-color: #496796 !important;
+}
+.bgcolor-grad-7{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#496796); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #496796); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#496796); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #496796); /*Standard*/
+}
+.bgcolor-8{   
+    background-color: #2E509B !important;
+}
+.bgcolor-grad-8{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#2E509B); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #2E509B); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#2E509B); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #2E509B); /*Standard*/
+}
+.bgcolor-9{   
+    background-color: #496796 !important;
+}
+.bgcolor-grad-9{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#496796); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #496796); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#496796); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #496796); /*Standard*/
+}
+.bgcolor-10{   
+    background-color: #2E509B !important;
+}
+.bgcolor-grad-10{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#2E509B); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #2E509B); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#2E509B); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #2E509B); /*Standard*/
+}
+.bgcolor-11{   
+    background-color: #496796 !important;
+}
+.bgcolor-grad-11{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#496796); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #496796); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#496796); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #496796); /*Standard*/
+}
+.bgcolor-12{   
+    background-color: #2E509B !important;
+}
+.bgcolor-grad-12{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#2E509B); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #2E509B); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#2E509B); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #2E509B); /*Standard*/
+}
+.bgcolor-13{   
+    background-color: #496796 !important;
+}
+.bgcolor-grad-13{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#496796); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #496796); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#496796); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #496796); /*Standard*/
+}
+.bgcolor-14{   
+    background-color: #2E509B !important;
+}
+.bgcolor-grad-14{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#2E509B); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC, #2E509B); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#2E509B); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC,  #2E509B); /*Standard*/
+}
+ .bgcolor-15{   
+    background: #496796 !important;
+}
+ /*rgba(0, 0, 0, 0.01) linear-gradient(to bottom, #BCBCBC, #F00) repeat scroll 0% 0%*/
+.bgcolor-grad-15{
+  background: -webkit-linear-gradient(bottom,#BCBCBC,#496796); /*Safari 5.1-6*/
+  background: -o-linear-gradient(bottom,#BCBCBC,#496796); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(bottom,#BCBCBC,#496796); /*Fx 3.6-15*/
+  background: linear-gradient(to bottom, #BCBCBC, #496796); /*Standard*/
+}
+
+.action-bar {
+    background-color: #2E509B;   
+}
+.btncustom {
+  border-radius: 0px;
+  border-color: transparent;
+  background-color: transparent;
+  color: #FFF; 
+}
+.btncustom:hover {
+    background-color: #5c729a !important;
+}
+
+.btncustom:disabled {
+    background-color: #4a69a3 !important;
+}
+.drill-down-level-0{    
+    background: transparent linear-gradient(to top, #2E509B , #2E509B ) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
+.drill-down-level-1{
+    background: transparent linear-gradient(to top, #496796, #496796) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
+.drill-down-level-2{
+    background: transparent linear-gradient(to top, #2E509B , #2E509B) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
+.drill-down-level-3{
+    background: transparent linear-gradient(to top,#496796, #496796) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
+.drill-down-level-4{
+    background: transparent linear-gradient(to top,#2E509B , #2E509B) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
+
+.drill-down-level-5{
+    background: transparent linear-gradient(to top,  #496796, #496796) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
+.drill-down-level-6{
+    background: transparent linear-gradient(to top, #2E509B , #2E509B) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+
+}
+.drill-down-level-7{
+    background: transparent linear-gradient(to top, #496796, #496796) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
+.drill-down-level-8{
+    background: transparent linear-gradient(to top,#2E509B , #2E509B) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
+.drill-down-level-9{
+    background: transparent linear-gradient(to top,  #496796, #496796) repeat scroll 0% 0%;
+    color: #FFF;
+    border-bottom:0px;
+}
