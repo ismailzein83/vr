@@ -11,31 +11,38 @@ namespace TOne.WhS.Invoice.Business
     public class ConfigManager
     {
         #region Public Methods
-        public Guid GetDefaultCustomerInvoiceTemplateMessageId()
-        {
-            InvoiceSettings setting = GetInvoiceSettings();
-            if (setting.CustomerInvoiceSettings == null)
-                throw new NullReferenceException("setting.CustomerInvoiceSettings");
-            foreach (var customerInvoiceSettings in setting.CustomerInvoiceSettings)
-            {
-                if (customerInvoiceSettings.IsDefault)
-                    return customerInvoiceSettings.DefaultEmailId;
-            }
-            throw new NullReferenceException("setting.CustomerInvoiceSettings");
-        }
-        #endregion
+        //public Guid GetDefaultCustomerInvoiceTemplateMessageId()
+        //{
+        //    CustomerInvoiceSettings customerInvoiceSettings = GetDefaultCustomerInvoiceSettings();
+        //    if (customerInvoiceSettings == null)
+        //        throw new NullReferenceException("defaultCustomerInvoice");
+        //    return customerInvoiceSettings.DefaultEmailId;
+        //}
+        //#endregion
      
-        #region Private Methods
-        private InvoiceSettings GetInvoiceSettings()
-        {
-            SettingManager settingManager = new SettingManager();
-            InvoiceSettings invoiceSettings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
+        //#region Private Methods
+        //private CustomerInvoiceSettings GetDefaultCustomerInvoiceSettings()
+        //{
+        //    InvoiceSettings setting = GetInvoiceSettings();
+        //    if (setting.CustomerInvoiceSettings == null)
+        //        throw new NullReferenceException("setting.CustomerInvoiceSettings");
+        //    foreach (var customerInvoiceSettings in setting.CustomerInvoiceSettings)
+        //    {
+        //        if (customerInvoiceSettings.IsDefault)
+        //            return customerInvoiceSettings;
+        //    }
+        //    throw new NullReferenceException("setting.CustomerInvoiceSettings");
+        //}
+        //private InvoiceSettings GetInvoiceSettings()
+        //{
+        //    SettingManager settingManager = new SettingManager();
+        //    InvoiceSettings invoiceSettings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
 
-            if (invoiceSettings == null)
-                throw new NullReferenceException("invoiceSettings");
+        //    if (invoiceSettings == null)
+        //        throw new NullReferenceException("invoiceSettings");
 
-            return invoiceSettings;
-        }
+        //    return invoiceSettings;
+        //}
 
         #endregion
 

@@ -17,7 +17,8 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
-        
+    
+        #region CarrierProfile
         public Vanrise.Entities.IDataRetrievalResult<CarrierProfileDetail> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
         {
             var allCarrierProfiles = GetCachedCarrierProfiles();
@@ -33,30 +34,26 @@ namespace TOne.WhS.BusinessEntity.Business
                  &&
                  (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId));
 
-                var resultProcessingHandler = new ResultProcessingHandler<CarrierProfileDetail>()
-                {
-                    ExportExcelHandler = new CarrierProfileDetailExportExcelHandler()
-                };
+            var resultProcessingHandler = new ResultProcessingHandler<CarrierProfileDetail>()
+            {
+                ExportExcelHandler = new CarrierProfileDetailExportExcelHandler()
+            };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper), resultProcessingHandler);
         }
-        
         public CarrierProfile GetCarrierProfile(int carrierProfileId)
         {
             var carrierProfiles = GetCachedCarrierProfiles();
             return carrierProfiles.GetRecord(carrierProfileId);
         }
-        
         public string GetCarrierProfileName(int carrierProfileId)
         {
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
             return carrierProfile != null ? carrierProfile.Name : null;
         }
-        
         public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
         {
             return GetCachedCarrierProfiles().MapRecords(CarrierProfileInfoMapper).OrderBy(x => x.Name);
         }
-        
         public TOne.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
             ValidateCarrierProfileToAdd(carrierProfile);
@@ -82,7 +79,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        
         public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfile)
         {
             ValidateCarrierProfileToEdit(carrierProfile);
@@ -105,7 +101,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
+        }
+        public IEnumerable<CarrierProfile> GetCarrierProfiles()
+        {
+            return GetCachedCarrierProfiles().Values;
+        }
+        #endregion
 
+        #region Special Methods
         public void UpdateCarrierProfileExtendedSetting<T>(int carrierProfileId, T extendedSettings) where T : class
         {
             string extendedSettingName = typeof(T).FullName;
@@ -130,13 +136,11 @@ namespace TOne.WhS.BusinessEntity.Business
             if (dataManager.UpdateExtendedSettings(carrierProfileId, extendedSettingsDic))
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
-
         public T GetExtendedSettings<T>(int carrierProfileId) where T : class
         {
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
             return carrierProfile != null ? GetExtendedSettings<T>(carrierProfile) : null;
-         }
-
+        }
         public T GetExtendedSettings<T>(CarrierProfile carrierProfile) where T : class
         {
             string extendedSettingName = typeof(T).FullName;
@@ -155,23 +159,11 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return default(T);
         }
-
-       
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
-        }
-        
-        public IEnumerable<CarrierProfile> GetCarrierProfiles()
-        {
-            return GetCachedCarrierProfiles().Values;
-        }
-
         public bool IsCarrierProfileDeleted(int carrierProfileId)
         {
             var carrierProfiles = this.GetCachedCarrierProfilesWithDeleted();
             CarrierProfile carrierProfile = carrierProfiles.GetRecord(carrierProfileId);
-            
+
             if (carrierProfile == null)
                 throw new DataIntegrityValidationException(string.Format("Carrier Profile with Id {0} is not found", carrierProfileId));
 
@@ -186,11 +178,26 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("carrierProfile.Settings");
             return carrierProfile.Settings.CurrencyId;
         }
+       
+        #endregion
+
+        #region Settings
         public CompanySetting GetCompanySetting(int carrierProfileId)
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             return configManager.GetDefaultCompanySetting();
         }
+        public Guid GetDefaultInvoiceEmailId(int carrierProfileId)
+        {
+            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
+            if (customerInvoiceSettings == null)
+                throw new NullReferenceException("customerInvoiceSettings");
+            return customerInvoiceSettings.DefaultEmailId;
+        }
+        #endregion
+
+
+
         #endregion
 
         #region Validation Methods
@@ -292,7 +299,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-
+        private CustomerInvoiceSettings GetCustomerInvoiceSettings(int carrierProfileId)
+        {
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetDefaultCustomerInvoiceSettings();
+        }
         #endregion
 
         #region  Mappers
@@ -324,17 +335,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (setting == null)
                 throw new NullReferenceException("BusinessEntityTechnicalSettingsData");
-
             return setting;
         }
 
         public List<VRTaxItemDefinition> GetTaxesDefinition()
         {
             BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
-
             if (setting.TaxesDefinition == null)
                 throw new NullReferenceException("setting.TaxesDefinition");
-
             return setting.TaxesDefinition.ItemDefinitions;
         }
 

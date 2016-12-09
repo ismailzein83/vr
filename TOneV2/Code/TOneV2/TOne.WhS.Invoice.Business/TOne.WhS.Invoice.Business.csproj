@@ -70,7 +70,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CarrierPartnerManager.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Extensions\CarrierPartnerSettings.cs" />
     <Compile Include="Extensions\CustomerInvoiceGenerator.cs" />
