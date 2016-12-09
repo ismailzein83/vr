@@ -28,7 +28,7 @@ namespace TOne.WhS.Sales.BP.Activities
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 
 			if (customerIds == null || customerIds.Count() == 0)
-				throw new NullReferenceException("customerIds");
+				throw new Vanrise.Entities.MissingArgumentValidationException("Failed to notify Customers: No Customers were selected");
 
 			NotificationManager notificationManager = new NotificationManager();
             notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
