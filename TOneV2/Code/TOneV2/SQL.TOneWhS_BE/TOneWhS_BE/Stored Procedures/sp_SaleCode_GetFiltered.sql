@@ -1,27 +1,32 @@
 ﻿CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetFiltered]
-	@EffectiveOn dateTime ,
+	@SellingNumberPlanID int,
+	@ZonesIDs varchar(max),
 	@Code varchar(20),
-	@SellingNumberPlanID int ,
-	@ZonesIDs varchar(max)
+	@EffectiveOn datetime,
+	@GetEffectiveAfter bit
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
+	set nocount on;
+	begin
 	
-	    BEGIN
-	    DECLARE @ZonesIDsTable TABLE (ZoneID int)
-		INSERT INTO @ZonesIDsTable (ZoneID)
-		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
-			SELECT  sc.[ID],sc.[Code],sc.[ZoneID],sc.[CodeGroupID],sc.[BED],sc.[EED],sc.[SourceID]
-			FROM [TOneWhS_BE].SaleCode sc WITH(NOLOCK) 
-			inner join  [TOneWhS_BE].SaleZone sz WITH(NOLOCK) on  sc.ZoneID = sz.ID   
-            WHERE 
-                (sc.BED < = @EffectiveOn)
-            and (sc.EED is null or sc.EED  > @EffectiveOn)
-            and (@Code IS NULL OR sc.Code LIKE @Code + '%')
-            and (@SellingNumberPlanID is null or @SellingNumberPlanID = sz.SellingNumberPlanID)
-            and (@ZonesIDs  is null or sc.ZoneID in (select ZoneID from @ZonesIDsTable))
-		END
-	SET NOCOUNT OFF
+		declare @ZonesIDsTable table (ZoneID int)
+		insert into @ZonesIDsTable (ZoneID) select convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
+
+		select sc.[ID], sc.[Code], sc.[ZoneID], sc.[CodeGroupID], sc.[BED], sc.[EED], sc.[SourceID]
+		from [TOneWhS_BE].SaleCode sc with(nolock)
+		inner join [TOneWhS_BE].SaleZone sz with(nolock) on sc.ZoneID = sz.ID
+        
+		where
+		(
+			-- Get effective codes; EED is necessarily > BED
+			(@GetEffectiveAfter = 0 and sc.BED <= @EffectiveOn and (sc.EED is null or sc.EED > @EffectiveOn))
+			or
+			-- Get codes effective after; Exclude deleted codes
+			(@GetEffectiveAfter = 1 and (sc.EED is null or (sc.EED > sc.BED and sc.EED > @EffectiveOn)))
+		)
+		and (@Code is null or sc.Code like @Code + '%')
+		and (@SellingNumberPlanID is null or @SellingNumberPlanID = sz.SellingNumberPlanID)
+		and (@ZonesIDs is null or sc.ZoneID in (select ZoneID from @ZonesIDsTable))
+	END
+	set nocount off
 END

@@ -3,11 +3,20 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE TOneWhS_Sales.sp_DefaultServicePreview_Get
-	@ProcessInstanceId bigint
+CREATE PROCEDURE [TOneWhS_Sales].[sp_DefaultServicePreview_Get]
+	@ProcessInstanceID_IN bigint
 AS
 BEGIN
+DECLARE @ProcessInstanceId INT
+
+SELECT @ProcessInstanceId  = @ProcessInstanceId_IN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;	
+
 	select ProcessInstanceId, CurrentServices, IsCurrentServiceInherited, NewServices, EffectiveOn, EffectiveUntil
 	from [TOneWhS_Sales].[RP_DefaultService_Preview]
 	where ProcessInstanceId = @ProcessInstanceId
+	
+	SET NOCOUNT OFF
 END

@@ -4,9 +4,17 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [TOneWhS_Sales].[RP_RatePlanPreviewSummary_Get]
-	@ProcessInstanceID bigint
+	@ProcessInstanceID_IN bigint
 AS
 BEGIN
+
+DECLARE @ProcessInstanceID bigint
+
+Select @ProcessInstanceID = @ProcessInstanceID_IN
+-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;	
+
 	select NumberOfNewRates,
 		NumberOfIncreasedRates,
 		NumberOfDecreasedRates,
@@ -22,4 +30,7 @@ BEGIN
 	
 	from [TOneWhS_Sales].RP_RatePlanPreview_Summary WITH(NOLOCK) 
 	where ProcessInstanceID = @ProcessInstanceID
+
+	SET NOCOUNT OFF
+
 END
