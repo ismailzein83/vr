@@ -33,7 +33,9 @@
         function defineScope()
         {
             $scope.scopeModel = {};
-            $scope.scopeModel.bed = new Date();
+            var bed = new Date();
+            bed.setHours(0, 0, 0, 0);
+            $scope.scopeModel.bed = bed;
 
             $scope.scopeModel.onPackageSelectorReady = function (api) {
                 packageSelectorAPI = api;
