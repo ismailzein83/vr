@@ -77,6 +77,8 @@
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)" Name="queueEntityBalanceInfoBatch" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadEntitiesToAlertStatus" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="createAlertsStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)" Name="queueUpdateLastAlertInfoPayload" />
       </Parallel.Variables>
       <vnbab:LoadEntitiesToAlert PreviousActivityStatus="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadEntitiesToAlert_1">
         <vnbab:LoadEntitiesToAlert.OutputQueue>
@@ -95,7 +97,7 @@
           </OutArgument>
         </vnbab:LoadEntitiesToAlert.Status>
       </vnbab:LoadEntitiesToAlert>
-      <vnbab:CreateAlerts Status="{x:Null}">
+      <vnbab:CreateAlerts sap2010:WorkflowViewState.IdRef="CreateAlerts_1">
         <vnbab:CreateAlerts.AlertTypeId>
           <InArgument x:TypeArguments="s:Guid">
             <mca:CSharpValue x:TypeArguments="s:Guid">Input.AlertRuleTypeId</mca:CSharpValue>
@@ -106,6 +108,11 @@
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)">queueEntityBalanceInfoBatch</mca:CSharpValue>
           </InArgument>
         </vnbab:CreateAlerts.InputQueue>
+        <vnbab:CreateAlerts.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)">queueUpdateLastAlertInfoPayload</mca:CSharpReference>
+          </InOutArgument>
+        </vnbab:CreateAlerts.OutputQueue>
         <vnbab:CreateAlerts.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadEntitiesToAlertStatus</mca:CSharpValue>
@@ -116,25 +123,48 @@
             <mca:CSharpValue x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">vrBalanceRuleTypeSettings</mca:CSharpValue>
           </InArgument>
         </vnbab:CreateAlerts.RuleTypeSettings>
-        <sap2010:WorkflowViewState.IdRef>CreateAlerts_1</sap2010:WorkflowViewState.IdRef>
+        <vnbab:CreateAlerts.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">createAlertsStatus</mca:CSharpReference>
+          </OutArgument>
+        </vnbab:CreateAlerts.Status>
       </vnbab:CreateAlerts>
+      <vnbab:UpdateBalanceLastAlertInfos Status="{x:Null}">
+        <vnbab:UpdateBalanceLastAlertInfos.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)">queueUpdateLastAlertInfoPayload</mca:CSharpValue>
+          </InArgument>
+        </vnbab:UpdateBalanceLastAlertInfos.InputQueue>
+        <vnbab:UpdateBalanceLastAlertInfos.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">createAlertsStatus</mca:CSharpValue>
+          </InArgument>
+        </vnbab:UpdateBalanceLastAlertInfos.PreviousActivityStatus>
+        <vnbab:UpdateBalanceLastAlertInfos.RuleTypeSettings>
+          <InArgument x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">
+            <mca:CSharpValue x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">vrBalanceRuleTypeSettings</mca:CSharpValue>
+          </InArgument>
+        </vnbab:UpdateBalanceLastAlertInfos.RuleTypeSettings>
+        <sap2010:WorkflowViewState.IdRef>UpdateBalanceLastAlertInfos_1</sap2010:WorkflowViewState.IdRef>
+      </vnbab:UpdateBalanceLastAlertInfos>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEJhbGFuY2VBbGVydENoZWNrZXJQcm9jZXNzLnhhbWwOPAN7DgIBAUAFSy8CAShMBXkQAgECSAtIhAECASxDC0NcAgEpUQdhIwIBGGIHeBwCAQNZDVl+AgEjXg1eegIBHlQNVJABAgEZdA10fgIBE28Nb3ICAQ5qDWqIAQIBCWUNZV4CAQQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEJhbGFuY2VBbGVydENoZWNrZXJQcm9jZXNzLnhhbWwUPAOYAQ4CAQFABUsvAgFaTAWWARACAQJIC0iEAQIBXkMLQ1wCAVtTB2MjAgFEZAeDARwCARmEAQeVASsCAQNbDVt+AgFTYA1gegIBTFYNVpABAgFFew17fgIBPXYNdnICATZsDWyIAQIBL4ABDYABcwIBKHENcaQBAgEhZw1nXgIBGpEBDZEBfgIBEowBDYwBawIBC4cBDYcBnAECAQQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetVRBalanceAlertRuleTypeSettings_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="GetVRBalanceAlertRuleTypeSettings_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="LoadEntitiesToAlert_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateAlerts_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,272">
+      <sap2010:ViewStateData Id="UpdateBalanceLastAlertInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,272">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Notification.BP.BalanceAlertCheckerProcess_1" sap:VirtualizedContainerService.HintSize="616,352" />
+      <sap2010:ViewStateData Id="Vanrise.Notification.BP.BalanceAlertCheckerProcess_1" sap:VirtualizedContainerService.HintSize="856,352" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

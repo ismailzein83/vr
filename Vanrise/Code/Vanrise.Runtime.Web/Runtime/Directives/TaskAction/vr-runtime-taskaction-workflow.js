@@ -61,7 +61,7 @@ function (UtilsService, VRUIUtilsService) {
 
                 return {
                     $type: "Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments",
-                    RawExpressions: (bpDefenitionDirectiveAPI != undefined) ? bpDefenitionDirectiveAPI.getExpressionsData() : null,
+                    RawExpressions: (bpDefenitionDirectiveAPI != undefined && bpDefenitionDirectiveAPI.getExpressionsData != undefined) ? bpDefenitionDirectiveAPI.getExpressionsData() : null,
                     BPDefinitionID: bpDefenitionSelectorAPI.getSelectedIds(),
                     ProcessInputArguments: (bpDefenitionDirectiveAPI != undefined) ? bpDefenitionDirectiveAPI.getData() : null
                 };

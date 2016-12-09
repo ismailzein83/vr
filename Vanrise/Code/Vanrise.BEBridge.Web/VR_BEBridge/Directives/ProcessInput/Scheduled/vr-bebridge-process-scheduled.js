@@ -53,6 +53,10 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                     };
                 };
 
+                api.getExpressionsData = function () {
+                    return '';
+                };
+
                 api.load = function (payload) {
                     var promises = [];
                     promises.push(loadRouteSyncDefinitionSelector());

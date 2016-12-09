@@ -75,6 +75,7 @@
     <Compile Include="BillingTransaction\BillingTransaction.cs" />
     <Compile Include="LiveBalance\LiveBalance.cs" />
     <Compile Include="LiveBalance\LiveBalanceAccountInfo.cs" />
+    <Compile Include="LiveBalance\LiveBalanceLastThresholdUpdateEntity.cs" />
     <Compile Include="LiveBalance\LiveBalanceNextThresholdUpdateEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -25,7 +25,31 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 
         protected override void DoWork(LoadEntitiesToClearAlertsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Loading Account Balances for Clear Alert.");
+            int batchCount = 100;
+            List<IVREntityBalanceInfo> lstBalanceInfoToAlert = new List<IVREntityBalanceInfo>();
+            Action<IVREntityBalanceInfo> onBalanceInfoLoaded = (vrEntityBalanceInfo) =>
+            {
+                if (lstBalanceInfoToAlert.Count >= batchCount)
+                {
+                    inputArgument.OutputQueue.Enqueue(new VREntityBalanceInfoBatch
+                    {
+                        BalanceInfos = new List<IVREntityBalanceInfo>(lstBalanceInfoToAlert)
+                    });
+                    lstBalanceInfoToAlert = new List<IVREntityBalanceInfo>();
+                }
+                lstBalanceInfoToAlert.Add(vrEntityBalanceInfo);
+            };
+            VRBalanceAlertRuleLoadEntitiesToClearAlertsContext context = new VRBalanceAlertRuleLoadEntitiesToClearAlertsContext(onBalanceInfoLoaded);
+            context.RuleTypeSettings = inputArgument.RuleTypeSettings;
+            inputArgument.RuleTypeSettings.Behavior.LoadEntitiesToClearAlerts(context);
+            if (lstBalanceInfoToAlert.Count > 0)
+            {
+                inputArgument.OutputQueue.Enqueue(new VREntityBalanceInfoBatch
+                {
+                    BalanceInfos = new List<IVREntityBalanceInfo>(lstBalanceInfoToAlert)
+                });
+            }
         }
 
         protected override LoadEntitiesToClearAlertsInput GetInputArgument2(AsyncCodeActivityContext context)

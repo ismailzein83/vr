@@ -34,36 +34,41 @@ namespace Vanrise.AccountBalance.Business.Extensions
 
         public override void UpdateBalanceRuleInfos(IVRBalanceAlertRuleUpdateBalanceRuleInfosContext context)
         {
-
-            List<LiveBalanceNextThresholdUpdateEntity> liveBalances = GenerateLiveBalances(context.BalanceRuleInfosToUpdate);
-            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-            dataManager.UpdateBalanceRuleInfos(liveBalances);
-        }
-
-        List<LiveBalanceNextThresholdUpdateEntity> GenerateLiveBalances(List<VRBalanceUpdateRuleInfoPayload> balanceRuleInfosToUpdate)
-        {
             List<LiveBalanceNextThresholdUpdateEntity> lstLiveBalanceNextThresholdUpdateEntity = new List<LiveBalanceNextThresholdUpdateEntity>();
 
-            foreach (var balanceRuleInfo in balanceRuleInfosToUpdate)
+            foreach (var balanceRuleInfo in context.BalanceRuleInfosToUpdate)
             {
-                LiveBalance liveBalance = (balanceRuleInfo.EntityBalanceInfo as LiveBalance);
+                LiveBalance entityBalanceInfo = (balanceRuleInfo.EntityBalanceInfo as LiveBalance);
                 LiveBalanceNextThresholdUpdateEntity balanceEntity = new LiveBalanceNextThresholdUpdateEntity
                 {
-                    AccountId = liveBalance.AccountId,
-                    AccountTypeId = liveBalance.AccountTypeId,
+                    AccountId = entityBalanceInfo.AccountId,
+                    AccountTypeId = entityBalanceInfo.AccountTypeId,
                     AlertRuleId = balanceRuleInfo.AlertRuleId,
                     NextAlertThreshold = balanceRuleInfo.NextAlertThreshold,
                     ThresholdActionIndex = balanceRuleInfo.ThresholdActionIndex
                 };
                 lstLiveBalanceNextThresholdUpdateEntity.Add(balanceEntity);
             }
-
-            return lstLiveBalanceNextThresholdUpdateEntity;
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            dataManager.UpdateBalanceRuleInfos(lstLiveBalanceNextThresholdUpdateEntity);
         }
 
         public override void UpdateBalanceLastAlertInfos(IVRBalanceAlertRuleUpdateBalanceLastAlertInfosContext context)
         {
-            throw new NotImplementedException();
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            List<LiveBalanceLastThresholdUpdateEntity> lstLiveBalanceNextThresholdUpdateEntity = new List<LiveBalanceLastThresholdUpdateEntity>();
+            foreach (var balanceRuleInfo in context.BalanceLastAlertInfosToUpdate)
+            {
+                LiveBalance entityBalanceInfo = (balanceRuleInfo.EntityBalanceInfo as LiveBalance);
+                LiveBalanceLastThresholdUpdateEntity balanceEntity = new LiveBalanceLastThresholdUpdateEntity
+                {
+                    AccountId = entityBalanceInfo.AccountId,
+                    AccountTypeId = entityBalanceInfo.AccountTypeId,
+                    LastExecutedActionThreshold = balanceRuleInfo.LastExecutedAlertThreshold
+                };
+                lstLiveBalanceNextThresholdUpdateEntity.Add(balanceEntity);
+            }
+            dataManager.UpdateBalanceLastAlertInfos(lstLiveBalanceNextThresholdUpdateEntity);
         }
 
         public override void LoadEntitiesToAlert(IVRBalanceAlertRuleLoadEntitiesToAlertContext context)

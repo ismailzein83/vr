@@ -9,6 +9,9 @@ namespace Vanrise.Notification.Data
 {
     public interface IVRNotificationDataManager : IDataManager
     {
-        void Insert(VRNotification notification);
+        bool Insert(VRNotification notification);
+        List<VRNotification> GetVRNotifications();
+        bool AreVRNotificationUpdated(ref object updateHandle);
+        void UpdateNotificationStatus(Guid notificationId, VRNotificationStatus vrNotificationStatus);
     }
 }

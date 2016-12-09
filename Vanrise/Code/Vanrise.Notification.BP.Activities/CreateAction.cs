@@ -11,17 +11,17 @@ namespace Vanrise.Notification.BP.Activities
 {
     public sealed class CreateAction : CodeActivity
     {
-        public InArgument<CreateVRActionInput> CreateVRActionInput { get; set; }
+        public InArgument<IVRActionEventPayload> EventPayload { get; set; }
+        public InArgument<VRAction> Action { get; set; }
         public InArgument<int> UserID { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
-            var createVRActionInput = CreateVRActionInput.Get(context);
             VRActionExecutionContext vrActionExecutionContext = new VRActionExecutionContext
             {
-                EventPayload = createVRActionInput.EventPayload,
+                EventPayload = EventPayload.Get(context),
                 UserID = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId
             };
-            createVRActionInput.Action.Execute(vrActionExecutionContext);
+            Action.Get(context).Execute(vrActionExecutionContext);
         }
     }
 
@@ -39,7 +39,7 @@ namespace Vanrise.Notification.BP.Activities
     //            return true;
     //        }
     //    }
-              
+
     //    protected override void Execute(NativeActivityContext context)
     //    {
     //        var createVRActionInput = CreateVRActionInput.Get(context);
@@ -66,7 +66,7 @@ namespace Vanrise.Notification.BP.Activities
     //          Bookmark bookmark,
     //          object value)
     //    {
-            
+
     //    }
 
     //    #region Classes

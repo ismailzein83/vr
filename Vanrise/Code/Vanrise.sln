@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common", "Vanrise.Common\Vanrise.Common.csproj", "{1A350B7C-28EA-4824-B9A0-C60AD25F0EA9}"
 EndProject
@@ -326,9 +326,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.NumberingPlan.BP.Ac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.NumberingPlan.BP.Arguments", "Vanrise.NumberingPlan.BP.Arguments\Vanrise.NumberingPlan.BP.Arguments.csproj", "{96358D6E-0962-43EE-92BA-6148A94A6B26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Notification.UnitTest", "Vanrise.Notification.UnitTest\Vanrise.Notification.UnitTest.csproj", "{2C328F11-66DC-4657-8100-CF7381EBA38C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 138
+		SccNumberOfProjects = 139
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -880,6 +882,10 @@ Global
 		SccProjectTopLevelParentUniqueName137 = Vanrise.sln
 		SccProjectName137 = Vanrise.NumberingPlan.BP.Arguments
 		SccLocalPath137 = Vanrise.NumberingPlan.BP.Arguments
+		SccProjectUniqueName138 = Vanrise.Notification.UnitTest\\Vanrise.Notification.UnitTest.csproj
+		SccProjectTopLevelParentUniqueName138 = Vanrise.sln
+		SccProjectName138 = Vanrise.Notification.UnitTest
+		SccLocalPath138 = Vanrise.Notification.UnitTest
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2006,6 +2012,14 @@ Global
 		{96358D6E-0962-43EE-92BA-6148A94A6B26}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96358D6E-0962-43EE-92BA-6148A94A6B26}.Release|x64.ActiveCfg = Release|Any CPU
 		{96358D6E-0962-43EE-92BA-6148A94A6B26}.Release|x86.ActiveCfg = Release|Any CPU
+		{2C328F11-66DC-4657-8100-CF7381EBA38C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C328F11-66DC-4657-8100-CF7381EBA38C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C328F11-66DC-4657-8100-CF7381EBA38C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2C328F11-66DC-4657-8100-CF7381EBA38C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2C328F11-66DC-4657-8100-CF7381EBA38C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C328F11-66DC-4657-8100-CF7381EBA38C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C328F11-66DC-4657-8100-CF7381EBA38C}.Release|x64.ActiveCfg = Release|Any CPU
+		{2C328F11-66DC-4657-8100-CF7381EBA38C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2142,6 +2156,7 @@ Global
 		{1C62D57F-BA03-42F7-9362-CB097E1145AC} = {375D020B-2FA0-4D68-B841-E74E1FD15B16}
 		{74BCFDD5-6F60-4976-A31C-712BECCC2787} = {8DFB44A5-B08F-439A-856A-174E03432484}
 		{C6B2D722-14CE-4ED4-8B2B-52588494E449} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{09D5C78A-0591-401B-8259-BF62AAA8360D} = {68B4A6C5-C8E4-44E1-A6FC-B0C2E9871BFE}
 		{952D4681-077C-4DA5-A1CF-D3C7F67D5B02} = {09D5C78A-0591-401B-8259-BF62AAA8360D}
 		{8B01A0F5-AB58-4A48-A3A4-F8BD7185ECA2} = {8DFB44A5-B08F-439A-856A-174E03432484}
 		{0370DAD0-C425-4005-896F-5169EB915205} = {A3A92219-95E9-48DC-9808-B64E2A09C226}
@@ -2152,5 +2167,6 @@ Global
 		{23F1FFBD-2107-4D5E-8C62-3A341749790E} = {A3A92219-95E9-48DC-9808-B64E2A09C226}
 		{9EB7951C-6F26-4B77-8982-60D06E61474C} = {A3A92219-95E9-48DC-9808-B64E2A09C226}
 		{96358D6E-0962-43EE-92BA-6148A94A6B26} = {A3A92219-95E9-48DC-9808-B64E2A09C226}
+		{2C328F11-66DC-4657-8100-CF7381EBA38C} = {E6F0D0C0-23BD-4814-8D34-E14AEA50D756}
 	EndGlobalSection
 EndGlobal

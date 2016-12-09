@@ -66,12 +66,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="CreateActionProcess.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </XamlAppDef>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Vanrise.Notification.BP.Activities\Vanrise.Notification.BP.Activities.csproj">
       <Project>{307DA9D0-FB11-49AE-8C05-2EF8F804074F}</Project>
       <Name>Vanrise.Notification.BP.Activities</Name>

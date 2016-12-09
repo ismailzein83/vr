@@ -55,23 +55,5 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
             };
         }
 
-        #region Contexts Implementation
-        public class VRBalanceAlertRuleUpdateBalanceRuleInfosContext : IVRBalanceAlertRuleUpdateBalanceRuleInfosContext
-        {
-            public List<VRBalanceUpdateRuleInfoPayload> BalanceRuleInfosToUpdate
-            {
-                get;
-                set;
-            }
-
-            public VRBalanceAlertRuleTypeSettings RuleTypeSettings
-            {
-                get;
-                set;
-            }
-        }
-
-        #endregion
-
-    }
+     }
 }

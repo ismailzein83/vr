@@ -62,6 +62,13 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
             };
         }
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if(this.OutputQueue.Get(context) ==null)
+                this.OutputQueue.Set(context, new MemoryQueue<VREntityBalanceInfoBatch>());
+            base.OnBeforeExecute(context, handle);
+        }
+
         #region Contexts Implementation
         public class VRBalanceAlertRuleLoadEntitiesToAlertContext : IVRBalanceAlertRuleLoadEntitiesToAlertContext
         {
