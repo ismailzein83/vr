@@ -51,6 +51,9 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
@@ -115,6 +118,7 @@
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="CodePrefixInfo.cs" />
+    <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IBusinessEntity.cs" />
     <Compile Include="ICode.cs" />
