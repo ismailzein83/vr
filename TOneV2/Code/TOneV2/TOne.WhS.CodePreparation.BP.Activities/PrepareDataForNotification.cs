@@ -13,7 +13,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    
+
     #region InArguments
     public class PrepareDataForNotificationInput
     {
@@ -28,8 +28,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
     #endregion
 
-     public sealed class PrepareDataForNotification : BaseAsyncActivity<PrepareDataForNotificationInput>
-     {
+    public sealed class PrepareDataForNotification : BaseAsyncActivity<PrepareDataForNotificationInput>
+    {
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
 
@@ -45,7 +45,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         protected override void DoWork(PrepareDataForNotificationInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<SalePLZoneChange> zoneChanges = this.GetZoneChanges(inputArgument.RatesPreview, inputArgument.ExistingZones, inputArgument.AddedZones);
-            if(zoneChanges.Count() > 0)
+            if (zoneChanges.Count() > 0)
             {
                 lock (inputArgument.SalePLZonesChanges)
                 {
@@ -77,14 +77,16 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 ratesPreviewByZoneName = StructureRatesPreviewByZoneName(newRatesPreview);
             }
 
-            List<SalePLZoneChange> zonesChanges = new List<SalePLZoneChange>();
-            SaleZoneManager zoneManager = new SaleZoneManager();
+            Dictionary<string, List<ExistingZone>> existingZonesByZoneName = StructureExistingZonesByZoneName(existingZones);
+            Dictionary<string, List<AddedZone>> addedZonesByZoneName = StructureAddedZonesByZoneName(addedZones);
 
-            if (existingZones != null)
+            List<SalePLZoneChange> zonesChanges = new List<SalePLZoneChange>();
+
+            foreach (KeyValuePair<string, List<ExistingZone>> item in existingZonesByZoneName)
             {
-                foreach (ExistingZone existingZone in existingZones)
+                foreach (ExistingZone existingZone in item.Value)
                 {
-                    if (existingZone.AddedCodes.Count > 0 || existingZone.ExistingCodes.Any(item => item.ChangedEntity != null))
+                    if (existingZone.AddedCodes.Count > 0 || existingZone.ExistingCodes.Any(itm => itm.ChangedEntity != null))
                     {
 
                         SalePLZoneChange zoneChange = new SalePLZoneChange()
@@ -95,32 +97,77 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                             CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, existingZone.Name)
                         };
                         zonesChanges.Add(zoneChange);
+                        break;
                     }
                 }
             }
 
-            if (addedZones != null)
+
+            foreach (KeyValuePair<string, List<AddedZone>> item in addedZonesByZoneName)
             {
-                foreach (AddedZone addedZone in addedZones)
+                AddedZone firstAddedZone = item.Value.Last();
+                SalePLZoneChange zoneChange = new SalePLZoneChange()
                 {
-                    SalePLZoneChange zoneChange = new SalePLZoneChange()
-                    {
-                        ZoneName = addedZone.Name,
-                        CountryId = addedZone.CountryId,
-                        HasCodeChange = true,
-                        CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, addedZone.Name)
-                    };
-                    zonesChanges.Add(zoneChange);
-                }
+                    ZoneName = firstAddedZone.Name,
+                    CountryId = firstAddedZone.CountryId,
+                    HasCodeChange = true,
+                    CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, firstAddedZone.Name)
+                };
+                zonesChanges.Add(zoneChange);
             }
 
             return zonesChanges;
+        }
+
+        private Dictionary<string, List<ExistingZone>> StructureExistingZonesByZoneName(IEnumerable<ExistingZone> existingZones)
+        {
+            Dictionary<string, List<ExistingZone>> existingZonesByZoneName = new Dictionary<string, List<ExistingZone>>();
+
+            if (existingZones != null)
+            {
+                List<ExistingZone> existingZonesList;
+                foreach (ExistingZone existingZone in existingZones)
+                {
+                    if (!existingZonesByZoneName.TryGetValue(existingZone.Name, out existingZonesList))
+                    {
+                        existingZonesList = new List<ExistingZone>() { existingZone };
+                        existingZonesByZoneName.Add(existingZone.Name, existingZonesList);
+                    }
+                    else
+                        existingZonesList.Add(existingZone);
+                }
+            }
+
+            return existingZonesByZoneName;
+        }
+
+        private Dictionary<string, List<AddedZone>> StructureAddedZonesByZoneName(IEnumerable<AddedZone> addedZones)
+        {
+            Dictionary<string, List<AddedZone>> addedZonesByZoneName = new Dictionary<string, List<AddedZone>>();
+
+            if (addedZones != null)
+            {
+                List<AddedZone> addedZonesList;
+                foreach (AddedZone addedZone in addedZones)
+                {
+                    if (!addedZonesByZoneName.TryGetValue(addedZone.Name, out addedZonesList))
+                    {
+                        addedZonesList = new List<AddedZone>() { addedZone };
+                        addedZonesByZoneName.Add(addedZone.Name, addedZonesList);
+                    }
+                    else
+                        addedZonesList.Add(addedZone);
+                }
+            }
+
+            return addedZonesByZoneName;
         }
 
         private IEnumerable<int> GetCustomersHavingRateChange(Dictionary<string, List<RatePreview>> ratesPreviewByZoneName, string zoneName)
         {
             HashSet<int> customersIds = new HashSet<int>();
             IEnumerable<RatePreview> newRates = ratesPreviewByZoneName.GetRecord(zoneName);
+            CustomerSellingProductManager manager = new CustomerSellingProductManager();
 
             if (newRates != null)
             {
@@ -130,13 +177,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         customersIds.Add(rate.OwnerId);
                     else
                     {
-                        CustomerSellingProductManager manager = new CustomerSellingProductManager();
                         IEnumerable<CarrierAccountInfo> customersAssignedToSellingProduct = manager.GetCustomersBySellingProductId(rate.OwnerId, DateTime.Today);
-                        if (customersAssignedToSellingProduct != null)
-                        {
-                            IEnumerable<int> ids = customersAssignedToSellingProduct.Select(itm => itm.CarrierAccountId);
-                            customersIds.UnionWith(ids);
-                        }
+                        IEnumerable<int> ids = customersAssignedToSellingProduct.Select(itm => itm.CarrierAccountId);
+                        customersIds.UnionWith(ids);
                     }
                 }
             }
@@ -169,6 +212,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         #endregion
 
-       
+
     }
 }
