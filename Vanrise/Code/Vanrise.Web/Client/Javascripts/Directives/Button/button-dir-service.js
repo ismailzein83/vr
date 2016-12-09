@@ -9,7 +9,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
     function getTemplate(attrs) {
 
         var actionsMenuTemplate = ''
-          + '<ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenuActions" ng-style="{\'position\': \'absolute\', \'top\': \'18px\'} " >'
+          + '<ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenuActions" ng-style="{\'position\': \'absolute\', \'top\': \'18px\' , \'min-width\': \'120px\'} " >'
        + ' <li role="presentation">'
        + '     <div ng-repeat="action in ctrl.menuActions"  ng-hide="action.disable" class="mark-select " style="padding-left: 2px; ">'
          + '       <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action)"><span style="font-size:11px">{{action.name}}</span>'
