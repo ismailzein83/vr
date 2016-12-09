@@ -58,6 +58,7 @@
     <Compile Include="InvoiceCarrierFilter.cs" />
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDLCCustomerInvoiceItemDetails.cs" />
     <Compile Include="SupplierInvoiceDetails.cs" />
     <Compile Include="SupplierInvoiceItemDetails.cs" />
   </ItemGroup>

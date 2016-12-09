@@ -1037,14 +1037,14 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="CustomerName">
+                    <Textbox Name="CustomerIdDescription">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!CustomerName.Value</Value>
+                              <Value>=Fields!CustomerIdDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1057,7 +1057,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>CustomerName</rd:DefaultName>
+                      <rd:DefaultName>CustomerIdDescription</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1812,6 +1812,13 @@
       </ConnectionProperties>
       <rd:DataSourceID>41638e64-11ab-4529-a225-b8a451a7cfb0</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSInvoiceEntities3">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>6aae826e-6f26-4839-90c5-5cbe08b79e79</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="BankDetails">
@@ -1870,65 +1877,69 @@
     </DataSet>
     <DataSet Name="ItemsDetails">
       <Query>
-        <DataSourceName>TOneWhSInvoiceEntities2</DataSourceName>
+        <DataSourceName>TOneWhSInvoiceEntities3</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="NumberOfCalls">
-          <DataField>NumberOfCalls</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="OriginalSaleAmount">
-          <DataField>OriginalSaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="Duration">
-          <DataField>Duration</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
         <Field Name="CustomerId">
           <DataField>CustomerId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="CustomerName">
-          <DataField>CustomerName</DataField>
+        <Field Name="CustomerIdDescription">
+          <DataField>CustomerIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SaleZoneId">
           <DataField>SaleZoneId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleZoneName">
-          <DataField>SaleZoneName</DataField>
+        <Field Name="SaleZoneIdDescription">
+          <DataField>SaleZoneIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="OriginalSaleCurrencyId">
           <DataField>OriginalSaleCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrency">
-          <DataField>OriginalSaleCurrency</DataField>
+        <Field Name="OriginalSaleCurrencyIdDescription">
+          <DataField>OriginalSaleCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SaleCurrencyId">
           <DataField>SaleCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrency">
-          <DataField>SaleCurrency</DataField>
+        <Field Name="SaleCurrencyIdDescription">
+          <DataField>SaleCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SaleRate">
-          <DataField>SaleRate</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="SaleRateTypeId">
           <DataField>SaleRateTypeId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SaleRateTypeIdDescription">
+          <DataField>SaleRateTypeIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NumberOfCalls">
+          <DataField>NumberOfCalls</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SaleAmount">
+          <DataField>SaleAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleAmount">
+          <DataField>OriginalSaleAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Duration">
+          <DataField>Duration</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SaleRate">
+          <DataField>SaleRate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="FromDate">
           <DataField>FromDate</DataField>
@@ -1941,9 +1952,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>CustomerInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>RDLCCustomerInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRDLCCustomerInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCCustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

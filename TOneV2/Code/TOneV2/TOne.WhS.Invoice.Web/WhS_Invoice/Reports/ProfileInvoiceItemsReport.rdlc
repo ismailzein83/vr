@@ -577,14 +577,14 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SaleZoneName">
+                    <Textbox Name="SaleZoneIdDescription">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SaleZoneName.Value</Value>
+                              <Value>=Fields!SaleZoneIdDescription.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -593,7 +593,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SaleZoneName</rd:DefaultName>
+                      <rd:DefaultName>SaleZoneIdDescription</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -794,14 +794,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SaleCurrency">
+                    <Textbox Name="OriginalSaleCurrencyIdDescription">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SaleCurrency.Value</Value>
+                              <Value>=Fields!OriginalSaleCurrencyIdDescription.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -810,7 +810,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SaleCurrency</rd:DefaultName>
+                      <rd:DefaultName>OriginalSaleCurrencyIdDescription</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1347,69 +1347,80 @@
       </ConnectionProperties>
       <rd:DataSourceID>c93f8410-2d59-4750-b598-13bc9e4eefee</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneWhSInvoiceEntities1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>f3ee3d85-76be-4b86-8ded-617da84eeec5</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="CustomerInvoiceItemDetails">
       <Query>
-        <DataSourceName>TOneWhSInvoiceEntities</DataSourceName>
+        <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="NumberOfCalls">
-          <DataField>NumberOfCalls</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="OriginalSaleAmount">
-          <DataField>OriginalSaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="Duration">
-          <DataField>Duration</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
         <Field Name="CustomerId">
           <DataField>CustomerId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="CustomerName">
-          <DataField>CustomerName</DataField>
+        <Field Name="CustomerIdDescription">
+          <DataField>CustomerIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SaleZoneId">
           <DataField>SaleZoneId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleZoneName">
-          <DataField>SaleZoneName</DataField>
+        <Field Name="SaleZoneIdDescription">
+          <DataField>SaleZoneIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="OriginalSaleCurrencyId">
           <DataField>OriginalSaleCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrency">
-          <DataField>OriginalSaleCurrency</DataField>
+        <Field Name="OriginalSaleCurrencyIdDescription">
+          <DataField>OriginalSaleCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SaleCurrencyId">
           <DataField>SaleCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrency">
-          <DataField>SaleCurrency</DataField>
+        <Field Name="SaleCurrencyIdDescription">
+          <DataField>SaleCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SaleRate">
-          <DataField>SaleRate</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="SaleRateTypeId">
           <DataField>SaleRateTypeId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SaleRateTypeIdDescription">
+          <DataField>SaleRateTypeIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NumberOfCalls">
+          <DataField>NumberOfCalls</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SaleAmount">
+          <DataField>SaleAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleAmount">
+          <DataField>OriginalSaleAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="Duration">
+          <DataField>Duration</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SaleRate">
+          <DataField>SaleRate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="FromDate">
           <DataField>FromDate</DataField>
@@ -1422,9 +1433,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>CustomerInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>RDLCCustomerInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRDLCCustomerInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCCustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

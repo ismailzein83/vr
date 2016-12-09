@@ -9,8 +9,8 @@ namespace TOne.WhS.Invoice.Entities
     public class CustomerInvoiceDetails
     {
         public int TotalNumberOfCalls { get; set; }
-        public Double SaleAmount { get; set; }
-        public Double OriginalSaleAmount { get; set; }
+        public Decimal SaleAmount { get; set; }
+        public Decimal OriginalSaleAmount { get; set; }
         public decimal Duration { get; set; }
         public string PartnerType { get; set; }
         public int SaleCurrencyId { get; set; }
@@ -19,7 +19,7 @@ namespace TOne.WhS.Invoice.Entities
         public string OriginalSaleCurrency { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public Double TotalAmount { get; set; }
+        public Decimal TotalAmount { get; set; }
         public CustomerInvoiceDetails() { }
         public IEnumerable<CustomerInvoiceDetails> GetCustomerInvoiceDetailsRDLCSchema()
         {

@@ -65,10 +65,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         foreach (var tax in carrierProfile.Settings.TaxSetting.Items)
                         {
-                            customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDouble(tax.Value)) / 100);
+                            customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
                         }
                     }
-                    customerInvoiceDetails.TotalAmount += (customerInvoiceDetails.SaleAmount * Convert.ToDouble(carrierProfile.Settings.TaxSetting.VAT)) / 100;
+                    customerInvoiceDetails.TotalAmount += (customerInvoiceDetails.SaleAmount * Convert.ToDecimal(carrierProfile.Settings.TaxSetting.VAT)) / 100;
                 }
             }
            
@@ -115,9 +115,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic)
         {
-            CurrencyManager currencyManager = new CurrencyManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
             if (itemSetNamesDic != null)
             {
@@ -144,10 +141,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SaleRateTypeId = item.SaleRateTypeId,
                             FromDate = item.InvoiceMeasures.BillingPeriodFrom,
                             ToDate = item.InvoiceMeasures.BillingPeriodTo,
-                            SaleCurrency = currencyManager.GetCurrencySymbol(item.SaleCurrencyId),
-                            OriginalSaleCurrency = currencyManager.GetCurrencySymbol(item.OriginalSaleCurrencyId),
-                            CustomerName = carrierAccountManager.GetCarrierAccountName(item.CustomerId),
-                            SaleZoneName = saleZoneManager.GetSaleZoneName(item.SaleZoneId),
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -198,10 +191,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
             if (analyticRecords != null)
             {
-                Dictionary<int, InvoiceBillingRecord> groupedByCustomerDic = new Dictionary<int, InvoiceBillingRecord>();
-                Dictionary<int, InvoiceBillingRecord> groupedByCurrencyDic = new Dictionary<int, InvoiceBillingRecord>();
-                Dictionary<int, InvoiceBillingRecord> groupedByCustomerCurrencyDic = new Dictionary<int, InvoiceBillingRecord>();
-
                 foreach (var analyticRecord in analyticRecords)
                 {
 
@@ -218,9 +207,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
                     MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
                     MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
-
                     #endregion
-                
                     InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
                     {
                         CustomerId = Convert.ToInt32(customerId.Value),
@@ -234,48 +221,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             BillingPeriodFrom = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
                             BillingPeriodTo = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
                             SaleDuration = Convert.ToDecimal(saleDuration.Value ?? 0.0),
-                            SaleNet = Convert.ToDouble(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
+                            SaleNet = Convert.ToDecimal(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
                             NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
-                            SaleNet_OrigCurr = Convert.ToDouble(saleNet_OrigCurr == null ? 0.0 : saleNet_OrigCurr.Value ?? 0.0),
+                            SaleNet_OrigCurr = Convert.ToDecimal(saleNet_OrigCurr == null ? 0.0 : saleNet_OrigCurr.Value ?? 0.0),
                         }
 
                     };
-
                     AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);
-                    GroupingData(groupedByCurrencyDic, invoiceBillingRecord.OriginalSaleCurrencyId, invoiceBillingRecord);
-                    AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCurrency_{0}", invoiceBillingRecord.OriginalSaleCurrencyId), invoiceBillingRecord);
-
-                    #region Grouping By Customer
-                    if (isGroupedByCustomer)
-                    {
-
-                        GroupingData(groupedByCustomerCurrencyDic, invoiceBillingRecord.OriginalSaleCurrencyId, invoiceBillingRecord);
-
-                        AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCustomer_{0}", invoiceBillingRecord.CustomerId), invoiceBillingRecord);
-
-                        GroupingData(groupedByCustomerDic, invoiceBillingRecord.CustomerId, invoiceBillingRecord);
-
-                    }
-                    #endregion
-
-                }
-                if (isGroupedByCustomer)
-                {
-                    foreach (var item in groupedByCustomerDic)
-                    {
-                        AddItemToDictionary(itemSetNamesDic, "GroupedByCustomer", item.Value);
-                        foreach (var itemByCurrency in groupedByCustomerCurrencyDic)
-                        {
-                            AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCustomer_{0}_Currancy_{1}", itemByCurrency.Value.CustomerId, itemByCurrency.Value.OriginalSaleCurrencyId), item.Value);
-                        }
-                    }
-                }
-                foreach (var item in groupedByCurrencyDic)
-                {
-                    AddItemToDictionary(itemSetNamesDic, string.Format("GroupedByCurrency"), item.Value);
                 }
             }
-           
             return itemSetNamesDic;
         }
 
@@ -334,8 +288,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public class InvoiceMeasures
         {
-            public Double SaleNet { get; set; }
-            public Double SaleNet_OrigCurr { get; set; }
+            public decimal SaleNet { get; set; }
+            public decimal SaleNet_OrigCurr { get; set; }
             public int NumberOfCalls { get; set; }
             public Decimal SaleDuration { get; set; }
             public DateTime BillingPeriodTo { get; set; }
