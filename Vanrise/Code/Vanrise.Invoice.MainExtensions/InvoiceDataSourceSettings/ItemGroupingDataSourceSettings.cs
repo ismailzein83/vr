@@ -52,21 +52,43 @@ namespace Vanrise.Invoice.MainExtensions
             var type = Type.GetType(this.GroupingClassFQTN);
          
             List<dynamic> invoiceItemsDetails = new List<dynamic>();
+            List<PropertyInfo> propertyInfo = new List<PropertyInfo>();
+
+            for (int i = 0; i < this.Dimensions.Count; i++)
+            {
+                var dimension = this.Dimensions[i];
+                var dimensionObj = itemGrouping.DimensionItemFields.FirstOrDefault(x => x.DimensionItemFieldId == dimension.DimensionId);
+                propertyInfo.Add(type.GetProperty(dimensionObj.FieldName));
+                propertyInfo.Add(type.GetProperty(string.Format("{0}Description",dimensionObj.FieldName)));
+            }
+            foreach (var measure in this.Measures)
+            {
+                var measureObj = itemGrouping.AggregateItemFields.FirstOrDefault(x => x.AggregateItemFieldId == measure.MeasureId);
+                propertyInfo.Add(type.GetProperty(measureObj.FieldName));
+            }
+
             foreach (var item in groupedItems)
             {
                 var classInstanse = Activator.CreateInstance(type);
+                int counter = 0;
                 for (int i = 0; i < this.Dimensions.Count; i++)
                 {
                     var dimension = this.Dimensions[i];
                     var dimensionObj = itemGrouping.DimensionItemFields.FirstOrDefault(x => x.DimensionItemFieldId == dimension.DimensionId);
                     var dimesionObjValue = item.DimensionValues[i].Value;
-                    SetObjectProperty(classInstanse, dimensionObj.FieldName, dimesionObjValue);
+                    var dimesionObjDescription = item.DimensionValues[i].Name;
+                    SetObjectProperty(classInstanse, propertyInfo[counter], dimesionObjValue);
+                    counter++;
+                    SetObjectProperty(classInstanse, propertyInfo[counter], dimesionObjDescription);
+                    counter++;
                 }
                 foreach (var measure in this.Measures)
                 {
+                    
                     var measureObj = itemGrouping.AggregateItemFields.FirstOrDefault(x => x.AggregateItemFieldId == measure.MeasureId);
                     var measureObjValue = item.MeasureValues[measureObj.FieldName].Value;
-                    SetObjectProperty(classInstanse, measureObj.FieldName, measureObjValue);
+                    SetObjectProperty(classInstanse, propertyInfo[counter], measureObjValue);
+                    counter++;
                 }
                 invoiceItemsDetails.Add(classInstanse);
             }
@@ -74,11 +96,9 @@ namespace Vanrise.Invoice.MainExtensions
             return invoiceItemsDetails;
 
         }
-        void SetObjectProperty(object theObject, string propertyName, object value)
+        void SetObjectProperty(object theObject, PropertyInfo propertyinfo, object value)
         {
-            Type type = theObject.GetType();
-            var property = type.GetProperty(propertyName);
-            property.SetValue(theObject,value);
+            propertyinfo.SetValue(theObject, value);
         }
         public class DataSourceDimension
         {

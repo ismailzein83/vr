@@ -188,7 +188,7 @@ namespace Vanrise.Invoice.Business
                 
                 var measureValue = new GetMeasureValueContext(groupingInvoiceItemQueryContext, invoiceItemRecord).GetAggregateValue(measureId);
                 var measureConfig = groupingInvoiceItemQueryContext.GetAggregateItemField(measureId);
-                analyticRecord.MeasureValues.Add(measureConfig.FieldName, new InvoiceGroupingMeasureValue { Value = measureConfig.FieldType.GetDescription(measureValue) });
+                analyticRecord.MeasureValues.Add(measureConfig.FieldName, new InvoiceGroupingMeasureValue { Value = measureValue });
             }
             return analyticRecord;
         }
