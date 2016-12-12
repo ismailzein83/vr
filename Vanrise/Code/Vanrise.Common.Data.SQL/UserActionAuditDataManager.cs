@@ -13,7 +13,7 @@ namespace Vanrise.Common.Data.SQL
     {
 
         public UserActionAuditDataManager()
-            : base(GetConnectionStringName("LogDBConnkey", "LogDBConnString"))
+            : base(GetConnectionStringName("LoggingDBConnStringKey", "LogDBConnString"))
         {
 
         }
