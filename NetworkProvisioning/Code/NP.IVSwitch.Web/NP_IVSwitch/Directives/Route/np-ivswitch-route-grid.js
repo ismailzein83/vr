@@ -55,8 +55,8 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
                 };
 
                 api.onRouteAdded = function (addedRoute) {
-                     gridAPI.itemAdded(addedRoute);
-                }
+                    gridAPI.itemAdded(addedRoute);
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

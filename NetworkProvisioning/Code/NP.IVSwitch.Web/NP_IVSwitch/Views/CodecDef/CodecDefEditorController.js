@@ -27,10 +27,10 @@
             $scope.scopeModel.add = function () {
 
                 if ($scope.onCodecDefAdded != undefined) {
-                     selectedCodecDefEntity = {
+                    selectedCodecDefEntity = {
                         Description: codecDefEntity.Description,
-                        CodecId: codecDefEntity.CodecId,
-                     }
+                        CodecId: codecDefEntity.CodecId
+                    };
                     $scope.onCodecDefAdded(selectedCodecDefEntity);
                 }
                     $scope.modalContext.closeModal();
@@ -49,7 +49,7 @@
                     $scope.SamplingFrequency = codecDefEntity.ClockRate;
                     $scope.PassThru = codecDefEntity.PassThru;
                 }
-            }
+            };
         };        
       
         function loadAllControls() {

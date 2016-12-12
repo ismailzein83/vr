@@ -31,21 +31,20 @@ app.directive('npIvswitchCodecdefGrid', ['NP_IVSwitch_CodecDefAPIService', 'NP_I
                     gridAPI = api;
                     defineAPI();
                 };
-                $scope.scopeModel.add = function ()
-                {
+                $scope.scopeModel.add = function () {
                     var onCodecDefAdded = function (addedCodecDef) {
-                         $scope.scopeModel.codecDef.push({ Entity: addedCodecDef });
+                        $scope.scopeModel.codecDef.push({ Entity: addedCodecDef });
 
-                    }
+                    };
                     NP_IVSwitch_CodecDefService.addCodecDef(onCodecDefAdded);
-                }
+                };
 
-                ctrl.isGridValid = function() {
+                ctrl.isGridValid = function () {
                     if ($scope.scopeModel.codecDef.length == 0) {
-                        return 'At least one codec must be added.'
+                        return 'At least one codec must be added.';
                     }
                     return null;
-                }
+                };
 
                 ctrl.deleterow = function (DeletedItem) {
                     var index = $scope.scopeModel.codecDef.indexOf(DeletedItem); 
@@ -70,7 +69,7 @@ app.directive('npIvswitchCodecdefGrid', ['NP_IVSwitch_CodecDefAPIService', 'NP_I
                         Data.push($scope.scopeModel.codecDef[i].Entity);
                     };
                     return Data;
-                }              
+                };
               
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

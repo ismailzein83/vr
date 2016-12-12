@@ -52,7 +52,7 @@ app.directive('npIvswitchCodecprofileGrid', ['NP_IVSwitch_CodecProfileAPIService
 
                 api.onCodecProfileAdded = function (addedCodecProfile) {
                     gridAPI.itemAdded(addedCodecProfile);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

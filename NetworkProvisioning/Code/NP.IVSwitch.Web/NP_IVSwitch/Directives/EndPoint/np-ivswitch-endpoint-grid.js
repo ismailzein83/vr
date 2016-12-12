@@ -65,7 +65,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 
                 api.onEndPointAdded = function (addedEndPoint) {
                     gridAPI.itemAdded(addedEndPoint);
-                }
+                };
 
               
 

@@ -73,33 +73,33 @@
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.TypeId = SelectedItem.value;
                 }
-            }
+            };
 
             $scope.scopeModel.onSelectionCodecProfileChanged = function (SelectedItem) {
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.codecprofileid = SelectedItem.CodecProfileId;
-                 }
-            }
+                }
+            };
 
             $scope.scopeModel.onSelectionTranslationRuleChanged = function (SelectedItem) {
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.translationruleid = SelectedItem.TranslationRuleId;
-                 }
-            }                        
+                }
+            };
 
             $scope.scopeModel.onSelectionChangedState = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.currentstate = SelectedItem;
                 }
-            }
+            };
 
             $scope.scopeModel.onSelectionChangedTransportMode = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.transportmodeid = SelectedItem;
-                 }
-            }
+                }
+            };
            
         }
         function load() {
@@ -254,10 +254,10 @@
                       TransRuleId: $scope.scopeModel.translationruleid,
                       WakeUpTime: $scope.scopeModel.wakeuptime,
                       TransportModeId: $scope.scopeModel.transportmodeid.value,
-                      Percentage : $scope.scopeModel.percentage,
+                      Percentage : $scope.scopeModel.percentage
                    },
 
-                  CarrierAccountId:   carrierAccountId,
+                  CarrierAccountId:   carrierAccountId
                
             };
         }

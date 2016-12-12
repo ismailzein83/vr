@@ -22,13 +22,13 @@
             $scope.add = function () {
                 var onCodecProfileAdded = function (addedCodecProfile) {
                     gridAPI.onCodecProfileAdded(addedCodecProfile);
-                 }
+                };
                 NP_IVSwitch_CodecProfileService.addCodecProfile(onCodecProfileAdded);
             };
 
             $scope.hasAddCodecProfilePermission = function () {
                 return NP_IVSwitch_CodecProfileAPIService.HasAddCodecProfilePermission();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                  gridAPI = api;

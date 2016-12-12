@@ -52,7 +52,7 @@ app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIS
 
                 api.onTranslationRuleAdded = function (addedTranslationRule) {
                     gridAPI.itemAdded(addedTranslationRule);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

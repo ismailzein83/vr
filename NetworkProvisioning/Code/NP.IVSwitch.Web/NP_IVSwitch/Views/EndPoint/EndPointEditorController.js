@@ -86,21 +86,21 @@
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.TypeId = SelectedItem.value;
                 }
-            }
+            };
 
             $scope.scopeModel.onSelectionCodecProfileChanged = function (SelectedItem) {
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.codecprofileid = SelectedItem.CodecProfileId;
                 }
-            }
+            };
 
             $scope.scopeModel.onSelectionTranslationRuleChanged = function (SelectedItem) {
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.translationruleid = SelectedItem.TranslationRuleId;
                 }
-            }
+            };
 
             $scope.scopeModel.onSelectionEndPointChanged = function (SelectedItem) {
                 if (SelectedItem != undefined) {
@@ -115,28 +115,28 @@
                         $scope.scopeModel.ShowACL = true;
                     }
 
-                 }
-            }
+                }
+            };
 
             $scope.scopeModel.onSelectionDomainChanged = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.domaineid = SelectedItem.DomainId;
-                 }
-            }
+                }
+            };
 
             $scope.scopeModel.onSelectionChangedState = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.currentstate = SelectedItem;
                 }
-            }
+            };
 
             $scope.scopeModel.onSelectionChangedRtpMode = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.selectedrtpmode = SelectedItem;
                     $scope.scopeModel.rtpmode = $scope.scopeModel.selectedrtpmode.value
                 }
- 
-            }
+
+            };
 
         }
         function load() {
@@ -340,10 +340,10 @@
                 TechPrefix: $scope.scopeModel.techprefix,
                 SipLogin: $scope.scopeModel.siplogin,
                 SipPassword: $scope.scopeModel.sippassword,
-                EndPointType: $scope.scopeModel.endpointtype,
+                EndPointType: $scope.scopeModel.endpointtype
               },
 
-                 CarrierAccountId:   carrierAccountId,
+                 CarrierAccountId:   carrierAccountId
                
             };
         }

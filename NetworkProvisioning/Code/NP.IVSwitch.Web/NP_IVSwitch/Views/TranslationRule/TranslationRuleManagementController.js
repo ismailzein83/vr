@@ -19,13 +19,13 @@
             $scope.add = function () {
                 var onTranslationRuleAdded = function (addedTranslationRule) {
                     gridAPI.onTranslationRuleAdded(addedTranslationRule);
-                }
+                };
                 NP_IVSwitch_TranslationRuleService.addTranslationRule(onTranslationRuleAdded);
             };
 
             $scope.hasAddTranslationRulePermission = function () {
                 return NP_IVSwitch_TranslationRuleAPIService.HasAddTranslationRulePermission();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
