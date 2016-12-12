@@ -516,6 +516,8 @@
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeManagement.html" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericRuleView\GenericRuleViewEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericRuleView\GenericRuleViewEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionCriteriaFieldEditor.html" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionCriteriaFieldEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericRuleDefinition\GenericRuleDefinitionEditor.html" />

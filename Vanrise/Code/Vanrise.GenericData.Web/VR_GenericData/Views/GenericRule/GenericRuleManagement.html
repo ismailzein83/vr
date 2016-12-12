@@ -12,9 +12,12 @@
             </vr-row>
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="Effective Date" value="scopeModel.effectiveDate" type="date"></vr-datetimepicker>
+                    <vr-genericdata-genericruledefinition-selector customlabel="Rule Type" selectedvalues="scopeModel.ruleDefinition" onselectionchanged="onGenericRuleDefinitionSelectorSelectionChange" on-ready="    onGenericRuleDefinitionSelectorDirectiveReady" hideremoveicon isrequired="true" normal-col-num="2"></vr-genericdata-genericruledefinition-selector>
+                </vr-columns>              
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-datetimepicker label="Effective Date" value=" scopemodel.effectivedate" type="date"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="normal" ng-show="advancedSelected">
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
                 <span ng-repeat="filter in scopeModel.filters" ng-show="advancedSelected || (filter.showInBasicSearch && basicSelected)">
@@ -27,15 +30,15 @@
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
+                <div transclude-to="buttons" ng-show="scopeModel.ruleDefinition" >
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="Add" data-onclick="addGenericRule" haspermission="hasAddGenericRulePermission"></vr-button>
+                    <vr-button type="Add" data-onclick="addGenericRule" ng-show="scopeModel.haveAddPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-genericdata-genericrule-grid on-ready="onGridReady"></vr-genericdata-genericrule-grid>
+                <vr-genericdata-genericrule-grid on-ready="onGridReady" ng-show="scopeModel.ruleDefinition"></vr-genericdata-genericrule-grid>
             </vr-columns>
         </vr-row>
 

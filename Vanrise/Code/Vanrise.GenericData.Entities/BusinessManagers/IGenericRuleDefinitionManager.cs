@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public interface IGenericRuleDefinitionManager : IBusinessManager
     {
-        bool DoesUserHaveViewAccess(int userId, Guid genericRuleDefinitionId);
+        bool DoesUserHaveViewAccess(int userId, List<Guid> RuleDefinitionIds);
 
     }
 }

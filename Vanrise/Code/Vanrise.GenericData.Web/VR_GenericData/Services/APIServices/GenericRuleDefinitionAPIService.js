@@ -12,8 +12,7 @@
             HasAddGenericRuleDefinition:HasAddGenericRuleDefinition,
             UpdateGenericRuleDefinition: UpdateGenericRuleDefinition,
             HasUpdateGenericRuleDefinition:HasUpdateGenericRuleDefinition,
-            GetGenericRuleDefinitionsInfo: GetGenericRuleDefinitionsInfo,
-            GetGenericRuleDefinitionView: GetGenericRuleDefinitionView
+            GetGenericRuleDefinitionsInfo: GetGenericRuleDefinitionsInfo
         };
 
         function GetFilteredGenericRuleDefinitions(input) {
@@ -44,11 +43,7 @@
             });
         }
 
-        function GetGenericRuleDefinitionView(genericRuleDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'GetGenericRuleDefinitionView'), {
-                genericRuleDefinitionId: genericRuleDefinitionId
-            });
-        }
+        
     }
 
     appControllers.service('VR_GenericData_GenericRuleDefinitionAPIService', GenericRuleDefinitionAPIService);

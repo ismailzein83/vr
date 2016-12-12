@@ -51,11 +51,5 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.GetGenericRuleDefinitionsInfo(deserializedFilter);
         }
 
-        [HttpGet]
-        [Route("GetGenericRuleDefinitionView")]
-        public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(Guid genericRuleDefinitionId)
-        {
-            return _manager.GetGenericRuleDefinitionView(genericRuleDefinitionId);
-        }
     }
 }

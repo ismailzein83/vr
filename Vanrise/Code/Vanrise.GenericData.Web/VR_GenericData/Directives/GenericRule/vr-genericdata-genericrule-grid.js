@@ -50,7 +50,7 @@
                     });
                 };
 
-                defineMenuActions();
+                //defineMenuActions();
             }
 
             function getDirectiveAPI() {
@@ -100,24 +100,15 @@
                 return true;
             }
             
-            //function defineMenuActions() {
-            //    $scope.gridMenuActions = [{
-            //        name: 'Edit',
-            //        clicked: editGenericRule,
-            //    },
-            //    {
-            //        name: 'Delete',
-            //        clicked: deleteGenericRule,
-            //    }];
-            //}
-
-            function defineMenuActions() {
-                $scope.gridMenuActions = [{
+           // function defineMenuActions() {
+            $scope.gridMenuActions = function () {
+               return [{
                     name: 'Edit',
                     clicked: editGenericRule,
                     haspermission: hasEditGenericRulePermission
                 }];
             }
+          //  }
 
             function hasEditGenericRulePermission(genericRule) {
                 return VR_GenericData_GenericRuleAPIService.DoesUserHaveEditAccess(genericRule.Entity.DefinitionId);

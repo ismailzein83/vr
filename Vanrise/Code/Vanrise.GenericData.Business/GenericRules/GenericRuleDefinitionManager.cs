@@ -116,25 +116,36 @@ namespace Vanrise.GenericData.Business
             return GetCachedGenericRuleDefinitions().FindAllRecords(filterExpression);
         }
 
-        public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(Guid genericRuleDefinitionId)
-        {
-            var viewManager = new Vanrise.Security.Business.ViewManager();
-            var allViews = viewManager.GetViews();
-            return allViews.FirstOrDefault(v => (v.Settings as GenericRuleViewSettings) != null && (v.Settings as GenericRuleViewSettings).RuleDefinitionId == genericRuleDefinitionId);
-        }
-
         public bool DoesUserHaveViewAccess(Guid genericRuleDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
-            return DoesUserHaveViewAccess(userId, genericRuleDefinitionId);
+            var genericRuleDefinition = GetGenericRuleDefinition(genericRuleDefinitionId);
+            return DoesUserHaveViewAccess(userId, genericRuleDefinition);
         }
-        public bool DoesUserHaveViewAccess(int userId, Guid genericRuleDefinitionId)
+        public bool DoesUserHaveViewAccess(GenericRuleDefinition genericRuleDefinition)
         {
-            var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
-            if (genericRuleDefinition != null && genericRuleDefinition.Security != null && genericRuleDefinition.Security.ViewRequiredPermission != null)
-                return DoesUserHaveAccess(userId, genericRuleDefinition.Security.ViewRequiredPermission);
-            return true;
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveViewAccess(userId, genericRuleDefinition);
         }
+        public bool DoesUserHaveViewAccess(int userId, List<Guid> RuleDefinitionIds)
+        {
+            foreach (var guid in RuleDefinitionIds)
+            {
+                var genericRuleDefinition = GetGenericRuleDefinition(guid);
+                if (DoesUserHaveViewAccess(userId, genericRuleDefinition))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveViewAccess(int userId, GenericRuleDefinition genericRuleDefinition)
+        {
+            if (genericRuleDefinition.Security != null && genericRuleDefinition.Security.ViewRequiredPermission != null)
+                return DoesUserHaveAccess(userId, genericRuleDefinition.Security.ViewRequiredPermission);
+            else
+                return true;
+        }
+
         public bool DoesUserHaveAddAccess(Guid genericRuleDefinitionId)
         {
             var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);

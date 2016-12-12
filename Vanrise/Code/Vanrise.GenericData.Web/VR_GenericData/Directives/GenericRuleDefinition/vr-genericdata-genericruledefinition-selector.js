@@ -144,7 +144,6 @@
                     + ' ' + hideselectedvaluessection
                     + ' isrequired="ctrl.isrequired"'
                     + ' ' + hideremoveicon
-                    + ' vr-disabled="ctrl.isdisabled"'
                     + ' label="' + label + '"'
                     + ' entityName="' + label + '"'
                 + '</vr-select>'

@@ -9,16 +9,19 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericRuleViewSettings : Vanrise.Security.Entities.ViewSettings
     {
-        public Guid RuleDefinitionId { get; set; }
+        public List<Guid> RuleDefinitionIds { get; set; }
 
         public override string GetURL(Security.Entities.View view)
         {
-            return String.Format("#/viewwithparams/VR_GenericData/Views/GenericRule/GenericRuleManagement/{{\"ruleDefinitionId\":\"{0}\"}}", this.RuleDefinitionId);
+            return String.Format("#/viewwithparams/VR_GenericData/Views/GenericRule/GenericRuleManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
         }
 
         public override bool DoesUserHaveAccess(IViewUserAccessContext context)
         {
-           return BusinessManagerFactory.GetManager<IGenericRuleDefinitionManager>().DoesUserHaveViewAccess(context.UserId ,this.RuleDefinitionId);
+            if (this.RuleDefinitionIds != null)
+                return BusinessManagerFactory.GetManager<IGenericRuleDefinitionManager>().DoesUserHaveViewAccess(context.UserId, this.RuleDefinitionIds);
+            else
+                return false;
 
         }
     }
