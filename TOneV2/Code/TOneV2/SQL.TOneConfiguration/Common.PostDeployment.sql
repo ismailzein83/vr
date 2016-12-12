@@ -30,6 +30,7 @@ as (select * from (values
 ('VRCommon/City/UpdateCity','VRCommon_City: Edit'),
 
 ('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_System_Log: View'),
+('VRCommon/LogEntry/GetFilteredLogs','VRCommon_System_Log: View'),
 
 ('VRCommon/Settings/GetFilteredSettings','VRCommon_Settings:View'),
 ('VRCommon/Settings/UpdateSetting','VRCommon_Settings:Edit'),
