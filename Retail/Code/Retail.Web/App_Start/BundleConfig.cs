@@ -29,8 +29,8 @@ namespace Retail.Web
                 "~/Client/Modules/VR_Notification", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_BEBridge", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/WhS_Routing", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/VR_Invoice", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_NumberingPlan", "*.js", true);
-
             bundles.Add(modulesJSBundle);
         }
     }
