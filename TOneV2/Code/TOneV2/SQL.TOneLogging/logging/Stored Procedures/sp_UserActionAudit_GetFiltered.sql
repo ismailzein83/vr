@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [logging].[sp_UserActionAudit_GetFilterd]
+CREATE PROCEDURE [logging].[sp_UserActionAudit_GetFiltered]
 	@Top INT ,
 	@UserIds nvarchar(max),
 	@ModuleName varchar(50),
