@@ -84,6 +84,7 @@
     <Compile Include="GenericParameterManager.cs" />
     <Compile Include="TextManipulationContext\TextManipulationActionContext.cs" />
     <Compile Include="TextManipulationManager.cs" />
+    <Compile Include="UserActionAudit\UserActionAuditManager.cs" />
     <Compile Include="VRMail\VRMailManager.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateManager.cs" />
     <Compile Include="VRMail\VRMailMessageTypeManager.cs" />
@@ -153,6 +154,10 @@
     <ProjectReference Include="..\Vanrise.Runtime\Vanrise.Runtime.csproj">
       <Project>{2cdddf60-45b6-4ce6-ac2b-4470bb9bfe96}</Project>
       <Name>Vanrise.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
+      <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
+      <Name>Vanrise.Security.Business</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

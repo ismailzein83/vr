@@ -1,0 +1,46 @@
+﻿<vr-panel>
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-sec-user-selector ismultipleselection="true" on-ready="scopeModel.onUserSelectorReady"></vr-sec-user-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="dateTime" label="From" isrequired="true" value="scopeModel.fromTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="dateTime" label="To" value="scopeModel.toTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox label="Url" value="scopeModel.baseUrl"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox label="Module" value="scopeModel.module"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox label="Entity" value="scopeModel.controller"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox label="Action" value="scopeModel.action"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-numeric label="Top" value="scopeModel.top" isrequired="true" minvalue="1"></vr-numeric>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow" ng-show="showGrid">
+                <vr-common-useractionaudit-grid on-ready="scopeModel.onGridReady"></vr-common-useractionaudit-grid>
+            </vr-columns>
+        </vr-row>
+
+    </vr-form>
+
+</vr-panel>

@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="logs"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.UserActionAuditId" defaultsortdirection="'DESC'" defaultsortbyfieldname="'Entity.UserActionAuditId'">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.UserActionAuditId'" type="'Text'" widthfactor="1"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'User'" field="'UserName'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Url'" field="'Entity.BaseUrl'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Module'" field="'Entity.ModuleName'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Entity'" field="'Entity.ControllerName'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Action'" field="'Entity.ActionName'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Log Time'" field="'Entity.LogTime'" type="'LongDatetime'" widthfactor="2"></vr-datagridcolumn>
+</vr-datagrid>

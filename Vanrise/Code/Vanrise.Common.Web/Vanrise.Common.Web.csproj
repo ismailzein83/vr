@@ -122,6 +122,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\UserActionAuditController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
     <Compile Include="Controllers\StyleDefinitionController.cs" />
@@ -187,6 +188,10 @@
     <Content Include="Common\Directives\Filter\Text\vr-common-textfiltertype-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-companysettings-editor.js" />
+    <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditGridTemplate.html" />
+    <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditSearch.html" />
+    <Content Include="Common\Directives\UserActionAudit\vr-common-useractionaudit-grid.js" />
+    <Content Include="Common\Directives\UserActionAudit\vr-useractionaudit-search.js" />
     <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttypeconfig-selector.js" />
@@ -281,6 +286,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
+    <Content Include="Common\Services\APIServices\UserActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTimeZoneAPIService.js" />
@@ -301,6 +307,7 @@
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\CompanySettingService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
+    <Content Include="Common\Services\UserActionAuditService.js" />
     <Content Include="Common\Services\VRComponentTypeService.js" />
     <Content Include="Common\Services\VRTimeZoneService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />

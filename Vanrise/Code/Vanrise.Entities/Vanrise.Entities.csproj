@@ -77,6 +77,9 @@
     <Compile Include="TextManipulation\TextManipulationActionSettingsConfig.cs" />
     <Compile Include="TextManipulation\TextManipulationSettings.cs" />
     <Compile Include="TextManipulation\TextManipulationTarget.cs" />
+    <Compile Include="UserActionAudit\UserActionAudit.cs" />
+    <Compile Include="UserActionAudit\UserActionAuditDetail.cs" />
+    <Compile Include="UserActionAudit\UserActionAuditQuery.cs" />
     <Compile Include="VRButtonType.cs" />
     <Compile Include="VRMail\VRMailAttachement.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />
