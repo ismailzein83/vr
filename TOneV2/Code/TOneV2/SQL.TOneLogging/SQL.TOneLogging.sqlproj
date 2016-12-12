@@ -109,6 +109,8 @@
     <Build Include="bp\Stored Procedures\sp_BPTrackings_CreateTempForFiltered.sql" />
     <Build Include="logging\Stored Procedures\SP_LogEntry_CreateTempByFiltered.sql" />
     <Build Include="logging\Tables\UserActionAudit.sql" />
+    <Build Include="logging\Stored Procedures\sp_UserActionAudit_Insert.sql" />
+    <Build Include="logging\Stored Procedures\sp_UserActionAudit_GetFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
