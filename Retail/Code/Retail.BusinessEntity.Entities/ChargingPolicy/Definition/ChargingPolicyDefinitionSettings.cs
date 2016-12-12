@@ -22,6 +22,8 @@ namespace Retail.BusinessEntity.Entities
         public string Title { get; set; }
 
         public Guid RuleDefinitionId { get; set; }
+
+        public Vanrise.GenericData.Entities.RecordFilterGroup BillingRecordFilter { get; set; }
     }
 
     public class ChargingPolicyDefinitionPart

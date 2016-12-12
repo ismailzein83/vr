@@ -24,5 +24,13 @@ namespace Retail.BusinessEntity.Entities
         public List<PackageItem> Services { get; set; }
 
         public PackageExtendedSettings ExtendedSettings { get; set; }
+
+        public int CurrencyId { get; set; }
+
+        public Decimal? InitialFee { get; set; }
+
+        public RecurringPeriodSettings RecurringPeriod { get; set; }
+
+        public Decimal? RecurringFee { get; set; }
     }
 }

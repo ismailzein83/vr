@@ -9,6 +9,8 @@ namespace Retail.Voice.Entities
     public interface IPackageVoiceUsageCharger
     {
         void TryChargeVoiceEvent(IVoiceUsageChargerContext context);
+
+        void DeductFromBalances(IVoiceUsageChargerDeductFromBalanceContext context);
     }
 
     public interface IPackageSettingVoiceUsageCharger
@@ -18,6 +20,8 @@ namespace Retail.Voice.Entities
 
     public interface IVoiceUsageChargerContext
     {
+        long AccountId { get; }
+
         Guid ServiceTypeId { get; }
 
         dynamic RawCDR { get; }
@@ -29,5 +33,16 @@ namespace Retail.Voice.Entities
         DateTime EventTime { get; }
 
         List<VoiceEventPricedPart> PricedPartInfos { set; }
+
+        Object ChargeInfo { set; }
+    }
+
+    public interface IVoiceUsageChargerDeductFromBalanceContext
+    {
+        long AccountId { get; }
+
+        Guid ServiceTypeId { get; }
+
+        Object ChargeInfo { get; }
     }
 }

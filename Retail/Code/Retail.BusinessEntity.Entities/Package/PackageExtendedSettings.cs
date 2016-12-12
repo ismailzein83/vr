@@ -14,10 +14,40 @@ namespace Retail.BusinessEntity.Entities
         {
             return null;
         }
+
+        public virtual void OnPackageAssignmentStarted(IPackageSettingAssignementStartedContext context)
+        {
+
+        }
+
+        public virtual void OnPackageAssignmentExpired(IPackageSettingAssignementExpiredContext context)
+        {
+
+        }
     }
 
     public abstract class PackageExtendedSettingsEditorRuntime
     {
 
+    }
+
+    public interface IPackageSettingAssignementStartedContext
+    {
+        long AccountId { get; }
+
+        Account Account { get; }
+
+        DateTime BED { get; }
+
+        DateTime? EED { get; }
+    }
+
+    public interface IPackageSettingAssignementExpiredContext
+    {
+        long AccountId { get; }
+
+        Account Account { get; }
+
+        DateTime EED { get; }
     }
 }

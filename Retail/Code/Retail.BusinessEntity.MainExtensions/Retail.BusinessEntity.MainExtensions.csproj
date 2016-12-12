@@ -101,6 +101,7 @@
     <Compile Include="DurationVolumes\VolumeByDuration.cs" />
     <Compile Include="DurationVolumes\VolumePerUnit.cs" />
     <Compile Include="PackageTypes\PricingPackageSettings.cs" />
+    <Compile Include="PackageTypes\VolumePackageSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiusSQLProvisionerRuntimeSetting.cs" />
     <Compile Include="RecurringPeriods\MonthlyRecurringPeriodSettings.cs" />
@@ -133,6 +134,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Entities\Retail.Voice.Entities.csproj">
+      <Project>{d1f8761c-baf9-4302-902a-a9ea86cc8ed6}</Project>
+      <Name>Retail.Voice.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

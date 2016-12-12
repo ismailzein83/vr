@@ -56,6 +56,8 @@ namespace Retail.BusinessEntity.Entities
         string BankDetails { get; }
 
         int StatusChargingSetId { get; }
+
+        int PackageGroupId { get; }
     }
 
     public class PaymentMethod

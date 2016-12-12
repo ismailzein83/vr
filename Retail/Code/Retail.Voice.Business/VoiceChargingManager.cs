@@ -34,10 +34,12 @@ namespace Retail.Voice.Business
 
             var voiceUsageChargers = GetVoiceUsageChargersByPriority(accountId, serviceTypeId, eventTime);
             Decimal remainingDurationToPrice = duration;
+            Dictionary<IPackageVoiceUsageCharger, Object> chargersChargingInfos = new Dictionary<IPackageVoiceUsageCharger, object>();
             foreach (var voiceUsageCharger in voiceUsageChargers)
             {
                 var context = new VoiceUsageChargerContext
                 {
+                    AccountId = accountId,
                     ServiceTypeId = serviceTypeId,
                     RawCDR = rawCDR,
                     MappedCDR = mappedCDR,
@@ -56,10 +58,13 @@ namespace Retail.Voice.Business
 
                         remainingDurationToPrice -= pricedPart.PricedDuration;
                     });
+                    chargersChargingInfos.Add(voiceUsageCharger.VoiceUsageCharger, context.ChargeInfo);
                     if (remainingDurationToPrice <= 0)
                         break;
                 }
             }
+
+
 
             if (voiceUsageChargers == null || voiceUsageChargers.Count == 0)
                 throw new Exception(string.Format("No voiceUsageChargers is defined for accountID: {0} and serviceTypeId: {1}.", accountId, serviceTypeId));
@@ -79,6 +84,16 @@ namespace Retail.Voice.Business
                 voiceEventPrice.Amount = voiceEventPricedPart.Amount;
                 voiceEventPrice.RateTypeId = voiceEventPricedPart.RateTypeId;
                 voiceEventPrice.CurrencyId = voiceEventPricedPart.CurrencyId;
+
+                foreach(var entry in chargersChargingInfos)
+                {
+                    entry.Key.DeductFromBalances(new VoiceUsageChargerDeductFromBalanceContext
+                        {
+                            AccountId = accountId,
+                            ServiceTypeId = serviceTypeId,
+                            ChargeInfo = entry.Value
+                        });
+                }
             }
 
             return voiceEventPrice;
@@ -222,6 +237,12 @@ namespace Retail.Voice.Business
 
     public class VoiceUsageChargerContext : IVoiceUsageChargerContext
     {
+        public long AccountId
+        {
+            get;
+            set;
+        }
+
         public Guid ServiceTypeId
         {
             get;
@@ -253,7 +274,35 @@ namespace Retail.Voice.Business
             get;
             set;
         }
+
+        public object ChargeInfo
+        {
+            get;
+            set;
+        }
     }
+
+    public class VoiceUsageChargerDeductFromBalanceContext : IVoiceUsageChargerDeductFromBalanceContext
+    {
+        public long AccountId
+        {
+            get;
+            set;
+        }
+
+        public Guid ServiceTypeId
+        {
+            get;
+            set;
+        }
+
+        public object ChargeInfo
+        {
+            get;
+            set;
+        }
+    }
+
 
     public class VoiceChargingPolicyEvaluatorContext : IVoiceChargingPolicyEvaluatorContext
     {

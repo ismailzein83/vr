@@ -79,6 +79,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Package\PackageGroup.cs" />
+    <Compile Include="Package\PackageGroupSettings.cs" />
     <Compile Include="UISettings\AccountGridDefinition.cs" />
     <Compile Include="UISettings\AccountViewDefinition.cs" />
     <Compile Include="UISettings\AccountViewDefinitionConfig.cs" />

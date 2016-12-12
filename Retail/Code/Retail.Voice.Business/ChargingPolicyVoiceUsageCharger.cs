@@ -36,5 +36,11 @@ namespace Retail.Voice.Business
                 };
             }
         }
+
+
+        public void DeductFromBalances(IVoiceUsageChargerDeductFromBalanceContext context)
+        {
+            
+        }
     }
 }
