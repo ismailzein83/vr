@@ -138,6 +138,19 @@ namespace Retail.BusinessEntity.Business
                 });
         }
 
+        public ChargingPolicyDefinitionSettings GetChargingPolicyDefinitionSettings(Guid serviceTypeId)
+        {
+            ServiceType serviceType = this.GetServiceType(serviceTypeId);
+
+            if (serviceType == null)
+                throw new NullReferenceException(string.Format("serviceType of serviceTypeId: {0}", serviceTypeId));
+
+            if (serviceType.Settings == null)
+                throw new NullReferenceException(string.Format("serviceType.Settings of serviceTypeId {0}", serviceTypeId));
+
+            return serviceType.Settings.ChargingPolicyDefinitionSettings;
+        }
+
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();

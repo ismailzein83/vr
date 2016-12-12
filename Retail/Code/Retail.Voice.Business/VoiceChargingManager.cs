@@ -135,7 +135,7 @@ namespace Retail.Voice.Business
             var cacheName = new GetVoiceUsageChargersByPriorityCacheName { AccountId = accountId, ServiceTypeId = serviceTypeId, EventDate = eventTime.Date };
 
             //needs caching
-            List<Package> accountPackagesByPriority = GetAccountPackagesByPriority(accountId); //get account packages by priority
+            List<Package> accountPackagesByPriority = GetAccountPackagesByPriority(accountId, eventTime); //get account packages by priority
 
             List<VoiceUsageChargerWithParentPackage> voiceUsageChargersByPriority = new List<VoiceUsageChargerWithParentPackage>();
             foreach (var package in accountPackagesByPriority)
@@ -192,9 +192,9 @@ namespace Retail.Voice.Business
             return chargingPolicyEvaluator;
         }
 
-        private List<Package> GetAccountPackagesByPriority(long accountId)
+        private List<Package> GetAccountPackagesByPriority(long accountId, DateTime effectiveTime)
         {
-            IEnumerable<int> accountPackagesIds = _accountPackageManager.GetPackageIdsAssignedToAccount(accountId);
+            IEnumerable<int> accountPackagesIds = _accountPackageManager.GetPackageIdsAssignedToAccount(accountId, effectiveTime);
 
             if (accountPackagesIds == null || accountPackagesIds.Count() == 0)
                 return null;

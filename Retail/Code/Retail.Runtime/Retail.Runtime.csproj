@@ -420,6 +420,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Pricing.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
@@ -534,6 +537,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.RingoExtensions\Retail.BusinessEntity.RingoExtensions.csproj">
       <Project>{79ee241b-c553-470e-a091-03fbbccd971f}</Project>
       <Name>Retail.BusinessEntity.RingoExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.Entities\Retail.Data.Entities.csproj">
+      <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>
+      <Name>Retail.Data.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.Voice.Business\Retail.Voice.Business.csproj">
       <Project>{95ae4730-ee1b-4a0b-a785-baf36f130714}</Project>

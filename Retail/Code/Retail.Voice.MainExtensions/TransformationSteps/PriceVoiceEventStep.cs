@@ -20,7 +20,13 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
         public string EventTime { get; set; }
 
         //Output Fields
-        public string VoiceEventPrice { get; set; }
+        public string PackageId { get; set; }
+        public string UsageChargingPolicyId { get; set; }
+        public string Rate { get; set; }
+        public string Amount { get; set; }
+        public string RateTypeId { get; set; }
+        public string CurrencyId { get; set; }
+        public string VoiceEventPricedParts { get; set; }
 
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
@@ -32,7 +38,26 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
             context.AddCodeToCurrentInstanceExecutionBlock("Retail.Voice.Entities.VoiceEventPrice {0} = {1}.PriceVoiceEvent({2},{3},{4},{5},{6},{7});", voiceEventPriceVariableName,
                 voiceChargingManagerVariableName, this.AccountId, this.ServiceTypeId, this.RawCDR, this.MappedCDR, this.Duration, this.EventTime);
 
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1};", this.VoiceEventPrice, voiceEventPriceVariableName);
+            if (this.PackageId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.PackageId;", this.PackageId, voiceEventPriceVariableName);
+
+            if (this.UsageChargingPolicyId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.UsageChargingPolicyId;", this.UsageChargingPolicyId, voiceEventPriceVariableName);
+
+            if (this.Rate != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Rate;", this.Rate, voiceEventPriceVariableName);
+
+            if (this.Amount != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Amount;", this.Amount, voiceEventPriceVariableName);
+
+            if (this.RateTypeId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RateTypeId;", this.RateTypeId, voiceEventPriceVariableName);
+
+            if (this.CurrencyId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.CurrencyId;", this.CurrencyId, voiceEventPriceVariableName);
+
+            if (this.VoiceEventPricedParts != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.VoiceEventPricedParts;", this.VoiceEventPricedParts, voiceEventPriceVariableName);
         }
     }
 }

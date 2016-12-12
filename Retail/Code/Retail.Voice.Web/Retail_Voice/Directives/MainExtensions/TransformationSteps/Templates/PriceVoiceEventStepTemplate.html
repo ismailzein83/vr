@@ -1,9 +1,58 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿
+<vr-section title="Input Fields">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onAccountIdReady" label="Account Id" isrequired="true"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onServiceTypeIdReady" label="Service Type Id" isrequired="true"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onRawCDRReady" label="Raw CDR" isrequired="true"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onMappedCDRReady" label="Mapped CDR" isrequired="true"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onDurationReady" label="Duration" isrequired="true"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onEventTimeReady" label="Event Time" isrequired="true"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+    </vr-row>
+</vr-section>
+<vr-section title="Output Fields">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onPackageIdReady" label="Package Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onChargingPolicyIdReady" label="Charging Policy Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onRateReady" label="Rate"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onAmountReady" label="Amount"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onRateTypeIdReady" label="Rate Type Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onCurrencyIdReady" label="Currency Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onVoiceEventPricedPartsReady" label="Voice Event Priced Parts"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+    </vr-row>
+</vr-section>

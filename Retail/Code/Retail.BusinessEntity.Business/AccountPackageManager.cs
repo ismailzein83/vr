@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Business
         PackageManager _packageManager = new PackageManager();
 
         #endregion
-        
+
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<AccountPackageDetail> GetFilteredAccountPackages(Vanrise.Entities.DataRetrievalInput<AccountPackageQuery> input)
@@ -50,6 +50,24 @@ namespace Retail.BusinessEntity.Business
                 return accountInfo.AccountPackages.MapRecords(itm => itm.PackageId);
             else
                 return new List<int>();
+        }
+
+        public IEnumerable<int> GetPackageIdsAssignedToAccount(long accountId, DateTime effectiveTime)
+        {
+            var accountInfo = GetAccountInfo(accountId);
+
+            Func<AccountPackage, bool> filterPredicate = (itm) =>
+            {
+                if (itm.BED > effectiveTime || (itm.EED.HasValue && itm.EED <= effectiveTime))
+                    return false;
+
+                return true;
+            };
+
+            if (accountInfo != null && accountInfo.AccountPackages != null)
+                return accountInfo.AccountPackages.MapRecords(itm => itm.PackageId, filterPredicate);
+
+            return null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackage accountPackage)
@@ -146,7 +164,7 @@ namespace Retail.BusinessEntity.Business
                 PackageName = _packageManager.GetPackageName(accountPackage.PackageId)
             };
         }
-        
+
         #endregion
     }
 }

@@ -39,9 +39,9 @@ namespace Retail.Voice.Entities
     {
         public int ChargingPolicyId { get; set; }
 
-        public Decimal Rate { get; set; }
+        public Decimal? Rate { get; set; }
 
-        public Decimal Amount { get; set; }
+        public Decimal? Amount { get; set; }
 
         public int? RateTypeId { get; set; }
 
