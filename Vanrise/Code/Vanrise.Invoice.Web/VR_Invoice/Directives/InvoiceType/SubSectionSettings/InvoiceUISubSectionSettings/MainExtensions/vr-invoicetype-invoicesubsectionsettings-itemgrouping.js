@@ -41,18 +41,16 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgrouping", ["UtilsServi
                     itemGroupingSubSectionSettingsReadyPromiseDeferred.resolve();
 
                 };
-                $scope.scopeModel.onItemGroupingSelectionChanged = function(selectedGroupItem)
-                {
-                    if (context != undefined && selectedGroupItem != undefined)
-                    {
+                $scope.scopeModel.onItemGroupingSelectionChanged = function (selectedGroupItem) {
+                    if (context != undefined && selectedGroupItem != undefined) {
                         var setLoader = function (value) {
                             $scope.scopeModel.isLoading = value;
                         };
-                        var payload = {context : getContext() };
-                 
+                        var payload = { context: getContext() };
+
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, itemGroupingSubSectionSettingsAPI, payload, setLoader, itemGroupingSelectedReadyPromiseDeferred);
                     }
-                }
+                };
 
                 defineAPI();
             }
@@ -106,13 +104,11 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgrouping", ["UtilsServi
                 {
                     currentContext = {};
                 }
-                currentContext.getItemGroupingId = function ()
-                {
-                    if($scope.scopeModel.selectedItemGrouping != undefined)
-                    {
+                currentContext.getItemGroupingId = function () {
+                    if ($scope.scopeModel.selectedItemGrouping != undefined) {
                         return $scope.scopeModel.selectedItemGrouping.ItemGroupingId;
                     }
-                }
+                };
                 return currentContext;
             }
         }

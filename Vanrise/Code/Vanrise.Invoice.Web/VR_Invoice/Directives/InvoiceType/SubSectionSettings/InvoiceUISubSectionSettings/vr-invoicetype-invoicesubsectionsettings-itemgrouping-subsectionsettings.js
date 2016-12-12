@@ -46,39 +46,39 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                     var dataItem = {
                         DimensionItemFieldId: dimension.DimensionItemFieldId,
                         FieldDescription: dimension.FieldDescription,
-                        FieldName: dimension.FieldName,
+                        FieldName: dimension.FieldName
                     };
                     $scope.scopeModel.dimensions.push(dataItem);
-                }
+                };
                 $scope.scopeModel.onDeselectDimensionItem = function (dimension) {
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dimension.DimensionItemFieldId, 'DimensionItemFieldId');
                     $scope.scopeModel.dimensions.splice(datasourceIndex, 1);
-                }
+                };
                 $scope.scopeModel.removeDimension = function (dimension) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedDimensions, dimension.DimensionItemFieldId, 'DimensionItemFieldId');
                     $scope.scopeModel.selectedDimensions.splice(index, 1);
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dimension.DimensionItemFieldId, 'DimensionItemFieldId');
                     $scope.scopeModel.dimensions.splice(datasourceIndex, 1);
-                }
+                };
 
                 $scope.scopeModel.onSelectMeasureItem = function (measure) {
                     var dataItem = {
                         MeasureItemFieldId: measure.MeasureItemFieldId,
                         FieldDescription: measure.FieldDescription,
-                        FieldName: measure.FieldName,
+                        FieldName: measure.FieldName
                     };
                     $scope.scopeModel.measures.push(dataItem);
-                }
+                };
                 $scope.scopeModel.onDeselectMeasureItem = function (measure) {
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, measure.MeasureItemFieldId, 'MeasureItemFieldId');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
-                }
+                };
                 $scope.scopeModel.removeMeasure = function (measure) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedMeasures, measure.MeasureItemFieldId, 'MeasureItemFieldId');
                     $scope.scopeModel.selectedMeasures.splice(index, 1);
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, measure.MeasureItemFieldId, 'MeasureItemFieldId');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
-                }
+                };
 
                 
                 $scope.scopeModel.onItemGroupingSubSectionsReady = function (api) {

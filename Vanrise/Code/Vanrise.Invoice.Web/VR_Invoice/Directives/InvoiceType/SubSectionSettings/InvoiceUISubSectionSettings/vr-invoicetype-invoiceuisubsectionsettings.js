@@ -49,7 +49,7 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    var directivePayload = { context: getContext() }
+                    var directivePayload = { context: getContext() };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }

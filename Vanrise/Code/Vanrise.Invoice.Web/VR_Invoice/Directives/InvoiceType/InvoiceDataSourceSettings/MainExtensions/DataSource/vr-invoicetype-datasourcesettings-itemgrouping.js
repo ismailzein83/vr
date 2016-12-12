@@ -53,24 +53,24 @@ app.directive("vrInvoicetypeDatasourcesettingsItemgrouping", ["UtilsService", "V
                             selectedMeasures.length = 0;
                         }
                     }
-                }
+                };
 
 
                 $scope.scopeModel.onSelectDimensionItem = function (dimension) {
                     selectedDimensions.push({ DimensionId: dimension.DimensionItemFieldId });
-                }
+                };
                 $scope.scopeModel.onDeselectDimensionItem = function (dimension) {
                     var dimensionIndex = UtilsService.getItemIndexByVal(selectedDimensions, dimension.DimensionItemFieldId, 'DimensionId');
                     selectedDimensions.splice(dimensionIndex, 1);
-                }
+                };
 
                 $scope.scopeModel.onSelectMeasureItem = function (measure) {
                     selectedMeasures.push({ MeasureId: measure.MeasureItemFieldId });
-                }
+                };
                 $scope.scopeModel.onDeselectMeasureItem = function (measure) {
                     var measureIndex = UtilsService.getItemIndexByVal(selectedMeasures, measure.MeasureItemFieldId, 'MeasureId');
                     selectedMeasures.splice(measureIndex, 1);
-                }
+                };
                 defineAPI();
             }
 
