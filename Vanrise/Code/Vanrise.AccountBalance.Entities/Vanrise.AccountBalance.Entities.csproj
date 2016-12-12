@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountUsage\AccountUsagePeriodSettings.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountType.cs" />
     <Compile Include="Account\AccountTypeInfo.cs" />

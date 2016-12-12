@@ -10,5 +10,6 @@ namespace Vanrise.AccountBalance.Entities
     {
         public Guid BillingTransactionTypeId { get; set; }
         public string Name { get; set; }
+        public bool IsCredit { get; set; }
     }
 }

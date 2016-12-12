@@ -22,5 +22,7 @@ namespace Vanrise.AccountBalance.Entities
         public Guid AlertMailMessageTypeId { get; set; }
 
         public BalancePeriodSettings BalancePeriodSettings { get; set; }
+
+        public AccountUsagePeriodSettings AccountUsagePeriodSettings { get; set; }
     }
 }

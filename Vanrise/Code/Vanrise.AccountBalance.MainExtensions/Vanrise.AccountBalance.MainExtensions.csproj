@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountUsagePeriods\DailyAccountUsagePeriod.cs" />
     <Compile Include="BalanceAlertThresholds\FixedBalanceAlertThreshold.cs" />
     <Compile Include="BalancePeriod\MonthlyBalancePeriodSettings.cs" />
     <Compile Include="BalancePeriod\WeeklyBalancePeriodSettings.cs" />
