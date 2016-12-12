@@ -14,7 +14,7 @@
 
         loadParameters();
         defineScope();
-        load()
+        load();
         var switchId;
 
         function loadParameters() {

@@ -78,7 +78,7 @@ app.directive('vrWhsBeSalepricelisttemplateMappedtableSelective', ['WhS_BE_SaleP
 
 			api.clearSelectedValue = function () {
 			    $scope.selectedExtensionConfig = undefined;
-			}
+			};
 
 			if (ctrl.onReady != null)
 				ctrl.onReady(api);
