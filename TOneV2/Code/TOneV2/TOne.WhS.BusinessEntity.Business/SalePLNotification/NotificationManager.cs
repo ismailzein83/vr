@@ -102,7 +102,16 @@ namespace TOne.WhS.BusinessEntity.Business
             objMail.Attachments.Add(attachment);
 
             SmtpClient client = _vrMailManager.GetSMTPClient(emailSettingData);
-            client.Send(objMail);
+            try
+            {
+                client.Send(objMail);
+            }
+            catch (Exception)
+            {
+                
+               
+            }
+            
         }
 
         #endregion

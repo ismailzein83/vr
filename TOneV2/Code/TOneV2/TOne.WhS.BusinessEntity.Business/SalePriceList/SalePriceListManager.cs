@@ -413,18 +413,13 @@ namespace TOne.WhS.BusinessEntity.Business
 					};
 
 					SaleEntityZoneRate saleEntityZoneRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneWrapper.ZoneId);
-
-					zoneNotification.Rate = saleEntityZoneRate != null ? SalePLRateNotificationMapper(saleEntityZoneRate) : GetExistingRate();
+                    if (saleEntityZoneRate == null)
+                        continue;
+					zoneNotification.Rate =SalePLRateNotificationMapper(saleEntityZoneRate);
 					zoneNotification.Codes.AddRange(zoneWrapper.Codes.MapRecords(SalePLCodeNotificationMapper));
 					salePLZoneNotifications.Add(zoneNotification);
 				}
 			}
-		}
-
-		private SalePLRateNotification GetExistingRate()
-		{
-			//TODO: Must Get Existing Rate
-			return null;
 		}
 
 		private SalePriceListType GetSalePriceListType(bool isAtoZ, SalePLChangeType changeType)
