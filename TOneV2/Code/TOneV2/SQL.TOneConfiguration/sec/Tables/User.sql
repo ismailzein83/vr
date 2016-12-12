@@ -4,7 +4,6 @@
     [Password]              NVARCHAR (255) NULL,
     [Email]                 NVARCHAR (255) NULL,
     [TenantId]              INT            NULL,
-    [Status]                INT            NULL,
     [LastLogin]             DATETIME       NULL,
     [Description]           NTEXT          NULL,
     [TempPassword]          NVARCHAR (255) NULL,
@@ -13,6 +12,8 @@
     [EnabledTill]           DATETIME       NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

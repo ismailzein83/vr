@@ -8,7 +8,6 @@ SELECT CASE  WHEN EXISTS (
       ,[Name]
       ,[Password]
       ,[Email]
-      ,[Status]
       ,[LastLogin]
       ,[Description]
       ,[timestamp]

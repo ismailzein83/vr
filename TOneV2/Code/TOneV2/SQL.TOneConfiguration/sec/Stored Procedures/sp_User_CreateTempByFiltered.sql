@@ -15,7 +15,6 @@ BEGIN
 			u.[Name],
 			u.[Email],
 			u.[Password],
-			u.[Status],
 			u.[LastLogin],
 			u.[Description]
 			INTO #RESULT

@@ -11,7 +11,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	Select	[ID], [Name], [Email], [Status], LastLogin, [Description], [TenantId] , [EnabledTill]
+	Select	[ID], [Name], [Email], LastLogin, [Description], [TenantId] , [EnabledTill]
 	FROM	[sec].[User] WITH(NOLOCK)
 	ORDER BY [Name]
 END

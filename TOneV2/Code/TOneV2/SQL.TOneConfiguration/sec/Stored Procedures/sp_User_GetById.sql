@@ -2,7 +2,7 @@
 	@ID int
 AS
 BEGIN
-	Select	[ID], [Name], [Email], [Status], LastLogin, [Description] 
+	Select	[ID], [Name], [Email], LastLogin, [Description] 
 	FROM	[sec].[User] WITH(NOLOCK) 
 	WHERE	ID = @ID
 END
