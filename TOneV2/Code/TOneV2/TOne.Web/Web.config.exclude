@@ -79,6 +79,8 @@
 
     <add key="StateBackupDatabase" value="TOneV2_StateBackup"/>
 
+    <add key="LogDBConnkey" value="LogDBConnString"/>
+
   </appSettings>
   <system.web>
     <httpHandlers>
