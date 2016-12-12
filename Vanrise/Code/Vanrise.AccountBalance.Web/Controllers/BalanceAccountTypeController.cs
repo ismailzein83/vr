@@ -19,5 +19,12 @@ namespace Vanrise.AccountBalance.Web.Controllers
             AccountTypeManager manager = new AccountTypeManager();
             return manager.GetAccountTypeInfo();
         }
+        [HttpGet]
+        [Route("GetAccountBalanceExtendedSettingsConfigs")]
+        public object GetAccountBalanceExtendedSettingsConfigs()
+        {
+            AccountTypeManager manager = new AccountTypeManager();
+            return manager.GetAccountBalanceExtendedSettingsConfigs();
+        }
     }
 }

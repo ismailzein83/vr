@@ -134,6 +134,8 @@
     <Compile Include="Extensions\DistributorSynchronizer.cs" />
     <Compile Include="Extensions\PosSynchronizer.cs" />
     <Compile Include="Extensions\AgentSynchronizer.cs" />
+    <Compile Include="Extensions\SubscriberAccountBalanceManager.cs" />
+    <Compile Include="Extensions\SubscriberAccountBalanceSetting.cs" />
     <Compile Include="PackageServiceUsageChargingPolicyContext.cs" />
     <Compile Include="POSManager.cs" />
     <Compile Include="AgentManager.cs" />

@@ -21,8 +21,8 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
             this.initializeController = initializeController;
             var accountTypeEntity;
 
-            var genericBESelectorAPI;
-            var genericBESelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var accountTypeSettingsAPI;
+            var accountTypeSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
             var billingTransactionTypeSelectorAPI;
             var billingTransactionTypeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -32,9 +32,9 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
 
                 $scope.scopeModel.selectedBusinessEntity;
 
-                $scope.scopeModel.genericBusinessEntitySelectorReady = function (api) {
-                    genericBESelectorAPI = api;
-                    genericBESelectorReadyDeferred.resolve();
+                $scope.scopeModel.accountTypeSettingsReady = function (api) {
+                    accountTypeSettingsAPI = api;
+                    accountTypeSettingsReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.BillingTransactionTypeSelectorReady = function (api) {
@@ -52,7 +52,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                         accountTypeEntity = payload.componentType;
                     }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadBillingTransactionTypeSelector, loadGenericBESelector, loadAllControls]).catch(function (error) {
+                    return UtilsService.waitMultipleAsyncOperations([loadBillingTransactionTypeSelector, loadAccountTypeSettings, loadAllControls]).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
                         $scope.scopeModel.isLoading = false;
@@ -73,8 +73,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
             function GetAccountSettings() {
                 return {
                     $type: "Vanrise.AccountBalance.Entities.AccountTypeSettings,  Vanrise.AccountBalance.Entities",
-                    AccountBusinessEntityDefinitionId: genericBESelectorAPI.getSelectedIds(),
-                    AccountSelector: $scope.scopeModel.AccountSelector,
+                    ExtendedSettings: accountTypeSettingsAPI.getData(),
                     UsageTransactionTypeId: billingTransactionTypeSelectorAPI.getSelectedIds(),
                     BalancePeriodSettings: getBalancePeriodSettings()
                 };
@@ -82,23 +81,21 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
 
             function loadAllControls() {
                 if (accountTypeEntity != undefined) {
-                    $scope.scopeModel.AccountSelector = accountTypeEntity.Settings.AccountSelector;
                     $scope.scopeModel.name = accountTypeEntity.Name;
                 }
             }
 
-            function loadGenericBESelector() {
-                var GenericBELoadDeferred = UtilsService.createPromiseDeferred();
-                genericBESelectorReadyDeferred.promise.then(function () {
-                    var selectorPayload;
+            function loadAccountTypeSettings() {
+                var accountTypeSettingsDeferred = UtilsService.createPromiseDeferred();
+                accountTypeSettingsReadyDeferred.promise.then(function () {
+                    var accountTypeSettingsPayload;
                     if (accountTypeEntity != undefined) {
-                        selectorPayload = {
-                            selectedIds: accountTypeEntity.Settings.AccountBusinessEntityDefinitionId
-                        }
+                        accountTypeSettingsPayload = { extendedSettingsEntity: accountTypeEntity.Settings.ExtendedSettings };
+                 
                     }
-                    VRUIUtilsService.callDirectiveLoad(genericBESelectorAPI, selectorPayload, GenericBELoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(accountTypeSettingsAPI, accountTypeSettingsPayload, accountTypeSettingsDeferred);
                 });
-                return GenericBELoadDeferred.promises;
+                return accountTypeSettingsDeferred.promises;
             }
 
             function loadBillingTransactionTypeSelector() {

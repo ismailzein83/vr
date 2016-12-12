@@ -232,6 +232,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Distributor\Templates\DistributorConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Distributor\Templates\DistributorSynchronizerEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Distributor\Templates\DistributorGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-accountbalance.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\Templates\AccountBalanceTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-entitiesinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-otherinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeEntitiesInfoPartDefinitionTemplate.html" />

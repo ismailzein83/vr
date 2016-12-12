@@ -148,6 +148,7 @@
     <Folder Include="VR_AccountBalance\Views\BalanceAlertRule\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_AccountBalance\Directives\AccountType\vr-accountbalance-accounttype-extendedsettings.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAccountType\vr-accountbalance-accounttype-selector.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\Constants\ModuleConfig.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransactionType\vr-accountbalance-billingtransactiontype-selector.js" />

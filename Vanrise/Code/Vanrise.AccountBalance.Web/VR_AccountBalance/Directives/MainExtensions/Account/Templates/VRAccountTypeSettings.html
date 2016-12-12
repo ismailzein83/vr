@@ -5,14 +5,9 @@
                 <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
             </vr-columns>
             <vr-columns width="1/2row">
-                <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.genericBusinessEntitySelectorReady" selectedvalues="scopeModel.selectedBusinessEntity" isrequired="true"></vr-genericdata-businessentitydefinition-selector>
-            </vr-columns>
-            <vr-columns width="1/2row">
                 <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.BillingTransactionTypeSelectorReady" selectedvalues="scopeModel.selectedBillingTransactionType" isrequired="true"></vr-accountbalance-billingtransactiontype-selector>
             </vr-columns>
-            <vr-columns width="1/2row">
-                <vr-textbox label="Account Selector" value="scopeModel.AccountSelector" isrequired="true"></vr-textbox>
-            </vr-columns>
         </vr-row>
+        <vr-accountbalance-accounttype-extendedsettings on-ready="scopeModel.accountTypeSettingsReady" isrequired="true" normal-col-num="6"></vr-accountbalance-accounttype-extendedsettings>
     </vr-tab>
 </vr-tabs>

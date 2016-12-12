@@ -14,15 +14,29 @@ namespace Vanrise.AccountBalance.Entities
         }
 
         public Guid AccountBusinessEntityDefinitionId { get; set; }
-
-        public string AccountSelector { get; set; }
-
         public Guid UsageTransactionTypeId { get; set; }
-
         public Guid AlertMailMessageTypeId { get; set; }
-
         public BalancePeriodSettings BalancePeriodSettings { get; set; }
-
         public AccountUsagePeriodSettings AccountUsagePeriodSettings { get; set; }
+        public AccountTypeExtendedSettings ExtendedSettings { get; set; }
+    }
+    public abstract class AccountTypeExtendedSettings
+    {
+        public abstract Guid ConfigId { get;}
+        public abstract string AccountSelector { get;}
+        public abstract IAccountManager GetAccountManager();
+    }
+    public interface IAccountManager
+    {
+        dynamic GetAccount(IAccountContext context);
+        AccountInfo GetAccountInfo(IAccountInfoContext context);
+    }
+    public interface IAccountContext
+    {
+        long AccountId { get; }
+    }
+    public interface IAccountInfoContext
+    {
+        long AccountId { get; }
     }
 }

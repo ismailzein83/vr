@@ -9,8 +9,14 @@
         function GetBalanceAccountTypeInfos(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetBalanceAccountTypeInfos"));
         }
+        function GetAccountBalanceExtendedSettingsConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetAccountBalanceExtendedSettingsConfigs"));
+
+        }
         return {
-            GetBalanceAccountTypeInfos: GetBalanceAccountTypeInfos
+            GetBalanceAccountTypeInfos: GetBalanceAccountTypeInfos,
+            GetAccountBalanceExtendedSettingsConfigs: GetAccountBalanceExtendedSettingsConfigs
         };
     }
 

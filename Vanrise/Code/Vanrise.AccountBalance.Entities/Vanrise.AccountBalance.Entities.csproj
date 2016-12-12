@@ -46,6 +46,7 @@
     <Compile Include="AccountUsage\AccountUsagePeriodSettings.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountType.cs" />
+    <Compile Include="Account\AccountTypeExtendedSettingsConfig.cs" />
     <Compile Include="Account\AccountTypeInfo.cs" />
     <Compile Include="Account\AccountTypeSettings.cs" />
     <Compile Include="AlertRuleActionExecution\AlertRuleActionExecution.cs" />
