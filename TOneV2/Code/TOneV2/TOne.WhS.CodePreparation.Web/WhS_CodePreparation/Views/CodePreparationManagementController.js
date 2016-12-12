@@ -68,9 +68,11 @@
                 clearCodesSelection();
                 if ($scope.currentNode != undefined) {
                     if ($scope.currentNode.type == 'Zone') {
-                        setZoneStateVisibility($scope.currentNode.DraftStatus, $scope.currentNode.status);
                         codesGridAPI.clearUpdatedItems();
-                        promise = codesGridAPI.loadGrid(getCodesFilterObject());
+                        promise = codesGridAPI.loadGrid(getCodesFilterObject()).then(function () {
+                            setZoneStateVisibility($scope.currentNode.DraftStatus, $scope.currentNode.status);
+
+                        });
                     }
                     else
                         setCountryStateVisibility();
@@ -439,7 +441,7 @@
             if (status != null)
                 $scope.showRenameZone = false;
             else
-                $scope.showRenameZone = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
+                $scope.showRenameZone = draftStatus == WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value ? false : codesGridAPI.hideShowRenameZone();
         }
 
         function hideShowEnd(draftStatus, status) {
