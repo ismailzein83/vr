@@ -254,30 +254,32 @@ namespace Retail.BusinessEntity.Business
 
             var accountPartDefinitionManager = new AccountPartDefinitionManager();
 
-            IEnumerable<AccountTypePartSettings> partSettingsList = GetAccountTypePartDefinitionSettingsList(accountTypeId);
-
             var runtimeParts = new List<AccountPartRuntime>();
 
-            foreach (AccountTypePartSettings partSettings in partSettingsList)
+            IEnumerable<AccountTypePartSettings> partSettingsList = GetAccountTypePartDefinitionSettingsList(accountTypeId);
+            if (partSettingsList != null && partSettingsList.Count() > 0)
             {
-                bool isPartFoundOrInherited = this.IsPartFoundOrInherited(parentAccountId, partSettings.PartDefinitionId);
-
-                if (partSettings.AvailabilitySettings == AccountPartAvailabilityOptions.AlwaysAvailable || !isPartFoundOrInherited)
+                foreach (AccountTypePartSettings partSettings in partSettingsList)
                 {
-                    var accountPartRuntime = new AccountPartRuntime();
+                    bool isPartFoundOrInherited = this.IsPartFoundOrInherited(parentAccountId, partSettings.PartDefinitionId);
 
-                    AccountPartDefinition partDefinition = accountPartDefinitionManager.GetAccountPartDefinition(partSettings.PartDefinitionId);
-                    if (partDefinition == null)
-                        throw new NullReferenceException("partDefinition");
+                    if (partSettings.AvailabilitySettings == AccountPartAvailabilityOptions.AlwaysAvailable || !isPartFoundOrInherited)
+                    {
+                        var accountPartRuntime = new AccountPartRuntime();
 
-                    accountPartRuntime.PartDefinition = partDefinition;
+                        AccountPartDefinition partDefinition = accountPartDefinitionManager.GetAccountPartDefinition(partSettings.PartDefinitionId);
+                        if (partDefinition == null)
+                            throw new NullReferenceException("partDefinition");
 
-                    if (partSettings.RequiredSettings == AccountPartRequiredOptions.RequiredIfNotInherited)
-                        accountPartRuntime.IsRequired = !isPartFoundOrInherited;
-                    else
-                        accountPartRuntime.IsRequired = (partSettings.RequiredSettings == AccountPartRequiredOptions.Required);
+                        accountPartRuntime.PartDefinition = partDefinition;
 
-                    runtimeParts.Add(accountPartRuntime);
+                        if (partSettings.RequiredSettings == AccountPartRequiredOptions.RequiredIfNotInherited)
+                            accountPartRuntime.IsRequired = !isPartFoundOrInherited;
+                        else
+                            accountPartRuntime.IsRequired = (partSettings.RequiredSettings == AccountPartRequiredOptions.Required);
+
+                        runtimeParts.Add(accountPartRuntime);
+                    }
                 }
             }
 
@@ -297,8 +299,6 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException("accountType");
             if (accountType.Settings == null)
                 throw new NullReferenceException("accountType.Settings");
-            if (accountType.Settings.PartDefinitionSettings == null)
-                throw new NullReferenceException("accountType.Settings.PartDefinitionSettings");
             return accountType.Settings.PartDefinitionSettings;
         }
 
