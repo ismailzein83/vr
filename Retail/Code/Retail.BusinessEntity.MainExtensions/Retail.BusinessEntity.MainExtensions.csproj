@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +42,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BEBridge.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
@@ -48,6 +53,10 @@
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -60,8 +69,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Pricing">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
@@ -100,6 +117,8 @@
     <Compile Include="ChargingPolicyParts\RateValues\SingleRateValueDefinition.cs" />
     <Compile Include="DurationVolumes\VolumeByDuration.cs" />
     <Compile Include="DurationVolumes\VolumePerUnit.cs" />
+    <Compile Include="FileAccountConvertors\CompanyConvertor.cs" />
+    <Compile Include="FileAccountConvertors\UserConvertor.cs" />
     <Compile Include="PackageTypes\PricingPackageSettings.cs" />
     <Compile Include="PackageTypes\VolumePackageSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

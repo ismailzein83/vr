@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,11 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
 
         public override void Execute(IVRActionExecutionContext context)
         {
-
+            string path =string.Format( @"C:\SendEmail_{0}.txt", Guid.NewGuid().ToString("N"));
+            File.Create(path );
+   
         }
     }
+
+
 }

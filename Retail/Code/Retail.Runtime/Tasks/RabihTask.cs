@@ -51,6 +51,7 @@ namespace Retail.Runtime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
             //RunUpdateBalanceThresholdProcess();
+            //RunBalanceAlertCheckerProcess();
             Console.ReadKey();
 
         }
@@ -171,6 +172,20 @@ namespace Retail.Runtime.Tasks
             bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new BalanceAlertThresholdUpdateProcessInput()
+                {
+                    AlertRuleTypeId = new Guid("B44BBBAD-C248-4C70-BA86-5022EADB9AEC"),
+                    UserId = 1
+                }
+            });
+        }
+
+        void RunBalanceAlertCheckerProcess()
+        {
+
+            BPInstanceManager bpClient = new BPInstanceManager();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                InputArguments = new BalanceAlertCheckerProcessInput()
                 {
                     AlertRuleTypeId = new Guid("B44BBBAD-C248-4C70-BA86-5022EADB9AEC"),
                     UserId = 1
