@@ -75,6 +75,19 @@ function (VRNotificationService, VRUIUtilsService, Vr_NP_CodePrepAPIService, Uti
                     	return true;
                     };
 
+                    directiveAPI.hideShowRenameZone = function () {
+                        for (var i = 0; i < $scope.salecodes.length; i++) {
+                            var saleCode = $scope.salecodes[i];
+
+                            if (saleCode.DraftStatus == Vr_NP_CodeItemDraftStatusEnum.ExistingClosed.value || saleCode.DraftStatus == Vr_NP_CodeItemDraftStatusEnum.MovedFrom.value
+                                || saleCode.DraftStatus == Vr_NP_CodeItemDraftStatusEnum.MovedTo.value) {
+                                if (saleCode.EED == null)
+                                    return false;
+                            }
+                        }
+                        return true;
+                    };
+
                     return directiveAPI;
                 }
             };
