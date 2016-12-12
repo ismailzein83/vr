@@ -152,10 +152,10 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
             function disableUser(dataItem) {
                 var onPermissionDisabled = function (entity) {
-                    var gridDateItem = { Entity: entity };
-                    gridDateItem.Status = false;
-                    $scope.gridMenuActions(gridDateItem);
-                    gridAPI.itemUpdated(gridDateItem);
+                    var gridDataItem = { Entity: entity };
+                    gridDataItem.Status = false;
+                    $scope.gridMenuActions(gridDataItem);
+                    gridAPI.itemUpdated(gridDataItem);
                 };
 
                 VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -173,10 +173,10 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
             function enableUser(dataItem) {
                 var onPermissionEnabled = function (entity) {
-                    var gridDateItem = { Entity: entity };
-                    gridDateItem.Status = true;
-                    $scope.gridMenuActions(gridDateItem);
-                    gridAPI.itemUpdated(gridDateItem);
+                    var gridDataItem = { Entity: entity };
+                    gridDataItem.Status = true;
+                    $scope.gridMenuActions(gridDataItem);
+                    gridAPI.itemUpdated(gridDataItem);
                 };
 
                 VRNotificationService.showConfirmation().then(function (confirmed) {
