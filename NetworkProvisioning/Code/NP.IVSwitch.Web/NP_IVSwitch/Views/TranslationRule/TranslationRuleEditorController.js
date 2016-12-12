@@ -31,6 +31,16 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.hasSaveTranslationRulePermission = function () {
+                if (isEditMode) {
+                    return NP_IVSwitch_TranslationRuleAPIService.HasEditTranslationRulePermission();
+                }
+                else {
+                    return NP_IVSwitch_TranslationRuleAPIService.HasAddTranslationRulePermission();
+                }
+            };
+
+
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -41,7 +51,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
 
@@ -134,7 +144,7 @@
                 TranslationRuleId: translationRuleEntity != undefined ? translationRuleEntity.TranslationRuleId : undefined,
                 Name: $scope.scopeModel.name,
                 DNISPattern: $scope.scopeModel.dnisPattern,
-                CLIPattern: $scope.scopeModel.cliPattern,
+                CLIPattern: $scope.scopeModel.cliPattern
             };
         }
     }

@@ -54,6 +54,15 @@
                     gridAPI.load(codecDefList);               
             };
   
+            $scope.hasSaveCodecProfilePermission = function () {
+                if (isEditMode) {
+                    return NP_IVSwitch_CodecProfileAPIService.HasEditCodecProfilePermission();
+                }
+                else {
+                    return NP_IVSwitch_CodecProfileAPIService.HasAddCodecProfilePermission();
+                }
+            };
+
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -64,7 +73,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 

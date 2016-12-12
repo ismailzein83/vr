@@ -27,7 +27,7 @@
             };
 
             $scope.hasAddCodecProfilePermission = function () {
-                return NP_IVSwitch_CodecProfileAPIService.HasAddCodecProfilePermission()
+                return NP_IVSwitch_CodecProfileAPIService.HasAddCodecProfilePermission();
             }
 
             $scope.onGridReady = function (api) {
@@ -43,7 +43,7 @@
 
         function buildGridQuery() {
             return {
-                Name: $scope.name,
+                Name: $scope.name
             };
         }
     }

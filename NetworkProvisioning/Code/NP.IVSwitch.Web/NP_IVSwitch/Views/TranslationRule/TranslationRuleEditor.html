@@ -19,7 +19,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formTranslationRuleEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formTranslationRuleEditor" haspermission="hasSaveTranslationRulePermission" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

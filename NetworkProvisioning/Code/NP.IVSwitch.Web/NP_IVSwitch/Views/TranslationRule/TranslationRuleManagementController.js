@@ -24,7 +24,7 @@
             };
 
             $scope.hasAddTranslationRulePermission = function () {
-                return NP_IVSwitch_TranslationRuleAPIService.HasAddTranslationRulePermission()
+                return NP_IVSwitch_TranslationRuleAPIService.HasAddTranslationRulePermission();
             }
 
             $scope.onGridReady = function (api) {
@@ -39,7 +39,7 @@
 
         function buildGridQuery() {
             return {
-                Name: $scope.name,
+                Name: $scope.name
             };
         }
     }        
