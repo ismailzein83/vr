@@ -13,7 +13,6 @@ namespace Vanrise.Rules.Pricing
         public void ApplyRateTypeRule(IPricingRuleRateTypeContext context)
         {
             if (context.RateTypes == null || context.RateTypes.Count == 0)
-
                 return;
 
             PricingRuleRateTypeItemContext itemContext = new PricingRuleRateTypeItemContext

@@ -35,7 +35,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
             {
                 decimal? amount = Vanrise.Common.Utilities.GetPropValueReader(this.Amount).GetPropertyValue(record);
 
-                if (amount.HasValue)
+                if (amount.HasValue && amount.Value > 0)
                 {
                     UsageBalanceUpdate usageBalanceUpdate = new UsageBalanceUpdate();
                     usageBalanceUpdate.Value = amount.Value;
@@ -47,8 +47,11 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
                 }
             }
 
-            UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
-            usageBalanceManager.UpdateUsageBalance(this.AccountTypeId, balanceUsageDetail);
+            if (balanceUsageDetail.UsageBalanceUpdates.Count > 0)
+            {
+                UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
+                usageBalanceManager.UpdateUsageBalance(this.AccountTypeId, balanceUsageDetail);
+            }
         }
 
         public override void ProcessItem(Queueing.Entities.PersistentQueueItem item, Queueing.Entities.ItemsToEnqueue outputItems)

@@ -159,6 +159,8 @@
     <Content Include="VR_AccountBalance\Directives\LiveBalance\vr-livebalance-currentaccountbalance.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\BalanceAlertRuleSettingsTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-accountbalancerule-settings.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\QueueActivators\Templates\QueueActivatorUpdateAccountBalancesTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\QueueActivators\vr-accountbalance-queueactivator-updateaccountbalances.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Normal\Templates\AccountBalanceUpdateProcessManualTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Scheduled\Templates\AccountBalanceUpdateProcessScheduledTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Scheduled\vr-accountbalance-updateprocess-scheduled.js" />

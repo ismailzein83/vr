@@ -1,0 +1,30 @@
+﻿
+<div>
+    <vr-columns width="1/3row" vr-loader="scopeModel.isAccountTypeSelectorLoading">
+        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                        selectedvalues="scopeModel.selectedAccountType"
+                                        isrequired="true">
+        </retail-be-accounttype-selector>
+    </vr-columns>
+
+    <vr-columns width="fullrow">
+        <vr-row>
+            <vr-columns width="fullrow" vr-loader="scopeModel.isGridLoading">
+                <vr-datagrid on-ready="scopeModel.ongridReady"
+                             datasource="scopeModel.dataRecordFields"
+                             pagingtype="'PagingOnScroll'">
+
+                    <vr-datagridcolumn headertext="'Record Name'" field="'RecordName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Record Value'">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordFieldSelectorReady"
+                                                                      selectedvalues="scopeModel.selectedDataRecordTypeField"
+                                                                      hidelabel="true"
+                                                                      isrequired="true">
+                        </vr-genericdata-datarecordtypefields-selector>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-columns>
+</div>
+

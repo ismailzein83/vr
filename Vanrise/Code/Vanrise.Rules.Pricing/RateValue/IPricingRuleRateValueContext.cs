@@ -8,6 +8,8 @@ namespace Vanrise.Rules.Pricing
 {
     public interface IPricingRuleRateValueContext : IRuleExecutionContext
     {
+        int CurrencyId { set; }
+
         Decimal NormalRate { set; }
 
         Dictionary<int, Decimal> RatesByRateType { set; }

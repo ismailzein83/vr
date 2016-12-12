@@ -18,6 +18,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.RateValue
 
         protected override void Execute(IPricingRuleRateValueContext context)
         {
+            context.CurrencyId = this.CurrencyId;
             context.NormalRate = this.NormalRate;
             context.RatesByRateType = this.RatesByRateType;
         }

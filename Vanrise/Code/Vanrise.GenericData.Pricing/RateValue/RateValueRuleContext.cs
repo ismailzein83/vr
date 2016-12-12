@@ -10,7 +10,9 @@ namespace Vanrise.GenericData.Pricing
 {
     public class RateValueRuleContext : IPricingRuleRateValueContext
     {
-        public Decimal NormalRate { set; get; }
+        public int CurrencyId { get; set; }
+
+        public Decimal NormalRate { get; set; }
 
         public Dictionary<int, Decimal> RatesByRateType { set; get; }
 

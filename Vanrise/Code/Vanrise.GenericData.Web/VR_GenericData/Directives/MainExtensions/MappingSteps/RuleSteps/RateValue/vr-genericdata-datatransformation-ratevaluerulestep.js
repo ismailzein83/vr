@@ -44,7 +44,11 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
             var ratesByRateTypeDirectiveAPI;
             var ratesByRateTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var currencyIdDirectiveAPI;
+            var currencyIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
+
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
                     ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
@@ -60,6 +64,11 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
                     ratesByRateTypeDirectiveReadyPromiseDeferred.resolve();
                 };
 
+                $scope.onCurrencyIdDirectiveReady = function (api) {
+                    currencyIdDirectiveAPI = api;
+                    currencyIdDirectiveReadyPromiseDeferred.resolve();
+                };
+
                 defineAPI();
             }
 
@@ -68,6 +77,8 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
 
                 api.load = function (payload) {
                     var promises = [];
+
+                    //loading RuleStepCommon directive
                     var loadRuleStepCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     ruleStepCommonDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadRuleStep = { ruleTypeName: ruleTypeName };
@@ -83,9 +94,9 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
                         }
                         VRUIUtilsService.callDirectiveLoad(ruleStepCommonDirectiveAPI, payloadRuleStep, loadRuleStepCommonDirectivePromiseDeferred);
                     });
-
                     promises.push(loadRuleStepCommonDirectivePromiseDeferred.promise);
 
+                    //loading NormalRate directive
                     var loadNormalRateDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     normalRateDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadNormalRate;
@@ -98,9 +109,9 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
                         }
                         VRUIUtilsService.callDirectiveLoad(normalRateDirectiveAPI, payloadNormalRate, loadNormalRateDirectivePromiseDeferred);
                     });
-
                     promises.push(loadNormalRateDirectivePromiseDeferred.promise);
 
+                    //loading RatesByRateType directive
                     var loadRatesByRateTypeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     ratesByRateTypeDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadRatesByRateType;
@@ -113,8 +124,23 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
                         }
                         VRUIUtilsService.callDirectiveLoad(ratesByRateTypeDirectiveAPI, payloadRatesByRateType, loadRatesByRateTypeDirectivePromiseDeferred);
                     });
-
                     promises.push(loadRatesByRateTypeDirectivePromiseDeferred.promise);
+
+                    //loading CurrencyId directive
+                    var loadCurrencyIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    currencyIdDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadCurrencyId;
+                        if (payload != undefined) {
+                            payloadCurrencyId = {};
+                            payloadCurrencyId.context = payload.context;
+                            if (payload.stepDetails != undefined) {
+                                payloadCurrencyId.selectedRecords = payload.stepDetails.CurrencyId;
+                            }
+                        }
+                        VRUIUtilsService.callDirectiveLoad(currencyIdDirectiveAPI, payloadCurrencyId, loadCurrencyIdDirectivePromiseDeferred);
+                    });
+                    promises.push(loadCurrencyIdDirectivePromiseDeferred.promise);
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -123,6 +149,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
                         $type: "Vanrise.GenericData.Pricing.RateValueMappingStep, Vanrise.GenericData.Pricing",
                         NormalRate: normalRateDirectiveAPI != undefined ? normalRateDirectiveAPI.getData() : undefined,
                         RatesByRateType: ratesByRateTypeDirectiveAPI != undefined ? ratesByRateTypeDirectiveAPI.getData() : undefined,
+                        CurrencyId: currencyIdDirectiveAPI != undefined ? currencyIdDirectiveAPI.getData() : undefined
                     };
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;
@@ -134,6 +161,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
 
             this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }
 ]);

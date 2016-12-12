@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Rules.Pricing
@@ -10,6 +6,8 @@ namespace Vanrise.Rules.Pricing
     public abstract class PricingRuleRateValueSettings
     {
         public abstract Guid ConfigId { get; }
+
+        public int CurrencyId { get; set; }
 
         protected abstract void Execute(IPricingRuleRateValueContext context);
 

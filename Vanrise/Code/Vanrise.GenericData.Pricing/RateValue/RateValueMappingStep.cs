@@ -16,6 +16,8 @@ namespace Vanrise.GenericData.Pricing
 
         public string RatesByRateType { get; set; }
 
+        public string CurrencyId { get; set; }
+
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             string ruleTargetVariableName;
@@ -27,6 +29,8 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateValueRule({1}, new Guid(\"{2}\"), {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.NormalRate;", this.NormalRate, ruleContextVariableName);
+            if (this.CurrencyId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.CurrencyId;", this.CurrencyId, ruleContextVariableName);
             if (this.RatesByRateType != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RatesByRateType;", this.RatesByRateType, ruleContextVariableName);
 

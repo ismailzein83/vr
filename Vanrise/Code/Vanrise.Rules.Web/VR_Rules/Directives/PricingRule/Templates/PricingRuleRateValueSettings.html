@@ -1,5 +1,10 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/4row">
+        <vr-common-currency-selector on-ready="onCurrencySelectReady" isrequired></vr-common-currency-selector>
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="1/4row">
         <vr-select on-ready="onSelectorReady"
                    datasource="rateValueTemplates"
                    selectedvalues="selectedRateValueTemplate"

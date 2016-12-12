@@ -24,39 +24,44 @@
             templateUrl: "/Client/Modules/VR_Rules/Directives/PricingRule/Templates/PricingRuleRateValueSettings.html"
         };
 
-        function RateValueSettings(ctrl, $scope, $attrs)
-        {
+        function RateValueSettings(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
-            var selectorAPI;
+            //var selectorAPI;
+
+            var currencyDirectiveAPI;
+            var currencyDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var directiveAPI;
             var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+
 
             function initializeController() {
                 $scope.rateValueTemplates = [];
                 $scope.selectedRateValueTemplate;
 
-                $scope.onSelectorReady = function (api) {
-                    selectorAPI = api;
-                    defineAPI();
+                $scope.onCurrencySelectReady = function (api) {
+                    currencyDirectiveAPI = api;
+                    currencyDirectiveReadyPromiseDeferred.resolve();
                 };
+
+                //$scope.onSelectorReady = function (api) {
+                //    selectorAPI = api;
+
+                //};
 
                 $scope.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) { $scope.isLoadingDirective = value };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
+
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
-
-                api.getData = function () {
-                    var data = directiveAPI.getData();
-                    data.ConfigId = $scope.selectedRateValueTemplate.ExtensionConfigurationId;
-                    return data;
-                };
 
                 api.load = function (payload) {
                     $scope.rateValueTemplates.length = 0;
@@ -67,7 +72,10 @@
                     if (payload != undefined) {
                         settings = payload.settings;
                     }
-                    
+
+                    var currencySelectorLoadPromise = getCurrencySelectorLoadPromise();
+                    promises.push(currencySelectorLoadPromise);
+
                     var loadTemplatesPromise = loadTemplates();
                     promises.push(loadTemplatesPromise);
 
@@ -82,6 +90,25 @@
                             $scope.selectedRateValueTemplate = $scope.rateValueTemplates[0];
                     });
 
+                    function getCurrencySelectorLoadPromise()
+                    {
+                        var currencySelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        var currencyPayload;
+                        if (settings != undefined && settings.CurrencyId > 0) {
+                            currencyPayload = { selectedIds: settings.CurrencyId };
+                        }
+                        else {
+                            currencyPayload = { selectSystemCurrency: true };
+                        }
+
+                        currencyDirectiveReadyPromiseDeferred.promise.then(function () {
+                            VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, currencySelectorLoadPromiseDeferred);
+
+                        });
+
+                        return currencySelectorLoadPromiseDeferred.promise;
+                    }
                     function loadTemplates() {
                         return VR_Rules_PricingRuleAPIService.GetPricingRuleRateValueTemplates().then(function (response) {
                             if (response != null) {
@@ -104,6 +131,13 @@
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
+                };
+
+                api.getData = function () {
+                    var obj = directiveAPI.getData();
+                    obj.ConfigId = $scope.selectedRateValueTemplate.ExtensionConfigurationId;
+                    obj.CurrencyId = currencyDirectiveAPI.getSelectedIds();
+                    return obj;
                 };
 
                 if (ctrl.onReady != null) {

@@ -54,8 +54,10 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                         if (payload.stepDetails != undefined) {
                             stepObj.normalRate = payload.stepDetails.NormalRate;
                             stepObj.ratesByRateType = payload.stepDetails.RatesByRateType;
+                            stepObj.currencyId = payload.stepDetails.CurrencyId;
                             ctrl.normalRate = payload.stepDetails.NormalRate;
                             ctrl.ratesByRateType = payload.stepDetails.RatesByRateType;
+                            ctrl.currencyId = payload.stepDetails.CurrencyId;
                         }
 
                     }
@@ -81,8 +83,10 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                         commonDirectiveAPI.applyChanges(changes);
                     stepObj.normalRate = changes.NormalRate;
                     stepObj.ratesByRateType = changes.RatesByRateType;
+                    stepObj.currencyId = changes.CurrencyId;
                     ctrl.normalRate = changes.NormalRate;
                     ctrl.ratesByRateType = changes.RatesByRateType;
+                    ctrl.currencyId = changes.CurrencyId;
                 };
 
                 api.checkValidation = function () {
@@ -99,6 +103,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                     if (stepDetails != undefined) {
                         stepDetails.NormalRate = stepObj.normalRate;
                         stepDetails.RatesByRateType = stepObj.ratesByRateType;
+                        stepDetails.CurrencyId = stepObj.currencyId;
                     }
                     return stepDetails;
                 };

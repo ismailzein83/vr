@@ -2,8 +2,9 @@
 <vr-row removeline>
     <vr-columns width="3/4row">
         <vr-list maxitemsperrow="1">
-            <vr-listitem ng-show="ctrl.normalRate !=undefined"><vr-label>Rule.NormalRate = {{ctrl.normalRate}}</vr-label></vr-listitem>
-            <vr-listitem ng-show="ctrl.ratesByRateType !=undefined"><vr-label>Rule.RatesByRateType = {{ctrl.ratesByRateType}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.normalRate !=undefined"><vr-label>{{ctrl.normalRate}} = Rule.NormalRate</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.ratesByRateType !=undefined"><vr-label>{{ctrl.ratesByRateType}} = Rule.RatesByRateType</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.currencyId !=undefined"><vr-label>{{ctrl.currencyId}} = Rule.CurrencyId</vr-label></vr-listitem>
         </vr-list>
     </vr-columns>
 </vr-row>
