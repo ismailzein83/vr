@@ -65,6 +65,8 @@
     
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
+
+    <add key="LoggingDBConnStringKey" value="LogDBConnString"/>
   </appSettings>
 
   <system.web>
