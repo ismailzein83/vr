@@ -86,7 +86,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CP_CodePrepAPIService, Ut
                             }
                         }
                         return true;
-                    }
+                    };
 
                     return directiveAPI;
                 }
