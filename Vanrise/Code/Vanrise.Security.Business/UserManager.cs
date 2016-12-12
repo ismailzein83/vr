@@ -64,13 +64,13 @@ namespace Vanrise.Security.Business
                     IEnumerable<Permission> entityPermissions = permissionManager.GetEntityPermissions((EntityType)filter.EntityType, filter.EntityId);
 
                     IEnumerable<int> excludedUserIds = entityPermissions.MapRecords(permission => Convert.ToInt32(permission.HolderId), permission => permission.HolderType == HolderType.USER);
-                    return users.MapRecords(UserInfoMapper, user => !excludedUserIds.Contains(user.UserId) || (filter.ExcludeInactive == true && user.Status == UserStatus.Active));
+                    return users.MapRecords(UserInfoMapper, user => !excludedUserIds.Contains(user.UserId) || (filter.ExcludeInactive == true && IsUserEnable(user)));
                 }
             }
             else
                 users = GetUsersByTenant();
 
-            return users.MapRecords(UserInfoMapper, user => (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == true && user.Status == UserStatus.Active)));
+            return users.MapRecords(UserInfoMapper, user => (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == true && IsUserEnable(user))));
         }
 
         private Dictionary<int, User> FilterUsers(Dictionary<int, User> users, List<IUserFilter> filters)
@@ -125,7 +125,7 @@ namespace Vanrise.Security.Business
                 var output = cloudServiceProxy.AddUserToApplication(new AddUserToApplicationInput
                     {
                         Email = userObject.Email,
-                        Status = userObject.Status,
+                        EnabledTill = userObject.EnabledTill,
                         Description = userObject.Description,
                         TenantId = userObject.TenantId
                     });
@@ -203,7 +203,7 @@ namespace Vanrise.Security.Business
                 var output = cloudServiceProxy.UpdateUserToApplication(new UpdateUserToApplicationInput
                 {
                     UserId = userObject.UserId,
-                    Status = userObject.Status,
+                    EnabledTill = userObject.EnabledTill,
                     Description = userObject.Description,
                     //TenantId = userObject.TenantId
                 });
@@ -236,6 +236,77 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> DisableUser(User userObject)
+        {
+            UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool updateActionSucc;
+            var cloudServiceProxy = GetCloudServiceProxy();
+            if (cloudServiceProxy != null)
+            {
+                throw new NullReferenceException("cloudServiceProxy");
+            }
+            else
+            {
+                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                updateActionSucc = dataManager.DisableUser(userObject.UserId);
+            }
+
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                var user = GetUserbyId(userObject.UserId);
+                updateOperationOutput.UpdatedObject = UserDetailMapper(user);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public bool IsUserEnable(User user)
+        {
+            return (!user.EnabledTill.HasValue || user.EnabledTill.Value > DateTime.Now);
+        }
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(User userObject)
+        {
+            UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool updateActionSucc;
+            var cloudServiceProxy = GetCloudServiceProxy();
+            if (cloudServiceProxy != null)
+            {
+                throw new ArgumentNullException("cloudServiceProxy");
+            }
+            else
+            {
+                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                updateActionSucc = dataManager.EnableUser(userObject.UserId);
+            }
+
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                var user = GetUserbyId(userObject.UserId);
+                updateOperationOutput.UpdatedObject = UserDetailMapper(user);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            }
+
+            return updateOperationOutput;
+        }
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(int userId, string password)
         {
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
@@ -561,7 +632,7 @@ namespace Vanrise.Security.Business
                 Name = cloudApplicationUser.User.Name,
                 LastLogin = cloudApplicationUser.User.LastLogin,
                 Description = cloudApplicationUser.Description,
-                Status = cloudApplicationUser.Status,
+                EnabledTill = cloudApplicationUser.EnabledTill,
                 TenantId = cloudApplicationUser.User.TenantId
             };
         }
@@ -610,6 +681,7 @@ namespace Vanrise.Security.Business
         {
             UserDetail userDetail = new UserDetail();
             userDetail.Entity = userObject;
+            userDetail.Status = IsUserEnable(userObject) ? UserStatus.Active : UserStatus.Inactive;
             return userDetail;
         }
 
@@ -618,7 +690,7 @@ namespace Vanrise.Security.Business
         {
             UserInfo userInfo = new UserInfo();
             userInfo.Name = userObject.Name;
-            userInfo.Status = userObject.Status;
+            userInfo.Status = IsUserEnable(userObject) ? UserStatus.Active : UserStatus.Inactive;
             userInfo.UserId = userObject.UserId;
             return userInfo;
         }

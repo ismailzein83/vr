@@ -42,7 +42,7 @@ namespace Vanrise.Security.Data.SQL
         {
             object userID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, tempPassword, userObject.Email, userObject.Status, userObject.Description, userObject.TenantId);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, tempPassword, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill);
             insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
             return (recordesEffected > 0);
@@ -50,10 +50,21 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateUser(User userObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Status, userObject.Description, userObject.TenantId);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill);
             return (recordesEffected > 0);
         }
 
+        public bool DisableUser(int userID)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_SetDisable", userID);
+            return (recordesEffected > 0);
+        }
+
+        public bool EnableUser(int userID)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_SetEnable", userID);
+            return (recordesEffected > 0);
+        }
         public bool UpdateLastLogin(int userID)
         {
             int recordsAffected = (int)ExecuteNonQuerySP("sec.sp_User_UpdateLastLogin", userID);
@@ -107,7 +118,7 @@ namespace Vanrise.Security.Data.SQL
                 Name = reader["Name"] as string,
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime?>(reader, "LastLogin"),
-                Status = (Entities.UserStatus)reader["Status"],
+                EnabledTill = GetReaderValue<DateTime?>(reader, "EnabledTill"),
                 Description = reader["Description"] as string,
                 TenantId = Convert.ToInt32(reader["TenantId"])
             };

@@ -126,7 +126,7 @@
             $scope.scopemodel.name = userEntity.Name;
             $scope.scopemodel.email = userEntity.Email;
             $scope.scopemodel.description = userEntity.Description;
-            $scope.scopemodel.isActive = userEntity.Status;
+            $scope.scopemodel.enabledTill = userEntity.EnabledTill;
         }
 
         function buildUserObjFromScope() {
@@ -135,7 +135,7 @@
                 Name: $scope.scopemodel.name,
                 Email: $scope.scopemodel.email,
                 Description: $scope.scopemodel.description,
-                Status: $scope.scopemodel.isActive == false ? '0' : '1',
+                EnabledTill: $scope.scopemodel.enabledTill,
                 TenantId: tenantSelectorAPI.getSelectedIds()
             };
 

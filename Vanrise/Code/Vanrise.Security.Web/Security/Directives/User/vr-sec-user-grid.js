@@ -26,6 +26,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
         function UsersGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
+            var gridQuery;
             var hasAuthServer;
             this.initializeController = initializeController;
 
@@ -43,6 +44,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                         var directiveAPI = {};
 
                         directiveAPI.loadGrid = function (query) {
+                            gridQuery = query;
                             return VR_Sec_SecurityAPIService.HasAuthServer().then(function (response) {
                                 hasAuthServer = response;
                                 gridAPI.retrieveData(query);
@@ -71,30 +73,62 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
             }
 
             function defineMenuActions() {
-                $scope.gridMenuActions = [{
-                    name: "Edit",
-                    clicked: editUser,
-                    haspermission: hasUpdateUserPermission
-                }, {
-                    name: "Reset Password",
-                    clicked: resetPassword,
-                    haspermission: hasResetUserPasswordPermission
-                }, {
-                    name: "Assign Permissions",
-                    clicked: assignPermissions,
-                    haspermission: hasUpdateSystemEntityPermissionsPermission // System Entities:Assign Permissions
-                }];
 
-                function hasUpdateUserPermission() {
-                    return VR_Sec_UserAPIService.HasUpdateUserPermission();
-                }
-                function hasResetUserPasswordPermission() {
-                    return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
-                }
-                function hasUpdateSystemEntityPermissionsPermission() {
-                    return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
-                }
+                $scope.gridMenuActions = function (dataItem) {
+                   
+                    var menuActions = [
+                        {
+                            name: "Edit",
+                            clicked: editUser,
+                            haspermission: hasUpdateUserPermission
+                        }, {
+                            name: "Reset Password",
+                            clicked: resetPassword,
+                            haspermission: hasResetUserPasswordPermission
+                        }, {
+                            name: "Assign Permissions",
+                            clicked: assignPermissions,
+                            haspermission: hasUpdateSystemEntityPermissionsPermission // System Entities:Assign Permissions
+                        }
+                    ];
+
+                    if (dataItem.Status) {
+                        var menuAction1 = {
+                            name: "Disable",
+                            clicked: disableUser,
+                            haspermission: hasDisableSystemEntityPermissionsPermission
+                        };
+                        menuActions.push(menuAction1);
+                    } else {
+                        var menuAction2 = {
+                            name: "Enable",
+                            clicked: enableUser,
+                            haspermission: hasEnableSystemEntityPermissionsPermission
+                        };
+                        menuActions.push(menuAction2);
+                    }
+                        return menuActions;
+                 
+                };
+                
             }
+
+            function hasUpdateUserPermission() {
+                return VR_Sec_UserAPIService.HasUpdateUserPermission();
+            }
+            function hasResetUserPasswordPermission() {
+                return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
+            }
+            function hasUpdateSystemEntityPermissionsPermission() {
+                return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
+            }
+            function hasDisableSystemEntityPermissionsPermission() {
+                return VR_Sec_PermissionAPIService.HasDisablePermission();
+            }
+            function hasEnableSystemEntityPermissionsPermission() {
+                return VR_Sec_PermissionAPIService.HasEnablePermission();
+            }
+         
 
             function editUser(userObj) {
                 var onUserUpdated = function (userObj) {
@@ -114,6 +148,48 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
             function assignPermissions(userObj) {
                 VR_Sec_PermissionService.assignPermissions(VR_Sec_HolderTypeEnum.User.value, userObj.Entity.UserId);
+            }
+
+            function disableUser(dataItem) {
+                var onPermissionDisabled = function (entity) {
+                    var gridDateItem = { Entity: entity };
+                    gridDateItem.Status = false;
+                    $scope.gridMenuActions(gridDateItem);
+                    gridAPI.itemUpdated(gridDateItem);
+                };
+
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return VR_Sec_UserAPIService.DisableUser(dataItem.Entity).then(function() {
+                            if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
+                                onPermissionDisabled(dataItem.Entity);
+                            }
+                        }).catch(function(error) {
+                            VRNotificationService.notifyException(error, scope);
+                        });
+                    }
+                });
+            }
+
+            function enableUser(dataItem) {
+                var onPermissionEnabled = function (entity) {
+                    var gridDateItem = { Entity: entity };
+                    gridDateItem.Status = true;
+                    $scope.gridMenuActions(gridDateItem);
+                    gridAPI.itemUpdated(gridDateItem);
+                };
+
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return VR_Sec_UserAPIService.EnableUser(dataItem.Entity).then(function() {
+                            if (onPermissionEnabled && typeof onPermissionEnabled == 'function') {
+                                onPermissionEnabled(dataItem.Entity);
+                            }
+                        }).catch(function(error) {
+                            VRNotificationService.notifyException(error, scope);
+                        });
+                    }
+                });
             }
         }
 

@@ -331,7 +331,7 @@ namespace Vanrise.BI.Business
                     foreach (int userId in users)
                     {
                         User user = allUserInfo.FirstOrDefault(x => x.UserId == userId);
-                        if (!distinctUsers.Contains(userId) && user != null && user.Status != UserStatus.Inactive)
+                        if (!distinctUsers.Contains(userId) && user != null && userManager.IsUserEnable(user))
                             distinctUsers.Add(userId);
                     }
                 }
@@ -341,7 +341,7 @@ namespace Vanrise.BI.Business
                 IEnumerable<User> users = userManager.GetUsers();
                 foreach (User user in users)
                 {
-                    if (!distinctUsers.Contains(user.UserId) && user.Status != UserStatus.Inactive)
+                    if (!distinctUsers.Contains(user.UserId) && userManager.IsUserEnable(user))
                         distinctUsers.Add(user.UserId);
                 }
             }

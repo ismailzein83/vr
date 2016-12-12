@@ -9,5 +9,6 @@ namespace Vanrise.Security.Entities
     public class UserDetail
     {
         public User Entity { get; set; }
+        public UserStatus Status { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace Vanrise.Security.Business
                 authToken.UserDisplayName = user.Name;
                 authToken.ExpirationIntervalInMinutes = expirationPeriodInMinutes;
 
-                if (user.Status == UserStatus.Inactive)
+                if (!manager.IsUserEnable(user))
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
                 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.MainExtensions.VRObjectTypes
@@ -14,7 +15,7 @@ namespace Vanrise.Security.MainExtensions.VRObjectTypes
     {
         public override Guid ConfigId { get { return  new Guid("2A2F21E2-1B3E-456D-9D91-B0898B3F6D49"); } }
         public UserField UserField { get; set; }
-
+        private UserManager UserManager = new UserManager();
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
             User user = context.Object as User;
@@ -30,7 +31,7 @@ namespace Vanrise.Security.MainExtensions.VRObjectTypes
 
                 case UserField.Description: return user.Description;
 
-                case UserField.Status: return user.Status;
+                case UserField.Status: return UserManager.IsUserEnable(user) ? UserStatus.Active : UserStatus.Inactive;
             }
 
             return null;

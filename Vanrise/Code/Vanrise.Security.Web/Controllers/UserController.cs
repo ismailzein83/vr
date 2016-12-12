@@ -59,6 +59,19 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
+        [Route("DisableUser")]
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> DisableUser(User userObject)
+        {
+            return _manager.DisableUser(userObject);
+        }
+
+        [HttpPost]
+        [Route("EnableUser")]
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(User userObject)
+        {
+            return _manager.EnableUser(userObject);
+        }
+        [HttpPost]
         [Route("AddUser")]
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
         {

@@ -22,6 +22,6 @@ namespace Vanrise.Security.Entities
 
         public string Description { get; set; }
 
-        public UserStatus Status { get; set; }
+        public DateTime? EnabledTill { get; set; }
     }
 }

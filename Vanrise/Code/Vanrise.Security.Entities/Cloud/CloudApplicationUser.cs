@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.Entities;
 
 namespace Vanrise.Security.Entities
@@ -7,7 +8,7 @@ namespace Vanrise.Security.Entities
     {
         public User User { get; set; }
 
-        public UserStatus Status { get; set; }
+        public DateTime? EnabledTill { get; set; }
 
         public string Description { get; set; }
     }
@@ -37,7 +38,7 @@ namespace Vanrise.Security.Entities
     {
         public string Email { get; set; }
 
-        public UserStatus Status { get; set; }
+        public DateTime? EnabledTill { get; set; }
 
         public string Description { get; set; }
 
@@ -53,7 +54,7 @@ namespace Vanrise.Security.Entities
     {
         public int UserId { get; set; }
 
-        public UserStatus Status { get; set; }
+        public DateTime? EnabledTill { get; set; }
 
         public string Description { get; set; }
 

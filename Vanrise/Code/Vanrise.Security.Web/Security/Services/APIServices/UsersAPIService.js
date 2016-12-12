@@ -23,7 +23,9 @@
             HasUpdateUserPermission: HasUpdateUserPermission,
             HasResetUserPasswordPermission: HasResetUserPasswordPermission,
             ActivatePassword: ActivatePassword,
-            ForgotPassword: ForgotPassword
+            ForgotPassword: ForgotPassword,
+            DisableUser: DisableUser,
+            EnableUser: EnableUser
         });
 
         function GetFilteredUsers(input) {
@@ -58,6 +60,14 @@
 
         function UpdateUser(user) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateUser'), user);
+        }
+
+        function DisableUser(user) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'DisableUser'), user);
+        }
+
+        function EnableUser(user) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'EnableUser'), user);
         }
 
         function CheckUserName(name) {
