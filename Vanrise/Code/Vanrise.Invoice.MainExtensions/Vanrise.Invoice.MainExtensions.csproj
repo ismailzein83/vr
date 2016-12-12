@@ -92,6 +92,7 @@
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceDateSerialNumberPart.cs" />
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceFieldSerialNumberPart.cs" />
     <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceCounterSerialNumberPart.cs" />
+    <Compile Include="VRConcatenatedPart\SerialNumberParts\InvoiceSequenceSerialNumberPart.cs" />
     <Compile Include="VRObjectTypes\InvoiceFieldPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\InvoiceObjectType.cs" />
   </ItemGroup>

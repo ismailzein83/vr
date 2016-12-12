@@ -92,7 +92,7 @@ namespace Vanrise.Invoice.MainExtensions
                                     repeatedReportDetails = new RepeatedReportDetails
                                     {
                                         Index = 0,
-                                        ParentDataSourceItems = subReport.ParentSubreportDataSource.Settings.GetDataSourceItems(reportDataSourceContext).ToList(),
+                                        ParentDataSourceItems = subReport.ParentSubreportDataSource.Settings.GetDataSourceItems(reportDataSourceContext),
                                         ItemsByDataSource = new Dictionary<string, IEnumerable<dynamic>>()
                                     };
                                     repeatedReports.Add(subReport.SubReportName, repeatedReportDetails);
@@ -166,10 +166,10 @@ namespace Vanrise.Invoice.MainExtensions
                             if (!repeatedReportDetails.ItemsByDataSource.TryGetValue(dataSource.DataSourceName, out dataSourceItems))
                             {
 
-                                dataSourceItems = dataSource.Settings.GetDataSourceItems(context).ToList();
+                                dataSourceItems = dataSource.Settings.GetDataSourceItems(context);
                                 repeatedReportDetails.ItemsByDataSource.Add(dataSource.DataSourceName, dataSourceItems);
                             }
-                            itemsFilterContext.Items = dataSourceItems.ToList();
+                            itemsFilterContext.Items = dataSourceItems;
                             repeatedReportDetails.Index++;
                             items = dataSource.ItemsFilter.GetFilteredItems(itemsFilterContext);
                         }
@@ -187,7 +187,7 @@ namespace Vanrise.Invoice.MainExtensions
     public class RepeatedReportDetails
     {
         public int Index { get; set; }
-        public List<dynamic> ParentDataSourceItems { get; set; }
+        public IEnumerable<dynamic> ParentDataSourceItems { get; set; }
         public Dictionary<string, IEnumerable<dynamic>> ItemsByDataSource { get; set; }
     }
     public class ReportInput

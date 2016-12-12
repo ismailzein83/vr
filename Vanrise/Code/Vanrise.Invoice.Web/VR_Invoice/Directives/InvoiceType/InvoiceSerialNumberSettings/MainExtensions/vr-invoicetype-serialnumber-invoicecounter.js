@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeSerialnumberInvoicecounter", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_Invoice_CounterTypeEnum",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_CounterTypeEnum) {
+app.directive("vrInvoicetypeSerialnumberInvoicesequence", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_Invoice_DateCounterTypeEnum",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_DateCounterTypeEnum) {
 
         var directiveDefinitionObject = {
 
@@ -30,7 +30,8 @@ app.directive("vrInvoicetypeSerialnumberInvoicecounter", ["UtilsService", "VRNot
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.counterTypes = UtilsService.getArrayEnum(VR_Invoice_CounterTypeEnum);
+                $scope.scopeModel.initialSequenceValue = 1;
+                $scope.scopeModel.dateCounterTypes = UtilsService.getArrayEnum(VR_Invoice_DateCounterTypeEnum);
                 defineAPI();
             }
 
@@ -41,9 +42,9 @@ app.directive("vrInvoicetypeSerialnumberInvoicecounter", ["UtilsService", "VRNot
                     if (payload != undefined) {
                         context = payload.context;
                         if (payload.concatenatedPartSettings != undefined) {
-                            $scope.scopeModel.usePartnerCount = payload.concatenatedPartSettings.UsePartnerCount;
-                            $scope.scopeModel.overAllStartUpCounter = payload.concatenatedPartSettings.OverAllStartUpCounter;
-                            $scope.scopeModel.selectedCounterType = UtilsService.getItemByVal($scope.scopeModel.counterTypes, payload.concatenatedPartSettings.Type, "value");
+                            $scope.scopeModel.includePartnerId = payload.concatenatedPartSettings.IncludePartnerId;
+                            $scope.scopeModel.initialSequenceValue = payload.concatenatedPartSettings.InitialSequenceValue;
+                            $scope.scopeModel.selectedDateCounterType = UtilsService.getItemByVal($scope.scopeModel.dateCounterTypes, payload.concatenatedPartSettings.DateCounterType, "value");
 
                         }
                         var promises = [];
@@ -53,10 +54,10 @@ app.directive("vrInvoicetypeSerialnumberInvoicecounter", ["UtilsService", "VRNot
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts.InvoiceCounterSerialNumberPart ,Vanrise.Invoice.MainExtensions",
-                        UsePartnerCount: $scope.scopeModel.usePartnerCount,
-                        OverAllStartUpCounter: $scope.scopeModel.overAllStartUpCounter,
-                        Type: $scope.scopeModel.selectedCounterType != undefined ? $scope.scopeModel.selectedCounterType.value : undefined
+                        $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts.InvoiceSequenceSerialNumberPart ,Vanrise.Invoice.MainExtensions",
+                        IncludePartnerId: $scope.scopeModel.includePartnerId,
+                        InitialSequenceValue: $scope.scopeModel.initialSequenceValue,
+                        DateCounterType: $scope.scopeModel.selectedDateCounterType != undefined ? $scope.scopeModel.selectedDateCounterType.value : undefined
                     };
                 };
 

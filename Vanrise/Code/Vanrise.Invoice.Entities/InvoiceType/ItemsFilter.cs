@@ -14,6 +14,6 @@ namespace Vanrise.Invoice.Entities
     public interface IItemsFilterContext
     {
         dynamic ParentItem { get; }
-        List<dynamic> Items { get; }
+        IEnumerable<dynamic> Items { get; }
     }
 }

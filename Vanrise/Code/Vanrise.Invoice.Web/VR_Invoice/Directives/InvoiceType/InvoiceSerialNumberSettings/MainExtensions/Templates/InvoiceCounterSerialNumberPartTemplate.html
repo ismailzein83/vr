@@ -1,16 +1,16 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-switch value="scopeModel.usePartnerCount" label="Use Partner Count"></vr-switch>
+        <vr-switch value="scopeModel.includePartnerId" label="Include Partner Id"></vr-switch>
     </vr-columns>
     <vr-columns width="1/2row">
-        <vr-textbox value="scopeModel.overAllStartUpCounter" type="number" label="Over All StartUp Counter"></vr-textbox>
+        <vr-textbox value="scopeModel.initialSequenceValue" type="number" label="Initial Sequence Value" minvalue="0" isrequired="true"></vr-textbox>
     </vr-columns>
     <vr-columns width="1/2row">
-        <vr-select datasource="scopeModel.counterTypes"
+        <vr-select datasource="scopeModel.dateCounterTypes"
                    datatextfield="description"
                    datavaluefield="value"
-                   selectedvalues="scopeModel.selectedCounterType"
-                   label="Type">
+                   selectedvalues="scopeModel.selectedDateCounterType"
+                   label="Date Counter Type">
         </vr-select>
     </vr-columns>
 </vr-row>

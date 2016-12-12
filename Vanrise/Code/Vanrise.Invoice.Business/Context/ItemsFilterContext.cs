@@ -10,6 +10,6 @@ namespace Vanrise.Invoice.Business
     public class ItemsFilterContext : IItemsFilterContext
     {
         public dynamic ParentItem { get; set; }
-        public List<dynamic> Items { get; set; }
+        public IEnumerable<dynamic> Items { get; set; }
     }
 }
