@@ -10,8 +10,11 @@
     [TempPassword]          NVARCHAR (255) NULL,
     [TempPasswordValidTill] DATETIME       NULL,
     [timestamp]             ROWVERSION     NULL,
+    [EnabledTill]           DATETIME       NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

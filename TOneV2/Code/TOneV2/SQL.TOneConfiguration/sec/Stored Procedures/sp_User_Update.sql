@@ -2,9 +2,9 @@
 	@ID int,
 	@Name Nvarchar(255),
 	@Email Nvarchar(255),
-	@Status int,
 	@Description ntext,
-	@TenantId int
+	@TenantId int,
+	@EnabledTill datetime
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM sec.[User] WHERE ID != @ID AND Email = @Email)
@@ -12,9 +12,9 @@ BEGIN
 		UPDATE sec.[User]
 		SET Name = @Name,
 			Email = @Email,
-			[Status] = @Status,
 			[Description] = @Description,
-			TenantId = @TenantId
+			TenantId = @TenantId,
+			EnabledTill = @EnabledTill
 		WHERE ID = @ID
 	end
 END

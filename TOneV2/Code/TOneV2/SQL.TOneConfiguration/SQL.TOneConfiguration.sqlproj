@@ -470,6 +470,8 @@
     <Build Include="VR_Invoice\Tables\BillingPeriodInfo.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_BillingPeriodInfo_InsertOrUpdate.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_BillingPeriodInfo_Get.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_SetEnable.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_SetDisable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
