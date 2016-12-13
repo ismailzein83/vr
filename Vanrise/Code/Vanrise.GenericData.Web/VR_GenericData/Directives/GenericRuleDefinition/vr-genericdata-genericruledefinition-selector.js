@@ -119,7 +119,9 @@
                 label = 'Generic Rule Definitions';
                 multipleselection = 'ismultipleselection';
             }
-
+            var datatextfield = "Name";
+            if (attrs.showtitle != undefined)
+                datatextfield ="Title";
             if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
             }
@@ -139,7 +141,7 @@
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
                     + ' datavaluefield="GenericRuleDefinitionId"'
-                    + ' datatextfield="Name"'
+                    + ' datatextfield="'+ datatextfield + '"'
                     + ' ' + multipleselection
                     + ' ' + hideselectedvaluessection
                     + ' isrequired="ctrl.isrequired"'
