@@ -361,12 +361,12 @@ namespace Retail.BusinessEntity.Business
             if (String.IsNullOrWhiteSpace(name))
                 throw new MissingArgumentValidationException("Account.Name");
 
-            //if (parentAccountId.HasValue)
-            //{
-            //    Account parentAccount = this.GetAccount(parentAccountId.Value);
-            //    if (parentAccount == null)
-            //        throw new DataIntegrityValidationException(String.Format("ParentAccount '{0}' does not exist", parentAccountId));
-            //}
+            if (parentAccountId.HasValue)
+            {
+                Account parentAccount = this.GetAccount(parentAccountId.Value);
+                if (parentAccount == null)
+                    throw new DataIntegrityValidationException(String.Format("ParentAccount '{0}' does not exist", parentAccountId));
+            }
         }
 
         private IEnumerable<long> GetSubAccountIds(long parentAccountId)
