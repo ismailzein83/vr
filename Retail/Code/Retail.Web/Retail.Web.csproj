@@ -684,6 +684,18 @@
       <Project>{f5b44646-ba9c-408f-be4f-cc37d0860616}</Project>
       <Name>Retail.Data.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Invoice.Business\Retail.Invoice.Business.csproj">
+      <Project>{6e17f958-24a2-4166-bb5d-7e26031b8afc}</Project>
+      <Name>Retail.Invoice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Invoice.Entities\Retail.Invoice.Entities.csproj">
+      <Project>{324f5b0b-84e3-403f-9b0b-a53eb997c941}</Project>
+      <Name>Retail.Invoice.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Invoice.Web\Retail.Invoice.Web.csproj">
+      <Project>{30dce0ef-eea6-456a-9778-469c46f737ea}</Project>
+      <Name>Retail.Invoice.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.SMS.Entities\Retail.SMS.Entities.csproj">
       <Project>{95c33c91-e6f0-4d60-937b-61bd35564a6c}</Project>
       <Name>Retail.SMS.Entities</Name>

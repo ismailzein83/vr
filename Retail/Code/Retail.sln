@@ -89,9 +89,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Invoice.Business", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Invoice.Entities", "Retail.Invoice.Entities\Retail.Invoice.Entities.csproj", "{324F5B0B-84E3-403F-9B0B-A53EB997C941}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Invoice.Web", "Retail.Invoice.Web\Retail.Invoice.Web.csproj", "{30DCE0EF-EEA6-456A-9778-469C46F737EA}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 33
+		SccNumberOfProjects = 34
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -223,6 +225,10 @@ Global
 		SccProjectTopLevelParentUniqueName32 = Retail.sln
 		SccProjectName32 = Retail.Invoice.Entities
 		SccLocalPath32 = Retail.Invoice.Entities
+		SccProjectUniqueName33 = Retail.Invoice.Web\\Retail.Invoice.Web.csproj
+		SccProjectTopLevelParentUniqueName33 = Retail.sln
+		SccProjectName33 = Retail.Invoice.Web
+		SccLocalPath33 = Retail.Invoice.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -361,6 +367,10 @@ Global
 		{324F5B0B-84E3-403F-9B0B-A53EB997C941}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{324F5B0B-84E3-403F-9B0B-A53EB997C941}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{324F5B0B-84E3-403F-9B0B-A53EB997C941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30DCE0EF-EEA6-456A-9778-469C46F737EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30DCE0EF-EEA6-456A-9778-469C46F737EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30DCE0EF-EEA6-456A-9778-469C46F737EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30DCE0EF-EEA6-456A-9778-469C46F737EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -404,5 +414,6 @@ Global
 		{135DFB85-9A22-48EE-87F9-29FA8157BC71} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
 		{6E17F958-24A2-4166-BB5D-7E26031B8AFC} = {135DFB85-9A22-48EE-87F9-29FA8157BC71}
 		{324F5B0B-84E3-403F-9B0B-A53EB997C941} = {135DFB85-9A22-48EE-87F9-29FA8157BC71}
+		{30DCE0EF-EEA6-456A-9778-469C46F737EA} = {135DFB85-9A22-48EE-87F9-29FA8157BC71}
 	EndGlobalSection
 EndGlobal

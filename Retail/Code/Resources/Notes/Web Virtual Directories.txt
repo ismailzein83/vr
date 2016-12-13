@@ -23,3 +23,4 @@ VR_BEBridge				C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
 WhS_Routing				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Routing.Web\WhS_Routing
 VR_NumberingPlan		C:\TFS\Vanrise\Code\Vanrise.NumberingPlan.Web\VR_NumberingPlan
 VR_Invoice				C:\TFS\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice
+Retail_Invoice			C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice
