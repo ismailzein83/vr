@@ -36,30 +36,27 @@ end
 ('2A2F21E2-1B3E-456D-9D91-B0898B3F6D49','VR_Security_VRObjectTypes_UserProfilePropertyEvaluator','Profile Property','VR_Security_UserProfile_PropertyEvaluator','{"Editor":"vr-sec-userprofilepropertyevaluator"}'),
 ('BE6619AE-687F-45E3-BD7B-90D1DB4626B6','Static Group','Static Group','VR_Sec_GroupSettings','{"Editor":"vr-sec-group-static"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
 
---to be removed in next stage
-Update [sec].[User] set TenantID = 1
 --[sec].[User]--------------------------------------------------------------------------------------
 begin
 set nocount on;
 set identity_insert [sec].[User] on;
-;with cte_data([ID],[Name],[Password],[Email],[TenantId],[Status])
+;with cte_data([ID],[Name],[Password],[Email],[TenantId])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1,1)
+(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Password],[Email],[TenantId],[Status]))
+)c([ID],[Name],[Password],[Email],[TenantId]))
 merge	[sec].[User] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Password] = s.[Password],[Email] = s.[Email],[TenantId] = s.[TenantId],[Status] = s.[Status]
+	[Name] = s.[Name],[Password] = s.[Password],[Email] = s.[Email]
 when not matched by target then
-	insert([ID],[Name],[Password],[Email],[TenantId],[Status])
-	values(s.[ID],s.[Name],s.[Password],s.[Email],s.[TenantId],s.[Status]);
+	insert([ID],[Name],[Password],[Email],[TenantId])
+	values(s.[ID],s.[Name],s.[Password],s.[Email],s.[TenantId]);
 set identity_insert [sec].[User] off;
 ----------------------------------------------------------------------------------------------------
-
 end
 
 --[sec].[SystemAction]------------------------------------------------------------------------------
