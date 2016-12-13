@@ -8,7 +8,6 @@
         return {
             addSupplier: addSupplier,
             editSupplier: editSupplier,
-            deleteSupplier: deleteSupplier,
             uploadNewSuppliers: uploadNewSuppliers
         };
 
@@ -37,17 +36,6 @@
                 modalScope.onSupplierUpdated = onSupplierUpdated;
             };
             VRModalService.showModal('/Client/Modules/QM_BusinessEntity/Views/Supplier/SupplierEditor.html', parameters, modalSettings);
-        }
-
-
-        function deleteSupplier(supplierId, onSupplierDeleted) {
-
-            return VRNotificationService.showConfirmation()
-                .then(function (response) {
-                    if (response) {
-                        onSupplierDeleted(supplierId);
-                    }
-                });
         }
 
         function uploadNewSuppliers(modalScope) {

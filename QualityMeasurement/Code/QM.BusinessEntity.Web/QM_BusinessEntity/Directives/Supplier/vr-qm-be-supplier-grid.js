@@ -95,20 +95,25 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
             QM_BE_SupplierService.editSupplier(supplier.Entity.SupplierId, onSupplierUpdated);
         }
 
-        function deleteSupplier(supplier) {
-            var onSupplierDeleted = function (deletedItem) {
-                QM_BE_SupplierAPIService.DeleteSupplier(deletedItem);
+
+        function deleteSupplier(dataItem) {
+            var onPermissionDeleted = function (entity) {
+                var gridDataItem = { Entity: entity };
+                gridDataItem.Entity.IsDeleted = true;
+                gridAPI.itemDeleted(gridDataItem);
             };
 
-            return QM_BE_SupplierService.deleteSupplier(supplier.Entity, onSupplierDeleted)
-               .then(function () {
-                })
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               }).finally(function () {
-                   gridAPI.retrieveData(queryGrid);
-                   defineMenuActions();
-               });
+            VRNotificationService.showConfirmation().then(function (confirmed) {
+                if (confirmed) {
+                    return QM_BE_SupplierAPIService.DeleteSupplier(dataItem.Entity).then(function () {
+                        if (onPermissionDeleted && typeof onPermissionDeleted == 'function') {
+                            onPermissionDeleted(dataItem.Entity);
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, scope);
+                    });
+                }
+            });
         }
 
         this.initializeController = initializeController;
