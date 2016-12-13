@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    invoiceAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Invoice_ModuleConfig", "VRModalService"];
+    invoiceAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Invoice_ModuleConfig"];
 
-    function invoiceAPIService(BaseAPIService, UtilsService, WhS_Invoice_ModuleConfig, VRModalService) {
+    function invoiceAPIService(BaseAPIService, UtilsService, WhS_Invoice_ModuleConfig) {
 
         var controllerName = "WhSInvoice";
 

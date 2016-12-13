@@ -181,14 +181,9 @@
     <Content Include="WhS_Invoice\Directives\MainExtensions\PartnerSettings\vr-invoicetype-partnersettings-carrier.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\SupplierInvoice\Templates\SupplierInvoiceGeneratorTemplate.html" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\SupplierInvoice\whs-invoice-invoicetype-supplierinvoicegenerator.js" />
-    <Content Include="WhS_Invoice\Directives\Settings\InvoiceSettings\Templates\InvoiceSettingsTemplate.html" />
-    <Content Include="WhS_Invoice\Directives\Settings\InvoiceSettings\whs-invoice-invoicesettings-editor.js" />
     <Content Include="WhS_Invoice\ModuleInitialization.js" />
     <Content Include="WhS_Invoice\Reports\Reporting.aspx" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
-    <Content Include="WhS_Invoice\Services\InvoiceSettingsService.js" />
-    <Content Include="WhS_Invoice\Views\InvoiceSettings\InvoiceSettingEditorController.js" />
-    <Content Include="WhS_Invoice\Views\InvoiceSettings\Templates\InvoiceSettingEditor.html" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

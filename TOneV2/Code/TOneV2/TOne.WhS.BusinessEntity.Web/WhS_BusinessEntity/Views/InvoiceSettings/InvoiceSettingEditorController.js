@@ -3,9 +3,9 @@
 
     "use strict";
 
-    invoiceSettingEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Invoice_InvoiceSettingService'];
+    invoiceSettingEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_InvoiceSettingService'];
 
-    function invoiceSettingEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Invoice_InvoiceSettingService) {
+    function invoiceSettingEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_BE_InvoiceSettingService) {
 
         var isEditMode;
         var invoiceSettingEntity;
@@ -97,8 +97,8 @@
 
         function loadMailMsgTemplateSelector() {
             var mailMsgTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            WhS_Invoice_InvoiceSettingService.getCustomerInvoiceMailType().then(function(response) {
-                customerInvoiceMailTemplateReadyPromiseDeferred.promise.then(function() {
+            WhS_BE_InvoiceSettingService.getCustomerInvoiceMailType().then(function (response) {
+                customerInvoiceMailTemplateReadyPromiseDeferred.promise.then(function () {
 
                     var selectorPayload = { filter: { VRMailMessageTypeId: response } };
                     if (invoiceSettingEntity != undefined) {
@@ -161,5 +161,5 @@
         }
     }
 
-    appControllers.controller('WhS_Invoice_InvoiceSettingEditorController', invoiceSettingEditorController);
+    appControllers.controller('WhS_BE_InvoiceSettingEditorController', invoiceSettingEditorController);
 })(appControllers);

@@ -15,7 +15,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     }
     public class CustomerInvoiceSettings
     {
-        public string Title { get; set; }
+        public Guid InvoiceSettingId { get; set; }
+        public string Name { get; set; }
         public Guid DefaultEmailId { get; set; }
         public bool IsDefault { get; set; }
         public int DuePeriod { get; set; }

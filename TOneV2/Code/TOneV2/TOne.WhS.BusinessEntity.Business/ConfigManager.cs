@@ -125,6 +125,33 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NullReferenceException("setting.CustomerInvoiceSettings");
         }
 
+        public IEnumerable<CustomerInvoiceSettingInfo> GetCustomerInvoiceSettingInfo()
+        {
+            InvoiceSettings setting = GetInvoiceSettings();
+            List<CustomerInvoiceSettingInfo> lstCustomerInvoiceSettingInfo = new List<CustomerInvoiceSettingInfo>();
+            foreach (var customerInvoiceSetting in setting.CustomerInvoiceSettings)
+            {
+                CustomerInvoiceSettingInfo customerInvoiceSettingInfo = new CustomerInvoiceSettingInfo();
+                customerInvoiceSettingInfo = CustomerInvoiceSettingInfoMapper(customerInvoiceSetting);
+                lstCustomerInvoiceSettingInfo.Add(customerInvoiceSettingInfo);
+            }
+
+            return lstCustomerInvoiceSettingInfo;
+        }
+
+        public CustomerInvoiceSettings GetInvoiceSettingsbyGuid(Guid guid)
+        {
+            InvoiceSettings setting = GetInvoiceSettings();
+            if (setting.CustomerInvoiceSettings == null)
+                throw new NullReferenceException("setting.CustomerInvoiceSettings");
+            foreach (var customerInvoiceSettings in setting.CustomerInvoiceSettings)
+            {
+                if (customerInvoiceSettings.InvoiceSettingId == guid)
+                    return customerInvoiceSettings;
+            }
+            throw new NullReferenceException("setting.CustomerInvoiceSettings");
+        }
+
         public Guid GetDefaultCustomerInvoiceTemplateMessageId()
         {
             CustomerInvoiceSettings customerInvoiceSettings = GetDefaultCustomerInvoiceSettings();
@@ -210,6 +237,20 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetSettings<PurchaseAreaSettingsData>(Constants.PurchaseAreaSettings);
         }
 
+        #endregion
+
+           
+
+        #region Mappers
+
+        private CustomerInvoiceSettingInfo CustomerInvoiceSettingInfoMapper(CustomerInvoiceSettings customerInvoiceSettings)
+        {
+            return new CustomerInvoiceSettingInfo()
+            {
+                InvoiceSettingId = customerInvoiceSettings.InvoiceSettingId,
+                Name = customerInvoiceSettings.Name,
+            };
+        }
         #endregion
     }
 }

@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\InvoiceSettingController.cs" />
     <Compile Include="Controllers\SalePricelistController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
@@ -241,6 +242,7 @@
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\InvoiceSettings\Templates\InvoiceSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\InvoiceSettings\vr-whs-be-invoice-setting-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\InvoiceSettings\vr-whs-be-invoicesettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
@@ -403,6 +405,7 @@
     <Content Include="WhS_BusinessEntity\Images\ReOpen.png" />
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\InvoiceSettingAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListTemplateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\StateBackupAPIService.js" />
@@ -417,6 +420,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchConnectivityAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
+    <Content Include="WhS_BusinessEntity\Services\InvoiceSettingService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListTemplateService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService_Service.js" />
@@ -469,6 +473,8 @@
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\InvoiceSettings\InvoiceSettingEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\InvoiceSettings\Templates\InvoiceSettingEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />

@@ -38,7 +38,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             switch(context.InfoType)
             {
                 case "CustomerMailTemplate":
-                     ConfigManager manager = new ConfigManager();
                  
                     
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();

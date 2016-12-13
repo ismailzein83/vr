@@ -119,6 +119,7 @@
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="CodePrefixInfo.cs" />
+    <Compile Include="CustomerInvoiceSettingInfo.cs" />
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IBusinessEntity.cs" />
