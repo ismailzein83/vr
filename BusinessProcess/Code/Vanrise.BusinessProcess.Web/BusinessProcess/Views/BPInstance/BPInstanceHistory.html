@@ -1,38 +1,5 @@
 ﻿<vr-panel ng-controller="BusinessProcess_BP_InstanceHistoryController" vr-loader="isLoading">
 
-    <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
-            <vr-row removeline>
-                <vr-columns width="normal">
-                    <businessprocess-bp-definition-selector ismultipleselection on-ready="onBPDefinitionDirectiveReady"></businessprocess-bp-definition-selector>
-                </vr-columns>
-
-                <vr-columns width="normal">
-                    <businessprocess-bp-instance-status-selector ismultipleselection on-ready="onBPInstanceStatusDirectiveReady"></businessprocess-bp-instance-status-selector>
-                </vr-columns>
-
-                <vr-columns width="normal">
-                    <vr-datetimepicker label="From" value="fromDate" type="dateTime" customvalidate="validateTimeRange()" isrequired></vr-datetimepicker>
-                </vr-columns>
-
-                <vr-columns width="normal">
-                    <vr-datetimepicker label="To" value="toDate" type="dateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
-                </vr-columns>
-            </vr-row>
-        </div>
-        <vr-row removeline>
-            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                </div>
-            </vr-actionbar>
-        </vr-row>
-        <vr-row>
-            <vr-columns width="fullrow">
-                <businessprocess-bp-instance-history-grid on-ready="onGridReady"></businessprocess-bp-instance-history-grid>
-            </vr-columns>
-        </vr-row>
-
-    </vr-form>
+    <bp-instance-log-search on-ready="onSearchReady"></bp-instance-log-search>
 
 </vr-panel>

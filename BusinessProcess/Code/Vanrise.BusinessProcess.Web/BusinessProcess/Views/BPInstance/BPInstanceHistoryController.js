@@ -5,59 +5,21 @@
     BusinessProcess_BP_InstanceHistoryController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceService', 'VRValidationService','VRNotificationService'];
 
     function BusinessProcess_BP_InstanceHistoryController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRValidationService, VRNotificationService) {
-        var gridAPI;
-        var filter = {};
-
-
-        var bpDefinitionDirectiveApi;
-        var bpDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var bpInstanceStatusDirectiveApi;
-        var bpInstanceStatusReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var searchAPI;
+        var searchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         loadAllControls();
 
         function defineScope() {
-            $scope.onBPDefinitionDirectiveReady = function (api) {
-                bpDefinitionDirectiveApi = api;
-                bpDefinitionReadyPromiseDeferred.resolve();
-            };
-
-            $scope.onBPInstanceStatusDirectiveReady = function (api) {
-                bpInstanceStatusDirectiveApi = api;
-                bpInstanceStatusReadyPromiseDeferred.resolve();
-            };
-
-            $scope.onGridReady = function (api) {
-                gridAPI = api;
-                gridAPI.loadGrid(filter);
-            };
-
-            $scope.searchClicked = function () {
-                getFilterObject();
-                return gridAPI.loadGrid(filter);
-            };
-
-            $scope.fromDate = new Date();
-
-            $scope.validateTimeRange = function () {
-                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            $scope.onSearchReady = function (api) {
+                searchAPI = api;
+                searchReadyPromiseDeferred.resolve();
             };
         }
-
-        function getFilterObject() {
-            filter = {
-                DefinitionsId: bpDefinitionDirectiveApi.getSelectedIds(),
-                InstanceStatus: bpInstanceStatusDirectiveApi.getSelectedIds(),
-                DateFrom: $scope.fromDate,
-                DateTo: $scope.toDate
-            };
-        }
-
         function loadAllControls() {
             $scope.isLoading = true;
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadBPDefinitions, loadBPInstanceStatus])
+            return UtilsService.waitMultipleAsyncOperations([loadSearchDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -65,27 +27,12 @@
                   $scope.isLoading = false;
               });
         }
-
-        function setTitle() {
-            $scope.title = 'Business Process';
-        }
-
-        function loadBPDefinitions() {
-            var loadBPDefinitionsPromiseDeferred = UtilsService.createPromiseDeferred();
-            bpDefinitionReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, undefined, loadBPDefinitionsPromiseDeferred);
+        function loadSearchDirective() {
+            var searchLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            searchReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(searchAPI, undefined, searchLoadPromiseDeferred);
             });
-
-            return loadBPDefinitionsPromiseDeferred.promise;
-        }
-
-        function loadBPInstanceStatus() {
-            var loadBPInstanceStatusPromiseDeferred = UtilsService.createPromiseDeferred();
-            bpInstanceStatusReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(bpInstanceStatusDirectiveApi, undefined, loadBPInstanceStatusPromiseDeferred);
-            });
-
-            return loadBPInstanceStatusPromiseDeferred.promise;
+            return searchLoadPromiseDeferred.promise;
         }
     }
 
