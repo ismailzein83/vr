@@ -142,6 +142,7 @@
                     return;
                 }
                 $scope.scopeModel.name = genericRuleDefinitionEntity.Name;
+                $scope.scopeModel.title = genericRuleDefinitionEntity.Title;
             }          
             function loadObjectDirective() {
                 var objectDirectiveLoadDeferred = UtilsService.createPromiseDeferred();

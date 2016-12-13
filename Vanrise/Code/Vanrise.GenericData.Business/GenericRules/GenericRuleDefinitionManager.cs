@@ -218,7 +218,7 @@ namespace Vanrise.GenericData.Business
             return new GenericRuleDefinitionInfo()
             {
                 GenericRuleDefinitionId = genericRuleDefinition.GenericRuleDefinitionId,
-                Name = genericRuleDefinition.Name
+                Name = genericRuleDefinition.Title!=null ?genericRuleDefinition.Title : genericRuleDefinition.Name
             };
         }
 

@@ -55,6 +55,7 @@ namespace Vanrise.GenericData.Data.SQL
             {
                 GenericRuleDefinitionId =  GetReaderValue<Guid>(reader,"ID"),
                 Name = (string)reader["Name"],
+                Title = details.Title,
                 CriteriaDefinition = details.CriteriaDefinition,
                 SettingsDefinition = details.SettingsDefinition,
                 Objects = details.Objects,
