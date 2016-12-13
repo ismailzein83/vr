@@ -106,7 +106,8 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             {
                 foreach (MVTSRadiusOption option in radiusRoute.MVTSRadiusOptions)
                 {
-                    radiusRouteBulkInsert.RadiusRoutePercentageStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", radiusRoute.CustomerId, radiusRoute.Code, option.Priority, option.Option, option.Percentage, 0);
+                    if (option.Percentage.HasValue)
+                        radiusRouteBulkInsert.RadiusRoutePercentageStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", radiusRoute.CustomerId, radiusRoute.Code, option.Priority, option.Option, option.Percentage, 0);
                 }
             }
         }
