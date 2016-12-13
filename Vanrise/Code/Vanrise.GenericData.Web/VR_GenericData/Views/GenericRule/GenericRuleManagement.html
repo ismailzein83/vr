@@ -14,10 +14,10 @@
                 <vr-columns width="normal">
                     <vr-genericdata-genericruledefinition-selector showtitle customlabel="Rule Type" selectedvalues="scopeModel.ruleDefinition" onselectionchanged="onGenericRuleDefinitionSelectorSelectionChange" on-ready="    onGenericRuleDefinitionSelectorDirectiveReady" hideremoveicon isrequired="true" normal-col-num="2"></vr-genericdata-genericruledefinition-selector>
                 </vr-columns>              
-                <vr-columns width="normal" ng-show="advancedSelected">
-                    <vr-datetimepicker label="Effective Date" value=" scopemodel.effectivedate" type="date"></vr-datetimepicker>
+                <vr-columns width="normal" ng-show="scopeModel.ruleDefinition">
+                    <vr-datetimepicker label="Effective Date" value="scopeModel.effectiveDate" type="date"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="advancedSelected">
+                <vr-columns width="normal" ng-show="scopeModel.ruleDefinition">
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
                 <span ng-repeat="filter in scopeModel.filters" ng-show="advancedSelected || (filter.showInBasicSearch && basicSelected)">
