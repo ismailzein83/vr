@@ -215,6 +215,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                        });
         }
 
+        public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
+        {
+            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance);
+        }
+
         #endregion
 
         #region Mappers
@@ -238,6 +243,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return new LiveBalanceAccountInfo
             {
+                LiveBalanceId = (long)reader["ID"],
                 AccountId = (long)reader["AccountId"],
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
             };
@@ -320,6 +326,9 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
 
         #endregion
+
+
+
 
     }
 }

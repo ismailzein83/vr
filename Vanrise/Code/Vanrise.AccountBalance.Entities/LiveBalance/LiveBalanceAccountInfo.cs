@@ -8,6 +8,7 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class LiveBalanceAccountInfo
     {
+        public long LiveBalanceId { get; set; }
         public long AccountId { get; set; }
         public int CurrencyId { get; set; }
     }
