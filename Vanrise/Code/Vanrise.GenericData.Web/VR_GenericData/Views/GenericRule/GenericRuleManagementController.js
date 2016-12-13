@@ -40,6 +40,7 @@
             $scope.onGenericRuleDefinitionSelectorSelectionChange = function () {
                 if (genericRuleDefinitionAPI.getSelectedIds() != undefined) {
                     $scope.scopeModel.filters.length = 0;
+                    settingsFilterDirectiveAPI = undefined;
                    loadAllControls().then(function () {
                         var defFilter = {
                             RuleDefinitionId: genericRuleDefinitionAPI.getSelectedIds(),
@@ -211,7 +212,7 @@
                     getRuleTypesPromise.then(function () {
                         $scope.scopeModel.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'ExtensionConfigurationId').FilterEditor;
 
-                        if ($scope.scopeModel.settingsFilterEditor != null) {
+                        if ($scope.scopeModel.settingsFilterEditor != null && settingsFilterDirectiveAPI!=undefined) {
                             settingsFilterDirectiveReadyDeferred.promise.then(function () {
                                 var settingsFilterDirectivePayload = {
                                     genericRuleDefinition: ruleDefinition,

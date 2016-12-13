@@ -298,6 +298,7 @@
             return {
                 GenericRuleDefinitionId: genericRuleDefinitionId,
                 Name: $scope.scopeModel.name,
+                Title: $scope.scopeModel.title,
                 CriteriaDefinition: criteriaDirectiveAPI.getData(),
                 SettingsDefinition: settingsDirectiveAPI.getData(),
                 Objects: objectDirectiveAPI.getData(),

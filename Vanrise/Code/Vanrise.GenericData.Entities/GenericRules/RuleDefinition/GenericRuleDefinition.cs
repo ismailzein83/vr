@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.Entities
 
         public string Name { get; set; }
 
+        public string Title { get; set; }
+
         public GenericRuleDefinitionCriteria CriteriaDefinition { get; set; }
 
         public VRObjectVariableCollection Objects { get; set; }
