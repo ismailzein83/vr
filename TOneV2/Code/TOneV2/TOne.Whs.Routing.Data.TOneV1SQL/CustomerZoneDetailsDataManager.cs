@@ -108,8 +108,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             string saleZoneServiceIds = record.SaleZoneServiceIds != null ? string.Join(",", record.SaleZoneServiceIds) : null;
 
             CustomerZoneDetailBulkInsert customerZoneDetailBulkInsert = dbApplyStream as CustomerZoneDetailBulkInsert;
-            customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource, record.SellingProductId,
-                                                                               record.EffectiveRateValue, (int)record.RateSource, saleZoneServiceIds);
+            customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.CustomerId, record.SaleZoneId, record.RoutingProductId,
+                (int)record.RoutingProductSource, record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds);
 
             if (!IsFuture.HasValue)
                 throw new ArgumentNullException("IsFuture");
@@ -134,7 +134,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 CarrierAccount customer = _allCarriers.GetRecord(record.CustomerId);
                 CarrierProfile profile = _allCarrierProfiles.GetRecord(customer.CarrierProfileId);
                 SaleZone saleZone = _allSaleZones.GetRecord(record.SaleZoneId);
-                customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", saleZone.SourceId, "SYS", customer.SourceId, serviceflag, profile.SourceId, record.EffectiveRateValue, 0, 0, string.Empty);
+                customerZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", saleZone.SourceId, "SYS", customer.SourceId, serviceflag, profile.SourceId, decimal.Round(record.EffectiveRateValue, 8), 0, 0, string.Empty);
             }
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)

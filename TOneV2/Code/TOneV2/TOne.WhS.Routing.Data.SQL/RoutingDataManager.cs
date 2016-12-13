@@ -171,7 +171,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [Rate] [decimal](20, 8) NULL,
                                                         [SaleZoneServiceIds] [varchar](max) NULL,
 	                                                    [IsBlocked] [bit] NOT NULL,
-	                                                    [ExecutedRuleId] [int] NOT NULL,
+	                                                    [ExecutedRuleId] [int] NULL,
 	                                                    [RouteOptions] [varchar](max) NULL/*,
                                                     CONSTRAINT [PK_CustomerRoute] PRIMARY KEY CLUSTERED 
                                                     (

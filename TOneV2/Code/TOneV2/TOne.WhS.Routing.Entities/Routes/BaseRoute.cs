@@ -12,13 +12,13 @@ namespace TOne.WhS.Routing.Entities
 
         public long SaleZoneId { get; set; }
 
-        public Decimal Rate { get; set; }
+        public Decimal? Rate { get; set; }
 
         public HashSet<int> SaleZoneServiceIds { get; set; }
 
         public bool IsBlocked { get; set; }
 
-        public int ExecutedRuleId { get; set; }
+        public int? ExecutedRuleId { get; set; }
 
         public List<RouteOption> Options { get; set; }
 

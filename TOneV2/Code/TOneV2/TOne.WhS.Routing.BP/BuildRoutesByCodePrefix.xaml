@@ -82,9 +82,17 @@
       <Variable x:TypeArguments="twre:SupplierZoneDetailByZone" Name="SupplierZoneDetails" />
       <Variable x:TypeArguments="twre:CustomerZoneDetailByZone" Name="CustomerZoneDetails" />
       <Variable x:TypeArguments="scg:List(twrba1:SwitchInProcess)" Name="SwitchesInProcess" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)" Name="ActiveRoutingCustomerInfos" />
     </Sequence.Variables>
     <Parallel DisplayName="Parallel_PrepareCodes" sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Sequence DisplayName="Sequence_SaleCodes" sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <twrba2:GetActiveCustomerInfos sap2010:WorkflowViewState.IdRef="GetActiveCustomerInfos_1">
+          <twrba2:GetActiveCustomerInfos.ActiveRoutingCustomerInfos>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">ActiveRoutingCustomerInfos</mca:CSharpReference>
+            </OutArgument>
+          </twrba2:GetActiveCustomerInfos.ActiveRoutingCustomerInfos>
+        </twrba2:GetActiveCustomerInfos>
         <twrba2:GetSaleCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSaleCodes_1">
           <twrba2:GetSaleCodes.CodePrefixGroup>
             <InArgument x:TypeArguments="scg:IEnumerable(twre:CodePrefix)">
@@ -278,6 +286,11 @@
         </twrba2:BuildCodeMatches.SupplierZoneDetails>
       </twrba2:BuildCodeMatches>
       <twrba2:BuildCustomerRoutes sap2010:WorkflowViewState.IdRef="BuildCustomerRoutes_1">
+        <twrba2:BuildCustomerRoutes.ActiveRoutingCustomerInfos>
+          <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">ActiveRoutingCustomerInfos</mca:CSharpValue>
+          </InArgument>
+        </twrba2:BuildCustomerRoutes.ActiveRoutingCustomerInfos>
         <twrba2:BuildCustomerRoutes.CustomerZoneDetails>
           <InArgument x:TypeArguments="twre:CustomerZoneDetailByZone">
             <mca:CSharpValue x:TypeArguments="twre:CustomerZoneDetailByZone">CustomerZoneDetails</mca:CSharpValue>
@@ -450,10 +463,11 @@
         </If.Then>
       </If>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbFROA8YDDgIBAVYFvQEQAwHxBb4BBdwBCgMBzAXdAQXEAxACAQJXB38SAwHGBoABB7wBEgMB8gXBAQvBAV4DAc0FxQEJ2gEoAwHUBeUBDeUBhQECARXvAQ3vAY8BAgED8wEHlwIhAwHMBJgCB8ECJAMBuwPCAgfcAi4DAeAC3QIH7QIoAwGpAu4CB6kDDAIBcaoDB8MDDAIBJ1gJbR8DAd0Gbgl+KQMBxwaEAQmKASkDAb0GiwEJqgEjAwGMBqsBCbsBKQMB8wXSAQ/SAaYBAwHqBc0BD80BfgMB4wXIAQ/IAWUDAdwF1wEP1wFbAwHVBYUCDYUCdQMBugWAAg2AAoMBAwGoBfYBDfYBeAMBlgWKAg2KAncDAYQF+wEN+wGQAQMB8gSPAg2PAn0DAeAE8wGGAfMBjAEDAd8ElAINlAJzAwHNBJsCDZsCcwMBugS0Ag20Am8DAagEpQINpQKIAQMBlgS+Ag2+AnQDAYQEoAINoAJqAwHyA7kCDbkCegMB4AOvAg2vAokBAwHOA6oCDaoCWgMBvAPUAg3UAnIDAakDxQINxQKBAQMBlwPPAg3PAmgDAYUD2QIN2QJ8AwHzAsoCDcoCfAMB4QLlAg3lAnQDAc4C4AIN4AJ0AwG8AuoCDeoCYQMBqgLxAg3xAmICAXL1AgunAxYDAYQBrQMNrQNgAgEosQMLwQMpAgE6ZQ9lbAMB8wZgD2B/AwHsBlsPW3oDAeUGag9qXAMB3gZxD3F9AwHWBnsPe3cDAc8Gdg92YwMByAaHAQ+HAYgBAwG+BpMBD5MBbAMBtQaOAQ+OAXoDAa0GnQEPnQGQAQMBpQanAQ+nAYABAwGdBqIBD6IBhwEDAZUGmAEPmAFcAwGNBq4BD64BYwMBhAazAQ+zAX8DAfwFuAEPuAF9AwH0BfYCDZADMQMBzgGRAw2mAysDAYUBvgMRvgN4AgFfuQMRuQODAQIBTbQDEbQDdgIBO4MDE4MDdQMBlwL5AhP5AoEBAwGFAogDE4gDcAMB8wGNAxONA38DAeEB/gIT/gJ/AwHPAZkDE5kDdwMBvAGUAxOUA3cDAaoBngMTngNnAwGYAaMDE6MDcAMBhgE=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbFdOA9MDDgIBAVcFxQEQAwGwBsYBBeQBCgMBhgblAQXRAxACAQJYB4cBEgMBjweIAQfEARIDAbEGyQELyQFeAwGHBs0BCeIBKAMBjwbtAQ3tAYUBAgEW9wEN9wGPAQIBA/sBB58CIQMB/wSgAgfOAiQDAdMDzwIH6QIuAwHzAuoCB/oCKAMBuQL7Age2AwwCAXe3AwfQAwwCASlZCV8pAwHKB2AJdR8DAakHdgmGASkDAZAHjAEJkgEpAwGFB5MBCbIBIwMBzgazAQnDASkDAbIG2gEP2gGmAQMBqAbVAQ/VAX4DAaAG0AEP0AFlAwGYBt8BD98BWwMBkAaNAg2NAnUDAfMFiAINiAKDAQMB4AX+AQ3+AXgDAc0FkgINkgJ3AwG6BYMCDYMCkAEDAacFlwINlwJ9AwGUBfsBhgH7AYwBAwGTBZwCDZwCcwMBgAWoAg2oAnMDAewEowINowKGAQMB2QTBAg3BAm8DAcYEsgINsgKIAQMBswTLAg3LAnQDAaAErQINrQJqAwGNBMYCDcYCegMB+gO8Ag28AokBAwHnA7cCDbcCWgMB1APhAg3hAnIDAcAD0gIN0gKBAQMBrQPcAg3cAmgDAZoD5gIN5gJ8AwGHA9cCDdcCfAMB9ALyAg3yAnQDAeAC7QIN7QJ0AwHNAvcCDfcCYQMBugL+Ag3+AmICAXiCAwu0AxYDAYsBugMNugNgAgEqvgMLzgMpAgE9XA9ckAEDAcsHbQ9tbAMBwgdoD2h/AwG6B2MPY3oDAbIHcg9yXAMBqgd5D3l9AwGhB4MBD4MBdwMBmQd+D35jAwGRB48BD48BiAEDAYYHmwEPmwFsAwH8BpYBD5YBegMB8walAQ+lAZABAwHqBq8BD68BgAEDAeEGqgEPqgGHAQMB2AagAQ+gAVwDAc8GtgEPtgFjAwHFBrsBD7sBfwMBvAbAAQ/AAX0DAbMGgwMNnQMxAwHZAZ4DDbMDKwMBjAHLAxHLA3gCAWTGAxHGA4MBAgFRwQMRwQN2AgE+kAMTkAN1AwGmAoYDE4YDgQEDAZMClQMTlQNwAwGAApoDE5oDfwMB7QGLAxOLA38DAdoBpgMTpgN3AwHGAaEDE6EDdwMBswGrAxOrA2cDAaABsAMTsANwAwGNAQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetActiveCustomerInfos_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetSaleCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,270">

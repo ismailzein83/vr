@@ -211,10 +211,10 @@ namespace TOne.WhS.Routing.Data.SQL
                 CustomerId = (int)reader["CustomerID"],
                 Code = reader["Code"].ToString(),
                 SaleZoneId = (long)reader["SaleZoneID"],
-                Rate = GetReaderValue<decimal>(reader, "Rate"),
+                Rate = GetReaderValue<decimal?>(reader, "Rate"),
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
-                ExecutedRuleId = (int)reader["ExecutedRuleId"],
+                ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
                 Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null
             };
         }

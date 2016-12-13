@@ -29,6 +29,40 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
+
+        public Dictionary<string, HashSet<int>> GetCGsParentCountries()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCGsParentCountries",
+               () =>
+               {
+                   Dictionary<string, HashSet<int>> result = new Dictionary<string, HashSet<int>>();
+                   var allCodeGroups = GetCachedCodeGroups();
+
+                   foreach (KeyValuePair<int, CodeGroup> codeGroup in allCodeGroups)
+                   {
+                       HashSet<int> parentCountries = new HashSet<int>();
+                       string code = codeGroup.Value.Code;
+                       
+                       while (code.Length > 0)
+                       {
+                           var matchedCodeGroups = allCodeGroups.FindAllRecords(itm => string.Compare(itm.Value.Code, code, true) == 0 && itm.Value.CountryId != codeGroup.Value.CountryId);
+                           if (matchedCodeGroups != null && matchedCodeGroups.Count() > 0)
+                           {
+                               foreach (KeyValuePair<int, CodeGroup> matchedCodeGroup in matchedCodeGroups)
+                               {
+                                   parentCountries.Add(matchedCodeGroup.Value.CountryId);
+                               }
+                           }
+                           code = code.Substring(0, code.Length - 1);
+                       }
+                       if (parentCountries.Count > 0)
+                           result.Add(codeGroup.Value.Code, parentCountries);
+                   }
+
+                   return result;
+               });
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<CodeGroupDetail> GetFilteredCodeGroups(Vanrise.Entities.DataRetrievalInput<CodeGroupQuery> input)
         {
             var allCodeGroups = GetCachedCodeGroups();
@@ -57,7 +91,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<CodeGroup> GetCountryCodeGroups(int countryId)
         {
-             return GetCachedCodeGroupsByCountry().GetRecord(countryId);
+            return GetCachedCodeGroupsByCountry().GetRecord(countryId);
         }
 
         public TOne.Entities.InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
@@ -177,8 +211,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 Country country = countryManager.GetCountry(code.Value.ToLower());
                 CodeGroup codeGroup = null;
-               
-               if (country == null || String.IsNullOrEmpty(code.Key))
+
+                if (country == null || String.IsNullOrEmpty(code.Key))
                 {
                     //TODO: Code Group Is Empty validation mist preceed the validation on numberic value to be more precise
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
@@ -196,7 +230,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     colIndex = 0;
                     rowIndex++;
                 }
-                else if(!Vanrise.Common.Utilities.IsNumeric(code.Key, 0))
+                else if (!Vanrise.Common.Utilities.IsNumeric(code.Key, 0))
                 {
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
                     colIndex++;
@@ -206,19 +240,19 @@ namespace TOne.WhS.BusinessEntity.Business
                     rowIndex++;
                 }
 
-               else if (!cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
-               {
-                   importedCodeGroup.Add(new CodeGroup
-                   {
-                       Code = code.Key,
-                       CountryId = country.CountryId
-                   });
-                   uploadCodeGroupLog.CountOfCodeGroupsAdded++;
-                   RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
-                   colIndex = 0;
-                   rowIndex++;
-               }
-    
+                else if (!cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
+                {
+                    importedCodeGroup.Add(new CodeGroup
+                    {
+                        Code = code.Key,
+                        CountryId = country.CountryId
+                    });
+                    uploadCodeGroupLog.CountOfCodeGroupsAdded++;
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
+                    colIndex = 0;
+                    rowIndex++;
+                }
+
             }
 
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
@@ -325,7 +359,7 @@ namespace TOne.WhS.BusinessEntity.Business
                        codeGroups.Add(cg);
                    }
 
-                   return codeGroupsByCountry;                   
+                   return codeGroupsByCountry;
                });
         }
 
@@ -364,7 +398,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new CodeGroupInfo()
             {
                 CodeGroupId = codeGroup.CodeGroupId,
-                Name = string.Format(@"{0}{1}", countryName != null ? string.Format(@"{0} - ",countryName) : "", codeGroup.Code)
+                Name = string.Format(@"{0}{1}", countryName != null ? string.Format(@"{0} - ", countryName) : "", codeGroup.Code)
             };
         }
         #endregion

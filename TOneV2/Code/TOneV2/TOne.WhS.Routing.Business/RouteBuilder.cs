@@ -33,33 +33,28 @@ namespace TOne.WhS.Routing.Business
 
         #region Public Methods
 
-        public IEnumerable<CarrierAccount> GetCustomersForRouting()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<CarrierAccount> GetSuppliersForRouting()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode, out IEnumerable<SellingProductRoute> sellingProductRoutes)
+        public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             _carrierAccounts = carrierAccountManager.GetCachedCarrierAccounts();
 
-            List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
-            Dictionary<int, SellingProductRoute> sellingProductRoutesDic = new Dictionary<int, SellingProductRoute>();
+            CodeGroupManager codeGroupeManager = new CodeGroupManager();
+            CodeGroup codeGroup = codeGroupeManager.GetMatchCodeGroup(routeCode);
 
-            if (context.SaleCodeMatches != null && context.CustomerZoneDetails != null)
+            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+
+            HashSet<int> routeCodeParentCountyIds = codeGroupeManager.GetCGsParentCountries().GetRecord(codeGroup.Code);
+
+            List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
+
+            if (context.SaleCodeMatches != null)
             {
                 Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules = new Dictionary<RouteRule, List<RouteOptionRuleTarget>>();
                 RouteRuleManager routeRuleManager = new RouteRuleManager();
                 foreach (var saleCodeMatch in context.SaleCodeMatches)
                 {
-                    List<CustomerZoneDetail> matchCustomerZoneDetails;
-                    if (context.CustomerZoneDetails.TryGetValue(saleCodeMatch.SaleZoneId, out matchCustomerZoneDetails))
+                    List<CustomerZoneDetail> matchCustomerZoneDetails = null;
+                    if (context.CustomerZoneDetails != null && context.CustomerZoneDetails.TryGetValue(saleCodeMatch.SaleZoneId, out matchCustomerZoneDetails))
                     {
                         foreach (var customerZoneDetail in matchCustomerZoneDetails)
                         {
@@ -79,8 +74,6 @@ namespace TOne.WhS.Routing.Business
                             {
                                 bool createCustomerRoute = true;
 
-                                // CheckSellingProductRoute(out createCustomerRoute, context, routeCode, sellingProductRoutesDic, routeRuleManager, saleCodeMatch, customerZoneDetail, routeRuleTarget, routeRule);
-
                                 if (createCustomerRoute)
                                 {
                                     CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleCodeMatch, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule);
@@ -92,10 +85,55 @@ namespace TOne.WhS.Routing.Business
                                 throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId, saleCodeMatch.SaleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
                         }
                     }
+                    if (routeCodeParentCountyIds == null || routeCodeParentCountyIds.Count == 0)
+                        continue;
+
+                    if (matchCustomerZoneDetails == null)
+                    {
+                        foreach (RoutingCustomerInfo routingCustomerInfo in context.ActiveRoutingCustomerInfos)
+                        {
+                            CheckAndAddIfParentCountryIsSold(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, routeCodeParentCountyIds, routeCode, saleCodeMatch);
+                        }
+                    }
+                    else if (matchCustomerZoneDetails.Count != context.ActiveRoutingCustomerInfos.Count())
+                    {
+                        foreach (RoutingCustomerInfo routingCustomerInfo in context.ActiveRoutingCustomerInfos)
+                        {
+                            if (matchCustomerZoneDetails.FindRecord(itm => itm.CustomerId == routingCustomerInfo.CustomerId) != null)
+                                continue;
+
+                            CheckAndAddIfParentCountryIsSold(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, routeCodeParentCountyIds, routeCode, saleCodeMatch);
+                        }
+                    }
                 }
             }
-            sellingProductRoutes = sellingProductRoutesDic.Values;
+
             return customerRoutes;
+        }
+
+        private void CheckAndAddIfParentCountryIsSold(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager,
+            List<CustomerRoute> customerRoutes, HashSet<int> routeCodeParentCountyIds, string routeCode, SaleCodeMatch saleCodeMatch)
+        {
+            List<int> soldCountries;
+            if (!context.CustomerCountries.TryGetValue(customerId, out soldCountries))
+            {
+                var customerCountryIds = customerCountryManager.GetCustomerCountryIds(customerId, context.EntitiesEffectiveOn, context.EntitiesEffectiveInFuture);
+                if (customerCountryIds != null)
+                {
+                    soldCountries = customerCountryIds.ToList();
+                    context.CustomerCountries.Add(customerId, soldCountries);
+                }
+                else
+                    context.CustomerCountries.Add(customerId, null);
+            }
+
+            if (soldCountries == null)
+                return;
+
+            if (soldCountries.Any(routeCodeParentCountyIds.Contains))
+            {
+                customerRoutes.Add(new CustomerRoute() { Code = routeCode, CorrespondentType = CorrespondentType.Other, CustomerId = customerId, SaleZoneId = saleCodeMatch.SaleZoneId });
+            }
         }
 
         public IEnumerable<RPRoute> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId, bool includeBlockedSupplierZones)
@@ -231,7 +269,7 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
                 var blockedOrFilteredItems = route.Options.FindAllRecords(itm => itm.IsBlocked || itm.IsFiltered);
-                if (blockedOrFilteredItems != null && blockedOrFilteredItems.Count()>0)
+                if (blockedOrFilteredItems != null && blockedOrFilteredItems.Count() > 0)
                 {
                     foreach (var blockedOrFilteredItem in blockedOrFilteredItems)
                         blockedOrFilteredItem.Percentage = null;
@@ -377,67 +415,6 @@ namespace TOne.WhS.Routing.Business
             return route;
         }
 
-        #endregion
-
-        #region obosolete
-        //private void CheckSellingProductRoute(out bool createCustomerRoute, IBuildCustomerRoutesContext context, string routeCode, Dictionary<int, SellingProductRoute> sellingProductRoutesDic, RouteRuleManager routeRuleManager, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
-        //{
-        //    createCustomerRoute = true;
-        //    //if same rule and rate is inherited from Pricing, then it should be same route as pricing product
-        //    if (routeRule.Criteria.RoutingProductId.HasValue && customerZoneDetail.RateSource == SalePriceListOwnerType.SellingProduct)
-        //    {
-        //        createCustomerRoute = false;
-        //        SellingProductRoute sellingProductRoute;
-        //        if (!sellingProductRoutesDic.TryGetValue(customerZoneDetail.SellingProductId, out sellingProductRoute))
-        //        {
-        //            var sellingProductRouteRuleTarget = new RouteRuleTarget
-        //            {
-        //                Code = routeCode,
-        //                SaleZoneId = saleCodeMatch.SaleZoneId,
-        //                RoutingProductId = customerZoneDetail.RoutingProductId,
-        //                SaleRate = customerZoneDetail.EffectiveRateValue,
-        //                EffectiveOn = context.EntitiesEffectiveOn,
-        //                IsEffectiveInFuture = context.EntitiesEffectiveInFuture
-        //            };
-        //            var sellingProductRouteRule = routeRuleManager.GetMatchRule(sellingProductRouteRuleTarget);
-        //            if (sellingProductRouteRule != null)
-        //            {
-        //                SellingProductRoute route = ExecuteRule<SellingProductRoute>(routeCode, saleCodeMatch, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, sellingProductRouteRuleTarget, sellingProductRouteRule);
-        //                route.SellingProductId = customerZoneDetail.SellingProductId;
-        //                sellingProductRoutesDic.Add(customerZoneDetail.SellingProductId, route);
-        //            }
-        //        }
-        //        if (sellingProductRoute == null)
-        //            createCustomerRoute = true;
-        //        else
-        //        {
-        //            //check if any option has a rule specific for the customer
-        //            if (sellingProductRoute.Options != null)
-        //            {
-        //                RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
-        //                foreach (var option in sellingProductRoute.Options)
-        //                {
-        //                    RouteOptionRuleTarget routeOptionRuleTarget = new RouteOptionRuleTarget
-        //                    {
-        //                        SupplierId = option.SupplierId,
-        //                        SupplierCode = option.SupplierCode,
-        //                        SupplierZoneId = option.SupplierZoneId,
-        //                        EffectiveOn = context.EntitiesEffectiveOn,
-        //                        RouteTarget = routeRuleTarget,
-        //                        SupplierRate = option.SupplierRate
-        //                    };
-        //                    var matchOptionRule = routeOptionRuleManager.GetMatchRule(routeOptionRuleTarget);
-        //                    int? matchOptionRuleId = matchOptionRule != null ? matchOptionRule.RuleId : default(int?);
-        //                    if (matchOptionRuleId != option.ExecutedRuleId)
-        //                    {
-        //                        createCustomerRoute = true;
-        //                        break;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
         #endregion
     }
 }

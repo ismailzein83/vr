@@ -12,11 +12,14 @@ using Vanrise.Data.SQL;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using System.Configuration;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
+        static bool Routing_TOne_Testing = ConfigurationManager.AppSettings["Routing_TOne_Testing"] == "true";
+
         public int ParentWFRuntimeProcessId { get; set; }
 
         public long ParentBPInstanceId { get; set; }
@@ -29,6 +32,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         readonly string[] routeColumns = { "RouteID", "CustomerID", "ProfileID", "Code", "OurZoneID", "OurActiveRate", "OurServicesFlag", "State", "Updated", "IsToDAffected", "IsSpecialRequestAffected", "IsOverrideAffected", "IsBlockAffected", "IsOptionBlock", "BatchID" };
 
         readonly string[] routeOptionsColumns = { "RouteID", "SupplierID", "SupplierZoneID", "SupplierActiveRate", "SupplierServicesFlag", "Priority", "NumberOfTries", "State", "Updated", "Percentage" };
+
+        readonly string[] routeColumnsTesting = { "RouteID", "CustomerID", "ProfileID", "Code", "OurZoneID", "OurActiveRate", "OurServicesFlag", "State", "Updated", "IsToDAffected", "IsSpecialRequestAffected", "IsOverrideAffected", "IsBlockAffected", "IsOptionBlock", "BatchID", "ExecutedRuleId" };
+
+        readonly string[] routeOptionsColumnsTesting = { "RouteID", "SupplierID", "SupplierZoneID", "SupplierActiveRate", "SupplierServicesFlag", "Priority", "NumberOfTries", "State", "Updated", "Percentage", "ExecutedRuleId" };
 
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
@@ -59,7 +66,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
-                ColumnNames = routeColumns,
+                ColumnNames = Routing_TOne_Testing ? routeColumnsTesting : routeColumns,
             };
 
             customerRouteBulkInsertInfo.RouteOptionStreamForBulkInsertInfo = new StreamBulkInsertInfo
@@ -69,7 +76,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 TabLock = true,
                 KeepIdentity = false,
                 FieldSeparator = '^',
-                ColumnNames = routeOptionsColumns,
+                ColumnNames = Routing_TOne_Testing ? routeOptionsColumnsTesting : routeOptionsColumns,
             };
 
             return customerRouteBulkInsertInfo;
@@ -128,27 +135,46 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 case CorrespondentType.Other:
                 default: break;
             }
-            foreach (RouteOption option in record.Options)
+            if (record.Options != null)
             {
-                int priority;
-                if (option.IsBlocked)
+                foreach (RouteOption option in record.Options)
                 {
-                    hasOptionBlock = true;
-                    priority = 0;
-                }
-                else
-                {
-                    priority = Math.Max(0, counter--);
-                }
-                CarrierAccount supplier = _allCarriers.GetRecord(option.SupplierId);
-                SupplierZone supplierZone = _allSupplierZones.GetRecord(option.SupplierZoneId);
-                int supplierServiceFlag = GetServiceFlag(option.ExactSupplierServiceIds, _allZoneServiceConfigs);
-                customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
-                    supplierServiceFlag, priority, 0, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0);
-            }
+                    int priority;
+                    if (option.IsBlocked)
+                    {
+                        hasOptionBlock = true;
+                        priority = 0;
+                    }
+                    else
+                    {
+                        priority = Math.Max(0, counter--);
+                    }
+                    CarrierAccount supplier = _allCarriers.GetRecord(option.SupplierId);
+                    SupplierZone supplierZone = _allSupplierZones.GetRecord(option.SupplierZoneId);
+                    int supplierServiceFlag = GetServiceFlag(option.ExactSupplierServiceIds, _allZoneServiceConfigs);
 
-            customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", routeId, customer.SourceId, profile.SourceId, record.Code, saleZone.SourceId,
-                 record.Rate, customerServiceFlag, record.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0);
+                    if (Routing_TOne_Testing)
+                    {
+                        customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
+                            supplierServiceFlag, priority, 0, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0, option.ExecutedRuleId);
+                    }
+                    else
+                    {
+                        customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
+                            supplierServiceFlag, priority, 0, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0);
+                    }
+                }
+            }
+            if (Routing_TOne_Testing)
+            {
+                customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}", routeId, customer.SourceId, profile.SourceId, record.Code, saleZone.SourceId,
+                  record.Rate, customerServiceFlag, record.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0, record.ExecutedRuleId);
+            }
+            else
+            {
+                customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", routeId, customer.SourceId, profile.SourceId, record.Code, saleZone.SourceId,
+                     record.Rate, customerServiceFlag, record.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0);
+            }
         }
 
         private int SetRouteId()
@@ -196,7 +222,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         public void FinalizeCurstomerRoute(Action<string> trackStep)
         {
             StringBuilder query = new StringBuilder();
-            //query.AppendLine(query_CreatingIndexes);
+            if (!Routing_TOne_Testing)
+                query.AppendLine(query_CreatingIndexes);
+
             query.AppendLine(query_DropSupplierZoneDetailsTable);
             query.AppendLine(query_DropCodeSaleZoneTable);
             query.AppendLine(query_DropCustomerZoneDetailTable);
@@ -223,19 +251,19 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         const string query_DropCodeMatchTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch' AND TABLE_SCHEMA = 'dbo')
                                                       drop table dbo.CodeMatch;";
 
-        const string query_CreatingIndexes = @"CREATE NONCLUSTERED INDEX [IX_ZoneRate_Customer] ON [dbo].[ZoneRate_Temp]
+        const string query_CreatingIndexes = @"CREATE NONCLUSTERED INDEX [IX_ZoneRate_Customer] ON [dbo].[ZoneRates_Temp]
                                                       (
 	                                                      [CustomerID] ASC
                                                       );
-                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_ServicesFlag] ON [dbo].[ZoneRate_Temp]
+                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_ServicesFlag] ON [dbo].[ZoneRates_Temp]
                                                       (
 	                                                      [ServicesFlag] ASC
                                                       );
-                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_Supplier] ON [dbo].[ZoneRate_Temp]
+                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_Supplier] ON [dbo].[ZoneRates_Temp]
                                                       (
 	                                                      [SupplierID] ASC
                                                       );
-                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_Zone] ON [dbo].[ZoneRate_Temp]
+                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_Zone] ON [dbo].[ZoneRates_Temp]
                                                       (
 	                                                      [ZoneID] ASC
                                                       );

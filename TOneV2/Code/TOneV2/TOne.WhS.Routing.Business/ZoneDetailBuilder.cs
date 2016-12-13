@@ -122,7 +122,8 @@ namespace TOne.WhS.Routing.Business
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
                         int currencyId = output.GetRecordValue("SaleCurrencyId");
 
-                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
+                        //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
+                        rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate);
 
                         CustomerZoneDetail customerZoneDetail = new CustomerZoneDetail
                         {
@@ -197,7 +198,8 @@ namespace TOne.WhS.Routing.Business
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
                         int currencyId = output.GetRecordValue("SupplierCurrencyId");
-                        rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
+                        //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
+                        rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate);
 
                         SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                         {

@@ -94,7 +94,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_SupplierZoneDetailsTable);
             query.AppendLine(query_CodeSaleZoneTable);
             query.AppendLine(query_TableTypes);
-            query.AppendLine(query_CustomerRouteTempTable);
+            if (ConfigurationManager.AppSettings["Routing_TOne_Testing"] == "true")
+                query.AppendLine(query_CustomerRouteTempTableForTesting);
+            else
+                query.AppendLine(query_CustomerRouteTempTable);
             query.AppendLine(query_CustomerZoneDetailTable);
             query.AppendLine(query_ZoneRateTempTable);
             query.AppendLine(query_CodeMatchTempTable);
@@ -132,7 +135,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         protected const string query_DropCodeMatchTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch_Temp' AND TABLE_SCHEMA = 'dbo')
                                                          drop table dbo.CodeMatch_Temp;";
 
-        
+
 
         protected const string query_DropCustomerZoneDetailTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CustomerZoneDetail' AND TABLE_SCHEMA = 'dbo')
                                                                     drop table dbo.CustomerZoneDetail;";
@@ -225,6 +228,39 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                                [Updated] [datetime] NULL,
 	                                                [Percentage] [tinyint] NULL
                                                 ) ON [PRIMARY];";
+
+        const string query_CustomerRouteTempTableForTesting = @"  CREATE TABLE [dbo].[Route_Temp](
+	                                                                [RouteID] [int] NOT NULL,
+	                                                                [CustomerID] [varchar](5) NOT NULL,
+	                                                                [ProfileID] [int] NULL,
+	                                                                [Code] [varchar](15) NULL,
+	                                                                [OurZoneID] [int] NULL,
+	                                                                [OurActiveRate] [real] NULL,
+	                                                                [OurServicesFlag] [smallint] NULL,
+	                                                                [State] [tinyint] NOT NULL,
+	                                                                [Updated] [datetime] NULL,
+	                                                                [IsToDAffected] [bit] NOT NULL,
+	                                                                [IsSpecialRequestAffected] [bit] NOT NULL,
+	                                                                [IsOverrideAffected] [bit] NOT NULL,
+	                                                                [IsBlockAffected] [bit] NOT NULL,
+	                                                                [IsOptionBlock] [bit] NOT NULL,
+	                                                                [BatchID] [int] NOT NULL,
+                                                                    [ExecutedRuleId] [int] NULL,
+                                                                ) ON [PRIMARY];
+
+                                                                CREATE TABLE [dbo].[RouteOption_Temp](
+	                                                                [RouteID] [int] NOT NULL,
+	                                                                [SupplierID] [varchar](5) NOT NULL,
+	                                                                [SupplierZoneID] [int] NULL,
+	                                                                [SupplierActiveRate] [real] NULL,
+	                                                                [SupplierServicesFlag] [smallint] NULL,
+	                                                                [Priority] [tinyint] NOT NULL,
+	                                                                [NumberOfTries] [tinyint] NULL,
+	                                                                [State] [tinyint] NOT NULL,
+	                                                                [Updated] [datetime] NULL,
+	                                                                [Percentage] [tinyint] NULL,
+                                                                    [ExecutedRuleId] [int] NULL,
+                                                                ) ON [PRIMARY];";
 
 
         const string query_TableTypes = @"IF not EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'LongIDType')

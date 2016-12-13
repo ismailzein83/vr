@@ -20,5 +20,9 @@ namespace TOne.WhS.Routing.Entities
         DateTime? EntitiesEffectiveOn { get; }
 
         bool EntitiesEffectiveInFuture { get; }
+
+        IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; }
+
+        Dictionary<int, List<int>> CustomerCountries { get; set; }
     }
 }

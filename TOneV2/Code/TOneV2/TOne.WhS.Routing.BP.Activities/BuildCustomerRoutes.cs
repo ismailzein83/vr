@@ -9,6 +9,7 @@ using Vanrise.Entities;
 using TOne.WhS.RouteSync.BP.Activities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.Routing.Business.Extensions;
+    using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -26,6 +27,9 @@ namespace TOne.WhS.Routing.BP.Activities
         public bool IsFuture { get; set; }
 
         public List<SwitchInProcess> SwitchesInProcess { get; set; }
+
+        public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
+
     }
 
     public class BuildCustomerRoutesContext : IBuildCustomerRoutesContext
@@ -42,7 +46,12 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public bool EntitiesEffectiveInFuture { get; set; }
 
-        public BuildCustomerRoutesContext(CodeMatches codeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture)
+        public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
+
+        public Dictionary<int, List<int>> CustomerCountries { get; set; }
+
+        public BuildCustomerRoutesContext(CodeMatches codeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture,
+            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, List<int>> customerCountries)
         {
             this.SaleCodeMatches = codeMatches.SaleCodeMatches;
             this.SupplierCodeMatches = codeMatches.SupplierCodeMatches;
@@ -50,6 +59,8 @@ namespace TOne.WhS.Routing.BP.Activities
             this.CustomerZoneDetails = customerZoneDetails;
             this.EntitiesEffectiveOn = effectiveDate;
             this.EntitiesEffectiveInFuture = isFuture;
+            this.ActiveRoutingCustomerInfos = activeRoutingCustomerInfos;
+            this.CustomerCountries = customerCountries;
         }
     }
 
@@ -67,6 +78,9 @@ namespace TOne.WhS.Routing.BP.Activities
 
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<RoutingCustomerInfo>> ActiveRoutingCustomerInfos { get; set; }
 
         public InArgument<List<SwitchInProcess>> SwitchesInProcess { get; set; }
 
@@ -86,6 +100,9 @@ namespace TOne.WhS.Routing.BP.Activities
             CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
             List<CustomerRoute> switchesInProcessRoutes = new List<CustomerRoute>();
             RouteBuilder builder = new RouteBuilder(RoutingProcessType.CustomerRoute);
+
+            Dictionary<int, List<int>> customerCountries = new Dictionary<int, List<int>>();
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -93,11 +110,10 @@ namespace TOne.WhS.Routing.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
                     {
-                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate, inputArgument.IsFuture);
+                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate, 
+                            inputArgument.IsFuture, inputArgument.ActiveRoutingCustomerInfos, customerCountries);
 
-                        IEnumerable<SellingProductRoute> sellingProductRoute;
-
-                        IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code, out sellingProductRoute);
+                        IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code);
 
                         if (inputArgument.SwitchesInProcess != null && inputArgument.SwitchesInProcess.Count > 0)
                         {
@@ -143,7 +159,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 EffectiveDate = this.EffectiveDate.Get(context),
                 IsFuture = this.IsFuture.Get(context),
-                SwitchesInProcess = this.SwitchesInProcess.Get(context)
+                SwitchesInProcess = this.SwitchesInProcess.Get(context),
+                ActiveRoutingCustomerInfos = this.ActiveRoutingCustomerInfos.Get(context)
             };
         }
 

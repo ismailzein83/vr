@@ -41,7 +41,7 @@ namespace TOne.WhS.Routing.Data.SQL
             string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.SupplierId, record.SupplierZoneId, decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight);
         }
         public void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails)
         {

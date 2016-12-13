@@ -91,7 +91,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
 
             SupplierZoneDetailBulkInsert supplierZoneDetailBulkInsert = dbApplyStream as SupplierZoneDetailBulkInsert;
-            supplierZoneDetailBulkInsert.SupplierZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.SupplierId, record.SupplierZoneId, record.EffectiveRateValue, supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight);
+            supplierZoneDetailBulkInsert.SupplierZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.SupplierId, record.SupplierZoneId,
+                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight);
 
             if (!IsFuture.HasValue)
                 throw new ArgumentNullException("IsFuture");
@@ -115,7 +116,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 CarrierAccount supplier = _allCarriers.GetRecord(record.SupplierId);
                 CarrierProfile profile = _allCarrierProfiles.GetRecord(supplier.CarrierProfileId);
                 SupplierZone supplierZone = _allSupplierZones.GetRecord(record.SupplierZoneId);
-                supplierZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", supplierZone.SourceId, supplier.SourceId, "SYS", serviceflag, profile.SourceId, record.EffectiveRateValue, 0, 0, string.Empty);
+                supplierZoneDetailBulkInsert.ZoneRateStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", supplierZone.SourceId, supplier.SourceId, "SYS", serviceflag, profile.SourceId, decimal.Round(record.EffectiveRateValue, 8), 0, 0, string.Empty);
             }
         }
 

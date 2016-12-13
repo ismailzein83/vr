@@ -109,10 +109,16 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
         }
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Rule",
-                clicked: openRouteRuleEditor,
-            }];
+            $scope.gridMenuActions = function (dataItem) {
+                var menu = [];
+                if (dataItem.Entity.ExecutedRuleId!=undefined)
+                    menu.push({
+                        name: "Rule",
+                        clicked: openRouteRuleEditor,
+                    });
+                return menu;
+            }
+             
         }
         function openRouteRuleEditor(dataItem) {
             WhS_Routing_RouteRuleService.editRouteRule(dataItem.Entity.ExecutedRuleId);
