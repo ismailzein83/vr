@@ -82,6 +82,8 @@
     <Compile Include="DataGrouping\Distribution\IDataGroupingDistributorWCFService.cs" />
     <Compile Include="DataGrouping\Execution\IDataGroupingExecutorWCFService.cs" />
     <Compile Include="GenericParameterManager.cs" />
+    <Compile Include="MasterLogManager.cs" />
+    <Compile Include="MasterLogViewSettings.cs" />
     <Compile Include="TextManipulationContext\TextManipulationActionContext.cs" />
     <Compile Include="TextManipulationManager.cs" />
     <Compile Include="UserActionAudit\UserActionAuditManager.cs" />

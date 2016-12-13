@@ -2,57 +2,49 @@
 
     "use strict";
 
-    masterLogManagementController.$inject = ['$scope', '$filter', 'VRCommon_MasterLogService', 'UtilsService'];
+    masterLogManagementController.$inject = ['$scope', 'VRCommon_MasterLogAPIService', 'UtilsService', 'VRNavigationService'];
 
-    function masterLogManagementController($scope, $filter, VRCommon_MasterLogService, UtilsService) {
-
-        var promises = [];
-        var accessibleTabs = [];
+    function masterLogManagementController($scope, VRCommon_MasterLogAPIService, UtilsService, VRNavigationService) {
+        loadParameters();
         defineScope();
         load();
-
-        function defineScope() {           
-          
-         
-
-           
+        var viewId;
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != null) {
+                viewId = parameters.viewId;
+            }
+        }
+        function defineScope() {
+            $scope.drillDownDirectiveTabs = [];
         }
 
         function load() {
             loadAllControls()
-           
         }
 
         function loadAllControls() {
-
-            var allTabs = VRCommon_MasterLogService.getTabsDefinition();
-           
-            for (var i = 0; i < allTabs.length; i++) {
-                var tab = allTabs[i];
-                checkTabPermission(tab);
-            }
-
-            UtilsService.waitMultiplePromises(promises).then(function () {              
-                $scope.drillDownDirectiveTabs = $filter('orderBy')(accessibleTabs, 'rank');
+            $scope.isLoading = true;
+            VRCommon_MasterLogAPIService.GetMasterLogDirectives(viewId).then(function (response) {
+                if (response.length > 0) {
+                    for (var i = 0 ; i < response.length; i++) {
+                        var obj = response[i];
+                        var tabDefinition = {
+                            title: obj.Title,
+                            directive: obj.Directive,
+                            loadDirective: function (directiveAPI) {
+                                return directiveAPI.load();
+                            }
+                        }
+                        $scope.drillDownDirectiveTabs.push(tabDefinition);
+                    }
+                }
+            }).finally(function () {
+                    $scope.isLoading = false;
             });
-
-           
-            
         }
        
-        function checkTabPermission(tab) {
-            if (tab.hasPermission == undefined || tab.hasPermission == null) {
-                accessibleTabs.push(tab);
-                return;
-            }
-            if (typeof (tab.hasPermission) == 'function' )
-             var promise = tab.hasPermission().then(function (isAllowed) {
-                 if (isAllowed) {
-                    accessibleTabs.push(tab);
-                }
-             });
-             promises.push(promise)
-        }
+        
     }
 
     appControllers.controller('VRCommon_MasterLogManagementController', masterLogManagementController);

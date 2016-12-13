@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\MasterLogController.cs" />
     <Compile Include="Controllers\UserActionAuditController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
@@ -289,6 +290,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
+    <Content Include="Common\Services\APIServices\MasterLogAPIService.js" />
     <Content Include="Common\Services\APIServices\UserActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
