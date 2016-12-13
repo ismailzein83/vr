@@ -116,6 +116,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFutureByOwner", SaleRateMapper, ownerType, ownerId);
         }
 
+		public IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnerAndZones(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime effectiveOn)
+		{
+			if (zoneIds == null)
+				throw new Vanrise.Entities.MissingArgumentValidationException("zoneIds");
+			string zoneIdsAsString = string.Join(",", zoneIds);
+			return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetEffectiveAfterByOwnerAndZones", SaleRateMapper, ownerType, ownerId, zoneIdsAsString, effectiveOn);
+		}
+
         #endregion
 
         #region Mappers

@@ -90,6 +90,7 @@ namespace TOne.WhS.Sales.Business
 
 						zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
 						{
+							RateTypeId = kvp.Key,
 							Rate = GetConvertedRate(kvp.Value),
 							IsRateEditable = otherRateSource == _ownerType,
 							BED = kvp.Value.BED,
