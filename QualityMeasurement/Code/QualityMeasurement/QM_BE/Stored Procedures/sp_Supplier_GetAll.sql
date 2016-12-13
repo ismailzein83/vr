@@ -15,5 +15,5 @@ BEGIN
       ,[Name]
       ,[SourceSupplierID]
       ,[Settings]
-      from QM_BE.Supplier WITH(NOLOCK) 
+      from QM_BE.Supplier WITH(NOLOCK) WHERE IsDeleted = 0 OR IsDeleted IS NULL 
 END
