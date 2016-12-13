@@ -18,7 +18,7 @@ AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
-IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName)
+IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName and Module = @Module )
 	BEGIN	
 		INSERT INTO sec.[View](ID,Name,Title,Url,Module,Audience,[Content], Settings,[Type]) 
 		VALUES (@pageID,@PageName,@Title,@Url,@Module,@Audience,@Content, @Settings,@Type)

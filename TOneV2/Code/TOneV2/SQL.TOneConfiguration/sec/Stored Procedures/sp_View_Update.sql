@@ -19,7 +19,7 @@ AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
-IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName and Id!=@pageID)
+IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName and Module=@Module and Id!=@pageID )
 	BEGIN		
 	UPDATE	sec.[View]
 		SET		Name = @PageName,
