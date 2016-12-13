@@ -37,8 +37,9 @@ BEGIN
 	FROM [QM_CLITester].[TestCall]  WITH(NOLOCK) 
 	WHERE 
 	 UserID = @UserId AND
-	([timestamp] > @TimestampAfter) --ONLY Updated records 
-	AND DATEDIFF(MINUTE,CreationDate,GETDATE()) < @NumberOfMinutes
+	([timestamp] >= @TimestampAfter) --ONLY Updated records 
+	AND
+	 DATEDIFF(MINUTE,CreationDate,GETDATE()) < @NumberOfMinutes
 	
 	SELECT * FROM #Result
 	ORDER BY ID DESC
