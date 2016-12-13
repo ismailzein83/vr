@@ -1,1 +1,13 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select label="Days of the Month"
+                   datasource="scopeModel.monthlyTypes"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   selectedvalues="scopeModel.selectedMonthlyType"
+                   isrequired="true"
+                   hideremoveicon="true">
+        </vr-select>
+        <vr-textbox value="scopeModel.specificDay" ng-if="scopeModel.selectedMonthlyType.value == 0" type="number" decimalprecision="0" minvalue="1" maxvalue="28" label="Specific Day" isrequired></vr-textbox>
+    </vr-columns>
+</vr-row>

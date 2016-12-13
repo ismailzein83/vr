@@ -1,14 +1,14 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VR_Invoice_InvoiceMonthlyEnum",
+    function (UtilsService, VR_Invoice_InvoiceMonthlyEnum) {
 
         var directiveDefinitionObject = {
 
             restrict: "E",
             scope:
             {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -36,7 +36,9 @@ app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VRNotificationS
                 var api = {};
 
                 api.load = function (payload) {
+                    $scope.scopeModel.monthlyTypes = UtilsService.getArrayEnum(VR_Invoice_InvoiceMonthlyEnum);
                     if (payload != undefined) {
+                        $scope.scopeModel.specificDay = payload.SpecificDay;
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
@@ -45,6 +47,8 @@ app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VRNotificationS
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.MonthlyBillingPeriod ,Vanrise.Invoice.MainExtensions",
+                        monthlyTypes: $scope.scopeModel.monthlyTypes,
+                        SpecificDay: $scope.scopeModel.specificDay
                     };
                 };
 

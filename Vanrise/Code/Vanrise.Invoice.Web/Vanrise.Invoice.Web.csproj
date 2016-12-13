@@ -177,16 +177,15 @@
     <Content Include="VR_Invoice\Constants\CounterTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceDateEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
+    <Content Include="VR_Invoice\Constants\InvoiceMonthlyTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\BiWeeklyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\BiMonthlyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\MonthlyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\PeriodBillingPeriodTemplate.html" />
-    <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\SemiMonthlyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\WeeklyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-period.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-weekly.js" />
-    <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-semimonthly.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-biweekly.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-bimonthly.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-monthly.js" />

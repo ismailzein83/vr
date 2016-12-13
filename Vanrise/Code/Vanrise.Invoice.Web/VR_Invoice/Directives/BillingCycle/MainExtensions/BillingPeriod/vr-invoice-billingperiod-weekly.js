@@ -37,6 +37,7 @@ app.directive("vrInvoiceBillingperiodWeekly", ["UtilsService", "VRNotificationSe
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        $scope.scopeModel.startDay = payload.startDay;
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
@@ -45,6 +46,7 @@ app.directive("vrInvoiceBillingperiodWeekly", ["UtilsService", "VRNotificationSe
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.WeeklyBillingPeriod ,Vanrise.Invoice.MainExtensions",
+                        startDay: $scope.scopeModel.startDay
                     };
                 };
 

@@ -32,7 +32,6 @@
 
             var directiveAPI;
             var directiveReadyDeferred;
-            var directivePayload;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -55,7 +54,7 @@
 
             function defineAPI() {
                 var api = {};
-                var serviceSettings;
+
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();

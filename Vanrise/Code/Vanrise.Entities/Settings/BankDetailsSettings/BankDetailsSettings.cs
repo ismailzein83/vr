@@ -13,6 +13,7 @@ namespace Vanrise.Entities
     }
     public class BankDetail
     {
+        public Guid BankDetailId { get; set; }
         public string Bank { get; set; }
         public int CurrencyId { get; set; }
         public string AccountCode { get; set; }

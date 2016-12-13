@@ -54,6 +54,20 @@ namespace Vanrise.Common.Business
             return bankDetails;
         }
 
+        public IEnumerable<BankDetailsSettingsInfo> GetBankDetailsInfo()
+        {
+            IEnumerable<BankDetail> bankDetails = GetBankDetails(); 
+            List<BankDetailsSettingsInfo> lstBankDetailsInfo = new List<BankDetailsSettingsInfo>();
+            foreach (var bankDetail in bankDetails)
+            {
+                BankDetailsSettingsInfo bankDetailsSettingsInfo = new BankDetailsSettingsInfo();
+                bankDetailsSettingsInfo = BankDetailInfoMapper(bankDetail);
+                lstBankDetailsInfo.Add(bankDetailsSettingsInfo);
+            }
+
+            return lstBankDetailsInfo;
+        }
+
         public IEnumerable<CompanySetting> GetCompanySetting()
         {
             SettingManager settingManager = new SettingManager();
@@ -74,6 +88,19 @@ namespace Vanrise.Common.Business
                     return setting;
             }
             return null;
+        }
+        #endregion
+
+
+        #region Mappers
+
+        private BankDetailsSettingsInfo BankDetailInfoMapper(BankDetail bankDetail)
+        {
+            return new BankDetailsSettingsInfo()
+            {
+                BankDetailId = bankDetail.BankDetailId,
+                Bank = bankDetail.Bank,
+            };
         }
         #endregion
 

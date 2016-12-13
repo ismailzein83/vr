@@ -122,6 +122,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\UserActionAuditController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
@@ -179,6 +180,7 @@
     <Content Include="Common\Constant\ModuleConfig.js" />
     <Content Include="Common\Constant\ProductInfoPropertyEnum.js" />
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
+    <Content Include="Common\Directives\BankDetail\vr-common-bank-detail-selector.js" />
     <Content Include="Common\Directives\City\Templates\CityGridTemplate.html" />
     <Content Include="Common\Directives\City\Templates\citySelectorTemplate.html" />
     <Content Include="Common\Directives\City\vr-common-city-grid.js" />
@@ -286,6 +288,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
+    <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
     <Content Include="Common\Services\APIServices\UserActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
