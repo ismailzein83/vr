@@ -338,6 +338,24 @@
     <Reference Include="Vanrise.Integration.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.dll</HintPath>
     </Reference>
