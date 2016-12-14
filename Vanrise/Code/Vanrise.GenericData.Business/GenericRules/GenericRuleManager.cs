@@ -103,6 +103,11 @@ namespace Vanrise.GenericData.Business
             return this.UpdateRule(rule as T) as Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail>;
         }
 
+        public bool TryUpdateGenericRule(GenericRule rule)
+        {
+            return this.TryUpdateRule(rule as T);
+        }
+
         public DeleteOperationOutput<GenericRuleDetail> DeleteGenericRule(int ruleId)
         {
             return this.DeleteRule(ruleId) as Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail>;

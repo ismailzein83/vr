@@ -53,13 +53,13 @@ namespace Vanrise.Rules
                 BED = rule.BeginEffectiveTime,
                 EED = rule.EndEffectiveTime,
             };
-            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            
-            int ruleId;
+           
             if (ValidateBeforeAdd(rule))
             {
+                IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+                int ruleId;
                 if (ruleDataManager.AddRule(ruleEntity, out ruleId))
-                {                    
+                {
                     rule.RuleId = ruleId;
                     return true;
                 }
@@ -69,6 +69,22 @@ namespace Vanrise.Rules
 
         public virtual bool ValidateBeforeUpdate(T rule) { return true; }
         public Vanrise.Entities.UpdateOperationOutput<Q> UpdateRule(T rule)
+        {            
+            UpdateOperationOutput<Q> updateOperationOutput = new UpdateOperationOutput<Q>();
+            if (TryUpdateRule(rule))
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                GetCacheManager().SetCacheExpired(GetRuleTypeId());
+                updateOperationOutput.UpdatedObject = MapToDetails(rule);
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            }
+            return updateOperationOutput;
+        }
+
+        public bool TryUpdateRule(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
             Entities.Rule ruleEntity = new Entities.Rule
@@ -79,22 +95,15 @@ namespace Vanrise.Rules
                 EED = rule.EndEffectiveTime,
                 BED = rule.BeginEffectiveTime
             };
-            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            UpdateOperationOutput<Q> updateOperationOutput = new UpdateOperationOutput<Q>();
             if (ValidateBeforeUpdate(rule))
             {
+                IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
                 if (ruleDataManager.UpdateRule(ruleEntity))
                 {
-                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                    GetCacheManager().SetCacheExpired(ruleTypeId);
-                    updateOperationOutput.UpdatedObject = MapToDetails(rule);
+                    return true;
                 }
             }
-            else
-            {
-                updateOperationOutput.Result = UpdateOperationResult.SameExists;
-            }
-            return updateOperationOutput;
+            return false;
         }
 
         public Vanrise.Entities.DeleteOperationOutput<Q> DeleteRule(int ruleId)
