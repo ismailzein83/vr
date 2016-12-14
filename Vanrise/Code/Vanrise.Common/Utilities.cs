@@ -62,9 +62,12 @@ namespace Vanrise.Common
         public static IEnumerable<Type> GetAllImplementations(Type baseType)
         {
             List<Type> lst = new List<Type>();
+            List<string> loadedAssemblies = new List<string>();
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-
+                if (loadedAssemblies.Contains(assembly.FullName))
+                    continue;
+                loadedAssemblies.Add(assembly.FullName);
                 foreach (Type t in assembly.GetLoadableTypes())
                 {
                     if (baseType.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
