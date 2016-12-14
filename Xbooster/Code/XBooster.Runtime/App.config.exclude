@@ -67,6 +67,7 @@
 
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString" />
+    <add key="BigDataServiceDBConnStringKey" value="TransactionDBConnString"/>
     <add key="RuntimeConnStringKey" value="TransactionDBConnString" />
     <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString" />
     <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString" />
