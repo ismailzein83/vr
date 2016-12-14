@@ -4,7 +4,7 @@
 	@Settings nvarchar(max)
 AS
 BEGIN
-IF NOT EXISTS(select 1 from  QM_BE.Supplier where Name = @Name)
+IF NOT EXISTS(select 1 from  QM_BE.Supplier where Name = @Name and (IsDeleted is null or IsDeleted=0))
 BEGIN
 	Insert into QM_BE.Supplier( [ID],[Name],[Settings])
 	Values(@ID,@Name,@Settings)
