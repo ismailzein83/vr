@@ -32,7 +32,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.haveAddPermission = false;
             $scope.scopeModel.filters = [];
-
+            $scope.scopeModel.gridloadded = false;
             $scope.onGenericRuleDefinitionSelectorDirectiveReady = function (api) {
                 genericRuleDefinitionAPI = api;
                 genericRuleDefinitionReadyDeferred.resolve();
@@ -40,15 +40,11 @@
             $scope.onGenericRuleDefinitionSelectorSelectionChange = function () {
                 if (genericRuleDefinitionAPI.getSelectedIds() != undefined) {
                     $scope.scopeModel.filters.length = 0;
-                    settingsFilterDirectiveAPI = undefined;
-                   loadAllControls().then(function () {
-                        var defFilter = {
-                            RuleDefinitionId: genericRuleDefinitionAPI.getSelectedIds(),
-                            EffectiveDate: $scope.scopeModel.effectiveDate,
-                            Description: $scope.scopeModel.description
-                        };
-                      gridAPI.loadGrid(defFilter);
-                      hasAddGenericRulePermission();
+                    $scope.scopeModel.settingsFilterEditor = null;
+                    $scope.scopeModel.gridloadded = false;
+                    loadAllControls().then(function () {
+                        $scope.scopeModel.gridloadded = true;                       
+                       hasAddGenericRulePermission();
                    })
                 }
             };
@@ -58,7 +54,13 @@
             };
 
             $scope.onGridReady = function (api) {
-                gridAPI = api;               
+                gridAPI = api;
+                var defFilter = {
+                    RuleDefinitionId: genericRuleDefinitionAPI.getSelectedIds(),
+                    EffectiveDate: $scope.scopeModel.effectiveDate,
+                    Description: $scope.scopeModel.description
+                };
+                gridAPI.loadGrid(defFilter);
             };
            
             $scope.search = function () {
@@ -199,47 +201,38 @@
 
                     return filter;
                 }
+                function getRuleTypes() {
+                    return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypes().then(function (response) {
+                        var ruleTypes = [];
+                        for (var i = 0; i < response.length; i++) {
+                            ruleTypes.push(response[i]);
+                        }
+                        $scope.scopeModel.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'ExtensionConfigurationId').FilterEditor;
+
+                    });
+                }
                 function loadSettingsFilter() {
                     var settingsPromises = [];
-                    var ruleTypes;
 
                     var getRuleTypesPromise = getRuleTypes();
                     settingsPromises.push(getRuleTypesPromise);
-
-                    var settingsFilterEditorLoadDeferred = UtilsService.createPromiseDeferred();
-                    settingsPromises.push(settingsFilterEditorLoadDeferred.promise);
-
-                    getRuleTypesPromise.then(function () {
-                        $scope.scopeModel.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'ExtensionConfigurationId').FilterEditor;
-
-                        if ($scope.scopeModel.settingsFilterEditor != null && settingsFilterDirectiveAPI!=undefined) {
-                            settingsFilterDirectiveReadyDeferred.promise.then(function () {
-                                var settingsFilterDirectivePayload = {
-                                    genericRuleDefinition: ruleDefinition,
-                                    settings: ruleDefinition.SettingsDefinition
-                                };
-                                VRUIUtilsService.callDirectiveLoad(settingsFilterDirectiveAPI, settingsFilterDirectivePayload, settingsFilterEditorLoadDeferred);
-                            });
-                        }
-                        else {
-                            settingsFilterEditorLoadDeferred.resolve();
+                    return UtilsService.waitMultiplePromises(settingsPromises).then(function () {                        
+                        if ($scope.scopeModel.settingsFilterEditor != null) {
+                            setTimeout(function () {
+                                var settingsFilterEditorLoadDeferred = UtilsService.createPromiseDeferred();
+                                settingsPromises.push(settingsFilterEditorLoadDeferred.promise);
+                                settingsFilterDirectiveReadyDeferred.promise.then(function () {
+                                    var settingsFilterDirectivePayload = {
+                                        genericRuleDefinition: ruleDefinition,
+                                        settings: ruleDefinition.SettingsDefinition
+                                    };
+                                    VRUIUtilsService.callDirectiveLoad(settingsFilterDirectiveAPI, settingsFilterDirectivePayload, settingsFilterEditorLoadDeferred);
+                                });
+                            },1)
                         }
                     });
-
-                    return UtilsService.waitMultiplePromises(settingsPromises);
-
-                    function getRuleTypes() {
-                        return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypes().then(function (response) {
-                            ruleTypes = [];
-                            for (var i = 0; i < response.length; i++) {
-                                ruleTypes.push(response[i]);
-                            }
-                        });
-                    }
                 }
             }
-
-
         }
 
         function loadGenericRuleDefinition() {

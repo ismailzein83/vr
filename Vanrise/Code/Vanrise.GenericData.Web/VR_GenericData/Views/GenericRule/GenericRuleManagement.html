@@ -24,7 +24,7 @@
                     <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
                 </span>
                 <span ng-show="advancedSelected">
-                    <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+                    <vr-directivewrapper  directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
                 </span>
             </vr-row>
         </div>
@@ -38,7 +38,7 @@
         </vr-row>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-genericdata-genericrule-grid on-ready="onGridReady" ng-show="scopeModel.ruleDefinition"></vr-genericdata-genericrule-grid>
+                <vr-genericdata-genericrule-grid ng-if="scopeModel.gridloadded" on-ready="onGridReady" ng-show="scopeModel.ruleDefinition"></vr-genericdata-genericrule-grid>
             </vr-columns>
         </vr-row>
 

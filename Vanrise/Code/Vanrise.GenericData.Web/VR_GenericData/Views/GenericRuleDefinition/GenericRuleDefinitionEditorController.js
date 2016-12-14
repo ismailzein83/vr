@@ -270,7 +270,6 @@
         }
 
         function update() {
-            console.log(buildGenericRuleDefinitionObjectFromScope())
             $scope.isLoading = true;
             return VR_GenericData_GenericRuleDefinitionAPIService.UpdateGenericRuleDefinition(buildGenericRuleDefinitionObjectFromScope())
              .then(function (response) {

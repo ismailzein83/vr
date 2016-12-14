@@ -34,7 +34,7 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
 
         function initializeController() {
 
-            $scope.scopeModel.value;
+            $scope.scopeModel.value =  false;
             
             if (ctrl.selectionmode != 'single') {
                 defineScopeForMultiModes();

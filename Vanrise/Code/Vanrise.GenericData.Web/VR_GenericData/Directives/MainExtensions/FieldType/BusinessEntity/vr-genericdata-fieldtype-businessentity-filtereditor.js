@@ -65,7 +65,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-fieldtype-businessentity-runtimeeditor on-ready="filterEditorCtrl.onDirectiveReady" selectionmode="multiple" normal-col-num="{{filterEditorCtrl.normalColNum}}" isrequired="filterEditorCtrl.isrequired" />';
+            return '<vr-genericdata-fieldtype-businessentity-runtimeeditor on-ready="filterEditorCtrl.onDirectiveReady" selectionmode="multiple" normal-col-num="{{filterEditorCtrl.normalColNum}}" isrequired="filterEditorCtrl.isrequired" ></vr-genericdata-fieldtype-businessentity-runtimeeditor>';
         }
     }
 
