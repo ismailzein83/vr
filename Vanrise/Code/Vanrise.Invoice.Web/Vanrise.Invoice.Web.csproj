@@ -175,6 +175,7 @@
   <ItemGroup>
     <Content Include="VR_Invoice\Constants\AggregateTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\CounterTypeEnum.js" />
+    <Content Include="VR_Invoice\Constants\InvoiceDailyTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceDateEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceMonthlyTypeEnum.js" />

@@ -1,5 +1,12 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-textbox value="scopeModel.startDay" label="Start Day" isrequired></vr-textbox>
+        <vr-select label="Start Day"
+                   datasource="scopeModel.dailyTypes"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   selectedvalues="scopeModel.selectedDailyType"
+                   isrequired="true"
+                   hideremoveicon="true">
+        </vr-select>
     </vr-columns>
 </vr-row>

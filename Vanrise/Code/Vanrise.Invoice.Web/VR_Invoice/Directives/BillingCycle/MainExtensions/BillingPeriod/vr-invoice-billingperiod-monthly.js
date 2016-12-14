@@ -28,7 +28,6 @@ app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VR_Invoice_Invo
         function MonthlyBillingPeriod($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             function initializeController() {
-                $scope.scopeModel = {};
                 defineAPI();
             }
 
@@ -36,12 +35,60 @@ app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VR_Invoice_Invo
                 var api = {};
 
                 api.load = function (payload) {
-                    $scope.scopeModel.monthlyTypes = UtilsService.getArrayEnum(VR_Invoice_InvoiceMonthlyEnum);
+                    ctrl.data = [];
+
+                    ctrl.monthlyTypes = UtilsService.getArrayEnum(VR_Invoice_InvoiceMonthlyEnum);
                     if (payload != undefined) {
-                        $scope.scopeModel.specificDay = payload.SpecificDay;
+                        ctrl.specificDay = payload.SpecificDay;
                     }
-                    var promises = [];
-                    return UtilsService.waitMultiplePromises(promises);
+
+                    ctrl.addMonthlyPeriod = function () {
+                        var obj = {
+                            Id: ctrl.data.length + 1,
+                            monthlyId: ctrl.selectedMonthlyType.value,
+                            monthlyType: ctrl.selectedMonthlyType.description,
+                            specificDay: ctrl.specificDay
+                        }
+                        ctrl.data.push(obj);
+                        ctrl.specificDay = undefined;
+                        ctrl.selectedMonthlyType = undefined;
+                    };
+
+                    ctrl.isValid = function () {
+                        if (ctrl.data != undefined && ctrl.data.length > 0) {
+
+                            if (ctrl.data.length == 1)
+                                return null;
+
+                            var count = 0;
+                            for (var i = 0; i < ctrl.data.length; i++) {
+                                var count2 = 0;
+                                var item = ctrl.data[i];
+                                if (item.monthlyId == 1) {
+                                    count = count + 1;
+                                } else {
+                                    for (var j = 0; j < ctrl.data.length; j++) {
+                                        var item2 = ctrl.data[j];
+                                        if (item2.specificDay == item.specificDay) {
+                                            count2 = count2 + 1;
+                                        }
+                                    }
+                                    if(count2 > 1)
+                                        return "Same Day added";
+                                }
+                            }
+
+                            if (count > 1)
+                                return "Same Day added";
+                            return null;
+                        }
+                        return "You Should add at least one day.";
+                    };
+
+                    ctrl.removeItem = function (dataItem) {
+                        var index = ctrl.data.indexOf(dataItem);
+                        ctrl.data.splice(index, 1);
+                    };
                 };
 
                 api.getData = function () {
@@ -58,6 +105,5 @@ app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VR_Invoice_Invo
         }
 
         return directiveDefinitionObject;
-
     }
 ]);
