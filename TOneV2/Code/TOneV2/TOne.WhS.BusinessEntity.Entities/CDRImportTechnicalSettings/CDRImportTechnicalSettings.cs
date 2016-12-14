@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class CDRTechnicalConfiguration
     {
-        public Guid RuleDefinitionGuid { get; set; }
+        public Guid CustomerRuleDefinitionGuid { get; set; }
+        public Guid SupplierRuleDefinitionGuid { get; set; }
     }
 }

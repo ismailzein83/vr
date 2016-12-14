@@ -22,13 +22,19 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return setting.RateTypeConfiguration.OffPeakRateTypeId;
         }
-
-        public Guid GetRuleDefinitionGuid()
+        public Guid GetCustomerRuleDefinitionId()
         {
             CDRImportTechnicalSettings settingData = GetCdrImportTechnicalSetting();
             if (settingData.CdrImportTechnicalSettingData == null)
-                throw new NullReferenceException("setting.CdrImportTechnicalSettingData");
-            return settingData.CdrImportTechnicalSettingData.RuleDefinitionGuid;
+                throw new NullReferenceException("setting.CDRTechnicalConfiguration");
+            return settingData.CdrImportTechnicalSettingData.CustomerRuleDefinitionGuid;
+        }
+        public Guid GetSupplierRuleDefinitionId()
+        {
+            CDRImportTechnicalSettings settingData = GetCdrImportTechnicalSetting();
+            if (settingData.CdrImportTechnicalSettingData == null)
+                throw new NullReferenceException("setting.CDRTechnicalConfiguration");
+            return settingData.CdrImportTechnicalSettingData.SupplierRuleDefinitionGuid;
         }
         public int GetWeekendRateTypeId()
         {
@@ -239,7 +245,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-           
+
 
         #region Mappers
 

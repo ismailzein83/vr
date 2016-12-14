@@ -23,14 +23,22 @@ app.directive('vrWhsBeCdrimportTechnicalSettingsEditor', ['UtilsService', 'VRUIU
         function cdrImporTechnicalEditorCtor(ctrl, $scope, $attrs) {
 
             var ruleDefinitionEntity;
-            var ruleDefinitionReadyApi;
-            var ruleDefinitionReadyPromiseDeferred = utilsService.createPromiseDeferred();
+            var customerRuleDefinitionReadyApi;
+            var customerRuleDefinitionReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
+            var supplierRuleDefinitionReadyApi;
+            var supplierRuleDefinitionReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onRuleDefinitionReady = function (api) {
-                    ruleDefinitionReadyApi = api;
-                    ruleDefinitionReadyPromiseDeferred.resolve();
+                $scope.scopeModel.onCustomerRuleDefinitionReady = function (api) {
+                    customerRuleDefinitionReadyApi = api;
+                    customerRuleDefinitionReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onSupplierRuleDefinitionReady = function (api) {
+                    supplierRuleDefinitionReadyApi = api;
+                    supplierRuleDefinitionReadyPromiseDeferred.resolve();
                 };
                 defineApi();
             }
@@ -42,13 +50,15 @@ app.directive('vrWhsBeCdrimportTechnicalSettingsEditor', ['UtilsService', 'VRUIU
                         ruleDefinitionEntity = payload.data;
                     }
                     var promises = [];
-                    promises.push(loadRuleDefinitionSelector());
+                    promises.push(loadCustomerRuleDefinitionSelector());
+                    promises.push(loadsupplierRuleDefinitionSelector());
                     return utilsService.waitMultiplePromises(promises);
                 };
                 api.getData = function () {
                     var cdrImportTechnicalSettingData =
                     {
-                        RuleDefinitionGuid: ruleDefinitionReadyApi.getSelectedIds()
+                        CustomerRuleDefinitionGuid: customerRuleDefinitionReadyApi.getSelectedIds(),
+                        SupplierRuleDefinitionGuid: supplierRuleDefinitionReadyApi.getSelectedIds(),
                     };
                     var obj = {
                         $type: "TOne.WhS.BusinessEntity.Entities.CDRImportTechnicalSettings, TOne.WhS.BusinessEntity.Entities",
@@ -60,19 +70,34 @@ app.directive('vrWhsBeCdrimportTechnicalSettingsEditor', ['UtilsService', 'VRUIU
                     ctrl.onReady(api);
             }
 
-            function loadRuleDefinitionSelector() {
-                var ruleDefinitionSelectorLoadDeferred = utilsService.createPromiseDeferred();
+            function loadCustomerRuleDefinitionSelector() {
+                var customerRuleDefinitionSelectorLoadDeferred = utilsService.createPromiseDeferred();
                 whSBeCdrImportTechnicalSettingsService.getRuleDefinitionType().then(function (response) {
-                    ruleDefinitionReadyPromiseDeferred.promise.then(function () {
+                    customerRuleDefinitionReadyPromiseDeferred.promise.then(function () {
                         var selectorPayload = { filter: { RuleTypeId: response } };
                         if (ruleDefinitionEntity != undefined) {
-                            selectorPayload.selectedIds = ruleDefinitionEntity.CdrImportTechnicalSettingData.RuleDefinitionGuid;
+                            selectorPayload.selectedIds = ruleDefinitionEntity.CdrImportTechnicalSettingData.CustomerRuleDefinitionGuid;
                         }
-                        vruiUtilsService.callDirectiveLoad(ruleDefinitionReadyApi, selectorPayload, ruleDefinitionSelectorLoadDeferred);
+                        vruiUtilsService.callDirectiveLoad(customerRuleDefinitionReadyApi, selectorPayload, customerRuleDefinitionSelectorLoadDeferred);
                     }
                     );
                 });
-                return ruleDefinitionSelectorLoadDeferred.promise;
+                return customerRuleDefinitionSelectorLoadDeferred.promise;
+            }
+
+            function loadsupplierRuleDefinitionSelector() {
+                var supplierRuleDefinitionSelectorLoadDeferred = utilsService.createPromiseDeferred();
+                whSBeCdrImportTechnicalSettingsService.getRuleDefinitionType().then(function (response) {
+                    supplierRuleDefinitionReadyPromiseDeferred.promise.then(function () {
+                        var selectorPayload = { filter: { RuleTypeId: response } };
+                        if (ruleDefinitionEntity != undefined) {
+                            selectorPayload.selectedIds = ruleDefinitionEntity.CdrImportTechnicalSettingData.SupplierRuleDefinitionGuid;
+                        }
+                        vruiUtilsService.callDirectiveLoad(supplierRuleDefinitionReadyApi, selectorPayload, supplierRuleDefinitionSelectorLoadDeferred);
+                    }
+                    );
+                });
+                return supplierRuleDefinitionSelectorLoadDeferred.promise;
             }
         }
         return directiveDefinitionObject;
