@@ -173,6 +173,7 @@
     <!--<add key="RoutingDBDataFileDirectory" value=""/>--><!--RoutingDBDataFileDirectory key will override the SQL default directory if needed-->
     <!--<add key="RoutingDBLogFileDirectory" value=""/>--><!--RoutingDBLogFileDirectory key will override the SQL default directory if needed-->
     <!--<add key="Routing_TOneV1" value="false"/>--><!--Routing_TOneV1 key if set to true will be used to build only current TOne route and route option tables-->
+    <!--<add key="Routing_TOne_Testing" value ="true"/>--><!--Routing_TOne_Testing key will let the process add additional fields (Like executed rule Id) to route and routeoption tables in current system in order to output verifications. Moreover, it will not build any indexes on those tables-->
     <add key="TOneV1RoutingDBConnStringKey" value="TOneV1RoutingDBConnString"/>
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="StateBackupDatabase" value="TOneV2_StateBackup"/>
