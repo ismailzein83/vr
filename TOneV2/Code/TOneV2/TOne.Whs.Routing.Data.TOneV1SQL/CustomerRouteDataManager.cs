@@ -156,12 +156,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                     if (Routing_TOne_Testing)
                     {
                         customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
-                            supplierServiceFlag, priority, 0, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0, option.ExecutedRuleId);
+                            supplierServiceFlag, priority, 1, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0, option.ExecutedRuleId);
                     }
                     else
                     {
                         customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
-                            supplierServiceFlag, priority, 0, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0);
+                            supplierServiceFlag, priority, 1, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0);
                     }
                 }
             }
