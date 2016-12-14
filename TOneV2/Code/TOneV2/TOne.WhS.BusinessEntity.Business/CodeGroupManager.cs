@@ -30,6 +30,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
 
+        /// <summary>
+        /// For each code group 'cg', we will get all countries having code groups which the code group 'cg' starts with
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, HashSet<int>> GetCGsParentCountries()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCGsParentCountries",
@@ -42,21 +46,12 @@ namespace TOne.WhS.BusinessEntity.Business
                    {
                        HashSet<int> parentCountries = new HashSet<int>();
                        string code = codeGroup.Value.Code;
-                       
-                       while (code.Length > 0)
-                       {
-                           var matchedCodeGroups = allCodeGroups.FindAllRecords(itm => string.Compare(itm.Value.Code, code, true) == 0 && itm.Value.CountryId != codeGroup.Value.CountryId);
-                           if (matchedCodeGroups != null && matchedCodeGroups.Count() > 0)
-                           {
-                               foreach (KeyValuePair<int, CodeGroup> matchedCodeGroup in matchedCodeGroups)
-                               {
-                                   parentCountries.Add(matchedCodeGroup.Value.CountryId);
-                               }
-                           }
-                           code = code.Substring(0, code.Length - 1);
-                       }
-                       if (parentCountries.Count > 0)
-                           result.Add(codeGroup.Value.Code, parentCountries);
+
+                       var matchedCodeGroups = allCodeGroups.FindAllRecords(itm => codeGroup.Value.Code.StartsWith(itm.Value.Code, true, System.Globalization.CultureInfo.InvariantCulture)
+                                                                                && itm.Value.CountryId != codeGroup.Value.CountryId);
+
+                       if (matchedCodeGroups != null && matchedCodeGroups.Count() > 0)
+                           result.Add(codeGroup.Value.Code, matchedCodeGroups.Select(itm => itm.Value.CountryId).ToHashSet());
                    }
 
                    return result;

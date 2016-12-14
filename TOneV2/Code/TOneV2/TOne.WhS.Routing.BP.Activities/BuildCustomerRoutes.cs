@@ -48,10 +48,10 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
 
-        public Dictionary<int, List<int>> CustomerCountries { get; set; }
+        public Dictionary<int, HashSet<int>> CustomerCountries { get; set; }
 
         public BuildCustomerRoutesContext(CodeMatches codeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture,
-            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, List<int>> customerCountries)
+            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries)
         {
             this.SaleCodeMatches = codeMatches.SaleCodeMatches;
             this.SupplierCodeMatches = codeMatches.SupplierCodeMatches;
@@ -101,7 +101,7 @@ namespace TOne.WhS.Routing.BP.Activities
             List<CustomerRoute> switchesInProcessRoutes = new List<CustomerRoute>();
             RouteBuilder builder = new RouteBuilder(RoutingProcessType.CustomerRoute);
 
-            Dictionary<int, List<int>> customerCountries = new Dictionary<int, List<int>>();
+            Dictionary<int, HashSet<int>> customerCountries = new Dictionary<int, HashSet<int>>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {

@@ -23,6 +23,6 @@ namespace TOne.WhS.Routing.Entities
 
         IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; }
 
-        Dictionary<int, List<int>> CustomerCountries { get; set; }
+        Dictionary<int, HashSet<int>> CustomerCountries { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace TOne.WhS.Routing.Business
 
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
 
-            HashSet<int> routeCodeParentCountyIds = codeGroupeManager.GetCGsParentCountries().GetRecord(codeGroup.Code);
+            HashSet<int> countryIdsHavingParentCode = codeGroupeManager.GetCGsParentCountries().GetRecord(codeGroup.Code);
 
             List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
 
@@ -53,11 +53,13 @@ namespace TOne.WhS.Routing.Business
                 RouteRuleManager routeRuleManager = new RouteRuleManager();
                 foreach (var saleCodeMatch in context.SaleCodeMatches)
                 {
+                    HashSet<int> soldCustomers = new HashSet<int>();
                     List<CustomerZoneDetail> matchCustomerZoneDetails = null;
                     if (context.CustomerZoneDetails != null && context.CustomerZoneDetails.TryGetValue(saleCodeMatch.SaleZoneId, out matchCustomerZoneDetails))
                     {
                         foreach (var customerZoneDetail in matchCustomerZoneDetails)
                         {
+                            soldCustomers.Add(customerZoneDetail.CustomerId);
                             var routeRuleTarget = new RouteRuleTarget
                             {
                                 CustomerId = customerZoneDetail.CustomerId,
@@ -85,24 +87,15 @@ namespace TOne.WhS.Routing.Business
                                 throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId, saleCodeMatch.SaleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
                         }
                     }
-                    if (routeCodeParentCountyIds == null || routeCodeParentCountyIds.Count == 0)
-                        continue;
 
-                    if (matchCustomerZoneDetails == null)
+                    if (countryIdsHavingParentCode != null && countryIdsHavingParentCode.Count > 0 && soldCustomers.Count != context.ActiveRoutingCustomerInfos.Count())
                     {
                         foreach (RoutingCustomerInfo routingCustomerInfo in context.ActiveRoutingCustomerInfos)
                         {
-                            CheckAndAddIfParentCountryIsSold(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, routeCodeParentCountyIds, routeCode, saleCodeMatch);
-                        }
-                    }
-                    else if (matchCustomerZoneDetails.Count != context.ActiveRoutingCustomerInfos.Count())
-                    {
-                        foreach (RoutingCustomerInfo routingCustomerInfo in context.ActiveRoutingCustomerInfos)
-                        {
-                            if (matchCustomerZoneDetails.FindRecord(itm => itm.CustomerId == routingCustomerInfo.CustomerId) != null)
+                            if (soldCustomers.Contains(routingCustomerInfo.CustomerId))
                                 continue;
 
-                            CheckAndAddIfParentCountryIsSold(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, routeCodeParentCountyIds, routeCode, saleCodeMatch);
+                            CheckAndAddIfParentCountryIsSold(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleCodeMatch);
                         }
                     }
                 }
@@ -112,25 +105,18 @@ namespace TOne.WhS.Routing.Business
         }
 
         private void CheckAndAddIfParentCountryIsSold(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager,
-            List<CustomerRoute> customerRoutes, HashSet<int> routeCodeParentCountyIds, string routeCode, SaleCodeMatch saleCodeMatch)
+            List<CustomerRoute> customerRoutes, HashSet<int> countryIdsHavingParentCode, string routeCode, SaleCodeMatch saleCodeMatch)
         {
-            List<int> soldCountries;
-            if (!context.CustomerCountries.TryGetValue(customerId, out soldCountries))
+            HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
             {
                 var customerCountryIds = customerCountryManager.GetCustomerCountryIds(customerId, context.EntitiesEffectiveOn, context.EntitiesEffectiveInFuture);
-                if (customerCountryIds != null)
-                {
-                    soldCountries = customerCountryIds.ToList();
-                    context.CustomerCountries.Add(customerId, soldCountries);
-                }
-                else
-                    context.CustomerCountries.Add(customerId, null);
-            }
+                return customerCountryIds != null ? customerCountryIds.ToHashSet() : null;
+            });
 
             if (soldCountries == null)
                 return;
 
-            if (soldCountries.Any(routeCodeParentCountyIds.Contains))
+            if (countryIdsHavingParentCode.Any(soldCountries.Contains))
             {
                 customerRoutes.Add(new CustomerRoute() { Code = routeCode, CorrespondentType = CorrespondentType.Other, CustomerId = customerId, SaleZoneId = saleCodeMatch.SaleZoneId });
             }
