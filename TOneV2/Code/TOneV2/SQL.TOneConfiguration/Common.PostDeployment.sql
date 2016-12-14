@@ -29,7 +29,6 @@ as (select * from (values
 ('VRCommon/City/GetFilteredCities','VRCommon_City: View'),
 ('VRCommon/City/UpdateCity','VRCommon_City: Edit'),
 
-('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_System_Log: View'),
 ('VRCommon/LogEntry/GetFilteredLogs','VRCommon_System_Log: View'),
 
 ('VRCommon/Settings/GetFilteredSettings','VRCommon_Settings:View'),
@@ -133,7 +132,7 @@ set nocount on;
 ('4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712','Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/RateType/GetFilteredRateTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,30),
 
 ('C8272FEA-32E8-4C3B-949A-50090DB82981','Settings','Settings','#/view/Common/Views/Settings/SettingsManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/Settings/GetFilteredSettings',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,10),
-('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs','#/view/Common/Views/MasterLog/MasterLogManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,15),
+
 ('40A3247C-375A-4FE3-8E5E-8370D086F8FA','Mail Templates','Mail Templates','#/view/Common/Views/VRMail/VRMailMessageTemplateManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','VRCommon/VRMailMessageTemplate/GetFilteredMailMessageTemplates',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,20),
 
 ('CFCF02C6-0C70-443D-A91E-B8D291F5263E','Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,30),
