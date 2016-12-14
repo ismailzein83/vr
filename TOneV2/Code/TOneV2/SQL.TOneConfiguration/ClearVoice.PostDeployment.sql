@@ -74,6 +74,8 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
+('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":[{"PermissionName":"VRCommon_System_Log: View","Directive":"vr-log-entry-search","Title":"General"},{"PermissionName":"VRCommon_UserActionAudit: View","Directive":"vr-useractionaudit-search","Title":"User Action Audit"}]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,15),
+
 ('b5b041a1-f037-42fc-9750-7802b9610aab','Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_CLITester/Profile/GetFilteredProfiles',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,10),
 ('7ce99d52-af55-4111-b59b-e6de6995b84f','Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,11),
 ('d845620f-f6c1-49c6-a521-0629ea8d2c66','History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement','21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,12),
