@@ -15,7 +15,7 @@ namespace Retail.BusinessEntity.Business
         }
         public override string AccountSelector
         {
-            get { return "retail-be-account-selector"; }
+            get { return "retail-be-extendedsettings-account-selector"; }
         }
         public override IAccountManager GetAccountManager()
         {
