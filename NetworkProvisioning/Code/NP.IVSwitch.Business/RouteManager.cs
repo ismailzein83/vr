@@ -106,6 +106,7 @@ namespace NP.IVSwitch.Business
             int? tempRouteId = dataManager.Insert(routeItem.Entity);
             if (tempRouteId.HasValue)
             {
+                routeId = tempRouteId.Value;
                 RouteCarrierAccountExtension routesExtendedSettings =
                     carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(
                         routeItem.CarrierAccountId) ??
@@ -124,7 +125,6 @@ namespace NP.IVSwitch.Business
 
                 carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId,
                     routesExtendedSettings);
-                routeId = tempRouteId.Value;
                 return true;
             }
             return false;
