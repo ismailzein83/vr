@@ -135,7 +135,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			return salePriceList.CurrencyId;
 		}
 
-		public RatesByZone GetOverlappedCustomerZoneRates(int customerId, IEnumerable<long> zoneIds, DateTime effectiveOn)
+		public OverlappedRatesByZone GetCustomerOverlappedRatesByZone(int customerId, IEnumerable<long> zoneIds, DateTime effectiveOn)
 		{
 			if (zoneIds == null || zoneIds.Count() == 0)
 				return null;
@@ -146,37 +146,37 @@ namespace TOne.WhS.BusinessEntity.Business
 			if (rates == null || rates.Count() == 0)
 				return null;
 
-			var ratesByZone = new RatesByZone();
+			var overlappedRatesByZone = new OverlappedRatesByZone();
 
 			foreach (SaleRate rate in rates)
 			{
-				ZoneRates zoneRates;
+				ZoneOverlappedRates zoneOverlappedRates;
 
-				if (!ratesByZone.TryGetValue(rate.ZoneId, out zoneRates))
+				if (!overlappedRatesByZone.TryGetValue(rate.ZoneId, out zoneOverlappedRates))
 				{
-					zoneRates = new ZoneRates()
+					zoneOverlappedRates = new ZoneOverlappedRates()
 					{
 						NormalRates = new List<SaleRate>(),
-						OtherRatesByType = new VRDictionary<int, List<SaleRate>>()
+						OtherRatesByType = new Dictionary<int, List<SaleRate>>()
 					};
-					ratesByZone.Add(rate.ZoneId, zoneRates);
+					overlappedRatesByZone.Add(rate.ZoneId, zoneOverlappedRates);
 				}
 
 				if (rate.RateTypeId.HasValue)
 				{
 					List<SaleRate> otherRatesByType;
-					if (!zoneRates.OtherRatesByType.TryGetValue(rate.RateTypeId.Value, out otherRatesByType))
+					if (!zoneOverlappedRates.OtherRatesByType.TryGetValue(rate.RateTypeId.Value, out otherRatesByType))
 					{
 						otherRatesByType = new List<SaleRate>();
-						zoneRates.OtherRatesByType.Add(rate.RateTypeId.Value, otherRatesByType);
+						zoneOverlappedRates.OtherRatesByType.Add(rate.RateTypeId.Value, otherRatesByType);
 					}
 					otherRatesByType.Add(rate);
 				}
 				else
-					zoneRates.NormalRates.Add(rate);
+					zoneOverlappedRates.NormalRates.Add(rate);
 			}
 
-			return ratesByZone;
+			return overlappedRatesByZone;
 		}
 
 		#endregion

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-	public class InheritedRatesByZone : Vanrise.Common.VRDictionary<long, ZoneInheritedRates>
+	public class InheritedRatesByZone : Dictionary<long, ZoneInheritedRates>
 	{
 		public DateTime GetMinimumBED()
 		{
@@ -25,7 +25,7 @@ namespace TOne.WhS.Sales.Entities
 
 		public ZoneInheritedRate NormalRate { get; set; }
 
-		public Vanrise.Common.VRDictionary<int, ZoneInheritedRate> OtherRatesByType { get; set; }
+		public Dictionary<int, ZoneInheritedRate> OtherRatesByType { get; set; }
 
 		public DateTime GetMinimumBED()
 		{
@@ -48,10 +48,5 @@ namespace TOne.WhS.Sales.Entities
 		public DateTime BED { get; set; }
 
 		public DateTime? EED { get; set; }
-	}
-
-	public class ZonesSoldOn : Vanrise.Common.VRDictionary<long, DateTime>
-	{
-
 	}
 }

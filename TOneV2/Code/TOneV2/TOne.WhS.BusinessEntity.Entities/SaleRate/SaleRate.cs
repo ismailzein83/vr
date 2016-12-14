@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Entities
@@ -58,38 +59,69 @@ namespace TOne.WhS.BusinessEntity.Entities
 		Decrease = 4
 	}
 
-	public class RatesByZone : Vanrise.Common.VRDictionary<long, ZoneRates>
+	public class OverlappedRatesByZone : Dictionary<long, ZoneOverlappedRates>
 	{
 
 	}
 
-	public class ZoneRates
+	public class ZoneOverlappedRates
 	{
 		public List<SaleRate> NormalRates { get; set; }
 
-		public Vanrise.Common.VRDictionary<int, List<SaleRate>> OtherRatesByType { get; set; }
+		public Dictionary<int, List<SaleRate>> OtherRatesByType { get; set; }
 
-		public IEnumerable<SaleRate> GetOverlappedNormalRates(DateTime beginEffectiveDate, DateTime? endEffectiveDate)
+		#region Normal Rate Methods
+
+		public DateTime? GetLastOverlappedNormalRateEED(DateTime inheritedRateBED, DateTime? inheritedRateEED)
+		{
+			IEnumerable<SaleRate> overlappedNormalRates = GetOverlappedNormalRates(inheritedRateBED, inheritedRateEED);
+			return GetLastEED(overlappedNormalRates);
+		}
+
+		public IEnumerable<SaleRate> GetOverlappedNormalRates(DateTime inheritedRateBED, DateTime? inheritedRateEED)
 		{
 			if (NormalRates == null)
 				return null;
-			return NormalRates.FindAllRecords(x => IsOverlapped(x, beginEffectiveDate, endEffectiveDate));
+			return NormalRates.FindAllRecords(x => IsOverlapped(x, inheritedRateBED, inheritedRateEED));
 		}
 
-		public IEnumerable<SaleRate> GetOverlappedOtherRates(int rateTypeId, DateTime beginEffectiveDate, DateTime? endEffectiveDate)
+		#endregion
+
+		#region Other Rate Methods
+
+		public DateTime? GetLastOverlappedOtherRateEED(int rateTypeId, DateTime inheritedRateBED, DateTime? inheritedRateEED)
+		{
+			IEnumerable<SaleRate> overlappedOtherRates = GetOverlappedOtherRates(rateTypeId, inheritedRateBED, inheritedRateEED);
+			return GetLastEED(overlappedOtherRates);
+		}
+
+		public IEnumerable<SaleRate> GetOverlappedOtherRates(int rateTypeId, DateTime inheritedRateBED, DateTime? inheritedRateEED)
 		{
 			if (OtherRatesByType == null)
 				return null;
 			List<SaleRate> otherRatesByType;
 			if (!OtherRatesByType.TryGetValue(rateTypeId, out otherRatesByType))
 				return null;
-			return otherRatesByType.FindAllRecords(x => IsOverlapped(x, beginEffectiveDate, endEffectiveDate));
+			return otherRatesByType.FindAllRecords(x => IsOverlapped(x, inheritedRateBED, inheritedRateEED));
+		}
+
+		#endregion
+
+		#region Common Methods
+
+		private DateTime? GetLastEED(IEnumerable<SaleRate> overlappedRates)
+		{
+			if (overlappedRates == null || overlappedRates.Count() == 0)
+				return null;
+			return overlappedRates.OrderByDescending(x => x.BED).FirstOrDefault().EED.Value;
 		}
 
 		private bool IsOverlapped(SaleRate saleRate, DateTime beginEffectiveDate, DateTime? endEffectiveDate)
 		{
-			return (endEffectiveDate.VRGreaterThan(saleRate.BED) && saleRate.EED.VRGreaterThan(beginEffectiveDate));
+			return (endEffectiveDate.VRGreaterThan(saleRate.BED) && saleRate.EED > beginEffectiveDate); // Overlapped rates always have an EED
 		}
+
+		#endregion
 	}
 }
 

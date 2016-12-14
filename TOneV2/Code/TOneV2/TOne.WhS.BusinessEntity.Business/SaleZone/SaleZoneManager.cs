@@ -315,6 +315,18 @@ namespace TOne.WhS.BusinessEntity.Business
 			}
 		}
 
+		public DateTime GetCustomerInheritedZoneRateBED(int? rateTypeId, ZoneOverlappedRates zoneOverlappedRates, DateTime inheritedRateBED, DateTime? inheritedRateEED, DateTime soldOn)
+		{
+			DateTime? lastOverlappedRateEED = null;
+			if (zoneOverlappedRates != null)
+			{
+				lastOverlappedRateEED = (rateTypeId.HasValue) ?
+					zoneOverlappedRates.GetLastOverlappedOtherRateEED(rateTypeId.Value, inheritedRateBED, inheritedRateEED) :
+					zoneOverlappedRates.GetLastOverlappedNormalRateEED(inheritedRateBED, inheritedRateEED);
+			}
+			return (lastOverlappedRateEED.HasValue) ? Vanrise.Common.Utilities.Max(inheritedRateBED, lastOverlappedRateEED.Value) : Vanrise.Common.Utilities.Max(inheritedRateBED, soldOn);
+		}
+
 		#endregion
 
 		#region Private Members
