@@ -20,7 +20,7 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Caching Runtime service used as centralized memory cache for business entities. nbOfRuntimeInstances depended on available resources-->
-      <runtimeServiceGroup name="groupA2" nbOfRuntimeInstances="2">
+      <runtimeServiceGroup name="groupA2" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="CachingRuntimeService" type="Vanrise.Caching.Runtime.CachingRuntimeService,Vanrise.Caching.Runtime" interval="00:00:01"></runtimeService>
         </runtimeServices>
