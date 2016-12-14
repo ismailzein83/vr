@@ -19,6 +19,7 @@ namespace Vanrise.Common.Business
         public string RetrieveData(string serializedRequest)
         {
             IBigDataRequest request = Vanrise.Common.Serializer.Deserialize(serializedRequest) as IBigDataRequest;
+            Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(request.UserId);
             return request.RetrieveData();
         }
     }

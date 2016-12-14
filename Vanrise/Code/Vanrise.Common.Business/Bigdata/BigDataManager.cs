@@ -137,6 +137,12 @@ namespace Vanrise.Common.Business
                             Input = input,
                             RequestHandler = requestHandler
                         };
+                        int? userId;
+                        if (!Vanrise.Security.Entities.ContextFactory.GetContext().TryGetLoggedInUserId(out userId))
+                            throw new Exception("Logged in user is not available");
+                        if (!userId.HasValue)
+                            throw new NullReferenceException("userId");
+                        request.UserId = userId.Value;
                         serializedResult = client.RetrieveData(Vanrise.Common.Serializer.Serialize(request));
                     });
                 if (isServiceCallSucceeded)
@@ -247,6 +253,8 @@ namespace Vanrise.Common.Business
 
         private class BigDataRequest<T,Q,R> : IBigDataRequest
         {
+            public int UserId { get; set; }
+
             public Entities.DataRetrievalInput<T> Input { get; set; }
 
             public BigDataRequestHandler<T, Q, R> RequestHandler { get; set; }

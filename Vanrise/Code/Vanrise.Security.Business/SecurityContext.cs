@@ -11,14 +11,17 @@ namespace Vanrise.Security.Business
 {
     public class SecurityContext : ISecurityContext
     {
-        #region Constants
+        #region Constants/Local Variables
 
         public const string SECURITY_TOKEN_NAME = "Auth-Token";
         public const string SECURITY_ENCRYPTION_SECRETE_KEY = "EncryptionSecretKey";
 
+        [ThreadStatic]
+        static int? s_currentContextUserId;
+
         #endregion
 
-        #region Signleton
+        #region Singleton
 
         private static SecurityContext _current;
 
@@ -41,21 +44,32 @@ namespace Vanrise.Security.Business
 
         public int GetLoggedInUserId()
         {
-            return this.GetSecurityToken().UserId;
+            if (s_currentContextUserId.HasValue)
+                return s_currentContextUserId.Value;
+            else
+                return this.GetSecurityToken().UserId;
         }
 
         public bool TryGetLoggedInUserId(out int? userId)
         {
-            SecurityToken securityToken;
-            if (TryGetSecurityToken(out securityToken))
+            if (s_currentContextUserId.HasValue)
             {
-                userId = securityToken.UserId;
+                userId = s_currentContextUserId.Value;
                 return true;
             }
             else
             {
-                userId = null;
-                return false;
+                SecurityToken securityToken;
+                if (TryGetSecurityToken(out securityToken))
+                {
+                    userId = securityToken.UserId;
+                    return true;
+                }
+                else
+                {
+                    userId = null;
+                    return false;
+                }
             }
         }
         
@@ -75,6 +89,14 @@ namespace Vanrise.Security.Business
         {
             SecurityManager manager = new SecurityManager();
             return manager.HasPermissionToActions(systemActionNames, GetLoggedInUserId());
+        }
+
+        public void SetContextUserId(int userId)
+        {
+            SecurityToken securityToken;
+            if (TryGetSecurityToken(out securityToken))
+                throw new InvalidOperationException("Current context has already a security token. It is not possible to set User Id");
+            s_currentContextUserId = userId;
         }
 
         #endregion

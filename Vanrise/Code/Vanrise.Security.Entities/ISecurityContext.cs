@@ -15,5 +15,7 @@ namespace Vanrise.Security.Entities
         bool IsAllowed(string requiredPermissions);
 
         bool HasPermissionToActions(string systemActionNames);
+
+        void SetContextUserId(int userId);
     }
 }

@@ -8,6 +8,8 @@ namespace Vanrise.Common.Business
 {
     internal interface IBigDataRequest
     {
+        int UserId { get; }
+
         string RetrieveData();
     }
 }
