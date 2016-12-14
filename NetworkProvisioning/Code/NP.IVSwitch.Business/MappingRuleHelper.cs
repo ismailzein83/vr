@@ -17,11 +17,11 @@ namespace NP.IVSwitch.Business
     {
         private int CarrierId { get; set; }
         private int CriteriaCarrierId { get; set; }
-        private int TypeId { get; set; }
+        private long TypeId { get; set; }
         private string CarrierName { get; set; }
         private Guid DefinitionId { get; set; }
 
-        public MappingRuleHelper(int carrierId, int criteriaCarrierId, int typeId, string carrierName)
+        public MappingRuleHelper(int carrierId, int criteriaCarrierId, long typeId, string carrierName)
         {
             CarrierId = carrierId;
             CriteriaCarrierId = criteriaCarrierId;
@@ -34,10 +34,17 @@ namespace NP.IVSwitch.Business
         {
             return GenerateRule();
         }
-        private bool AreSettingMatched(MappingRuleSettings originalSettings, int carrierId)
+        private bool AreSettingMatched(MappingRule originalRule, int carrierId)
         {
-            long originalCarrierId = (long)originalSettings.Value;
-            return originalCarrierId == carrierId;
+            long originalCarrierId = (long)originalRule.Settings.Value;
+            if (originalCarrierId != carrierId) return false;
+            foreach (var elt in originalRule.Criteria.FieldsValues)
+            {
+                if (!elt.Key.Equals("Type")) continue;
+                var value = elt.Value.GetValues();
+                return value.Contains(TypeId);
+            }
+            return false;
         }
         private bool GenerateRule()
         {
@@ -61,13 +68,13 @@ namespace NP.IVSwitch.Business
             foreach (var rule in mappingRules)
             {
                 MappingRule mappingRule = (MappingRule)rule;
-                if (AreSettingMatched(mappingRule.Settings, CarrierId))
+                if (AreSettingMatched(mappingRule, CarrierId))
                     return UpdateRule(mappingRule, CriteriaCarrierId.ToString());
             }
-            return CreateRule(tempRule, CriteriaCarrierId, TypeId);
+            return CreateRule(tempRule, CriteriaCarrierId);
 
         }
-        private bool CreateRule(MappingRule originRule, int endpointId, int carrierType)
+        private bool CreateRule(MappingRule originRule, int endpointId)
         {
             MappingRule createdRule = originRule;
             var tempSiwtch = Helper.GetSwitch();
@@ -79,7 +86,7 @@ namespace NP.IVSwitch.Business
 
             createdRule.Criteria.FieldsValues["Type"] = new StaticValues
             {
-                Values = ((new List<long> { carrierType }).Cast<Object>()).ToList()
+                Values = ((new List<long> { TypeId }).Cast<Object>()).ToList()
             };
             createdRule.Criteria.FieldsValues["Switch"] = new StaticValues
             {
@@ -100,18 +107,13 @@ namespace NP.IVSwitch.Business
 
         private bool UpdateRule(MappingRule rule, string endpointid)
         {
-            List<string> carrierList = new List<string>();
-            carrierList.Add(endpointid);
+            List<string> carrierList = new List<string> { endpointid };
             foreach (var elt in rule.Criteria.FieldsValues)
             {
-                if (elt.Key.Equals("Carrier"))
-                {
-                    var value = elt.Value.GetValues();
-                    foreach (var eltValue in value)
-                    {
-                        carrierList.Add((string)eltValue);
-                    }
-                }
+                if (!elt.Key.Equals("Carrier")) continue;
+
+                var value = elt.Value.GetValues();
+                carrierList.AddRange(value.Cast<string>());
             }
             rule.Criteria.FieldsValues["Carrier"] = new StaticValues
             {

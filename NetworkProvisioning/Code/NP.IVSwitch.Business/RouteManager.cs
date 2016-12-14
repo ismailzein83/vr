@@ -73,6 +73,7 @@ namespace NP.IVSwitch.Business
         {
             routeId = 0;
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            string carrierName = carrierAccountManager.GetCarrierAccountName(routeItem.CarrierAccountId);
             var profileId = carrierAccountManager.GetCarrierProfileId(routeItem.CarrierAccountId);
 
             if (!profileId.HasValue) return false;
@@ -125,6 +126,7 @@ namespace NP.IVSwitch.Business
 
                 carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId,
                     routesExtendedSettings);
+                GenerateRule(routeItem.CarrierAccountId, routeId, carrierName);
                 return true;
             }
             return false;
@@ -188,7 +190,11 @@ namespace NP.IVSwitch.Business
         #endregion
 
         #region Private Methods
-
+        private void GenerateRule(int carrierId, int routeId, string carrierName)
+        {
+            MappingRuleHelper mappingRuleHelper = new MappingRuleHelper(carrierId, routeId, 2, carrierName);
+            mappingRuleHelper.BuildRule();
+        }
         Dictionary<int, Route> GetCachedRoutes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoute",
