@@ -31,10 +31,12 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountsInfo")]
-        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter)
+        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter, string serializedFilter)
         {
-            return _manager.GetAccountsInfo(nameFilter);
+            AccountFilter accountFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<AccountFilter>(serializedFilter) : null;
+            return _manager.GetAccountsInfo(nameFilter, accountFilter);
         }
+
 
         [HttpPost]
         [Route("GetAccountsInfoByIds")]

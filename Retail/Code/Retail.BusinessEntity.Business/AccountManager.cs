@@ -59,18 +59,30 @@ namespace Retail.BusinessEntity.Business
             return account != null ? AccountDetailMapper(account) : null;
         }
 
-        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter)
-        {
-            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
-            IEnumerable<Account> accounts = GetCachedAccounts().Values;
 
-            Func<Account, bool> accountFilter = (account) =>
-             {
-                 if (nameFilterLower != null && !account.Name.ToLower().Contains(nameFilterLower))
-                     return false;
-                 return true;
-             };
-            return accounts.MapRecords(AccountInfoMapper, accountFilter).OrderBy(x => x.Name);
+        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter, AccountFilter filter)
+        {
+            IEnumerable<Account> allAccounts = GetCachedAccounts().Values;
+            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
+            Func<Account, bool> filterFunc = null;
+            if (filter != null)
+            {
+                filterFunc = (account) =>
+                {
+                    if (filter.Filters != null)
+                    {
+                        var context = new AccountFilterContext() {  Account = account };
+                        if (filter.Filters.Any(x => x.IsExcluded(context)))
+                            return false;
+                    }
+
+                    if (nameFilterLower != null && !account.Name.ToLower().Contains(nameFilterLower))
+                        return false;
+
+                    return true;
+                };
+            }
+            return allAccounts.MapRecords(AccountInfoMapper, filterFunc).OrderBy(x => x.Name);
         }
 
         public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
@@ -244,6 +256,11 @@ namespace Retail.BusinessEntity.Business
         public bool IsAccountMatchWithFilterGroup(Account account, RecordFilterGroup filterGroup)
         {
             return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(account));
+        }
+
+        public int GetAccountDuePeriod(long accountId)
+        {
+            return 0;
         }
 
         #region Get Account Editor Runtime

@@ -32,12 +32,12 @@ namespace Retail.Invoice.Business
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            throw new NotImplementedException();
+            return new RetailSubscriberInvoiceGenerator();
         }
 
         public override InvoicePartnerSettings GetPartnerSettings()
         {
-            throw new NotImplementedException();
+            return new RetailSubscriberPartnerSettings();
         }
     }
 }

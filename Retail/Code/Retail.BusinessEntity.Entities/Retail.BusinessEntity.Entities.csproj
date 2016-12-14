@@ -79,6 +79,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="Package\PackageGroup.cs" />
     <Compile Include="Package\PackageGroupSettings.cs" />
     <Compile Include="UISettings\AccountGridDefinition.cs" />

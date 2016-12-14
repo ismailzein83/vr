@@ -51,9 +51,10 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateAccount']));
         }
 
-        function GetAccountsInfo(nameFilter) {
+        function GetAccountsInfo(nameFilter, serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfo"), {
-                nameFilter: nameFilter
+                nameFilter: nameFilter,
+                serializedFilter: serializedFilter
             });
         }
 

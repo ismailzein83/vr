@@ -1,0 +1,187 @@
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
+using Retail.Invoice.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
+using Vanrise.Entities;
+using Vanrise.Invoice.Entities;
+
+namespace Retail.Invoice.Business
+{
+    public class RetailSubscriberInvoiceGenerator : InvoiceGenerator
+    {
+        public override void GenerateInvoice(IInvoiceGenerationContext context)
+        {
+            List<string> listMeasures = new List<string> { "TotalAmount" };
+            List<string> listDimensions = new List<string> { "ServiceTypeId" };
+
+            string dimensionName = "ServiceTypeId";
+
+            AccountManager accountManager = new AccountManager();
+            IAccountPayment accountPayment;
+            long accountId = Convert.ToInt32(context.PartnerId);
+            if (!accountManager.HasAccountPayment(accountId, true, out accountPayment))
+                return;
+
+            int currencyId = accountPayment.CurrencyId;
+            Account account = accountManager.GetAccount(accountId);
+
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, accountId, context.FromDate, context.ToDate, currencyId);
+            if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
+            {
+                throw new InvoiceGeneratorException("No data available between the selected period.");
+            }
+
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId);
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
+
+            RetailSubscriberInvoiceDetails retailSubscriberInvoiceDetails = BuilRetailSubscriberInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate);
+
+            context.Invoice = new GeneratedInvoice
+            {
+                InvoiceDetails = retailSubscriberInvoiceDetails,
+                InvoiceItemSets = generatedInvoiceItemSets,
+            };
+
+        }
+
+        private RetailSubscriberInvoiceDetails BuilRetailSubscriberInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, DateTime fromDate, DateTime toDate)
+        {
+            RetailSubscriberInvoiceDetails retailSubscriberInvoiceDetails = null;
+            if (itemSetNamesDic != null)
+            {
+                List<InvoiceBillingRecord> invoiceBillingRecordList = null;
+                if (itemSetNamesDic.TryGetValue("GroupedByServiceType", out invoiceBillingRecordList))
+                {
+                    retailSubscriberInvoiceDetails = new RetailSubscriberInvoiceDetails();
+                    foreach (var invoiceBillingRecord in invoiceBillingRecordList)
+                    {
+                        retailSubscriberInvoiceDetails.TotalAmount += invoiceBillingRecord.Amount;
+                    }
+                };
+            }
+            return retailSubscriberInvoiceDetails;
+        }
+
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic)
+        {
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
+            if (itemSetNamesDic != null)
+            {
+                foreach (var itemSet in itemSetNamesDic)
+                {
+                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                    generatedInvoiceItemSet.SetName = itemSet.Key;
+                    var itemSetValues = itemSet.Value;
+                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
+                    foreach (var item in itemSetValues)
+                    {
+                        RetailSubscriberInvoiceItemDetails subscriberInvoiceItemDetails = new RetailSubscriberInvoiceItemDetails()
+                        {
+                            Amount = item.Amount,
+                        };
+                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                        {
+                            Details = subscriberInvoiceItemDetails,
+                            Name = "GroupedByServiceType"
+                        });
+                    }
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+
+                }
+            }
+            return generatedInvoiceItemSets;
+        }
+
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int currencyId)
+        {
+            AnalyticManager analyticManager = new AnalyticManager();
+            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            {
+                Query = new AnalyticQuery()
+                {
+                    DimensionFields = listDimensions,
+                    MeasureFields = listMeasures,
+                    TableId = 8,
+                    FromTime = fromDate,
+                    ToTime = toDate,
+                    ParentDimensions = new List<string>(),
+                    Filters = new List<DimensionFilter>(),
+                    CurrencyId = currencyId
+                },
+                SortByColumnName = "DimensionValues[0].Name"
+            };
+            DimensionFilter dimensionFilter = new DimensionFilter()
+            {
+                Dimension = dimensionFilterName,
+                FilterValues = new List<object> { dimensionFilterValue }
+            };
+            analyticQuery.Query.Filters.Add(dimensionFilter);
+            return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+        }
+
+        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId)
+        {
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
+            if (analyticRecords != null)
+            {
+                foreach (var analyticRecord in analyticRecords)
+                {
+
+                    #region ReadDataFromAnalyticResult
+                    DimensionValue serviceTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+
+                    MeasureValue totalAmount = GetMeasureValue(analyticRecord, "TotalAmount");
+
+                    #endregion
+                    InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
+                    {
+                        ServiceTypeId = Convert.ToInt32(serviceTypeId.Value),
+                        Amount = Convert.ToDecimal(totalAmount.Value ?? 0.0),
+                    };
+                    AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
+                }
+            }
+            return itemSetNamesDic;
+        }
+
+        private void AddItemToDictionary<T>(Dictionary<T, List<InvoiceBillingRecord>> itemSetNamesDic, T key, InvoiceBillingRecord invoiceBillingRecord)
+        {
+            if (itemSetNamesDic == null)
+                itemSetNamesDic = new Dictionary<T, List<InvoiceBillingRecord>>();
+            List<InvoiceBillingRecord> invoiceBillingRecordList = null;
+
+            if (!itemSetNamesDic.TryGetValue(key, out invoiceBillingRecordList))
+            {
+                invoiceBillingRecordList = new List<InvoiceBillingRecord>();
+                invoiceBillingRecordList.Add(invoiceBillingRecord);
+                itemSetNamesDic.Add(key, invoiceBillingRecordList);
+            }
+            else
+            {
+                invoiceBillingRecordList.Add(invoiceBillingRecord);
+                itemSetNamesDic[key] = invoiceBillingRecordList;
+            }
+        }
+
+        private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
+        {
+            MeasureValue measureValue;
+            analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
+            return measureValue;
+        }
+
+        public class InvoiceBillingRecord
+        {
+            public decimal Amount { get; set; }
+            public long ServiceTypeId { get; set; }
+        }
+
+    }
+}

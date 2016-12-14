@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.Invoice.Entities
 {
-    public class RetailSubscriberInvoiceDetails
+    public class RetailSubscriberInvoiceItemDetails
     {
-        public Decimal TotalAmount { get; set; }
+        public decimal Amount { get; set; }
     }
 }

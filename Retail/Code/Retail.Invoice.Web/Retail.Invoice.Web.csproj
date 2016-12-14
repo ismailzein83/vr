@@ -124,10 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Invoice\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Invoice\Directives\FinancialAccount\retail-invoice-financialaccount-selector.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Retail_Invoice\Directives\" />
     <Folder Include="Retail_Invoice\Services\APIServices\" />
     <Folder Include="Retail_Invoice\Views\" />
   </ItemGroup>

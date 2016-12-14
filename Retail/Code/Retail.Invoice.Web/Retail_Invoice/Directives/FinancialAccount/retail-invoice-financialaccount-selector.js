@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUtilsService',
-    function (Retail_BE_AccountAPIService, VRUIUtilsService) {
+app.directive('retailInvoiceFinancialaccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUtilsService', 'UtilsService',
+function (Retail_BE_AccountAPIService, VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -45,18 +45,12 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
             }
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                   + '<vr-select on-ready="ctrl.onSelectorReady"'
-                   + '  selectedvalues="ctrl.selectedvalues"'
-                   + '  onselectionchanged="ctrl.onselectionchanged"'
-                   + '  datasource="ctrl.search"'
-                   + '  datavaluefield="AccountId"'
-                   + '  datatextfield="Name"'
-                   + '  ' + multipleselection
+                   + '<retail-be-account-selector on-ready="ctrl.onSelectorReady"'
+                   + ' ' + multipleselection
                    + '  isrequired="ctrl.isrequired"'
                    + '  label="' + label + '"'
-                   + ' entityName="' + label + '"'
                    + '  >'
-                   + '</vr-select>'
+                   + '</retail-be-account-selector>'
                    + '</vr-columns>';
         }
 
@@ -64,7 +58,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
 
             this.initializeController = initializeController;
 
-            var filter = {};
+            var filter;
             var selectorAPI;
 
             function initializeController() {
@@ -76,12 +70,6 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                         ctrl.onReady(defineAPI());
                     }
                 };
-
-
-                ctrl.search = function (nameFilter) {
-                    return Retail_BE_AccountAPIService.GetAccountsInfo(nameFilter, filter);
-                };
-
             }
 
             function defineAPI() {
@@ -90,11 +78,10 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                 api.load = function (payload) {
 
                     var selectedIds;
-
+                    var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                     if (payload != undefined) {
-                        selectedIds = payload.selectedIds;
-                        filter = payload.filter;
+                        selectedIds = payload.selectedIds
                     }
 
                     if (selectedIds != undefined) {
@@ -104,7 +91,12 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                         else
                             selectedAccountIds.push(selectedIds);
 
-                        return GetAccountsInfo(attrs, ctrl, selectedAccountIds);
+                        var financailAccountsPayload = {
+                            selectedIds: selectedIds,
+                            filter: getAccountSelectorFilter
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(selectorAPI, financailAccountsPayload, accountSelectorLoadDeferred);
                     }
 
 
@@ -114,6 +106,10 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                     return VRUIUtilsService.getIdSelectedIds('AccountId', attrs, ctrl);
                 };
 
+                api.getData = function () {
+                    selectorAPI.getSelectedIds();
+                }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
 
@@ -121,15 +117,19 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
 
             }
 
-            function GetAccountsInfo(attrs, ctrl, selectedIds) {
-                ctrl.datasource = [];
-                return Retail_BE_AccountAPIService.GetAccountsInfoByIds(selectedIds).then(function (response) {
-                    angular.forEach(response, function (item) {
-                        ctrl.datasource.push(item);
-                    });
-                    if (selectedIds != undefined)
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'AccountId', attrs, ctrl);
-                });
+            function getAccountSelectorFilter() {
+                var filter = {};
+
+                filter.Filters = [];
+
+                var financialAccounts = {
+                    $type: 'Retail.Invoice.Business.InvoiceEnabledAccountFilter, Retail.Invoice.Business',
+                    test: "Test"
+                };
+                filter.Filters.push(financialAccounts);
+
+
+                return filter;
             }
         }
 
