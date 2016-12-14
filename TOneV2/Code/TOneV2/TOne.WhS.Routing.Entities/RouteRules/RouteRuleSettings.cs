@@ -6,7 +6,7 @@ namespace TOne.WhS.Routing.Entities
     public enum CorrespondentType { Other, SpecialRequest, Block, LCR, Override }
     public abstract class RouteRuleSettings
     {
-        public abstract Guid ConfigId { get;}
+        public abstract Guid ConfigId { get; }
 
         public virtual bool UseOrderedExecution
         {
@@ -38,5 +38,10 @@ namespace TOne.WhS.Routing.Entities
         public abstract void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options);
 
         public virtual CorrespondentType CorrespondentType { get { return Entities.CorrespondentType.Other; } }
+
+        public virtual int? GetMaxNumberOfOptions(ISaleEntityRouteRuleExecutionContext context)
+        {
+            return context.NumberOfOptions;
+        }
     }
 }

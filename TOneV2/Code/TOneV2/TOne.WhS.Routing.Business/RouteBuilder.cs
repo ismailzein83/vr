@@ -197,11 +197,10 @@ namespace TOne.WhS.Routing.Business
             where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
-            var maxNumberOfOptions = configManager.GetCustomerRouteBuildNumberOfOptions();
             bool addBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
 
             SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions, addBlockedOptions);
-            routeRuleExecutionContext.NumberOfOptions = maxNumberOfOptions;
+            routeRuleExecutionContext.NumberOfOptions = configManager.GetCustomerRouteBuildNumberOfOptions();
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
             routeRuleExecutionContext.SaleZoneServiceList = customerZoneDetail.SaleZoneServiceIds;//used for service matching
@@ -214,6 +213,8 @@ namespace TOne.WhS.Routing.Business
             route.Rate = customerZoneDetail.EffectiveRateValue;
             route.SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds;
             route.CorrespondentType = routeRule.CorrespondentType;
+
+            int? maxNumberOfOptions = routeRule.Settings.GetMaxNumberOfOptions(routeRuleExecutionContext);
 
             if (routeRule.Settings.UseOrderedExecution)
             {
@@ -249,7 +250,7 @@ namespace TOne.WhS.Routing.Business
                                 continue;
                             }
 
-                            if (maxNumberOfOptions == optionsAdded)
+                            if (maxNumberOfOptions.HasValue && maxNumberOfOptions == optionsAdded)
                                 break;
                         }
                     }

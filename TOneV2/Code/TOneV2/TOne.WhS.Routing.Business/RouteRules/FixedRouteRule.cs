@@ -41,6 +41,10 @@ namespace TOne.WhS.Routing.Business
 
 
         #region SaleEntity Execution
+        public override int? GetMaxNumberOfOptions(ISaleEntityRouteRuleExecutionContext context)
+        {
+            return null;
+        }
 
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
