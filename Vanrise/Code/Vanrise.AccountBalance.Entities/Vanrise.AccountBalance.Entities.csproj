@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountStatement\AccountStatementViewSettings.cs" />
     <Compile Include="AccountUsage\AccountUsage.cs" />
     <Compile Include="AccountUsage\AccountUsageInfo.cs" />
     <Compile Include="AccountUsage\AccountUsagePeriodSettings.cs" />
@@ -106,6 +107,10 @@
     <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
       <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
       <Name>Vanrise.Rules</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
