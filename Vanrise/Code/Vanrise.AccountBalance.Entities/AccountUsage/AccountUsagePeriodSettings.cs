@@ -8,6 +8,7 @@ namespace Vanrise.AccountBalance.Entities
 {
     public abstract class AccountUsagePeriodSettings
     {
+        public abstract Guid ConfigId { get; }
         public abstract void EvaluatePeriod(IAccountUsagePeriodEvaluationContext context);
     }
 

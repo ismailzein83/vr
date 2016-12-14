@@ -26,59 +26,6 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_GetById]", LiveBalanceMapper, accountTypeId, accountId);
         }
-        public bool UpdateLiveBalanceFromBillingTransaction(Guid accountTypeId, long accountId, List<long> billingTransactionIds, decimal amount)
-        {
-            var options = new TransactionOptions
-            {
-                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-                Timeout = TransactionManager.DefaultTimeout
-            };
-
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
-            {
-                ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_UpdateFromBillingTransaction]", accountTypeId, accountId, amount);
-
-                BillingTransactionDataManager dataManager = new BillingTransactionDataManager();
-                dataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
-                scope.Complete();
-            }
-            return true;
-        }
-        public bool UpdateLiveBalanceFromBalanceUsageQueue(Guid accountTypeId, IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId)
-        {
-            var options = new TransactionOptions
-            {
-                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-            };
-
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
-            {
-                DataTable liveBalanceToUpdate = GetLiveBalancesTable();
-                foreach (var item in groupedResult)
-                {
-                    DataRow dr = liveBalanceToUpdate.NewRow();
-                    FillLiveBalanceRow(dr, item);
-                    liveBalanceToUpdate.Rows.Add(dr);
-                }
-                liveBalanceToUpdate.EndLoadData();
-                if (liveBalanceToUpdate.Rows.Count > 0)
-                    ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateFromBalanceUsageQueue]",
-                           (cmd) =>
-                           {
-                               var dtPrm = new System.Data.SqlClient.SqlParameter("@AccountTypeId", SqlDbType.UniqueIdentifier);
-                               dtPrm.Value = accountTypeId;
-                               cmd.Parameters.Add(dtPrm);
-
-                               dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceTable", SqlDbType.Structured);
-                               dtPrm.Value = liveBalanceToUpdate;
-                               cmd.Parameters.Add(dtPrm);
-                           });
-                BalanceUsageQueueDataManager dataManager = new BalanceUsageQueueDataManager();
-                dataManager.DeleteBalanceUsageQueue(balanceUsageQueueId);
-                scope.Complete();
-            }
-            return true;
-        }
         public IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo(Guid accountTypeId)
         {
             return GetItemsSP("[VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]", LiveBalanceAccountInfoMapper, accountTypeId);
@@ -93,10 +40,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                        onLiveBalanceReady(LiveBalanceMapper(reader));
                    }
                });
-        }
-        public bool TryAddLiveBalance(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
-        {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_InsertIfNotExists]", accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance) > 0);
         }
         public bool ResetInitialAndUsageBalance(Guid accountTypeId)
         {
@@ -217,9 +160,45 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
         {
-            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance);
+            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper,accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance);
         }
+        public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate)
+        {
+            var options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+            };
 
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+
+                UpdateLiveBalancetoUpdate(liveBalnacesToUpdate);
+                AccountUsageDataManager accountUsageDataManager = new SQL.AccountUsageDataManager();
+                accountUsageDataManager.UpdateAccountUsageFromBalanceUsageQueue(accountsUsageToUpdate);
+                BalanceUsageQueueDataManager dataManager = new BalanceUsageQueueDataManager();
+                dataManager.DeleteBalanceUsageQueue(balanceUsageQueueId);
+                scope.Complete();
+            }
+            return true;
+
+        }
+        public bool UpdateLiveBalanceFromBillingTransaction(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, List<long> billingTransactionIds)
+        {
+            var options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                UpdateLiveBalancetoUpdate(liveBalnacesToUpdate);
+                BillingTransactionDataManager dataManager = new BillingTransactionDataManager();
+                dataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
+                scope.Complete();
+            }
+            return true;
+        }
         #endregion
 
         #region Mappers
@@ -240,7 +219,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                 LiveBalanceActiveAlertThresholds = GetActiveAlertThresholds(reader["ActiveAlertThresholds"] as string)
             };
         }
-
         List<decimal> GetActiveAlertThresholds(string activeAlertThresholds)
         {
             if (string.IsNullOrEmpty(activeAlertThresholds))
@@ -260,18 +238,47 @@ namespace Vanrise.AccountBalance.Data.SQL
         #endregion
 
         #region Private Methods
-        private void FillLiveBalanceRow(DataRow dr, UsageBalanceUpdate usageBalanceUpdate)
+
+        private bool UpdateLiveBalancetoUpdate(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate)
         {
-            dr["AccountID"] = usageBalanceUpdate.AccountId;
-            dr["UpdateValue"] = usageBalanceUpdate.Value;
+            DataTable liveBalanceToUpdate = GetLiveBalanceTable();
+            foreach (var item in liveBalnacesToUpdate)
+            {
+                DataRow dr = liveBalanceToUpdate.NewRow();
+                FillLiveBalanceTableRow(dr, item);
+                liveBalanceToUpdate.Rows.Add(dr);
+            }
+            liveBalanceToUpdate.EndLoadData();
+            if (liveBalanceToUpdate.Rows.Count > 0)
+                ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateBalance]",
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@BalanceTable", SqlDbType.Structured);
+                           dtPrm.Value = liveBalanceToUpdate;
+                           cmd.Parameters.Add(dtPrm);
+                       });
+            return true;
         }
-        private DataTable GetLiveBalancesTable()
+        private DataTable GetLiveBalanceTable()
         {
             DataTable dt = new DataTable(LiveBalance_TABLENAME);
-            dt.Columns.Add("AccountID", typeof(long));
+            dt.Columns.Add("ID", typeof(long));
             dt.Columns.Add("UpdateValue", typeof(decimal));
             return dt;
         }
+        private void FillLiveBalanceTableRow(DataRow dr, LiveBalanceToUpdate liveBalanceToUpdate)
+        {
+            dr["ID"] = liveBalanceToUpdate.LiveBalanceId;
+            dr["UpdateValue"] = liveBalanceToUpdate.Value;
+        }
+
+
+
+
+
+
+
+
         private void FillLiveBalanceThresholdRow(DataRow dr, BalanceAccountThreshold balanceAccountThreshold)
         {
             dr["AccountID"] = balanceAccountThreshold.AccountId;
@@ -340,5 +347,11 @@ namespace Vanrise.AccountBalance.Data.SQL
 
 
 
+
+
+
+
+
+     
     }
 }

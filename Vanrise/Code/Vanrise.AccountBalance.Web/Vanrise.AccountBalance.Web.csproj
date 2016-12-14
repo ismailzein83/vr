@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountUsageController.cs" />
     <Compile Include="Controllers\BalanceAccountTypeController.cs" />
     <Compile Include="Controllers\BalanceAlertController.cs" />
     <Compile Include="Controllers\BillingTransactionTypeController.cs" />
@@ -149,6 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_AccountBalance\Directives\AccountType\vr-accountbalance-accounttype-extendedsettings.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\Templates\DailyAccountUsagePeriodTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\vr-accountusage-periodsettings-daily.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountUsage\vr-accountusage-periodsettings.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAccountType\vr-accountbalance-accounttype-selector.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\Constants\ModuleConfig.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransactionType\vr-accountbalance-billingtransactiontype-selector.js" />
@@ -170,6 +174,7 @@
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Normal\vr-accountbalance-updateprocess-manual.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertchecker-process.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertthreshold-updateprocess.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\AccountUsageAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BalanceAlertAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BalanceAccountTypeAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BillingTransactionTypeAPIService.js" />

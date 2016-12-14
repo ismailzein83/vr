@@ -10,6 +10,7 @@ namespace Vanrise.AccountBalance.Entities
     {
         static BalanceUsageDetail()
         {
+            new Entities.UsageBalanceUpdate();
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BalanceUsageDetail), "UsageBalanceUpdates");
         }
         public List<UsageBalanceUpdate> UsageBalanceUpdates { get; set; }

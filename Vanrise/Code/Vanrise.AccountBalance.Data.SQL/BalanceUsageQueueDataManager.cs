@@ -16,6 +16,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         public BalanceUsageQueueDataManager()
             : base(GetConnectionStringName("VR_AccountBalance_TransactionDBConnStringKey", "VR_AccountBalance_TransactionDBConnString"))
         {
+             new BalanceUsageDetail();
         }
 
 

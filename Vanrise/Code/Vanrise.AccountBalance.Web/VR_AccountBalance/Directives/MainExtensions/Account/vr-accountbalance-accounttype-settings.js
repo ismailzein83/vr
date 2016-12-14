@@ -24,6 +24,9 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
             var accountTypeSettingsAPI;
             var accountTypeSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var accountUsagePeriodSettingsAPI;
+            var accountUsagePeriodSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
             var billingTransactionTypeSelectorAPI;
             var billingTransactionTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -36,7 +39,10 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     accountTypeSettingsAPI = api;
                     accountTypeSettingsReadyDeferred.resolve();
                 };
-
+                $scope.scopeModel.accountUsagePeriodSettingsReady = function (api) {
+                    accountUsagePeriodSettingsAPI = api;
+                    accountUsagePeriodSettingsReadyDeferred.resolve();
+                };
                 $scope.scopeModel.BillingTransactionTypeSelectorReady = function (api) {
                     billingTransactionTypeSelectorAPI = api;
                     billingTransactionTypeReadyDeferred.resolve();
@@ -52,7 +58,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                         accountTypeEntity = payload.componentType;
                     }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadBillingTransactionTypeSelector, loadAccountTypeSettings, loadAllControls]).catch(function (error) {
+                    return UtilsService.waitMultipleAsyncOperations([loadBillingTransactionTypeSelector, loadAccountTypeSettings, loadAllControls, loadAccountUsagePeriodSettings]).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
                         $scope.scopeModel.isLoading = false;
@@ -75,7 +81,8 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     $type: "Vanrise.AccountBalance.Entities.AccountTypeSettings,  Vanrise.AccountBalance.Entities",
                     ExtendedSettings: accountTypeSettingsAPI.getData(),
                     UsageTransactionTypeId: billingTransactionTypeSelectorAPI.getSelectedIds(),
-                    BalancePeriodSettings: getBalancePeriodSettings()
+                    BalancePeriodSettings: getBalancePeriodSettings(),
+                    AccountUsagePeriodSettings: accountUsagePeriodSettingsAPI.getData()
                 };
             }
 
@@ -97,7 +104,18 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                 });
                 return accountTypeSettingsDeferred.promises;
             }
+            function loadAccountUsagePeriodSettings() {
+                var accountUsagePeriodSettingsDeferred = UtilsService.createPromiseDeferred();
+                accountUsagePeriodSettingsReadyDeferred.promise.then(function () {
+                    var accountUsagePeriodSettingsPayload;
+                    if (accountTypeEntity != undefined) {
+                        accountUsagePeriodSettingsPayload = { periodSettingsEntity: accountTypeEntity.Settings.AccountUsagePeriodSettings };
 
+                    }
+                    VRUIUtilsService.callDirectiveLoad(accountUsagePeriodSettingsAPI, accountUsagePeriodSettingsPayload, accountUsagePeriodSettingsDeferred);
+                });
+                return accountUsagePeriodSettingsDeferred.promises;
+            }
             function loadBillingTransactionTypeSelector() {
                 var billingTransactionTypeLoadDeferred = UtilsService.createPromiseDeferred();
                 billingTransactionTypeReadyDeferred.promise.then(function () {

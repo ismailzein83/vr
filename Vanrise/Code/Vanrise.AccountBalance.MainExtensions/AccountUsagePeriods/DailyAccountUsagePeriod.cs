@@ -15,5 +15,10 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountUsagePeriods
             context.PeriodStart = periodStart;
             context.PeriodEnd = periodStart.AddDays(1);
         }
+
+        public override Guid ConfigId
+        {
+            get { return new Guid("F0A06C27-2850-40ED-BF6C-F0E65BD3894D"); }
+        }
     }
 }

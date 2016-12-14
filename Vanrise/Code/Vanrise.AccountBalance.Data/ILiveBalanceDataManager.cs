@@ -11,11 +11,10 @@ namespace Vanrise.AccountBalance.Data
     {
         LiveBalance GetLiveBalance(Guid accountTypeId, long accountId);
         void GetLiveBalanceAccounts(Action<LiveBalance> onLiveBalanceReady);
-        bool UpdateLiveBalanceFromBillingTransaction(Guid accountTypeId, long accountId, List<long> billingTransactionIds, decimal amount);
-        bool UpdateLiveBalanceFromBalanceUsageQueue(Guid accountTypeId, IEnumerable<UsageBalanceUpdate> groupedResult, long balanceUsageQueueId);
+        bool UpdateLiveBalanceFromBillingTransaction(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, List<long> billingTransactionIds);
         IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo(Guid accountTypeId);
-        bool TryAddLiveBalance(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance);
         LiveBalanceAccountInfo TryAddLiveBalanceAndGet(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance);
+        bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate);
         bool UpdateLiveBalanceThreshold(Guid accountTypeId, List<BalanceAccountThreshold> balanceAccountsThresholds);
         void UpdateLiveBalanceAlertRule(List<AccountBalanceAlertRule> accountBalanceAlertRules);
         void UpdateBalanceRuleInfos(List<LiveBalanceNextThresholdUpdateEntity> updateEntities);
