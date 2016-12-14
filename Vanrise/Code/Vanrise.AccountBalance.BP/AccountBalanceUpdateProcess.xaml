@@ -153,7 +153,14 @@
         </vaba1:ProcessPendingUsageUpdates.PreviousActivityStatus>
       </vaba1:ProcessPendingUsageUpdates>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwWPgOdAQ4CAQFFBVAtAgFWUQV3EAIBKXgFmwEQAgECTQtNgwECAV1IC0haAgFXVQdlKgIBQGYHdi0CASp5B4kBJwIBFooBB5oBKgIBA1gNWFwCAU9iDWJ+AgFIXQ1dlQECAUFzDXN2AgE5bg1ulQECATJpDWl9AgErfA18XAIBI4YBDYYBgAECAR2BAQ2BAYwBAgEXlwENlwF4AgEQkgENkgGMAQIBCo0BDY0BfQIBBA==</sads:DebugSymbol.Symbol>
+    <vaba1:InsertBillingTransactionFromAccountUsageAndUpdate sap2010:WorkflowViewState.IdRef="InsertBillingTransactionFromAccountUsageAndUpdate_1">
+      <vaba1:InsertBillingTransactionFromAccountUsageAndUpdate.AccountTypeId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountTypeId</mca:CSharpValue>
+        </InArgument>
+      </vaba1:InsertBillingTransactionFromAccountUsageAndUpdate.AccountTypeId>
+    </vaba1:InsertBillingTransactionFromAccountUsageAndUpdate>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwYPgOkAQ4CAQFFBVAtAgFdUQV3EAIBMHgFmwEQAgEJnAEFogE/AgECTQtNgwECAWRIC0haAgFeVQdlKgIBR2YHdi0CATF5B4kBJwIBHYoBB5oBKgIBCp8BC58BWgIBA1gNWFwCAVZiDWJ+AgFPXQ1dlQECAUhzDXN2AgFAbg1ulQECATlpDWl9AgEyfA18XAIBKoYBDYYBgAECASSBAQ2BAYwBAgEelwENlwF4AgEXkgENkgGMAQIBEY0BDY0BfQIBCw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -164,14 +171,15 @@
       <sap2010:ViewStateData Id="LoadPendingUsageUpdates_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessPendingUsageUpdates_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,398">
+      <sap2010:ViewStateData Id="InsertBillingTransactionFromAccountUsageAndUpdate_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,460">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1" sap:VirtualizedContainerService.HintSize="616,478" />
+      <sap2010:ViewStateData Id="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1" sap:VirtualizedContainerService.HintSize="616,540" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -28,9 +28,9 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByPeriod]", AccountUsageInfoMapper, accountTypeId, periodStart);
         }
-        public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, long accountId, DateTime periodStart, DateTime periodEnd, decimal usageBalance)
+        public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, long accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance,string billingTransactionNote)
         {
-            return GetItemSP("[VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]", AccountUsageInfoMapper, accountTypeId, accountId, periodStart, periodEnd, usageBalance);
+            return GetItemSP("[VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]", AccountUsageInfoMapper, accountTypeId, accountId, periodStart, periodEnd, currencyId, usageBalance, billingTransactionNote);
         }
         public bool UpdateAccountUsageFromBalanceUsageQueue(IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate)
         {

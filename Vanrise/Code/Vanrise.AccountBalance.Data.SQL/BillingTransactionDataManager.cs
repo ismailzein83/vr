@@ -69,7 +69,10 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_UpdateClosingPeriodId]", closingPeriodID, accountTypeId) > 0);
         }
-
+        public bool InsertBillingTransactionFromAccountUsageAndUpdate(Guid accountTypeId,Guid transactionTypeId)
+        {
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_InsertFromAccountUsageAndUpdate]", accountTypeId, transactionTypeId) > 0);
+        }
         #endregion
 
         #region Mappers

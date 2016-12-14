@@ -96,8 +96,8 @@ namespace Vanrise.AccountBalance.Business
                     UsageTime = usageBalanceUpdate.EffectiveOn
                 };
                 _accountUsagePeriodSettings.EvaluatePeriod(context);
-                var accountUsageInfo = GetAccountUsageInfo(usageBalanceUpdate.AccountId, context.PeriodStart, context.PeriodEnd);
-                GroupAccountUsageToUpdateById(accountsUsageToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId,usageBalanceUpdate.Value, accountUsageInfo);
+                var accountUsageInfo = GetAccountUsageInfo(usageBalanceUpdate.AccountId, context.PeriodStart, context.PeriodEnd,liveBalanceInfo.CurrencyId);
+                GroupAccountUsageToUpdateById(accountsUsageToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId, liveBalanceInfo.CurrencyId,usageBalanceUpdate.Value, accountUsageInfo);
             }
             if (liveBalnacesToUpdate.Count > 0 || accountsUsageToUpdate.Count>0)
             {
@@ -133,7 +133,7 @@ namespace Vanrise.AccountBalance.Business
             return liveBalanceDataManager.TryAddLiveBalanceAndGet(accountId, _accountTypeId, 0, currencyId, 0, 0);
 
         }
-        private AccountUsageInfo GetAccountUsageInfo(long accountId, DateTime periodStart, DateTime periodEnd)
+        private AccountUsageInfo GetAccountUsageInfo(long accountId, DateTime periodStart, DateTime periodEnd,int currencyId)
         {
             var accountsUsageByPeriod = AccountsUsageByPeriod.GetOrCreateItem(periodStart, () =>
             {
@@ -143,16 +143,17 @@ namespace Vanrise.AccountBalance.Business
 
           return accountsUsageByPeriod.GetOrCreateItem(accountId,()=>
             {
-                return AddAccountUsageInfo(accountId, periodStart, periodEnd);
+                return AddAccountUsageInfo(accountId, periodStart, periodEnd, currencyId);
             });
         }
-        private AccountUsageInfo AddAccountUsageInfo(long accountId, DateTime periodStart, DateTime periodEnd)
+        private AccountUsageInfo AddAccountUsageInfo(long accountId, DateTime periodStart, DateTime periodEnd, int currencyId)
         {
-            return TryAddAccountUsageAndGet(accountId, periodStart, periodEnd);
+            return TryAddAccountUsageAndGet(accountId, periodStart, periodEnd, currencyId);
         }
-        private AccountUsageInfo TryAddAccountUsageAndGet(long accountId, DateTime periodStart,DateTime periodEnd)
+        private AccountUsageInfo TryAddAccountUsageAndGet(long accountId, DateTime periodStart,DateTime periodEnd,int currencyId)
         {
-            return accountUsageDataManager.TryAddAccountUsageAndGet(_accountTypeId, accountId, periodStart, periodEnd, 0);
+            string billingTransactionNote = string.Format("Usage From {0:yyyy-MM-dd HH:mm} to {1:yyyy-MM-dd HH:mm}", periodStart, periodEnd);
+            return accountUsageDataManager.TryAddAccountUsageAndGet(_accountTypeId, accountId, periodStart, periodEnd,currencyId, 0,billingTransactionNote);
         }
         private void GroupLiveBalanceToUpdateById(Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate, DateTime effectiveOn, int currencyId, decimal value, LiveBalanceAccountInfo liveBalanceInfo)
         {
@@ -162,24 +163,14 @@ namespace Vanrise.AccountBalance.Business
                 });
             liveBalanceToUpdate.Value += currencyId != liveBalanceInfo.CurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(value, currencyId, liveBalanceInfo.CurrencyId, effectiveOn) : value;
         }
-        private void GroupAccountUsageToUpdateById(Dictionary<long, AccountUsageToUpdate> accountsUsageToUpdate, DateTime effectiveOn,  int currencyId,decimal value, AccountUsageInfo accountUsageInfo)
+        private void GroupAccountUsageToUpdateById(Dictionary<long, AccountUsageToUpdate> accountsUsageToUpdate, DateTime effectiveOn, int usageCurrencyId, int liveBalanceCurrencyId, decimal value, AccountUsageInfo accountUsageInfo)
         {
 
-            AccountUsageToUpdate accountUsageToUpdate;
-            if (!accountsUsageToUpdate.TryGetValue(accountUsageInfo.AccountUsageId, out accountUsageToUpdate))
+            AccountUsageToUpdate accountUsageToUpdate = accountsUsageToUpdate.GetOrCreateItem(accountUsageInfo.AccountUsageId, () => new AccountUsageToUpdate
             {
-                accountsUsageToUpdate.Add(accountUsageInfo.AccountUsageId, new AccountUsageToUpdate
-                {
-                    AccountUsageId = accountUsageInfo.AccountUsageId,
-                    Value = value
-                });
-            }
-            else
-            {
-                accountUsageToUpdate.Value += value;
-                accountsUsageToUpdate[accountUsageInfo.AccountUsageId] = accountUsageToUpdate;
-            }
-
+                AccountUsageId = accountUsageInfo.AccountUsageId
+            });
+            accountUsageToUpdate.Value += usageCurrencyId != liveBalanceCurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(value, usageCurrencyId, liveBalanceCurrencyId, effectiveOn) : value;
         }
         private decimal ConvertValueToCurrency(decimal amount, int fromCurrencyId, int currencyId, DateTime effectiveOn)
         {

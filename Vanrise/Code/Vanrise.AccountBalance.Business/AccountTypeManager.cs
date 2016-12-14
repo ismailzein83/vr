@@ -31,6 +31,11 @@ namespace Vanrise.AccountBalance
             return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings>().MapRecords(AccountTypeInfoMapper);
         }
 
+        public Guid GetUsageTransactionTypeId(Guid accountTypeId)
+        {
+            var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            return accountTypeSettings.UsageTransactionTypeId;
+        }
         public BalancePeriodSettings GetBalancePeriodSettings(Guid accountTypeId)
         {
             var accountTypeSettings = GetAccountTypeSettings(accountTypeId);

@@ -76,6 +76,7 @@
     <Compile Include="AccountBalanceUpdate\LoadPendingUsageUpdates.cs" />
     <Compile Include="AccountBalanceUpdate\ProcessNewBillingTransactions.cs" />
     <Compile Include="AccountBalanceUpdate\ProcessPendingUsageUpdates.cs" />
+    <Compile Include="AccountBalanceUpdate\InsertBillingTransactionFromAccountUsageAndUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\UpdateNextAlertThresholds.cs" />
   </ItemGroup>
