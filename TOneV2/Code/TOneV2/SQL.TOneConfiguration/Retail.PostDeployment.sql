@@ -72,8 +72,8 @@ set nocount on;;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[Allow
 END
 
 GO
---delete useless views from TOne product such 'My Scheduler Service', 'Organizational Charts', 'Alert Rule Types', 'Alert Rule'
-delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','DCF8CA21-852C-41B9-9101-6990E545509D','05234A49-DFA3-44C3-A552-80E6C793A67A', 'FF5E429A-CFF0-4095-8AD0-987FD3CAD502')
+--delete useless views from TOne product such 'My Scheduler Service', 'Organizational Charts'
+delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','DCF8CA21-852C-41B9-9101-6990E545509D')
 --delete views for WhS_BusinessEntity
 delete from [sec].[View] where [Id] in ('EDB49F55-E9E7-4779-9C77-44E89571A792','893CDCE3-209D-4F45-838B-7D732BF14562','4DC9F2F1-2D59-4402-899F-AFD8C6EB113A', '4BDF2F4E-4CFB-487F-84F4-B5B7E74B8DC5')
 
