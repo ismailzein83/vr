@@ -1,5 +1,6 @@
 ﻿using NP.IVSwitch.Data;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.IVSwitch;
 
 namespace NP.IVSwitch.Business
@@ -8,6 +9,12 @@ namespace NP.IVSwitch.Business
     {
         public static void SetSwitchConfig(IDataManager dataManager)
         {
+            var tempSwitch = GetSwitch();
+            if (tempSwitch != null)
+                dataManager.IvSwitchSync = (BuiltInIVSwitchSWSync)tempSwitch.Settings.RouteSynchronizer;
+        }
+        public static Switch GetSwitch()
+        {
             SwitchManager switchManager = new SwitchManager();
             var switches = switchManager.GetAllSwitches();
             foreach (var switchelt in switches)
@@ -15,11 +22,10 @@ namespace NP.IVSwitch.Business
                 BuiltInIVSwitchSWSync routeSync = (BuiltInIVSwitchSWSync)switchelt.Settings.RouteSynchronizer;
                 if (routeSync != null)
                 {
-                    dataManager.IvSwitchSync = routeSync;
-                    break;
+                    return switchelt;
                 }
             }
-
+            return null;
         }
     }
 }

@@ -124,6 +124,7 @@ namespace NP.IVSwitch.Business
 
                 carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId,
                     routesExtendedSettings);
+                routeId = tempRouteId.Value;
                 return true;
             }
             return false;

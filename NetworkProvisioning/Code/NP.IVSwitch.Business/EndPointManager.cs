@@ -9,6 +9,11 @@ using Vanrise.Common;
 using NP.IVSwitch.Data;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.GenericData.Transformation;
+using Vanrise.GenericData.Transformation.Entities;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
+using Vanrise.GenericData.Business;
 
 namespace NP.IVSwitch.Business
 {
@@ -114,6 +119,7 @@ namespace NP.IVSwitch.Business
                 endPointsExtendedSettings.UserEndPointInfo.Add(endPointInfo);
             }
             carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(endPointItem.CarrierAccountId, endPointsExtendedSettings);
+            GenerateRule(endPointItem.CarrierAccountId, endPointId, carrierAccountName);
             return true;
         }
         private int CreateNewAccount(int profileId)
@@ -124,7 +130,9 @@ namespace NP.IVSwitch.Business
             Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, true);
             int accountId = accountManager.AddAccount(account);
 
-            AccountCarrierProfileExtension extendedSettings = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId);
+            AccountCarrierProfileExtension extendedSettings =
+                carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId) ??
+                new AccountCarrierProfileExtension();
             extendedSettings.CustomerAccountId = accountId;
 
             carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(profileId, extendedSettings);
@@ -168,6 +176,11 @@ namespace NP.IVSwitch.Business
 
         #region Private Methods
 
+        private void GenerateRule(int carrierId, int endPointId, string carrierName)
+        {
+            MappingRuleHelper mappingRuleHelper = new MappingRuleHelper(carrierId, endPointId, 1, carrierName);
+            mappingRuleHelper.BuildRule();
+        }
         Dictionary<int, EndPoint> GetCachedEndPoint()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetEndPoint",
