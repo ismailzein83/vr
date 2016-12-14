@@ -48,6 +48,18 @@ namespace Retail.BusinessEntity.Business
             return cachedAccounts.GetRecord(accountId);
         }
 
+        public Account GetSelfOrParentAccountOfType(long accountId, Guid accountTypeId)
+        {
+            var account = GetAccount(accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("Account '{0}'", account));
+            if (account.TypeId == accountTypeId)
+                return account;
+            else if (account.ParentAccountId.HasValue)
+                return GetSelfOrParentAccountOfType(account.ParentAccountId.Value, accountTypeId);
+            else return null;
+        }
+
         public Account GetAccountBySourceId(string sourceId)
         {
             Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId();
