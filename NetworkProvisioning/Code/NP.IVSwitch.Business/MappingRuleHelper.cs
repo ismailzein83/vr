@@ -13,138 +13,126 @@ using Vanrise.GenericData.Transformation.Entities;
 
 namespace NP.IVSwitch.Business
 {
+    public enum MappingRuleCarrierType
+    {
+        Customer = 1,
+        Supplier = 2
+    }
     public class MappingRuleHelper
     {
-        private int CarrierId { get; set; }
-        private int CriteriaCarrierId { get; set; }
-        private long TypeId { get; set; }
-        private string CarrierName { get; set; }
-        private Guid DefinitionId { get; set; }
+        private int _carrierId;
+        private int _criteriaCarrierId;
+        private MappingRuleCarrierType _carrierType;
+        private string _carrierName;
+        private Guid _definitionId;
 
         public MappingRuleHelper(int carrierId, int criteriaCarrierId, long typeId, string carrierName)
         {
-            CarrierId = carrierId;
-            CriteriaCarrierId = criteriaCarrierId;
-            TypeId = typeId;
-            CarrierName = carrierName;
+            _carrierId = carrierId;
+            _criteriaCarrierId = criteriaCarrierId;
+            _carrierType = (MappingRuleCarrierType)typeId;
+            _carrierName = carrierName;
             ConfigManager configManager = new ConfigManager();
-            DefinitionId = configManager.GetCustomerRuleDefinitionId();
+            _definitionId = _carrierType == MappingRuleCarrierType.Customer
+                ? configManager.GetCustomerRuleDefinitionId()
+                : configManager.GetSupplierRuleDefinitionId();
         }
-        public bool BuildRule()
+
+        private bool TryGetMatchingMappingRule(out MappingRule matchedRule)
         {
-            return GenerateRule();
-        }
-        private bool AreSettingMatched(MappingRule originalRule, int carrierId)
-        {
-            long originalCarrierId = (long)originalRule.Settings.Value;
-            if (originalCarrierId != carrierId) return false;
-            foreach (var elt in originalRule.Criteria.FieldsValues)
+            matchedRule = new MappingRule();
+            MappingRuleManager mappingRuleManager = new MappingRuleManager();
+            var genericRules = mappingRuleManager.GetGenericRulesByDefinitionId(_definitionId);
+            foreach (var rule in genericRules)
             {
-                if (!elt.Key.Equals("Type")) continue;
-                var value = elt.Value.GetValues();
-                return value.Contains(TypeId);
+                MappingRule mappingRule = (MappingRule)rule;
+                int carrierAccountId = Convert.ToInt32(mappingRule.Settings.Value);
+                if (carrierAccountId != _carrierId) continue;
+                GenericRuleCriteriaFieldValues criteriaFieldValues;
+                if (mappingRule.Criteria.FieldsValues.TryGetValue("Type", out criteriaFieldValues))
+                {
+                    var typeValue = criteriaFieldValues.GetValues();
+                    if (typeValue.Contains((long)_carrierType))
+                    {
+                        matchedRule = mappingRule;
+                        return true;
+                    }
+                }
             }
             return false;
         }
-        private bool GenerateRule()
+
+        public bool BuildRule()
         {
-            MappingRule tempRule = new MappingRule
+            MappingRule toCompareRule;
+            if (TryGetMatchingMappingRule(out toCompareRule))
+                return UpdateRule(toCompareRule);
+            return CreateRule();
+        }
+        private bool CreateRule()
+        {
+            var tempSiwtch = Helper.GetSwitch();
+            if (tempSiwtch == null) return false;
+            MappingRule createdRule = new MappingRule
             {
                 Settings = new MappingRuleSettings
                 {
-                    Value = CarrierId
+                    Value = _carrierId
                 },
-                DefinitionId = DefinitionId,
+                DefinitionId = _definitionId,
                 Criteria = new GenericRuleCriteria
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
                 },
                 RuleId = 0,
-                Description = CarrierName,
+                Description = _carrierName,
                 BeginEffectiveTime = new DateTime(2000, 1, 1)
             };
-            MappingRuleManager mappingRuleManager = new MappingRuleManager();
-            var mappingRules = mappingRuleManager.GetGenericRulesByDefinitionId(DefinitionId);
-            foreach (var rule in mappingRules)
-            {
-                MappingRule mappingRule = (MappingRule)rule;
-                if (AreSettingMatched(mappingRule, CarrierId))
-                    return UpdateRule(mappingRule, CriteriaCarrierId.ToString());
-            }
-            return CreateRule(tempRule, CriteriaCarrierId);
-
-        }
-        private bool CreateRule(MappingRule originRule, int endpointId)
-        {
-            MappingRule createdRule = originRule;
-            var tempSiwtch = Helper.GetSwitch();
-            if (tempSiwtch == null) return false;
             createdRule.Criteria.FieldsValues["Carrier"] = new StaticValues
             {
-                Values = ((new List<string> { endpointId.ToString() }).Cast<Object>()).ToList()
+                Values = new List<object> { _criteriaCarrierId.ToString() }
             };
 
             createdRule.Criteria.FieldsValues["Type"] = new StaticValues
             {
-                Values = ((new List<long> { TypeId }).Cast<Object>()).ToList()
+                Values = new List<Object> { _carrierType }
             };
             createdRule.Criteria.FieldsValues["Switch"] = new StaticValues
             {
-                Values = ((new List<int> { tempSiwtch.SwitchId }).Cast<Object>()).ToList()
+                Values = new List<object> { tempSiwtch.SwitchId }
             };
-            var output = AddRule(createdRule);
-            switch (output.Result)
-            {
-                case InsertOperationResult.Succeeded:
-                    return true;
-                case InsertOperationResult.Failed:
-                    return false;
-                case InsertOperationResult.SameExists:
-                    return false;
-            }
-            return false;
+            return AddRule(createdRule);
         }
 
-        private bool UpdateRule(MappingRule rule, string endpointid)
+        private bool UpdateRule(MappingRule rule)
         {
-            List<string> carrierList = new List<string> { endpointid };
-            foreach (var elt in rule.Criteria.FieldsValues)
+            List<object> carrierList = new List<object> { _carrierId.ToString() };
+            GenericRuleCriteriaFieldValues criteriaFieldValues;
+            if (rule.Criteria.FieldsValues.TryGetValue("Carrier", out criteriaFieldValues))
             {
-                if (!elt.Key.Equals("Carrier")) continue;
-
-                var value = elt.Value.GetValues();
-                carrierList.AddRange(value.Cast<string>());
+                var value = criteriaFieldValues.GetValues();
+                carrierList.AddRange(value);
             }
             rule.Criteria.FieldsValues["Carrier"] = new StaticValues
             {
-                Values = (carrierList.Cast<Object>()).ToList()
+                Values = carrierList
             };
-            var output = Update(rule);
-            switch (output.Result)
-            {
-                case UpdateOperationResult.Succeeded:
-                    return true;
-                case UpdateOperationResult.Failed:
-                    return false;
-                case UpdateOperationResult.SameExists:
-                    return false;
-            }
-            return false;
+            return Update(rule);
         }
-        private UpdateOperationOutput<GenericRuleDetail> Update(MappingRule rule)
+        private bool Update(MappingRule rule)
         {
-            var manager = GetManager(DefinitionId);
-            return manager.UpdateGenericRule(rule);
+            var manager = GetManager();
+            return manager.TryUpdateGenericRule(rule);
         }
-        private InsertOperationOutput<GenericRuleDetail> AddRule(GenericRule rule)
+        private bool AddRule(GenericRule rule)
         {
-            var manager = GetManager(DefinitionId);
-            return manager.AddGenericRule(rule);
+            var manager = GetManager();
+            return manager.TryAddGenericRule(rule);
         }
-        private IGenericRuleManager GetManager(Guid ruleDefinitionGuid)
+        private IGenericRuleManager GetManager()
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionGuid);
+            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(_definitionId);
 
             GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
             GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);
