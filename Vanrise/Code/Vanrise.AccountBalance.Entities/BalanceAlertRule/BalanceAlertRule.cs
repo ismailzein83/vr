@@ -48,5 +48,6 @@ namespace Vanrise.AccountBalance.Entities
     public class BalanceAlertRuleTypeSettings : VRGenericAlertRuleTypeSettings
     {
         public Guid AccountTypeId { get; set; }
+
     }
 }

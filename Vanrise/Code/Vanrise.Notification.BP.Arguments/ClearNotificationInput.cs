@@ -11,7 +11,7 @@ namespace Vanrise.Notification.BP.Arguments
     {
         public override string GetTitle()
         {
-            throw new NotImplementedException();
+            return "Clear Notification Process";
         }
 
         public Guid NotificationTypeId {get;set;}

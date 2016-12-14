@@ -236,8 +236,16 @@ namespace Vanrise.AccountBalance.Data.SQL
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
                 NextThreshold = GetReaderValue<decimal?>(reader, "NextAlertThreshold"),
                 LastExecutedThreshold = GetReaderValue<decimal?>(reader, "LastExecutedActionThreshold"),
-                ThresholdIndex = GetReaderValue<int?>(reader, "ThresholdActionIndex")
+                ThresholdIndex = GetReaderValue<int?>(reader, "ThresholdActionIndex"),
+                LiveBalanceActiveAlertThresholds = GetActiveAlertThresholds(reader["ActiveAlertThresholds"] as string)
             };
+        }
+
+        List<decimal> GetActiveAlertThresholds(string activeAlertThresholds)
+        {
+            if (string.IsNullOrEmpty(activeAlertThresholds))
+                return null;
+            return new List<decimal>(activeAlertThresholds.Split(',').Select(s => decimal.Parse(s)));
         }
         private LiveBalanceAccountInfo LiveBalanceAccountInfoMapper(IDataReader reader)
         {
@@ -315,6 +323,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             dr["AccountTypeID"] = updateEntity.AccountTypeId;
             dr["AccountID"] = updateEntity.AccountId;
             dr["LastExecutedActionThreshold"] = updateEntity.LastExecutedActionThreshold;
+            dr["ActiveAlertThresholds"] = updateEntity.ActiveAlertThresholds == null ? null : updateEntity.ActiveAlertThresholds.Aggregate("", (i, j) => i + "," + j);
         }
         DataTable GetLastThresholdUpdateTable()
         {
@@ -322,6 +331,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AccountTypeID", typeof(Guid));
             dt.Columns.Add("AccountID", typeof(long));
             dt.Columns.Add("LastExecutedActionThreshold", typeof(decimal));
+            dt.Columns.Add("ActiveAlertThresholds", typeof(string));
             return dt;
         }
 

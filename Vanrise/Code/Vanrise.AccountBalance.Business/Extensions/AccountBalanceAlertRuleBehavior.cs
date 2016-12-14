@@ -57,14 +57,15 @@ namespace Vanrise.AccountBalance.Business.Extensions
         {
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
             List<LiveBalanceLastThresholdUpdateEntity> lstLiveBalanceNextThresholdUpdateEntity = new List<LiveBalanceLastThresholdUpdateEntity>();
-            foreach (var balanceRuleInfo in context.BalanceLastAlertInfosToUpdate)
+            foreach (var infoToUpdate in context.BalanceLastAlertInfosToUpdate)
             {
-                LiveBalance entityBalanceInfo = (balanceRuleInfo.EntityBalanceInfo as LiveBalance);
+                LiveBalance entityBalanceInfo = (infoToUpdate.EntityBalanceInfo as LiveBalance);
                 LiveBalanceLastThresholdUpdateEntity balanceEntity = new LiveBalanceLastThresholdUpdateEntity
                 {
                     AccountId = entityBalanceInfo.AccountId,
                     AccountTypeId = entityBalanceInfo.AccountTypeId,
-                    LastExecutedActionThreshold = balanceRuleInfo.LastExecutedAlertThreshold
+                    LastExecutedActionThreshold = infoToUpdate.LastExecutedAlertThreshold,
+                    ActiveAlertThresholds = infoToUpdate.ActiveAlertThresholds
                 };
                 lstLiveBalanceNextThresholdUpdateEntity.Add(balanceEntity);
             }

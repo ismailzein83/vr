@@ -20,6 +20,8 @@ namespace Vanrise.AccountBalance.Entities
         public decimal? LastExecutedThreshold { get; set; }
         public decimal? NextThreshold { get; set; }
 
+        public List<decimal> LiveBalanceActiveAlertThresholds { get; set; }
+
         public string EntityId
         {
             get { return this.AccountId.ToString(); }
@@ -44,6 +46,12 @@ namespace Vanrise.AccountBalance.Entities
         public int? ThresholdActionIndex
         {
             get { return this.ThresholdIndex; }
+        }
+
+
+        public List<decimal> ActiveAlertThresholds
+        {
+            get { return this.ActiveAlertThresholds; }
         }
     }
 }

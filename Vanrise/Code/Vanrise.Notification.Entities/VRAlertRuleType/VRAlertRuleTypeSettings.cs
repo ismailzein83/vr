@@ -12,7 +12,7 @@ namespace Vanrise.Notification.Entities
     {
         public Guid ConfigId { get; set; }
 
-        public Guid NotificationTypeId { get; set; }
+        public virtual Guid NotificationTypeId { get; set; }
 
         public virtual string CriteriaEditor { get; set; }
 

@@ -62,6 +62,10 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 
                                 VRBalanceAlertThresholdContext vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext { EntityBalanceInfo = entityBalanceInfo };
                                 var lastExecutedThreshold = balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext);
+
+                                List<decimal> activeAlertThresholds = new List<decimal>(entityBalanceInfo.ActiveAlertThresholds);
+                                activeAlertThresholds.Add(lastExecutedThreshold);
+
                                 CreateAlertRuleNotificationInput createAlertRuleNotification = new CreateAlertRuleNotificationInput
                                 {
                                     Actions = balanceAlertThresholdAction.Actions,
@@ -85,7 +89,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                 balanceUpdateLastAlertInfoPayloadBatch.Items.Add(new VRBalanceUpdateLastAlertInfoPayload
                                 {
                                     EntityBalanceInfo = entityBalanceInfo,
-                                    LastExecutedAlertThreshold = lastExecutedThreshold
+                                    LastExecutedAlertThreshold = lastExecutedThreshold,
+                                    ActiveAlertThresholds = activeAlertThresholds
                                 });
                             }
                             inputArgument.OutputQueue.Enqueue(balanceUpdateLastAlertInfoPayloadBatch);

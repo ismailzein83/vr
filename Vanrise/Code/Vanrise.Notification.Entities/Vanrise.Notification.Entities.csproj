@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BalanceAlertRule\VRBalanceAlertEventPayload.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceAlertNotificationType.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleBehavior.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleSettings.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleThresholdConfig.cs" />

@@ -9,6 +9,10 @@ namespace Vanrise.AccountBalance.Business.Extensions
 {
     public class AccountBalanceAlertRuleTypeSettings : VRBalanceAlertRuleTypeSettings
     {
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
         public Guid AccountTypeId { get; set; }
         public override string VRActionExtensionType
         {
