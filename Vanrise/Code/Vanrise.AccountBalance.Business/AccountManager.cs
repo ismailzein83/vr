@@ -14,11 +14,6 @@ namespace Vanrise.AccountBalance.Business
             Guid accountBEDefinitionId = new ConfigurationManager().GetAccountBEDefinitionId();
             return new GenericData.Business.BusinessEntityManager().GetEntity(accountBEDefinitionId, accountId);
         }
-        public AccountInfo GetAccountInfo(long accountId)
-        {
-            Guid accountBEDefinitionId = new ConfigurationManager().GetAccountBEDefinitionId();
-            return new GenericData.Business.BusinessEntityManager().GetEntityInfo(accountBEDefinitionId,AccountInfo.BEInfoType, accountId);
-        }
 
         AccountTypeManager _accountTypeManager = new AccountTypeManager();
         GenericData.Business.BusinessEntityManager _businessEntityManager = new GenericData.Business.BusinessEntityManager();

@@ -43,7 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountUsage\AccountUsage.cs" />
+    <Compile Include="AccountUsage\AccountUsageInfo.cs" />
     <Compile Include="AccountUsage\AccountUsagePeriodSettings.cs" />
+    <Compile Include="AccountUsage\AccountUsagePeriodSettingsConfig.cs" />
+    <Compile Include="AccountUsage\AccountUsageToUpdate.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountType.cs" />
     <Compile Include="Account\AccountTypeExtendedSettingsConfig.cs" />
@@ -79,6 +83,7 @@
     <Compile Include="LiveBalance\LiveBalanceAccountInfo.cs" />
     <Compile Include="LiveBalance\LiveBalanceLastThresholdUpdateEntity.cs" />
     <Compile Include="LiveBalance\LiveBalanceNextThresholdUpdateEntity.cs" />
+    <Compile Include="LiveBalance\LiveBalanceToUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
-
+using Vanrise.Common;
 namespace Vanrise.AccountBalance.Business
 {
     public class AccountBalanceUpdateHandler
@@ -17,10 +17,14 @@ namespace Vanrise.AccountBalance.Business
         static ConcurrentDictionary<Guid, AccountBalanceUpdateHandler> _handlersByAccountTypeId = new ConcurrentDictionary<Guid, AccountBalanceUpdateHandler>();
 
         Dictionary<long, LiveBalanceAccountInfo> AccountsInfo;
+        Dictionary<DateTime, Dictionary<long,AccountUsageInfo>> AccountsUsageByPeriod;
         CurrencyExchangeRateManager currencyExchangeRateManager;
         AccountManager manager;
-        ILiveBalanceDataManager dataManager;
+        ILiveBalanceDataManager liveBalanceDataManager;
+        IAccountUsageDataManager accountUsageDataManager;
         Guid _accountTypeId;
+        AccountUsagePeriodSettings _accountUsagePeriodSettings;
+        BillingTransactionTypeManager billingTransactionTypeManager;
 
         #endregion
 
@@ -28,9 +32,11 @@ namespace Vanrise.AccountBalance.Business
         private AccountBalanceUpdateHandler(Guid accountTypeId)
         {
             currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            liveBalanceDataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            accountUsageDataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
             manager = new AccountManager();
             _accountTypeId = accountTypeId;
+            billingTransactionTypeManager = new BillingTransactionTypeManager();
             IntializeAccountsInfo();
         }
 
@@ -55,84 +61,140 @@ namespace Vanrise.AccountBalance.Business
         }
 
         public void AddAndUpdateLiveBalanceFromBillingTransction(List<BillingTransaction> billingTransactions)
-        {
-            var accountsToInsert = billingTransactions.Where(x => !AccountsInfo.ContainsKey(x.AccountId)).Select(a => a.AccountId).Distinct();
-            InsertAccountInfos(accountsToInsert);
-
-            UpdateLiveBalanceFromBillingTransaction(billingTransactions);
-
+        {           
+            
+            Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate = new Dictionary<long, LiveBalanceToUpdate>();
+            List<long> billingTransactionIds = new List<long>();
+            foreach (var billingTransaction in billingTransactions)
+            {
+                var liveBalanceInfo = GetLiveBalanceInfo(billingTransaction.AccountId);
+                var transactionType = billingTransactionTypeManager.GetBillingTransactionType(billingTransaction.TransactionTypeId);
+                decimal value = billingTransaction.Amount;
+                if (!transactionType.IsCredit)
+                    value = -value;
+                GroupLiveBalanceToUpdateById(liveBalnacesToUpdate, billingTransaction.TransactionTime, billingTransaction.CurrencyId, value, liveBalanceInfo);
+                billingTransactionIds.Add(billingTransaction.AccountBillingTransactionId);
+            }
+            if (liveBalnacesToUpdate.Count > 0)
+            {
+                UpdateLiveBalanceFromBillingTransaction(liveBalnacesToUpdate.Values, billingTransactionIds);
+            }
         }
         public void AddAndUpdateLiveBalanceFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<UsageBalanceUpdate> usageBalanceUpdates)
         {
-            var accountsToInsert = usageBalanceUpdates.Where(x => !AccountsInfo.ContainsKey(x.AccountId)).Select(a => a.AccountId).Distinct();
-            InsertAccountInfos(accountsToInsert);
-            UpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueueId, usageBalanceUpdates);
+
+            Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate = new Dictionary<long, LiveBalanceToUpdate>();
+            Dictionary<long, AccountUsageToUpdate> accountsUsageToUpdate = new Dictionary<long, AccountUsageToUpdate>();
+
+            foreach (var usageBalanceUpdate in usageBalanceUpdates)
+            {
+                var liveBalanceInfo = GetLiveBalanceInfo(usageBalanceUpdate.AccountId);
+                GroupLiveBalanceToUpdateById(liveBalnacesToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId, -usageBalanceUpdate.Value, liveBalanceInfo);
+                
+                AccountUsagePeriodEvaluationContext context = new AccountUsagePeriodEvaluationContext
+                {
+                    UsageTime = usageBalanceUpdate.EffectiveOn
+                };
+                _accountUsagePeriodSettings.EvaluatePeriod(context);
+                var accountUsageInfo = GetAccountUsageInfo(usageBalanceUpdate.AccountId, context.PeriodStart, context.PeriodEnd);
+                GroupAccountUsageToUpdateById(accountsUsageToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId,usageBalanceUpdate.Value, accountUsageInfo);
+            }
+            if (liveBalnacesToUpdate.Count > 0 || accountsUsageToUpdate.Count>0)
+            {
+                UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalnacesToUpdate.Values, accountsUsageToUpdate.Values);
+            }
         }
 
-        private void InsertAccountInfos(IEnumerable<long> accountsToInsert)
-        {
-            foreach (var accountToInsert in accountsToInsert)
-                AddLiveAccountInfo(accountToInsert);
-        }
-        public bool TryAddLiveBalance(long accountId, int currencyId)
-        {
-            return dataManager.TryAddLiveBalance(accountId, _accountTypeId, 0, currencyId, 0, 0);
-        }
         #endregion
 
         #region Private Methods
-        private LiveBalanceAccountInfo AddLiveAccountInfo(long accountId)
-        {
-            var account = manager.GetAccountInfo(accountId);
-            var accountInfo = new LiveBalanceAccountInfo { AccountId = accountId, CurrencyId = account.CurrencyId };
-
-            if (TryAddLiveBalance(accountId, accountInfo.CurrencyId))
-            {
-                AccountsInfo.Add(accountId, accountInfo);
-            }
-            return accountInfo;
-        }
         private void IntializeAccountsInfo()
         {
             AccountsInfo = new Dictionary<long, LiveBalanceAccountInfo>();
-            var accountBlances = dataManager.GetLiveBalanceAccountsInfo(_accountTypeId);
+            var accountBlances = liveBalanceDataManager.GetLiveBalanceAccountsInfo(_accountTypeId);
             AccountsInfo = accountBlances.ToDictionary(x => x.AccountId, x => x);
+            AccountsUsageByPeriod = new Dictionary<DateTime, Dictionary<long, AccountUsageInfo>>();
+            _accountUsagePeriodSettings = new AccountTypeManager().GetAccountUsagePeriodSettings(_accountTypeId);
         }
-        private bool UpdateLiveBalanceFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<UsageBalanceUpdate> usageBalanceUpdates)
+        private LiveBalanceAccountInfo GetLiveBalanceInfo(long accountId)
         {
-            foreach (var itm in usageBalanceUpdates)
+            return AccountsInfo.GetOrCreateItem(accountId, () =>
             {
-                LiveBalanceAccountInfo accountInfo = null;
-                AccountsInfo.TryGetValue(itm.AccountId, out accountInfo);
-                itm.Value = itm.CurrencyId != accountInfo.CurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(itm.Value, itm.CurrencyId, accountInfo.CurrencyId, itm.EffectiveOn) : itm.Value;
+                return AddLiveAccountInfo(accountId);
+            });
+        }
+        private LiveBalanceAccountInfo AddLiveAccountInfo(long accountId)
+        {
+            var account = manager.GetAccountInfo(_accountTypeId, accountId);
+            return TryAddLiveBalanceAndGet(accountId, account.CurrencyId);
+        }
+        private LiveBalanceAccountInfo TryAddLiveBalanceAndGet(long accountId, int currencyId)
+        {
+            return liveBalanceDataManager.TryAddLiveBalanceAndGet(accountId, _accountTypeId, 0, currencyId, 0, 0);
+
+        }
+        private AccountUsageInfo GetAccountUsageInfo(long accountId, DateTime periodStart, DateTime periodEnd)
+        {
+            var accountsUsageByPeriod = AccountsUsageByPeriod.GetOrCreateItem(periodStart, () =>
+            {
+                IEnumerable<AccountUsageInfo> accountsUsageInfo = accountUsageDataManager.GetAccountsUsageInfoByPeriod(_accountTypeId, periodStart);
+                return accountsUsageInfo.ToDictionary(x=>x.AccountId,x=>x);
+            });
+
+          return accountsUsageByPeriod.GetOrCreateItem(accountId,()=>
+            {
+                return AddAccountUsageInfo(accountId, periodStart, periodEnd);
+            });
+        }
+        private AccountUsageInfo AddAccountUsageInfo(long accountId, DateTime periodStart, DateTime periodEnd)
+        {
+            return TryAddAccountUsageAndGet(accountId, periodStart, periodEnd);
+        }
+        private AccountUsageInfo TryAddAccountUsageAndGet(long accountId, DateTime periodStart,DateTime periodEnd)
+        {
+            return accountUsageDataManager.TryAddAccountUsageAndGet(_accountTypeId, accountId, periodStart, periodEnd, 0);
+        }
+        private void GroupLiveBalanceToUpdateById(Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate, DateTime effectiveOn, int currencyId, decimal value, LiveBalanceAccountInfo liveBalanceInfo)
+        {
+            LiveBalanceToUpdate liveBalanceToUpdate = liveBalnacesToUpdate.GetOrCreateItem(liveBalanceInfo.LiveBalanceId, () =>  new LiveBalanceToUpdate
+                {
+                    LiveBalanceId = liveBalanceInfo.LiveBalanceId
+                });
+            liveBalanceToUpdate.Value += currencyId != liveBalanceInfo.CurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(value, currencyId, liveBalanceInfo.CurrencyId, effectiveOn) : value;
+        }
+        private void GroupAccountUsageToUpdateById(Dictionary<long, AccountUsageToUpdate> accountsUsageToUpdate, DateTime effectiveOn,  int currencyId,decimal value, AccountUsageInfo accountUsageInfo)
+        {
+
+            AccountUsageToUpdate accountUsageToUpdate;
+            if (!accountsUsageToUpdate.TryGetValue(accountUsageInfo.AccountUsageId, out accountUsageToUpdate))
+            {
+                accountsUsageToUpdate.Add(accountUsageInfo.AccountUsageId, new AccountUsageToUpdate
+                {
+                    AccountUsageId = accountUsageInfo.AccountUsageId,
+                    Value = value
+                });
             }
-            var groupedResult = usageBalanceUpdates.GroupBy(elt => elt.AccountId).Select(group => new UsageBalanceUpdate { AccountId = group.Key, Value = group.Sum(elt => elt.Value) });
-            return dataManager.UpdateLiveBalanceFromBalanceUsageQueue(_accountTypeId, groupedResult, balanceUsageQueueId);
+            else
+            {
+                accountUsageToUpdate.Value += value;
+                accountsUsageToUpdate[accountUsageInfo.AccountUsageId] = accountUsageToUpdate;
+            }
+
         }
         private decimal ConvertValueToCurrency(decimal amount, int fromCurrencyId, int currencyId, DateTime effectiveOn)
         {
             return currencyExchangeRateManager.ConvertValueToCurrency(amount, fromCurrencyId, currencyId, effectiveOn);
         }
-        private void UpdateLiveBalanceFromBillingTransaction(List<BillingTransaction> billingTransactions)
+        private bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate)
         {
-            decimal amount = 0;
-            var groupedResult = billingTransactions.GroupBy(elt => elt.AccountId);
-            List<long> billingTransactionIds = new List<long>();
-            foreach (var group in groupedResult)
-            {
-                LiveBalanceAccountInfo accountInfo = null;
-                AccountsInfo.TryGetValue(group.Key, out accountInfo);
-                foreach (var billingTransaction in group)
-                {
-                    billingTransactionIds.Add(billingTransaction.AccountBillingTransactionId);
-                    amount += billingTransaction.CurrencyId != accountInfo.CurrencyId ? ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, accountInfo.CurrencyId, billingTransaction.TransactionTime) : billingTransaction.Amount;
-                }
-                dataManager.UpdateLiveBalanceFromBillingTransaction(_accountTypeId, accountInfo.AccountId, billingTransactionIds, amount);
-            }
-
+            return liveBalanceDataManager.UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalnacesToUpdate, accountsUsageToUpdate);
+        }
+        private bool UpdateLiveBalanceFromBillingTransaction(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, List<long> billingTransactionIds)
+        {
+            return liveBalanceDataManager.UpdateLiveBalanceFromBillingTransaction(liveBalnacesToUpdate, billingTransactionIds);
         }
 
         #endregion
-
+       
     }
 }

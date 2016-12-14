@@ -61,24 +61,11 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="s:DateTime" Name="nextClosingDate" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadBillingTransactionsStatus" />
       <Variable x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)" Name="outputQueuePendingUsageUpdates" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadingPendingUsageUpdateStatus" />
       <Variable x:TypeArguments="vab:AccountBalanceUpdateHandler" Name="accountBalanceUpdateHandler" />
     </Sequence.Variables>
-    <vaba1:GetNextBalanceClosingDate sap2010:WorkflowViewState.IdRef="GetNextBalanceClosingDate_1">
-      <vaba1:GetNextBalanceClosingDate.AccountTypeId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountTypeId</mca:CSharpValue>
-        </InArgument>
-      </vaba1:GetNextBalanceClosingDate.AccountTypeId>
-      <vaba1:GetNextBalanceClosingDate.NextClosingDate>
-        <OutArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpReference x:TypeArguments="s:DateTime">nextClosingDate</mca:CSharpReference>
-        </OutArgument>
-      </vaba1:GetNextBalanceClosingDate.NextClosingDate>
-    </vaba1:GetNextBalanceClosingDate>
     <vaba1:LoadAccountBalanceUpdateHandler sap2010:WorkflowViewState.IdRef="LoadAccountBalanceUpdateHandler_1">
       <vaba1:LoadAccountBalanceUpdateHandler.AccountTypeId>
         <InArgument x:TypeArguments="s:Guid">
@@ -166,34 +153,10 @@
         </vaba1:ProcessPendingUsageUpdates.PreviousActivityStatus>
       </vaba1:ProcessPendingUsageUpdates>
     </Parallel>
-    <If sap2010:WorkflowViewState.IdRef="If_1">
-      <If.Condition>
-        <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">nextClosingDate &lt; DateTime.Now</mca:CSharpValue>
-        </InArgument>
-      </If.Condition>
-      <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <vaba1:CreateBalanceClosingPeriod sap2010:WorkflowViewState.IdRef="CreateBalanceClosingPeriod_1">
-            <vaba1:CreateBalanceClosingPeriod.AccountTypeId>
-              <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountTypeId</mca:CSharpValue>
-              </InArgument>
-            </vaba1:CreateBalanceClosingPeriod.AccountTypeId>
-            <vaba1:CreateBalanceClosingPeriod.BalanceClosingPeriod>
-              <InArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpValue x:TypeArguments="s:DateTime">nextClosingDate</mca:CSharpValue>
-              </InArgument>
-            </vaba1:CreateBalanceClosingPeriod.BalanceClosingPeriod>
-          </vaba1:CreateBalanceClosingPeriod>
-        </Sequence>
-      </If.Then>
-    </If>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwfPgPBAQ4CAQFGBVEnAwGJAVIFXS0CAXpeBYQBEAIBR4UBBagBEAIBGqkBBb8BCgIBAkkLSVoDAZEBTgtOYgMBigFaC1qDAQMBggFVC1VaAgF7YgdyKgIBYXMHgwEtAgFIhgEHlgEnAgExlwEHpwEqAgEbrAELrAFrAgEDsAEJvQEUAgEKZQ1lXAIBcm8Nb34CAWpqDWqVAQIBYoABDYABdgIBWXsNe5UBAgFRdg12fQIBSYkBDYkBXAIBQJMBDZMBgAECATmOAQ2OAYwBAgEypAENpAF4AgEqnwENnwGMAQIBI5oBDZoBfQIBHLEBC7wBLgIBC7QBEbQBYAIBE7kBEbkBYAIBDA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwWPgOdAQ4CAQFFBVAtAgFWUQV3EAIBKXgFmwEQAgECTQtNgwECAV1IC0haAgFXVQdlKgIBQGYHdi0CASp5B4kBJwIBFooBB5oBKgIBA1gNWFwCAU9iDWJ+AgFIXQ1dlQECAUFzDXN2AgE5bg1ulQECATJpDWl9AgErfA18XAIBI4YBDYYBgAECAR2BAQ2BAYwBAgEXlwENlwF4AgEQkgENkgGMAQIBCo0BDY0BfQIBBA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetNextBalanceClosingDate_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="LoadAccountBalanceUpdateHandler_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="LoadNewBillingTransactions_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessNewBillingTransactions_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -201,24 +164,14 @@
       <sap2010:ViewStateData Id="LoadPendingUsageUpdates_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessPendingUsageUpdates_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="CreateBalanceClosingPeriod_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,146">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="554,296" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,796">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,398">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1" sap:VirtualizedContainerService.HintSize="616,876" />
+      <sap2010:ViewStateData Id="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1" sap:VirtualizedContainerService.HintSize="616,478" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
