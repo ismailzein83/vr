@@ -57,7 +57,8 @@ namespace TOne.WhS.DBSync.Data.SQL
             + " delete from [TOneWhS_Sales].[RP_SaleRate_Preview] "
             + " delete from [TOneWhS_Sales].[RatePlan] "
             + " delete from [TOneWhS_Sales].[RP_SaleZoneRoutingProduct_Preview] "
-            + " delete from [TOneWhS_Sales].[RP_SaleZoneService_Preview] ", null);
+            + " delete from [TOneWhS_Sales].[RP_SaleZoneService_Preview] "
+            + " delete from [TOneWhS_BE].[SalePriceListTemplate]", null);
         }
     }
 }
