@@ -1,0 +1,13 @@
+﻿<vr-datagrid dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             datasource="scopeModel.acountStatements" defaultsortbyfieldname="'Entity.TransactionTime'" defaultsortdirection="'DESC'">
+
+    <vr-datagridcolumn headertext="'Transaction Time'" field="'Entity.AccountBillingTransactionId'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Transaction Type'" field="'TransactionTypeDescription'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Entity.Amount'" type="'Number'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Debit'" field="'CurrencyDescription'" widthfactor="3"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Credit'" field="'Entity.TransactionTime'" type="'Datetime'" widthfactor="3"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Balance'" field="'Entity.Reference'" widthfactor="5"></vr-datagridcolumn>
+</vr-datagrid>

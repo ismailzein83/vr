@@ -117,6 +117,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountStatementController.cs" />
+    <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\AccountUsageController.cs" />
     <Compile Include="Controllers\BalanceAccountTypeController.cs" />
     <Compile Include="Controllers\BalanceAlertController.cs" />
@@ -149,6 +151,8 @@
     <Folder Include="VR_AccountBalance\Views\BalanceAlertRule\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_AccountBalance\Directives\AccountStatement\Templates\AccountStatementGridTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\AccountStatement\vr-accountbalance-accountstatement-grid.js" />
     <Content Include="VR_AccountBalance\Directives\AccountType\vr-accountbalance-accounttype-extendedsettings.js" />
     <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\Templates\DailyAccountUsagePeriodTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\vr-accountusage-periodsettings-daily.js" />
@@ -174,6 +178,8 @@
     <Content Include="VR_AccountBalance\Directives\ProcessInput\Normal\vr-accountbalance-updateprocess-manual.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertchecker-process.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertthreshold-updateprocess.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\AccountStatementAPIService.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\AccountTypeAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\AccountUsageAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BalanceAlertAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\BalanceAccountTypeAPIService.js" />
@@ -182,6 +188,8 @@
     <Content Include="VR_AccountBalance\Services\APIServices\LiveBalanceAPIService.js" />
     <Content Include="VR_AccountBalance\Services\BalanceAlertService.js" />
     <Content Include="VR_AccountBalance\Services\BillingTransactionService.js" />
+    <Content Include="VR_AccountBalance\Views\AccountStatement\AccountStatementManagement.html" />
+    <Content Include="VR_AccountBalance\Views\AccountStatement\AccountStatementManagementController.js" />
     <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionEditor.html" />
     <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionEditorController.js" />
   </ItemGroup>

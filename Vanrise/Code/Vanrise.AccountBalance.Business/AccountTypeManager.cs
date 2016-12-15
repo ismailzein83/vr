@@ -14,6 +14,14 @@ namespace Vanrise.AccountBalance
     {
         Vanrise.Common.Business.VRComponentTypeManager _vrComponentTypeManager = new Common.Business.VRComponentTypeManager();
 
+
+        public string GetAccountSelector(Guid accountTypeId)
+        {
+            var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            if (accountTypeSettings.ExtendedSettings == null)
+                throw new NullReferenceException("accountTypeSettings.ExtendedSettings");
+            return accountTypeSettings.ExtendedSettings.AccountSelector;
+        }
         public IEnumerable<AccountTypeExtendedSettingsConfig> GetAccountBalanceExtendedSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
@@ -30,7 +38,6 @@ namespace Vanrise.AccountBalance
         {
             return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings>().MapRecords(AccountTypeInfoMapper);
         }
-
         public Guid GetUsageTransactionTypeId(Guid accountTypeId)
         {
             var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
