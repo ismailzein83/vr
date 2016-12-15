@@ -374,7 +374,7 @@ namespace Vanrise.GenericData.Business
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             var entityDefinitionSettings = context.EntityDefinition.Settings as GenericBEDefinitionSettings;
-            GenericBusinessEntity entity = GetGenericBusinessEntity((long)context.EntityId, context.EntityDefinition.BusinessEntityDefinitionId);
+            GenericBusinessEntity entity = GetGenericBusinessEntity(Convert.ToInt64(context.EntityId), context.EntityDefinition.BusinessEntityDefinitionId);
             if (entity == null) throw new NullReferenceException(String.Format("entity. entityId '{0}'", context.EntityId));
             string entityDescription = GetFieldPathValue(entity, entityDefinitionSettings.FieldPath);
             return entityDescription;
