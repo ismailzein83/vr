@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUtilsService',
-    function (Retail_BE_AccountAPIService, VRUIUtilsService) {
+app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUtilsService', 'UtilsService',
+    function (Retail_BE_AccountAPIService, VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -79,7 +79,10 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
 
 
                 ctrl.search = function (nameFilter) {
-                    return Retail_BE_AccountAPIService.GetAccountsInfo(nameFilter, filter);
+                    var serializedFilter = "";
+                    if (filter != undefined)
+                        serializedFilter = UtilsService.serializetoJson(filter);
+                    return Retail_BE_AccountAPIService.GetAccountsInfo(nameFilter, serializedFilter);
                 };
 
             }
@@ -107,8 +110,9 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                         return GetAccountsInfo(attrs, ctrl, selectedAccountIds);
                     }
 
-
+                     
                 };
+
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('AccountId', attrs, ctrl);

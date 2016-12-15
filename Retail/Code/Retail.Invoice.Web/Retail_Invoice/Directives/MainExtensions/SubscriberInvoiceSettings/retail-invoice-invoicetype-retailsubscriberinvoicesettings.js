@@ -13,7 +13,7 @@ app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["Utils
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new CarrierInvoiceSettings($scope, ctrl, $attrs);
+                var ctor = new SubscriberInvoiceSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
