@@ -23,7 +23,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             _SellingProductId = sellingProductId;
         }
 
-
         public void ApplyCustomerZoneToTemp(List<CustomerCountry2> customerZones)
         {
             DataTable dt = new DataTable();
@@ -32,7 +31,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("CustomerID", typeof(int));
             dt.Columns.Add("CountryID", typeof(int));
             dt.Columns.Add("BED", typeof(DateTime));
-            dt.Columns.Add("EED", typeof(DateTime?));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
             dt.BeginLoadData();
 
             foreach (var item in customerZones)
@@ -42,7 +41,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row["CustomerID"] = item.CustomerId;
                 row["CountryID"] = item.CountryId;
                 row["BED"] = (DateTime)item.BED;
-                row["EED"] = (DateTime?)item.EED;
+                row["EED"] = item.EED.HasValue ? item.EED : (object)DBNull.Value;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
