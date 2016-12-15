@@ -91,7 +91,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                               DateTime? eed = GetReaderValue<DateTime?>(reader, "EED");
                               int hasNullEED = (int)reader["HasNullEED"];
 
-                              DateTime? modifiedEED = hasNullEED == 0 ? null : eed;
+                              DateTime? modifiedEED = hasNullEED > 0 ? null : eed;
 
                               if (!customerZones.TryGetValue(ownerId, out customerZone))
                               {
