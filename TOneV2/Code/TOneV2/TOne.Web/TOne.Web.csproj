@@ -570,6 +570,9 @@
     <Content Include="images\cloudXPoint-iconheader.ico" />
     <Content Include="images\cloudXPoint-login.png" />
     <Content Include="images\cloudXPoint-logoonheader.png" />
+    <Content Include="images\INSOFT-iconheader.ico" />
+    <Content Include="images\INSOFT-login.png" />
+    <Content Include="images\INSOFT-logoonheader.png" />
     <Content Include="images\login.png" />
     <Content Include="images\logoonheader.png" />
     <Content Include="images\iconheader.ico" />
