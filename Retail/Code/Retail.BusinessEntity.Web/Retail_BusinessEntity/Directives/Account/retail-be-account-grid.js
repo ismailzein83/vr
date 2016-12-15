@@ -196,7 +196,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                     var accountIdentificationRulesGridAPIGridPayload = {
                         AccountId: account.Entity.AccountId
                     };
-                    return account.accountIdentificationRulesGridAPI.load(accountIdentificationRulesGridAPIGridPayload);
+                    return account.accountIdentificationRulesGridAPI.loadDirective(accountIdentificationRulesGridAPIGridPayload);
                 };
 
                 identificationRuleTab.parentMenuActions = [{
@@ -280,15 +280,15 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 var billingTransactionTab = {};
 
                 billingTransactionTab.title = 'Billing Transactions';
-                billingTransactionTab.directive = 'vr-billingtransaction-grid';
+                billingTransactionTab.directive = 'vr-accountbalance-billingtransaction-search';
 
                 billingTransactionTab.loadDirective = function (billingTransactionGridAPI, account) {
-                    account.billingTransactioGridAPI = billingTransactionGridAPI;
+                    account.billingTransactioGridAPI = billingTransactionGridAPI;                    
                     var billingTransactionGridPayload = {
                         AccountsIds: [account.Entity.AccountId],
                         AccountTypeId: "20b0c83e-6f53-49c7-b52f-828a19e6dc2a"
                     };
-                    return account.billingTransactioGridAPI.loadGrid(billingTransactionGridPayload);
+                    return account.billingTransactioGridAPI.load(billingTransactionGridPayload);
                 };
 
                 billingTransactionTab.parentMenuActions = [{
