@@ -10,5 +10,10 @@ namespace Vanrise.AccountBalance.Entities
     {
         public List<long> AccountsIds { get; set; }
         public Guid AccountTypeId { get; set; }
+
+        public DateTime FromDate { get; set; }
+
+        public DateTime? ToDate { get; set; }
+
     }
 }
