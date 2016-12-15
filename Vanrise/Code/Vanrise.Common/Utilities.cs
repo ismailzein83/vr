@@ -193,7 +193,7 @@ namespace Vanrise.Common
                     {
                         var exposedConnectionStringNames = ConfigurationManager.AppSettings["ExposedConnectionStringNames"];
                         if (exposedConnectionStringNames != null)
-                            s_exposedConnectionStringNames = new HashSet<string>(exposedConnectionStringNames.Split(','));
+                            s_exposedConnectionStringNames = new HashSet<string>(exposedConnectionStringNames.Split(',').Select(itm => itm.Trim()));
                         else
                             s_exposedConnectionStringNames = new HashSet<string>();
                     }
@@ -220,7 +220,7 @@ namespace Vanrise.Common
                 return null;
             return dict.Keys.ToList();
         }
-        
+
         public static T DeserializeAndValidate<T>(string serialized)
         {
             if (serialized == null)
@@ -255,5 +255,5 @@ namespace Vanrise.Common
     public interface IPropValueReader
     {
         Object GetPropertyValue(dynamic target);
-    }        
+    }
 }
