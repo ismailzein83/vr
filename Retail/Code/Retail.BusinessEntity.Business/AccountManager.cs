@@ -33,7 +33,7 @@ namespace Retail.BusinessEntity.Business
             var bigResult = cachedAccounts.ToBigResult(input, filterExpression, AccountDetailMapperStep1);
             if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
-                foreach(var accountDetail in bigResult.Data)
+                foreach (var accountDetail in bigResult.Data)
                 {
                     AccountDetailMapperStep2(accountDetail, accountDetail.Entity);
                 }
@@ -77,21 +77,21 @@ namespace Retail.BusinessEntity.Business
             IEnumerable<Account> allAccounts = GetCachedAccounts().Values;
             string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
             Func<Account, bool> filterFunc = null;
-           
-                filterFunc = (account) =>
+
+            filterFunc = (account) =>
+            {
+                if (nameFilterLower != null && !account.Name.Trim().ToLower().StartsWith(nameFilterLower))
+                    return false;
+
+                if (filter != null && filter.Filters != null)
                 {
-                    if (nameFilterLower != null && !account.Name.Trim().ToLower().StartsWith(nameFilterLower))
+                    var context = new AccountFilterContext() { Account = account };
+                    if (filter.Filters.Any(x => x.IsExcluded(context)))
                         return false;
+                }
 
-                    if (filter != null && filter.Filters != null)
-                    {
-                        var context = new AccountFilterContext() {  Account = account };
-                        if (filter.Filters.Any(x => x.IsExcluded(context)))
-                            return false;
-                    }
-
-                    return true;
-                };
+                return true;
+            };
             return allAccounts.MapRecords(AccountInfoMapper, filterFunc).OrderBy(x => x.Name);
         }
 
@@ -99,13 +99,13 @@ namespace Retail.BusinessEntity.Business
         {
             List<AccountInfo> accountInfos = new List<AccountInfo>();
             var accounts = GetCachedAccounts();
-            foreach(var accountId in accountIds)
+            foreach (var accountId in accountIds)
             {
                 var account = accounts.GetRecord(accountId);
                 if (account != null)
                     accountInfos.Add(AccountInfoMapper(account));
             }
-            return accountInfos.OrderBy(x => x.Name);            
+            return accountInfos.OrderBy(x => x.Name);
         }
 
         public string GetAccountName(long accountId)
@@ -261,6 +261,19 @@ namespace Retail.BusinessEntity.Business
                 accountPayment = null;
                 return false;
             }
+        }
+
+        public long? GetFinancialAccountId(long? accountId)
+        {
+            if (!accountId.HasValue)
+                return null;
+
+            IAccountPayment accountPayment;
+            if (HasAccountPayment(accountId.Value, false, out accountPayment))
+                return accountId;
+
+            var account = GetAccount(accountId.Value);
+            return GetFinancialAccountId(account.ParentAccountId);
         }
 
         public bool IsAccountMatchWithFilterGroup(Account account, RecordFilterGroup filterGroup)
@@ -500,16 +513,16 @@ namespace Retail.BusinessEntity.Business
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCacheAccountTreeNodes", () =>
               {
                   Dictionary<long, AccountTreeNode> treeNodes = new Dictionary<long, AccountTreeNode>();
-                  foreach(var account in GetCachedAccounts().Values)
+                  foreach (var account in GetCachedAccounts().Values)
                   {
                       AccountTreeNode node = new AccountTreeNode
                       {
                           Account = account
-                      };                      
+                      };
                       treeNodes.Add(account.AccountId, node);
                   }
                   //updating nodes parent info
-                  foreach(var node in treeNodes.Values)
+                  foreach (var node in treeNodes.Values)
                   {
                       var account = node.Account;
                       if (account.ParentAccountId.HasValue)
@@ -545,7 +558,7 @@ namespace Retail.BusinessEntity.Business
 
         private AccountDetail AccountDetailMapperStep1(Account account)
         {
-            var accountTypeManager = new AccountTypeManager();            
+            var accountTypeManager = new AccountTypeManager();
             StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
 
             var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
