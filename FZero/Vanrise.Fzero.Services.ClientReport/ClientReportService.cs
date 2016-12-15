@@ -117,6 +117,7 @@ namespace Vanrise.Fzero.Services.ClientReport
             {
                 ReportViewer rvToOperator = new ReportViewer();
                 ReportViewer rvToOperator2 = new ReportViewer();
+                ReportViewer rvToOperatorNatSec = new ReportViewer();
                 Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
 
 
@@ -193,8 +194,8 @@ namespace Vanrise.Fzero.Services.ClientReport
                 string exeFolder = Path.GetDirectoryName(@"C:\FMS\Vanrise.Fzero.Services.ClientReport\");
                 string reportPath = string.Empty;
                 string reportPath2 = string.Empty;
-
-
+                bool isNatSecurity = false;
+                string reportPathNatSec = string.Empty;
                 if (ClientID == (int) Enums.Clients.ST) //-- Syrian Telecom
                 {
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToSyrianOperator.rdlc");
@@ -210,11 +211,15 @@ namespace Vanrise.Fzero.Services.ClientReport
                 }
                 else if (ClientID == (int) Enums.Clients.ITPC) //-- ITPC
                 {
+                    isNatSecurity = true;
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
+                    reportPathNatSec = Path.Combine(exeFolder, @"Reports\rptToOperatorIraqNationalSec.rdlc");
                 }
                 else
                 {
+                    isNatSecurity = true;
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
+                    reportPathNatSec = Path.Combine(exeFolder, @"Reports\rptToOperatorIraqNationalSec.rdlc");
                 }
 
 
@@ -223,21 +228,25 @@ namespace Vanrise.Fzero.Services.ClientReport
 
                 rvToOperator.LocalReport.ReportPath = reportPath;
                 rvToOperator2.LocalReport.ReportPath = reportPath2;
+                rvToOperatorNatSec.LocalReport.ReportPath = reportPathNatSec;
 
 
 
                 ReportDataSource SignatureDataset = new ReportDataSource("SignatureDataset",
                     (ApplicationUser.LoadbyUserId(1)).User.Signature);
                 rvToOperator.LocalReport.DataSources.Add(SignatureDataset);
-
+                rvToOperatorNatSec.LocalReport.DataSources.Add(SignatureDataset);
+                
 
                 ReportDataSource rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourceDataSet1);
+                rvToOperatorNatSec.LocalReport.DataSources.Add(rptDataSourceDataSet1);
 
                 ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls",
                     GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
                 rvToOperator2.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
+                rvToOperatorNatSec.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
                 string CCs = EmailCC.GetClientEmailCCs(ClientID);
 
 
@@ -252,6 +261,10 @@ namespace Vanrise.Fzero.Services.ClientReport
                 rvToOperator.LocalReport.Refresh();
                 rvToOperator2.LocalReport.SetParameters(parameters);
                 rvToOperator2.LocalReport.Refresh();
+                rvToOperatorNatSec.LocalReport.SetParameters(parameters);
+                rvToOperatorNatSec.LocalReport.Refresh();
+                string emailNatSec = ConfigurationManager.AppSettings["EmailNatSec"];
+
                 string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
                 string filenameExcel2 = ExportReportToExcel(report.ReportID + ".xls", rvToOperator2);
 
@@ -263,7 +276,11 @@ namespace Vanrise.Fzero.Services.ClientReport
                 parameters[2] = new ReportParameter("HideSignature", "false");
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
+                rvToOperatorNatSec.LocalReport.SetParameters(parameters);
+                rvToOperatorNatSec.LocalReport.Refresh();
+
                 string filenamePDF = ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
+                string filenamePDFNatSec = ExportReportToPDF(report.ReportID + ".pdf", rvToOperatorNatSec);
 
                 ErrorLog("filenamePDF: " + filenamePDF);
 
@@ -275,6 +292,14 @@ namespace Vanrise.Fzero.Services.ClientReport
                         EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
                         CCs, report.ReportID, "FMS_Syria_Profile");
 
+                    if (isNatSecurity)
+                    {
+                        ExportReportToPDF(report.ReportID + ".pdf", rvToOperatorNatSec);
+                        EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenamePDFNatSec,
+                            emailNatSec,
+                            ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
+                            "", report.ReportID, "FMS_Syria_Profile");
+                    }
                 }
                 else
                 {
@@ -283,9 +308,17 @@ namespace Vanrise.Fzero.Services.ClientReport
                     ErrorLog("zainExcel: " + zainExcel);
 
                     if (string.IsNullOrEmpty(zainExcel))
+                    {
                         EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress,
                             ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
                             report.ReportID, "FMS_Profile");
+                        if (isNatSecurity)
+                        {
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFNatSec, emailNatSec,
+                                ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, "",
+                                report.ReportID, "FMS_Profile");
+                        }
+                    }
                     else
                     {
                         if (ClientID == (int) Enums.Clients.Zain)
@@ -294,22 +327,51 @@ namespace Vanrise.Fzero.Services.ClientReport
 
                             if (zainExcel == "true")
                             {
-                                ErrorLog("ListIds.Count: " + ListIds.Count + " filenameExcel2: " + filenameExcel2 + " filenamePDF: " + filenamePDF
-                                    + " EmailAddress: " + EmailAddress + " report.ReportID: " + report.ReportID);
+                                ErrorLog("ListIds.Count: " + ListIds.Count + " filenameExcel2: " + filenameExcel2 +
+                                         " filenamePDF: " + filenamePDF
+                                         + " EmailAddress: " + EmailAddress + " report.ReportID: " + report.ReportID);
                                 EmailManager.SendReporttoMobileOperator(ListIds.Count,
                                     filenameExcel2 + ";" + filenamePDF, EmailAddress,
                                     ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
                                     CCs, report.ReportID, "FMS_Profile");
+
+                                if (isNatSecurity)
+                                {
+                                    EmailManager.SendReporttoMobileOperator(ListIds.Count,
+                                        filenamePDFNatSec, emailNatSec,
+                                        ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" +
+                                        report.ReportID,
+                                        "", report.ReportID, "FMS_Profile");
+                                }
                             }
                             else
+                            {
                                 EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress,
                                     ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
                                     CCs, report.ReportID, "FMS_Profile");
+
+                                if (isNatSecurity)
+                                {
+                                    EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFNatSec,
+                                        emailNatSec,
+                                        ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" +
+                                        report.ReportID,
+                                        "", report.ReportID, "FMS_Profile");
+                                }
+                            }
                         }
                         else
+                        {
                             EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress,
                                 ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
                                 report.ReportID, "FMS_Profile");
+                            if (isNatSecurity)
+                            {
+                                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFNatSec, emailNatSec,
+                                    ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, "",
+                                    report.ReportID, "FMS_Profile");
+                            }
+                        }
                     }
 
                 }
