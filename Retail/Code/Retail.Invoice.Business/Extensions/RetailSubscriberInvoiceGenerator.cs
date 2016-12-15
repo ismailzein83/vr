@@ -17,10 +17,10 @@ namespace Retail.Invoice.Business
     {
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<string> listMeasures = new List<string> { "Amount" };
-            List<string> listDimensions = new List<string> { "SubscriberAccountId", "ServiceType" };
+            List<string> listMeasures = new List<string> { "Amount", "CountCDRs", "TotalDuration" };
+            List<string> listDimensions = new List<string> { "FinancialAccountId", "ServiceType", "Zone", "Operator" };
 
-            string dimensionName = "SubscriberAccountId";
+            string dimensionName = "FinancialAccountId";
 
             AccountManager accountManager = new AccountManager();
             IAccountPayment accountPayment;
@@ -85,7 +85,11 @@ namespace Retail.Invoice.Business
                         RetailSubscriberInvoiceItemDetails subscriberInvoiceItemDetails = new RetailSubscriberInvoiceItemDetails()
                         {
                             Amount = item.Amount,
-                            ServiceTypeId = item.ServiceTypeId
+                            ServiceTypeId = item.ServiceTypeId,
+                            CountCDRs = item.CountCDRs,
+                            TotalDuration = item.TotalDuration,
+                            ZoneId = item.ZoneId,
+                            InterconnectOperatorId = item.InterconnectOperatorId
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -135,13 +139,23 @@ namespace Retail.Invoice.Business
                 foreach (var analyticRecord in analyticRecords)
                 {
                     DimensionValue serviceTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
+                    DimensionValue zoneId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
+                    DimensionValue operatorId = analyticRecord.DimensionValues.ElementAtOrDefault(3);
+
                     if (serviceTypeId.Value != null)
                     {
                         MeasureValue totalAmount = GetMeasureValue(analyticRecord, "Amount");
+                        MeasureValue countCDRs = GetMeasureValue(analyticRecord, "CountCDRs");
+                        MeasureValue totalDuration = GetMeasureValue(analyticRecord, "TotalDuration");
+
                         InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
                         {
                             ServiceTypeId = new Guid(serviceTypeId.Value.ToString()),
                             Amount = Convert.ToDecimal(totalAmount.Value ?? 0.0),
+                            CountCDRs = Convert.ToInt32(countCDRs.Value),
+                            TotalDuration = Convert.ToDecimal(totalDuration.Value ?? 0.0),
+                            ZoneId = Convert.ToInt32(zoneId.Value),
+                            InterconnectOperatorId = Convert.ToInt32(operatorId.Value)
                         };
                         AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
                     }
@@ -179,7 +193,17 @@ namespace Retail.Invoice.Business
         public class InvoiceBillingRecord
         {
             public decimal Amount { get; set; }
-            public Guid ServiceTypeId { get; set; }
+            
+            public Guid? ServiceTypeId { get; set; }
+
+            public long? ZoneId { get; set; }
+
+            public long? InterconnectOperatorId { get; set; }
+
+            public int CountCDRs { get; set; }
+
+            public Decimal TotalDuration { get; set; }
+
         }
 
     }
