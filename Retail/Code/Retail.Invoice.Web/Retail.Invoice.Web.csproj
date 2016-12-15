@@ -125,6 +125,8 @@
   <ItemGroup>
     <Content Include="Retail_Invoice\Constant\ModuleConfig.js" />
     <Content Include="Retail_Invoice\Directives\FinancialAccount\retail-invoice-financialaccount-selector.js" />
+    <Content Include="Retail_Invoice\Directives\MainExtensions\SubscriberInvoiceSettings\retail-invoice-invoicetype-retailsubscriberinvoicesettings.js" />
+    <Content Include="Retail_Invoice\Directives\MainExtensions\SubscriberInvoiceSettings\Templates\SubscriberInvoiceSettingsTemplate.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
