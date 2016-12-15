@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAccountbalanceAccountstatementGrid', ['VR_AccountBalance_AccountStatementAPIService', 'VRNotificationService',
-    function (VR_AccountBalance_AccountStatementAPIService, VRNotificationService) {
+app.directive('vrAccountbalanceAccountstatementGrid', ['VR_AccountBalance_AccountStatementAPIService', 'VRNotificationService','DataGridRetrieveDataEventType',
+    function (VR_AccountBalance_AccountStatementAPIService, VRNotificationService, DataGridRetrieveDataEventType) {
         return {
             restrict: 'E',
             scope: {
@@ -32,8 +32,17 @@ app.directive('vrAccountbalanceAccountstatementGrid', ['VR_AccountBalance_Accoun
                     defineAPI();
                 };
 
-                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady,gridContext) {
                     return VR_AccountBalance_AccountStatementAPIService.GetFilteredAccountStatments(dataRetrievalInput).then(function (response) {
+                        if (response)
+                        {
+                            if (gridContext != undefined && gridContext.eventType == DataGridRetrieveDataEventType.ExternalTrigger)
+                            {
+                                ctrl.currency = response.Currency;
+                                ctrl.currentBalance = response.CurrentBalance;
+                            }
+                            
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

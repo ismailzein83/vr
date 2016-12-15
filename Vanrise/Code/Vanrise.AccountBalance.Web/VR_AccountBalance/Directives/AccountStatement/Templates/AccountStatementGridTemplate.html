@@ -1,13 +1,20 @@
-﻿<vr-datagrid dataretrievalfunction="scopeModel.dataRetrievalFunction"
+﻿<vr-row>
+    <vr-list maxitemsperrow="2">
+        <vr-listitem><vr-label>Currency: </vr-label><vr-label isvalue> {{ctrl.currency}}</vr-label></vr-listitem>
+        <vr-listitem><vr-label>Current Balance: </vr-label><vr-label isvalue>{{ctrl.currentBalance}}</vr-label></vr-listitem>
+    </vr-list>
+</vr-row>
+
+<vr-datagrid dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
-             datasource="scopeModel.acountStatements" defaultsortbyfieldname="'TransactionTime'" defaultsortdirection="'DESC'">
+             datasource="scopeModel.acountStatements" defaultsortbyfieldname="'TransactionTime'" defaultsortdirection="'ASC'">
 
-    <vr-datagridcolumn headertext="'Transaction Time'" field="'TransactionTime'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Transaction Type'" field="'TransactionType'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Debit'" field="'Debit'" widthfactor="3"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Credit'" field="'Credit'" type="'Datetime'" widthfactor="3"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Balance'" field="'Balance'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Transaction Time'" field="'TransactionTime'" type="'Datetime'" widthfactor="5" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Transaction Type'" field="'TransactionType'" widthfactor="2" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="10" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Debit'" field="'Debit'" widthfactor="3" type="'Number'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Credit'" field="'Credit'" type="'Number'" widthfactor="3" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Balance'" field="'Balance'" widthfactor="5" type="'Number'" disablesorting></vr-datagridcolumn>
 </vr-datagrid>

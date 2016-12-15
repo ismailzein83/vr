@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class AccountStatementDetail : BigResult<AccountStatement>
+    public class AccountStatementResult : BigResult<AccountStatementItem>
     {
         public decimal CurrentBalance { get; set; }
-        public string CurrentCurrency { get; set; }
+        public string Currency { get; set; }
     }
 }

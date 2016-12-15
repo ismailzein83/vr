@@ -75,7 +75,7 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
                 api.getData = function () {
                     var data = directiveReadyAPI.getSelectedIds();
                     return {
-                        selectedIds: data != undefined ? data.selectedIds : undefined,
+                        selectedIds: data,
                     };
                 };
 

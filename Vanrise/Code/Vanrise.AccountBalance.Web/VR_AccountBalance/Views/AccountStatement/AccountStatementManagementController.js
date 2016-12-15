@@ -27,9 +27,6 @@
             $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                if (!$scope.isLoadingFilters)
-                    gridAPI.loadGrid(getFilterObject());
-
             };
             $scope.onAccountSelectorReady = function (api) {
                 accountSelectorAPI = api;
@@ -58,24 +55,20 @@
             });
         }
         function getFilterObject() {
-            //var accountObject;
-            //if (accountSelectorAPI != undefined)
-            //    accountObject = accountSelectorAPI.getData();
-            //accountObject != undefined ? accountObject.selectedIds : undefined,
+            var accountObject;
+            if (accountSelectorAPI != undefined)
+                accountObject = accountSelectorAPI.getData();
+            console.log(accountObject);
             var query = {
                     FromDate: $scope.fromDate,
-                    ToDate: $scope.toDate,
-                    AccountId: 385750,
+                    AccountId: accountObject != undefined ? accountObject.selectedIds : undefined,
                     AccountTypeId: accountTypeId,
-                    };
+            };
+            console.log(query);
             return query;
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadAccountSelectorDirective]).then(function () {
-                if (gridAPI != undefined) {
-                    gridAPI.loadGrid(getFilterObject());
-                }
-            })
+            return UtilsService.waitMultipleAsyncOperations([loadAccountSelectorDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })

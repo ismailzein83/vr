@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountStatement\AccountStatement.cs" />
-    <Compile Include="AccountStatement\AccountStatementDetail.cs" />
+    <Compile Include="AccountStatement\AccountStatementItem.cs" />
+    <Compile Include="AccountStatement\AccountStatementResult.cs" />
     <Compile Include="AccountStatement\AccountStatementQuery.cs" />
     <Compile Include="AccountStatement\AccountStatementViewSettings.cs" />
     <Compile Include="AccountUsage\AccountUsage.cs" />

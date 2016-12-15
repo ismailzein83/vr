@@ -52,6 +52,10 @@ namespace Vanrise.AccountBalance.Data.SQL
                            });
             return true;
         }
+        public IEnumerable<AccountUsage> GetPendingAccountUsages(Guid accountTypeId, long accountId)
+        {
+            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetAccountPendingUsage]", AccountUsageMapper, accountTypeId, accountId);
+        }
         #endregion
 
         #region Mappers
@@ -71,13 +75,16 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return new AccountUsage
             {
+                AccountUsageId = GetReaderValue<long>(reader, "ID"),
                 AccountId = (long)reader["AccountId"],
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeId"),
-                BillingTransactionId = GetReaderValue<long>(reader, "BillingTransactionId"),
+                BillingTransactionId = GetReaderValue<long?>(reader, "BillingTransactionId"),
                 ShouldRecreateTransaction = GetReaderValue<Boolean>(reader, "ShouldRecreateTransaction"),
                 PeriodStart = GetReaderValue<DateTime>(reader, "PeriodStart"),
                 PeriodEnd = GetReaderValue<DateTime>(reader, "PeriodEnd"),
                 UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
+                BillingTransactionNote = reader["BillingTransactionNote"] as string,
+                CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
             };
         }
         private AccountUsageInfo AccountUsageInfoMapper(IDataReader reader)

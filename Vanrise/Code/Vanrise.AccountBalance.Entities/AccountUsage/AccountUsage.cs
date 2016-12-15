@@ -14,7 +14,9 @@ namespace Vanrise.AccountBalance.Entities
         public DateTime PeriodStart { get; set; }
         public DateTime PeriodEnd { get; set; }
         public decimal UsageBalance { get; set; }
-        public long BillingTransactionId { get; set; }
+        public long? BillingTransactionId { get; set; }
         public bool ShouldRecreateTransaction { get; set; }
+        public string BillingTransactionNote { get; set; }
+        public int CurrencyId { get; set; }
     }
 }
