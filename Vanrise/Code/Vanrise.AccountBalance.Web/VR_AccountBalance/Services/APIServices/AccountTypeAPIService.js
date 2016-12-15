@@ -11,7 +11,7 @@
         }
 
         return {
-            GetAccountSelector: GetAccountSelector,
+            GetAccountSelector: GetAccountSelector
         };
     }
 

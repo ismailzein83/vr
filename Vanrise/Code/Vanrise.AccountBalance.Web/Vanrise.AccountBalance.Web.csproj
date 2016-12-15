@@ -160,6 +160,8 @@
     <Content Include="VR_AccountBalance\Directives\BalanceAccountType\vr-accountbalance-accounttype-selector.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\Constants\ModuleConfig.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransactionType\vr-accountbalance-billingtransactiontype-selector.js" />
+    <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTranactionSearch.html" />
+    <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-search.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\Templates\VRAccountTypeSettings.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\vr-accountbalance-accounttype-settings.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTranactionGridTemplate.html" />

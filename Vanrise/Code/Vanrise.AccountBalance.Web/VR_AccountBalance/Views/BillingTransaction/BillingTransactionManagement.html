@@ -1,13 +1,14 @@
-﻿<vr-panel ng-controller="VR_AccountBalance_BillingTransactionManagementController">
+﻿<vr-panel ng-controller="VR_AccountBalance_BillingTransactionManagementController" vr-loader="isLoading">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" label="From" isrequired="true" value="fromTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
-                </vr-columns> 
+                </vr-columns>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" label="To" value="toTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
+                <vr-directivewrapper directive="filterEditor" on-ready="onFilterDirectiveReady" normal-col-num="2" ismultipleselection="true"></vr-directivewrapper>
             </vr-row>
         </div>
         <vr-row removeline>
@@ -23,5 +24,5 @@
             </vr-columns>
         </vr-row>
     </vr-form>
-
 </vr-panel>
+
