@@ -17,8 +17,6 @@ namespace Vanrise.AccountBalance.Business
             return BigDataManager.Instance.RetrieveData(input, new AccountStatmentRequestHandler());
         }
 
-
-
         #region Private Classes
         private class AccountStatmentRequestHandler : BigDataRequestHandler<AccountStatementQuery, AccountStatement, AccountStatement>
         {
@@ -26,7 +24,7 @@ namespace Vanrise.AccountBalance.Business
             {
                 return entity;
             }
-
+            decimal _currenctBalance;
             public override IEnumerable<AccountStatement> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<AccountStatementQuery> input)
             {
 
@@ -34,16 +32,38 @@ namespace Vanrise.AccountBalance.Business
                 {
                     AccountsIds = new List<long> { input.Query.AccountId },
                     AccountTypeId = input.Query.AccountTypeId,
-                    FromDate = input.Query.FromDate,
-                    ToDate = input.Query.ToDate
+                    FromTime = input.Query.FromDate,
+                    ToTime = input.Query.ToDate
                 };
+                BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
                 IBillingTransactionDataManager billingTransactionDataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
                 var billingTransactions = billingTransactionDataManager.GetFilteredBillingTransactions(billingTransactionQuery);
                 List<AccountStatement> accountStatements = new List<AccountStatement>();
 
+
+                billingTransactions.OrderBy(x => x.TransactionTime);
+                _currenctBalance = 0;
                 foreach(var billingTransaction in billingTransactions)
                 {
-
+                    var billingTransactionType = billingTransactionTypeManager.GetBillingTransactionType(billingTransaction.TransactionTypeId);
+                   AccountStatement accountStatement= new AccountStatement
+                   {
+                       TransactionTime = billingTransaction.TransactionTime,
+                        Description = billingTransaction.Notes,
+                        TransactionType = billingTransactionType.Name,
+                   };
+                    if(billingTransactionType.IsCredit)
+                    {
+                        _currenctBalance += billingTransaction.Amount;
+                        accountStatement.Balance =_currenctBalance;
+                        accountStatement.Credit = billingTransaction.Amount;
+                    }else
+                    {
+                         _currenctBalance -= billingTransaction.Amount;
+                        accountStatement.Balance =_currenctBalance;
+                        accountStatement.Debit = billingTransaction.Amount;
+                    }
+                    accountStatements.Add(accountStatement);
                 }
 
                 return accountStatements;
@@ -56,7 +76,8 @@ namespace Vanrise.AccountBalance.Business
                 {
                     ResultKey = input.ResultKey,
                     Data = allRecords.ToList(),
-                    TotalCount = allRecords.Count()
+                    TotalCount = allRecords.Count(),
+                    CurrentBalance = _currenctBalance,
                 };
                 return analyticBigResult;
             }

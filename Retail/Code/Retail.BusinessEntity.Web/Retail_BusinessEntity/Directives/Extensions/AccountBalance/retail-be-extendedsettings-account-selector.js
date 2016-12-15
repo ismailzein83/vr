@@ -15,7 +15,7 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
                 ctor.initializeController();
 
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'accountCtrl',
             bindToController: true,
             compile: function (element, attrs) {
                 return {
@@ -30,7 +30,7 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
         };
 
         function getTemplate(attrs) {
-            return '<retail-be-account-selector isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" on-ready="ctrl.onDirectiveReady" ></retail-be-account-selector>';
+            return '<retail-be-account-selector isrequired="accountCtrl.isrequired" normal-col-num="{{accountCtrl.normalColNum}}"  on-ready="accountCtrl.onDirectiveReady" ></retail-be-account-selector>';
         }
 
         function accountsCtor(ctrl, $scope, attrs) {
@@ -42,8 +42,8 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
                 ctrl.onDirectiveReady = function (api) {
                     directiveReadyAPI = api;
                     directiveReadyPromiseDeferred.resolve();
+                    defineAPI();
                 };
-                defineAPI();
             }
 
             function defineAPI() {
@@ -73,7 +73,7 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
                 };
 
                 api.getData = function () {
-                    var data = directiveReadyAPI.getData();
+                    var data = directiveReadyAPI.getSelectedIds();
                     return {
                         selectedIds: data != undefined ? data.selectedIds : undefined,
                     };

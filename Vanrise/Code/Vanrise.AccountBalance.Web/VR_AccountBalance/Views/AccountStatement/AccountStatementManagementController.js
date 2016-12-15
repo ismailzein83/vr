@@ -58,14 +58,15 @@
             });
         }
         function getFilterObject() {
-            var accountObject;
-            if (accountSelectorAPI != undefined)
-                accountObject = accountSelectorAPI.getData();
+            //var accountObject;
+            //if (accountSelectorAPI != undefined)
+            //    accountObject = accountSelectorAPI.getData();
+            //accountObject != undefined ? accountObject.selectedIds : undefined,
             var query = {
                     FromDate: $scope.fromDate,
                     ToDate: $scope.toDate,
-                    AccountId: accountObject != undefined ? accountObject.selectedIds : undefined,
-                    AccountTypeId: invoiceTypeId,
+                    AccountId: 385750,
+                    AccountTypeId: accountTypeId,
                     };
             return query;
         }

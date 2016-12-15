@@ -14,7 +14,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
     public class AccountStatementController:BaseAPIController
     {
         AccountStatementManager _accountStatementManager = new AccountStatementManager();
-        [HttpGet]
+        [HttpPost]
         [Route("GetFilteredAccountStatments")]
         public object GetFilteredAccountStatments(Vanrise.Entities.DataRetrievalInput<AccountStatementQuery> input)
         {
