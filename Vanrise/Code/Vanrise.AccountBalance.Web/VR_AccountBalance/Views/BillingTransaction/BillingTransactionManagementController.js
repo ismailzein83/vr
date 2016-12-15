@@ -32,14 +32,12 @@
                 api.loadGrid(getFilterObject());
             };
 
-            $scope.onGridReady = function (api) {
-                gridAPI = api;
-                api.loadGrid(getFilterObject());
+            $scope.searchClicked = function (api) {
+                gridAPI.loadGrid(getFilterObject());
             };
             $scope.onFilterDirectiveReady = function (api) {
                 filterDirectiveAPI = api;
-                filterDirectiveReadyDeferred.resolve()
-
+                filterDirectiveReadyDeferred.resolve();
             };
         }
 
