@@ -42,7 +42,7 @@ app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["Utils
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.Invoice.Business, Retail.Invoice.Business.RetailSubscriberInvoiceSettings"
+                        $type: "Retail.Invoice.Business.RetailSubscriberInvoiceSettings, Retail.Invoice.Business"
                     };
                 };
 
