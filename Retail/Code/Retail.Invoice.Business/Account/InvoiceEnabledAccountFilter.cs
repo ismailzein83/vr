@@ -16,7 +16,7 @@ namespace Retail.Invoice.Business
             {
                 AccountManager accountManager = new AccountManager();
                 IAccountPayment accountPayment;
-                return !(accountManager.HasAccountPayment(context.Account.AccountId, true, out accountPayment));
+                return !accountManager.HasAccountPayment(context.Account.AccountId, false, out accountPayment);
             }
             return false;
         }

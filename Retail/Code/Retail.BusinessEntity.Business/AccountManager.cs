@@ -77,23 +77,21 @@ namespace Retail.BusinessEntity.Business
             IEnumerable<Account> allAccounts = GetCachedAccounts().Values;
             string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
             Func<Account, bool> filterFunc = null;
-            if (filter != null)
-            {
+           
                 filterFunc = (account) =>
                 {
-                    if (filter.Filters != null)
+                    if (nameFilterLower != null && !account.Name.Trim().ToLower().StartsWith(nameFilterLower))
+                        return false;
+
+                    if (filter != null && filter.Filters != null)
                     {
                         var context = new AccountFilterContext() {  Account = account };
                         if (filter.Filters.Any(x => x.IsExcluded(context)))
                             return false;
                     }
 
-                    if (nameFilterLower != null && !account.Name.ToLower().Contains(nameFilterLower))
-                        return false;
-
                     return true;
                 };
-            }
             return allAccounts.MapRecords(AccountInfoMapper, filterFunc).OrderBy(x => x.Name);
         }
 
@@ -251,7 +249,7 @@ namespace Retail.BusinessEntity.Business
             {
                 foreach (var part in account.Settings.Parts)
                 {
-                    accountPayment = part.Value as IAccountPayment;
+                    accountPayment = part.Value.Settings as IAccountPayment;
                     if (accountPayment != null)
                         return true;
                 }

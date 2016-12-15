@@ -50,20 +50,19 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
             }
             function setMenuActions() {
                 dataItem.menuActions = [];
-                for (var j = 0; j < dataItem.ActionTypeNames.length; j++)
-                {
-                    var invoiceGridAction = dataItem.ActionTypeNames[j];
-                    var invoiceAction = UtilsService.getItemByVal(invoiceActions, invoiceGridAction.InvoiceGridActionId, "InvoiceActionId");
-                    if (invoiceAction != undefined)
-                    {
-                        var actionType = VR_Invoice_InvoiceActionService.getActionTypeIfExist(invoiceAction.Settings.ActionTypeName);
-                        if (actionType != undefined) {
-                            addgridMenuAction(invoiceGridAction, invoiceAction, actionType);
+                if (dataItem.ActionTypeNames != undefined) {
+                    for (var j = 0; j < dataItem.ActionTypeNames.length; j++) {
+                        var invoiceGridAction = dataItem.ActionTypeNames[j];
+                        var invoiceAction = UtilsService.getItemByVal(invoiceActions, invoiceGridAction.InvoiceGridActionId, "InvoiceActionId");
+                        if (invoiceAction != undefined) {
+                            var actionType = VR_Invoice_InvoiceActionService.getActionTypeIfExist(invoiceAction.Settings.ActionTypeName);
+                            if (actionType != undefined) {
+                                addgridMenuAction(invoiceGridAction, invoiceAction, actionType);
+                            }
                         }
                     }
-                   
-                   
                 }
+               
                 function addgridMenuAction(invoiceGridAction, invoiceAction, actionType) {
                     dataItem.menuActions.push({
                         name: invoiceGridAction.Title,

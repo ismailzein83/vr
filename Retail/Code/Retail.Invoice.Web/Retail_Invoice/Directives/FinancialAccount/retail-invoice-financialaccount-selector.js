@@ -1,26 +1,21 @@
 ﻿'use strict';
-app.directive('retailInvoiceFinancialaccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUtilsService', 'UtilsService',
-function (Retail_BE_AccountAPIService, VRUIUtilsService, UtilsService) {
+app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: "@",
-                onselectionchanged: '=',
-                isrequired: "=",
-                isdisabled: "=",
-                selectedvalues: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-                var accountCtor = new AccountCtor(ctrl, $scope, $attrs);
-                accountCtor.initializeController();
-                ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
+                var ctor = new carriersCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'financialAccountCtrl',
             bindToController: true,
             compile: function (element, attrs) {
                 return {
@@ -30,91 +25,62 @@ function (Retail_BE_AccountAPIService, VRUIUtilsService, UtilsService) {
                 };
             },
             template: function (element, attrs) {
-                return getAccountTemplate(attrs);
+                return getTemplate(attrs);
             }
-
         };
 
-
-        function getAccountTemplate(attrs) {
-            var label = "Account";
-            var multipleselection = "";
-            if (attrs.ismultipleselection != undefined) {
-                label = "Accounts";
-                multipleselection = "ismultipleselection";
-            }
-
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                   + '<retail-be-account-selector on-ready="ctrl.onSelectorReady"'
-                   + ' ' + multipleselection
-                   + '  isrequired="ctrl.isrequired"'
-                   + '  label="' + label + '"'
-                   + '  >'
-                   + '</retail-be-account-selector>'
-                   + '</vr-columns>';
+        function getTemplate(attrs) {
+            return '<retail-be-account-selector isrequired="financialAccountCtrl.isrequired" normal-col-num="{{financialAccountCtrl.normalColNum}}" on-ready="financialAccountCtrl.onDirectiveReady"hideremoveicon></retail-be-account-selector>';
         }
 
-        function AccountCtor(ctrl, $scope, attrs) {
+        function carriersCtor(ctrl, $scope, attrs) {
 
-            this.initializeController = initializeController;
-
-            var filter;
-            var selectorAPI;
-
+            var directiveReadyAPI;
+            var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var context;
             function initializeController() {
 
-                ctrl.onSelectorReady = function (api) {
-                    selectorAPI = api;
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(defineAPI());
-                    }
+                ctrl.onDirectiveReady = function (api) {
+                    directiveReadyAPI = api;
+                    directiveReadyPromiseDeferred.resolve();
                 };
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-
                     var selectedIds;
-                    var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
                     if (payload != undefined) {
-                        selectedIds = payload.selectedIds
+                        context = payload.context;
+                        selectedIds = payload.selectedIds;
                     }
+                    var promises = [];
 
-                    if (selectedIds != undefined) {
-                        var selectedAccountIds = [];
-                        if (attrs.ismultipleselection != undefined)
-                            selectedAccountIds = selectedIds;
-                        else
-                            selectedAccountIds.push(selectedIds);
+                    var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(directiveLoadPromiseDeferred.promise);
 
-                        var financailAccountsPayload = {
-                            selectedIds: selectedIds,
-                            filter: getAccountSelectorFilter
+                    directiveReadyPromiseDeferred.promise.then(function () {
+                        var selectorPayload = { filter: getAccountSelectorFilter() };
+                        if (selectedIds != undefined) {
+                            selectorPayload.selectedIds = selectedIds;
                         }
-
-                        VRUIUtilsService.callDirectiveLoad(selectorAPI, financailAccountsPayload, accountSelectorLoadDeferred);
-                    }
-
-
-                };
-
-                api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('AccountId', attrs, ctrl);
+                        VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, selectorPayload, directiveLoadPromiseDeferred);
+                    });
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    selectorAPI.getSelectedIds();
-                }
+                    var data = directiveReadyAPI.getData();
+                    return {
+                        partnerPrefix: data != undefined ? data.partnerPrefix : undefined,
+                        selectedIds: data != undefined ? data.selectedIds : undefined,
+                    };
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-
-                return api;
-
             }
 
             function getAccountSelectorFilter() {
@@ -124,15 +90,17 @@ function (Retail_BE_AccountAPIService, VRUIUtilsService, UtilsService) {
 
                 var financialAccounts = {
                     $type: 'Retail.Invoice.Business.InvoiceEnabledAccountFilter, Retail.Invoice.Business',
-                    test: "Test"
                 };
                 filter.Filters.push(financialAccounts);
-
-
                 return filter;
             }
+
+            function getContext() {
+                var currentContext = context;
+                return currentContext;
+            }
+            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;
-
     }]);

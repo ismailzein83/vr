@@ -9,5 +9,7 @@ namespace Retail.Invoice.Entities
     public class RetailSubscriberInvoiceItemDetails
     {
         public decimal Amount { get; set; }
+
+        public Guid ServiceTypeId { get; set; }
     }
 }

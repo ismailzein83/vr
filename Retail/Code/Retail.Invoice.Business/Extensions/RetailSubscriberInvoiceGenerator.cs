@@ -17,16 +17,16 @@ namespace Retail.Invoice.Business
     {
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<string> listMeasures = new List<string> { "TotalAmount" };
-            List<string> listDimensions = new List<string> { "ServiceTypeId" };
+            List<string> listMeasures = new List<string> { "Amount" };
+            List<string> listDimensions = new List<string> { "SubscriberAccountId", "ServiceType" };
 
-            string dimensionName = "ServiceTypeId";
+            string dimensionName = "SubscriberAccountId";
 
             AccountManager accountManager = new AccountManager();
             IAccountPayment accountPayment;
             long accountId = Convert.ToInt32(context.PartnerId);
-            if (!accountManager.HasAccountPayment(accountId, true, out accountPayment))
-                return;
+            if (!accountManager.HasAccountPayment(accountId, false, out accountPayment))
+                throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", accountId));
 
             int currencyId = accountPayment.CurrencyId;
             Account account = accountManager.GetAccount(accountId);
@@ -85,6 +85,7 @@ namespace Retail.Invoice.Business
                         RetailSubscriberInvoiceItemDetails subscriberInvoiceItemDetails = new RetailSubscriberInvoiceItemDetails()
                         {
                             Amount = item.Amount,
+                            ServiceTypeId = item.ServiceTypeId
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -133,19 +134,17 @@ namespace Retail.Invoice.Business
             {
                 foreach (var analyticRecord in analyticRecords)
                 {
-
-                    #region ReadDataFromAnalyticResult
-                    DimensionValue serviceTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-
-                    MeasureValue totalAmount = GetMeasureValue(analyticRecord, "TotalAmount");
-
-                    #endregion
-                    InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
+                    DimensionValue serviceTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
+                    if (serviceTypeId.Value != null)
                     {
-                        ServiceTypeId = Convert.ToInt32(serviceTypeId.Value),
-                        Amount = Convert.ToDecimal(totalAmount.Value ?? 0.0),
-                    };
-                    AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
+                        MeasureValue totalAmount = GetMeasureValue(analyticRecord, "Amount");
+                        InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
+                        {
+                            ServiceTypeId = new Guid(serviceTypeId.Value.ToString()),
+                            Amount = Convert.ToDecimal(totalAmount.Value ?? 0.0),
+                        };
+                        AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
+                    }
                 }
             }
             return itemSetNamesDic;
@@ -180,7 +179,7 @@ namespace Retail.Invoice.Business
         public class InvoiceBillingRecord
         {
             public decimal Amount { get; set; }
-            public long ServiceTypeId { get; set; }
+            public Guid ServiceTypeId { get; set; }
         }
 
     }
