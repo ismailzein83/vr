@@ -33,14 +33,15 @@ namespace TOne.WhS.DBSync.Data.SQL
                 AccountType = (SourceAccountType)reader["AccountType"],
                 CurrencyId = reader["CurrencyID"] as string,
                 CarrierMask = reader["CarrierMask"] as string,
-                IsDeleted = (reader["IsDeleted"] as string).Equals("Y", System.StringComparison.InvariantCultureIgnoreCase)
+                IsDeleted = (reader["IsDeleted"] as string).Equals("Y", System.StringComparison.InvariantCultureIgnoreCase),
+                IsAToZ = (reader["IsAToZ"] as string).Equals("Y", System.StringComparison.InvariantCultureIgnoreCase)
             };
             return sourceCarrierAccount;
         }
 
         const string query_getSourceCarrierAccounts = @"SELECT  ca.CarrierAccountID CarrierAccountID, ca.ProfileID ProfileID, ca.ActivationStatus ActivationStatus, ca.RoutingStatus RoutingStatus,  
                                                                 ca.AccountType AccountType, ca.NameSuffix NameSuffix, ca.ServicesFlag ServicesFlag, ca.GMTTime GMTTime, ca.CustomerGMTTime CustomerGMTTime,
-                                                                cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask , ca.IsDeleted IsDeleted, ca.NominalCapacityInE1s NominalCapacityInE1s
+                                                                cp.CurrencyID CurrencyID, ca.CarrierMask CarrierMask , ca.IsDeleted IsDeleted, ca.NominalCapacityInE1s NominalCapacityInE1s, ca.IsAToZ IsAToZ
                                                                 FROM  CarrierAccount ca WITH (NOLOCK) INNER JOIN CarrierProfile cp 
                                                                 ON ca.ProfileID = cp.ProfileID";
     }
