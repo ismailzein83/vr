@@ -32,7 +32,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("CustomerID", typeof(int));
             dt.Columns.Add("CountryID", typeof(int));
             dt.Columns.Add("BED", typeof(DateTime));
-
+            dt.Columns.Add("EED", typeof(DateTime?));
             dt.BeginLoadData();
 
             foreach (var item in customerZones)
@@ -42,6 +42,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row["CustomerID"] = item.CustomerId;
                 row["CountryID"] = item.CountryId;
                 row["BED"] = (DateTime)item.BED;
+                row["EED"] = (DateTime?)item.EED;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
@@ -78,7 +79,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             Dictionary<int, SourceCustomerZone> customerZones = new Dictionary<int, SourceCustomerZone>();
             SourceCustomerZone customerZone;
-            ExecuteReaderText("SELECT DISTINCT SP.OwnerID, SZ.CountryID, SP.OwnerType, MIN(SR.BED) AS BED FROM "
+            ExecuteReaderText("SELECT DISTINCT SP.OwnerID, SZ.CountryID, SP.OwnerType, MIN(SR.BED) AS BED , MAX(SR.eed) as EED, SUM(Case when SR.EED is null then 1 else 0 end) as HasNullEED FROM "
                       + MigrationUtils.GetTableName(_Schema, "SalePriceList", useTempTables) + " AS SP INNER JOIN"
                       + MigrationUtils.GetTableName(_Schema, "SaleRate", useTempTables) + " AS SR ON SP.ID = SR.PriceListID INNER JOIN "
                       + MigrationUtils.GetTableName(_Schema, "SaleZone", useTempTables) + " AS SZ ON SR.ZoneID = SZ.ID"
@@ -88,13 +89,22 @@ namespace TOne.WhS.DBSync.Data.SQL
                           {
                               int ownerId = (int)reader["OwnerID"];
                               DateTime bed = (DateTime)reader["BED"];
+                              DateTime? eed = GetReaderValue<DateTime?>(reader, "EED");
+                              bool hasNullEED = (bool)reader["HasNullEED"];
+
+                              DateTime? modifiedEED = hasNullEED ? null : eed;
+
                               if (!customerZones.TryGetValue(ownerId, out customerZone))
                               {
                                   customerZones.Add(ownerId, new SourceCustomerZone()
                                   {
                                       Countries = new List<CustomerCountry>()
                                       { 
-                                          new CustomerCountry(){ CountryId = (int)reader["CountryID"], StartEffectiveTime =bed }
+                                          new CustomerCountry(){ 
+                                              CountryId = (int)reader["CountryID"], 
+                                              StartEffectiveTime = bed, 
+                                              EndEffectiveTime = modifiedEED
+                                          }
                                       },
                                       CustomerId = ownerId,
                                       StartEffectiveTime = bed
@@ -102,10 +112,9 @@ namespace TOne.WhS.DBSync.Data.SQL
                               }
                               else
                               {
-                                  customerZones[ownerId].Countries.Add(new CustomerCountry() { CountryId = (int)reader["CountryID"], StartEffectiveTime = bed });
-                                  customerZones[ownerId].StartEffectiveTime = Vanrise.Common.Utilities.Min(customerZones[ownerId].StartEffectiveTime, bed);
+                                  customerZone.Countries.Add(new CustomerCountry() { CountryId = (int)reader["CountryID"], StartEffectiveTime = bed, EndEffectiveTime = modifiedEED });
+                                  customerZone.StartEffectiveTime = Vanrise.Common.Utilities.Min(customerZone.StartEffectiveTime, bed);
                               }
-
                           }
                       }, null);
 

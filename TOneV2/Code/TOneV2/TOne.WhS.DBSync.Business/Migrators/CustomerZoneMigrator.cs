@@ -72,6 +72,7 @@ namespace TOne.WhS.DBSync.Business
                         CustomerCountry2 customerCountry = new CustomerCountry2()
                         {
                             BED = country.StartEffectiveTime,
+                            EED = country.EndEffectiveTime,
                             CountryId = country.CountryId,
                             CustomerId = sourceCustomerZone.CustomerId,
                             CustomerCountryId = counter
