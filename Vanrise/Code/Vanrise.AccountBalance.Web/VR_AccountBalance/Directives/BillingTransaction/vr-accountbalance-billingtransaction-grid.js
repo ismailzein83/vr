@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrBillingtransactionGrid', ['VR_AccountBalance_BillingTransactionAPIService', 'VRNotificationService',
+app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_BillingTransactionAPIService', 'VRNotificationService',
     function (VR_AccountBalance_BillingTransactionAPIService, VRNotificationService) {
         return {
             restrict: 'E',

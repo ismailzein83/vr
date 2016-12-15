@@ -68,6 +68,7 @@
     <Compile Include="BalanceUsageQueue\BalanceUsageQueue.cs" />
     <Compile Include="BillingTransactionType\BillingTransactionType.cs" />
     <Compile Include="BillingTransactionType\BillingTransactionTypeInfo.cs" />
+    <Compile Include="BillingTransaction\BillingTransactionViewSettings.cs" />
     <Compile Include="BillingTransaction\BillingTransactionBatch.cs" />
     <Compile Include="BillingTransaction\BillingTransactionDetail.cs" />
     <Compile Include="BillingTransaction\BillingTransactionQuery.cs" />

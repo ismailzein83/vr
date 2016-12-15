@@ -163,7 +163,7 @@
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\Templates\VRAccountTypeSettings.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\vr-accountbalance-accounttype-settings.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTranactionGridTemplate.html" />
-    <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-billingtransaction-grid.js" />
+    <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-grid.js" />
     <Content Include="VR_AccountBalance\Directives\LiveBalance\Templates\LiveBalanceTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\LiveBalance\vr-livebalance-currentaccountbalance.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\BalanceAlertRuleSettingsTemplate.html" />
@@ -192,6 +192,8 @@
     <Content Include="VR_AccountBalance\Views\AccountStatement\AccountStatementManagementController.js" />
     <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionEditor.html" />
     <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionEditorController.js" />
+    <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionManagement.html" />
+    <Content Include="VR_AccountBalance\Views\BillingTransaction\BillingTransactionManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
