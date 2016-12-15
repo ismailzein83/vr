@@ -167,10 +167,14 @@
   <ItemGroup>
     <Content Include="Client\Images\01.png" />
     <Content Include="Client\Images\02.png" />
+    <Content Include="Client\Images\cloudXPoint-01.png" />
+    <Content Include="Client\Images\cloudXPoint-02.png" />
     <Content Include="Client\Images\doruknet-logo.png" />
     <Content Include="Client\Images\explicit.png" />
     <Content Include="Client\Images\false.png" />
     <Content Include="Client\Images\inherited.png" />
+    <Content Include="Client\Images\INSOFT-01.png" />
+    <Content Include="Client\Images\INSOFT-02.png" />
     <Content Include="Client\Images\menu-icons\admin.png" />
     <Content Include="Client\Images\menu-icons\Administration.png" />
     <Content Include="Client\Images\menu-icons\busines intel.png" />
@@ -180,6 +184,8 @@
     <Content Include="Client\Images\log in.png" />
     <Content Include="Client\Images\logout.png" />
     <Content Include="Client\Images\member.png" />
+    <Content Include="Client\Images\nTegra-01.png" />
+    <Content Include="Client\Images\nTegra-02.png" />
     <Content Include="Client\Images\onebit_33.png" />
     <Content Include="Client\Images\onebit_34.png" />
     <Content Include="Client\Images\support.png" />
