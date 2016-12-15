@@ -56,12 +56,10 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
         public override void ProcessItem(Queueing.Entities.PersistentQueueItem item, Queueing.Entities.ItemsToEnqueue outputItems)
         {
-            throw new NotImplementedException();
         }
 
         public override void OnDisposed()
         {
-            throw new NotImplementedException();
         }
     }
 }

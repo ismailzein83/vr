@@ -183,6 +183,7 @@
     <Content Include="Analytic\Directives\Definition\AnalyticItemAction\vr-analytic-analyticitemaction-editor.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\History\Templates\HistoryAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\History\vr-analytic-analyticreport-history-definition.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\History\Widgets\Templates\WidgetsSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-stylerulecondition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\SearchSettings\vr-analytic-realtime-searchsettings-selective.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Templates\RealTimeAnalyticReportTemplates.html" />

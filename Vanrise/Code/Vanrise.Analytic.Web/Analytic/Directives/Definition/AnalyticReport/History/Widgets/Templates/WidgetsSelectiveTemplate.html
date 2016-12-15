@@ -1,0 +1,48 @@
+﻿<vr-tabs>
+    <vr-tab header="'Definition'">
+        <vr-row>
+
+            <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">
+                <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>
+            </vr-columns>
+
+            <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">
+                <vr-select datasource="scopeModel.columnWidth" datatextfield="description" datavaluefield="value" hideremoveicon label="Row Space" selectedvalues="scopeModel.selectedColumnWidth" isrequired hidefilterbox></vr-select>
+            </vr-columns>
+
+            <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">
+                <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" 
+                                            selectedvalues="scopeModel.selectedTable"
+                                            onselectitem="scopeModel.onSelectionTableChanged"
+                                            onselectionchanged="scopeModel.onAnalyticTableSelectorChanged"
+                                            hideremoveicon isrequired="true">
+                </vr-analytic-table-selector>
+            </vr-columns>
+
+            <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}" ng-if="scopeModel.selectedTable !=undefined">
+                <vr-select on-ready="scopeModel.onSelectorReady"
+                           datasource="scopeModel.templateConfigs"
+                           selectedvalues="scopeModel.selectedTemplateConfig"
+                           datavaluefield="ExtensionConfigurationId"
+                           datatextfield="Title"
+                           label="Widgets"
+                           isrequired="true"
+                           hideremoveicon>
+                </vr-select>
+            </vr-columns>
+
+            <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">
+                <vr-switch label="Show Title" value="scopeModel.showTitle"></vr-switch>
+            </vr-columns>
+
+        </vr-row>
+        <vr-directivewrapper directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{searchSettingsCtrl.normalColNum}}" isrequired="searchSettingsCtrl.isrequired" customvalidate="searchSettingsCtrl.customvalidate" type="searchSettingsCtrl.type"></vr-directivewrapper>
+    </vr-tab>
+    <vr-tab header="'Filters'">
+        <vr-section title="Record Filter" vr-loader="scopeModel.isRecordFilterDirectiveLoading" collapsible>
+            <vr-row>
+                <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+            </vr-row>
+        </vr-section>
+    </vr-tab>
+</vr-tabs>

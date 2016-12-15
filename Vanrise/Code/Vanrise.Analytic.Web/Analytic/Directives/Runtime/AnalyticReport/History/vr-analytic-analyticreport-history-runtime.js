@@ -20,18 +20,24 @@
             templateUrl: "/Client/Modules/Analytic/Directives/Runtime/AnalyticReport/History/Templates/HistoryAnalyticReportRuntimeTemplates.html"
 
         };
+
         function HistoryAnalyticReport($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var fieldTypes = [];
             var filterObj;
+
+            var dimensions = [];
+            var measures = [];
+            var settings;
+
             var currencySelectorAPI;
             var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var timeRangeDirectiveAPI;
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var dimensions = [];
-            var measures = [];
-            var settings;
+
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -48,22 +54,19 @@
                     timeRangeReadyPromiseDeferred.resolve();
                 };
 
-
                 $scope.scopeModel.onCurrencySelectorReady = function (api) {
                     currencySelectorAPI = api;
                     currencySelectorReadyDeferred.resolve();
                 };
-
                 $scope.scopeModel.addFilter = function () {
                     var onDimensionFilterAdded = function (filter, expression) {
                         filterObj = filter;
                         $scope.scopeModel.expression = expression;
                     };
                     var fields = [];
-                    for (var i = 0; i < dimensions.length; i++)
-                    {
+                    for (var i = 0; i < dimensions.length; i++) {
                         var dimension = dimensions[i];
-                    
+
                         fields.push({
                             FieldName: dimension.Name,
                             FieldTitle: dimension.Title,
@@ -79,12 +82,10 @@
                 };
 
                 $scope.search = function () {
-                    if (!$scope.scopeModel.isLoadedData)
-                    {
+                    if (!$scope.scopeModel.isLoadedData) {
                         $scope.scopeModel.isLoadedData = true;
-                       return loadWidgets();
-                    } else
-                    {
+                        return loadWidgets();
+                    } else {
                         if ($scope.scopeModel.widgets.length > 0) {
                             var promiseDeffer = UtilsService.createPromiseDeferred();
                             for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
@@ -96,20 +97,17 @@
                             return promiseDeffer.promise;
                         }
                     }
-                   
+
                 };
 
                 defineColumnWidth();
-
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         settings = payload.settings;
                     }
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
@@ -131,33 +129,37 @@
                     return loadPromiseDeffer.promise;
                 };
 
-              
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
 
             }
+            function defineColumnWidth() {
+                $scope.scopeModel.columnWidth = [];
+                for (var td in ColumnWidthEnum)
+                    $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
+                $scope.scopeModel.selectedColumnWidth = $scope.scopeModel.columnWidth[0];
+            }
 
-            function loadTimeRangeDirective()
-                {
-                     var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
-                             timeRangeReadyPromiseDeferred.promise.then(function () {
-                        var timeRangePeriod = {
-                                period: PeriodEnum.Today.value
-                                };
+            function loadTimeRangeDirective() {
+                var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
+                timeRangeReadyPromiseDeferred.promise.then(function () {
+                    var timeRangePeriod = {
+                        period: PeriodEnum.Today.value
+                    };
 
-                        VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
 
                 });
-                             return loadTimeDimentionPromiseDeferred.promise;
-                }
-
+                return loadTimeDimentionPromiseDeferred.promise;
+            }
 
             function getWidgetsTemplateConfigs() {
                 return VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {
-                   
+
                     if (response != null) {
-                        
+
                         for (var i = 0; i < response.length; i++) {
                             $scope.scopeModel.templateConfigs.push(response[i]);
                         }
@@ -192,8 +194,7 @@
                     for (var i = 0; i < settings.SearchSettings.GroupingDimensions.length; i++) {
                         var groupingDimention = settings.SearchSettings.GroupingDimensions[i];
                         var dimension = UtilsService.getItemByVal(dimensions, groupingDimention.DimensionName, "Name");
-                        if (dimension !=undefined && dimension.Config.RequiredParentDimension == undefined)
-                        {
+                        if (dimension != undefined && dimension.Config.RequiredParentDimension == undefined) {
                             var dimensionObj = {
                                 DimensionName: groupingDimention.DimensionName,
                                 IsSelected: groupingDimention.IsSelected,
@@ -204,7 +205,7 @@
                                 $scope.scopeModel.selectedGroupingDimentions.push(dimensionObj);
                             }
                         }
-                       
+
                     }
                 }
 
@@ -214,10 +215,10 @@
                     currencySelectorReadyDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, undefined, loadCurrencySelectorDirectivePromiseDeferred);
                     });
-                     filterPromises.push(loadCurrencySelectorDirectivePromiseDeferred.promise);
+                    filterPromises.push(loadCurrencySelectorDirectivePromiseDeferred.promise);
                 }
 
-      
+
 
 
 
@@ -314,23 +315,17 @@
                     $scope.scopeModel.widgets.push(widget);
                 }
 
-                return  UtilsService.waitMultiplePromises(promises);
+                return UtilsService.waitMultiplePromises(promises);
 
-            }
-
-            function defineColumnWidth() {
-                $scope.scopeModel.columnWidth = [];
-                for (var td in ColumnWidthEnum)
-                    $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
-                $scope.scopeModel.selectedColumnWidth = $scope.scopeModel.columnWidth[0];
             }
 
             function getQuery(widgetPayload) {
+                console.log(widgetPayload);
                 var dimensionFilters = [];
                 if ($scope.scopeModel.filters != undefined) {
                     for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
                         var filter = $scope.scopeModel.filters[i];
-                        if (filter.directiveAPI !=undefined && filter.directiveAPI.getData() != undefined) {
+                        if (filter.directiveAPI != undefined && filter.directiveAPI.getData() != undefined) {
                             dimensionFilters.push({
                                 Dimension: filter.dimesnionName,
                                 FilterValues: filter.directiveAPI.getValuesAsArray()
@@ -364,13 +359,27 @@
                     SelectedGroupingDimensions: groupingDimensions,
                     TableId: widgetPayload.AnalyticTableId,
                     FromTime: $scope.scopeModel.fromdate,
-                    FilterGroup: filterObj,
+                    FilterGroup: buildFilterGroupObj(filterObj, widgetPayload.RecordFilter),
                     ToTime: $scope.scopeModel.todate
                 };
                 return query;
-            }
-        }
+            };
 
+            function buildFilterGroupObj(filterObj, widgetRecordFilter) {
+                if (widgetRecordFilter == undefined)
+                    return filterObj;
+
+                if (filterObj == undefined)
+                    return widgetRecordFilter;
+
+                return {
+                    $type: 'Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities',
+                    LogicalOperator: 0,
+                    Filters: [filterObj, widgetRecordFilter]
+                };
+            };
+        }
     }
+
     app.directive('vrAnalyticAnalyticreportHistoryRuntime', HistoryAnalyticReportDirective);
 })(app);

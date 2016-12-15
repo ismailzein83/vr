@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnalyticWidgetsSelective.$inject = ['VR_Analytic_AnalyticConfigurationAPIService', 'UtilsService', 'VRUIUtilsService','ColumnWidthEnum'];
+    AnalyticWidgetsSelective.$inject = ['VR_Analytic_AnalyticConfigurationAPIService', 'VR_Analytic_AnalyticTypeEnum', 'UtilsService', 'VRUIUtilsService', 'ColumnWidthEnum', 'VR_Analytic_AnalyticItemConfigAPIService'];
 
-    function AnalyticWidgetsSelective(VR_Analytic_AnalyticConfigurationAPIService, UtilsService, VRUIUtilsService, ColumnWidthEnum) {
+    function AnalyticWidgetsSelective(VR_Analytic_AnalyticConfigurationAPIService, VR_Analytic_AnalyticTypeEnum, UtilsService, VRUIUtilsService, ColumnWidthEnum, VR_Analytic_AnalyticItemConfigAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -21,56 +21,16 @@
             },
             controllerAs: "searchSettingsCtrl",
             bindToController: true,
-            template: function (element, attrs) {
-                return getTamplate(attrs);
-            }
+            templateUrl: "/Client/Modules/Analytic/Directives/Definition/AnalyticReport/History/Widgets/Templates/WidgetsSelectiveTemplate.html"
         };
-        function getTamplate(attrs) {
-            var withemptyline = 'withemptyline';
-            var label = "label='Widgets'";
-            if (attrs.hidelabel != undefined) {
-                label = "";
-                withemptyline = '';
-            }
 
-
-            var template =
-                '<vr-row>'
-                + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
-                + ' <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>'
-                + ' </vr-columns>'
-                + '  <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
-                + '  <vr-select datasource="scopeModel.columnWidth" datatextfield="description" datavaluefield="value" hideremoveicon label="Row Space" selectedvalues="scopeModel.selectedColumnWidth" isrequired hidefilterbox></vr-select>'
-                + ' </vr-columns>'
-
-
-                + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
-                + ' <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTable" hideremoveicon onselectitem="scopeModel.onSelectionTableChanged"></vr-analytic-table-selector>'
-              + ' </vr-columns>'
-
-              + '<vr-columns colnum="{{searchSettingsCtrl.normalColNum}}" ng-if="scopeModel.selectedTable !=undefined">'
-              + ' <vr-select on-ready="scopeModel.onSelectorReady"'
-              + ' datasource="scopeModel.templateConfigs"'
-              + ' selectedvalues="scopeModel.selectedTemplateConfig"'
-               + 'datavaluefield="ExtensionConfigurationId"'
-              + ' datatextfield="Title"'
-              + label
-               + ' isrequired="true"'
-              + 'hideremoveicon>'
-          + '</vr-select>'
-           + ' </vr-columns>'
-
-           + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
-                + ' <vr-switch label="Show Title" value="scopeModel.showTitle"></vr-switch>'
-                + ' </vr-columns>'
-
-           + '</vr-row>'
-              + '<vr-directivewrapper directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{searchSettingsCtrl.normalColNum}}" isrequired="searchSettingsCtrl.isrequired" customvalidate="searchSettingsCtrl.customvalidate" type="searchSettingsCtrl.type"></vr-directivewrapper>';
-            return template;
-
-        }
         function Widgets($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
+            var tableIds;
+            var dimensions;
+            var widgetEntity;
+
             var selectorAPI;
 
             var directiveAPI;
@@ -79,7 +39,11 @@
 
             var tableSelectorAPI;
             var tableSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-            var tableIds;
+            var tableSelectorSelectionChanged;
+
+            var recordFilterDirectiveAPI;
+            var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -91,7 +55,7 @@
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
-                  
+
                 };
                 $scope.scopeModel.onTableSelectorDirectiveReady = function (api) {
                     tableSelectorAPI = api;
@@ -99,7 +63,7 @@
                 };
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
-                    directivePayload={
+                    directivePayload = {
                         tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined
                     };
                     var setLoader = function (value) {
@@ -107,62 +71,90 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
+
+                $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
+                    recordFilterDirectiveAPI = api;
+                    recordFilterDirectiveReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onAnalyticTableSelectorChanged = function (selectedItem) {
+
+                    if (selectedItem != undefined) {
+
+                        var input = {
+                            TableIds: [selectedItem.AnalyticTableId],
+                            ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value,
+                        };
+
+                        loadDimensions(input).then(function (response) {
+
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isRecordFilterDirectiveLoading = value;
+                            };
+                            var recordFilterDirectivePayload = {};
+                            recordFilterDirectivePayload.context = buildContext();
+
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterDirectivePayload, setLoader, tableSelectorSelectionChanged);
+                        });
+                    }
+                }
+
                 defineColumnWidth();
                 defineAPI();
-
             }
-
             function defineAPI() {
                 var api = {};
-                var widgetEntity;
+
+
                 api.load = function (payload) {
-               
+
                     var promises = [];
                     if (payload != undefined) {
                         tableIds = payload.tableIds;
 
-                        if (payload.widgetEntity != undefined)
-                        {
-                            widgetEntity = payload.widgetEntity;
+                        if (payload.widgetEntity != undefined) {
 
-                            $scope.scopeModel.widgetTitle = payload.widgetEntity.WidgetTitle;
-                            $scope.scopeModel.selectedColumnWidth = UtilsService.getItemByVal($scope.scopeModel.columnWidth, payload.widgetEntity.ColumnWidth, "value");
-                            $scope.scopeModel.showTitle = payload.widgetEntity.ShowTitle;
+                            widgetEntity = payload.widgetEntity;
+                            $scope.scopeModel.widgetTitle = widgetEntity.WidgetTitle;
+                            $scope.scopeModel.selectedColumnWidth = UtilsService.getItemByVal($scope.scopeModel.columnWidth, widgetEntity.ColumnWidth, "value");
+                            $scope.scopeModel.showTitle = widgetEntity.ShowTitle;
+
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;
                                 var payloadDirective = {
                                     tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined,
-                                    widgetEntity: payload.widgetEntity
+                                    widgetEntity: widgetEntity
                                 };
 
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                             });
                             promises.push(loadDirectivePromiseDeferred.promise);
-
                         }
+
                         var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         tableSelectorReadyDeferred.promise.then(function () {
                             var payLoadTableSelector = {
                                 filter: { OnlySelectedIds: tableIds },
-                                selectedIds: payload.widgetEntity != undefined ? payload.widgetEntity.AnalyticTableId : undefined
+                                selectedIds: widgetEntity != undefined ? widgetEntity.AnalyticTableId : undefined
                             };
 
                             VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoadTableSelector, loadTableSelectorPromiseDeferred);
                         });
                         promises.push(loadTableSelectorPromiseDeferred.promise);
-                            var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
-                            promises.push(getWidgetsTemplateConfigsPromise);
 
-                            return UtilsService.waitMultiplePromises(promises);
+                        var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
+                        promises.push(getWidgetsTemplateConfigsPromise);
+
+                        //Loading Record Filter Directive @EditMode only
+                        if (widgetEntity != undefined) {
+                            var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise(widgetEntity.RecordFilter);
+                            promises.push(recordFilterDirectiveLoadPromise);
+                        }
+
+                        return UtilsService.waitMultiplePromises(promises);
                     }
-
-
-
-                    
-
-
                 };
 
                 api.getData = getData;
@@ -170,38 +162,6 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
-
-                function getData() {
-                    var data;
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-
-                        data = directiveAPI.getData();
-                        if (data != undefined) {
-                            data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                            data.AnalyticTableId = $scope.scopeModel.selectedTable != undefined ? $scope.scopeModel.selectedTable.AnalyticTableId : undefined;
-                            data.WidgetTitle = $scope.scopeModel.widgetTitle;
-                            data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
-                            data.ShowTitle = $scope.scopeModel.showTitle;
-                        }
-                    }
-                    return data;
-                }
-                function getWidgetsTemplateConfigs() {
-                    return VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {
-                        if (selectorAPI != undefined)
-                            selectorAPI.clearDataSource();
-                        if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                $scope.scopeModel.templateConfigs.push(response[i]);
-                            }
-                            if (widgetEntity != undefined)
-                                $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, widgetEntity.ConfigId, 'ExtensionConfigurationId');
-                            //else
-                            //$scope.selectedTemplateConfig = $scope.templateConfigs[0];
-                        }
-                    });
-                }
-                
             }
             function defineColumnWidth() {
                 $scope.scopeModel.columnWidth = [];
@@ -209,6 +169,92 @@
                     $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
                 $scope.scopeModel.selectedColumnWidth = ColumnWidthEnum.FullRow;
             }
+
+            function getData() {
+                var data;
+                if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
+
+                    data = directiveAPI.getData();
+                    if (data != undefined) {
+                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                        data.AnalyticTableId = $scope.scopeModel.selectedTable != undefined ? $scope.scopeModel.selectedTable.AnalyticTableId : undefined;
+                        data.WidgetTitle = $scope.scopeModel.widgetTitle;
+                        data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
+                        data.ShowTitle = $scope.scopeModel.showTitle;
+                        data.RecordFilter = recordFilterDirectiveAPI.getData().filterObj
+                    }
+                }
+                return data;
+            }
+            function getWidgetsTemplateConfigs() {
+                return VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {
+                    if (selectorAPI != undefined)
+                        selectorAPI.clearDataSource();
+                    if (response != null) {
+                        for (var i = 0; i < response.length; i++) {
+                            $scope.scopeModel.templateConfigs.push(response[i]);
+                        }
+                        if (widgetEntity != undefined)
+                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, widgetEntity.ConfigId, 'ExtensionConfigurationId');
+                        //else
+                        //$scope.selectedTemplateConfig = $scope.templateConfigs[0];
+                    }
+                });
+            }
+            function getRecordFilterDirectiveLoadPromise(recordFilter) {
+                var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                if (tableSelectorSelectionChanged == undefined)
+                    tableSelectorSelectionChanged = UtilsService.createPromiseDeferred();
+
+                UtilsService.waitMultiplePromises([recordFilterDirectiveReadyDeferred.promise, tableSelectorSelectionChanged.promise]).then(function () {
+                    tableSelectorSelectionChanged = undefined;
+
+                    var input = {
+                        TableIds: [$scope.scopeModel.selectedTable.AnalyticTableId],
+                        ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value,
+                    };
+
+                    loadDimensions(input).then(function (response) {
+
+                        var recordFilterDirectivePayload = {};
+                        recordFilterDirectivePayload.context = buildContext();
+                        if (recordFilter != undefined) {
+                            recordFilterDirectivePayload.FilterGroup = recordFilter;
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+                    });
+                });
+
+                return recordFilterDirectiveLoadDeferred.promise;
+            }
+            function loadDimensions(input) {
+
+                return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
+                    dimensions = response;
+                });
+            }
+            function buildContext() {
+                var context = {
+                    getFields: function () {
+                        var fields = [];
+                        if (dimensions != undefined) {
+                            for (var i = 0; i < dimensions.length; i++) {
+                                var dimension = dimensions[i];
+
+                                fields.push({
+                                    FieldName: dimension.Name,
+                                    FieldTitle: dimension.Title,
+                                    Type: dimension.Config.FieldType,
+                                });
+                            }
+                        }
+                        return fields;
+                    }
+                }
+                return context;
+            };
         }
     }
 
