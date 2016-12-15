@@ -90,6 +90,7 @@
     <Compile Include="Rules\SourceBaseRule.cs" />
     <Compile Include="Rules\SourceRule.cs" />
     <Compile Include="Rules\SourceRouteOverrideRule.cs" />
+    <Compile Include="Rules\SourceTariffRule.cs" />
     <Compile Include="Rules\SupplierOption.cs" />
     <Compile Include="SourceCarrierSwitchConnectivity.cs" />
     <Compile Include="SourceMarketPrice.cs" />
