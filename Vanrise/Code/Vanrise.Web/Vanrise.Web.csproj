@@ -1157,6 +1157,7 @@
     <Content Include="Client\Styles\simple-sidebar.css" />
     <Content Include="Client\Styles\Styles.css" />
     <None Include="Client\Themes\theme-extented-blue.css.exclude" />
+    <Content Include="Client\Themes\theme-extented-INSOFT.css.exclude" />
     <None Include="Client\Themes\theme-extented-red.css.exclude" />
     <None Include="Client\Themes\theme-extented-green.css.exclude" />
     <None Include="Client\Themes\theme-extented-cloudXPoint.css.exclude" />
