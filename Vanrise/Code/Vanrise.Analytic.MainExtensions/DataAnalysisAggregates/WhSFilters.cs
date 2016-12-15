@@ -191,7 +191,7 @@ namespace Vanrise.Analytic.MainExtensions.DataAnalysisAggregationFields
 
             //FILTER
             recordAnalysisIn.RecordFilter = new RecordFilterGroup();
-            recordAnalysisIn.RecordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "CustomerAccountType", Values = new List<decimal> { 1 } });//Exchange
+            recordAnalysisIn.RecordFilter.Filters.Add(new StringListRecordFilter { FieldName = "CustomerAccountType", Values = new List<string> { "1" } });//Exchange
             
             //GROUPING
             recordAnalysisIn.GroupingFields = new List<DAProfCalcGroupingField>();
@@ -207,7 +207,7 @@ namespace Vanrise.Analytic.MainExtensions.DataAnalysisAggregationFields
 
             //FILTER
             recordAnalysisOut.RecordFilter = new RecordFilterGroup();
-            recordAnalysisOut.RecordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "SupplierAccountType", Values = new List<decimal> { 1 } });//Exchange
+            recordAnalysisOut.RecordFilter.Filters.Add(new StringListRecordFilter { FieldName = "SupplierAccountType", Values = new List<string> { "1" } });//Exchange
 
             //GROUPING
             recordAnalysisOut.GroupingFields = new List<DAProfCalcGroupingField>();

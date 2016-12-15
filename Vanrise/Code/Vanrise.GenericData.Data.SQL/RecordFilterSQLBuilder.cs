@@ -83,6 +83,13 @@ namespace Vanrise.GenericData.Data.SQL
                     builder.Append(BuildRecordFilter(numberListFilter, ref parameterIndex, parameterValues));
                     continue;
                 }
+
+                StringListRecordFilter stringListRecordFilter = filter as StringListRecordFilter;
+                if (stringListRecordFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(stringListRecordFilter, ref parameterIndex, parameterValues));
+                    continue;
+                }
             }
 
             return String.Format("({0})", builder);
@@ -181,6 +188,11 @@ namespace Vanrise.GenericData.Data.SQL
         private string BuildRecordFilter(NumberListRecordFilter numberListFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
             return BuildRecordFilter<Decimal>(numberListFilter, ref parameterIndex, parameterValues);
+        }
+
+        private string BuildRecordFilter(StringListRecordFilter stringListRecordFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            return BuildRecordFilter<String>(stringListRecordFilter, ref parameterIndex, parameterValues);
         }
 
         string BuildRecordFilter<T>(ListRecordFilter<T> listFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)

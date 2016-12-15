@@ -65,7 +65,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.Entities.NumberListRecordFilter, Vanrise.GenericData.Entities",
+                        $type: "Vanrise.GenericData.Entities.StringListRecordFilter, Vanrise.GenericData.Entities",
                         CompareOperator: $scope.selectedFilter.value,
                         Values: businessEntityApi.getData()
                     };

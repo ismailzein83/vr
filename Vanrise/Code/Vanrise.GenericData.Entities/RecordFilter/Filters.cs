@@ -178,5 +178,8 @@ namespace Vanrise.GenericData.Entities
     {
 
     }
+    public class StringListRecordFilter : ListRecordFilter<String>
+    {
 
+    }
 }

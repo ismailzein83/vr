@@ -100,23 +100,23 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
         {
-            NumberListRecordFilter numberListRecordFilter = recordFilter as NumberListRecordFilter;
-            if (numberListRecordFilter == null)
-                throw new NullReferenceException("numberListRecordFilter");
+            StringListRecordFilter stringListRecordFilter = recordFilter as StringListRecordFilter;
+            if (stringListRecordFilter == null)
+                throw new NullReferenceException("stringListRecordFilter");
             if (fieldValue == null)
-                return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.NotIn;
+                return stringListRecordFilter.CompareOperator == ListRecordFilterOperator.NotIn;
 
-            bool isValueInFilter = numberListRecordFilter.Values.Contains(Convert.ToDecimal(fieldValue));
+            bool isValueInFilter = stringListRecordFilter.Values.Contains(fieldValue.ToString());
 
-            return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
+            return stringListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
         }
 
         public override RecordFilter ConvertToRecordFilter(string fieldName , List<Object> filterValues)
         {
-            return new NumberListRecordFilter
+            return new StringListRecordFilter
             {
                 CompareOperator = ListRecordFilterOperator.In,
-                Values = filterValues.Select(value => Convert.ToDecimal(value)).ToList(),
+                Values = filterValues.Select(value => value.ToString()).ToList(),
                 FieldName = fieldName
             };
         }
@@ -155,8 +155,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetFilterDescription(RecordFilter filter)
         {
-            NumberListRecordFilter numberListRecordFilter = filter as NumberListRecordFilter;
-            return string.Format(" {0} {1} ( {2} ) ", numberListRecordFilter.FieldName, Utilities.GetEnumDescription(numberListRecordFilter.CompareOperator), GetDescription(numberListRecordFilter.Values.Cast<Object>().ToList()));
+            StringListRecordFilter stringListRecordFilter = filter as StringListRecordFilter;
+            return string.Format(" {0} {1} ( {2} ) ", stringListRecordFilter.FieldName, Utilities.GetEnumDescription(stringListRecordFilter.CompareOperator), GetDescription(stringListRecordFilter.Values.Cast<Object>().ToList()));
         }
     }
 }
