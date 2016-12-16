@@ -106,7 +106,9 @@ namespace TestRuntime.Tasks
                     case DBTableName.SaleEntityService:
                         migrationTables.Add(table);
                         break;
-
+                    case DBTableName.Rule:
+                        migrationTables.Add(table);
+                        break;
 
 
                 }
