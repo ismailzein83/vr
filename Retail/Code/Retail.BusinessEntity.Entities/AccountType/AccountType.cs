@@ -58,7 +58,9 @@ namespace Retail.BusinessEntity.Entities
 
     public class AccountType : BaseAccountType
     {
-        
+        public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_AccountType";
+        public static Guid BUSINESSENTITY_DEFINITION_ID = new Guid("1BC07506-D535-4FF8-AC61-C8FDAAF37038");
+
     }
 
     public class AccountTypeToEdit : BaseAccountType
