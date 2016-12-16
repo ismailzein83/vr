@@ -9,6 +9,7 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
+                ctrl.showAccount = true;
                 var billingTransactionGrid = new BillingTransactionGrid($scope, ctrl, $attrs);
                 billingTransactionGrid.initializeController();
             },
@@ -46,8 +47,9 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
             function defineAPI() {
                 var api = {};
 
-                api.loadGrid = function (query) {
-                    return gridAPI.retrieveData(query);
+                api.loadGrid = function (payload) {
+                    ctrl.showAccount = payload.showAccount != undefined ? payload.showAccount : true;
+                    return gridAPI.retrieveData(payload.query);
                 };
                 api.onBillingTransactionAdded = function (billingTransaction) {
                     return gridAPI.itemAdded(billingTransaction);

@@ -19,7 +19,6 @@ namespace Vanrise.AccountBalance.Business
 
         public Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail> AddBillingTransaction(BillingTransaction billingTransaction)
         {         
-            billingTransaction.TransactionTypeId = Guid.Parse("f178d94d-d622-4ebf-a1ba-2a4af1067d6b");
             billingTransaction.TransactionTime = DateTime.Now;
         
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail>();
@@ -48,11 +47,16 @@ namespace Vanrise.AccountBalance.Business
         {
             CurrencyManager currencyManager = new CurrencyManager();
             BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
+            AccountManager accountManager = new AccountManager();
+            bool isCredit = billingTransactionTypeManager.IsCredit(billingTransaction.TransactionTypeId);
             return new BillingTransactionDetail
             {
                 Entity = billingTransaction,
                 CurrencyDescription = currencyManager.GetCurrencyName(billingTransaction.CurrencyId),
-                TransactionTypeDescription = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId)
+                TransactionTypeDescription = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId),
+                AccountInfo = accountManager.GetAccountInfo(billingTransaction.AccountTypeId,billingTransaction.AccountId),
+                Credit = isCredit? (double?)billingTransaction.Amount : null,
+                Debit = !isCredit ? (double?)billingTransaction.Amount : null
             };
         }
 

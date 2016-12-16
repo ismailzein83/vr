@@ -11,7 +11,8 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
                 isrequired: "=",
                 isdisabled: "=",
                 selectedvalues: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                hideremoveicon: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -43,11 +44,13 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
                 label = "Billing Transaction Types";
                 multipleselection = "ismultipleselection";
             }
+            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
             return '<vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
-                   + '  datasource="ctrl.datasource"'
+                   + '  datasource="ctrl.datasource"`'
+                   + ' ' + hideremoveicon 
                    + '  datavaluefield="Id"'
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection

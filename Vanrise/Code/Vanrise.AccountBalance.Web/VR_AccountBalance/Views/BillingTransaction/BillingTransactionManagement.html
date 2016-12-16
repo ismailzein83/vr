@@ -8,6 +8,9 @@
                 <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" label="To" value="toTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
+                <vr-columns width="normal">
+                    <vr-accountbalance-billingtransactiontype-selector on-ready="onBillingTransactionTypeReady"  ismultipleselection="true"></vr-accountbalance-billingtransactiontype-selector>
+                </vr-columns>
                 <vr-directivewrapper directive="filterEditor" on-ready="onFilterDirectiveReady" normal-col-num="2" ismultipleselection="true"></vr-directivewrapper>
             </vr-row>
         </div>
@@ -15,6 +18,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addClicked"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

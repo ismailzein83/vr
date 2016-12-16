@@ -2,13 +2,20 @@
 
     'use strict';
 
-    BillingTransactionController.$inject = ['$scope', 'VR_AccountBalance_BillingTransactionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    BillingTransactionController.$inject = ['$scope', 'VR_AccountBalance_BillingTransactionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_AccountBalance_AccountTypeAPIService'];
 
-    function BillingTransactionController($scope, VR_AccountBalance_BillingTransactionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function BillingTransactionController($scope, VR_AccountBalance_BillingTransactionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService) {
         var accountId;
-
+        var accountTypeId;
         var currencySelectorAPI;
         var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var transactionTypeDirectiveAPI;
+        var transactionTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var filterDirectiveAPI;
+        var filterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -19,7 +26,11 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
                 accountId = parameters.accountId;
+                accountTypeId = parameters.accountTypeId;
+
             }
+            $scope.showFilter = accountId == undefined;
+
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -28,7 +39,15 @@
                 currencySelectorAPI = api;
                 currencySelectorReadyDeferred.resolve();
             };
+            $scope.scopeModel.onBillingTransactionTypeReady = function (api) {
+                transactionTypeDirectiveAPI = api;
+                transactionTypeDirectiveReadyDeferred.resolve();
+            };
 
+            $scope.scopeModel.onFilterDirectiveReady = function (api) {
+                filterDirectiveAPI = api;
+                filterDirectiveReadyDeferred.resolve();
+            }
             $scope.scopeModel.save = function () {
                 return  insertBillingTransaction();
             };
@@ -39,18 +58,25 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            loadAllControls();
+            if (accountTypeId != undefined) {
+                VR_AccountBalance_AccountTypeAPIService.GetAccountSelector(accountTypeId).then(function (response) {
+                    $scope.filterEditor = response;
+                    loadAllControls();
+                });
+            }
+            else
+                loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector, loadTransactionTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
         function setTitle() {
-           $scope.title = UtilsService.buildTitleForAddEditor('Payment');
+           $scope.title = UtilsService.buildTitleForAddEditor('Billing Transaction');
         }
         function loadStaticData() {
            
@@ -63,7 +89,23 @@
             });
             return currencyLoadDeferred.promises;
         }
-        
+        function loadTransactionTypeSelector() {
+            var loadTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            transactionTypeDirectiveReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, undefined, loadTransactionTypePromiseDeferred);
+            });
+            return loadTransactionTypePromiseDeferred.promise;
+        }
+        function loadFilterDirective() {
+            if (accountId)
+                return;
+            var loadFilterPromiseDeferred = UtilsService.createPromiseDeferred();
+            filterDirectiveReadyDeferred.promise.then(function () {
+
+                VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, undefined, loadFilterPromiseDeferred);
+            });
+            return loadFilterPromiseDeferred.promise;
+        }
         function insertBillingTransaction() {
             $scope.scopeModel.isLoading = true;
 
@@ -84,9 +126,11 @@
 
         function buildBuillingTransactionObjFromScope() {
             var obj = {
-                AccountId: accountId,
+                AccountId: accountId != undefined ? accountId : filterDirectiveAPI.getData().selectedIds,
                 Amount: $scope.scopeModel.amount,
+                AccountTypeId:accountTypeId,
                 CurrencyId: currencySelectorAPI.getSelectedIds(),
+                TransactionTypeId:transactionTypeDirectiveAPI.getSelectedIds(),
                 Notes: $scope.scopeModel.notes,
                 Reference: $scope.scopeModel.reference
             };

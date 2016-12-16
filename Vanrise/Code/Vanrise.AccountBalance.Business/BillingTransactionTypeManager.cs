@@ -23,6 +23,11 @@ namespace Vanrise.AccountBalance.Business
             return (billingTransactionType != null) ? billingTransactionType.Name : null;
         }
 
+        public bool IsCredit(Guid billingTransactionTypeId)
+        {
+            BillingTransactionType billingTransactionType = this.GetBillingTransactionType(billingTransactionTypeId);
+            return billingTransactionType.IsCredit;
+        }
 
         #region Private Classes
         private class CacheManager : Vanrise.Caching.BaseCacheManager

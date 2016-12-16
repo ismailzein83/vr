@@ -2,14 +2,18 @@
 
     "use strict";
 
-    billingTransactionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService','VRNavigationService', 'VR_AccountBalance_AccountTypeAPIService'];
+    billingTransactionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_BillingTransactionService'];
 
-    function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService) {
+    function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_BillingTransactionService) {
         var gridAPI;
         var accountTypeId;
 
         var filterDirectiveAPI;
         var filterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var transactionTypeDirectiveAPI;
+        var transactionTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -25,20 +29,39 @@
         
         function defineScope() {
             var today = new Date();
+            today.setMonth(today.getMonth() - 1);
             today.setHours(0, 0, 0, 0);
             $scope.fromTime = today;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                api.loadGrid(getFilterObject());
+                var payload = {
+                    query: getFilterObject()
+                }
+                //api.loadGrid(payload);
             };
 
             $scope.searchClicked = function (api) {
-                gridAPI.loadGrid(getFilterObject());
+                var payload = {
+                    query: getFilterObject()
+                }
+                gridAPI.loadGrid(payload);
+            };
+            $scope.addClicked = function (api) {
+                var onBillingTransactionAdded = function (transactionObj) {
+                    if (gridAPI != undefined) {
+                        gridAPI.onBillingTransactionAdded(transactionObj);
+                    }
+                };
+                VR_AccountBalance_BillingTransactionService.addBillingTransaction(undefined, accountTypeId, onBillingTransactionAdded);
             };
             $scope.onFilterDirectiveReady = function (api) {
                 filterDirectiveAPI = api;
                 filterDirectiveReadyDeferred.resolve();
             };
+            $scope.onBillingTransactionTypeReady = function (api) {
+                transactionTypeDirectiveAPI = api;
+                transactionTypeDirectiveReadyDeferred.resolve();
+            }
         }
 
 
@@ -52,7 +75,7 @@
         }
 
         function loadAllControls() {           
-            return UtilsService.waitMultipleAsyncOperations([loadFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadFilterDirective,loadTransactionTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -65,11 +88,19 @@
             });
             return loadFilterPromiseDeferred.promise;
         }
+        function loadTransactionTypeSelector() {
+            var loadTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            transactionTypeDirectiveReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, undefined, loadTransactionTypePromiseDeferred);
+            });
+            return loadTransactionTypePromiseDeferred.promise;
+        }
         function getFilterObject() {
             return {
                 FromTime: $scope.fromTime,
                 ToTime: $scope.toTime,
-                AccountTypeId: accountTypeId
+                AccountTypeId: accountTypeId,
+                TransactionTypeIds: transactionTypeDirectiveAPI.getSelectedIds()
             };
         }
     }

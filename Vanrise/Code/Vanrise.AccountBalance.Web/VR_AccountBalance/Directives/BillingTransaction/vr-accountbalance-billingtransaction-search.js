@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAccountbalanceBillingtransactionSearch", [ 'VRNotificationService', 'UtilsService', 'VRUIUtilsService','VRValidationService',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService) {
+app.directive("vrAccountbalanceBillingtransactionSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_AccountBalance_LiveBalanceAPIService', 'VR_AccountBalance_BillingTransactionService',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VR_AccountBalance_LiveBalanceAPIService, VR_AccountBalance_BillingTransactionService) {
 
     var directiveDefinitionObject = {
 
@@ -44,6 +44,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                         accountTypeId = payload.AccountTypeId;
                         accountsIds = payload.AccountsIds;
                     }
+                    load();
                 };
                 return directiveAPI;
             }
@@ -52,25 +53,51 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function defineScope() 
         {
             var fromTime = new Date();
-            fromTime.setHours(0, 0, 0);
+            fromTime.setMonth(fromTime.getMonth() - 1);
+            fromTime.setHours(0, 0, 0, 0);
             $scope.fromTime = fromTime;
             $scope.searchClicked = function () {
-                return gridAPI.loadGrid(getFilterObject());
+                var payload = {
+                    query: getFilterObject(),
+                    showAccount:false,
+                }
+                return gridAPI.loadGrid(payload);
             };
+            $scope.addTransaction = function () {
+                var onBillingTransacationAdded = function (obj) {
+                    gridAPI.onBillingTransactionAdded(obj);
+                    load();
+                };
+                VR_AccountBalance_BillingTransactionService.addBillingTransaction(accountsIds[0], accountTypeId, onBillingTransacationAdded)
+            }
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.fromTime, $scope.toTime);
             };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid(getFilterObject());
+                var payload = {
+                    query: getFilterObject(),
+                    showAccount: false,
+                }
+                gridAPI.loadGrid(payload);
             };
+        }
+
+        function load() {
+            $scope.isLoading = true;
+            VR_AccountBalance_LiveBalanceAPIService.GetCurrentAccountBalance(accountsIds[0], accountTypeId).then(function (response) {
+                $scope.balance = response.CurrentBalance;
+                $scope.currency = response.CurrencyDescription;
+            }).finally(function () {
+                $scope.isLoading = false;
+            })
         }
         function getFilterObject() {
             var filter = {
                 AccountTypeId: accountTypeId,
                 AccountsIds: accountsIds,
                 FromTime: $scope.fromTime,
-                ToTime: $scope.toTime
+                ToTime: $scope.toTime,
             };
            return filter;
         }

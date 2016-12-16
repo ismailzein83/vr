@@ -9,6 +9,8 @@ namespace Vanrise.AccountBalance.Entities
     public class BillingTransactionQuery
     {
         public List<long> AccountsIds { get; set; }
+
+        public List<Guid> TransactionTypeIds { get; set; }
         public Guid AccountTypeId { get; set; }
 
         public DateTime FromTime { get; set; }

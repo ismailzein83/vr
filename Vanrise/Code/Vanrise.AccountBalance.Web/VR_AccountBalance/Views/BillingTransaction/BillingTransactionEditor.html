@@ -7,17 +7,19 @@
                         <vr-columns width="1/2row">
                             <vr-textbox label="Amount" value="scopeModel.amount" isrequired="true" type="number"></vr-textbox>
                         </vr-columns>
+                        <vr-directivewrapper ng-if="showFilter" directive="filterEditor" on-ready="scopeModel.onFilterDirectiveReady" isrequired="true" normal-col-num="6"></vr-directivewrapper>
                         <vr-columns width="1/2row">
                             <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true"> </vr-common-currency-selector>
                         </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady" isrequired="true" hideremoveicon></vr-accountbalance-billingtransactiontype-selector>
+                        </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-textbox label="reference" value="scopeModel.reference" isrequired="true"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="fullrow">
                             <vr-textarea label="Notes" value="scopeModel.notes"> </vr-textarea>
                         </vr-columns>
                     </vr-row>

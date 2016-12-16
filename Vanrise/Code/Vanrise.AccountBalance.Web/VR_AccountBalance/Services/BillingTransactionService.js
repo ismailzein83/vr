@@ -5,9 +5,10 @@
     BillingTransactionService.$inject = ['VRModalService', 'VRNotificationService'];
 
     function BillingTransactionService(VRModalService, VRNotificationService) {
-        function addBillingTransaction(accountId, onBillingTransactionAdded) {
+        function addBillingTransaction(accountId, accountTypeId, onBillingTransactionAdded) {
             var parameters = {
-                accountId: accountId
+                accountId: accountId,
+                accountTypeId: accountTypeId
             };
 
             var settings = {};

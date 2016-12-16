@@ -12,5 +12,8 @@ namespace Vanrise.AccountBalance.Entities
         public string CurrencyDescription { get; set; }
         public AccountInfo AccountInfo { get; set; }
         public string  TransactionTypeDescription { get; set; }
+        public double? Debit { get; set; }
+        public double? Credit { get; set; }
+
     }
 }
