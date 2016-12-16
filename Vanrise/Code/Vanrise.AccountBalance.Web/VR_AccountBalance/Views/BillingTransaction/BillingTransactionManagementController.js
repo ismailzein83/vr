@@ -37,7 +37,7 @@
                 var payload = {
                     query: getFilterObject()
                 }
-                //api.loadGrid(payload);
+                api.loadGrid(payload);
             };
 
             $scope.searchClicked = function (api) {

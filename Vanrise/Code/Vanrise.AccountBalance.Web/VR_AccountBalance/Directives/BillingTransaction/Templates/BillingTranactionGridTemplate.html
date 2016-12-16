@@ -4,13 +4,13 @@
              menuactions="scopeModel.menuActions"
              datasource="scopeModel.billingTransactions" defaultsortbyfieldname="'Entity.TransactionTime'" defaultsortdirection="'DESC'">
 
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBillingTransactionId'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Transaction Time'" field="'Entity.TransactionTime'" type="'Datetime'" widthfactor="3"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Account'" field="'AccountInfo.Name'" ng-show="ctrl.showAccount" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Transaction Type'" field="'TransactionTypeDescription'" widthfactor="2"></vr-datagridcolumn>    
-    <vr-datagridcolumn headertext="'Debit'" field="'Debit'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Credit'" field="'Credit'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyDescription'" widthfactor="3"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Notes'" field="'Entity.Notes'" widthfactor="3"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Reference'" field="'Entity.Reference'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBillingTransactionId'" fixedwidth="50"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Transaction Time'" field="'Entity.TransactionTime'" type="'Datetime'" fixedwidth="120"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Account'" field="'AccountInfo.Name'" ng-show="ctrl.showAccount" widthfactor="4"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Transaction Type'" field="'TransactionTypeDescription'" widthfactor="2" fixedwidth="120"></vr-datagridcolumn>    
+    <vr-datagridcolumn headertext="'Debit'" field="'Debit'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="100"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Credit'" field="'Credit'" type="'Number'" numberprecision="'LongPrecision'"  fixedwidth="100"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyDescription'" fixedwidth="80"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Notes'" field="'Entity.Notes'" widthfactor="8"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Reference'" field="'Entity.Reference'" widthfactor="4"></vr-datagridcolumn>
 </vr-datagrid>
