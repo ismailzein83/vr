@@ -29,7 +29,7 @@ namespace Vanrise.Invoice.Entities
         DateTime FromDate { get; }
 
         DateTime ToDate { get; }
-
+        DateTime GeneratedToDate { get; }
         dynamic CustomSectionPayload { get; }
 
         GeneratedInvoice Invoice { set; }
