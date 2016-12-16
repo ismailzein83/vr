@@ -288,7 +288,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                         AccountsIds: [account.Entity.AccountId],
                         AccountTypeId: "20b0c83e-6f53-49c7-b52f-828a19e6dc2a"
                     };
-                    return account.billingTransactioGridAPI.load(billingTransactionGridPayload);
+                    return account.billingTransactioGridAPI.loadDirective(billingTransactionGridPayload);
                 };
 
                 billingTransactionTab.parentMenuActions = [{
