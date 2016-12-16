@@ -213,16 +213,14 @@ namespace Vanrise.Fzero.Services.ClientReport
                 {
                     isNatSecurity = true;
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
-                    reportPathNatSec = Path.Combine(exeFolder, @"Reports\rptToOperatorIraqNationalSec.rdlc");
                 }
                 else
                 {
                     isNatSecurity = true;
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
-                    reportPathNatSec = Path.Combine(exeFolder, @"Reports\rptToOperatorIraqNationalSec.rdlc");
                 }
 
-
+                reportPathNatSec = Path.Combine(exeFolder, @"Reports\rptToOperatorIraqNationalSec.rdlc");
 
 
 
