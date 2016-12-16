@@ -157,9 +157,9 @@ namespace Vanrise.GenericData.Entities
 
         public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
         {
-            if(this.ValueParameterIds != null)
+            if (this.ValueParameterIds != null)
             {
-                foreach(var valueParameterId in this.ValueParameterIds)
+                foreach (var valueParameterId in this.ValueParameterIds)
                 {
                     dynamic parameterValue;
                     if (context.TryGetParameterValue(valueParameterId, out parameterValue))
@@ -179,6 +179,11 @@ namespace Vanrise.GenericData.Entities
 
     }
     public class StringListRecordFilter : ListRecordFilter<String>
+    {
+
+    }
+
+    public class ObjectListRecordFilter : ListRecordFilter<Object>
     {
 
     }

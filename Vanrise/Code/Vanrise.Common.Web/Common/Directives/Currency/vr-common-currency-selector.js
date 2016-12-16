@@ -13,7 +13,8 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
-                hideremoveicon: '@'
+                hideremoveicon: '@',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -69,9 +70,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewCurrency"';
 
-            return '<div>'
-                + '<vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId" label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired"></vr-select>'
-               + '</div>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId" label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired"></vr-select></vr-columns>';
         }
 
         function currencyCtor(ctrl, $scope, attrs) {

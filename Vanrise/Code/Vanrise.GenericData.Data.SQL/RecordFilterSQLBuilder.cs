@@ -90,6 +90,13 @@ namespace Vanrise.GenericData.Data.SQL
                     builder.Append(BuildRecordFilter(stringListRecordFilter, ref parameterIndex, parameterValues));
                     continue;
                 }
+
+                ObjectListRecordFilter objectListRecordFilter = filter as ObjectListRecordFilter;
+                if (objectListRecordFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(objectListRecordFilter, ref parameterIndex, parameterValues));
+                    continue;
+                }
             }
 
             return String.Format("({0})", builder);
@@ -193,6 +200,11 @@ namespace Vanrise.GenericData.Data.SQL
         private string BuildRecordFilter(StringListRecordFilter stringListRecordFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
             return BuildRecordFilter<String>(stringListRecordFilter, ref parameterIndex, parameterValues);
+        }
+
+        private string BuildRecordFilter(ObjectListRecordFilter stringListRecordFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            return BuildRecordFilter<Object>(stringListRecordFilter, ref parameterIndex, parameterValues);
         }
 
         string BuildRecordFilter<T>(ListRecordFilter<T> listFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)

@@ -22,10 +22,26 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (staticValues != null)
                 return staticValues.Values.Select(itm => (T)itm);
 
-            var objList = fieldValue as List<object>;
-            if (objList != null)
-                return objList.Select(itm => (T)itm);
-
+            if (fieldValue != null)
+            {
+                var fieldValueType = fieldValue.GetType();
+                if ((fieldValueType.IsGenericType && fieldValueType.GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>)))
+                    || typeof(IEnumerable<T>).IsAssignableFrom(fieldValueType))
+                {
+                    var objList = fieldValue as System.Collections.IEnumerable;
+                    if (objList != null)
+                    {
+                        List<T> values = new List<T>();
+                        var enumerator = objList.GetEnumerator();
+                        while (enumerator.MoveNext())
+                        {
+                            if (enumerator.Current != null)
+                                values.Add((T)Convert.ChangeType(enumerator.Current, typeof(T)));
+                        }
+                        return values;
+                    }
+                }
+            }
             return null;
         }
     }

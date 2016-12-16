@@ -28,19 +28,19 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             if (context.InitialFilter == null)
                 throw new ArgumentNullException("context.InitialFilter");
 
-            StringListRecordFilter stringListFilter = context.InitialFilter as StringListRecordFilter;
-            if (stringListFilter != null)
+            ObjectListRecordFilter objectListFilter = context.InitialFilter as ObjectListRecordFilter;
+            if (objectListFilter != null)
             {
                 DataRecordFields.FieldBusinessEntityType currentBEFieldType;
                 DataRecordFields.FieldBusinessEntityType childBEFieldType;
                 GetFieldTypes(context, out currentBEFieldType, out childBEFieldType);
                 
                 BusinessEntityManager beManager = new BusinessEntityManager();
-                IEnumerable<dynamic> childValues = beManager.GetChildEntitiesIds(currentBEFieldType.BusinessEntityDefinitionId, childBEFieldType.BusinessEntityDefinitionId, stringListFilter.Values.Cast<dynamic>());
+                IEnumerable<dynamic> childValues = beManager.GetChildEntitiesIds(currentBEFieldType.BusinessEntityDefinitionId, childBEFieldType.BusinessEntityDefinitionId, objectListFilter.Values.Cast<dynamic>());
 
                 var childFilter = childBEFieldType.ConvertToRecordFilter(this.ChildFieldName, childValues.Cast<Object>().ToList());
-                if (childFilter is StringListRecordFilter)
-                    ((StringListRecordFilter)childFilter).CompareOperator = stringListFilter.CompareOperator;
+                if (childFilter is ObjectListRecordFilter)
+                    ((ObjectListRecordFilter)childFilter).CompareOperator = objectListFilter.CompareOperator;
                 return childFilter;
             }
 

@@ -53,7 +53,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
                         var businessEntityLoadDeferred = UtilsService.createPromiseDeferred();
 
                         businessEntityReadyDeferred.promise.then(function () {
-                            var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Values : undefined };
+                            var payload = { fieldType: selectedObj.Type, fieldValue: filterObj != undefined ? filterObj.Values : undefined, fieldTitle: selectedObj.FieldTitle };
                             VRUIUtilsService.callDirectiveLoad(businessEntityApi, payload, businessEntityLoadDeferred);
                         });
                         promises.push(businessEntityLoadDeferred.promise);
@@ -65,7 +65,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRulefiltereditor', ['VR_Gener
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.Entities.StringListRecordFilter, Vanrise.GenericData.Entities",
+                        $type: "Vanrise.GenericData.Entities.ObjectListRecordFilter, Vanrise.GenericData.Entities",
                         CompareOperator: $scope.selectedFilter.value,
                         Values: businessEntityApi.getData()
                     };

@@ -7,9 +7,7 @@
     <vr-columns width="normal" withemptyline>
         <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
     </vr-columns>
-    <vr-columns width="1/4row">
-        <vr-common-currency-selector on-ready="ctrl.onCurrencySelectReady" isrequired isdisabled="true"> </vr-common-currency-selector>
-    </vr-columns>
+    <vr-common-currency-selector on-ready="ctrl.onCurrencySelectReady" isrequired="true" normal-col-num="3"></vr-common-currency-selector>
 </vr-row>
 <vr-row>
     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">

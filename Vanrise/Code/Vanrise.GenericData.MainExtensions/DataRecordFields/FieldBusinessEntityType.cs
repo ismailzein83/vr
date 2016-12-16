@@ -37,7 +37,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override Type GetNonNullableRuntimeType()
         {
             BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();
-           
+
             if (beDefinition.Settings.IdType == null)
                 throw new NullReferenceException("beDefinition.Settings.IdType");
             return Type.GetType(beDefinition.Settings.IdType);
@@ -100,23 +100,33 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
         {
-            StringListRecordFilter stringListRecordFilter = recordFilter as StringListRecordFilter;
-            if (stringListRecordFilter == null)
+            ObjectListRecordFilter objectListRecordFilter = recordFilter as ObjectListRecordFilter;
+            if (objectListRecordFilter == null)
                 throw new NullReferenceException("stringListRecordFilter");
             if (fieldValue == null)
-                return stringListRecordFilter.CompareOperator == ListRecordFilterOperator.NotIn;
+                return objectListRecordFilter.CompareOperator == ListRecordFilterOperator.NotIn;
 
-            bool isValueInFilter = stringListRecordFilter.Values.Contains(fieldValue.ToString());
+            Type type = GetNonNullableRuntimeType();
+            bool isValueInFilter;
+            if (type.FullName == "System.Guid")
+            {
+                isValueInFilter = objectListRecordFilter.Values.Contains(fieldValue.ToString());
+            }
+            else
+            {
+                var convertedFieldValue = Convert.ChangeType(fieldValue, type);
+                isValueInFilter = objectListRecordFilter.Values.Select(itm => Convert.ChangeType(itm, type)).Contains(convertedFieldValue);
+            }
 
-            return stringListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
+            return objectListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName , List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
-            return new StringListRecordFilter
+            return new ObjectListRecordFilter
             {
                 CompareOperator = ListRecordFilterOperator.In,
-                Values = filterValues.Select(value => value.ToString()).ToList(),
+                Values = filterValues.Select(value => value).ToList(),
                 FieldName = fieldName
             };
         }
@@ -155,8 +165,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetFilterDescription(RecordFilter filter)
         {
-            StringListRecordFilter stringListRecordFilter = filter as StringListRecordFilter;
-            return string.Format(" {0} {1} ( {2} ) ", stringListRecordFilter.FieldName, Utilities.GetEnumDescription(stringListRecordFilter.CompareOperator), GetDescription(stringListRecordFilter.Values.Cast<Object>().ToList()));
+            ObjectListRecordFilter objectListRecordFilter = filter as ObjectListRecordFilter;
+            return string.Format(" {0} {1} ( {2} ) ", objectListRecordFilter.FieldName, Utilities.GetEnumDescription(objectListRecordFilter.CompareOperator), GetDescription(objectListRecordFilter.Values.Cast<Object>().ToList()));
         }
     }
 }
