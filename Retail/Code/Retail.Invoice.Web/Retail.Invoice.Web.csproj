@@ -44,6 +44,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.ReportViewer.WebForms\11.0.0.0__89845dcd8080cc91\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
@@ -121,12 +125,20 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retail_Invoice\Reports\Reporting.aspx.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Retail_Invoice\Reports\Reporting.aspx.designer.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Invoice\Constant\ModuleConfig.js" />
     <Content Include="Retail_Invoice\Directives\FinancialAccount\retail-invoice-financialaccount-selector.js" />
     <Content Include="Retail_Invoice\Directives\MainExtensions\SubscriberInvoiceSettings\retail-invoice-invoicetype-retailsubscriberinvoicesettings.js" />
     <Content Include="Retail_Invoice\Directives\MainExtensions\SubscriberInvoiceSettings\Templates\SubscriberInvoiceSettingsTemplate.html" />
+    <Content Include="Retail_Invoice\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -135,6 +147,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Retail_Invoice\Reports\SubscriberInvoiceReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.Invoice.Entities\Retail.Invoice.Entities.csproj">
+      <Project>{324f5b0b-84e3-403f-9b0b-a53eb997c941}</Project>
+      <Name>Retail.Invoice.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

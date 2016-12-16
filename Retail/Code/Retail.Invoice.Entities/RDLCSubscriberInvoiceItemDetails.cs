@@ -12,6 +12,8 @@ namespace Retail.Invoice.Entities
 
         public Guid ServiceTypeId { get; set; }
 
+        public string ServiceTypeIdDescription { get; set; }
+
         public long? ZoneId { get; set; }
 
         public long? InterconnectOperatorId { get; set; }
