@@ -90,7 +90,8 @@ namespace Vanrise.Invoice.Business
                     {
                         foreach (var column in gridColumns)
                         {
-                            var fieldValue = Vanrise.Common.Utilities.GetPropValueReader(column.FieldName).GetPropertyValue(item.Details);
+                            var fieldValue = item.Details.GetType().GetProperty(column.FieldName).GetValue(item.Details, null); 
+                            //Vanrise.Common.Utilities.GetPropValueReader(column.FieldName).GetPropertyValue(item.Details);
                             invoiceItemDetail.Items.Add(new InvoiceItemDetailObject
                             {
                                 Description = column.FieldType.GetDescription(fieldValue),

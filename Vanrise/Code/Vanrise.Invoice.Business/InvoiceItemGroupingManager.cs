@@ -44,7 +44,8 @@ namespace Vanrise.Invoice.Business
                 {
                     invoiceItemRecord.GroupingValuesByDimensionId.Add(dimension.DimensionItemFieldId, new InvoiceItemGroupingValue
                     {
-                        Value = Vanrise.Common.Utilities.GetPropValueReader(dimension.FieldName).GetPropertyValue(invoiceItem.Details)
+                        Value =  invoiceItem.Details.GetType().GetProperty(dimension.FieldName).GetValue(invoiceItem.Details, null),
+                    //Vanrise.Common.Utilities.GetPropValueReader(dimension.FieldName).GetPropertyValue(invoiceItem.Details)
                     });
                 }
                 foreach (var measure in itemGrouping.AggregateItemFields)
@@ -52,7 +53,9 @@ namespace Vanrise.Invoice.Business
                     invoiceItemRecord.AggValuesByAggId.Add(measure.AggregateItemFieldId, new InvoiceItemAggValue
                     {
 
-                        Value = Vanrise.Common.Utilities.GetPropValueReader(measure.FieldName).GetPropertyValue(invoiceItem.Details)
+                        Value = invoiceItem.Details.GetType().GetProperty(measure.FieldName).GetValue(invoiceItem.Details, null),
+                        
+                        //Vanrise.Common.Utilities.GetPropValueReader(measure.FieldName).GetPropertyValue(invoiceItem.Details)
                     });
                 }
                 #endregion
