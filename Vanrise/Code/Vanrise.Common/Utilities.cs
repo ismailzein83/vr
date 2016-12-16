@@ -170,6 +170,85 @@ namespace Vanrise.Common
             }
             return propValueReader;
         }
+
+        public static void CompilePredefinedPropValueReaders()
+        {
+            var compilationStepTypes = GetAllImplementations<IPropValueReaderCompilationStep>();
+            HashSet<string> propNames = new HashSet<string>();
+            foreach(var stepType in compilationStepTypes)
+            {
+                foreach(var propName in (Activator.CreateInstance(stepType) as IPropValueReaderCompilationStep).GetPropertiesToCompile(null))
+                {
+                    propNames.Add(propName);
+                }
+            }
+            AddPropValueReaders(propNames);
+        }
+
+        static void AddPropValueReaders(HashSet<string> propNames)
+        {
+            List<string> propNamesToInclude = propNames.Where(itm => !s_cachedProbValueReaders.ContainsKey(itm)).ToList();
+            if(propNamesToInclude.Count > 0)
+            {
+                string classDefinitionTemplate = @"public class #CLASSNAME# : Vanrise.Common.IPropValueReader
+                    {   
+                        public Object GetPropertyValue(dynamic target)
+                        {
+                            return target.#PROPNAME#;
+                        }
+                    }";
+
+                Dictionary<string, string> classNamesByProperties = new Dictionary<string,string>();
+                StringBuilder classDefinitionsBuilder = new StringBuilder();
+
+                foreach(var propName in propNamesToInclude)
+                {
+                    string className = string.Format("PropValueReader_{0}", propName.Replace(".", "_").Replace("[", "_").Replace("]", "_"));
+                    
+                    classNamesByProperties.Add(propName, className);
+                    StringBuilder builder = new StringBuilder(classDefinitionTemplate);
+                    builder.Replace("#CLASSNAME#", className);
+                    builder.Replace("#PROPNAME#", propName);
+                    classDefinitionsBuilder.AppendLine();
+                    classDefinitionsBuilder.AppendLine(builder.ToString());
+                }
+
+                StringBuilder fullCodeBuilder = new StringBuilder(@" 
+                using System;
+
+                namespace #NAMESPACE#
+                {
+                    #CLASSES#
+                }
+                ");
+
+                string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Common");
+                fullCodeBuilder.Replace("#NAMESPACE#", classNamespace);
+                fullCodeBuilder.Replace("#CLASSES#", classDefinitionsBuilder.ToString());
+                CSharpCompilationOutput compilationOutput;
+                if (!CSharpCompiler.TryCompileClass(fullCodeBuilder.ToString(), out compilationOutput))
+                {
+                    StringBuilder errorsBuilder = new StringBuilder();
+                    if (compilationOutput.ErrorMessages != null)
+                    {
+                        foreach (var errorMessage in compilationOutput.ErrorMessages)
+                        {
+                            errorsBuilder.AppendLine(errorMessage);
+                        }
+                    }
+                    throw new Exception(String.Format("Compile Error when building executor type for PropValueReader. Errors: {0}",
+                        errorsBuilder));
+                }
+                foreach(var propEntry in classNamesByProperties)
+                {
+                    var runtimeType = compilationOutput.OutputAssembly.GetType(String.Format("{0}.{1}", classNamespace, propEntry.Value));
+                    if (runtimeType == null)
+                        throw new NullReferenceException(String.Format("runtimeType '{0}'", propEntry.Key));
+                    var propValueReader = Activator.CreateInstance(runtimeType) as IPropValueReader;
+                    s_cachedProbValueReaders.TryAdd(propEntry.Key, propValueReader);
+                }
+            }
+        }
         public static string GetExposedConnectionString(string connectionStringName)
         {
             if (!IsConnectionStringExposed(connectionStringName))
@@ -256,4 +335,23 @@ namespace Vanrise.Common
     {
         Object GetPropertyValue(dynamic target);
     }
+
+    public interface IPropValueReaderCompilationStep
+    {
+        HashSet<string> GetPropertiesToCompile(IPropValueReaderCompilationStepContext context);
+    }
+
+    public interface IPropValueReaderCompilationStepContext
+    {
+
+    }
+
+    public class CommonPropPropValueReaderCompilationStep : IPropValueReaderCompilationStep
+    {
+        public HashSet<string> GetPropertiesToCompile(IPropValueReaderCompilationStepContext context)
+        {
+            return new HashSet<string> { "ID", "Entity.ID", "Name", "Entity.Name", "Description", "Entity.Description", "CreatedTime", "Entity.CreatedTime" };
+        }
+    }
+
 }

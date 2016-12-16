@@ -13,6 +13,7 @@ namespace Vanrise.Web
     {
         protected virtual void Application_Start()
         {
+            Vanrise.Common.Utilities.CompilePredefinedPropValueReaders();
             AreaRegistration.RegisterAllAreas();
             RegisterWebAPI();
             RegisterGlobalFilters();

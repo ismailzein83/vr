@@ -198,7 +198,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Methods
-        private Dictionary<Guid, DataRecordType> GetCachedDataRecordTypes()
+        public Dictionary<Guid, DataRecordType> GetCachedDataRecordTypes()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordTypes",
                () =>
@@ -308,4 +308,30 @@ namespace Vanrise.GenericData.Business
         }
         #endregion
     }
+
+    public class RecordTypeFieldsPropValueCompilationStep : IPropValueReaderCompilationStep
+    {
+        public HashSet<string> GetPropertiesToCompile(IPropValueReaderCompilationStepContext context)
+        {
+            HashSet<string> properties = new HashSet<string>();
+            var manager = new DataRecordTypeManager();
+            var allRecordTypes = manager.GetCachedDataRecordTypes();
+            if(allRecordTypes != null)
+            {
+                foreach(var recordType in allRecordTypes.Values)
+                {
+                    var fields = manager.GetDataRecordTypeFields(recordType.DataRecordTypeId);
+                    if (fields != null)
+                    {
+                        foreach(var fld in fields.Values)
+                        {
+                            properties.Add(fld.Name);
+                        }
+                    }
+                }
+            }
+            return properties;
+        }
+    }
+
 }
