@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/VRObjectTypes/PropertyEvaluator/Templates/FinancialRetailAccountEvaluatorTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/VRObjectTypes/Templates/FinancialRetailAccountEvaluatorTemplate.html"
 
         };
         function RetailAccountObjectType($scope, ctrl, $attrs) {
