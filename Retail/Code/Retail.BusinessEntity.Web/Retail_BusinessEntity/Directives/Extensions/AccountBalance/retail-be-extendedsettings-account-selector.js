@@ -65,7 +65,7 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
                     promises.push(directiveLoadPromiseDeferred.promise);
 
                     directiveReadyPromiseDeferred.promise.then(function () {
-                        var selectorPayload;
+                        var selectorPayload = { filter: getAccountSelectorFilter() };
                         if (selectedIds != undefined) {
                             selectorPayload = {
                                 selectedIds: selectedIds
@@ -86,7 +86,17 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-           
+            function getAccountSelectorFilter() {
+                var filter = {};
+
+                filter.Filters = [];
+
+                var financialAccounts = {
+                    $type: 'Retail.BusinessEntity.Business.AccountBalanceEnabledAccountFilter, Retail.BusinessEntity.Business',
+                };
+                filter.Filters.push(financialAccounts);
+                return filter;
+            }
             this.initializeController = initializeController;
         }
 
