@@ -8,15 +8,19 @@ namespace Retail.Invoice.Entities
 {
     public class RDLCSubscriberInvoiceItemDetails
     {
-        public decimal Amount { get; set; }
-
         public Guid ServiceTypeId { get; set; }
 
         public string ServiceTypeIdDescription { get; set; }
 
-        //public long? ZoneId { get; set; }
+        public long? ZoneId { get; set; }
 
-        //public long? InterconnectOperatorId { get; set; }
+        public string ZoneIdDescription { get; set; }
+
+        public long? InterconnectOperatorId { get; set; }
+
+        public string InterconnectOperatorIdDescription { get; set; }
+
+        public decimal Amount { get; set; }
 
         public int CountCDRs { get; set; }
 

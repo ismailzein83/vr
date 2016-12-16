@@ -62,6 +62,8 @@ namespace Retail.Invoice.Business
                     foreach (var invoiceBillingRecord in invoiceBillingRecordList)
                     {
                         retailSubscriberInvoiceDetails.TotalAmount += invoiceBillingRecord.Amount;
+                        retailSubscriberInvoiceDetails.CountCDRs += invoiceBillingRecord.CountCDRs;
+                        retailSubscriberInvoiceDetails.TotalDuration += invoiceBillingRecord.TotalDuration;
                     }
                 };
             }
@@ -153,10 +155,15 @@ namespace Retail.Invoice.Business
                             ServiceTypeId = new Guid(serviceTypeId.Value.ToString()),
                             Amount = Convert.ToDecimal(totalAmount.Value ?? 0.0),
                             CountCDRs = Convert.ToInt32(countCDRs.Value),
-                            TotalDuration = Convert.ToDecimal(totalDuration.Value ?? 0.0),
-                            ZoneId = Convert.ToInt32(zoneId.Value),
-                            InterconnectOperatorId = Convert.ToInt32(operatorId.Value)
+                            TotalDuration = Convert.ToDecimal(totalDuration.Value ?? 0.0)
                         };
+
+                        if (zoneId.Value != null)
+                            invoiceBillingRecord.ZoneId = Convert.ToInt32(zoneId.Value);
+
+                        if (operatorId.Value != null)
+                            invoiceBillingRecord.InterconnectOperatorId = Convert.ToInt32(operatorId.Value);
+
                         AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
                     }
                 }
