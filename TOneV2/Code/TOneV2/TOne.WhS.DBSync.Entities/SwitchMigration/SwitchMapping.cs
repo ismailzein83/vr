@@ -9,6 +9,7 @@ namespace TOne.WhS.DBSync.Entities
 {
     public class SwitchMapping
     {
+        public int SwitchId { get; set; }
         public string CarrierId { get; set; }
         public InOutMapping InMapping { get; set; }
         public InOutMapping OutMapping { get; set; }
