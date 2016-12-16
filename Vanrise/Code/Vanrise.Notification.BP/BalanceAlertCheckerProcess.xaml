@@ -147,8 +147,79 @@
         </vnbab:UpdateBalanceLastAlertInfos.RuleTypeSettings>
       </vnbab:UpdateBalanceLastAlertInfos>
     </Parallel>
-    <Parallel DisplayName="Parallel_ClearAlerts" sap2010:WorkflowViewState.IdRef="Parallel_2" />
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEJhbGFuY2VBbGVydENoZWNrZXJQcm9jZXNzLnhhbWwVPAOYAQ4CAQFABUsvAgFbTAWVARACAQOWAQWWAWECAQJIC0iEAQIBX0MLQ1wCAVxTB2MjAgFFZAeDARwCARqEAQeUASsCAQRbDVt+AgFUYA1gegIBTVYNVpABAgFGew17fgIBPnYNdnICATdsDWyIAQIBMIABDYABcwIBKXENcaQBAgEiZw1nXgIBG5EBDZEBfgIBE4wBDYwBawIBDIcBDYcBnAECAQU=</sads:DebugSymbol.Symbol>
+    <Parallel DisplayName="Parallel_ClearAlerts" sap2010:WorkflowViewState.IdRef="Parallel_2">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadEntitiesToClearStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)" Name="queueEntityBalanceInfoToClearBatch" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="clearAlertsStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)" Name="queueUpdateLastAlertInfoToClearPayload" />
+      </Parallel.Variables>
+      <vnbab:LoadEntitiesToClearAlerts PreviousActivityStatus="{x:Null}">
+        <vnbab:LoadEntitiesToClearAlerts.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)">queueEntityBalanceInfoToClearBatch</mca:CSharpReference>
+          </InOutArgument>
+        </vnbab:LoadEntitiesToClearAlerts.OutputQueue>
+        <vnbab:LoadEntitiesToClearAlerts.RuleTypeSettings>
+          <InArgument x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">
+            <mca:CSharpValue x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">vrBalanceRuleTypeSettings</mca:CSharpValue>
+          </InArgument>
+        </vnbab:LoadEntitiesToClearAlerts.RuleTypeSettings>
+        <vnbab:LoadEntitiesToClearAlerts.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadEntitiesToClearStatus</mca:CSharpReference>
+          </OutArgument>
+        </vnbab:LoadEntitiesToClearAlerts.Status>
+        <sap2010:WorkflowViewState.IdRef>LoadEntitiesToClearAlerts_1</sap2010:WorkflowViewState.IdRef>
+      </vnbab:LoadEntitiesToClearAlerts>
+      <vnbab:ClearAlerts>
+        <vnbab:ClearAlerts.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vne:VREntityBalanceInfoBatch)">queueEntityBalanceInfoToClearBatch</mca:CSharpValue>
+          </InArgument>
+        </vnbab:ClearAlerts.InputQueue>
+        <vnbab:ClearAlerts.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)">queueUpdateLastAlertInfoToClearPayload</mca:CSharpReference>
+          </InOutArgument>
+        </vnbab:ClearAlerts.OutputQueue>
+        <vnbab:ClearAlerts.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadEntitiesToClearStatus</mca:CSharpValue>
+          </InArgument>
+        </vnbab:ClearAlerts.PreviousActivityStatus>
+        <vnbab:ClearAlerts.RuleTypeSettings>
+          <InArgument x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">
+            <mca:CSharpValue x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">vrBalanceRuleTypeSettings</mca:CSharpValue>
+          </InArgument>
+        </vnbab:ClearAlerts.RuleTypeSettings>
+        <vnbab:ClearAlerts.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">clearAlertsStatus</mca:CSharpReference>
+          </OutArgument>
+        </vnbab:ClearAlerts.Status>
+        <sap2010:WorkflowViewState.IdRef>ClearAlerts_1</sap2010:WorkflowViewState.IdRef>
+      </vnbab:ClearAlerts>
+      <vnbab:UpdateBalanceLastAlertInfos Status="{x:Null}">
+        <vnbab:UpdateBalanceLastAlertInfos.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vne:VRBalanceUpdateLastAlertInfoPayloadBatch)">queueUpdateLastAlertInfoToClearPayload</mca:CSharpValue>
+          </InArgument>
+        </vnbab:UpdateBalanceLastAlertInfos.InputQueue>
+        <vnbab:UpdateBalanceLastAlertInfos.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">clearAlertsStatus</mca:CSharpValue>
+          </InArgument>
+        </vnbab:UpdateBalanceLastAlertInfos.PreviousActivityStatus>
+        <vnbab:UpdateBalanceLastAlertInfos.RuleTypeSettings>
+          <InArgument x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">
+            <mca:CSharpValue x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings">vrBalanceRuleTypeSettings</mca:CSharpValue>
+          </InArgument>
+        </vnbab:UpdateBalanceLastAlertInfos.RuleTypeSettings>
+        <sap2010:WorkflowViewState.IdRef>UpdateBalanceLastAlertInfos_2</sap2010:WorkflowViewState.IdRef>
+      </vnbab:UpdateBalanceLastAlertInfos>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEJhbGFuY2VBbGVydENoZWNrZXJQcm9jZXNzLnhhbWwjPAPfAQ4CAQFABUsvAwGrAUwFlQEQAgFTlgEF3QEQAgECSAtIhAEDAa8BQwtDXAMBrAFTB2MjAwGVAWQHgwEcAgFqhAEHlAErAgFUnQEHrgEpAgE9rwEHygEbAgEZywEH3AErAgEDWw1bfgMBpAFgDWB6AwGdAVYNVpABAwGWAXsNe34DAY4Bdg12cgMBhwFsDWyIAQMBgAGAAQ2AAXMCAXlxDXGkAQIBcmcNZ14CAWuRAQ2RAX4CAWOMAQ2MAWsCAVyHAQ2HAZwBAgFVpQENpQF+AgFMqgENqgF6AgFFoAENoAGXAQIBPsEBDcEBfgIBNrwBDbwBcgIBL7IBDbIBjwECASjGAQ3GAXICASG3AQ23AasBAgEa2AEN2AF+AgES0wEN0wFqAgELzgENzgGjAQIBBA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -157,15 +228,18 @@
       <sap2010:ViewStateData Id="CreateAlerts_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="UpdateBalanceLastAlertInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="794,101" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,413">
+      <sap2010:ViewStateData Id="LoadEntitiesToClearAlerts_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ClearAlerts_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="UpdateBalanceLastAlertInfos_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,398">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Notification.BP.BalanceAlertCheckerProcess_1" sap:VirtualizedContainerService.HintSize="856,493" />
+      <sap2010:ViewStateData Id="Vanrise.Notification.BP.BalanceAlertCheckerProcess_1" sap:VirtualizedContainerService.HintSize="856,478" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

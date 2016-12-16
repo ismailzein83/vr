@@ -35,17 +35,20 @@ namespace Vanrise.Notification.Business
             };
         }
 
-        public void ClearNotifications(Guid alertRuleTypeId, long? alertRuleId, string eventKey)
+        public void ClearNotifications(ClearAlertRuleNotificationInput notificationInput)
         {
-            Guid notificationTypeId = GetNotificationTypeId(alertRuleTypeId);
-            var notificationParentTypes = BuildNotificationParentTypes(alertRuleTypeId, alertRuleId);
-            _vrNofiticationManager.ClearNotifications(notificationTypeId, notificationParentTypes, eventKey);
+            Guid notificationTypeId = GetNotificationTypeId(notificationInput.RuleTypeId);
+            var notificationParentTypes = BuildNotificationParentTypes(notificationInput.RuleTypeId, notificationInput.AlertRuleId);
+            ClearVRNotificationInput clearNotificationInput = new ClearVRNotificationInput
+            {
+                EventKey = notificationInput.EventKey,
+                NotificationTypeId = notificationTypeId,
+                ParentTypes = notificationParentTypes,
+                UserId = notificationInput.UserId
+            };
+            _vrNofiticationManager.ClearNotifications(clearNotificationInput);
         }
 
-        public void ClearNotifications(Guid alertRuleTypeId, string eventKey)
-        {
-            ClearNotifications(alertRuleTypeId, null, eventKey);
-        }
         public List<string> GetNotClearedNotificationsEventKeys(Guid alertRuleTypeId, long? alertRuleId, DateTime? notificationCreatedAfter)
         {
             Guid notificationTypeId = GetNotificationTypeId(alertRuleTypeId);

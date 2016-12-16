@@ -53,27 +53,18 @@ namespace Vanrise.Notification.Business
 
         public VRNotification GetVRNotificationById(Guid vrNotificationId)
         {
-            var allNotifications = GetCachedVRNotifications();
-            return allNotifications.GetRecord(vrNotificationId);
+            IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
+            return dataManager.GetVRNotificationById(vrNotificationId);
         }
 
-        Dictionary<Guid, VRNotification> GetCachedVRNotifications()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRNotifications",
-               () =>
-               {
-                   IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
-                   return dataManager.GetVRNotifications().ToDictionary(x => x.VRNotificationId, x => x);
-               });
-        }
-
-        public void ClearNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, string eventKey)
+        public void ClearNotifications(ClearVRNotificationInput input)
         {
             ClearNotificationInput clearNotificationInput = new ClearNotificationInput
             {
-                EntityId = eventKey,
-                NotificationTypeId = notificationTypeId,
-                ParentTypes = parentTypes
+                EventKey = input.EventKey,
+                NotificationTypeId = input.NotificationTypeId,
+                ParentTypes = input.ParentTypes,
+                UserId = input.UserId
             };
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
             {
@@ -86,22 +77,6 @@ namespace Vanrise.Notification.Business
         {
             throw new NotImplementedException();
         }
-
-        #region Private Classes
-
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IVRNotificationDataManager _dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreVRNotificationUpdated(ref _updateHandle);
-            }
-        }
-
-        #endregion
-
 
         public void UpdateNotificationStatus(Guid notificationId, VRNotificationStatus vrNotificationStatus)
         {

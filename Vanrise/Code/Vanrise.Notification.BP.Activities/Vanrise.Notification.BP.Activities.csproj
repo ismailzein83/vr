@@ -71,6 +71,7 @@
     <Compile Include="BalanceAlertChecker\CreateAlerts.cs" />
     <Compile Include="BalanceAlertChecker\LoadEntitiesToAlert.cs" />
     <Compile Include="BalanceAlertChecker\LoadEntitiesToClearAlerts.cs" />
+    <Compile Include="LoadNotifications.cs" />
     <Compile Include="BalanceAlertChecker\UpdateBalanceLastAlertInfos.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\CalculateNextAlertThresholds.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\LoadBalanceInfos.cs" />
@@ -95,6 +96,10 @@
     <ProjectReference Include="..\Vanrise.Notification.Business\Vanrise.Notification.Business.csproj">
       <Project>{918ce99a-576c-49f0-897e-07817959e79c}</Project>
       <Name>Vanrise.Notification.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Data\Vanrise.Notification.Data.csproj">
+      <Project>{c425f563-5869-495c-b4fb-e39b6ab48b82}</Project>
+      <Name>Vanrise.Notification.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
       <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>

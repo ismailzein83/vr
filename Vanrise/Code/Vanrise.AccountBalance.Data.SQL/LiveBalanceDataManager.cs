@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
+using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.Data.SQL
 {
@@ -160,7 +163,7 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
         {
-            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper,accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance);
+            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance);
         }
         public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate)
         {
@@ -216,14 +219,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 NextThreshold = GetReaderValue<decimal?>(reader, "NextAlertThreshold"),
                 LastExecutedThreshold = GetReaderValue<decimal?>(reader, "LastExecutedActionThreshold"),
                 ThresholdIndex = GetReaderValue<int?>(reader, "ThresholdActionIndex"),
-                LiveBalanceActiveAlertThresholds = GetActiveAlertThresholds(reader["ActiveAlertThresholds"] as string)
+                LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader["ActiveAlertsInfo"] as string, typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo
             };
-        }
-        List<decimal> GetActiveAlertThresholds(string activeAlertThresholds)
-        {
-            if (string.IsNullOrEmpty(activeAlertThresholds))
-                return null;
-            return new List<decimal>(activeAlertThresholds.Split(',').Select(s => decimal.Parse(s)));
         }
         private LiveBalanceAccountInfo LiveBalanceAccountInfoMapper(IDataReader reader)
         {
@@ -271,14 +268,6 @@ namespace Vanrise.AccountBalance.Data.SQL
             dr["ID"] = liveBalanceToUpdate.LiveBalanceId;
             dr["UpdateValue"] = liveBalanceToUpdate.Value;
         }
-
-
-
-
-
-
-
-
         private void FillLiveBalanceThresholdRow(DataRow dr, BalanceAccountThreshold balanceAccountThreshold)
         {
             dr["AccountID"] = balanceAccountThreshold.AccountId;
@@ -311,9 +300,13 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             dr["AccountTypeID"] = updateEntity.AccountTypeId;
             dr["AccountID"] = updateEntity.AccountId;
-            dr["NextAlertThreshold"] = updateEntity.NextAlertThreshold;
-            dr["AlertRuleId"] = updateEntity.AlertRuleId;
-            dr["ThresholdActionIndex"] = updateEntity.ThresholdActionIndex;
+
+            if (updateEntity.NextAlertThreshold.HasValue)
+                dr["NextAlertThreshold"] = updateEntity.NextAlertThreshold;
+            if (updateEntity.AlertRuleId.HasValue)
+                dr["AlertRuleId"] = updateEntity.AlertRuleId;
+            if (updateEntity.ThresholdActionIndex.HasValue)
+                dr["ThresholdActionIndex"] = updateEntity.ThresholdActionIndex;
         }
         DataTable GetNextThresholdUpdateTable()
         {
@@ -329,8 +322,10 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             dr["AccountTypeID"] = updateEntity.AccountTypeId;
             dr["AccountID"] = updateEntity.AccountId;
-            dr["LastExecutedActionThreshold"] = updateEntity.LastExecutedActionThreshold;
-            dr["ActiveAlertThresholds"] = updateEntity.ActiveAlertThresholds == null ? null : updateEntity.ActiveAlertThresholds.Aggregate("", (i, j) => i + "," + j);
+            if (updateEntity.LastExecutedActionThreshold.HasValue)
+                dr["LastExecutedActionThreshold"] = updateEntity.LastExecutedActionThreshold;
+            if (updateEntity.ActiveAlertsInfo != null)
+                dr["ActiveAlertsInfo"] = Serializer.Serialize(updateEntity.ActiveAlertsInfo, true);
         }
         DataTable GetLastThresholdUpdateTable()
         {
@@ -338,20 +333,11 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AccountTypeID", typeof(Guid));
             dt.Columns.Add("AccountID", typeof(long));
             dt.Columns.Add("LastExecutedActionThreshold", typeof(decimal));
-            dt.Columns.Add("ActiveAlertThresholds", typeof(string));
+            dt.Columns.Add("ActiveAlertsInfo", typeof(string));
             return dt;
         }
 
         #endregion
 
-
-
-
-
-
-
-
-
-     
     }
 }

@@ -25,7 +25,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
 
         protected override void DoWork(UpdateBalanceRuleInfosInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-
+            int totalEntityBalanceInfoUpdated = 0;
+            int totalEntityBalanceInfoBatchesUpdated = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -34,6 +35,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (vrBalanceUpdateRuleInfoPayloadBatch) =>
                         {
+                            totalEntityBalanceInfoBatchesUpdated++;
+                            totalEntityBalanceInfoUpdated += vrBalanceUpdateRuleInfoPayloadBatch.Items.Count;
                             VRBalanceAlertRuleUpdateBalanceRuleInfosContext context = new VRBalanceAlertRuleUpdateBalanceRuleInfosContext
                                 {
                                     BalanceRuleInfosToUpdate = vrBalanceUpdateRuleInfoPayloadBatch.Items,
@@ -44,6 +47,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
 
                 } while (!ShouldStop(handle) && hasItem);
             });
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Total Balance Info Updated.", totalEntityBalanceInfoUpdated);
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Total Balance Info Batches Updated.", totalEntityBalanceInfoBatchesUpdated);
         }
 
         protected override UpdateBalanceRuleInfosInput GetInputArgument2(AsyncCodeActivityContext context)
@@ -55,5 +60,5 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
             };
         }
 
-     }
+    }
 }

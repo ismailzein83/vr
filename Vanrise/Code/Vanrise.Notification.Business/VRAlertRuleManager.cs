@@ -110,7 +110,11 @@ namespace Vanrise.Notification.Business
 
         private Dictionary<Guid, List<VRAlertRule>> GetCachedRulesByType()
         {
-            return GetCachedVRAlertRules().Values.GroupBy(s => s.RuleTypeId).ToDictionary(x => x.Key, v => v.ToList());
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRAlertRulesByTypeId",
+               () =>
+               {
+                   return GetCachedVRAlertRules().Values.GroupBy(s => s.RuleTypeId).ToDictionary(x => x.Key, v => v.ToList());
+               });
         }
 
         Dictionary<long, VRAlertRule> GetCachedVRAlertRules()

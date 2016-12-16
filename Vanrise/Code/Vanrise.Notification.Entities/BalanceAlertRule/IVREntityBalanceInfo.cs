@@ -17,8 +17,9 @@ namespace Vanrise.Notification.Entities
         Decimal? NextAlertThreshold { get; }
 
         Decimal? LastExecutedAlertThreshold { get; }
-        List<decimal> ActiveAlertThresholds { get; }
         int? ThresholdActionIndex { get; }
+
+        VRBalanceActiveAlertInfo ActiveAlertsInfo { get; }
     }
 
     public class VREntityBalanceInfoBatch

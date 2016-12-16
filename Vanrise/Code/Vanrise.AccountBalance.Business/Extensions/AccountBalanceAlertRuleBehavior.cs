@@ -65,7 +65,7 @@ namespace Vanrise.AccountBalance.Business.Extensions
                     AccountId = entityBalanceInfo.AccountId,
                     AccountTypeId = entityBalanceInfo.AccountTypeId,
                     LastExecutedActionThreshold = infoToUpdate.LastExecutedAlertThreshold,
-                    ActiveAlertThresholds = infoToUpdate.ActiveAlertThresholds
+                    ActiveAlertsInfo = infoToUpdate.ActiveAlertsInfo
                 };
                 lstLiveBalanceNextThresholdUpdateEntity.Add(balanceEntity);
             }
@@ -81,7 +81,7 @@ namespace Vanrise.AccountBalance.Business.Extensions
         public override void LoadEntitiesToClearAlerts(IVRBalanceAlertRuleLoadEntitiesToClearAlertsContext context)
         {
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-            dataManager.GetLiveBalancesToAlert(context.OnBalanceInfoLoaded);
+            dataManager.GetLiveBalancesToClearAlert(context.OnBalanceInfoLoaded);
         }
 
         #region Private Methods

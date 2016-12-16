@@ -1,12 +1,16 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Notification.BP.ClearNotificationProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vnba="clr-namespace:Vanrise.Notification.BP.Arguments;assembly=Vanrise.Notification.BP.Arguments"
+ xmlns:vnba1="clr-namespace:Vanrise.Notification.BP.Activities;assembly=Vanrise.Notification.BP.Activities"
+ xmlns:vne="clr-namespace:Vanrise.Notification.Entities;assembly=Vanrise.Notification.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vnba:ClearNotificationInput)" />
@@ -21,30 +25,158 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Vanrise.Notification.BP.Arguments</x:String>
+      <x:String>Vanrise.Notification.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Notification.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1" sads:DebugSymbol.Symbol="d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXENsZWFyTm90aWZpY2F0aW9uUHJvY2Vzcy54YW1sASUDJW8CAQE=" />
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(vne:VRNotification)" Name="vrNotifications" />
+    </Sequence.Variables>
+    <vnba1:LoadNotifications sap2010:WorkflowViewState.IdRef="LoadNotifications_1">
+      <vnba1:LoadNotifications.EventKey>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">Input.EventKey</mca:CSharpValue>
+        </InArgument>
+      </vnba1:LoadNotifications.EventKey>
+      <vnba1:LoadNotifications.NotificationTypeId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.NotificationTypeId</mca:CSharpValue>
+        </InArgument>
+      </vnba1:LoadNotifications.NotificationTypeId>
+      <vnba1:LoadNotifications.Notifications>
+        <OutArgument x:TypeArguments="scg:List(vne:VRNotification)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vne:VRNotification)">vrNotifications</mca:CSharpReference>
+        </OutArgument>
+      </vnba1:LoadNotifications.Notifications>
+      <vnba1:LoadNotifications.ParentTypes>
+        <InArgument x:TypeArguments="vne:VRNotificationParentTypes">
+          <mca:CSharpValue x:TypeArguments="vne:VRNotificationParentTypes">Input.ParentTypes</mca:CSharpValue>
+        </InArgument>
+      </vnba1:LoadNotifications.ParentTypes>
+    </vnba1:LoadNotifications>
+    <ParallelForEach x:TypeArguments="vne:VRNotification" DisplayName="ParallelForEach&lt;VRNotification&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
+      <ParallelForEach.Values>
+        <InArgument x:TypeArguments="scg:IEnumerable(vne:VRNotification)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vne:VRNotification)">vrNotifications</mca:CSharpValue>
+        </InArgument>
+      </ParallelForEach.Values>
+      <ActivityAction x:TypeArguments="vne:VRNotification">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="vne:VRNotification" Name="vrNotification" />
+        </ActivityAction.Argument>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <If sap2010:WorkflowViewState.IdRef="If_1">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">vrNotification.Data.ClearanceActions != null</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <ParallelForEach x:TypeArguments="vne:VRAction" DisplayName="ParallelForEach&lt;VRAction&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
+                <ParallelForEach.Values>
+                  <InArgument x:TypeArguments="scg:IEnumerable(vne:VRAction)">
+                    <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vne:VRAction)">vrNotification.Data.ClearanceActions</mca:CSharpValue>
+                  </InArgument>
+                </ParallelForEach.Values>
+                <ActivityAction x:TypeArguments="vne:VRAction">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="vne:VRAction" Name="vrAction" />
+                  </ActivityAction.Argument>
+                  <vnba1:CreateAction UserID="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateAction_1">
+                    <vnba1:CreateAction.Action>
+                      <InArgument x:TypeArguments="vne:VRAction">
+                        <mca:CSharpValue x:TypeArguments="vne:VRAction">vrAction</mca:CSharpValue>
+                      </InArgument>
+                    </vnba1:CreateAction.Action>
+                    <vnba1:CreateAction.EventPayload>
+                      <InArgument x:TypeArguments="vne:IVRActionEventPayload">
+                        <mca:CSharpValue x:TypeArguments="vne:IVRActionEventPayload">vrNotification.Data.EventPayload</mca:CSharpValue>
+                      </InArgument>
+                    </vnba1:CreateAction.EventPayload>
+                  </vnba1:CreateAction>
+                </ActivityAction>
+              </ParallelForEach>
+            </If.Then>
+          </If>
+          <vnba1:UpdateNotificationStatus sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_1">
+            <vnba1:UpdateNotificationStatus.Status>
+              <InArgument x:TypeArguments="vne:VRNotificationStatus">
+                <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.Cleared</mca:CSharpValue>
+              </InArgument>
+            </vnba1:UpdateNotificationStatus.Status>
+            <vnba1:UpdateNotificationStatus.VRNotificationId>
+              <InArgument x:TypeArguments="s:Guid">
+                <mca:CSharpValue x:TypeArguments="s:Guid">vrNotification.VRNotificationId</mca:CSharpValue>
+              </InArgument>
+            </vnba1:UpdateNotificationStatus.VRNotificationId>
+          </vnba1:UpdateNotificationStatus>
+        </Sequence>
+      </ActivityAction>
+    </ParallelForEach>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXENsZWFyTm90aWZpY2F0aW9uUHJvY2Vzcy54YW1sEzcDjQEOAgEBOwVQHwIBJVEFiwEXAgECPgs+VwIBL00LTW8CASxIC0h0AgEpQwtDXwIBJlQLVHMCASJbCYkBFAIBA1wLfBACAQ19C4gBLAIBBF8RX3wCAQ5jD3ohAgEShQERhQFsAgEJgAERgAF7AgEFZhVmjAECAR5tE3goAgETdRl1iAECARlwGXBjAgEU</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="LoadNotifications_1" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="CreateAction_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,210">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,360">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UpdateNotificationStatus_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,546">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="516,696" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="538,882">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Notification.BP.ClearNotificationProcess_1" sap:VirtualizedContainerService.HintSize="240,179" />
+      <sap2010:ViewStateData Id="Vanrise.Notification.BP.ClearNotificationProcess_1" sap:VirtualizedContainerService.HintSize="578,962" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

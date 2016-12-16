@@ -47,6 +47,14 @@ namespace Vanrise.AccountBalance.Entities
 
     public class BalanceAlertRuleTypeSettings : VRGenericAlertRuleTypeSettings
     {
+        public override Guid NotificationTypeId
+        {
+            get
+            {
+                return new Guid("0E469B87-EB7F-44C2-ADFA-0E6A20CCB25A");
+            }
+
+        }
         public Guid AccountTypeId { get; set; }
 
     }

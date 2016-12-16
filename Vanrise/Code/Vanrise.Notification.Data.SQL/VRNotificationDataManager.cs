@@ -22,6 +22,10 @@ namespace Vanrise.Notification.Data.SQL
         #endregion
 
         #region Public Methods
+        public VRNotification GetVRNotificationById(Guid notificationId)
+        {
+            return GetItemSP("[VRNotification].[sp_VRNotification_GetById]", VRNotificationMapper, notificationId);
+        }
         public bool Insert(VRNotification notification)
         {
             int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRNotification_Insert", notification.VRNotificationId,
@@ -40,18 +44,13 @@ namespace Vanrise.Notification.Data.SQL
             return (affectedRecords > 0);
         }
 
-        public List<VRNotification> GetVRNotifications()
+        public List<VRNotification> GetVRNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, string eventKey)
         {
-            return GetItemsSP("VRNotification.sp_VRNotification_GetAll", VRNotificationMapper);
+            return GetItemsSP("VRNotification.sp_VRNotification_GetByNotificationType", VRNotificationMapper, notificationTypeId, parentTypes.ParentType1, parentTypes.ParentType2, eventKey);
         }
         public void UpdateNotificationStatus(Guid notificationId, VRNotificationStatus vrNotificationStatus)
         {
             ExecuteNonQuerySP("[VRNotification].[sp_VRNotification_UpdateStatus]", notificationId, vrNotificationStatus);
-        }
-
-        public bool AreVRNotificationUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("VRNotification.VRNotification", ref updateHandle);
         }
 
         #endregion
@@ -81,5 +80,6 @@ namespace Vanrise.Notification.Data.SQL
         }
 
         #endregion
+
     }
 }

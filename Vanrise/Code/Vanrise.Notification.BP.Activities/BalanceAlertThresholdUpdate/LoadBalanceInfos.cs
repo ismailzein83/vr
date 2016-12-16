@@ -6,6 +6,7 @@ using System.Activities;
 using Vanrise.Notification.Entities;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
 {
@@ -25,9 +26,12 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
         protected override void DoWork(LoadBalanceInfosInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             int batchCount = 100;
+            long totalBalanceEntitiesCount = 0;
+            int totalBatchesCount = 0;
             List<IVREntityBalanceInfo> lstEntityBalanceInfo = new List<IVREntityBalanceInfo>();
             Action<IVREntityBalanceInfo> onBalanceInfoLoaded = (vrEntityBalanceInfo) =>
             {
+                totalBalanceEntitiesCount++;
                 if (lstEntityBalanceInfo.Count >= batchCount)
                 {
                     inputArgument.OutputQueue.Enqueue(new VREntityBalanceInfoBatch
@@ -35,6 +39,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                         BalanceInfos = new List<IVREntityBalanceInfo>(lstEntityBalanceInfo)
                     });
                     lstEntityBalanceInfo = new List<IVREntityBalanceInfo>();
+                    totalBatchesCount++;
                 }
                 lstEntityBalanceInfo.Add(vrEntityBalanceInfo);
             };
@@ -43,11 +48,14 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
             inputArgument.RuleTypeSettings.Behavior.LoadBalanceInfos(context);
             if (lstEntityBalanceInfo.Count > 0)
             {
+                totalBatchesCount++;
                 inputArgument.OutputQueue.Enqueue(new VREntityBalanceInfoBatch
                 {
                     BalanceInfos = new List<IVREntityBalanceInfo>(lstEntityBalanceInfo)
                 });
             }
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "{0} Total Balance Entity Loaded.", totalBalanceEntitiesCount);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "{0} Balance Entity Batches Created.", totalBatchesCount);
         }
 
         protected override LoadBalanceInfosInput GetInputArgument2(AsyncCodeActivityContext context)

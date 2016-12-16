@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using Vanrise.Notification.Entities;
 using Vanrise.Notification.Business;
+using Vanrise.Notification.Data;
 
 namespace Vanrise.Notification.BP.Activities
 {
@@ -18,8 +19,8 @@ namespace Vanrise.Notification.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            VRNotificationManager manager = new VRNotificationManager();
-            VRNotification notification = manager.GetVRNotificationById(VRNotificationId.Get(context));
+            IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
+            VRNotification notification = dataManager.GetVRNotificationById(VRNotificationId.Get(context));
             if (notification == null)
                 throw new NullReferenceException("notification");
             if (notification.Data == null)

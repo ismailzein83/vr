@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
@@ -11,6 +12,6 @@ namespace Vanrise.AccountBalance.Entities
         public Guid AccountTypeId { get; set; }
         public long AccountId { get; set; }
         public decimal? LastExecutedActionThreshold { get; set; }
-        public List<decimal> ActiveAlertThresholds { get; set; }
+        public VRBalanceActiveAlertInfo ActiveAlertsInfo { get; set; }
     }
 }

@@ -9,6 +9,7 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vnba="clr-namespace:Vanrise.Notification.BP.Arguments;assembly=Vanrise.Notification.BP.Arguments"
  xmlns:vnba1="clr-namespace:Vanrise.Notification.BP.Activities;assembly=Vanrise.Notification.BP.Activities"
  xmlns:vnbab="clr-namespace:Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate;assembly=Vanrise.Notification.BP.Activities"
@@ -54,6 +55,7 @@
       <AssemblyReference>Vanrise.Notification.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -61,6 +63,7 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="vne:VRBalanceAlertRuleTypeSettings" Name="vrBalanceAlertRuleTypeSettings" />
     </Sequence.Variables>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" Message="Balance Alert Threshold Update Process Started" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" />
     <vnba1:GetVRBalanceAlertRuleTypeSettings sap2010:WorkflowViewState.IdRef="GetVRBalanceAlertRuleTypeSettings_1">
       <vnba1:GetVRBalanceAlertRuleTypeSettings.AlertRuleTypeId>
         <InArgument x:TypeArguments="s:Guid">
@@ -147,23 +150,26 @@
         </vnbab:UpdateBalanceRuleInfos.RuleTypeSettings>
       </vnbab:UpdateBalanceRuleInfos>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEJhbGFuY2VBbGVydFRocmVzaG9sZFVwZGF0ZVByb2Nlc3MueGFtbBQ8A5cBDgIBAUAFSy8CAVpMBZUBEAIBAkgLSIkBAgFeQwtDXAIBW1MHYyACAURkB4MBLAIBGYQBB5QBJgIBA1sNW4MBAgFTYA1gdwIBTFYNVpABAgFFew17gwECAT12DXZvAgE2bA1siAECAS+AAQ2AAYIBAgEocQ1xpgECASFnDWdeAgEakQENkQGDAQIBEowBDYwBegIBC4cBDYcBngECAQQ=</sads:DebugSymbol.Symbol>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" Message="Balance Alert Threshold Update Process Finished" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" />
+    <sads:DebugSymbol.Symbol>d1NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEJhbGFuY2VBbGVydFRocmVzaG9sZFVwZGF0ZVByb2Nlc3MueGFtbBg+A5sBDgIBAUIFQqcBAgFjQwVOLwIBXE8FmAEQAgEEmQEFmQGoAQIBAkI7QmsCAWRLC0uJAQIBYEYLRlwCAV1WB2YgAgFGZweGASwCARuHAQeXASYCAQWZATuZAWwCAQNeDV6DAQIBVWMNY3cCAU5ZDVmQAQIBR34NfoMBAgE/eQ15bwIBOG8Nb4gBAgExgwENgwGCAQIBKnQNdKYBAgEjag1qXgIBHJQBDZQBgwECARSPAQ2PAXoCAQ2KAQ2KAZ4BAgEG</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="GetVRBalanceAlertRuleTypeSettings_1" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="LoadBalanceInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CalculateNextAlertThresholds_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="UpdateBalanceRuleInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,272">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,396">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Notification.BP.BalanceAlertThresholdUpdateProcess_1" sap:VirtualizedContainerService.HintSize="856,352" />
+      <sap2010:ViewStateData Id="Vanrise.Notification.BP.BalanceAlertThresholdUpdateProcess_1" sap:VirtualizedContainerService.HintSize="856,476" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

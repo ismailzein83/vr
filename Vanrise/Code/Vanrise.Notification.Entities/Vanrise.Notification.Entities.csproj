@@ -49,6 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BalanceAlertRule\VRBalanceActiveAlertInfo.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceActiveAlertThreshold.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertEventPayload.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertNotificationType.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleBehavior.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeConfig.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeFilter.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeInfo.cs" />
+    <Compile Include="VRAlertRule\ClearAlertRuleNotificationInput.cs" />
     <Compile Include="VRAlertRule\CreateAlertRuleNotificationInput.cs" />
     <Compile Include="VRAlertRule\CreateAlertRuleNotificationOutput.cs" />
     <Compile Include="VRAlertRule\VRAlertRule.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeDetail.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeQuery.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeSettings.cs" />
+    <Compile Include="VRNotification\ClearVRNotificationInput.cs" />
     <Compile Include="VRNotification\CreateVRNotificationInput.cs" />
     <Compile Include="VRNotification\CreateVRNotificationOutput.cs" />
     <Compile Include="VRNotification\VRNotification.cs" />
