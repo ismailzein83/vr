@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.Services.ClientReport
         protected override void OnStart(string[] args)
         {
             base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
-            Debugger.Launch(); // launch and attach debugger
+            //Debugger.Launch(); // launch and attach debugger
             int timeInterval;
 
             bool parsed = Int32.TryParse(ConfigurationManager.AppSettings["TimeInterval"], out timeInterval);
