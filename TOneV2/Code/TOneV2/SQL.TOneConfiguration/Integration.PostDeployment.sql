@@ -71,10 +71,10 @@ set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[Bre
 --------------------------------------------------------------------------------------------------------------
 END
 
-
+Delete from [sec].[BusinessEntity] where [Id] in ('4C07BCD1-BBB0-4ABE-A055-B375950ABB59','560F893F-C03F-4DF1-A300-A499ACA3E75A') 
 --[sec].[BusinessEntity]-------------------901 to 1200--------------------------------------------------------
 BEGIN
-set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('CCD65B5B-53BB-4816-B7EA-D8DC58AA513E',901,'VR_Integration_DataSource','Datasource','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View","Add","Edit","Delete"]'),('4C07BCD1-BBB0-4ABE-A055-B375950ABB59',902,'VR_Integration_DataSource_ImportedBatch','Imported Batches','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View"]'),('560F893F-C03F-4DF1-A300-A499ACA3E75A',903,'VR_Integration_DataSource_Log','Log','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('CCD65B5B-53BB-4816-B7EA-D8DC58AA513E',901,'VR_Integration_DataSource','Datasource','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View","Add","Edit","Delete","ImportedBatch","Log"]')--('4C07BCD1-BBB0-4ABE-A055-B375950ABB59',902,'VR_Integration_DataSource_ImportedBatch','Imported Batches','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View"]'),--('560F893F-C03F-4DF1-A300-A499ACA3E75A',903,'VR_Integration_DataSource_Log','Log','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 END
 
@@ -95,8 +95,8 @@ as (select * from (values
 ('VR_Integration/DataSource/AddDataSource','VR_Integration_DataSource: Add'),
 ('VR_Integration/DataSource/UpdateDataSource','VR_Integration_DataSource: Edit'),
 ('VR_Integration/DataSource/DeleteDataSource','VR_Integration_DataSource: Delete'),
-('VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches','VR_Integration_DataSource_ImportedBatch: View'),
-('VR_Integration/DataSourceLog/GetFilteredDataSourceLogs','VR_Integration_DataSource_Log: View')
+('VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches','VR_Integration_DataSource: ImportedBatch'),
+('VR_Integration/DataSourceLog/GetFilteredDataSourceLogs','VR_Integration_DataSource: Log')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
