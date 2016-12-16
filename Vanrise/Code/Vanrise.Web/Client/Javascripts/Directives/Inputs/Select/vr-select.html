@@ -36,8 +36,8 @@
                                 </div>
                                 <!--<div ng-if="ctrl.isMultiple() && !ctrl.isRemoteLoad()" style="padding-left:5px;"><a href="" ng-click="ctrl.selectAll()">Select all </a></div>-->
                                 <div class="vr-select-height" ng-if="!ctrl.isMultiple()">
-                                    <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" ng-repeat="c in ctrl.boundDataSource" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
-                                        <a href="" ng-if="!ctrl.isMultiple()" style="display: inline-block; width:100%;" ng-class=" ctrl.getobjectdisabled(c)= =true?'vr-select-disabled-item':''" ng-repeat="c in ctrl.boundDataSource" class="mark-select " ng-click="ctrl.selectValue($event, c);">
+                                    <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
+                                        <a href="" ng-if="!ctrl.isMultiple()" style="display: inline-block; width:100%;" ng-class=" ctrl.getobjectdisabled(c)==true?'vr-select-disabled-item':''" ng-repeat="c in ctrl.boundDataSource" class="mark-select " ng-click="ctrl.selectValue($event, c);">
                                             <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
                                         </a>
                                         <span ng-show="showeye" style="display: inline-block;top: 4px;position:absolute;right:2px;" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton" ng-click="ctrl.onViewHandler(c)" class=" glyphicon glyphicon-eye-open hand-cursor"></span>

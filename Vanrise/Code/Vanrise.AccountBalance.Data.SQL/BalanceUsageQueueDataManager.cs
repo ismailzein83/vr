@@ -41,6 +41,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             if (balanceUsageDetail != null)
             {
                 binaryArray = Common.ProtoBufSerializer.Serialize(balanceUsageDetail);
+                binaryArray = Common.Compressor.Compress(binaryArray);
             }
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Update]", accountTypeId, binaryArray) > 0);
         }
@@ -58,7 +59,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             {
                 BalanceUsageQueueId = (long)reader["ID"],
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeID"),
-                UsageDetails = Vanrise.Common.ProtoBufSerializer.Deserialize<BalanceUsageDetail>(GetReaderValue<byte[]>(reader, "UsageDetails"))
+                UsageDetails = Vanrise.Common.ProtoBufSerializer.Deserialize<BalanceUsageDetail>(Common.Compressor.Decompress(GetReaderValue<byte[]>(reader, "UsageDetails")))
             };
         }
 

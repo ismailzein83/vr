@@ -42,6 +42,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             {
                 BillingTransactionTypeId = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
+                IsCredit = GetReaderValue<bool>(reader, "IsCredit")
             };
         }
 
