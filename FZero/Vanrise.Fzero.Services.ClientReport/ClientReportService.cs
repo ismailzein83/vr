@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.Services.ClientReport
         protected override void OnStart(string[] args)
         {
             base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
-            //Debugger.Launch(); // launch and attach debugger
+            Debugger.Launch(); // launch and attach debugger
             int timeInterval;
 
             bool parsed = Int32.TryParse(ConfigurationManager.AppSettings["TimeInterval"], out timeInterval);
@@ -198,8 +198,8 @@ namespace Vanrise.Fzero.Services.ClientReport
                 string reportPath = string.Empty;
                 string reportPath2 = string.Empty;
                 bool isNatSecurity = false;
-                
-                if (ClientName.Substring(0, 1) == "K" || ClientName.Substring(0, 1) == "A")
+
+                if (LastReport.ReportID.Substring(2, 1) == "K" || LastReport.ReportID.Substring(2, 1) == "A" || LastReport.ReportID.Substring(2, 1) == "Z")
                     isNatSecurity = true;
                 
                 string reportPathNatSec = string.Empty;
