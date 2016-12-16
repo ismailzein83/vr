@@ -13,7 +13,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountTypeManager
+    public class AccountTypeManager : IBusinessEntityManager
     {
         #region Public Methods
 
@@ -55,15 +55,15 @@ namespace Retail.BusinessEntity.Business
                             if (accountType.Settings == null || accountType.Settings.SupportedParentAccountTypeIds == null || !accountType.Settings.SupportedParentAccountTypeIds.Contains(parentAccount.TypeId))
                                 return false;
                         }
-                        else if(accountType.Settings == null || !accountType.Settings.CanBeRootAccount)
+                        else if (accountType.Settings == null || !accountType.Settings.CanBeRootAccount)
                         {
                             return false;
                         }
-                        if(filter.RootAccountTypeOnly && (accountType.Settings == null || !accountType.Settings.CanBeRootAccount))
+                        if (filter.RootAccountTypeOnly && (accountType.Settings == null || !accountType.Settings.CanBeRootAccount))
                             return false;
-                      return  true;
+                        return true;
                     };
-                
+
             }
 
             return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
@@ -146,6 +146,7 @@ namespace Retail.BusinessEntity.Business
                 {
                     List<AccountGenericField> fields = new List<AccountGenericField>();
                     FillAccountCommonGenericFields(fields);
+
                     var accountPartDefinitions = new AccountPartDefinitionManager().GetAccountPartDefinitions();
                     if (accountPartDefinitions != null)
                     {
@@ -167,9 +168,19 @@ namespace Retail.BusinessEntity.Business
             return GetAccountGenericFields().GetRecord(fieldName);
         }
 
-        void FillAccountCommonGenericFields(List<AccountGenericField> fields)
+        public IEnumerable<GenericFieldDefinition> GetGenericFieldDefinitions()
+        {
+            Dictionary<string, AccountGenericField> accountGenericFields = GetAccountGenericFields();
+            if (accountGenericFields == null || accountGenericFields.Values.Count() == 0)
+                return null;
+            return accountGenericFields.Values.Select(itm => new GenericFieldDefinition() { Name = itm.Name, Title = itm.Title, FieldType = itm.FieldType });
+        }
+
+        private void FillAccountCommonGenericFields(List<AccountGenericField> fields)
         {
             fields.Add(new AccountStatusGenericField());
+            fields.Add(new AccountNameGenericField());
+            fields.Add(new AccountTypeGenericField());
         }
 
         #endregion
@@ -249,6 +260,45 @@ namespace Retail.BusinessEntity.Business
                 AccountTypeId = accountType.AccountTypeId,
                 Title = accountType.Title
             };
+        }
+
+        #endregion
+
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetCachedAccountTypes().Select(itm => itm as dynamic).ToList();
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetAccountType(context.EntityId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetAccountTypeName(Guid.Parse(context.EntityId.ToString()));
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
