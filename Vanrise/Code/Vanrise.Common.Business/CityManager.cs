@@ -90,6 +90,15 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
+        public string GetCityName(int cityId)
+        {
+            var city = this.GetCity(cityId);
+            if (city != null)
+                return city.Name;
+            else
+                return null;
+        }
+
         #endregion
 
         #region Private Classes
