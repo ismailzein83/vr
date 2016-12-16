@@ -93,7 +93,7 @@ app.directive('retailBeCreditclassSelector', ['Retail_BE_CreditClassAPIService',
             var label = "Credit Class";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Credit Classs";
+                label = "Credit Classes";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)

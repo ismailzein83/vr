@@ -20,6 +20,13 @@ namespace Retail.BusinessEntity.MainExtensions.FileAccountConvertors
 {
     public class UserConvertor : TargetBEConvertor
     {
+        public override string Name
+        {
+            get
+            {
+                return "Users";
+            }
+        }
         CurrencySettingData _currencySettingData;
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
@@ -69,8 +76,6 @@ namespace Retail.BusinessEntity.MainExtensions.FileAccountConvertors
                         }
                         accountData.Account.Name = accountName;
                         accountData.Account.SourceId = sourceId;
-
-                        FillAccountSettings(accountData, accountRecords);
                         accountData.Account.StatusId = Guid.Parse("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B");
                         lstTargets.Add(accountData);
                     }
@@ -108,37 +113,6 @@ namespace Retail.BusinessEntity.MainExtensions.FileAccountConvertors
         }
 
         #region Private Methods
-        void FillAccountSettings(SourceAccountData accountData, string[] accountRecords)
-        {
-            accountData.Account.Settings = new AccountSettings
-            {
-                Parts = new AccountPartCollection()
-            };
-
-            FillPersonalInfoPart(accountData, accountRecords);
-            FillFinancialInfo(accountData, accountRecords);
-        }
-        void FillFinancialInfo(SourceAccountData accountData, string[] accountRecords)
-        {
-            accountData.Account.Settings.Parts.Add(AccountPartFinancial._ConfigId, new AccountPart
-            {
-                Settings = new AccountPartFinancial
-                {
-                    CurrencyId = _currencySettingData.CurrencyId
-                }
-            });
-        }
-        void FillPersonalInfoPart(SourceAccountData accountData, string[] accountRecords)
-        {
-            accountData.Account.Settings.Parts.Add(AccountPartPersonalInfo._ConfigId, new AccountPart
-            {
-                Settings = new AccountPartPersonalInfo
-                {
-                    FirstName = accountRecords[2],
-                    LastName = accountRecords[3]
-                }
-            });
-        }
         MappingRule GetMappingRule(string number, string accountName)
         {
             MappingRule rule = new MappingRule
@@ -149,10 +123,10 @@ namespace Retail.BusinessEntity.MainExtensions.FileAccountConvertors
                 {
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
                 },
-                DefinitionId = new Guid("E30037DA-29C6-426A-A581-8EB0EDD1D5E3"),
+                DefinitionId = new Guid("7282858D-C7B5-44EB-BCF2-68A02DE45F8B"),
                 Description = string.Format("{0} Identification Rule", accountName)
             };
-            rule.Criteria.FieldsValues.Add("MSISDN", new StaticValues
+            rule.Criteria.FieldsValues.Add("Number", new StaticValues
             {
                 Values = new List<object>
                 {

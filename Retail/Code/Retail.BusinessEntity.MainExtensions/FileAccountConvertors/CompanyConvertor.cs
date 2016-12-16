@@ -20,6 +20,13 @@ namespace Retail.BusinessEntity.MainExtensions.FileAccountConvertors
 {
     public class CompanyConvertor : TargetBEConvertor
     {
+        public override string Name
+        {
+            get
+            {
+                return "Companies";
+            }
+        }
         CurrencySettingData _currencySettingData;
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
