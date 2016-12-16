@@ -39,13 +39,16 @@ namespace Vanrise.Fzero.Services.ClientReport
         {
             base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
             //Debugger.Launch(); // launch and attach debugger
+            int timeInterval;
+
+            bool parsed = Int32.TryParse(ConfigurationManager.AppSettings["TimeInterval"], out timeInterval);
 
             // Create a timer with a ten second interval.
-            aTimer = new System.Timers.Timer(7200000);// 2 hours
+            aTimer = new System.Timers.Timer(timeInterval);// 2 hours
             // Hook up the Elapsed event for the timer.
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 
-            aTimer.Interval = 7200000;// 2 hours
+            aTimer.Interval = timeInterval;// 2 hours
             aTimer.Enabled = true;
 
             GC.KeepAlive(aTimer);
@@ -262,6 +265,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                 rvToOperatorNatSec.LocalReport.SetParameters(parameters);
                 rvToOperatorNatSec.LocalReport.Refresh();
                 string emailNatSec = ConfigurationManager.AppSettings["EmailNatSec"];
+                string emailCCNatSec = ConfigurationManager.AppSettings["EmailCCNatSec"];
 
                 string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
                 string filenameExcel2 = ExportReportToExcel(report.ReportID + ".xls", rvToOperator2);
@@ -296,7 +300,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                         EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenamePDFNatSec,
                             emailNatSec,
                             ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
-                            "", report.ReportID, "FMS_Syria_Profile");
+                            emailCCNatSec, report.ReportID, "FMS_Syria_Profile");
                     }
                 }
                 else
@@ -313,7 +317,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                         if (isNatSecurity)
                         {
                             EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFNatSec, emailNatSec,
-                                ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, "",
+                                ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, emailCCNatSec,
                                 report.ReportID, "FMS_Profile");
                         }
                     }
@@ -339,7 +343,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                                         filenamePDFNatSec, emailNatSec,
                                         ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" +
                                         report.ReportID,
-                                        "", report.ReportID, "FMS_Profile");
+                                        emailCCNatSec, report.ReportID, "FMS_Profile");
                                 }
                             }
                             else
@@ -354,7 +358,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                                         emailNatSec,
                                         ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" +
                                         report.ReportID,
-                                        "", report.ReportID, "FMS_Profile");
+                                        emailCCNatSec, report.ReportID, "FMS_Profile");
                                 }
                             }
                         }
@@ -366,7 +370,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                             if (isNatSecurity)
                             {
                                 EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFNatSec, emailNatSec,
-                                    ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, "",
+                                    ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, emailCCNatSec,
                                     report.ReportID, "FMS_Profile");
                             }
                         }
