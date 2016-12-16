@@ -9,5 +9,10 @@ namespace Retail.Invoice.Entities
     public class RetailSubscriberInvoiceDetails
     {
         public Decimal TotalAmount { get; set; }
+
+        public decimal TotalDuration { get; set; }
+
+        public int CountCDRs { get; set; }
+
     }
 }
