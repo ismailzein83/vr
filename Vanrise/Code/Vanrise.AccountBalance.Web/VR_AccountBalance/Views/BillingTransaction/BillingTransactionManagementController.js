@@ -100,7 +100,8 @@
                 FromTime: $scope.fromTime,
                 ToTime: $scope.toTime,
                 AccountTypeId: accountTypeId,
-                TransactionTypeIds: transactionTypeDirectiveAPI.getSelectedIds()
+                TransactionTypeIds: transactionTypeDirectiveAPI.getSelectedIds(),
+                AccountsIds: filterDirectiveAPI.getData().selectedIds
             };
         }
     }
