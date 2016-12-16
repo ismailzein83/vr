@@ -142,7 +142,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                 ErrorLog("ClientID: " + ClientID);
 
                 string ReportID;
-
+                    
                 string ReportIDBeforeCounter = "FZ" + ClientName.Substring(0, 1) +
                                                DateTime.Now.Year.ToString("D2").Substring(2) +
                                                DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
@@ -198,6 +198,10 @@ namespace Vanrise.Fzero.Services.ClientReport
                 string reportPath = string.Empty;
                 string reportPath2 = string.Empty;
                 bool isNatSecurity = false;
+                
+                if (ClientName.Substring(0, 1) == "K" || ClientName.Substring(0, 1) == "A")
+                    isNatSecurity = true;
+                
                 string reportPathNatSec = string.Empty;
                 if (ClientID == (int) Enums.Clients.ST) //-- Syrian Telecom
                 {
@@ -337,14 +341,11 @@ namespace Vanrise.Fzero.Services.ClientReport
                                     ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
                                     CCs, report.ReportID, "FMS_Profile");
 
-                                if (isNatSecurity)
-                                {
-                                    EmailManager.SendReporttoMobileOperator(ListIds.Count,
-                                        filenamePDFNatSec, emailNatSec,
-                                        ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" +
-                                        report.ReportID,
-                                        emailCCNatSec, report.ReportID, "FMS_Profile");
-                                }
+                                EmailManager.SendReporttoMobileOperator(ListIds.Count,
+                                    filenamePDFNatSec, emailNatSec,
+                                    ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" +
+                                    report.ReportID,
+                                    emailCCNatSec, report.ReportID, "FMS_Profile");
                             }
                             else
                             {
