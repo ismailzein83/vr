@@ -133,6 +133,9 @@
     <Folder Include="Retail_Invoice\Services\APIServices\" />
     <Folder Include="Retail_Invoice\Views\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Retail_Invoice\Reports\SubscriberInvoiceReport.rdlc" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
