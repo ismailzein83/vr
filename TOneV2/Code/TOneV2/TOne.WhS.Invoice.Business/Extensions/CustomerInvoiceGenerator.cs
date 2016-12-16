@@ -44,7 +44,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
             }
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.ToDate,currencyId);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.GeneratedToDate,currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
                 throw new InvoiceGeneratorException("No data available between the selected period.");
