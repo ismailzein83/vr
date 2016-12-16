@@ -19,6 +19,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Business;
 //using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
@@ -31,61 +32,54 @@ namespace TestRuntime
         public void Execute()
         {
 
-            RunMigration();
-            return;
-
-            var runtimeServices = new List<RuntimeService>();
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(schedulerService);
-            RuntimeHost host = new RuntimeHost(runtimeServices);
-            host.Start();
-            return;
-
-            //RadiusDataManagerConfig settings = new RadiusDataManagerConfig
-            //{
-            //    RadiusDataManager = new RadiusSQLDataManager()
-            //};
-
-            //RadiusSQLDataManager dataManager = new RadiusSQLDataManager();
-
-            //RouteSyncTechnicalSettings sett = new RouteSyncTechnicalSettings() { SwitchInfoGetter = new RouteSyncSwitchGetter() };
-            //var ser = Serializer.Serialize(settings);
-
-            //System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-            //Console.WriteLine("Hello from Rabih!");
+            //RunMigration();
+            //return;
 
             //var runtimeServices = new List<RuntimeService>();
-            //BusinessProcessService bpservice = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(bpservice);
-
-            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            //TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-            //runtimeServices.Add(transactionLockRuntimeService);
-            //runtimeServices.Add(queueActivationService);
             //runtimeServices.Add(schedulerService);
-            //runtimeServices.Add(dsRuntimeService);
-
             //RuntimeHost host = new RuntimeHost(runtimeServices);
             //host.Start();
+            //return;
 
-            //RunRouteSync();
-            //RunCompleteRouteBuild();
-            //RunCompleteProductRouteBuild();
-            //RunPartialRouteBuild();
+            var runtimeServices = new List<RuntimeService>();
 
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpService);
 
-            //RuntimeHost _host;
-            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            //BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueRegulatorService);
 
-            //TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-            //var runtimeServices = new List<RuntimeService> { queueActivationService, bpService, bpRegulatorService, transactionLockRuntimeService };
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService);
 
-            //_host = new RuntimeHost(runtimeServices);
-            //_host.Start();
+            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService);
+
+            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            //runtimeServices.Add(schedulerService);
+
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bigDataService);
+
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(transactionLockRuntimeService);
+
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dsRuntimeService);
+
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorRuntimeService);
+
+            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingRuntimeService);
+
+            //CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(cachingDistributorRuntimeService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
+            Console.ReadKey();
         }
 
         //private static void RunCompleteProductRouteBuild()
@@ -234,8 +228,8 @@ namespace TestRuntime
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument
             {
-                ConnectionString = "Server=192.168.110.185;Database=TOneV1_Spactrom;User ID=development;Password=dev!123;",
-                //ConnectionString = "Server=192.168.110.195;Database=NetTalkFidaa;User ID=sa;Password=QAP@ssw0rd;",
+                //ConnectionString = "Server=192.168.110.185;Database=TOneV1_Spactrom;User ID=development;Password=dev!123;",
+                ConnectionString = "Server=192.168.110.195;Database=MMOKDAD;User ID=sa;Password=QAP@ssw0rd;",
                 DefaultSellingNumberPlanId = 1,
                 SellingProductId = 1,
                 OffPeakRateTypeId = -2,

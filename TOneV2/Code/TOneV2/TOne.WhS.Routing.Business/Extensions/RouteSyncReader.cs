@@ -12,6 +12,10 @@ namespace TOne.WhS.Routing.Business.Extensions
 
     public class RouteSyncReader : RouteReader
     {
+        public override Guid ConfigId
+        {
+            get { return new Guid("C03EF53F-5022-443F-8833-639E67F88A62"); }
+        }
         public TOneRouteRangeType? RangeType { get; set; }
 
         public override bool TryGetReadRanges(IRouteReaderGetReadRangesContext context)
@@ -97,6 +101,6 @@ namespace TOne.WhS.Routing.Business.Extensions
                 }
                 codePrefix = rangeInfo.CodePrefix;
             }
-        }
+        }       
     }
 }

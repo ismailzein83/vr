@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.RouteSync.Entities
 {
-    public enum RouteRangeType { ByCustomer = 0, ByCodePrefix = 1, ByCustomerAndCode = 2, Random = 3}
+    public enum RouteRangeType { ByCustomer = 0, ByCodePrefix = 1, ByCustomerAndCode = 2, Random = 3 }
 
     public abstract class RouteReader
     {
-        public int ConfigId { get; set; }
+        public abstract Guid ConfigId { get;}
 
         public abstract bool TryGetReadRanges(IRouteReaderGetReadRangesContext context);
 
