@@ -1,6 +1,6 @@
 ﻿<vr-panel ng-controller="WhS_Sales_RatePlanController">
     <vr-form validationcontext="FilterGroup">
-        
+
         <div vr-loader="isLoadingFilterSection" ng-hide="filterSectionCollapsed">
 
             <vr-row removeline>
@@ -15,7 +15,7 @@
             <vr-row>
                 <vr-validation-group validationcontext="SearchGroup">
                     <vr-validation-group validationcontext="SellGroup">
-                        
+
                         <span ng-show="isSettingsSelected">
                             <vr-whs-sales-ownertype-selector on-ready="onOwnerTypeSelectorReady"
                                                              onselectionchanged="onOwnerTypeChanged"
@@ -34,7 +34,7 @@
                                                                hideremoveicon>
                             </vr-whs-be-sellingproduct-selector>
                         </span>
-                        
+
                         <span ng-show="isSettingsSelected && showCarrierAccountSelector">
                             <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
                                                                getcustomers
@@ -45,13 +45,10 @@
                                                                hideremoveicon>
                             </vr-whs-be-carrieraccount-selector>
                         </span>
-                    
-                        <vr-columns width="normal" ng-show="isSettingsSelected && showCarrierAccountSelector">
-                            <vr-common-currency-selector on-ready="onCurrencySelectorReady"
-                                                         onselectionchanged="onCurrencyChanged"
-                                                         isrequired="showCarrierAccountSelector">
-                            </vr-common-currency-selector>
-                        </vr-columns>
+
+                        <span ng-show="isSettingsSelected && showCarrierAccountSelector">
+                            <vr-common-currency-selector on-ready="onCurrencySelectorReady" normal-col-num="2" onselectionchanged="onCurrencyChanged" isrequired="showCarrierAccountSelector"></vr-common-currency-selector>
+                        </span>
                     </vr-validation-group>
 
                     <vr-columns colnum="2" ng-show="isSettingsSelected">
@@ -62,11 +59,11 @@
                                                                  hideremoveicon>
                         </vr-whs-routing-routingdatabase-selector>
                     </vr-columns>
-                    
+
                     <vr-columns colnum="2" ng-show="isSettingsSelected">
                         <vr-whs-routing-rproutepolicy-selector on-ready="onPolicySelectorReady" isrequired></vr-whs-routing-rproutepolicy-selector>
                     </vr-columns>
-                    
+
                     <vr-columns colnum="2" ng-show="isSettingsSelected">
                         <vr-textbox type="number" label="Number of Options" value="numberOfOptions" minvalue="1" isrequired></vr-textbox>
                     </vr-columns>
@@ -74,7 +71,7 @@
                     <span ng-show="isZoneFilterSelected">
                         <vr-common-country-selector on-ready="onCountrySelectorReady" normal-col-num="2" ismultipleselection="true"></vr-common-country-selector>
                     </span>
-                    
+
                     <span ng-show="isZoneFilterSelected">
                         <vr-common-filter-text on-ready="onTextFilterReady" label="Zone Name" normal-col-num="2"></vr-common-filter-text>
                     </span>
@@ -120,5 +117,5 @@
                 <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
             </div>
         </div>
-</vr-form>
+    </vr-form>
 </vr-panel>

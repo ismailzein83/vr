@@ -20,10 +20,9 @@
                     <vr-whs-be-salezone-selector ismultipleselection normal-col-num="2" on-ready="onSaleZoneDirectiveReady">
                     </vr-whs-be-salezone-selector>
                 </span>
-                <vr-columns colnum="2">
-                    <vr-common-currency-selector on-ready="onCurrencySelectReady" isrequired selectedvalues="selectedCurrency"> </vr-common-currency-selector>
-                </vr-columns>
-                
+
+                <vr-common-currency-selector on-ready="onCurrencySelectReady" isrequired="true" selectedvalues="selectedCurrency" normal-col-num="2"></vr-common-currency-selector>
+
                 <vr-columns colnum="2" ng-if="false">
                     <button ng-if="false" ng-click="export()" class="btn btn-default">Export</button>
                 </vr-columns>

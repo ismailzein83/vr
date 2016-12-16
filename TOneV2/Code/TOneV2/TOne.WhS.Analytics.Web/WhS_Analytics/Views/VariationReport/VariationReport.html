@@ -32,9 +32,9 @@
                 <vr-columns width="normal" ng-show="scopeModel.showTopFilter">
                     <vr-textbox label="Top" type="number" value="scopeModel.top" minvalue="1" customvalidate="scopeModel.validateTopFilter()" isrequired="scopeModel.showTopFilter"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="scopeModel.showCurrencyFilter">
-                    <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="scopeModel.showCurrencyFilter" hideremoveicon="true"></vr-common-currency-selector>
-                </vr-columns>
+                <span ng-show="scopeModel.showCurrencyFilter">
+                    <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="scopeModel.showCurrencyFilter" normal-col-num="2" hideremoveicon="true"></vr-common-currency-selector>
+                </span>
                 <vr-columns width="normal">
                     <vr-switch label="Grouped by Profile" value="scopeModel.groupByProfile"></vr-switch>
                 </vr-columns>

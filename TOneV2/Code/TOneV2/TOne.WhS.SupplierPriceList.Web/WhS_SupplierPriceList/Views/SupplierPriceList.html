@@ -9,9 +9,9 @@
 
                     <vr-whs-be-carrieraccount-selector getsuppliers on-ready="scopeModel.onCarrierAccountDirectiveReady" normal-col-num="2" selectedvalues="scopeModel.selectedSupplier" onselectitem="scopeModel.carrierAccountSelectItem" isrequired="true"></vr-whs-be-carrieraccount-selector>
 
-                    <vr-columns width="normal" vr-loader="scopeModel.isLoadingCurrencySelector">
-                        <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady" isrequired></vr-common-currency-selector>
-                    </vr-columns>
+                    <span vr-loader="scopeModel.isLoadingCurrencySelector">
+                        <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady" isrequired="true" normal-col-num="2"></vr-common-currency-selector>
+                    </span>
 
                     <vr-columns width="normal">
                         <vr-datetimepicker type="date" label="Pricelist Date" value="scopeModel.priceListDate" isrequired></vr-datetimepicker>

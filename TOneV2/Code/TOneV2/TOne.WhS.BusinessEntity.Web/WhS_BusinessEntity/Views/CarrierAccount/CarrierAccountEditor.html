@@ -22,11 +22,8 @@
                                            selectedvalues="scopeModel.selectedCarrierAccountType" onselectionchanged="scopeModel.onCarrierTypeSelectionChanged" />
                             </vr-columns>
                         </span>
+                        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" normal-col-num="6"></vr-common-currency-selector>
 
-
-                        <vr-columns width="1/2row">
-                            <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true"></vr-common-currency-selector>
-                        </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
                         </vr-columns>
@@ -67,7 +64,7 @@
                         </span>
                         <vr-columns width="1/2row">
 
-                            <vr-whs-be-routingstatus-selector  hideremoveicon="true" isrequired on-ready="scopeModel.onCustomerRoutingStatusDirectiveReady">
+                            <vr-whs-be-routingstatus-selector hideremoveicon="true" isrequired on-ready="scopeModel.onCustomerRoutingStatusDirectiveReady">
                             </vr-whs-be-routingstatus-selector>
                         </vr-columns>
                         <vr-columns width="1/2row">

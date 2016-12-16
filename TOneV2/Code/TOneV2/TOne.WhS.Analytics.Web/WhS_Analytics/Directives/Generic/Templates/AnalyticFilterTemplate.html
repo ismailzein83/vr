@@ -50,9 +50,9 @@
 
                 </span>
 
-                <vr-columns width="normal" ng-show="ctrl.isLoadCurrencies && advancedSelected">
-                    <vr-common-currency-selector on-ready="ctrl.onCurrencyDirectiveReady" selectedvalues="ctrl.selectedCurrency"></vr-common-currency-selector>
-                </vr-columns>
+                <span ng-show="ctrl.isLoadCurrencies && advancedSelected">
+                    <vr-common-currency-selector on-ready="ctrl.onCurrencyDirectiveReady" selectedvalues="ctrl.selectedCurrency" normal-col-num="2"></vr-common-currency-selector>
+                </span>
             </vr-row>
 
         </vr-columns>

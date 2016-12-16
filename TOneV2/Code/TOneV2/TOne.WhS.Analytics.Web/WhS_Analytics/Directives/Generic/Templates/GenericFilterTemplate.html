@@ -10,56 +10,56 @@
     </vr-row>
     <vr-row removeline>
         <vr-columns width="fullrow">
-           
-                <vr-row removeline>
-                    <vr-columns colnum="2" ng-if="ctrl.periods.length>0">
-                        <vr-select label="Period" datasource="ctrl.periods"
-                                   datatextfield="description" datavaluefield="value" isrequired selectedvalues="ctrl.selectedperiod"></vr-select>
-                    </vr-columns>
 
-                    <vr-columns colnum="2">
-                        <vr-select label="Group By" datasource="ctrl.dimensions"
-                                   datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired()" selectedvalues="ctrl.selecteddimensions" ismultipleselection></vr-select>
-                    </vr-columns>
-                    <!--<vr-columns colnum="2">
-                       
-                    </vr-columns>-->
+            <vr-row removeline>
+                <vr-columns colnum="2" ng-if="ctrl.periods.length>0">
+                    <vr-select label="Period" datasource="ctrl.periods"
+                               datatextfield="description" datavaluefield="value" isrequired selectedvalues="ctrl.selectedperiod"></vr-select>
+                </vr-columns>
 
-                   <vr-columns colnum="2">
-                        <vr-datetimepicker type="date" label="From:" value="ctrl.fromdate" isrequired customvalidate="ctrl.validateDateTime()"></vr-datetimepicker>
-                   </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-select label="Group By" datasource="ctrl.dimensions"
+                               datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired()" selectedvalues="ctrl.selecteddimensions" ismultipleselection></vr-select>
+                </vr-columns>
+                <!--<vr-columns colnum="2">
 
-                   <vr-columns colnum="2">
-                       <vr-datetimepicker type="date" label="To:" value="ctrl.todate" customvalidate="ctrl.validateDateTime()"></vr-datetimepicker>
-                   </vr-columns>
+            </vr-columns>-->
 
-                    <vr-columns width="normal" ng-show="ctrl.isLoadSellingNumberPlan && advancedSelected">
-                        <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberPlanDirectiveReady" onselectitem="ctrl.onSelectSellingNumberPlan" selectedvalues="ctrl.selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
-                    </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="date" label="From:" value="ctrl.fromdate" isrequired customvalidate="ctrl.validateDateTime()"></vr-datetimepicker>
+                </vr-columns>
 
-                    <span ng-show="ctrl.isLoadSellingNumberPlan && advancedSelected && ctrl.selectedSellingNumberPlan!=undefined" vr-loader="ctrl.isLoadingSaleZonesSelector">
-                        <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="ctrl.onSaleZoneDirectiveReady" />
-                    </span>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="date" label="To:" value="ctrl.todate" customvalidate="ctrl.validateDateTime()"></vr-datetimepicker>
+                </vr-columns>
 
-                    <vr-columns width="normal" ng-show="ctrl.isLoadCountries && advancedSelected">
-                        <vr-common-country-selector on-ready="ctrl.onCountryDirectiveReady" ismultipleselection selectedvalues="ctrl.selectedCountries"></vr-common-country-selector>
-                    </vr-columns>
+                <vr-columns width="normal" ng-show="ctrl.isLoadSellingNumberPlan && advancedSelected">
+                    <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberPlanDirectiveReady" onselectitem="ctrl.onSelectSellingNumberPlan" selectedvalues="ctrl.selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
+                </vr-columns>
 
-                    <span ng-show="ctrl.isLoadCustomers && advancedSelected">
-                        <vr-whs-be-carrieraccount-selector normal-col-num="2" ismultipleselection getcustomers selectedvalues="ctrl.selectedCustomers" on-ready="ctrl.onCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+                <span ng-show="ctrl.isLoadSellingNumberPlan && advancedSelected && ctrl.selectedSellingNumberPlan!=undefined" vr-loader="ctrl.isLoadingSaleZonesSelector">
+                    <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="ctrl.onSaleZoneDirectiveReady" />
+                </span>
 
-                    </span>
+                <vr-columns width="normal" ng-show="ctrl.isLoadCountries && advancedSelected">
+                    <vr-common-country-selector on-ready="ctrl.onCountryDirectiveReady" ismultipleselection selectedvalues="ctrl.selectedCountries"></vr-common-country-selector>
+                </vr-columns>
 
-                    <span ng-show=" ctrl.isLoadSuppliers && advancedSelected">
-                        <vr-whs-be-carrieraccount-selector normal-col-num="2"  ismultipleselection getsuppliers selectedvalues="ctrl.selectedSuppliers" on-ready="ctrl.onSupplierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+                <span ng-show="ctrl.isLoadCustomers && advancedSelected">
+                    <vr-whs-be-carrieraccount-selector normal-col-num="2" ismultipleselection getcustomers selectedvalues="ctrl.selectedCustomers" on-ready="ctrl.onCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
 
-                    </span>
+                </span>
 
-                    <vr-columns width="normal" ng-show="ctrl.isLoadCurrencies && advancedSelected">
-                        <vr-common-currency-selector on-ready="ctrl.onCurrencyDirectiveReady" selectedvalues="ctrl.selectedCurrency"></vr-common-currency-selector>
-                    </vr-columns>
-                </vr-row>
-          
-</vr-columns>
+                <span ng-show=" ctrl.isLoadSuppliers && advancedSelected">
+                    <vr-whs-be-carrieraccount-selector normal-col-num="2"  ismultipleselection getsuppliers selectedvalues="ctrl.selectedSuppliers" on-ready="ctrl.onSupplierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+
+                </span>
+
+                <span ng-show="ctrl.isLoadCurrencies && advancedSelected">
+                    <vr-common-currency-selector on-ready="ctrl.onCurrencyDirectiveReady" selectedvalues="ctrl.selectedCurrency" normal-col-num="2"></vr-common-currency-selector>
+                </span>
+            </vr-row>
+
+        </vr-columns>
     </vr-row>
 </div>
