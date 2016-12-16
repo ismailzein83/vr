@@ -30,7 +30,11 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
         };
 
         function getTemplate(attrs) {
-            return '<retail-be-account-selector isrequired="accountCtrl.isrequired" normal-col-num="{{accountCtrl.normalColNum}}"  on-ready="accountCtrl.onDirectiveReady" ></retail-be-account-selector>';
+            var multipleselection;
+            if (attrs.ismultipleselection != undefined) {
+                multipleselection = 'ismultipleselection="true"';
+            }
+            return '<retail-be-account-selector isrequired="accountCtrl.isrequired" normal-col-num="{{accountCtrl.normalColNum}}" ' + multipleselection + ' on-ready="accountCtrl.onDirectiveReady" ></retail-be-account-selector>';
         }
 
         function accountsCtor(ctrl, $scope, attrs) {

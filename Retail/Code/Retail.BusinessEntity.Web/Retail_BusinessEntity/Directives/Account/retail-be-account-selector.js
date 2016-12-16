@@ -14,21 +14,13 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                 normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
                 var accountCtor = new AccountCtor(ctrl, $scope, $attrs);
                 accountCtor.initializeController();
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             },
             controllerAs: 'ctrl',
-            bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
+            bindToController: true,          
             template: function (element, attrs) {
                 return getAccountTemplate(attrs);
             }
@@ -39,6 +31,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
         function getAccountTemplate(attrs) {
             var label = "Account";
             var multipleselection = "";
+
             if (attrs.ismultipleselection != undefined) {
                 label = "Accounts";
                 multipleselection = "ismultipleselection";
