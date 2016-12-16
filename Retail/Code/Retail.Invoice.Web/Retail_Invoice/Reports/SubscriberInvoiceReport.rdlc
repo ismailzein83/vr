@@ -1803,7 +1803,7 @@
         <Top>4.20708in</Top>
         <Left>0.1425in</Left>
         <Height>0.5in</Height>
-        <Width>6.56329in</Width>
+        <Width>6.5633in</Width>
         <ZIndex>28</ZIndex>
         <Style>
           <Border>
@@ -2307,14 +2307,6 @@
         <Field Name="ServiceTypeIdDescription">
           <DataField>ServiceTypeIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ZoneId">
-          <DataField>ZoneId</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="InterconnectOperatorId">
-          <DataField>InterconnectOperatorId</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="CountCDRs">
           <DataField>CountCDRs</DataField>

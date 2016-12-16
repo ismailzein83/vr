@@ -14,9 +14,9 @@ namespace Retail.Invoice.Entities
 
         public string ServiceTypeIdDescription { get; set; }
 
-        public long? ZoneId { get; set; }
+        //public long? ZoneId { get; set; }
 
-        public long? InterconnectOperatorId { get; set; }
+        //public long? InterconnectOperatorId { get; set; }
 
         public int CountCDRs { get; set; }
 

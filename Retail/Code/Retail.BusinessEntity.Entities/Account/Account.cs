@@ -43,8 +43,6 @@ namespace Retail.BusinessEntity.Entities
         public string SourceId { get; set; }
     }
 
-
-
     public interface IAccountPayment
     {
         int PaymentMethodId { get; }
@@ -58,6 +56,15 @@ namespace Retail.BusinessEntity.Entities
         int StatusChargingSetId { get; }
 
         int PackageGroupId { get; }
+    }
+
+    public interface IAccountProfile
+    {
+        string Address { get; }
+
+        List<string> Faxes { get; }
+
+        List<string> PhoneNumbers { get; }
     }
 
     public class PaymentMethod

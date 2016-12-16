@@ -263,6 +263,33 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        public bool HasAccountProfile(long accountId, bool getInherited, out IAccountProfile accountProfile)
+        {
+            var account = GetAccount(accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("account '{0}'", accountId));
+
+            if (account.Settings == null)
+                throw new NullReferenceException(String.Format("account.Settings '{0}'", accountId));
+
+            if (account.Settings.Parts != null)
+            {
+                foreach (var part in account.Settings.Parts)
+                {
+                    accountProfile = part.Value.Settings as IAccountProfile;
+                    if (accountProfile != null)
+                        return true;
+                }
+            }
+            if (getInherited && account.ParentAccountId.HasValue)
+                return HasAccountProfile(account.ParentAccountId.Value, true, out accountProfile);
+            else
+            {
+                accountProfile = null;
+                return false;
+            }
+        }
+
         public long? GetFinancialAccountId(long? accountId)
         {
             if (!accountId.HasValue)
@@ -284,6 +311,12 @@ namespace Retail.BusinessEntity.Business
         public int GetAccountDuePeriod(long accountId)
         {
             return 0;
+        }
+
+        public CompanySetting GetCompanySetting(long accountId)
+        {
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            return configManager.GetDefaultCompanySetting();
         }
 
         #region Get Account Editor Runtime
