@@ -84,6 +84,9 @@ namespace Retail.Invoice.Business
 
                     foreach (var item in itemSetValues)
                     {
+                        if (item.Amount == 0)
+                            continue;
+
                         RetailSubscriberInvoiceItemDetails subscriberInvoiceItemDetails = new RetailSubscriberInvoiceItemDetails()
                         {
                             Amount = item.Amount,
