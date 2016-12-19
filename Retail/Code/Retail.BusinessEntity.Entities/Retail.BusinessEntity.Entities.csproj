@@ -89,7 +89,7 @@
     <Compile Include="UISettings\AccountGridDefinition.cs" />
     <Compile Include="UISettings\AccountViewDefinition.cs" />
     <Compile Include="UISettings\AccountViewDefinitionConfig.cs" />
-    <Compile Include="RetailBETechnicalSetting.cs" />
+    <Compile Include="UISettings\RetailBETechnicalSetting.cs" />
     <Compile Include="AccountCondition\AccountCondition.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationQuery.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationDetail.cs" />
