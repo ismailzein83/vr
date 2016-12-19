@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrIcon', [function ($compile) {
+app.directive('vrIcon', ['$compile', function ($compile) {
     var option = {
         true: { value: "Client/Images/true.png", isimage: true },
         false: { value: "Client/Images/onebit_33.png", isimage: true },

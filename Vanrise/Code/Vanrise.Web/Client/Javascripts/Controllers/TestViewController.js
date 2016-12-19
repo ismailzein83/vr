@@ -1,8 +1,7 @@
 ﻿"use strict";
 
-var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, UtilsService, LabelColorsEnum) {
-
-    $scope.buttonMenuActions = [
+appControllers.controller('TestViewController', ['$scope', '$http', 'ValuesAPIService', '$timeout', 'UtilsService', 'LabelColorsEnum', function TestViewController($scope, $http, ValuesAPIService, $timeout, UtilsService, LabelColorsEnum) {
+        $scope.buttonMenuActions = [
                         {
                             name: "TOD Rule",
                             clicked: function () {
@@ -196,7 +195,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
         gridApi = api;
         $scope.loadMoreData();
     };
-    $scope.testObj = {};   
+    $scope.testObj = {};
     $scope.groupeHeaders = [
         { lable: "test 2", type: "leaf", rotated: true, position: "pulltop pullleft " },
         { lable: "www", type: "leaf", rotated: true, position: " pullleft " },
@@ -254,94 +253,5 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
     $scope.treeReady = function (api) {
         api.refreshTree($scope.values);
     };
-};
-appControllers.controller('TestViewController', TestViewController);
+}]);
 
-
-app.directive("getStyle",function(){
-    return {
-        link: function (scope, element, attrs) {
-
-
-
-
-            setTimeout(function () {
-
-                var dom = element[0];
-                var selw = $(element).width();
-                var parent = $(element).parent();
-                var ph = $(parent).height();
-                var pw = $(parent).width();
-                var h = dom.scrollWidth;
-                var w = dom.scrollHeight;
-                var pos = [];
-                if (attrs.position != undefined && attrs.position != "") {
-                    pos = attrs.position.split(" ");
-
-                }
-                if (pos.indexOf("pullbottom") > -1) {
-                    var str1=(100 * ((ph - 33))) / ph;
-                    var str2 ="%";
-                    element[0].style.top = str1.concat(str2); // bottom formular
-                }
-                else if (pos.indexOf("pulltop") > -1) {
-                    var str1 = (100 * ((ph - (ph - h)) - 33)) / ph;
-                    var str2 = "%";
-                    element[0].style.top = str1.concat(str2);//  top formula 
-                }
-                else {
-                    var str1 = (100 * ((ph - 33) - ((ph - h) / 2))) / ph;
-                    var str2 = "%";
-                    element[0].style.top = str1.concat(str2);// center  formula
-                }
-
-                if (pos.indexOf("pullrigth") > -1) {
-                    var str1 = (100 * ((pw) - (w))) / pw;
-                    var str2 = "%";
-                    element[0].style.left = str1.concat(str2);
-                }
-                else if (pos.indexOf("pullleft") > -1){
-                    element[0].style.left = "0%";
-                }   
-                else {
-                    var str1 = (100 * ((pw / 2) - (w / 3))) / pw;
-                    var str2 = "%";
-                    element[0].style.left = str1.concat(str2);
-                }
-            }, 1);
-
-            //setTimeout(function () {
-
-            //    var dom = element[0];
-            //    var selw = $(element).width();
-            //    var parent = $(element).parent();
-            //    var ph = $(parent).height();
-            //    var pw = $(parent).width();
-            //    var h = dom.scrollWidth;
-            //    var w = dom.scrollHeight;
-
-            //    if (attrs.pullbottom != undefined)
-            //        element[0].style.top = (100 * ((ph))) / ph + "%"; // bottom formular
-            //    else if (attrs.pulltop != undefined)
-            //        element[0].style.top = (100 * ((ph - (ph - h)) )) / ph + "%"; //  top formula 
-            //    else
-            //        element[0].style.top = (100 * ((ph ) - ((ph - h) / 2))) / ph + "%"; // center  formula
-
-            //    if (attrs.pullrigth != undefined)
-            //        element[0].style.left = (100 * ((pw) - (w))) / pw + "%";
-
-            //    else if (attrs.pullleft != undefined)
-            //        element[0].style.left = "0%";
-
-            //    else
-            //        element[0].style.left = (100 * ((pw / 2) - (w / 3))) / pw + "%";
-
-            //}, 1)
-
-            //parent[0].style.backgroundColor = scope.getCellcolor();
-
-
-
-        }
-    };
-});

@@ -8,14 +8,10 @@ app.directive('vrDirectivewrapper', ['$compile', function ($compile) {
         scope: false,
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
         },
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-
-
-
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                     var cloneScope = null;
