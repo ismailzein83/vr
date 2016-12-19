@@ -196,7 +196,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                     var accountIdentificationRulesGridAPIGridPayload = {
                         AccountId: account.Entity.AccountId
                     };
-                    return account.accountIdentificationRulesGridAPI.loadDirective(accountIdentificationRulesGridAPIGridPayload);
+                    return account.accountIdentificationRulesGridAPI.load(accountIdentificationRulesGridAPIGridPayload);
                 };
 
                 identificationRuleTab.parentMenuActions = [{
