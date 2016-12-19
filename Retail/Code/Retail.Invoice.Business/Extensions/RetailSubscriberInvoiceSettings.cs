@@ -31,15 +31,13 @@ namespace Retail.Invoice.Business
                 case "MailTemplate":
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     var invoiceDetails = context.Invoice.Details as RetailSubscriberInvoiceDetails;
-                    objects.Add("CustomerInvoice", context.Invoice);
-                    string[] partner = context.Invoice.PartnerId.Split('_');
                     long accountId = Convert.ToInt32(context.Invoice.PartnerId);
                     Guid invoiceTemplateId = Guid.Empty;
                     AccountManager accountManager = new AccountManager();
                     var account = accountManager.GetAccount(accountId);
                     invoiceTemplateId = accountManager.GetDefaultInvoiceEmailId(accountId);
                     objects.Add("Account", account);
-                    objects.Add("invoice", context.Invoice);
+                    objects.Add("Invoice", context.Invoice);
                     VRMailManager vrMailManager = new VRMailManager();
                     VRMailEvaluatedTemplate template = vrMailManager.EvaluateMailTemplate(invoiceTemplateId, objects);
                     return template;
