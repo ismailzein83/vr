@@ -384,7 +384,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             col.width = col.fixedWidth + 'px';
                         }
                         else {
-                            col.width = "calc(" + (totalWidth * col.widthFactor / totalWidthFactors) + "% - " + totalfixedWidth / normalColCount + "px)";
+                            col.width = "calc(" + (totalWidth * col.widthFactor / totalWidthFactors) + "% - " + (totalfixedWidth * (totalWidth * col.widthFactor / totalWidthFactors)/100) + "px)";
                          }
 
                     }
