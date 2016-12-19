@@ -258,6 +258,7 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Editor\vr-editor-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\TextBoxMultiple\vr-textbox-multiple-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\TimeSpan\vr-timespan-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationIp.js" />
     <Content Include="Client\Javascripts\Directives\List\vr-datalist-directive.js" />
     <Content Include="Client\Javascripts\Directives\List\vr-list-item-directive.js" />
     <Content Include="Client\Javascripts\Directives\List\vr-list-directive.js" />
