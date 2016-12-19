@@ -39,7 +39,7 @@
                 $scope.scopeModel.onRuleDefinitionEditorReady = function (api) {
                     ruleDefinitionEditorAPI = api;
                     ruleDefinitionEditorReadyDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -88,7 +88,7 @@
                         $type: "Retail.Voice.Entities.VoiceChargingPolicyDefinitionSettings, Retail.Voice.Entities",
                         PartDefinitions: directiveData,
                         RuleDefinitions: ruleDefinitionEditorAPI.getData()
-                    }
+                    };
                     return data;
                 }
             }

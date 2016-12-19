@@ -35,7 +35,7 @@
                 $scope.scopeModel.onRuleDefinitionEditorReady = function (api) {
                     ruleDefinitionEditorAPI = api;
                     ruleDefinitionEditorReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onPartsDirectiveReady = function (api) {
                     directiveAPI = api;
@@ -90,8 +90,8 @@
                     var data = {
                         $type: "Retail.Data.Entities.DataChargingPolicyDefinitionSettings, Retail.Data.Entities",
                         RuleDefinitions: ruleDefinitionEditorAPI.getData(),
-                        PartDefinitions: directiveAPI.getData(),
-                    }
+                        PartDefinitions: directiveAPI.getData()
+                    };
                     return data;
                 }
             }

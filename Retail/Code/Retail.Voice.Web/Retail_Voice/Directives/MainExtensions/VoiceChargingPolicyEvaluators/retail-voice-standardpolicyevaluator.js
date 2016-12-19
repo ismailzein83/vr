@@ -199,7 +199,7 @@
                         RateTypeRuleDefinitionId: rateTypeRuleDefinitionId,
                         RateValueRuleDefinitionId: rateValueRuleDefinitionId,
                         ExtraChargeRuleDefinitionId: extraChargeRuleDefinitionId
-                    }
+                    };
                     return obj;
                 };
 
