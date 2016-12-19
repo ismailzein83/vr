@@ -20,6 +20,11 @@ namespace TOne.WhS.Runtime.Tasks
         #region Public Methods
         public void Execute()
         {
+            #region Runtime
+            ExecuteRuntime executeRuntime = new ExecuteRuntime();
+            executeRuntime.Runtime_Main();
+            #endregion
+
             #region PrepareCodePrefixesTask
             //PrepareCodePrefixesTask prepareCodePrefixesTask = new PrepareCodePrefixesTask();
             //IEnumerable<CodePrefixInfo> codePrefixesResult = prepareCodePrefixesTask.PrepareCodePrefixes_Main();
@@ -30,10 +35,26 @@ namespace TOne.WhS.Runtime.Tasks
             //VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
             //vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
             #endregion
+        }
+        #endregion
 
-            #region Runtime
+        #region Private Methods
+        void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
+        {
+            foreach (CodePrefixInfo item in codePrefixes)
+                Console.WriteLine(item.CodePrefix + "   " + item.Count);
+
+            Console.WriteLine("\n");
+        }
+        #endregion
+    }
+
+
+    public class ExecuteRuntime
+    {
+        public void Runtime_Main()
+        {
             var runtimeServices = new List<RuntimeService>();
-
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpService);
@@ -64,62 +85,9 @@ namespace TOne.WhS.Runtime.Tasks
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
+
             Console.ReadKey();
-            #endregion
         }
-        #endregion
-
-        #region Private Methods
-        void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
-        {
-            foreach (CodePrefixInfo item in codePrefixes)
-                Console.WriteLine(item.CodePrefix + "   " + item.Count);
-
-            Console.WriteLine("\n");
-        }
-        #endregion
-    }
-
-
-    public class VRMailMessageTemplateTask
-    {
-        #region Public Method
-        public void VRMailMessageTemplate_Main()
-        {
-            Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
-
-            Guid guid = new Guid("E21CD125-61F0-4091-A03E-200CFE33F6E3");
-            Carrier carrier = new Carrier() { Id = 100, CustomerId = 101 };
-            User user = new User() { Email = "aatoui@vanrise.com", Name = "Ali Atoui" };
-
-            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-            objects.Add("Carrier-ON", carrier);
-            objects.Add("AliAtoui-ON", user);
-
-            VRMailManager vrMailManager = new VRMailManager();
-            vrMailManager.SendMail(guid, objects);
-
-            Console.ReadLine();
-        }
-        #endregion
-
-        #region Private Methods
-
-        #endregion
-
-        #region Private Classes
-        private class Carrier
-        {
-            public int Id { get; set; }
-
-            public int CustomerId { get; set; }
-        }
-        private class User
-        {
-            public string Email { get; set; }
-            public string Name { get; set; }
-        }
-        #endregion
     }
 
     public class PrepareCodePrefixesTask
@@ -185,7 +153,6 @@ namespace TOne.WhS.Runtime.Tasks
         #endregion
 
         #region Private Methods
-
         void AddCodePrefixes(IEnumerable<CodePrefixInfo> codePrefixes, Dictionary<string, CodePrefixInfo> pendingCodePrefixes)
         {
             long _validNumberPrefix;
@@ -209,7 +176,6 @@ namespace TOne.WhS.Runtime.Tasks
                 //    context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Sale Code Prefix: {0}", item.CodePrefix);
             }
         }
-
         void CheckThreshold(Dictionary<string, CodePrefixInfo> pendingCodePrefixes, Dictionary<string, CodePrefixInfo> codePrefixes, int threshold)
         {
             Dictionary<string, CodePrefixInfo> _pendingCodePrefixes = new Dictionary<string, CodePrefixInfo>(pendingCodePrefixes);
@@ -220,7 +186,6 @@ namespace TOne.WhS.Runtime.Tasks
                     pendingCodePrefixes.Remove(item.Key);
                 }
         }
-
         void DisplayDictionary(Dictionary<string, CodePrefixInfo> codePrefixes)
         {
             IEnumerable<CodePrefixInfo> _list = codePrefixes.Values.OrderBy(x => x.CodePrefix);
@@ -230,7 +195,43 @@ namespace TOne.WhS.Runtime.Tasks
 
             Console.WriteLine("\n");
         }
+        #endregion
+    }
 
+    public class VRMailMessageTemplateTask
+    {
+        #region Public Method
+        public void VRMailMessageTemplate_Main()
+        {
+            Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
+
+            Guid guid = new Guid("E21CD125-61F0-4091-A03E-200CFE33F6E3");
+            Carrier carrier = new Carrier() { Id = 100, CustomerId = 101 };
+            User user = new User() { Email = "aatoui@vanrise.com", Name = "Ali Atoui" };
+
+            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            objects.Add("Carrier-ON", carrier);
+            objects.Add("AliAtoui-ON", user);
+
+            VRMailManager vrMailManager = new VRMailManager();
+            vrMailManager.SendMail(guid, objects);
+
+            Console.ReadLine();
+        }
+        #endregion
+
+        #region Private Classes
+        private class Carrier
+        {
+            public int Id { get; set; }
+
+            public int CustomerId { get; set; }
+        }
+        private class User
+        {
+            public string Email { get; set; }
+            public string Name { get; set; }
+        }
         #endregion
     }
 }
