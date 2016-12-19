@@ -235,6 +235,9 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-accountbalance.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\Templates\AccountBalanceTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\Templates\InvoiceSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\retail-be-invoice-setting-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\retail-be-invoicesettings-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-entitiesinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-otherinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeEntitiesInfoPartDefinitionTemplate.html" />
@@ -427,6 +430,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AgentAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountTypeService.js" />
     <Content Include="Retail_BusinessEntity\Services\ActionDefinitionService.js" />
@@ -464,6 +468,8 @@
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\InvoiceSettings\InvoiceSettingEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\InvoiceSettings\Templates\InvoiceSettingEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoItemEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoItemEditorController.js" />

@@ -71,6 +71,9 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
@@ -80,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountFilter.cs" />
+    <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Package\PackageGroup.cs" />
     <Compile Include="Package\PackageGroupSettings.cs" />
     <Compile Include="UISettings\AccountGridDefinition.cs" />
