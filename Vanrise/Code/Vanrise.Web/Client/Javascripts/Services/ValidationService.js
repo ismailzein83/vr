@@ -42,11 +42,13 @@
         function validateIp(value) {
             var isIp_re = /^([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})$/;
             var ipParts = value.split(".");
+            var valid = true;
             if (String(value).search(isIp_re) == -1)
-                return false;              
+                valid=  false;              
             if (parseInt(ipParts[0]) > 255 || parseInt(ipParts[1]) > 255 || parseInt(ipParts[2]) > 255 || parseInt(ipParts[3]) > 255)
-                return false;
-            else return true;
+                valid = false;
+
+           return valid;
            // return String(value).search(isIp_re) != -1;
         }
         function validateNumber(value, validationOptions) {

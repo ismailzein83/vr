@@ -105,9 +105,12 @@
                         ctrl.muteAction = function (e) {
                             BaseDirService.muteAction(e);
                         };
+                        console.log()
                         var validationOptionsInput = {};
                         if (iAttrs.datatype === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.datatype) === TextboxTypeEnum.Email.name)
                             validationOptionsInput.emailValidation = true;
+                        if (iAttrs.datatype === TextboxTypeEnum.Ip.name || $scope.$parent.$eval(ctrl.datatype) === TextboxTypeEnum.Ip.name)
+                            validationOptionsInput.ipValidation = true;
                         else if (iAttrs.datatype === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.datatype) === TextboxTypeEnum.Number.name) {
                             validationOptionsInput.numberValidation = true;
                             validationOptionsInput.maxNumber = ctrl.maxvalue;
@@ -327,6 +330,7 @@
 
     app.constant('TextboxTypeEnum', {
         Email: { name: "email" },
+        Ip: { name: "ip" },
         Number: { name: "number" },
         Password: { name: "password" }
     });
