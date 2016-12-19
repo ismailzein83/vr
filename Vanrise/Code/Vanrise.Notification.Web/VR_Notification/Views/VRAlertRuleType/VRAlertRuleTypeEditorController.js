@@ -96,10 +96,10 @@
             function setTitle() {
                 if (isEditMode) {
                     var vrAlertRuleTypeName = (vrAlertRuleTypeEntity != undefined) ? vrAlertRuleTypeEntity.Name : null;
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrAlertRuleTypeName, 'Alert Rule Type');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrAlertRuleTypeName, 'Action Rule Type');
                 }
                 else {
-                    $scope.title = UtilsService.buildTitleForAddEditor('Alert Rule Type');
+                    $scope.title = UtilsService.buildTitleForAddEditor('Action Rule Type');
                 }
             }
             function loadStaticData() {
