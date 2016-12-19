@@ -279,7 +279,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
             function buildBillingTransactionTab() {
                 var billingTransactionTab = {};
 
-                billingTransactionTab.title = 'Billing Transactions';
+                billingTransactionTab.title = 'Financial Transactions';
                 billingTransactionTab.directive = 'vr-accountbalance-billingtransaction-search';
 
                 billingTransactionTab.loadDirective = function (billingTransactionGridAPI, account) {
