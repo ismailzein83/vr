@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -13,5 +14,7 @@ namespace Retail.BusinessEntity.Entities
         public IEnumerable<Guid> AccountTypeIds { get; set; }
 
         public long? ParentAccountId { get; set; }
+
+        public RecordFilterGroup FilterGroup { get; set; }
     }
 }
