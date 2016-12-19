@@ -76,7 +76,7 @@
             });
         }
         function setTitle() {
-           $scope.title = UtilsService.buildTitleForAddEditor('Billing Transaction');
+            $scope.title = UtilsService.buildTitleForAddEditor('Financial Transactions');
         }
         function loadStaticData() {
            
@@ -112,7 +112,7 @@
             var billingTransactionObj = buildBuillingTransactionObjFromScope();
 
             return VR_AccountBalance_BillingTransactionAPIService.AddBillingTransaction(billingTransactionObj).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Payment', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemAdded('Financial Transactions', response, 'Name')) {
                     if ($scope.onBillingTransactionAdded != undefined)
                         $scope.onBillingTransactionAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();

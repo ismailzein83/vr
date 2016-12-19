@@ -34,12 +34,7 @@
             $scope.fromTime = today;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                var payload = {
-                    query: getFilterObject()
-                }
-                api.loadGrid(payload);
             };
-
             $scope.searchClicked = function (api) {
                 var payload = {
                     query: getFilterObject()
@@ -101,7 +96,7 @@
                 ToTime: $scope.toTime,
                 AccountTypeId: accountTypeId,
                 TransactionTypeIds: transactionTypeDirectiveAPI.getSelectedIds(),
-                AccountsIds: filterDirectiveAPI.getData().selectedIds
+                AccountsIds:(filterDirectiveAPI!=undefined)? filterDirectiveAPI.getData().selectedIds : null
             };
         }
     }
