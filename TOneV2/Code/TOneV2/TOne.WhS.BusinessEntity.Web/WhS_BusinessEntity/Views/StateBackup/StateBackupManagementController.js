@@ -11,7 +11,6 @@
 
         defineScope();
         load();
-        var filter = {};
 
         function defineScope() {
             $scope.scopeModel = {};
@@ -19,9 +18,7 @@
             $scope.scopeModel.fromBackupDate = new Date();
 
             $scope.searchClicked = function () {
-
-                setFilterObject();
-                return gridAPI.loadGrid(filter);
+                return gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.onGridReady = function (api) {
@@ -68,13 +65,21 @@
         }
 
 
-        function setFilterObject() {
-            filter = {
+        function getFilterObject() {
+            var filter = {
                 BackupTypeFilterConfigId: $scope.scopeModel.selectedStateBackupType != undefined ? $scope.scopeModel.selectedStateBackupType.ExtensionConfigurationId : undefined,
-                BackupTypeFilterObject: stateBackupTypesDirectiveAPI != undefined ? stateBackupTypesDirectiveAPI.getData() : undefined,
                 From: $scope.scopeModel.fromBackupDate,
                 To: $scope.scopeModel.toBackupDate
             };
+            var backupTypeFilterObject;
+            if (stateBackupTypesDirectiveAPI != undefined) {
+                backupTypeFilterObject = stateBackupTypesDirectiveAPI.getData();
+
+            }
+            if (backupTypeFilterObject != undefined)
+                filter.BackupTypeFilterObject = backupTypeFilterObject;
+
+            return filter;
         }
 
     }

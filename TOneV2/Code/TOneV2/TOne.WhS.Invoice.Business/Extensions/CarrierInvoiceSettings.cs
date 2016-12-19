@@ -37,7 +37,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
            
             switch(context.InfoType)
             {
-                case "CustomerMailTemplate":
+                case "MailTemplate":
                  
                     
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
