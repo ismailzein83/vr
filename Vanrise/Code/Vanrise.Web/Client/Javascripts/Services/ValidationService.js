@@ -16,6 +16,10 @@
                         if (!validateEmail(value))
                             return ValidationMessagesEnum.invalidEmail;
                     }
+                    if (validationOptions.ipValidation) {
+                        if (!validateIp(value, validationOptions))
+                            return ValidationMessagesEnum.invalidIp;
+                    }
                     if (validationOptions.numberValidation) {
                         if (!validateNumber(value, validationOptions))
                             return ValidationMessagesEnum.invalidNumber;
@@ -35,6 +39,16 @@
             return String(value).search(isEmail_re) != -1;
         }
 
+        function validateIp(value) {
+            var isIp_re = /^([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})$/;
+            var ipParts = value.split(".");
+            if (String(value).search(isIp_re) == -1)
+                return false;              
+            if (parseInt(ipParts[0]) > 255 || parseInt(ipParts[1]) > 255 || parseInt(ipParts[2]) > 255 || parseInt(ipParts[3]) > 255)
+                return false;
+            else return true;
+           // return String(value).search(isIp_re) != -1;
+        }
         function validateNumber(value, validationOptions) {
             var decimalArray = String(value).split(".");
             var validmax = (validationOptions.maxNumber != undefined) ? parseFloat(value) <= validationOptions.maxNumber : true;
@@ -107,7 +121,8 @@
 
         return ({
             validate: validate,
-            validateEmail:validateEmail,
+            validateEmail: validateEmail,
+            validateIp:validateIp,
             validateTimeRange: validateTimeRange,
             validateTimeEqualorGreaterthanToday: validateTimeEqualorGreaterthanToday
         });
