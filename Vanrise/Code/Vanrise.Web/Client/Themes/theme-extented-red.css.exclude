@@ -154,7 +154,10 @@
   background: -moz-linear-gradient(bottom,#BCBCBC,#E04157); /*Fx 3.6-15*/
   background: linear-gradient(to bottom, #BCBCBC, #E04157); /*Standard*/
 }
-
+.modal-header {
+    background-color:  #C3162A !important;
+    color: #FFF;
+}
 .action-bar {
     background-color: #C3162A;   
 }
