@@ -49,6 +49,6 @@
         }
     }
 
-    app.directive('retailBeRetailaccountobjecttype', VRRetailAccountObjectType);
+    app.directive('retailBeRetailaccountObjecttype', VRRetailAccountObjectType);
 
 })(app);

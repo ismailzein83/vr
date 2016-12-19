@@ -1,9 +1,12 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿
 
-</body>
-</html>
+<vr-columns width="1/2row">
+    <vr-select on-ready="scopeModel.onSelectorReady"
+               datasource="scopeModel.genericFieldDefinitions"
+               selectedvalues="scopeModel.selectedGenericFieldDefinition"
+               datavaluefield="Name"
+               datatextfield="Title"
+               label="Account Fields"
+               hideremoveicon>
+    </vr-select>
+</vr-columns>

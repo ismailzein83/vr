@@ -9,9 +9,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartFinancial : AccountPartSettings, IAccountPayment
     {
-        public override Guid ConfigId { get { return _ConfigId; } }
         public static Guid _ConfigId = new Guid("82228BE2-E633-4EF8-B383-9894F28C8CB0");
+
+        public override Guid ConfigId { get { return _ConfigId; } }
+
         //public const int ExtensionConfigId = 14;
+
         public PaymentMethod PaymentMethod { get; set; }
 
         public int CurrencyId { get; set; }
@@ -30,8 +33,20 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public int BillingCycleId { get; set; }
 
-
         public int PackageGroupId { get; set; }
+
+
+        public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
+        {
+            switch (context.FieldName)
+            {
+                case "Currency": return this.CurrencyId;
+
+                case "CreditClass": return this.CreditClassId;
+
+                default: return null;
+            }
+        }
     }
 
     public enum PaymentMethod { Prepaid = 0, Postpaid = 1 }

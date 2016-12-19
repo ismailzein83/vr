@@ -12,6 +12,20 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public override Guid ConfigId { get { return new Guid("1aff2bf7-1f15-4e0b-accf-457edf36a342"); } }
 
         public List<CompanyProfileContactType> ContactTypes { get; set; }
+
+
+        public override List<GenericFieldDefinition> GetFieldDefinitions()
+        {
+            return new List<GenericFieldDefinition>()
+                {
+                    new GenericFieldDefinition()
+                    {
+                        Name = "Emails",
+                        Title = "Emails",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                    }
+                };
+        }
     }
     public class CompanyProfileContactType
     {

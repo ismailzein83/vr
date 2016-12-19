@@ -57,5 +57,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.UpdateAccountType(accountType);
         }
+
+        [HttpPost]
+        [Route("GetGenericFieldDefinitions")]
+        public IEnumerable<GenericFieldDefinition> GetGenericFieldDefinitions()
+        {
+            return _manager.GetGenericFieldDefinitions();
+        }
     }
 }

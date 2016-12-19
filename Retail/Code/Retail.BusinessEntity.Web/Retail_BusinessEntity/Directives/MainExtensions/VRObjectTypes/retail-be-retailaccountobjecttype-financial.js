@@ -8,7 +8,7 @@
         return {
             restrict: "E",
             scope: {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -18,8 +18,8 @@
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/VRObjectTypes/Templates/FinancialRetailAccountEvaluatorTemplate.html"
-
         };
+
         function RetailAccountObjectType($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 

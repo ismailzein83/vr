@@ -82,6 +82,10 @@
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
     </Reference>
+    <Reference Include="RazorEngine, Version=3.8.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RazorEngine.3.8.2\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Net.Ftp">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>
     </Reference>
@@ -89,6 +93,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />

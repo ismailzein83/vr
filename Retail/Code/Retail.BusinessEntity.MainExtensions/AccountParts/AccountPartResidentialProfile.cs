@@ -16,19 +16,19 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public static Guid _ConfigId = new Guid("05FECF19-6413-402F-BD65-64B0EEF1FB52");
         public override Guid ConfigId { get { return _ConfigId; } }
 
-       // public const int ExtensionConfigId = 22;
+        // public const int ExtensionConfigId = 22;
         public int? CountryId { get; set; }
-        
+
         public int? CityId { get; set; }
-        
+
         public string Town { get; set; }
-        
-        public string Street { get; set; }        
-        
+
+        public string Street { get; set; }
+
         public string Email { get; set; }
-        
+
         public string ZipCode { get; set; }
-        
+
         public string Provence { get; set; }
 
         #region IAccountProfile Memebers
@@ -66,5 +66,16 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         }
 
         #endregion
+
+
+        public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
+        {
+            switch (context.FieldName)
+            {
+                case "Email": return this.Email;
+
+                default: return null;
+            }
+        }
     }
 }

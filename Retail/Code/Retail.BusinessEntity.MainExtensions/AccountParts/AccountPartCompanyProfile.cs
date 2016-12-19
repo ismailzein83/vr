@@ -52,10 +52,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
                 List<string> address = new List<string>();
 
-                if(string.IsNullOrEmpty(countryName))
+                if (string.IsNullOrEmpty(countryName))
                     address.Add(countryName);
 
-                if(string.IsNullOrEmpty(cityName))
+                if (string.IsNullOrEmpty(cityName))
                     address.Add(cityName);
 
                 address.Add(this.Town);
@@ -66,6 +66,17 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         }
 
         #endregion
+
+
+        public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
+        {
+            switch (context.FieldName)
+            {
+                case "Emails": return this.Contacts != null ? this.Contacts.Select(itm => itm.Email) : null;
+
+                default: return null;
+            }
+        }
     }
 
     public class AccountCompanyContact

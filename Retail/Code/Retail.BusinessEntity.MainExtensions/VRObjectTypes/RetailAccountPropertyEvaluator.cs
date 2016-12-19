@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,11 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
-            throw new NotImplementedException();
+            AccountGenericField accountGenericField = new AccountTypeManager().GetAccountGenericField(this.GenericFieldDefinition.Name);
+            if (accountGenericField == null)
+                throw new NullReferenceException(String.Format("accountGenericField '{0}'", this.GenericFieldDefinition.Name));
+            
+            return accountGenericField.GetValue(new AccountGenericFieldContext(context.Object));
         }
     }
 }
