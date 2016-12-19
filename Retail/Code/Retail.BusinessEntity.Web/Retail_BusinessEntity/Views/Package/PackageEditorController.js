@@ -151,7 +151,7 @@
             packageExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
                 packageExtendedSettingsDirectiveReadyDeferred = undefined;
 
-                var packageExtendedSettingsDirectivePayload
+                var packageExtendedSettingsDirectivePayload;
                 if (packageEntity != undefined && packageEntity.Settings != undefined && packageEntity.Settings.ExtendedSettings) {
 
                     packageExtendedSettingsDirectivePayload = {

@@ -206,11 +206,11 @@
             extendedSettingsDirectiveReadyDeferred.promise.then(function () {
                 extendedSettingsDirectiveReadyDeferred = undefined;
 
-                var extendedSettingsDirectivePayload
+                var extendedSettingsDirectivePayload;
                 if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined && serviceTypeEntity.Settings.ExtendedSettings) {
 
                     extendedSettingsDirectivePayload = {
-                        extendedSettings: serviceTypeEntity.Settings.ExtendedSettings,
+                        extendedSettings: serviceTypeEntity.Settings.ExtendedSettings
                     };
                 }
                 VRUIUtilsService.callDirectiveLoad(extendedSettingsDirectiveAPI, extendedSettingsDirectivePayload, extendedSettingsDirectiveLoadDeferred);

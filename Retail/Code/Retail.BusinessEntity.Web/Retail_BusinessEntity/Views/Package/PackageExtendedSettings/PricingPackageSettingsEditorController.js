@@ -34,7 +34,7 @@
 
                 if (parameters.pricingPackageSetting != undefined) {
                     serviceTypeId = parameters.pricingPackageSetting.ServiceTypeId;
-                    serviceTypeName = parameters.pricingPackageSetting.ServiceTypeName
+                    serviceTypeName = parameters.pricingPackageSetting.ServiceTypeName;
                     usageChargingPolicyId = parameters.pricingPackageSetting.UsageChargingPolicyId;
                     usageChargingPolicyName = parameters.pricingPackageSetting.UsageChargingPolicyName;
                 }
@@ -62,7 +62,7 @@
                         $scope.scopeModel.isChargingPolicySelectorLoading = value;
                     };
                     var payloadChargingPolicyDirective = {
-                        filter: { ServiceTypeId: serviceTypeId },
+                        filter: { ServiceTypeId: serviceTypeId }
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, chargingPolicyAPI, payloadChargingPolicyDirective, setLoader, serviceTypeSelectionChangedPromiseDeferred);
                 }
