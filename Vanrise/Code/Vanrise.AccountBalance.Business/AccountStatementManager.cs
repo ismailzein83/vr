@@ -36,6 +36,7 @@ namespace Vanrise.AccountBalance.Business
                 _currencyName = currencyManager.GetCurrencyName(currencyId);
                  List<AccountStatementItem> accountStatementItems = BuildAccountStatementItems(input.Query.AccountTypeId, input.Query.AccountId, input.Query.FromDate, currencyId);
                 var accountStatementItem = GetPendingAcountUsages(input.Query.AccountTypeId, input.Query.AccountId, currencyId);
+                if (accountStatementItem != null)
                 accountStatementItems.Add(accountStatementItem);
                 return accountStatementItems;
             }
@@ -71,23 +72,23 @@ namespace Vanrise.AccountBalance.Business
                 foreach (var billingTransaction in billingTransactions)
                 {
                     var transactionType = billingTransactionTypeManager.GetBillingTransactionType(billingTransaction.TransactionTypeId);
-                    var convertedAmmount = billingTransaction.CurrencyId != currencyId ? currencyExchangeRateManager.ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, currencyId, billingTransaction.TransactionTime) : billingTransaction.Amount;
+                    var convertedAmount = billingTransaction.CurrencyId != currencyId ? currencyExchangeRateManager.ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, currencyId, billingTransaction.TransactionTime) : billingTransaction.Amount;
 
                     if (transactionType.IsCredit)
                     {
-                        _currenctBalance += convertedAmmount;
+                        _currenctBalance += convertedAmount;
                         if (billingTransaction.TransactionTime < fromDate)
                         {
-                            previousBalance += convertedAmmount;
+                            previousBalance += convertedAmount;
                         }
 
                     }
                     else
                     {
-                        _currenctBalance -= convertedAmmount;
+                        _currenctBalance -= convertedAmount;
                         if (billingTransaction.TransactionTime < fromDate)
                         {
-                            previousBalance -= convertedAmmount;
+                            previousBalance -= convertedAmount;
                         }
                     }
                 }
@@ -102,20 +103,20 @@ namespace Vanrise.AccountBalance.Business
                         Description = billingTransaction.Notes,
                         TransactionType = billingTransactionType.Name,
                     };
-                    if (billingTransaction.TransactionTime > fromDate)
+                    if (billingTransaction.TransactionTime >= fromDate)
                     {
                         if (billingTransactionType.IsCredit)
                         {
                             balance += amount;
-                            accountStatementItem.Balance = balance;
                             accountStatementItem.Credit = amount;
                         }
                         else
                         {
                             balance -= amount;
-                            accountStatementItem.Balance = balance;
                             accountStatementItem.Debit = amount;
                         }
+                        accountStatementItem.Balance = balance;
+
                         accountStatementItems.Add(accountStatementItem);
                     }
                 }
@@ -123,7 +124,7 @@ namespace Vanrise.AccountBalance.Business
                 accountStatementItems.Insert(0,new AccountStatementItem
                 {
                     Balance = previousBalance,
-                    Description = "Previous Balance",
+                    Description = "Balance brought forward",
                 });
                 return accountStatementItems;
 
@@ -139,22 +140,31 @@ namespace Vanrise.AccountBalance.Business
                 AccountStatementItem accountStatementItem = new AccountStatementItem();
                 var trasactionId = accountTypeManager.GetUsageTransactionTypeId(accountTypeId);
                 var transactionType = billingTransactionTypeManager.GetBillingTransactionType(trasactionId); 
-                accountStatementItem.TransactionType = transactionType.Name;
-                accountStatementItem.Description = "Pending Usage";
+                accountStatementItem.Description = "Live usage";
                 bool isCredit = transactionType.IsCredit;
+                if(pendingAccountUsages ==null ||pendingAccountUsages.Count() == 0)
+                    return null;
                 foreach(var pendingAccountUsage in pendingAccountUsages)
                 {
                     var amount = pendingAccountUsage.CurrencyId != currencyId ? currencyExchangeRateManager.ConvertValueToCurrency(pendingAccountUsage.UsageBalance, pendingAccountUsage.CurrencyId, currencyId, pendingAccountUsage.PeriodEnd) : pendingAccountUsage.UsageBalance;
                     if(isCredit)
                     {
+                        if (!accountStatementItem.Credit.HasValue)
+                            accountStatementItem.Credit = 0;
                         accountStatementItem.Credit +=amount;
+                        _currenctBalance += amount;
                     }
-                        else
-                        {
-                            accountStatementItem.Debit+=amount;
-                        }
-                    
+                    else
+                    {
+                        if (!accountStatementItem.Debit.HasValue)
+                            accountStatementItem.Debit = 0;
+                        accountStatementItem.Debit+=amount;
+                       
+                        _currenctBalance -= amount;
+                    }
                 }
+                accountStatementItem.Balance = _currenctBalance;
+
                 return accountStatementItem;
             }
 

@@ -24,7 +24,7 @@
 
         function defineScope() {
             var date = new Date();
-            $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
+            $scope.fromDate = new Date(date.getFullYear(), date.getMonth()-1, 1, 0, 0, 0, 0);
             $scope.onGridReady = function (api) {
                 gridAPI = api;
             };
@@ -58,13 +58,11 @@
             var accountObject;
             if (accountSelectorAPI != undefined)
                 accountObject = accountSelectorAPI.getData();
-            console.log(accountObject);
             var query = {
                     FromDate: $scope.fromDate,
                     AccountId: accountObject != undefined ? accountObject.selectedIds : undefined,
                     AccountTypeId: accountTypeId,
             };
-            console.log(query);
             return query;
         }
         function loadAllControls() {

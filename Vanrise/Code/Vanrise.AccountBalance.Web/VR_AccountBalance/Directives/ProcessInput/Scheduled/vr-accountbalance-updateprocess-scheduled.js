@@ -45,16 +45,14 @@ app.directive("vrAccountbalanceUpdateprocessScheduled", ['UtilsService', 'VRUIUt
             var api = {};
             api.getData = function () {
                 return {
-                    InputArguments: {
-                        $type: "Vanrise.AccountBalance.BP.Arguments.AccountBalanceUpdateProcessInput, Vanrise.AccountBalance.BP.Arguments",
-                        AccountTypeId: accountTypeSelectorAPI.getSelectedIds()
-                    }
+                    $type: "Vanrise.AccountBalance.BP.Arguments.AccountBalanceUpdateProcessInput, Vanrise.AccountBalance.BP.Arguments",
+                    AccountTypeId: accountTypeSelectorAPI.getSelectedIds()
                 };
             };
 
             api.load = function (payload) {
                 var promises = [];
-                promises.push(loadAccountTypeSelector());
+                promises.push(loadAccountTypeSelector(payload));
                 return UtilsService.waitMultiplePromises(promises);
             };
 
@@ -62,10 +60,15 @@ app.directive("vrAccountbalanceUpdateprocessScheduled", ['UtilsService', 'VRUIUt
                 ctrl.onReady(api);
         }
 
-        function loadAccountTypeSelector() {
+        function loadAccountTypeSelector(payload) {
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             accountTypeSelectorAPIReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, undefined, accountTypeSelectorLoadDeferred);
+                var payloadSelector;
+                if (payload != undefined && payload.data != undefined)
+                {
+                    payloadSelector = { selectedIds: payload.data.AccountTypeId }
+                }
+                VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, payloadSelector, accountTypeSelectorLoadDeferred);
             });
 
             return accountTypeSelectorLoadDeferred.promise;
