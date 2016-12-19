@@ -67,6 +67,7 @@
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
     <add key="LoggingDBConnStringKey" value="LogDBConnString"/>
+    <add key="InvoiceDBConnStringKey" value="ConfigurationDBConnString"/>
   </appSettings>
 
   <system.web>
