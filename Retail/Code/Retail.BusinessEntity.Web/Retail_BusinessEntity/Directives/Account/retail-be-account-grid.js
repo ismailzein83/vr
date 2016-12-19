@@ -290,19 +290,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                     };
                     return account.billingTransactioGridAPI.loadDirective(billingTransactionGridPayload);
                 };
-
-                billingTransactionTab.parentMenuActions = [{
-                    name: 'Add Payment',
-                    clicked: function (account) {
-                        if (billingTransactionTab.setTabSelected != undefined)
-                            billingTransactionTab.setTabSelected(account);
-
-                        var onPaymentAdded = function (billingTransaction) {
-                            account.billingTransactioGridAPI.onBillingTransactionAdded(billingTransaction);
-                        };
-                        VR_AccountBalance_BillingTransactionService.addBillingTransaction(account.Entity.AccountId, onPaymentAdded);
-                    }
-                }];
                 return billingTransactionTab;
             }
 
