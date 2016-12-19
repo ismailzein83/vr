@@ -311,6 +311,7 @@
     <Content Include="VR_Invoice\Services\InvoiceGeneratorActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGridSettingService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGroupingItemService.js" />
+    <Content Include="VR_Invoice\Services\InvoiceItemService.js" />
     <Content Include="VR_Invoice\Services\InvoicePartnerSettingsService.js" />
     <Content Include="VR_Invoice\Services\InvoiceSerialNumberSettingsService.js" />
     <Content Include="VR_Invoice\Services\InvoiceService.js" />

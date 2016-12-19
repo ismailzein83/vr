@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_ItemGroupingSectionAPIService", "VRUIUtilsService", "VRCommon_GridWidthFactorEnum", "VR_Invoice_InvoiceTypeAPIService",
-    function (UtilsService, VRNotificationService, VR_Invoice_ItemGroupingSectionAPIService, VRUIUtilsService, VRCommon_GridWidthFactorEnum, VR_Invoice_InvoiceTypeAPIService) {
+app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_ItemGroupingSectionAPIService", "VRUIUtilsService", "VRCommon_GridWidthFactorEnum", "VR_Invoice_InvoiceTypeAPIService","VR_Invoice_InvoiceItemService",
+    function (UtilsService, VRNotificationService, VR_Invoice_ItemGroupingSectionAPIService, VRUIUtilsService, VRCommon_GridWidthFactorEnum, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceItemService) {
 
         var directiveDefinitionObject = {
 
@@ -29,15 +29,12 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
             this.initializeController = initializeController;
             var gridAPI;
             var gridWidthFactors = [];
-            var drillDownManager;
-            var drillDownTabs = [];
             var subSectionConfigs = [];
             var itemGroupingId;
             var invoiceTypeId;
             var invoiceId;
             var invoiceItemGroupings;
             var parentFilter;
-            var subSections;
             function initializeController() {
                 gridWidthFactors = UtilsService.getArrayEnum(VRCommon_GridWidthFactorEnum);
                 $scope.datastore = [];
@@ -77,7 +74,7 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                                         GridColumns: []
                                     };
                                     if (payload != undefined && payload.settings != undefined && payload.settings.Settings != undefined) {
-                                       subSections = payload.settings.Settings.SubSections;
+                                        subSectionConfigs = payload.settings.Settings.SubSections;
                                     }
                                     var itemGrouping = UtilsService.getItemByVal(payload.invoiceItemGroupings, itemGroupingId, "ItemGroupingId");
                                     if (payload.settings.Settings.GridDimesions != undefined)
@@ -116,9 +113,6 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                                     VR_Invoice_InvoiceTypeAPIService.ConvertToGridColumnAttribute(input).then(function (response) {
                                         buildGridFields(response, input.GridColumns);
 
-                                        drillDownTabs.length = 0;
-                                        
-                                        drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, []);
                                         gridAPI.retrieveData(query).then(function () {
                                             promiseDeferred.resolve();
                                         }).catch(function (error) {
@@ -142,8 +136,8 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                         
                             if (response.Data != undefined) {
                                 for (var i = 0; i < response.Data.length; i++) {
-                                    buildGridSubSections(subSections, response.Data[i].SubSectionsIds);
-                                    drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                                    var dataItem = response.Data[i];
+                                    VR_Invoice_InvoiceItemService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, dataItem.SubSectionsIds, subSectionConfigs, $scope.gridFields, parentFilter, invoiceId, invoiceTypeId, itemGroupingId, invoiceItemGroupings);
                                 }
                             }
                             onResponseReady(response);
@@ -191,70 +185,6 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                 };
             }
 
-            function buildGridSubSections(subSections, subSectionsIds) {
-                if (subSections != undefined) {
-                    for (var i = 0; i < subSectionsIds.length; i++)
-                    {
-                        var subSectionsId=subSectionsIds[i];
-                        for (var i = 0; i < subSections.length ; i++) {
-
-                            var subSection = subSections[i];
-                            if(subSectionsId == subSection.InvoiceSubSectionId)
-                            {
-                                var tab = buildInvoiceItemsTab(subSection);
-                                if (tab != undefined)
-                                    drillDownTabs.push(tab);
-                            }
-                           
-                        }
-                    }
-                   
-                    function buildInvoiceItemsTab(subSection) {
-                        var invoiceItemsTab = {};
-                        invoiceItemsTab.title = subSection.SectionTitle;
-                        invoiceItemsTab.directive = "vr-invoice-groupingsubsection-grid";
-                        invoiceItemsTab.loadDirective = function (invoiceItemGridAPI, invoiceItem) {
-                            var filters = [];
-                            if (parentFilter != undefined)
-                            {
-                                filters = parentFilter;
-                            }
-                            var dimensionCounter = 0;
-                            for (var i = 0; i < $scope.gridFields.length; i++)
-                            {
-                                var gridField = $scope.gridFields[i];
-                                if (gridField.ItemType == "Dimension")
-                                {
-                                    filters.push({
-                                        DimensionId: gridField.ID,
-                                        FilterValue: invoiceItem.DimensionValues[dimensionCounter].Value
-                                    });
-                                    dimensionCounter++;
-                                }
-                            }
-                            invoiceItem.invoiceItemGridAPI = invoiceItemGridAPI;
-                            var invoiceItemGridPayload = {
-                                query: {
-                                    InvoiceId: invoiceId,
-                                    InvoiceTypeId: invoiceTypeId,
-                                    ItemGroupingId: itemGroupingId,
-                                    Filters: filters,
-                                    ParentGroupingInvoiceItemDetails: invoiceItem,
-                                    SectionId: subSection.InvoiceSubSectionId
-                                },
-                                settings: subSection,
-                                invoiceId: invoiceId,
-                                itemGroupingId: itemGroupingId,
-                                invoiceItemGroupings: invoiceItemGroupings,
-                                ParentFilter: filters
-                            };
-                            return invoiceItem.invoiceItemGridAPI.load(invoiceItemGridPayload);
-                        };
-                        invoiceItemsTab.parentMenuActions = [];
-                        return invoiceItemsTab;
-                    }
-                }
-            }
         }
 
         return directiveDefinitionObject;
