@@ -5,7 +5,10 @@
     text-transform: uppercase;
     font-weight: 700;
 }
-
+.bg-custom {
+    background-color:  #496796 !important;
+    color: #FFF !important;
+}
 .bgcolor-0{   
     background-color: #2E509B !important;
 }

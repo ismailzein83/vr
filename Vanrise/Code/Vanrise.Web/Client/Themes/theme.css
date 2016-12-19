@@ -67,6 +67,10 @@
 .bold-item {   
    font-weight:bold;
 }
+.bg-custom {
+    background-color: #08A282 !important;
+    color: #FFF !important;
+}
 
 .bgcolor-0{   
     background-color: #20407d !important;

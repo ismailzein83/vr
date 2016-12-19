@@ -6,6 +6,10 @@
     font-weight: 700;
 }
 
+.bg-custom {
+    background-color: #94C3CD !important;
+    color: #FFF !important;
+}
 .bgcolor-0{   
     background-color: #514596 !important;
 }

@@ -51,11 +51,11 @@
                     </div>
                     <div class="menu-icon" title="Alert(s)">
                         <img src="Client/Images/01.png" class="img1" />
-                        <span class="badge bg-lightred">0</span>
+                        <span class="badge bg-custom">0</span>
                     </div>
                     <div class="warning-icon" title="Notification(s)">
                         <img src="Client/Images/02.png" class="img2" />
-                        <span class="badge bg-lightred">0</span>
+                        <span class="badge bg-custom">0</span>
                     </div>
                 </div>
             </div>
@@ -171,51 +171,14 @@
             <div id="page-content-wrapper">
                 <div class="container-fluid vr-container">
                     <div class="row">
-
-                        @*<div class="panel-primary panel-vr his-nav" ng-if="hisnav.length > 0 ">
-                                <div class="panel-heading">
-                                    <span ng-show="showHip"> Nav History </span>
-                                    <span class="hand-cursor" ng-click="showHip=!showHip ">
-                                        <span ng-show="showHip" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-                                        <span ng-hide="showHip" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                                    </span>
-
-                                </div>
-                                <div class="panel-body am-slide-top" ng-show="showHip">
-                                    <vr-row removeline>
-                                        <div ng-if="hisnav.length > 0 ">
-                                            <div ng-repeat="h in hisnav">
-                                                <button class="btn-link" ng-click="hidesubview(h.name,$index)">{{h.Name}}</button>
-                                            </div>
-                                            <span class="glyphicon glyphicon-circle-arrow-left pull-right hand-cursor" ng-click="hidesubview(hisnav[hisnav.length-1].name,hisnav.length-1)"></span>
-                                        </div>
-
-
-                                    </vr-row>
-
-                                </div>
-
-                            </div>*@
-
                         <div class="col-lg-12" ng-view>
-
-
                         </div>
-
                     </div>
                 </div>
-
                 <!-- /#page-content-wrapper -->
             </div>
-
-
         </div>
     </div>
-
-
-
-
-
 </body>
 @Scripts.Render("~/bundles/helpers")
 @Scripts.Render("~/bundles/JQuery")

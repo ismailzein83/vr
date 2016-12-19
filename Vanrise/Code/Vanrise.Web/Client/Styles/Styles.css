@@ -99,15 +99,10 @@
     display: inline-block;
 }
 
-    .vr-nav-custom div .badge {
-        position: absolute;
-        top: 10px;
-        left: 8px;
-    }
-
-.bg-lightred {
-    background-color: #08A282 !important;
-    color: #FFF !important;
+.vr-nav-custom div .badge {
+    position: absolute;
+    top: 10px;
+    left: 8px;
 }
 
 .badge {
