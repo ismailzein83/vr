@@ -7,14 +7,12 @@ using Vanrise.Integration.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions
 {
-    public class RadiusSQLProvisionerDefinitionSetting : ActionProvisionerDefinitionSettings
+    public enum DestinationType { NoDestination = 0, AllDestinations=1,Europe=2,Asia=3}
+    public class ChangeRoutingGroupProvisionerDefinitionSetting : ActionProvisionerDefinitionSettings
     {
-        public string ConnectionString { get; set; }
-        public string Query { get; set; }
-
         public override Guid ConfigId
         {
-            get { return new Guid("a7f4e906-cfb0-48fb-843a-f25dbacb934e"); }
+            get { return new Guid("966cc944-4528-4dde-96f4-b9d1d51a2c6a"); }
         }
     }
 }
