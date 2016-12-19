@@ -334,6 +334,34 @@ namespace Retail.BusinessEntity.Business
             return configManager.GetDefaultCompanySetting();
         }
 
+        public Guid GetDefaultInvoiceEmailId(long accountId)
+        {
+            var retailSubscriberInvoiceSettings = GetRetailDefaulSubscriberInvoiceSettings();
+            if (retailSubscriberInvoiceSettings == null)
+                throw new NullReferenceException("retailSubscriberInvoiceSettings");
+            return retailSubscriberInvoiceSettings.DefaultEmailId;
+        }
+
+
+         private SubscriberInvoiceSettings GetRetailDefaulSubscriberInvoiceSettings()
+        {
+            SettingManager settingManager = new SettingManager();
+            InvoiceSettings settings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
+
+            if (settings == null || settings.SubscriberInvoiceSettings == null)
+                throw new NullReferenceException("setting.SubscriberInvoiceSettings");
+
+            foreach (var item in settings.SubscriberInvoiceSettings)
+            {
+                if (item.IsDefault)
+                    return item;
+            }
+            throw new NullReferenceException("setting.SubscriberInvoiceSettings");
+        }
+
+         
+        #endregion
+
         #region Get Account Editor Runtime
 
         public AccountEditorRuntime GetAccountEditorRuntime(Guid accountTypeId, int? parentAccountId)
@@ -415,7 +443,6 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-        #endregion
 
         #region Validation Methods
 

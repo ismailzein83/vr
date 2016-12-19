@@ -68,9 +68,9 @@ app.directive('retailBeInvoicesettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     if (payload != undefined && payload.data != undefined) {
                         invoiceSettingsPayload = payload.data;
                     }
-                    if (invoiceSettingsPayload != undefined && invoiceSettingsPayload.CustomerInvoiceSettings != undefined) {
-                        for (var i = 0; i < invoiceSettingsPayload.CustomerInvoiceSettings.length; i++) {
-                            var invoiceSetting = invoiceSettingsPayload.CustomerInvoiceSettings[i];
+                    if (invoiceSettingsPayload != undefined && invoiceSettingsPayload.SubscriberInvoiceSettings != undefined) {
+                        for (var i = 0; i < invoiceSettingsPayload.SubscriberInvoiceSettings.length; i++) {
+                            var invoiceSetting = invoiceSettingsPayload.SubscriberInvoiceSettings[i];
                             ctrl.datasource.push({ Entity: invoiceSetting });
                         }
                     }
@@ -87,7 +87,7 @@ app.directive('retailBeInvoicesettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     }
                     return {
                         $type: "Retail.BusinessEntity.Entities.InvoiceSettings, Retail.BusinessEntity.Entities",
-                        CustomerInvoiceSettings: invoiceSettings
+                        SubscriberInvoiceSettings: invoiceSettings
                     };
                 };
 

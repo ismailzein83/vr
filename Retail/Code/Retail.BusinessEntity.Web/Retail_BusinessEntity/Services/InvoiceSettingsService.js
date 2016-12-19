@@ -8,7 +8,7 @@
         return ({
             addInvoiceSetting: addInvoiceSetting,
             editInvoiceSetting: editInvoiceSetting,
-            getCustomerInvoiceMailType: getCustomerInvoiceMailType
+            getSubscriberInvoiceMailType: getSubscriberInvoiceMailType
         });
 
 
@@ -38,9 +38,9 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/InvoiceSettings/Templates/InvoiceSettingEditor.html', modalParameters, modalSettings);
         }
 
-        function getCustomerInvoiceMailType() {
+        function getSubscriberInvoiceMailType() {
             var promiseDeffered = UtilsService.createPromiseDeferred();
-            promiseDeffered.resolve("d077a578-53b3-4faf-84b7-5e1ef5724c79");
+            promiseDeffered.resolve("691E1A9E-41BC-482D-88BE-7DC77E2D2CA1");
             return promiseDeffered.promise;
         }
     }

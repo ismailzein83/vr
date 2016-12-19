@@ -10,13 +10,13 @@ namespace Retail.BusinessEntity.Entities
 {
     public class InvoiceSettings : SettingData
     {
-        public const string SETTING_TYPE = "Retail_Invoice_InvoiceSettings";
+        public const string SETTING_TYPE = "Retail_BE_InvoiceSettings";
         public List<SubscriberInvoiceSettings> SubscriberInvoiceSettings { get; set; }
     }
     public class SubscriberInvoiceSettings
     {
         public Guid InvoiceSettingId { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public Guid DefaultEmailId { get; set; }
         public bool IsDefault { get; set; }
         public int DuePeriod { get; set; }

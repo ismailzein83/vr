@@ -55,7 +55,7 @@ namespace Vanrise.Invoice.MainExtensions
              var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
              InvoiceTypeExtendedSettingsInfoContext context = new InvoiceTypeExtendedSettingsInfoContext
              {
-                 InfoType = "CustomerMailTemplate",
+                 InfoType = "MailTemplate",
                  Invoice = invoice
 
              };
