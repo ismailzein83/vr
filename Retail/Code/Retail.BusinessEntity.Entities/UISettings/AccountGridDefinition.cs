@@ -19,6 +19,8 @@ namespace Retail.BusinessEntity.Entities
 
         public bool IsAvailableInRoot { get; set; }
 
+        public bool IsAvailableInSubAccounts { get; set; }
+
         public AccountCondition ParentAccountAvailabilityCondition { get; set; }
     }
 }
