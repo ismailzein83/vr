@@ -21,15 +21,30 @@ namespace Retail.BusinessEntity.Business
 
         public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
+            var recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
+
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts();
 
             Func<Account, bool> filterExpression = (account) =>
-                (input.Query.Name == null || account.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
-                (input.Query.AccountTypeIds == null || input.Query.AccountTypeIds.Contains(account.TypeId)) &&
-                (
-                    (!input.Query.ParentAccountId.HasValue && !account.ParentAccountId.HasValue) ||
-                    (input.Query.ParentAccountId.HasValue && account.ParentAccountId.HasValue && account.ParentAccountId.Value == input.Query.ParentAccountId.Value)
-                );
+                {
+                    if (input.Query.Name != null && !account.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                        return false;
+
+                    if (input.Query.AccountTypeIds != null && !input.Query.AccountTypeIds.Contains(account.TypeId))
+                        return false;
+
+                    if (!input.Query.ParentAccountId.HasValue && account.ParentAccountId.HasValue)
+                        return false;
+
+                    if (input.Query.ParentAccountId.HasValue && (!account.ParentAccountId.HasValue || (account.ParentAccountId.HasValue && input.Query.ParentAccountId.Value != account.ParentAccountId.Value)))
+                        return false;
+
+                    if(!recordFilterManager.IsFilterGroupMatch(input.Query.FilterGroup, new AccountRecordFilterGenericFieldMatchContext(account)))
+                        return false;
+
+                    return true;
+                };
+
             var bigResult = cachedAccounts.ToBigResult(input, filterExpression, AccountDetailMapperStep1);
             if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
