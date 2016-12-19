@@ -621,6 +621,9 @@
     <Content Include="Images\menu-icons\other.png" />
     <Content Include="Images\menu-icons\plug.png" />
     <Content Include="Images\menu-icons\Sale Area.png" />
+    <Content Include="Images\nTegra-iconheader.ico" />
+    <Content Include="Images\nTegra-login.png" />
+    <Content Include="Images\nTegra-logoonheader.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
