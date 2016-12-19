@@ -34,7 +34,11 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         mainPayload = payload;
-                        if (payload.provisionerRuntimeSettings != undefined) {
+                        if (payload.provisionerRuntimeEntity != undefined) {
+                            $scope.scopeModel.domain = payload.provisionerRuntimeEntity.Domain;
+                            $scope.scopeModel.gateWay = payload.provisionerRuntimeEntity.GateWay;
+                            $scope.scopeModel.loginName = payload.provisionerRuntimeEntity.LoginName;
+                            $scope.scopeModel.password = payload.provisionerRuntimeEntity.Password;
                         }
                     }
 

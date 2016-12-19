@@ -49,9 +49,15 @@
 
                     var promises = [];
                     var provisionerDefinitionSettings;
+                    var actionBPSettings;
+                    if (payload != undefined )
+                        if( payload.bpDefinitionSettings !=undefined) {
+                            provisionerDefinitionSettings = payload.bpDefinitionSettings.ProvisionerDefinitionSettings;
 
-                    if (payload != undefined && payload.bpDefinitionSettings !=undefined) {
-                        provisionerDefinitionSettings = payload.bpDefinitionSettings.ProvisionerDefinitionSettings;
+                            if(payload.vrActionEntity !=undefined)
+                            {
+                                actionBPSettings = payload.vrActionEntity.ActionBPSettings;
+                            }
                     }
 
 
@@ -79,7 +85,12 @@
                         var provisionerSettingLoadDeferred = UtilsService.createPromiseDeferred();
 
                         provisionerReadyDeferred.promise.then(function () {
-                            var settingPayload = provisionerDefinitionSettings != undefined ? { provisionerRuntimeSettings: provisionerDefinitionSettings } : undefined;
+
+                            var settingPayload = { provisionerDefinitionSettings: provisionerDefinitionSettings };
+                            if (actionBPSettings != undefined)
+                            {
+                                settingPayload.provisionerRuntimeEntity = actionBPSettings.ActionProvisioner;
+                            }
                             VRUIUtilsService.callDirectiveLoad(provisionerRuntimeAPI, settingPayload, provisionerSettingLoadDeferred);
                         });
                         return provisionerSettingLoadDeferred.promise;

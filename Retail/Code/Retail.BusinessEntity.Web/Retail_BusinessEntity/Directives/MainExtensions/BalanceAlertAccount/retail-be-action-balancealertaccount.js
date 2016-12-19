@@ -35,8 +35,9 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
 
             var actionDefinitionAPI;
             var actionDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var selectedActionDefinitionSelectorReadyDeferred;
             var actionDefinitionRuntimeAPI;
-            var actionDefinitionRuntimeReadyDeferred;
+            var actionDefinitionRuntimeReadyDeferred = UtilsService.createPromiseDeferred();
 
             var actionDefinitionEntity;
             var vrActionEntity;
@@ -51,34 +52,30 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                     actionDefinitionSelectorReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.onActionDeinitionSelectionChanged = function () {
-                    var selectedActionDefinitionId = actionDefinitionAPI.getSelectedIds();
-                    if (selectedActionDefinitionId != undefined) {
-                        getActionDefinitionById(selectedActionDefinitionId).then(function () {
-
-
-
-                            if (actionDefinitionRuntimeAPI != undefined) {
-                                var directivePayload = { bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings };
-                                var setLoader = function (value) {
-                                    $scope.scopeModel.isLoadingDirective = value;
-                                };
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, actionDefinitionRuntimeAPI, directivePayload, setLoader, actionDefinitionRuntimeReadyDeferred);
-                            }
-
-
-                        })
+                $scope.scopeModel.onActionDefinitionSelectionChanged = function () {
+                    if (selectedActionDefinitionSelectorReadyDeferred != undefined)
+                    {
+                        selectedActionDefinitionSelectorReadyDeferred.resolve();
+                    } else
+                    {
+                        var selectedActionDefinitionId = actionDefinitionAPI.getSelectedIds();
+                        if (selectedActionDefinitionId != undefined) {
+                            getActionDefinitionById(selectedActionDefinitionId).finally(function () {
+                                $scope.scopeModel.isLoadingDirective = true;
+                                actionDefinitionRuntimeReadyDeferred.promise.then(function(){
+                                    var directivePayload = { bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings };
+                                    var setLoader = function (value) {
+                                        $scope.scopeModel.isLoadingDirective = value;
+                                    };
+                                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, actionDefinitionRuntimeAPI, directivePayload, setLoader);
+                                });
+                            });
+                        }
                     }
-
                 };
-
                 $scope.scopeModel.onActionDefinitionRuntimeReady = function (api) {
                     actionDefinitionRuntimeAPI = api;
-                    var directivePayload = { bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings };
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, actionDefinitionRuntimeAPI, directivePayload, setLoader, actionDefinitionRuntimeReadyDeferred);
+                    actionDefinitionRuntimeReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -88,9 +85,15 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                 var api = {};
 
                 api.load = function (payload) {
+                    
                     if (payload != undefined) {
                         vrActionEntity = payload.vrActionEntity;
+                        if(vrActionEntity != undefined)
+                        {
+                            selectedActionDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                        }
                     }
+
                     var promises = [];
                     var actionDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     actionDefinitionSelectorReadyDeferred.promise.then(function () {
@@ -104,22 +107,30 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                     });
                     promises.push(actionDefinitionSelectorLoadDeferred.promise);
 
+
                     var loadActionBPDefinitionExtensionConfigsPromise = loadActionBPDefinitionExtensionConfigs();
                     promises.push(loadActionBPDefinitionExtensionConfigsPromise);
 
-                    if (vrActionEntity) {
-                        var promiseDiffered = UtilsService.createPromiseDeferred();
-                        promises.push(promiseDiffered.promise);
-                        loadActionBPDefinitionExtensionConfigsPromise.then(function () {
-                            if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined) {
-                                loadDirective().then(function () {
-                                    promiseDiffered.resolve();
-                                }).catch(function (error) {
-                                    promiseDiffered.reject(error);
+
+
+
+                    if (vrActionEntity != undefined) {
+                        var actionDefinitionRuntimeLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(actionDefinitionRuntimeLoadDeferred.promise);
+
+                        var promise = getActionDefinitionById(vrActionEntity.ActionDefinitionId);
+                        UtilsService.waitMultiplePromises([loadActionBPDefinitionExtensionConfigsPromise, promise]).then(function () {
+                            UtilsService.waitMultiplePromises([selectedActionDefinitionSelectorReadyDeferred.promise, actionDefinitionRuntimeReadyDeferred.promise]).then(function () {
+                                selectedActionDefinitionSelectorReadyDeferred = undefined;
+                                var selectedActionDefinitionId = actionDefinitionAPI.getSelectedIds();
+                                getActionDefinitionById(selectedActionDefinitionId).then(function () {
+                                    var directivePayload = {
+                                        bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings,
+                                        vrActionEntity: vrActionEntity
+                                    };
+                                    VRUIUtilsService.callDirectiveLoad(actionDefinitionRuntimeAPI, directivePayload, actionDefinitionRuntimeLoadDeferred);
                                 });
-                            } else {
-                                promiseDiffered.resolve();
-                            }
+                            });
                         });
                     }
                     return UtilsService.waitMultiplePromises(promises);
@@ -147,7 +158,6 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
             {
                 return Retail_BE_ActionDefinitionAPIService.GetActionDefinition(actionDefinitionId).then(function (response) {
                     actionDefinitionEntity = response;
-
                     if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined)
                         $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, actionDefinitionEntity.Settings.BPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
                 });
@@ -164,19 +174,7 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                 });
             }
 
-            function loadDirective() {
-                
-                var actionDefinitionRuntimeLoadDeferred = UtilsService.createPromiseDeferred();
-                actionDefinitionRuntimeReadyDeferred = UtilsService.createPromiseDeferred();
-                actionDefinitionRuntimeReadyDeferred.promise.then(function () {
-                    actionDefinitionRuntimeReadyDeferred = undefined;
-                    var directivePayload = {
-                        bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings
-                    };
-                    VRUIUtilsService.callDirectiveLoad(actionDefinitionRuntimeAPI, directivePayload, actionDefinitionRuntimeLoadDeferred);
-                });
-                return actionDefinitionRuntimeLoadDeferred.promise;
-            }
+ 
 
 
             this.initializeController = initializeController;

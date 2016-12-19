@@ -34,7 +34,7 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         mainPayload = payload;
-                        if(payload.provisionerDefinitionSettings !=undefined)
+                        if (payload.ProvisionerDefinitionSettings != undefined)
                         {
                         }
                     }
