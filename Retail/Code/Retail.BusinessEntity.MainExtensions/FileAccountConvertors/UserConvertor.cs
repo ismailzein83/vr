@@ -63,7 +63,7 @@ namespace Retail.BusinessEntity.MainExtensions.FileAccountConvertors
 
                         if (string.IsNullOrEmpty(companyId))
                         {
-                            accountData.Account.TypeId = Guid.Parse("19A97F72-8C56-441E-A74D-AA185961B242");
+                            accountData.Account.TypeId = Guid.Parse("FA621626-8927-4BA6-AD5F-80A0A8FA6F06");
                         }
                         else
                         {
@@ -104,12 +104,12 @@ namespace Retail.BusinessEntity.MainExtensions.FileAccountConvertors
 
         void UpdatePersonalInfoPart(SourceAccountData finalBe, SourceAccountData newBe)
         {
-            AccountPartPersonalInfo personalInfo = newBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings as AccountPartPersonalInfo;
-            AccountPartPersonalInfo newPersonalInfo = finalBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings as AccountPartPersonalInfo;
-            newPersonalInfo.FirstName = personalInfo.FirstName;
-            newPersonalInfo.LastName = personalInfo.LastName;
-            finalBe.Account.Name = string.Format("{0} {1}", newPersonalInfo.FirstName, newPersonalInfo.LastName);
-            finalBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings = newPersonalInfo;
+            ////AccountPartPersonalInfo personalInfo = newBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings as AccountPartPersonalInfo;
+            ////AccountPartPersonalInfo newPersonalInfo = finalBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings as AccountPartPersonalInfo;
+            //newPersonalInfo.FirstName = personalInfo.FirstName;
+            //newPersonalInfo.LastName = personalInfo.LastName;
+            //finalBe.Account.Name = string.Format("{0} {1}", newPersonalInfo.FirstName, newPersonalInfo.LastName);
+            //finalBe.Account.Settings.Parts[AccountPartPersonalInfo._ConfigId].Settings = newPersonalInfo;
         }
 
         #region Private Methods
