@@ -132,7 +132,12 @@
         }
 
         function getContext() {
-            return context;
+            var currentContext = UtilsService.cloneObject(context, true);
+
+            if (currentContext == undefined) {
+                currentContext = {};
+            }
+            return currentContext;
         }
 
     }

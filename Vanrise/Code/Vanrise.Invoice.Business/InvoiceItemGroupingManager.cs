@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
@@ -88,6 +90,7 @@ namespace Vanrise.Invoice.Business
             foreach (var invoiceItem in groupedRecordsByDimensionsKey.Values)
             {
                 GroupingInvoiceItemDetail analyticRecord = BuildGroupingInvoiceItemDetail(groupingInvoiceItemQueryContext, invoiceItem, requestedDimensionIds, measureIds);
+               
                 records.Add(analyticRecord);
             }
 
@@ -95,7 +98,6 @@ namespace Vanrise.Invoice.Business
 
             return records;
         }
-
         private bool ApplyFilters(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, InvoiceItemRecord invoiceItemRecord, List<InvoiceGroupingDimensionFilter> dimensionFilters)
         {
             if (dimensionFilters != null)

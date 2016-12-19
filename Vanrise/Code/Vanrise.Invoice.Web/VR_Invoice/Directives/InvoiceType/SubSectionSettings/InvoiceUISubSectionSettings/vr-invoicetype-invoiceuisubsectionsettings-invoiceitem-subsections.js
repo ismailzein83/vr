@@ -108,7 +108,11 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsections", 
             }
             function getContext()
             {
-                return context;
+                console.log(context);
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
 

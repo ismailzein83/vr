@@ -22,12 +22,6 @@ namespace Vanrise.Invoice.Web.Controllers
              InvoiceItemManager manager = new InvoiceItemManager();
              return GetWebResponse(input, manager.GetFilteredInvoiceItems(input));
          }
-         [HttpPost]
-         [Route("GetFilteredGroupingInvoiceItems")]
-         public object GetFilteredGroupingInvoiceItems(DataRetrievalInput<GroupingInvoiceItemQuery> input)
-         {
-             InvoiceItemManager manager = new InvoiceItemManager();
-             return GetWebResponse(input, manager.GetFilteredGroupingInvoiceItems(input));
-         }
+         
     }
 }

@@ -495,7 +495,8 @@
                                 groupingMeasures.push({
                                     MeasureItemFieldId:aggregateItem.AggregateItemFieldId,
                                     FieldName:aggregateItem.FieldName,
-                                    FieldDescription:aggregateItem.FieldDescription,
+                                    FieldDescription: aggregateItem.FieldDescription,
+                                    FieldType: aggregateItem.FieldType
                                 });
                             }
                         }

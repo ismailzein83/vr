@@ -76,10 +76,13 @@
     <Compile Include="InvoiceActionSettings\RecreateInvoiceAction.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\SendEmailAction.cs" />
     <Compile Include="InvoiceActionSettings\SetInvoicePaidAction.cs" />
-    <Compile Include="InvoiceUISubSectionSettings\ItemGroupingSection.cs" />
+    <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionController.cs" />
+    <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSection.cs" />
     <Compile Include="InvoiceUISubSectionSettings\InvoiceItemSubSection.cs" />
     <Compile Include="InvoiceDataSourceSettings\BankDetailsDataSourceSettings.cs" />
     <Compile Include="InvoiceDataSourceSettings\InvoiceDataSourceItems.cs" />
+    <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionResult.cs" />
+    <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionSettings.cs" />
     <Compile Include="ItemsFilter\GenericItemsFilter.cs" />
     <Compile Include="RDLCReportParameterValue\CustomFieldRDLReportParameterValue.cs" />
     <Compile Include="RDLCReportParameterValue\FieldRDLReportParameterValue.cs" />

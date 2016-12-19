@@ -80,6 +80,7 @@
     <Compile Include="InvoiceType\InvoiceGridSettings\InvoiceGridAction.cs" />
     <Compile Include="InvoiceType\InvoiceGridSettings\InvoiceGridSettings.cs" />
     <Compile Include="InvoiceType\InvoiceSerialNumberSettings\InvoiceSerialNumberSettings.cs" />
+    <Compile Include="InvoiceType\ItemGroupingSectionQuery.cs" />
     <Compile Include="InvoiceType\SendEmailActionInput.cs" />
     <Compile Include="InvoiceType\SubSections\InvoiceSubSection.cs" />
     <Compile Include="InvoiceType\ExtendedSettings\InvoiceTypeExtendedSettings.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="InvoiceType\InvoiceTypeSettings.cs" />
     <Compile Include="InvoiceViewSettings.cs" />
     <Compile Include="InvoiceType\InvoiceDataSourceSettings.cs" />
+    <Compile Include="ItemGroupingFieldInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

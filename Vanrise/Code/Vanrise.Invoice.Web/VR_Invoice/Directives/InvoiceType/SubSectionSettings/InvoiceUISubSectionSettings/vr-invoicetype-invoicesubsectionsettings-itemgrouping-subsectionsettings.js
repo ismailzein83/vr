@@ -31,6 +31,8 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
 
             var itemGroupingSubSectionsAPI;
             var itemGroupingSubSectionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -181,7 +183,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                     return {
                         GridDimesions:dimensions,
                         GridMeasures: measures,
-                        SubSections: itemGroupingSubSectionsAPI.getData()
+                        SubSections: itemGroupingSubSectionsAPI.getData(),
                     };
                 };
 
@@ -195,7 +197,6 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                 {
                     currentContext ={};
                 }
-               
                 return currentContext;
             }
         }

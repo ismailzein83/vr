@@ -11,6 +11,7 @@ namespace Vanrise.Invoice.Entities
         public InvoiceGroupingDimensionValue[] DimensionValues { get; set; }
 
         public InvoiceGroupingMeasureValues MeasureValues { get; set; }
+     
     }
     public class InvoiceGroupingDimensionValue
     {

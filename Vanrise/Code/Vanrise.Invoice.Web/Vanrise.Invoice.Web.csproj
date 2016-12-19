@@ -306,6 +306,7 @@
     <Content Include="VR_Invoice\Services\APIServices\InvoiceItemAPISevice.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeConfigsAPIService.js" />
+    <Content Include="VR_Invoice\Services\APIServices\ItemGroupingSectionAPIService.js" />
     <Content Include="VR_Invoice\Services\InvoiceActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGeneratorActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGridSettingService.js" />
