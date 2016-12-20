@@ -10,6 +10,8 @@
 
         var accountViewDefinitionEntity;
        
+        var settingsDirectiveAPI;
+        var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -25,7 +27,10 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.onAccountViewDefinitionSettingsReady = function (api) {
+                settingsDirectiveAPI = api;
+                settingsDirectiveReadyDeferred.resolve();
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode)
                     return update();
@@ -52,9 +57,24 @@
                 if (accountViewDefinitionEntity == undefined)
                     return;
                 $scope.scopeModel.name = accountViewDefinitionEntity.Name;
-            }
+                $scope.scopeModel.drillDownSectionName = accountViewDefinitionEntity.DrillDownSectionName;
+                $scope.scopeModel.account360DegreeSectionName = accountViewDefinitionEntity.Account360DegreeSectionName;
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            }
+            function loadSettingsDirective() {
+                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                settingsDirectiveReadyDeferred.promise.then(function () {
+                    var settingsDirectivePayload;
+                    if (accountViewDefinitionEntity != undefined) {
+                        settingsDirectivePayload = { accountViewDefinitionSettings: accountViewDefinitionEntity.Settings };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+                });
+
+                return settingsDirectiveLoadDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -81,7 +101,10 @@
         function buildAccountViewDefinitionObjectFromScope() {
             return {
                 AccountViewDefinitionId:accountViewDefinitionEntity != undefined?accountViewDefinitionEntity.AccountViewDefinitionId:UtilsService.guid(),
-                Name:$scope.scopeModel.name
+                Name: $scope.scopeModel.name,
+                DrillDownSectionName:$scope.scopeModel.drillDownSectionName,
+                Account360DegreeSectionName: $scope.scopeModel.account360DegreeSectionName,
+                Settings: settingsDirectiveAPI.getData(),
             };
         }
     }
