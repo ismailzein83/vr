@@ -12,8 +12,11 @@
     [ClosingPeriodId]   BIGINT           NULL,
     [CreatedTime]       DATETIME         CONSTRAINT [DF_BillingTransaction_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]         ROWVERSION       NULL,
+    [IsDeleted]         BIT              NULL,
     CONSTRAINT [PK_BillingTransaction] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

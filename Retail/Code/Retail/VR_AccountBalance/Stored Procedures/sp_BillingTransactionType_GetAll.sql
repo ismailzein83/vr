@@ -6,6 +6,6 @@
 CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransactionType_GetAll]
 AS
 BEGIN
-	SELECT ID, Name
+	SELECT ID, Name, IsCredit
 	FROM VR_AccountBalance.BillingTransactionType  with(nolock)
 END

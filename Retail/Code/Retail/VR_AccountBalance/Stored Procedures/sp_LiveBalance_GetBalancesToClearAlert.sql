@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetBalancesForAlert]
+CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetBalancesToClearAlert]
 AS
 BEGIN
 	
@@ -19,6 +19,6 @@ BEGIN
 			,lb.ThresholdActionIndex
 			,lb.ActiveAlertsInfo
 	FROM VR_AccountBalance.LiveBalance lb WITH(NOLOCK) 
-	WHERE lb.[CurrentBalance] <= lb.NextAlertThreshold and (lb.LastExecutedActionThreshold IS NULL OR lb.NextAlertThreshold  < lb.LastExecutedActionThreshold)
+	WHERE lb.[CurrentBalance] > lb.LastExecutedActionThreshold 
 
 END

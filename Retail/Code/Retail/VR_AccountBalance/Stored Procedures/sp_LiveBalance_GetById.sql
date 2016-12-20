@@ -14,7 +14,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 /****** Script for SelectTopNRows command from SSMS  ******/
-	SELECT  AccountID, AccountTypeID, CurrencyID,InitialBalance,UsageBalance,CurrentBalance,CurrentAlertThreshold,NextAlertThreshold,AlertRuleID,ThresholdActionIndex
+	SELECT   AccountID
+			,AccountTypeID
+			,CurrencyID
+			,InitialBalance
+			,UsageBalance
+			,CurrentBalance
+			,NextAlertThreshold
+			,AlertRuleID
+			,ThresholdActionIndex
+			,LastExecutedActionThreshold
+			,ActiveAlertsInfo
 	FROM	[VR_AccountBalance].LiveBalance lb  with(nolock)
 	WHERE	AccountTypeID = @AccountTypeId and AccountID = @AccountID
         

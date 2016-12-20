@@ -287,5 +287,17 @@
     <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodePreparation_GetChanges.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceThresholdUpdateTable.sql" />
     <Build Include="Security\VR_NumberingPlan.sql" />
+    <Build Include="VR_AccountBalance\Tables\AccountUsage.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalanceLastThreshold.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_TryAddAndGet.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetBalancesToClearAlert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_InsertFromAccountUsageAndUpdate.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_UpdateBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_TryAddAndGet.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByPeriod.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetAccountPendingUsage.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceLastThresholdUpdateTable.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\BalanceTableType.sql" />
   </ItemGroup>
 </Project>

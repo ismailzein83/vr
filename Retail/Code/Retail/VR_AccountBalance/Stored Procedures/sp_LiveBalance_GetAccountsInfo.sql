@@ -7,7 +7,7 @@ CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]
 	@AccountTypeID uniqueidentifier
 AS
 BEGIN
-	SELECT AccountID, CurrencyID
+	SELECT ID,AccountID, CurrencyID
 	FROM VR_AccountBalance.LiveBalance  with(nolock)
 	where AccountTypeID = @AccountTypeID 
 END
