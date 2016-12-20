@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountFilter.cs" />
+    <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Package\PackageGroup.cs" />
     <Compile Include="Package\PackageGroupSettings.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="AccountPartDefinition\AccountPartDefinitionDetail.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionInfo.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionQuery.cs" />
-    <Compile Include="GenericFieldDefinition.cs" />
+    <Compile Include="GenericFieldDefinition\GenericFieldDefinition.cs" />
     <Compile Include="AccountServiceCondition\AccountServiceCondition.cs" />
     <Compile Include="AccountType\AccountTypeDetail.cs" />
     <Compile Include="AccountType\AccountTypeFilter.cs" />
