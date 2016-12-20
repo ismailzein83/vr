@@ -60,7 +60,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('42BE0E81-EAEE-490D-A342-028FB111DE19','Dynamic Management',null,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,11,0),
-('EB303A61-929A-4D33-BF50-18F40308BC86','Business Intelligence',null,null,'/images/menu-icons/busines intel.png',35,1)
+('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards',null,null,'/images/menu-icons/busines intel.png',35,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
