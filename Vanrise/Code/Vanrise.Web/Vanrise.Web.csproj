@@ -179,6 +179,7 @@
     <Content Include="Client\Images\menu-icons\Administration.png" />
     <Content Include="Client\Images\menu-icons\busines intel.png" />
     <Content Include="Client\Images\menu-icons\Business Entities.png" />
+    <Content Include="Client\Images\menu-icons\other.png" />
     <Content Include="Client\Images\menu-icons\SystemProcesses.png" />
     <Content Include="Client\Images\no_image.jpg" />
     <Content Include="Client\Images\loader-mask.gif" />
