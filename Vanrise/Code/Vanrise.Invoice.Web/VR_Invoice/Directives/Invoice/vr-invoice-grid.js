@@ -101,7 +101,8 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                             if (response.Data != undefined) {
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var dataItem = response.Data[i];
-                                    buildGridFields(dataItem);
+                                    if ($scope.gridFields == undefined || $scope.gridFields.length == 0)
+                                        buildGridFields(dataItem);
                                     VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
                                 }
                             }
