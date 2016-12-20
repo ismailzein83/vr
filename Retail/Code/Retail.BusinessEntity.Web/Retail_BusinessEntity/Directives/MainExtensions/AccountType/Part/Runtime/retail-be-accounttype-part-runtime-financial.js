@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMethodEnum", "Retail_BE_AccountTypePartRuntimeFinancialEnum", "UtilsService", "VRUIUtilsService",
-    function (Retail_BE_PaymentMethodEnum, Retail_BE_AccountTypePartRuntimeFinancialEnum, UtilsService, VRUIUtilsService) {
+app.directive('retailBeAccounttypePartRuntimeFinancial', [  "UtilsService", "VRUIUtilsService",
+    function (  UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -32,8 +32,6 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
 
         function initializeController() {
             $scope.scopeModel = {};
-            $scope.scopeModel.paymentMethods = UtilsService.getArrayEnum(Retail_BE_PaymentMethodEnum);
-            $scope.scopeModel.billingCycles = UtilsService.getArrayEnum(Retail_BE_AccountTypePartRuntimeFinancialEnum);
         
             $scope.scopeModel.onCreditClassDirectiveReady = function (api) {
                 creditClassSelectorAPI = api;
@@ -43,13 +41,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
                 currencySelectorAPI = api;
                 currencySelectorReadyPromiseDeferred.resolve();
             };
-            $scope.scopeModel.onDirectiveReady = function (api) {
-                paymentMethodDirectiveAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingPaymentMethod = value };
-                var payload;
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, paymentMethodDirectiveAPI, payload, setLoader, paymentMethodReadyPromiseDeferred);
-            };
-
+           
             defineAPI();
         }
         function defineAPI() {
@@ -59,29 +51,6 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
                 var promises = [];
                 if (payload != undefined && payload.partSettings != undefined)
                 {
-                    if (payload.partSettings.PaymentMethod != undefined)
-                    {
-                        var loadPaymentMethodPromiseDeferred = UtilsService.createPromiseDeferred();
-                        paymentMethodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                        paymentMethodReadyPromiseDeferred.promise
-                            .then(function () {
-                                paymentMethodReadyPromiseDeferred = undefined;
-                                var directivePayload;
-
-                                switch(payload.partSettings.PaymentMethod)
-                                {
-                                    case Retail_BE_PaymentMethodEnum.Postpaid.value:directivePayload = payload.partSettings.PostpaidSettings;break;
-                                    case Retail_BE_PaymentMethodEnum.Prepaid.value:directivePayload = payload.partSettings.PrepaidSettings;break;
-                                }
-                                VRUIUtilsService.callDirectiveLoad(paymentMethodDirectiveAPI, directivePayload, loadPaymentMethodPromiseDeferred);
-                            });
-
-                        promises.push(loadPaymentMethodPromiseDeferred.promise);
-
-                        $scope.scopeModel.selectedPaymentMethod = UtilsService.getItemByVal($scope.scopeModel.paymentMethods, payload.partSettings.PaymentMethod, "value");
-                        $scope.scopeModel.selectedBillingCycle = UtilsService.getItemByVal($scope.scopeModel.billingCycles, payload.partSettings.BillingCycleId, "value");
-                    }
-                    $scope.scopeModel.bankDetails = payload.partSettings.BankDetails;
                 }
 
                 var creditClassSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -105,12 +74,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["Retail_BE_PaymentMeth
             api.getData = function () {
                 return {
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancial,Retail.BusinessEntity.MainExtensions',
-                    PaymentMethod: $scope.scopeModel.selectedPaymentMethod.value,
-                    CurrencyId: currencySelectorAPI.getSelectedIds(),
-                    BankDetails: $scope.scopeModel.bankDetails,
-                    PostpaidSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Postpaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
-                    PrepaidSettings: $scope.scopeModel.selectedPaymentMethod.value == Retail_BE_PaymentMethodEnum.Prepaid.value ? paymentMethodDirectiveAPI.getData() : undefined,
-                    BillingCycleId: $scope.scopeModel.selectedBillingCycle.value,
+                    CurrencyId: currencySelectorAPI.getSelectedIds(),             
                     CreditClassId: creditClassSelectorAPI.getSelectedIds()
                 };
             };

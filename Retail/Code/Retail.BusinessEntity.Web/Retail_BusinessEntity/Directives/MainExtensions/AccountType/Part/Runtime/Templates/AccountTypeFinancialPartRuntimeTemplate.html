@@ -1,47 +1,6 @@
 ﻿<vr-tab header="'Financial'">
-
     <vr-row removeline>
         <vr-common-currency-selector selectedvalues="scopeModel.currency" normal-col-num="4" on-ready="scopeModel.onCurrencyDirectiveReady" isrequired="true"></vr-common-currency-selector>
-
         <retail-be-creditclass-selector normal-col-num="4" on-ready="scopeModel.onCreditClassDirectiveReady" isrequired="true"></retail-be-creditclass-selector>
-
-        <vr-columns width="1/3row">
-            <vr-select label="Billing Cycle"
-                       datasource="scopeModel.billingCycles"
-                       selectedvalues="scopeModel.selectedBillingCycle"
-                       datavaluefield="value"
-                       datatextfield="description"
-                       isrequired="true"
-                       hideremoveicon>
-            </vr-select>
-        </vr-columns>
     </vr-row>
-
-    <vr-row>
-        <vr-columns width="fullrow">
-            <vr-textarea value="scopeModel.bankDetails" label="Bank Details"></vr-textarea>
-        </vr-columns>
-    </vr-row>
-
-    <vr-row removeline>
-        <vr-columns width="1/2row">
-            <vr-select datasource="scopeModel.paymentMethods"
-                       selectedvalues="scopeModel.selectedPaymentMethod"
-                       datavaluefield="value"
-                       datatextfield="description"
-                       isrequired="true"
-                       hideremoveicon
-                       label="Payment Method">
-            </vr-select>
-        </vr-columns>
-    </vr-row>
-
-    <vr-row ng-if="scopeModel.selectedPaymentMethod != undefined" removeline>
-        <vr-columns width="fullrow">
-            <vr-section title="{{scopeModel.selectedPaymentMethod.description}} Settings" vr-loader="scopeModel.isLoadingPaymentMethod">
-                <vr-directivewrapper directive="scopeModel.selectedPaymentMethod.directiveEditor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
-            </vr-section>
-        </vr-columns>
-    </vr-row>
-
 </vr-tab>

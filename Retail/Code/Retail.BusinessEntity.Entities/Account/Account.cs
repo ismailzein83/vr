@@ -45,15 +45,9 @@ namespace Retail.BusinessEntity.Entities
 
     public interface IAccountPayment
     {
-        int PaymentMethodId { get; }
-
         int CurrencyId { get; }
 
         int CreditClassId { get; }
-
-        string BankDetails { get; }
-
-        int StatusChargingSetId { get; }
 
         int PackageGroupId { get; }
     }

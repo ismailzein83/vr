@@ -200,8 +200,6 @@
     <Content Include="Retail_BusinessEntity\Constant\FinancialRetailAccountEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
-    <Content Include="Retail_BusinessEntity\Constant\PaymentMethodEnum.js" />
-    <Content Include="Retail_BusinessEntity\Constant\AccountTypePartRuntimeFinancialEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\WebServiceRequestTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\retail-be-accountidentification-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\Templates\AccountIdentificationGridTemplate.html" />
@@ -321,8 +319,6 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeActivationPartDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-companyprofile.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-activation.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-financial-prepaid.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-financial-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-financial.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-generic.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-personalinfo.js" />
@@ -330,8 +326,6 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeActivationPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeCompanyProfilePartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeFinancialPartRuntimeTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeFinancialPrepaidPartRuntimeTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeFinancialPostpaidPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeGenericPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypePersonalInfoPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeResidentialProfilePartRuntimeTemplate.html" />
