@@ -20,7 +20,7 @@ app.directive('retailBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServ
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Settings/Templates/TechnicalSettingsEditorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/TechnicalSettingsEditorTemplate.html'
         };
 
         function technicalSettingsEditorCtor(ctrl, $scope, $attrs) {
@@ -28,6 +28,8 @@ app.directive('retailBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServ
             var accountGridDefinitionDirectiveAPI;
             var accountGridDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
 
+            var accountViewDefinitionDirectiveAPI;
+            var accountViewDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -35,8 +37,13 @@ app.directive('retailBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     accountGridDefinitionDirectiveAPI = api;
                     accountGridDefinitionDirectiveDeferred.resolve();
                 };
+                $scope.scopeModel.onAccountViewDefinitionsReady = function(api)
+                {
+                    accountViewDefinitionDirectiveAPI = api;
+                    accountViewDefinitionDirectiveDeferred.resolve();
 
-                UtilsService.waitMultiplePromises([accountGridDefinitionDirectiveDeferred.promise]).then(function () {
+                }
+                UtilsService.waitMultiplePromises([accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -46,9 +53,10 @@ app.directive('retailBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                 api.load = function (payload) {
                     var promises = [];
                     var accountGridDefinition;
-
+                    var accountViewDefinitions;
                     if (payload != undefined && payload.data != undefined) {
                         accountGridDefinition = payload.data.GridDefinition;
+                        accountViewDefinitions = payload.data.AccountViewDefinitions;
                     }
 
                     //Loading AccountGridDefinition Directive
@@ -56,7 +64,10 @@ app.directive('retailBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     promises.push(accountGridDefinitionLoadPromise);
 
 
-                    function getAccountGridDefinitionLoadPromise(){
+                    var accountViewDefinitionLoadPromise = getAccountViewDefinitionLoadPromise();
+                    promises.push(accountViewDefinitionLoadPromise);
+
+                    function getAccountGridDefinitionLoadPromise() {
                         var accountGridDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
 
                         var accountGridDefinitionPayload = {
@@ -67,13 +78,25 @@ app.directive('retailBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         return accountGridDefitnionLoadDeferred.promise;
                     }
 
+                    function getAccountViewDefinitionLoadPromise(){
+                        var accountViewDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        var accountViewDefinitionPayload = {
+                            accountViewDefinitions: accountViewDefinitions
+                        };
+                        VRUIUtilsService.callDirectiveLoad(accountViewDefinitionDirectiveAPI, accountViewDefinitionPayload, accountViewDefitnionLoadDeferred);
+
+                        return accountViewDefitnionLoadDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     var obj = {
                         $type: "Retail.BusinessEntity.Entities.RetailBETechnicalSetting, Retail.BusinessEntity.Entities",
-                        GridDefinition: accountGridDefinitionDirectiveAPI.getData()
+                        GridDefinition: accountGridDefinitionDirectiveAPI.getData(),
+                        AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData()
                     };
 
                     return obj;

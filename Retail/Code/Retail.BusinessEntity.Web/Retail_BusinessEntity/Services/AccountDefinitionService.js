@@ -7,7 +7,7 @@
     function AccountDefinitionService(VRModalService) {
 
 
-        function addAccountViewDefinitions(onAccountViewDefinitionAdded) {
+        function addAccountViewDefinition(onAccountViewDefinitionAdded) {
 
             var modalSettings = {};
 
@@ -18,10 +18,10 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountViewDefinition/AccountViewDefinitionEditor.html', null, modalSettings);
 
         }
-        function editAccountViewDefinition(accountViewDefinition, onAccountViewDefinitionUpdated) {
+        function editAccountViewDefinition(accountViewDefinitionEntity, onAccountViewDefinitionUpdated) {
 
             var parameters = {
-                accountViewDefinition: accountViewDefinition
+                accountViewDefinitionEntity: accountViewDefinitionEntity
             };
 
             var modalSettings = {};
