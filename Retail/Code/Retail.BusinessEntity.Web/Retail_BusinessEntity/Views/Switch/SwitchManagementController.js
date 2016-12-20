@@ -45,7 +45,6 @@
             return {
                 Name: $scope.scopeModel.name,
                 Description: $scope.scopeModel.description,
-                Location: $scope.scopeModel.location
             };
         }
     }

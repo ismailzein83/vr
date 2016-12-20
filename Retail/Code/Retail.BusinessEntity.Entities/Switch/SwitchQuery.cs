@@ -12,6 +12,5 @@ namespace Retail.BusinessEntity.Entities
 
         public string Description { get; set; }
 
-        public string Location { get; set; }
     }
 }
