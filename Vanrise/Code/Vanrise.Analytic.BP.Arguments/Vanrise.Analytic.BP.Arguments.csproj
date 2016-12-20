@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAProfCalcGenerateAlertInput.cs" />
     <Compile Include="DAProfCalcStoreOutputInput.cs" />
     <Compile Include="DAProfCalcForRangeProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
