@@ -11,5 +11,8 @@ namespace Vanrise.AccountBalance.Entities
     {
         public decimal CurrentBalance { get; set; }
         public string Currency { get; set; }
+        public decimal TotalCredit { get; set; }
+        public decimal TotalDebit { get; set; }
+        
     }
 }

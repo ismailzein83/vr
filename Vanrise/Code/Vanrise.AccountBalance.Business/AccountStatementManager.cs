@@ -27,6 +27,8 @@ namespace Vanrise.AccountBalance.Business
             }
             decimal _currenctBalance;
             string _currencyName;
+            decimal _totalDebit = 0;
+            decimal _totalCredit = 0;
             public override IEnumerable<AccountStatementItem> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<AccountStatementQuery> input)
             {
                 AccountManager accountManager = new AccountManager();
@@ -50,7 +52,9 @@ namespace Vanrise.AccountBalance.Business
                     Data =  allRecords.VRGetPage(input),
                     TotalCount = allRecords.Count(),
                     CurrentBalance = _currenctBalance,
-                    Currency = _currencyName
+                    Currency = _currencyName,
+                    TotalCredit = _totalCredit,
+                    TotalDebit = _totalDebit
                 };
                 return analyticBigResult;
             }
@@ -109,11 +113,13 @@ namespace Vanrise.AccountBalance.Business
                         {
                             balance += amount;
                             accountStatementItem.Credit = amount;
+                            _totalCredit += amount;
                         }
                         else
                         {
                             balance -= amount;
                             accountStatementItem.Debit = amount;
+                            _totalDebit += amount;
                         }
                         accountStatementItem.Balance = balance;
 
@@ -153,6 +159,8 @@ namespace Vanrise.AccountBalance.Business
                             accountStatementItem.Credit = 0;
                         accountStatementItem.Credit +=amount;
                         _currenctBalance += amount;
+                        _totalCredit += amount;
+
                     }
                     else
                     {
@@ -161,6 +169,8 @@ namespace Vanrise.AccountBalance.Business
                         accountStatementItem.Debit+=amount;
                        
                         _currenctBalance -= amount;
+                        _totalDebit += amount;
+
                     }
                 }
                 accountStatementItem.Balance = _currenctBalance;

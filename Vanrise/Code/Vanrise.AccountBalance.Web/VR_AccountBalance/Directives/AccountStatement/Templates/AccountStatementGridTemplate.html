@@ -1,7 +1,10 @@
 ﻿<vr-row>
-    <vr-list maxitemsperrow="2">
-        <vr-listitem><vr-label>Currency: </vr-label><vr-label isvalue> {{ctrl.currency}}</vr-label></vr-listitem>
+    <vr-list maxitemsperrow="4">
+       
         <vr-listitem><vr-label>Current Balance: </vr-label><vr-label isvalue>{{ctrl.currentBalance}}</vr-label></vr-listitem>
+        <vr-listitem><vr-label>Total Debit: </vr-label><vr-label isvalue>{{ctrl.totalDebit}}</vr-label></vr-listitem>
+        <vr-listitem><vr-label>Total Credit: </vr-label><vr-label isvalue>{{ctrl.totalCredit}}</vr-label></vr-listitem>
+        <vr-listitem><vr-label>Currency: </vr-label><vr-label isvalue> {{ctrl.currency}}</vr-label></vr-listitem>
     </vr-list>
 </vr-row>
 
@@ -16,5 +19,5 @@
     <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="10" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Debit'" field="'Debit'" widthfactor="3" type="'Number'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Credit'" field="'Credit'" type="'Number'" widthfactor="3" disablesorting></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Balance'" field="'Balance'" widthfactor="5" type="'Number'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Balance'" field="'Balance'" widthfactor="5" type="'Number'"  disablesorting></vr-datagridcolumn>
 </vr-datagrid>
