@@ -176,7 +176,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\" />
     <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountGridDefinition\" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +204,12 @@
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\WebServiceRequestTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-services.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-subaccounts.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-accountinfo.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\ServicesViewSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\SubAccountsViewSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\AccountInfoViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountviewdefinitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\retail-be-accountidentification-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\Templates\AccountIdentificationGridTemplate.html" />

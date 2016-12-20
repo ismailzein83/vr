@@ -44,6 +44,7 @@
                     if (switchIntegration != undefined) {
                         $scope.scopeModel.authorization = switchIntegration.Authorization;
                         $scope.scopeModel.token = switchIntegration.Token;
+                        $scope.scopeModel.url = switchIntegration.URL;
                     }
                 };
 
@@ -58,6 +59,7 @@
                         $type: "Retail.BusinessEntity.MainExtensions.TelesAPISwitchIntegration,Retail.BusinessEntity.MainExtensions",
                         Authorization: $scope.scopeModel.authorization,
                         Token: $scope.scopeModel.token,
+                        URL:$scope.scopeModel.url,
                     };
                     return data;
                 }
