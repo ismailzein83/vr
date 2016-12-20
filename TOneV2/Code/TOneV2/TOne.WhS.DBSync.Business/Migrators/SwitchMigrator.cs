@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.DBSync.Business.SwitchMigration;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using TOne.WhS.RouteSync.Entities;
@@ -52,6 +53,8 @@ namespace TOne.WhS.DBSync.Business
             switch (switchManager)
             {
                 case "TABS.Addons.MvtsProSwitchLibraryMultipleQueue.SwitchManager": parser = new MVTSSwitchMigrationParser(sourceItem.Configuration); break;
+                case "TABS.Addons.FIKARSwitchLibrary.SwitchManager": parser = new IVSwitchMigrationParser(sourceItem.Configuration);
+                    break;
                 default: break;
             }
             return new Switch

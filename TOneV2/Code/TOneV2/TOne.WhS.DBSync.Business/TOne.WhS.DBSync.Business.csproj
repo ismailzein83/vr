@@ -144,6 +144,7 @@
     <Compile Include="DBSyncTaskActionArgument.cs" />
     <Compile Include="Migrators\Rules\RouteBlockRuleMigrator.cs" />
     <Compile Include="SwitchMigration\ISwitchParser.cs" />
+    <Compile Include="SwitchMigration\IVSwitchMigrationParser.cs" />
     <Compile Include="SwitchMigration\MVTSSwitchMigrationParser.cs" />
     <Compile Include="SwitchMigration\MVTSSwitchMigrator.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRulesManager.cs" />
@@ -179,6 +180,10 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.IVSwitch\TOne.WhS.RouteSync.IVSwitch.csproj">
+      <Project>{c0da1a40-bf0e-4657-941e-e245bb82269f}</Project>
+      <Name>TOne.WhS.RouteSync.IVSwitch</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.MVTSRadius.SQL\TOne.WhS.RouteSync.MVTSRadius.SQL.csproj">
       <Project>{89fe058f-9f8f-4afb-bda9-992941cb2140}</Project>
