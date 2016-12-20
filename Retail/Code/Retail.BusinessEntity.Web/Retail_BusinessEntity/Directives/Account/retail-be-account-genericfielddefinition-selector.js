@@ -74,15 +74,15 @@
 
                 api.getData = function () {
 
-                    //var data = {
-                    //    genericFieldDefinition: $scope.scopeModel.selectedGenericFieldDefinition
-                    //};
-
                     var obj = $scope.scopeModel.selectedGenericFieldDefinition;
-                    console.log(obj);
-                    //return $scope.scopeModel.selectedGenericFieldDefinition;
-                    if (obj != undefined)
-                        return obj;
+                    if (obj == undefined)
+                        return undefined
+
+                    return {
+                        Name: obj.Name,
+                        Title: obj.Title,
+                        FieldType: obj.FieldType
+                    }
                 };
 
                 if (ctrl.onReady != null) {

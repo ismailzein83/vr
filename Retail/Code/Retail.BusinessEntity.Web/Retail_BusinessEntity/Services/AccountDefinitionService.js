@@ -6,6 +6,30 @@
 
     function AccountDefinitionService(VRModalService) {
 
+        function addGridColumnDefinition(onColumnDefinitionAdded) {
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onColumnDefinitionAdded = onColumnDefinitionAdded
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountGridDefinition/GridColumnDefinitionEditor.html', null, modalSettings);
+        };
+        function editGridColumnDefinition(columnDefinition, onColumnDefinitionUpdated) {
+
+            var parameters = {
+                columnDefinition: columnDefinition
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onColumnDefinitionUpdated = onColumnDefinitionUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountGridDefinition/GridColumnDefinitionEditor.html', parameters, modalSettings);
+        }
 
         function addAccountViewDefinition(onAccountViewDefinitionAdded) {
 
@@ -33,11 +57,15 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountViewDefinition/AccountViewDefinitionEditor.html', parameters, modalSettings);
         }
 
+
         return {
+            addGridColumnDefinition: addGridColumnDefinition,
+            editGridColumnDefinition: editGridColumnDefinition,
             addAccountViewDefinition: addAccountViewDefinition,
             editAccountViewDefinition: editAccountViewDefinition
         };
     }
+
     appControllers.service('Retail_BE_AccountDefinitionService', AccountDefinitionService);
 
 })(appControllers);

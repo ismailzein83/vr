@@ -84,7 +84,6 @@
                     ctrl.onReady(api);
                 }
             }
-
         }
     }
 

@@ -120,6 +120,6 @@
         }
     }
 
-    appControllers.controller('Retail_BE_ColumnDefinitionEditorController', ColumnDefinitionEditorController);
+    appControllers.controller('Retail_BE_GridColumnDefinitionEditorController', ColumnDefinitionEditorController);
 
 })(appControllers);

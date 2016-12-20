@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountGridDefinitionManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountGridDefinitionService'];
+    AccountGridDefinitionManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountDefinitionService'];
 
-    function AccountGridDefinitionManagementDirective(UtilsService, VRNotificationService, Retail_BE_AccountGridDefinitionService) {
+    function AccountGridDefinitionManagementDirective(UtilsService, VRNotificationService, Retail_BE_AccountDefinitionService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,7 +25,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Settings/Templates/AccountGridDefinitionTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/AccountGridDefinitionTemplate.html'
         };
 
         function AccountGridDefinitionManagementCtor($scope, ctrl) {
@@ -47,7 +47,7 @@
                         $scope.scopeModel.columnDefinitions.push(addedColumnDefinition);
                     };
 
-                    Retail_BE_AccountGridDefinitionService.addColumnDefinition(onColumnDefinitionAdded);
+                    Retail_BE_AccountDefinitionService.addGridColumnDefinition(onColumnDefinitionAdded);
                 };
                 $scope.scopeModel.onDeleteColumnDefinition = function (columnDefinition) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -106,7 +106,7 @@
                     $scope.scopeModel.columnDefinitions[index] = updatedColumnDefinition;
                 };
 
-                Retail_BE_AccountGridDefinitionService.editColumnDefinition(columnDefinition, onColumnDefinitionUpdated);
+                Retail_BE_AccountDefinitionService.editGridColumnDefinition(columnDefinition, onColumnDefinitionUpdated);
             }
         }
     }
