@@ -102,6 +102,7 @@
     <Compile Include="SaleCodeIterator.cs" />
     <Compile Include="SaleCode\SaleCodeCacheManager.cs" />
     <Compile Include="SaleCode\SaleCodeManager.cs" />
+    <Compile Include="SaleCode\SaleCodeQueryHandler.cs" />
     <Compile Include="SaleZoneManager.cs" />
     <Compile Include="SellingNumberPlanManager.cs" />
     <Compile Include="TransformationSteps\MasterPlanSaleCodeMatchStep.cs" />
