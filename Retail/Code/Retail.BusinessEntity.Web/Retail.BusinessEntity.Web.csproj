@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountDefinitionController.cs" />
     <Compile Include="Controllers\AccountIdentificationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
@@ -174,7 +175,11 @@
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Retail_BusinessEntity\Directives\Settings\MainExtensions\AccountViewDefinitions\Templates\" />
+    <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountGridDefinition\" />
+    <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountViewDefinition\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
@@ -407,6 +412,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-accountgriddefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-technical-settings-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\AccountGridDefinitionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-accountviewdefinitions.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\AccountViewDefinitionsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\TechnicalSettingsEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-recurringperiod-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />
@@ -422,12 +429,14 @@
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Services\AccountDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountGridDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PosAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\DistributorAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AgentAPIService.js" />
