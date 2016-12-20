@@ -428,6 +428,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Services\AccountGridDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
@@ -530,6 +531,8 @@
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ServiceTypeManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Settings\ColumnDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Settings\ColumnDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\StatusChargingSet\StatusChargingSetEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\StatusChargingSet\StatusChargingSetEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Status\StatusDefinitionEditor.html" />
