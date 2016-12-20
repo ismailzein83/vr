@@ -24,9 +24,7 @@ namespace Retail.BusinessEntity.Business
             Func<Switch, bool> filterExpression = (switchItem) =>
                 (input.Query.Name == null || switchItem.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
                 (input.Query.Description == null ||
-                    (switchItem.Settings.Description != null && switchItem.Settings.Description.ToLower().Contains(input.Query.Description.ToLower()))) &&
-                (input.Query.Location == null ||
-                    (switchItem.Settings.Location != null && switchItem.Settings.Location.ToLower().Contains(input.Query.Location.ToLower())));
+                    (switchItem.Settings.Description != null && switchItem.Settings.Description.ToLower().Contains(input.Query.Description.ToLower())));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper));
         }

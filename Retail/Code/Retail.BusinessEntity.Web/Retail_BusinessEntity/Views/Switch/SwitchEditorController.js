@@ -94,7 +94,6 @@
                 if (switchEntity.Settings == null)
                     return;
                 $scope.scopeModel.description = switchEntity.Settings.Description;
-                $scope.scopeModel.location = switchEntity.Settings.Location;
             }
             function loadSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -145,7 +144,6 @@
         {
             var settings = settingsDirectiveAPI.getData();
             settings.Description = $scope.scopeModel.description;
-            settings.Location = $scope.scopeModel.location;
 
             return {
                 SwitchId: switchEntity != undefined ? switchEntity.SwitchId : undefined,

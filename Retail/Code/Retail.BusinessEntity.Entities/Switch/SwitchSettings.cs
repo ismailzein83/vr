@@ -9,9 +9,6 @@ namespace Retail.BusinessEntity.Entities
     public class SwitchSettings
     {
         public string Description { get; set; }
-
-        public string Location { get; set; }
-
         public SwitchIntegration SwitchIntegration { get; set; }
     }
 }
