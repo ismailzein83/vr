@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
+app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_OrderTypeEnum',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_OrderTypeEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -46,7 +46,6 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     function getDirectiveAPI() {
 
                         directiveAPI.load = function (payload) {
-
                             var query = getQuery(payload);
 
                             var dataRetrievalInput = {
@@ -172,7 +171,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     TableId: payLoad.TableId,
                     FilterGroup: payLoad.FilterGroup,
                     TopRecords: payLoad.Settings.TopRecords,
-                    OrderBy: [payLoad.Settings.TopMeasure]
+                    OrderType: VR_Analytic_OrderTypeEnum.ByAllMeasures.value
                 };
                 return queryFinalized;
             }
