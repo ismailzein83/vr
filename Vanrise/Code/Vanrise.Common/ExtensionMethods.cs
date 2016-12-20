@@ -382,5 +382,23 @@ namespace Vanrise.Common
         }
 
         #endregion
+
+
+        #region Miscellaneous
+
+        /// <summary>
+        /// Check if object with reference type is null and throw a null reference excpetion with formated string.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="objectName">Defined Object Name</param>
+        /// <param name="id">Object Id</param>
+        public static void ThrowIfNull<T>(this T obj, string objectName, object id) where T : class
+        {
+            if (obj == null)
+                throw new NullReferenceException(string.Format("{0} '{1}'", objectName, id));
+        }
+
+        #endregion
     }
 }
