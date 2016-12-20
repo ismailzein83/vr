@@ -6,7 +6,7 @@
 
     function ColumnDefinitionService(VRModalService) {
 
-        function addColumnDefinitions(onColumnDefinitionAdded) {
+        function addColumnDefinition(onColumnDefinitionAdded) {
 
             var modalSettings = {};
 
@@ -14,10 +14,10 @@
                 modalScope.onColumnDefinitionAdded = onColumnDefinitionAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/ColumnDefinition/ColumnDefinitionEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Settings/ColumnDefinitionEditor.html', null, modalSettings);
         };
 
-        function editColumnDefinitions(columnDefinition, onColumnDefinitionUpdated) {
+        function editColumnDefinition(columnDefinition, onColumnDefinitionUpdated) {
 
             var parameters = {
                 columnDefinition: columnDefinition
@@ -29,7 +29,7 @@
                 modalScope.onColumnDefinitionUpdated = onColumnDefinitionUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/ColumnDefinition/ColumnDefinitionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Settings/ColumnDefinitionEditor.html', parameters, modalSettings);
         }
 
         return {
@@ -38,6 +38,6 @@
         };
     }
 
-    appControllers.service('Retail_BE_ColumnDefinitionService', ColumnDefinitionService);
+    appControllers.service('Retail_BE_AccountGridDefinitionService', ColumnDefinitionService);
 
 })(appControllers);

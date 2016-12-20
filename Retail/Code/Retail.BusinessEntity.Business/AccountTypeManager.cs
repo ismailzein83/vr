@@ -168,12 +168,12 @@ namespace Retail.BusinessEntity.Business
             return GetAccountGenericFields().GetRecord(fieldName);
         }
 
-        public IEnumerable<GenericFieldDefinition> GetGenericFieldDefinitions()
+        public IEnumerable<GenericFieldDefinitionInfo> GetGenericFieldDefinitionsInfo()
         {
             Dictionary<string, AccountGenericField> accountGenericFields = GetAccountGenericFields();
             if (accountGenericFields == null || accountGenericFields.Values.Count() == 0)
                 return null;
-            return accountGenericFields.Values.Select(itm => new GenericFieldDefinition() { Name = itm.Name, Title = itm.Title, FieldType = itm.FieldType });
+            return accountGenericFields.Values.Select(itm => new GenericFieldDefinitionInfo() { Name = itm.Name, Title = itm.Title, FieldType = itm.FieldType });
         }
 
         private void FillAccountCommonGenericFields(List<AccountGenericField> fields)

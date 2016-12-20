@@ -8,10 +8,7 @@
 
         var isEditMode;
 
-        var propertyName;
         var columnDefinitionEntity;
-        var properties; // properties are passed for validation
-        var objectType;
 
         //var objectPropertySelectiveAPI;
         //var objectPropertySelectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -57,38 +54,39 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+        }
+        function setTitle() {
+            $scope.title = (isEditMode) ?
+                UtilsService.buildTitleForUpdateEditor((columnDefinitionEntity != undefined) ? columnDefinitionEntity.FieldName : null, 'Column Definition') :
+                UtilsService.buildTitleForAddEditor('Column Definition');
+        }
+        function loadStaticData() {
 
-            function setTitle() {
-                $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((columnDefinitionEntity != undefined) ? columnDefinitionEntity.FieldName : null, 'Column Definition') :
-                    UtilsService.buildTitleForAddEditor('Column Definition');
-            }
-            function loadStaticData() {
+            if (columnDefinitionEntity == undefined)
+                return;
 
-                if (columnDefinitionEntity == undefined)
-                    return;
+            $scope.scopeModel.fieldName = columnDefinitionEntity.FieldName;
+            $scope.scopeModel.header = columnDefinitionEntity.Header;
+            $scope.scopeModel.IsAvailableInRoot = columnDefinitionEntity.IsAvailableInRoot;
+            $scope.scopeModel.IsAvailableInSubAccounts = columnDefinitionEntity.IsAvailableInSubAccounts;
+        }
+        function loadObjectPropertySelective() {
+            var objectPropertySelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                $scope.scopeModel.fieldName = columnDefinitionEntity.FieldName;
-                $scope.scopeModel.header = columnDefinitionEntity.Header;
-            }
-            function loadObjectPropertySelective() {
-                var objectPropertySelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            objectPropertySelectiveReadyDeferred.promise.then(function () {
+                var payload = {};
 
-                objectPropertySelectiveReadyDeferred.promise.then(function () {
-                    var payload = {};
+                if (objectType != undefined) {
+                    payload.objectType = objectType;
+                }
+                if (propertyEntity != undefined) {
+                    payload.objectPropertyEvaluator = propertyEntity.PropertyEvaluator;
+                }
 
-                    if (objectType != undefined) {
-                        payload.objectType = objectType;
-                    }
-                    if (propertyEntity != undefined) {
-                        payload.objectPropertyEvaluator = propertyEntity.PropertyEvaluator;
-                    }
+                VRUIUtilsService.callDirectiveLoad(objectPropertySelectiveAPI, payload, objectPropertySelectiveLoadDeferred);
+            });
 
-                    VRUIUtilsService.callDirectiveLoad(objectPropertySelectiveAPI, payload, objectPropertySelectiveLoadDeferred);
-                });
-
-                return objectPropertySelectiveLoadDeferred.promise;
-            }
+            return objectPropertySelectiveLoadDeferred.promise;
         }
 
         function insert() {
@@ -114,7 +112,9 @@
 
             return {
                 FieldName: $scope.scopeModel.fieldName,
-                Header: $scope.scopeModel.header
+                Header: $scope.scopeModel.header,
+                IsAvailableInRoot: $scope.scopeModel.IsAvailableInRoot,
+                IsAvailableInSubAccounts: $scope.scopeModel.IsAvailableInSubAccounts
                 //PropertyEvaluator: propertyEvaluator
             };
         }

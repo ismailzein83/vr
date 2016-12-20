@@ -2,12 +2,28 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoading">
             <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
                 </vr-columns>
                 <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="2" ismultipleselection="true"></retail-be-accounttype-selector>
             </vr-row>
+            <vr-row ng-show="advancedSelected" removeline>
+                <vr-columns width="fullrow">
+                    <vr-section title="Advanced Filter" collapsible>
+                        <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
         </div>
+
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">

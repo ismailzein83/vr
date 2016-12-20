@@ -29,13 +29,15 @@
 
             var selectorAPI;
 
+            var accountGenericFieldDefinitionSelectorAPI;
+            var accountGenericFieldDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
 
                 $scope.scopeModel = {};
-                $scope.scopeModel.genericFieldDefinitions = [];
 
-                $scope.scopeModel.onSelectorReady = function (api) {
-                    selectorAPI = api;
+                $scope.scopeModel.onAccountGenericFieldDefinitionSelectorReady = function (api) {
+                    accountGenericFieldDefinitionSelectorAPI = api;
                     defineAPI();
                 };
             }
@@ -46,28 +48,24 @@
 
                     var promises = [];
                     var genericFieldDefinition;
-                    
+
                     if (payload != undefined && payload.objectPropertyEvaluator != undefined) {
                         genericFieldDefinition = payload.objectPropertyEvaluator.GenericFieldDefinition;
                     }
 
-                    var selectorLoadPromise = getSelectorLoadPromise();
-                    promises.push(selectorLoadPromise);
+                    var accountGenericFieldDefinitionSelectorLoadPromise = getAccountGenericFieldDefinitionSelectorLoadPromise();
+                    promises.push(accountGenericFieldDefinitionSelectorLoadPromise);
 
 
-                    function getSelectorLoadPromise() {
+                    function getAccountGenericFieldDefinitionSelectorLoadPromise() {
+                        var accountGenericFieldDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitions().then(function (response) {
-                            if (response != null) {
-                                for (var i = 0; i < response.length; i++) {
-                                    $scope.scopeModel.genericFieldDefinitions.push(response[i]);
-                                }
-                                if (genericFieldDefinition != undefined) {
-                                    $scope.scopeModel.selectedGenericFieldDefinition =
-                                        UtilsService.getItemByVal($scope.scopeModel.genericFieldDefinitions, genericFieldDefinition.Name, 'Name');
-                                }
-                            }
-                        });
+                        var accountGenericFieldDefinitionSelectorPayload = {
+                            genericFieldDefinition: genericFieldDefinition
+                        };
+                        VRUIUtilsService.callDirectiveLoad(accountGenericFieldDefinitionSelectorAPI, accountGenericFieldDefinitionSelectorPayload, accountGenericFieldDefinitionSelectorLoadDeferred);
+
+                        return accountGenericFieldDefinitionSelectorLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -77,7 +75,7 @@
 
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.VRObjectTypes.RetailAccountPropertyEvaluator, Retail.BusinessEntity.MainExtensions",
-                        GenericFieldDefinition: $scope.scopeModel.selectedGenericFieldDefinition
+                        GenericFieldDefinition: accountGenericFieldDefinitionSelectorAPI.getData()
                     };
                     return data;
                 };

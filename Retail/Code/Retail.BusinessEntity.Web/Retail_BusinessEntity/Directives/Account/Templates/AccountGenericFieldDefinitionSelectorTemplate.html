@@ -1,1 +1,13 @@
 ﻿
+
+<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-select on-ready="scopeModel.onSelectorReady"
+               datasource="scopeModel.genericFieldDefinitions"
+               selectedvalues="scopeModel.selectedGenericFieldDefinition"
+               datavaluefield="Name"
+               datatextfield="Title"
+               label="Account Fields"
+               isrequired="ctrl.isrequired"
+               hideremoveicon>
+    </vr-select>
+</vr-columns>

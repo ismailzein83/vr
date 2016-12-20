@@ -36,8 +36,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccountType'), accountType);
         }
 
-        function GetGenericFieldDefinitions(accountType) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetGenericFieldDefinitions'));
+        function GetGenericFieldDefinitionsInfo(accountType) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetGenericFieldDefinitionsInfo'));
         }
 
         function HasViewAccountTypesPermission() {
@@ -59,7 +59,7 @@
             GetAccountTypePartDefinitionExtensionConfigs: GetAccountTypePartDefinitionExtensionConfigs,
             AddAccountType: AddAccountType,
             UpdateAccountType: UpdateAccountType,
-            GetGenericFieldDefinitions: GetGenericFieldDefinitions,
+            GetGenericFieldDefinitionsInfo: GetGenericFieldDefinitionsInfo,
             HasViewAccountTypesPermission: HasViewAccountTypesPermission,
             HasAddAccountTypePermission: HasAddAccountTypePermission,
             HasUpdateAccountTypePermission: HasUpdateAccountTypePermission

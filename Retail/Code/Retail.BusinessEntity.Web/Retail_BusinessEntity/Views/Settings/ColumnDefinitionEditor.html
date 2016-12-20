@@ -4,10 +4,18 @@
 
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox type="text" label="Field Name" value="scopeModel.fieldName" isrequired></vr-textbox>
+                    <vr-textbox type="text" value="scopeModel.fieldName" label="Field Name" isrequired></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-textbox type="text" label="Header" value="scopeModel.header"></vr-textbox>
+                    <vr-textbox type="text" value="scopeModel.header" label="Header"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-switch value="scopeModel.IsAvailableInRoot" label="Available In Root"></vr-switch>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-switch value="scopeModel.IsAvailableInSubAccounts" label="Available In SubAccounts"></vr-switch>
                 </vr-columns>
             </vr-row>
             <!--<vr-common-objectpropertyevaluator-selective on-ready="scopeModel.onObjectPropertySelectiveReady"></vr-common-objectpropertyevaluator-selective>-->

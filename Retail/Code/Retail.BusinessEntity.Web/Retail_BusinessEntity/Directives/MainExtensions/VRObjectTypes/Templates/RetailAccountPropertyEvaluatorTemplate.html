@@ -1,12 +1,7 @@
 ﻿
 
-<vr-columns width="1/2row">
-    <vr-select on-ready="scopeModel.onSelectorReady"
-               datasource="scopeModel.genericFieldDefinitions"
-               selectedvalues="scopeModel.selectedGenericFieldDefinition"
-               datavaluefield="Name"
-               datatextfield="Title"
-               label="Account Fields"
-               hideremoveicon>
-    </vr-select>
-</vr-columns>
+<retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onAccountGenericFieldDefinitionSelectorReady" 
+                                                   normal-col-num="6" 
+                                                   isrequired="true">
+</retail-be-account-genericfielddefinition-selector>
+
