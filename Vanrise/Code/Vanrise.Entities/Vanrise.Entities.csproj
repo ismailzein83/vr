@@ -82,6 +82,9 @@
     <Compile Include="UserActionAudit\UserActionAuditDetail.cs" />
     <Compile Include="UserActionAudit\UserActionAuditQuery.cs" />
     <Compile Include="VRButtonType.cs" />
+    <Compile Include="VRDocument\VRDocumentsDefinition.cs" />
+    <Compile Include="VRDocument\VRDocumentItemDefinition.cs" />
+    <Compile Include="VRDocument\VRDocumentSetting.cs" />
     <Compile Include="VRMail\VRMailAttachement.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentPDF.cs" />
