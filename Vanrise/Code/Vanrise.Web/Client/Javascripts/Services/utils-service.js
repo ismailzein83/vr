@@ -827,6 +827,14 @@
             }
             return dateAsString;
         }
+
+        function isNumericValue(value) {
+            return !isNaN(value);
+        }
+
+        function isIntegerValue(value) {
+            return !isNaN(parseFloat(value)) && isFinite(value) && Math.floor(value) === value;
+        }
         return ({
             replaceAll: replaceAll,
             waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -883,7 +891,9 @@
             isContextReadOnly: isContextReadOnly,
             setContextReadOnly: setContextReadOnly,
             createDateFromString: createDateFromString,
-            parseDateToString: parseDateToString
+            parseDateToString: parseDateToString,
+            isNumericValue: isNumericValue,
+            isIntegerValue: isIntegerValue
         });
     }
 

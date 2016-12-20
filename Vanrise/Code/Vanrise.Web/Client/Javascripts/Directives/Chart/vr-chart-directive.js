@@ -247,6 +247,12 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     },
                     series: series,
                     tooltip: {
+
+                        formatter: function () {
+                            var s = this.key;
+                            s += '<br/><span style="color:' + this.point.color + '">\u25CF</span> ' + this.series.name + ': <b>' + formatValue(this.point.y) + '</b>'
+                            return s;
+                        },
                         shared: true
                     },
                 });
@@ -360,6 +366,14 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             var seriesSettings = series;
 
             var tooltipSettings = {
+                formatter: function () {
+                    var s = '<b>' + this.x + '</b>';
+                    $.each(this.points, function (i, point) {
+                        s += '<br/><span style="color:' + point.series.color + '">\u25CF</span> ' + point.series.name + ': ' + formatValue(point.y);
+                    });
+
+                    return s;
+                },
                 shared: true
             };
             api.hideChart();
@@ -373,6 +387,10 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 tooltip: tooltipSettings,
             });
             isChartAvailable = true;
+        }
+
+        function formatValue(value) {
+            return (UtilsService.isIntegerValue(value) ? Highcharts.numberFormat(value, 0) : (UtilsService.isNumericValue(value) ? Highcharts.numberFormat(value, 4) : value));
         }
 
         function defineAPI() {
