@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Timers;
 using Vanrise.Fzero.Bypass;
 using Microsoft.Reporting.WebForms;
 using Vanrise.CommonLibrary;
-
-
 
 namespace Vanrise.Fzero.Services.ClientReport
 {
@@ -22,28 +21,14 @@ namespace Vanrise.Fzero.Services.ClientReport
 		    InitializeComponent();
 	    }
 
-        private void ErrorLog(string message)
-        {
-            string cs = "Client Report Service";
-            EventLog elog = new EventLog();
-            if (!EventLog.SourceExists(cs))
-            {
-                EventLog.CreateEventSource(cs, cs);
-            }
-            elog.Source = cs;
-            elog.EnableRaisingEvents = true;
-            elog.WriteEntry(message);
-        }
-
         protected override void OnStart(string[] args)
         {
-            base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
+            base.RequestAdditionalTime(15000); // timeout in minutes for startup
             //Debugger.Launch(); // launch and attach debugger
             int timeInterval;
-
             bool parsed = Int32.TryParse(ConfigurationManager.AppSettings["TimeInterval"], out timeInterval);
 
-            // Create a timer with a ten second interval.
+            // Create a timer.
             aTimer = new System.Timers.Timer(timeInterval);// 2 hours
             // Hook up the Elapsed event for the timer.
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
@@ -61,46 +46,42 @@ namespace Vanrise.Fzero.Services.ClientReport
             {
                 if (HttpHelper.CheckInternetConnection("mail.vanrise.com", 26))
                 {
-
-                    foreach (Client i in Client.GetAllClients())
+                    foreach (Client client in Client.GetAllClients())
                     {
-                        if (i.ClientReport.Value)
+                        //Check if the client should send report or not
+                        if (client.ClientReport.Value)
                         {
-                            List<string> DistinctCLIs = new List<string>();
-                            List<ViewGeneratedCall> listFraudCases = GeneratedCall.GetClientFraudCases(i.ID);
+                            List<ViewGeneratedCall> listFraudCases = GeneratedCall.GetClientFraudCases(client.ID);
+                            List<string> listDistinctCLIs = new List<string>();
                             List<int> listDistinctFraudCases = new List<int>();
                             List<int> listRepeatedFraudCases = new List<int>();
-                            foreach (ViewGeneratedCall v in listFraudCases)
+                            foreach (ViewGeneratedCall generatedCall in listFraudCases)
                             {
-                                if (!DistinctCLIs.Contains(v.CLI))
+                                if (!listDistinctCLIs.Contains(generatedCall.CLI))
                                 {
-                                    DistinctCLIs.Add(v.CLI);
-                                    listDistinctFraudCases.Add(v.ID);
+                                    listDistinctCLIs.Add(generatedCall.CLI);
+                                    listDistinctFraudCases.Add(generatedCall.ID);
                                 }
                                 else
                                 {
-                                    listRepeatedFraudCases.Add(v.ID);
+                                    listRepeatedFraudCases.Add(generatedCall.ID);
                                 }
                             }
 
-
+                            //If the generated call is repeated update the generated call as IGNORED
                             if (listRepeatedFraudCases.Count > 0)
                             {
                                 GeneratedCall.UpdateReportStatus(listRepeatedFraudCases, (int)Enums.ReportingStatuses.Ignored, null);
                             }
 
-                            ErrorLog("Count: " + listDistinctFraudCases.Count);
+                            //If the generated call is distinct update the generated call as Reported
                             if (listDistinctFraudCases.Count > 0)
                             {
                                 GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
-                                SendReport(listDistinctFraudCases, i.Name, (int)Enums.Statuses.Fraud,  i.ClientEmail, i.ID, (i.GMT.Value - SysParameter.Global_GMT));
+                                SendReport(listDistinctFraudCases, client.Name, (int)Enums.Statuses.Fraud,  client.ClientEmail, client.ID, (client.GMT.Value - SysParameter.Global_GMT));
                             }
-
-
                         }
                     }
-
-
                 }
             }
             catch(Exception ex)
@@ -109,9 +90,32 @@ namespace Vanrise.Fzero.Services.ClientReport
                 ErrorLog("OnTimedEvent: " + ex.InnerException);
                 ErrorLog("OnTimedEvent: " + ex.ToString());
             }
+        }
 
+        private void UpdateRecommendedAction(Vanrise.Fzero.Bypass.Report report, int clientId, int statusId)
+        {
+            if (clientId == (int)Enums.Clients.ST)
+            {
+                report.RecommendedAction =
+                    "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.";
+                report.ApplicationUserID = 8;
+            }
+            else
+            {
+                report.RecommendedAction =
+                    "It is highly recommended to immediately investigate and trace these international calls and provide us with the respective CDR's of these Fradulent Calls as they were termnated to your Network and did not pass legally through ITPC's IGW.";
+                report.ApplicationUserID = 3;
+            }
 
-          
+            if (statusId == (int)Enums.Statuses.Suspect)
+            {
+                report.RecommendedActionID = (int)Enums.RecommendedAction.Investigate;
+            }
+            else if (statusId == (int)Enums.Statuses.Fraud)
+            {
+                report.RecommendedActionID = (int)Enums.RecommendedAction.Block;
+
+            }
         }
 
         private void SendReport(List<int> ListIds, string ClientName, int StatusID, string EmailAddress, int ClientID, int DifferenceInGMT)
@@ -119,35 +123,20 @@ namespace Vanrise.Fzero.Services.ClientReport
             try
             {
                 ReportViewer rvToOperator = new ReportViewer();
-                ReportViewer rvToOperator2 = new ReportViewer();
+                ReportViewer rvToOperatorExcel = new ReportViewer();
                 ReportViewer rvToOperatorNatSec = new ReportViewer();
-                Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
+                string ReportID;
 
+                Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
 
                 report.SentDateTime = DateTime.Now;
 
-                if (ClientID == 3)
-                {
-                    report.RecommendedAction =
-                        "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.";
-                    report.ApplicationUserID = 8;
-                }
-                else
-                {
-                    report.RecommendedAction =
-                        "It is highly recommended to immediately investigate and trace these international calls and provide us with the respective CDR's of these Fradulent Calls as they were termnated to your Network and did not pass legally through ITPC's IGW.";
-                    report.ApplicationUserID = 3;
-                }
-
-                ErrorLog("ClientID: " + ClientID);
-
-                string ReportID;
-                    
+                UpdateRecommendedAction(report, ClientID, StatusID);
+  
                 string ReportIDBeforeCounter = "FZ" + ClientName.Substring(0, 1) +
                                                DateTime.Now.Year.ToString("D2").Substring(2) +
                                                DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
                 Vanrise.Fzero.Bypass.Report LastReport = Vanrise.Fzero.Bypass.Report.Load(ReportIDBeforeCounter);
-
 
                 if (LastReport == null)
                 {
@@ -158,28 +147,11 @@ namespace Vanrise.Fzero.Services.ClientReport
                     ReportID = ReportIDBeforeCounter + (int.Parse(LastReport.ReportID.Substring(9)) + 1).ToString("D4");
                 }
 
-                ErrorLog("ReportID: " + ReportID);
-
                 report.ReportID = ReportID;
-
-
-
-                if (StatusID == (int) Enums.Statuses.Suspect)
-                {
-                    report.RecommendedActionID = (int) Enums.RecommendedAction.Investigate;
-                }
-                else if (StatusID == (int) Enums.Statuses.Fraud)
-                {
-                    report.RecommendedActionID = (int) Enums.RecommendedAction.Block;
-
-                }
-
 
                 GeneratedCall.SendReport(ListIds, Vanrise.Fzero.Bypass.Report.Save(report).ID);
                 ReportParameter[] parameters = new ReportParameter[3];
                 parameters[0] = new ReportParameter("ReportID", report.ReportID);
-
-
 
                 if (ClientID == 3)
                 {
@@ -192,16 +164,11 @@ namespace Vanrise.Fzero.Services.ClientReport
                         "It is highly recommended to immediately investigate and trace these international calls and provide us with the respective CDR's of these Fradulent Calls as they were termnated to your Network and did not pass legally through ITPC's IGW.");
                 }
 
-
-
                 string exeFolder = Path.GetDirectoryName(@"C:\FMS\Vanrise.Fzero.Services.ClientReport\");
                 string reportPath = string.Empty;
-                string reportPath2 = string.Empty;
+                string reportPathExcel = string.Empty;
                 bool isNatSecurity = false;
 
-                if (LastReport.ReportID.Substring(2, 1) == "K" || LastReport.ReportID.Substring(2, 1) == "A" || LastReport.ReportID.Substring(2, 1) == "Z")
-                    isNatSecurity = true;
-                
                 string reportPathNatSec = string.Empty;
                 if (ClientID == (int) Enums.Clients.ST) //-- Syrian Telecom
                 {
@@ -210,11 +177,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                 else if (ClientID == (int) Enums.Clients.Zain) //-- Zain
                 {
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToZainOperator.rdlc");
-                    reportPath2 = Path.Combine(exeFolder, @"Reports\rptToZainOperatorExcel.rdlc");
-
-                    ErrorLog("reportPath: " + reportPath);
-                    ErrorLog("reportPath2: " + reportPath2);
-
+                    reportPathExcel = Path.Combine(exeFolder, @"Reports\rptToZainOperatorExcel.rdlc");
                 }
                 else if (ClientID == (int) Enums.Clients.ITPC) //-- ITPC
                 {
@@ -229,13 +192,9 @@ namespace Vanrise.Fzero.Services.ClientReport
 
                 reportPathNatSec = Path.Combine(exeFolder, @"Reports\rptToOperatorIraqNationalSec.rdlc");
 
-
-
                 rvToOperator.LocalReport.ReportPath = reportPath;
-                rvToOperator2.LocalReport.ReportPath = reportPath2;
+                rvToOperatorExcel.LocalReport.ReportPath = reportPathExcel;
                 rvToOperatorNatSec.LocalReport.ReportPath = reportPathNatSec;
-
-
 
                 ReportDataSource SignatureDataset = new ReportDataSource("SignatureDataset",
                     (ApplicationUser.LoadbyUserId(1)).User.Signature);
@@ -250,34 +209,22 @@ namespace Vanrise.Fzero.Services.ClientReport
                 ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls",
                     GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
-                rvToOperator2.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
+                rvToOperatorExcel.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
                 rvToOperatorNatSec.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
                 string CCs = EmailCC.GetClientEmailCCs(ClientID);
-
-
-
                 
-                
-
-
-
                 parameters[2] = new ReportParameter("HideSignature", "true");
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
-                rvToOperator2.LocalReport.SetParameters(parameters);
-                rvToOperator2.LocalReport.Refresh();
+                rvToOperatorExcel.LocalReport.SetParameters(parameters);
+                rvToOperatorExcel.LocalReport.Refresh();
                 rvToOperatorNatSec.LocalReport.SetParameters(parameters);
                 rvToOperatorNatSec.LocalReport.Refresh();
                 string emailNatSec = ConfigurationManager.AppSettings["EmailNatSec"];
                 string emailCCNatSec = ConfigurationManager.AppSettings["EmailCCNatSec"];
 
                 string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
-                string filenameExcel2 = ExportReportToExcel(report.ReportID + ".xls", rvToOperator2);
-
-                ErrorLog("filenameExcel: " + filenameExcel);
-                ErrorLog("filenameExcel2: " + filenameExcel2);
-
-
+                string filenameExcelZain = ExportReportToExcel(report.ReportID + ".xls", rvToOperatorExcel);
 
                 parameters[2] = new ReportParameter("HideSignature", "false");
                 rvToOperator.LocalReport.SetParameters(parameters);
@@ -288,64 +235,40 @@ namespace Vanrise.Fzero.Services.ClientReport
                 string filenamePDF = ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
                 string filenamePDFNatSec = ExportReportToPDF(report.ReportID + ".pdf", rvToOperatorNatSec);
 
-                ErrorLog("filenamePDF: " + filenamePDF);
-
-
-                if (ClientID == 3)
+                if (ClientID == (int)Enums.Clients.ST) //-- Syrian Telecom
                 {
                     ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
                     EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF,
                         EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
                         CCs, report.ReportID, "FMS_Syria_Profile");
-
-                    if (isNatSecurity)
-                    {
-                        ExportReportToPDF(report.ReportID + ".pdf", rvToOperatorNatSec);
-                        EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenamePDFNatSec,
-                            emailNatSec,
-                            ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
-                            emailCCNatSec, report.ReportID, "FMS_Syria_Profile");
-                    }
                 }
                 else
                 {
                     string zainExcel = ConfigurationManager.AppSettings["ZainExcel"];
-
-                    ErrorLog("zainExcel: " + zainExcel);
 
                     if (string.IsNullOrEmpty(zainExcel))
                     {
                         EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress,
                             ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
                             report.ReportID, "FMS_Profile");
-                        if (isNatSecurity)
+
+                        if (ClientID == (int)Enums.Clients.ITPC)
                         {
-                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFNatSec, emailNatSec,
-                                ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, emailCCNatSec,
-                                report.ReportID, "FMS_Profile");
+                            SendEmailNationalSecurity(report.ReportID, ListIds.Count, filenamePDFNatSec);
                         }
                     }
                     else
                     {
-                        if (ClientID == (int) Enums.Clients.Zain)
+                        if (ClientID == (int)Enums.Clients.ITPC)
                         {
-                            ErrorLog("Zain Client");
-
                             if (zainExcel == "true")
                             {
-                                ErrorLog("ListIds.Count: " + ListIds.Count + " filenameExcel2: " + filenameExcel2 +
-                                         " filenamePDF: " + filenamePDF
-                                         + " EmailAddress: " + EmailAddress + " report.ReportID: " + report.ReportID);
                                 EmailManager.SendReporttoMobileOperator(ListIds.Count,
-                                    filenameExcel2 + ";" + filenamePDF, EmailAddress,
+                                    filenameExcelZain + ";" + filenamePDF, EmailAddress,
                                     ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
                                     CCs, report.ReportID, "FMS_Profile");
 
-                                EmailManager.SendReporttoMobileOperator(ListIds.Count,
-                                    filenamePDFNatSec, emailNatSec,
-                                    ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" +
-                                    report.ReportID,
-                                    emailCCNatSec, report.ReportID, "FMS_Profile");
+                                SendEmailNationalSecurity(report.ReportID, ListIds.Count, filenamePDFNatSec);
                             }
                             else
                             {
@@ -353,14 +276,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                                     ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
                                     CCs, report.ReportID, "FMS_Profile");
 
-                                if (isNatSecurity)
-                                {
-                                    EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFNatSec,
-                                        emailNatSec,
-                                        ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" +
-                                        report.ReportID,
-                                        emailCCNatSec, report.ReportID, "FMS_Profile");
-                                }
+                                SendEmailNationalSecurity(report.ReportID, ListIds.Count, filenamePDFNatSec);
                             }
                         }
                         else
@@ -368,15 +284,8 @@ namespace Vanrise.Fzero.Services.ClientReport
                             EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress,
                                 ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
                                 report.ReportID, "FMS_Profile");
-                            if (isNatSecurity)
-                            {
-                                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFNatSec, emailNatSec,
-                                    ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, emailCCNatSec,
-                                    report.ReportID, "FMS_Profile");
-                            }
                         }
                     }
-
                 }
             }
             catch (Exception e)
@@ -385,6 +294,19 @@ namespace Vanrise.Fzero.Services.ClientReport
             }
         }
 
+        #region SendEmailNatSec
+        private void SendEmailNationalSecurity(string reportId, int countListID, string filenamePDFNatSec)
+        {
+            string emailNatSec = ConfigurationManager.AppSettings["EmailNatSec"];
+            string emailCCNatSec = ConfigurationManager.AppSettings["EmailCCNatSec"];
+            string operatorPath = ConfigurationManager.AppSettings["OperatorPath"];
+
+            EmailManager.SendReporttoMobileOperator(countListID, filenamePDFNatSec, emailNatSec,
+                    operatorPath + "?ReportID=" + reportId, emailCCNatSec, reportId, "FMS_Profile");
+        }
+        #endregion
+
+        #region ExportReportsPDFExcel
         private string ExportReportToPDF(string reportName, ReportViewer rvToOperator)
         {
             Warning[] warnings;
@@ -427,20 +349,25 @@ namespace Vanrise.Fzero.Services.ClientReport
             return filename;
         }
 
+        #endregion
+
+        #region Logging
+        private void ErrorLog(string message)
+        {
+            string cs = "Client Report Service";
+            EventLog elog = new EventLog();
+            if (!EventLog.SourceExists(cs))
+            {
+                EventLog.CreateEventSource(cs, cs);
+            }
+            elog.Source = cs;
+            elog.EnableRaisingEvents = true;
+            elog.WriteEntry(message);
+        }
         private void eventLog1_EntryWritten(object sender, EntryWrittenEventArgs e)
         {
 
         }
-
+        #endregion
     }
-
 }
-
-
-
-
-
-
-
-
-
