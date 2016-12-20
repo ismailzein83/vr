@@ -9,7 +9,7 @@
         var isEditMode;
 
         var propertyName;
-        var propertyEntity;
+        var columnDefinitionEntity;
         var properties; // properties are passed for validation
         var objectType;
 
@@ -24,34 +24,17 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                propertyName = parameters.propertyName;
-                properties = parameters.properties;
-                if (parameters.context != undefined)
-                    objectType = parameters.context.getObjectType();
+                columnDefinitionEntity = parameters.columnDefinition;
             }
-            isEditMode = (propertyName != undefined);
+            isEditMode = (columnDefinitionEntity != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onObjectPropertySelectiveReady = function (api) {
-                objectPropertySelectiveAPI = api;
-                objectPropertySelectiveReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onValidateProperties = function () {
-
-                if (propertyEntity != undefined && propertyEntity.Name == $scope.scopeModel.propertyName)
-                    return null;
-
-                for (var i = 0; i < properties.length; i++) {
-                    var property = properties[i];
-                    if ($scope.scopeModel.propertyName.toLowerCase() == property.Name.toLowerCase()) {
-                        return 'Same Property Name Exists';
-                    }
-                }
-                return null;
-            };
+            //$scope.scopeModel.onObjectPropertySelectiveReady = function (api) {
+            //    objectPropertySelectiveAPI = api;
+            //    objectPropertySelectiveReadyDeferred.resolve();
+            //};
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -65,27 +48,11 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-
-            if (isEditMode) {
-                setPropertyEntityFromParameters().then(function () {
-                    loadAllControls()
-                });
-            }
-            else {
-                loadAllControls();
-            }
-        }
-
-        function setPropertyEntityFromParameters() {
-            propertyEntity = UtilsService.getItemByVal(properties, propertyName, 'Name');
-
-            var deferred = UtilsService.createPromiseDeferred();
-            deferred.resolve();
-            return deferred.promise;
+            loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectPropertySelective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -93,16 +60,16 @@
 
             function setTitle() {
                 $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((propertyEntity != undefined) ? propertyEntity.Name : null, 'Object Type Property Definition') :
-                    UtilsService.buildTitleForAddEditor('Object Type Property Definition');
+                    UtilsService.buildTitleForUpdateEditor((columnDefinitionEntity != undefined) ? columnDefinitionEntity.FieldName : null, 'Column Definition') :
+                    UtilsService.buildTitleForAddEditor('Column Definition');
             }
             function loadStaticData() {
 
-                if (propertyEntity == undefined)
+                if (columnDefinitionEntity == undefined)
                     return;
 
-                $scope.scopeModel.propertyName = propertyEntity.Name;
-                $scope.scopeModel.description = propertyEntity.Description;
+                $scope.scopeModel.fieldName = columnDefinitionEntity.FieldName;
+                $scope.scopeModel.header = columnDefinitionEntity.Header;
             }
             function loadObjectPropertySelective() {
                 var objectPropertySelectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -153,6 +120,6 @@
         }
     }
 
-    appControllers.controller('Retail_BE_ColumnDefinitionEditorController', VRObjectTypePropertyDefinitionController);
+    appControllers.controller('Retail_BE_ColumnDefinitionEditorController', ColumnDefinitionEditorController);
 
 })(appControllers);
