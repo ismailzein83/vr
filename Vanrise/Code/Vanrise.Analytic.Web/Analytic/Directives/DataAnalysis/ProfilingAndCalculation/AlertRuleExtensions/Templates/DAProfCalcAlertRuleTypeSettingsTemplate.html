@@ -1,5 +1,12 @@
-﻿
-
-<vr-columns width="1/2row">
-    <vr-analytic-dataanalysisdefinition-selector on-ready="scopeModel.onDataAnalysisDefinitionSelectorReady"></vr-analytic-dataanalysisdefinition-selector>
-</vr-columns>
+﻿<vr-tab header="'Settings'">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-analytic-dataanalysisdefinition-selector on-ready="scopeModel.onDataAnalysisDefinitionSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedDataAnalysisDefinition"
+                                                         onselectionchanged="onDataAnalysisDefinitionSelectionChanged"></vr-analytic-dataanalysisdefinition-selector>
+        </vr-columns>
+        <vr-columns width="1/2row" ng-show="scopeModel.selectedDataAnalysisDefinition!=undefined">
+            <vr-genericdata-datarecordstorage-selector on-ready="onSourceDataRecordStorageSelectorReady" selectedvalues="selectedSourceDataRecordStorages" isrequired="true"
+                                                       customlabel="Source Record Storages" ismultipleselection="true"></vr-genericdata-datarecordstorage-selector>
+        </vr-columns>
+    </vr-row>
+</vr-tab>

@@ -129,7 +129,7 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="DAProfCalcProcess.xaml">
+    <XamlAppDef Include="DAProfCalcStoreOutputProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

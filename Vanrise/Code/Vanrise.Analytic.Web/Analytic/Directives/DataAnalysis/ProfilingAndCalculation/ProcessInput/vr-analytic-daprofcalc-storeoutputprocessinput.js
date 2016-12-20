@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDaprofcalcProcessinput", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'DAProfCalcChunkTimeEnum',
+app.directive("vrAnalyticDaprofcalcStoreoutputprocessinput", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'DAProfCalcChunkTimeEnum',
     function (UtilsService, VRUIUtilsService, VRValidationService, DAProfCalcChunkTimeEnum) {
         var directiveDefinitionObject = {
             restrict: "E",
@@ -22,7 +22,7 @@ app.directive("vrAnalyticDaprofcalcProcessinput", ['UtilsService', 'VRUIUtilsSer
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/ProcessInput/Templates/DAProfCalcProcessInputTemplate.html'
+            templateUrl: '/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/ProcessInput/Templates/DAProfCalcStoreOutputProcessInputTemplate.html'
         };
 
         function DirectiveConstructor($scope, ctrl) {
@@ -92,7 +92,7 @@ app.directive("vrAnalyticDaprofcalcProcessinput", ['UtilsService', 'VRUIUtilsSer
                 api.getData = function () {
                     return {
                         InputArguments: {
-                            $type: "Vanrise.Analytic.BP.Arguments.DAProfCalcProcessInput, Vanrise.Analytic.BP.Arguments",
+                            $type: "Vanrise.Analytic.BP.Arguments.DAProfCalcStoreOutputInput, Vanrise.Analytic.BP.Arguments",
                             DAProfCalcDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds(),
                             InRecordStorageIds: sourceDataRecordStorageSelectorAPI.getSelectedIds(),
                             FromTime: $scope.fromDate,

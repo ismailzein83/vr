@@ -25,6 +25,10 @@
 
             var dataAnalysisDefinitionSelectorAPI;
             var dataAnalysisDefinitionSelectoReadyDeferred = UtilsService.createPromiseDeferred();
+            var selectedDataAnalysisDefinitionSelectoReadyDeferred;
+
+            var sourceDataRecordStorageSelectorAPI;
+            var sourceDataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -34,21 +38,44 @@
                     dataAnalysisDefinitionSelectoReadyDeferred.resolve();
                 };
 
+                $scope.onSourceDataRecordStorageSelectorReady = function (api) {
+                    sourceDataRecordStorageSelectorAPI = api;
+                    sourceDataRecordStorageSelectorReadyDeferred.resolve();
+                };
+
+                $scope.onDataAnalysisDefinitionSelectionChanged = function (dataItem) {
+                    if (dataItem != undefined) {
+                        var filters = [];
+                        var daProfCalcDataRecordStorageFilter = {
+                            $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.MainExtensions',
+                            DataAnalysisDefinitionId: dataItem.DataAnalysisDefinitionId
+                        };
+                        filters.push(daProfCalcDataRecordStorageFilter);
+
+                        var setSourceLoader = function (value) { $scope.scopeModel.isLoadingSourceDataRecordStorage = value };
+                        var payload = {
+                            filters: filters
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceDataRecordStorageSelectorAPI, payload, setSourceLoader, selectedDataAnalysisDefinitionSelectoReadyDeferred);
+                    }
+                };
+
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-
+                    var promises = [];
                     var vrAlertRuleTypeSettings;
 
                     if (payload != undefined)
-                        vrAlertRuleTypeSettings = payload.vrAlertRuleTypeSettings;
+                        vrAlertRuleTypeSettings = payload.settings;
 
-
+                    if (vrAlertRuleTypeSettings != undefined) {
+                        selectedDataAnalysisDefinitionSelectoReadyDeferred = UtilsService.createPromiseDeferred();
+                    }
                     var dataAnalysisDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
                     dataAnalysisDefinitionSelectoReadyDeferred.promise.then(function () {
                         var dataAnalysisDefinitionSelectorPayload;
 
@@ -59,14 +86,39 @@
                         }
                         VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorAPI, dataAnalysisDefinitionSelectorPayload, dataAnalysisDefinitionSelectorLoadDeferred);
                     });
+                    promises.push(dataAnalysisDefinitionSelectorLoadDeferred.promise);
 
-                    return dataAnalysisDefinitionSelectorLoadDeferred.promise;       
+                    if (vrAlertRuleTypeSettings != undefined) {
+                        var sourceDataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(sourceDataRecordStorageSelectorLoadDeferred.promise);
+                        UtilsService.waitMultiplePromises([sourceDataRecordStorageSelectorReadyDeferred.promise, selectedDataAnalysisDefinitionSelectoReadyDeferred.promise]).then(function () {
+                            selectedDataAnalysisDefinitionSelectoReadyDeferred = undefined;
+                            var filters = [];
+                            var daProfCalcDataRecordStorageFilter = {
+                                $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.MainExtensions',
+                                DataAnalysisDefinitionId: vrAlertRuleTypeSettings.DataAnalysisDefinitionId
+                            };
+                            filters.push(daProfCalcDataRecordStorageFilter);
+
+                            var recordStoragePayload = {
+                                filters: filters,
+                                selectedIds: getSelectedSourceRecordStorageIds(vrAlertRuleTypeSettings.SourceRecordStorages)
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(sourceDataRecordStorageSelectorAPI, recordStoragePayload, sourceDataRecordStorageSelectorLoadDeferred);
+                        });
+
+                    }
+
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleTypeSettings, Vanrise.Analytic.Entities",
-                        DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds()
+                        DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds(),
+                        SourceRecordStorages: buildSourceRecordStorages()
                     };
                     return data;
                 };
@@ -74,7 +126,29 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
-            }
+            };
+
+            function buildSourceRecordStorages() {
+                var selectedRecordStorages = [];
+                var recordStorageIds = sourceDataRecordStorageSelectorAPI.getSelectedIds();
+                for (var x = 0; x < recordStorageIds.length; x++) {
+                    var currentItem = recordStorageIds[x];
+                    selectedRecordStorages.push({ DataRecordStorageId: currentItem });
+                }
+                return selectedRecordStorages;
+            };
+
+            function getSelectedSourceRecordStorageIds(sourceRecordStorages) {
+                if (sourceRecordStorages == undefined)
+                    return undefined;
+
+                var selectedRecordStorages = [];
+                for (var x = 0; x < sourceRecordStorages.length; x++) {
+                    var currentItem = sourceRecordStorages[x];
+                    selectedRecordStorages.push(currentItem.DataRecordStorageId);
+                }
+                return selectedRecordStorages;
+            };
         }
     }
 

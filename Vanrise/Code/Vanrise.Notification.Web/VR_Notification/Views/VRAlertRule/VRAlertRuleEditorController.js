@@ -126,10 +126,10 @@
         }
 
         function getVRAlertRuleType() {
+            $scope.scopeModel.SettingEditor = undefined;
             return VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleType(vrAlertRuleTypeId).then(function (response) {
                 vrAlertRuleTypeEntity = response;
                 $scope.scopeModel.SettingEditor = response.Settings.SettingEditor;
-
             });
         }
 

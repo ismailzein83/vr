@@ -17,8 +17,9 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-directivewrapper directive="scopeModel.SettingEditor" on-ready="scopeModel.onDirectiveReady">
-                </vr-directivewrapper>
+                <span ng-if="scopeModel.SettingEditor!=undefined">
+                    <vr-directivewrapper directive="scopeModel.SettingEditor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
+                </span>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
