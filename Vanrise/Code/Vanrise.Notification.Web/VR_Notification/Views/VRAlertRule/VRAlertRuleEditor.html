@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_Notification_VRAlertRuleEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="VR_Notification_VRAlertRuleEditorController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formvrAlertRuleEditor">
             <vr-tabs>
@@ -10,7 +10,7 @@
                         <vr-columns width="1/2row">
                             <vr-notification-alertruletype-selector on-ready="scopeModel.onAlertRuleTypeSelectorReady"
                                                                     isrequired="true"
-                                                                    selectedvalues="scopeModel.selectedRuleType" 
+                                                                    selectedvalues="scopeModel.selectedRuleType"
                                                                     onselectionchanged="scopeModel.onAlertRuleTypeSelectionChanged">
                             </vr-notification-alertruletype-selector>
                             <!--"-->
