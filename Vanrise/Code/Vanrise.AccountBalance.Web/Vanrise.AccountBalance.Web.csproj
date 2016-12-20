@@ -147,10 +147,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_AccountBalance\Directives\BalanceAccountType\Templates\" />
+    <Folder Include="VR_AccountBalance\Directives\BalanceAlertRule\" />
     <Folder Include="VR_AccountBalance\Directives\BillingTransactionType\Templates\" />
     <Folder Include="VR_AccountBalance\Views\BalanceAlertRule\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_AccountBalance\Constants\BalanceOrderByEnum.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\Templates\AccountBalancesGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\vr-accountbalance-accountbalances-grid.js" />
     <Content Include="VR_AccountBalance\Directives\AccountStatement\Templates\AccountStatementGridTemplate.html" />
@@ -160,7 +162,7 @@
     <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\vr-accountusage-periodsettings-daily.js" />
     <Content Include="VR_AccountBalance\Directives\AccountUsage\vr-accountusage-periodsettings.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAccountType\vr-accountbalance-accounttype-selector.js" />
-    <Content Include="VR_AccountBalance\Directives\BalanceAlertRule\Constants\ModuleConfig.js" />
+    <Content Include="VR_AccountBalance\Constants\ModuleConfig.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransactionType\vr-accountbalance-billingtransactiontype-selector.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTranactionSearch.html" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-search.js" />

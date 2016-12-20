@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBalanceAPIService', 'VRNotificationService',
-    function (VR_AccountBalance_BillingTransactionAPIService, VRNotificationService) {
+    function (VR_AccountBalance_LiveBalanceAPIService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -34,7 +34,7 @@ app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBal
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return VR_AccountBalance_BillingTransactionAPIService.GetFilteredBillingTransactions(dataRetrievalInput).then(function (response) {
+                    return VR_AccountBalance_LiveBalanceAPIService.GetFilteredAccountBalances(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -47,6 +47,7 @@ app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBal
             function defineAPI() {
                 var api = {};
                 api.loadGrid = function (query) {
+                    ctrl.orderBy = query.OrderBy;
                     return gridAPI.retrieveData(query);
                 };
                 if (ctrl.onReady != null)

@@ -53,6 +53,8 @@ namespace Vanrise.AccountBalance.Data.SQL
             {
                 cmd.Parameters.Add(new SqlParameter("@Top", query.Top));
                 cmd.Parameters.Add(new SqlParameter("@AccountTypeID", query.AccountTypeId));
+                cmd.Parameters.Add(new SqlParameter("@OrderBy", query.OrderBy));
+
             });
 
         }
@@ -368,16 +370,24 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         private string GetAccountBalanceQuery(AccountBalanceQuery query)
         {
-            StringBuilder whereBuilder = new StringBuilder(@"lv.AccountTypeID = @AccountTypeID");
+            StringBuilder whereBuilder = new StringBuilder(@"lb.AccountTypeID = @AccountTypeID");
 
-            if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
-                whereBuilder.Append(String.Format(@" AND lv.AccountID in ({0})", string.Join<long>(",", query.AccountsIds)));
+            if (query.AccountsIds!=null && query.AccountsIds.Count() > 0)
+                whereBuilder.Append(String.Format(@" AND lb.AccountID in ({0})", string.Join<long>(",", query.AccountsIds)));
 
-            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lv.ID , lv.AccountTypeID, lv.AccountID, lv.CurrencyID, lv.InitialBalance, lv.UsageBalance, lv.CurrentBalance
+            if (query.Sign != null)
+                whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign , query.Balance));
+
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.UsageBalance, lb.CurrentBalance 
                                                                     FROM [VR_AccountBalance].[LiveBalance] as lb
-                                                                    WHERE  (#WHEREPART#)  ");
+                                                                    WHERE  (#WHEREPART#) 
+                                                                    ORDER BY  lb.CurrentBalance #ORDERDIRECTION#
+                                                                    ");
+
 
             queryBuilder.Replace("#WHEREPART#", whereBuilder.ToString());
+
+            queryBuilder.Replace("#ORDERDIRECTION#", query.OrderBy);
 
             return queryBuilder.ToString();
         }

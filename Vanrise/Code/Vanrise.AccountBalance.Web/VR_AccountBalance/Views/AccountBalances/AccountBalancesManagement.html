@@ -3,9 +3,21 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline> 
                 <vr-directivewrapper directive="filterEditor" on-ready="onFilterDirectiveReady" normal-col-num="2" ismultipleselection="true"></vr-directivewrapper>
+                <vr-columns colnum="1">
+                    <vr-select hidefilterbox="true" label="Balance" datatextfield="text" datavaluefield="value"
+                               datasource="signs" selectedvalues="sign" onselectionchanged="onSignSelectionChanged"></vr-select>
+                </vr-columns>
+                <vr-columns colnum="1" withemptyline>
+                    <vr-textbox type="number" isrequired="sign!=undefined" value="balance"></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="1">
+                    <vr-select hideremoveicon="true" label="Balance Order By" datatextfield="description" datavaluefield="value"
+                               datasource="orderByOptions" selectedvalues="orderBy" isrequired="true"></vr-select>
+                </vr-columns>
                 <vr-columns width="normal">
                     <vr-numeric  label="Top" isrequired="true" value="top" minvalue="1"></vr-numeric>
                 </vr-columns>
+              
             </vr-row>
         </div>
         <vr-row removeline>

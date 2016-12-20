@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BillingTransactionController.$inject = ['$scope', 'VR_AccountBalance_BillingTransactionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_AccountBalance_AccountTypeAPIService'];
+    billingTransactionEditorController.$inject = ['$scope', 'VR_AccountBalance_BillingTransactionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_AccountBalance_AccountTypeAPIService'];
 
-    function BillingTransactionController($scope, VR_AccountBalance_BillingTransactionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService) {
+    function billingTransactionEditorController($scope, VR_AccountBalance_BillingTransactionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService) {
         var accountId;
         var accountTypeId;
         var currencySelectorAPI;
@@ -34,7 +34,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.date = new Date();
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyDeferred.resolve();
@@ -132,12 +132,13 @@
                 CurrencyId: currencySelectorAPI.getSelectedIds(),
                 TransactionTypeId:transactionTypeDirectiveAPI.getSelectedIds(),
                 Notes: $scope.scopeModel.notes,
+                TransactionTime: $scope.scopeModel.date,
                 Reference: $scope.scopeModel.reference
             };
             return obj;
         }
     }
 
-    appControllers.controller('VR_AccountBalance_BillingTransactionController', BillingTransactionController);
+    appControllers.controller('VR_AccountBalance_BillingTransactionEditorController', billingTransactionEditorController);
 
 })(appControllers);

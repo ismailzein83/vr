@@ -12,5 +12,11 @@ namespace Vanrise.AccountBalance.Entities
         public Guid AccountTypeId { get; set; }
         public int Top { get; set; }
 
+        public string Sign { get; set; }
+
+        public decimal Balance { get; set; }
+
+        public string OrderBy { get; set; }
+
     }
 }

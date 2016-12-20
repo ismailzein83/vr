@@ -38,12 +38,15 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
 
 
         function getTemplate(attrs) {
-            var label = "Billing Transaction Type";
+            var label = "Transaction Type";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
-                label = "Billing Transaction Types";
+                label = "Transaction Types";
                 multipleselection = "ismultipleselection";
             }
+            if (attrs.customlabel != undefined)
+                label = attrs.customlabel;
+
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
             return '<vr-select on-ready="ctrl.onSelectorReady"'

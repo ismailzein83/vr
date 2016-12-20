@@ -19,7 +19,6 @@ namespace Vanrise.AccountBalance.Business
 
         public Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail> AddBillingTransaction(BillingTransaction billingTransaction)
         {         
-            billingTransaction.TransactionTime = DateTime.Now;
         
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail>();
 
