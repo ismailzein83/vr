@@ -176,7 +176,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Retail_BusinessEntity\Directives\Settings\MainExtensions\AccountViewDefinitions\Templates\" />
+    <Folder Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\" />
     <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountGridDefinition\" />
     <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountViewDefinition\" />
   </ItemGroup>
@@ -412,8 +412,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-accountgriddefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-technical-settings-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\AccountGridDefinitionTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-accountviewdefinitions.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\AccountViewDefinitionsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountviewdefinitions.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountViewDefinitionsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\TechnicalSettingsEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-recurringperiod-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />
