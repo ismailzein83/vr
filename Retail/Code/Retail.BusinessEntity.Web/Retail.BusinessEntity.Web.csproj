@@ -178,7 +178,6 @@
   <ItemGroup>
     <Folder Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\" />
     <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountGridDefinition\" />
-    <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountViewDefinition\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
@@ -472,6 +471,8 @@
     <Content Include="Retail_BusinessEntity\Services\PackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\ServiceTypeService.js" />
     <Content Include="Retail_BusinessEntity\Services\SwitchService.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountDefinition\AccountViewDefinition\AccountViewDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountDefinition\AccountViewDefinition\AccountViewDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionEditor.html" />
