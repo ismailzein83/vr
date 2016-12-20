@@ -15,5 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public IEnumerable<StateBackupCleanupTask> Tasks { get; set; }
         public VRTaxesDefinition TaxesDefinition { get; set; }
+
+        public VRDocumentsDefinition DocumentsDefinition { get; set; }
     }
 }

@@ -124,6 +124,50 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+                <vr-tab header="'Documents'">
+                    <vr-row>
+                        <vr-columns withemptyline width="1/2row">
+                            <vr-button type="Add" data-onclick="scopeModal.addDocument" vr-disabled="scopeModal.disabledAddDocument" standalone></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                      
+                            <vr-datagrid datasource="scopeModal.documents"
+                                         ondeleterow="scopeModal.removeDocument"
+                                         hidegridmenu="true"
+                                         norowhighlightonclick="true">
+                                
+                                <vr-datagridcolumn headertext="'Attachment'" disablesorting="true">
+                                    <vr-fileupload extension="xls,xlsx,csv,xlsb" value="dataItem.documentAttachment" isrequired="true">
+                                    </vr-fileupload>
+                                </vr-datagridcolumn>
+                               
+                                 <vr-datagridcolumn headertext="'Document Category'">
+                                     <vr-select datatextfield="Title"
+                                                datavaluefield="ItemId"
+                                                isrequired="true"
+                                                datasource="dataItem.documentCategories"
+                                                on-ready="dataItem.onDocumentCategorySelectorReady"
+                                                selectedvalues="dataItem.selectedDocumentCategory">
+                                     </vr-select>
+                                </vr-datagridcolumn>
+
+                                <vr-datagridcolumn headertext="'Description'">
+                                    <vr-textbox value="dataItem.documentDescription" type="text">
+                                    </vr-textbox>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Created On'" disablesorting="true">
+                                    <span>
+                                        {{dataItem.createdOn}}
+                                    </span>
+                                </vr-datagridcolumn>
+                                
+                                <vr-datagridcolumn headertext="'Updated On'" value="dataItem.updatedOn" type="'Datetime'"></vr-datagridcolumn>
+
+                            </vr-datagrid>
+                       
+                    </vr-row>
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

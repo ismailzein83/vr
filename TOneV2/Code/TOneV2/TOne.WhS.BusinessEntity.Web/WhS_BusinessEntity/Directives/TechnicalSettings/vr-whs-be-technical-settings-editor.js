@@ -24,6 +24,7 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
         function settingEditorCtor(ctrl, $scope, $attrs) {
 
             ctrl.titles = [];
+            ctrl.documentTitles = [];
 
             var offPeakRateTypeSelectorAPI;
             var offPeakRateTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -68,6 +69,23 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                     return null;
                 };
 
+                ctrl.addDocumentTitle = function () {
+                    ctrl.documentTitles.push({ documentTitle: ctrl.documentTitlevalue });
+                    ctrl.documentTitlevalue = undefined;
+                    ctrl.disabledAddDocumentTitle = true;
+                };
+
+                ctrl.onDocumentTitleValueChange = function (value) {
+                    ctrl.disabledAddDocumentTitle = (value == undefined && ctrl.documentTitlevalue.length - 1 < 1) || UtilsService.getItemIndexByVal(ctrl.documentTitles, value, "documentTitle") != -1;
+                };
+
+                ctrl.validateAddDocumentTitle = function () {
+                    if (ctrl.documentTitle != undefined && ctrl.documentTitle.length == 0)
+                        return "Enter at least one keyword.";
+                    return null;
+                };
+
+
                 defineAPI();
             }
 
@@ -85,6 +103,11 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                         if (payload.data.TaxesDefinition != undefined && payload.data.TaxesDefinition.ItemDefinitions != undefined)
                             angular.forEach(payload.data.TaxesDefinition.ItemDefinitions, function (val) {
                                 ctrl.titles.push({ title: val.Title });
+                            });
+
+                        if (payload.data.DocumentsDefinition != undefined && payload.data.DocumentsDefinition.ItemDefinitions != undefined)
+                            angular.forEach(payload.data.DocumentsDefinition.ItemDefinitions, function (val) {
+                                ctrl.documentTitles.push({ documentTitle: val.Title });
                             });
 
                         if (payload.data.RateTypeConfiguration != undefined) {
@@ -134,6 +157,14 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                         itemDefinitions.push(taxItemDefinition);
                     }
 
+                    var documentItemsDefinition = [];
+                    for (var i = 0; i < ctrl.documentTitles.length; i++) {
+                        var documentItemDefinition = {};
+                        documentItemDefinition.ItemId = UtilsService.guid();
+                        documentItemDefinition.Title = ctrl.documentTitles[i].documentTitle;
+                        documentItemsDefinition.push(documentItemDefinition);
+                    }
+
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.BusinessEntityTechnicalSettingsData, TOne.WhS.BusinessEntity.Entities",
                         RateTypeConfiguration: {
@@ -141,7 +172,8 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                             WeekendRateTypeId: weekendRateTypeSelectorAPI.getSelectedIds(),
                             HolidayRateTypeId: holidayRateTypeSelectorAPI.getSelectedIds()
                         },
-                        TaxesDefinition: { ItemDefinitions: itemDefinitions }
+                        TaxesDefinition: { ItemDefinitions: itemDefinitions },
+                        DocumentsDefinition: { ItemDefinitions: documentItemsDefinition }
                     };
                 };
 

@@ -165,6 +165,16 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("defaultCustomerInvoice");
             return customerInvoiceSettings.DefaultEmailId;
         }
+
+        public IEnumerable<VRDocumentItemDefinition> GetDocumentItemDefinitionsInfo()
+        {
+            BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
+
+            if (setting.DocumentsDefinition == null)
+                throw new NullReferenceException("setting.DocumentsDefinition");
+
+            return setting.DocumentsDefinition.ItemDefinitions;
+        }
         #endregion
 
         #region Private Methods

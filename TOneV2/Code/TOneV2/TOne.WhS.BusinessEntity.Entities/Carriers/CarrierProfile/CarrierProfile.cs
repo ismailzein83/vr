@@ -49,6 +49,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<CarrierContact> Contacts { get; set; }
         public VRTaxSetting TaxSetting { get; set; }
+        public List<VRDocumentSetting> Documents { get; set; }
     }
 
     public class CarrierProfile: BaseCarrierProfile

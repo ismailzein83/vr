@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\TechnicalSettingsController.cs" />
     <Compile Include="Controllers\InvoiceSettingController.cs" />
     <Compile Include="Controllers\SalePricelistController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
@@ -419,6 +420,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchConnectivityAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\TechnicalSettingsAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
     <Content Include="WhS_BusinessEntity\Services\InvoiceSettingService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
