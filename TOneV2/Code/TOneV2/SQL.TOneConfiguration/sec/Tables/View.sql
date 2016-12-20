@@ -12,9 +12,12 @@
     [OldType]     INT              NULL,
     [Rank]        INT              NULL,
     [timestamp]   ROWVERSION       NULL,
+    [IsDeleted]   BIT              NULL,
     CONSTRAINT [PK_View] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_View_Module] FOREIGN KEY ([Module]) REFERENCES [sec].[Module] ([ID])
 );
+
+
 
 
 

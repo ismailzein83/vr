@@ -14,6 +14,7 @@ BEGIN
 
     -- Insert statements for procedure here
 	SELECT	v.[Id],v.[Name],v.[Title],v.[Url],v.[Module],v.[ActionNames],v.[Audience],v.[Type],v.[Content],v.[Settings],v.[Rank]
-	FROM	[sec].[View] v WITH(NOLOCK) 
+	FROM	[sec].[View] v WITH(NOLOCK) 	
+	WHERE ISNULL(IsDeleted, 0) = 0
     ORDER BY v.[Module],v.[Rank]
 END
