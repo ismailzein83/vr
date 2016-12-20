@@ -19,5 +19,14 @@ namespace Vanrise.AccountBalance.Web.Controllers
             LiveBalanceManager manager = new LiveBalanceManager();
             return manager.GetCurrentAccountBalance(accountTypeId, accountId);
         }
+
+        [HttpPost]
+        [Route("GetFilteredAccountBalances")]
+        public object GetFilteredAccountBalances(Vanrise.Entities.DataRetrievalInput<AccountBalanceQuery> input)
+        {
+            LiveBalanceManager manager = new LiveBalanceManager();
+            return manager.GetFilteredAccountBalances(input);
+        }
+
     }
 }

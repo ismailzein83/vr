@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
@@ -44,6 +45,19 @@ namespace Vanrise.AccountBalance.Data.SQL
                    }
                });
         }
+
+        public IEnumerable<Vanrise.AccountBalance.Entities.AccountBalance> GetFilteredAccountBalances(AccountBalanceQuery query)
+        {
+
+            return GetItemsText(GetAccountBalanceQuery(query), AccountBalanceMapper, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@Top", query.Top));
+                cmd.Parameters.Add(new SqlParameter("@AccountTypeID", query.AccountTypeId));
+            });
+
+        }
+
+       
         public bool ResetInitialAndUsageBalance(Guid accountTypeId)
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_ResetInitialAndUsage]", accountTypeId) > 0);
@@ -222,6 +236,21 @@ namespace Vanrise.AccountBalance.Data.SQL
                 LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader["ActiveAlertsInfo"] as string, typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo
             };
         }
+
+        private Vanrise.AccountBalance.Entities.AccountBalance AccountBalanceMapper(IDataReader reader)
+        {
+            return new Vanrise.AccountBalance.Entities.AccountBalance
+            {
+                AccountBalanceId = (long)reader["ID"],
+                AccountId = (long)reader["AccountId"],
+                AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeID"),
+                CurrentBalance = GetReaderValue<Decimal>(reader, "CurrentBalance"),
+                UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
+                CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
+                InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
+               
+            };
+        }
         private LiveBalanceAccountInfo LiveBalanceAccountInfoMapper(IDataReader reader)
         {
             return new LiveBalanceAccountInfo
@@ -336,6 +365,23 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("ActiveAlertsInfo", typeof(string));
             return dt;
         }
+
+        private string GetAccountBalanceQuery(AccountBalanceQuery query)
+        {
+            StringBuilder whereBuilder = new StringBuilder(@"lv.AccountTypeID = @AccountTypeID");
+
+            if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
+                whereBuilder.Append(String.Format(@" AND lv.AccountID in ({0})", string.Join<long>(",", query.AccountsIds)));
+
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lv.ID , lv.AccountTypeID, lv.AccountID, lv.CurrencyID, lv.InitialBalance, lv.UsageBalance, lv.CurrentBalance
+                                                                    FROM [VR_AccountBalance].[LiveBalance] as lb
+                                                                    WHERE  (#WHEREPART#)  ");
+
+            queryBuilder.Replace("#WHEREPART#", whereBuilder.ToString());
+
+            return queryBuilder.ToString();
+        }
+
 
         #endregion
 

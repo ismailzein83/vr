@@ -11,6 +11,7 @@ namespace Vanrise.AccountBalance.Data
     {
         LiveBalance GetLiveBalance(Guid accountTypeId, long accountId);
         void GetLiveBalanceAccounts(Action<LiveBalance> onLiveBalanceReady);
+        IEnumerable<Vanrise.AccountBalance.Entities.AccountBalance> GetFilteredAccountBalances(AccountBalanceQuery query);
         bool UpdateLiveBalanceFromBillingTransaction(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, List<long> billingTransactionIds);
         IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo(Guid accountTypeId);
         LiveBalanceAccountInfo TryAddLiveBalanceAndGet(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance);

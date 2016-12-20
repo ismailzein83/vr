@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBalances\AccountBalanceDetail.cs" />
+    <Compile Include="AccountBalances\AccountBalance.cs" />
+    <Compile Include="AccountBalances\AccountBalancesViewSettings.cs" />
+    <Compile Include="AccountBalances\AccountBalanceQuery.cs" />
     <Compile Include="AccountStatement\AccountStatementItem.cs" />
     <Compile Include="AccountStatement\AccountStatementResult.cs" />
     <Compile Include="AccountStatement\AccountStatementQuery.cs" />

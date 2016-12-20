@@ -34,5 +34,40 @@ namespace Vanrise.AccountBalance.Business
                 CurrentBalance = liveBalance.CurrentBalance
             };
         }
+
+        public Vanrise.Entities.IDataRetrievalResult<AccountBalanceDetail> GetFilteredAccountBalances(Vanrise.Entities.DataRetrievalInput<AccountBalanceQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new AccountBalanceRequestHandler());
+        }
+
+        private AccountBalanceDetail AccountBalanceDetailMapper(Vanrise.AccountBalance.Entities.AccountBalance accountBalance)
+        {
+            CurrencyManager currencyManager = new CurrencyManager();
+            AccountManager accountManager = new AccountManager();
+            return new AccountBalanceDetail
+            {
+                Entity = accountBalance,
+                CurrencyDescription = currencyManager.GetCurrencyName(accountBalance.CurrencyId),
+                AccountInfo = accountManager.GetAccountInfo(accountBalance.AccountTypeId, accountBalance.AccountId)
+            };
+        }
+
+        #region Private Classes
+        private class AccountBalanceRequestHandler : BigDataRequestHandler<AccountBalanceQuery, Vanrise.AccountBalance.Entities.AccountBalance, AccountBalanceDetail>
+        {
+            public override AccountBalanceDetail EntityDetailMapper(Vanrise.AccountBalance.Entities.AccountBalance entity)
+            {
+                LiveBalanceManager manager = new LiveBalanceManager();
+                return manager.AccountBalanceDetailMapper(entity);
+            }
+
+            public override IEnumerable<Vanrise.AccountBalance.Entities.AccountBalance> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<AccountBalanceQuery> input)
+            {
+                ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+                return dataManager.GetFilteredAccountBalances(input.Query);
+            }
+        }
+
+        #endregion
     }
 }

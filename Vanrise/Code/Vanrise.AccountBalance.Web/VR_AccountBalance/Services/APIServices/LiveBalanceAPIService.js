@@ -13,9 +13,12 @@
                 accountId: accountId
             });
         }
-
+        function GetFilteredAccountBalances(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetFilteredAccountBalances"), input);
+        }
         return {
-            GetCurrentAccountBalance: GetCurrentAccountBalance
+            GetCurrentAccountBalance: GetCurrentAccountBalance,
+            GetFilteredAccountBalances: GetFilteredAccountBalances
         };
     }
 

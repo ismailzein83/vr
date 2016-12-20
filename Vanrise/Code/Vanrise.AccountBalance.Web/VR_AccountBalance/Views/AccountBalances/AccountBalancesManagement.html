@@ -1,0 +1,25 @@
+﻿<vr-panel ng-controller="VR_AccountBalance_AccountBalancesManagementController" vr-loader="isLoading">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline> 
+                <vr-directivewrapper directive="filterEditor" on-ready="onFilterDirectiveReady" normal-col-num="2" ismultipleselection="true"></vr-directivewrapper>
+                <vr-columns width="normal">
+                    <vr-numeric  label="Top" isrequired="true" value="top" minvalue="1"></vr-numeric>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-accountbalance-accountbalances-grid on-ready="onGridReady"></vr-accountbalance-accountbalances-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
+
