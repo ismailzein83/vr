@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwitchIntegrationRadius.$inject = ["UtilsService", 'VRUIUtilsService'];
+    SwitchIntegrationTelesAPI.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-    function SwitchIntegrationRadius(UtilsService, VRUIUtilsService) {
+    function SwitchIntegrationTelesAPI(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -12,15 +12,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var radiusIntegration = new RadiusIntegration($scope, ctrl, $attrs);
-                radiusIntegration.initializeController();
+                var telesAPIIntegration = new TelesAPIIntegration($scope, ctrl, $attrs);
+                telesAPIIntegration.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/SwitchIntegrations/Templates/RetailBESwitchIntegrationRadiusTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/SwitchIntegrations/Templates/SwitchIntegrationTelesAPITemplate.html"
 
         };
-        function RadiusIntegration($scope, ctrl, $attrs) {
+        function TelesAPIIntegration($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
             var mainPayload;
@@ -42,9 +42,8 @@
                     }
 
                     if (switchIntegration != undefined) {
-                        $scope.scopeModel.connectionString = switchIntegration.ConnectionString;
-                        $scope.scopeModel.tableName = switchIntegration.TableName;
-                        $scope.scopeModel.mappingLogic = switchIntegration.MappingLogic;
+                        $scope.scopeModel.authorization = switchIntegration.Authorization;
+                        $scope.scopeModel.token = switchIntegration.Token;
                     }
                 };
 
@@ -56,10 +55,9 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.SwitchIntegrations.Radius,Retail.BusinessEntity.MainExtensions",
-                        ConnectionString: $scope.scopeModel.connectionString,
-                        TableName: $scope.scopeModel.tableName,
-                        MappingLogic: $scope.scopeModel.mappingLogic
+                        $type: "Retail.BusinessEntity.MainExtensions.TelesAPISwitchIntegration,Retail.BusinessEntity.MainExtensions",
+                        Authorization: $scope.scopeModel.authorization,
+                        Token: $scope.scopeModel.token,
                     };
                     return data;
                 }
@@ -67,6 +65,6 @@
         }
     }
 
-    app.directive('retailBeSwitchintegrationsRadius', SwitchIntegrationRadius);
+    app.directive('retailBeSwitchintegrationsTelesapi', SwitchIntegrationTelesAPI);
 
 })(app);

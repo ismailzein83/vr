@@ -129,8 +129,7 @@
     <Compile Include="RecurringPeriods\WeeklyRecurringPeriodSettings.cs" />
     <Compile Include="ServicePackageItem\ServicePackageChargingPolicyItem.cs" />
     <Compile Include="ServicePackageItem\ServicePackageVolumeItem.cs" />
-    <Compile Include="SwitchIntegrations\Radius.cs" />
-    <Compile Include="SwitchIntegrations\WebService.cs" />
+    <Compile Include="SwitchIntegrations\TelesAPISwitchIntegration.cs" />
     <Compile Include="AccountParts\AccountPartActivation.cs" />
     <Compile Include="AccountParts\AccountPartActivationDefinition.cs" />
     <Compile Include="AccountParts\AccountPartCompanyProfile.cs" />
