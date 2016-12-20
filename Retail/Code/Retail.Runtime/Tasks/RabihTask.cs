@@ -50,8 +50,8 @@ namespace Retail.Runtime.Tasks
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-            RunUpdateBalanceThresholdProcess();
-            //RunBalanceAlertCheckerProcess();
+            //RunUpdateBalanceThresholdProcess();
+            RunBalanceAlertCheckerProcess();
             Console.ReadKey();
 
         }

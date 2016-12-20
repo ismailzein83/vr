@@ -30,10 +30,20 @@ app.directive('retailBeAccountactionEmail', ['UtilsService', 'VRUIUtilsService',
 
         function NotificationActionEmailCtor(ctrl, $scope) {
 
+            this.initializeController = initializeController;
+
+            var mailTemplateSelectorReadyAPI;
+            var mailTemplateSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var vrActionEntity;
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onMailTemplateSelectorReady = function (api) {
+                    mailTemplateSelectorReadyAPI = api;
+                    mailTemplateSelectorReadyPromiseDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -42,23 +52,41 @@ app.directive('retailBeAccountactionEmail', ['UtilsService', 'VRUIUtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        vrActionEntity = payload.vrActionEntity;
+                    var mailTemplateId;
+
+                    if (payload != undefined && payload.vrActionEntity != undefined) {
+                        mailTemplateId = payload.vrActionEntity.MailMessageTemplateId;
                     }
+
+                    var mailMessageTemplatePayload = {
+                        selectedIds: mailTemplateId,
+                        filter: { VRMailMessageTypeId: '8F8E37C5-DBBF-4720-895A-63C9F35501B0' }
+                    };
+
+                    var promises = [];
+                    var loadMailTemplatesPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadMailTemplatesPromiseDeferred.promise);
+
+
+                    mailTemplateSelectorReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(mailTemplateSelectorReadyAPI, mailMessageTemplatePayload, loadMailTemplatesPromiseDeferred);
+                    });
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
 
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.AccountActions.SendEmailAction, Retail.BusinessEntity.MainExtensions",
-                        ActionName: "Email"
+                        ActionName: "Email",
+                        MailMessageTemplateId: mailTemplateSelectorReadyAPI.getSelectedIds()
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            this.initializeController = initializeController;
+
         }
         return directiveDefinitionObject;
     }
