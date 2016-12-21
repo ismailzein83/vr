@@ -28,7 +28,7 @@
                             <vr-excel-wb fileid="scopeModel.inPutFile.fileId" on-ready="scopeModel.onReadyWoorkBook"></vr-excel-wb>
                         </vr-section>
                     </vr-columns>
-                    <vr-columns width="1/2row" ng-if="scopeModel.selectedSupplier != undefined">
+                    <vr-columns width="1/2row" ng-if="scopeModel.selectedSupplier != undefined && scopeModel.showMapping">
                         <vr-validation-group validationcontext="scopeModel.configurationValidation">
                             <vr-section title="Supplier Price List Mapping">
                                 <vr-row>

@@ -23,6 +23,8 @@
 
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.showMapping = true;
+
                 $scope.scopeModel.priceListTypes = UtilsService.getArrayEnum(WhS_SupPL_SupplierPriceListTypeEnum);
 
                 $scope.scopeModel.testConversion = function () {
@@ -52,11 +54,13 @@
                 $scope.scopeModel.carrierAccountSelectItem = function (dataItem) {
                     var selectedCarrierAccountId = dataItem.CarrierAccountId;
                     if (selectedCarrierAccountId != undefined) {
+                        $scope.scopeModel.showMapping = false;
                         $scope.scopeModel.isLoadingCurrencySelector = true;
                         $scope.scopeModel.inPutFile = undefined;
                         WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(selectedCarrierAccountId).then(function (currencyId) {
                             currencyDirectiveAPI.selectedCurrency(currencyId);
                             $scope.scopeModel.isLoadingCurrencySelector = false;
+                            $scope.scopeModel.showMapping = true;
                         });
 
                         getPriceListTemplate(selectedCarrierAccountId).then(function (response) {
