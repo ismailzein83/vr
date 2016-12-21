@@ -226,9 +226,11 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-genericfielddefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-synchronizer-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-dynamicaccount-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGenericFieldDefinitionSelectorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountSynchronizerEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\Templates\DynamicAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Agent\retail-be-agent-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Agent\retail-be-agent-synchronizer-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Agent\retail-be-agent-grid.js" />
@@ -490,6 +492,8 @@
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Account\DynamicAccountManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\Account\DynamicAccountManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\InvoiceSettings\InvoiceSettingEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\InvoiceSettings\Templates\InvoiceSettingEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoItemEditor.html" />
