@@ -126,7 +126,7 @@
                 </vr-tab>
                 <vr-tab header="'Documents'">
                     <vr-row>
-                        <vr-columns withemptyline width="1/2row">
+                        <vr-columns  width="1/2row" >
                             <vr-button type="Add" data-onclick="scopeModal.addDocument" vr-disabled="scopeModal.disabledAddDocument" standalone></vr-button>
                         </vr-columns>
                     </vr-row>
@@ -138,7 +138,7 @@
                                          norowhighlightonclick="true">
                                 
                                 <vr-datagridcolumn headertext="'Attachment'" disablesorting="true">
-                                    <vr-fileupload extension="xls,xlsx,csv,xlsb" value="dataItem.documentAttachment" isrequired="true">
+                                    <vr-fileupload extension="xls,xlsx,csv,xlsb" value="dataItem.Entity.documentAttachment" isrequired="true">
                                     </vr-fileupload>
                                 </vr-datagridcolumn>
                                
@@ -146,23 +146,18 @@
                                      <vr-select datatextfield="Title"
                                                 datavaluefield="ItemId"
                                                 isrequired="true"
-                                                datasource="dataItem.documentCategories"
-                                                on-ready="dataItem.onDocumentCategorySelectorReady"
-                                                selectedvalues="dataItem.selectedDocumentCategory">
+                                                datasource="dataItem.Entity.documentCategories"
+                                                on-ready="dataItem.Entity.onDocumentCategorySelectorReady"
+                                                selectedvalues="dataItem.Entity.selectedDocumentCategory">
                                      </vr-select>
                                 </vr-datagridcolumn>
-
                                 <vr-datagridcolumn headertext="'Description'">
-                                    <vr-textbox value="dataItem.documentDescription" type="text">
+                                    <vr-textbox value="dataItem.Entity.documentDescription" type="text">
                                     </vr-textbox>
                                 </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Created On'" disablesorting="true">
-                                    <span>
-                                        {{dataItem.createdOn}}
-                                    </span>
-                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Created On'" field="'Entity.createdOn'" type="'Datetime'"></vr-datagridcolumn>
                                 
-                                <vr-datagridcolumn headertext="'Updated On'" value="dataItem.updatedOn" type="'Datetime'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Updated On'" field="'Entity.updatedOn'" type="'Datetime'"></vr-datagridcolumn>
 
                             </vr-datagrid>
                        

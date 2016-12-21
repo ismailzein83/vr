@@ -127,14 +127,18 @@
 
             $scope.scopeModal.addDocument = function () {
                 var document = {
-                    documentCategories: []
+                    Entity: {
+                        documentCategories: []
+                    }
                 };
 
-                document.onDocumentCategorySelectorReady = function () {
+
+
+                document.Entity.onDocumentCategorySelectorReady = function () {
                     WhS_BE_TechnicalSettingsAPIService.GetDocumentItemDefinitionsInfo().then(function (response) {
                         if (response != undefined) {
                             for (var i = 0; i < response.length; i++)
-                                document.documentCategories.push(response[i])
+                                document.Entity.documentCategories.push(response[i])
                         }
                     })
                 }
@@ -276,23 +280,24 @@
 
                     for (var i = 0; i < documents.length; i++) {
                         var document = documents[i];
-                        var item = {
-                            documentAttachment: {
-                                fileId: document.FileId
-                            },
-                            selectedDocumentCategory: document.CategoryId,
-                            documentDescription: document.Description,
-                            createdOn: document.CreatedOn,
-                            updatedOn: document.UpdatedOn,
-                            documentCategories: documentCategories
+
+                        var documentItem = {
+                            Entity: {
+                                documentAttachment: {
+                                    fileId: document.FileId
+                                },
+                                selectedDocumentCategory: document.CategoryId,
+                                documentDescription: document.Description,
+                                createdOn: document.CreatedOn,
+                                updatedOn: document.UpdatedOn,
+                                documentCategories: documentCategories
+                            }
                         };
 
-                        $scope.scopeModal.documents.push(item)
-                        item.selectedDocumentCategory = UtilsService.getItemByVal(documentCategories, document.CategoryId , 'ItemId');
+                        $scope.scopeModal.documents.push(documentItem)
+                        documentItem.Entity.selectedDocumentCategory = UtilsService.getItemByVal(documentCategories, document.CategoryId, 'ItemId');
                     }
-                   
                 });
-                
             }
         }
 
@@ -459,14 +464,21 @@
             if ($scope.scopeModal.documents.length > 0) {
                 obj.Settings.Documents = [];
                 for (var i = 0; i < $scope.scopeModal.documents.length; i++) {
-                    var item = $scope.scopeModal.documents[i];
+                    var item = $scope.scopeModal.documents[i].Entity;
 
                     var documentSetting = {
                         FileId: item.documentAttachment.fileId,
                         CategoryId: item.selectedDocumentCategory.ItemId,
-                        Description: item.documentDescription,
-                        CreatedOn: new Date()
+                        Description: item.documentDescription
                     }
+                    if (carrierProfileId != null)
+                    {
+                        documentSetting.UpdatedOn = new Date();
+                        documentSetting.CreatedOn = item.createdOn;
+                    }
+                    else
+                        documentSetting.CreatedOn = new Date();
+
                     obj.Settings.Documents.push(documentSetting);
                 }
             }
