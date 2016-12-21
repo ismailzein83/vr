@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouterulesettingsOrdertype', ['WhS_Routing_OrderTypeEnum', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrWhsRoutingRouterulesettingsOrdertypeSelector', ['WhS_Routing_OrderTypeEnum', 'UtilsService', 'VRUIUtilsService',
 
     function (WhS_Routing_OrderTypeEnum, UtilsService, VRUIUtilsService) {
         return {
