@@ -55,7 +55,8 @@ namespace Vanrise.Invoice.MainExtensions
                 case InvoiceField.SerialNumber:
                     return invoice.SerialNumber;
                 case InvoiceField.CustomField:
-                    return Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
+                    return invoice.Details.GetType().GetProperty(this.FieldName).GetValue(invoice.Details, null); 
+                    //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
                 case InvoiceField.Paid:
                     return invoice.PaidDate;
                 default: return null;

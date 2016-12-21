@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RazorEngine;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,10 +32,10 @@ namespace Vanrise.Common.Business
 
             return new VRMailEvaluatedTemplate
             {
-                To = EvaluateExpression(mailMessageTemplate.Settings.To, mailContext),
-                CC = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext),
-                Subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext),
-                Body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext)
+                To = EvaluateExpression(mailMessageTemplateId, "To", mailMessageTemplate.Settings.To, mailContext),
+                CC = EvaluateExpression(mailMessageTemplateId, "CC", mailMessageTemplate.Settings.CC, mailContext),
+                Subject = EvaluateExpression(mailMessageTemplateId, "Subject", mailMessageTemplate.Settings.Subject, mailContext),
+                Body = EvaluateExpression(mailMessageTemplateId, "Body", mailMessageTemplate.Settings.Body, mailContext)
             };
         }
         
@@ -146,9 +147,25 @@ namespace Vanrise.Common.Business
             return mailMessageType;
         }
 
-        private static string EvaluateExpression(VRExpression expression, VRMailContext mailContext)
+        private static string EvaluateExpression(Guid mailMessageTemplateId, string fieldName, VRExpression expression, VRMailContext mailContext)
         {
-            return expression.ExpressionString != null ? RazorEngine.Razor.Parse<VRMailContext>(expression.ExpressionString, mailContext) : null;
+            if (expression.ExpressionString == null)
+                return null;
+            string cacheName = String.Format("EmailTemplate_{0}_{1}", mailMessageTemplateId, fieldName);
+            string templateKey = Vanrise.Caching.CacheManagerFactory.GetCacheManager<VRMailMessageTemplateManager.CacheManager>()
+                .GetOrCreateObject(cacheName, () =>
+                {
+                    string templateKeyLocal = string.Format("TemplateKey_{0}", Guid.NewGuid());
+                    var key = new RazorEngine.Templating.NameOnlyTemplateKey(templateKeyLocal, RazorEngine.Templating.ResolveType.Global, null);
+                    RazorEngine.Engine.Razor.AddTemplate(key, new RazorEngine.Templating.LoadedTemplateSource(expression.ExpressionString));
+                    RazorEngine.Engine.Razor.Compile(key, typeof(VRMailContext));
+                    return templateKeyLocal;
+                });
+            var keyName = new RazorEngine.Templating.NameOnlyTemplateKey(templateKey, RazorEngine.Templating.ResolveType.Global, null);
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+            RazorEngine.Engine.Razor.RunCompile(keyName, sw, typeof(VRMailContext), mailContext);
+            return sb.ToString();
         }
         #endregion
     }

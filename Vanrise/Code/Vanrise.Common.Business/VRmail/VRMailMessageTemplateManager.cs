@@ -93,7 +93,7 @@ namespace Vanrise.Common.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRMailMessageTemplateDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRMailMessageTemplateDataManager>();
             object _updateHandle;

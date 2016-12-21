@@ -152,6 +152,7 @@
     <Content Include="DLLs\Newtonsoft.Json.dll" />
     <Content Include="DLLs\Npgsql.dll" />
     <Content Include="DLLs\protobuf-net.dll" />
+    <Content Include="DLLs\RazorEngine.dll" />
     <Content Include="DLLs\Rebex.Net.Ftp.dll" />
     <Content Include="DLLs\Rebex.Net.ProxySocket.dll" />
     <Content Include="DLLs\Rebex.Net.ProxySocket.xml" />
