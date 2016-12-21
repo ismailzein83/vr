@@ -546,7 +546,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<long, Account> GetCachedAccounts()
+        public Dictionary<long, Account> GetCachedAccounts()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccounts", () =>
             {
