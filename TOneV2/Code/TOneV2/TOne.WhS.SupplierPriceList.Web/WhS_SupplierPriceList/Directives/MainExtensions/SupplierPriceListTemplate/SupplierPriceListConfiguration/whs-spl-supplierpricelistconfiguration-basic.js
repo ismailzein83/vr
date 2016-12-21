@@ -43,6 +43,8 @@
             var rateTabsAPI;
             var serviceTabsAPI;
 
+            var isCodeLayoutSelected;
+
             $scope.intPutFieldMappings;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -138,8 +140,18 @@
                     codeListMappingReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onCodeLayoutSelectionChanged = function () {
-                    if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value) {
-                        //  if ($scope.scopeModel.delimiterValue == undefined)
+
+                	var isDelimitedCodeLayout =
+						($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value);
+
+                	if (isCodeLayoutSelected === false) {
+                		isCodeLayoutSelected = true;
+                		if (isDelimitedCodeLayout)
+                			$scope.scopeModel.showDelimiter = true;
+                		return;
+                	}
+
+                	if (isDelimitedCodeLayout) {
                         $scope.scopeModel.delimiterValue = ',';
                         $scope.scopeModel.showDelimiter = true;
                     }
@@ -194,9 +206,14 @@
                 var api = {};
 
                 api.load = function (payload) {
+
+                	isCodeLayoutSelected = undefined;
+
                     $scope.scopeModel.rateTypesSelected.length = 0;
                     $scope.scopeModel.servicesSelected.length = 0;
+
                     var promises = [];
+
                     if (payload != undefined) {
                         context = payload.context;
                         configDetails = payload.configDetails;
@@ -206,7 +223,10 @@
                             $scope.scopeModel.rangeSeparator = configDetails.RangeSeparator;
                             $scope.scopeModel.delimiterValue = configDetails.Delimiter;
                             $scope.scopeModel.isCommaDecimalSeparator = configDetails.IsCommaDecimalSeparator;
+
+                            isCodeLayoutSelected = false;
                             $scope.scopeModel.selectedCodeLayout = UtilsService.getItemByVal($scope.scopeModel.codeLayouts, configDetails.CodeLayout, "value");
+
                             $scope.scopeModel.includeServices = configDetails.IncludeServices;
                             loadOtherRateListMapping(promises);
                             loadFlaggedServiceListMapping(promises)
