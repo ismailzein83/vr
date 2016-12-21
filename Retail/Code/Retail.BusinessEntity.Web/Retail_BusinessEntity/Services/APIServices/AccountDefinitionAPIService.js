@@ -11,8 +11,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitionSettingsConfigs"));
         }
 
+        function GetAccountConditionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountConditionConfigs"));
+        }
+
+
         return {
-            GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs
+            GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
+            GetAccountConditionConfigs: GetAccountConditionConfigs
         };
     }
 

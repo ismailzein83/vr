@@ -11,6 +11,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountConditions
 {
     public class FilterGroupAccountCondition : AccountCondition
     {
+        public override Guid ConfigId { get { return new Guid("1B1AF5DD-52EB-42C7-97EF-8CE824BB7D03"); } }
+
         public RecordFilterGroup FilterGroup { get; set; }
 
         static AccountManager s_accountManager = new AccountManager();

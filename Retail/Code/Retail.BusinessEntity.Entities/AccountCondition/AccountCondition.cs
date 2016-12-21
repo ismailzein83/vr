@@ -8,6 +8,8 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class AccountCondition
     {
+        public abstract Guid ConfigId { get; }
+
         public abstract bool Evaluate(IAccountConditionEvaluationContext context);
     }
 

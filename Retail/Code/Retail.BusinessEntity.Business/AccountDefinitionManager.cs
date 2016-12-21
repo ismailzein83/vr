@@ -14,6 +14,12 @@ namespace Retail.BusinessEntity.Business
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
             return extensionConfigurationManager.GetExtensionConfigurations<AccountViewDefinitionSettingsConfig>(AccountViewDefinitionSettingsConfig.EXTENSION_TYPE);
-         }
+        }
+
+        public IEnumerable<AccountConditionConfig> GetAccountConditionConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountConditionConfig>(AccountConditionConfig.EXTENSION_TYPE);
+        }
     }
 }

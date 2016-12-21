@@ -202,6 +202,10 @@
     <Content Include="Retail_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\WebServiceRequestTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\retail-be-accountcondition-filtergroup.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\FilterGroupAccountConditionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\retail-be-accountcondition-selective.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\Templates\AccountConditionSelectiveTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-services.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-subaccounts.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-accountinfo.js" />
@@ -412,9 +416,9 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-ruledefinition-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\EntityType\retail-be-entitytype-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountgriddefinition.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountgriddefinition-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-technical-settings-editor.js" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountGridDefinitionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountGridDefinitionManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountviewdefinitions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountViewDefinitionsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\TechnicalSettingsEditorTemplate.html" />
