@@ -1438,12 +1438,15 @@
     <value>Last Login Time</value>
   </data>
   <data name="IsClientReport" xml:space="preserve">
-    <value>Operators</value>
+    <value>Send report to Operator</value>
   </data>
   <data name="IsClientReportSecurity" xml:space="preserve">
-    <value>Security</value>
+    <value>Send report to Security</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
+  </data>
+  <data name="EmailSecurity" xml:space="preserve">
+    <value>Security Email</value>
   </data>
 </root>

@@ -120,7 +120,7 @@
                                             <div class="span12">
                                                 <div class="widget blue">
                                                     <div class="widget-title">
-                                                        <h4><i class="icon-reorder"></i>Search Results</h4>
+                                                        <h4><i class="icon-reorder"></i>Settings for Enable/Disable sending emails to Clients/National Security</h4>
 
                                                     </div>
                                                     <div class="widget-body" style="display: block;">
@@ -134,6 +134,7 @@
                                                                     <telerik:GridBoundColumn DataField="Name" UniqueName="Name" />
                                                                     <telerik:GridBoundColumn DataField="ClientEmail" UniqueName="ClientEmail" />
                                                                     <telerik:GridBoundColumn DataField="ClientReport" UniqueName="ClientReport" />
+                                                                    <telerik:GridBoundColumn DataField="EmailSecurity"  UniqueName="EmailSecurity" />
                                                                     <telerik:GridBoundColumn DataField="ClientReportSecurity"  UniqueName="ClientReportSecurity" />
                                                                    
 

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ActionTypes">
           <Key>
             <PropertyRef Name="ID" />
@@ -70,6 +70,7 @@
           <Property Name="FraudPrefix" Type="varchar" MaxLength="50" />
           <Property Name="Length" Type="int" />
           <Property Name="ClientReportSecurity" Type="bit" />
+          <Property Name="SecurityEmail" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="EmailCCs">
           <Key>
@@ -3801,6 +3802,7 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <NavigationProperty Name="EmailCCs" Relationship="Model.FK_EmailCCs_Clients" FromRole="Client" ToRole="EmailCC" />
           <NavigationProperty Name="RecievedCalls" Relationship="Model.FK_RecievedCalls_Clients" FromRole="Client" ToRole="RecievedCall" />
           <NavigationProperty Name="Users" Relationship="Model.FK_Users_Clients" FromRole="Client" ToRole="User" />
+          <Property Name="SecurityEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_EmailCCs_Clients">
           <End Type="Model.Client" Role="Client" Multiplicity="1" />
@@ -4879,6 +4881,7 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="Model.Client">
               <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="SecurityEmail" ColumnName="SecurityEmail" />
                 <ScalarProperty Name="ClientReportSecurity" ColumnName="ClientReportSecurity" />
                 <ScalarProperty Name="Length" ColumnName="Length" />
                 <ScalarProperty Name="FraudPrefix" ColumnName="FraudPrefix" />

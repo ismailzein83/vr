@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.Bypass
         public Nullable<int> MobileOperatorID { get; set; }
         public int ClientID { get; set; }
     
-        public virtual Client Client { get; set; }
         public virtual MobileOperator MobileOperator { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

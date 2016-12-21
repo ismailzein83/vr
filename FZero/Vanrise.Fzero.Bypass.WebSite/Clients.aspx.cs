@@ -61,7 +61,8 @@ public partial class Clients : BasePage
         gvApplicationUsers.Columns[columnIndex++].HeaderText = Resources.Resources.Name;
         gvApplicationUsers.Columns[columnIndex++].HeaderText = Resources.Resources.Email;
         gvApplicationUsers.Columns[columnIndex++].HeaderText = Resources.Resources.IsClientReport;
-        gvApplicationUsers.Columns[columnIndex++].HeaderText = Resources.Resources.IsClientReportSecurity;
+        gvApplicationUsers.Columns[columnIndex++].HeaderText = Resources.Resources.EmailSecurity;        
+        gvApplicationUsers.Columns[columnIndex++].HeaderText = Resources.Resources.IsClientReportSecurity;        
     }
 
     public void FillData(Client Client)
