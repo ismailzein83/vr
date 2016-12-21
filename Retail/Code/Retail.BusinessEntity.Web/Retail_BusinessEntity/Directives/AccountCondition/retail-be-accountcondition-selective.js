@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountConditionSelectiveDirective.$inject = ['Retail_BE_AccountDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    AccountConditionSelectiveDirective.$inject = ['Retail_BE_AccountConditionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function AccountConditionSelectiveDirective(Retail_BE_AccountDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function AccountConditionSelectiveDirective(Retail_BE_AccountConditionAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -72,7 +72,7 @@
 
 
                     function getAccountConditionTemplateConfigs() {
-                        return Retail_BE_AccountDefinitionAPIService.GetAccountConditionConfigs().then(function (response) {
+                        return Retail_BE_AccountConditionAPIService.GetAccountConditionConfigs().then(function (response) {
                             if (response != undefined) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

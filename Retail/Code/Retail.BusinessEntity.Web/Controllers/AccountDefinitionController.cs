@@ -21,12 +21,5 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountViewDefinitionSettingsConfigs();
         }
-
-        [HttpGet]
-        [Route("GetAccountConditionConfigs")]
-        public IEnumerable<AccountConditionConfig> GetAccountConditionConfigs()
-        {
-            return _manager.GetAccountConditionConfigs();
-        }
     }
 }

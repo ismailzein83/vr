@@ -8,12 +8,12 @@ using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountDefinitionManager
+    public class AccountConditionManager
     {
-        public IEnumerable<AccountViewDefinitionSettingsConfig> GetAccountViewDefinitionSettingsConfigs()
+        public IEnumerable<AccountConditionConfig> GetAccountConditionConfigs()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
-            return extensionConfigurationManager.GetExtensionConfigurations<AccountViewDefinitionSettingsConfig>(AccountViewDefinitionSettingsConfig.EXTENSION_TYPE);
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountConditionConfig>(AccountConditionConfig.EXTENSION_TYPE);
         }
     }
 }
