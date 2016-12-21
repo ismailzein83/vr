@@ -25,9 +25,9 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (Security
 
                 }, 1);
             };
-
-            if ($scope.value == undefined)
-                $scope.value = false;
+            var ctrl = this;
+            if (ctrl.value == undefined)
+                ctrl.value = false;
         },
         link: function (scope, element, attrs, ctrl) {
 
