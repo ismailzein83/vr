@@ -244,9 +244,18 @@ namespace TOne.WhS.BusinessEntity.Business
                     });
                     uploadCodeGroupLog.CountOfCodeGroupsAdded++;
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
+                    
+                }
+                else
+                {
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                    colIndex++;
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup already exists");
+                    uploadCodeGroupLog.CountOfCodeGroupsFailed++;
                     colIndex = 0;
                     rowIndex++;
                 }
+
 
             }
 
