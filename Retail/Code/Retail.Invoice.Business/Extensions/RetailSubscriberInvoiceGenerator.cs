@@ -37,10 +37,10 @@ namespace Retail.Invoice.Business
                 throw new InvoiceGeneratorException("No data available between the selected period.");
             }
 
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId);
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
 
-            RetailSubscriberInvoiceDetails retailSubscriberInvoiceDetails = BuilRetailSubscriberInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate);
+            RetailSubscriberInvoiceDetails retailSubscriberInvoiceDetails = BuilRetailSubscriberInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate, currencyId);
 
             context.Invoice = new GeneratedInvoice
             {
@@ -50,7 +50,7 @@ namespace Retail.Invoice.Business
 
         }
 
-        private RetailSubscriberInvoiceDetails BuilRetailSubscriberInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, DateTime fromDate, DateTime toDate)
+        private RetailSubscriberInvoiceDetails BuilRetailSubscriberInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, DateTime fromDate, DateTime toDate, int currencyId)
         {
             RetailSubscriberInvoiceDetails retailSubscriberInvoiceDetails = null;
             if (itemSetNamesDic != null)
@@ -64,6 +64,7 @@ namespace Retail.Invoice.Business
                         retailSubscriberInvoiceDetails.TotalAmount += invoiceBillingRecord.Amount;
                         retailSubscriberInvoiceDetails.CountCDRs += invoiceBillingRecord.CountCDRs;
                         retailSubscriberInvoiceDetails.TotalDuration += invoiceBillingRecord.TotalDuration;
+                        retailSubscriberInvoiceDetails.CurrencyId = currencyId;
                     }
                 };
             }
@@ -136,7 +137,7 @@ namespace Retail.Invoice.Business
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
 
-        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId)
+        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords)
         {
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
             if (analyticRecords != null)
@@ -213,7 +214,6 @@ namespace Retail.Invoice.Business
             public int CountCDRs { get; set; }
 
             public Decimal TotalDuration { get; set; }
-
         }
 
     }

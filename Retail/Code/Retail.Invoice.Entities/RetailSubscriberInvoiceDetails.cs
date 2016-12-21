@@ -14,5 +14,7 @@ namespace Retail.Invoice.Entities
 
         public int CountCDRs { get; set; }
 
+        public int CurrencyId { get; set; }
+
     }
 }
