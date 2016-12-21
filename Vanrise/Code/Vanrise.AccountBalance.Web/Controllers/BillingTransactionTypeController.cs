@@ -14,10 +14,11 @@ namespace Vanrise.AccountBalance.Web.Controllers
     {
         [HttpGet]
         [Route("GetBillingTransactionTypesInfo")]
-        public object GetBillingTransactionTypesInfo()
+        public object GetBillingTransactionTypesInfo(string filter = null)
         {
+            BillingTransactionTypeInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<BillingTransactionTypeInfoFilter>(filter) : null;
             BillingTransactionTypeManager manager = new BillingTransactionTypeManager();
-            return manager.GetBillingTransactionTypesInfo();
+            return manager.GetBillingTransactionTypesInfo(deserializedFilter);
         }
     }
 }

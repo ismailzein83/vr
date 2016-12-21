@@ -39,7 +39,7 @@
                 var payload = {
                     query: getFilterObject()
                 }
-                gridAPI.loadGrid(payload);
+                return gridAPI.loadGrid(payload);
             };
             $scope.addClicked = function (api) {
                 var onBillingTransactionAdded = function (transactionObj) {

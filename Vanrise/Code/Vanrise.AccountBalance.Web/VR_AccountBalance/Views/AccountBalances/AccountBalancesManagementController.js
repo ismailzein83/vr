@@ -32,7 +32,7 @@
                 gridAPI = api;
             };
             $scope.searchClicked = function (api) {           
-                gridAPI.loadGrid(getFilterObject());
+               return  gridAPI.loadGrid(getFilterObject());
             };
             $scope.onSignSelectionChanged = function () {
                 if (!$scope.sign)

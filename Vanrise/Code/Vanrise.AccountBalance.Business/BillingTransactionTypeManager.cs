@@ -56,9 +56,32 @@ namespace Vanrise.AccountBalance.Business
 
         #endregion
 
-        public object GetBillingTransactionTypesInfo()
+        //public object GetBillingTransactionTypesInfo()
+        //{
+        //    return GetCachedBillingTransactionTypes().MapRecords(BillingTransactionTypeInfoMapper, obj => !obj.Settings.ManualAdditionDisabled );
+        //}
+
+
+        public object GetBillingTransactionTypesInfo(BillingTransactionTypeInfoFilter filter)
         {
-            return GetCachedBillingTransactionTypes().MapRecords(BillingTransactionTypeInfoMapper);
+            var cachedBillingTransactionTypes = GetCachedBillingTransactionTypes();
+            Func<BillingTransactionType, bool> filterExpression = null;
+
+            if (filter != null)
+            {
+                filterExpression = (item) => (filter.Filters != null && CheckIfFilterIsMatch(item.Settings, filter.Filters));
+            }
+
+            return cachedBillingTransactionTypes.MapRecords(BillingTransactionTypeInfoMapper, filterExpression);
+        }
+        public bool CheckIfFilterIsMatch(BillingTransactionTypeSettings settings, List<IBillingTransactionTypeFilter> filters)
+        {
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(settings))
+                    return false;
+            }
+            return true;
         }
 
         BillingTransactionTypeInfo BillingTransactionTypeInfoMapper(BillingTransactionType transactionType)

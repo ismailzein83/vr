@@ -7,7 +7,9 @@
     function BillingTransactionTypeAPIService(BaseAPIService, UtilsService, VR_AccountBalance_ModuleConfig, SecurityService) {
         var controllerName = 'BillingTransactionType';
         function GetBillingTransactionTypesInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetBillingTransactionTypesInfo"));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetBillingTransactionTypesInfo"), {
+                filter: filter
+            });
         }
         return {
             GetBillingTransactionTypesInfo: GetBillingTransactionTypesInfo

@@ -84,7 +84,9 @@
         function loadCurrencySelector() {
             var currencyLoadDeferred = UtilsService.createPromiseDeferred();
             currencySelectorReadyDeferred.promise.then(function () {
-                var currencySelectorPayload;
+                var currencySelectorPayload = {
+                    selectSystemCurrency:true
+                };
                 VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencyLoadDeferred);
             });
             return currencyLoadDeferred.promises;
@@ -92,7 +94,14 @@
         function loadTransactionTypeSelector() {
             var loadTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
             transactionTypeDirectiveReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, undefined, loadTransactionTypePromiseDeferred);
+                var payload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
+                        }]
+                    }
+                }
+                VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, payload, loadTransactionTypePromiseDeferred);
             });
             return loadTransactionTypePromiseDeferred.promise;
         }

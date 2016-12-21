@@ -15,6 +15,8 @@ namespace Vanrise.AccountBalance.Entities
         public BillingTransactionTypeSettings Settings { get; set; }
     }
 
+    
+
     public class BillingTransactionTypeSettings
     {
         /// <summary>
@@ -22,4 +24,11 @@ namespace Vanrise.AccountBalance.Entities
         /// </summary>
         public bool ManualAdditionDisabled { get; set; }
     }
+
+ 
+
+
+  
+
+   
 }

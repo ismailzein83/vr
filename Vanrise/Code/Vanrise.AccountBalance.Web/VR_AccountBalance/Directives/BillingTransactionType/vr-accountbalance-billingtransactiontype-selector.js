@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBalance_BillingTransactionTypeAPIService', 'VRUIUtilsService',
-    function (VR_AccountBalance_BillingTransactionTypeAPIService, VRUIUtilsService) {
+app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBalance_BillingTransactionTypeAPIService', 'VRUIUtilsService','UtilsService',
+    function (VR_AccountBalance_BillingTransactionTypeAPIService, VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -101,8 +101,7 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                     }
-
-                    return VR_AccountBalance_BillingTransactionTypeAPIService.GetBillingTransactionTypesInfo(undefined).then(function (response) {
+                    return VR_AccountBalance_BillingTransactionTypeAPIService.GetBillingTransactionTypesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
