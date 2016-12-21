@@ -54,7 +54,7 @@
                                         <td>
                                             <table>
                                                 <tr>
-                                                    <td class="caption"><%=Resources.Resources.Name %></td>
+                                                    <td class=""><%=Resources.Resources.Name %></td>
                                                     <td ></td>
                                                     <td>
                                                         <telerik:RadTextBox ID="txtName" runat="server" Enabled="False"></telerik:RadTextBox>
@@ -64,7 +64,7 @@
                               
 
                                                 <tr>
-                                                    <td class="caption"><%= Resources.Resources.IsClientReport %></td>
+                                                    <td class=""><%= Resources.Resources.IsClientReport %></td>
                                                     <td ></td>
                                                     <td>
                                                         <asp:CheckBox ID="chkIsClientReport" runat="server" />
@@ -72,7 +72,7 @@
                                                 </tr>
                                                 
                                                      <tr>
-                                                    <td class="caption"><%= Resources.Resources.IsClientReportSecurity %></td>
+                                                    <td class=""><%= Resources.Resources.IsClientReportSecurity %></td>
                                                     <td ></td>
                                                     <td>
                                                         <asp:CheckBox ID="chkIsClientReportSecurity" runat="server" />
@@ -134,7 +134,7 @@
                                                                     <telerik:GridBoundColumn DataField="Name" UniqueName="Name" />
                                                                     <telerik:GridBoundColumn DataField="ClientEmail" UniqueName="ClientEmail" />
                                                                     <telerik:GridBoundColumn DataField="ClientReport" UniqueName="ClientReport" />
-                                                                    <telerik:GridBoundColumn DataField="EmailSecurity"  UniqueName="EmailSecurity" />
+                                                                    <telerik:GridBoundColumn DataField="SecurityEmail"  UniqueName="SecurityEmail" />
                                                                     <telerik:GridBoundColumn DataField="ClientReportSecurity"  UniqueName="ClientReportSecurity" />
                                                                    
 
