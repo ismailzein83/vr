@@ -18,13 +18,10 @@ namespace TOne.WhS.Sales.BP.Activities
 		#region Input Arguments
 
 		[RequiredArgument]
-		public InArgument<int> OwnerId { get; set; }
+		public InArgument<IEnumerable<DataByZone>> DataByZone { get; set; }
 
 		[RequiredArgument]
-		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
-
-		[RequiredArgument]
-		public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
+		public InArgument<IEnumerable<NewCustomerCountry>> NewCustomerCountries { get; set; }
 
 		#endregion
 
@@ -37,86 +34,185 @@ namespace TOne.WhS.Sales.BP.Activities
 
 		protected override void Execute(CodeActivityContext context)
 		{
-			int ownerId = this.OwnerId.Get(context);
-			SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
-			IEnumerable<ExistingZone> existingZones = this.ExistingZones.Get(context);
+			IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+			IEnumerable<DataByZone> dataByZone = DataByZone.Get(context);
+			IEnumerable<NewCustomerCountry> newCountries = NewCustomerCountries.Get(context);
 
-			IEnumerable<SalePLZoneChange> zoneChanges = (ownerType == SalePriceListOwnerType.SellingProduct) ?
-				GetSellingProductZoneChanges(ownerId, existingZones) :
-				GetCustomerZoneChanges(ownerId, existingZones);
+			IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(ratePlanContext.OwnerType, ratePlanContext.OwnerId, ratePlanContext.EffectiveDate);
+			SaleEntityZoneRateLocator futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, null, true));
+
+			IEnumerable<SalePLZoneChange> zoneChanges;
+
+			if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
+			{
+				zoneChanges = GetSellingProductZoneChanges(dataByZone, dataByCustomer, futureRateLocator);
+			}
+			else
+			{
+				RoutingCustomerInfoDetails customerData = dataByCustomer.FirstOrDefault();
+				Dictionary<int, IEnumerable<SaleZone>> newCountryZonesByCountry = GetNewCountryZonesByCountry(newCountries, ratePlanContext.OwnerSellingNumberPlanId, ratePlanContext.EffectiveDate);
+				zoneChanges = GetCustomerZoneChanges(customerData.CustomerId, customerData.SellingProductId, futureRateLocator, dataByZone, newCountryZonesByCountry);
+			}
 
 			SalePLZoneChanges.Set(context, zoneChanges);
 		}
 
-		#region Private Methods
+		#region Selling Product Methods
 
-		private IEnumerable<SalePLZoneChange> GetSellingProductZoneChanges(int sellingProductId, IEnumerable<ExistingZone> existingZones)
+		private IEnumerable<SalePLZoneChange> GetSellingProductZoneChanges(IEnumerable<DataByZone> dataByZone, IEnumerable<RoutingCustomerInfoDetails> dataByCustomer, SaleEntityZoneRateLocator futureRateLocator)
 		{
-			List<SalePLZoneChange> zonesChanges = new List<SalePLZoneChange>();
+			if (dataByZone == null || dataByZone.Count() == 0)
+				return null;
 
-			IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(sellingProductId);
-			SaleEntityZoneRateLocator futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, null, true));
+			var zoneChanges = new List<SalePLZoneChange>();
+			List<int> customerIds;
 
-			foreach (ExistingZone existingZone in existingZones)
+			foreach (DataByZone zoneData in dataByZone)
 			{
-				if (existingZone.NewRates.Count > 0 || existingZone.ExistingRates.Any(x => x.ChangedRate != null))
+				if (DoesZoneHasRateChanges(zoneData))
 				{
-					var customerIds = new List<int>();
+					customerIds = new List<int>();
 					foreach (RoutingCustomerInfoDetails customerData in dataByCustomer)
 					{
-						SaleEntityZoneRate customerRate = futureRateLocator.GetCustomerZoneRate(customerData.CustomerId, sellingProductId, existingZone.ZoneId);
-						if (customerRate != null && customerRate.Source == SalePriceListOwnerType.SellingProduct)
-							customerIds.Add(customerData.CustomerId);
+						SaleEntityZoneRate customerRate = futureRateLocator.GetCustomerZoneRate(customerData.CustomerId, customerData.SellingProductId, zoneData.ZoneId);
+						if (customerRate != null && customerRate.Rate != null)
+						{
+							if (customerRate.Source == SalePriceListOwnerType.SellingProduct || customerRate.Rate.EED.HasValue)
+								customerIds.Add(customerData.CustomerId);
+						}
 					}
-					zonesChanges.Add(new SalePLZoneChange()
+					zoneChanges.Add(new SalePLZoneChange()
 					{
-						ZoneName = existingZone.Name,
-						CountryId = existingZone.CountryId,
+						ZoneName = zoneData.ZoneName,
+						CountryId = zoneData.CountryId,
 						HasCodeChange = false,
 						CustomersHavingRateChange = customerIds
 					});
 				}
 			}
 
-			return zonesChanges;
+			return zoneChanges;
+		}
+		
+		#endregion
+
+		#region Customer Methods
+
+		private IEnumerable<SalePLZoneChange> GetCustomerZoneChanges(int customerId, int sellingProductId, SaleEntityZoneRateLocator futureRateLocator, IEnumerable<DataByZone> dataByZone, Dictionary<int, IEnumerable<SaleZone>> newCountryZonesByCountry)
+		{
+			var zoneChanges = new List<SalePLZoneChange>();
+
+			IEnumerable<int> customerIds = new List<int>() { customerId };
+			var zoneChangeIds = new List<long>();
+
+			if (dataByZone != null)
+			{
+				foreach (DataByZone zoneData in dataByZone)
+				{
+					if (DoesZoneHasRateChanges(zoneData))
+					{
+						zoneChangeIds.Add(zoneData.ZoneId);
+						var zoneChange = new SalePLZoneChange()
+						{
+							ZoneName = zoneData.ZoneName,
+							CountryId = zoneData.CountryId,
+							HasCodeChange = false,
+							CustomersHavingRateChange = customerIds
+						};
+						zoneChanges.Add(zoneChange);
+					}
+				}
+			}
+
+			if (newCountryZonesByCountry != null)
+			{
+				foreach (IEnumerable<SaleZone> countryZones in newCountryZonesByCountry.Values)
+				{
+					foreach (SaleZone countryZone in countryZones)
+					{
+						if (zoneChangeIds.Contains(countryZone.SaleZoneId))
+							continue;
+						SaleEntityZoneRate zoneRate = futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, countryZone.SaleZoneId);
+						if (zoneRate == null || zoneRate.Rate == null || zoneRate.Source != SalePriceListOwnerType.SellingProduct)
+							continue;
+						zoneChanges.Add(new SalePLZoneChange()
+						{
+							ZoneName = countryZone.Name,
+							CountryId = countryZone.CountryId,
+							HasCodeChange = false,
+							CustomersHavingRateChange = customerIds
+						});
+					}
+				}
+			}
+
+			return zoneChanges;
 		}
 
-		private IEnumerable<RoutingCustomerInfoDetails> GetDataByCustomer(int sellingProductId)
+		private Dictionary<int, IEnumerable<SaleZone>> GetNewCountryZonesByCountry(IEnumerable<NewCustomerCountry> newCountries, int sellingNumberPlanId, DateTime effectiveOn)
 		{
-			var customerSellingProductManager = new CustomerSellingProductManager();
-			IEnumerable<CarrierAccountInfo> customers = customerSellingProductManager.GetCustomersBySellingProductId(sellingProductId, DateTime.Today);
-			
-			return customers.MapRecords(x => new RoutingCustomerInfoDetails()
+			if (newCountries == null || newCountries.Count() == 0)
+				return null;
+
+			var newCountryZonesByCountry = new Dictionary<int, IEnumerable<SaleZone>>();
+
+			IEnumerable<int> newCountryIds = newCountries.MapRecords(x => x.CountryId);
+			var saleZoneManager = new SaleZoneManager();
+
+			foreach (int newCountryId in newCountryIds)
 			{
-				CustomerId = x.CarrierAccountId,
+				IEnumerable<SaleZone> countryZones = saleZoneManager.GetSaleZonesByCountryId(sellingNumberPlanId, newCountryId, effectiveOn);
+				if (countryZones == null || countryZones.Count() == 0)
+					continue;
+				if (!newCountryZonesByCountry.ContainsKey(newCountryId))
+					newCountryZonesByCountry.Add(newCountryId, countryZones);
+			}
+
+			return newCountryZonesByCountry;
+		}
+
+		#endregion
+
+		#region Common Methods
+
+		private IEnumerable<RoutingCustomerInfoDetails> GetDataByCustomer(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveDate)
+		{
+			var customerIds = new List<int>();
+			int sellingProductId;
+
+			if (ownerType == SalePriceListOwnerType.SellingProduct)
+			{
+				IEnumerable<int> customerIdsAssignedToSellingProduct = new CustomerSellingProductManager().GetCustomerIdsAssignedToSellingProduct(ownerId, effectiveDate);
+
+				if (customerIdsAssignedToSellingProduct == null || customerIdsAssignedToSellingProduct.Count() == 0)
+					return null;
+
+				customerIds.AddRange(customerIdsAssignedToSellingProduct);
+				sellingProductId = ownerId;
+			}
+			else
+			{
+				customerIds.Add(ownerId);
+
+				int? effectiveSellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(ownerId, effectiveDate, false);
+				if (!effectiveSellingProductId.HasValue)
+					throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a Selling Product", ownerId));
+
+				sellingProductId = effectiveSellingProductId.Value;
+			}
+
+			return customerIds.MapRecords(customerId => new RoutingCustomerInfoDetails()
+			{
+				CustomerId = customerId,
 				SellingProductId = sellingProductId
 			});
 		}
 
-		private IEnumerable<SalePLZoneChange> GetCustomerZoneChanges(int customerId, IEnumerable<ExistingZone> existingZones)
+		private bool DoesZoneHasRateChanges(DataByZone zoneData)
 		{
-			var zonesChanges = new List<SalePLZoneChange>();
-			
-			var ownerIds = new List<int>();
-			ownerIds.Add(customerId);
-
-			foreach (ExistingZone existingZone in existingZones)
-			{
-				if (existingZone.NewRates.Count > 0 || existingZone.ExistingRates.Any(x => x.ChangedRate != null))
-				{
-					var zoneChange = new SalePLZoneChange()
-					{
-						ZoneName = existingZone.Name,
-						CountryId = existingZone.CountryId,
-						HasCodeChange = false,
-						CustomersHavingRateChange = ownerIds
-					};
-					zonesChanges.Add(zoneChange);
-				}
-			}
-			return zonesChanges;
+			return (zoneData.NormalRateToChange != null || zoneData.NormalRateToClose != null || (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0) || (zoneData.OtherRatesToClose != null && zoneData.OtherRatesToClose.Count > 0));
 		}
-
+		
 		#endregion
 	}
 }

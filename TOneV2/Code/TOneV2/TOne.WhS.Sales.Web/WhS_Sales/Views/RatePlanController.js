@@ -914,7 +914,7 @@
                     OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                     OwnerId: getOwnerId(),
                     CurrencyId: getCurrencyId(),
-                    EffectiveDate: new Date()
+                    EffectiveDate: UtilsService.getDateFromDateTime(new Date())
                 };
 
                 var input = {

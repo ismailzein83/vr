@@ -19,12 +19,6 @@ namespace TOne.WhS.Sales.BP.Activities
 		#region Input Arguments
 
 		[RequiredArgument]
-		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
-
-		[RequiredArgument]
-		public InArgument<int> OwnerId { get; set; }
-
-		[RequiredArgument]
 		public InArgument<int> CurrencyId { get; set; }
 
 		[RequiredArgument]
@@ -46,7 +40,7 @@ namespace TOne.WhS.Sales.BP.Activities
 		public InArgument<IEnumerable<SaleZoneServiceToClose>> SaleZoneServicesToClose { get; set; }
 
 		[RequiredArgument]
-		public InArgument<IEnumerable<DraftNewCountry>> DraftNewCountries { get; set; }
+		public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
 
 		#endregion
 
@@ -59,10 +53,11 @@ namespace TOne.WhS.Sales.BP.Activities
 
 		protected override void Execute(CodeActivityContext context)
 		{
-			SalePriceListOwnerType ownerType = OwnerType.Get(context);
-			int ownerId = OwnerId.Get(context);
+			IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+			SalePriceListOwnerType ownerType = ratePlanContext.OwnerType;
+			int ownerId = ratePlanContext.OwnerId;
 			int currencyId = CurrencyId.Get(context);
-			IEnumerable<DraftNewCountry> draftNewCountries = DraftNewCountries.Get(context);
+			IEnumerable<CustomerCountryToAdd> countriesToAdd = CustomerCountriesToAdd.Get(context);
 
 			IEnumerable<RateToChange> ratesToChange = this.RatesToChange.Get(context);
 			IEnumerable<RateToClose> ratesToClose = this.RatesToClose.Get(context);
@@ -75,7 +70,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
 			IEnumerable<RatePlanCountry> soldCountries = null;
 			if (ownerType == SalePriceListOwnerType.Customer)
-				soldCountries = GetSoldCountries(ownerId, DateTime.Now.Date, false, draftNewCountries);
+				soldCountries = GetSoldCountries(ownerId, DateTime.Now.Date, false, countriesToAdd);
 
 			var saleZoneManager = new SaleZoneManager();
 
@@ -89,7 +84,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			foreach (RateToChange rateToChange in ratesToChange)
 			{
 				if (!dataByZoneName.TryGetValue(rateToChange.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, rateToChange.ZoneName, rateToChange.ZoneId, out dataByZone);
+					AddEmptyDataByZone(dataByZoneName, rateToChange.ZoneName, rateToChange.ZoneId, out dataByZone, saleZoneManager);
 
 				if (rateToChange.RateTypeId.HasValue)
 					dataByZone.OtherRatesToChange.Add(rateToChange);
@@ -106,7 +101,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			foreach (RateToClose rateToClose in ratesToClose)
 			{
 				if (!dataByZoneName.TryGetValue(rateToClose.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, rateToClose.ZoneName, rateToClose.ZoneId, out dataByZone);
+					AddEmptyDataByZone(dataByZoneName, rateToClose.ZoneName, rateToClose.ZoneId, out dataByZone, saleZoneManager);
 
 				if (rateToClose.RateTypeId.HasValue)
 					dataByZone.OtherRatesToClose.Add(rateToClose);
@@ -123,21 +118,21 @@ namespace TOne.WhS.Sales.BP.Activities
 			foreach (SaleZoneRoutingProductToAdd routingProductToAdd in saleZoneRoutingProductsToAdd)
 			{
 				if (!dataByZoneName.TryGetValue(routingProductToAdd.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, routingProductToAdd.ZoneName, routingProductToAdd.ZoneId, out dataByZone);
+					AddEmptyDataByZone(dataByZoneName, routingProductToAdd.ZoneName, routingProductToAdd.ZoneId, out dataByZone, saleZoneManager);
 				dataByZone.SaleZoneRoutingProductToAdd = routingProductToAdd;
 			}
 
 			foreach (SaleZoneRoutingProductToClose routingProductToClose in saleZoneRoutingProductsToClose)
 			{
 				if (!dataByZoneName.TryGetValue(routingProductToClose.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, routingProductToClose.ZoneName, routingProductToClose.ZoneId, out dataByZone);
+					AddEmptyDataByZone(dataByZoneName, routingProductToClose.ZoneName, routingProductToClose.ZoneId, out dataByZone, saleZoneManager);
 				dataByZone.SaleZoneRoutingProductToClose = routingProductToClose;
 			}
 
 			foreach (SaleZoneServiceToAdd saleZoneServiceToAdd in saleZoneServicesToAdd)
 			{
 				if (!dataByZoneName.TryGetValue(saleZoneServiceToAdd.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, saleZoneServiceToAdd.ZoneName, saleZoneServiceToAdd.ZoneId, out dataByZone);
+					AddEmptyDataByZone(dataByZoneName, saleZoneServiceToAdd.ZoneName, saleZoneServiceToAdd.ZoneId, out dataByZone, saleZoneManager);
 
 				dataByZone.SaleZoneServiceToAdd = saleZoneServiceToAdd;
 
@@ -148,7 +143,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			foreach (SaleZoneServiceToClose saleZoneServiceToClose in saleZoneServicesToClose)
 			{
 				if (!dataByZoneName.TryGetValue(saleZoneServiceToClose.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, saleZoneServiceToClose.ZoneName, saleZoneServiceToClose.ZoneId, out dataByZone);
+					AddEmptyDataByZone(dataByZoneName, saleZoneServiceToClose.ZoneName, saleZoneServiceToClose.ZoneId, out dataByZone, saleZoneManager);
 
 				dataByZone.SaleZoneServiceToClose = saleZoneServiceToClose;
 
@@ -176,26 +171,32 @@ namespace TOne.WhS.Sales.BP.Activities
 			};
 		}
 
-		private void AddEmptyDataByZone(Dictionary<string, DataByZone> dataByZoneName, string zoneName, long zoneId, out DataByZone dataByZone)
+		private void AddEmptyDataByZone(Dictionary<string, DataByZone> dataByZoneName, string zoneName, long zoneId, out DataByZone dataByZone, SaleZoneManager saleZoneManager)
 		{
-			dataByZone = new DataByZone();
-			dataByZone.ZoneName = zoneName;
-			dataByZone.ZoneId = zoneId;
-			dataByZone.OtherRatesToChange = new List<RateToChange>();
-			dataByZone.OtherRatesToClose = new List<RateToClose>();
+			int? countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
+			if (!countryId.HasValue)
+				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Could not find the Country of Sale Zone '{0}'", zoneId));
+			dataByZone = new DataByZone()
+			{
+				ZoneId = zoneId,
+				ZoneName = zoneName,
+				CountryId = countryId.Value,
+				OtherRatesToChange = new List<RateToChange>(),
+				OtherRatesToClose = new List<RateToClose>()
+			};
 			dataByZoneName.Add(zoneName, dataByZone);
 		}
 
-		private IEnumerable<RatePlanCountry> GetSoldCountries(int customerId, DateTime effectiveOn, bool isEffectiveInFuture, IEnumerable<DraftNewCountry> newCountries)
+		private IEnumerable<RatePlanCountry> GetSoldCountries(int customerId, DateTime effectiveOn, bool isEffectiveInFuture, IEnumerable<CustomerCountryToAdd> countriesToAdd)
 		{
 			var customerCountryManager = new CustomerCountryManager();
 			IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountries(customerId, effectiveOn, isEffectiveInFuture);
 
 			IEnumerable<RatePlanCountry> draftCountries = null;
-			if (newCountries != null)
+			if (countriesToAdd != null)
 			{
-				IEnumerable<int> newCountryIds = newCountries.MapRecords(x => x.CountryId);
-				draftCountries = newCountries.MapRecords(x => new RatePlanCountry() { CountryId = x.CountryId, BED = x.BED });
+				IEnumerable<int> newCountryIds = countriesToAdd.MapRecords(x => x.CountryId);
+				draftCountries = countriesToAdd.MapRecords(x => new RatePlanCountry() { CountryId = x.CountryId, BED = x.BED });
 			}
 
 			var allCountries = new List<RatePlanCountry>();

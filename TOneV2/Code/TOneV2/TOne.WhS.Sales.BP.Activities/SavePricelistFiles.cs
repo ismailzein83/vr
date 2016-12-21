@@ -7,147 +7,102 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
+using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-    public class SavePricelistFiles : CodeActivity
-    {
-        [RequiredArgument]
-        public InArgument<int> OwnerId { get; set; }
+	public class SavePricelistFiles : CodeActivity
+	{
+		#region Input Arguments
 
-        [RequiredArgument]
-        public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
+		[RequiredArgument]
+		public InArgument<IEnumerable<SalePLZoneChange>> SalePLZoneChanges { get; set; }
 
-        [RequiredArgument]
-        public InArgument<IEnumerable<SalePLZoneChange>> SalePLZoneChanges { get; set; }
+		[RequiredArgument]
+		public InArgument<IEnumerable<ChangedCustomerCountry>> ChangedCustomerCountries { get; set; }
 
-        [RequiredArgument]
-        public OutArgument<IEnumerable<CarrierAccountInfo>> CustomersWithPriceListFile { get; set; }
+		#endregion
 
-        protected override void Execute(CodeActivityContext context)
-        {
-            int ownerId = OwnerId.Get(context);
-            SalePriceListOwnerType ownerType = OwnerType.Get(context);
-            IEnumerable<SalePLZoneChange> salePLZoneChanges = SalePLZoneChanges.Get(context);
+		#region Output Arguments
 
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            int sellingNumberPlanId;
-            IEnumerable<CarrierAccountInfo> customersOfSellingProduct;
+		[RequiredArgument]
+		public OutArgument<IEnumerable<int>> CustomerIdsWithPriceList { get; set; }
 
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                sellingNumberPlanId = GetSellingProductSellingNumberPlanId(ownerId);
-                customersOfSellingProduct = customerSellingProductManager.GetCustomersBySellingProductId(ownerId, DateTime.Today);
-            }
-            else
-            {
-                sellingNumberPlanId = GetCustomerSellingNumberPlanId(ownerId);
-                CarrierAccount customer = carrierAccountManager.GetCarrierAccount(ownerId);
+		#endregion
 
-                customersOfSellingProduct = new List<CarrierAccountInfo>() 
-                { 
-                    new CarrierAccountInfo()
-                    {
-                        CarrierAccountId = ownerId,
-                        AccountType = customer.AccountType,
-                        Name = carrierAccountManager.GetCarrierAccountName(ownerId),
-                        SellingNumberPlanId = customer.SellingNumberPlanId
-                    }
-                };
-            }
+		protected override void Execute(CodeActivityContext context)
+		{
+			IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+			IEnumerable<SalePLZoneChange> zoneChanges = SalePLZoneChanges.Get(context);
+			IEnumerable<ChangedCustomerCountry> changedCountries = ChangedCustomerCountries.Get(context);
 
-            IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor = this.GetCustomersToSavePriceListsFor(customersOfSellingProduct, salePLZoneChanges);
-            IEnumerable<int> customerIds = customersToSavePricelistsFor.Select(item => item.CarrierAccountId);
+			IEnumerable<int> customerIdsWithPriceList;
+			SalePLChangeType plChangeType;
 
-            var salePricelistFileContext = new SalePricelistFileContext
-            {
-                SellingNumberPlanId = sellingNumberPlanId,
-                ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
-                CustomerIds = customerIds,
-                ZoneChanges = salePLZoneChanges,
-                EffectiveDate = DateTime.Today,
-                ChangeType = SalePLChangeType.Rate,
-            };
+			if (changedCountries != null && changedCountries.Count() > 0)
+			{
+				customerIdsWithPriceList = new List<int>() { ratePlanContext.OwnerId };
+				plChangeType = SalePLChangeType.CountryAndRate;
+			}
+			else
+			{
+				customerIdsWithPriceList = GetCustomerIdsWithPriceList(zoneChanges);
+				plChangeType = SalePLChangeType.Rate;
+			}
 
+			var salePricelistFileContext = new SalePricelistFileContext
+			{
+				SellingNumberPlanId = ratePlanContext.OwnerSellingNumberPlanId,
+				ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
+				CustomerIds = customerIdsWithPriceList,
+				ZoneChanges = zoneChanges,
+				EffectiveDate = ratePlanContext.EffectiveDate,
+				ChangeType = plChangeType
+			};
 
-            SalePriceListManager salePricelistManager = new SalePriceListManager();
-            salePricelistManager.SavePricelistFiles(salePricelistFileContext);
+			var salePricelistManager = new SalePriceListManager();
+			salePricelistManager.SavePricelistFiles(salePricelistFileContext);
 
-            CustomersWithPriceListFile.Set(context, customersToSavePricelistsFor);
-        }
+			CustomerIdsWithPriceList.Set(context, customerIdsWithPriceList);
+		}
 
-        #region Private Methods
+		#region Private Methods
 
-        private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(IEnumerable<CarrierAccountInfo> customers, IEnumerable<SalePLZoneChange> zonesChanges)
-        {
-            Dictionary<int, List<SalePLZoneChange>> zonesChangesByCountry = StructureZonesChangesByCountry(zonesChanges);
-            HashSet<int> customerIdsHavingRateChange = new HashSet<int>(zonesChanges.SelectMany(itm => itm.CustomersHavingRateChange));
+		private IEnumerable<int> GetCustomerIdsWithPriceList(IEnumerable<SalePLZoneChange> zonesChanges)
+		{
+			if (zonesChanges == null || zonesChanges.Count() == 0)
+				return null;
 
-            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+			HashSet<int> countryIds;
+			HashSet<int> customerIds;
+			SetCountryAndCustomerIds(zonesChanges, out countryIds, out customerIds);
 
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+			if (customerIds == null || customerIds.Count == 0)
+				return null;
 
-            DateTime today = DateTime.Today;
+			var customerIdsWithPriceList = new List<int>();
+			var customerCountryManager = new CustomerCountryManager();
 
-            List<CarrierAccountInfo> customersToSavePricelistsFor = new List<CarrierAccountInfo>();
-            if (customers != null)
-            {
-                foreach (CarrierAccountInfo customer in customers)
-                {
-                    IEnumerable<int> customerCountryIds = customerCountryManager.GetCustomerCountryIds(customer.CarrierAccountId, today, false);
+			foreach (int customerId in customerIds)
+			{
+				IEnumerable<int> soldCountryIds = customerCountryManager.GetCustomerCountryIds(customerId, DateTime.Today, false);
 
-                    if (customerCountryIds != null && customerCountryIds.Intersect(zonesChangesByCountry.Keys).Count() > 0 && customerIdsHavingRateChange.Contains(customer.CarrierAccountId))
-                        customersToSavePricelistsFor.Add(customer);
-                }
-            }
+				if (soldCountryIds != null && soldCountryIds.Any(soldCountryId => countryIds.Contains(soldCountryId)))
+					customerIdsWithPriceList.Add(customerId);
+			}
 
-            return customersToSavePricelistsFor;
-        }
+			return customerIdsWithPriceList;
+		}
 
-        private Dictionary<int, List<SalePLZoneChange>> StructureZonesChangesByCountry(IEnumerable<SalePLZoneChange> zonesChanges)
-        {
-            Dictionary<int, List<SalePLZoneChange>> zonesChangesByCountry = new Dictionary<int, List<SalePLZoneChange>>();
+		private void SetCountryAndCustomerIds(IEnumerable<SalePLZoneChange> zoneChanges, out HashSet<int> countryIds, out HashSet<int> customerIds)
+		{
+			countryIds = new HashSet<int>(zoneChanges.MapRecords(x => x.CountryId));
+			IEnumerable<int> customerIdList = zoneChanges.SelectMany(x => x.CustomersHavingRateChange);
+			customerIds = (customerIdList != null) ? new HashSet<int>(customerIdList) : null;
+		}
 
-            List<SalePLZoneChange> zonesChangesList;
-
-            foreach (SalePLZoneChange zoneChange in zonesChanges)
-            {
-                if (!zonesChangesByCountry.TryGetValue(zoneChange.CountryId, out zonesChangesList))
-                {
-                    zonesChangesList = new List<SalePLZoneChange>();
-                    zonesChangesList.Add(zoneChange);
-                    zonesChangesByCountry.Add(zoneChange.CountryId, zonesChangesList);
-                }
-                else
-                    zonesChangesList.Add(zoneChange);
-            }
-
-            return zonesChangesByCountry;
-        }
-
-        private int GetSellingProductSellingNumberPlanId(int sellingProductId)
-        {
-            var sellingProductManager = new SellingProductManager();
-            int? sellingNumberPlanId = sellingProductManager.GetSellingNumberPlanId(sellingProductId);
-            if (!sellingNumberPlanId.HasValue)
-                throw new NullReferenceException(string.Format("SellingProduct '{0}' was not found", sellingProductId));
-            return sellingNumberPlanId.Value;
-        }
-
-        private int GetCustomerSellingNumberPlanId(int customerId)
-        {
-            var carrierAccountManager = new CarrierAccountManager();
-            CarrierAccount customerAccount = carrierAccountManager.GetCarrierAccount(customerId);
-            if (customerAccount == null)
-                throw new NullReferenceException(string.Format("Customer '{0}' was not found", customerId));
-            if (customerAccount.AccountType == CarrierAccountType.Supplier)
-                throw new Exception(string.Format("CarrierAccount '{0}' is not a Customer", customerId));
-            return customerAccount.SellingNumberPlanId.Value;
-        }
-
-
-        #endregion
-    }
+		#endregion
+	}
 }

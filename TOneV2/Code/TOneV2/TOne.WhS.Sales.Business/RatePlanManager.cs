@@ -92,7 +92,8 @@ namespace TOne.WhS.Sales.Business
 			var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId);
 			var rpManager = new ZoneRPManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft);
 
-			var inheritedRatesByZone = new InheritedRatesByZone();
+			var baseRatesByZone = new BaseRatesByZone();
+			var saleRateManager = new SaleRateManager();
 
 			foreach (SaleZone saleZone in saleZones)
 			{
@@ -120,16 +121,18 @@ namespace TOne.WhS.Sales.Business
 				}
 				else
 				{
-					AddZoneInheritedRates(inheritedRatesByZone, zoneItem); // Check if the customer zone has any inherited rate
+					AddZoneBaseRates(baseRatesByZone, zoneItem); // Check if the customer zone has any inherited rate
 					rpManager.SetCustomerZoneRP(zoneItem, input.Filter.OwnerId, sellingProductId.Value, zoneDraft);
 				}
 
 				zoneItems.Add(zoneItem);
 			}
 
-			if (input.Filter.OwnerType == SalePriceListOwnerType.Customer && inheritedRatesByZone.Count > 0)
+			if (input.Filter.OwnerType == SalePriceListOwnerType.Customer)
 			{
-				SetZoneInheritedRateBEDs(input.Filter.OwnerId, effectiveOn, inheritedRatesByZone);
+				IEnumerable<DraftNewCountry> draftNewCountries = (draft != null && draft.CountryChanges != null) ? draft.CountryChanges.NewCountries : null;
+				IEnumerable<CustomerCountry2> soldCountries = GetSoldCountries(input.Filter.OwnerId, effectiveOn, false, draftNewCountries);
+				saleRateManager.ProcessBaseRatesByZone(input.Filter.OwnerId, baseRatesByZone, soldCountries);
 			}
 
 			IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { RoutingProductId = x.EffectiveRoutingProductId, SaleZoneId = x.ZoneId });
@@ -139,121 +142,49 @@ namespace TOne.WhS.Sales.Business
 			return zoneItems;
 		}
 
-		#region Zone Inherited Rate Methods
+		#region Zone Base Rate Methods
 
-		private void AddZoneInheritedRates(InheritedRatesByZone inheritedRatesByZone, ZoneItem zoneItem)
+		private void AddZoneBaseRates(BaseRatesByZone baseRatesByZone, ZoneItem zoneItem)
 		{
 			if (zoneItem.IsCurrentRateEditable.HasValue && !zoneItem.IsCurrentRateEditable.Value)
 			{
-				AddZoneInheritedRate(inheritedRatesByZone, zoneItem, null, zoneItem.CurrentRateBED.Value, zoneItem.CurrentRateEED);
+				int? rateTypeId = null;
+				baseRatesByZone.AddZoneBaseRate(zoneItem.ZoneId, zoneItem, zoneItem.CountryId, rateTypeId, zoneItem.CurrentRateBED.Value, zoneItem.CurrentRateEED);
 			}
 			if (zoneItem.CurrentOtherRates != null)
 			{
-				foreach (OtherRate otherRate in zoneItem.CurrentOtherRates.Values)
+				foreach (OtherRate currentOtherRate in zoneItem.CurrentOtherRates.Values)
 				{
-					if (!otherRate.IsRateEditable)
-						AddZoneInheritedRate(inheritedRatesByZone, zoneItem, otherRate.RateTypeId, otherRate.BED, otherRate.EED);
+					if (!currentOtherRate.IsRateEditable)
+						baseRatesByZone.AddZoneBaseRate(zoneItem.ZoneId, zoneItem, zoneItem.CountryId, currentOtherRate.RateTypeId, currentOtherRate.BED, currentOtherRate.EED);
 				}
 			}
 		}
 
-		private void AddZoneInheritedRate(InheritedRatesByZone inheritedRatesByZone, ZoneItem zoneItem, int? rateTypeId, DateTime rateBED, DateTime? rateEED)
+		private IEnumerable<CustomerCountry2> GetSoldCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<DraftNewCountry> draftNewCountries)
 		{
-			ZoneInheritedRates zoneInheritedRates;
-			if (!inheritedRatesByZone.TryGetValue(zoneItem.ZoneId, out zoneInheritedRates))
+			var allCountries = new List<CustomerCountry2>();
+			var customerCountryManager = new CustomerCountryManager();
+
+			IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountries(customerId, effectiveOn, isEffectiveInFuture);
+			if (soldCountries != null)
+				allCountries.AddRange(soldCountries);
+
+			if (draftNewCountries != null)
 			{
-				zoneInheritedRates = new ZoneInheritedRates()
+				foreach (DraftNewCountry draftNewCountry in draftNewCountries)
 				{
-					ZoneItem = zoneItem,
-					OtherRatesByType = new Dictionary<int, ZoneInheritedRate>()
-				};
-				inheritedRatesByZone.Add(zoneItem.ZoneId, zoneInheritedRates);
-			}
-			if (rateTypeId.HasValue)
-			{
-				if (!zoneInheritedRates.OtherRatesByType.ContainsKey(rateTypeId.Value))
-				{
-					zoneInheritedRates.OtherRatesByType.Add(rateTypeId.Value, new ZoneInheritedRate()
+					allCountries.Add(new CustomerCountry2()
 					{
-						RateTypeId = rateTypeId.Value,
-						BED = rateBED,
-						EED = rateEED
+						CustomerId = customerId,
+						CountryId = draftNewCountry.CountryId,
+						BED = draftNewCountry.BED,
+						EED = draftNewCountry.EED
 					});
 				}
 			}
-			else
-			{
-				zoneInheritedRates.NormalRate = new ZoneInheritedRate()
-				{
-					RateTypeId = rateTypeId,
-					BED = rateBED,
-					EED = rateEED
-				};
-			}
-		}
 
-		private void SetZoneInheritedRateBEDs(int customerId, DateTime effectiveOn, InheritedRatesByZone inheritedRatesByZone)
-		{
-			var saleZoneManager = new SaleZoneManager();
-
-			IEnumerable<long> zoneIds = inheritedRatesByZone.Values.MapRecords(x => x.ZoneItem.ZoneId);
-			DateTime minimumBED = inheritedRatesByZone.GetMinimumBED();
-
-			OverlappedRatesByZone overlappedRatesByZone = new SaleRateManager().GetCustomerOverlappedRatesByZone(customerId, zoneIds, minimumBED);
-			Dictionary<int, DateTime> countryIdsBySoldOn = GetCountryIdsBySoldOn(customerId, effectiveOn);
-
-			foreach (ZoneInheritedRates zoneInheritedRates in inheritedRatesByZone.Values)
-			{
-				ZoneOverlappedRates zoneOverlappedRates = overlappedRatesByZone.GetRecord(zoneInheritedRates.ZoneItem.ZoneId);
-				DateTime soldOn = countryIdsBySoldOn.GetRecord(zoneInheritedRates.ZoneItem.CountryId);
-
-				if (zoneInheritedRates.NormalRate != null)
-				{
-					zoneInheritedRates.ZoneItem.CurrentRateBED = saleZoneManager.GetCustomerInheritedZoneRateBED(null, zoneOverlappedRates, zoneInheritedRates.NormalRate.BED, zoneInheritedRates.NormalRate.EED, soldOn);
-				}
-
-				if (zoneInheritedRates.OtherRatesByType.Count > 0)
-				{
-					foreach (ZoneInheritedRate inheritedOtherRate in zoneInheritedRates.OtherRatesByType.Values)
-					{
-						OtherRate currentOtherRate = zoneInheritedRates.ZoneItem.CurrentOtherRates.GetRecord(inheritedOtherRate.RateTypeId.Value);
-						currentOtherRate.BED = saleZoneManager.GetCustomerInheritedZoneRateBED(inheritedOtherRate.RateTypeId.Value, zoneOverlappedRates, inheritedOtherRate.BED, inheritedOtherRate.EED, soldOn);
-					}
-				}
-			}
-		}
-
-		private Dictionary<int, DateTime> GetCountryIdsBySoldOn(int customerId, DateTime effectiveOn)
-		{
-			var countryIdsBySoldOn = new Dictionary<int, DateTime>();
-
-			IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetCustomerCountries(customerId, effectiveOn, false);
-
-			Changes draft = new RatePlanDraftManager().GetDraft(SalePriceListOwnerType.Customer, customerId);
-			IEnumerable<DraftNewCountry> newCountries = (draft != null && draft.CountryChanges != null) ? draft.CountryChanges.NewCountries : null;
-
-			if ((soldCountries == null || soldCountries.Count() == 0) && (newCountries == null || newCountries.Count() == 0))
-				throw new Vanrise.Entities.DataIntegrityValidationException("countries");
-
-			if (soldCountries != null)
-			{
-				foreach (CustomerCountry2 soldCountry in soldCountries)
-				{
-					if (!countryIdsBySoldOn.ContainsKey(soldCountry.CountryId))
-						countryIdsBySoldOn.Add(soldCountry.CountryId, soldCountry.BED);
-				}
-			}
-
-			if (newCountries != null)
-			{
-				foreach (DraftNewCountry newCountry in newCountries)
-				{
-					if (!countryIdsBySoldOn.ContainsKey(newCountry.CountryId))
-						countryIdsBySoldOn.Add(newCountry.CountryId, newCountry.BED);
-				}
-			}
-
-			return (countryIdsBySoldOn.Count > 0) ? countryIdsBySoldOn : null;
+			return allCountries;
 		}
 
 		#endregion

@@ -23,10 +23,13 @@ namespace TOne.WhS.BusinessEntity.Entities
         [Description("None")]
         None,
 
-        [Description("Code And Rate")]
+        [Description("Code and Rate")]
         CodeAndRate,
 
         [Description("Rate")]
-        Rate
+        Rate,
+
+		[Description("Country and Rate")]
+		CountryAndRate,
     }
 }

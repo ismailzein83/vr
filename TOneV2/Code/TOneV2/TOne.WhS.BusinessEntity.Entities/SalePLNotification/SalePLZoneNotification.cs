@@ -6,26 +6,42 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-   public  class SalePLZoneNotification
-    {
-        private List<SalePLCodeNotification> _codes = new List<SalePLCodeNotification>();
+	public class SalePLZoneNotification : IBaseRates
+	{
+		private List<SalePLCodeNotification> _codes = new List<SalePLCodeNotification>();
 
-        public string ZoneName { get; set; }
+		public string ZoneName { get; set; }
 
-        public long ZoneId { get; set; }
+		public long ZoneId { get; set; }
 
-        public List<SalePLCodeNotification> Codes
-        {
-            get
-            {
-                return this._codes;
-            }
+		public List<SalePLCodeNotification> Codes
+		{
+			get
+			{
+				return this._codes;
+			}
 			set
 			{
 				_codes = value;
 			}
-        }
+		}
 
-        public SalePLRateNotification Rate { get; set; }    
-    }
+		public SalePLRateNotification Rate { get; set; }
+
+		#region IBaseRates Implementation
+
+		public void SetNormalRateBED(DateTime beginEffectiveDate)
+		{
+			if (Rate == null)
+				return;
+			Rate.BED = beginEffectiveDate;
+		}
+
+		public void SetOtherRateBED(int rateTypeId, DateTime beginEffectiveDate)
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion
+	}
 }

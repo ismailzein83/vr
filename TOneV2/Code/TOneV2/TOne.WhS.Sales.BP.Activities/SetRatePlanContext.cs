@@ -41,9 +41,36 @@ namespace TOne.WhS.Sales.BP.Activities
 			RatePlanContext ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
 			ratePlanContext.OwnerType = ownerType;
 			ratePlanContext.OwnerId = ownerId;
+			ratePlanContext.OwnerSellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
 			ratePlanContext.EffectiveDate = effectiveDate;
 			ratePlanContext.RateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
 		}
+
+		#region Private Methods
+
+		private int GetOwnerSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			int? sellingNumberPlanId;
+
+			if (ownerType == SalePriceListOwnerType.SellingProduct)
+			{
+				sellingNumberPlanId = new SellingProductManager().GetSellingNumberPlanId(ownerId);
+			}
+			else
+			{
+				sellingNumberPlanId = new CarrierAccountManager().GetCustomerSellingNumberPlanId(ownerId);
+			}
+
+			if (!sellingNumberPlanId.HasValue)
+			{
+				string ownerTypeDescription = Vanrise.Common.Utilities.GetEnumDescription<SalePriceListOwnerType>(ownerType);
+				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Could not find the Selling Number Plan of {0} '{1}'", ownerTypeDescription, ownerId));
+			}
+
+			return sellingNumberPlanId.Value;
+		}
+
+		#endregion
 	}
 
 	internal static class ContextExtensionMethods

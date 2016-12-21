@@ -9,7 +9,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class ZoneItem
+    public class ZoneItem : IBaseRates
     {
         public long ZoneId { get; set; }
         public string ZoneName { get; set; }
@@ -94,7 +94,27 @@ namespace TOne.WhS.Sales.Entities
 		public DraftResetZoneService ResetService { get; set; }
 		public IEnumerable<ZoneService> EffectiveServices { get; set; }
 		#endregion
-    }
+
+		#region IBaseRates Implementation
+
+		public void SetNormalRateBED(DateTime beginEffectiveDate)
+		{
+			if (!CurrentRateBED.HasValue)
+				return;
+			CurrentRateBED = beginEffectiveDate;
+		}
+
+		public void SetOtherRateBED(int rateTypeId, DateTime beginEffectiveDate)
+		{
+			if (CurrentOtherRates == null)
+				return;
+			OtherRate currentOtherRate;
+			if (CurrentOtherRates.TryGetValue(rateTypeId, out currentOtherRate))
+				currentOtherRate.BED = beginEffectiveDate;
+		}
+		
+		#endregion
+	}
 
     public class OtherRate
     {

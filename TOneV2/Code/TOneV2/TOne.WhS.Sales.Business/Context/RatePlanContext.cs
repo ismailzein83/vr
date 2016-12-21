@@ -20,6 +20,7 @@ namespace TOne.WhS.Sales.Business
 
 		public SalePriceListOwnerType OwnerType { get; set; }
 		public int OwnerId { get; set; }
+		public int OwnerSellingNumberPlanId { get; set; }
 		public DateTime EffectiveDate { get; set; }
 		public SaleEntityZoneRateLocator RateLocator { get; set; }
 		public DateTime RetroactiveDate
@@ -35,6 +36,7 @@ namespace TOne.WhS.Sales.Business
 	{
 		SalePriceListOwnerType OwnerType { get; }
 		int OwnerId { get; }
+		int OwnerSellingNumberPlanId { get; }
 		DateTime EffectiveDate { get; }
 		SaleEntityZoneRateLocator RateLocator { get; }
 		DateTime RetroactiveDate { get; }

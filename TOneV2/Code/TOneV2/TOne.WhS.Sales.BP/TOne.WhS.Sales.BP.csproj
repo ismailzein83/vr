@@ -97,6 +97,10 @@
       <Project>{d604102b-eca7-4f50-b9a1-be46ee701dc0}</Project>
       <Name>TOne.WhS.Sales.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Activities\TOne.WhS.SupplierPriceList.BP.Activities.csproj">
+      <Project>{F7438737-D6BB-4DBC-BEFF-813A524E6ECA}</Project>
+      <Name>TOne.WhS.SupplierPriceList.BP.Activities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

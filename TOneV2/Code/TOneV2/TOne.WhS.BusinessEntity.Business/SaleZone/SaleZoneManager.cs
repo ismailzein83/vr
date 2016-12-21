@@ -65,9 +65,11 @@ namespace TOne.WhS.BusinessEntity.Business
 			return GetCachedSaleZones().GetRecord(saleZoneId);
 		}
 
-		public int GetSaleZoneCountryId(long saleZoneId)
+		public int? GetSaleZoneCountryId(long saleZoneId)
 		{
 			SaleZone saleZone = GetSaleZone(saleZoneId);
+			if (saleZone == null)
+				return null;
 			return saleZone.CountryId;
 		}
 

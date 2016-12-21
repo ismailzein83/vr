@@ -90,6 +90,7 @@
     <Compile Include="GetExistingCustomerCountries.cs" />
     <Compile Include="LogEmailedCustomers.cs" />
     <Compile Include="PrepareCustomerCountryPreviews.cs" />
+    <Compile Include="PrepareCustomersWithPriceList.cs" />
     <Compile Include="PrepareExistingCustomerCountries.cs" />
     <Compile Include="PrepareZoneChanges.cs" />
     <Compile Include="GetExistingSaleEntityDefaultServices.cs" />

@@ -42,7 +42,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
 	public enum RateChangeType
 	{
-
 		[Description("Not Changed")]
 		NotChanged = 0,
 
@@ -123,5 +122,100 @@ namespace TOne.WhS.BusinessEntity.Entities
 
 		#endregion
 	}
-}
 
+	public class BaseRatesByZone : Dictionary<long, BaseRates>
+	{
+		public void AddZoneBaseRate(long zoneId, IBaseRates entity, int countryId, int? rateTypeId, DateTime rateBED, DateTime? rateEED)
+		{
+			BaseRates baseRates;
+			if (!base.TryGetValue(zoneId, out baseRates))
+			{
+				baseRates = new BaseRates()
+				{
+					ZoneId = zoneId,
+					Entity = entity,
+					CountryId = countryId
+				};
+				base.Add(zoneId, baseRates);
+			}
+			if (rateTypeId.HasValue)
+			{
+				if (!baseRates.BaseOtherRates.ContainsKey(rateTypeId.Value))
+				{
+					baseRates.BaseOtherRates.Add(rateTypeId.Value, new BaseRate()
+					{
+						RateTypeId = rateTypeId.Value,
+						BED = rateBED,
+						EED = rateEED
+					});
+				}
+			}
+			else
+			{
+				baseRates.BaseNormalRate = new BaseRate()
+				{
+					RateTypeId = rateTypeId,
+					BED = rateBED,
+					EED = rateEED
+				};
+			}
+		}
+
+		public DateTime GetMinimumBED()
+		{
+			var dates = new List<DateTime>();
+			foreach (BaseRates zoneBaseRates in base.Values)
+			{
+				dates.Add(zoneBaseRates.GetMinimumBED());
+			}
+			return dates.Min();
+		}
+	}
+
+	public class BaseRates
+	{
+		public BaseRates()
+		{
+			BaseOtherRates = new Dictionary<int, BaseRate>();
+		}
+
+		public long ZoneId { get; set; }
+
+		public int CountryId { get; set; }
+
+		public IBaseRates Entity { get; set; }
+
+		public BaseRate BaseNormalRate { get; set; }
+
+		public Dictionary<int, BaseRate> BaseOtherRates { get; set; }
+
+		public DateTime GetMinimumBED()
+		{
+			var dates = new List<DateTime>();
+			if (BaseNormalRate != null)
+				dates.Add(BaseNormalRate.BED);
+			if (BaseOtherRates != null)
+			{
+				foreach (BaseRate baseOtherRate in BaseOtherRates.Values)
+					dates.Add(baseOtherRate.BED);
+			}
+			return dates.Min();
+		}
+	}
+
+	public class BaseRate
+	{
+		public int? RateTypeId { get; set; }
+
+		public DateTime BED { get; set; }
+
+		public DateTime? EED { get; set; }
+	}
+
+	public interface IBaseRates
+	{
+		void SetNormalRateBED(DateTime beginEffectiveDate);
+
+		void SetOtherRateBED(int rateTypeId, DateTime beginEffectiveDate);
+	}
+}

@@ -13,205 +13,206 @@ using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
+	#region Classes
 
-    #region InArguments
-    public class PrepareDataForNotificationInput
-    {
-        public IEnumerable<ExistingZone> ExistingZones { get; set; }
+	public class PrepareDataForNotificationInput
+	{
+		public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
-        public IEnumerable<AddedZone> AddedZones { get; set; }
+		public IEnumerable<AddedZone> AddedZones { get; set; }
 
-        public IEnumerable<RatePreview> RatesPreview { get; set; }
+		public IEnumerable<RatePreview> RatesPreview { get; set; }
 
-        public List<SalePLZoneChange> SalePLZonesChanges { get; set; }
-    }
+		public List<SalePLZoneChange> SalePLZonesChanges { get; set; }
+	}
 
-    #endregion
+	#endregion
 
-    public sealed class PrepareDataForNotification : BaseAsyncActivity<PrepareDataForNotificationInput>
-    {
-        [RequiredArgument]
-        public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
+	public sealed class PrepareDataForNotification : BaseAsyncActivity<PrepareDataForNotificationInput>
+	{
+		#region Input Arguments
 
-        [RequiredArgument]
-        public InArgument<IEnumerable<AddedZone>> AddedZones { get; set; }
+		[RequiredArgument]
+		public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
 
-        [RequiredArgument]
-        public InArgument<IEnumerable<RatePreview>> RatesPreview { get; set; }
+		[RequiredArgument]
+		public InArgument<IEnumerable<AddedZone>> AddedZones { get; set; }
 
-        [RequiredArgument]
-        public InArgument<List<SalePLZoneChange>> SalePLZonesChanges { get; set; }
+		[RequiredArgument]
+		public InArgument<IEnumerable<RatePreview>> RatesPreview { get; set; }
 
-        protected override void DoWork(PrepareDataForNotificationInput inputArgument, AsyncActivityHandle handle)
-        {
-            IEnumerable<SalePLZoneChange> zoneChanges = this.GetZoneChanges(inputArgument.RatesPreview, inputArgument.ExistingZones, inputArgument.AddedZones);
-            if (zoneChanges.Count() > 0)
-            {
-                lock (inputArgument.SalePLZonesChanges)
-                {
-                    inputArgument.SalePLZonesChanges.AddRange(zoneChanges);
-                }
-            }
-        }
+		[RequiredArgument]
+		public InArgument<List<SalePLZoneChange>> SalePLZonesChanges { get; set; }
 
-        protected override PrepareDataForNotificationInput GetInputArgument(AsyncCodeActivityContext context)
-        {
-            return new PrepareDataForNotificationInput()
-            {
-                ExistingZones = this.ExistingZones.Get(context),
-                AddedZones = this.AddedZones.Get(context),
-                RatesPreview = this.RatesPreview.Get(context),
-                SalePLZonesChanges = this.SalePLZonesChanges.Get(context)
-            };
-        }
+		#endregion
 
-        #region Private Methods
+		protected override void DoWork(PrepareDataForNotificationInput inputArgument, AsyncActivityHandle handle)
+		{
+			IEnumerable<SalePLZoneChange> zoneChanges = this.GetZoneChanges(inputArgument.RatesPreview, inputArgument.ExistingZones, inputArgument.AddedZones);
+			if (zoneChanges.Count() > 0)
+			{
+				lock (inputArgument.SalePLZonesChanges)
+				{
+					inputArgument.SalePLZonesChanges.AddRange(zoneChanges);
+				}
+			}
+		}
 
-        private IEnumerable<SalePLZoneChange> GetZoneChanges(IEnumerable<RatePreview> ratesPreview, IEnumerable<ExistingZone> existingZones, IEnumerable<AddedZone> addedZones)
-        {
-            Dictionary<string, List<RatePreview>> ratesPreviewByZoneName = new Dictionary<string, List<RatePreview>>();
+		protected override PrepareDataForNotificationInput GetInputArgument(AsyncCodeActivityContext context)
+		{
+			return new PrepareDataForNotificationInput()
+			{
+				ExistingZones = this.ExistingZones.Get(context),
+				AddedZones = this.AddedZones.Get(context),
+				RatesPreview = this.RatesPreview.Get(context),
+				SalePLZonesChanges = this.SalePLZonesChanges.Get(context)
+			};
+		}
 
-            if (ratesPreview != null)
-            {
-                IEnumerable<RatePreview> newRatesPreview = ratesPreview.FindAllRecords(item => item.ChangeType == RateChangeType.New);
-                ratesPreviewByZoneName = StructureRatesPreviewByZoneName(newRatesPreview);
-            }
+		#region Private Methods
 
-            Dictionary<string, List<ExistingZone>> existingZonesByZoneName = StructureExistingZonesByZoneName(existingZones);
-            Dictionary<string, List<AddedZone>> addedZonesByZoneName = StructureAddedZonesByZoneName(addedZones);
+		private IEnumerable<SalePLZoneChange> GetZoneChanges(IEnumerable<RatePreview> ratesPreview, IEnumerable<ExistingZone> existingZones, IEnumerable<AddedZone> addedZones)
+		{
+			Dictionary<string, List<RatePreview>> ratesPreviewByZoneName = new Dictionary<string, List<RatePreview>>();
 
-            List<SalePLZoneChange> zonesChanges = new List<SalePLZoneChange>();
+			if (ratesPreview != null)
+			{
+				IEnumerable<RatePreview> newRatesPreview = ratesPreview.FindAllRecords(item => item.ChangeType == RateChangeType.New);
+				ratesPreviewByZoneName = StructureRatesPreviewByZoneName(newRatesPreview);
+			}
 
-            foreach (KeyValuePair<string, List<ExistingZone>> item in existingZonesByZoneName)
-            {
-                foreach (ExistingZone existingZone in item.Value)
-                {
-                    if (existingZone.AddedCodes.Count > 0 || existingZone.ExistingCodes.Any(itm => itm.ChangedEntity != null))
-                    {
+			Dictionary<string, List<ExistingZone>> existingZonesByZoneName = StructureExistingZonesByZoneName(existingZones);
+			Dictionary<string, List<AddedZone>> addedZonesByZoneName = StructureAddedZonesByZoneName(addedZones);
 
-                        SalePLZoneChange zoneChange = new SalePLZoneChange()
-                        {
-                            ZoneName = existingZone.Name,
-                            CountryId = existingZone.CountryId,
-                            HasCodeChange = true,
-                            CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, existingZone.Name)
-                        };
-                        zonesChanges.Add(zoneChange);
-                        break;
-                    }
-                }
-            }
+			List<SalePLZoneChange> zonesChanges = new List<SalePLZoneChange>();
 
+			foreach (KeyValuePair<string, List<ExistingZone>> item in existingZonesByZoneName)
+			{
+				foreach (ExistingZone existingZone in item.Value)
+				{
+					if (existingZone.AddedCodes.Count > 0 || existingZone.ExistingCodes.Any(itm => itm.ChangedEntity != null))
+					{
 
-            foreach (KeyValuePair<string, List<AddedZone>> item in addedZonesByZoneName)
-            {
-                AddedZone firstAddedZone = item.Value.Last();
-                SalePLZoneChange zoneChange = new SalePLZoneChange()
-                {
-                    ZoneName = firstAddedZone.Name,
-                    CountryId = firstAddedZone.CountryId,
-                    HasCodeChange = true,
-                    CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, firstAddedZone.Name)
-                };
-                zonesChanges.Add(zoneChange);
-            }
-
-            return zonesChanges;
-        }
-
-        private Dictionary<string, List<ExistingZone>> StructureExistingZonesByZoneName(IEnumerable<ExistingZone> existingZones)
-        {
-            Dictionary<string, List<ExistingZone>> existingZonesByZoneName = new Dictionary<string, List<ExistingZone>>();
-
-            if (existingZones != null)
-            {
-                List<ExistingZone> existingZonesList;
-                foreach (ExistingZone existingZone in existingZones)
-                {
-                    if (!existingZonesByZoneName.TryGetValue(existingZone.Name, out existingZonesList))
-                    {
-                        existingZonesList = new List<ExistingZone>() { existingZone };
-                        existingZonesByZoneName.Add(existingZone.Name, existingZonesList);
-                    }
-                    else
-                        existingZonesList.Add(existingZone);
-                }
-            }
-
-            return existingZonesByZoneName;
-        }
-
-        private Dictionary<string, List<AddedZone>> StructureAddedZonesByZoneName(IEnumerable<AddedZone> addedZones)
-        {
-            Dictionary<string, List<AddedZone>> addedZonesByZoneName = new Dictionary<string, List<AddedZone>>();
-
-            if (addedZones != null)
-            {
-                List<AddedZone> addedZonesList;
-                foreach (AddedZone addedZone in addedZones)
-                {
-                    if (!addedZonesByZoneName.TryGetValue(addedZone.Name, out addedZonesList))
-                    {
-                        addedZonesList = new List<AddedZone>() { addedZone };
-                        addedZonesByZoneName.Add(addedZone.Name, addedZonesList);
-                    }
-                    else
-                        addedZonesList.Add(addedZone);
-                }
-            }
-
-            return addedZonesByZoneName;
-        }
-
-        private IEnumerable<int> GetCustomersHavingRateChange(Dictionary<string, List<RatePreview>> ratesPreviewByZoneName, string zoneName)
-        {
-            HashSet<int> customersIds = new HashSet<int>();
-            IEnumerable<RatePreview> newRates = ratesPreviewByZoneName.GetRecord(zoneName);
-            CustomerSellingProductManager manager = new CustomerSellingProductManager();
-
-            if (newRates != null)
-            {
-                foreach (RatePreview rate in newRates)
-                {
-                    if (rate.OnwerType == SalePriceListOwnerType.Customer)
-                        customersIds.Add(rate.OwnerId);
-                    else
-                    {
-                        IEnumerable<CarrierAccountInfo> customersAssignedToSellingProduct = manager.GetCustomersBySellingProductId(rate.OwnerId, DateTime.Today);
-                        IEnumerable<int> ids = customersAssignedToSellingProduct.Select(itm => itm.CarrierAccountId);
-                        customersIds.UnionWith(ids);
-                    }
-                }
-            }
+						SalePLZoneChange zoneChange = new SalePLZoneChange()
+						{
+							ZoneName = existingZone.Name,
+							CountryId = existingZone.CountryId,
+							HasCodeChange = true,
+							CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, existingZone.Name)
+						};
+						zonesChanges.Add(zoneChange);
+						break;
+					}
+				}
+			}
 
 
-            return customersIds;
-        }
+			foreach (KeyValuePair<string, List<AddedZone>> item in addedZonesByZoneName)
+			{
+				AddedZone firstAddedZone = item.Value.Last();
+				SalePLZoneChange zoneChange = new SalePLZoneChange()
+				{
+					ZoneName = firstAddedZone.Name,
+					CountryId = firstAddedZone.CountryId,
+					HasCodeChange = true,
+					CustomersHavingRateChange = this.GetCustomersHavingRateChange(ratesPreviewByZoneName, firstAddedZone.Name)
+				};
+				zonesChanges.Add(zoneChange);
+			}
 
-        private Dictionary<string, List<RatePreview>> StructureRatesPreviewByZoneName(IEnumerable<RatePreview> ratesPreview)
-        {
-            Dictionary<string, List<RatePreview>> ratesPreviewByZoneName = new Dictionary<string, List<RatePreview>>();
-            if (ratesPreview != null)
-            {
-                List<RatePreview> ratesPreviewList;
-                foreach (RatePreview ratePreview in ratesPreview)
-                {
-                    if (!ratesPreviewByZoneName.TryGetValue(ratePreview.ZoneName, out ratesPreviewList))
-                    {
-                        ratesPreviewList = new List<RatePreview>();
-                        ratesPreviewList.Add(ratePreview);
-                        ratesPreviewByZoneName.Add(ratePreview.ZoneName, ratesPreviewList);
-                    }
-                    else
-                        ratesPreviewList.Add(ratePreview);
-                }
-            }
-            return ratesPreviewByZoneName;
-        }
+			return zonesChanges;
+		}
+
+		private Dictionary<string, List<ExistingZone>> StructureExistingZonesByZoneName(IEnumerable<ExistingZone> existingZones)
+		{
+			Dictionary<string, List<ExistingZone>> existingZonesByZoneName = new Dictionary<string, List<ExistingZone>>();
+
+			if (existingZones != null)
+			{
+				List<ExistingZone> existingZonesList;
+				foreach (ExistingZone existingZone in existingZones)
+				{
+					if (!existingZonesByZoneName.TryGetValue(existingZone.Name, out existingZonesList))
+					{
+						existingZonesList = new List<ExistingZone>() { existingZone };
+						existingZonesByZoneName.Add(existingZone.Name, existingZonesList);
+					}
+					else
+						existingZonesList.Add(existingZone);
+				}
+			}
+
+			return existingZonesByZoneName;
+		}
+
+		private Dictionary<string, List<AddedZone>> StructureAddedZonesByZoneName(IEnumerable<AddedZone> addedZones)
+		{
+			Dictionary<string, List<AddedZone>> addedZonesByZoneName = new Dictionary<string, List<AddedZone>>();
+
+			if (addedZones != null)
+			{
+				List<AddedZone> addedZonesList;
+				foreach (AddedZone addedZone in addedZones)
+				{
+					if (!addedZonesByZoneName.TryGetValue(addedZone.Name, out addedZonesList))
+					{
+						addedZonesList = new List<AddedZone>() { addedZone };
+						addedZonesByZoneName.Add(addedZone.Name, addedZonesList);
+					}
+					else
+						addedZonesList.Add(addedZone);
+				}
+			}
+
+			return addedZonesByZoneName;
+		}
+
+		private IEnumerable<int> GetCustomersHavingRateChange(Dictionary<string, List<RatePreview>> ratesPreviewByZoneName, string zoneName)
+		{
+			HashSet<int> customersIds = new HashSet<int>();
+			IEnumerable<RatePreview> newRates = ratesPreviewByZoneName.GetRecord(zoneName);
+			CustomerSellingProductManager manager = new CustomerSellingProductManager();
+
+			if (newRates != null)
+			{
+				foreach (RatePreview rate in newRates)
+				{
+					if (rate.OnwerType == SalePriceListOwnerType.Customer)
+						customersIds.Add(rate.OwnerId);
+					else
+					{
+						IEnumerable<CarrierAccountInfo> customersAssignedToSellingProduct = manager.GetCustomersBySellingProductId(rate.OwnerId, DateTime.Today);
+						IEnumerable<int> ids = customersAssignedToSellingProduct.Select(itm => itm.CarrierAccountId);
+						customersIds.UnionWith(ids);
+					}
+				}
+			}
 
 
-        #endregion
+			return customersIds;
+		}
 
+		private Dictionary<string, List<RatePreview>> StructureRatesPreviewByZoneName(IEnumerable<RatePreview> ratesPreview)
+		{
+			Dictionary<string, List<RatePreview>> ratesPreviewByZoneName = new Dictionary<string, List<RatePreview>>();
+			if (ratesPreview != null)
+			{
+				List<RatePreview> ratesPreviewList;
+				foreach (RatePreview ratePreview in ratesPreview)
+				{
+					if (!ratesPreviewByZoneName.TryGetValue(ratePreview.ZoneName, out ratesPreviewList))
+					{
+						ratesPreviewList = new List<RatePreview>();
+						ratesPreviewList.Add(ratePreview);
+						ratesPreviewByZoneName.Add(ratePreview.ZoneName, ratesPreviewList);
+					}
+					else
+						ratesPreviewList.Add(ratePreview);
+				}
+			}
+			return ratesPreviewByZoneName;
+		}
 
-    }
+		#endregion
+	}
 }

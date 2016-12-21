@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.Business
 	public class SaleRateManager : ISaleEntityZoneRateManager
 	{
 		#region Public Methods
+
 		public List<SaleRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
 		{
 			throw new NotImplementedException();
@@ -179,6 +180,41 @@ namespace TOne.WhS.BusinessEntity.Business
 			return overlappedRatesByZone;
 		}
 
+		public void ProcessBaseRatesByZone(int customerId, BaseRatesByZone baseRatesByZone, IEnumerable<CustomerCountry2> soldCountries)
+		{
+			if (baseRatesByZone.Count == 0)
+				return;
+
+			var saleZoneManager = new SaleZoneManager();
+
+			IEnumerable<long> zoneIds = baseRatesByZone.Values.MapRecords(x => x.ZoneId);
+			DateTime minimumBED = baseRatesByZone.GetMinimumBED();
+
+			OverlappedRatesByZone overlappedRatesByZone = new SaleRateManager().GetCustomerOverlappedRatesByZone(customerId, zoneIds, minimumBED);
+			Dictionary<int, DateTime> sellDatesByCountry = StructureSellDatesByCountry(soldCountries);
+
+			foreach (BaseRates zoneBaseRates in baseRatesByZone.Values)
+			{
+				ZoneOverlappedRates zoneOverlappedRates = overlappedRatesByZone.GetRecord(zoneBaseRates.ZoneId);
+				DateTime soldOn = sellDatesByCountry.GetRecord(zoneBaseRates.CountryId);
+
+				if (zoneBaseRates.BaseNormalRate != null)
+				{
+					DateTime baseNormalRateBED = saleZoneManager.GetCustomerInheritedZoneRateBED(null, zoneOverlappedRates, zoneBaseRates.BaseNormalRate.BED, zoneBaseRates.BaseNormalRate.EED, soldOn);
+					zoneBaseRates.Entity.SetNormalRateBED(baseNormalRateBED);
+				}
+
+				if (zoneBaseRates.BaseOtherRates.Count > 0)
+				{
+					foreach (BaseRate baseOtherRate in zoneBaseRates.BaseOtherRates.Values)
+					{
+						DateTime baseOtherRateBED = saleZoneManager.GetCustomerInheritedZoneRateBED(baseOtherRate.RateTypeId.Value, zoneOverlappedRates, baseOtherRate.BED, baseOtherRate.EED, soldOn);
+						zoneBaseRates.Entity.SetOtherRateBED(baseOtherRate.RateTypeId.Value, baseOtherRateBED);
+					}
+				}
+			}
+		}
+
 		#endregion
 
 		#region Private Classes
@@ -336,6 +372,26 @@ namespace TOne.WhS.BusinessEntity.Business
 			}
 		}
 
+		#endregion
+
+		#region Private Methods
+
+		private Dictionary<int, DateTime> StructureSellDatesByCountry(IEnumerable<CustomerCountry2> soldCountries)
+		{
+			if (soldCountries == null || soldCountries.Count() == 0)
+				return null;
+
+			var sellDatesByCountry = new Dictionary<int, DateTime>();
+
+			foreach (CustomerCountry2 soldCountry in soldCountries)
+			{
+				if (!sellDatesByCountry.ContainsKey(soldCountry.CountryId))
+					sellDatesByCountry.Add(soldCountry.CountryId, soldCountry.BED);
+			}
+
+			return sellDatesByCountry;
+		}
+		
 		#endregion
 	}
 }
