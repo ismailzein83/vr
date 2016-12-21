@@ -94,7 +94,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 Notes = reader["Notes"] as string,
                 TransactionTime = GetReaderValue<DateTime>(reader, "TransactionTime"),
                 TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeID"),
-                Reference = reader["Reference"] as string
+                Reference = reader["Reference"] as string,
+                IsBalanceUpdated = GetReaderValue<bool>(reader, "IsBalanceUpdated")
             };
         }
 

@@ -24,5 +24,6 @@ namespace Vanrise.AccountBalance.Entities
         public string Notes { get; set; }
 
         public string Reference { get; set; }
+        public bool IsBalanceUpdated { get; set; }
     }
 }
