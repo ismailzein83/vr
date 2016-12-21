@@ -60,19 +60,28 @@
                         WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(selectedCarrierAccountId).then(function (currencyId) {
                             currencyDirectiveAPI.selectedCurrency(currencyId);
                             $scope.scopeModel.isLoadingCurrencySelector = false;
-                            $scope.scopeModel.showMapping = true;
+                            
                         });
 
                         getPriceListTemplate(selectedCarrierAccountId).then(function (response) {
-                            priceListTemplateEntity = response;
-                            var payload = {
-                                context: buildContext(),
-                                configDetails: response != undefined && response.ConfigDetails != undefined ? response.ConfigDetails : undefined
-                            };
-                            var setLoader = function (value) {
-                                $scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierPriceListConfigurationAPI, payload, setLoader, supplierPriceListConfigurationReadyPromiseDeferred);
+
+                        	supplierPriceListConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                        	$scope.scopeModel.showMapping = true;
+
+                        	supplierPriceListConfigurationReadyPromiseDeferred.promise.then(function () {
+
+                        		priceListTemplateEntity = response;
+                        		supplierPriceListConfigurationReadyPromiseDeferred = undefined;
+
+                        		var payload = {
+                        			context: buildContext(),
+                        			configDetails: response != undefined && response.ConfigDetails != undefined ? response.ConfigDetails : undefined
+                        		};
+                        		var setLoader = function (value) {
+                        			$scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
+                        		};
+                        		VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierPriceListConfigurationAPI, payload, setLoader, supplierPriceListConfigurationReadyPromiseDeferred);
+                        	});
                         });
                     }
                 };
@@ -82,7 +91,8 @@
                 };
 
                 $scope.scopeModel.onSupplierPriceListConfigurationSelectiveReady = function (api) {
-                    supplierPriceListConfigurationAPI = api;
+                	supplierPriceListConfigurationAPI = api;
+                	supplierPriceListConfigurationReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.saveSupplierPriceListConfiguration = function () {
