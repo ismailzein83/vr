@@ -69,6 +69,8 @@ public partial class Clients : BasePage
     {
         hdnId.Value = Client.ID.ToString();
         txtName.Text = Client.Name;
+        txtEmail.Text = Client.ClientEmail;
+        txtSecurityEmail.Text = Client.SecurityEmail;
         chkIsClientReport.Checked = Client.ClientReport.Value;
         chkIsClientReportSecurity.Checked = Client.ClientReportSecurity.Value;
 

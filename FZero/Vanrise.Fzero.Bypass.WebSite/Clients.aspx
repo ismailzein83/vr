@@ -61,8 +61,14 @@
                                                         <asp:RequiredFieldValidator CssClass="error" ID="rfvUserName" runat="server" ControlToValidate="txtName" ErrorMessage="Username should not be empty " ValidationGroup="Save"></asp:RequiredFieldValidator>
                                                     </td>
                                                 </tr>
-                              
-
+                                                <tr>
+                                                    <td class=""><%=Resources.Resources.Email %></td>
+                                                    <td ></td>
+                                                    <td>
+                                                        <telerik:RadTextBox ID="txtEmail" runat="server"></telerik:RadTextBox>
+                                                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtEmail" ErrorMessage="Email should not be empty " ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <td class=""><%= Resources.Resources.IsClientReport %></td>
                                                     <td ></td>
@@ -70,16 +76,21 @@
                                                         <asp:CheckBox ID="chkIsClientReport" runat="server" />
                                                     </td>
                                                 </tr>
-                                                
-                                                     <tr>
+                                                <tr>
+                                                    <td class=""><%=Resources.Resources.SecurityEmail %></td>
+                                                    <td ></td>
+                                                    <td>
+                                                        <telerik:RadTextBox ID="txtSecurityEmail" runat="server"></telerik:RadTextBox>
+                                                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtSecurityEmail" ErrorMessage="Security Email should not be empty " ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td class=""><%= Resources.Resources.IsClientReportSecurity %></td>
                                                     <td ></td>
                                                     <td>
                                                         <asp:CheckBox ID="chkIsClientReportSecurity" runat="server" />
                                                     </td>
                                                 </tr>
-
-
                                                 <tr>
                                                     <td></td>
                                                     <td></td>
