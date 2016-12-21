@@ -70,7 +70,7 @@ namespace Vanrise.AccountBalance.Business
                 };
                 IBillingTransactionDataManager billingTransactionDataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
                 var billingTransactions = billingTransactionDataManager.GetFilteredBillingTransactions(billingTransactionQuery);
-
+                billingTransactions.OrderBy(x => x.TransactionTime);
                 List<AccountStatementItem> accountStatementItems = new List<AccountStatementItem>();
                 decimal previousBalance = 0;
                 foreach (var billingTransaction in billingTransactions)
