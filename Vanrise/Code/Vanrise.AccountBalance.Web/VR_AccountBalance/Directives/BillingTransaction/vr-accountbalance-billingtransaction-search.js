@@ -61,12 +61,13 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     query: getFilterObject(),
                     showAccount:false,
                 }
-                return gridAPI.loadGrid(payload);
+                return gridAPI.loadGrid(payload).then(function () {
+                    load();
+                });
             };
             $scope.addTransaction = function () {
                 var onBillingTransacationAdded = function (obj) {
                     gridAPI.onBillingTransactionAdded(obj);
-                    load();
                 };
                 VR_AccountBalance_BillingTransactionService.addBillingTransaction(accountsIds[0], accountTypeId, onBillingTransacationAdded)
             }
