@@ -149,7 +149,10 @@ namespace NP.IVSwitch.Data.Postgres
             insertedId = Convert.ToInt32(endPointId);
             return true;
         }
-
+        public List<AccessList> GetAccessList()
+        {
+            return GetItemsText("select user_id,route_table_id,tariff_id from access_list", AccessListMapper, null);
+        }
         public bool AclInsert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
         {
             insertedId = -1;
@@ -286,7 +289,6 @@ namespace NP.IVSwitch.Data.Postgres
             AccessList accessList = CheckAccessListExistense(accountId, groupId);
             return accessList ?? CreateTariffAndRouteTables(carrierAccountName);
         }
-
         private AccessList CheckAccessListExistense(int accountId, int groupId)
         {
             string query = @"select route_table_id,tariff_id from access_list
@@ -511,15 +513,14 @@ namespace NP.IVSwitch.Data.Postgres
                 int.TryParse(reader["tariff_id"].ToString(), out id);
                 endPoint.TariffId = id;
             }
+            if (reader["user_id"] != DBNull.Value)
+            {
+                int.TryParse(reader["user_id"].ToString(), out id);
+                endPoint.UserId = id;
+            }
             return endPoint;
         }
 
         #endregion
-    }
-
-    public class AccessList
-    {
-        public int RouteTableId { get; set; }
-        public int TariffId { get; set; }
     }
 }

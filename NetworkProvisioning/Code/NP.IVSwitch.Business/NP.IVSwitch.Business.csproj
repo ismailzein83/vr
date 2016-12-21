@@ -95,6 +95,7 @@
     <Compile Include="MappingRuleHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteManager.cs" />
+    <Compile Include="CustomerRouteManager.cs" />
     <Compile Include="TranslationRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>

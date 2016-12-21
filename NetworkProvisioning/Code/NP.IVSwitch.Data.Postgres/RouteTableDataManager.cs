@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using NP.IVSwitch.Entities;
 using Vanrise.Data.Postgres;
 
 namespace NP.IVSwitch.Data.Postgres
 {
-    public class RouteTableDataManager : BasePostgresDataManager
+    public class RouteTableDataManager : BasePostgresDataManager, ICustomerRouteDataManager
     {
+        public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
         private string ConnectionString { get; set; }
         private string Owner { get; set; }
 
@@ -22,6 +22,25 @@ namespace NP.IVSwitch.Data.Postgres
             return ConnectionString;
         }
 
+        public List<CustomerRoute> GetCustomerRoutes(string routeTableName, int top, string orderBy, string codePrefix)
+        {
+            string destinationQuery = string.Empty;
+            if (!string.IsNullOrEmpty(codePrefix))
+            {
+                destinationQuery = string.Format("where destination like '{0}'", codePrefix);
+            }
+            string query = string.Format(@"
+                            ;with TopDistinctCodes as (
+                            select distinct destination from {0}
+                            {3}
+                            order by destination {2}
+                            limit {1}
+                            )
+                            select rt190.destination,rt190.route_id,rt190.flag_1 from TopDistinctCodes
+                            join {0} on {0}.destination = TopDistinctCodes.destination"
+                               , routeTableName, top, orderBy, destinationQuery);
+            return GetItemsText(query, CustomerRouteMapper, null);
+        }
         public int CreateRouteTable(int routeId)
         {
             if (routeId == -1) return -1;
@@ -62,5 +81,17 @@ namespace NP.IVSwitch.Data.Postgres
             return routeId;
         }
 
+        #region mapper
+
+        private CustomerRoute CustomerRouteMapper(IDataReader reader)
+        {
+            return new CustomerRoute
+            {
+                Destination = reader["destination"] as string,
+                RouteId = GetReaderValue<int>(reader, "route_id"),
+                Percentage = GetReaderValue<decimal>(reader, "flag_1")
+            };
+        }
+        #endregion
     }
 }

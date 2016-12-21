@@ -129,6 +129,7 @@
     <Compile Include="Controllers\DomainController.cs" />
     <Compile Include="Controllers\EndPointController.cs" />
     <Compile Include="Controllers\RouteController.cs" />
+    <Compile Include="Controllers\CustomerRouteController.cs" />
     <Compile Include="Controllers\TranslationRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -159,6 +160,8 @@
     <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpoint-grid.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpoint-selector.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\Templates\EndPointGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\CustomerRoute\np-ivswitch-customerroute-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\Templates\RouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-grid.js" />
@@ -189,6 +192,8 @@
     <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileEditor.html" />
     <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileManagement.html" />
     <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileManagementController.js" />
+    <Content Include="NP_IVSwitch\Views\CustomerRoute\CustomerRouteManagement.html" />
+    <Content Include="NP_IVSwitch\Views\CustomerRoute\CustomerRouteManagementController.js" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditor.html" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditor.html" />

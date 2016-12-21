@@ -57,6 +57,7 @@
     <Compile Include="Domain\Domain.cs" />
     <Compile Include="Domain\DomainFilter.cs" />
     <Compile Include="Domain\DomainInfo.cs" />
+    <Compile Include="EndPoint\AccessList.cs" />
     <Compile Include="EndPoint\EndPoint.cs" />
     <Compile Include="EndPoint\EndPointDetail.cs" />
     <Compile Include="EndPoint\EndPointCarrierAccountExtension.cs" />
@@ -64,6 +65,9 @@
     <Compile Include="EndPoint\EndPointToAdd.cs" />
     <Compile Include="EndPoint\EndPointToUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomerRoute\CustomerRoute.cs" />
+    <Compile Include="CustomerRoute\CustomerRouteDetail.cs" />
+    <Compile Include="CustomerRoute\CustomerRouteQuery.cs" />
     <Compile Include="Route\RouteCarrierAccountExtension.cs" />
     <Compile Include="Route\RouteToAdd.cs" />
     <Compile Include="Route\Route.cs" />
