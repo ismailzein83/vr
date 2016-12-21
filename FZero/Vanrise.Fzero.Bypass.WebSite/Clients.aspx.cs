@@ -95,6 +95,8 @@ public partial class Clients : BasePage
         Client client = currentObject;
         client.ClientReport = chkIsClientReport.Checked;
         client.ClientReportSecurity = chkIsClientReportSecurity.Checked;
+        client.SecurityEmail = txtSecurityEmail.Text;
+        client.ClientEmail = txtEmail.Text;
         return client;
     }
 
