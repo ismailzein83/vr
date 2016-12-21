@@ -1438,7 +1438,7 @@
     <value>Last Login Time</value>
   </data>
   <data name="IsClientReport" xml:space="preserve">
-    <value>Send report to Operator</value>
+    <value>Send report to Client</value>
   </data>
   <data name="IsClientReportSecurity" xml:space="preserve">
     <value>Send report to Security</value>
