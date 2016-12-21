@@ -29,9 +29,6 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                 $scope.scopeModel.accounts = [];
                 $scope.scopeModel.menuActions = [];
 
-                $scope.scopeModel.getStatusColor = function (dataItem) {
-                    return dataItem.Style;
-                };
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions, true);
@@ -50,7 +47,10 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
-                defineMenuActions();
+
+                $scope.scopeModel.getStatusColor = function (dataItem) {
+                    return dataItem.Style;
+                };
 
                 $scope.scopeModel.getMenuActions = function (dataItem) {
                     var menuActions = [];
@@ -68,6 +68,8 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                     }
                     return menuActions;
                 };
+
+                defineMenuActions();
 
                 function defineActionDefinitionMenuAction(actionDefinition) {
                     return {
