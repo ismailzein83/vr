@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountGridDefinitionManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountDefinitionService'];
+    AccountGridDefinitionManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountDefinitionService', 'Retail_BE_AccountTypeAPIService'];
 
-    function AccountGridDefinitionManagementDirective(UtilsService, VRNotificationService, Retail_BE_AccountDefinitionService) {
+    function AccountGridDefinitionManagementDirective(UtilsService, VRNotificationService, Retail_BE_AccountDefinitionService, Retail_BE_AccountTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -31,6 +31,8 @@
         function AccountGridDefinitionManagementCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountFields;
+
             var gridAPI;
 
             function initializeController() {
@@ -44,6 +46,7 @@
 
                 $scope.scopeModel.onAddColumnDefinition = function () {
                     var onColumnDefinitionAdded = function (addedColumnDefinition) {
+                        extendColumnDefinitionObj(addedColumnDefinition);
                         $scope.scopeModel.columnDefinitions.push({ Entity: addedColumnDefinition });
                     };
 
@@ -64,6 +67,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
                     var accountGridDefinition;
 
@@ -71,15 +75,31 @@
                         accountGridDefinition = payload.accountGridDefinition;
                     }
 
-                    //Loading ColumnDefinitions Grid
-                    if (accountGridDefinition != undefined && accountGridDefinition.ColumnDefinitions != undefined) {
-                        for (var index in accountGridDefinition.ColumnDefinitions) {
-                            if (index != "$type") {
-                                var columnDefinition = accountGridDefinition.ColumnDefinitions[index];
-                                $scope.scopeModel.columnDefinitions.push({ Entity: columnDefinition });
+                    var loadAccountFieldsPromise = loadAccountFields();
+                    promises.push(loadAccountFieldsPromise);
+
+                    loadAccountFieldsPromise.then(function () {
+
+                        //Loading ColumnDefinitions Grid
+                        if (accountGridDefinition != undefined && accountGridDefinition.ColumnDefinitions != undefined) {
+                            for (var index in accountGridDefinition.ColumnDefinitions) {
+                                if (index != "$type") {
+                                    var columnDefinition = accountGridDefinition.ColumnDefinitions[index];
+                                    extendColumnDefinitionObj(columnDefinition);
+                                    $scope.scopeModel.columnDefinitions.push({ Entity: columnDefinition });
+                                }
                             }
                         }
+                    });
+
+                    function loadAccountFields() {
+
+                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo().then(function (response) {
+                            accountFields = response;
+                        });
                     }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -112,10 +132,24 @@
             function editColumnDefinitionDefinition(columnDefinition) {
                 var onColumnDefinitionUpdated = function (updatedColumnDefinition) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.columnDefinitions, columnDefinition.Entity.FieldName, 'Entity.FieldName');
+                    extendColumnDefinitionObj(updatedColumnDefinition);
                     $scope.scopeModel.columnDefinitions[index] = { Entity: updatedColumnDefinition };
                 };
 
                 Retail_BE_AccountDefinitionService.editGridColumnDefinition(columnDefinition.Entity, onColumnDefinitionUpdated);
+            }
+
+            function extendColumnDefinitionObj(columnDefinition) {
+                if (accountFields == undefined)
+                    return;
+
+                for (var index = 0; index < accountFields.length; index++) {
+                    var currentAccountField = accountFields[index];
+                    if (columnDefinition.FieldName == currentAccountField.Name) {
+                        columnDefinition.FieldTitle = currentAccountField.Title;
+                        return;
+                    }
+                }
             }
         }
     }

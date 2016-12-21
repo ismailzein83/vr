@@ -4,8 +4,7 @@
 
     Retail_BE_AccountTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig', 'SecurityService'];
 
-    function Retail_BE_AccountTypeAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService)
-    {
+    function Retail_BE_AccountTypeAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
         var controllerName = 'AccountType';
 
         function GetFilteredAccountTypes(input) {
@@ -36,8 +35,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccountType'), accountType);
         }
 
-        function GetGenericFieldDefinitionsInfo(accountType) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetGenericFieldDefinitionsInfo'));
+        function GetGenericFieldDefinitionsInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetGenericFieldDefinitionsInfo'), {}, { useCache: true });
         }
 
         function HasViewAccountTypesPermission() {

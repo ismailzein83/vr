@@ -21,6 +21,6 @@ namespace Retail.BusinessEntity.Entities
 
         public bool IsAvailableInSubAccounts { get; set; }
 
-        public AccountCondition ParentAccountAvailabilityCondition { get; set; }
+        public AccountCondition SubAccountsAvailabilityCondition { get; set; }
     }
 }

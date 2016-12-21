@@ -103,7 +103,7 @@
                 var accountConditionSelectivePayload;
                 if (columnDefinitionEntity != undefined) {
                     accountConditionSelectivePayload = {
-                        accountCondition: columnDefinitionEntity.ParentAccountAvailabilityCondition
+                        accountCondition: columnDefinitionEntity.SubAccountsAvailabilityCondition
                     };
                 }
                 VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
@@ -134,11 +134,11 @@
             var accountGenericFieldDefinitionSelectorObj = accountGenericFieldDefinitionSelectorAPI.getData();
 
             return {
-                FieldName: accountGenericFieldDefinitionSelectorObj != undefined ? accountGenericFieldDefinitionSelectorObj.Title : undefined,
+                FieldName: accountGenericFieldDefinitionSelectorObj != undefined ? accountGenericFieldDefinitionSelectorObj.Name : undefined,
                 Header: $scope.scopeModel.header,
                 IsAvailableInRoot: $scope.scopeModel.IsAvailableInRoot,
                 IsAvailableInSubAccounts: $scope.scopeModel.IsAvailableInSubAccounts,
-                ParentAccountAvailabilityCondition: accountConditionSelectiveAPI.getData()
+                SubAccountsAvailabilityCondition: $scope.scopeModel.IsAvailableInSubAccounts == true ? accountConditionSelectiveAPI.getData() : null
             };
         }
     }
