@@ -6,11 +6,11 @@
 
                     <np-ivswitch-endpoint-selector vr-disabled="scopeModel.DisableSelector" on-ready="scopeModel.onSelectorEndPointReady" onselectionchanged="scopeModel.onSelectionEndPointChanged"
                                                    normal-col-num="6" isrequired="true"></np-ivswitch-endpoint-selector>
- 
+
                     <vr-columns width="1/2row">
                         <vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
-                    </vr-columns>                  
-                     
+                    </vr-columns>
+
                     <vr-columns width="1/2row">
                         <vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired></vr-textbox>
                     </vr-columns>
@@ -28,19 +28,19 @@
                     <vr-columns width="1/2row">
                         <vr-textbox label="Channels Limit" value="scopeModel.channelslimit" type="number" isrequired></vr-textbox>
                     </vr-columns>
- 
-                  
+
+
                     <vr-columns width="1/2row">
                         <vr-textbox label="Max Call Duration" value="scopeModel.maxcallduration" type="number"></vr-textbox>
                     </vr-columns>
 
 
                     <np-ivswitch-domain-selector on-ready="scopeModel.onSelectorDomainReady" onselectionchanged="scopeModel.onSelectionDomainChanged"
-                                                 normal-col-num="6"></np-ivswitch-domain-selector>                  
+                                                 normal-col-num="6"></np-ivswitch-domain-selector>
 
 
                     <vr-columns width="1/2row">
-                        <vr-textbox label="Host/Network Address" value="scopeModel.host" ng-if="scopeModel.ShowACL" isrequired></vr-textbox>
+                        <vr-textbox label="Host/Network Address" type="ip" value="scopeModel.host" ng-if="scopeModel.ShowACL" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-textbox label="Tech Prefix" value="scopeModel.techprefix" ng-if="scopeModel.ShowACL" isrequired></vr-textbox>
@@ -56,9 +56,9 @@
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-textbox label="SIP Password" value="scopeModel.sippassword" ng-if="scopeModel.ShowSIP" isrequired></vr-textbox>
-                    </vr-columns>                
-                     
-                     
+                    </vr-columns>
+
+
 
                 </vr-tab>
             </vr-tabs>

@@ -1,4 +1,4 @@
 ﻿app.constant('NP_IVSwitch_EndPointEnum', {
-    SIP: { value: 0, description: "SIP" },
-    ACL: { value: 1, description: "ACL" },
+    SIP: { value: 3, description: "ACL" },
+    ACL: { value: 4, description: "SIP" }
 });

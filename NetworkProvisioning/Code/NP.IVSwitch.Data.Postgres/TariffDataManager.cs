@@ -49,7 +49,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         public void CreateGlobalTable(int tariffId)
         {
-            String[] cmdText = { string.Format(@"CREATE TABLE trf_{0} (
+            String[] cmdText = { string.Format(@"CREATE TABLE trf{0} (
                                                       dest_code character varying(30) NOT NULL,
                                                       time_frame character varying(50) NOT NULL,
                                                       dest_name character varying(100) DEFAULT NULL::character varying,
@@ -57,13 +57,13 @@ namespace NP.IVSwitch.Data.Postgres
                                                       next_period integer,
                                                       init_charge numeric(18,9) DEFAULT NULL::numeric,
                                                       next_charge numeric(18,9) DEFAULT NULL::numeric,
-                                                      CONSTRAINT trf_{0}_pkey PRIMARY KEY (dest_code, time_frame)
+                                                      CONSTRAINT trf{0}_pkey PRIMARY KEY (dest_code, time_frame)
                                                     )
                                                     WITH (
                                                       OIDS=FALSE
                                                     );",tariffId) ,
-                                       string.Format("ALTER TABLE  trf_{0}  OWNER TO {1};",tariffId,Owner),
-                                       string.Format(@"INSERT INTO trf_{0} (dest_code, time_frame,dest_name,init_period ,next_period,init_charge,next_charge) 
+                                       string.Format("ALTER TABLE  trf{0}  OWNER TO {1};",tariffId,Owner),
+                                       string.Format(@"INSERT INTO trf{0} (dest_code, time_frame,dest_name,init_period ,next_period,init_charge,next_charge) 
                                         SELECT  dest_code,time_frame,dest_name,init_period,next_period,init_charge,next_charge
                                         FROM  	unnest(ARRAY[0,1,2,3,4,5,6,7,8,9]) dest_code, 
                                                 unnest(ARRAY['* * * * *']) time_frame,

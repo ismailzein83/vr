@@ -217,7 +217,7 @@ namespace NP.IVSwitch.Data.Postgres
                 };
                 cmd.Parameters.Add(prmPassword);
                 cmd.Parameters.AddWithValue("@tech_prefix", ".");
-                cmd.Parameters.AddWithValue("@type_id", 2);
+                cmd.Parameters.AddWithValue("@type_id", (int)endPoint.EndPointType);
             }
                 );
         }
@@ -243,7 +243,7 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@rtp_mode", 1);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                 cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);
-                cmd.Parameters.AddWithValue("@type_id", 2);
+                cmd.Parameters.AddWithValue("@type_id", (int)endPoint.EndPointType);
                 cmd.Parameters.AddWithValue("@route_table_id", accessList.RouteTableId);
                 cmd.Parameters.AddWithValue("@tariff_id", accessList.TariffId);
             }
