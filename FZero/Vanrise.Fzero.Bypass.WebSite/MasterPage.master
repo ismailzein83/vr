@@ -255,7 +255,12 @@
                         </li>
 
 
-
+                          <li class="sub-menu" id="Li1" runat="server">
+                            <a class="" href="Clients.aspx">
+                                <i class="icon-briefcase"></i>
+                                <span>Clients</span>
+                            </a>
+                        </li>
 
 
 

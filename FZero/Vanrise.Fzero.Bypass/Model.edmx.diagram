@@ -4,14 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="05c52f6c890c45e4a9b8a1dd780df1e9" Name="Diagram1" ZoomLevel="66">
+      <Diagram DiagramId="05c52f6c890c45e4a9b8a1dd780df1e9" Name="Diagram1" ZoomLevel="98">
         <EntityTypeShape EntityType="Model.ActionType" Width="1.5" PointX="3" PointY="21.75" />
         <EntityTypeShape EntityType="Model.ApplicationUser" Width="1.5" PointX="5.25" PointY="37.625" />
         <EntityTypeShape EntityType="Model.AppType" Width="1.5" PointX="5.75" PointY="8.875" />
         <EntityTypeShape EntityType="Model.Carrier" Width="1.5" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="Model.CasesLog" Width="1.5" PointX="3" PointY="1" />
         <EntityTypeShape EntityType="Model.ChangeType" Width="1.5" PointX="0.75" PointY="9.625" />
-        <EntityTypeShape EntityType="Model.Client" Width="1.5" PointX="0.75" PointY="22.75" />
         <EntityTypeShape EntityType="Model.EmailCC" Width="1.5" PointX="7.5" PointY="20.375" />
         <EntityTypeShape EntityType="Model.Email" Width="1.5" PointX="7.5" PointY="40.75" />
         <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="5.25" PointY="41.25" />
@@ -49,7 +48,7 @@
         <EntityTypeShape EntityType="Model.ValueType" Width="1.5" PointX="3" PointY="31.875" />
         <EntityTypeShape EntityType="Model.WebsiteMenu" Width="1.5" PointX="10.25" PointY="8.125" />
         <EntityTypeShape EntityType="Model.View_Origination" Width="1.5" PointX="2.75" PointY="11.75" />
-        <EntityTypeShape EntityType="Model.ViewGeneratedCall" Width="1.5" PointX="12.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.ViewGeneratedCall" Width="1.875" PointX="12.75" PointY="3.75" />
         <EntityTypeShape EntityType="Model.ViewSummary" Width="1.5" PointX="4.75" PointY="11.75" />
         <EntityTypeShape EntityType="Model.vwAllCase" Width="1.5" PointX="14.75" PointY="0.75" />
         <EntityTypeShape EntityType="Model.vwCLI" Width="1.5" PointX="0.75" PointY="14.75" />
@@ -67,9 +66,6 @@
         <AssociationConnector Association="Model.FK_CasesLogs_MobileOperatorFeedbacks" />
         <AssociationConnector Association="Model.FK_CasesLogs_ReportingStatuses" />
         <AssociationConnector Association="Model.FK_CasesLogs_Statuses" />
-        <AssociationConnector Association="Model.FK_EmailCCs_Clients" />
-        <AssociationConnector Association="Model.FK_RecievedCalls_Clients" />
-        <AssociationConnector Association="Model.FK_Users_Clients" />
         <AssociationConnector Association="Model.FK_EmailCCs_MobileOperators" />
         <AssociationConnector Association="Model.FK_Emails_EmailTemplates" />
         <AssociationConnector Association="Model.FK_EmailTemplates_Users" />
@@ -97,6 +93,10 @@
         <AssociationConnector Association="Model.FK_CustomerPermissions_Customers" />
         <AssociationConnector Association="Model.FK_UserPermissions_Users" />
         <AssociationConnector Association="Model.FK_WebsiteMenus_WebsiteMenus" />
+        <EntityTypeShape EntityType="Model.Client" Width="1.5" PointX="0.75" PointY="25.375" />
+        <AssociationConnector Association="Model.FK_EmailCCs_Clients" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_Clients" />
+        <AssociationConnector Association="Model.FK_Users_Clients" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

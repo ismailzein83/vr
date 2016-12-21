@@ -47,12 +47,12 @@ namespace Vanrise.Fzero.Bypass
         public int GMT { get; set; }
     
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
-        public virtual Client Client { get; set; }
         public virtual ICollection<EmailTemplate> EmailTemplates { get; set; }
         public virtual ICollection<LoggedAction> LoggedActions { get; set; }
         public virtual ICollection<MobileOperator> MobileOperators { get; set; }
         public virtual ICollection<SysParameter> SysParameters { get; set; }
         public virtual ICollection<UserPermission> UserPermissions { get; set; }
         public virtual ICollection<UserPermission> UserPermissions1 { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

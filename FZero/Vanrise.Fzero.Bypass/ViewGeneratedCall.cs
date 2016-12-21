@@ -61,5 +61,7 @@ namespace Vanrise.Fzero.Bypass
         public string FeedbackNotes { get; set; }
         public string MobileOperatorFeedbackName { get; set; }
         public string Carrier { get; set; }
+        public Nullable<bool> ReportedBeforeSecurity { get; set; }
+        public Nullable<int> ReportingStatusSecurityID { get; set; }
     }
 }

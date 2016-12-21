@@ -28,5 +28,51 @@ namespace Vanrise.Fzero.Bypass
 
             return ClientsList;
         }
+
+        public static Client Save(Client client)
+        {
+            Client currentUser = new Client();
+            try
+            {
+                using (Entities context = new Entities())
+                {
+                    if (client.ID == 0)
+                    {
+                        context.Clients.Add(client);
+                    }
+                    else
+                    {
+                        context.Clients.Attach(client);
+                        context.Entry(client).State = System.Data.EntityState.Modified;
+                    }
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.Clients.Save(" + client.ID.ToString() + ")", err);
+            }
+            return currentUser;
+        }
+
+        public static Client Load(int ID)
+        {
+            Client client = new Client();
+            try
+            {
+                using (Entities context = new Entities())
+                {
+                    client = context.Clients
+                     .Where(u => u.ID == ID)
+                     .FirstOrDefault();
+                }
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.Client.Load(" + ID.ToString() + ")", err);
+            }
+            return client;
+        }
+
     }
 }

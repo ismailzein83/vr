@@ -64,6 +64,58 @@ namespace Vanrise.Fzero.Bypass
 
         }
 
+        public static bool SendReportSecurity(List<int> ListIds, int ReportID)
+        {
+            bool success = false;
+            try
+            {
+                using (Entities context = new Entities())
+                {
+
+                    foreach (int id in ListIds)
+                    {
+                        foreach (GeneratedCall generatedCall in context.GeneratedCalls.Where(x => x.ID == id).ToList())
+                        {
+                            generatedCall.ReportID = ReportID;
+                            generatedCall.MobileOperatorFeedbackID = (int)Enums.MobileOperatorFeedbacks.Pending;
+                            generatedCall.ReportingStatusSecurityID = (int)Enums.ReportingStatuses.Reported;
+                            context.Entry(generatedCall).State = System.Data.EntityState.Modified;
+                        }
+                    }
+
+                    context.SaveChanges();
+                }
+
+
+
+                List<CasesLog> ListCasesLogs = new List<CasesLog>();
+
+                foreach (int ID in ListIds)
+                {
+                    CasesLog cl1 = new CasesLog();
+                    cl1.UpdatedOn = DateTime.Now;
+                    cl1.ChangeTypeID = (int)Enums.ChangeType.ChangedStatus;
+                    cl1.GeneratedCallID = ID;
+                    cl1.ReportingStatusID = (int)Enums.ReportingStatuses.Reported;
+                    ListCasesLogs.Add(cl1);
+                }
+
+                CasesLog.SaveBulk("CasesLogs", ListCasesLogs);
+
+
+                success = true;
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.SendReportSecurity.Report(" + ListIds.Count.ToString() + ")", err);
+            }
+            return success;
+
+
+
+
+        }
+
         public static void Confirm(int SourceID, DataTable dt, int? ImportedBy)
         {
             HashSet<string> CountryCodes = new HashSet<string>();
@@ -255,6 +307,7 @@ namespace Vanrise.Fzero.Bypass
                         gc.StatusID = (int)Enums.Statuses.Pending;
                         gc.ImportID = import.ID;
                         gc.ReportingStatusID = (int)Enums.ReportingStatuses.Pending;
+                        gc.ReportingStatusSecurityID = (int)Enums.ReportingStatuses.Pending;
                         gc.SourceID = SourceID;
                         CounterGeneratesandRecieves++;
 
@@ -709,6 +762,7 @@ namespace Vanrise.Fzero.Bypass
                         gc.StatusID = (int)Enums.Statuses.Pending;
                         gc.ImportID = import.ID;
                         gc.ReportingStatusID = (int)Enums.ReportingStatuses.Pending;
+                        gc.ReportingStatusSecurityID = (int)Enums.ReportingStatuses.Pending;
                         gc.SourceID = SourceID;
                         CounterGeneratesOnly++;
 
@@ -1269,6 +1323,56 @@ namespace Vanrise.Fzero.Bypass
 
         }
 
+        public static bool UpdateReportStatusSecurity(List<int> ListIds, int ReportingStatusID, int? ReportingStatusChangedBy)
+        {
+
+            bool success = false;
+            try
+            {
+                using (Entities context = new Entities())
+                {
+
+                    foreach (int id in ListIds)
+                    {
+                        foreach (GeneratedCall generatedCall in context.GeneratedCalls.Where(x => x.ID == id).ToList())
+                        {
+                            generatedCall.ReportingStatusSecurityID = ReportingStatusID;
+                            generatedCall.ReportingStatusChangedBy = ReportingStatusChangedBy;
+                            context.Entry(generatedCall).State = System.Data.EntityState.Modified;
+                        }
+                    }
+
+                    context.SaveChanges();
+                }
+
+
+                List<CasesLog> ListCasesLogs = new List<CasesLog>();
+
+                foreach (int ID in ListIds)
+                {
+                    CasesLog cl1 = new CasesLog();
+                    cl1.UpdatedOn = DateTime.Now;
+                    cl1.ChangeTypeID = (int)Enums.ChangeType.ChangedStatus;
+                    cl1.GeneratedCallID = ID;
+                    cl1.ReportingStatusID = ReportingStatusID;
+                    ListCasesLogs.Add(cl1);
+                }
+
+                CasesLog.SaveBulk("CasesLogs", ListCasesLogs);
+
+                success = true;
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.UpdateReportStatusSecurity(" + ListIds.Count.ToString() + ")", err);
+            }
+            return success;
+
+
+
+
+        }
+
         public static List<ViewGeneratedCall> GetReportedCalls(string ReportID, int DifferenceInGMT)
         {
             List<ViewGeneratedCall> GeneratedCallsList = new List<ViewGeneratedCall>();
@@ -1767,10 +1871,40 @@ namespace Vanrise.Fzero.Bypass
                                 .Where(u => u.ID > 0
                                   && (u.ClientID == ClientID)
                                   && (u.StatusID == (int)Enums.Statuses.Fraud)
-                                  && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Reported)
-                                  && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Verified)
+                                  && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Reported) 
+                                  && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Verified) 
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Reopened)
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Ignored)
+                                  )
+                                  .OrderByDescending(u => u.AttemptDateTime)
+                                  .ToList();
+                }
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCases()", err);
+            }
+
+            return GeneratedCallsList;
+        }
+
+        public static List<ViewGeneratedCall> GetClientFraudCasesSecurity(int ClientID)
+        {
+            List<ViewGeneratedCall> GeneratedCallsList = new List<ViewGeneratedCall>();
+
+            try
+            {
+                using (Entities context = new Entities())
+                {
+                    ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
+                    GeneratedCallsList = context.ViewGeneratedCalls.Where(x => x.ReportedBeforeSecurity == false)
+                                .Where(u => u.ID > 0
+                                  && (u.ClientID == ClientID)
+                                  && (u.StatusID == (int)Enums.Statuses.Fraud)
+                                  && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Reported) 
+                                  && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Verified) 
+                                  && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Reopened) 
+                                  && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Ignored)
                                   )
                                   .OrderByDescending(u => u.AttemptDateTime)
                                   .ToList();

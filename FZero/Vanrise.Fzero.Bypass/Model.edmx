@@ -69,6 +69,7 @@
           <Property Name="PrefixLength" Type="int" />
           <Property Name="FraudPrefix" Type="varchar" MaxLength="50" />
           <Property Name="Length" Type="int" />
+          <Property Name="ClientReportSecurity" Type="bit" />
         </EntityType>
         <EntityType Name="EmailCCs">
           <Key>
@@ -151,6 +152,7 @@
           <Property Name="Carrier" Type="varchar" MaxLength="100" />
           <Property Name="Reference" Type="varchar" MaxLength="50" />
           <Property Name="Type" Type="varchar" MaxLength="5" />
+          <Property Name="ReportingStatusSecurityID" Type="int" />
         </EntityType>
         <EntityType Name="GMTs">
           <Key>
@@ -527,6 +529,8 @@ warning 6002: The table/view 'FMS.dbo.ViewGeneratedCalls' does not have a primar
           <Property Name="FeedbackNotes" Type="varchar" MaxLength="5000" />
           <Property Name="MobileOperatorFeedbackName" Type="varchar" MaxLength="20" />
           <Property Name="Carrier" Type="varchar" MaxLength="100" />
+          <Property Name="ReportedBeforeSecurity" Type="bit" />
+          <Property Name="ReportingStatusSecurityID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'FMS.dbo.ViewSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1132,6 +1136,9 @@ warning 6002: The table/view 'FMS.dbo.vwRepeatedCase' does not have a primary ke
         <Function Name="fn_CheckIfReportedBefore" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
           <Parameter Name="CLI" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="fn_CheckIfReportedBeforeSecurity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
+          <Parameter Name="CLI" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="fn_CheckIfToBeReportedBefore" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
           <Parameter Name="CLI" Type="varchar" Mode="In" />
         </Function>
@@ -1515,7 +1522,9 @@ FROM [dbo].[View_Origination] AS [View_Origination]</DefiningQuery>
 [ViewGeneratedCalls].[ToBeReportedBefore] AS [ToBeReportedBefore], 
 [ViewGeneratedCalls].[FeedbackNotes] AS [FeedbackNotes], 
 [ViewGeneratedCalls].[MobileOperatorFeedbackName] AS [MobileOperatorFeedbackName], 
-[ViewGeneratedCalls].[Carrier] AS [Carrier]
+[ViewGeneratedCalls].[Carrier] AS [Carrier], 
+[ViewGeneratedCalls].[ReportedBeforeSecurity] AS [ReportedBeforeSecurity], 
+[ViewGeneratedCalls].[ReportingStatusSecurityID] AS [ReportingStatusSecurityID]
 FROM [dbo].[ViewGeneratedCalls] AS [ViewGeneratedCalls]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="ViewSummary" EntityType="Self.ViewSummary" store:Type="Views" store:Schema="dbo">
@@ -2112,7 +2121,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySet Name="Carriers" EntityType="Model.Carrier" />
           <EntitySet Name="CasesLogs" EntityType="Model.CasesLog" />
           <EntitySet Name="ChangeTypes" EntityType="Model.ChangeType" />
-          <EntitySet Name="Clients" EntityType="Model.Client" />
           <EntitySet Name="EmailCCs" EntityType="Model.EmailCC" />
           <EntitySet Name="Emails" EntityType="Model.Email" />
           <EntitySet Name="EmailTemplates" EntityType="Model.EmailTemplate" />
@@ -2200,18 +2208,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <AssociationSet Name="FK_CasesLogs_Statuses" Association="Model.FK_CasesLogs_Statuses">
             <End Role="Status" EntitySet="Statuses" />
             <End Role="CasesLog" EntitySet="CasesLogs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmailCCs_Clients" Association="Model.FK_EmailCCs_Clients">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="EmailCC" EntitySet="EmailCCs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RecievedCalls_Clients" Association="Model.FK_RecievedCalls_Clients">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="RecievedCall" EntitySet="RecievedCalls" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Users_Clients" Association="Model.FK_Users_Clients">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="User" EntitySet="Users" />
           </AssociationSet>
           <AssociationSet Name="FK_EmailCCs_MobileOperators" Association="Model.FK_EmailCCs_MobileOperators">
             <End Role="MobileOperator" EntitySet="MobileOperators" />
@@ -2320,6 +2316,19 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <AssociationSet Name="FK_WebsiteMenus_WebsiteMenus" Association="Model.FK_WebsiteMenus_WebsiteMenus">
             <End Role="WebsiteMenu" EntitySet="WebsiteMenus" />
             <End Role="WebsiteMenu1" EntitySet="WebsiteMenus" />
+          </AssociationSet>
+          <EntitySet Name="Clients" EntityType="Model.Client" />
+          <AssociationSet Name="FK_EmailCCs_Clients" Association="Model.FK_EmailCCs_Clients">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="EmailCC" EntitySet="EmailCCs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RecievedCalls_Clients" Association="Model.FK_RecievedCalls_Clients">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="RecievedCall" EntitySet="RecievedCalls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Clients" Association="Model.FK_Users_Clients">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="User" EntitySet="Users" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="delete_prSummary_Admin_Result">
@@ -2705,26 +2714,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CasesLogs" Relationship="Model.FK_CasesLogs_ChangeTypes" FromRole="ChangeType" ToRole="CasesLog" />
         </EntityType>
-        <EntityType Name="Client">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SendDailyReport" Type="Boolean" />
-          <Property Name="SendWeeklyReport" Type="Boolean" />
-          <Property Name="SendMonthlyReport" Type="Boolean" />
-          <Property Name="ClientReport" Type="Boolean" />
-          <Property Name="ClientEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="GMT" Type="Int32" />
-          <Property Name="CountryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PrefixLength" Type="Int32" />
-          <Property Name="FraudPrefix" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Length" Type="Int32" />
-          <NavigationProperty Name="EmailCCs" Relationship="Model.FK_EmailCCs_Clients" FromRole="Client" ToRole="EmailCC" />
-          <NavigationProperty Name="RecievedCalls" Relationship="Model.FK_RecievedCalls_Clients" FromRole="Client" ToRole="RecievedCall" />
-          <NavigationProperty Name="Users" Relationship="Model.FK_Users_Clients" FromRole="Client" ToRole="User" />
-        </EntityType>
         <EntityType Name="EmailCC">
           <Key>
             <PropertyRef Name="Id" />
@@ -2733,8 +2722,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="MobileOperatorID" Type="Int32" />
           <Property Name="ClientID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Client" Relationship="Model.FK_EmailCCs_Clients" FromRole="EmailCC" ToRole="Client" />
           <NavigationProperty Name="MobileOperator" Relationship="Model.FK_EmailCCs_MobileOperators" FromRole="EmailCC" ToRole="MobileOperator" />
+          <NavigationProperty Name="Client" Relationship="Model.FK_EmailCCs_Clients" FromRole="EmailCC" ToRole="Client" />
         </EntityType>
         <EntityType Name="Email">
           <Key>
@@ -2812,6 +2801,7 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="Reference" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="MobileOperator" Relationship="Model.FK_GeneratedCalls_MobileOperators" FromRole="GeneratedCall" ToRole="MobileOperator" />
+          <Property Name="ReportingStatusSecurityID" Type="Int32" />
         </EntityType>
         <EntityType Name="GMT">
           <Key>
@@ -2942,10 +2932,10 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="OriginationNetwork" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Reference" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Client" Relationship="Model.FK_RecievedCalls_Clients" FromRole="RecievedCall" ToRole="Client" />
           <NavigationProperty Name="Import" Relationship="Model.FK_RecievedCalls_Imports" FromRole="RecievedCall" ToRole="Import" />
           <NavigationProperty Name="MobileOperator" Relationship="Model.FK_RecievedCalls_MobileOperators" FromRole="RecievedCall" ToRole="MobileOperator" />
           <NavigationProperty Name="Source" Relationship="Model.FK_RecievedCalls_Sources" FromRole="RecievedCall" ToRole="Source" />
+          <NavigationProperty Name="Client" Relationship="Model.FK_RecievedCalls_Clients" FromRole="RecievedCall" ToRole="Client" />
         </EntityType>
         <EntityType Name="RecievedEmail">
           <Key>
@@ -3148,13 +3138,13 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="ClientID" Type="Int32" />
           <Property Name="GMT" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ApplicationUsers" Relationship="Model.FK_Administrators_Users" FromRole="User" ToRole="ApplicationUser" />
-          <NavigationProperty Name="Client" Relationship="Model.FK_Users_Clients" FromRole="User" ToRole="Client" />
           <NavigationProperty Name="EmailTemplates" Relationship="Model.FK_EmailTemplates_Users" FromRole="User" ToRole="EmailTemplate" />
           <NavigationProperty Name="LoggedActions" Relationship="Model.FK_LoggedActions_Users" FromRole="User" ToRole="LoggedAction" />
           <NavigationProperty Name="MobileOperators" Relationship="Model.FK_Customers_Users" FromRole="User" ToRole="MobileOperator" />
           <NavigationProperty Name="SysParameters" Relationship="Model.FK_SystemParameters_Users" FromRole="User" ToRole="SysParameter" />
           <NavigationProperty Name="UserPermissions" Relationship="Model.FK_CustomerPermissions_Customers" FromRole="User" ToRole="UserPermission" />
           <NavigationProperty Name="UserPermissions1" Relationship="Model.FK_UserPermissions_Users" FromRole="User" ToRole="UserPermission" />
+          <NavigationProperty Name="Client" Relationship="Model.FK_Users_Clients" FromRole="User" ToRole="Client" />
         </EntityType>
         <EntityType Name="ValueType">
           <Key>
@@ -3245,6 +3235,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="FeedbackNotes" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
           <Property Name="MobileOperatorFeedbackName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Carrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ReportedBeforeSecurity" Type="Boolean" />
+          <Property Name="ReportingStatusSecurityID" Type="Int32" />
         </EntityType>
         <EntityType Name="ViewSummary">
           <Key>
@@ -3460,42 +3452,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             </Principal>
             <Dependent Role="CasesLog">
               <PropertyRef Name="StatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EmailCCs_Clients">
-          <End Type="Model.Client" Role="Client" Multiplicity="1" />
-          <End Type="Model.EmailCC" Role="EmailCC" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="EmailCC">
-              <PropertyRef Name="ClientID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RecievedCalls_Clients">
-          <End Type="Model.Client" Role="Client" Multiplicity="0..1" />
-          <End Type="Model.RecievedCall" Role="RecievedCall" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RecievedCall">
-              <PropertyRef Name="ClientID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Users_Clients">
-          <End Type="Model.Client" Role="Client" Multiplicity="0..1" />
-          <End Type="Model.User" Role="User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="ClientID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3822,6 +3778,63 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             </Principal>
             <Dependent Role="WebsiteMenu1">
               <PropertyRef Name="MainMenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SendDailyReport" Type="Boolean" />
+          <Property Name="SendWeeklyReport" Type="Boolean" />
+          <Property Name="SendMonthlyReport" Type="Boolean" />
+          <Property Name="ClientReport" Type="Boolean" />
+          <Property Name="ClientEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GMT" Type="Int32" />
+          <Property Name="CountryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrefixLength" Type="Int32" />
+          <Property Name="FraudPrefix" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Length" Type="Int32" />
+          <Property Name="ClientReportSecurity" Type="Boolean" />
+          <NavigationProperty Name="EmailCCs" Relationship="Model.FK_EmailCCs_Clients" FromRole="Client" ToRole="EmailCC" />
+          <NavigationProperty Name="RecievedCalls" Relationship="Model.FK_RecievedCalls_Clients" FromRole="Client" ToRole="RecievedCall" />
+          <NavigationProperty Name="Users" Relationship="Model.FK_Users_Clients" FromRole="Client" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_EmailCCs_Clients">
+          <End Type="Model.Client" Role="Client" Multiplicity="1" />
+          <End Type="Model.EmailCC" Role="EmailCC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmailCC">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RecievedCalls_Clients">
+          <End Type="Model.Client" Role="Client" Multiplicity="0..1" />
+          <End Type="Model.RecievedCall" Role="RecievedCall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RecievedCall">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Clients">
+          <End Type="Model.Client" Role="Client" Multiplicity="0..1" />
+          <End Type="Model.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ClientID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4307,24 +4320,6 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Clients">
-            <EntityTypeMapping TypeName="Model.Client">
-              <MappingFragment StoreEntitySet="Clients">
-                <ScalarProperty Name="Length" ColumnName="Length" />
-                <ScalarProperty Name="FraudPrefix" ColumnName="FraudPrefix" />
-                <ScalarProperty Name="PrefixLength" ColumnName="PrefixLength" />
-                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
-                <ScalarProperty Name="GMT" ColumnName="GMT" />
-                <ScalarProperty Name="ClientEmail" ColumnName="ClientEmail" />
-                <ScalarProperty Name="ClientReport" ColumnName="ClientReport" />
-                <ScalarProperty Name="SendMonthlyReport" ColumnName="SendMonthlyReport" />
-                <ScalarProperty Name="SendWeeklyReport" ColumnName="SendWeeklyReport" />
-                <ScalarProperty Name="SendDailyReport" ColumnName="SendDailyReport" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="EmailCCs">
             <EntityTypeMapping TypeName="Model.EmailCC">
               <MappingFragment StoreEntitySet="EmailCCs">
@@ -4380,6 +4375,7 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="GeneratedCalls">
             <EntityTypeMapping TypeName="Model.GeneratedCall">
               <MappingFragment StoreEntitySet="GeneratedCalls">
+                <ScalarProperty Name="ReportingStatusSecurityID" ColumnName="ReportingStatusSecurityID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Reference" ColumnName="Reference" />
                 <ScalarProperty Name="Carrier" ColumnName="Carrier" />
@@ -4761,6 +4757,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="ViewGeneratedCalls">
             <EntityTypeMapping TypeName="Model.ViewGeneratedCall">
               <MappingFragment StoreEntitySet="ViewGeneratedCalls">
+                <ScalarProperty Name="ReportingStatusSecurityID" ColumnName="ReportingStatusSecurityID" />
+                <ScalarProperty Name="ReportedBeforeSecurity" ColumnName="ReportedBeforeSecurity" />
                 <ScalarProperty Name="Carrier" ColumnName="Carrier" />
                 <ScalarProperty Name="MobileOperatorFeedbackName" ColumnName="MobileOperatorFeedbackName" />
                 <ScalarProperty Name="FeedbackNotes" ColumnName="FeedbackNotes" />
@@ -4875,6 +4873,25 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
                 <ScalarProperty Name="LastAttemptDateTime" ColumnName="LastAttemptDateTime" />
                 <ScalarProperty Name="CLI" ColumnName="CLI" />
                 <ScalarProperty Name="MobileOperatorID" ColumnName="MobileOperatorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="Model.Client">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="ClientReportSecurity" ColumnName="ClientReportSecurity" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="FraudPrefix" ColumnName="FraudPrefix" />
+                <ScalarProperty Name="PrefixLength" ColumnName="PrefixLength" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="GMT" ColumnName="GMT" />
+                <ScalarProperty Name="ClientEmail" ColumnName="ClientEmail" />
+                <ScalarProperty Name="ClientReport" ColumnName="ClientReport" />
+                <ScalarProperty Name="SendMonthlyReport" ColumnName="SendMonthlyReport" />
+                <ScalarProperty Name="SendWeeklyReport" ColumnName="SendWeeklyReport" />
+                <ScalarProperty Name="SendDailyReport" ColumnName="SendDailyReport" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

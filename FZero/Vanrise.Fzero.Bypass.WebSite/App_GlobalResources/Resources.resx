@@ -1437,4 +1437,13 @@
   <data name="LastLoginTime" xml:space="preserve">
     <value>Last Login Time</value>
   </data>
+  <data name="IsClientReport" xml:space="preserve">
+    <value>Operators</value>
+  </data>
+  <data name="IsClientReportSecurity" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="Clients" xml:space="preserve">
+    <value>Clients</value>
+  </data>
 </root>

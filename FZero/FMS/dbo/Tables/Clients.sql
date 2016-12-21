@@ -11,6 +11,7 @@
     [PrefixLength]      INT           NULL,
     [FraudPrefix]       VARCHAR (50)  NULL,
     [Length]            INT           NULL,
+    [ClientReportSecurity] BIT NULL, 
     CONSTRAINT [PK_ClientNames] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 

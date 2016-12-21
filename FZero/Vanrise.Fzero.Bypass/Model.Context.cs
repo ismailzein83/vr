@@ -34,7 +34,6 @@ namespace Vanrise.Fzero.Bypass
         public DbSet<Carrier> Carriers { get; set; }
         public DbSet<CasesLog> CasesLogs { get; set; }
         public DbSet<ChangeType> ChangeTypes { get; set; }
-        public DbSet<Client> Clients { get; set; }
         public DbSet<EmailCC> EmailCCs { get; set; }
         public DbSet<Email> Emails { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
@@ -79,6 +78,7 @@ namespace Vanrise.Fzero.Bypass
         public DbSet<vwCount> vwCounts { get; set; }
         public DbSet<vwFraudCase> vwFraudCases { get; set; }
         public DbSet<vwRepeatedCase> vwRepeatedCases { get; set; }
+        public DbSet<Client> Clients { get; set; }
     
         public virtual int delete_asp_Write_String_To_File(string @string, string path, string filename)
         {

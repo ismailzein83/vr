@@ -43,6 +43,7 @@ namespace Vanrise.Fzero.Bypass
         public string Carrier { get; set; }
         public string Reference { get; set; }
         public string Type { get; set; }
+        public Nullable<int> ReportingStatusSecurityID { get; set; }
     
         public virtual MobileOperator MobileOperator { get; set; }
     }

@@ -30,9 +30,9 @@ namespace Vanrise.Fzero.Bypass
         public string Reference { get; set; }
         public string Type { get; set; }
     
-        public virtual Client Client { get; set; }
         public virtual Import Import { get; set; }
         public virtual MobileOperator MobileOperator { get; set; }
         public virtual Source Source { get; set; }
+        public virtual Client Client { get; set; }
     }
 }
