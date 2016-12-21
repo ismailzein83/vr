@@ -179,7 +179,8 @@ namespace Retail.BusinessEntity.Business
             switch(actionDefinition.EntityType)
             {
                 case EntityType.Account:
-                    fullName = string.Format("{0} {1}", actionDefinition.Name, Utilities.GetEnumDescription(actionDefinition.EntityType));
+               //     fullName = string.Format("{0} {1}", actionDefinition.Name, Utilities.GetEnumDescription(actionDefinition.EntityType));
+                    fullName = string.Format("{0}", actionDefinition.Name);
                     break;
                 case EntityType.AccountService:
                  ServiceTypeManager manager = new ServiceTypeManager();
