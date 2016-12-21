@@ -123,7 +123,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                                         (int)Enums.ReportingStatuses.TobeReported, null);
                                     SendReportSecurity(listDistinctFraudCasesSecurity, client.Name,
                                         (int)Enums.Statuses.Fraud, client.ClientEmail, client.ID,
-                                        (client.GMT.Value - SysParameter.Global_GMT));
+                                        (client.GMT.Value - SysParameter.Global_GMT), client.SecurityEmail);
                                 }
                             }
                         }
@@ -346,7 +346,7 @@ namespace Vanrise.Fzero.Services.ClientReport
         /// <param name="EmailAddress"></param>
         /// <param name="ClientID"></param>
         /// <param name="DifferenceInGMT"></param>
-        private void SendReportSecurity(List<int> ListIds, string ClientName, int StatusID, string EmailAddress, int ClientID, int DifferenceInGMT)
+        private void SendReportSecurity(List<int> ListIds, string ClientName, int StatusID, string EmailAddress, int ClientID, int DifferenceInGMT, string emailNatSec)
         {
             try
             {
@@ -417,8 +417,6 @@ namespace Vanrise.Fzero.Services.ClientReport
 
                     rvToOperatorNatSec.LocalReport.SetParameters(parameters);
                     rvToOperatorNatSec.LocalReport.Refresh();
-                    string emailNatSec = ConfigurationManager.AppSettings["EmailNatSec"];
-                    string emailCCNatSec = ConfigurationManager.AppSettings["EmailCCNatSec"];
 
                     parameters[2] = new ReportParameter("HideSignature", "false");
 
@@ -427,7 +425,7 @@ namespace Vanrise.Fzero.Services.ClientReport
 
                     string filenamePDFNatSec = ExportReportToPDF(report.ReportID + ".pdf", rvToOperatorNatSec);
 
-                    SendEmailNationalSecurity(report.ReportID, ListIds.Count, filenamePDFNatSec);
+                    SendEmailNationalSecurity(report.ReportID, ListIds.Count, filenamePDFNatSec, emailNatSec);
                 }
             }
             catch (Exception e)
@@ -436,9 +434,8 @@ namespace Vanrise.Fzero.Services.ClientReport
             }
         }
 
-        private void SendEmailNationalSecurity(string reportId, int countListID, string filenamePDFNatSec)
+        private void SendEmailNationalSecurity(string reportId, int countListID, string filenamePDFNatSec, string emailNatSec)
         {
-            string emailNatSec = ConfigurationManager.AppSettings["EmailNatSec"];
             string emailCCNatSec = ConfigurationManager.AppSettings["EmailCCNatSec"];
             string operatorPath = ConfigurationManager.AppSettings["OperatorPath"];
 
