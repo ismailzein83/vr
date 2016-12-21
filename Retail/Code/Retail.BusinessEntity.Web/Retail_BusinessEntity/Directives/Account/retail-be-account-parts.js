@@ -19,7 +19,7 @@ app.directive('retailBeAccountParts', ['Retail_BE_AccountPartDefinitionAPIServic
     function AccountParts($scope, ctrl, $attrs)
     {
         this.initializeController = initializeController;
-
+        var counter = 0;
         function initializeController() {
             $scope.scopeModel = {};
 
@@ -49,31 +49,46 @@ app.directive('retailBeAccountParts', ['Retail_BE_AccountPartDefinitionAPIServic
                     return;
 
                 var promises = [];
-
+                var partsArr = [];
                 for (var i = 0; i < partDefinitions.length; i++)
                 {
                     var partDefinition = partDefinitions[i];
                     var part = buildPart(partDefinition);
+                    partsArr.push(part);
                     promises.push(part.directiveLoadDeferred.promise);
+                }
+                addNextPart(1, partsArr[0], partsArr);
+                function addNextPart(index,part,parts)
+                {
+                    part.directiveResolvedDeferred.promise.then(function () {
+                        addNextPart(index + 1, parts[index], parts);
+                    });
                     $scope.scopeModel.parts.push(part);
                 }
 
                 function buildPart(partDefinition)
                 {
                     var part = {};
+                    part.id = counter++;
                     part.definitionId = partDefinition.AccountPartDefinitionId;
                     part.runtimeEditor = context.getPartDefinitionRuntimeEditor(partDefinition.Settings.ConfigId);
                     part.title = partDefinition.Title;
                     part.directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    part.directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    part.directiveResolvedDeferred = UtilsService.createPromiseDeferred();
                     part.onDirectiveReady = function (api) {
                         part.directiveAPI = api;
+                        part.directiveReadyDeferred.resolve();
+                        part.directiveResolvedDeferred.resolve();
+                    };
+                    part.directiveReadyDeferred.promise.then(function () {
                         var directivePayload = {
                             partDefinition: partDefinition,
                             partSettings: (parts != undefined && parts[partDefinition.AccountPartDefinitionId] != undefined) ?
                                 parts[partDefinition.AccountPartDefinitionId].Settings : undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(part.directiveAPI, directivePayload, part.directiveLoadDeferred);
-                    };
+                    });
                     return part;
                 }
 
