@@ -10,8 +10,11 @@
 
         var columnDefinitionEntity;
 
-        //var objectPropertySelectiveAPI;
-        //var objectPropertySelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountGenericFieldDefinitionSelectorAPI;
+        var accountGenericFieldDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var accountConditionSelectiveAPI;
+        var accountConditionSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -28,10 +31,15 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            //$scope.scopeModel.onObjectPropertySelectiveReady = function (api) {
-            //    objectPropertySelectiveAPI = api;
-            //    objectPropertySelectiveReadyDeferred.resolve();
-            //};
+            $scope.scopeModel.onAccountGenericFieldDefinitionSelectorReady = function (api) {
+                accountGenericFieldDefinitionSelectorAPI = api;
+                accountGenericFieldDefinitionSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onAccountConditionSelectiveReady = function (api) {
+                accountConditionSelectiveAPI = api;
+                accountConditionSelectiveReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -49,7 +57,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountGenericFieldDefinitionSelector, loadAccountConditionSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -65,28 +73,43 @@
             if (columnDefinitionEntity == undefined)
                 return;
 
-            $scope.scopeModel.fieldName = columnDefinitionEntity.FieldName;
             $scope.scopeModel.header = columnDefinitionEntity.Header;
             $scope.scopeModel.IsAvailableInRoot = columnDefinitionEntity.IsAvailableInRoot;
             $scope.scopeModel.IsAvailableInSubAccounts = columnDefinitionEntity.IsAvailableInSubAccounts;
         }
-        function loadObjectPropertySelective() {
-            var objectPropertySelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadAccountGenericFieldDefinitionSelector() {
+            var accountGenericFieldDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            objectPropertySelectiveReadyDeferred.promise.then(function () {
-                var payload = {};
+            accountGenericFieldDefinitionSelectorReadyDeferred.promise.then(function () {
 
-                if (objectType != undefined) {
-                    payload.objectType = objectType;
+                var accountGenericFieldDefinitionSelectorPayload;
+                if (columnDefinitionEntity != undefined) {
+                    accountGenericFieldDefinitionSelectorPayload = {
+                        genericFieldDefinition: {
+                            Name: columnDefinitionEntity.FieldName
+                        }
+                    };
                 }
-                if (propertyEntity != undefined) {
-                    payload.objectPropertyEvaluator = propertyEntity.PropertyEvaluator;
-                }
-
-                VRUIUtilsService.callDirectiveLoad(objectPropertySelectiveAPI, payload, objectPropertySelectiveLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(accountGenericFieldDefinitionSelectorAPI, accountGenericFieldDefinitionSelectorPayload, accountGenericFieldDefinitionSelectorLoadDeferred);
             });
 
-            return objectPropertySelectiveLoadDeferred.promise;
+            return accountGenericFieldDefinitionSelectorLoadDeferred.promise;
+        }
+        function loadAccountConditionSelective() {
+            var accountConditionSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            accountConditionSelectiveReadyDeferred.promise.then(function () {
+
+                var accountConditionSelectivePayload;
+                if (columnDefinitionEntity != undefined) {
+                    accountConditionSelectivePayload = {
+                        accountCondition: columnDefinitionEntity.ParentAccountAvailabilityCondition
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
+            });
+
+            return accountConditionSelectiveLoadDeferred.promise;
         }
 
         function insert() {
@@ -108,14 +131,14 @@
 
         function buildColumnDefinitionObjectFromScope() {
 
-            //var propertyEvaluator = objectPropertySelectiveAPI.getData();
+            var accountGenericFieldDefinitionSelectorObj = accountGenericFieldDefinitionSelectorAPI.getData();
 
             return {
-                FieldName: $scope.scopeModel.fieldName,
+                FieldName: accountGenericFieldDefinitionSelectorObj != undefined ? accountGenericFieldDefinitionSelectorObj.Title : undefined,
                 Header: $scope.scopeModel.header,
                 IsAvailableInRoot: $scope.scopeModel.IsAvailableInRoot,
-                IsAvailableInSubAccounts: $scope.scopeModel.IsAvailableInSubAccounts
-                //PropertyEvaluator: propertyEvaluator
+                IsAvailableInSubAccounts: $scope.scopeModel.IsAvailableInSubAccounts,
+                ParentAccountAvailabilityCondition: accountConditionSelectiveAPI.getData()
             };
         }
     }

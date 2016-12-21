@@ -25,7 +25,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/AccountGridDefinitionTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/AccountGridDefinitionManagementTemplate.html'
         };
 
         function AccountGridDefinitionManagementCtor($scope, ctrl) {
@@ -44,7 +44,7 @@
 
                 $scope.scopeModel.onAddColumnDefinition = function () {
                     var onColumnDefinitionAdded = function (addedColumnDefinition) {
-                        $scope.scopeModel.columnDefinitions.push(addedColumnDefinition);
+                        $scope.scopeModel.columnDefinitions.push({ Entity: addedColumnDefinition });
                     };
 
                     Retail_BE_AccountDefinitionService.addGridColumnDefinition(onColumnDefinitionAdded);
@@ -52,7 +52,7 @@
                 $scope.scopeModel.onDeleteColumnDefinition = function (columnDefinition) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.columnDefinitions, columnDefinition.FieldName, 'FieldName');
+                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.columnDefinitions, columnDefinition.Entity.FieldName, 'Entity.FieldName');
                             $scope.scopeModel.columnDefinitions.splice(index, 1);
                         }
                     });
@@ -65,28 +65,37 @@
 
                 api.load = function (payload) {
 
-                    var columnDefinitions;
+                    var accountGridDefinition;
 
                     if (payload != undefined) {
-                        var accountGridDefinition = payload.accountGridDefinition;
-
-                        if (accountGridDefinition != undefined) {
-                            columnDefinitions = accountGridDefinition.ColumnDefinitions
-                        }
+                        accountGridDefinition = payload.accountGridDefinition;
                     }
 
                     //Loading ColumnDefinitions Grid
-                    if (columnDefinitions != undefined)
-                        $scope.scopeModel.columnDefinitions = columnDefinitions;
+                    if (accountGridDefinition != undefined && accountGridDefinition.ColumnDefinitions != undefined) {
+                        for (var index in accountGridDefinition.ColumnDefinitions) {
+                            if (index != "$type") {
+                                var columnDefinition = accountGridDefinition.ColumnDefinitions[index];
+                                $scope.scopeModel.columnDefinitions.push({ Entity: columnDefinition });
+                            }
+                        }
+                    }
                 };
 
                 api.getData = function () {
 
-                    var obj = {
-                        ColumnDefinitions: $scope.scopeModel.columnDefinitions
-                    };
+                    var columnDefinitions;
+                    if ($scope.scopeModel.columnDefinitions.length > 0) {
+                        columnDefinitions = [];
+                        for (var i = 0; i < $scope.scopeModel.columnDefinitions.length; i++) {
+                            var columnDefinition = $scope.scopeModel.columnDefinitions[i].Entity;
+                            columnDefinitions.push(columnDefinition);
+                        }
+                    }
 
-                    return obj;
+                    return {
+                        ColumnDefinitions: columnDefinitions
+                    };
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -102,15 +111,15 @@
             }
             function editColumnDefinitionDefinition(columnDefinition) {
                 var onColumnDefinitionUpdated = function (updatedColumnDefinition) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.columnDefinitions, columnDefinition.FieldName, 'FieldName');
-                    $scope.scopeModel.columnDefinitions[index] = updatedColumnDefinition;
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.columnDefinitions, columnDefinition.Entity.FieldName, 'Entity.FieldName');
+                    $scope.scopeModel.columnDefinitions[index] = { Entity: updatedColumnDefinition };
                 };
 
-                Retail_BE_AccountDefinitionService.editGridColumnDefinition(columnDefinition, onColumnDefinitionUpdated);
+                Retail_BE_AccountDefinitionService.editGridColumnDefinition(columnDefinition.Entity, onColumnDefinitionUpdated);
             }
         }
     }
 
-    app.directive('retailBeAccountgriddefinition', AccountGridDefinitionManagementDirective);
+    app.directive('retailBeAccountgriddefinitionManagement', AccountGridDefinitionManagementDirective);
 
 })(app);
