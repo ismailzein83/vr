@@ -91,6 +91,14 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeManager manager = new InvoiceTypeManager();
                 var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
                 GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId);
+
+
+                if(generatedInvoice.InvoiceDetails == null)
+                {
+                    throw new InvoiceGeneratorException("No data available between the selected period.");
+                }
+
+
                 var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails);
 
                 var serialNumber = invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern;
