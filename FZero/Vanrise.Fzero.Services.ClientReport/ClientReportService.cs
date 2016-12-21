@@ -273,10 +273,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                 rvToOperator.LocalReport.Refresh();
                 rvToOperatorExcel.LocalReport.SetParameters(parameters);
                 rvToOperatorExcel.LocalReport.Refresh();
-
-                string emailNatSec = ConfigurationManager.AppSettings["EmailNatSec"];
-                string emailCCNatSec = ConfigurationManager.AppSettings["EmailCCNatSec"];
-
+                
                 string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
                 string filenameExcelZain = ExportReportToExcel(report.ReportID + ".xls", rvToOperatorExcel);
 
@@ -414,9 +411,6 @@ namespace Vanrise.Fzero.Services.ClientReport
                         GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
 
                     rvToOperatorNatSec.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
-
-                    rvToOperatorNatSec.LocalReport.SetParameters(parameters);
-                    rvToOperatorNatSec.LocalReport.Refresh();
 
                     parameters[2] = new ReportParameter("HideSignature", "false");
 
