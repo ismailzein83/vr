@@ -43,14 +43,15 @@
 
                 ctrl.onAddObjectTypePropertyDefinition = function () {
                     var onObjectTypePropertyDefinitionAdded = function (addedObjectTypePropertyDefinition) {
-                        ctrl.objectTypePropertyDefinitions.push(addedObjectTypePropertyDefinition);
+                        ctrl.objectTypePropertyDefinitions.push({ Entity: addedObjectTypePropertyDefinition });
                     };
-                    VRCommon_VRObjectTypePropertyDefinitionService.addObjectTypePropertyDefinition(ctrl.objectTypePropertyDefinitions, context, onObjectTypePropertyDefinitionAdded);
+
+                    VRCommon_VRObjectTypePropertyDefinitionService.addObjectTypePropertyDefinition(getObjectTypePropertyDefinitions(), context, onObjectTypePropertyDefinitionAdded);
                 };
                 ctrl.onDeleteObjectTypePropertyDefinition = function (objectTypePropertyDefinition) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.Name, 'Name');
+                            var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.Entity.Name, 'Entity.Name');
                             ctrl.objectTypePropertyDefinitions.splice(index, 1);
                         }
                     });
@@ -63,30 +64,31 @@
 
                 api.load = function (payload) {
 
-                    ctrl.objectTypePropertyDefinitions = [];
+                    ctrl.objectTypePropertyDefinitions.length = 0;
 
                     if (payload != undefined && payload.context != undefined)
                         context = payload.context;
 
                     if (payload != undefined && payload.properties != undefined) {
-                        for (var index in payload.properties) 
+                        for (var index in payload.properties) {
                             if (index != "$type") {
                                 var property = payload.properties[index];
-                                ctrl.objectTypePropertyDefinitions.push(property);
-                            }          
+                                ctrl.objectTypePropertyDefinitions.push({ Entity: property });
+                            }
+                        }
                     }
                 };
 
                 api.getData = function () {
 
+                    var properties;
                     if (ctrl.objectTypePropertyDefinitions.length > 0) {
-                        var properties = {};
+                        properties = {};
                         for (var i = 0; i < ctrl.objectTypePropertyDefinitions.length; i++) {
-                            var objectTypePropertyDefinition = ctrl.objectTypePropertyDefinitions[i];
+                            var objectTypePropertyDefinition = ctrl.objectTypePropertyDefinitions[i].Entity;
                             properties[objectTypePropertyDefinition.Name] = objectTypePropertyDefinition;
                         }
                     }
-
                     return properties;
                 };
 
@@ -101,14 +103,21 @@
                     clicked: editObjectTypePropertyDefinition
                 }];
             }
-
             function editObjectTypePropertyDefinition(objectTypePropertyDefinition) {
                 var onObjectTypePropertyDefinitionUpdated = function (updatedObjectTypePropertyDefinition) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.Name, 'Name');
-                    ctrl.objectTypePropertyDefinitions[index] = updatedObjectTypePropertyDefinition;
+                    var index = UtilsService.getItemIndexByVal(ctrl.objectTypePropertyDefinitions, objectTypePropertyDefinition.Entity.Name, 'Entity.Name');
+                    ctrl.objectTypePropertyDefinitions[index] = { Entity: updatedObjectTypePropertyDefinition };
                 };
 
-                VRCommon_VRObjectTypePropertyDefinitionService.editObjectTypePropertyDefinition(objectTypePropertyDefinition.Name, ctrl.objectTypePropertyDefinitions, context, onObjectTypePropertyDefinitionUpdated);
+                VRCommon_VRObjectTypePropertyDefinitionService.editObjectTypePropertyDefinition(objectTypePropertyDefinition.Entity.Name, getObjectTypePropertyDefinitions(), context, onObjectTypePropertyDefinitionUpdated);
+            }
+            function getObjectTypePropertyDefinitions() {
+
+                var fields = [];
+                for (var i = 0; i < ctrl.objectTypePropertyDefinitions.length; i++) {
+                    fields.push(ctrl.objectTypePropertyDefinitions[i].Entity);
+                }
+                return fields;
             }
         }
     }
