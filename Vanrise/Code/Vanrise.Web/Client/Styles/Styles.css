@@ -2057,17 +2057,17 @@ vr-switch[class*="divDisabled"] .switch {
 .vr-file {
     display: inline-block;
     position: relative;
-    top: -8px;
+    top: -6px;
     width: calc(100% - 55px );
     left: 2px;
 }
 
-    .vr-file:empty {
-        display: inline-block;
-        position: relative;
-        top: -5px;
-        width: calc(100% - 40px );
-    }
+.vr-file:empty {
+    display: inline-block;
+    position: relative;
+    top: -5px;
+    width: calc(100% - 40px );
+}
 
 .vr-file-btn {
     padding: 5px 12px;
