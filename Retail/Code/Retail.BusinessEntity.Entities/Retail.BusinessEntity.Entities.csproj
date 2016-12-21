@@ -84,7 +84,6 @@
   <ItemGroup>
     <Compile Include="AccountCondition\AccountConditionConfig.cs" />
     <Compile Include="Account\AccountFilter.cs" />
-    <Compile Include="Account\AccountGridColumnAttribute.cs" />
     <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Package\PackageGroup.cs" />
