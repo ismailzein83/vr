@@ -140,7 +140,25 @@ namespace Vanrise.Common
             
             int rowIndex = 0;
             int colIndex = 0;
-            
+
+
+            if (excelSheet.SummaryRows != null )
+            {
+                foreach(var summaryRow in excelSheet.SummaryRows)
+                {
+                    if (summaryRow.Cells == null)
+                        throw new NullReferenceException(String.Format("excelRow.Cells. RowIndex '{0}'", rowIndex));
+                    colIndex = 0;
+                    foreach (var cell in summaryRow.Cells)
+                    {
+                        var excelCell = RateWorkSheet.Cells[rowIndex, colIndex];
+                        excelCell.PutValue(cell.Value);
+                        colIndex++;
+                    }
+                    rowIndex++;
+                }
+            }
+            colIndex = 0;
             //filling header
             foreach (var headerCell in excelSheet.Header.Cells)
             {

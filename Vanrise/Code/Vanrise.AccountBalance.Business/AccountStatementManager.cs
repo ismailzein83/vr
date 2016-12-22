@@ -178,6 +178,91 @@ namespace Vanrise.AccountBalance.Business
                 return accountStatementItem;
             }
 
+            protected override ResultProcessingHandler<AccountStatementItem> GetResultProcessingHandler(DataRetrievalInput<AccountStatementQuery> input, BigResult<AccountStatementItem> bigResult)
+            {
+                return new ResultProcessingHandler<AccountStatementItem>
+                {
+                    ExportExcelHandler = new AccountStatementExcelExportHandler(input.Query)
+                };
+            }
+            
+        }
+
+
+
+        private class AccountStatementExcelExportHandler : ExcelExportHandler<AccountStatementItem>
+        {
+            AccountStatementQuery _query;
+            public AccountStatementExcelExportHandler(AccountStatementQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountStatementItem> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+
+
+                var results = context.BigResult as AccountStatementResult;
+
+                sheet.SummaryRows = new List<ExportExcelRow>();
+                AccountManager accountManager = new AccountManager();
+                var account = accountManager.GetAccountInfo(_query.AccountTypeId, _query.AccountId);
+
+                var accountRow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                sheet.SummaryRows.Add(accountRow);
+                accountRow.Cells.Add(new ExportExcelCell { Value = "Account Name" });
+                accountRow.Cells.Add(new ExportExcelCell { Value = account.Name });
+
+                var periodRow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                sheet.SummaryRows.Add(periodRow);
+                periodRow.Cells.Add(new ExportExcelCell { Value = "From Date" });
+                periodRow.Cells.Add(new ExportExcelCell { Value = _query.FromDate.ToString() });
+                periodRow.Cells.Add(new ExportExcelCell { Value = "To Date" });
+                periodRow.Cells.Add(new ExportExcelCell { Value = DateTime.Now.ToString() });
+
+                var balanceRow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                sheet.SummaryRows.Add(balanceRow);
+                balanceRow.Cells.Add(new ExportExcelCell { Value = "Current Balance" });
+                balanceRow.Cells.Add(new ExportExcelCell { Value = results.CurrentBalance });
+                balanceRow.Cells.Add(new ExportExcelCell { Value = "Total Debit" });
+                balanceRow.Cells.Add(new ExportExcelCell { Value = results.TotalDebit });
+                balanceRow.Cells.Add(new ExportExcelCell { Value = "Total Credit" });
+                balanceRow.Cells.Add(new ExportExcelCell { Value = results.TotalCredit });
+
+                var currencyRow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                sheet.SummaryRows.Add(currencyRow);
+                currencyRow.Cells.Add(new ExportExcelCell { Value = "Currency" });
+                currencyRow.Cells.Add(new ExportExcelCell { Value = results.Currency });
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "TransactionTime" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "TransactionType" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Debit" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Credit" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Balance" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in results.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    row.Cells.Add(new ExportExcelCell { Value = record.TransactionTime.ToString() });
+                    row.Cells.Add(new ExportExcelCell { Value = record.TransactionType });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Description });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Debit });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Credit });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Balance });
+       
+                }
+                context.MainSheet = sheet;
+            }
         }
         #endregion
 

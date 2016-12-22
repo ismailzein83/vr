@@ -23,6 +23,7 @@ namespace Vanrise.Entities
         public string SheetName { get; set; }
 
         public ExportExcelHeader Header { get; set; }
+        public List<ExportExcelRow> SummaryRows { get; set; }
 
         public List<ExportExcelRow> Rows { get; set; }
     }
