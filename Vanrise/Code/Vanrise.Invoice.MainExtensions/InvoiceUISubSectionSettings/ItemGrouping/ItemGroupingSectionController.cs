@@ -119,7 +119,7 @@ namespace Vanrise.Invoice.MainExtensions
                      }
                      bigDataResult.Data = itemGroupingSectionResults;
                  }
-                 bigDataResult.TotalCount = bigDataResult.Data.Count();
+                 bigDataResult.TotalCount = result.TotalCount;
             }
             return GetWebResponse(input, bigDataResult);
         }
