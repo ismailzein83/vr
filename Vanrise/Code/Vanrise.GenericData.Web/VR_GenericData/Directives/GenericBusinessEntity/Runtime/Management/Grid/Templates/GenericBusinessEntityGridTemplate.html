@@ -3,7 +3,8 @@
              dataretrievalfunction="ctrl.dataRetrievalFunction"
              menuactions="ctrl.menuActions"
              pagingtype="'PagingOnScroll'"
-             idfield="Entity.GenericBusinessEntityId">
+             idfield="Entity.GenericBusinessEntityId"
+             defaultsortbyfieldname="'Entity.GenericBusinessEntityId'">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.GenericBusinessEntityId'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" field="'FieldValueDescriptions[' + $index + ']'" tag="column" isfielddynamic="true" disablesorting>
         <span ng-init="result = viewScope.isValueBool(colDef,dataItem)">

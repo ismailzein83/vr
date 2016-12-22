@@ -100,8 +100,6 @@
                     }
 
                     setGridColumns();
-                    return gridAPI.retrieveData(gridQuery);
-
                     function setGridColumns() {
                         if (runtimeGrid != undefined && runtimeGrid.Columns != undefined) {
                             ctrl.columns.length = 0;
@@ -110,6 +108,7 @@
                             }
                         }
                     }
+                    return gridAPI.retrieveData(gridQuery);
                 };
 
                 api.onGenericBusinessEntityAdded = function (addedGenericBusinessEntity) {
