@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ActionTypes">
           <Key>
             <PropertyRef Name="ID" />
@@ -206,6 +206,8 @@
           <Property Name="RepeatedCases" Type="bit" Nullable="false" />
           <Property Name="EnableAutoBlock" Type="bit" Nullable="false" />
           <Property Name="AutoBlockEmail" Type="varchar" MaxLength="50" />
+          <Property Name="AutoReportSecurity" Type="bit" Nullable="false" />
+          <Property Name="AutoReportSecurityEmail" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="OriginationNetworks">
           <Key>
@@ -2867,6 +2869,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <NavigationProperty Name="User" Relationship="Model.FK_Customers_Users" FromRole="MobileOperator" ToRole="User" />
           <NavigationProperty Name="RecievedCalls" Relationship="Model.FK_RecievedCalls_MobileOperators" FromRole="MobileOperator" ToRole="RecievedCall" />
           <NavigationProperty Name="RelatedNumberMappings" Relationship="Model.FK_RelatedNumberMappings_MobileOperators" FromRole="MobileOperator" ToRole="RelatedNumberMapping" />
+          <Property Name="AutoReportSecurity" Type="Boolean" Nullable="false" />
+          <Property Name="AutoReportSecurityEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OriginationNetwork">
           <Key>
@@ -4458,6 +4462,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="MobileOperators">
             <EntityTypeMapping TypeName="Model.MobileOperator">
               <MappingFragment StoreEntitySet="MobileOperators">
+                <ScalarProperty Name="AutoReportSecurityEmail" ColumnName="AutoReportSecurityEmail" />
+                <ScalarProperty Name="AutoReportSecurity" ColumnName="AutoReportSecurity" />
                 <ScalarProperty Name="AutoBlockEmail" ColumnName="AutoBlockEmail" />
                 <ScalarProperty Name="EnableAutoBlock" ColumnName="EnableAutoBlock" />
                 <ScalarProperty Name="RepeatedCases" ColumnName="RepeatedCases" />

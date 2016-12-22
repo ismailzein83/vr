@@ -162,6 +162,24 @@
                                             </td>
                                         </tr>
 
+                                        
+                                        
+                                                                                <tr>
+                                            <td class="caption">Enable Security</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <asp:CheckBox ID="chkEnableSecurity" runat="server"></asp:CheckBox>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td class="caption">Security Email</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <telerik:RadTextBox ID="txtSecurityEmail" runat="server"></telerik:RadTextBox>
+                                            </td>
+                                        </tr>
 
                                         
 

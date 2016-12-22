@@ -243,30 +243,12 @@
                                 <span>Manual Import</span>
                             </a>
                         </li>
-
-
-                       
-
                         <li class="sub-menu" id="btnRelatedNumbers" runat="server">
                             <a class="" href="RelatedNumbers.aspx">
                                 <i class="icon-briefcase"></i>
                                 <span>Related Numbers</span>
                             </a>
                         </li>
-
-
-                          <li class="sub-menu" id="Li1" runat="server">
-                            <a class="" href="Clients.aspx">
-                                <i class="icon-briefcase"></i>
-                                <span>Clients</span>
-                            </a>
-                        </li>
-
-
-
-
-
-
                     </ul>
                     <!-- END SIDEBAR MENU -->
                 </div>

@@ -106,7 +106,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="FMSDataSet.xsc">
       <DependentUpon>FMSDataSet.xsd</DependentUpon>
     </None>
@@ -130,6 +132,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptDefaultToOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToOperator.rdlc" />
+    <EmbeddedResource Include="Reports\rptToOperatorIraqNationalSec.rdlc" />
     <EmbeddedResource Include="Reports\rptToSyrianOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToZainOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToZainOperatorExcel.rdlc" />

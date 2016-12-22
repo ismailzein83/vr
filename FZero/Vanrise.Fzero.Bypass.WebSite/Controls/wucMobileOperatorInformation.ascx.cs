@@ -68,6 +68,30 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
     }
 
+    public string SecurityEmail
+    {
+        get
+        {
+            return txtSecurityEmail.Text;
+        }
+        set
+        {
+            txtSecurityEmail.Text = value;
+        }
+    }
+
+    public bool EnableSecurity
+    {
+        get
+        {
+            return chkEnableSecurity.Checked;
+        }
+        set
+        {
+            chkEnableSecurity.Checked = value;
+        }
+    }
+
     public bool EnableAutoBlock
     {
         get
@@ -349,6 +373,8 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         EnableAutoBlock = MobileOperator.EnableAutoBlock;
         EnableAutoReport = MobileOperator.AutoReport;
         AutoBlockEmail = MobileOperator.AutoBlockEmail;
+        SecurityEmail = MobileOperator.AutoReportSecurityEmail;
+        EnableSecurity = MobileOperator.AutoReportSecurity;
 
         if (SysParameter.Global_DefaultMobileOperator != MobileOperator.User.FullName)
         {
@@ -400,6 +426,11 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         MobileOperator.EnableAutoBlock = EnableAutoBlock;
         MobileOperator.AutoReport = EnableAutoReport;
         MobileOperator.AutoBlockEmail = AutoBlockEmail;
+
+        MobileOperator.AutoReportSecurityEmail = SecurityEmail;
+        MobileOperator.AutoReportSecurity = EnableSecurity;
+
+
 
         if (!txtUserNameReadOnly)
         {

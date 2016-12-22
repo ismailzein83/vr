@@ -29,6 +29,8 @@ namespace Vanrise.Fzero.Bypass
         public bool RepeatedCases { get; set; }
         public bool EnableAutoBlock { get; set; }
         public string AutoBlockEmail { get; set; }
+        public bool AutoReportSecurity { get; set; }
+        public string AutoReportSecurityEmail { get; set; }
     
         public virtual ICollection<EmailCC> EmailCCs { get; set; }
         public virtual ICollection<GeneratedCall> GeneratedCalls { get; set; }

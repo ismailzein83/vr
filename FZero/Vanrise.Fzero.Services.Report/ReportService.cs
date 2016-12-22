@@ -39,9 +39,12 @@ namespace Vanrise.Fzero.Services.Report
         {
             base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
             //Debugger.Launch(); // launch and attach debugger
-            aTimer = new System.Timers.Timer(7200000);// 2 hours
+            int timeInterval;
+            bool parsed = Int32.TryParse(ConfigurationManager.AppSettings["TimeInterval"], out timeInterval);
+
+            aTimer = new System.Timers.Timer(timeInterval);// 2 hours
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            aTimer.Interval = 7200000;// 2 hours
+            aTimer.Interval = timeInterval;// 2 hours
             aTimer.Enabled = true;
             GC.KeepAlive(aTimer);
             OnTimedEvent(null, null);
@@ -86,6 +89,42 @@ namespace Vanrise.Fzero.Services.Report
                                 GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
 
                                 SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
+                            }
+
+
+                        }
+
+                        if (i.AutoReportSecurity && i.User.ClientID != null)
+                        {
+                            HashSet<string> DistinctCLIs = new HashSet<string>();
+                            List<ViewGeneratedCall> listFraudCases = GeneratedCall.GetFraudCasesSecurity(i.User.ClientID, i.ID);
+                            List<int> listDistinctFraudCases = new List<int>();
+                            List<int> listRepeatedFraudCases = new List<int>();
+                            foreach (ViewGeneratedCall v in listFraudCases)
+                            {
+                                if (!DistinctCLIs.Contains(v.CLI))
+                                {
+                                    DistinctCLIs.Add(v.CLI);
+                                    listDistinctFraudCases.Add(v.ID);
+                                }
+                                else
+                                {
+                                    listRepeatedFraudCases.Add(v.ID);
+                                }
+                            }
+
+
+                            if (listRepeatedFraudCases.Count > 0)
+                            {
+                                GeneratedCall.UpdateReportStatusSecurity(listRepeatedFraudCases, (int)Enums.ReportingStatuses.Ignored, null);
+                            }
+
+                            ErrorLog("Count: " + listDistinctFraudCases.Count);
+                            if (listDistinctFraudCases.Count > 0)
+                            {
+                                GeneratedCall.UpdateReportStatusSecurity(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
+
+                                SendReportSecurity(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.AutoReportSecurityEmail, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
                             }
 
 
@@ -318,6 +357,123 @@ namespace Vanrise.Fzero.Services.Report
 
 
         }
+
+        private void SendReportSecurity(HashSet<string> CLIs, List<int> ListIds, string MobileOperatorName, int StatusID, int MobileOperatorID, string EmailAddress, int ClientID, int DifferenceInGMT)
+        {
+            try
+            {
+
+                ReportViewer rvToOperator = new ReportViewer();
+                Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
+
+
+                report.SentDateTime = DateTime.Now;
+
+                if (ClientID == 3) //ST
+                {
+                    report.RecommendedAction = "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.";
+                    report.ApplicationUserID = 8;
+                }
+                else
+                {
+                    report.RecommendedAction = "It is highly recommended to immediately investigate and trace these international calls and provide us with the respective CDR's of these Fradulent Calls as they were termnated to your Network and did not pass legally through ITPC's IGW.";
+                    report.ApplicationUserID = 3;
+                }
+
+                ErrorLog("ClientID: " + ClientID);
+
+                string ReportID;
+
+                string ReportIDBeforeCounter = "FZ" + MobileOperatorName.Substring(0, 1) + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
+
+
+                Vanrise.Fzero.Bypass.Report LastReport = Vanrise.Fzero.Bypass.Report.Load(ReportIDBeforeCounter);
+                if (LastReport == null)
+                {
+                    ReportID = ReportIDBeforeCounter + "0001";
+                }
+                else
+                {
+                    ReportID = ReportIDBeforeCounter + (int.Parse(LastReport.ReportID.Replace("- Repeated Numbers", "").Substring(9)) + 1).ToString("D4");
+                }
+                ErrorLog("ReportID: " + ReportID);
+                report.ReportID = ReportID;
+
+
+                if (StatusID == (int)Enums.Statuses.Suspect)
+                {
+                    report.RecommendedActionID = (int)Enums.RecommendedAction.Investigate;
+                }
+                else if (StatusID == (int)Enums.Statuses.Fraud)
+                {
+                    report.RecommendedActionID = (int)Enums.RecommendedAction.Block;
+
+                }
+
+
+                GeneratedCall.SendReportSecurity(ListIds, Vanrise.Fzero.Bypass.Report.Save(report).ID);
+                ReportParameter[] parameters = new ReportParameter[3];
+                parameters[0] = new ReportParameter("ReportID", report.ReportID);
+
+
+
+                if (ClientID == 3)
+                {
+                    parameters[1] = new ReportParameter("RecommendedAction", "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.");
+                }
+                else
+                {
+                    parameters[1] = new ReportParameter("RecommendedAction", "It is highly recommended to immediately investigate and trace these international calls and provide us with the respective CDR's of these Fradulent Calls as they were termnated to your Network and did not pass legally through ITPC's IGW.");
+                }
+
+
+
+                string exeFolder = Path.GetDirectoryName(@"C:\FMS\Vanrise.Fzero.Services.Report\");
+                string reportPath = string.Empty;
+                reportPath = Path.Combine(exeFolder, @"Reports\rptToOperatorIraqNationalSec.rdlc");
+                rvToOperator.LocalReport.ReportPath = reportPath;
+
+                ReportDataSource SignatureDataset = new ReportDataSource("SignatureDataset", (ApplicationUser.LoadbyUserId(1)).User.Signature);
+                rvToOperator.LocalReport.DataSources.Add(SignatureDataset);
+
+
+                ReportDataSource rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
+                rvToOperator.LocalReport.DataSources.Add(rptDataSourceDataSet1);
+
+                ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
+                rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
+
+                parameters[2] = new ReportParameter("HideSignature", "true");
+                rvToOperator.LocalReport.SetParameters(parameters);
+                rvToOperator.LocalReport.Refresh();
+                string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
+
+                parameters[2] = new ReportParameter("HideSignature", "false");
+                rvToOperator.LocalReport.SetParameters(parameters);
+                rvToOperator.LocalReport.Refresh();
+                string filenamePDF = ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
+
+                ErrorLog("filenamePDF: " + filenamePDF);
+                    
+                string CCs = EmailCC.GetEmailCCs(MobileOperatorID, ClientID);
+                string profile_name = "FMS_Profile";
+
+                if (ClientID == 3)
+                    profile_name = "FMS_Syria_Profile";
+
+                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
+                    ConfigurationManager.AppSettings["EmailCCNatSec"], report.ReportID, "FMS_Profile");
+
+
+            }
+            catch (Exception e)
+            {
+                ErrorLog("SendReport: " + e.Message);
+            }
+
+
+        }
+
 
         private string ExportReportToPDF(string reportName, ReportViewer rvToOperator)
         {

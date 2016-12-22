@@ -1858,6 +1858,37 @@ namespace Vanrise.Fzero.Bypass
             return GeneratedCallsList;
         }
 
+        public static List<ViewGeneratedCall> GetFraudCasesSecurity(int? ClientID, int RecievedMobileOperatorID)
+        {
+            List<ViewGeneratedCall> GeneratedCallsList = new List<ViewGeneratedCall>();
+
+            try
+            {
+                using (Entities context = new Entities())
+                {
+                    ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 0;
+                    GeneratedCallsList = context.ViewGeneratedCalls.Where(x => x.ReportedBeforeSecurity == false)
+                                .Where(u => u.ID > 0
+                                  && (u.ClientID == ClientID)
+                                  && (u.StatusID == (int)Enums.Statuses.Fraud)
+                                  && (u.ReceivedMobileOperatorID == RecievedMobileOperatorID)
+                                  && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Reported)
+                                  && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Verified)
+                                  && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Reopened)
+                                  && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Ignored)
+                                  )
+                                  .OrderByDescending(u => u.AttemptDateTime)
+                                  .ToList();
+                }
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.GeneratedCall.GetFraudCasesSecurity()", err);
+            }
+
+            return GeneratedCallsList;
+        }
+
         public static List<ViewGeneratedCall> GetClientFraudCases(int ClientID)
         {
             List<ViewGeneratedCall> GeneratedCallsList = new List<ViewGeneratedCall>();
