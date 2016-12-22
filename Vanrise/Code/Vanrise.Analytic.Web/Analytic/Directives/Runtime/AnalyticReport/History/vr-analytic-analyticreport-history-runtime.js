@@ -320,7 +320,6 @@
             }
 
             function getQuery(widgetPayload) {
-                console.log(widgetPayload);
                 var dimensionFilters = [];
                 if ($scope.scopeModel.filters != undefined) {
                     for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
