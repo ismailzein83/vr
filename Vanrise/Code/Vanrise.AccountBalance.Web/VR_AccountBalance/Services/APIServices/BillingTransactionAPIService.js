@@ -15,9 +15,15 @@
         function AddBillingTransaction(billingTransaction) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, 'AddBillingTransaction'), billingTransaction);
         }
+
+        function HasAddBillingTransactionPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_AccountBalance_ModuleConfig.moduleName, controllerName, ['AddBillingTransaction']));
+
+        }
         return {
             GetFilteredBillingTransactions: GetFilteredBillingTransactions,
-            AddBillingTransaction: AddBillingTransaction
+            AddBillingTransaction: AddBillingTransaction,
+            HasAddBillingTransactionPermission: HasAddBillingTransactionPermission
         };
     }
 

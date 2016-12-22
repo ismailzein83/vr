@@ -3,8 +3,8 @@
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
              datasource="scopeModel.accountBalances" defaultsortbyfieldname="'Entity.CurrentBalance'" defaultsortdirection="ctrl.orderBy">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBalanceId'" fixedwidth="50"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBalanceId'" fixedwidth="'50'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Account'" field="'AccountInfo.Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Current Balance'" field="'Entity.CurrentBalance'" numberprecision="'NormalPrecision'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Balance'" field="'Entity.CurrentBalance'" type="'Number'" fixedwidth="'120'" numberprecision="'NormalPrecision'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Currency'" field="'CurrencyDescription'" fixedwidth="100"></vr-datagridcolumn>
 </vr-datagrid>

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    billingTransactionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_BillingTransactionService'];
+    billingTransactionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_BillingTransactionService', 'VR_AccountBalance_BillingTransactionAPIService'];
 
-    function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_BillingTransactionService) {
+    function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionAPIService) {
         var gridAPI;
         var accountTypeId;
 
@@ -56,7 +56,11 @@
             $scope.onBillingTransactionTypeReady = function (api) {
                 transactionTypeDirectiveAPI = api;
                 transactionTypeDirectiveReadyDeferred.resolve();
-            }
+            };
+            $scope.hasAddBillingTransactionPermission = function () {
+                return VR_AccountBalance_BillingTransactionAPIService.HasAddBillingTransactionPermission();
+            };
+
         }
 
 
