@@ -109,7 +109,7 @@ namespace TOne.WhS.DBSync.Business
 
                     profileDocuments.Add(new VRDocumentSetting()
                     {
-                        CategoryId = bETechnicalSettingsData.DocumentsDefinition.ItemDefinitions.FindRecord(item => item.Title.Equals(carrierDocumet.Category, StringComparison.InvariantCultureIgnoreCase)).ItemId,
+                        CategoryId = bETechnicalSettingsData.DocumentCategoryDefinition.ItemDefinitions.FindRecord(item => item.Title.Equals(carrierDocumet.Category, StringComparison.InvariantCultureIgnoreCase)).ItemId,
                         CreatedOn = carrierDocumet.Created,
                         Description = carrierDocumet.Description,
                         FileId = documentId
@@ -224,7 +224,7 @@ namespace TOne.WhS.DBSync.Business
 
                 if (bETechnicalSettings != null)
                 {
-                    VRDocumentsDefinition documentDefinition = new VRDocumentsDefinition();
+                    VRDocumentCategoryDefinition documentDefinition = new VRDocumentCategoryDefinition();
                     documentDefinition.ItemDefinitions = new List<VRDocumentItemDefinition>();
                     IEnumerable<string> distinctDocumentsCategories = sourceCarrierDocuments.Select(item => item.Category).Distinct(StringComparer.InvariantCultureIgnoreCase);
                     if (distinctDocumentsCategories != null)
@@ -241,7 +241,7 @@ namespace TOne.WhS.DBSync.Business
                         }
                     }
 
-                    bETechnicalSettingsData.DocumentsDefinition = documentDefinition;
+                    bETechnicalSettingsData.DocumentCategoryDefinition = documentDefinition;
 
                     settingManager.UpdateSetting(bETechnicalSettings);
                 }

@@ -105,8 +105,8 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                                 ctrl.titles.push({ title: val.Title });
                             });
 
-                        if (payload.data.DocumentsDefinition != undefined && payload.data.DocumentsDefinition.ItemDefinitions != undefined)
-                            angular.forEach(payload.data.DocumentsDefinition.ItemDefinitions, function (val) {
+                        if (payload.data.DocumentCategoryDefinition != undefined && payload.data.DocumentCategoryDefinition.ItemDefinitions != undefined)
+                            angular.forEach(payload.data.DocumentCategoryDefinition.ItemDefinitions, function (val) {
                                 ctrl.documentTitles.push({ documentTitle: val.Title });
                             });
 
@@ -173,7 +173,7 @@ app.directive('vrWhsBeTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                             HolidayRateTypeId: holidayRateTypeSelectorAPI.getSelectedIds()
                         },
                         TaxesDefinition: { ItemDefinitions: itemDefinitions },
-                        DocumentsDefinition: { ItemDefinitions: documentItemsDefinition }
+                        DocumentCategoryDefinition: { ItemDefinitions: documentItemsDefinition }
                     };
                 };
 

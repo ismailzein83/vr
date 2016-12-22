@@ -19,6 +19,9 @@
         var currencySelectorAPI;
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var documentsGridAPI;
+        var documentsGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var countrySelectedPromiseDeferred;
 
         loadParameters();
@@ -126,25 +129,13 @@
             };
 
             $scope.scopeModal.addDocument = function () {
-                var document = {
-                    Entity: {
-                        documentCategories: []
-                    }
-                };
+                documentsGridAPI.addDocument();
+            };
 
-
-
-                document.Entity.onDocumentCategorySelectorReady = function () {
-                    WhS_BE_TechnicalSettingsAPIService.GetDocumentItemDefinitionsInfo().then(function (response) {
-                        if (response != undefined) {
-                            for (var i = 0; i < response.length; i++)
-                                document.Entity.documentCategories.push(response[i])
-                        }
-                    })
-                }
-
-                $scope.scopeModal.documents.push(document);
-            }
+            $scope.scopeModal.onDocumentGridReady = function (api) {
+                documentsGridAPI = api;
+                documentsGridReadyPromiseDeferred.resolve();
+            };
         }
 
         function load() {
@@ -269,38 +260,28 @@
         }
 
         function loadDocuments() {
-            if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.Documents != undefined) {
-                var documents = carrierProfileEntity.Settings.Documents;
+            var loadDocumentsPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            documentsGridReadyPromiseDeferred.promise.then(function () {
                 WhS_BE_TechnicalSettingsAPIService.GetDocumentItemDefinitionsInfo().then(function (response) {
                     var documentCategories = [];
-                    if (response != undefined) {
-                        for (var i = 0; i < response.length; i++)
-                            documentCategories.push(response[i])
-                    }
-
-                    for (var i = 0; i < documents.length; i++) {
-                        var document = documents[i];
-
-                        var documentItem = {
-                            Entity: {
-                                documentAttachment: {
-                                    fileId: document.FileId
-                                },
-                                selectedDocumentCategory: document.CategoryId,
-                                documentDescription: document.Description,
-                                createdOn: document.CreatedOn,
-                                updatedOn: document.UpdatedOn,
-                                documentCategories: documentCategories
+                            if (response != undefined) {
+                                for (var i = 0; i < response.length; i++)
+                                    documentCategories.push(response[i])
                             }
-                        };
-
-                        $scope.scopeModal.documents.push(documentItem)
-                        documentItem.Entity.selectedDocumentCategory = UtilsService.getItemByVal(documentCategories, document.CategoryId, 'ItemId');
-                    }
-                });
-            }
+                            var payload = {
+                                documentCategories: documentCategories
+                            };
+                            if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.Documents != undefined) {
+                                payload.documents = carrierProfileEntity.Settings.Documents;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(documentsGridAPI, payload, loadDocumentsPromiseDeferred);
+                })
+              
+            });
+            return loadDocumentsPromiseDeferred.promise;
         }
-
+         
         function loadContacts() {
             for (var x in WhS_BE_ContactTypeEnum) {
                 $scope.scopeModal.contacts.push(addcontactObj(x));
@@ -427,7 +408,8 @@
                     CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : 0,
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax"),
-                    CustomerInvoiceByProfile: $scope.scopeModal.customerInvoiceByProfile
+                    CustomerInvoiceByProfile: $scope.scopeModal.customerInvoiceByProfile,
+                    Documents : documentsGridAPI.getData()
                 }
             };
 
@@ -458,29 +440,6 @@
                         obj.Settings.TaxSetting.Items.push({ ItemId: item.ItemId, Value: item.value });
                     }
                 };
-            }
-
-
-            if ($scope.scopeModal.documents.length > 0) {
-                obj.Settings.Documents = [];
-                for (var i = 0; i < $scope.scopeModal.documents.length; i++) {
-                    var item = $scope.scopeModal.documents[i].Entity;
-
-                    var documentSetting = {
-                        FileId: item.documentAttachment.fileId,
-                        CategoryId: item.selectedDocumentCategory.ItemId,
-                        Description: item.documentDescription
-                    }
-                    if (carrierProfileId != null)
-                    {
-                        documentSetting.UpdatedOn = new Date();
-                        documentSetting.CreatedOn = item.createdOn;
-                    }
-                    else
-                        documentSetting.CreatedOn = new Date();
-
-                    obj.Settings.Documents.push(documentSetting);
-                }
             }
             return obj;
         }

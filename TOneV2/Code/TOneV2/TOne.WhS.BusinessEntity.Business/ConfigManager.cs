@@ -170,10 +170,10 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
 
-            if (setting.DocumentsDefinition == null)
-                throw new NullReferenceException("setting.DocumentsDefinition");
+            if (setting.DocumentCategoryDefinition == null)
+                throw new NullReferenceException("setting.DocumentCategoryDefinition");
 
-            return setting.DocumentsDefinition.ItemDefinitions;
+            return setting.DocumentCategoryDefinition.ItemDefinitions;
         }
         #endregion
 

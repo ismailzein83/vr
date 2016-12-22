@@ -131,36 +131,9 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                      
-                            <vr-datagrid datasource="scopeModal.documents"
-                                         ondeleterow="scopeModal.removeDocument"
-                                         hidegridmenu="true"
-                                         norowhighlightonclick="true">
-                                
-                                <vr-datagridcolumn headertext="'Attachment'" disablesorting="true">
-                                    <vr-fileupload extension="xls,xlsx,csv,xlsb" value="dataItem.Entity.documentAttachment" isrequired="true">
-                                    </vr-fileupload>
-                                </vr-datagridcolumn>
-                               
-                                 <vr-datagridcolumn headertext="'Document Category'">
-                                     <vr-select datatextfield="Title"
-                                                datavaluefield="ItemId"
-                                                isrequired="true"
-                                                datasource="dataItem.Entity.documentCategories"
-                                                on-ready="dataItem.Entity.onDocumentCategorySelectorReady"
-                                                selectedvalues="dataItem.Entity.selectedDocumentCategory">
-                                     </vr-select>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Description'">
-                                    <vr-textarea value="dataItem.Entity.documentDescription">
-                                    </vr-textarea>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Created On'" field="'Entity.createdOn'" type="'Datetime'"></vr-datagridcolumn>
-                                
-                                <vr-datagridcolumn headertext="'Updated On'" field="'Entity.updatedOn'" type="'Datetime'"></vr-datagridcolumn>
+                        <vr-common-document-grid on-ready="scopeModal.onDocumentGridReady">
 
-                            </vr-datagrid>
-                       
+                        </vr-common-document-grid>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
