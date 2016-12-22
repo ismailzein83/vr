@@ -14,7 +14,23 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         public override string GetMessage(IRuleTarget target)
         {
             DataByZone zone = (target as DataByZone);
-            return String.Format("BED ({0}) of the normal rate of zone {1} must be greater than or equal to BED ({2}) of the zone", zone.NormalRateToChange.BED, zone.ZoneName, zone.BED);
+
+			string zoneBED = UtilitiesManager.GetDateTimeAsString(zone.BED);
+			string normalRateBED = UtilitiesManager.GetDateTimeAsString(zone.NormalRateToChange.BED);
+
+			var messageBuilder = new StringBuilder(string.Format("BED '{0}' of the Normal Rate of Zone '{1}' must be greater than", normalRateBED, zone.ZoneName));
+
+			if (zone.SoldOn.HasValue)
+			{
+				string soldOn = UtilitiesManager.GetDateTimeAsString(zone.SoldOn.Value);
+				messageBuilder.Append(string.Format(" the maximum between the BED '{0}' of the Zone and the date '{1}' when the Country was sold", zoneBED, soldOn));
+			}
+			else
+			{
+				messageBuilder.Append(string.Format(" the BED '{0}' of the Zone", zoneBED));
+			}
+
+			return messageBuilder.ToString();
         }
 
         public override bool ShouldValidate(IRuleTarget target)

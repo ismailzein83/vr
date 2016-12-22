@@ -30,7 +30,8 @@ namespace TOne.WhS.Sales.Business
 
             return maxDate;
         }
-        public static DateTime? GetMinDate(IEnumerable<DateTime?> dates)
+        
+		public static DateTime? GetMinDate(IEnumerable<DateTime?> dates)
         {
             int count;
             DateTime? minDate = GetFirstDate(dates, out count);
@@ -52,6 +53,11 @@ namespace TOne.WhS.Sales.Business
 
             return minDate;
         }
+		
+		public static string GetDateTimeAsString(DateTime dateTime)
+		{
+			return dateTime.ToShortDateString();
+		}
 
         #region Private Methods
         private static DateTime? GetFirstDate(IEnumerable<DateTime?> dates, out int count)
