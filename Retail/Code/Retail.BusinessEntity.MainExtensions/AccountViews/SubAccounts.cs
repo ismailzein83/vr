@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
         {
             get
             {
-                throw new NotImplementedException();
+                return "retail-be-account-grid";
             }
             set
             {
