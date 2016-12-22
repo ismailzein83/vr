@@ -198,6 +198,9 @@
     <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttypeconfig-selector.js" />
+    <Content Include="Common\Directives\VRDocument\Templates\VRDocumentGridTemplate.html" />
+    <Content Include="Common\Directives\VRDocument\vr-common-document-grid.js" />
+    <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
     <Content Include="Common\Directives\VRTimeZone\Templates\VRTimeZoneGridTemplate.html" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-grid.js" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-selector.js" />

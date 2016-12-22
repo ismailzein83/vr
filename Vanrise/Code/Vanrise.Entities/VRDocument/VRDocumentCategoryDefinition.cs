@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class VRDocumentsDefinition
+    public class VRDocumentCategoryDefinition
     {
         public List<VRDocumentItemDefinition> ItemDefinitions { get; set; }
 
