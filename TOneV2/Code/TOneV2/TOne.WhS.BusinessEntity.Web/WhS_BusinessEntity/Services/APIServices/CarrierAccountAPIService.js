@@ -59,6 +59,10 @@
         function HasAddCarrierAccountPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddCarrierAccount']));
         }
+
+        function HasViewCarrierAccountPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['GetFilteredCarrierAccounts']));
+        }
         return ({
             GetCarrierAccountInfo: GetCarrierAccountInfo,
             GetSupplierGroupTemplates: GetSupplierGroupTemplates,
@@ -71,7 +75,8 @@
             UpdateCarrierAccount: UpdateCarrierAccount,
             GetSuppliersWithZonesGroupsTemplates: GetSuppliersWithZonesGroupsTemplates,
             HasUpdateCarrierAccountPermission: HasUpdateCarrierAccountPermission,
-            HasAddCarrierAccountPermission: HasAddCarrierAccountPermission
+            HasAddCarrierAccountPermission: HasAddCarrierAccountPermission,
+            HasViewCarrierAccountPermission: HasViewCarrierAccountPermission
         });
     }
 

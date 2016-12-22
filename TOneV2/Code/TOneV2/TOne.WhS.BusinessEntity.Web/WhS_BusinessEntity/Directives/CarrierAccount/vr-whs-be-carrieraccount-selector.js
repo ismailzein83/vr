@@ -73,7 +73,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         var hideremoveicon = "";
         if (attrs.hideremoveicon != undefined)
             hideremoveicon = "hideremoveicon";
-        var viewCliked = "";
+        var viewCliked = '';
         if (attrs.showviewbutton != undefined)
             viewCliked = 'onviewclicked="ctrl.ViewCarrierAccount"';
 
@@ -85,7 +85,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.ismultipleselection != undefined)
             ismultipleselection = "ismultipleselection";
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
             + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + ' ' + viewCliked + ' ></vr-select></vr-columns>';
     }
 
@@ -97,6 +97,10 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             ctrl.ViewCarrierAccount = function (obj) {               
                 WhS_BE_CarrierAccountService.viewCarrierAccount(obj.CarrierAccountId);
             };
+            ctrl.hasviewpermission = function () {
+                return WhS_BE_CarrierAccountAPIService.HasViewCarrierAccountPermission();
+            };
+
             ctrl.onSelectorReady = function (api) {
                 selectorApi = api;
                 defineAPI();
