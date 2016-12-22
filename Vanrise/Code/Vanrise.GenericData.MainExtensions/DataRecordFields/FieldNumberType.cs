@@ -145,7 +145,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case FieldNumberDataType.Int:
                 default: numberPrecision = "NoDecimal"; break;
             }
-            return new Vanrise.Entities.GridColumnAttribute() { Type = "Number", NumberPrecision = numberPrecision };
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Number", NumberPrecision = numberPrecision, Field = context != null ? context.ValueFieldPath : null };
         }
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)

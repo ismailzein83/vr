@@ -39,7 +39,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             if (textValues == null)
                 return value.ToString();
-            
+
             var descriptions = new List<string>();
             foreach (var textValue in textValues)
                 descriptions.Add(textValue.ToString());
@@ -55,7 +55,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
                 var fieldValueStringList = fieldValueObjList.MapRecords(itm => Convert.ToString(itm).ToUpper());
                 var filterValueString = filterValue.ToString().ToUpper();
-                
+
                 foreach (var fieldValueStringItem in fieldValueStringList)
                 {
                     if (fieldValueStringItem.Contains(filterValueString))
@@ -74,12 +74,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (stringRecordFilter == null)
                 throw new NullReferenceException("stringRecordFilter");
             string valueAsString = fieldValue as string;
-            if(valueAsString == null)
+            if (valueAsString == null)
                 throw new NullReferenceException("valueAsString");
-            string filterValue  = stringRecordFilter.Value;
-             if(filterValue == null)
+            string filterValue = stringRecordFilter.Value;
+            if (filterValue == null)
                 throw new NullReferenceException("filterValue");
-            switch(stringRecordFilter.CompareOperator)
+            switch (stringRecordFilter.CompareOperator)
             {
                 case StringRecordFilterOperator.Equals: return String.Compare(valueAsString, filterValue, false) == 0;
                 case StringRecordFilterOperator.NotEquals: return String.Compare(valueAsString, filterValue, false) != 0;
@@ -95,12 +95,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
-            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
         }
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
-            var values = filterValues.Select(x=>x.ToString()).ToList();
+            var values = filterValues.Select(x => x.ToString()).ToList();
             RecordFilterGroup recordFilterGroup = new RecordFilterGroup
             {
                 LogicalOperator = RecordQueryLogicalOperator.Or,

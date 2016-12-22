@@ -35,7 +35,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             if (selectedBooleanValues == null)
                 return value.ToString();
-            
+
             var descriptions = new List<string>();
 
             foreach (bool selectedBooleanValue in selectedBooleanValues)
@@ -52,7 +52,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
-            return new Vanrise.Entities.GridColumnAttribute() { Type = "Boolean", NumberPrecision = "NoDecimal" };
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Boolean", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
         }
 
         public override bool IsMatched(object fieldValue, RecordFilter recordFilter)

@@ -150,7 +150,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case FieldDateTimeDataType.Date: type = "Date"; break;
                 default: type = "Datetime"; break;
             }
-            return new Vanrise.Entities.GridColumnAttribute() { Type = type, NumberPrecision = "NoDecimal" };
+            return new Vanrise.Entities.GridColumnAttribute() { Type = type, NumberPrecision = "NoDecimal", Field = context != null ? context.ValueFieldPath : null };
         }
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
