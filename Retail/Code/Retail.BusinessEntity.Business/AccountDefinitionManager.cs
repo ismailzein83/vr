@@ -60,5 +60,9 @@ namespace Retail.BusinessEntity.Business
             ConfigManager configManager = new ConfigManager();
             return configManager.GetAccountViewDefinitions();
         }
+        public List<AccountViewDefinition> GetAccountViewDefinitionsByAccount(long accountId)
+        {
+            return GetAccountViewDefinitions();
+        }
     }
 }

@@ -18,12 +18,16 @@
         function GetAccountViewDefinitions() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitions"));
         }
-
+        function GetAccountViewDefinitionsByAccount(accountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitions"),
+                { accountId: accountId });
+        }
 
         return {
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
             GetAccountGridColumnAttributes: GetAccountGridColumnAttributes,
-            GetAccountViewDefinitions: GetAccountViewDefinitions
+            GetAccountViewDefinitions: GetAccountViewDefinitions,
+            GetAccountViewDefinitionsByAccount: GetAccountViewDefinitionsByAccount
         };
     }
 

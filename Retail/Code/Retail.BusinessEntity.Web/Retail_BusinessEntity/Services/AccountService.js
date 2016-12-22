@@ -111,11 +111,23 @@
                     account.menuActions.push(menuActions[i]);
             }
         }
+        function openAccount360DegreeEditor(accountId) {
+            var parameters = {
+                accountId: accountId
+            };
 
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/Account360DegreeEditor.html', parameters, settings);
+        };
         return {
             addAccount: addAccount,
             editAccount: editAccount,
-            defineAccountItemTabsAndMenuActions: defineAccountItemTabsAndMenuActions
+            defineAccountItemTabsAndMenuActions: defineAccountItemTabsAndMenuActions,
+            openAccount360DegreeEditor: openAccount360DegreeEditor
         };
     }
 

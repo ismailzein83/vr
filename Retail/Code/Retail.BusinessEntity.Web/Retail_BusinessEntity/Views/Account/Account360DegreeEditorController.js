@@ -2,9 +2,9 @@
 
     'use strict';
 
-    Account360DegreeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_AccountAPIService'];
+    Account360DegreeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_AccountAPIService','Retail_BE_AccountDefinitionAPIService'];
 
-    function Account360DegreeEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService) {
+    function Account360DegreeEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService, Retail_BE_AccountDefinitionAPIService) {
 
         var accountId;
         var accountEntity;
@@ -21,7 +21,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-           
+            $scope.scopeModel.accountViews = [];
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -40,7 +40,9 @@
         }
         function getAccountViewsDefinitions()
         {
-
+            return Retail_BE_AccountDefinitionAPIService.GetAccountViewDefinitionsByAccount(accountId).then(function (response) {
+                accountViewsDefinitions = response;
+            });
         }
         function loadAllControls() {
 
@@ -52,7 +54,29 @@
                     return;
             }
             
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            function loadAccountViews()
+            {
+                if(accountViewsDefinitions != undefined)
+                {
+                    for(var i=0;i<accountViewsDefinitions.length ; i++)
+                    {
+                        var accountViewDefinition = accountViewsDefinitions[i];
+                        AddAccountView(accountViewDefinition);
+                    }
+                }
+                function AddAccountView(viewDefinition)
+                {
+                    if (viewDefinition.Account360DegreeSectionName != undefined)
+                    {
+                        var view = {
+                            header: viewDefinition.Account360DegreeSectionName
+                        };
+                        $scope.scopeModel.accountViews.push(view);
+                    }
+                  
+                }
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountViews]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;

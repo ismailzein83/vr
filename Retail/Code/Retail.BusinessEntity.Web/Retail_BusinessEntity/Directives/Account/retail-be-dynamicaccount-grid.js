@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountDefinitionAPIService',
-    function (VRNotificationService, UtilsService, Retail_BE_AccountAPIService, Retail_BE_AccountDefinitionAPIService) {
+app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountDefinitionAPIService','Retail_BE_AccountService',
+    function (VRNotificationService, UtilsService, Retail_BE_AccountAPIService, Retail_BE_AccountDefinitionAPIService, Retail_BE_AccountService) {
         return {
             restrict: 'E',
             scope: {
@@ -144,6 +144,9 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                     name: 'Edit',
                     clicked: editAccount,
                     haspermission: hasEditAccountPermission
+                }, {
+                    name: 'Open Account 360 Degree',
+                    clicked: openAccount360DegreeEditor,
                 });
             }
             function editAccount(account) {
@@ -153,6 +156,9 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                 };
 
                 Retail_BE_AccountService.editAccount(account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
+            }
+            function openAccount360DegreeEditor(account) {
+                Retail_BE_AccountService.openAccount360DegreeEditor(account.Entity.AccountId);
             }
             function hasEditAccountPermission() {
                 return Retail_BE_AccountAPIService.HasUpdateAccountPermission();

@@ -1,6 +1,10 @@
 ﻿<div vr-modalcontent ng-controller="Retail_BE_Account360DegreeEditorController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formAccount360DegreeEditor">
+            <vr-tabs>
+                <vr-tab ng-repeat="accountView in scopeModel.accountViews" header="accountView.header" vertical>
+                </vr-tab>
+            </vr-tabs>
             <vr-row>
                 <vr-columns width="1/2row">
                 </vr-columns>
