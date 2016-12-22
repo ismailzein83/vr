@@ -75,7 +75,7 @@
     </Reference>
     <Reference Include="RazorEngine, Version=3.8.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RazorEngine.3.8.2\lib\net45\RazorEngine.dll</HintPath>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\RazorEngine.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -602,7 +602,9 @@
     <Content Include="Reports\Analytics\ZoneProfit.aspx" />
     <Content Include="Reports\ReportChart.aspx" />
     <Content Include="Reports\ReportPage.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
     </None>

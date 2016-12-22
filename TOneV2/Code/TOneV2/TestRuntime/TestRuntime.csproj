@@ -144,8 +144,9 @@
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="RazorEngine">
-      <HintPath>..\packages\RazorEngine.3.8.2\lib\net45\RazorEngine.dll</HintPath>
+    <Reference Include="RazorEngine, Version=3.8.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\RazorEngine.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Net.Ftp, Version=3.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
