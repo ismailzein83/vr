@@ -12,8 +12,8 @@
                                 <div ng-if="ctrl.isEnFilter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
                                     <div class="inner-addon right-addon">
 
-                                        <i ng-if="! ctrl.isRemoteLoad()" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.clearFilter($event)"></i>
-                                        <input ng-if="!ctrl.isRemoteLoad()" id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
+                                        <i ng-if="!ctrl.isRemoteLoad()" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.clearFilter($event)"></i>
+                                        <input ng-if="!ctrl.isRemoteLoad()" id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername[ctrl.datatextfield]" ng-click="ctrl.muteAction($event)" />
 
                                         <i ng-if="ctrl.isRemoteLoad()" class="glyphicon icon-loader" ng-show="ctrl.showloading"></i>
                                         <input ng-if="ctrl.isRemoteLoad()" id="filterInput" class="form-control input-sm" style="width:100%" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-click="ctrl.muteAction($event)" ng-model="ctrl.filtername" ng-change="ctrl.search();">
@@ -49,12 +49,12 @@
                             <div ng-if="!ctrl.isContainerVisible()">
                                 <div ng-if="ctrl.withLocalFiter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
                                     <div class="inner-addon right-addon">
-                                        <i class="glyphicon glyphicon-remove hand-cursor" ng-if="ctrl.filtername.length > 0" style="top:9px" ng-click="ctrl.clearFilter($event)"></i>
-                                        <input id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
-                                    </div>
+                                        <i class="glyphicon glyphicon-remove hand-cursor"  style="top:9px" ng-click="ctrl.clearFilter($event)"></i>
+                                        <input id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername[ctrl.datatextfield]" ng-click="ctrl.muteAction($event)" />
+                                      </div>
                                 </div>
                                 <div class="vr-select-height">
-                                    <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
+                                    <div dataindex="{{$index}}" ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
                                         <a href="" ng-if="!ctrl.isContainerVisible()" ng-class="ctrl.getObjectDisabled(c)==true?'vr-select-disabled-item':''" class="mark-select " ng-click="ctrl.selectValue($event, c)" ng-mouseenter="ctrl.muteaction($event);"
                                            style="display: inline-block; width:100%;padding:2px; white-space: normal;">
                                             <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}} </div>

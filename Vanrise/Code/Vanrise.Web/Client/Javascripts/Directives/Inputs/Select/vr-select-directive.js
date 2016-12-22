@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $location, $anchorScroll) {
+    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService) {
 
         var openedDropDownIds = [], rootScope;
         var vrSelectSharedObject = {
@@ -54,6 +54,7 @@
                     rootScope = $scope.$root;
 
                 var controller = this;
+                controller.filtername = '';
                 controller.readOnly = utilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
                 controller.validate = function () {
@@ -699,7 +700,7 @@
 
     }
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$location', '$anchorScroll'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService'];
 
     app.directive('vrSelect', vrSelectDirective);
 
