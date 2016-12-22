@@ -9,6 +9,7 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+DELETE FROM [sec].[Module] WHERE [Id]='2F940ED6-799C-4411-8FE3-339600964FE1'
 --[sec].[Module]------------------------------701 to 800------------------------------------------------------
 begin
 set nocount on;
@@ -91,6 +92,7 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
+DELETE FROM [sec].[BusinessEntityModule] WHERE [ID] = '24779963-F541-4692-BF0D-E4C058C8F9C0'
 --[sec].[BusinessEntityModule]--------------------701 to 800----------------------------------------
 begin
 set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B21654DA-1A2F-4E5A-887C-865FD9320807',701,'Queueing','B6B8F582-4759-43FB-9220-AA7662C366EA',2,0)--,--('24779963-F541-4692-BF0D-E4C058C8F9C0',null,'Queueing','954705D8-ABC5-41AB-BDB2-FEC686C7BE09',2,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);

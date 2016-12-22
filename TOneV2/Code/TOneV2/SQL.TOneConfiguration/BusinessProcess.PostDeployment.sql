@@ -53,6 +53,7 @@ when not matched by target then
 --------------------------------------------------------------------------------------------------------------
 end
 
+DELETE FROM [sec].[View] WHERE [ID] IN ('AA0B6783-ED68-41E8-B7C9-99BE96672476','79E759A9-3324-4B82-87E3-2065CD86C3F7','B23B61C1-D5AE-44A9-BD6E-F3009166395B','3C53D6DC-BBE7-49CA-A222-8211AF25DD31')
 --[sec].[View]-----------------------------6001 to 7000-------------------------------------------------------
 begin
 set nocount on;
@@ -69,6 +70,7 @@ set nocount on;
 --------------------------------------------------------------------------------------------------------------
 end
 
+DELETE FROM [sec].[BusinessEntityModule] WHERE [ID] = 'E53820F4-9736-4202-970F-F40C660EC08E'
 --[sec].[BusinessEntityModule]-------------601 to 700---------------------------------------------------------
 begin
 set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('0C719C34-F553-4B90-8013-D967A57FAB14',601,'Business Process','B6B8F582-4759-43FB-9220-AA7662C366EA',2,0),('04493174-83F0-44D6-BBE4-DBEB8B57875A',602,'WorkFlows','B6B8F582-4759-43FB-9220-AA7662C366EA',601,0)--,--('E53820F4-9736-4202-970F-F40C660EC08E',603,'Business Process','954705D8-ABC5-41AB-BDB2-FEC686C7BE09',-1,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
