@@ -48,6 +48,7 @@ namespace Vanrise.Analytic.Entities
                 base.SettingEditor = value;
             }
         }
+        public override Guid NotificationTypeId { get { return new Guid("6BB06963-AC64-4827-A7FC-EB6892057AD7"); } }
 
         public Guid DataAnalysisDefinitionId { get; set; }
 

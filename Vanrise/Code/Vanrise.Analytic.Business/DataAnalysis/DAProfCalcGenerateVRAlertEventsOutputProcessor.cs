@@ -48,7 +48,7 @@ namespace Vanrise.Analytic.Business
                             AlertRuleTypeId = alertRule.RuleTypeId,
                             Description = "This is the description",
                             EventKey = outputRecord.GroupingKey,
-                            EventPayload = new DAProfCalcAlertRuleActionEventPayload() { AlertRuleId = alertRuleId, AlertRuleTypeId = alertRule.RuleTypeId, GroupingKey = outputRecord.GroupingKey },
+                            EventPayload = new DAProfCalcAlertRuleActionEventPayload() { AlertRuleId = alertRuleId, AlertRuleTypeId = alertRule.RuleTypeId, GroupingKey = outputRecord.GroupingKey, UserId = UserId },
                             UserId = UserId
                         };
                         alertRuleNotificationManager.CreateNotification(notificationInput);

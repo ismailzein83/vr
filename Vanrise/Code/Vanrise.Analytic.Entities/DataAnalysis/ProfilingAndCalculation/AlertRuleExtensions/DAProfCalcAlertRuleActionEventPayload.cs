@@ -14,5 +14,7 @@ namespace Vanrise.Analytic.Entities
         public long AlertRuleId { get; set; }
 
         public string GroupingKey { get; set; }
+
+        public int UserId { get; set; }
     }
 }

@@ -8,7 +8,6 @@ using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
-using System.Linq;
 using System.Configuration;
 using RazorEngine.Templating;
 using Vanrise.Common.Business;
