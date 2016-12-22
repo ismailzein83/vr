@@ -16,6 +16,7 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
         public bool IncludePartnerId { get; set; }
         public DateCounterType? DateCounterType { get; set; }
         public long InitialSequenceValue { get; set; }
+        public int PaddingLeft { get; set; }
 
         public override string GetPartText(IInvoiceSerialNumberConcatenatedPartContext context)
         {
@@ -33,7 +34,8 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
                 }
             }
            InvoiceSequenceManager manager = new InvoiceSequenceManager();
-            return manager.GetNextSequenceValue(context.InvoiceTypeId, sequenceKey.ToString(), this.InitialSequenceValue).ToString();
+           var sequenceNumber = manager.GetNextSequenceValue(context.InvoiceTypeId, sequenceKey.ToString(), this.InitialSequenceValue);
+           return sequenceNumber.ToString().PadLeft(this.PaddingLeft, '0');
         }
     }
 }

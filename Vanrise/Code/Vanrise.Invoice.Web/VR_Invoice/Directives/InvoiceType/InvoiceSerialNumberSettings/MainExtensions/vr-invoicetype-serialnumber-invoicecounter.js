@@ -45,7 +45,7 @@ app.directive("vrInvoicetypeSerialnumberInvoicesequence", ["UtilsService", "VRNo
                             $scope.scopeModel.includePartnerId = payload.concatenatedPartSettings.IncludePartnerId;
                             $scope.scopeModel.initialSequenceValue = payload.concatenatedPartSettings.InitialSequenceValue;
                             $scope.scopeModel.selectedDateCounterType = UtilsService.getItemByVal($scope.scopeModel.dateCounterTypes, payload.concatenatedPartSettings.DateCounterType, "value");
-
+                            $scope.scopeModel.paddingLeft = payload.concatenatedPartSettings.PaddingLeft;
                         }
                         var promises = [];
                         return UtilsService.waitMultiplePromises(promises);
@@ -57,7 +57,8 @@ app.directive("vrInvoicetypeSerialnumberInvoicesequence", ["UtilsService", "VRNo
                         $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts.InvoiceSequenceSerialNumberPart ,Vanrise.Invoice.MainExtensions",
                         IncludePartnerId: $scope.scopeModel.includePartnerId,
                         InitialSequenceValue: $scope.scopeModel.initialSequenceValue,
-                        DateCounterType: $scope.scopeModel.selectedDateCounterType != undefined ? $scope.scopeModel.selectedDateCounterType.value : undefined
+                        DateCounterType: $scope.scopeModel.selectedDateCounterType != undefined ? $scope.scopeModel.selectedDateCounterType.value : undefined,
+                        PaddingLeft: $scope.scopeModel.paddingLeft
                     };
                 };
 
