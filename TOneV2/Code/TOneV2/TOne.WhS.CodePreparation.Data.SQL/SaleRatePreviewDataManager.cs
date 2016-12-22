@@ -56,8 +56,8 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 (int)record.OnwerType,
                 record.OwnerId,
                 decimal.Round(record.Rate, 8),
-                record.BED,
-                record.EED);
+               GetDateTimeForBCP(record.BED),
+               GetDateTimeForBCP(record.EED));
         }
 
         public object FinishDBApplyStream(object dbApplyStream)

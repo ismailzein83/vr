@@ -61,8 +61,8 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                        record.AddedZone.ZoneId,
                        record.PriceListToAdd.PriceListId,
                        decimal.Round(record.NormalRate, 8),
-                       record.BED,
-                       record.EED);
+                      GetDateTimeForBCP(record.BED),
+                      GetDateTimeForBCP(record.EED));
         }
 
 

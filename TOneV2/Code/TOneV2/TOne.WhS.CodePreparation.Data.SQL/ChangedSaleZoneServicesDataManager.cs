@@ -36,7 +36,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
                        record.EntityId,
                        _processInstanceID,
-                       record.EED);
+                      GetDateTimeForBCP(record.EED));
         }
 
         public object FinishDBApplyStream(object dbApplyStream)

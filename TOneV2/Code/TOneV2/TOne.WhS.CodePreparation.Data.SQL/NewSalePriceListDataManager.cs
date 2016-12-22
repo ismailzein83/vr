@@ -58,7 +58,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                                (int)record.OwnerType,
                                record.OwnerId,
                                record.CurrencyId,
-                               record.EffectiveOn);
+                              GetDateTimeForBCP(record.EffectiveOn));
         }
 
         public void ApplySalePriceListsToDB(object preparedSalePriceLists)
