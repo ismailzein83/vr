@@ -13,8 +13,7 @@ Post-Deployment Script Template
 BEGIN
 set nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('497557D1-399E-4AF5-BA10-A03338D1CAF4','FixedBalanceAlertThreshold','Fixed','VR_AccountBalance_BalanceAlertThreshold','{"Editor":"vr-accountbalance-balancealertthreshold-fixed"}'),
-('BE74A60E-D312-4B4F-BD76-5B7BE81ABE62','Email','Email','VR_AccountBalance_BalanceAlert_VRAction','{"Editor":"vr-notification-action-email"}')
+('BA79CB79-D058-4382-88FC-DB1C154B5374','VR_Notification_VRAlertRuleTypeSettings_AccountBalanceRule','Account Balance Rule Type','VR_Notification_VRAlertRuleTypeSettings','{"Editor":"vr-accountbalance-accountbalancerule-settings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[ExtensionConfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
