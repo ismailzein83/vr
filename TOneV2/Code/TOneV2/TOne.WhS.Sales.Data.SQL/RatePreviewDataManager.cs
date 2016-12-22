@@ -85,8 +85,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 isCurrentRateInherited,
                 GetRoundedRate(record.NewRate),
                 Convert.ToInt32(record.ChangeType),
-                record.EffectiveOn,
-                record.EffectiveUntil
+				GetDateTimeForBCP(record.EffectiveOn),
+				GetDateTimeForBCP(record.EffectiveUntil)
             );
         }
 

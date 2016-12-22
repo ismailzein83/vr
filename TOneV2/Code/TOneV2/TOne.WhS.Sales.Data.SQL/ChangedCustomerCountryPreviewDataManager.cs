@@ -67,7 +67,7 @@ namespace TOne.WhS.Sales.Data.SQL
 				"{0}^{1}^{2}",
 				record.CountryId,
 				_processInstanceId,
-				record.EED
+				GetDateTimeForBCP(record.EED)
 			);
 		}
 

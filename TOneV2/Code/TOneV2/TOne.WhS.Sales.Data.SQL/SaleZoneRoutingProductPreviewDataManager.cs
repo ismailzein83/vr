@@ -82,7 +82,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 record.CurrentSaleZoneRoutingProductName,
                 isCurrentSaleZoneRoutingProductInherited,
                 record.NewSaleZoneRoutingProductName,
-                record.EffectiveOn
+				GetDateTimeForBCP(record.EffectiveOn)
             );
         }
 

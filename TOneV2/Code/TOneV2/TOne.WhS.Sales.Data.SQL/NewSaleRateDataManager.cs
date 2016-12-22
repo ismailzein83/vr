@@ -72,8 +72,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 record.RateTypeId,
                 decimal.Round(record.Rate, 8),
                 record.CurrencyId,
-                record.BED,
-                record.EED
+				GetDateTimeForBCP(record.BED),
+				GetDateTimeForBCP(record.EED)
             );
         }
 
