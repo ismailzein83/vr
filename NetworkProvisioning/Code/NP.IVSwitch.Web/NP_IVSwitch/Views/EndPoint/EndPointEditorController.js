@@ -2,9 +2,9 @@
 
     "use strict";
 
-    EndPointEditorController.$inject = ['$scope', 'NP_IVSwitch_EndPointAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum',  'NP_IVSwitch_RtpModeEnum', 'NP_IVSwitch_EndPointEnum'];
+    EndPointEditorController.$inject = ['$scope', 'NP_IVSwitch_EndPointAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum', 'NP_IVSwitch_RtpModeEnum', 'NP_IVSwitch_EndPointEnum'];
 
-    function EndPointEditorController($scope, NP_IVSwitch_EndPointAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum,   NP_IVSwitch_RtpModeEnum, NP_IVSwitch_EndPointEnum) {
+    function EndPointEditorController($scope, NP_IVSwitch_EndPointAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_RtpModeEnum, NP_IVSwitch_EndPointEnum) {
 
         var isEditMode;
 
@@ -12,15 +12,15 @@
         var carrierAccountId;
         var endPointEntity;
 
- 
+
         var selectorCodecProfileAPI;
         var selectorCodecProfileReadyDeferred = UtilsService.createPromiseDeferred();
 
         var selectorTranslationRuleAPI;
-        var selectorTranslationRuleReadyDeferred = UtilsService.createPromiseDeferred();      
+        var selectorTranslationRuleReadyDeferred = UtilsService.createPromiseDeferred();
 
         var selectorEndPointAPI;
-        var selectorEndPointReadyDeferred = UtilsService.createPromiseDeferred();      
+        var selectorEndPointReadyDeferred = UtilsService.createPromiseDeferred();
 
         var selectorDomainAPI;
         var selectorDomainReadyDeferred = UtilsService.createPromiseDeferred();
@@ -45,7 +45,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
- 
+
             $scope.scopeModel.DisableSelector = false;
 
             $scope.scopeModel.save = function () {
@@ -72,7 +72,7 @@
             };
 
             $scope.scopeModel.onSelectorEndPointReady = function (api) {
-                 selectorEndPointAPI = api; 
+                selectorEndPointAPI = api;
                 selectorEndPointReadyDeferred.resolve();
             };
 
@@ -106,7 +106,7 @@
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.endpointtype = SelectedItem.value;
 
-                    if ($scope.scopeModel.endpointtype == 0) {
+                    if ($scope.scopeModel.endpointtype == 4) {
                         $scope.scopeModel.ShowSIP = true;
                         $scope.scopeModel.ShowACL = false;
                     }
@@ -133,7 +133,7 @@
             $scope.scopeModel.onSelectionChangedRtpMode = function (SelectedItem) {
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.selectedrtpmode = SelectedItem;
-                    $scope.scopeModel.rtpmode = $scope.scopeModel.selectedrtpmode.value
+                    $scope.scopeModel.rtpmode = $scope.scopeModel.selectedrtpmode.value;
                 }
 
             };
@@ -142,7 +142,7 @@
         function load() {
 
             $scope.scopeModel.isLoading = true;
-            if (isEditMode) {  
+            if (isEditMode) {
                 getEndPoint().then(function () {
                     $scope.scopeModel.DisableSelector = true;
                     loadAllControls();
@@ -153,7 +153,7 @@
             }
             else {
                 loadAllControls();
- 
+
             }
         }
 
@@ -162,7 +162,7 @@
         function getEndPoint() {
             return NP_IVSwitch_EndPointAPIService.GetEndPoint(endPointId).then(function (response) {
                 endPointEntity = response;
-             });
+            });
         }
 
         function loadAllControls() {
@@ -184,12 +184,12 @@
             function loadStaticData() {
 
                 $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
- 
+
                 $scope.scopeModel.rtpmodes = UtilsService.getArrayEnum(NP_IVSwitch_RtpModeEnum);
 
                 $scope.scopeModel.endpointtypes = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
 
-               
+
                 if (endPointEntity == undefined) {
 
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
@@ -211,12 +211,12 @@
                 $scope.scopeModel.siplogin = endPointEntity.SipLogin;
                 $scope.scopeModel.sippassword = endPointEntity.SipPassword;
                 $scope.scopeModel.endpointtype = endPointEntity.EndPointType;
-  
-  
+
+
                 if (endPointEntity.CurrentState != undefined)
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
                 if (endPointEntity.RtpMode != undefined) {
-                     $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[endPointEntity.RtpMode - 1];
+                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[endPointEntity.RtpMode - 1];
                     if ($scope.scopeModel.selectedrtpmode != undefined)
                         $scope.scopeModel.rtpmode = $scope.scopeModel.selectedrtpmode.value;
                 }
@@ -225,7 +225,7 @@
 
                 if (endPointEntity.EndPointType != undefined)
                     $scope.scopeModel.endpointtype = $scope.scopeModel.endpointtypes[endPointEntity.EndPointType];
-             }
+            }
 
             function loadSelectorCodecProfile() {
                 var selectorCodecProfileLoadDeferred = UtilsService.createPromiseDeferred();
@@ -259,12 +259,12 @@
             function loadSelectorEndPoint() {
 
                 var selectorEndPointLoadDeferred = UtilsService.createPromiseDeferred();
- 
+
                 selectorEndPointReadyDeferred.promise.then(function () {
                     var selectorEndPointPayload = {};
-                    if (endPointEntity != undefined && endPointEntity.EndPointType!= undefined)
+                    if (endPointEntity != undefined && endPointEntity.EndPointType != undefined)
                         selectorEndPointPayload.selectedIds = endPointEntity.EndPointType;
-                    
+
                     VRUIUtilsService.callDirectiveLoad(selectorEndPointAPI, selectorEndPointPayload, selectorEndPointLoadDeferred);
                 });
 
@@ -289,7 +289,7 @@
         function insert() {
             $scope.scopeModel.isLoading = true;
 
-            
+
             return NP_IVSwitch_EndPointAPIService.AddEndPoint(buildEndPointObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('EndPoint', response, 'Name')) {
 
@@ -304,8 +304,8 @@
             });
         }
         function update() {
-            $scope.scopeModel.isLoading = true; 
- 
+            $scope.scopeModel.isLoading = true;
+
             return NP_IVSwitch_EndPointAPIService.UpdateEndPoint(buildEndPointObjFromScope()).then(function (response) {
 
                 if (VRNotificationService.notifyOnItemUpdated('EndPoint', response, 'Name')) {
@@ -326,25 +326,25 @@
             return {
                 Entity:
              {
-                EndPointId: endPointEntity != undefined ? endPointEntity.EndPointId : undefined,
-                Description: $scope.scopeModel.description,
-                LogAlias: $scope.scopeModel.logalias,
-                CodecProfileId: $scope.scopeModel.codecprofileid,
-                TransRuleId: $scope.scopeModel.translationruleid,
-                CurrentState: $scope.scopeModel.currentstate.value,
-                ChannelsLimit: $scope.scopeModel.channelslimit,
-                MaxCallDuration : $scope.scopeModel.maxcallduration,
-                RtpMode: $scope.scopeModel.rtpmode ,
-                DomainId :$scope.scopeModel.domaineid,
-                Host: $scope.scopeModel.host,
-                TechPrefix: $scope.scopeModel.techprefix,
-                SipLogin: $scope.scopeModel.siplogin,
-                SipPassword: $scope.scopeModel.sippassword,
-                EndPointType: $scope.scopeModel.endpointtype
-              },
+                 EndPointId: endPointEntity != undefined ? endPointEntity.EndPointId : undefined,
+                 Description: $scope.scopeModel.description,
+                 LogAlias: $scope.scopeModel.logalias,
+                 CodecProfileId: $scope.scopeModel.codecprofileid,
+                 TransRuleId: $scope.scopeModel.translationruleid,
+                 CurrentState: $scope.scopeModel.currentstate.value,
+                 ChannelsLimit: $scope.scopeModel.channelslimit,
+                 MaxCallDuration: $scope.scopeModel.maxcallduration,
+                 RtpMode: $scope.scopeModel.rtpmode,
+                 DomainId: $scope.scopeModel.domaineid,
+                 Host: $scope.scopeModel.host,
+                 TechPrefix: $scope.scopeModel.techprefix,
+                 SipLogin: $scope.scopeModel.siplogin,
+                 SipPassword: $scope.scopeModel.sippassword,
+                 EndPointType: $scope.scopeModel.endpointtype
+             },
 
-                 CarrierAccountId:   carrierAccountId
-               
+                CarrierAccountId: carrierAccountId
+
             };
         }
     }
