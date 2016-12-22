@@ -65,8 +65,14 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             }
 
             $scope.removeDocument = function (dataItem) {
-                var index = $scope.documents.indexOf(dataItem);
-                $scope.documents.splice(index, 1);
+               
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        var index = $scope.documents.indexOf(dataItem);
+                        $scope.documents.splice(index, 1);
+                    }
+                    
+                });
             };
 
         };
