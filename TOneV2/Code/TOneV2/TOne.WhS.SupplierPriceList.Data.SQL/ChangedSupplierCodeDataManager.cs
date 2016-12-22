@@ -56,7 +56,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
                        record.EntityId,
                        _processInstanceID,
-                       record.EED);
+                       GetDateTimeForBCP(record.EED));
         }
     }
 }

@@ -58,10 +58,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 _processInstanceID,
                 record.ZoneName,
                 GetRoundedRate(record.SystemRate),
-                record.SystemRateBED,
-                record.SystemRateEED,
+                GetDateTimeForBCP(record.SystemRateBED),
+                GetDateTimeForBCP(record.SystemRateEED),
                 GetRoundedRate(record.ImportedRate),
-                record.ImportedRateBED,
+                GetDateTimeForBCP(record.ImportedRateBED),
                 record.RateTypeId,
                 (int)record.ChangeTypeRate);
         }

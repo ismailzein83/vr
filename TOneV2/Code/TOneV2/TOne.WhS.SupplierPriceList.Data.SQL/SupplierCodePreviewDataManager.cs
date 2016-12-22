@@ -63,8 +63,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 (int)record.ChangeType,
                 record.RecentZoneName,
                 record.ZoneName,
-                record.BED,
-                record.EED);
+                GetDateTimeForBCP(record.BED),
+                GetDateTimeForBCP(record.EED));
         }
 
         public object FinishDBApplyStream(object dbApplyStream)

@@ -56,10 +56,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 _processInstanceID,
                 record.ZoneName,
                 Vanrise.Common.Serializer.Serialize(record.SystemServiceIds, true),
-                record.SystemServicesBED,
-                record.SystemServicesEED,
+                GetDateTimeForBCP(record.SystemServicesBED),
+                GetDateTimeForBCP(record.SystemServicesEED),
                 Vanrise.Common.Serializer.Serialize(record.ImportedServiceIds, true),
-                record.ImportedServicesBED,
+                GetDateTimeForBCP(record.ImportedServicesBED),
                 (int)record.ZoneServicesChangeType);
         }
 

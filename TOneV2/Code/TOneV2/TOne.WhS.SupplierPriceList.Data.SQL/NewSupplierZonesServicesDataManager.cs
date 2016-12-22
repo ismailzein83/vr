@@ -62,8 +62,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        _processInstanceID,
                        record.Zone.ZoneId,
                        Vanrise.Common.Serializer.Serialize(record.ZoneServices, true),
-                       record.BED,
-                       record.EED);
+                       GetDateTimeForBCP(record.BED),
+                       GetDateTimeForBCP(record.EED));
         }
     }
 }

@@ -62,8 +62,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        record.CurrencyId,
                        decimal.Round(record.NormalRate, 8),
                        record.RateTypeId,
-                       record.BED,
-                       record.EED);
+                       GetDateTimeForBCP(record.BED),
+                       GetDateTimeForBCP(record.EED));
         }
     }
 }

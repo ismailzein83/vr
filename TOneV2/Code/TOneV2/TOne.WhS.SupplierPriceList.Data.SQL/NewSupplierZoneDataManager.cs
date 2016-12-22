@@ -70,8 +70,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        record.CountryId,
                        record.Name,
                        _supplierId,
-                       record.BED,
-                       record.EED);
+                       GetDateTimeForBCP(record.BED),
+                       GetDateTimeForBCP(record.EED));
         }
     }
 }
