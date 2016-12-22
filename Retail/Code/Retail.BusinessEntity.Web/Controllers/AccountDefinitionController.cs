@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
 
 namespace Retail.BusinessEntity.Web.Controllers
@@ -20,6 +21,20 @@ namespace Retail.BusinessEntity.Web.Controllers
         public IEnumerable<AccountViewDefinitionSettingsConfig> GetAccountViewDefinitionSettingsConfigs()
         {
             return _manager.GetAccountViewDefinitionSettingsConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetAccountGridColumnAttributes")]
+        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes()
+        {
+            return _manager.GetAccountGridColumnAttributes();
+        }
+
+        [HttpGet]
+        [Route("GetAccountViewDefinitions")]
+        public List<AccountViewDefinition> GetAccountViewDefinitions()
+        {
+            return _manager.GetAccountViewDefinitions();
         }
     }
 }
