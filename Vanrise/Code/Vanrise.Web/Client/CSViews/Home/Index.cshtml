@@ -66,9 +66,9 @@
                 </h4>
             </div>
         </div>
-        <div id="wrapper" ng-style="toogled==true?{'padding-left':'210px'}:{'padding-left':'25px'}">
+        <div id="wrapper" ng-style="toogled==true?{'padding-left':'185px'}:{'padding-left':'25px'}">
             <!-- Sidebar -->
-            <div id="sidebar-wrapper" style="overflow-x:hidden;" ng-style="toogled==true?{'width':'225px'}:{'width':'0px'}">
+            <div id="sidebar-wrapper" style="overflow-x:hidden;" ng-style="toogled==true?{'width':'200px'}:{'width':'0px'}">
 
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
                     <div class="panel panel-default toggle-panel ">
@@ -77,12 +77,12 @@
                             <span class=" hand-cursor glyphicon glyphicon-chevron-left" ng-click="hideToogled()" style="font-size: 17px; margin: 6px 4px; position: absolute; right: 16px; top:5px;" ng-if="pinned==true"></span>
                         </div>
                     </div>
-                    <div class="panel panel-default menu-item-list" ng-repeat="item in menuItems">
+                    <div class="panel panel-default menu-item-list" ng-repeat="item in menuItems" ng-class="$index == menuItems.length -1 ? 'last': '' ">
                         <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-parent="#accordion" ng-click="setIndex(item)" aria-expanded="true">
 
                             <span ng-if="item.Childs.length > 0">
                                 <span class="glyphicon " style="top: -4px; "><img ng-src="{{item.Icon}}" /></span>
-                                <span class="vr-module-name">{{::item.Name}}</span>
+                                <span class="vr-module-name" title="{{::item.Name}}">{{::item.Name}}</span>
                                 <span class=" hand-cursor  toggel">
                                     <span ng-if="item.Childs.length>0" class="glyphicon " ng-class="menuItemsCurrent.Id == item.Id ?'glyphicon-chevron-up':'glyphicon-chevron-down'" style="font-size: 10px; top: 7px;"></span>
                                 </span>
