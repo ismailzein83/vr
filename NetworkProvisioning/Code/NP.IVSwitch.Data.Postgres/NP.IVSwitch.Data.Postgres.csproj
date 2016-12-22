@@ -74,6 +74,7 @@
     <Compile Include="AccountDataManager.cs" />
     <Compile Include="CodecDefDataManager.cs" />
     <Compile Include="CodecProfileDataManager.cs" />
+    <Compile Include="FirewallDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteDataManager.cs" />
     <Compile Include="RouteTableDataManager.cs" />

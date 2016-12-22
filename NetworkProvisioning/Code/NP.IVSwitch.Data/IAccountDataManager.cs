@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Data
 {
-    public interface  IAccountDataManager:IDataManager
+    public interface IAccountDataManager : IDataManager
     {
-          bool Insert(Account Account, out int insertedId);
+        bool Insert(Account account, out int insertedId);
+        void UpdateCustomerChannelLimit(int accountId);
     }
 }

@@ -9,12 +9,17 @@ namespace NP.IVSwitch.Entities
 {
     public enum RtpMode { AdvancedProxying = 1, PassthruProxying = 2, NoProxying = 3 }
 
-    public enum EndPointType { SIP = 4, ACL = 3 }
+    public enum UserType
+    {
+        VendroTermRoute = 2,
+        ACL = 3,
+        SIP = 4
+    }
     public class EndPoint
     {
         public int EndPointId { get; set; } // user_id
 
-        public EndPointType EndPointType { get; set; }
+        public UserType EndPointType { get; set; }
 
         public String Host { get; set; }
         public Int16 DomainId { get; set; }

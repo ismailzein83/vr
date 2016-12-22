@@ -72,6 +72,7 @@ namespace NP.IVSwitch.Business
         private bool Insert(RouteToAdd routeItem, out int routeId)
         {
             routeId = 0;
+            AccountManager accountManager = new AccountManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             string carrierName = carrierAccountManager.GetCarrierAccountName(routeItem.CarrierAccountId);
             var profileId = carrierAccountManager.GetCarrierProfileId(routeItem.CarrierAccountId);
@@ -89,7 +90,6 @@ namespace NP.IVSwitch.Business
             }
             else
             {
-                AccountManager accountManager = new AccountManager();
                 Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, false);
                 accountId = accountManager.AddAccount(account);
                 AccountCarrierProfileExtension extendedSettings =
@@ -107,6 +107,7 @@ namespace NP.IVSwitch.Business
             int? tempRouteId = dataManager.Insert(routeItem.Entity);
             if (tempRouteId.HasValue)
             {
+                accountManager.UpdateChannelLimit(routeItem.Entity.AccountId);
                 routeId = tempRouteId.Value;
                 RouteCarrierAccountExtension routesExtendedSettings =
                     carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(

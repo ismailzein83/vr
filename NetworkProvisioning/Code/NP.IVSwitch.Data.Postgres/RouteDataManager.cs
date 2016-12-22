@@ -82,16 +82,17 @@ namespace NP.IVSwitch.Data.Postgres
 
         private int? InsertRoutes(Route route, int groupId, int tariffId)
         {
-            String cmdText = @"INSERT INTO routes(account_id,description,group_id,tariff_id,
+            String cmdText = @"INSERT INTO routes(account_id,user_id,description,group_id,tariff_id,
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time, host,port,transport_mode_id,
                                     timeout  )
-	                             SELECT  @account_id, @description, @group_id, @tariff_id, @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
+	                             SELECT  @account_id,@user_id, @description, @group_id, @tariff_id, @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
                                  @channels_limit,  @wakeup_time, @host, @port, @transport_mode_id, @timeout 
  	                             returning  route_id;";
 
             return (int?)ExecuteScalarText(cmdText, (cmd) =>
             {
                 cmd.Parameters.AddWithValue("@account_id", route.AccountId);
+                cmd.Parameters.AddWithValue("@user_id", route.UserId);
                 cmd.Parameters.AddWithValue("@description", route.Description);
                 cmd.Parameters.AddWithValue("@group_id", groupId);
                 cmd.Parameters.AddWithValue("@tariff_id", tariffId);
@@ -105,7 +106,6 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@port", CheckIfNull(route.Port, "5060"));
                 cmd.Parameters.AddWithValue("@transport_mode_id", (int)route.TransportModeId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
-
             }
                 );
         }
@@ -113,7 +113,51 @@ namespace NP.IVSwitch.Data.Postgres
         {
             int groupId = GetGroupId(route);
             int tariffId = CheckTariffTable();
+            int? userIdInserted = InserVendorUSer(route, groupId);
+            if (!userIdInserted.HasValue) return userIdInserted;
+            route.UserId = userIdInserted.Value;
             return InsertRoutes(route, groupId, tariffId);
+        }
+        private void UpdateCustomerChannelLimit(int accountId)
+        {
+            bool succ = false;
+            string[] query =
+            {
+                string.Format(@";with sumChannels as 
+                            (
+                            select sum(channels_limit) sumCh,account_id  from users
+                             where account_id = {0}
+                            group by account_id
+                            )
+                            UPDATE accounts
+                            SET channels_limit = sumChannels.sumCh
+                            FROM
+                             sumChannels
+                            WHERE
+                             sumChannels.account_id = accounts.account_id;", accountId)
+            };
+            ExecuteNonQuery(query);
+        }
+        private int? InserVendorUSer(Route route, int groupId)
+        {
+            String cmdText1 = @"INSERT INTO users(account_id,group_id, trans_rule_id,state_id , 
+                                                 channels_limit,channels_active,type_id ,enable_trace)
+	                             SELECT  @account_id,  @group_id, @trans_rule_id,@state_id,
+                                 @channels_limit, @channels_active,@type_id,@enable_trace
+ 	                             returning  user_id;";
+
+            return (int?)ExecuteScalarText(cmdText1, cmd =>
+            {
+                cmd.Parameters.AddWithValue("@account_id", route.AccountId);
+                cmd.Parameters.AddWithValue("@group_id", groupId);
+                cmd.Parameters.AddWithValue("@trans_rule_id", route.TransRuleId);
+                cmd.Parameters.AddWithValue("@state_id", 1);
+                cmd.Parameters.AddWithValue("@channels_limit", route.ChannelsLimit);
+                cmd.Parameters.AddWithValue("@channels_active", 0);
+                cmd.Parameters.AddWithValue("@type_id", (int)UserType.VendroTermRoute);
+                cmd.Parameters.AddWithValue("@enable_trace", 1);
+            }
+                );
         }
         private int CheckTariffTable()
         {

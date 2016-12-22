@@ -167,14 +167,14 @@ namespace NP.IVSwitch.Data.Postgres
         }
         public bool Insert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
         {
-            if (endPoint.EndPointType == EndPointType.ACL)
+            if (endPoint.EndPointType == UserType.ACL)
                 return AclInsert(endPoint, userEndPoints, aclEndPoints, out insertedId, carrierAccountName);
             return SipInsert(endPoint, userEndPoints, out insertedId);
         }
 
         public bool Update(EndPoint endPoint)
         {
-            if (endPoint.EndPointType == EndPointType.ACL)
+            if (endPoint.EndPointType == UserType.ACL)
                 return AclUpdate(endPoint);
             return SipUpdate(endPoint);
 
@@ -238,7 +238,7 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@group_id", groupId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
                 cmd.Parameters.AddWithValue("@state_id", 1);
-                cmd.Parameters.AddWithValue("@channels_limit", 1);
+                cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                 cmd.Parameters.AddWithValue("@rtp_mode", 1);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
@@ -291,7 +291,7 @@ namespace NP.IVSwitch.Data.Postgres
         }
         private AccessList CheckAccessListExistense(int accountId, int groupId)
         {
-            string query = @"select route_table_id,tariff_id from access_list
+            string query = @"select route_table_id,tariff_id,user_id from access_list
                              where account_id =  @account_id and group_id = @group_id";
             List<AccessList> accessLists = GetItemsText(query, AccessListMapper, cmd =>
              {
@@ -349,7 +349,7 @@ namespace NP.IVSwitch.Data.Postgres
         {
 
             // update new endpoint (tariff_id and route_id columns)
-            if (endPoint.EndPointType == EndPointType.ACL)
+            if (endPoint.EndPointType == UserType.ACL)
             {
                 //update access_list
                 String cmdText2 = "UPDATE access_list  SET  tariff_id=@tariff_id, route_table_id=@route_table_id WHERE  user_id = @user_id";
@@ -479,12 +479,7 @@ namespace NP.IVSwitch.Data.Postgres
             System.Net.IPAddress Host = GetReaderValue<System.Net.IPAddress>(reader, "host");
             endPoint.Host = (Host == null) ? null : Host.ToString();
 
-
-
-            if (endPoint.Host == null)
-                endPoint.EndPointType = EndPointType.SIP;
-            else
-                endPoint.EndPointType = EndPointType.ACL;
+            endPoint.EndPointType = endPoint.Host == null ? UserType.SIP : UserType.ACL;
 
             return endPoint;
         }

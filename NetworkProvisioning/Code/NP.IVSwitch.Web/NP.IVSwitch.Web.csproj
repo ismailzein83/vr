@@ -128,6 +128,7 @@
     <Compile Include="Controllers\CodecProfileController.cs" />
     <Compile Include="Controllers\DomainController.cs" />
     <Compile Include="Controllers\EndPointController.cs" />
+    <Compile Include="Controllers\FirewallController.cs" />
     <Compile Include="Controllers\RouteController.cs" />
     <Compile Include="Controllers\CustomerRouteController.cs" />
     <Compile Include="Controllers\TranslationRuleController.cs" />
@@ -162,6 +163,8 @@
     <Content Include="NP_IVSwitch\Directives\EndPoint\Templates\EndPointGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\CustomerRoute\np-ivswitch-customerroute-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\Firewall\np-ivswitch-firewall-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\Firewall\Templates\FirewallGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\Templates\RouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-grid.js" />
@@ -175,6 +178,7 @@
     <Content Include="NP_IVSwitch\ModuleInitialization.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\DomainAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\EndPointService.js" />
     <Content Include="NP_IVSwitch\Services\RouteService.js" />
@@ -194,6 +198,8 @@
     <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileManagementController.js" />
     <Content Include="NP_IVSwitch\Views\CustomerRoute\CustomerRouteManagement.html" />
     <Content Include="NP_IVSwitch\Views\CustomerRoute\CustomerRouteManagementController.js" />
+    <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagement.html" />
+    <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagementController.js" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditor.html" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditor.html" />

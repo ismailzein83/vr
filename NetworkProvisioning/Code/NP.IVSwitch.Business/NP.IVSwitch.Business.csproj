@@ -91,6 +91,7 @@
     <Compile Include="AccountManager.cs" />
     <Compile Include="CodecDefManager.cs" />
     <Compile Include="CodecProfileManager.cs" />
+    <Compile Include="FirewallManager.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MappingRuleHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

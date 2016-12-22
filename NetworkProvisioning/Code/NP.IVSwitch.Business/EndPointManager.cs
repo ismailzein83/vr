@@ -103,10 +103,11 @@ namespace NP.IVSwitch.Business
 
             bool succInsert = dataManager.Insert(endPointItem.Entity, userEndPointInfoList, aclEndPointInfoList, out endPointId, carrierAccountName);
             if (!succInsert) return false;
-
+            AccountManager accountManager = new AccountManager();
+            accountManager.UpdateChannelLimit(endPointItem.Entity.AccountId);
             EndPointInfo endPointInfo = new EndPointInfo { EndPointId = endPointId };
 
-            if (endPointItem.Entity.EndPointType == EndPointType.ACL)
+            if (endPointItem.Entity.EndPointType == UserType.ACL)
             {
                 if (endPointsExtendedSettings.AclEndPointInfo == null)
                     endPointsExtendedSettings.AclEndPointInfo = new List<EndPointInfo>();
@@ -198,12 +199,11 @@ namespace NP.IVSwitch.Business
 
         public EndPointDetail EndPointDetailMapper(EndPoint endPoint)
         {
-            EndPointDetail endPointDetail = new EndPointDetail()
+            EndPointDetail endPointDetail = new EndPointDetail
             {
                 Entity = endPoint,
-                CurrentStateDescription = Vanrise.Common.Utilities.GetEnumDescription<State>(endPoint.CurrentState),
-                CurrentEndPointType = Vanrise.Common.Utilities.GetEnumDescription<EndPointType>(endPoint.EndPointType),
-
+                CurrentStateDescription = Utilities.GetEnumDescription<State>(endPoint.CurrentState),
+                CurrentEndPointType = Utilities.GetEnumDescription<UserType>(endPoint.EndPointType)
             };
 
             return endPointDetail;

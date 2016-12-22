@@ -50,7 +50,25 @@ namespace NP.IVSwitch.Data.Postgres
 
             return account;
         }
-
+        public void UpdateCustomerChannelLimit(int accountId)
+        {
+            string[] query =
+            {
+                string.Format(@";with sumChannels as 
+                            (
+                            select sum(channels_limit) sumCh,account_id  from users
+                             where account_id = {0}
+                            group by account_id
+                            )
+                            UPDATE accounts
+                            SET channels_limit = sumChannels.sumCh
+                            FROM
+                             sumChannels
+                            WHERE
+                             sumChannels.account_id = accounts.account_id;", accountId)
+            };
+            ExecuteNonQuery(query);
+        }
         public bool Insert(Account account, out int insertedId)
         {
             object accountId;
