@@ -1117,7 +1117,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 
                 ctrl.menuActionClicked = function (action, dataItem) {
-                    action.clicked(dataItem);
+                    action.clicked(dataItem , gridApi);
                 };
             }
 
