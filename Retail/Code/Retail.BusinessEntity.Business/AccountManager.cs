@@ -39,13 +39,13 @@ namespace Retail.BusinessEntity.Business
                     if (input.Query.ParentAccountId.HasValue && (!account.ParentAccountId.HasValue || (account.ParentAccountId.HasValue && input.Query.ParentAccountId.Value != account.ParentAccountId.Value)))
                         return false;
 
-                    if(!recordFilterManager.IsFilterGroupMatch(input.Query.FilterGroup, new AccountRecordFilterGenericFieldMatchContext(account)))
+                    if (!recordFilterManager.IsFilterGroupMatch(input.Query.FilterGroup, new AccountRecordFilterGenericFieldMatchContext(account)))
                         return false;
 
                     return true;
                 };
 
-            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, AccountDetailMapperStep1);
+            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(account, input.Query.Columns));
             if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 foreach (var accountDetail in bigResult.Data)
@@ -85,7 +85,6 @@ namespace Retail.BusinessEntity.Business
             var account = GetAccount(accountId);
             return account != null ? AccountDetailMapper(account) : null;
         }
-
 
         public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter, AccountFilter filter)
         {
@@ -343,7 +342,7 @@ namespace Retail.BusinessEntity.Business
         }
 
 
-         private SubscriberInvoiceSettings GetRetailDefaulSubscriberInvoiceSettings()
+        private SubscriberInvoiceSettings GetRetailDefaulSubscriberInvoiceSettings()
         {
             SettingManager settingManager = new SettingManager();
             InvoiceSettings settings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
@@ -359,7 +358,7 @@ namespace Retail.BusinessEntity.Business
             throw new NullReferenceException("setting.SubscriberInvoiceSettings");
         }
 
-         
+
         #endregion
 
         #region Get Account Editor Runtime
@@ -626,31 +625,52 @@ namespace Retail.BusinessEntity.Business
 
         private AccountDetail AccountDetailMapper(Account account)
         {
-            var accountDetail = AccountDetailMapperStep1(account);
+            var accountDetail = AccountDetailMapperStep1(account, null);
             AccountDetailMapperStep2(accountDetail, account);
             return accountDetail;
         }
 
-        private AccountDetail AccountDetailMapperStep1(Account account)
+        private AccountDetail AccountDetailMapperStep1(Account account, List<string> columns)
         {
+            var statusDefinitionManager = new StatusDefinitionManager();
             var accountTypeManager = new AccountTypeManager();
-            StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
-
-            var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
-
             var accountServices = new AccountServiceManager();
             var accountPackages = new AccountPackageManager();
 
             var accountTreeNode = GetCacheAccountTreeNodes().GetRecord(account.AccountId);
+
+            //Dynamic Part
+            IEnumerable<GenericFieldDefinitionInfo> genericFieldDefinitionInfos = accountTypeManager.GetGenericFieldDefinitionsInfo();
+            Dictionary<string, AccountFieldValue> fieldValues = new Dictionary<string, AccountFieldValue>();
+
+            foreach (var field in genericFieldDefinitionInfos)
+            {
+                if (columns != null && !columns.Contains(field.Name))
+                    continue;
+
+                AccountFieldValue accountFieldValue = new AccountFieldValue();
+
+                AccountGenericField accountGenericField = new AccountTypeManager().GetAccountGenericField(field.Name);
+                if (accountGenericField == null)
+                    throw new NullReferenceException(String.Format("accountGenericField '{0}'", field.Name));
+
+                object value = accountGenericField.GetValue(new AccountGenericFieldContext(account));
+                accountFieldValue.Value = value;
+                accountFieldValue.Description = field.FieldType.GetDescription(value);
+
+                fieldValues.Add(field.Name, accountFieldValue);
+            }
+
             return new AccountDetail()
             {
                 Entity = account,
                 AccountTypeTitle = accountTypeManager.GetAccountTypeName(account.TypeId),
                 DirectSubAccountCount = accountTreeNode.ChildNodes.Count,
                 TotalSubAccountCount = accountTreeNode.TotalSubAccountsCount,
-                StatusDesciption = statusDesciption,
+                StatusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId),
                 NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
-                NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId)
+                NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId),
+                FieldValues = fieldValues
             };
         }
 

@@ -1,9 +1,13 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿
 
-</body>
-</html>
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.accounts"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.AccountId"
+             defaultsortbyfieldname="'Entity.AccountId'">
+
+    <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
+
+</vr-datagrid>

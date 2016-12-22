@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,13 @@ namespace Retail.Runtime.Tasks
             #endregion
 
             #region RetailAccountPropertyEvaluatorTask
-            RetailAccountPropertyEvaluatorTask retailAccountPropertyEvaluatorTask = new RetailAccountPropertyEvaluatorTask();
-            retailAccountPropertyEvaluatorTask.RetailAccountPropertyEvaluator_Main();
+            //RetailAccountPropertyEvaluatorTask retailAccountPropertyEvaluatorTask = new RetailAccountPropertyEvaluatorTask();
+            //retailAccountPropertyEvaluatorTask.RetailAccountPropertyEvaluator_Main();
             #endregion
+
+            AccountManager accountManager = new AccountManager();
+            //accountManager.GetAccountGridColumnAttributes();
+            //accountManager.GetAccountViewRuntimeEditors();
         }
     }
 

@@ -19,7 +19,16 @@ namespace Retail.BusinessEntity.Entities
         public StyleFormatingSettings Style { get; set; }
         public int NumberOfServices { get; set; }
         public int NumberOfPackages { get; set; }
-        
+
+        public Dictionary<string, AccountFieldValue> FieldValues { get; set; }
+        public List<Guid> AvailableAccountViews { get; set; }
+    }
+
+    public class AccountFieldValue
+    {
+        public Object Value { get; set; }
+
+        public string Description { get; set; }
     }
 }
         

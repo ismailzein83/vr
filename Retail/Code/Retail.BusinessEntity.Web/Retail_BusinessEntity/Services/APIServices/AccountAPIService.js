@@ -68,6 +68,7 @@
                 accountId: accountId
             });
         }
+
         return {
             GetFilteredAccounts: GetFilteredAccounts,
             GetAccountDetail:GetAccountDetail,

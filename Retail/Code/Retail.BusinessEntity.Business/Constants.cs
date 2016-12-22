@@ -9,8 +9,9 @@ namespace Retail.BusinessEntity.Business
     public  class Constants
     {
         public const string ServicesTemplateConfigsConfigType = "Retail_BE_ServicesTemplate";
+        
         public const string ServiceVoiceTypeTemplateConfigType = "Retail_BE_ServiceVoiceTypeTemplate";
 
-        
+        public const string RetailBETechnicalSettings = "Retail_BE_TechnicalSettings";
     }
 }

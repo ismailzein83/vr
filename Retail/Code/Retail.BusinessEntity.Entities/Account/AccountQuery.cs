@@ -16,5 +16,7 @@ namespace Retail.BusinessEntity.Entities
         public long? ParentAccountId { get; set; }
 
         public RecordFilterGroup FilterGroup { get; set; }
+
+        public List<string> Columns { get; set; }
     }
 }
