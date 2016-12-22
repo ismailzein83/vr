@@ -492,6 +492,8 @@
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Account\Account360DegreeEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Account\Account360DegreeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\DynamicAccountManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\DynamicAccountManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\InvoiceSettings\InvoiceSettingEditorController.js" />
