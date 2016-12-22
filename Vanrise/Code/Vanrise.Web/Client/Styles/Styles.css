@@ -2701,6 +2701,10 @@ vr-validator[vr-input] > div:nth-child(1){
     padding: 3px 12px;
 }
 
+.vr-datagrid-celltext vr-validator[vr-textarea-element] .form-control{
+     height: auto !important;
+}
+
 .vr-datagrid-celltext .form-control {
     padding: 3px 3px;
 }
