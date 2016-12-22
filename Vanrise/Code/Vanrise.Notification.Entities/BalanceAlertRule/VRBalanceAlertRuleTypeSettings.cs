@@ -8,7 +8,6 @@ namespace Vanrise.Notification.Entities
 {
     public abstract class VRBalanceAlertRuleTypeSettings : VRGenericAlertRuleTypeSettings
     {
-        public abstract Guid ConfigId { get; }
         public abstract string VRActionExtensionType { get; set; }
 
         public abstract string ThresholdExtensionType { get; set; }
@@ -23,6 +22,4 @@ namespace Vanrise.Notification.Entities
             }
         }
     }
-
-
 }

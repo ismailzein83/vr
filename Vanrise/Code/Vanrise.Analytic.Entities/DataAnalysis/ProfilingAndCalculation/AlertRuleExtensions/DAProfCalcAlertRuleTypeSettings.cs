@@ -52,6 +52,8 @@ namespace Vanrise.Analytic.Entities
         public Guid DataAnalysisDefinitionId { get; set; }
 
         public List<DAProfCalcAlertRuleRecordStorage> SourceRecordStorages { get; set; }
+
+        public override Guid ConfigId { get { return new Guid("57033e80-65cb-4359-95f6-22a57084d027"); } }
     }
 
     public class DAProfCalcAlertRuleRecordStorage

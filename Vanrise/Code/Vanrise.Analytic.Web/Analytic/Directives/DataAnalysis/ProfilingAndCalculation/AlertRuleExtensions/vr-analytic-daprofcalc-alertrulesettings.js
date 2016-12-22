@@ -53,7 +53,6 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var promises = [];
 
                     if (payload != undefined) {
@@ -66,8 +65,8 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         criteriaDirectiveReadyPromiseDeferred.promise.then(function () {
                             var criteriapayload = { dataAnalysisDefinitionId: alertTypeSettings.DataAnalysisDefinitionId };
 
-                            if (alertExtendedSettings != undefined && alertExtendedSettings.DAProfCalcExecInput != undefined) {
-                                criteriapayload.criteria = { DAProfCalcOutputItemDefinitionId: alertExtendedSettings.DAProfCalcExecInput.OutputItemDefinitionId, FilterGroup: alertExtendedSettings.FilterGroup };
+                            if (alertExtendedSettings != undefined) {
+                                criteriapayload.criteria = { DAProfCalcOutputItemDefinitionId: alertExtendedSettings.OutputItemDefinitionId, FilterGroup: alertExtendedSettings.FilterGroup };
                             }
 
                             VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriapayload, loadCriteriaSectionPromiseDeferred);
@@ -84,7 +83,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     return {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleSettings,Vanrise.Analytic.Entities",
                         FilterGroup: criteria.FilterGroup,
-                        DAProfCalcExecInput: { OutputItemDefinitionId: criteria.DAProfCalcOutputItemDefinitionId },
+                        OutputItemDefinitionId: criteria.DAProfCalcOutputItemDefinitionId,
                         Actions: vRActionManagementAPI.getData()
                     };
                 };

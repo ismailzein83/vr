@@ -10,14 +10,6 @@ namespace Vanrise.Notification.Entities
     public class VRAlertRuleSettings
     {
         public VRAlertRuleExtendedSettings ExtendedSettings { get; set; }
-
-        public Guid RuleTypeId { get; set; }
-
-        public VRAlertRuleCriteria Criteria { get; set; }
-
-        public List<VRAction> Actions { get; set; }
-
-        public List<VRAction> RollbackActions { get; set; }
     }
 
     public abstract class VRAlertRuleExtendedSettings

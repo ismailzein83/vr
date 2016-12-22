@@ -69,6 +69,17 @@
                     }
                 };
 
+                $scope.scopeModel.validateRecordFilter = function () {
+                    if (recordFilterDirectiveAPI != undefined) {
+                        var filterObj = recordFilterDirectiveAPI.getData().filterObj;
+                        if (filterObj != undefined && filterObj != {})
+                            return null;
+                        else
+                            return 'Record Filter is required';
+                    }
+                    return null;
+                };
+
                 $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
                     recordFilterDirectiveAPI = api;
                     recordFilterDirectiveReadyDeferred.resolve();
@@ -82,7 +93,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-
                     daProfCalcOutputItemDefinitionId = undefined;
                     $scope.scopeModel.isDataanalysisitemdefinitionSelected = false;
 

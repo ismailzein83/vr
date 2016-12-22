@@ -11,7 +11,7 @@ using Vanrise.Common.Business;
 
 namespace Vanrise.Analytic.Business
 {
-    public class DataAnalysisDefinitionManager 
+    public class DataAnalysisDefinitionManager
     {
         #region Public Methods
 
@@ -84,7 +84,21 @@ namespace Vanrise.Analytic.Business
 
         public IEnumerable<DataAnalysisDefinitionInfo> GetDataAnalysisDefinitionsInfo(DataAnalysisDefinitionFilter filter)
         {
-            Func<DataAnalysisDefinition, bool> filterExpression = null;
+            Func<DataAnalysisDefinition, bool> filterExpression = (dataAnalysisDefinition) =>
+            {
+                if (filter != null)
+                {
+                    if (filter.Filters != null)
+                    {
+                        foreach (IDataAnalysisDefinitionFilter dataAnalysisDefinitionFilter in filter.Filters)
+                        {
+                            if (!dataAnalysisDefinitionFilter.IsMatch(dataAnalysisDefinition))
+                                return false;
+                        }
+                    }
+                }
+                return true;
+            };
 
             return this.GetCachedDataAnalysisDefinitions().MapRecords(DataAnalysisDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
@@ -144,6 +158,6 @@ namespace Vanrise.Analytic.Business
             return dataAnalysisDefinitionInfo;
         }
 
-        #endregion   
+        #endregion
     }
 }

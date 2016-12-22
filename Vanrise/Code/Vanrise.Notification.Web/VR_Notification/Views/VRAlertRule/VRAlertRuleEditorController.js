@@ -59,15 +59,12 @@
             $scope.scopeModel.onAlertRuleTypeSelectionChanged = function (api) {
                 vrAlertRuleTypeId = vrAlertRuleTypeSelectorAPI.getSelectedIds();
                 if (vrAlertRuleTypeId != undefined) {
-
                     getVRAlertRuleType().then(function () {
-
                         $scope.scopeModel.isAlertRuleTypeSelected = true;
 
                         if (vrAlertRuleTypeSelectionChangedDeferred != undefined) {
                             vrAlertRuleTypeSelectionChangedDeferred.resolve();
                         }
-
                     });
                 }
             };
@@ -84,7 +81,6 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
-
         }
 
         function loadRuleTypeSection() {
@@ -184,6 +180,7 @@
 
                 directiveReadyDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, getDirectiveWrapperPayload(), directiveLoadDeferred);
+                vrAlertRuleEntity = undefined;
             });
 
             return directiveLoadDeferred.promise;
@@ -230,7 +227,7 @@
         function buildVRAlertRuleObjFromScope() {
 
             return {
-                VRAlertRuleId: vrAlertRuleEntity != undefined ? vrAlertRuleEntity.VRAlertRuleId : undefined,
+                VRAlertRuleId: vrAlertRuleId,
                 Name: $scope.scopeModel.name,
                 RuleTypeId: vrAlertRuleTypeSelectorAPI.getSelectedIds(),
                 Settings: {

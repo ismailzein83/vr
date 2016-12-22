@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public abstract class DataAnalysisDefinitionSettings 
+    public abstract class DataAnalysisDefinitionSettings
     {
-        public Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public virtual List<DataAnalysisItemDefinitionConfig> ItemsConfig { get; set; }
     }
@@ -25,6 +25,6 @@ namespace Vanrise.Analytic.Entities
         public virtual string GridDirective
         {
             get { return "vr-analytic-dataanalysisitemdefinition-grid"; }
-        } 
+        }
     }
 }

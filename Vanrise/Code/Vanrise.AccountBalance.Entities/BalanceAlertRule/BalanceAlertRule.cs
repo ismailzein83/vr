@@ -22,7 +22,7 @@ namespace Vanrise.AccountBalance.Entities
                 List<string> actionDescriptions = new List<string>();
                 foreach (var thresholdAction in Settings.ThresholdActions)
                 {
-                    foreach(var action in thresholdAction.Actions)
+                    foreach (var action in thresholdAction.Actions)
                     {
                         actionDescriptions.Add(action.ActionName);
                     }
@@ -54,8 +54,11 @@ namespace Vanrise.AccountBalance.Entities
                 return new Guid("0E469B87-EB7F-44C2-ADFA-0E6A20CCB25A");
             }
 
-        }
+        }
+
         public Guid AccountTypeId { get; set; }
 
+
+        public override Guid ConfigId { get { return new Guid("ba79cb79-d058-4382-88fc-db1c154b5374"); } }
     }
 }

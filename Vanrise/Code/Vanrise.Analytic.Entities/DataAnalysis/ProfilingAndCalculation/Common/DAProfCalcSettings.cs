@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Analytic.Entities 
+namespace Vanrise.Analytic.Entities
 {
-    public class DAProfCalcSettings : DataAnalysisDefinitionSettings 
+    public class DAProfCalcSettings : DataAnalysisDefinitionSettings
     {
+        public override Guid ConfigId { get { return new Guid("B3AF681B-72CE-4DD8-9090-CC727690F7E0"); } }
+
         public Guid DataRecordTypeId { get; set; }
 
         public override List<DataAnalysisItemDefinitionConfig> ItemsConfig

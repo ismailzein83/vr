@@ -9,8 +9,10 @@
 </vr-row>
 <vr-row vr-loader="scopeModel.isRecordFilterDirectiveLoading" ng-show="scopeModel.isDataanalysisitemdefinitionSelected">
     <vr-columns width="fullrow">
-        <vr-section title="Record Filter" collapsible>
-            <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
-        </vr-section>
+        <vr-validator validate="scopeModel.validateRecordFilter()">
+            <vr-section title="Record Filter" collapsible>
+                <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+            </vr-section>
+        </vr-validator>
     </vr-columns>
 </vr-row>

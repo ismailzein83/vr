@@ -97,7 +97,21 @@ namespace Vanrise.Notification.Business
 
         public IEnumerable<VRAlertRuleTypeInfo> GetVRAlertRuleTypesInfo(VRAlertRuleTypeFilter filter)
         {
-            Func<VRAlertRuleType, bool> filterExpression = null;
+            Func<VRAlertRuleType, bool> filterExpression = (alertRuleType) =>
+            {
+                if (filter != null)
+                {
+                    if (filter.Filters != null)
+                    {
+                        foreach (IVRAlertRuleTypeFilter dataAnalysisDefinitionFilter in filter.Filters)
+                        {
+                            if (!dataAnalysisDefinitionFilter.IsMatch(alertRuleType))
+                                return false;
+                        }
+                    }
+                }
+                return true;
+            };
 
             return this.GetCachedVRAlertRuleTypes().MapRecords(VRAlertRuleTypeInfoMapper, filterExpression).OrderBy(x => x.Name);
         }

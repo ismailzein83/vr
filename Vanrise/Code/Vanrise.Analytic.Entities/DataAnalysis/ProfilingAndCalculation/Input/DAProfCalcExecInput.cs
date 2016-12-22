@@ -8,7 +8,16 @@ namespace Vanrise.Analytic.Entities
         public Guid OutputItemDefinitionId { get; set; }
 
         public Dictionary<Guid, dynamic> FilterParameterValues { get; set; }
+
+        public DAProfCalcExecPayload DAProfCalcPayload { get; set; }
     }
+
+
+    public abstract class DAProfCalcExecPayload
+    {
+ 
+    }
+
 
     public class DAProfCalcExecInputDetail
     {

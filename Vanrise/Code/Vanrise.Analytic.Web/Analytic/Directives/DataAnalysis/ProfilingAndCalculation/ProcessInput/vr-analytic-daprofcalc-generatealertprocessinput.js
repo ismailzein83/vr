@@ -69,7 +69,9 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 
                     var alertRuleTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                     alertRuleTypeSelectorReadyDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(alertRuleTypeSelectorAPI, undefined, alertRuleTypeSelectorLoadDeferred);
+                        var payload = { filter: { Filters: [] } };
+                        payload.filter.Filters.push({ $type: "Vanrise.Analytic.Entities.DAProfCalVRAlertRuleTypeFilter, Vanrise.Analytic.Entities" });
+                        VRUIUtilsService.callDirectiveLoad(alertRuleTypeSelectorAPI, payload, alertRuleTypeSelectorLoadDeferred);
                     });
 
                     promises.push(alertRuleTypeSelectorLoadDeferred.promise);

@@ -10,7 +10,7 @@ namespace Vanrise.Notification.Entities
 {
     public abstract class VRAlertRuleTypeSettings
     {
-        public Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public virtual Guid NotificationTypeId { get; set; }
 

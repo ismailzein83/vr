@@ -8,7 +8,7 @@
         <vr-validator validate="ctrl.isValid()">
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
                          on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeVRAction" hidegridmenu>
-                <vr-datagridcolumn headertext="'Action Name'" field="'Entity.ActionName'" widthfactor="5"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Action Name'" field="'Entity.ActionName'" widthfactor="5" disablesorting></vr-datagridcolumn>
             </vr-datagrid>
         </vr-validator>
     </vr-columns>

@@ -37,7 +37,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 inputArgument.DAProfCalcExecInputDetail.DataAnalysisUniqueName,
                 new ProfilingDGHandler
                 {
-                    OutputItemDefinitionId = inputArgument.DAProfCalcExecInputDetail.DAProfCalcExecInput.OutputItemDefinitionId,
+                    DAProfCalcExecInput = inputArgument.DAProfCalcExecInputDetail.DAProfCalcExecInput,
                     OutputRecordProcessor = inputArgument.OutputRecordProcessor
                 });
 

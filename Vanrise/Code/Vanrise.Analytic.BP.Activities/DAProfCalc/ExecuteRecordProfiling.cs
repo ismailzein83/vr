@@ -77,7 +77,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 dataAnalysisInfos.Add(dataAnalysisUniqueName, new DataAnalysisInfo()
                 {
                     DataAnalysisItemDefinition = dataAnalysisItemDefinition,
-                    DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { OutputItemDefinitionId = outputItemDefinitionId, OutputRecordProcessor = inputArgument.OutputRecordProcessor })
+                    DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor })
                 });
             }
 
