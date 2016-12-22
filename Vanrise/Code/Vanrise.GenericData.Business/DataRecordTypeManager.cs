@@ -34,7 +34,7 @@ namespace Vanrise.GenericData.Business
             DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
             foreach (DataRecordField field in dataRecordType.Fields)
             {
-                DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute() { Attribute = field.Type.GetGridColumnAttribute(), Name = field.Name };
+                DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute() { Attribute = field.Type.GetGridColumnAttribute(null), Name = field.Name };
                 fields.Add(attribute);
             }
             return fields;

@@ -42,7 +42,7 @@ namespace Vanrise.Invoice.Business
                 {
                       var fieldType = recordType.Fields.FirstOrDefault(x=>x.Name == gridColumn.CustomFieldName);
                       if (fieldType != null)
-                        attribute = fieldType.Type.GetGridColumnAttribute();
+                          attribute = fieldType.Type.GetGridColumnAttribute(null);
                 }
 
                 invoiceTypeRuntime.MainGridRuntimeColumns.Add(new InvoiceUIGridColumnRunTime
@@ -149,7 +149,7 @@ namespace Vanrise.Invoice.Business
                 {
                     if (column.FieldType == null)
                         throw new NullReferenceException(string.Format("{0} is not mapped to field type.", column.FieldName));
-                    var gridAttribute = column.FieldType.GetGridColumnAttribute();
+                    var gridAttribute = column.FieldType.GetGridColumnAttribute(null);
                     gridAttribute.HeaderText = column.Header;
                     gridAttribute.Field = column.FieldName;
                     gridAttribute.Tag = column.FieldName;

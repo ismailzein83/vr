@@ -127,7 +127,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         #endregion
 
-        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()
+        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
             string numberPrecision;
             switch (DataType)

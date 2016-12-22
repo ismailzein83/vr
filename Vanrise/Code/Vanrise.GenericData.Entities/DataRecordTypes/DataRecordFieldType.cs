@@ -22,7 +22,7 @@ namespace Vanrise.GenericData.Entities
 
         public abstract bool IsMatched(Object fieldValue, RecordFilter recordFilter);
 
-        public abstract GridColumnAttribute GetGridColumnAttribute();
+        public abstract GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context);
 
         public abstract RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues);
 
@@ -61,5 +61,11 @@ namespace Vanrise.GenericData.Entities
     public interface IDataRecordFieldConvertFilterContext
     {
 
+    }
+
+    public class FieldTypeGetGridColumnAttributeContext
+    {
+        public string ValueFieldPath { get; set; }
+        public string DescriptionFieldPath { get; set; }
     }
 }

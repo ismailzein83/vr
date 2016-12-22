@@ -50,7 +50,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return (boolValues != null) ? boolValues.Contains(Convert.ToBoolean(filterValue)) : Convert.ToBoolean(fieldValue).CompareTo(Convert.ToBoolean(filterValue)) == 0;
         }
 
-        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()
+        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Boolean", NumberPrecision = "NoDecimal" };
         }

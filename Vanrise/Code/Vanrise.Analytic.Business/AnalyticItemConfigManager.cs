@@ -409,7 +409,7 @@ namespace Vanrise.Analytic.Business
                 Title = analyticItemConfig.Title,
                 RequiredParentDimension = analyticItemConfig.Config.RequiredParentDimension,
                 Parents = analyticItemConfig.Config.Parents,
-                Attribute = analyticItemConfig.Config.FieldType.GetGridColumnAttribute()
+                Attribute = analyticItemConfig.Config.FieldType.GetGridColumnAttribute(null)
             };
         }
         AnalyticMeasureConfigInfo AnalyticMeasureConfigInfoMapper(AnalyticItemConfig<AnalyticMeasureConfig> analyticItemConfig)
@@ -419,7 +419,7 @@ namespace Vanrise.Analytic.Business
                 AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
                 Name = analyticItemConfig.Name,
                 Title = analyticItemConfig.Title,
-                Attribute = analyticItemConfig.Config.FieldType.GetGridColumnAttribute(),
+                Attribute = analyticItemConfig.Config.FieldType.GetGridColumnAttribute(null),
                 FieldType = analyticItemConfig.Config.FieldType
 
             };
