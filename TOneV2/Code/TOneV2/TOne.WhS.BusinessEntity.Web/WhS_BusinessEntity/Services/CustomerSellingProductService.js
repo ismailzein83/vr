@@ -92,11 +92,11 @@
             function hasAddCustomerSellingProductPermission() {
                 return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
             }
-            function assignNew(dataItem) {
+            function assignNew(dataItem,gridApi) {
                 if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value)
                     return;
 
-                gridAPI.expandRow(dataItem);
+                gridApi.expandRow(dataItem);
                 var onCustomerSellingProductAdded = function (customerSellingProductObj) {
                     if (dataItem.customersellingproductGridAPI != undefined) {
                         for (var i = 0; i < customerSellingProductObj.length; i++) {
@@ -104,7 +104,7 @@
                         }
                     }
                 };
-                WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
+                addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
             }
         }
         
