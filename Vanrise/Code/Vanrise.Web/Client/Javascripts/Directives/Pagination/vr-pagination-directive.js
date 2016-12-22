@@ -10,7 +10,7 @@ app.directive('vrPagination', [function () {
         },
         controller: function ($scope, $element, $attrs) {
             var pagerCtrl = this;
-            pagerCtrl.topCounts = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+            pagerCtrl.topCounts = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100];
             if (pagerCtrl.pagersettings != undefined) {
                 pagerCtrl.pagersettings.itemsPerPage = pagerCtrl.topCounts[1];
                 pagerCtrl.pagersettings.getPageInfo = function () {
