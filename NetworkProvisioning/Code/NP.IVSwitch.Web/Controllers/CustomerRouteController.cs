@@ -11,7 +11,7 @@ namespace NP.IVSwitch.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "CustomerRoute")]
     [JSONWithTypeAttribute]
-    public class CustomerRouteController : BaseAPIController
+    public class NP_IVSwitch_CustomerRouteController : BaseAPIController
     {
         CustomerRouteManager _manager = new CustomerRouteManager();
 
