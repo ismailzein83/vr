@@ -6,6 +6,8 @@ using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Common;
+using System.IO;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -13,9 +15,13 @@ namespace TOne.WhS.DBSync.Business
     {
         CarrierProfileDBSyncDataManager dbSyncDataManager;
         SourceCarrierProfileDataManager dataManager;
+        SourceCarrierDocumentDataManager carrierDocumentDataManager;
         FileDBSyncDataManager fileDataManager;
         Dictionary<string, Country> allCountries;
         Dictionary<string, Currency> allCurrencies;
+        Dictionary<string, List<SourceCarrierDocument>> allCarrierDocumentsByProfileId;
+        BusinessEntityTechnicalSettingsData bETechnicalSettingsData;
+
         public CarrierProfileMigrator(MigrationContext context)
             : base(context)
         {
@@ -27,7 +33,13 @@ namespace TOne.WhS.DBSync.Business
             allCountries = (Dictionary<string, Country>)dbTableCountry.Records;
             var dbTableCurrency = Context.DBTables[DBTableName.Currency];
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
+            carrierDocumentDataManager = new SourceCarrierDocumentDataManager(Context.ConnectionString);
+
+            allCarrierDocumentsByProfileId = GetAccountDocumentsAndMigrateBETechnicalSettings();
         }
+
+
+
 
         public override void Migrate(MigrationInfoContext context)
         {
@@ -73,6 +85,40 @@ namespace TOne.WhS.DBSync.Business
 
             if (currency != null)
                 settings.CurrencyId = currency.CurrencyId;
+
+            List<SourceCarrierDocument> carrierDocuments;
+            if (allCarrierDocumentsByProfileId.TryGetValue(sourceItem.SourceId, out carrierDocuments))
+            {
+                List<VRDocumentSetting> profileDocuments = new List<VRDocumentSetting>();
+                foreach (SourceCarrierDocument carrierDocumet in carrierDocuments)
+                {
+                    string documentExtension = Path.GetExtension(carrierDocumet.Name);
+                    if (!string.IsNullOrEmpty(documentExtension))
+                        documentExtension = documentExtension.Substring(1);
+
+                    VRFile document = new VRFile()
+                    {
+                        Content = carrierDocumet.Document,
+                        Extension = documentExtension,
+                        CreatedTime = carrierDocumet.Created,
+                        Name = carrierDocumet.Name
+                    };
+
+
+                    long documentId = fileDataManager.ApplyFile(document);
+
+                    profileDocuments.Add(new VRDocumentSetting()
+                    {
+                        CategoryId = bETechnicalSettingsData.DocumentsDefinition.ItemDefinitions.FindRecord(item => item.Title.Equals(carrierDocumet.Category, StringComparison.InvariantCultureIgnoreCase)).ItemId,
+                        CreatedOn = carrierDocumet.Created,
+                        Description = carrierDocumet.Description,
+                        FileId = documentId
+                    });
+                }
+
+                settings.Documents = profileDocuments;
+            }
+
 
             List<CarrierContact> contacts = new List<CarrierContact>();
             contacts.Add(new CarrierContact { Description = sourceItem.AccountManagerContact, Type = CarrierContactType.AccountManagerContact });
@@ -139,5 +185,71 @@ namespace TOne.WhS.DBSync.Business
             if (dbTableCarrierProfile != null)
                 dbTableCarrierProfile.Records = dbSyncDataManager.GetCarrierProfiles(useTempTables);
         }
+
+
+        #region Private Methods
+
+        private Dictionary<string, List<SourceCarrierDocument>> GetAccountDocumentsAndMigrateBETechnicalSettings()
+        {
+            Dictionary<string, List<SourceCarrierDocument>> carrierDocumentsByProfileId = new Dictionary<string, List<SourceCarrierDocument>>();
+            IEnumerable<SourceCarrierDocument> sourceCarrierDocuments = carrierDocumentDataManager.GetSourceCarrierDocuments();
+            if (sourceCarrierDocuments != null)
+            {
+                List<SourceCarrierDocument> carrierDocumentsList;
+                foreach (SourceCarrierDocument sourceCarrierDocument in sourceCarrierDocuments)
+                {
+                    if (!carrierDocumentsByProfileId.TryGetValue(sourceCarrierDocument.ProfileId.ToString(), out carrierDocumentsList))
+                    {
+                        carrierDocumentsList = new List<SourceCarrierDocument>();
+                        carrierDocumentsByProfileId.Add(sourceCarrierDocument.ProfileId.ToString(), carrierDocumentsList);
+                    }
+
+                    carrierDocumentsList.Add(sourceCarrierDocument);
+                }
+            }
+
+            bETechnicalSettingsData = MigrateBETechnicalSettings(sourceCarrierDocuments);
+
+            return carrierDocumentsByProfileId;
+        }
+
+        private BusinessEntityTechnicalSettingsData MigrateBETechnicalSettings(IEnumerable<SourceCarrierDocument> sourceCarrierDocuments)
+        {
+            SettingManager settingManager = new SettingManager();
+            Setting bETechnicalSettings = settingManager.GetSettingByType("WhS_BE_TechnicalSettings");
+            BusinessEntityTechnicalSettingsData bETechnicalSettingsData = bETechnicalSettings.Data as BusinessEntityTechnicalSettingsData;
+
+            if (sourceCarrierDocuments != null)
+            {
+
+                if (bETechnicalSettings != null)
+                {
+                    VRDocumentsDefinition documentDefinition = new VRDocumentsDefinition();
+                    documentDefinition.ItemDefinitions = new List<VRDocumentItemDefinition>();
+                    IEnumerable<string> distinctDocumentsCategories = sourceCarrierDocuments.Select(item => item.Category).Distinct(StringComparer.InvariantCultureIgnoreCase);
+                    if (distinctDocumentsCategories != null)
+                    {
+                        foreach (string documentCategory in distinctDocumentsCategories)
+                        {
+                            VRDocumentItemDefinition documentItemDefinition = new VRDocumentItemDefinition()
+                            {
+                                ItemId = Guid.NewGuid(),
+                                Title = documentCategory
+                            };
+
+                            documentDefinition.ItemDefinitions.Add(documentItemDefinition);
+                        }
+                    }
+
+                    bETechnicalSettingsData.DocumentsDefinition = documentDefinition;
+
+                    settingManager.UpdateSetting(bETechnicalSettings);
+                }
+            }
+
+            return bETechnicalSettingsData;
+        }
+
+        #endregion
     }
 }
