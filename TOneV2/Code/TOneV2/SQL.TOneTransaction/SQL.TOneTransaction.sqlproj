@@ -97,6 +97,7 @@
     <Folder Include="reprocess\Stored Procedures\" />
     <Folder Include="VRNotification\" />
     <Folder Include="VRNotification\Tables\" />
+    <Folder Include="VRNotification\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -214,6 +215,10 @@
     <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_Delete.sql" />
     <Build Include="VRNotification\Tables\VRNotification.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotification_UpdateStatus.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotification_Insert.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotification_GetByNotificationType.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotification_GetById.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
