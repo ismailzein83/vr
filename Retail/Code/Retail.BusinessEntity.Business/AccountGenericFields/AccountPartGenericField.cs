@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.Business
         {
             _partDefinition = partDefinition;
             _field = fieldDefinition;
-            _name = String.Format("{0}_{1}", _partDefinition.AccountPartDefinitionId, _field.Name);
+            _name = String.Format("Part_{0}_{1}", _partDefinition.AccountPartDefinitionId.ToString().Replace("-", ""), _field.Name);
             _title = String.Format("{0} ({1})", _field.Title, _partDefinition.Title);
         }
 
