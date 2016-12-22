@@ -12,7 +12,8 @@
        
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var accountConditionSelectiveAPI;
+        var accountConditionSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -30,6 +31,10 @@
             $scope.scopeModel.onAccountViewDefinitionSettingsReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onAccountConditionSelectiveReady = function (api) {
+                accountConditionSelectiveAPI = api;
+                accountConditionSelectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -74,7 +79,23 @@
 
                 return settingsDirectiveLoadDeferred.promise;
             }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
+            function loadAccountConditionSelective() {
+                var accountConditionSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                accountConditionSelectiveReadyDeferred.promise.then(function () {
+
+                    var accountConditionSelectivePayload;
+                    if (accountViewDefinitionEntity != undefined) {
+                        accountConditionSelectivePayload = {
+                            accountCondition: accountViewDefinitionEntity.AvailabilityCondition
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
+                });
+
+                return accountConditionSelectiveLoadDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective, loadAccountConditionSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -105,6 +126,7 @@
                 DrillDownSectionName:$scope.scopeModel.drillDownSectionName,
                 Account360DegreeSectionName: $scope.scopeModel.account360DegreeSectionName,
                 Settings: settingsDirectiveAPI.getData(),
+                AvailabilityCondition: accountConditionSelectiveAPI.getData()
             };
         }
     }
