@@ -47,7 +47,7 @@
         function loadAllControls() {
 
             function setTitle() {
-                $scope.title = (accountEntity != undefined) ? accountEntity.Name : undefined;
+                $scope.title = (accountEntity != undefined) ? "Account Name: " + accountEntity.Name : undefined;
             }
             function loadStaticData() {
                 if (accountEntity == undefined)
@@ -69,7 +69,17 @@
                     if (viewDefinition.Account360DegreeSectionName != undefined)
                     {
                         var view = {
-                            header: viewDefinition.Account360DegreeSectionName
+                            header: viewDefinition.Account360DegreeSectionName,
+                            runtimeEditor: viewDefinition.Settings.RuntimeEditor,
+                            onDirectiveReady:function(api)
+                            {
+                                view.directiveAPI = api;
+                                var setLoader = function (value) {
+                                    view.isLoadingDirective = value;
+                                };
+                                var payloadDirective = {};
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, view.directiveAPI, payloadDirective, setLoader);
+                            }
                         };
                         $scope.scopeModel.accountViews.push(view);
                     }
