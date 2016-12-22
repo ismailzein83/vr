@@ -2,9 +2,9 @@
 (function (appControllers) {
 
     "use strict";
-    CreditClassAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig'];
+    CreditClassAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig', 'SecurityService'];
 
-    function CreditClassAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig) {
+    function CreditClassAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
 
         var controllerName = "CreditClass";
 
@@ -23,8 +23,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddCreditClass'), statusDefinitionItem);
         }
 
+        function HasAddCreditClassPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddCreditClass']));
+
+        }
+
         function UpdateCreditClass(statusDefinitionItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateCreditClass'), statusDefinitionItem);
+        }
+
+        function HasUpdateCreditClassPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateCreditClass']));
+
         }
 
         function GetCreditClassesInfo(filter) {
@@ -37,7 +47,9 @@
             GetFilteredCreditClasss: GetFilteredCreditClass,
             GetCreditClass: GetCreditClass,
             AddCreditClass: AddCreditClass,
+            HasAddCreditClassPermission:HasAddCreditClassPermission,
             UpdateCreditClass: UpdateCreditClass,
+            HasUpdateCreditClassPermission:HasUpdateCreditClassPermission,
             GetCreditClassesInfo: GetCreditClassesInfo,
         });
     }

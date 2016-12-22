@@ -25,9 +25,17 @@
         function AddSwitch(switchItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddSwitch'), switchItem);
         }
+        function HasAddSwitchPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddSwitch']));
 
+        }
         function UpdateSwitch(switchItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateSwitch'), switchItem);
+        }
+
+        function HasUpdateSwitchPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateSwitch']));
+
         }
 
         return ({
@@ -35,7 +43,9 @@
             GetFilteredSwitches: GetFilteredSwitches,
             GetSwitch: GetSwitch,
             AddSwitch: AddSwitch,
-            UpdateSwitch: UpdateSwitch
+            HasAddSwitchPermission:HasAddSwitchPermission,
+            UpdateSwitch: UpdateSwitch,
+            HasUpdateSwitchPermission: HasUpdateSwitchPermission
         });
     }
 

@@ -66,9 +66,12 @@ app.directive('retailBeCreditclassGrid', ['Retail_BE_CreditClassAPIService', 'Re
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editCreditClass,
+                    haspermission: hasEditCreditClassPermission
                 });
             }
-
+            function hasEditCreditClassPermission() {
+                return Retail_BE_CreditClassAPIService.HasUpdateCreditClassPermission()
+            }
             function editCreditClass(creditClassItem) {
                 var onCreditClassUpdated = function (updatedCreditClass) {
                     gridAPI.itemUpdated(updatedCreditClass);

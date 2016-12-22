@@ -66,9 +66,12 @@ app.directive('retailBeSwitchGrid', ['Retail_BE_SwitchAPIService', 'Retail_BE_Sw
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editSwitch,
+                    haspermission:hasEditSwitchPermission
                 });
             }
-
+            function hasEditSwitchPermission() {
+                return Retail_BE_SwitchAPIService.HasUpdateSwitchPermission();
+            }
             function editSwitch(switchItem) {
                 var onSwitchUpdated = function (updatedSwitch) {
                     gridAPI.itemUpdated(updatedSwitch);

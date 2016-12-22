@@ -3,9 +3,9 @@
 
     "use strict";
 
-    CreditClassManagementController.$inject = ['$scope', 'Retail_BE_CreditClassService', 'UtilsService', 'VRUIUtilsService'];
+    CreditClassManagementController.$inject = ['$scope', 'Retail_BE_CreditClassService', 'UtilsService', 'VRUIUtilsService', 'Retail_BE_CreditClassAPIService'];
 
-    function CreditClassManagementController($scope, Reprocess_CreditClassService, UtilsService, VRUIUtilsService) {
+    function CreditClassManagementController($scope, Retail_BE_CreditClassService, UtilsService, VRUIUtilsService, Retail_BE_CreditClassAPIService) {
 
         var gridAPI;
 
@@ -25,12 +25,16 @@
                 var onCreditClassAdded = function (addedCreditClass) {
                     gridAPI.onCreditClassAdded(addedCreditClass);
                 };
-                Reprocess_CreditClassService.addCreditClass(onCreditClassAdded);
+                Retail_BE_CreditClassService.addCreditClass(onCreditClassAdded);
             };
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
+            };
+
+            $scope.scopeModel.hasAddCreditClassPermission = function () {
+                return Retail_BE_CreditClassAPIService.HasAddCreditClassPermission();
             };
         }
 

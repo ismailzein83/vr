@@ -2,9 +2,9 @@
 
     "use strict";
 
-    SwitchManagementController.$inject = ['$scope', 'Retail_BE_SwitchService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    SwitchManagementController.$inject = ['$scope', 'Retail_BE_SwitchService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_BE_SwitchAPIService'];
 
-    function SwitchManagementController($scope, Retail_BE_SwitchService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function SwitchManagementController($scope, Retail_BE_SwitchService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_SwitchAPIService) {
 
         var gridAPI;
 
@@ -33,6 +33,9 @@
 
             $scope.onSwitchUpdated = function (updatedSwitch) {
                 gridAPI.onSwitchUpdated(updatedSwitch);
+            };
+            $scope.scopeModel.hasAddSwitchPermmision = function () {
+                return Retail_BE_SwitchAPIService.HasAddSwitchPermission();
             };
 
         }
