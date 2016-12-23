@@ -81,7 +81,7 @@
 
         function setTitle() {
             if (isEditMode && invoiceSettingEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(invoiceSettingEntity.Title, "Invoice Setting");
+                $scope.title = UtilsService.buildTitleForUpdateEditor(invoiceSettingEntity.Name, "Invoice Setting");
             else
                 $scope.title = UtilsService.buildTitleForAddEditor("Invoice Setting");
         }
@@ -89,7 +89,7 @@
         function loadStaticData() {
             if (invoiceSettingEntity == undefined)
                 return;
-            $scope.scopeModel.title = invoiceSettingEntity.Title;
+            $scope.scopeModel.title = invoiceSettingEntity.Name;
             $scope.scopeModel.duePeriod = invoiceSettingEntity.DuePeriod;
             $scope.scopeModel.isFollow = invoiceSettingEntity.IsFollow;
             $scope.scopeModel.isDefault = invoiceSettingEntity.IsDefault;
@@ -136,7 +136,7 @@
 
         function buildInvoiceSettingsObjFromScope() {
             var obj = {
-                Title: $scope.scopeModel.title,
+                Name: $scope.scopeModel.title,
                 DuePeriod: $scope.scopeModel.duePeriod,
                 DefaultEmailId: customerInvoiceMailTemplateReadyAPI.getSelectedIds(),
                 IsFollow: $scope.scopeModel.isFollow,
