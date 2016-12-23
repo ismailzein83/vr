@@ -47,7 +47,7 @@ namespace Vanrise.Security.Business
 
             do
             {
-                IEnumerable<Permission> nodePermissions = cachedPermissions.FindAllRecords(x => x.EntityType == targetNode.EntType && x.EntityId == targetNode.EntityId.ToString());
+                IEnumerable<Permission> nodePermissions = cachedPermissions.FindAllRecords(x => x.EntityType == targetNode.EntType && new Guid(x.EntityId) == targetNode.EntityId);
                 entityPermissions.AddRange(nodePermissions);
 
                 if (targetNode.BreakInheritance) break;
