@@ -24,17 +24,11 @@
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="8" disablesorting="true">
-                            <vr-row removeline>
-                                <vr-common-gridwidthfactor-selector normal-col-num="8" on-ready="dataItem.onDimensionGridWidthFactorSelectorReady" onselectionchanged="dataItem.onWidthSelectionChanged" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
-                                <vr-columns width="1/3row" haschildcolumns>
-                                    <vr-textbox type="number" ng-show="dataItem.hasfixedwidth" value="dataItem.FixedWidth" decimalprecision="0" isrequired="dataItem.hasfixedwidth"></vr-textbox>
-                                </vr-columns>
-                            </vr-row>
+                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onDimensionGridWidthFactorEditorReady"></vr-common-gridcolumnwidth-editor>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="3" disablesorting="true">
                             <vr-switch value="dataItem.IsRootDimension"></vr-switch>
                         </vr-datagridcolumn>
-
                     </vr-datagrid>
                 </vr-validator>
             </vr-columns>
@@ -52,12 +46,7 @@
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="8" disablesorting="true">
-                            <vr-row removeline>
-                                <vr-common-gridwidthfactor-selector normal-col-num="8" on-ready="dataItem.onMeasureGridWidthFactorSelectorReady" onselectionchanged="dataItem.onWidthSelectionChanged" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
-                                <vr-columns width="1/3row" haschildcolumns>
-                                    <vr-textbox type="number" ng-show="dataItem.hasfixedwidth" value="dataItem.FixedWidth" decimalprecision="0" isrequired="dataItem.hasfixedwidth"></vr-textbox>
-                                </vr-columns>
-                            </vr-row>
+                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onMeasureGridWidthFactorEditorReady"></vr-common-gridcolumnwidth-editor>                        
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>

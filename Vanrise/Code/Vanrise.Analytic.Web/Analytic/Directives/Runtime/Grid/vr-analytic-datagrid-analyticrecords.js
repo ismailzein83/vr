@@ -348,7 +348,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     var dimensionForDrillDown = [];
                     for (var i = 0; i < ctrl.dimensions.length; i++) {
                         var dimension = ctrl.dimensions[i];
-                        var gridWidth = UtilsService.getItemByVal(gridWidths, dimension.Width, "value");
+                        var gridWidth = UtilsService.getItemByVal(gridWidths, dimension.ColumnSettings.Width, "value");
                         if (gridWidth != undefined)
                             dimension.Widthfactor = gridWidth.widthFactor;
 

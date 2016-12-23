@@ -189,6 +189,8 @@
     <Content Include="Common\Directives\Filter\Text\Templates\TextFilterTemplate.html" />
     <Content Include="Common\Directives\Filter\Text\vr-common-filter-text.js" />
     <Content Include="Common\Directives\Filter\Text\vr-common-textfiltertype-selector.js" />
+    <Content Include="Common\Directives\GridColumnWidth\Templates\GridColumnWidthEditorTemplate.html" />
+    <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-companysettings-editor.js" />
     <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditGridTemplate.html" />
