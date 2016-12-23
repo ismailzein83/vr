@@ -9,6 +9,10 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericBEDefinitionSettings:BusinessEntityDefinitionSettings
     {
+        public override Guid ConfigId
+        {
+            get { return new Guid("6F3FBD7B-275A-4D92-8E06-AD7F7B04C7D6"); }
+        }
         public override string GroupSelectorUIControl { get; set; }
         public override string DefinitionEditor { get { return "/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html"; } }
         public override string SelectorUIControl
@@ -28,6 +32,8 @@ namespace Vanrise.GenericData.Entities
         public string FieldPath { get; set; }
         public GenericEditor EditorDesign { get; set; }
         public GenericManagement ManagementDesign { get; set; }
-        
+
+
+       
     }
 }
