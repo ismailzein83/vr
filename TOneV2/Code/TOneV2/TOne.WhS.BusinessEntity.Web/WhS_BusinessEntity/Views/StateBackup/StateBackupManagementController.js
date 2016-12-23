@@ -71,13 +71,9 @@
                 From: $scope.scopeModel.fromBackupDate,
                 To: $scope.scopeModel.toBackupDate
             };
-            var backupTypeFilterObject;
-            if (stateBackupTypesDirectiveAPI != undefined) {
-                backupTypeFilterObject = stateBackupTypesDirectiveAPI.getData();
-
-            }
-            if (backupTypeFilterObject != undefined)
-                filter.BackupTypeFilterObject = backupTypeFilterObject;
+          
+            if ($scope.scopeModel.selectedStateBackupType != undefined)
+                filter.BackupTypeFilterObject = stateBackupTypesDirectiveAPI.getData();
 
             return filter;
         }
