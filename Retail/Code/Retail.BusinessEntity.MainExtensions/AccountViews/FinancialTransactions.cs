@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountViews
 {
-    public class SubAccounts : AccountViewDefinitionSettings
+    public class FinancialTransactions : AccountViewDefinitionSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("9A5B27E1-4928-4B71-B548-71C2F89444A5"); }
+            get { return new Guid("A9475C63-ECA4-4C01-B9FF-11DF8AA4C157"); }
         }
 
         public override string RuntimeEditor
         {
             get
             {
-                return "retail-be-subaccounts-view";
+                return "retail-be-financialtransactions-view";
             }
             set
             {

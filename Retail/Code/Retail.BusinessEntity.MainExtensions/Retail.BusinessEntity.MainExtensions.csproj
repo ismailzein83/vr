@@ -104,8 +104,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountViews\AccountIdentificationRules.cs" />
     <Compile Include="AccountViews\AccountInfo.cs" />
-    <Compile Include="AccountViews\Services.cs" />
+    <Compile Include="AccountViews\AccountPackages.cs" />
+    <Compile Include="AccountViews\AccountServices.cs" />
+    <Compile Include="AccountViews\Actions.cs" />
+    <Compile Include="AccountViews\FinancialTransactions.cs" />
     <Compile Include="AccountViews\SubAccounts.cs" />
     <Compile Include="AccountConditions\FilterGroupAccountCondition.cs" />
     <Compile Include="AccountParts\AccountPartPersonalInfo.cs" />

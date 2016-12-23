@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountViews
 {
-    public class Services : AccountViewDefinitionSettings
+    public class AccountIdentificationRules : AccountViewDefinitionSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("71AB18ED-F2AC-4E71-B4E4-4826D092A201"); }
+            get { return new Guid("A8098DDE-51C2-4922-B346-32AFF202A4C1"); }
         }
 
         public override string RuntimeEditor
         {
             get
             {
-               return null;
+                return "retail-be-accountidentificationrules-view";
             }
             set
             {
-                
+
             }
         }
     }
