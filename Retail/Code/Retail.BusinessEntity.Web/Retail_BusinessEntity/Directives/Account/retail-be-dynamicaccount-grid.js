@@ -39,6 +39,16 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
                     return Retail_BE_AccountAPIService.GetFilteredAccounts(dataRetrievalInput).then(function (response) {
+
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                var account = response.Data[i];
+                                Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(account, accountViewDefinitions, gridAPI);
+                            }
+                        }
+
+                        console.log(response);
+
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -50,10 +60,14 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
             function defineAPI() {
                 var api = {};
 
-                api.load = function (query) {
+                api.load = function (payload) { 
                     var promises = [];
 
-                    var gridQuery = query;
+                    var gridQuery;
+
+                    if (payload != undefined) {
+                        gridQuery = payload.query;
+                    }
 
                     if ($scope.scopeModel.columns.length == 0) {
 
@@ -80,6 +94,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                         }).catch(function (error) {
                             accountGridLoadPromiseDeferred.reject(error);
                         });
+
                     }).catch(function (error) {
                         accountGridLoadPromiseDeferred.reject(error);
                     });

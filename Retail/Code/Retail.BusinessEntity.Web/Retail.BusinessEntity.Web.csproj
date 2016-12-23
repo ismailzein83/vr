@@ -223,6 +223,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountPartDefinition\Templates\AccountPartDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\retail-be-accountservice-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\Templates\AccountServiceGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-subaccounts-view.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\SubAccountsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-genericfielddefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-synchronizer-editor.js" />

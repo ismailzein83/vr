@@ -2,12 +2,10 @@
 
     'use stict';
 
-    AccountService.$inject = ['VRModalService', 'VRNotificationService'];
+    AccountService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function AccountService(VRModalService, VRNotificationService)
-    {
-        function addAccount(parentAccountId, onAccountAdded)
-        {
+    function AccountService(VRModalService, VRNotificationService, UtilsService, VRUIUtilsService) {
+        function addAccount(parentAccountId, onAccountAdded) {
             var parameters = {
                 parentAccountId: parentAccountId
             };
@@ -21,8 +19,7 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
 
-        function editAccount(accountId, parentAccountId, onAccountUpdated)
-        {
+        function editAccount(accountId, parentAccountId, onAccountUpdated) {
             var parameters = {
                 accountId: accountId,
                 parentAccountId: parentAccountId
@@ -37,44 +34,47 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
 
-        function defineAccountItemTabsAndMenuActions(account, gridAPI) {
-            if (account.Entity.Settings == null || account.Entity.Settings.ItemsConfig == null)
+        function defineAccountViewTabsAndMenuActions(account, accountViewDefinitions, gridAPI) {
+            if (account == undefined || account.AvailableAccountViews == undefined || account.AvailableAccountViews.legnth == 0)
                 return;
 
             var drillDownTabs = [];
-            //var menuActions = [];
 
-            for (var i = 0; i < account.Entity.Settings.ItemsConfig.length; i++) {
-                var dataAnalysisItemDefinitionConfig = account.Entity.Settings.ItemsConfig[i];
+            for (var index = 0; index < account.AvailableAccountViews.length; index++) {
 
-                addDrillDownTab(dataAnalysisItemDefinitionConfig);
-                //addMenuAction(dataAnalysisItemDefinitionConfig, i);
+                var currentAccountViewDefinitionId = account.AvailableAccountViews[index];
+                var accountViewDefinition = UtilsService.getItemByVal(accountViewDefinitions, currentAccountViewDefinitionId, "AccountViewDefinitionId");
+                addDrillDownTab(accountViewDefinition);
             }
 
             setDrillDownTabs();
-            //setMenuActions();
 
 
-            function addDrillDownTab(dataAnalysisItemDefinitionConfig) {
+            function addDrillDownTab(accountViewDefinition) {
                 var drillDownTab = {};
 
-                drillDownTab.title = dataAnalysisItemDefinitionConfig.Title;
-                drillDownTab.directive = dataAnalysisItemDefinitionConfig.GridDirective;
+                drillDownTab.title = accountViewDefinition.Name;
+                drillDownTab.directive = accountViewDefinition.Settings.RuntimeEditor;
 
-                drillDownTab.loadDirective = function (dataAnalysisItemDefinitionGridAPI, account) {
-                    account.dataAnalysisItemDefinitionGridAPI = dataAnalysisItemDefinitionGridAPI;
+                drillDownTab.loadDirective = function (accountViewGridAPI, account) {
+                    account.accountViewGridAPI = accountViewGridAPI;
 
-                    return account.dataAnalysisItemDefinitionGridAPI.load(buildDataAnalysisItemDefinitionQuery());
+                    console.log(account);
+                    console.log(accountViewGridAPI);
+
+                    return account.accountViewGridAPI.load(buildAccountViewQuery());
                 };
 
-                function buildDataAnalysisItemDefinitionQuery() {
+                function buildAccountViewQuery() {
 
-                    var dataAnalysisItemDefinitionQuery = {};
+                    //var dataAnalysisItemDefinitionQuery = {};
 
-                    dataAnalysisItemDefinitionQuery.DataAnalysisDefinitionId = account.Entity.DataAnalysisDefinitionId;
-                    dataAnalysisItemDefinitionQuery.ItemDefinitionTypeId = dataAnalysisItemDefinitionConfig.TypeId;
+                    //dataAnalysisItemDefinitionQuery.DataAnalysisDefinitionId = account.Entity.DataAnalysisDefinitionId;
+                    //dataAnalysisItemDefinitionQuery.ItemDefinitionTypeId = dataAnalysisItemDefinitionConfig.TypeId;
 
-                    return dataAnalysisItemDefinitionQuery;
+                    //return dataAnalysisItemDefinitionQuery;
+
+                    return {};
                 }
 
                 drillDownTabs.push(drillDownTab);
@@ -83,34 +83,8 @@
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
                 drillDownManager.setDrillDownExtensionObject(account);
             }
-
-            function addMenuAction(dataAnalysisItemDefinitionConfig, dataAnalysisItemDefinitionConfigIndex) {
-                var menuAction = {};
-
-                menuAction.name = 'New ' + dataAnalysisItemDefinitionConfig.Title;
-                menuAction.clicked = function (account) {
-
-                    account.drillDownExtensionObject.drillDownDirectiveTabs[dataAnalysisItemDefinitionConfigIndex].setTabSelected(account);
-
-                    var itemDefinitionTypeId = dataAnalysisItemDefinitionConfig.TypeId;
-
-                    var onDataAnalysisItemDefinitionAdded = function (addedDataAnalysisItemDefinition) {
-                        account.dataAnalysisItemDefinitionGridAPI.onItemAdded(addedDataAnalysisItemDefinition);
-                    };
-
-                    VR_Analytic_DataAnalysisItemDefinitionService.addDataAnalysisItemDefinition(account.Entity.DataAnalysisDefinitionId,
-                                                                                                itemDefinitionTypeId,
-                                                                                                onDataAnalysisItemDefinitionAdded);
-                };
-
-                menuActions.push(menuAction);
-            }
-            function setMenuActions() {
-                account.menuActions = [];
-                for (var i = 0; i < menuActions.length; i++)
-                    account.menuActions.push(menuActions[i]);
-            }
         }
+
         function openAccount360DegreeEditor(accountId) {
             var parameters = {
                 accountId: accountId
@@ -123,10 +97,12 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/Account360DegreeEditor.html', parameters, settings);
         };
+
+
         return {
             addAccount: addAccount,
             editAccount: editAccount,
-            defineAccountItemTabsAndMenuActions: defineAccountItemTabsAndMenuActions,
+            defineAccountViewTabsAndMenuActions: defineAccountViewTabsAndMenuActions,
             openAccount360DegreeEditor: openAccount360DegreeEditor
         };
     }

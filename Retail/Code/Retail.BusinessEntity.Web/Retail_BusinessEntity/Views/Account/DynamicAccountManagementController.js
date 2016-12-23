@@ -39,7 +39,7 @@
 
             $scope.scopeModel.search = function () {
                 var query = buildGridQuery();
-                return gridAPI.load(query);
+                return gridAPI.load({ query: query });
             };
             $scope.scopeModel.add = function () {
                 var onAccountAdded = function (addedAccount) {
