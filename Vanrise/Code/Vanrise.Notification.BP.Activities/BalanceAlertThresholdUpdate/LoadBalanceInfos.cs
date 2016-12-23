@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using Vanrise.Notification.Entities;
-using Vanrise.Queueing;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
+using Vanrise.Notification.Entities;
+using Vanrise.Queueing;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
 {

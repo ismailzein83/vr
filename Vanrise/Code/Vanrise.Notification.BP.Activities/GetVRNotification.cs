@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using Vanrise.Notification.Entities;
-using Vanrise.Notification.Business;
 using Vanrise.Notification.Data;
+using Vanrise.Notification.Entities;
 
 namespace Vanrise.Notification.BP.Activities
 {

@@ -9,6 +9,14 @@ namespace Vanrise.AccountBalance.Business.Extensions
 {
     public class AccountBalanceAlertRuleTypeSettings : VRBalanceAlertRuleTypeSettings
     {
+        public override Guid NotificationTypeId
+        {
+            get
+            {
+                return new Guid("987F1100-3498-4338-BE98-9EBE115D0A58");
+            }
+
+        }
         public override Guid ConfigId
         {
             get { return new Guid("ba79cb79-d058-4382-88fc-db1c154b5374"); }

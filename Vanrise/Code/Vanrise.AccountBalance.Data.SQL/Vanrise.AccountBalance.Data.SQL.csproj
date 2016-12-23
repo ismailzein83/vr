@@ -47,7 +47,6 @@
     <Compile Include="AccountUsageDataManager.cs" />
     <Compile Include="AlertRuleActionExecutionDataManager.cs" />
     <Compile Include="AlertRuleThresholdActionDataManager.cs" />
-    <Compile Include="BalanceAlertRuleDataManager.cs" />
     <Compile Include="BalanceHistoryDataManager.cs" />
     <Compile Include="BalanceUsageQueueDataManager.cs" />
     <Compile Include="BillingTransactionDataManager.cs" />

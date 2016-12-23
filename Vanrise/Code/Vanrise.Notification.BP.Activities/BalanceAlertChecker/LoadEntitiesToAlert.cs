@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
+using System.Collections.Generic;
+using Vanrise.BusinessProcess;
 using Vanrise.Notification.Entities;
 using Vanrise.Queueing;
-using Vanrise.BusinessProcess;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 {

@@ -1,5 +1,6 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Notification.BP.ClearNotificationProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:Vanrise.Notification.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -44,6 +45,7 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Arguments</AssemblyReference>
@@ -106,18 +108,19 @@
                   <ActivityAction.Argument>
                     <DelegateInArgument x:TypeArguments="vne:VRAction" Name="vrAction" />
                   </ActivityAction.Argument>
-                  <vnba1:CreateAction UserID="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateAction_1">
-                    <vnba1:CreateAction.Action>
-                      <InArgument x:TypeArguments="vne:VRAction">
-                        <mca:CSharpValue x:TypeArguments="vne:VRAction">vrAction</mca:CSharpValue>
-                      </InArgument>
-                    </vnba1:CreateAction.Action>
-                    <vnba1:CreateAction.EventPayload>
+                  <local:ExecuteActionProcess>
+                    <local:ExecuteActionProcess.EventPayLoad>
                       <InArgument x:TypeArguments="vne:IVRActionEventPayload">
                         <mca:CSharpValue x:TypeArguments="vne:IVRActionEventPayload">vrNotification.Data.EventPayload</mca:CSharpValue>
                       </InArgument>
-                    </vnba1:CreateAction.EventPayload>
-                  </vnba1:CreateAction>
+                    </local:ExecuteActionProcess.EventPayLoad>
+                    <local:ExecuteActionProcess.VrAction>
+                      <InArgument x:TypeArguments="vne:VRAction">
+                        <mca:CSharpValue x:TypeArguments="vne:VRAction">vrAction</mca:CSharpValue>
+                      </InArgument>
+                    </local:ExecuteActionProcess.VrAction>
+                    <sap2010:WorkflowViewState.IdRef>ExecuteActionProcess_1</sap2010:WorkflowViewState.IdRef>
+                  </local:ExecuteActionProcess>
                 </ActivityAction>
               </ParallelForEach>
             </If.Then>
@@ -137,12 +140,12 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXENsZWFyTm90aWZpY2F0aW9uUHJvY2Vzcy54YW1sEzcDjQEOAgEBOwVQHwIBJVEFiwEXAgECPgs+VwIBL00LTW8CASxIC0h0AgEpQwtDXwIBJlQLVHMCASJbCYkBFAIBA1wLfBACAQ19C4gBLAIBBF8RX3wCAQ5jD3ohAgEShQERhQFsAgEJgAERgAF7AgEFZhVmjAECAR5tE3goAgETdRl1iAECARlwGXBjAgEU</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXENsZWFyTm90aWZpY2F0aW9uUHJvY2Vzcy54YW1sEzkDkAEOAgEBPQVSHwIBJVMFjgEXAgECQAtAVwIBL08LT28CASxKC0p0AgEpRQtFXwIBJlYLVnMCASJdCYwBFAIBA14LfxACAQ2AAQuLASwCAQRhEWF8AgEOZQ99IQIBEogBEYgBbAIBCYMBEYMBewIBBWgVaIwBAgEebxN7MAIBE3IZcogBAgEZdxl3YwIBFA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="LoadNotifications_1" sap:VirtualizedContainerService.HintSize="516,22" />
-      <sap2010:ViewStateData Id="CreateAction_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ExecuteActionProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,210">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

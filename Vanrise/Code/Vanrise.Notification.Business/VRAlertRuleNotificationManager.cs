@@ -26,7 +26,7 @@ namespace Vanrise.Notification.Business
                 EventPayload = notificationInput.EventPayload,
                 Actions = notificationInput.Actions,
                 ClearanceActions = notificationInput.ClearanceActions,
-                IsAutoClearable = notificationInput.IsAutoClearable
+                IsAutoClearable = notificationInput.IsAutoClearable                 
             };
             var createVRNotificationOutput = _vrNofiticationManager.CreateNotification(createVRNotificationInput);
             return new CreateAlertRuleNotificationOutput

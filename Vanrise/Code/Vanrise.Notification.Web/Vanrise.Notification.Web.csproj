@@ -159,6 +159,14 @@
     <Content Include="VR_Notification\Directives\MainExtensions\VRBalanceAlertRule\Templates\VRBalanceAlertRuleSettingsTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrule-grid.js" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRBalanceAlertRule\vr-notification-vrbalancealertrule-settings.js" />
+    <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Normal\Templates\BalanceAlertThresholdProcessManualTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Normal\Templates\BalanceAlertCheckerProcessManualTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Normal\vr-notification-balancealertrule-alertthresholdprocess-manual.js" />
+    <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Normal\vr-notification-balancealertrule-alertcheckerprocess-manual.js" />
+    <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Scheduled\Templates\BalanceAlertThresholdProcessScheduledTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Scheduled\Templates\BalanceAlertCheckerProcessScheduledTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Scheduled\vr-notification-balancealertrule-alertthresholdprocess-scheduled.js" />
+    <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Scheduled\vr-notification-balancealertrule-alertcheckerprocess-scheduled.js" />
     <Content Include="VR_Notification\Directives\VRBalanceAlertRule\vr-notification-balancealertrule-threshold-selector.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />

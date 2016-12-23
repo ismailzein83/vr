@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
+using System.Collections.Generic;
+using Vanrise.BusinessProcess;
+using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Queueing;
-using Vanrise.BusinessProcess;
-using Vanrise.GenericData.Entities;
-using Vanrise.Notification.Business;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 {
@@ -85,7 +82,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                                 CurrentBalance = entityBalanceInfo.CurrentBalance,
                                                 EntityId = entityBalanceInfo.EntityId,
                                                 Threshold = lastExecutedThreshold.Value
-                                            },
+                                            },                                             
                                             AlertRuleTypeId = inputArgument.AlertTypeId,
                                             UserId = handle.SharedInstanceData.InstanceInfo.InitiatorUserId,
                                             Description = ""

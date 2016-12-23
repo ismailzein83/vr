@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
-using Vanrise.Notification.Entities;
+﻿using System.Activities;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Notification.Business;
+using Vanrise.Notification.Entities;
 
 namespace Vanrise.Notification.BP.Activities
 {
-
-    public sealed class TryConvertActionToBPInputArg : CodeActivity
+    public sealed class TryConvertActionToBPInputArgumnet : CodeActivity
     {
         [RequiredArgument]
         public InArgument<CreateVRActionInput> CreateVRActionInput { get; set; }
 
         [RequiredArgument]
-        public OutArgument<Vanrise.BusinessProcess.Entities.BaseProcessInputArgument> BPInputArgument { get; set; }
+        public OutArgument<BaseProcessInputArgument> BPInputArgument { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {

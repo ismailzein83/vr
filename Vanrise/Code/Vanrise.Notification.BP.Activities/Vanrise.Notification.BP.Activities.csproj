@@ -77,11 +77,11 @@
     <Compile Include="BalanceAlertThresholdUpdate\LoadBalanceInfos.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\UpdateBalanceRuleInfos.cs" />
     <Compile Include="Contexts.cs" />
-    <Compile Include="CreateAction.cs" />
+    <Compile Include="ExecuteAction.cs" />
     <Compile Include="GetAlertRuleType.cs" />
     <Compile Include="GetVRNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TryConvertActionToBPInputArg.cs" />
+    <Compile Include="TryConvertActionToBPInputArgumnet.cs" />
     <Compile Include="UpdateNotificationStatus.cs" />
   </ItemGroup>
   <ItemGroup>

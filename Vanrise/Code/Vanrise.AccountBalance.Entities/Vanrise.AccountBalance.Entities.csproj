@@ -64,9 +64,6 @@
     <Compile Include="AlertRuleActionExecution\AlertRuleActionExecution.cs" />
     <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdAction.cs" />
     <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdActionBatch.cs" />
-    <Compile Include="BalanceAlertRule\BalanceAlertRule.cs" />
-    <Compile Include="BalanceAlertRule\BalanceAlertSettings.cs" />
-    <Compile Include="BalanceAlertRule\BalanceAlertThresholdConfig.cs" />
     <Compile Include="BalanceClosingPeriod\BalanceClosingPeriod.cs" />
     <Compile Include="BalanceUsageQueue\BalanceUsageDetail.cs" />
     <Compile Include="BalanceUsageQueue\BalanceUsageQueue.cs" />

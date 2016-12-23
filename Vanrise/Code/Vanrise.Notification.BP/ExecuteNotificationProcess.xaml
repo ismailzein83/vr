@@ -1,5 +1,6 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Notification.BP.ExecuteNotificationProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:Vanrise.Notification.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -44,6 +45,7 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Arguments</AssemblyReference>
@@ -91,23 +93,19 @@
         <ActivityAction.Argument>
           <DelegateInArgument x:TypeArguments="vne:VRAction" Name="action" />
         </ActivityAction.Argument>
-        <vnba1:CreateAction DisplayName="CreateAndExecuteAction" sap2010:WorkflowViewState.IdRef="CreateAction_1">
-          <vnba1:CreateAction.Action>
-            <InArgument x:TypeArguments="vne:VRAction">
-              <mca:CSharpValue x:TypeArguments="vne:VRAction">action</mca:CSharpValue>
-            </InArgument>
-          </vnba1:CreateAction.Action>
-          <vnba1:CreateAction.EventPayload>
+        <local:ExecuteActionProcess>
+          <local:ExecuteActionProcess.EventPayLoad>
             <InArgument x:TypeArguments="vne:IVRActionEventPayload">
               <mca:CSharpValue x:TypeArguments="vne:IVRActionEventPayload">vrNotification.Data.EventPayload</mca:CSharpValue>
             </InArgument>
-          </vnba1:CreateAction.EventPayload>
-          <vnba1:CreateAction.UserID>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">Input.UserId</mca:CSharpValue>
+          </local:ExecuteActionProcess.EventPayLoad>
+          <local:ExecuteActionProcess.VrAction>
+            <InArgument x:TypeArguments="vne:VRAction">
+              <mca:CSharpValue x:TypeArguments="vne:VRAction">action</mca:CSharpValue>
             </InArgument>
-          </vnba1:CreateAction.UserID>
-        </vnba1:CreateAction>
+          </local:ExecuteActionProcess.VrAction>
+          <sap2010:WorkflowViewState.IdRef>ExecuteActionProcess_1</sap2010:WorkflowViewState.IdRef>
+        </local:ExecuteActionProcess>
       </ActivityAction>
     </ParallelForEach>
     <vnba1:UpdateNotificationStatus DisplayName="UpdateStatusCompleted" sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_2">
@@ -122,14 +120,14 @@
         </InArgument>
       </vnba1:UpdateNotificationStatus.VRNotificationId>
     </vnba1:UpdateNotificationStatus>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEV4ZWN1dGVOb3RpZmljYXRpb25Qcm9jZXNzLnhhbWwSNwN+DgIBATsFO1wCASg8BUcfAgEhSAVTJgIBGlQFcBcCAQlxBXwmAgECO0M7WQIBKT8LP2kCASVEC0RbAgEiUAtQZgIBHksLS3cCARtXC1d5AgEXXgluHgIBCnkLeWYCAQZ0C3R3AgEDZg9mfgIBE2EPYVcCAQ9rD2tYAgEL</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEV4ZWN1dGVOb3RpZmljYXRpb25Qcm9jZXNzLnhhbWwROQN8DgIBAT0FPVwCASQ+BUkfAgEdSgVVJgIBFlYFbhcCAQlvBXomAgECPUM9WQIBJUELQWkCASFGC0ZbAgEeUgtSZgIBGk0LTXcCARdZC1l5AgETYAlsJgIBCncLd2YCAQZyC3J3AgEDYw9jfgIBD2gPaFcCAQs=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="287,62" />
       <sap2010:ViewStateData Id="GetVRNotification_2" sap:VirtualizedContainerService.HintSize="287,22" />
       <sap2010:ViewStateData Id="UpdateNotificationStatus_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="CreateAction_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ExecuteActionProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="287,210" />
       <sap2010:ViewStateData Id="UpdateNotificationStatus_2" sap:VirtualizedContainerService.HintSize="287,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,622">
