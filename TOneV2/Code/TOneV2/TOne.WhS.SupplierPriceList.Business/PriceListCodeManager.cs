@@ -146,7 +146,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             notImportedCode.ZoneName = firstElementInTheList.ParentZone.Name;
             notImportedCode.Code = firstElementInTheList.CodeEntity.Code;
             notImportedCode.BED = firstElementInTheList.BED;
-            notImportedCode.EED = lastElementInTheList.CodeEntity.EED;
+            notImportedCode.EED = lastElementInTheList.EED;
             notImportedCode.HasChanged = linkedExistingCodes.Any(x => x.ChangedCode != null);
 
             return notImportedCode;

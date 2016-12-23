@@ -290,7 +290,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 return new SystemRate()
                 {
                     BED = recentExistingRate.BED,
-                    EED = recentExistingRate.OriginalEED,
+                    EED = recentExistingRate.EED,
                     Rate = recentExistingRate.ConvertedRate,
                     RateTypeId = recentExistingRate.RateEntity.RateTypeId,
                 };
@@ -327,7 +327,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             return new SystemRate()
             {
                 BED = firstElementInTheList.BED,
-                EED = lastElementInTheList.OriginalEED,
+                EED = lastElementInTheList.EED,
                 Rate = firstElementInTheList.RateEntity.Rate,
                 RateTypeId = firstElementInTheList.RateEntity.RateTypeId
             };
