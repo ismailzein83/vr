@@ -28,7 +28,7 @@
     position: relative;
     top: 4px;
     display: inline-block;
-    max-width: 137px;
+    max-width: 145px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis
@@ -1018,10 +1018,12 @@ loader .outer-loader {
 .toggle-panel {
     margin: 0px;
     border-bottom: 1px solid #d0d0d0;
+    
 }
 
 .menu-item-list {
     border: 0px solid transparent !important;
+    font-size: 13px !important;
 }
 .menu-item-list.last  {
  margin-bottom: 92px;
@@ -1033,7 +1035,7 @@ loader .outer-loader {
 .menu-item-list .panel-body {
     padding: 0px;
     background-color: #f0f0f0 !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
 }
 
 .dll-menu {
