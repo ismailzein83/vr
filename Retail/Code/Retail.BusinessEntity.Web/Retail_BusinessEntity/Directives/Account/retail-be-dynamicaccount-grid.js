@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountDefinitionAPIService','Retail_BE_AccountService',
+app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountDefinitionAPIService', 'Retail_BE_AccountService',
     function (VRNotificationService, UtilsService, Retail_BE_AccountAPIService, Retail_BE_AccountDefinitionAPIService, Retail_BE_AccountService) {
         return {
             restrict: 'E',
@@ -22,6 +22,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
 
             var gridColumnFieldNames = [];
             var accountViewDefinitions = [];
+            var parentAccountId;
 
             var gridAPI;
 
@@ -46,10 +47,8 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                                 Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(account, accountViewDefinitions, gridAPI);
                             }
                         }
-
-                        console.log(response);
-
                         onResponseReady(response);
+
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
@@ -60,13 +59,14 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) { 
+                api.load = function (payload) {
                     var promises = [];
 
                     var gridQuery;
 
                     if (payload != undefined) {
                         gridQuery = payload.query;
+                        parentAccountId = payload.parentAccountId;
                     }
 
                     if ($scope.scopeModel.columns.length == 0) {
@@ -80,30 +80,27 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                         promises.push(accountViewDefinitionsLoadPromise);
                     }
 
-                    var accountGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var gridLoadDeferred = UtilsService.createPromiseDeferred();
 
                     //Retrieving Data
                     UtilsService.waitMultiplePromises(promises).then(function () {
 
-                        if (gridQuery == undefined)
-                            gridQuery = {};
-                        gridQuery.Columns = gridColumnFieldNames;
-
+                        gridQuery = buildGridQuery(gridQuery);
                         gridAPI.retrieveData(gridQuery).then(function () {
-                            accountGridLoadPromiseDeferred.resolve();
+                            gridLoadDeferred.resolve();
                         }).catch(function (error) {
-                            accountGridLoadPromiseDeferred.reject(error);
+                            gridLoadDeferred.reject(error);
                         });
 
                     }).catch(function (error) {
-                        accountGridLoadPromiseDeferred.reject(error);
+                        gridLoadDeferred.reject(error);
                     });
 
                     function getAccountGridColumnsLoadPromise() {
 
                         var accountGridColumnAttributesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        Retail_BE_AccountDefinitionAPIService.GetAccountGridColumnAttributes().then(function (response) {
+                        Retail_BE_AccountDefinitionAPIService.GetAccountGridColumnAttributes(parentAccountId).then(function (response) {
 
                             var accountGridColumnAttributes = response;
 
@@ -142,8 +139,16 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
 
                         return accountViewDefinitionsLoadPromiseDeferred.promise;
                     }
+                    function buildGridQuery(gridQuery) {
+                        if (gridQuery == undefined)
+                            gridQuery = {};
 
-                    return accountGridLoadPromiseDeferred.promise;
+                        gridQuery.Columns = gridColumnFieldNames;
+                        gridQuery.ParentAccountId = parentAccountId;
+                        return gridQuery;
+                    }
+
+                    return gridLoadDeferred.promise;
                 };
 
                 api.onAccountAdded = function (addedAccount) {

@@ -59,22 +59,15 @@
                 drillDownTab.loadDirective = function (accountViewGridAPI, account) {
                     account.accountViewGridAPI = accountViewGridAPI;
 
-                    console.log(account);
-                    console.log(accountViewGridAPI);
-
                     return account.accountViewGridAPI.load(buildAccountViewQuery());
                 };
 
                 function buildAccountViewQuery() {
 
-                    //var dataAnalysisItemDefinitionQuery = {};
-
-                    //dataAnalysisItemDefinitionQuery.DataAnalysisDefinitionId = account.Entity.DataAnalysisDefinitionId;
-                    //dataAnalysisItemDefinitionQuery.ItemDefinitionTypeId = dataAnalysisItemDefinitionConfig.TypeId;
-
-                    //return dataAnalysisItemDefinitionQuery;
-
-                    return {};
+                    var payload = {
+                        parentAccountId: account.Entity.AccountId,
+                    };
+                    return payload;
                 }
 
                 drillDownTabs.push(drillDownTab);

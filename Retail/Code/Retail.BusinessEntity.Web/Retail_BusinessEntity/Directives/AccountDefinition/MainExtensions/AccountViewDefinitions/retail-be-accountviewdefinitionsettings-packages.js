@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountviewdefinitionsettingsAccountinfo', ['UtilsService',
+app.directive('retailBeAccountviewdefinitionsettingsPackages', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountviewdefinitionsettingsAccountinfo', ['UtilsService
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new AccountInfoViewDefinitionSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new PackagesViewDefinitionSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountViewDefinitions/Templates/AccountInfoViewSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountViewDefinitions/Templates/PackagesViewSettingsTemplate.html'
         };
 
-        function AccountInfoViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
+        function PackagesViewDefinitionSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -30,13 +30,11 @@ app.directive('retailBeAccountviewdefinitionsettingsAccountinfo', ['UtilsService
 
                 api.load = function (payload) {
 
-                    if (payload != undefined) {
-                    }
                 };
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.AccountInfo, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.AccountPackages, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

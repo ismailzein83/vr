@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SubAccountsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountService'];
+    AccountIdentificationRulesViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountIdentificationService'];
 
-    function SubAccountsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountService) {
+    function AccountIdentificationRulesViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountIdentificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,7 +12,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SubAccountsViewCtor($scope, ctrl);
+                var ctor = new AccountIdentificationRulesViewCtor($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -24,10 +24,10 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/SubAccountsViewTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/AccountIdentificationRulesViewTemplate.html'
         };
 
-        function SubAccountsViewCtor($scope, ctrl) {
+        function AccountIdentificationRulesViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
             var parentAccountId;
@@ -42,12 +42,12 @@
                     defineAPI();
                 };
 
-                $scope.scopeModel.onSubAccountAdded = function () {
-                    var onSubAccountAdded = function (addedSubcAccount) {
-                        gridAPI.onAccountAdded(addedSubcAccount);
+                $scope.scopeModel.onAccountIdentificationRuleAdded = function () {
+                    var onAccountIdentificationRuleAdded = function (addedService) {
+                        gridAPI.onAccountIdentificationRuleAdded(addedService);
                     };
 
-                    Retail_BE_AccountService.addAccount(parentAccountId, onSubAccountAdded);
+                    Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(parentAccountId, onAccountIdentificationRuleAdded);
                 };
             }
             function defineAPI() {
@@ -72,11 +72,18 @@
             }
 
             function buildGridPayload(loadPayload) {
-                return loadPayload;
+
+                var accountIdentificationRulesGridPayload;
+                if (loadPayload != undefined) {
+                    accountIdentificationRulesGridPayload = {
+                        AccountId: loadPayload.parentAccountId
+                    };
+                }
+                return accountIdentificationRulesGridPayload;
             }
         }
     }
 
-    app.directive('retailBeSubaccountsView', SubAccountsViewDirective);
+    app.directive('retailBeAccountidentificationrulesView', AccountIdentificationRulesViewDirective);
 
 })(app);

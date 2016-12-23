@@ -25,9 +25,9 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountGridColumnAttributes")]
-        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes()
+        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(long? parentAccountId = null)
         {
-            return _manager.GetAccountGridColumnAttributes();
+            return _manager.GetAccountGridColumnAttributes(parentAccountId);
         }
 
         [HttpGet]

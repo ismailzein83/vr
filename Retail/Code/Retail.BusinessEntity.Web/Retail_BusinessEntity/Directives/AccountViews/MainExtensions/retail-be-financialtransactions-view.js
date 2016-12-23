@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SubAccountsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountService'];
+    FinancialTransactionsViewDirective.$inject = ['UtilsService', 'VRNotificationService'];
 
-    function SubAccountsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountService) {
+    function FinancialTransactionsViewDirective(UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,7 +12,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SubAccountsViewCtor($scope, ctrl);
+                var ctor = new FinancialTransactionsViewCtor($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -24,13 +24,11 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/SubAccountsViewTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/FinancialTransactionsViewTemplate.html'
         };
 
-        function SubAccountsViewCtor($scope, ctrl) {
+        function FinancialTransactionsViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
-
-            var parentAccountId;
 
             var gridAPI;
 
@@ -41,29 +39,13 @@
                     gridAPI = api;
                     defineAPI();
                 };
-
-                $scope.scopeModel.onSubAccountAdded = function () {
-                    var onSubAccountAdded = function (addedSubcAccount) {
-                        gridAPI.onAccountAdded(addedSubcAccount);
-                    };
-
-                    Retail_BE_AccountService.addAccount(parentAccountId, onSubAccountAdded);
-                };
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
 
-                    $scope.scopeModel.isGridLoading = true;
-
-                    if (payload != undefined) {
-                        parentAccountId = payload.parentAccountId;
-                    }
-
-                    return gridAPI.load(buildGridPayload(payload)).then(function () {
-                        $scope.scopeModel.isGridLoading = false;
-                    });
+                    return gridAPI.loadDirective(buildGridPayload(payload));
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -72,11 +54,18 @@
             }
 
             function buildGridPayload(loadPayload) {
-                return loadPayload;
+
+                var parentAccountId = loadPayload != undefined ? loadPayload.parentAccountId : undefined;
+
+                var billingTransactionGridPayload = {
+                    AccountsIds: [parentAccountId],
+                    AccountTypeId: "20b0c83e-6f53-49c7-b52f-828a19e6dc2a"
+                };
+                return billingTransactionGridPayload;
             }
         }
     }
 
-    app.directive('retailBeSubaccountsView', SubAccountsViewDirective);
+    app.directive('retailBeFinancialtransactionsView', FinancialTransactionsViewDirective);
 
 })(app);

@@ -11,8 +11,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitionSettingsConfigs"));
         }
 
-        function GetAccountGridColumnAttributes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountGridColumnAttributes"));
+        function GetAccountGridColumnAttributes(parentAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountGridColumnAttributes"), {
+                parentAccountId: parentAccountId
+            });
         }
 
         function GetAccountViewDefinitions() {

@@ -60,6 +60,9 @@ app.directive('retailBeAccountParts', ['Retail_BE_AccountPartDefinitionAPIServic
                 addNextPart(1, partsArr[0], partsArr);
                 function addNextPart(index,part,parts)
                 {
+                    if (part == undefined)
+                        return;
+
                     part.directiveResolvedDeferred.promise.then(function () {
                         addNextPart(index + 1, parts[index], parts);
                     });

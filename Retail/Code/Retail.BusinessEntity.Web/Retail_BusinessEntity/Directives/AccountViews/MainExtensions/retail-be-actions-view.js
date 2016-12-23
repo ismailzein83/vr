@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SubAccountsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountService'];
+    ActionsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_ActionDefinitionService', 'Retail_BE_EntityTypeEnum'];
 
-    function SubAccountsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountService) {
+    function ActionsViewDirective(UtilsService, VRNotificationService, Retail_BE_ActionDefinitionService, Retail_BE_EntityTypeEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -12,7 +12,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SubAccountsViewCtor($scope, ctrl);
+                var ctor = new ActionsViewCtor($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -24,13 +24,11 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/SubAccountsViewTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/ActionsViewTemplate.html'
         };
 
-        function SubAccountsViewCtor($scope, ctrl) {
+        function ActionsViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
-
-            var parentAccountId;
 
             var gridAPI;
 
@@ -41,29 +39,13 @@
                     gridAPI = api;
                     defineAPI();
                 };
-
-                $scope.scopeModel.onSubAccountAdded = function () {
-                    var onSubAccountAdded = function (addedSubcAccount) {
-                        gridAPI.onAccountAdded(addedSubcAccount);
-                    };
-
-                    Retail_BE_AccountService.addAccount(parentAccountId, onSubAccountAdded);
-                };
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
 
-                    $scope.scopeModel.isGridLoading = true;
-
-                    if (payload != undefined) {
-                        parentAccountId = payload.parentAccountId;
-                    }
-
-                    return gridAPI.load(buildGridPayload(payload)).then(function () {
-                        $scope.scopeModel.isGridLoading = false;
-                    });
+                    return gridAPI.loadGrid(buildGridPayload(payload));
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -72,11 +54,17 @@
             }
 
             function buildGridPayload(loadPayload) {
-                return loadPayload;
+
+                var parentAccountId = loadPayload != undefined ? loadPayload.parentAccountId : undefined;
+
+                var actionGridPayload = {
+                    EntityId: Retail_BE_ActionDefinitionService.getEntityId(Retail_BE_EntityTypeEnum.Account.value, parentAccountId)
+                };
+                return actionGridPayload;
             }
         }
     }
 
-    app.directive('retailBeSubaccountsView', SubAccountsViewDirective);
+    app.directive('retailBeActionsView', ActionsViewDirective);
 
 })(app);

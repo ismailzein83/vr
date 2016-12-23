@@ -1,12 +1,12 @@
 ﻿<div>
     <vr-row removeline>
         <vr-columns width="fullrow" simplecol>
-            <vr-button type="Add" data-onclick="scopeModel.onSubAccountAdded" standalone></vr-button>
+            <vr-button type="Add" data-onclick="scopeModel.onAccountServiceAdded" standalone></vr-button>
         </vr-columns>
     </vr-row>
     <vr-row vr-loader="scopeModel.isGridLoading">
         <vr-columns width="fullrow" simplecol>
-            <retail-be-dynamicaccount-grid on-ready="scopeModel.onGridReady"></retail-be-dynamicaccount-grid>
+            <retail-be-accountservice-grid on-ready="scopeModel.onGridReady"></retail-be-accountservice-grid>
         </vr-columns>
     </vr-row>
 </div>

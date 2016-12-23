@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SubAccountsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountService'];
+    AccountPackagesViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountPackageService'];
 
-    function SubAccountsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountService) {
+    function AccountPackagesViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountPackageService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,7 +12,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SubAccountsViewCtor($scope, ctrl);
+                var ctor = new AccountPackagesViewCtor($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -24,10 +24,10 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/SubAccountsViewTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/AccountPackagesViewTemplate.html'
         };
 
-        function SubAccountsViewCtor($scope, ctrl) {
+        function AccountPackagesViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
             var parentAccountId;
@@ -42,12 +42,12 @@
                     defineAPI();
                 };
 
-                $scope.scopeModel.onSubAccountAdded = function () {
-                    var onSubAccountAdded = function (addedSubcAccount) {
-                        gridAPI.onAccountAdded(addedSubcAccount);
+                $scope.scopeModel.onAccountPackageAdded = function () {
+                    var onAccountPackageAdded = function (addedPackage) {
+                        gridAPI.onAccountPackageAdded(addedPackage);
                     };
 
-                    Retail_BE_AccountService.addAccount(parentAccountId, onSubAccountAdded);
+                    Retail_BE_AccountPackageService.assignPackageToAccount(parentAccountId, onAccountPackageAdded);
                 };
             }
             function defineAPI() {
@@ -72,11 +72,18 @@
             }
 
             function buildGridPayload(loadPayload) {
-                return loadPayload;
+
+                var accountPackageGridPayload;
+                if (loadPayload != undefined) {
+                    accountPackageGridPayload = {
+                        AssignedToAccountId: loadPayload.parentAccountId
+                    };
+                }
+                return accountPackageGridPayload;
             }
         }
     }
 
-    app.directive('retailBeSubaccountsView', SubAccountsViewDirective);
+    app.directive('retailBeAccountpackagesView', AccountPackagesViewDirective);
 
 })(app);
