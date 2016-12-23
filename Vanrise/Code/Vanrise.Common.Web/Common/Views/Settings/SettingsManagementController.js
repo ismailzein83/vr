@@ -51,12 +51,14 @@
         var buildSettingCategory = function (currentItem) {
             var settingCategory = {
                 settingName: currentItem,
+                rank:(currentItem=='General')? 1 : undefined,
                 onGridReady: function (api) {
                     settingCategory.api = api;
                     api.loadGrid(getFilterObject(currentItem));
                 }
             };
             $scope.settingCategories.push(settingCategory);
+          
         };
 
         function getFilterObject(category) {

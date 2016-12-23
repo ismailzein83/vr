@@ -17,7 +17,7 @@
         <vr-row>
             <vr-columns width="fullrow">
                 <vr-tabs>
-                    <vr-tab ng-repeat="settingCategory in settingCategories" header="settingCategory.settingName" dontload="true">
+                    <vr-tab ng-repeat="settingCategory in settingCategories | orderBy:'rank'" header="settingCategory.settingName" dontload="true">
                         <vr-common-settings-grid on-ready="settingCategory.onGridReady"> </vr-common-settings-grid>
                     </vr-tab>
                 </vr-tabs>
