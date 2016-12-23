@@ -77,7 +77,7 @@ namespace Retail.BusinessEntity.Data.SQL
                 Name = reader["Name"] as string,
                 TypeId = GetReaderValue<Guid>(reader,"TypeID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountSettings>(reader["Settings"] as string),
-                ParentAccountId = GetReaderValue<int?>(reader, "ParentID"),
+                ParentAccountId = GetReaderValue<long?>(reader, "ParentID"),
                 ExecutedActions = reader["ExecutedActionsData"] as string != null?Vanrise.Common.Serializer.Deserialize<ExecutedActions>(reader["ExecutedActionsData"] as string) :null,
                 StatusId = GetReaderValue<Guid>(reader, "StatusID"),
                 SourceId = reader["SourceID"] as string
