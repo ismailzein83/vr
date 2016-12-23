@@ -26,7 +26,16 @@ namespace Vanrise.Invoice.Business
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
 
-            return  BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
+            var bigResult = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
+            if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
+            {
+                foreach (var accountDetail in bigResult.Data)
+                {
+                    InvoiceDetailMapper2(accountDetail, invoiceType);
+                }
+            }
+
+            return bigResult;
         }
         public Entities.Invoice GetInvoice(long invoiceId)
         {
@@ -227,6 +236,15 @@ namespace Vanrise.Invoice.Business
         private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice)
         {
 
+            var invoiceDetail = InvoiceDetailMapper1(invoice);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
+            InvoiceDetailMapper2(invoiceDetail, invoiceType);
+            return invoiceDetail;
+        }
+
+        private static InvoiceDetail InvoiceDetailMapper1(Entities.Invoice invoice)
+        {
+
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
 
@@ -256,7 +274,54 @@ namespace Vanrise.Invoice.Business
 
             return invoiceDetail;
         }
+        private static void FillNeededDetailData(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
+        {
 
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            var dataRecordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            invoiceDetail.Items = new List<InvoiceDetailObject>();
+            foreach (var field in dataRecordType.Fields)
+            {
+                var fieldValue = Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
+                if (fieldValue != null)
+                {
+                    invoiceDetail.Items.Add(new InvoiceDetailObject
+                    {
+                        FieldName = field.Name,
+                        Description = field.Type.GetDescription(fieldValue),
+                        Value = fieldValue
+                    });
+                }
+            }
+        }
+        private static InvoiceDetail InvoiceDetailMapper2(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
+        {
+            DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoiceDetail.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            RecordFilterManager recordFilterManager = new RecordFilterManager();
+            foreach (var section in invoiceType.Settings.SubSections)
+            {
+                if (recordFilterManager.IsFilterGroupMatch(section.SubSectionFilter, context))
+                {
+                    if (invoiceDetail.SectionsTitle == null)
+                        invoiceDetail.SectionsTitle = new List<string>();
+                    invoiceDetail.SectionsTitle.Add(section.SectionTitle);
+                }
+            }
+            InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType };
+            foreach (var action in invoiceType.Settings.InvoiceGridSettings.InvoiceGridActions)
+            {
+                if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(invoiceFilterConditionContext))
+                {
+                    var invoiceAction = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == action.InvoiceGridActionId);
+
+                    if (invoiceDetail.ActionTypeNames == null)
+                        invoiceDetail.ActionTypeNames = new List<InvoiceGridAction>();
+                    if (DoesUserHaveAccess(invoiceAction.RequiredPermission))
+                        invoiceDetail.ActionTypeNames.Add(action);
+                }
+            }
+            return invoiceDetail;
+        }
         #endregion
 
         #region Private Classes
@@ -269,7 +334,7 @@ namespace Vanrise.Invoice.Business
             }
             public override InvoiceDetail EntityDetailMapper(Entities.Invoice entity)
             {
-                return InvoiceManager.InvoiceDetailMapper(entity);
+                return InvoiceManager.InvoiceDetailMapper1(entity);
             }
             public override IEnumerable<Entities.Invoice> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
             {
@@ -321,50 +386,7 @@ namespace Vanrise.Invoice.Business
             return context.Invoice;
 
         }
-        private static void FillNeededDetailData(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
-        {
-            DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoiceDetail.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
-            RecordFilterManager recordFilterManager = new RecordFilterManager();
-            foreach (var section in invoiceType.Settings.SubSections)
-            {
-                if (recordFilterManager.IsFilterGroupMatch(section.SubSectionFilter, context))
-                {
-                    if (invoiceDetail.SectionsTitle == null)
-                        invoiceDetail.SectionsTitle = new List<string>();
-                    invoiceDetail.SectionsTitle.Add(section.SectionTitle);
-                }
-            }
-            InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType };
-            foreach (var action in invoiceType.Settings.InvoiceGridSettings.InvoiceGridActions)
-            {
-                if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(invoiceFilterConditionContext))
-                {
-                    var invoiceAction = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == action.InvoiceGridActionId);
-
-                    if (invoiceDetail.ActionTypeNames == null)
-                        invoiceDetail.ActionTypeNames = new List<InvoiceGridAction>();
-                    if (DoesUserHaveAccess(invoiceAction.RequiredPermission))
-                    invoiceDetail.ActionTypeNames.Add(action);
-                }
-            }
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var dataRecordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
-            invoiceDetail.Items = new List<InvoiceDetailObject>();
-            foreach (var field in dataRecordType.Fields)
-            {
-                var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
-                //Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
-                if (fieldValue != null)
-                {
-                    invoiceDetail.Items.Add(new InvoiceDetailObject
-                    {
-                        FieldName = field.Name,
-                        Description = field.Type.GetDescription(fieldValue),
-                        Value = fieldValue
-                    });
-                }
-            }
-        }
+       
 
         private static bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
         {
