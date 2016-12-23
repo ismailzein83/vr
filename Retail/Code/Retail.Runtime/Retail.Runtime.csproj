@@ -84,7 +84,7 @@
     </Reference>
     <Reference Include="RazorEngine, Version=3.8.2.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RazorEngine.3.8.2\lib\net45\RazorEngine.dll</HintPath>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\RazorEngine.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Net.Ftp">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>
@@ -572,6 +572,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Extensions.TelesSwitch\Retail.BusinessEntity.Extensions.TelesSwitch.csproj">
+      <Project>{960f1314-605c-453b-a8b0-2416b345d5f1}</Project>
+      <Name>Retail.BusinessEntity.Extensions.TelesSwitch</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.MainActionBPs.Activities\Retail.BusinessEntity.MainActionBPs.Activities.csproj">
       <Project>{48d55b41-d141-4cc8-97ca-06a6a7f993ba}</Project>

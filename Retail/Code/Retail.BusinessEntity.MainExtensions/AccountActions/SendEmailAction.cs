@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
-using Vanrise.Common;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountActions
 {
@@ -49,6 +45,4 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
 
         }
     }
-
-
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Business;
 using Vanrise.Notification.Entities;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business.Extensions
 {
@@ -19,12 +20,13 @@ namespace Retail.BusinessEntity.Business.Extensions
 
         public override bool TryConvertToBPInputArgument(IVRActionConvertToBPInputArgumentContext context)
         {
-            BalanceAlertEventPayload balanceAlertEventPayload = context.EventPayload as BalanceAlertEventPayload;
-            if (balanceAlertEventPayload == null)
-                throw new NullReferenceException("balanceAlertEventPayload");
-            Account account = new AccountManager().GetAccount(balanceAlertEventPayload.AccountId);
-            if (account == null)
-                throw new NullReferenceException("account");
+            VRBalanceAlertEventPayload balanceAlertEventPayload = context.EventPayload as VRBalanceAlertEventPayload;
+            balanceAlertEventPayload.ThrowIfNull("balanceAlertEventPayload", "");
+
+            long accountId = 0;
+            long.TryParse(balanceAlertEventPayload.EntityId, out accountId);
+            Account account = new AccountManager().GetAccount(accountId);
+            account.ThrowIfNull("account", accountId);
 
             var actionDefinition = GetActionDefinition();
 
@@ -57,10 +59,10 @@ namespace Retail.BusinessEntity.Business.Extensions
         private ActionDefinition GetActionDefinition()
         {
             var actionDefinition = new ActionDefinitionManager().GetActionDefinition(this.ActionDefinitionId);
-            if (actionDefinition == null)
-                throw new NullReferenceException(String.Format("actionDefinition '{0}'", this.ActionDefinitionId));
-            if (actionDefinition.Settings == null)
-                throw new NullReferenceException(String.Format("actionDefinition.Settings '{0}'", this.ActionDefinitionId));
+
+            actionDefinition.ThrowIfNull("actionDefinition", this.ActionDefinitionId);
+            actionDefinition.Settings.ThrowIfNull("actionDefinition.Settings", this.ActionDefinitionId);
+
             return actionDefinition;
         }
     }

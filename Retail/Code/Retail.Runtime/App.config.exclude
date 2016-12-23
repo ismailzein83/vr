@@ -65,6 +65,7 @@
     <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password= " />
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password= " />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password= " />
+    <add name="VRNotificationTransactionDBConnString" connectionString="Data Source=.;Initial Catalog=Retail_Dev_Transaction;User ID=sa; Password=p@ssw0rd"/>
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
 
@@ -83,7 +84,7 @@
     <add key="VR_AccountBalance_TransactionDBConnStringKey" value="VR_AccountBalance_TransactionDBConnString"/>
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="TOneWhS_BE_DBConnStringKey" value="RetailDBConnString"/>
-    
+    <add key="VRNotificationTransactionDBConnStringKey" value="VRNotificationTransactionDBConnString"/>
     <add key="IsRuntimeService" value="true"/>
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
