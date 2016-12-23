@@ -45,6 +45,12 @@ namespace Retail.BusinessEntity.Business
                     return true;
                 };
 
+            if (input.SortByColumnName != null && input.SortByColumnName.Contains("FieldValues"))
+            {
+                string[] fieldProperty = input.SortByColumnName.Split('.');
+                input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", fieldProperty[0], fieldProperty[1]);
+            }
+
             var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(account, input.Query.Columns));
             if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
@@ -634,6 +640,7 @@ namespace Retail.BusinessEntity.Business
         {
             var statusDefinitionManager = new StatusDefinitionManager();
             var accountTypeManager = new AccountTypeManager();
+            var accountDefinitionManager = new AccountDefinitionManager();
             var accountServices = new AccountServiceManager();
             var accountPackages = new AccountPackageManager();
 
@@ -661,6 +668,8 @@ namespace Retail.BusinessEntity.Business
                 fieldValues.Add(field.Name, accountFieldValue);
             }
 
+            List<AccountViewDefinition> accountViewDefinitions = accountDefinitionManager.GetAccountViewDefinitions();
+
             return new AccountDetail()
             {
                 Entity = account,
@@ -670,7 +679,8 @@ namespace Retail.BusinessEntity.Business
                 StatusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId),
                 NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
                 NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId),
-                FieldValues = fieldValues
+                FieldValues = fieldValues,
+                AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null
             };
         }
 

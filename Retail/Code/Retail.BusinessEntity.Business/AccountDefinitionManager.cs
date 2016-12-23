@@ -12,13 +12,9 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountDefinitionManager
     {
-        public IEnumerable<AccountViewDefinitionSettingsConfig> GetAccountViewDefinitionSettingsConfigs()
-        {
-            var extensionConfigurationManager = new ExtensionConfigurationManager();
-            return extensionConfigurationManager.GetExtensionConfigurations<AccountViewDefinitionSettingsConfig>(AccountViewDefinitionSettingsConfig.EXTENSION_TYPE);
-        }
+        #region Public Methods
 
-        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes()
+        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(long? parentAccountId)
         {
             List<DataRecordGridColumnAttribute> results = new List<DataRecordGridColumnAttribute>();
 
@@ -34,6 +30,9 @@ namespace Retail.BusinessEntity.Business
 
             foreach (AccountGridColumnDefinition itm in accountGridDefinition.ColumnDefinitions)
             {
+                if (!IsColumnAvailable(parentAccountId, itm))
+                    continue;
+
                 GenericFieldDefinitionInfo genericFieldDefinitionInfo = genericFieldDefinitionInfos.FindRecord(x => x.Name == itm.FieldName);
                 if (genericFieldDefinitionInfo == null)
                     throw new NullReferenceException("genericFieldDefinitionInfo");
@@ -60,9 +59,42 @@ namespace Retail.BusinessEntity.Business
             ConfigManager configManager = new ConfigManager();
             return configManager.GetAccountViewDefinitions();
         }
+
         public List<AccountViewDefinition> GetAccountViewDefinitionsByAccount(long accountId)
         {
             return GetAccountViewDefinitions();
         }
+
+        public IEnumerable<AccountViewDefinitionSettingsConfig> GetAccountViewDefinitionSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountViewDefinitionSettingsConfig>(AccountViewDefinitionSettingsConfig.EXTENSION_TYPE);
+        }
+
+        #endregion
+
+
+        #region Private Methods
+
+        private bool IsColumnAvailable(long? parentAccountId, AccountGridColumnDefinition gridColumnDefinition)
+        {
+            bool isRoot = parentAccountId.HasValue ? false : true;
+
+            if(isRoot)
+                return gridColumnDefinition.IsAvailableInRoot;
+
+            if (!gridColumnDefinition.IsAvailableInSubAccounts)
+                return false;
+
+            if (gridColumnDefinition.SubAccountsAvailabilityCondition == null)
+                return true;
+
+            AccountConditionEvaluationContext context = new AccountConditionEvaluationContext();
+            context.Account = new AccountManager().GetAccount(parentAccountId.Value);
+
+            return gridColumnDefinition.SubAccountsAvailabilityCondition.Evaluate(context);
+        }
+
+        #endregion
     }
 }

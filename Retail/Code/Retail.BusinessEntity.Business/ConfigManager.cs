@@ -34,22 +34,6 @@ namespace Retail.BusinessEntity.Business
             return accountViewDefinitions;
         }
 
-        public List<string> GetRuntimeEditors()
-        {
-            List<AccountViewDefinition> accountViewDefinitions = GetAccountViewDefinitions();
-            List<string> runtimeEditors = new List<string>();
-
-            foreach(var itm in accountViewDefinitions)
-            {
-                if(itm.Settings == null)
-                    continue;
-
-                runtimeEditors.Add(itm.Settings.RuntimeEditor);
-            }
-
-            return runtimeEditors;
-        }
-
         #endregion
 
         #region private methods
