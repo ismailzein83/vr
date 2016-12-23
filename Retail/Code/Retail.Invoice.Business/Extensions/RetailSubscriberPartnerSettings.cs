@@ -116,7 +116,7 @@ namespace Retail.Invoice.Business
         public override string GetPartnerName(IPartnerNameManagerContext context)
         {
             AccountManager accountManager = new AccountManager();
-            return accountManager.GetAccountName(Convert.ToInt32(context.PartnerId));
+            return accountManager.GetAccountName(Convert.ToInt64(context.PartnerId));
         }
 
         private void AddRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, RDLCParameter key, string value, bool isVisible)
