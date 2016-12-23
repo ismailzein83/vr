@@ -19,7 +19,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
         static bool Routing_TOne_Testing = ConfigurationManager.AppSettings["Routing_TOne_Testing"] == "true";
-
+        static string Routing_TOneV1_FileGroup = ConfigurationManager.AppSettings["Routing_TOneV1_FileGroup"];
         public int ParentWFRuntimeProcessId { get; set; }
 
         public long ParentBPInstanceId { get; set; }
@@ -223,7 +223,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         {
             StringBuilder query = new StringBuilder();
             if (!Routing_TOne_Testing)
-                query.AppendLine(query_CreatingIndexes);
+            {
+                CreateIndex(string.Format(query_CreateZoneRateIndexes, Routing_TOneV1_FileGroup), trackStep, "Zone Rate");
+                CreateIndex(query_CreateCodeMatchIndexes, trackStep, "Code Match");
+                CreateIndex(string.Format(query_CreateRouteIndexes, Routing_TOneV1_FileGroup), trackStep, "Route");
+                CreateIndex(string.Format(query_CreateRouteOptionIndexes, Routing_TOneV1_FileGroup), trackStep, "Route Option");
+            }
 
             query.AppendLine(query_DropSupplierZoneDetailsTable);
             query.AppendLine(query_DropCodeSaleZoneTable);
@@ -236,6 +241,15 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine("EXEC sp_rename 'ZoneRates_Temp','ZoneRates';");
             query.AppendLine("EXEC sp_rename 'CodeMatch_Temp','CodeMatch';");
             ExecuteNonQueryText(query.ToString(), null);
+        }
+
+
+        void CreateIndex(string query, Action<string> trackStep, string obejctName)
+        {
+            DateTime startDate = DateTime.Now;
+            ExecuteNonQueryText(query, null);
+            DateTime endDate = DateTime.Now;
+            trackStep(string.Format("Building Indexes for {0} table took {1} minutes", obejctName, (endDate - startDate).TotalMinutes));
         }
 
         #region Queries
@@ -251,24 +265,21 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         const string query_DropCodeMatchTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch' AND TABLE_SCHEMA = 'dbo')
                                                       drop table dbo.CodeMatch;";
 
-        const string query_CreatingIndexes = @"CREATE NONCLUSTERED INDEX [IX_ZoneRate_Customer] ON [dbo].[ZoneRates_Temp]
-                                                      (
-	                                                      [CustomerID] ASC
-                                                      );
-                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_ServicesFlag] ON [dbo].[ZoneRates_Temp]
-                                                      (
-	                                                      [ServicesFlag] ASC
-                                                      );
-                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_Supplier] ON [dbo].[ZoneRates_Temp]
-                                                      (
-	                                                      [SupplierID] ASC
-                                                      );
-                                                      CREATE NONCLUSTERED INDEX [IX_ZoneRate_Zone] ON [dbo].[ZoneRates_Temp]
-                                                      (
-	                                                      [ZoneID] ASC
-                                                      );
+        const string query_CreateZoneRateIndexes =  @"  CREATE NONCLUSTERED INDEX [IX_ZoneRates_ServicesFlag] ON [dbo].[ZoneRates_Temp]
+                                                        (
+                                                            [ServicesFlag] ASC
+                                                        )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];
 
-                                                      CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Code] ON [dbo].[CodeMatch_Temp] 
+                                                        CREATE NONCLUSTERED INDEX [IX_ZoneRates_SupplierIsBlock] ON [dbo].[ZoneRates_Temp]
+                                                        (	
+                                                            [SupplierID] ASC, [IsBlock] ASC, [ZoneID] ASC
+                                                        )
+                                                        INCLUDE 
+                                                        ( 
+                                                            [CustomerID],[ServicesFlag],[ProfileId],[ActiveRate],[IsTOD]
+                                                        )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];";
+
+        const string query_CreateCodeMatchIndexes=@"  CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Code] ON [dbo].[CodeMatch_Temp] 
                                                       (
 	                                                      [Code] ASC
                                                       );
@@ -280,6 +291,45 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                       (
 	                                                      [SupplierZoneID] ASC
                                                       );";
+
+        const string query_CreateRouteIndexes = @"  CREATE CLUSTERED INDEX [PK_TempRouteID] ON [dbo].[Route_Temp] 
+			                                        (
+				                                        [RouteID] ASC
+			                                        )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];
+
+			                                        CREATE NONCLUSTERED INDEX [IX_Route_Zone] ON [dbo].[Route_Temp] 
+			                                        (
+				                                        [OurZoneID] ASC
+			                                        )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];
+
+			                                        CREATE NONCLUSTERED INDEX [IX_Route_Updated] ON [dbo].[Route_Temp] 
+			                                        (
+				                                        [Updated] DESC
+			                                        )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];
+
+			                                        CREATE NONCLUSTERED INDEX [IX_Route_Customer] ON [dbo].[Route_Temp] 
+			                                        (
+				                                        [CustomerID] ASC
+			                                        )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];
+
+			                                        CREATE NONCLUSTERED INDEX [IX_Route_Code] ON [dbo].[Route_Temp] 
+			                                        (
+				                                        [Code] ASC
+			                                        )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];";
+
+        const string query_CreateRouteOptionIndexes = @"CREATE NONCLUSTERED INDEX [IDX_RouteOption_Updated] ON [dbo].[RouteOption_Temp] 
+			                                            (
+				                                            [Updated] DESC
+			                                            )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];
+
+			                                            CREATE NONCLUSTERED INDEX [IDX_RouteOption_SupplierZoneID] ON [dbo].[RouteOption_Temp]
+			                                            (
+				                                            [SupplierZoneID] ASC
+			                                            )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];
+			                                            CREATE CLUSTERED INDEX [IDX_RouteOption_RouteID] ON [dbo].[RouteOption_Temp] 
+			                                            (
+				                                            [RouteID] ASC
+			                                            )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];";
 
         #endregion
 
