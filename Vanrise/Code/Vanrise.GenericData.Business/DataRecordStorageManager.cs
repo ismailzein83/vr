@@ -55,7 +55,7 @@ namespace Vanrise.GenericData.Business
                 string[] fieldValueproperty = input.SortByColumnName.Split('.');
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldValueproperty[0], fieldValueproperty[1], fieldValueproperty[2]);
             }
-            return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler(recordType));
+            return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler() { DataRecordTypeId = dataRecordStorage.DataRecordTypeId });
         }
 
         private RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType)
@@ -144,7 +144,7 @@ namespace Vanrise.GenericData.Business
 
                 if (filter.Filters != null && filter.Filters.Count > 0)
                 {
-                    foreach(IDataRecordStorageFilter dataRecordStorageFilter in filter.Filters)
+                    foreach (IDataRecordStorageFilter dataRecordStorageFilter in filter.Filters)
                     {
                         if (!dataRecordStorageFilter.IsMatched(dataRecordStorage))
                             return false;
@@ -337,11 +337,23 @@ namespace Vanrise.GenericData.Business
 
         private class DataRecordRequestHandler : BigDataRequestHandler<DataRecordQuery, DataRecord, DataRecordDetail>
         {
-            DataRecordType RecordType;
-            public DataRecordRequestHandler(DataRecordType recordType)
+            public Guid DataRecordTypeId { get; set; }
+
+            private DataRecordType _recordType;
+
+            private DataRecordType RecordType
             {
-                RecordType = recordType;
+                get 
+                {
+                    if (_recordType == null)
+                    {
+                        var recordTypeManager = new DataRecordTypeManager();
+                        _recordType = recordTypeManager.GetDataRecordType(DataRecordTypeId);
+                    }
+                    return _recordType;
+                }
             }
+
             public override DataRecordDetail EntityDetailMapper(DataRecord entity)
             {
                 var dataRecordDetail = new DataRecordDetail() { RecordTime = entity.RecordTime, FieldValues = new Dictionary<string, DataRecordFieldValue>() };
