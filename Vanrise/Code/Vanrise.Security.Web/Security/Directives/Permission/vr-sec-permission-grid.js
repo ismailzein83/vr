@@ -58,7 +58,7 @@
                         permission.Entity.HolderType = permission.Entity.HolderType == VR_Sec_HolderTypeEnum.User.value ? VR_Sec_HolderTypeEnum.User.description : VR_Sec_HolderTypeEnum.Group.description;
                         permission.PermissionFlagsDescription = buildPermissionFlagsDescription(permission.Entity.PermissionFlags);
 
-                        permission.isInherited = !(permission.Entity.EntityType == businessEntityNode.EntType && permission.Entity.EntityId == businessEntityNode.EntityId);
+                        permission.isInherited = !(permission.Entity.EntityType == businessEntityNode.EntType && permission.Entity.EntityId.toLowerCase() == businessEntityNode.EntityId.toLowerCase());
                         permission.PermissionType = permission.isInherited ? "Inherited (" + permission.Entity.PermissionPath + ")" : "Direct";
 
                         ctrl.permissions.push(permission);
