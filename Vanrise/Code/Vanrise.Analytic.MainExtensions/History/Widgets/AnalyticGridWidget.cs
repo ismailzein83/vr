@@ -33,6 +33,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public string Title { get; set; }
         public bool IsRootDimension { get; set; }
         public string Width { get; set; }
+        public int? FixedWidth { get; set; }
     }
 
     public class AnalyticGridWidgetMeasure
@@ -41,5 +42,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
 
         public string Title { get; set; }
         public string Width { get; set; }
+        public int? FixedWidth { get; set; }
+
     }
 }

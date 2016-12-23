@@ -170,7 +170,6 @@
                             selectedIds: viewEntity.Settings.TypeId
                         }
                     }
-
                     VRUIUtilsService.callDirectiveLoad(reportTypeSelectorAPI, payLoad, loadReportTypeSelectorPromiseDeferred);
                 });
                 return loadReportTypeSelectorPromiseDeferred.promise;

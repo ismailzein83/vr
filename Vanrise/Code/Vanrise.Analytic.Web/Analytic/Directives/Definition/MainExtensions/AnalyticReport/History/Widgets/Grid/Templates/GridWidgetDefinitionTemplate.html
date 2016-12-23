@@ -14,24 +14,27 @@
 <vr-tabs>
     <vr-tab header="'Dimensions'">
         <vr-row>
-            <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="!scopeModel.rootDimensionsFromSearch" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedDimensions" onselectitem="    scopeModel.onSelectDimensionItem" ondeselectitem="    scopeModel.onDeselectDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
+            <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="!scopeModel.rootDimensionsFromSearch" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedDimensions" onselectitem="    scopeModel.onSelectDimensionItem" ondeselectitem="scopeModel.onDeselectDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
             <vr-columns width="2/3row">
                 <vr-validator validate="scopeModel.isValidDimensions()">
                     <vr-datagrid datasource="scopeModel.dimensions" enabledraggablerow="true"
-                                    on-ready="onGridReady" ondeleterow="    scopeModel.removeDimension" hidegridmenu norowhighlightonclick="'true'">
+                                 on-ready="onGridReady" ondeleterow="    scopeModel.removeDimension" hidegridmenu norowhighlightonclick="'true'">
                         <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Title'" widthfactor="8" disablesorting="true">
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                            <vr-common-gridwidthfactor-selector on-ready="dataItem.onDimensionGridWidthFactorSelectorReady" onselectionchanged="dataItem.onWidthSelectionChanged" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
+                        <vr-datagridcolumn headertext="'Width'" widthfactor="8" disablesorting="true">
+                            <vr-row removeline>
+                                <vr-common-gridwidthfactor-selector normal-col-num="8" on-ready="dataItem.onDimensionGridWidthFactorSelectorReady" onselectionchanged="dataItem.onWidthSelectionChanged" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
+                                <vr-columns width="1/3row" haschildcolumns>
+                                    <vr-textbox type="number" ng-show="dataItem.hasfixedwidth" value="dataItem.FixedWidth" decimalprecision="0" isrequired="dataItem.hasfixedwidth"></vr-textbox>
+                                </vr-columns>
+                            </vr-row>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="3" disablesorting="true">
                             <vr-switch value="dataItem.IsRootDimension"></vr-switch>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Fixed Width'" widthfactor="4" disablesorting="true" >
-                            <vr-textbox type="number" ng-show="dataItem.fixedwidth" decimalprecision="0" isrequired="dataItem.fixedwidth"></vr-textbox>
-                        </vr-datagridcolumn>
+
                     </vr-datagrid>
                 </vr-validator>
             </vr-columns>
@@ -39,18 +42,23 @@
     </vr-tab>
     <vr-tab header="'Measures'">
         <vr-row>
-            <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedMeasures" onselectitem="    scopeModel.onSelectMeasureItem" ondeselectitem="    scopeModel.onDeselectMeasureItem" hideselectedvaluessection onselectionchanged="    scopeModel.onSelectionMeasureChanged"></vr-analytic-measure-selector>
+            <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedMeasures" onselectitem="scopeModel.onSelectMeasureItem" ondeselectitem="scopeModel.onDeselectMeasureItem" hideselectedvaluessection onselectionchanged="    scopeModel.onSelectionMeasureChanged"></vr-analytic-measure-selector>
             <vr-columns width="2/3row">
                 <vr-validator validate="scopeModel.isValidMeasures()">
                     <vr-datagrid datasource="scopeModel.measures" enabledraggablerow="true"
-                                    on-ready="onGridReady" ondeleterow="    scopeModel.removeMeasure" hidegridmenu norowhighlightonclick="'true'">
+                                 on-ready="onGridReady" ondeleterow="    scopeModel.removeMeasure" hidegridmenu norowhighlightonclick="'true'">
                         <vr-datagridcolumn headertext="'Measure Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
+                        <vr-datagridcolumn headertext="'Title'" widthfactor="6" disablesorting="true">
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                            <vr-common-gridwidthfactor-selector  on-ready="dataItem.onMeasureGridWidthFactorSelectorReady" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
-                        </vr-datagridcolumn>              
+                        <vr-datagridcolumn headertext="'Width'" widthfactor="8" disablesorting="true">
+                            <vr-row removeline>
+                                <vr-common-gridwidthfactor-selector normal-col-num="8" on-ready="dataItem.onMeasureGridWidthFactorSelectorReady" onselectionchanged="dataItem.onWidthSelectionChanged" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
+                                <vr-columns width="1/3row" haschildcolumns>
+                                    <vr-textbox type="number" ng-show="dataItem.hasfixedwidth" value="dataItem.FixedWidth" decimalprecision="0" isrequired="dataItem.hasfixedwidth"></vr-textbox>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>
             </vr-columns>

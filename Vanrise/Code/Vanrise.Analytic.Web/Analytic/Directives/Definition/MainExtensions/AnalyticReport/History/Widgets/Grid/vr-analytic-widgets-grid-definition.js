@@ -64,7 +64,8 @@
                     var dataItem = {
                         AnalyticItemConfigId: dimension.AnalyticItemConfigId,
                         Title: dimension.Title,
-                        Name: dimension.Name,
+                        Name: dimension.Name,                        
+                        FixedWidth: null,
                         IsRootDimension: false
                     };
                     dataItem.onDimensionGridWidthFactorSelectorReady = function (api) {
@@ -76,10 +77,10 @@
                     dataItem.onWidthSelectionChanged = function () {
                         var obj = dataItem;
                         if (dataItem.dimensionGridWidthFactorAPI.getSelectedIds() == 'FixedWidth') {
-                            obj.fixedwidth = true;
+                            obj.hasfixedwidth = true;
                         }
                         else
-                            obj.fixedwidth = false;
+                            obj.hasfixedwidth = false;
                         $scope.scopeModel.dimensions[$scope.scopeModel.dimensions.indexOf(dataItem)] = obj;
 
                     };
@@ -128,6 +129,7 @@
                         Title: measure.Title,
                         Name: measure.Name,
                         SelectedGridWidth: VR_Analytic_GridWidthEnum.Normal,
+                        FixedWidth: null
                     };
                     dataItem.onMeasureGridWidthFactorSelectorReady = function (api) {
                         dataItem.measureGridWidthFactorAPI = api;
@@ -135,7 +137,16 @@
                         var setLoader = function (value) { $scope.isLoadingDirective = value };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
+                    dataItem.onWidthSelectionChanged = function () {
+                        var obj = dataItem;
+                        if (dataItem.measureGridWidthFactorAPI.getSelectedIds() == 'FixedWidth') {
+                            obj.hasfixedwidth = true;
+                        }
+                        else
+                            obj.hasfixedwidth = false;
+                        $scope.scopeModel.dimensions[$scope.scopeModel.dimensions.indexOf(dataItem)]= obj;
 
+                    };
                     $scope.scopeModel.measures.push(dataItem);
                 };
 
@@ -294,6 +305,7 @@
                                 Title: dimension.Title,
                                 IsRootDimension: dimension.IsRootDimension,
                                 Width: dimension.dimensionGridWidthFactorAPI.getSelectedIds(),
+                                FixedWidth: (dimension.hasfixedwidth == true) ? dimension.FixedWidth : null
                             });
                         }
                     }
@@ -307,6 +319,7 @@
                                 MeasureName: measure.Name,
                                 Title: measure.Title,
                                 Width: measure.measureGridWidthFactorAPI.getSelectedIds(),
+                                FixedWidth: (measure.hasfixedwidth == true) ? measure.FixedWidth: null
                             });
                         }
                     }
@@ -333,6 +346,7 @@
                     dataItem.Title = gridField.payload.Title;
                     dataItem.IsRootDimension = gridField.payload.IsRootDimension;
                     dataItemPayload.selectedIds = gridField.payload.Width;
+                    dataItem.FixedWidth = gridField.payload.FixedWidth;
                 }
                 dataItem.onDimensionGridWidthFactorSelectorReady = function (api) {
                     dataItem.dimensionGridWidthFactorAPI = api;
@@ -341,22 +355,17 @@
                 dataItem.onWidthSelectionChanged = function () {
                     var obj = dataItem;
                     if (dataItem.dimensionGridWidthFactorAPI.getSelectedIds() == 'FixedWidth') {
-                        obj.fixedwidth = true;
+                        obj.hasfixedwidth = true;
                     }
                     else
-                        obj.fixedwidth = false;
-                    //console.log(dataItem);
+                        obj.hasfixedwidth = false;
                     $scope.scopeModel.dimensions[$scope.scopeModel.dimensions.indexOf(dataItem)] = obj;
-                    //console.log($scope.scopeModel.dimensions[$scope.scopeModel.dimensions.indexOf(obj)]);
 
                 };
                 gridField.readyPromiseDeferred.promise
                     .then(function () {
                         VRUIUtilsService.callDirectiveLoad(dataItem.dimensionGridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
-                    });
-                dataItem.showFixedCol = function () {
-                    return dataItem.fixedwidth == true;
-                };
+                });
                 $scope.scopeModel.dimensions.push(dataItem);
             }
             function addMeasureGridWidthAPI(gridField) {
@@ -366,11 +375,24 @@
                     dataItem.Name = gridField.payload.MeasureName;
                     dataItem.Title = gridField.payload.Title;
                     dataItemPayload.selectedIds = gridField.payload.Width;
+                    dataItem.FixedWidth = gridField.payload.FixedWidth;
+
                 }
                 dataItem.onMeasureGridWidthFactorSelectorReady = function (api) {
                     dataItem.measureGridWidthFactorAPI = api;
                     gridField.readyPromiseDeferred.resolve();
                 };
+
+                dataItem.onWidthSelectionChanged = function () {
+                        var obj = dataItem;
+                        if (dataItem.measureGridWidthFactorAPI.getSelectedIds() == 'FixedWidth') {
+                            obj.hasfixedwidth = true;
+                        }
+                        else
+                            obj.hasfixedwidth = false;
+                            $scope.scopeModel.dimensions[$scope.scopeModel.dimensions.indexOf(dataItem)]= obj;
+
+                 };
               
                 gridField.readyPromiseDeferred.promise
                     .then(function () {
