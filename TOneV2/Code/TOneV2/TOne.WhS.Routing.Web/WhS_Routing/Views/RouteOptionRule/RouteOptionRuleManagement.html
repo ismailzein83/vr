@@ -4,10 +4,10 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilterData">
             <vr-row removeline>
                 <vr-columns width="fullrow">
-                    <vr-choices selectedindex="selectedTabIndex">
-                        <vr-choice isselected="basicSelected">Basic</vr-choice>
-                        <vr-choice isselected="advancedSelected">Advanced</vr-choice>
-                    </vr-choices>
+                    <vr-choices-filter selectedindex="selectedTabIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
                     <vr-row>
                         <vr-columns width="normal">
                             <vr-datetimepicker type="date" value="effectiveOn" label="Effective On"></vr-datetimepicker>
