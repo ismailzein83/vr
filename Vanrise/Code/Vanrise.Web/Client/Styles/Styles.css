@@ -1952,6 +1952,13 @@ vr-switch[class*="divDisabled"] .switch {
    background-color: #F0F0F0 ;
 }
 
+.tab-vertical-content {
+  display: inline-block;
+  width: calc(100% - 160px);
+  height:auto;
+  border:1px solid #DDD;
+  padding-left:15px
+}
 .vr-tabs label > span {
     text-overflow: ellipsis;
     display: inline-block;

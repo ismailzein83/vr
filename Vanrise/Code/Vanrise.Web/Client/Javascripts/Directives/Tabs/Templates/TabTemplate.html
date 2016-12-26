@@ -5,7 +5,7 @@
         </vr-validation-group>
     </vr-columns>
 </vr-row>
-<div id="{{ctrl.tabobject.guid}}" ng-if="ctrl.tabobject.isLoaded &&  ctrl.vertical" ng-show="ctrl.tabobject.isSelected" ng-style="ctrl.getMinHeight()" tabcontent="true" style="display: inline-block;width: calc(100% - 160px);height:auto;border:1px solid #DDD;">
+<div id="{{ctrl.tabobject.guid}}" ng-if="ctrl.tabobject.isLoaded &&  ctrl.vertical" ng-show="ctrl.tabobject.isSelected" ng-style="ctrl.getMinHeight()" tabcontent="true" class="tab-vertical-content" >
     <div tabs="true">
         <vr-validation-group validationcontext="ctrl.tabobject.validationContext">
             <div ng-transclude></div>
