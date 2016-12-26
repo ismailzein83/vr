@@ -10,6 +10,8 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using System.Collections.Concurrent;
 using System.Reflection;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 namespace Vanrise.GenericData.Business
 {
     public class GenericBusinessEntityManager : BaseBEManager, IBusinessEntityManager, IGenericBusinessEntityManager
@@ -184,9 +186,67 @@ namespace Vanrise.GenericData.Business
 
             return gbeDefinitionSettings.DataRecordTypeId;
         }
+
+        public bool DoesUserHaveViewAccess(Guid genericBEDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveViewAccess(userId, genericBEDefinitionId);
+        }
+        public bool DoesUserHaveViewAccess(int userId, Guid genericBEDefinitionId)
+        {
+            var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
+            if (beDefinition != null && beDefinition.Settings != null)
+            {
+                var settings = beDefinition.Settings as GenericBEDefinitionSettings;
+                if (settings != null && settings.Security != null && settings.Security.ViewRequiredPermission != null)
+                    return DoesUserHaveAccess(userId, settings.Security.ViewRequiredPermission);
+            }
+            return true;
+        }
+        public bool DoesUserHaveAddAccess(Guid genericBEDefinitionId)
+        {
+            var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
+
+            if (beDefinition != null && beDefinition.Settings != null)
+            {
+                var settings = beDefinition.Settings as GenericBEDefinitionSettings;
+                if (settings != null && settings.Security != null && settings.Security.AddRequiredPermission != null)
+                    return DoesUserHaveAccess(settings.Security.AddRequiredPermission);
+            }
+            return true;
+        }
+        public bool DoesUserHaveEditAccess(Guid genericBEDefinitionId)
+        {
+            var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
+            if (beDefinition != null && beDefinition.Settings != null)
+            {
+                var settings = beDefinition.Settings as GenericBEDefinitionSettings;
+                if (settings != null && settings.Security != null && settings.Security.EditRequiredPermission != null)
+                    return DoesUserHaveAccess(settings.Security.EditRequiredPermission);
+            }
+            return true;
+        }
         #endregion
         
         #region Private Methods
+
+        private bool DoesUserHaveAccess(int userId, RequiredPermissionSettings requiredPermission)
+        {
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
+        }
+        private bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
+        }
         private BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId)
         {
              var businessEntityDefinition = _businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);

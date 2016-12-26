@@ -14,7 +14,8 @@
             UpdateBusinessEntityDefinition: UpdateBusinessEntityDefinition,
             HasUpdateBusinessEntityDefinition: HasUpdateBusinessEntityDefinition,
             GetGenericBEDefinitionView: GetGenericBEDefinitionView,
-            GetBEDataRecordTypeIdIfGeneric: GetBEDataRecordTypeIdIfGeneric
+            GetBEDataRecordTypeIdIfGeneric: GetBEDataRecordTypeIdIfGeneric,
+            GetBEDefinitionSettingConfigs: GetBEDefinitionSettingConfigs
         };
 
         function GetBusinessEntityDefinition(businessEntityDefinitionId) {

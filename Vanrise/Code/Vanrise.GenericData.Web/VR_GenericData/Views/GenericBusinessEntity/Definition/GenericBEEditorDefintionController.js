@@ -12,8 +12,7 @@
         var businessEntityDefinitionId;
 
         var settingDirectiveAPI;
-        var settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        var settingReadyPromiseDeferred;
         var menuItems;
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -32,15 +31,18 @@
         }
 
         function defineScope() {
-            $scope.scopeModal = {};
+            $scope.scopeModel = {};
 
-            $scope.scopeModal.onSettingDirectiveReady = function (api) {
+            $scope.scopeModel.onSettingDirectiveReady = function (api) {
                 settingDirectiveAPI = api;
-                settingReadyPromiseDeferred.resolve();
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, settingDirectiveAPI, undefined, setLoader, settingReadyPromiseDeferred);
             };
-
+            $scope.scopeModel.bEDefinitionSettingConfigs = [];
            
-            $scope.scopeModal.SaveGenericBEEditor = function () {
+            $scope.scopeModel.SaveGenericBEEditor = function () {
                 if (isEditMode) {
                     return update();
                 }
@@ -48,7 +50,7 @@
                     return insert();
                 }
             };
-            $scope.scopeModal.hasSaveGenericBEEditor = function () {
+            $scope.scopeModel.hasSaveGenericBEEditor = function () {
                 if (isEditMode) {
                     return VR_GenericData_BusinessEntityDefinitionAPIService.HasUpdateBusinessEntityDefinition();
                 }
@@ -56,43 +58,41 @@
                     return VR_GenericData_BusinessEntityDefinitionAPIService.HasAddBusinessEntityDefinition();
                 }
             };
-            $scope.scopeModal.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
 
-            $scope.scopeModal.onTreeReady = function (api) {
+            $scope.scopeModel.onTreeReady = function (api) {
                 treeAPI = api;
                 treeReadyDeferred.resolve();
             };
 
-            $scope.scopeModal.validateMenuLocation = function () {
-                return ($scope.scopeModal.selectedMenuItem != undefined) ? null : 'No menu location selected';
+            $scope.scopeModel.validateMenuLocation = function () {
+                return ($scope.scopeModel.selectedMenuItem != undefined) ? null : 'No menu location selected';
             };
         }
 
         function load() {
-            $scope.scopeModal.isLoading = true;
-
-            if (isEditMode) {
-                getEntities().then(function () {
+            $scope.scopeModel.isLoading = true;
+            getBEDefinitionSettingConfigs().then(function () {
+                if (isEditMode) {
+                    getEntities().then(function () {
                         loadAllControls();
-                }).catch(function () {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.scopeModal.isLoading = false;
-                });
-            }
-            else {
-                loadAllControls();
-            }
+                    }).catch(function () {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.scopeModel.isLoading = false;
+                    });
+                }
+                else {
+                    loadAllControls();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
+            })
+            
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, setTitle, loadTree]).then(function () {
-                }).finally(function () {
-                    $scope.scopeModal.isLoading = false;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
-
 
                 function setTitle() {
                     if (isEditMode && businessEntityDefinitionEntity != undefined)
@@ -100,27 +100,29 @@
                     else
                         $scope.title = UtilsService.buildTitleForAddEditor('Generic BE Editor');
                 }
-                function loadStaticData()
-                {
-                    if(businessEntityDefinitionEntity != undefined )
-                    {
-                        $scope.scopeModal.businessEntityName = businessEntityDefinitionEntity.Name;
-                        $scope.scopeModal.businessEntityTitle = businessEntityDefinitionEntity.Title;
+                function loadStaticData() {
+                    if (businessEntityDefinitionEntity != undefined) {
+                        $scope.scopeModel.businessEntityName = businessEntityDefinitionEntity.Name;
+                        $scope.scopeModel.businessEntityTitle = businessEntityDefinitionEntity.Title;
                     }
                 }
                 function loadSettingDirectiveSection() {
-                    var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                    settingReadyPromiseDeferred.promise
-                        .then(function () {
-                            var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) ?
-                            {
-                                businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
-                            } : undefined;
-                            VRUIUtilsService.callDirectiveLoad(settingDirectiveAPI, directivePayload, loadSettingDirectivePromiseDeferred);
-                        });
+                    if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) {
+                        settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    return loadSettingDirectivePromiseDeferred.promise;
-                   
+                        $scope.scopeModel.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModel.bEDefinitionSettingConfigs, businessEntityDefinitionEntity.Settings.ConfigId, "ExtensionConfigurationId");
+
+                        var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        settingReadyPromiseDeferred.promise
+                            .then(function () {
+                                var directivePayload = {
+                                    businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
+                                };
+                                VRUIUtilsService.callDirectiveLoad(settingDirectiveAPI, directivePayload, loadSettingDirectivePromiseDeferred);
+                            });
+
+                        return loadSettingDirectivePromiseDeferred.promise;
+                    }
                 }
 
                 function loadTree() {
@@ -129,8 +131,8 @@
                     loadMenuItems().then(function () {
                         treeReadyDeferred.promise.then(function () {
                             if (viewEntity != undefined) {
-                               
-                                $scope.scopeModal.selectedMenuItem = treeAPI.setSelectedNode(menuItems, viewEntity.ModuleId, "Id", "Childs");
+
+                                $scope.scopeModel.selectedMenuItem = treeAPI.setSelectedNode(menuItems, viewEntity.ModuleId, "Id", "Childs");
                             }
                             treeAPI.refreshTree(menuItems);
                             treeLoadDeferred.resolve();
@@ -142,7 +144,7 @@
                     return treeLoadDeferred.promise;
 
                     function loadMenuItems() {
-                        return VR_Sec_MenuAPIService.GetAllMenuItems(false,true).then(function (response) {
+                        return VR_Sec_MenuAPIService.GetAllMenuItems(false, true).then(function (response) {
                             if (response) {
                                 menuItems = [];
                                 for (var i = 0; i < response.length; i++) {
@@ -152,6 +154,14 @@
                         });
                     }
                 }
+
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, setTitle,loadTree]).then(function () {
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+
             }
 
             function getEntities() {
@@ -170,11 +180,19 @@
             }
             
         }
+
+        function getBEDefinitionSettingConfigs() {
+          return  VR_GenericData_BusinessEntityDefinitionAPIService.GetBEDefinitionSettingConfigs().then(function (response) {
+                if (response) {
+                    $scope.scopeModel.bEDefinitionSettingConfigs = response;
+                }
+            });
+        }
         function buildGenericBEDefinitionFromScope() {
             var bEdefinition = {
                 BusinessEntityDefinitionId :businessEntityDefinitionId,
-                Name: $scope.scopeModal.businessEntityName,
-                Title: $scope.scopeModal.businessEntityTitle,
+                Name: $scope.scopeModel.businessEntityName,
+                Title: $scope.scopeModel.businessEntityTitle,
                 Settings: settingDirectiveAPI.getData()
             };
             return bEdefinition;
@@ -183,9 +201,9 @@
         function buildViewObjectFromScope(businessEntityDefinitionId) {
             return {
                 ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
-                Name: $scope.scopeModal.businessEntityName,
-                Title: $scope.scopeModal.businessEntityTitle,
-                ModuleId: $scope.scopeModal.selectedMenuItem.Id,
+                Name: $scope.scopeModel.businessEntityName,
+                Title: $scope.scopeModel.businessEntityTitle,
+                ModuleId: $scope.scopeModel.selectedMenuItem.Id,
                 Settings: {
                     $type: 'Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities',
                     BusinessEntityDefinitionId: businessEntityDefinitionId
@@ -194,9 +212,8 @@
             };
         }
 
-
         function insert() {
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             var serverResponse;
             var genericBEDefinition = buildGenericBEDefinitionFromScope();
             var promises = [];
@@ -223,15 +240,15 @@
 
             return UtilsService.waitMultiplePromises(promises).then(function () {
                 if (VRNotificationService.notifyOnItemAdded('Business Entity Definition', serverResponse, 'Name')) {
-                    if ($scope.onGenericBEDefinitionAdded != undefined) {
-                        $scope.onGenericBEDefinitionAdded(serverResponse.InsertedObject);
+                    if ($scope.onBusinessEntityDefinitionAdded != undefined) {
+                        $scope.onBusinessEntityDefinitionAdded(serverResponse.InsertedObject);
                     }
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.scopeModal.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
             function insertGenericBEDefinition() {
                 return VR_GenericData_BusinessEntityDefinitionAPIService.AddBusinessEntityDefinition(genericBEDefinition).then(function (response) {
@@ -245,7 +262,7 @@
         }
 
         function update() {
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             var genericBEDefinitionResponse;
             var genericBEDefinition = buildGenericBEDefinitionFromScope();
             return UtilsService.waitMultipleAsyncOperations([updateGenericBEDefinition, updateView]).then(function () {

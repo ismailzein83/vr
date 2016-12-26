@@ -9,6 +9,6 @@ namespace Vanrise.GenericData.Entities
     public interface IGenericBusinessEntityManager : IBusinessManager
     {
         Guid GetDataRecordTypeId(Guid businessEntityDefinitionId);
-
+        bool DoesUserHaveViewAccess(int userId, Guid businessEntityDefinitionId);
     }
 }

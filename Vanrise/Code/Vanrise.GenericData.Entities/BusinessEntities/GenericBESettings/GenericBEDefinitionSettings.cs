@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Entities
             get { return new Guid("6F3FBD7B-275A-4D92-8E06-AD7F7B04C7D6"); }
         }
         public override string GroupSelectorUIControl { get; set; }
-        public override string DefinitionEditor { get { return "/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html"; } }
+        public override string DefinitionEditor { get { return "vr-genericdata-genericbusinessentity-editor"; } }
         public override string SelectorUIControl
         {
             get { return "vr-genericdata-genericbusinessentity-selector"; }

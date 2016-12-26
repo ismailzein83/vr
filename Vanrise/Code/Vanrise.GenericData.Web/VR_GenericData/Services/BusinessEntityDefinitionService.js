@@ -6,10 +6,11 @@
 
     function BusinessEntityDefinitionService(VRModalService, VRNotificationService) {
         return {
-            editBusinessEntityDefinition: editBusinessEntityDefinition
+            editBusinessEntityDefinition: editBusinessEntityDefinition,
+            addBusinessEntityDefinition: addBusinessEntityDefinition,
         };
 
-        function editBusinessEntityDefinition(businessEntityDefinitionId, onBusinessEntityDefinitionUpdated, editor) {
+        function editBusinessEntityDefinition(businessEntityDefinitionId, onBusinessEntityDefinitionUpdated) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
@@ -17,10 +18,21 @@
             };
 
             var parameters = {
-                businessEntityDefinitionId: businessEntityDefinitionId
+                businessEntityDefinitionId: businessEntityDefinitionId,
             };
 
-            VRModalService.showModal(editor, parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html', parameters, modalSettings);
+        }
+        function addBusinessEntityDefinition(onBusinessEntityDefinitionAdded) {
+            var modalParameters;
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onBusinessEntityDefinitionAdded = onBusinessEntityDefinitionAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html', modalParameters, modalSettings);
         }
 
     }

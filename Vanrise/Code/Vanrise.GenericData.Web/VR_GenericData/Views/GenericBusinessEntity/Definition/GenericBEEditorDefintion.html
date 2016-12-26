@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEEditorDefintionController" vr-loader="scopeModal.isLoading" width="'60%'">
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEEditorDefintionController" vr-loader="scopeModel.isLoading" width="'60%'">
     <vr-modalbody maxheight="'600px'">
         <vr-form validationcontext="genericBEEditorGroup">
             <vr-tabs>
@@ -6,23 +6,31 @@
 
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-section title="Page Setting">
                                 <vr-row removeline>
-                                    <vr-textbox value="scopeModal.businessEntityName" isrequired="true" label="Business Entity Name" customvalidate="scopeModal.validate()"></vr-textbox>
+                                    <vr-columns width="fullrow">
+                                        <vr-textbox value="scopeModel.businessEntityName" isrequired="true" label="Name" customvalidate="scopeModel.validate()"></vr-textbox>
+                                    </vr-columns>
                                 </vr-row>
                                 <vr-row>
-                                    <vr-textbox value="scopeModal.businessEntityTitle" isrequired="true" label="Business Entity Title" customvalidate="scopeModal.validate()"></vr-textbox>
+                                    <vr-columns width="fullrow">
+                                        <vr-textbox value="scopeModel.businessEntityTitle" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>
+                                    </vr-columns>
                                 </vr-row>
-                            </vr-section>
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-select datasource="scopeModel.bEDefinitionSettingConfigs" selectedvalues="scopeModel.selectedFieldTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
+                                    </vr-select>
+                                </vr-columns>
+                            </vr-row>
                         </vr-columns>
                         <vr-columns width="2/3row">
                             <vr-section title="Menu Location">
-                                <vr-validator validate="scopeModal.validateMenuLocation()">
-                                    <vr-treeview on-ready="scopeModal.onTreeReady"
+                                <vr-validator validate="scopeModel.validateMenuLocation()">
+                                    <vr-treeview on-ready="scopeModel.onTreeReady"
                                                  datavaluefield="Id"
                                                  datatextfield="Name"
                                                  datachildrenfield="Childs"
-                                                 selecteditem="scopeModal.selectedMenuItem"
+                                                 selecteditem="scopeModel.selectedMenuItem"
                                                  wholerow>
                                     </vr-treeview>
                                 </vr-validator>
@@ -30,14 +38,15 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-genericdata-genericbusinessentity-editor on-ready="scopeModal.onSettingDirectiveReady"></vr-genericdata-genericbusinessentity-editor></vr-tabs>
+                <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" ng-if="scopeModel.selectedFieldTypeConfig != undefined" directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onSettingDirectiveReady"></vr-directivewrapper>
+                </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" validationcontext="genericBEEditorGroup" haspermission="scopeModal.hasSaveGenericBEEditor" data-onclick="scopeModal.SaveGenericBEEditor"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+                <vr-button type="Save" validationcontext="genericBEEditorGroup" haspermission="scopeModel.hasSaveGenericBEEditor" data-onclick="scopeModel.SaveGenericBEEditor"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
 

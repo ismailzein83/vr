@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.Entities
         public override bool DoesUserHaveAccess(Security.Entities.IViewUserAccessContext context)
         {
 
-            return BusinessManagerFactory.GetManager<IBusinessEntityDefinitionManager>().DoesUserHaveViewAccess(context.UserId, this.BusinessEntityDefinitionId);
+            return BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>().DoesUserHaveViewAccess(context.UserId, this.BusinessEntityDefinitionId);
         }
     }
 }

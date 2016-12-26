@@ -152,7 +152,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
                     gridAPI.itemUpdated(businessEntityDefinition);
                 };
 
-                VR_GenericData_BusinessEntityDefinitionService.editBusinessEntityDefinition(dataItem.Entity.BusinessEntityDefinitionId, onBusinessEntityDefinitionUpdated, dataItem.Entity.Settings.DefinitionEditor);
+                VR_GenericData_BusinessEntityDefinitionService.editBusinessEntityDefinition(dataItem.Entity.BusinessEntityDefinitionId, onBusinessEntityDefinitionUpdated);
             }
         }
 
