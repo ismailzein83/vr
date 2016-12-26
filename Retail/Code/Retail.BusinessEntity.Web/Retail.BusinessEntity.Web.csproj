@@ -221,9 +221,11 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\ServicesViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\SubAccountsViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\AccountInfoViewSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountbedefinition-vieweditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountbedefinitions-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountviewdefinitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountBEDefinitionEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountBEDefinitionViewEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\retail-be-accountidentification-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\Templates\AccountIdentificationGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\retail-be-accountpackage-grid.js" />
