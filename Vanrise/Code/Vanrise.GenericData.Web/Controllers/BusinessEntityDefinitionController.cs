@@ -63,5 +63,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetBEDataRecordTypeIdIfGeneric(businessEntityDefinitionId);
         }
+
+        [HttpGet]
+        [Route("GetBEDefinitionSettingConfigs")]
+        public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
+        {
+            return _manager.GetBEDefinitionSettingConfigs();
+        }
     }
 }

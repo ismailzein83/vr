@@ -10,6 +10,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
 using Vanrise.Security.Business;
+using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.Business
 {
@@ -159,25 +160,42 @@ namespace Vanrise.GenericData.Business
         public bool DoesUserHaveViewAccess(int userId, Guid genericBEDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
-            if (beDefinition != null && beDefinition.Settings != null && beDefinition.Settings.Security != null && beDefinition.Settings.Security.ViewRequiredPermission != null)
-                return DoesUserHaveAccess(userId, beDefinition.Settings.Security.ViewRequiredPermission);
+            if (beDefinition != null && beDefinition.Settings != null)
+            {
+                var settings =  beDefinition.Settings as GenericBEDefinitionSettings;
+                if(settings != null && settings.Security != null && settings.Security.ViewRequiredPermission != null)
+                     return DoesUserHaveAccess(userId, settings.Security.ViewRequiredPermission);
+            }
             return true;
         }
         public bool DoesUserHaveAddAccess(Guid genericBEDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
-            if (beDefinition != null && beDefinition.Settings != null && beDefinition.Settings.Security != null && beDefinition.Settings.Security.AddRequiredPermission != null)
-                return DoesUserHaveAccess(beDefinition.Settings.Security.AddRequiredPermission);
+
+            if (beDefinition != null && beDefinition.Settings != null)
+            {
+                var settings = beDefinition.Settings as GenericBEDefinitionSettings;
+                if (settings != null && settings.Security != null && settings.Security.AddRequiredPermission != null)
+                    return DoesUserHaveAccess(settings.Security.AddRequiredPermission);
+            }
             return true;
         }
         public bool DoesUserHaveEditAccess(Guid genericBEDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
-            if (beDefinition != null && beDefinition.Settings != null && beDefinition.Settings.Security != null && beDefinition.Settings.Security.EditRequiredPermission != null)
-                return DoesUserHaveAccess(beDefinition.Settings.Security.EditRequiredPermission);
+            if (beDefinition != null && beDefinition.Settings != null)
+            {
+                var settings = beDefinition.Settings as GenericBEDefinitionSettings;
+                if (settings != null && settings.Security != null && settings.Security.EditRequiredPermission != null)
+                    return DoesUserHaveAccess(settings.Security.EditRequiredPermission);
+            }
             return true;
         }
-
+        public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<BusinessEntityDefinitionSettingsConfig>(BusinessEntityDefinitionSettingsConfig.EXTENSION_TYPE);
+        }
         #endregion
 
         #region Private Methods

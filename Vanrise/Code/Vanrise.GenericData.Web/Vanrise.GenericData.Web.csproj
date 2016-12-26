@@ -200,6 +200,7 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-editor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-selector.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinitionsetting-selective.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-recordtype-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\Templates\DataRecordFieldChoiceGrid.html" />
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\vr-genericdata-datarecordfieldchoice-grid.js" />

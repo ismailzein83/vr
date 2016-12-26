@@ -55,6 +55,9 @@
                 businessEntityDefinitionId: businessEntityDefinitionId
             });
         }
+        function GetBEDefinitionSettingConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetBEDefinitionSettingConfigs'));
+        }
     }
 
     appControllers.service('VR_GenericData_BusinessEntityDefinitionAPIService', BusinessEntityDefinitionAPIService);
