@@ -159,13 +159,13 @@ namespace NP.IVSwitch.Business
                 RouteInfo routeInfo;
                 if (routeInfoDic.TryGetValue(routeItem.Entity.RouteId, out routeInfo))
                 {
-                    if (routeInfo.Percentage == routeItem.Entity.Percentage) return updateOperationOutput;
-
-                    routeInfo.Percentage = routeItem.Entity.Percentage;
-                    routesExtendedSettings.RouteInfo = routeInfoList;
-                    carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId,
-                        routesExtendedSettings);
-
+                    if (routeInfo.Percentage != routeItem.Entity.Percentage)
+                    {
+                        routeInfo.Percentage = routeItem.Entity.Percentage;
+                        routesExtendedSettings.RouteInfo = routeInfoList;
+                        carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId,
+                            routesExtendedSettings);
+                    }
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = RouteDetailMapper(GetRoute(routeItem.Entity.RouteId));
