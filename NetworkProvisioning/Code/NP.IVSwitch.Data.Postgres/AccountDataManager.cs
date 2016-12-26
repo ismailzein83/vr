@@ -71,12 +71,6 @@ namespace NP.IVSwitch.Data.Postgres
         }
         public bool Insert(Account account, out int insertedId)
         {
-            object accountId;
-            int currentState, typeId;
-
-            MapEnum(account, out currentState, out  typeId);
-
-
             String cmdText = @"INSERT INTO accounts(type_id,first_name,last_name,company_name,contact_display,email,web_site,cycle_id,tax_group_id,
 	                               pay_terms,state_id,credit_limit,threshold_credit,balance,log_alias,address,peer_account_id,channels_limit)
 	                             SELECT @type_id,@first_name,@last_name, @company_name,@contact_display, @email,@web_site,@cycle_id,@tax_group_id,
@@ -84,35 +78,36 @@ namespace NP.IVSwitch.Data.Postgres
 	                             WHERE (NOT EXISTS(SELECT 1 FROM accounts WHERE  type_id = @type_id and email = @email))
 	                             returning  account_id;";
 
-            accountId = ExecuteScalarText(cmdText, (cmd) =>
+            var accountId = ExecuteScalarText(cmdText, cmd =>
             {
-                cmd.Parameters.AddWithValue("@type_id", typeId);
+                cmd.Parameters.AddWithValue("@type_id", (int)account.TypeId);
                 cmd.Parameters.AddWithValue("@first_name", account.FirstName);
                 cmd.Parameters.AddWithValue("@last_name", account.LastName);
                 cmd.Parameters.AddWithValue("@company_name", account.CompanyName);
                 cmd.Parameters.AddWithValue("@contact_display", account.ContactDisplay);
                 cmd.Parameters.AddWithValue("@email", account.Email);
-                //   cmd.Parameters.AddWithValue("@web_site", account.WebSite);
-                var prmWebSite = new Npgsql.NpgsqlParameter("@web_site", DbType.String);
-                prmWebSite.Value = CheckIfNull(account.WebSite);
+                var prmWebSite = new Npgsql.NpgsqlParameter("@web_site", DbType.String)
+                {
+                    Value = CheckIfNull(account.WebSite)
+                };
                 cmd.Parameters.Add(prmWebSite);
                 cmd.Parameters.AddWithValue("@cycle_id", account.BillingCycle);
                 cmd.Parameters.AddWithValue("@tax_group_id", account.TaxGroupId);
                 cmd.Parameters.AddWithValue("@pay_terms", account.PaymentTerms);
-                cmd.Parameters.AddWithValue("@state_id", currentState);
-                cmd.Parameters.AddWithValue("@credit_limit", account.CreditLimit);
+                cmd.Parameters.AddWithValue("@state_id", (int)account.CurrentState);
+                cmd.Parameters.AddWithValue("@credit_limit", -1);
                 cmd.Parameters.AddWithValue("@threshold_credit", account.CreditThreshold);
                 cmd.Parameters.AddWithValue("@balance", account.CurrentBalance);
                 cmd.Parameters.AddWithValue("@log_alias", account.LogAlias);
-                // cmd.Parameters.AddWithValue("@address", account.Address);
-                var prmAddress = new Npgsql.NpgsqlParameter("@address", DbType.String);
-                prmAddress.Value = CheckIfNull(account.Address);
+                var prmAddress = new Npgsql.NpgsqlParameter("@address", DbType.String)
+                {
+                    Value = CheckIfNull(account.Address)
+                };
                 cmd.Parameters.Add(prmAddress);
                 cmd.Parameters.AddWithValue("@peer_account_id", account.PeerVendorId);
                 cmd.Parameters.AddWithValue("@channels_limit", account.ChannelsLimit);
-
             }
-            );
+                );
 
             insertedId = -1;
             if (accountId != null)
@@ -120,9 +115,7 @@ namespace NP.IVSwitch.Data.Postgres
                 insertedId = Convert.ToInt32(accountId);
                 return true;
             }
-            else
-                return false;
-
+            return false;
         }
 
         private void MapEnum(Account account, out int currentState, out int typeId)

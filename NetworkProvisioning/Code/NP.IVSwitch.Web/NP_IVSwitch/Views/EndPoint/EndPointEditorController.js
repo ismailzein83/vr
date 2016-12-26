@@ -193,7 +193,7 @@
                 if (endPointEntity == undefined) {
 
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
-                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[0];
+                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[1];
 
                     return;
                 }
@@ -221,7 +221,7 @@
                         $scope.scopeModel.rtpmode = $scope.scopeModel.selectedrtpmode.value;
                 }
                 else
-                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[0];
+                    $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[1];
 
                 if (endPointEntity.EndPointType != undefined)
                     $scope.scopeModel.endpointtype = $scope.scopeModel.endpointtypes[endPointEntity.EndPointType];

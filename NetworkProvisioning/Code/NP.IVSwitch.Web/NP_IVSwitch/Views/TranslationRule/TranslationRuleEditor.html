@@ -7,12 +7,12 @@
                         <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="DNIS Pattern" value="scopeModel.dnisPattern" isrequired></vr-textbox>
+                        <vr-textbox label="DNIS Pattern" value="scopeModel.dnisPattern" isrequired="scopeModel.cliPattern == undefined" ></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="CLI Pattern" value="scopeModel.cliPattern" isrequired></vr-textbox>
+                        <vr-textbox label="CLI Pattern" value="scopeModel.cliPattern" isrequired="scopeModel.dnisPattern == undefined"></vr-textbox>
                     </vr-columns>
-                 </vr-tab>                
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

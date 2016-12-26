@@ -12,10 +12,6 @@ namespace NP.IVSwitch.Data
         List<EndPoint> GetEndPoints();
         bool Update(EndPoint endPoint);
         bool Insert(EndPoint endPoint, List<EndPointInfo> userEndPointInfoList, List<EndPointInfo> aclEndPointInfoList, out int insertedId, string carrierAccountName);
-        bool AclUpdate(EndPoint endPoint);
-        bool AclInsert(EndPoint endPoint, List<EndPointInfo> userEndPointInfoList, List<EndPointInfo> aclEndPointInfoList, out int insertedId, string carrierAccountName);
-        bool SipUpdate(EndPoint endPoint);
-        bool SipInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId);
         List<AccessList> GetAccessList();
     }
 }

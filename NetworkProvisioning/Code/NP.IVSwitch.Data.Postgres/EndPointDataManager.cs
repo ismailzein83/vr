@@ -189,7 +189,7 @@ namespace NP.IVSwitch.Data.Postgres
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, max_call_dura,rtp_mode,domain_id,
                                     sip_login,sip_password, tech_prefix,type_id)
 	                             SELECT  @account_id, @description, @group_id,   @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
-                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id,@sip_login, @sip_password , @tech_prefix,@type_id 
+                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id,@sip_login, @sip_password , @tech_prefix,@type_id
                                    WHERE   NOT EXISTS(SELECT 1 FROM  users WHERE (domain_id=@domain_id and sip_login=@sip_login and tech_prefix=@tech_prefix))
  	                             returning  user_id;";
 
@@ -252,8 +252,6 @@ namespace NP.IVSwitch.Data.Postgres
 
         private bool InsertAcl(int endPointId, EndPoint endPoint, int groupId, AccessList accessList)
         {
-            int currentState, rtpMode;
-            MapEnum(endPoint, out currentState, out rtpMode);
             String cmdText = @"INSERT INTO access_list(user_id,account_id,description,group_id, 
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit,  max_call_dura,rtp_mode,domain_id,
                                     host,tech_prefix,tariff_id, route_table_id)
@@ -270,10 +268,10 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
-                cmd.Parameters.AddWithValue("@state_id", currentState);
+                cmd.Parameters.AddWithValue("@state_id", (int)endPoint.CurrentState);
                 cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
-                cmd.Parameters.AddWithValue("@rtp_mode", 1);
+                cmd.Parameters.AddWithValue("@rtp_mode", (int)endPoint.RtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                 cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
                 cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);

@@ -2,9 +2,9 @@
 
     "use strict";
 
-     TranslationRuleEditorController.$inject = ['$scope', 'NP_IVSwitch_TranslationRuleAPIService', 'VRNotificationService', 'UtilsService',  'VRNavigationService'];
+    TranslationRuleEditorController.$inject = ['$scope', 'NP_IVSwitch_TranslationRuleAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService'];
 
-    function  TranslationRuleEditorController($scope, NP_IVSwitch_TranslationRuleAPIService, VRNotificationService, UtilsService,  VRNavigationService) {
+    function TranslationRuleEditorController($scope, NP_IVSwitch_TranslationRuleAPIService, VRNotificationService, UtilsService, VRNavigationService) {
 
         var isEditMode;
 
@@ -12,18 +12,18 @@
         var translationRuleEntity;
 
         loadParameters();
- 
+
         defineScope();
- 
+
         load();
- 
+
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
                 translationRuleId = parameters.TranslationRuleId;
-              }
+            }
 
 
             isEditMode = (translationRuleId != undefined);
@@ -39,7 +39,6 @@
                     return NP_IVSwitch_TranslationRuleAPIService.HasAddTranslationRulePermission();
                 }
             };
-
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -111,7 +110,7 @@
 
             return NP_IVSwitch_TranslationRuleAPIService.AddTranslationRule(buildTranslationRuleObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Translation Rule', response, 'Name')) {
- 
+
                     if ($scope.onTranslationRuleAdded != undefined)
                         $scope.onTranslationRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
