@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -91,9 +91,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Invoice.Entities", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Invoice.Web", "Retail.Invoice.Web\Retail.Invoice.Web.csproj", "{30DCE0EF-EEA6-456A-9778-469C46F737EA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.Ringo", "Retail.Ringo", "{77D5FEA4-6D6C-4163-A368-ADB63247EE2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Ringo.Entities", "Retail.Ringo.Entities\Retail.Ringo.Entities.csproj", "{9B58744D-1E39-499A-860F-264D658ABE40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Ringo.Business", "Retail.Ringo.Business\Retail.Ringo.Business.csproj", "{C6098267-9BB4-4F28-8A80-70132FB0BC82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Ringo.Data", "Retail.Ringo.Data\Retail.Ringo.Data.csproj", "{C5DB9130-7E65-462F-98D0-C7790685D007}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Ringo.Data.SQL", "Retail.Ringo.Data.SQL\Retail.Ringo.Data.SQL.csproj", "{76E94DA4-C4EB-4972-9A9F-524D080AC388}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 34
+		SccNumberOfProjects = 38
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -229,6 +239,22 @@ Global
 		SccProjectTopLevelParentUniqueName33 = Retail.sln
 		SccProjectName33 = Retail.Invoice.Web
 		SccLocalPath33 = Retail.Invoice.Web
+		SccProjectUniqueName34 = Retail.Ringo.Entities\\Retail.Ringo.Entities.csproj
+		SccProjectTopLevelParentUniqueName34 = Retail.sln
+		SccProjectName34 = Retail.Ringo.Entities
+		SccLocalPath34 = Retail.Ringo.Entities
+		SccProjectUniqueName35 = Retail.Ringo.Business\\Retail.Ringo.Business.csproj
+		SccProjectTopLevelParentUniqueName35 = Retail.sln
+		SccProjectName35 = Retail.Ringo.Business
+		SccLocalPath35 = Retail.Ringo.Business
+		SccProjectUniqueName36 = Retail.Ringo.Data\\Retail.Ringo.Data.csproj
+		SccProjectTopLevelParentUniqueName36 = Retail.sln
+		SccProjectName36 = Retail.Ringo.Data
+		SccLocalPath36 = Retail.Ringo.Data
+		SccProjectUniqueName37 = Retail.Ringo.Data.SQL\\Retail.Ringo.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName37 = Retail.sln
+		SccProjectName37 = Retail.Ringo.Data.SQL
+		SccLocalPath37 = Retail.Ringo.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -371,6 +397,22 @@ Global
 		{30DCE0EF-EEA6-456A-9778-469C46F737EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30DCE0EF-EEA6-456A-9778-469C46F737EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30DCE0EF-EEA6-456A-9778-469C46F737EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B58744D-1E39-499A-860F-264D658ABE40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B58744D-1E39-499A-860F-264D658ABE40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B58744D-1E39-499A-860F-264D658ABE40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B58744D-1E39-499A-860F-264D658ABE40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6098267-9BB4-4F28-8A80-70132FB0BC82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6098267-9BB4-4F28-8A80-70132FB0BC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6098267-9BB4-4F28-8A80-70132FB0BC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6098267-9BB4-4F28-8A80-70132FB0BC82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5DB9130-7E65-462F-98D0-C7790685D007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5DB9130-7E65-462F-98D0-C7790685D007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5DB9130-7E65-462F-98D0-C7790685D007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5DB9130-7E65-462F-98D0-C7790685D007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E94DA4-C4EB-4972-9A9F-524D080AC388}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E94DA4-C4EB-4972-9A9F-524D080AC388}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E94DA4-C4EB-4972-9A9F-524D080AC388}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E94DA4-C4EB-4972-9A9F-524D080AC388}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -415,5 +457,10 @@ Global
 		{6E17F958-24A2-4166-BB5D-7E26031B8AFC} = {135DFB85-9A22-48EE-87F9-29FA8157BC71}
 		{324F5B0B-84E3-403F-9B0B-A53EB997C941} = {135DFB85-9A22-48EE-87F9-29FA8157BC71}
 		{30DCE0EF-EEA6-456A-9778-469C46F737EA} = {135DFB85-9A22-48EE-87F9-29FA8157BC71}
+		{77D5FEA4-6D6C-4163-A368-ADB63247EE2D} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{9B58744D-1E39-499A-860F-264D658ABE40} = {77D5FEA4-6D6C-4163-A368-ADB63247EE2D}
+		{C6098267-9BB4-4F28-8A80-70132FB0BC82} = {77D5FEA4-6D6C-4163-A368-ADB63247EE2D}
+		{C5DB9130-7E65-462F-98D0-C7790685D007} = {77D5FEA4-6D6C-4163-A368-ADB63247EE2D}
+		{76E94DA4-C4EB-4972-9A9F-524D080AC388} = {77D5FEA4-6D6C-4163-A368-ADB63247EE2D}
 	EndGlobalSection
 EndGlobal
