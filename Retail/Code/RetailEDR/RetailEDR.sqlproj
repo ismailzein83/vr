@@ -74,6 +74,7 @@
     <Folder Include="Retail_CDR\" />
     <Folder Include="Retail_CDR\Tables\" />
     <Folder Include="Retail_CDR\User Defined Types\" />
+    <Folder Include="Retail_EDR\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail_Event\Tables\VoiceEvent.sql" />
@@ -111,5 +112,8 @@
     <Build Include="Retail_CDR\User Defined Types\BillingCDR_MainType.sql" />
     <Build Include="Retail_CDR\User Defined Types\CDRType.sql" />
     <Build Include="Security\Retail_CDR.sql" />
+    <Build Include="Retail_EDR\Stored Procedures\sp_RingoMessage_GetTotal.sql" />
+    <Build Include="Retail_EDR\Stored Procedures\sp_RingoMessage_FilterdBySenderNetwork_GroupedByRecipient.sql" />
+    <Build Include="Retail_EDR\Stored Procedures\sp_RingoMessage_FilterdByRecipientNetwork_GroupedBySender.sql" />
   </ItemGroup>
 </Project>
