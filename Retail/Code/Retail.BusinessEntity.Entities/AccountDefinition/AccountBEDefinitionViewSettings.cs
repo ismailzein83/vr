@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Retail.BusinessEntity.Entities
+{
+    public class AccountBEDefinitionViewSettings : Vanrise.Security.Entities.ViewSettings
+    {
+        public List<AccountBEDefinitionViewSetting> AccountBEDefinitionSettings { get; set; }
+
+        public override string GetURL(Vanrise.Security.Entities.View view)
+        {
+            return String.Format("#/viewwithparams/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
+        }
+    }
+
+    public class AccountBEDefinitionViewSetting
+    {
+        public Guid BusinessEntityId { get; set; }
+    }
+}

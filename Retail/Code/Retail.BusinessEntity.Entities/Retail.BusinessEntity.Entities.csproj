@@ -53,6 +53,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
@@ -77,6 +81,10 @@
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
@@ -84,6 +92,8 @@
   <ItemGroup>
     <Compile Include="AccountCondition\AccountConditionConfig.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
+    <Compile Include="AccountDefinition\AccountBEDefinitionViewFilter.cs" />
+    <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />
     <Compile Include="InvoiceSettings.cs" />
