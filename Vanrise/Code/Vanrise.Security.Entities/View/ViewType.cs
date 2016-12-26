@@ -10,11 +10,8 @@ namespace Vanrise.Security.Entities
     public class ViewType:ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VR_Security_ViewTypeConfig";
-
-     //   public Guid ViewTypeId { get; set; }
-       // public string Name { get; set; }
-      //  public string Title { get; set; }
         public string Editor { get; set; }
+        public string DirectiveEditor { get; set; }
         public bool EnableAdd { get; set; }
     }
 }

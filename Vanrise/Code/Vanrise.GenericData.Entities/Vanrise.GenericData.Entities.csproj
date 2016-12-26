@@ -62,7 +62,6 @@
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinition.cs" />
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
     <Compile Include="BusinessEntities\GenericBESettings\BusinessEntityDefinitionSettingsConfig.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\GenericBEDefinitionSettingsViewSettings.cs" />
     <Compile Include="BusinessEntities\GenericBESettings\StaticBEDefinitionSettings.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />

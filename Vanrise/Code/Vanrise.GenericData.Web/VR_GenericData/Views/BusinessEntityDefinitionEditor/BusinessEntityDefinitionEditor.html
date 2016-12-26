@@ -3,43 +3,25 @@
         <vr-form validationcontext="genericBEEditorGroup">
             <vr-tabs>
                 <vr-tab header="'Definition'">
-
-                    <vr-row>
-                        <vr-columns width="1/3row">
-                                <vr-row removeline>
-                                    <vr-columns width="fullrow">
-                                        <vr-textbox value="scopeModel.businessEntityName" isrequired="true" label="Name" customvalidate="scopeModel.validate()"></vr-textbox>
-                                    </vr-columns>
-                                </vr-row>
-                                <vr-row>
-                                    <vr-columns width="fullrow">
-                                        <vr-textbox value="scopeModel.businessEntityTitle" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>
-                                    </vr-columns>
-                                </vr-row>
-                            <vr-row>
-                                <vr-columns width="fullrow">
-                                    <vr-select datasource="scopeModel.bEDefinitionSettingConfigs" selectedvalues="scopeModel.selectedSetingsTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
-                                    </vr-select>
-                                </vr-columns>
-                            </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.businessEntityName" isrequired="true" label="Name" customvalidate="scopeModel.validate()"></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="2/3row">
-                            <vr-section title="Menu Location">
-                                <vr-validator validate="scopeModel.validateMenuLocation()">
-                                    <vr-treeview on-ready="scopeModel.onTreeReady"
-                                                 datavaluefield="Id"
-                                                 datatextfield="Name"
-                                                 datachildrenfield="Childs"
-                                                 selecteditem="scopeModel.selectedMenuItem"
-                                                 wholerow>
-                                    </vr-treeview>
-                                </vr-validator>
-                            </vr-section>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.businessEntityTitle" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-select datasource="scopeModel.bEDefinitionSettingConfigs" selectedvalues="scopeModel.selectedSetingsTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
+                            </vr-select>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" ng-if="scopeModel.selectedSetingsTypeConfig != undefined" directive="scopeModel.selectedSetingsTypeConfig.Editor" on-ready="scopeModel.onSettingDirectiveReady"></vr-directivewrapper>
-                </vr-tabs>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

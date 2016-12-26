@@ -294,6 +294,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Security\Views\View\GenericViewEditor.html" />
+    <Content Include="Security\Views\View\GenericViewEditorController.js" />
     <Content Include="Security\Views\View\ViewManagement.html" />
     <Content Include="Security\Views\View\ViewManagementController.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetPreview.html" />

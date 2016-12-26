@@ -84,7 +84,8 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
             var viewType = UtilsService.getItemByVal(ctrl.viewTypes, viewObj.Entity.Type, "ExtensionConfigurationId");
 
             var modalParameters = {
-                viewId: viewObj.Entity.ViewId
+                viewId: viewObj.Entity.ViewId,
+                viewType: viewType
             };
 
             var modalSettings = {};

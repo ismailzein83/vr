@@ -85,14 +85,16 @@ function ViewManagementController($scope, UtilsService, VRNotificationService, V
                     clicked: function () {
                         var modalSettings = {
                         };
-
+                        var modalParameters = {
+                            viewType: viewType,
+                        };
                         modalSettings.onScopeReady = function (modalScope) {
                             modalScope.onViewAdded = function (Obj) {
                                 if (mainGridAPI != undefined)
                                     mainGridAPI.onViewAdded(Obj);
                             };
                         };
-                        VRModalService.showModal(viewType.Editor, null, modalSettings);
+                        VRModalService.showModal(viewType.Editor, modalParameters, modalSettings);
 
                     }
                 });
