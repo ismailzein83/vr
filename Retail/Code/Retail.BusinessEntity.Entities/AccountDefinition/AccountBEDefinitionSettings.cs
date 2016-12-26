@@ -12,12 +12,7 @@ namespace Retail.BusinessEntity.Entities
 
         public override string DefinitionEditor
         { 
-            get { return "retail-be-accountbedefinitions-settings-editor"; } 
-        }
-
-        public override string ManagerFQTN
-        {
-            get { return "Retail.BusinessEntity.Business.AccountManager, Retail.BusinessEntity.Business"; }
+            get { return "retail-be-accountbedefinitions-editor"; } 
         }
 
         public override string IdType
@@ -25,9 +20,14 @@ namespace Retail.BusinessEntity.Entities
             get { return "System.Int64"; }
         }
 
+        public override string ManagerFQTN
+        {
+            get { return "Retail.BusinessEntity.Business.AccountManager, Retail.BusinessEntity.Business"; }
+        }
+
         public override string SelectorUIControl
         {
-            get { throw new NotImplementedException(); }
+            get { return ""; }
         }
 
         public Guid StatusGroupId { get; set; }

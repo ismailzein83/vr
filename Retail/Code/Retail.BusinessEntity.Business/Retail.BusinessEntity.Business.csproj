@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceEnabledAccountFilter.cs" />
+    <Compile Include="AccountBEManager.cs" />
     <Compile Include="AccountConditionManager.cs" />
     <Compile Include="AccountDefinitionManager.cs" />
     <Compile Include="AccountGenericFields\AccountNameGenericField.cs" />

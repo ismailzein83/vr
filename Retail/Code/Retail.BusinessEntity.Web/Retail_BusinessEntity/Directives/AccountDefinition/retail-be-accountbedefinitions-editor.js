@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountbedefinitionsSettingsEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ app.directive('retailBeAccountbedefinitionsSettingsEditor', ['UtilsService', 'VR
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new technicalSettingsEditorCtor(ctrl, $scope, $attrs);
+                var ctor = new AccountBeDefinitionsSettingsEditorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -19,7 +19,7 @@ app.directive('retailBeAccountbedefinitionsSettingsEditor', ['UtilsService', 'VR
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/AccountBEDefinitionSettingsEditorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/AccountBEDefinitionEditorTemplate.html'
         };
 
         function AccountBeDefinitionsSettingsEditorCtor(ctrl, $scope, $attrs) {
@@ -55,9 +55,9 @@ app.directive('retailBeAccountbedefinitionsSettingsEditor', ['UtilsService', 'VR
                     var accountGridDefinition;
                     var accountViewDefinitions;
 
-                    if (payload != undefined && payload.data != undefined) {
-                        accountGridDefinition = payload.data.GridDefinition;
-                        accountViewDefinitions = payload.data.AccountViewDefinitions;
+                    if (payload != undefined && payload.businessEntityDefinitionSettings != undefined) {
+                        accountGridDefinition = payload.businessEntityDefinitionSettings.GridDefinition;
+                        accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
                     }
 
                     //Loading AccountGridDefinition Directive
@@ -95,7 +95,7 @@ app.directive('retailBeAccountbedefinitionsSettingsEditor', ['UtilsService', 'VR
 
                 api.getData = function () {
                     var obj = {
-                        $type: "Retail.BusinessEntity.Entities.RetailBETechnicalSetting, Retail.BusinessEntity.Entities",
+                        $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionSettings, Retail.BusinessEntity.Entities",
                         GridDefinition: accountGridDefinitionDirectiveAPI.getData(),
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData()
                     };
