@@ -2,10 +2,15 @@
 
     'use strict';
 
-    AccountManagementController.$inject = ['$scope', 'Retail_BE_AccountService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    AccountManagementController.$inject = ['$scope', 'Retail_BE_AccountService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function AccountManagementController($scope, Retail_BE_AccountService, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function AccountManagementController($scope, Retail_BE_AccountService, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
+
         var accountFields;
+        var viewId;
+
+        var businessEntityDefinitionSelectorAPI;
+        var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var accountTypeSelectorAPI;
         var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -15,26 +20,49 @@
 
         var gridAPI;
 
-
+        loadParameters();
         defineScope();
         load();
 
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+
+            if (parameters != null) {
+                viewId = parameters.viewId;
+            }
+        }
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                businessEntityDefinitionSelectorAPI = api;
+                businessEntityDefinitionSelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
                 accountTypeSelectorAPI = api;
                 accountTypeSelectorReadyDeferred.resolve();
             };
-
             $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
                 recordFilterDirectiveAPI = api;
                 recordFilterDirectiveReadyDeferred.resolve();
             };
-
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
+            };
+
+            $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function () {
+
+                if (businessEntityDefinitionSelectorAPI.getSelectedIds() != undefined) {
+                    $scope.scopeModel.filters.length = 0;
+                    $scope.scopeModel.settingsFilterEditor = null;
+                    $scope.scopeModel.gridloadded = false;
+
+                    loadAllControls().then(function () {
+                        $scope.scopeModel.gridloadded = true;
+                        //hasAddGenericRulePermission();
+                    })
+                }
             };
 
             $scope.scopeModel.search = function () {
@@ -59,11 +87,29 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadBusinessEntityDefinitionSelector, loadAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+        }
+        function loadBusinessEntityDefinitionSelector() {
+            var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            businessEntityDefinitionSelectorReadyDeferred.promise.then(function () {
+                var payload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewFilter, Retail.BusinessEntity.Entities",
+                            ViewId: viewId
+                        }]
+                    }
+                };
+
+                VRUIUtilsService.callDirectiveLoad(businessEntityDefinitionSelectorAPI, payload, businessEntityDefinitionSelectorLoadDeferred);
+            });
+
+            return businessEntityDefinitionSelectorLoadDeferred.promise;
         }
         function loadAccountTypeSelector() {
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();

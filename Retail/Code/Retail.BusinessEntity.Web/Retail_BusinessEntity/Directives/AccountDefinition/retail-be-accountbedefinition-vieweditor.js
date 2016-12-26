@@ -7,7 +7,7 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
             restrict: "E",
             scope:
             {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -34,21 +34,17 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                     beDefinitionSelectorApi = api;
                     beDefinitionSelectorPromiseDeferred.resolve();
                 };
+
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
-                api.getData = function () {
-                    return {
-                        $type: "Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities",
-                        AccountBEDefinitionIds: beDefinitionSelectorApi.getSelectedIds()
-                    };
-                };
                 api.load = function (payload) {
                     var promises = [];
+
                     promises.push(loadBusinessEntityDefinitionSelector());
+
                     function loadBusinessEntityDefinitionSelector() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -57,22 +53,31 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                                 selectedIds: payload != undefined ? payload.BusinessEntityDefinitionId : undefined,
                                 filter: {
                                     Filters: [{
-                                        $type: "Vanrise.GenericData.Business.GenericBusinessEntityDefinitionFilter,Vanrise.GenericData.Business"
+                                        $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewFilter, Retail.BusinessEntity.Entities"
                                     }]
                                 }
                             };
                             VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, payloadSelector, businessEntityDefinitionSelectorLoadDeferred);
                         });
+
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
                     }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
+
+                api.getData = function () {
+                    return {
+                        $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewSettings, Retail.BusinessEntity.Entities",
+                        AccountBEDefinitionSettings: beDefinitionSelectorApi.getSelectedIds()
+                    };
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
         }
 
         return directiveDefinitionObject;
-
     }
 ]);
