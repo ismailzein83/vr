@@ -151,7 +151,18 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     modelValue = new Date(modelValue);
                 if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
                     isUserChange = true;
-
+                    var unspecifiedHour = 0;
+                    var unspecifiedMinute = 0;
+                    var unspecifiedSecond = 0;
+                    var unspecifiedMillisecond = 0;
+                    if ($attrs.applytimemax != undefined) {
+                        
+                        unspecifiedHour = 23;
+                        unspecifiedMinute = 59;
+                        unspecifiedSecond = 59;
+                        unspecifiedMillisecond = 999;
+                    }
+                    console.log(unspecifiedHour);
                     if ($attrs.type == "time") {
                         $scope.ctrl.value = {
                             $type: 'Vanrise.Entities.Time, Vanrise.Entities',
@@ -162,22 +173,22 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         };
                     }
                     else if ($attrs.type == "date") {
-                        var date = new Date(selectedDate.setHours(0, 0, 0, 0));
+                        var date = new Date(selectedDate.setHours(unspecifiedHour, unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
                         //var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date;
                     }
                     else if ($attrs.type == "dateHour") {
-                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), 0, 0, 0));
+                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
                         //var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date;
                     }
                     else if ($attrs.type == "longDateTime") {
-                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), selectedDate.getSeconds(), 0));
+                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), selectedDate.getSeconds(), unspecifiedMillisecond));
                         //var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date;
                     }
                     else {
-                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), 0, 0));
+                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), unspecifiedSecond, unspecifiedMillisecond));
                         //var date = moment.utc(selectedDate).format("L LT"); 
                         $scope.ctrl.value = date;
 

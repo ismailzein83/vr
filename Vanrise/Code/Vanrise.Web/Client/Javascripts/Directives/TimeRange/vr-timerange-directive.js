@@ -55,7 +55,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" customvalidate="scopeModel.validateDateTime()" isrequired="true" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
                + '<vr-columns width="' + attrs.width + '">'
-               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" customvalidate="scopeModel.validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
+               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" applytimemax customvalidate="scopeModel.validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>';
     }
 

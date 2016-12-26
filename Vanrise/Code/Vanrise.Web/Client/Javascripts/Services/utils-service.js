@@ -98,7 +98,8 @@
             longTime: "h:MM:ss TT Z",
             isoDate: "yyyy-mm-dd",
             isoTime: "HH:MM:ss",
-            isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",
+            isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",            
+            isoFullDateTime: "yyyy-mm-dd'T'HH:MM:ss.l",
             isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
         };
 
@@ -528,7 +529,7 @@
 
         function dateToServerFormat(date) {
             if (date instanceof Date)
-                return dateFormat(date, dateFormat.masks.isoDateTime);
+                return dateFormat(date, dateFormat.masks.isoFullDateTime);
             else
                 return date;
         }
