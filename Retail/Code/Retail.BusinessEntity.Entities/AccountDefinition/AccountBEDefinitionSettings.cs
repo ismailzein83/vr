@@ -5,22 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
-{   
+{
     public class AccountBEDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings
     {
-        public override string DefinitionEditor { get { throw new NotImplementedException(); } }
+        public override Guid ConfigId { get { return new Guid("70D4A6AD-10CC-4F0B-8364-7D8EF3C044C4"); } }
 
-        public override string SelectorUIControl
-        {
-            get { throw new NotImplementedException(); }
+        public override string DefinitionEditor
+        { 
+            get { return "retail-be-accountbedefinitions-settings-editor"; } 
         }
+
         public override string ManagerFQTN
         {
             get { return "Retail.BusinessEntity.Business.AccountManager, Retail.BusinessEntity.Business"; }
         }
+
         public override string IdType
         {
             get { return "System.Int64"; }
+        }
+
+        public override string SelectorUIControl
+        {
+            get { throw new NotImplementedException(); }
         }
 
         public Guid StatusGroupId { get; set; }
@@ -30,11 +37,6 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountViewDefinition> AccountViewDefinitions { get; set; }
 
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
-
-        public override Guid ConfigId
-        {
-            get { throw new NotImplementedException(); }
-        }
     }
 
     public abstract class AccountBEDefinitionCondition
