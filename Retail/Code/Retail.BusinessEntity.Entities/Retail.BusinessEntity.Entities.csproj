@@ -109,7 +109,7 @@
     <Compile Include="AccountType\AccountTypeFilter.cs" />
     <Compile Include="AccountType\AccountTypeInfo.cs" />
     <Compile Include="AccountType\AccountTypeQuery.cs" />
-    <Compile Include="AccountType\Parts\AccountPart.cs" />
+    <Compile Include="AccountPart\AccountPart.cs" />
     <Compile Include="AccountType\AccountType.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinition.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionConfig.cs" />
@@ -249,7 +249,7 @@
     <Compile Include="Zone\Zone.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="AccountType\Parts\Definition\" />
+    <Folder Include="AccountType\Parts\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
