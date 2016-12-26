@@ -2690,6 +2690,7 @@ vr-validator .panel-vr {
 }
 vr-validator > div[validator-section] >div:nth-child(1){
    min-height:28px;
+   overflow:hidden;
 }
 vr-validator[vr-input] > div[validator-section] >div:nth-child(1){
    min-height:initial !important;
