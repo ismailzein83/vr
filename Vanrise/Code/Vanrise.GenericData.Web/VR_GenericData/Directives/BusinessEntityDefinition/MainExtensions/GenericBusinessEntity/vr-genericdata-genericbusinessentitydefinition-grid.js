@@ -28,7 +28,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/GenericBusinessEntityDefinitionGrid.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Templates/GenericBusinessEntityDefinitionGrid.html"
 
         };
 

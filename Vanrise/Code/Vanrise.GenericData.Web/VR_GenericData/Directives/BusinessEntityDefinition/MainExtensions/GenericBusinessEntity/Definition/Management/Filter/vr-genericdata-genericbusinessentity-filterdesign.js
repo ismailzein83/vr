@@ -26,7 +26,7 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Management/Filter/Templates/GenericBusinessEntityFilterDesign.html';
+                return '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Management/Filter/Templates/GenericBusinessEntityFilterDesign.html';
             }
 
         };

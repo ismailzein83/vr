@@ -13,14 +13,6 @@
                                 <vr-row>
                                     <vr-textbox value="scopeModal.businessEntityTitle" isrequired="true" label="Business Entity Title" customvalidate="scopeModal.validate()"></vr-textbox>
                                 </vr-row>
-                                <vr-row>
-                                    <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="scopeModal.onRecordTypeSelectionChanged" selectedvalues="scopeModal.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
-                                </vr-row>
-                                <vr-row>
-                                    <vr-select datatextfield="Name" datavaluefield="Name" label="Title Field" isrequired="true"
-                                               entityname="Title field" selectedvalues="scopeModal.selectedTitleFieldPath" datasource="scopeModal.fields" hideselectedvaluessection></vr-select>
-
-                                </vr-row>
                             </vr-section>
                         </vr-columns>
                         <vr-columns width="2/3row">
@@ -38,46 +30,7 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Editor Design'">
-                    <vr-row ng-show="scopeModal.selectedDataRecordType !=undefined">
-                            <vr-genericdata-genericbusinessentity-definition-editor on-ready="scopeModal.onGenericEditorDirectiveReady"></vr-genericdata-genericbusinessentity-definition-editor>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Grid Design'">
-                    <vr-row ng-show="scopeModal.selectedDataRecordType !=undefined">
-                         <vr-genericdata-genericbusinessentity-griddesign on-ready="scopeModal.onGridFieldDesignReady"></vr-genericdata-genericbusinessentity-griddesign>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Filter Design'">
-                    <vr-row ng-show="scopeModal.selectedDataRecordType !=undefined">
-                       <vr-genericdata-genericbusinessentity-filterdesign on-ready="scopeModal.onFilterFieldDesignReady"></vr-genericdata-genericbusinessentity-filterdesign>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Security'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="View">
-                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="Add">
-                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onAddRequiredPermissionReady"></vr-sec-requiredpermission-grid>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="Edit">
-                                <vr-sec-requiredpermission-grid on-ready="scopeModal.onEditRequiredPermissionReady"></vr-sec-requiredpermission-grid>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-
-            </vr-tabs>
+                <vr-genericdata-genericbusinessentity-editor on-ready="scopeModal.onSettingDirectiveReady"></vr-genericdata-genericbusinessentity-editor></vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

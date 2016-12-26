@@ -9,31 +9,10 @@
         var isEditMode;
         var viewTypeName = "VR_GenericData_GenericBusinessEntity";
         var businessEntityDefinitionEntity;
-        var recordTypeEntity;
         var businessEntityDefinitionId;
 
-        var dataRecordTypeSelectorAPI;
-        var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var genericEditorDesignAPI;
-        var genericEditorDesignReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var gridFieldsDirectiveAPI;
-        var gridFieldsDesignReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var filterFieldsDirectiveAPI;
-        var filterFieldsDesignReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var viewPermissionAPI;
-        var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var addPermissionAPI;
-        var addPermissionReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var editPermissionAPI;
-        var editPermissionReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var recordTypeSelectedPromiseDeferred;
+        var settingDirectiveAPI;
+        var settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var menuItems;
         var treeAPI;
@@ -55,60 +34,12 @@
         function defineScope() {
             $scope.scopeModal = {};
 
-            $scope.scopeModal.onGridFieldDesignReady = function (api) {
-                gridFieldsDirectiveAPI = api;
-                gridFieldsDesignReadyPromiseDeferred.resolve();
-            };
-            
-            $scope.scopeModal.onFilterFieldDesignReady = function (api) {
-                filterFieldsDirectiveAPI = api;
-                filterFieldsDesignReadyPromiseDeferred.resolve();
+            $scope.scopeModal.onSettingDirectiveReady = function (api) {
+                settingDirectiveAPI = api;
+                settingReadyPromiseDeferred.resolve();
             };
 
-            $scope.scopeModal.isRecordTypeDisbled = (isEditMode == true);
-
-            $scope.scopeModal.onRecordTypeSelectionChanged = function () {
-
-                var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
-
-                if (selectedDataRecordTypeId != undefined) {
-                    if (recordTypeSelectedPromiseDeferred != undefined)
-                        recordTypeSelectedPromiseDeferred.resolve();
-                    else {
-                        getDataRecordType(selectedDataRecordTypeId).then(function () {
-                            var payload = { recordTypeFields: recordTypeEntity.Fields };
-                            var setLoader = function (value) { $scope.isLoading = value; };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, genericEditorDesignAPI, payload, setLoader);
-
-                            var payloadGrid = { recordTypeFields: recordTypeEntity.Fields };
-                            var setLoaderGrid = function (value) { $scope.isLoading = value; };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridFieldsDirectiveAPI, payloadGrid, setLoaderGrid);
-
-                            var payloadFilter = { recordTypeFields: recordTypeEntity.Fields };
-                            var setLoaderFilter = function (value) { $scope.isLoading = value; };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterFieldsDirectiveAPI, payloadFilter, setLoaderFilter);
-                            recordTypeSelectedPromiseDeferred = undefined;
-                        });
-                    }
-                }
-            };
-
-            $scope.scopeModal.onDataRecordTypeSelectorDirectiveReady = function (api) {
-                dataRecordTypeSelectorAPI = api;
-                dataRecordTypeSelectorReadyPromiseDeferred.resolve();
-            };
-            $scope.scopeModal.onViewRequiredPermissionReady = function (api) {
-                viewPermissionAPI = api;
-                viewPermissionReadyDeferred.resolve();
-            };
-            $scope.scopeModal.onAddRequiredPermissionReady = function (api) {
-                addPermissionAPI = api;
-                addPermissionReadyDeferred.resolve();
-            };
-            $scope.scopeModal.onEditRequiredPermissionReady = function (api) {
-                editPermissionAPI = api;
-                editPermissionReadyDeferred.resolve();
-            };
+           
             $scope.scopeModal.SaveGenericBEEditor = function () {
                 if (isEditMode) {
                     return update();
@@ -129,11 +60,6 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.scopeModal.onGenericEditorDirectiveReady = function (api) {
-                genericEditorDesignAPI = api;
-                genericEditorDesignReadyPromiseDeferred.resolve();
-            };
-
             $scope.scopeModal.onTreeReady = function (api) {
                 treeAPI = api;
                 treeReadyDeferred.resolve();
@@ -149,15 +75,7 @@
 
             if (isEditMode) {
                 getEntities().then(function () {
-                    getDataRecordType(businessEntityDefinitionEntity.Settings.DataRecordTypeId).then(function () {
-                        recordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         loadAllControls();
-                    }).catch(function () {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        $scope.scopeModal.isLoading = false;
-                    });;
-
-
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModal.isLoading = false;
@@ -168,8 +86,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadEditorDesignSection, setTitle, loadDataRecordTypeSelector, loadGridDesignSection, loadFilterDesignSection, loadTree, loadViewRequiredPermission, loadAddRequiredPermission, loadEditRequiredPermission]).then(function () {
-
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, setTitle, loadTree]).then(function () {
                 }).finally(function () {
                     $scope.scopeModal.isLoading = false;
                 }).catch(function (error) {
@@ -189,75 +106,23 @@
                     {
                         $scope.scopeModal.businessEntityName = businessEntityDefinitionEntity.Name;
                         $scope.scopeModal.businessEntityTitle = businessEntityDefinitionEntity.Title;
-                        if(businessEntityDefinitionEntity.Settings != undefined)
-                            $scope.scopeModal.selectedTitleFieldPath = UtilsService.getItemByVal($scope.scopeModal.fields, businessEntityDefinitionEntity.Settings.FieldPath, "Name");
                     }
                 }
-                function loadEditorDesignSection() {
-                    if (businessEntityDefinitionEntity != undefined)
-                    {
-                        var loadGenericEditorDesignPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        UtilsService.waitMultiplePromises([genericEditorDesignReadyPromiseDeferred.promise, recordTypeSelectedPromiseDeferred.promise])
-
-                            .then(function () {
-                                recordTypeSelectedPromiseDeferred = undefined;
-
-                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && recordTypeEntity != undefined) ?
-                                {
-                                    sections: businessEntityDefinitionEntity.Settings.EditorDesign.Sections,
-                                    recordTypeFields: recordTypeEntity.Fields
-                                } : undefined;
-                                genericEditorDesignReadyPromiseDeferred = undefined;
-                                VRUIUtilsService.callDirectiveLoad(genericEditorDesignAPI, directivePayload, loadGenericEditorDesignPromiseDeferred);
-                            });
-
-                        return loadGenericEditorDesignPromiseDeferred.promise;
-                    }
-                }
-                function loadGridDesignSection() {
-                    if (businessEntityDefinitionEntity != undefined) {
-                        var loadGridDesignPromiseDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([gridFieldsDesignReadyPromiseDeferred.promise, recordTypeSelectedPromiseDeferred.promise])
-
-                            .then(function () {
-                                recordTypeSelectedPromiseDeferred = undefined;
-
-                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings.ManagementDesign != undefined && recordTypeEntity != undefined) ? { selectedColumns: businessEntityDefinitionEntity.Settings.ManagementDesign.GridDesign.Columns, recordTypeFields: recordTypeEntity.Fields } : undefined;
-                                gridFieldsDesignReadyPromiseDeferred = undefined;
-                                VRUIUtilsService.callDirectiveLoad(gridFieldsDirectiveAPI, directivePayload, loadGridDesignPromiseDeferred);
-                            });
-
-                        return loadGridDesignPromiseDeferred.promise;
-                    }
-                }
-                function loadFilterDesignSection() {
-                    if (businessEntityDefinitionEntity != undefined) {
-                        var loadFilterDesignPromiseDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([filterFieldsDesignReadyPromiseDeferred.promise, recordTypeSelectedPromiseDeferred.promise])
-
-                            .then(function () {
-                                recordTypeSelectedPromiseDeferred = undefined;
-                                var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && recordTypeEntity != undefined) ? { selectedFields: businessEntityDefinitionEntity.Settings.ManagementDesign.FilterDesign.Fields, recordTypeFields: recordTypeEntity.Fields } : undefined;
-                                filterFieldsDesignReadyPromiseDeferred = undefined;
-                                VRUIUtilsService.callDirectiveLoad(filterFieldsDirectiveAPI, directivePayload, loadFilterDesignPromiseDeferred);
-                            });
-
-                        return loadFilterDesignPromiseDeferred.promise;
-                    }
-                }
-                function loadDataRecordTypeSelector() {
-                    var loadDataRecordTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                    dataRecordTypeSelectorReadyPromiseDeferred.promise
+                function loadSettingDirectiveSection() {
+                    var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    settingReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) ? { selectedIds: businessEntityDefinitionEntity.Settings.DataRecordTypeId } : undefined;
-
-                            VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, directivePayload, loadDataRecordTypeSelectorPromiseDeferred);
+                            var directivePayload = (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) ?
+                            {
+                                businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
+                            } : undefined;
+                            VRUIUtilsService.callDirectiveLoad(settingDirectiveAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                         });
 
-                    return loadDataRecordTypeSelectorPromiseDeferred.promise;
+                    return loadSettingDirectivePromiseDeferred.promise;
+                   
                 }
+
                 function loadTree() {
                     var treeLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -287,60 +152,6 @@
                         });
                     }
                 }
-
-                function loadViewRequiredPermission() {
-                    var viewPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                    viewPermissionReadyDeferred.promise.then(function () {
-                        var payload;
-
-                        if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings!=undefined  && businessEntityDefinitionEntity.Settings.Security != undefined && businessEntityDefinitionEntity.Settings.Security.ViewRequiredPermission != null) {
-                            payload = {
-                                data: businessEntityDefinitionEntity.Settings.Security.ViewRequiredPermission
-                            };
-                        }
-
-                        VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, payload, viewPermissionLoadDeferred);
-                    });
-
-                    return viewPermissionLoadDeferred.promise;
-                }
-                function loadAddRequiredPermission() {
-                    var addPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                    addPermissionReadyDeferred.promise.then(function () {
-                        var payload;
-
-                        if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && businessEntityDefinitionEntity.Settings.Security != undefined && businessEntityDefinitionEntity.Settings.Security.AddRequiredPermission != null) {
-                            payload = {
-                                data: businessEntityDefinitionEntity.Settings.Security.AddRequiredPermission
-                            };
-                        }
-
-                        VRUIUtilsService.callDirectiveLoad(addPermissionAPI, payload, addPermissionLoadDeferred);
-                    });
-
-                    return addPermissionLoadDeferred.promise;
-                }
-                function loadEditRequiredPermission() {
-                    var editPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                    editPermissionReadyDeferred.promise.then(function () {
-                        var payload;
-
-                        if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined && businessEntityDefinitionEntity.Settings.Security != undefined && businessEntityDefinitionEntity.Settings.Security.EditRequiredPermission != null) {
-                            payload = {
-                                data: businessEntityDefinitionEntity.Settings.Security.EditRequiredPermission
-                            };
-                        }
-
-                        VRUIUtilsService.callDirectiveLoad(editPermissionAPI, payload, editPermissionLoadDeferred);
-                    });
-
-                    return editPermissionLoadDeferred.promise;
-              }
-
-
             }
 
             function getEntities() {
@@ -359,36 +170,12 @@
             }
             
         }
-
-
-        function getDataRecordType(dataRecordTypeId) {
-            return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
-                recordTypeEntity = response;
-                $scope.scopeModal.fields = response.Fields;
-            });
-        }
-
         function buildGenericBEDefinitionFromScope() {
-            var genericBEDefinitionSettings = {
-                $type:"Vanrise.GenericData.Entities.GenericBEDefinitionSettings, Vanrise.GenericData.Entities",
-                DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
-                FieldPath: $scope.scopeModal.selectedTitleFieldPath.Name,
-                EditorDesign: genericEditorDesignAPI.getData(),
-                ManagementDesign: {
-                    GridDesign:gridFieldsDirectiveAPI.getData(),
-                    FilterDesign:filterFieldsDirectiveAPI.getData()
-                },
-                Security: {
-                    ViewRequiredPermission: viewPermissionAPI.getData(),
-                    AddRequiredPermission:  addPermissionAPI.getData(),
-                    EditRequiredPermission: editPermissionAPI.getData()
-                }
-            };
             var bEdefinition = {
                 BusinessEntityDefinitionId :businessEntityDefinitionId,
                 Name: $scope.scopeModal.businessEntityName,
                 Title: $scope.scopeModal.businessEntityTitle,
-                Settings: genericBEDefinitionSettings
+                Settings: settingDirectiveAPI.getData()
             };
             return bEdefinition;
         }

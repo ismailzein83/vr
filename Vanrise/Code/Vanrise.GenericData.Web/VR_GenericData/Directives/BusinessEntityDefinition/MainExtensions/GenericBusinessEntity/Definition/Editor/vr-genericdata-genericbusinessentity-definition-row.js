@@ -26,7 +26,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionRow', ['UtilsService'
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/DefinitionRowTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/DefinitionRowTemplate.html';
             }
 
         };

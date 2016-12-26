@@ -21,7 +21,7 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/ExtensibleBEItemGrid.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Templates/ExtensibleBEItemGrid.html"
 
         };
 

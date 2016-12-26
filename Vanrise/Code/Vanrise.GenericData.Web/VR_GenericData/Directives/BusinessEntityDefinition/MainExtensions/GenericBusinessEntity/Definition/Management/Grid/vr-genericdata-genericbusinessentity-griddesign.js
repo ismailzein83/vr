@@ -26,7 +26,7 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Management/Grid/Templates/GenericBusinessEntityGridDesign.html';
+                return '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Management/Grid/Templates/GenericBusinessEntityGridDesign.html';
             }
 
         };

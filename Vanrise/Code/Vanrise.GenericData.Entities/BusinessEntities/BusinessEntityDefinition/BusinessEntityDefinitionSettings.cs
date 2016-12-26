@@ -10,14 +10,10 @@ namespace Vanrise.GenericData.Entities
     {
         public abstract Guid ConfigId { get; }
         public virtual string SelectorUIControl { get; set; }
-
         public virtual string GroupSelectorUIControl { get; set; }
-
         public virtual string ManagerFQTN { get; set; }
         public virtual string DefinitionEditor { get; set; }
-
         public virtual string IdType { get; set; }
-        public GenericRuleDefinitionSecurity Security { get; set; }
 
     }
 }

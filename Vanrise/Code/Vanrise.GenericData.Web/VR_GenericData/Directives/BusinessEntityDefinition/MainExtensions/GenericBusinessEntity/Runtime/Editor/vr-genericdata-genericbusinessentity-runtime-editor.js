@@ -26,7 +26,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/Editor/Templates/EditorTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Runtime/Editor/Templates/EditorTemplate.html';
             }
 
         };
