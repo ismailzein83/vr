@@ -1,6 +1,6 @@
 ﻿<vr-row removeline>
     <vr-common-gridwidthfactor-selector normal-col-num="8" on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" hidelabel></vr-common-gridwidthfactor-selector>
-    <vr-columns width="1/3row" haschildcolumns>
+    <vr-columns width="1/3row" >
         <vr-textbox type="number" ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue" value="scopeModel.fixedWidth" decimalprecision="0" isrequired="scopeModel.widthOption.value == scopeModel.fixedWidthValue "></vr-textbox>
     </vr-columns>
 </vr-row>
