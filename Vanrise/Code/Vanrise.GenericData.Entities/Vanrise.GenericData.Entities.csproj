@@ -57,6 +57,7 @@
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionInfoFilter.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionQuery.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionSettings.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition\IBusinessEntityDefinitionFilter.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDescriptionContext.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinition.cs" />
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />

@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class BusinessEntityDefinitionInfoFilter
     {
-
+        public List<IBusinessEntityDefinitionFilter> Filters { get; set; }
     }
 }

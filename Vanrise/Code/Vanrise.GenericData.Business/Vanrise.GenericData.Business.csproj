@@ -51,6 +51,7 @@
     <Compile Include="BELookupRules\RuleStructureBehaviors\IBELookupRuleStructureBehavior.cs" />
     <Compile Include="BusinessEntity\BusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityManagerContext.cs" />
+    <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionFilterContext.cs" />
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityGroupContext.cs" />
     <Compile Include="BusinessEntity\BaseBEManager.cs" />

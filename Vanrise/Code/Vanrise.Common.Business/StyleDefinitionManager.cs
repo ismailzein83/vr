@@ -88,7 +88,6 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -104,7 +103,6 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-
         #region Private Methods
 
         Dictionary<Guid, StyleDefinition> GetCachedStyleDefinitions()
@@ -118,7 +116,6 @@ namespace Vanrise.Common.Business
         }
 
         #endregion
-
 
         #region Mappers
 

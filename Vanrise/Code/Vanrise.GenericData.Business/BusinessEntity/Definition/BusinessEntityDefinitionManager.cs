@@ -17,6 +17,7 @@ namespace Vanrise.GenericData.Business
     public class BusinessEntityDefinitionManager
     {
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<BusinessEntityDefinitionDetail> GetFilteredBusinessEntityDefinitions(Vanrise.Entities.DataRetrievalInput<BusinessEntityDefinitionQuery> input)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
@@ -28,7 +29,7 @@ namespace Vanrise.GenericData.Business
         public Guid GetBusinessEntityDefinitionId(string businessEntityDefinitionName)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
-            var businessEntityDefinition = cachedBEDefinitions.FindRecord(x=>x.Name == businessEntityDefinitionName);
+            var businessEntityDefinition = cachedBEDefinitions.FindRecord(x => x.Name == businessEntityDefinitionName);
             if (businessEntityDefinition == null)
                 throw new NullReferenceException(String.Format("businessEntityDefinition. businessEntityDefinitionName '{0}'", businessEntityDefinitionName));
             return businessEntityDefinition.BusinessEntityDefinitionId;
@@ -45,7 +46,7 @@ namespace Vanrise.GenericData.Business
 
             if (filter != null)
             {
-                // Set filterExpression
+                filterExpression = (item) => (filter.Filters != null && CheckIfFilterIsMatch(item, filter.Filters));
             }
 
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
@@ -115,11 +116,11 @@ namespace Vanrise.GenericData.Business
             bool insertActionSucc = dataManager.AddBusinessEntityDefinition(businessEntityDefinition);
             if (insertActionSucc)
             {
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                   
-                    insertOperationOutput.InsertedObject = BusinessEntityDefinitionDetailMapper(businessEntityDefinition);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
 
-                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.InsertedObject = BusinessEntityDefinitionDetailMapper(businessEntityDefinition);
+
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -151,12 +152,13 @@ namespace Vanrise.GenericData.Business
             }
             return null;
         }
-      
+
         public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
             return extensionConfigurationManager.GetExtensionConfigurations<BusinessEntityDefinitionSettingsConfig>(BusinessEntityDefinitionSettingsConfig.EXTENSION_TYPE);
         }
+
         #endregion
 
         #region Private Methods
@@ -170,6 +172,17 @@ namespace Vanrise.GenericData.Business
                     IEnumerable<BusinessEntityDefinition> beDefinitions = dataManager.GetBusinessEntityDefinitions();
                     return beDefinitions.ToDictionary(beDefinition => beDefinition.BusinessEntityDefinitionId, beDefinition => beDefinition);
                 });
+        }
+
+        private bool CheckIfFilterIsMatch(BusinessEntityDefinition entityDefinition, List<IBusinessEntityDefinitionFilter> filters)
+        {
+            BusinessEntityDefinitionFilterContext context = new BusinessEntityDefinitionFilterContext { entityDefinition = entityDefinition };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
 
         #endregion
@@ -201,15 +214,15 @@ namespace Vanrise.GenericData.Business
         }
         BusinessEntityDefinitionDetail BusinessEntityDefinitionDetailMapper(BusinessEntityDefinition beDefinition)
         {
-           Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
-           bool isExtensible = typeof(ExtensibleBEManager).IsAssignableFrom(beManagerType);
+            Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
+            bool isExtensible = typeof(ExtensibleBEManager).IsAssignableFrom(beManagerType);
             return new BusinessEntityDefinitionDetail()
             {
                 Entity = beDefinition,
                 IsExtensible = isExtensible
             };
         }
-        
+
         #endregion
     }
 }
