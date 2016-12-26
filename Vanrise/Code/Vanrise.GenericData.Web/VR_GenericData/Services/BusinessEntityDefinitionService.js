@@ -21,7 +21,7 @@
                 businessEntityDefinitionId: businessEntityDefinitionId,
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/BusinessEntityDefinitionEditor/BusinessEntityDefinitionEditor.html', parameters, modalSettings);
         }
         function addBusinessEntityDefinition(onBusinessEntityDefinitionAdded) {
             var modalParameters;
@@ -32,7 +32,7 @@
                 modalScope.onBusinessEntityDefinitionAdded = onBusinessEntityDefinitionAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/BusinessEntityDefinitionEditor/BusinessEntityDefinitionEditor.html', modalParameters, modalSettings);
         }
 
     }

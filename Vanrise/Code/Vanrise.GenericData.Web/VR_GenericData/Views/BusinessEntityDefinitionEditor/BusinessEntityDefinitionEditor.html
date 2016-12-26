@@ -18,7 +18,7 @@
                                 </vr-row>
                             <vr-row>
                                 <vr-columns width="fullrow">
-                                    <vr-select datasource="scopeModel.bEDefinitionSettingConfigs" selectedvalues="scopeModel.selectedFieldTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
+                                    <vr-select datasource="scopeModel.bEDefinitionSettingConfigs" selectedvalues="scopeModel.selectedSetingsTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
                                     </vr-select>
                                 </vr-columns>
                             </vr-row>
@@ -38,7 +38,7 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" ng-if="scopeModel.selectedFieldTypeConfig != undefined" directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onSettingDirectiveReady"></vr-directivewrapper>
+                <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" ng-if="scopeModel.selectedSetingsTypeConfig != undefined" directive="scopeModel.selectedSetingsTypeConfig.Editor" on-ready="scopeModel.onSettingDirectiveReady"></vr-directivewrapper>
                 </vr-tabs>
         </vr-form>
     </vr-modalbody>

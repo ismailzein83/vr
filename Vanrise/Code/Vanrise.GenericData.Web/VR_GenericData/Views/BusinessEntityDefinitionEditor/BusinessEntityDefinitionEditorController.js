@@ -110,7 +110,7 @@
                     if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) {
                         settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        $scope.scopeModel.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModel.bEDefinitionSettingConfigs, businessEntityDefinitionEntity.Settings.ConfigId, "ExtensionConfigurationId");
+                        $scope.scopeModel.selectedSetingsTypeConfig = UtilsService.getItemByVal($scope.scopeModel.bEDefinitionSettingConfigs, businessEntityDefinitionEntity.Settings.ConfigId, "ExtensionConfigurationId");
 
                         var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         settingReadyPromiseDeferred.promise
@@ -189,11 +189,15 @@
             });
         }
         function buildGenericBEDefinitionFromScope() {
+            var settings = settingDirectiveAPI.getData();
+            if (settings != undefined) {
+                settings.ConfigId = $scope.scopeModel.selectedSetingsTypeConfig.ExtensionConfigurationId;
+            }
             var bEdefinition = {
                 BusinessEntityDefinitionId :businessEntityDefinitionId,
                 Name: $scope.scopeModel.businessEntityName,
                 Title: $scope.scopeModel.businessEntityTitle,
-                Settings: settingDirectiveAPI.getData()
+                Settings: settings
             };
             return bEdefinition;
         }
