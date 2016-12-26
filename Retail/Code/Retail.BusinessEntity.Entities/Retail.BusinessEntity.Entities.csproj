@@ -95,6 +95,10 @@
     <Compile Include="AccountDefinition\AccountBEDefinitionViewFilter.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="Account\AccountFilter.cs" />
+    <Compile Include="BEAction\AccountBEActionType.cs" />
+    <Compile Include="BEAction\AccountServiceBEActionType.cs" />
+    <Compile Include="BEAction\BEAction.cs" />
+    <Compile Include="BEAction\BEActionSettings.cs" />
     <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Package\PackageGroup.cs" />
