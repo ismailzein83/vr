@@ -60,9 +60,26 @@ namespace Retail.BusinessEntity.Business
             return configManager.GetAccountViewDefinitions();
         }
 
-        public List<AccountViewDefinition> GetAccountViewDefinitionsByAccount(long accountId)
+        public List<AccountViewDefinition> GetAccountViewDefinitionsByAccount(Account account)
         {
-            return GetAccountViewDefinitions();
+            List<AccountViewDefinition> results = new List<AccountViewDefinition>();
+            List<AccountViewDefinition> accoutViewDefinitions = this.GetAccountViewDefinitions();
+
+            foreach (var itm in accoutViewDefinitions)
+            {
+                if (IsViewAvailable(itm, account))
+                    results.Add(itm);
+            }
+            return results;
+        }
+
+        public List<AccountViewDefinition> GetAccountViewDefinitionsByAccountId(long accountId)
+        {
+            Account account = new AccountManager().GetAccount(accountId);
+            if (account == null)
+                throw new NullReferenceException(string.Format("accountId: {0}", accountId));
+
+            return GetAccountViewDefinitionsByAccount(account);
         }
 
         public IEnumerable<AccountViewDefinitionSettingsConfig> GetAccountViewDefinitionSettingsConfigs()
@@ -73,26 +90,34 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-
         #region Private Methods
 
         private bool IsColumnAvailable(long? parentAccountId, AccountGridColumnDefinition gridColumnDefinition)
         {
             bool isRoot = parentAccountId.HasValue ? false : true;
 
-            if(isRoot)
+            if (isRoot)
                 return gridColumnDefinition.IsAvailableInRoot;
 
             if (!gridColumnDefinition.IsAvailableInSubAccounts)
                 return false;
 
-            if (gridColumnDefinition.SubAccountsAvailabilityCondition == null)
-                return true;
+            if (gridColumnDefinition.SubAccountsAvailabilityCondition != null)
+            {
+                AccountConditionEvaluationContext context = new AccountConditionEvaluationContext();
+                context.Account = new AccountManager().GetAccount(parentAccountId.Value);
+                return gridColumnDefinition.SubAccountsAvailabilityCondition.Evaluate(context);
+            }
 
-            AccountConditionEvaluationContext context = new AccountConditionEvaluationContext();
-            context.Account = new AccountManager().GetAccount(parentAccountId.Value);
+            return true;
+        }
 
-            return gridColumnDefinition.SubAccountsAvailabilityCondition.Evaluate(context);
+        private bool IsViewAvailable(AccountViewDefinition accountViewDefinition, Account account)
+        {
+            if (accountViewDefinition.AvailabilityCondition != null)
+                return accountViewDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
+
+            return true;
         }
 
         #endregion

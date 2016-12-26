@@ -5,6 +5,7 @@
     AccountEditorController.$inject = ['$scope', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountPartDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
     function AccountEditorController($scope, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, Retail_BE_AccountPartDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+
         var isEditMode;
         var accountId;
         var accountEntity;
@@ -100,6 +101,7 @@
                 accountEntity = response;
             });
         }
+
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountTypeSelectorWithRuntime]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -322,6 +324,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function buildAccountObjFromScope() {
             var obj = {
                 AccountId: accountId,

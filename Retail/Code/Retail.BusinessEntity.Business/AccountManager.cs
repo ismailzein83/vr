@@ -448,7 +448,6 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-
         #region Validation Methods
 
         private void ValidateAccountToAdd(Account account)
@@ -668,7 +667,7 @@ namespace Retail.BusinessEntity.Business
                 fieldValues.Add(field.Name, accountFieldValue);
             }
 
-            List<AccountViewDefinition> accountViewDefinitions = accountDefinitionManager.GetAccountViewDefinitions();
+            List<AccountViewDefinition> accountViewDefinitions = accountDefinitionManager.GetAccountViewDefinitionsByAccount(account);
 
             return new AccountDetail()
             {

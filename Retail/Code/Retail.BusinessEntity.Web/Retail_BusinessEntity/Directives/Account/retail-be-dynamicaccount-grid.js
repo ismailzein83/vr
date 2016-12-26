@@ -152,6 +152,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                 };
 
                 api.onAccountAdded = function (addedAccount) {
+                    Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(addedAccount, accountViewDefinitions, gridAPI);
                     gridAPI.itemAdded(addedAccount);
                 };
 
@@ -171,7 +172,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
             }
             function editAccount(account) {
                 var onAccountUpdated = function (updatedAccount) {
-                    //drillDownManager.setDrillDownExtensionObject(updatedAccount);
+                    Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(updatedAccount, accountViewDefinitions, gridAPI);
                     gridAPI.itemUpdated(updatedAccount);
                 };
 

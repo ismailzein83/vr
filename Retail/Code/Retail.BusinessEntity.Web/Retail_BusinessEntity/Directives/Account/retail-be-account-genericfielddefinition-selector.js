@@ -76,20 +76,19 @@
 
                     var obj = $scope.scopeModel.selectedGenericFieldDefinition;
                     if (obj == undefined)
-                        return undefined
+                        return;
 
                     return {
                         Name: obj.Name,
                         Title: obj.Title,
                         FieldType: obj.FieldType
-                    }
+                    };
                 };
 
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
             }
-
         }
     }
 

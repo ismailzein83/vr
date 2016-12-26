@@ -20,8 +20,8 @@
         function GetAccountViewDefinitions() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitions"));
         }
-        function GetAccountViewDefinitionsByAccount(accountId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitions"),
+        function GetAccountViewDefinitionsByAccountId(accountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitionsByAccountId"),
                 { accountId: accountId });
         }
 
@@ -29,7 +29,7 @@
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
             GetAccountGridColumnAttributes: GetAccountGridColumnAttributes,
             GetAccountViewDefinitions: GetAccountViewDefinitions,
-            GetAccountViewDefinitionsByAccount: GetAccountViewDefinitionsByAccount
+            GetAccountViewDefinitionsByAccountId: GetAccountViewDefinitionsByAccountId
         };
     }
 

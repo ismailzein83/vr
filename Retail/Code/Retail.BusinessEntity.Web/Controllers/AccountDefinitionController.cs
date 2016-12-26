@@ -37,10 +37,10 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetAccountViewDefinitions();
         }
         [HttpGet]
-        [Route("GetAccountViewDefinitionsByAccount")]
-        public List<AccountViewDefinition> GetAccountViewDefinitionsByAccount(long accountId)
+        [Route("GetAccountViewDefinitionsByAccountId")]
+        public List<AccountViewDefinition> GetAccountViewDefinitionsByAccountId(long accountId)
         {
-            return _manager.GetAccountViewDefinitionsByAccount(accountId);
+            return _manager.GetAccountViewDefinitionsByAccountId(accountId);
         }
     }
 }

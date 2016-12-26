@@ -5,6 +5,7 @@
     AccountService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
 
     function AccountService(VRModalService, VRNotificationService, UtilsService, VRUIUtilsService) {
+
         function addAccount(parentAccountId, onAccountAdded) {
             var parameters = {
                 parentAccountId: parentAccountId
@@ -35,7 +36,7 @@
         };
 
         function defineAccountViewTabsAndMenuActions(account, accountViewDefinitions, gridAPI) {
-            if (account == undefined || account.AvailableAccountViews == undefined || account.AvailableAccountViews.legnth == 0)
+            if (account == undefined || account.AvailableAccountViews == undefined || account.AvailableAccountViews.length == 0)
                 return;
 
             var drillDownTabs = [];
@@ -51,9 +52,12 @@
 
 
             function addDrillDownTab(accountViewDefinition) {
+                if (accountViewDefinition.DrillDownSectionName == undefined || accountViewDefinition.Settings == undefined || accountViewDefinition.Settings.RuntimeEditor == undefined)
+                    return;
+
                 var drillDownTab = {};
 
-                drillDownTab.title = accountViewDefinition.Name;
+                drillDownTab.title = accountViewDefinition.DrillDownSectionName;
                 drillDownTab.directive = accountViewDefinition.Settings.RuntimeEditor;
 
                 drillDownTab.loadDirective = function (accountViewGridAPI, account) {
