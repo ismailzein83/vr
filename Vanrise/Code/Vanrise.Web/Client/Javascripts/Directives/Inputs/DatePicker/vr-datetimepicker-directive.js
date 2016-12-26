@@ -64,6 +64,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 case "dateHour": format = 'DD/MM/YYYY HH';
                     $scope.ctrl.isDateTime = true;
                     break;
+                case "longDateTime": format = 'DD/MM/YYYY HH:mm:ss';
+                    $scope.ctrl.isDateTime = true;
+                    break;
                 default: format = 'DD/MM/YYYY HH:mm';
                     $scope.ctrl.isDateTime = true;
                     break;
@@ -141,8 +144,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 var dt = e.date;
                 //selectedDate = convertUTCDateToLocalDate(new Date(dt));
                 selectedDate = new Date(dt);
-                selectedDate.setSeconds(0);
-                selectedDate.setMilliseconds(0);
+                //selectedDate.setSeconds(0);
+                //selectedDate.setMilliseconds(0);
                 var modelValue = $scope.ctrl.value;
                 if (modelValue != undefined && !(modelValue instanceof Date))
                     modelValue = new Date(modelValue);
@@ -165,6 +168,11 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     }
                     else if ($attrs.type == "dateHour") {
                         var date = new Date(selectedDate.setHours(selectedDate.getHours(), 0, 0, 0));
+                        //var date = moment.utc(selectedDate).format("L LT");
+                        $scope.ctrl.value = date;
+                    }
+                    else if ($attrs.type == "longDateTime") {
+                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), selectedDate.getSeconds(), 0));
                         //var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date;
                     }
@@ -346,12 +354,12 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
             var icontemplate = "";
-            if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour') {
+            if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime') {
                 n++;
                 icontemplate += ' <span   class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>';
 
             }
-            if (attrs.type == 'time' || attrs.type == 'dateTime' || attrs.type == 'dateHour') {
+            if (attrs.type == 'time' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime') {
                 n++;
                 icontemplate += ' <span   class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
 
