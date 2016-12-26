@@ -248,9 +248,7 @@
     <Compile Include="Zone\ZoneFilter.cs" />
     <Compile Include="Zone\Zone.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AccountType\Parts\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
