@@ -456,11 +456,9 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\EntityType\retail-be-entitytype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\retail-be-accountgriddefinition-management.js" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-technical-settings-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\Templates\AccountGridDefinitionManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\retail-be-accountviewdefinitions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\Templates\AccountViewDefinitionsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\TechnicalSettingsEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-recurringperiod-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Status\retail-be-statusdefinition-grid.js" />

@@ -41,7 +41,6 @@ namespace Retail.BusinessEntity.Business
         {
             List<DataRecordGridColumnAttribute> results = new List<DataRecordGridColumnAttribute>();
 
-            ConfigManager configManager = new ConfigManager();
             AccountGridDefinition accountGridDefinition = this.GetAccountGridDefinition(accountBEDefinitionId);
             if (accountGridDefinition.ColumnDefinitions == null)
                 throw new NullReferenceException("accountGridDefinition.ColumnDefinitions");

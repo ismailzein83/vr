@@ -109,7 +109,6 @@
     <Compile Include="AccountDefinition\AccountGridDefinition.cs" />
     <Compile Include="AccountDefinition\AccountViewDefinition.cs" />
     <Compile Include="AccountDefinition\AccountViewDefinitionConfig.cs" />
-    <Compile Include="Settings\RetailBETechnicalSetting.cs" />
     <Compile Include="AccountCondition\AccountCondition.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationQuery.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationDetail.cs" />
