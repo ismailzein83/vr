@@ -2,10 +2,11 @@
 
     'use strict';
 
-    Account360DegreeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountDefinitionAPIService'];
+    Account360DegreeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountBEDefinitionAPIService'];
 
-    function Account360DegreeEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService, Retail_BE_AccountDefinitionAPIService) {
+    function Account360DegreeEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService, Retail_BE_AccountBEDefinitionAPIService) {
 
+        var accountBEDefinitionId;
         var accountId;
         var accountEntity;
         var accountViewsDefinitions;
@@ -18,6 +19,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountId = parameters.accountId;
             }
         }
@@ -42,7 +44,7 @@
             });
         }
         function getAccountViewsDefinitions() { 
-            return Retail_BE_AccountDefinitionAPIService.GetAccountViewDefinitionsByAccountId(accountId).then(function (response) {
+            return Retail_BE_AccountBEDefinitionAPIService.GetAccountViewDefinitionsByAccountId(accountBEDefinitionId, accountId).then(function (response) {
                 accountViewsDefinitions = response;
             });
         }

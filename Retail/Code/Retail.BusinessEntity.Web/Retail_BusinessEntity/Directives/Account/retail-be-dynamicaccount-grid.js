@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountDefinitionAPIService', 'Retail_BE_AccountService',
-    function (VRNotificationService, UtilsService, Retail_BE_AccountAPIService, Retail_BE_AccountDefinitionAPIService, Retail_BE_AccountService) {
+app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountService',
+    function (VRNotificationService, UtilsService, Retail_BE_AccountAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_BE_AccountService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,9 +20,10 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
         function AccountGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
+            var parentAccountId;
             var gridColumnFieldNames = [];
             var accountViewDefinitions = [];
-            var parentAccountId;
 
             var gridAPI;
 
@@ -44,7 +45,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var account = response.Data[i];
-                                Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(account, accountViewDefinitions, gridAPI);
+                                Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(accountBEDefinitionId, account, accountViewDefinitions, gridAPI);
                             }
                         }
                         onResponseReady(response);
@@ -65,8 +66,9 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                     var gridQuery;
 
                     if (payload != undefined) {
-                        gridQuery = payload.query;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
+                        gridQuery = payload.query;
                     }
 
                     if ($scope.scopeModel.columns.length == 0) {
@@ -100,7 +102,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
 
                         var accountGridColumnAttributesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        Retail_BE_AccountDefinitionAPIService.GetAccountGridColumnAttributes(parentAccountId).then(function (response) {
+                        Retail_BE_AccountBEDefinitionAPIService.GetAccountGridColumnAttributes(accountBEDefinitionId, parentAccountId).then(function (response) {
 
                             var accountGridColumnAttributes = response;
 
@@ -128,7 +130,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
 
                         var accountViewDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        Retail_BE_AccountDefinitionAPIService.GetAccountViewDefinitions().then(function (response) {
+                        Retail_BE_AccountBEDefinitionAPIService.GetAccountViewDefinitions(accountBEDefinitionId).then(function (response) {
 
                             accountViewDefinitions = response;
                             accountViewDefinitionsLoadPromiseDeferred.resolve();
@@ -143,8 +145,9 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                         if (gridQuery == undefined)
                             gridQuery = {};
 
-                        gridQuery.Columns = gridColumnFieldNames;
+                        gridQuery.AccountBEDefinitionId = accountBEDefinitionId;
                         gridQuery.ParentAccountId = parentAccountId;
+                        gridQuery.Columns = gridColumnFieldNames;
                         return gridQuery;
                     }
 

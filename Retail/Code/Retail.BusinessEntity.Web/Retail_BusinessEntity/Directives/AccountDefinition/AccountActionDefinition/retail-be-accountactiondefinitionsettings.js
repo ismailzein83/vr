@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountActionDefinitionSettingsDirective.$inject = ['Retail_BE_AccountDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    AccountActionDefinitionSettingsDirective.$inject = ['Retail_BE_AccountBEDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function AccountActionDefinitionSettingsDirective(Retail_BE_AccountDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function AccountActionDefinitionSettingsDirective(Retail_BE_AccountBEDefinitionAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -75,7 +75,7 @@
                     promises.push(getAccountActionDefinitionSettingsTemplateConfigsPromise);
 
                     function getAccountActionDefinitionSettingsTemplateConfigs() {
-                        return Retail_BE_AccountDefinitionAPIService.GetAccountActionDefinitionSettingsConfigs().then(function (response) {
+                        return Retail_BE_AccountBEDefinitionAPIService.GetAccountActionDefinitionSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

@@ -8,6 +8,7 @@
 
         var accountFields;
         var viewId;
+        var accountBEDefinitionId;
 
         var businessEntityDefinitionSelectorAPI;
         var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -51,14 +52,19 @@
             };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.load({});
+                var gridPayload = {
+                    accountBEDefinitionId: accountBEDefinitionId
+                };
+                gridAPI.load(gridPayload);
             };
 
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (selectedBusinessEntityDefinition) {
 
                 if (selectedBusinessEntityDefinition != undefined) {
-
+                    $scope.scopeModel.isGridLoadded = false;
                     $scope.scopeModel.isAccountBEDefinitionSelected = true;
+
+                    accountBEDefinitionId = selectedBusinessEntityDefinition.BusinessEntityDefinitionId;
 
                     loadAllControls().then(function () {
                         $scope.scopeModel.isGridLoadded = true;
@@ -67,8 +73,12 @@
             };
 
             $scope.scopeModel.search = function () {
-                var query = buildGridQuery();
-                return gridAPI.load({ query: query });
+                var gridPayload = {
+                    query: buildGridQuery(),
+                    accountBEDefinitionId: accountBEDefinitionId
+                };
+
+                return gridAPI.load(gridPayload);
             };
             $scope.scopeModel.add = function () {
                 var onAccountAdded = function (addedAccount) {

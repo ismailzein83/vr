@@ -35,7 +35,7 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
 
-        function defineAccountViewTabsAndMenuActions(account, accountViewDefinitions, gridAPI) {
+        function defineAccountViewTabsAndMenuActions(accountBEDefinitionId, account, accountViewDefinitions, gridAPI) {
             if (account == undefined || account.AvailableAccountViews == undefined || account.AvailableAccountViews.length == 0)
                 return;
 
@@ -69,7 +69,8 @@
                 function buildAccountViewQuery() {
 
                     var payload = {
-                        parentAccountId: account.Entity.AccountId,
+                        accountBEDefinitionId: accountBEDefinitionId,
+                        parentAccountId: account.Entity.AccountId
                     };
                     return payload;
                 }

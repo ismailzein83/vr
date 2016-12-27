@@ -2,41 +2,48 @@
 
     'use strict';
 
-    AccountDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig', 'SecurityService'];
+    AccountBEDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig', 'SecurityService'];
 
-    function AccountDefinitionAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
-        var controllerName = 'AccountDefinition';
+    function AccountBEDefinitionAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
+
+        var controllerName = 'AccountBEDefinition';
 
         function GetAccountViewDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitionSettingsConfigs"));
         }
+
         function GetAccountActionDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountActionDefinitionSettingsConfigs"));
         }
         
-        function GetAccountGridColumnAttributes(parentAccountId) {
+        function GetAccountGridColumnAttributes(accountBEDefinitionId, parentAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountGridColumnAttributes"), {
+                accountBEDefinitionId: accountBEDefinitionId,
                 parentAccountId: parentAccountId
             });
         }
 
-        function GetAccountViewDefinitions() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitions"));
+        function GetAccountViewDefinitions(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitions"), {
+                accountBEDefinitionId: accountBEDefinitionId
+            });
         }
-        function GetAccountViewDefinitionsByAccountId(accountId) {
+
+        function GetAccountViewDefinitionsByAccountId(accountBEDefinitionId, accountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitionsByAccountId"),
                 { accountId: accountId });
         }
         
+
         return {
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
+            GetAccountActionDefinitionSettingsConfigs: GetAccountActionDefinitionSettingsConfigs,
             GetAccountGridColumnAttributes: GetAccountGridColumnAttributes,
             GetAccountViewDefinitions: GetAccountViewDefinitions,
-            GetAccountViewDefinitionsByAccountId: GetAccountViewDefinitionsByAccountId,
-            GetAccountActionDefinitionSettingsConfigs: GetAccountActionDefinitionSettingsConfigs
+            GetAccountViewDefinitionsByAccountId: GetAccountViewDefinitionsByAccountId
         };
     }
 
-    appControllers.service('Retail_BE_AccountDefinitionAPIService', AccountDefinitionAPIService);
+    appControllers.service('Retail_BE_AccountBEDefinitionAPIService', AccountBEDefinitionAPIService);
 
 })(appControllers);

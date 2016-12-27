@@ -11,10 +11,10 @@ using Vanrise.Web.Base;
 namespace Retail.BusinessEntity.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "AccountDefinition")]
-    public class AccountDefinitionController : BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "AccountBEDefinition")]
+    public class AccountBEDefinitionController : BaseAPIController
     {
-        AccountDefinitionManager _manager = new AccountDefinitionManager();
+        AccountBEDefinitionManager _manager = new AccountBEDefinitionManager();
 
         [HttpGet]
         [Route("GetAccountViewDefinitionSettingsConfigs")]
@@ -30,22 +30,23 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
         [HttpGet]
         [Route("GetAccountGridColumnAttributes")]
-        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(long? parentAccountId = null)
+        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(Guid accountBEDefinitionId, long? parentAccountId = null)
         {
-            return _manager.GetAccountGridColumnAttributes(parentAccountId);
+            return _manager.GetAccountGridColumnAttributes(accountBEDefinitionId, parentAccountId);
         }
 
         [HttpGet]
         [Route("GetAccountViewDefinitions")]
-        public List<AccountViewDefinition> GetAccountViewDefinitions()
+        public List<AccountViewDefinition> GetAccountViewDefinitions(Guid accountBEDefinitionId)
         {
-            return _manager.GetAccountViewDefinitions();
+            return _manager.GetAccountViewDefinitions(accountBEDefinitionId);
         }
+
         [HttpGet]
         [Route("GetAccountViewDefinitionsByAccountId")]
-        public List<AccountViewDefinition> GetAccountViewDefinitionsByAccountId(long accountId)
+        public List<AccountViewDefinition> GetAccountViewDefinitionsByAccountId(Guid accountBEDefinitionId, long accountId)
         {
-            return _manager.GetAccountViewDefinitionsByAccountId(accountId);
+            return _manager.GetAccountViewDefinitionsByAccountId(accountBEDefinitionId, accountId);
         }
     }
 }

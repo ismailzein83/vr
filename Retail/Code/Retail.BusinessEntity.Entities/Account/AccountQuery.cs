@@ -18,5 +18,7 @@ namespace Retail.BusinessEntity.Entities
         public RecordFilterGroup FilterGroup { get; set; }
 
         public List<string> Columns { get; set; }
+
+        public Guid AccountBEDefinitionId { get; set; }
     }
 }

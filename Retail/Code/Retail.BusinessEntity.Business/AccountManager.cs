@@ -51,7 +51,7 @@ namespace Retail.BusinessEntity.Business
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", fieldProperty[0], fieldProperty[1]);
             }
 
-            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(account, input.Query.Columns));
+            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(account, input.Query));
             if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 foreach (var accountDetail in bigResult.Data)
@@ -635,11 +635,11 @@ namespace Retail.BusinessEntity.Business
             return accountDetail;
         }
 
-        private AccountDetail AccountDetailMapperStep1(Account account, List<string> columns)
+        private AccountDetail AccountDetailMapperStep1(Account account, AccountQuery accountQuery)
         {
             var statusDefinitionManager = new StatusDefinitionManager();
             var accountTypeManager = new AccountTypeManager();
-            var accountDefinitionManager = new AccountDefinitionManager();
+            var accountDefinitionManager = new AccountBEDefinitionManager();
             var accountServices = new AccountServiceManager();
             var accountPackages = new AccountPackageManager();
 
@@ -651,7 +651,7 @@ namespace Retail.BusinessEntity.Business
 
             foreach (var field in genericFieldDefinitionInfos)
             {
-                if (columns != null && !columns.Contains(field.Name))
+                if (accountQuery.Columns != null && !accountQuery.Columns.Contains(field.Name))
                     continue;
 
                 AccountFieldValue accountFieldValue = new AccountFieldValue();
@@ -667,7 +667,7 @@ namespace Retail.BusinessEntity.Business
                 fieldValues.Add(field.Name, accountFieldValue);
             }
 
-            List<AccountViewDefinition> accountViewDefinitions = accountDefinitionManager.GetAccountViewDefinitionsByAccount(account);
+            List<AccountViewDefinition> accountViewDefinitions = accountDefinitionManager.GetAccountViewDefinitionsByAccount(accountQuery.AccountBEDefinitionId, account);
 
             return new AccountDetail()
             {
