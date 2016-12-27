@@ -66,7 +66,14 @@ namespace Vanrise.Common.Business
         public IDataRetrievalResult<VRComponentTypeDetail> GetFilteredVRComponentTypes(DataRetrievalInput<VRComponentTypeQuery> input)
         {
             var allVRComponentTypes = GetCachedComponentTypes();
-            Func<VRComponentType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()) && (input.Query.ExtensionConfigId == null || x.Settings.VRComponentTypeConfigId == input.Query.ExtensionConfigId));
+            Func<VRComponentType, bool> filterExpression = (x) =>
+                {
+                    if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                        return false;
+                    if (x.Settings.VRComponentTypeConfigId != input.Query.ExtensionConfigId)
+                        return false;
+                    return true;
+                };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRComponentTypes.ToBigResult(input, filterExpression, VRComponentTypeDetailMapper));
         }
 

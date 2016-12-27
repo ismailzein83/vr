@@ -62,7 +62,10 @@
         function loadGrid() {
             if (gridAPI != undefined) {
                 var query = buildGridQuery();
-                return gridAPI.load(query);
+                $scope.scopeModel.isLoading = true;
+                return gridAPI.load(query).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
             }
         }
         function loadVRComponentTypes() {
