@@ -11,14 +11,13 @@ namespace Vanrise.GenericData.Business
     {
         public bool IsMatched(IBusinessEntityDefinitionFilterContext context)
         {
-            if (context.entityDefinition != null && context.entityDefinition.Settings != null)
-            {
-                var settings = context.entityDefinition.Settings as GenericBEDefinitionSettings;
-                if (settings != null)
-                    return true;
+            if (context.entityDefinition == null || context.entityDefinition.Settings == null)
+                return false;
 
-            }
-            return false;
+            if (context.entityDefinition.Settings.ConfigId != new GenericBEDefinitionSettings().ConfigId)
+                return false;
+
+            return true;
         }
     }
 }
