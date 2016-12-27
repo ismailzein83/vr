@@ -24,13 +24,31 @@ namespace Retail.BusinessEntity.Entities
         public List<PackageItem> Services { get; set; }
 
         public PackageExtendedSettings ExtendedSettings { get; set; }
+    }
 
-        public int CurrencyId { get; set; }
+    public class AccountPackageDefaultAssignmentSetting : Vanrise.Entities.SettingData
+    {
+        public List<AccountPackageDefaultAssignmentRule> AssignmentRules { get; set; }
+    }
 
-        public Decimal? InitialFee { get; set; }
+    public class AccountPackageDefaultAssignmentRule
+    {
+        public AccountCondition AccountCondition { get; set; }
 
-        public RecurringPeriodSettings RecurringPeriod { get; set; }
+        public int PackageGroupId { get; set; }
 
-        public Decimal? RecurringFee { get; set; }
+        public List<int> PackageIds { get; set; }
+    }
+
+    public class AccountDefaultActionSetting : Vanrise.Entities.SettingData
+    {
+
+    }
+
+    public class AccountDefaultActionItem
+    {
+        public AccountCondition AccountCondition { get; set; }
+
+        public Guid ActionDefinitionId { get; set; }
     }
 }

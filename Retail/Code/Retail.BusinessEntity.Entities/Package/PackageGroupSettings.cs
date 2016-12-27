@@ -8,6 +8,19 @@ namespace Retail.BusinessEntity.Entities
 {
     public class PackageGroupSettings
     {
-        public List<int> PackageIds { get; set; }
+        public List<PackageGroupItem> Packages { get; set; }
+    }
+
+    public class PackageGroupItem
+    {
+        public int PackageId { get; set; }
+
+        public int CurrencyId { get; set; }
+
+        public Decimal? InitialFee { get; set; }
+
+        public RecurringPeriodSettings RecurringPeriod { get; set; }
+
+        public Decimal? RecurringFee { get; set; }
     }
 }
