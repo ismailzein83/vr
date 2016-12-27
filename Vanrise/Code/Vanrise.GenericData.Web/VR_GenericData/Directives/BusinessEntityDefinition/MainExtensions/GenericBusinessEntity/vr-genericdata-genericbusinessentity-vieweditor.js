@@ -7,12 +7,12 @@ app.directive("vrGenericdataGenericbusinessentityVieweditor", ["UtilsService", "
             restrict: "E",
             scope:
             {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var genericBusinessEntityViewEditor = new GenericBusinessEntityViewEditor($scope, ctrl, $attrs);
-                genericBusinessEntityViewEditor.initializeController();
+                var ctor = new GenericBusinessEntityViewEditorCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
@@ -21,7 +21,7 @@ app.directive("vrGenericdataGenericbusinessentityVieweditor", ["UtilsService", "
             },
             templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Templates/GenericBusinessEntityViewEditor.html"
         };
-        function GenericBusinessEntityViewEditor($scope, ctrl, $attrs) {
+        function GenericBusinessEntityViewEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var beDefinitionSelectorApi;
@@ -30,7 +30,7 @@ app.directive("vrGenericdataGenericbusinessentityVieweditor", ["UtilsService", "
             function initializeController() {
                 $scope.scopeModel = {};
               
-                $scope.scopeModel.onDataRecordTypeSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     beDefinitionSelectorApi = api;
                     beDefinitionSelectorPromiseDeferred.resolve();
                 };
@@ -40,16 +40,11 @@ app.directive("vrGenericdataGenericbusinessentityVieweditor", ["UtilsService", "
             function defineAPI() {
                 var api = {};
 
-                api.getData = function () {
-                    return {
-                        $type: "Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities",
-                        BusinessEntityDefinitionId: beDefinitionSelectorApi.getSelectedIds()
-
-                    };
-                };
                 api.load = function (payload) {
                     var promises = [];
+
                     promises.push(loadBusinessEntityDefinitionSelector());
+
                     function loadBusinessEntityDefinitionSelector() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -58,7 +53,7 @@ app.directive("vrGenericdataGenericbusinessentityVieweditor", ["UtilsService", "
                                 selectedIds: payload != undefined ? payload.BusinessEntityDefinitionId : undefined,
                                 filter: {
                                     Filters: [{
-                                        $type: "Vanrise.GenericData.Business.GenericBusinessEntityDefinitionFilter,Vanrise.GenericData.Business"
+                                        $type: "Vanrise.GenericData.Business.GenericBusinessEntityDefinitionFilter, Vanrise.GenericData.Business"
                                     }]
                                 }
                             };
@@ -66,14 +61,22 @@ app.directive("vrGenericdataGenericbusinessentityVieweditor", ["UtilsService", "
                         });
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
                     }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
+
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities",
+                        BusinessEntityDefinitionId: beDefinitionSelectorApi.getSelectedIds()
+                    };
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
         }
 
         return directiveDefinitionObject;
-
     }
 ]);

@@ -15,7 +15,6 @@
                 onselectionchanged: '=',
                 ismultipleselection: "@",
                 isrequired: "=",
-                isdisabled: "=",
                 customlabel: "@"
             },
             controller: function ($scope, $element, $attrs) {
@@ -121,7 +120,6 @@
                     + ' ' + hideselectedvaluessection
                     + ' isrequired="ctrl.isrequired"'
                     + ' ' + hideremoveicon
-                    + ' vr-disabled="ctrl.isdisabled"'
                     + ' label="' + label + '"'
                     + ' entityName="' + label + '"'
                 + '</vr-select>'

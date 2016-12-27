@@ -30,29 +30,19 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.haveAddPermission = false;
             $scope.scopeModel.filters = [];
+
+            $scope.scopeModel.haveAddPermission = false;
             $scope.scopeModel.gridloadded = false;
+
             $scope.onGenericRuleDefinitionSelectorDirectiveReady = function (api) {
                 genericRuleDefinitionAPI = api;
                 genericRuleDefinitionReadyDeferred.resolve();
-            };
-            $scope.onGenericRuleDefinitionSelectorSelectionChange = function () {
-                if (genericRuleDefinitionAPI.getSelectedIds() != undefined) {
-                    $scope.scopeModel.filters.length = 0;
-                    $scope.scopeModel.settingsFilterEditor = null;
-                    $scope.scopeModel.gridloadded = false;
-                    loadAllControls().then(function () {
-                        $scope.scopeModel.gridloadded = true;                       
-                       hasAddGenericRulePermission();
-                   })
-                }
             };
             $scope.onSettingsFilterDirectiveReady = function (api) {
                 settingsFilterDirectiveAPI = api;
                 settingsFilterDirectiveReadyDeferred.resolve();
             };
-
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var defFilter = {
@@ -61,6 +51,18 @@
                     Description: $scope.scopeModel.description
                 };
                 gridAPI.loadGrid(defFilter);
+            };
+
+            $scope.onGenericRuleDefinitionSelectorSelectionChange = function () {
+                if (genericRuleDefinitionAPI.getSelectedIds() != undefined) {
+                    $scope.scopeModel.filters.length = 0;
+                    $scope.scopeModel.settingsFilterEditor = null;
+                    $scope.scopeModel.gridloadded = false;
+                    loadAllControls().then(function () {
+                        $scope.scopeModel.gridloadded = true;
+                        hasAddGenericRulePermission();
+                    })
+                }
             };
            
             $scope.search = function () {
@@ -110,25 +112,39 @@
         function load() {
             loadGenericRuleDefinition();
         }
+
+        function loadGenericRuleDefinition() {
+            var loadGenericRuleDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            genericRuleDefinitionReadyDeferred.promise.then(function () {
+                var payLoad;
+                payLoad = {
+                    filter: {
+                        Filters: [{
+                            $type: "Vanrise.GenericData.Business.GenericRuleDefinitionViewFilter, Vanrise.GenericData.Business",
+                            ViewId: viewId
+                        }]
+                    }
+                }
+                VRUIUtilsService.callDirectiveLoad(genericRuleDefinitionAPI, payLoad, loadGenericRuleDefinitionSelectorPromiseDeferred);
+            });
+            return loadGenericRuleDefinitionSelectorPromiseDeferred.promise;
+        }
+
         function loadAllControls() {
             $scope.isLoading = true;
-            return UtilsService.waitMultipleAsyncOperations([setStaticData, loadFilters]).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
 
             function setStaticData() {
                 $scope.scopeModel.effectiveDate = new Date();
             }
-
             function loadFilters() {
                 var promises = [];
+
                 var ruleDefinition;
                 var fieldTypes;
 
                 var getRuleDefinitionPromise = getRuleDefinition();
                 var getFieldTypeConfigsPromise = getFieldTypeConfigs();
+
                 var getRuleDefinitionAndFieldTypeConfigsDeferred = UtilsService.createPromiseDeferred();
                 promises.push(getRuleDefinitionAndFieldTypeConfigsDeferred.promise);
 
@@ -162,7 +178,6 @@
                     getRuleDefinitionAndFieldTypeConfigsDeferred.reject(error);
                 });
 
-                return UtilsService.waitMultiplePromises(promises);
 
                 function getRuleDefinition() {
                     return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionAPI.getSelectedIds()).then(function (response) {
@@ -232,24 +247,15 @@
                         }
                     });
                 }
-            }
-        }
 
-        function loadGenericRuleDefinition() {
-            var loadGenericRuleDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-            genericRuleDefinitionReadyDeferred.promise.then(function () {
-                var payLoad;
-                    payLoad = {
-                        filter: {
-                            Filters: [{
-                                $type: "Vanrise.GenericData.Business.GenericRuleDefinitionViewFilter, Vanrise.GenericData.Business",
-                                ViewId: viewId
-                            }]
-                        }
-                }
-                VRUIUtilsService.callDirectiveLoad(genericRuleDefinitionAPI, payLoad, loadGenericRuleDefinitionSelectorPromiseDeferred);
+                return UtilsService.waitMultiplePromises(promises);
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setStaticData, loadFilters]).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
             });
-            return loadGenericRuleDefinitionSelectorPromiseDeferred.promise;
         }
 
         function hasAddGenericRulePermission() {
