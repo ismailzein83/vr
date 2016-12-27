@@ -3,9 +3,10 @@
              datasource="firewalls"
              dataretrievalfunction="dataRetrievalFunction"
              menuactions="scopeModel.menuActions"
+             pagingtype="'PagingOnScroll'"
              idfield="Entity.Host">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.Id'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Host/Network'" field="'Entity.Host'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreationDate'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreationDate'" type="'Datetime'"></vr-datagridcolumn>
 </vr-datagrid>
