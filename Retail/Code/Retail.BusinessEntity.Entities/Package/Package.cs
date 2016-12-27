@@ -23,6 +23,8 @@ namespace Retail.BusinessEntity.Entities
     {
         public List<PackageItem> Services { get; set; }
 
+        public Guid PackageDefinitionId { get; set; }
+
         public PackageExtendedSettings ExtendedSettings { get; set; }
     }
 

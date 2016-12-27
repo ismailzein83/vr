@@ -14,20 +14,19 @@ namespace Retail.BusinessEntity.Entities
 
         public string Title { get; set; }
 
+        public Guid AccountBEDefinitionId { get; set; }
+
         public AccountTypeSettings Settings { get; set; }
     }
 
     public class AccountTypeSettings
     {
+
         public bool CanBeRootAccount { get; set; }
 
         public List<Guid> SupportedParentAccountTypeIds { get; set; }
 
         public List<AccountTypePartSettings> PartDefinitionSettings { get; set; }
-
-        public List<ActionTypeStatusSettings> SupportedStatuses { get; set; }
-
-        public List<AccountTypeActionSettings> SupportedActions { get; set; }
 
         public Guid InitialStatusId { get; set; }
 
@@ -42,18 +41,6 @@ namespace Retail.BusinessEntity.Entities
         public AccountPartAvailabilityOptions AvailabilitySettings { get; set; }
         public AccountPartRequiredOptions RequiredSettings { get; set; }
         public Guid PartDefinitionId { get; set; }
-    }
-
-    public class ActionTypeStatusSettings
-    {
-        public Guid StatusDefinitionId { get; set; }
-
-        public bool IsChargeable { get; set; }
-    }
-
-    public class AccountTypeActionSettings
-    {
-        public Guid ActionDefinitionId { get; set; }
     }
 
     public class AccountType : BaseAccountType

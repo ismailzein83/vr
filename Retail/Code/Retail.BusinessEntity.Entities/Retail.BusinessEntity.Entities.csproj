@@ -99,6 +99,10 @@
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />
     <Compile Include="InvoiceSettings.cs" />
+    <Compile Include="Package\Definition\PackageDefinition.cs" />
+    <Compile Include="Package\Definition\PackageDefinitionConfig.cs" />
+    <Compile Include="Package\Definition\PackageDefinitionExtendedSettings.cs" />
+    <Compile Include="Package\Definition\PackageDefinitionSettings.cs" />
     <Compile Include="Package\PackageGroup.cs" />
     <Compile Include="Package\PackageGroupSettings.cs" />
     <Compile Include="AccountDefinition\AccountGridDefinition.cs" />

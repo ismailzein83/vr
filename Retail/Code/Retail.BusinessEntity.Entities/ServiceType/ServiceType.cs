@@ -16,6 +16,8 @@ namespace Retail.BusinessEntity.Entities
 
         public string Title { get; set; }
 
+        public Guid AccountBEDefinitionId { get; set; }
+
         public ServiceTypeSettings Settings { get; set; }
     }
 
