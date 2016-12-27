@@ -221,7 +221,7 @@ namespace Vanrise.Security.Business
             {
                 if (securityToken.AccessibleCloudApplications == null || !securityToken.AccessibleCloudApplications.Any(app => app.ApplicationId == authServer.Settings.CurrentApplicationId))
                 {
-                    errorMessage = "You dont have access to this application";
+                    errorMessage = "You don't have access to this application";
                     invalidAccess = InvalidAccess.UnauthorizeAccess;
                     return false;
                 }

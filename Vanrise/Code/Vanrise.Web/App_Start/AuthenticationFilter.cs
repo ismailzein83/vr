@@ -34,7 +34,7 @@ namespace Vanrise.Web.App_Start
                             SecurityToken securityToken = Serializer.Deserialize<SecurityToken>(decryptedToken);
                             if (securityToken == null)
                             {
-                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid token");
+                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Token");
                             }
                             else if (!(new SecurityManager()).CheckTokenAccess(securityToken, out errorMessage, out invalidAccess))
                             {
