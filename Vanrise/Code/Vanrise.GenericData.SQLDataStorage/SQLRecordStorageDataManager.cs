@@ -419,7 +419,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, input.Query.Direction == OrderDirection.Ascending ? "ASC" : "DESC");
             StringBuilder str = new StringBuilder(string.Format(@"  select Top {0} {1} from {2} WITH (NOLOCK)
                                                                     where ({3} >= @FromTime) 
-                                                                    and (@ToTime is null or {3} < @ToTime) 
+                                                                    and (@ToTime is null or {3} <= @ToTime) 
                                                                     {4} {5}", input.Query.LimitResult, string.Join<string>(",", GetColumnNamesFromFieldNames(input.Query.Columns)), tableName, dateTimeColumn, recordFilterResult, orderResult));
             //input.SortByColumnName = dateTimeColumn;
             return str.ToString();
