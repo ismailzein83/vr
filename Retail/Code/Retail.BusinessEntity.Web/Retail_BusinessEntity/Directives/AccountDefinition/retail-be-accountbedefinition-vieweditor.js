@@ -11,8 +11,8 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var accountBEDefinitionViewEditor = new AccountBEDefinitionViewEditor($scope, ctrl, $attrs);
-                accountBEDefinitionViewEditor.initializeController();
+                var ctor = new AccountBEDefinitionViewEditorCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
@@ -21,7 +21,7 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
             },
             templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/AccountBEDefinitionViewEditor.html"
         };
-        function AccountBEDefinitionViewEditor($scope, ctrl, $attrs) {
+        function AccountBEDefinitionViewEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var beDefinitionSelectorApi;
@@ -30,11 +30,11 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onDataRecordTypeSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     beDefinitionSelectorApi = api;
                     beDefinitionSelectorPromiseDeferred.resolve();
                 };
-
+                 
                 defineAPI();
             }
             function defineAPI() {
@@ -53,7 +53,7 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                                 selectedIds: payload != undefined ? payload.BusinessEntityDefinitionId : undefined,
                                 filter: {
                                     Filters: [{
-                                        $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewFilter, Retail.BusinessEntity.Entities"
+                                        $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionFilter, Retail.BusinessEntity.Entities"
                                     }]
                                 }
                             };

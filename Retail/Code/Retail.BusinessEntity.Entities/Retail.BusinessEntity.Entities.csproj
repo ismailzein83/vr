@@ -93,7 +93,7 @@
     <Compile Include="AccountCondition\AccountConditionConfig.cs" />
     <Compile Include="AccountDefinition\AccountActionDefinition.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
-    <Compile Include="AccountDefinition\AccountBEDefinitionViewFilter.cs" />
+    <Compile Include="AccountDefinition\AccountBEDefinitionFilter.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />

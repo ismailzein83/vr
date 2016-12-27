@@ -9,32 +9,28 @@ using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Entities
 {
-    class AccountBEDefinitionViewFilter : IBusinessEntityDefinitionFilter
+    class AccountBEDefinitionFilter : IBusinessEntityDefinitionFilter
     {
         public Guid ViewId { get; set; }
 
         public bool IsMatched(IBusinessEntityDefinitionFilterContext context)
         {
 
-            var settings = context.entityDefinition.Settings as AccountBEDefinitionSettings;
+            var settings = context.entityDefinition.Settings as AccountBEDefinitionSettings; 
             if (settings == null)
                 return false;
 
-            if (this.ViewId == Guid.Empty)
-            {
-                return true;
-            }
-            else
+            if (this.ViewId != Guid.Empty)
             {
                 ViewManager viewManager = new ViewManager();
                 var accountBEDefinitionViewSettings = viewManager.GetView(this.ViewId).Settings as AccountBEDefinitionViewSettings;
                 BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
 
-                if (accountBEDefinitionViewSettings.AccountBEDefinitionSettings.Any(x => x.BusinessEntityId == context.entityDefinition.BusinessEntityDefinitionId))
-                    return true;
+                if (!accountBEDefinitionViewSettings.AccountBEDefinitionSettings.Any(x => x.BusinessEntityId == context.entityDefinition.BusinessEntityDefinitionId))
+                    return false;
             }
 
-            return false;
+            return true;
         }
     }
 }

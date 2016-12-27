@@ -34,6 +34,9 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.isAccountBEDefinitionSelected = false;
+            $scope.scopeModel.isGridLoadded = false;
+
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 businessEntityDefinitionSelectorAPI = api;
                 businessEntityDefinitionSelectorReadyDeferred.resolve();
@@ -51,16 +54,14 @@
                 gridAPI.load({});
             };
 
-            $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function () {
+            $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (selectedBusinessEntityDefinition) {
 
-                if (businessEntityDefinitionSelectorAPI.getSelectedIds() != undefined) {
-                    $scope.scopeModel.filters.length = 0;
-                    $scope.scopeModel.settingsFilterEditor = null;
-                    $scope.scopeModel.gridloadded = false;
+                if (selectedBusinessEntityDefinition != undefined) {
+
+                    $scope.scopeModel.isAccountBEDefinitionSelected = true;
 
                     loadAllControls().then(function () {
-                        $scope.scopeModel.gridloadded = true;
-                        //hasAddGenericRulePermission();
+                        $scope.scopeModel.isGridLoadded = true;
                     })
                 }
             };
@@ -83,16 +84,9 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            loadAllControls();
+            return loadBusinessEntityDefinitionSelector();
         }
 
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadBusinessEntityDefinitionSelector, loadAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
-        }
         function loadBusinessEntityDefinitionSelector() {
             var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -100,7 +94,7 @@
                 var payload = {
                     filter: {
                         Filters: [{
-                            $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewFilter, Retail.BusinessEntity.Entities",
+                            $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionFilter, Retail.BusinessEntity.Entities",
                             ViewId: viewId
                         }]
                     }
@@ -109,7 +103,19 @@
                 VRUIUtilsService.callDirectiveLoad(businessEntityDefinitionSelectorAPI, payload, businessEntityDefinitionSelectorLoadDeferred);
             });
 
-            return businessEntityDefinitionSelectorLoadDeferred.promise;
+            return businessEntityDefinitionSelectorLoadDeferred.promise.catch(function (error) {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        }).finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                        });
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
         function loadAccountTypeSelector() {
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -166,7 +172,6 @@
             }
             return context;
         };
-
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,

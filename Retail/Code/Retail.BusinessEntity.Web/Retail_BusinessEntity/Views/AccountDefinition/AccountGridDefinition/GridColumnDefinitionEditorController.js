@@ -65,8 +65,8 @@
         }
         function setTitle() {
             $scope.title = (isEditMode) ?
-                UtilsService.buildTitleForUpdateEditor((columnDefinitionEntity != undefined) ? columnDefinitionEntity.FieldName : null, 'Column Definition') :
-                UtilsService.buildTitleForAddEditor('Column Definition');
+                UtilsService.buildTitleForUpdateEditor((columnDefinitionEntity != undefined) ? columnDefinitionEntity.FieldName : null, 'Column') :
+                UtilsService.buildTitleForAddEditor('Column');
         }
         function loadStaticData() {
 

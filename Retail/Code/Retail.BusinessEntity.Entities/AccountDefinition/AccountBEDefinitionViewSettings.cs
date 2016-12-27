@@ -12,10 +12,10 @@ namespace Retail.BusinessEntity.Entities
 
         public override string GetURL(Vanrise.Security.Entities.View view)
         {
-            return String.Format("#/viewwithparams/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
+            return String.Format("#/viewwithparams/Retail_BusinessEntity/Views/AccountBusinessEntity/Runtime/AccountBusinessEntityManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
         }
     }
-
+     
     public class AccountBEDefinitionViewSetting
     {
         public Guid BusinessEntityId { get; set; }

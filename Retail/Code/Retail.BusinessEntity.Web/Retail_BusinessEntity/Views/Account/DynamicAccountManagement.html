@@ -14,15 +14,17 @@
                 <vr-columns width="normal">
                     <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
                                                                       onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"
-                                                                      hideremoveicon>
+                                                                      customlabel="Account Definition" hideremoveicon>
                     </vr-genericdata-businessentitydefinition-selector>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
                     <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
                 </vr-columns>
-                <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="2" ismultipleselection="true"></retail-be-accounttype-selector>
+                <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="2"
+                                                ng-show="scopeModel.isAccountBEDefinitionSelected" ismultipleselection="true">
+                </retail-be-accounttype-selector>
             </vr-row>
-            <vr-row ng-show="advancedSelected" removeline>
+            <vr-row ng-show="advancedSelected && scopeModel.isAccountBEDefinitionSelected" removeline>
                 <vr-columns width="fullrow">
                     <vr-section title="Advanced Filter" collapsible>
                         <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
@@ -33,7 +35,7 @@
 
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
+                <div transclude-to="buttons" ng-show="scopeModel.isAccountBEDefinitionSelected">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
                     <vr-button type="Add" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddAccountPermission"></vr-button>
                 </div>
@@ -42,7 +44,7 @@
 
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <retail-be-dynamicaccount-grid on-ready="scopeModel.onGridReady"></retail-be-dynamicaccount-grid>
+                <retail-be-dynamicaccount-grid ng-if="scopeModel.isGridLoadded" on-ready="scopeModel.onGridReady"></retail-be-dynamicaccount-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

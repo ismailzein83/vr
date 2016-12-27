@@ -55,8 +55,8 @@
 
             function setTitle() {
                 $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((accountViewDefinitionEntity != undefined) ? accountViewDefinitionEntity.Name : null, 'Account View Definition') :
-                    UtilsService.buildTitleForAddEditor('Account View  Definition');
+                    UtilsService.buildTitleForUpdateEditor((accountViewDefinitionEntity != undefined) ? accountViewDefinitionEntity.Name : null, 'View') :
+                    UtilsService.buildTitleForAddEditor('View');
             }
             function loadStaticData() {
                 if (accountViewDefinitionEntity == undefined)
