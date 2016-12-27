@@ -24,6 +24,11 @@
                         <vr-columns width="1/2row">
                             <vr-textarea label="Description" value="scopeModel.description" isrequired></vr-textarea>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
+                                                                              customlabel="Account Definition" hideremoveicon isrequired="true">
+                            </vr-genericdata-businessentitydefinition-selector>
+                        </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/2row">

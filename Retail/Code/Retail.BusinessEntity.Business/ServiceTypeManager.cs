@@ -63,7 +63,7 @@ namespace Retail.BusinessEntity.Business
 
             IServiceTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
 
-            if (dataManager.Update(updatedServiceType.ServiceTypeId, updatedServiceType.Title, serviceTypeSettings))
+            if (dataManager.Update(updatedServiceType.ServiceTypeId, updatedServiceType.Title,updatedServiceType.AccountBEDefinitionId, serviceTypeSettings))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;

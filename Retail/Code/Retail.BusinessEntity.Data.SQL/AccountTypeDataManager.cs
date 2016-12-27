@@ -32,7 +32,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             string serializedSettings = accountType.Settings != null ? Vanrise.Common.Serializer.Serialize(accountType.Settings) : null;
 
-            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountType_Insert", accountType.AccountTypeId, accountType.Name, accountType.Title, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountType_Insert", accountType.AccountTypeId, accountType.Name, accountType.Title,accountType.AccountBEDefinitionId, serializedSettings);
 
             if (affectedRecords > 0)
             {
@@ -45,7 +45,7 @@ namespace Retail.BusinessEntity.Data.SQL
         public bool Update(AccountTypeToEdit accountType)
         {
             string serializedSettings = accountType.Settings != null ? Vanrise.Common.Serializer.Serialize(accountType.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountType_Update", accountType.AccountTypeId, accountType.Name, accountType.Title, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountType_Update", accountType.AccountTypeId, accountType.Name, accountType.Title,accountType.AccountBEDefinitionId, serializedSettings);
             return (affectedRecords > 0);
         }
 
@@ -65,6 +65,7 @@ namespace Retail.BusinessEntity.Data.SQL
                 AccountTypeId =  GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
+                AccountBEDefinitionId = GetReaderValue<Guid>(reader, "AccountBEDefinitionId"),
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountTypeSettings>(reader["Settings"] as string)
             };
         }

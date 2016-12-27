@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.Data
     {
         IEnumerable<ServiceType> GetServiceTypes();
 
-        bool Update(Guid serviceTypeId, string title, ServiceTypeSettings serviceTypeSettings);
+        bool Update(Guid serviceTypeId, string title, Guid accountBEDefinitionId, ServiceTypeSettings serviceTypeSettings);
 
         bool AreServiceTypesUpdated(ref object updateHandle);
     }

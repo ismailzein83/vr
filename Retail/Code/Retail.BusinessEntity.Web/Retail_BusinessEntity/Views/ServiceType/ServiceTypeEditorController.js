@@ -25,6 +25,9 @@
         var extendedSettingsDirectiveAPI;
         var extendedSettingsDirectiveReadyDeferred;
 
+        var businessEntityDefinitionSelectorAPI;
+        var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -42,6 +45,11 @@
             $scope.scopeModel = {};
             $scope.scopeModel.extendedSettingsTemplateConfigs = [];
             $scope.scopeModel.selectedExtendedSettingsTemplateConfig;
+
+            $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                businessEntityDefinitionSelectorAPI = api;
+                businessEntityDefinitionSelectorReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.onExtendedSettingsSelectorReady = function (api) {
                 extendedSettingsSelectorAPI = api;
@@ -100,8 +108,134 @@
         }
 
         function loadAllControls() {
+
+            function setTitle() {
+                if (isEditMode) {
+                    var serviceTypeTitle = (serviceTypeEntity != undefined) ? serviceTypeEntity.Title : undefined;
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(serviceTypeTitle, 'ServiceType');
+                }
+                else {
+                    $scope.title = UtilsService.buildTitleForAddEditor('ServiceType');
+                }
+            }
+            function loadStaticData() {
+                if (serviceTypeEntity == undefined)
+                    return;
+                $scope.scopeModel.title = serviceTypeEntity.Title;
+                $scope.scopeModel.description = serviceTypeEntity.Settings.Description;
+
+            }
+            function loadExtendedSettingsSelector() {
+
+                var extendedSettingsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                extendedSettingsSelectorReadyDeferred.promise.then(function () {
+
+                    Retail_BE_ServiceTypeAPIService.GetServiceTypeExtendedSettingsTemplateConfigs().then(function (response) {
+                        if (response != null) {
+                            for (var i = 0; i < response.length; i++) {
+                                $scope.scopeModel.extendedSettingsTemplateConfigs.push(response[i]);
+                            }
+
+                            var extendedSettings;
+                            if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined)
+                                extendedSettings = serviceTypeEntity.Settings.ExtendedSettings;
+
+                            if (extendedSettings != undefined && extendedSettings.ConfigId != null) {
+                                $scope.scopeModel.selectedExtendedSettingsTemplateConfig =
+                                    UtilsService.getItemByVal($scope.scopeModel.extendedSettingsTemplateConfigs, extendedSettings.ConfigId, 'ExtensionConfigurationId');
+                            }
+                        }
+
+                        extendedSettingsSelectorLoadDeferred.resolve();
+                    });
+                });
+
+                return extendedSettingsSelectorLoadDeferred.promise;
+            }
+            function loadChargingPolicy() {
+                var chargingPolicyLoadDeferred = UtilsService.createPromiseDeferred();
+
+                chargingPolicyReadyDeferred.promise.then(function () {
+                    var chargingPolicyPayload;
+
+                    if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined) {
+                        chargingPolicyPayload = { chargingPolicy: serviceTypeEntity.Settings.ChargingPolicyDefinitionSettings }
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(chargingPolicyAPI, chargingPolicyPayload, chargingPolicyLoadDeferred);
+                });
+
+                return chargingPolicyLoadDeferred.promise;
+            }
+            function loadRuleDefinitionSelector() {
+                var ruleDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                ruleDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var ruleDefinitionPayload = { filter: { Filters: [{ $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter,Retail.BusinessEntity.Business" }] } };
+
+                    if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined) {
+                        ruleDefinitionPayload.selectedIds = serviceTypeEntity.Settings.IdentificationRuleDefinitionId;
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(ruleDefinitionSelectorAPI, ruleDefinitionPayload, ruleDefinitionLoadDeferred);
+                });
+
+                return ruleDefinitionLoadDeferred.promise;
+            }
+            function loadStatusDefinitionSelector() {
+                var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var statusDefinitionSelectorPayload = {
+                        filter: { EntityType: Retail_BE_EntityTypeEnum.AccountService.value },
+                        selectedIds: serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined ? serviceTypeEntity.Settings.InitialStatusId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+                });
+                return statusDefinitionSelectorLoadDeferred.promise;
+            }
+            function loadExtendedSettingsDirectiveWrapper() {
+                if (!isEditMode || serviceTypeEntity == undefined || serviceTypeEntity.Settings == undefined ||
+                    serviceTypeEntity.Settings.ExtendedSettings == undefined || serviceTypeEntity.Settings.ExtendedSettings.ConfigId == undefined)
+                    return;
+
+                extendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                var extendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                extendedSettingsDirectiveReadyDeferred.promise.then(function () {
+                    extendedSettingsDirectiveReadyDeferred = undefined;
+
+                    var extendedSettingsDirectivePayload;
+                    if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined && serviceTypeEntity.Settings.ExtendedSettings) {
+
+                        extendedSettingsDirectivePayload = {
+                            extendedSettings: serviceTypeEntity.Settings.ExtendedSettings
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(extendedSettingsDirectiveAPI, extendedSettingsDirectivePayload, extendedSettingsDirectiveLoadDeferred);
+                });
+
+                return extendedSettingsDirectiveLoadDeferred.promise;
+            }
+            function loadBusinessEntityDefinitionSelector() {
+                var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                businessEntityDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionFilter, Retail.BusinessEntity.Entities",
+                            }]
+                        },
+                        selectedIds:serviceTypeEntity != undefined?serviceTypeEntity.AccountBEDefinitionId:undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(businessEntityDefinitionSelectorAPI, payload, businessEntityDefinitionSelectorLoadDeferred);
+                });
+
+                return businessEntityDefinitionSelectorLoadDeferred.promise;
+            }
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadExtendedSettingsSelector, loadChargingPolicy,
-                                    loadRuleDefinitionSelector, loadStatusDefinitionSelector, loadExtendedSettingsDirectiveWrapper])
+                                    loadRuleDefinitionSelector, loadStatusDefinitionSelector, loadExtendedSettingsDirectiveWrapper, loadBusinessEntityDefinitionSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -109,115 +243,7 @@
                     $scope.scopeModel.isLoading = false;
                 });
         }
-        function setTitle() {
-            if (isEditMode) {
-                var serviceTypeTitle = (serviceTypeEntity != undefined) ? serviceTypeEntity.Title : undefined;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(serviceTypeTitle, 'ServiceType');
-            }
-            else {
-                $scope.title = UtilsService.buildTitleForAddEditor('ServiceType');
-            }
-        }
-        function loadStaticData() {
-            if (serviceTypeEntity == undefined)
-                return;
-            $scope.scopeModel.title = serviceTypeEntity.Title;
-            $scope.scopeModel.description = serviceTypeEntity.Settings.Description;
-
-        }
-        function loadExtendedSettingsSelector() {
-
-            var extendedSettingsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-            extendedSettingsSelectorReadyDeferred.promise.then(function () {
-
-                Retail_BE_ServiceTypeAPIService.GetServiceTypeExtendedSettingsTemplateConfigs().then(function (response) {
-                    if (response != null) {
-                        for (var i = 0; i < response.length; i++) {
-                            $scope.scopeModel.extendedSettingsTemplateConfigs.push(response[i]);
-                        }
-
-                        var extendedSettings;
-                        if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined)
-                            extendedSettings = serviceTypeEntity.Settings.ExtendedSettings;
-
-                        if (extendedSettings != undefined && extendedSettings.ConfigId != null) {
-                            $scope.scopeModel.selectedExtendedSettingsTemplateConfig =
-                                UtilsService.getItemByVal($scope.scopeModel.extendedSettingsTemplateConfigs, extendedSettings.ConfigId, 'ExtensionConfigurationId');
-                        }
-                    }
-
-                    extendedSettingsSelectorLoadDeferred.resolve();
-                });
-            });
-
-            return extendedSettingsSelectorLoadDeferred.promise;
-        }
-        function loadChargingPolicy() {
-            var chargingPolicyLoadDeferred = UtilsService.createPromiseDeferred();
-
-            chargingPolicyReadyDeferred.promise.then(function () {
-                var chargingPolicyPayload;
-
-                if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined) {
-                    chargingPolicyPayload = { chargingPolicy: serviceTypeEntity.Settings.ChargingPolicyDefinitionSettings }
-                }
-
-                VRUIUtilsService.callDirectiveLoad(chargingPolicyAPI, chargingPolicyPayload, chargingPolicyLoadDeferred);
-            });
-
-            return chargingPolicyLoadDeferred.promise;
-        }
-        function loadRuleDefinitionSelector() {
-            var ruleDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
-
-            ruleDefinitionSelectorReadyDeferred.promise.then(function () {
-                var ruleDefinitionPayload = { filter: { Filters: [{ $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter,Retail.BusinessEntity.Business" }] } };
-
-                if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined) {
-                    ruleDefinitionPayload.selectedIds = serviceTypeEntity.Settings.IdentificationRuleDefinitionId;
-                }
-
-                VRUIUtilsService.callDirectiveLoad(ruleDefinitionSelectorAPI, ruleDefinitionPayload, ruleDefinitionLoadDeferred);
-            });
-
-            return ruleDefinitionLoadDeferred.promise;
-        }
-        function loadStatusDefinitionSelector() {
-            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                var statusDefinitionSelectorPayload = {
-                    filter: { EntityType: Retail_BE_EntityTypeEnum.AccountService.value },
-                    selectedIds: serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined ? serviceTypeEntity.Settings.InitialStatusId : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-            });
-            return statusDefinitionSelectorLoadDeferred.promise;
-        }
-        function loadExtendedSettingsDirectiveWrapper() {
-            if (!isEditMode || serviceTypeEntity == undefined || serviceTypeEntity.Settings == undefined ||
-                serviceTypeEntity.Settings.ExtendedSettings == undefined || serviceTypeEntity.Settings.ExtendedSettings.ConfigId == undefined)
-                return;
-
-            extendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-            var extendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            extendedSettingsDirectiveReadyDeferred.promise.then(function () {
-                extendedSettingsDirectiveReadyDeferred = undefined;
-
-                var extendedSettingsDirectivePayload;
-                if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined && serviceTypeEntity.Settings.ExtendedSettings) {
-
-                    extendedSettingsDirectivePayload = {
-                        extendedSettings: serviceTypeEntity.Settings.ExtendedSettings
-                    };
-                }
-                VRUIUtilsService.callDirectiveLoad(extendedSettingsDirectiveAPI, extendedSettingsDirectivePayload, extendedSettingsDirectiveLoadDeferred);
-            });
-
-            return extendedSettingsDirectiveLoadDeferred.promise;
-        }
+      
 
         function updateServiceType() {
             $scope.scopeModel.isLoading = true;
@@ -246,7 +272,8 @@
                 IdentificationRuleDefinitionId: ruleDefinitionSelectorAPI.getSelectedIds(),
                 ChargingPolicyDefinitionSettings: chargingPolicyAPI.getData(),
                 InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds(),
-                ExtendedSettings: extendedSettingsDirectiveAPI.getData()
+                ExtendedSettings: extendedSettingsDirectiveAPI.getData(),
+                AccountBEDefinitionId:businessEntityDefinitionSelectorAPI.getSelectedIds()
             };
         }
     }
