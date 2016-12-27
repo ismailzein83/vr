@@ -218,8 +218,6 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartSparklineController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\ZingChartController.js" />
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
-    <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
-    <Content Include="Client\Javascripts\Controllers\TreeController .js" />
     <Content Include="Client\Javascripts\Directives\ActionBar\actionbar-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\ActionBar\vr-actionbar-directive.js" />
     <Content Include="Client\Javascripts\Directives\ActionBar\vr-actionbar.html" />
@@ -331,11 +329,7 @@
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
     <Content Include="Client\Javascripts\Services\FileAPIService.js" />
     <Content Include="Client\Javascripts\Services\APIServices\BaseAPIService.js" />
-    <Content Include="Client\Javascripts\Services\APIServices\ValuesAPIService.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
-    <Content Include="Client\Javascripts\Services\carrier-service.js" />
-    <Content Include="Client\Javascripts\Services\CarrierTypeEnum.js" />
-    <Content Include="Client\Javascripts\Services\main-service.js" />
     <Content Include="Client\Javascripts\Services\ModalService\vr-modal-service.html" />
     <Content Include="Client\Javascripts\Services\ModalService\vr-modal-service.js" />
     <Content Include="Client\Javascripts\Services\multitransclude-service.js" />
@@ -346,7 +340,6 @@
     <Content Include="Client\Javascripts\Services\UIUtilsService.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Services\ValidationService.js" />
-    <Content Include="Client\Javascripts\Services\zone-service.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\moment-with-locales.js" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\jstree.js" />
