@@ -51,7 +51,7 @@ BEGIN
 		FROM [FraudAnalysis].[StrategyExecution] exe WITH(NOLOCK)
 		WHERE (@FromCDRDate is null or exe.FromDate>=@FromCDRDate) and (@ToCDRDate is null or exe.ToDate<@ToCDRDate)
 		and   (@FromExecutionDate is null or exe.ExecutionDate>=@FromExecutionDate) and (@ToExecutionDate is null or exe.ExecutionDate<@ToExecutionDate)
-		and   (@FromCancellationDate is null or exe.CancellationDate>=@FromCancellationDate) and (@ToCancellationDate is null or exe.CancellationDate<@ToCancellationDate)
+		and   (@FromCancellationDate is null or exe.CancellationDate>=@FromCancellationDate) and (@ToCancellationDate is null or exe.CancellationDate<=@ToCancellationDate)
 		and   (@StrategyIDs is null or exe.StrategyID in (SELECT StrategyID FROM @StrategyIDsTable))
 		and   (@PeriodID is null or exe.PeriodID = @PeriodID)
 		and   (@UserIDs IS NULL OR exe.ExecutedBy IN (SELECT UserID FROM @UserIDsTable)OR exe.CancelledBy IN (SELECT UserID FROM @UserIDsTable))

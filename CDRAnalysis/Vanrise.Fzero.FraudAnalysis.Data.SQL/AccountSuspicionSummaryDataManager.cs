@@ -77,7 +77,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             StringBuilder whereClause = new StringBuilder();
 
             if (toDate.HasValue)
-                whereClause.Append("WHERE ac.CreatedTime >= '" + fromDate + "' AND ac.CreatedTime < '" + toDate + "'");
+                whereClause.Append("WHERE ac.CreatedTime >= '" + fromDate + "' AND ac.CreatedTime <= '" + toDate + "'");
             else
                 whereClause.Append("WHERE ac.CreatedTime >= '" + fromDate + "' ");
 
