@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountviewdefinitionsettingsActions', ['UtilsService',
+app.directive('retailBeAccountviewdefinitionsettingsIdentificationrules', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountviewdefinitionsettingsActions', ['UtilsService',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ActionsViewDefinitionSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new IdentificationRulesViewDefinitionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountViewDefinitions/Templates/ActionsViewSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/MainExtensions/Templates/IdentificationRulesViewSettingsTemplate.html'
         };
 
-        function ActionsViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
+        function IdentificationRulesViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -30,11 +30,13 @@ app.directive('retailBeAccountviewdefinitionsettingsActions', ['UtilsService',
 
                 api.load = function (payload) {
 
+                    if (payload != undefined) {
+                    }
                 };
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.Actions, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.AccountIdentificationRules, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

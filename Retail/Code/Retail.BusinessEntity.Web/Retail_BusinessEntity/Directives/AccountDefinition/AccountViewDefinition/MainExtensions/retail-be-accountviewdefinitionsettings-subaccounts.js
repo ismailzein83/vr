@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountviewdefinitionsettingsAccountinfo', ['UtilsService',
+app.directive('retailBeAccountviewdefinitionsettingsSubaccounts', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountviewdefinitionsettingsAccountinfo', ['UtilsService
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new AccountInfoViewDefinitionSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new SubAccountsViewDefinitionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountViewDefinitions/Templates/AccountInfoViewSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/MainExtensions/Templates/SubAccountsViewSettingsTemplate.html'
         };
 
-        function AccountInfoViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
+        function SubAccountsViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -36,7 +36,7 @@ app.directive('retailBeAccountviewdefinitionsettingsAccountinfo', ['UtilsService
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.AccountInfo, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.SubAccounts, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

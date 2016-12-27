@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotificationService", "Retail_BE_AccountDefinitionService",
+app.directive("retailBeAccountactiondefinitions", ["UtilsService", "VRNotificationService", "Retail_BE_AccountDefinitionService",
     function (UtilsService, VRNotificationService, Retail_BE_AccountDefinitionService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotification
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new AccountViewDefinition($scope, ctrl, $attrs);
+                var ctor = new AccountActionDefinition($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotification
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/AccountViewDefinitionsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/Templates/AccountActionDefinitionsTemplate.html"
 
         };
 
-        function AccountViewDefinition($scope, ctrl, $attrs) {
+        function AccountActionDefinition($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -33,14 +33,14 @@ app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotification
             function initializeController() {
                 ctrl.datasource = [];
 
-                ctrl.addAccountViewDefinition = function () {
-                    var onAccountViewDefinitionAdded = function (accountViewDefinition) {
-                        ctrl.datasource.push({ Entity: accountViewDefinition });
+                ctrl.addAccountActionDefinition = function () {
+                    var onAccountActionDefinitionAdded = function (accountActionDefinition) {
+                        ctrl.datasource.push({ Entity: accountActionDefinition });
                     };
-                    Retail_BE_AccountDefinitionService.addAccountViewDefinition(onAccountViewDefinitionAdded, getContext());
+                    Retail_BE_AccountDefinitionService.addAccountActionDefinition(onAccountActionDefinitionAdded, getContext());
                 };
 
-                ctrl.removeAccountViewDefinition = function (dataItem) {
+                ctrl.removeAccountActionDefinition = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -52,24 +52,24 @@ app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotification
                 var api = {};
 
                 api.getData = function () {
-                    var accountViewDefinitions;
+                    var accountActionDefinitions;
                     if (ctrl.datasource != undefined) {
-                        accountViewDefinitions = [];
+                        accountActionDefinitions = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            accountViewDefinitions.push(currentItem.Entity);
+                            accountActionDefinitions.push(currentItem.Entity);
                         }
                     }
-                    return accountViewDefinitions;
+                    return accountActionDefinitions;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.accountViewDefinitions != undefined) {
-                            for (var i = 0; i < payload.accountViewDefinitions.length; i++) {
-                                var accountViewDefinition = payload.accountViewDefinitions[i];
-                                ctrl.datasource.push({ Entity: accountViewDefinition });
+                        if (payload.accountActionDefinitions != undefined) {
+                            for (var i = 0; i < payload.accountActionDefinitions.length; i++) {
+                                var accountActionDefinition = payload.accountActionDefinitions[i];
+                                ctrl.datasource.push({ Entity: accountActionDefinition });
                             }
                         }
                     }
@@ -83,7 +83,7 @@ app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotification
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editAccountViewDefinition,
+                    clicked: editAccountActionDefinition,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -91,12 +91,12 @@ app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotification
                 };
             }
 
-            function editAccountViewDefinition(accountViewDefinitionObj) {
-                var onAccountViewDefinitionUpdated = function (accountViewDefinition) {
-                    var index = ctrl.datasource.indexOf(accountViewDefinitionObj);
-                    ctrl.datasource[index] = { Entity: accountViewDefinition };
+            function editAccountActionDefinition(accountActionDefinitionObj) {
+                var onAccountActionDefinitionUpdated = function (accountActionDefinition) {
+                    var index = ctrl.datasource.indexOf(accountActionDefinitionObj);
+                    ctrl.datasource[index] = { Entity: accountActionDefinition };
                 };
-                Retail_BE_AccountDefinitionService.editAccountViewDefinition(accountViewDefinitionObj.Entity, onAccountViewDefinitionUpdated, getContext());
+                Retail_BE_AccountDefinitionService.editAccountActionDefinition(accountActionDefinitionObj.Entity, onAccountActionDefinitionUpdated, getContext());
             }
             function getContext() {
                 return context;

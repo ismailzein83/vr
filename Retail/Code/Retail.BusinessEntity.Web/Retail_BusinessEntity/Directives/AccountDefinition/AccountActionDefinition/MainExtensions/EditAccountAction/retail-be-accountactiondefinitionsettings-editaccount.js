@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountviewdefinitionsettingsFinancialtransactions', ['UtilsService',
+app.directive('retailBeAccountactiondefinitionsettingsEditaccount', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountviewdefinitionsettingsFinancialtransactions', ['Ut
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new FinancialTransactionsViewDefinitionSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new ActionsActionDefinitionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountViewDefinitions/Templates/FinancialTransactionsViewSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/MainExtensions/EditAccountAction/Templates/EditAccountActionSettingsTemplate.html'
         };
 
-        function FinancialTransactionsViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
+        function ActionsActionDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -30,13 +30,11 @@ app.directive('retailBeAccountviewdefinitionsettingsFinancialtransactions', ['Ut
 
                 api.load = function (payload) {
 
-                    if (payload != undefined) {
-                    }
                 };
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.FinancialTransactions, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType.EditAccountActionSettings, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

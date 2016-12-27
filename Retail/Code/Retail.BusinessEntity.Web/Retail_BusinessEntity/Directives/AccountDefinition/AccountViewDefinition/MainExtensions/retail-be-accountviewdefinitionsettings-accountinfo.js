@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountviewdefinitionsettingsIdentificationrules', ['UtilsService',
+app.directive('retailBeAccountviewdefinitionsettingsAccountinfo', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountviewdefinitionsettingsIdentificationrules', ['Util
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new IdentificationRulesViewDefinitionSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new AccountInfoViewDefinitionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountViewDefinitions/Templates/IdentificationRulesViewSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/MainExtensions/Templates/AccountInfoViewSettingsTemplate.html'
         };
 
-        function IdentificationRulesViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
+        function AccountInfoViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -36,7 +36,7 @@ app.directive('retailBeAccountviewdefinitionsettingsIdentificationrules', ['Util
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.AccountIdentificationRules, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.AccountInfo, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountactiondefinitionsettingsEditaccount', ['UtilsService',
+app.directive('retailBeAccountviewdefinitionsettingsActions', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountactiondefinitionsettingsEditaccount', ['UtilsServi
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ActionsActionDefinitionSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new ActionsViewDefinitionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountActionDefinitions/Templates/EditAccountActionSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/MainExtensions/Templates/ActionsViewSettingsTemplate.html'
         };
 
-        function ActionsActionDefinitionSettingsCtor($scope, ctrl, $attrs) {
+        function ActionsViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -34,7 +34,7 @@ app.directive('retailBeAccountactiondefinitionsettingsEditaccount', ['UtilsServi
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType.EditAccountActionSettings, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.Actions, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

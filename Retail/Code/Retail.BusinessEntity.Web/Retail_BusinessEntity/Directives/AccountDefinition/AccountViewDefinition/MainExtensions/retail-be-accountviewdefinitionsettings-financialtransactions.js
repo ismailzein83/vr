@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountviewdefinitionsettingsServices', ['UtilsService',
+app.directive('retailBeAccountviewdefinitionsettingsFinancialtransactions', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountviewdefinitionsettingsServices', ['UtilsService',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ServicesViewDefinitionSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new FinancialTransactionsViewDefinitionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountViewDefinitions/Templates/ServicesViewSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/MainExtensions/Templates/FinancialTransactionsViewSettingsTemplate.html'
         };
 
-        function ServicesViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
+        function FinancialTransactionsViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -30,11 +30,13 @@ app.directive('retailBeAccountviewdefinitionsettingsServices', ['UtilsService',
 
                 api.load = function (payload) {
 
+                    if (payload != undefined) {
+                    }
                 };
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.AccountServices, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.FinancialTransactions, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

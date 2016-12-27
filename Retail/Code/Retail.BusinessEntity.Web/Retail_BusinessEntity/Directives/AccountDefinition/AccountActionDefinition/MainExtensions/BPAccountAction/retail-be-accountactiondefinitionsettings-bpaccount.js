@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountviewdefinitionsettingsPackages', ['UtilsService',
+app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountviewdefinitionsettingsPackages', ['UtilsService',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new PackagesViewDefinitionSettings($scope, ctrl, $attrs);
+                var ctor = new BPAccountActionDefinitionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/MainExtensions/AccountViewDefinitions/Templates/PackagesViewSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/MainExtensions/BPAccountAction/Templates/BPAccountActionSettingsTemplate.html'
         };
 
-        function PackagesViewDefinitionSettings($scope, ctrl, $attrs) {
+        function BPAccountActionDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -34,7 +34,7 @@ app.directive('retailBeAccountviewdefinitionsettingsPackages', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.AccountViews.AccountPackages, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType.BPAccountActionSettings, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

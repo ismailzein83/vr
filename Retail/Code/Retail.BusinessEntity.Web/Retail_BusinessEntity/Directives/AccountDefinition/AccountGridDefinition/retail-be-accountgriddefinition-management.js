@@ -25,7 +25,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/Templates/AccountGridDefinitionManagementTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/AccountGridDefinitionManagementTemplate.html'
         };
 
         function AccountGridDefinitionManagementCtor($scope, ctrl) {
