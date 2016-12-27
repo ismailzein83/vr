@@ -91,10 +91,11 @@
             var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             businessEntityDefinitionSelectorReadyDeferred.promise.then(function () {
+
                 var payload = {
                     filter: {
                         Filters: [{
-                            $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionFilter, Retail.BusinessEntity.Entities",
+                            $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewFilter, Retail.BusinessEntity.Entities",
                             ViewId: viewId
                         }]
                     }

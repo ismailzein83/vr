@@ -34,7 +34,7 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                     beDefinitionSelectorApi = api;
                     beDefinitionSelectorPromiseDeferred.resolve();
                 };
-                 
+
                 defineAPI();
             }
             function defineAPI() {
@@ -43,22 +43,40 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                 api.load = function (payload) {
                     var promises = [];
 
-                    promises.push(loadBusinessEntityDefinitionSelector());
+                    //Loading BusinessEntityDefinition Selector
+                    var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
+                    promises.push(businessEntityDefinitionSelectorLoadPromise);
 
-                    function loadBusinessEntityDefinitionSelector() {
+
+                    function getBusinessEntityDefinitionSelectorLoadPromise() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         beDefinitionSelectorPromiseDeferred.promise.then(function () {
-                            var payloadSelector = {
-                                selectedIds: payload != undefined ? payload.BusinessEntityDefinitionId : undefined,
+                            var selectorPayload = {
                                 filter: {
                                     Filters: [{
                                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionFilter, Retail.BusinessEntity.Entities"
                                     }]
                                 }
                             };
-                            VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, payloadSelector, businessEntityDefinitionSelectorLoadDeferred);
+                            if (payload != undefined) {
+                                selectorPayload.selectedIds = buildBESelectorIdsObj(payload.AccountBEDefinitionSettings);
+                            }
+                            VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
                         });
+
+                        function buildBESelectorIdsObj(accountBEDefinitionSettings)
+                        {
+                            var _seletedIds = [];
+
+                            if (accountBEDefinitionSettings != undefined) {
+                                for (var index = 0; index < accountBEDefinitionSettings.length; index++) {
+                                    var currentBEDefinitionSetting = accountBEDefinitionSettings[index];
+                                    _seletedIds.push(currentBEDefinitionSetting.BusinessEntityId)
+                                }
+                            }
+                            return _seletedIds;
+                        }
 
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
                     }
@@ -67,10 +85,25 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                 };
 
                 api.getData = function () {
-                    return {
+
+                    var obj = {
                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewSettings, Retail.BusinessEntity.Entities",
-                        AccountBEDefinitionSettings: beDefinitionSelectorApi.getSelectedIds()
+                        AccountBEDefinitionSettings: buildAccountBEDefinitionSettingsObj()
                     };
+
+                    function buildAccountBEDefinitionSettingsObj() {
+                        var accountBEDefinitionSettings = [];
+
+                        var accountBEDefinitionIds = beDefinitionSelectorApi.getSelectedIds()
+                        if (accountBEDefinitionIds != undefined) {
+                            for (var index = 0; index < accountBEDefinitionIds.length; index++) {
+                                accountBEDefinitionSettings.push({ BusinessEntityId: accountBEDefinitionIds[index] })
+                            }
+                        }
+                        return accountBEDefinitionSettings;
+                    }
+
+                    return obj;
                 };
 
                 if (ctrl.onReady != null)

@@ -12,7 +12,7 @@ namespace Retail.BusinessEntity.Entities
 
         public override string GetURL(Vanrise.Security.Entities.View view)
         {
-            return String.Format("#/viewwithparams/Retail_BusinessEntity/Views/AccountBusinessEntity/Runtime/AccountBusinessEntityManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
+            return String.Format("#/viewwithparams/Retail_BusinessEntity/Views/Account/DynamicAccountManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
         }
     }
      
