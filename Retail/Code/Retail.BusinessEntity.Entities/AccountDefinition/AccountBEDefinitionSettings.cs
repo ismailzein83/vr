@@ -8,7 +8,8 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountBEDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings
     {
-        public override Guid ConfigId { get { return new Guid("70D4A6AD-10CC-4F0B-8364-7D8EF3C044C4"); } }
+        public static Guid _configId = new Guid("70D4A6AD-10CC-4F0B-8364-7D8EF3C044C4");
+        public override Guid ConfigId { get { return _configId; } }
 
         public override string DefinitionEditor
         { 
