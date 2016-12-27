@@ -470,6 +470,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
+    <Content Include="Retail_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="Retail_BusinessEntity\Services\AccountActionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
