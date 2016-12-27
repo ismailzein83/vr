@@ -54,7 +54,7 @@
                                       </div>
                                 </div>
                                 <div class="vr-select-height">
-                                    <div dataindex="{{$index}}" ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
+                                    <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" ng-repeat="c in ctrl.boundDataSource | filter:ctrl.filtername" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
                                         <a href="" ng-if="!ctrl.isContainerVisible()" ng-class="ctrl.getObjectDisabled(c)==true?'vr-select-disabled-item':''" class="mark-select " ng-click="ctrl.selectValue($event, c)" ng-mouseenter="ctrl.muteaction($event);"
                                            style="display: inline-block; width:100%;padding:2px; white-space: normal;">
                                             <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}} </div>
