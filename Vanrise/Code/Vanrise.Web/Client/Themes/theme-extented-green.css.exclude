@@ -155,7 +155,7 @@
   background: linear-gradient(to bottom, #BCBCBC, #027C65); /*Standard*/
 }
 .modal-header {
-    background-color: #20407D !important;
+    background-color: #01A082 !important;
     color: #FFF;
 }
 .action-bar {
