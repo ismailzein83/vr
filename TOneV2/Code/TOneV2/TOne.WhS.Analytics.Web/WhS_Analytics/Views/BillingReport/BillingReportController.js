@@ -111,8 +111,8 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
-            paramsurl += "&fromDate=" + $scope.dateToString($scope.fromDate);
-            paramsurl += "&toDate=" + $scope.dateToString($scope.toDate);
+            paramsurl += "&fromDate=" + UtilsService.dateToServerFormat($scope.fromDate);
+            paramsurl += "&toDate=" + UtilsService.dateToServerFormat($scope.toDate);
             paramsurl += "&groupByCustomer=" + $scope.params.groupByCustomer;
             paramsurl += "&groupByProfile=" + $scope.params.groupByProfile;
             paramsurl += "&isCost=" + $scope.params.isCost;

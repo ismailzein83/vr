@@ -22,8 +22,8 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                 if (!IsPostBack)
                 {
                     int reportId = Convert.ToInt32(Request.QueryString["reportId"]);
-                    DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    DateTime? to = !string.IsNullOrEmpty(Request.QueryString["toDate"]) ? DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture) : default(DateTime?);
+                    DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture);
+                    DateTime? to = !string.IsNullOrEmpty(Request.QueryString["toDate"]) ? DateTime.ParseExact(Request.QueryString["toDate"], "yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture) : default(DateTime?);
 
                     string customers = Request.QueryString["customer"];
                     string suppliers = Request.QueryString["supplier"];

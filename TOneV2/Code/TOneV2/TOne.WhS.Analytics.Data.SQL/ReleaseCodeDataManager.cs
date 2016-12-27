@@ -149,7 +149,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             whereBuilder.Append(String.Format(@"{0}.AttemptDateTime>= @FromDate ", alias));
             if (query.To.HasValue)
-                whereBuilder.AppendFormat("AND {0}.AttemptDateTime< @ToDate  ", alias);
+                whereBuilder.AppendFormat("AND {0}.AttemptDateTime<= @ToDate  ", alias);
             groupByBuilder.Append(String.Format(@"{0}.SwitchId, {0}.ReleaseCode,{0}.ReleaseSource", alias));
             selectQueryPart.Append(String.Format(@"         {0}.SwitchId,
                                                             {0}.ReleaseCode,{0}.ReleaseSource,
