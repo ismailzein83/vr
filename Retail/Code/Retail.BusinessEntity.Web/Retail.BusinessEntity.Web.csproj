@@ -176,7 +176,9 @@
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
@@ -207,6 +209,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\FilterGroupAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\retail-be-accountcondition-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\Templates\AccountConditionSelectiveTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-bpaccountaction-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\EditAccountAction\retail-be-accountactiondefinitionsettings-editaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-accountactiondefinitionsettings-bpaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\EditAccountAction\Templates\EditAccountActionSettingsTemplate.html" />
@@ -377,8 +380,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeGenericPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypePersonalInfoPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeResidentialProfilePartRuntimeTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\retail-be-actionbpdefinition-definitionsettings-regular.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\RegularActionBPDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\retail-be-actionbpdefinition-definitionsettings-regular.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\Templates\RegularActionBPDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-radiussql.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\Templates\RadiusSQLProvisionerDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\retail-be-actionbpdefinition-runtimesettings-regular.js" />

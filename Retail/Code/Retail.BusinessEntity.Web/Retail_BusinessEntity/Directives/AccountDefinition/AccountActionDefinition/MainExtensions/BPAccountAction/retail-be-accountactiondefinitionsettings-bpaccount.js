@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService',
-    function (UtilsService) {
+app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService','VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,21 +20,52 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
 
         function BPAccountActionDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var bPDefinitionSettingsApi;
+            var bPDefinitionSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
+
+
+                $scope.scopeModel.onBPAccountActionSelectiveReady = function (api) {
+                    bPDefinitionSettingsApi = api;
+                    bPDefinitionSettingsPromiseDeferred.resolve();
+                };
+
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var accountActionDefinitionSettings;
+                    if (payload != undefined)
+                    {
+                        accountActionDefinitionSettings = payload.accountActionDefinitionSettings;
+                    }
+                    var promises = [];
+
+
+                    promises.push(loadBusinessEntityDefinitionSelector());
+
+                    function loadBusinessEntityDefinitionSelector() {
+                        var bPDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        bPDefinitionSettingsPromiseDeferred.promise.then(function () {
+                            var payloadBPDefinition = accountActionDefinitionSettings != undefined ? { bpDefinitionSettings: accountActionDefinitionSettings.BPDefinitionSettings } : undefined;
+                            VRUIUtilsService.callDirectiveLoad(bPDefinitionSettingsApi, payloadBPDefinition, bPDefinitionSettingsLoadDeferred);
+                        });
+
+                        return bPDefinitionSettingsLoadDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
 
                 };
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType.BPAccountActionSettings, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType.BPAccountActionSettings, Retail.BusinessEntity.MainExtensions',
+                        BPDefinitionSettings: bPDefinitionSettingsApi.getData()
                     };
                 };
 
