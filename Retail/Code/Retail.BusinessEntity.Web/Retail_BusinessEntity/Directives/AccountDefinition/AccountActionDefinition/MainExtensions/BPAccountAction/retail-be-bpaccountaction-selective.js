@@ -125,7 +125,7 @@
 
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
-            var label = "label='Type'";
+            var label = "label='Business Process'";
             if (attrs.hidelabel != undefined) {
                 label = "";
                 withemptyline = '';
