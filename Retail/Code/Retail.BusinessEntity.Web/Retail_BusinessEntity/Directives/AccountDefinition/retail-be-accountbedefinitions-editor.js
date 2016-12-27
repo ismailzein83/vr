@@ -30,6 +30,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var accountViewDefinitionDirectiveAPI;
             var accountViewDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
 
+            var accountActionDefinitionDirectiveAPI;
+            var accountActionDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -41,8 +44,11 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     accountViewDefinitionDirectiveAPI = api;
                     accountViewDefinitionDirectiveDeferred.resolve();
                 }
-
-                UtilsService.waitMultiplePromises([accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise]).then(function () {
+                $scope.scopeModel.onAccountActionDefinitionsReady = function (api) {
+                    accountActionDefinitionDirectiveAPI = api;
+                    accountActionDefinitionDirectiveDeferred.resolve();
+                }
+                UtilsService.waitMultiplePromises([accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -54,10 +60,11 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                     var accountGridDefinition;
                     var accountViewDefinitions;
-
+                    var accountActionDefinitions;
                     if (payload != undefined && payload.businessEntityDefinitionSettings != undefined) {
                         accountGridDefinition = payload.businessEntityDefinitionSettings.GridDefinition;
                         accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
+                        accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
                     }
 
                     //Loading AccountGridDefinition Directive
@@ -68,6 +75,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountViewDefinitionLoadPromise = getAccountViewDefinitionLoadPromise();
                     promises.push(accountViewDefinitionLoadPromise);
 
+                    //Loading AccountActionDefinition Directive
+                    var accountActionDefinitionLoadPromise = getAccountActionDefinitionLoadPromise();
+                    promises.push(accountActionDefinitionLoadPromise);
 
                     function getAccountGridDefinitionLoadPromise() {
                         var accountGridDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
@@ -89,7 +99,16 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                         return accountViewDefitnionLoadDeferred.promise;
                     }
+                    function getAccountActionDefinitionLoadPromise() {
+                        var accountActionDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
 
+                        var accountActionDefinitionPayload = {
+                            accountActionDefinitions: accountActionDefinitions
+                        };
+                        VRUIUtilsService.callDirectiveLoad(accountActionDefinitionDirectiveAPI, accountActionDefinitionPayload, accountActionDefitnionLoadDeferred);
+
+                        return accountActionDefitnionLoadDeferred.promise;
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -97,7 +116,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var obj = {
                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionSettings, Retail.BusinessEntity.Entities",
                         GridDefinition: accountGridDefinitionDirectiveAPI.getData(),
-                        AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData()
+                        AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
+                        ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
                     };
 
                     return obj;

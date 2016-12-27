@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountViewDefinitionConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Retail_BE_AccountViewDefinition";
+        public const string EXTENSION_TYPE = "Retail_BE_AccountViewDefinitionConfig";
 
         public string Editor { get; set; }
     }

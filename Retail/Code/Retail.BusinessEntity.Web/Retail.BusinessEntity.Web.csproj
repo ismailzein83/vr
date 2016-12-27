@@ -207,6 +207,10 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\FilterGroupAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\retail-be-accountcondition-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\Templates\AccountConditionSelectiveTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountActionDefinitions\retail-be-accountactiondefinitionsettings-editaccount.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountActionDefinitions\retail-be-accountactiondefinitionsettings-bpaccount.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountActionDefinitions\Templates\EditAccountActionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountActionDefinitions\Templates\BPAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-actions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-financialtransactions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\retail-be-accountviewdefinitionsettings-identificationrules.js" />
@@ -221,11 +225,14 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\ServicesViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\SubAccountsViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\MainExtensions\AccountViewDefinitions\Templates\AccountInfoViewSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountactiondefinitions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountbedefinition-vieweditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountbedefinitions-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountactiondefinitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountviewdefinitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountBEDefinitionEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountBEDefinitionViewEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\Templates\AccountActionDefinitionsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\retail-be-accountidentification-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\Templates\AccountIdentificationGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\retail-be-accountpackage-grid.js" />
@@ -506,6 +513,8 @@
     <Content Include="Retail_BusinessEntity\Services\PackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\ServiceTypeService.js" />
     <Content Include="Retail_BusinessEntity\Services\SwitchService.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountDefinition\AccountActionDefinition\AccountActionDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountDefinition\AccountActionDefinition\AccountActionDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountDefinition\AccountViewDefinition\AccountViewDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountDefinition\AccountViewDefinition\AccountViewDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />

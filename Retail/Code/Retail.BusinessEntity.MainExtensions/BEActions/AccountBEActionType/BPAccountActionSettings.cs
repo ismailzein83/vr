@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("17817576-4DE9-4C00-9BEF-0505007B4F53"); }
         }
 
         public override string ClientActionName

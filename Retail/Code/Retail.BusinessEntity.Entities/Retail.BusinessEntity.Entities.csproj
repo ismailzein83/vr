@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="AccountCondition\AccountConditionConfig.cs" />
     <Compile Include="AccountDefinition\AccountActionDefinition.cs" />
+    <Compile Include="AccountDefinition\AccountActionDefinitionConfig.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionFilter.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
@@ -100,10 +101,9 @@
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Package\PackageGroup.cs" />
     <Compile Include="Package\PackageGroupSettings.cs" />
-    <Compile Include="Settings\AccountGridDefinition.cs" />
-    <Compile Include="Settings\AccountViewDefinition.cs" />
-    <Compile Include="Settings\AccountViewDefinitionConfig.cs" />
-    <Compile Include="Settings\AccountViewDefinitionSettingsConfig.cs" />
+    <Compile Include="AccountDefinition\AccountGridDefinition.cs" />
+    <Compile Include="AccountDefinition\AccountViewDefinition.cs" />
+    <Compile Include="AccountDefinition\AccountViewDefinitionConfig.cs" />
     <Compile Include="Settings\RetailBETechnicalSetting.cs" />
     <Compile Include="AccountCondition\AccountCondition.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationQuery.cs" />

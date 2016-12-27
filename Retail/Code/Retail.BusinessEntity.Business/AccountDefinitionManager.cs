@@ -82,12 +82,16 @@ namespace Retail.BusinessEntity.Business
             return GetAccountViewDefinitionsByAccount(account);
         }
 
-        public IEnumerable<AccountViewDefinitionSettingsConfig> GetAccountViewDefinitionSettingsConfigs()
+        public IEnumerable<AccountViewDefinitionConfig> GetAccountViewDefinitionSettingsConfigs()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
-            return extensionConfigurationManager.GetExtensionConfigurations<AccountViewDefinitionSettingsConfig>(AccountViewDefinitionSettingsConfig.EXTENSION_TYPE);
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountViewDefinitionConfig>(AccountViewDefinitionConfig.EXTENSION_TYPE);
         }
-
+        public IEnumerable<AccountActionDefinitionConfig> GetAccountActionDefinitionSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountActionDefinitionConfig>(AccountActionDefinitionConfig.EXTENSION_TYPE);
+        }
         #endregion
 
         #region Private Methods

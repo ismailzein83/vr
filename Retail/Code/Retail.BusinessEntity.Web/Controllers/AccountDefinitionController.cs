@@ -18,11 +18,16 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountViewDefinitionSettingsConfigs")]
-        public IEnumerable<AccountViewDefinitionSettingsConfig> GetAccountViewDefinitionSettingsConfigs()
+        public IEnumerable<AccountViewDefinitionConfig> GetAccountViewDefinitionSettingsConfigs()
         {
             return _manager.GetAccountViewDefinitionSettingsConfigs();
         }
-
+        [HttpGet]
+        [Route("GetAccountActionDefinitionSettingsConfigs")]
+        public IEnumerable<AccountActionDefinitionConfig> GetAccountActionDefinitionSettingsConfigs()
+        {
+            return _manager.GetAccountActionDefinitionSettingsConfigs();
+        }
         [HttpGet]
         [Route("GetAccountGridColumnAttributes")]
         public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(long? parentAccountId = null)
