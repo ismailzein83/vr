@@ -45,7 +45,8 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -153,104 +154,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BusinessEntity\Constant\ModuleConfig.js" />
-    <Content Include="BusinessEntity\Constant\AccountTypeEnum.js" />
-    <Content Include="BusinessEntity\Constant\ActivationStatusEnum.js" />
-    <Content Include="BusinessEntity\Constant\ChangeEnum.js" />
-    <Content Include="BusinessEntity\Constant\EffectiveEnum.js" />
-    <Content Include="BusinessEntity\Constant\PaymentTypeEnum.js" />
-    <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
-    <Content Include="BusinessEntity\Directives\Templates\CarrierGroupTree.html" />
-    <Content Include="BusinessEntity\Directives\Templates\CarrierGroupTreeController.js" />
-    <Content Include="BusinessEntity\Directives\vr-be-carriergroup-directive.js" />
-    <Content Include="BusinessEntity\Directives\vr-be-costzones-directive.js" />
-    <Content Include="BusinessEntity\Directives\vr-be-zones-directive.js" />
-    <Content Include="BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CarrierAccountAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CarrierAccountConnectionAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CarrierGroupAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CarrierMaskAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CarrierProfileAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CarrierSummaryAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CodeAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CurrencyAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CustomerCommissionAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CustomerPricelistsAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CustomerTariffAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\LookUpAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\RateAnalysisAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\SupplierCommissionAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\SupplierPricelistsAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\SupplierTariffAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\CustomerTODAPIService .js" />
-    <Content Include="BusinessEntity\Services\APIServices\SupplierTODAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\ProfileAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\SwitchManagmentAPIService.js" />
-    <Content Include="BusinessEntity\Services\APIServices\ZoneAPIService.js" />
-    <Content Include="BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
-    <Content Include="BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />
-    <Content Include="BusinessEntity\Views\AccountManager\CarrierAssignmentEditor.html" />
-    <Content Include="BusinessEntity\Views\AccountManager\CarrierAssignmentEditorController.js" />
-    <Content Include="BusinessEntity\Views\AccountManager\OrgChartAssignmentEditor.html" />
-    <Content Include="BusinessEntity\Views\AccountManager\OrgChartAssignmentEditorController.js" />
-    <Content Include="BusinessEntity\Views\CarrierAccountEditor.html" />
-    <Content Include="BusinessEntity\Views\CarrierAccountEditorController.js" />
-    <Content Include="BusinessEntity\Views\CarrierAccountManagement.html" />
-    <Content Include="BusinessEntity\Views\CarrierAccountManagementController.js" />
-    <Content Include="BusinessEntity\Views\CarrierGroupEditor.html" />
-    <Content Include="BusinessEntity\Views\CarrierGroupEditorController.js" />
-    <Content Include="BusinessEntity\Views\CarrierGroupManagement.html" />
-    <Content Include="BusinessEntity\Views\CarrierGroupManagementController.js" />
-    <Content Include="BusinessEntity\Views\CarrierMaskEditor.html" />
-    <Content Include="BusinessEntity\Views\CarrierMaskEditorController.js" />
-    <Content Include="BusinessEntity\Views\CarrierMaskManagement.html" />
-    <Content Include="BusinessEntity\Views\CarrierMaskManagementController.js" />
-    <Content Include="BusinessEntity\Views\CarrierPriceList.html" />
-    <Content Include="BusinessEntity\Views\CarrierPriceListController.js" />
-    <Content Include="BusinessEntity\Views\CarrierProfileEditor.html" />
-    <Content Include="BusinessEntity\Views\CarrierProfileEditorController.js" />
-    <Content Include="BusinessEntity\Views\CarrierProfileManagement.html" />
-    <Content Include="BusinessEntity\Views\CarrierProfileManagementController.js" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierCommissionManagement.html" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierCommissionManagementController.js" />
-    <Content Include="BusinessEntity\Views\Rate Analysis\RateAnalysis.html" />
-    <Content Include="BusinessEntity\Views\Rate Analysis\RateAnalysisController.js" />
-    <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelists.html" />
-    <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelistsController.js" />
-    <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelistsGrid.html" />
-    <Content Include="BusinessEntity\Views\SalesArea\Customer Pricelists\CustomerPricelistsGridController.js" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTariffManagement.html" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTariffManagementController.js" />
-    <Content Include="BusinessEntity\Views\Rates.html" />
-    <Content Include="BusinessEntity\Views\RatesController.js" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTODManagement.html" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\SupplierTODManagementController.js" />
-    <Content Include="BusinessEntity\Views\SalesArea\CustomerCommissionManagement.html" />
-    <Content Include="BusinessEntity\Views\SalesArea\CustomerCommissionManagementController.js" />
-    <Content Include="BusinessEntity\Views\SalesArea\CustomerTariffManagement.html" />
-    <Content Include="BusinessEntity\Views\SalesArea\CustomerTariffManagementController.js" />
-    <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagementController.js" />
-    <Content Include="BusinessEntity\Views\SalesArea\CustomerTODManagement.html" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\Supplier PriceLists\SupplierPriceLists.html" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\Supplier PriceLists\SupplierPriceListsController.js" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\Supplier PriceLists\SupplierPriceListsGrid.html" />
-    <Content Include="BusinessEntity\Views\PurchaseArea\Supplier PriceLists\SupplierPriceListsGridController.js" />
-    <Content Include="BusinessEntity\Views\SwitchEditor.html" />
-    <Content Include="BusinessEntity\Views\SwitchEditorController.js" />
-    <Content Include="BusinessEntity\Views\SwitchManagment.html" />
-    <Content Include="BusinessEntity\Views\SwitchManagmentController.js" />
-    <Content Include="BusinessEntity\Views\SwitchsController.js" />
-    <Content Include="BusinessEntity\Views\Switchs.html" />
-    <Content Include="BusinessEntity\Views\TestCarrierGroupTree.html" />
-    <Content Include="BusinessEntity\Views\TestCarrierGroupTreeController.js" />
-    <Content Include="BusinessEntity\Views\TestCodeGroup.html" />
-    <Content Include="BusinessEntity\Views\TestCodeGroupController.js" />
-    <Content Include="BusinessEntity\Views\TestNew.html" />
-    <Content Include="BusinessEntity\Views\TestNewController.js" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
@@ -269,9 +172,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BusinessEntity\Views\TestPage.html" />
-    <Content Include="BusinessEntity\Views\TestPageController.js" />
-    <Content Include="BusinessEntity\Views\TestPageEditor.html" />
     <Content Include="packages.config" />
     <Content Include="web.config" />
   </ItemGroup>

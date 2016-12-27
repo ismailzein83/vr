@@ -1,9 +1,0 @@
-﻿<div>
-
-    <vr-columns ng-repeat="c in ctrl.measurechart" colnum="6" simplecol>
-        <vr-section title="Traffic for {{c.measure.description}}" vr-loader="ctrl.isGettingEntityStatistics">
-            <vr-chart data-on-ready="c.chartSelectedEntityReady"></vr-chart>
-        </vr-section>
-    </vr-columns>
-
-</div>

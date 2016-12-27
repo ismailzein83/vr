@@ -144,18 +144,6 @@
       <Name>TOne.Billing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Billing\Constants\PeriodRangeEnum.js" />
-    <Content Include="Billing\Constants\RateTypeEnum.js" />
-    <Content Include="Billing\Services\APIServices\CustomerInvoiceAPIService.js" />
-    <Content Include="Billing\Services\APIServices\SupplierInvoiceAPIService.js" />
-    <Content Include="Billing\Views\CustomerInvoice.html" />
-    <Content Include="Billing\Views\CustomerInvoiceController.js" />
-    <Content Include="Billing\Views\SupplierInvoiceDetailGrid.html" />
-    <Content Include="Billing\Views\SupplierInvoiceDetailGridController.js" />
-    <Content Include="Billing\Views\SupplierInvoiceManagement.html" />
-    <Content Include="Billing\Views\SupplierInvoiceManagementController.js" />
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -131,39 +131,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Routing\Constants\CodeSetTypeEnum.js" />
-    <Content Include="Routing\Constants\CustomerSetsEnum.js" />
-    <Content Include="Routing\Constants\RouteDetailFilterOrderEnum.js" />
-    <Content Include="Routing\Constants\RoutingRulesEnum.js" />
-    <Content Include="Routing\Constants\RoutingRulesTemplatesEnum.js" />
-    <Content Include="Routing\Services\RoutingAPIService.js" />
-    <Content Include="Routing\Services\RoutingRulesAPIService.js" />
-    <Content Include="Routing\Views\RoutingManagement\RoutingManagementController.js" />
-    <Content Include="Routing\Views\RoutingManagement\RoutingManagement.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\CodeTemplateController.js" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\CodeTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\CustomerTemplateController.js" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\CustomerTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\PoolTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\PriorityTemplateController.js" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\PriorityTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\ProductTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteBlockTemplateController.js" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteBlockTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteOverrideTemplateController.js" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteOverrideTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\TimeSettingTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\TimeSettingTemplateController.js" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplateController.js" />
-    <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplate.html" />
-    <Content Include="Routing\Views\RoutingRules\RouteRuleEditor.html" />
-    <Content Include="Routing\Views\RoutingRules\RouteRuleEditorController.js" />
-    <Content Include="Routing\Views\RoutingRules\RoutingRulesGrid.html" />
-    <Content Include="Routing\Views\RoutingRules\RoutingRulesGridController.js" />
-    <Content Include="Routing\Views\RoutingRules\RoutingRulesManagement.html" />
-    <Content Include="Routing\Views\RoutingRules\RoutingRulesManagementController.js" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
