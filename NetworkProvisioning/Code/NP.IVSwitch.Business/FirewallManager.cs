@@ -16,8 +16,9 @@ namespace NP.IVSwitch.Business
             var allFirewalls = this.GetCachedFirewalls();
             Func<Firewall, bool> filterExpression =
                 x =>
-                    (input.Query.Host == null || x.Host.Contains(input.Query.Host) || input.Query.Description == null ||
-                     x.Description.Contains(input.Query.Description));
+                    ((input.Query.Host == null || x.Host.Contains(input.Query.Host)) &&
+                     (input.Query.Description == null ||
+                      x.Description.Contains(input.Query.Description)));
             return DataRetrievalManager.Instance.ProcessResult(input, allFirewalls.ToBigResult(input, filterExpression, FirewallDetailMapper));
         }
         public Firewall GetFirewall(int firewallId)
