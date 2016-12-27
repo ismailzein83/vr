@@ -246,7 +246,54 @@ button.btn {
     height: 27px !important;
     padding: 4px 12px !important;
 }
+/* override  bootstrap btn class focus and active behavior */
+vr-actionbar .btn.active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+vr-actionbar .btn.active.focus {
+  outline: none;
+}
 
+vr-actionbar .btn:active,
+vr-actionbar .btn:focus,
+vr-actionbar .btn.active {
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+vr-actionbar .btn:focus,vr-actionbar .btn:active:focus,vr-actionbar .btn.active:focus,vr-actionbar .btn.focus,vr-actionbar .btn:active.focus,vr-actionbar .btn.active.focus {
+    outline: none;
+    outline: none;
+    outline-offset:0px;
+}
+
+
+vr-button .btn.active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+vr-button .btn.active.focus {
+  outline: none;
+}
+
+vr-button .btn:active,
+vr-button .btn:focus,
+vr-button .btn.active {
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+vr-button .btn:focus,vr-button .btn:active:focus,vr-button .btn.active:focus,vr-button .btn.focus,vr-button .btn:active.focus,vr-button .btn.active.focus {
+    outline: none;
+    outline: none;
+    outline-offset:0px;
+}
+/* override  bootstrap btn class focus and active behavior */
 .modal-x-lg {
     width: 97%;
 }
