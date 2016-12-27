@@ -48,11 +48,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         private void SetWorkbookData(ISalePriceListTemplateSettingsContext context, Workbook workbook)
         {
-            foreach (MappedTable mappedSheet in MappedTables)
+            if (MappedTables != null)
             {
-                IEnumerable<SalePriceListTemplateTableCell> sheets = mappedSheet.FillSheet(context, DateTimeFormat);
-                Worksheet worksheet = workbook.Worksheets[mappedSheet.SheetIndex];
-                SetCellData(worksheet, sheets);
+                foreach (MappedTable mappedSheet in MappedTables)
+                {
+                    IEnumerable<SalePriceListTemplateTableCell> sheets = mappedSheet.FillSheet(context, DateTimeFormat);
+                    Worksheet worksheet = workbook.Worksheets[mappedSheet.SheetIndex];
+                    SetCellData(worksheet, sheets);
+                }
             }
         }
         private void SetCellData(Worksheet worksheet, IEnumerable<SalePriceListTemplateTableCell> sheets)
