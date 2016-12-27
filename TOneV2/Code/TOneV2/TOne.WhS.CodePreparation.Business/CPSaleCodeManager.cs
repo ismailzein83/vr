@@ -156,7 +156,7 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     CodeItem codeItem = new CodeItem()
                     {
-                        BED = null,
+                        BED = saleCode.BED,
                         Code = newCode.Code,
                         EED = null,
                         DraftStatus = CodeItemDraftStatus.MovedFrom,
