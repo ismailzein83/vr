@@ -81,7 +81,7 @@ namespace Vanrise.Entities
         #region Private Methods
         private bool CompareTime(int hour, int minute, int second, int milliSecond)
         {
-            if (this.Hour > hour && this.Hour!=null)
+            if (this.Hour > hour)
                 return true;
             else if (this.Hour == hour && this.Minute > minute)
                 return true;
