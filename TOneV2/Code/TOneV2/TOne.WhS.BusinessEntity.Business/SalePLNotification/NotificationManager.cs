@@ -35,20 +35,23 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
 
-        public void SendNotification(int initiatorId, IEnumerable<int> customerIds, long processInstanceId)
+        public IEnumerable<int> SendNotification(int initiatorId, IEnumerable<int> customerIds, long processInstanceId)
         {
+            List<int> failedCustomerIdsToSendEmailFor = new List<int>();
             foreach (int customerId in customerIds)
             {
                 Guid salePLMailTemplateId = _carrierAccountManager.GetSalePLMailTemplateId(customerId);
-                this.SendMail(salePLMailTemplateId, customerId, initiatorId, processInstanceId);
+                this.SendMail(salePLMailTemplateId, customerId, initiatorId, processInstanceId, failedCustomerIdsToSendEmailFor);
             }
+
+            return failedCustomerIdsToSendEmailFor;
         }
 
         #endregion
 
         #region Private Methods
 
-        private void SendMail(Guid salePLMailTemplateId, int customerId, int initiatorId, long processInstanceId)
+        private void SendMail(Guid salePLMailTemplateId, int customerId, int initiatorId, long processInstanceId, List<int> failedCustomersToSendEmail)
         {
             CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerId);
 
@@ -108,8 +111,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             catch (Exception)
             {
-                
-               
+                failedCustomersToSendEmail.Add(customer.CarrierAccountId);
             }
             
         }

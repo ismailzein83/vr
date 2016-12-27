@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -27,7 +28,18 @@ namespace TOne.WhS.Sales.BP.Activities
 			long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 
 			NotificationManager notificationManager = new NotificationManager();
-			notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
+            IEnumerable<int> failedCustomerIdsToSendEmailFor = notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
+
+            if (failedCustomerIdsToSendEmailFor.Count() > 0)
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                List<string> customerNames = new List<string>();
+                foreach (int customerId in failedCustomerIdsToSendEmailFor)
+                    customerNames.Add(carrierAccountManager.GetCarrierAccountName(customerId));
+
+                string customers = string.Join(", ", customerNames.ToArray());
+                context.WriteTrackingMessage(LogEntryType.Warning, "Failed Sending Sale Pricelists to Customers: {0}.", customers);
+            }
 		}
 	}
 }
