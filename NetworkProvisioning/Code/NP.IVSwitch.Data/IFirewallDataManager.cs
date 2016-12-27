@@ -10,5 +10,7 @@ namespace NP.IVSwitch.Data
     public interface IFirewallDataManager : IDataManager
     {
         List<Firewall> GetFirewalls();
+        bool Update(Firewall firewall);
+        bool Insert(Firewall firewall, out int insertedId);
     }
 }

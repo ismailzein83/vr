@@ -167,8 +167,12 @@ namespace NP.IVSwitch.Business
                             routesExtendedSettings);
                     }
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    Route updatedRoute = GetRoute(routeItem.Entity.RouteId);
+                    dataManager.UpdateVendorUSer(updatedRoute);
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = RouteDetailMapper(GetRoute(routeItem.Entity.RouteId));
+                    updateOperationOutput.UpdatedObject = RouteDetailMapper(updatedRoute);
+                    AccountManager accountManager = new AccountManager();
+                    accountManager.UpdateChannelLimit(updatedRoute.AccountId);
                 }
             }
             else

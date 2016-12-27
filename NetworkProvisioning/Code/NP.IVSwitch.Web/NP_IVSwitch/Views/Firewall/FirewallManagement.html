@@ -4,15 +4,18 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-textbox label="Host/Network" value="host"></vr-textbox>
+                    <vr-textbox label="Host" value="host"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox label="Description" value="description"></vr-textbox>
                 </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewFirewall"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="Add" data-onclick="add" haspermission="hasAddFirewallPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

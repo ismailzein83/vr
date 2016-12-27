@@ -8,7 +8,7 @@ namespace NP.IVSwitch.Entities
 {
     public class Firewall
     {
-        public int RecId { get; set; }
+        public int Id { get; set; }
         public string Host { get; set; }
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }

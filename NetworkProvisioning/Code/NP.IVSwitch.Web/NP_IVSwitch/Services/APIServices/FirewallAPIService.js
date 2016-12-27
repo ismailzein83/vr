@@ -2,9 +2,9 @@
 (function (appControllers) {
 
     "use strict";
-    FirewallAPIService.$inject = ['BaseAPIService', 'UtilsService', 'NP_IVSwitch_ModuleConfig'];
+    FirewallAPIService.$inject = ['BaseAPIService', 'UtilsService', 'NP_IVSwitch_ModuleConfig', 'SecurityService'];
 
-    function FirewallAPIService(baseApiService, utilsService, npIvSwitchModuleConfig) {
+    function FirewallAPIService(baseApiService, utilsService, npIvSwitchModuleConfig, securityService) {
 
         var controllerName = "Firewall";
 
@@ -12,8 +12,34 @@
             return baseApiService.post(utilsService.getServiceURL(npIvSwitchModuleConfig.moduleName, controllerName, 'GetFilteredFirewalls'), input);
         }
 
+        function GetFirewall(firewallId) {
+            return baseApiService.get(utilsService.getServiceURL(npIvSwitchModuleConfig.moduleName, controllerName, 'GetFirewall'), {
+                firewallId: firewallId
+            });
+        }
+
+        function AddFirewall(firewallItem) {
+            return baseApiService.post(utilsService.getServiceURL(npIvSwitchModuleConfig.moduleName, controllerName, 'AddFirewall'), firewallItem);
+        }
+
+        function UpdateFirewall(firewallItem) {
+            return baseApiService.post(utilsService.getServiceURL(npIvSwitchModuleConfig.moduleName, controllerName, 'UpdateFirewall'), firewallItem);
+        }
+        function HasAddFirewallPermission() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(npIvSwitchModuleConfig.moduleName, controllerName, ['AddFirewall']));
+        }
+
+        function HasEditFirewallPermission() {
+            return securityService.HasPermissionToActions(utilsService.getSystemActionNames(npIvSwitchModuleConfig.moduleName, controllerName, ['UpdateFirewall']));
+        }
         return ({
-            GetFilteredFirewalls: GetFilteredFirewalls
+            GetFilteredFirewalls: GetFilteredFirewalls,
+            GetFirewall: GetFirewall,
+            AddFirewall: AddFirewall,
+            UpdateFirewall: UpdateFirewall,
+            HasEditFirewallPermission: HasEditFirewallPermission,
+            HasAddFirewallPermission: HasAddFirewallPermission
+
         });
     }
 

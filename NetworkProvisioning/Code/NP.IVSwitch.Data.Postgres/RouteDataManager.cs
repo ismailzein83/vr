@@ -22,6 +22,7 @@ namespace NP.IVSwitch.Data.Postgres
             Route route = new Route
             {
                 RouteId = (int)reader["route_id"],
+                UserId = reader["user_id"] != DBNull.Value ? (int)reader["user_id"] : 0,
                 AccountId = (int)reader["account_id"],
                 Description = reader["description"] as string,
                 TariffId = (int)reader["tariff_id"],
@@ -42,7 +43,7 @@ namespace NP.IVSwitch.Data.Postgres
 
         public List<Route> GetRoutes()
         {
-            String cmdText = @"SELECT route_id,account_id,description,group_id,tariff_id,log_alias,codec_profile_id,trans_rule_id,state_id,channels_limit,
+            String cmdText = @"SELECT route_id,user_id,account_id,description,group_id,tariff_id,log_alias,codec_profile_id,trans_rule_id,state_id,channels_limit,
                                       wakeup_time,host,port ,transport_mode_id,timeout          
                                        FROM routes;";
             return GetItemsText(cmdText, RouteMapper, (cmd) =>
@@ -141,9 +142,9 @@ namespace NP.IVSwitch.Data.Postgres
         private int? InserVendorUSer(Route route, int groupId)
         {
             String cmdText1 = @"INSERT INTO users(account_id,group_id, trans_rule_id,state_id , 
-                                                 channels_limit,channels_active,type_id ,enable_trace)
+                                                 channels_limit,channels_active,type_id ,enable_trace,log_alias,codec_profile_id)
 	                             SELECT  @account_id,  @group_id, @trans_rule_id,@state_id,
-                                 @channels_limit, @channels_active,@type_id,@enable_trace
+                                 @channels_limit, @channels_active,@type_id,@enable_trace,@log_alias,@codec_profile_id
  	                             returning  user_id;";
 
             return (int?)ExecuteScalarText(cmdText1, cmd =>
@@ -151,13 +152,36 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@account_id", route.AccountId);
                 cmd.Parameters.AddWithValue("@group_id", groupId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", route.TransRuleId);
-                cmd.Parameters.AddWithValue("@state_id", 1);
                 cmd.Parameters.AddWithValue("@channels_limit", route.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@channels_active", 0);
                 cmd.Parameters.AddWithValue("@type_id", (int)UserType.VendroTermRoute);
                 cmd.Parameters.AddWithValue("@enable_trace", 1);
+                cmd.Parameters.AddWithValue("@log_alias", route.LogAlias);
+                cmd.Parameters.AddWithValue("@codec_profile_id", route.CodecProfileId);
+                cmd.Parameters.AddWithValue("@state_id", (int)route.CurrentState);
+
             }
                 );
+        }
+
+        public bool UpdateVendorUSer(Route route)
+        {
+            String cmdText1 = @"UPDATE users
+	                             SET  trans_rule_id=@trans_rule_id,channels_limit=@channels_limit,log_alias=@log_alias
+                                      ,codec_profile_id= @codec_profile_id,state_id=@state_id
+                                      WHERE  user_id = @user_id  ";
+
+            int recordsEffected = ExecuteNonQueryText(cmdText1, cmd =>
+            {
+                cmd.Parameters.AddWithValue("@user_id", route.UserId);
+                cmd.Parameters.AddWithValue("@trans_rule_id", route.TransRuleId);
+                cmd.Parameters.AddWithValue("@channels_limit", route.ChannelsLimit);
+                cmd.Parameters.AddWithValue("@log_alias", route.LogAlias);
+                cmd.Parameters.AddWithValue("@codec_profile_id", route.CodecProfileId);
+                cmd.Parameters.AddWithValue("@state_id", (int)route.CurrentState);
+            }
+           );
+            return recordsEffected > 0;
         }
         private int CheckTariffTable()
         {

@@ -9,5 +9,6 @@ namespace NP.IVSwitch.Entities
     public class FirewallQuery
     {
         public string Host { get; set; }
+        public string Description { get; set; }
     }
 }

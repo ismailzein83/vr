@@ -12,5 +12,6 @@ namespace NP.IVSwitch.Data
         List<Route> GetRoutes();
         bool Update(Route route);
         int? Insert(Route route);
+        bool UpdateVendorUSer(Route route);
     }
 }

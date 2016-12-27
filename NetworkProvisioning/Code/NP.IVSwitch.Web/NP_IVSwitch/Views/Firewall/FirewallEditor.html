@@ -1,0 +1,24 @@
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_FirewallEditorController" width="'40%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formFirewallEditor">
+            <vr-tabs>
+                <vr-tab header="'Firewall Rule'">
+                    <vr-columns width="1/2row">
+                        <vr-textbox label="IP address" value="scopeModel.IPaddress" type="ip" isrequired></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formFirewallEditor" data-onclick="scopeModel.save" haspermission="hasSaveFirewallPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

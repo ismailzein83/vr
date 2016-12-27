@@ -16,5 +16,25 @@ namespace NP.IVSwitch.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredFirewalls(input));
         }
+        [HttpGet]
+        [Route("GetFirewall")]
+        public Firewall GetFirewall(int firewallId)
+        {
+            return _manager.GetFirewall(firewallId);
+        }
+
+        [HttpPost]
+        [Route("AddFirewall")]
+        public Vanrise.Entities.InsertOperationOutput<FirewallDetail> AddFirewall(Firewall firewallItem)
+        {
+            return _manager.AddFirewall(firewallItem);
+        }
+
+        [HttpPost]
+        [Route("UpdateFirewall")]
+        public Vanrise.Entities.UpdateOperationOutput<FirewallDetail> UpdateFirewall(Firewall firewallItem)
+        {
+            return _manager.UpdateFirewall(firewallItem);
+        }
     }
 }

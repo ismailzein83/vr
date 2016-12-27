@@ -139,12 +139,13 @@ namespace NP.IVSwitch.Business
             carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(profileId, extendedSettings);
             return accountId;
         }
-        public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
+        public UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
         {
-            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<EndPointDetail>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
+            var updateOperationOutput = new UpdateOperationOutput<EndPointDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
 
             IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
             Helper.SetSwitchConfig(dataManager);
@@ -152,13 +153,14 @@ namespace NP.IVSwitch.Business
             if (dataManager.Update(endPointItem.Entity))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = EndPointDetailMapper(this.GetEndPoint(endPointItem.Entity.EndPointId));
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                EndPoint updatedEndPoint = GetEndPoint(endPointItem.Entity.EndPointId);
+                updateOperationOutput.UpdatedObject = EndPointDetailMapper(updatedEndPoint);
+                AccountManager accountManager = new AccountManager();
+                accountManager.UpdateChannelLimit(updatedEndPoint.AccountId);
             }
             else
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-            }
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
 
             return updateOperationOutput;
         }

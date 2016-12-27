@@ -181,6 +181,7 @@
     <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\EndPointService.js" />
+    <Content Include="NP_IVSwitch\Services\FirewallService.js" />
     <Content Include="NP_IVSwitch\Services\RouteService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\CodecDefAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\CodecProfileAPIService.js" />
@@ -198,6 +199,8 @@
     <Content Include="NP_IVSwitch\Views\CodecProfile\CodecProfileManagementController.js" />
     <Content Include="NP_IVSwitch\Views\CustomerRoute\CustomerRouteManagement.html" />
     <Content Include="NP_IVSwitch\Views\CustomerRoute\CustomerRouteManagementController.js" />
+    <Content Include="NP_IVSwitch\Views\Firewall\FirewallEditor.html" />
+    <Content Include="NP_IVSwitch\Views\Firewall\FirewallEditorController.js" />
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagement.html" />
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagementController.js" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditor.html" />

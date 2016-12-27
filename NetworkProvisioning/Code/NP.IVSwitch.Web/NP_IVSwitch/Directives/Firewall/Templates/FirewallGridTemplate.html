@@ -2,7 +2,9 @@
 <vr-datagrid on-ready="scopeModel.onGridReady"
              datasource="firewalls"
              dataretrievalfunction="dataRetrievalFunction"
-             idfield="Entity.RecId">
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.Host">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.Id'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Host/Network'" field="'Entity.Host'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreationDate'"></vr-datagridcolumn>

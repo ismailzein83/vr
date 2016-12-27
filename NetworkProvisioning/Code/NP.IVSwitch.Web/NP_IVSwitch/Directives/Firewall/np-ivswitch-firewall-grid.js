@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSwitchGrid", ["UtilsService", "VRNotificationService",
-function (utilsService, vrNotificationService) {
+app.directive("npIvswitchFirewallGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_FirewallAPIService", "NP_IVSwitch_FirewallService",
+function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npIvSwitchFirewallService) {
 
     var directiveDefinitionObject = {
 
@@ -24,23 +24,16 @@ function (utilsService, vrNotificationService) {
         var gridAPI;
 
         function initializeController() {
+            $scope.scopeModel = {};
+            $scope.scopeModel.menuActions = [];
             $scope.firewalls = [];
 
-            $scope.onGridReady = function (api) {
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-
-                function getDirectiveAPI() {
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
-                    };
-                    return directiveAPI;
-                }
+                defineAPI();
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SwitchAPIService.GetFilteredSwitches(dataRetrievalInput)
+                return npIvSwitchFirewallApiService.GetFilteredFirewalls(dataRetrievalInput)
                    .then(function (response) {
                        onResponseReady(response);
                    })
@@ -48,6 +41,39 @@ function (utilsService, vrNotificationService) {
                        vrNotificationService.notifyExceptionWithClose(error, $scope);
                    });
             };
+            defineMenuActions();
+        }
+
+        function defineAPI() {
+            var api = {};
+
+            api.load = function (query) {
+                return gridAPI.retrieveData(query);
+            };
+
+            api.onFirewallAdded = function (addedFirewall) {
+                gridAPI.itemAdded(addedFirewall);
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
+
+        function defineMenuActions() {
+            $scope.scopeModel.menuActions.push({
+                name: 'Edit',
+                clicked: editFirewall,
+                haspermission: hasEditFirewallPermission
+            });
+        }
+        function editFirewall(firewallItem) {
+            var onFirewallUpdated = function (updatedFirewall) {
+                gridAPI.itemUpdated(updatedFirewall);
+            };
+            npIvSwitchFirewallService.editFirewall(firewallItem.Entity.Id, onFirewallUpdated);
+        }
+        function hasEditFirewallPermission() {
+            return npIvSwitchFirewallApiService.HasEditFirewallPermission();
         }
         this.initializeController = initializeController;
     }
