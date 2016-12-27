@@ -299,6 +299,9 @@ namespace TOne.WhS.CodePreparation.Business
 
             foreach (ExistingZone existingZone in existingZones)
             {
+                if (!(existingZone.BED <= DateTime.Today && Vanrise.Common.ExtensionMethods.VRGreaterThan(existingZone.EED, DateTime.Today)))
+                    continue;
+
                 if (GetSaleZoneType(existingZone.Name, saleAreaSettingsData) == SaleZoneTypeEnum.Fixed)
                     fixedExistingZones.Add(existingZone);
                 else

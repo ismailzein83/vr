@@ -26,7 +26,7 @@ namespace TOne.WhS.CodePreparation.Business
                 if (zonesByType[SaleZoneTypeEnum.Fixed].Count() == 0)
                     return null;
                 else
-                    return this.CreateRatesWithDefaultValueForAllSellingProducts();
+                    return this.CreateRatesWithDefaultValueForAllSellingProducts(zonesByType[SaleZoneTypeEnum.Fixed]);
             }
             else
             {
@@ -39,31 +39,36 @@ namespace TOne.WhS.CodePreparation.Business
             }
         }
 
-        private List<NewZoneRateEntity> CreateRatesWithDefaultValueForAllSellingProducts()
+        private List<NewZoneRateEntity> CreateRatesWithDefaultValueForAllSellingProducts(IEnumerable<ExistingZone> fixedExistingZones)
         {
-            List<NewZoneRateEntity> ratesEntities = null;
+            List<NewZoneRateEntity> ratesEntities = new List<NewZoneRateEntity>();
 
             SellingProductManager sellingProductManager = new SellingProductManager();
             IEnumerable<SellingProduct> allSellingProducts = sellingProductManager.GetSellingProductsBySellingNumberPlan(base.SellingNumberPlanId);
 
-            if (allSellingProducts != null && allSellingProducts.Count() > 0)
+            SalePriceListManager priceListManager = new SalePriceListManager();
+            foreach (ExistingZone existingZone in fixedExistingZones)
             {
-                ratesEntities = new List<NewZoneRateEntity>();
-                foreach (SellingProduct sellingProduct in allSellingProducts)
+                foreach (ExistingRate existingRate in existingZone.ExistingRates)
                 {
-                    int sellingProductCurrencyId = base.GetCurrencyForNewRate(sellingProduct.SellingProductId, SalePriceListOwnerType.SellingProduct);
-                    NewZoneRateEntity rate = new NewZoneRateEntity()
+                    SalePriceList pricelist = priceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
+                    if(pricelist.OwnerType == SalePriceListOwnerType.SellingProduct)
                     {
-                        OwnerId = sellingProduct.SellingProductId,
-                        OwnerType = SalePriceListOwnerType.SellingProduct,
-                        CurrencyId = sellingProductCurrencyId,
-                        //TODO: make sure to convert from default rate currency to selling product currency later
-                        Rate = base.SaleAreaSettings.DefaultRate
-                    };
+                        int sellingProductCurrencyId = base.GetCurrencyForNewRate(pricelist.OwnerId, SalePriceListOwnerType.SellingProduct);
+                        NewZoneRateEntity rate = new NewZoneRateEntity()
+                        {
+                            OwnerId = pricelist.OwnerId,
+                            OwnerType = SalePriceListOwnerType.SellingProduct,
+                            CurrencyId = sellingProductCurrencyId,
+                            //TODO: make sure to convert from default rate currency to selling product currency later
+                            Rate = base.SaleAreaSettings.DefaultRate
+                        };
 
-                    ratesEntities.Add(rate);
+                        ratesEntities.Add(rate);
+                    }
                 }
             }
+
             return ratesEntities;
         }
     }

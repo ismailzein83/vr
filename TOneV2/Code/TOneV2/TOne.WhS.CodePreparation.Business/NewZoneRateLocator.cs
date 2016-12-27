@@ -88,14 +88,12 @@ namespace TOne.WhS.CodePreparation.Business
 
             foreach (ExistingZone existingZone in matchedZones)
             {
-                foreach (ExistingRate existingRate in existingZone.ExistingRates)
+                IEnumerable<ExistingRate> normalExistingRates = existingZone.ExistingRates.FindAllRecords(itm => !itm.RateEntity.RateTypeId.HasValue);
+                if(normalExistingRates != null)
                 {
-                    //Comparison will only occur with normal rates
-                    if (existingRate.RateEntity.RateTypeId != null)
-                        continue;
-
-                    SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
-                    existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, existingRate);
+                    ExistingRate lastNormalExistingRate = normalExistingRates.OrderBy(itm => itm.BED).Last();
+                    SalePriceList salePriceList = salePriceListManager.GetPriceList(lastNormalExistingRate.RateEntity.PriceListId);
+                    existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, lastNormalExistingRate);
                 }
             }
 
