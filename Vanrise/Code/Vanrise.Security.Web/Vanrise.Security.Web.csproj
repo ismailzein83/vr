@@ -304,15 +304,6 @@
     <Content Include="Security\Views\WidgetsPages\WidgetEditorController.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetManagement.html" />
     <Content Include="Security\Views\WidgetsPages\WidgetManagementController.js" />
-    <Content Include="web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Security\Directives\Menu\View\Templates\" />
