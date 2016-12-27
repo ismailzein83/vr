@@ -43,7 +43,7 @@
                 accountEntity = response;
             });
         }
-        function getAccountViewsDefinitions() { 
+        function getAccountViewsDefinitions() {
             return Retail_BE_AccountBEDefinitionAPIService.GetAccountViewDefinitionsByAccountId(accountBEDefinitionId, accountId).then(function (response) {
                 accountViewsDefinitions = response;
             });
@@ -83,6 +83,7 @@
                                 view.isLoadingDirective = value;
                             };
                             var payloadDirective = {
+                                accountBEDefinitionId: accountBEDefinitionId,
                                 parentAccountId: accountId
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, view.directiveAPI, payloadDirective, setLoader);

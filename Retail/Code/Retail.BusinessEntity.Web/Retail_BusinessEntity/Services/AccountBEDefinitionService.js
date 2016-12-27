@@ -2,9 +2,9 @@
 
     'use stict';
 
-    AccountDefinitionService.$inject = ['VRModalService'];
+    AccountBEDefinitionService.$inject = ['VRModalService'];
 
-    function AccountDefinitionService(VRModalService) {
+    function AccountBEDefinitionService(VRModalService) {
 
         function addGridColumnDefinition(onColumnDefinitionAdded) {
 
@@ -93,6 +93,6 @@
         };
     }
 
-    appControllers.service('Retail_BE_AccountDefinitionService', AccountDefinitionService);
+    appControllers.service('Retail_BE_AccountBEDefinitionService', AccountBEDefinitionService);
 
 })(appControllers);

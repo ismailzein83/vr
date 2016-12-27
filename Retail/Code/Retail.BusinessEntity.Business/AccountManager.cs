@@ -751,7 +751,6 @@ namespace Retail.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             switch (context.InfoType)

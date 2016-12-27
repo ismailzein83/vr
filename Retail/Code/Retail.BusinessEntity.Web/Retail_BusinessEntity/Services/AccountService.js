@@ -83,8 +83,9 @@
             }
         }
 
-        function openAccount360DegreeEditor(accountId) {
+        function openAccount360DegreeEditor(accountBEDefinitionId, accountId) {
             var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId
             };
 

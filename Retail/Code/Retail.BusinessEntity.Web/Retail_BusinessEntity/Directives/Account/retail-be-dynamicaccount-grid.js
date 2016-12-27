@@ -182,7 +182,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                 Retail_BE_AccountService.editAccount(account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
             }
             function openAccount360DegreeEditor(account) {
-                Retail_BE_AccountService.openAccount360DegreeEditor(account.Entity.AccountId);
+                Retail_BE_AccountService.openAccount360DegreeEditor(accountBEDefinitionId, account.Entity.AccountId);
             }
             function hasEditAccountPermission() {
                 return Retail_BE_AccountAPIService.HasUpdateAccountPermission();

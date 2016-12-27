@@ -477,14 +477,14 @@
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
     <Content Include="Retail_BusinessEntity\ModuleInitialization.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountActionService.js" />
-    <Content Include="Retail_BusinessEntity\Services\AccountDefinitionService.js" />
+    <Content Include="Retail_BusinessEntity\Services\AccountBEDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountConditionAPIService.js" />
-    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PosAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\DistributorAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AgentAPIService.js" />

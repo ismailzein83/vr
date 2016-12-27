@@ -30,8 +30,10 @@
         }
 
         function GetAccountViewDefinitionsByAccountId(accountBEDefinitionId, accountId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitionsByAccountId"),
-                { accountId: accountId });
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountViewDefinitionsByAccountId"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId
+            });
         }
         
 

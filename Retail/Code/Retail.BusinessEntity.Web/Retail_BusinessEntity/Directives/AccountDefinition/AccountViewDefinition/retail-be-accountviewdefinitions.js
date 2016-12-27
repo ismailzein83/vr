@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotificationService", "Retail_BE_AccountDefinitionService",
-    function (UtilsService, VRNotificationService, Retail_BE_AccountDefinitionService) {
+app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotificationService", "Retail_BE_AccountBEDefinitionService",
+    function (UtilsService, VRNotificationService, Retail_BE_AccountBEDefinitionService) {
 
         var directiveDefinitionObject = {
 
@@ -37,7 +37,7 @@ app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotification
                     var onAccountViewDefinitionAdded = function (accountViewDefinition) {
                         ctrl.datasource.push({ Entity: accountViewDefinition });
                     };
-                    Retail_BE_AccountDefinitionService.addAccountViewDefinition(onAccountViewDefinitionAdded, getContext());
+                    Retail_BE_AccountBEDefinitionService.addAccountViewDefinition(onAccountViewDefinitionAdded, getContext());
                 };
 
                 ctrl.removeAccountViewDefinition = function (dataItem) {
@@ -96,7 +96,7 @@ app.directive("retailBeAccountviewdefinitions", ["UtilsService", "VRNotification
                     var index = ctrl.datasource.indexOf(accountViewDefinitionObj);
                     ctrl.datasource[index] = { Entity: accountViewDefinition };
                 };
-                Retail_BE_AccountDefinitionService.editAccountViewDefinition(accountViewDefinitionObj.Entity, onAccountViewDefinitionUpdated, getContext());
+                Retail_BE_AccountBEDefinitionService.editAccountViewDefinition(accountViewDefinitionObj.Entity, onAccountViewDefinitionUpdated, getContext());
             }
             function getContext() {
                 return context;

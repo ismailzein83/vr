@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBeAccountactiondefinitions", ["UtilsService", "VRNotificationService", "Retail_BE_AccountDefinitionService",
-    function (UtilsService, VRNotificationService, Retail_BE_AccountDefinitionService) {
+app.directive("retailBeAccountactiondefinitions", ["UtilsService", "VRNotificationService", "Retail_BE_AccountBEDefinitionService",
+    function (UtilsService, VRNotificationService, Retail_BE_AccountBEDefinitionService) {
 
         var directiveDefinitionObject = {
 
@@ -37,7 +37,7 @@ app.directive("retailBeAccountactiondefinitions", ["UtilsService", "VRNotificati
                     var onAccountActionDefinitionAdded = function (accountActionDefinition) {
                         ctrl.datasource.push({ Entity: accountActionDefinition });
                     };
-                    Retail_BE_AccountDefinitionService.addAccountActionDefinition(onAccountActionDefinitionAdded, getContext());
+                    Retail_BE_AccountBEDefinitionService.addAccountActionDefinition(onAccountActionDefinitionAdded, getContext());
                 };
 
                 ctrl.removeAccountActionDefinition = function (dataItem) {
@@ -96,7 +96,7 @@ app.directive("retailBeAccountactiondefinitions", ["UtilsService", "VRNotificati
                     var index = ctrl.datasource.indexOf(accountActionDefinitionObj);
                     ctrl.datasource[index] = { Entity: accountActionDefinition };
                 };
-                Retail_BE_AccountDefinitionService.editAccountActionDefinition(accountActionDefinitionObj.Entity, onAccountActionDefinitionUpdated, getContext());
+                Retail_BE_AccountBEDefinitionService.editAccountActionDefinition(accountActionDefinitionObj.Entity, onAccountActionDefinitionUpdated, getContext());
             }
             function getContext() {
                 return context;

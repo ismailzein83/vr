@@ -98,7 +98,6 @@ namespace Retail.BusinessEntity.Business
             return GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
         }
 
-
         public IEnumerable<AccountViewDefinitionConfig> GetAccountViewDefinitionSettingsConfigs()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
