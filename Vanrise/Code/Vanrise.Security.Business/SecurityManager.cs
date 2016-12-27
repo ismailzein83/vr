@@ -330,6 +330,8 @@ namespace Vanrise.Security.Business
             foreach (var p in requirePermissions.Entries)
             {
                 BusinessEntity be = new BusinessEntityManager().GetBusinessEntityById(p.EntityId);
+                if (be == null)
+                    throw new DataIntegrityValidationException(string.Format("Business Entity with Id {0} is not found", p.EntityId));
                 string beName = be.Name;
                 rp +=  String.Format("{0}: ", beName);
                 foreach (string s in p.PermissionOptions)
