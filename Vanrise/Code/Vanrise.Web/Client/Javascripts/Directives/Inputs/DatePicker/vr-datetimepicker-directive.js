@@ -162,7 +162,6 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         unspecifiedSecond = 59;
                         unspecifiedMillisecond = 999;
                     }
-                    console.log(unspecifiedHour);
                     if ($attrs.type == "time") {
                         $scope.ctrl.value = {
                             $type: 'Vanrise.Entities.Time, Vanrise.Entities',
