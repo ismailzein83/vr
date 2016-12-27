@@ -72,7 +72,7 @@
             filter = {
                 Name: $scope.name,
                 SupplierId: supplierDirectiveApi.getSelectedIds(),
-                EffectiveOn: $scope.effectiveOn,
+                EffectiveOn: UtilsService.getDateFromDateTime($scope.effectiveOn),
                 Countries: countryDirectiveApi.getSelectedIds()
             };
            
