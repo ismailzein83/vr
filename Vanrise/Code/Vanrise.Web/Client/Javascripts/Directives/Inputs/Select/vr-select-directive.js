@@ -64,6 +64,7 @@
                 controller.boundDataSource = [];
                 var itemsToAddToSource;
                 $scope.$watch('isDropDownOpened', function (newValue, oldValue) {
+                    controller.isLoading = true;
                     $scope.effectiveDataSource = getdatasource();
                     refreshBoundDataSource();
                 });
@@ -102,7 +103,7 @@
                 }
 
                 function addBatchItemsToSource() {
-                    var numberOfItems = 10;
+                    var numberOfItems = 20;
                     for (var i = 0; i < numberOfItems; i++) {
                         if (itemsToAddToSource.length > 0) {
                             controller.boundDataSource.push(itemsToAddToSource[0]);
@@ -116,10 +117,12 @@
                             $scope.$apply(function () {
 
                             });
-                        }, 250);
+                        });
                     }
-                else {
-                    setTimeout(function () {
+                    else {
+                        controller.isLoading = false;
+                        setTimeout(function () {
+
                         if (!controller.isMultiple()) {
                             if (controller.selectedvalues !=undefined) {
                                  var index = controller.getObjectValue(controller.selectedvalues);
@@ -141,6 +144,7 @@
                                     }, 1);
                             }
                         }
+                       
                       }, 1);
                 }
                 }
