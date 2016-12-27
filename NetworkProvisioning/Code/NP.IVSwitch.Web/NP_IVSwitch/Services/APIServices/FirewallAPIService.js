@@ -26,7 +26,7 @@
             return baseApiService.post(utilsService.getServiceURL(npIvSwitchModuleConfig.moduleName, controllerName, 'UpdateFirewall'), firewallItem);
         }
         function HasAddFirewallPermission() {
-            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(npIvSwitchModuleConfig.moduleName, controllerName, ['AddFirewall']));
+            return securityService.HasPermissionToActions(utilsService.getSystemActionNames(npIvSwitchModuleConfig.moduleName, controllerName, ['AddFirewall']));
         }
 
         function HasEditFirewallPermission() {
