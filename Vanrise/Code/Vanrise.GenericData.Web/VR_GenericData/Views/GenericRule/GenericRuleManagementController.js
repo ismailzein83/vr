@@ -110,6 +110,7 @@
         }
 
         function load() {
+            $scope.isLoading = true;
             loadGenericRuleDefinition();
         }
 
@@ -127,7 +128,9 @@
                 }
                 VRUIUtilsService.callDirectiveLoad(genericRuleDefinitionAPI, payLoad, loadGenericRuleDefinitionSelectorPromiseDeferred);
             });
-            return loadGenericRuleDefinitionSelectorPromiseDeferred.promise;
+            return loadGenericRuleDefinitionSelectorPromiseDeferred.promise.then(function () {
+                $scope.isLoading = false;
+            });
         }
 
         function loadAllControls() {
