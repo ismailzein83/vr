@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType
 {
-    public class BPAccountActionSettings : AccountBEActionSettings
+    public class BPAccountActionSettings : AccountActionDefinitionSettings
     {
         public override Guid ConfigId
         {
@@ -18,5 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType
         {
             get { return "BPAction"; }
         }
+                
+        public ActionBPDefinitionSettings BPDefinitionSettings { get; set; }
     }
 }

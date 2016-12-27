@@ -37,6 +37,8 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountViewDefinition> AccountViewDefinitions { get; set; }
 
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
+
+        public List<AccountActionDefinition> ActionDefinitions { get; set; }
     }
 
     public abstract class AccountBEDefinitionCondition

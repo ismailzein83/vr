@@ -6,21 +6,18 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountBEActionType : BEActionType
+    public class AccountActionDefinition
     {
-        public override Guid ConfigId
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public Guid AccountActionDefinitionId { get; set; }
 
-        public Guid AccountBEDefinitionId { get; set; }
+        public string Name { get; set; }
 
         public AccountCondition AvailabilityCondition { get; set; }
 
-        public AccountBEActionSettings ActionSettings { get; set; }
+        public AccountActionDefinitionSettings ActionDefinitionSettings { get; set; }
     }
 
-    public abstract class AccountBEActionSettings
+    public abstract class AccountActionDefinitionSettings
     {
         public abstract Guid ConfigId { get; }
 
