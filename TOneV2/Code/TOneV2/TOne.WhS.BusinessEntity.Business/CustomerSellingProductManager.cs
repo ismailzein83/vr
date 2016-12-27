@@ -62,7 +62,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 		public IEnumerable<int> GetCustomerIdsAssignedToSellingProduct(int sellingProductId, DateTime effectiveOn)
 		{
-			Dictionary<int, CustomerSellingProduct> effectiveCustomerSellingProductsByCustomerId = GetEffectiveCustomerSellingProductsByCustomerId(sellingProductId, effectiveOn);
+			Dictionary<int, CustomerSellingProduct> effectiveCustomerSellingProductsByCustomerId = GetEffectiveCustomerSellingProductsByActiveCustomerId(sellingProductId, effectiveOn);
 			
 			if (effectiveCustomerSellingProductsByCustomerId != null && effectiveCustomerSellingProductsByCustomerId.Count > 0)
 				return effectiveCustomerSellingProductsByCustomerId.Keys;
@@ -70,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Business
 				return null;
 		}
 
-		public Dictionary<int, CustomerSellingProduct> GetEffectiveCustomerSellingProductsByCustomerId(int sellingProductId, DateTime effectiveOn)
+		public Dictionary<int, CustomerSellingProduct> GetEffectiveCustomerSellingProductsByActiveCustomerId(int sellingProductId, DateTime effectiveOn)
 		{
 			IEnumerable<CustomerSellingProduct> customerSellingProducts = GetCachedCustomerSellingProductsBySellingProductId().GetRecord(sellingProductId);
 
@@ -78,9 +78,12 @@ namespace TOne.WhS.BusinessEntity.Business
 				return null;
 
 			var effectiveCustomerSellingProductsByCustomerId = new Dictionary<int, CustomerSellingProduct>();
+			var carrierAccountManager = new CarrierAccountManager();
 
 			foreach (CustomerSellingProduct customerSellingProduct in customerSellingProducts)
 			{
+				if (!carrierAccountManager.IsCarrierAccountActive(customerSellingProduct.CustomerId))
+					continue;
 				if (customerSellingProduct.BED > effectiveOn)
 					continue;
 

@@ -392,6 +392,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierAccount.IsDeleted;
         }
+		public bool IsCarrierAccountActive(int carrierAccountId)
+		{
+			var carrierAccount = GetCarrierAccount(carrierAccountId);
+			if (carrierAccount == null)
+				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Carrier Account '{0}' was not found", carrierAccountId));
+			if (carrierAccount.CarrierAccountSettings == null)
+				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of Carrier Account '{0}' were not found", carrierAccountId));
+			return (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active);
+		}
         public int? GetCarrierProfileId(int carrierAccountId)
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
