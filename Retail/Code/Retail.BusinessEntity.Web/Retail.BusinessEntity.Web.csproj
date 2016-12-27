@@ -284,6 +284,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-accountbalance.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\Templates\AccountBalanceTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\Templates\VRPackageDefinitionSettings.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\vr-packagedefinition-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\Templates\InvoiceSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\retail-be-invoice-setting-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\retail-be-invoicesettings-editor.js" />

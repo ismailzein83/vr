@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public override Guid VRComponentTypeConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("ce9260a7-732f-4573-bef8-9a3f8fc7bcc6"); }
         }
 
         public Guid AccountBEDefinitionId { get; set; }
