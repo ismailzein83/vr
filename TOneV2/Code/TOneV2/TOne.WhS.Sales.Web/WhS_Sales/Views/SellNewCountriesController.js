@@ -9,10 +9,12 @@
 		var customerId;
 		var countryChanges;
 		var saleAreaSettings;
+		var ratePlanSettings;
 
 		var effectiveDateDayOffset = 0;
 		var retroactiveDayOffset = 0;
 		var retroactiveDate = UtilsService.getDateFromDateTime(new Date());
+		var newRateDayOffset = 0;
 
 		var countrySelectorAPI;
 		var countrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -33,19 +35,18 @@
 				customerId = parameters.customerId;
 				countryChanges = parameters.countryChanges;
 				saleAreaSettings = parameters.saleAreaSettings;
+				ratePlanSettings = parameters.ratePlanSettings;
 			}
 			if (saleAreaSettings != undefined) {
-				// Make sure that the offsets are valid numbers
-				var effectiveDateDayOffsetValue = Number(saleAreaSettings.EffectiveDateDayOffset);
-				if (!isNaN(effectiveDateDayOffsetValue))
-					effectiveDateDayOffset = effectiveDateDayOffsetValue;
-				var retroactiveDayOffsetValue = Number(saleAreaSettings.RetroactiveDayOffset);
-				if (!isNaN(retroactiveDayOffsetValue))
-					retroactiveDayOffset = retroactiveDayOffsetValue;
+				effectiveDateDayOffset = getNumberIfValid(saleAreaSettings.EffectiveDateDayOffset);
+				retroactiveDayOffset = getNumberIfValid(saleAreaSettings.RetroactiveDayOffset);
 			}
 			if (retroactiveDayOffset > 0) {
 				var retroactiveDateValue = WhS_Sales_RatePlanUtilsService.getNowMinusDays(retroactiveDayOffset);
 				retroactiveDate = UtilsService.getDateFromDateTime(retroactiveDateValue);
+			}
+			if (ratePlanSettings != undefined) {
+				newRateDayOffset = getNumberIfValid(ratePlanSettings.NewRateDayOffset);
 			}
 		}
 		function defineScope() {
@@ -195,7 +196,7 @@
 				Entity: {
 					CountryId: country.CountryId,
 					Name: country.Name,
-					BED: WhS_Sales_RatePlanUtilsService.getNowPlusDays(effectiveDateDayOffset),
+					BED: WhS_Sales_RatePlanUtilsService.getNowPlusDays(newRateDayOffset),
 					EED: null
 				}
 			};
@@ -223,6 +224,15 @@
 		}
 		function getNewCountryEntities() {
 			return UtilsService.getPropValuesFromArray($scope.scopeModel.newCountries, 'Entity');
+		}
+
+		function getNumberIfValid(number) {
+			if (number != undefined) {
+				var numberValue = Number(number);
+				if (!isNaN(numberValue))
+					return numberValue;
+			}
+			return 0;
 		}
 	}
 

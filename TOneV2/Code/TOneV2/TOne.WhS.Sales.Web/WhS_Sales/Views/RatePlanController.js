@@ -239,7 +239,7 @@
             			VRNotificationService.notifyException(error, $scope);
             		});
             	};
-            	WhS_Sales_RatePlanService.sellNewCountries(customerId, countryChanges, saleAreaSettingsData, onCountryChangesUpdated);
+            	WhS_Sales_RatePlanService.sellNewCountries(customerId, countryChanges, saleAreaSettingsData, ratePlanSettingsData, onCountryChangesUpdated);
             };
             $scope.editSettings = function ()
             {

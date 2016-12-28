@@ -14,12 +14,13 @@
             viewZoneInfo: viewZoneInfo
         };
 
-        function sellNewCountries(customerId, countryChanges, saleAreaSettings, onCountryChangesUpdated) {
+        function sellNewCountries(customerId, countryChanges, saleAreaSettings, ratePlanSettings, onCountryChangesUpdated) {
 
         	var parameters = {
         		customerId: customerId,
         		countryChanges: countryChanges,
-        		saleAreaSettings: saleAreaSettings
+        		saleAreaSettings: saleAreaSettings,
+        		ratePlanSettings: ratePlanSettings
             };
 
             var settings = {};
