@@ -45,7 +45,7 @@ app.directive('npIvswitchEndpointSelector', ['NP_IVSwitch_EndPointAPIService', '
 
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
- 
+
                     selectorAPI = api;
                     defineAPI();
                 };
@@ -62,7 +62,7 @@ app.directive('npIvswitchEndpointSelector', ['NP_IVSwitch_EndPointAPIService', '
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                     }
- 
+
 
                     var EnumArray = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
                     selectorAPI.clearDataSource();
@@ -73,29 +73,29 @@ app.directive('npIvswitchEndpointSelector', ['NP_IVSwitch_EndPointAPIService', '
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
-                
-         
 
 
-        };
-
-        api.getSelectedIds = function () {
-            return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
-        };
 
 
-        if (ctrl.onReady != null)
-            ctrl.onReady(api);
-    }
-}
+                };
+
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
+                };
+
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
+        }
 
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "EndPoint Type";
+            var label = "Type";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "EndPoint Type";
+                label = "Type";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
@@ -109,6 +109,5 @@ app.directive('npIvswitchEndpointSelector', ['NP_IVSwitch_EndPointAPIService', '
                    '</vr-columns>';
         }
 
-}]);
+    }]);
 
-    
