@@ -326,8 +326,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Convertors\retail-be-user-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Convertors\Templates\CompanyConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Convertors\Templates\UserConvertorEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\PackageTypes\retail-be-pricingpackagesettings-management.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\PackageTypes\Templates\PricingPackageSettingsManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\retail-be-pricingpackagesettings-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\Templates\PricingPackageSettingsManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />

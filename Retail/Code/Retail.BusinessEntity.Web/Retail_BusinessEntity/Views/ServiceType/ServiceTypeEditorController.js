@@ -224,7 +224,7 @@
                     var payload = {
                         filter: {
                             Filters: [{
-                                $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionFilter, Retail.BusinessEntity.Entities",
+                                $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business",
                             }]
                         },
                         selectedIds:serviceTypeEntity != undefined?serviceTypeEntity.AccountBEDefinitionId:undefined

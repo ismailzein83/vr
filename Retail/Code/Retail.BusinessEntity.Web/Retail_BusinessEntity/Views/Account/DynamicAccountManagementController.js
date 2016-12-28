@@ -105,7 +105,7 @@
                 var payload = {
                     filter: {
                         Filters: [{
-                            $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewFilter, Retail.BusinessEntity.Entities",
+                            $type: "Retail.BusinessEntity.Business.AccountBEDefinitionViewFilter, Retail.BusinessEntity.Business",
                             ViewId: viewId
                         }]
                     }

@@ -53,24 +53,11 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.GenericData.Transformation.Data">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.GenericData.Transformation.Data.SQL">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.SQL.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.GenericData.Transformation.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.GenericData.Transformation.MainExtensions">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.MainExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
@@ -81,10 +68,6 @@
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Security.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
@@ -94,8 +77,6 @@
     <Compile Include="AccountDefinition\AccountActionDefinition.cs" />
     <Compile Include="AccountDefinition\AccountActionDefinitionConfig.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
-    <Compile Include="AccountDefinition\AccountBEDefinitionFilter.cs" />
-    <Compile Include="AccountDefinition\AccountBEDefinitionViewFilter.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="Contract\Contract.cs" />

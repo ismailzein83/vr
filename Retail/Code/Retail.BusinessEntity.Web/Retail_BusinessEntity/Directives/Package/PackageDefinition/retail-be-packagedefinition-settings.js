@@ -55,7 +55,7 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
                             var payload = {
                                 filter: {
                                     Filters: [{
-                                        $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionFilter, Retail.BusinessEntity.Entities",
+                                        $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business",
                                     }]
                                 },
                                 selectedIds: packageDefinitionEntity != undefined && packageDefinitionEntity.Settings != undefined ? packageDefinitionEntity.Settings.AccountBEDefinitionId : undefined

@@ -55,7 +55,7 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                             var selectorPayload = {
                                 filter: {
                                     Filters: [{
-                                        $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionFilter, Retail.BusinessEntity.Entities"
+                                        $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
                                     }]
                                 }
                             };

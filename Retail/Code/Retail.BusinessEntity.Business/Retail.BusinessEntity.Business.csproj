@@ -113,6 +113,14 @@
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceEnabledAccountFilter.cs" />
@@ -141,6 +149,9 @@
     <Compile Include="Extensions\AgentSynchronizer.cs" />
     <Compile Include="Extensions\SubscriberAccountBalanceManager.cs" />
     <Compile Include="Extensions\SubscriberAccountBalanceSetting.cs" />
+    <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionFilter.cs" />
+    <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionViewFilter.cs" />
+    <Compile Include="Filters\PackageDefinitionServiceTypeFilter.cs" />
     <Compile Include="PackageDefinitionManager.cs" />
     <Compile Include="PackageServiceUsageChargingPolicyContext.cs" />
     <Compile Include="POSManager.cs" />

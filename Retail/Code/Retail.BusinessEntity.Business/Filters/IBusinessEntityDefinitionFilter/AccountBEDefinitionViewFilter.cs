@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Security.Business;
 
-namespace Retail.BusinessEntity.Entities
+namespace Retail.BusinessEntity.Business
 {
     public class AccountBEDefinitionViewFilter : IBusinessEntityDefinitionFilter
     {

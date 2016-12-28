@@ -8,11 +8,12 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.name" label="Package Name" isrequired></vr-textbox>
                         </vr-columns>
-                            <retail-be-packagedefinition-selector on-ready="scopeModel.onPackageDefinitionsSelectorReady" normal-col-num="6"
-                                                                  selectedvalues="scopeModel.selectedPackageDefinition"
-                                                                  hideremoveicon
-                                                                  isrequired="true">
-                            </retail-be-packagedefinition-selector>
+                        <retail-be-packagedefinition-selector on-ready="scopeModel.onPackageDefinitionsSelectorReady" normal-col-num="6"
+                                                              selectedvalues="scopeModel.selectedPackageDefinition"
+                                                              hideremoveicon
+                                                              isrequired="true"
+                                                              onselectionchanged="scopeModel.onPackageDefinitionsSelectionChanged">
+                        </retail-be-packagedefinition-selector>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/2row">

@@ -25,7 +25,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/PackageTypes/Templates/PricingPackageSettingsManagementTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/PackageTypes/Templates/PricingPackageSettingsManagementTemplate.html'
         };
 
         function PricingPackageSettingsManagementCtor($scope, ctrl) {
@@ -71,7 +71,7 @@
                 var api = {};
 
                 api.load = function (payload) {
-
+                    ctrl.pricingPackageSettings.length = 0;
                     var pricingPackageSettings;
                     var serviceTypeUsageChargingPolicies;
                     var pricingPackageSettingsEditorRuntime;
