@@ -51,7 +51,7 @@ namespace Retail.BusinessEntity.Business
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", fieldProperty[0], fieldProperty[1]);
             }
 
-            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(account, input.Query));
+            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(input.Query.AccountBEDefinitionId, account, input.Query.Columns));
             if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 foreach (var accountDetail in bigResult.Data)
@@ -630,16 +630,17 @@ namespace Retail.BusinessEntity.Business
 
         private AccountDetail AccountDetailMapper(Account account)
         {
-            var accountDetail = AccountDetailMapperStep1(account, null);
+            AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
+            var accountDetail = AccountDetailMapperStep1(accountType.AccountBEDefinitionId, account, null);
             AccountDetailMapperStep2(accountDetail, account);
             return accountDetail;
         }
 
-        private AccountDetail AccountDetailMapperStep1(Account account, AccountQuery accountQuery)
+        private AccountDetail AccountDetailMapperStep1(Guid accountBEDefinitionId, Account account, List<string> columns)
         {
             var statusDefinitionManager = new StatusDefinitionManager();
             var accountTypeManager = new AccountTypeManager();
-            var accountDefinitionManager = new AccountBEDefinitionManager();
+            var accountBEDefinitionManager = new AccountBEDefinitionManager();
             var accountServices = new AccountServiceManager();
             var accountPackages = new AccountPackageManager();
 
@@ -651,7 +652,7 @@ namespace Retail.BusinessEntity.Business
 
             foreach (var field in genericFieldDefinitionInfos)
             {
-                if (accountQuery.Columns != null && !accountQuery.Columns.Contains(field.Name))
+                if (columns != null && !columns.Contains(field.Name))
                     continue;
 
                 AccountFieldValue accountFieldValue = new AccountFieldValue();
@@ -667,7 +668,8 @@ namespace Retail.BusinessEntity.Business
                 fieldValues.Add(field.Name, accountFieldValue);
             }
 
-            List<AccountViewDefinition> accountViewDefinitions = accountDefinitionManager.GetAccountViewDefinitionsByAccount(accountQuery.AccountBEDefinitionId, account);
+            List<AccountViewDefinition> accountViewDefinitions = accountBEDefinitionManager.GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
+            List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionManager.GetAccountActionDefinitionsByAccount(accountBEDefinitionId, account);
 
             return new AccountDetail()
             {
@@ -679,7 +681,8 @@ namespace Retail.BusinessEntity.Business
                 NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
                 NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId),
                 FieldValues = fieldValues,
-                AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null
+                AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null,
+                AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Select(itm => itm.AccountActionDefinitionId).ToList() : null
             };
         }
 

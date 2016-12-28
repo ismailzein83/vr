@@ -22,6 +22,7 @@ namespace Retail.BusinessEntity.Entities
 
         public Dictionary<string, AccountFieldValue> FieldValues { get; set; }
         public List<Guid> AvailableAccountViews { get; set; }
+        public List<Guid> AvailableAccountActions { get; set; }
     }
 
     public class AccountFieldValue

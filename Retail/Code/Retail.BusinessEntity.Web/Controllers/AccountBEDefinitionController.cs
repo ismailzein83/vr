@@ -48,5 +48,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountViewDefinitionsByAccountId(accountBEDefinitionId, accountId);
         }
+
+        [HttpGet]
+        [Route("GetAccountActionDefinitions")]
+        public List<AccountActionDefinition> GetAccountActionDefinitions(Guid accountBEDefinitionId)
+        {
+            return _manager.GetAccountActionDefinitions(accountBEDefinitionId);
+        }
     }
 }

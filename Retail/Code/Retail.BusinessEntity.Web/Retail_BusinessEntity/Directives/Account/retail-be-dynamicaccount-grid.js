@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountService',
-    function (VRNotificationService, UtilsService, Retail_BE_AccountAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_BE_AccountService) {
+app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountActionService',
+    function (VRNotificationService, UtilsService, Retail_BE_AccountAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_BE_AccountService, Retail_BE_AccountActionService) {
         return {
             restrict: 'E',
             scope: {
@@ -24,6 +24,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
             var parentAccountId;
             var gridColumnFieldNames = [];
             var accountViewDefinitions = [];
+            var accountActionDefinitions = [];
 
             var gridAPI;
 
@@ -45,7 +46,8 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var account = response.Data[i];
-                                Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(accountBEDefinitionId, account, accountViewDefinitions, gridAPI);
+                                Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, account, gridAPI, accountViewDefinitions);
+                                Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, account, gridAPI, accountViewDefinitions, accountActionDefinitions);
                             }
                         }
                         onResponseReady(response);
@@ -55,7 +57,16 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                     });
                 };
 
-                defineMenuActions();
+                $scope.scopeModel.menuActions = function (account) {
+                    var menuActions = [];
+                    if (account.menuActions != undefined) {
+                        for (var i = 0; i < account.menuActions.length; i++)
+                            menuActions.push(account.menuActions[i]);
+                    }
+                    return menuActions;
+                };
+
+                //defineMenuActions();
             }
             function defineAPI() {
                 var api = {};
@@ -80,6 +91,10 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                         //Loading AccountViewDefinitions
                         var accountViewDefinitionsLoadPromise = getAccountViewDefinitionsLoadPromise();
                         promises.push(accountViewDefinitionsLoadPromise);
+
+                        //Loading AccountViewDefinitions
+                        var accountActionDefinitionsLoadPromise = getAccountActionDefinitionsLoadPromise();
+                        promises.push(accountActionDefinitionsLoadPromise);
                     }
 
                     var gridLoadDeferred = UtilsService.createPromiseDeferred();
@@ -141,6 +156,21 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
 
                         return accountViewDefinitionsLoadPromiseDeferred.promise;
                     }
+                    function getAccountActionDefinitionsLoadPromise() {
+
+                        var accountActionDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        Retail_BE_AccountBEDefinitionAPIService.GetAccountActionDefinitions(accountBEDefinitionId).then(function (response) {
+
+                            accountActionDefinitions = response;
+                            accountActionDefinitionsLoadPromiseDeferred.resolve();
+
+                        }).catch(function (error) {
+                            accountViewRuntimeEditorsLoadPromiseDeferred.reject(error);
+                        });
+
+                        return accountActionDefinitionsLoadPromiseDeferred.promise;
+                    }
                     function buildGridQuery(gridQuery) {
                         if (gridQuery == undefined)
                             gridQuery = {};
@@ -155,7 +185,8 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                 };
 
                 api.onAccountAdded = function (addedAccount) {
-                    Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(addedAccount, accountViewDefinitions, gridAPI);
+                    Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, addedAccount, gridAPI, accountViewDefinitions);
+                    Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, addedAccount, gridAPI, accountViewDefinitions, accountActionDefinitions);
                     gridAPI.itemAdded(addedAccount);
                 };
 
@@ -175,7 +206,8 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
             }
             function editAccount(account) {
                 var onAccountUpdated = function (updatedAccount) {
-                    Retail_BE_AccountService.defineAccountViewTabsAndMenuActions(updatedAccount, accountViewDefinitions, gridAPI);
+                    Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, updatedAccount, gridAPI, accountViewDefinitions);
+                    Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, updatedAccount, gridAPI, accountViewDefinitions, accountActionDefinitions);
                     gridAPI.itemUpdated(updatedAccount);
                 };
 

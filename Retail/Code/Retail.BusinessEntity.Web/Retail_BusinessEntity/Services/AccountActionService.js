@@ -1,8 +1,76 @@
 ﻿
-app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService) {
+app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountService',
+    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountService) {
 
         var actionTypes = [];
+
+        function defineAccountMenuActions(accountBEDefinitionId, account, gridAPI, accountViewDefinitions, accountActionDefinitions) {
+
+            account.menuActions = [];
+
+            if (account.AvailableAccountActions != undefined) {
+                for (var j = 0; j < account.AvailableAccountActions.length; j++) {
+                    var actionId = account.AvailableAccountActions[j];
+                    var accountActionDefinition = UtilsService.getItemByVal(accountActionDefinitions, actionId, "AccountActionDefinitionId");
+                    if (accountActionDefinition != undefined) {
+                        var actionType = getActionTypeIfExist(accountActionDefinition.ActionDefinitionSettings.ClientActionName);
+                        if (actionType != undefined) {
+                            addGridMenuAction(accountActionDefinition, actionType);
+                        }
+                    }
+                }
+            }
+
+            function addGridMenuAction(accountAction, actionType) {
+                account.menuActions.push({
+                    name: accountAction.Name,
+                    clicked: function (account) {
+                        var payload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            account: account,
+                            accountActionDefinition: accountActionDefinition,
+                            onItemUpdated: function (updatedItem) {
+                                Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions);
+                                defineAccountMenuActions(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions, accountActionDefinitions);
+                                gridAPI.itemUpdated(updatedItem);
+                            }
+                        };
+
+                        //var promiseDeffered = UtilsService.createPromiseDeferred();
+
+                        var promise = actionType.ExecuteAction(payload);
+                        //if (promise != undefined && promise.then != undefined) {
+                        //    promise.then(function (response) {
+                        //        if (response) {
+                        //            gridAPI.showLoader();
+                        //            var invoiceId = account.Entity.InvoiceId;
+                        //            return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
+                        //                gridAPI.itemUpdated(response);
+                        //                defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
+                        //                promiseDeffered.resolve();
+                        //            }).catch(function (error) {
+                        //                promiseDeffered.reject(error);
+                        //            });
+                        //        } else {
+                        //            promiseDeffered.resolve();
+                        //        }
+
+                        //        promiseDeffered.resolve();
+
+                        //    }).catch(function (error) {
+                        //        promiseDeffered.reject(error);
+                        //    }).finally(function () {
+                        //        gridAPI.hideLoader();
+                        //    });
+                        //} else {
+                        //    promiseDeffered.resolve();
+                        //}
+
+                        //return promiseDeffered.promise;
+                    }
+                });
+            }
+        }
 
         function getActionTypeIfExist(actionTypeName) {
             for (var i = 0; i < actionTypes.length; i++) {
@@ -11,7 +79,6 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                     return actionType;
             }
         }
-
         function registerActionType(actionType) {
             actionTypes.push(actionType);
         }
@@ -20,16 +87,41 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
 
             var actionType = {
                 ActionTypeName: "Edit",
-                actionMethod: function (payload) {
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var account = payload.account;
+                    var accountActionDefinition = payload.accountActionDefinition;
+                    var onItemUpdated = payload.onItemUpdated;
+
+                    var onAccountUpdated = function (updatedAccount) {
+                        if (onItemUpdated != undefined)
+                            onItemUpdated(updatedAccount);
+                    };
+                    Retail_BE_AccountService.editAccount(account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
+                }
+            };
+            registerActionType(actionType);
+        }
+        function registerBPActionAccount() {
+
+            var actionType = {
+                ActionTypeName: "BPAction",
+                ExecuteAction: function (payload) {
 
                 }
             };
             registerActionType(actionType);
         }
 
+
         return ({
+            defineAccountMenuActions: defineAccountMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
-            registerEditAccount: registerEditAccount
+            registerEditAccount: registerEditAccount,
+            registerBPActionAccount: registerBPActionAccount
         });
     }]);

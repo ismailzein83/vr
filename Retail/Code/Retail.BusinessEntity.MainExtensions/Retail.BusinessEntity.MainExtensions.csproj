@@ -116,6 +116,7 @@
     <Compile Include="AccountParts\AccountPartPersonalInfoDefinition.cs" />
     <Compile Include="BEActions\AccountBEActionType\BPAccountActionSettings.cs" />
     <Compile Include="BEActions\AccountBEActionType\EditAccountActionSettings.cs" />
+    <Compile Include="BEActions\AccountBEActionType\Open360DegreeAccountActionSettings.cs" />
     <Compile Include="ChangeRoutingGroupProvisionerDefinitionSetting.cs" />
     <Compile Include="ChangeRoutingGroupProvisionerRuntimeSetting.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariff.cs" />

@@ -35,7 +35,16 @@ namespace Retail.BusinessEntity.Business
 
             return accountViewDefinitions;
         }
+        public List<AccountActionDefinition> GetAccountActionDefinitions(Guid accountBEDefinitionId)
+        {
+            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
 
+            List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionSettings.ActionDefinitions;
+            if (accountActionDefinitions == null)
+                throw new NullReferenceException(string.Format("accountActionDefinitions for BusinessEntityDefinition Id : {0}", accountBEDefinitionId));
+
+            return accountActionDefinitions;
+        }
 
         public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(Guid accountBEDefinitionId, long? parentAccountId)
         {
@@ -97,6 +106,19 @@ namespace Retail.BusinessEntity.Business
             return GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
         }
 
+        public List<AccountActionDefinition> GetAccountActionDefinitionsByAccount(Guid accountBEDefinitionId, Account account)
+        {
+            List<AccountActionDefinition> results = new List<AccountActionDefinition>();
+            List<AccountActionDefinition> accoutActionDefinitions = this.GetAccountActionDefinitions(accountBEDefinitionId);
+
+            foreach (var itm in accoutActionDefinitions)
+            {
+                if (IsActionAvailable(itm, account))
+                    results.Add(itm);
+            }
+            return results;
+        }
+
         public IEnumerable<AccountViewDefinitionConfig> GetAccountViewDefinitionSettingsConfigs()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
@@ -153,7 +175,12 @@ namespace Retail.BusinessEntity.Business
         {
             if (accountViewDefinition.AvailabilityCondition != null)
                 return accountViewDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
-            
+            return true;
+        }
+        private bool IsActionAvailable(AccountActionDefinition accountActionDefinition, Account account)
+        {
+            if (accountActionDefinition.AvailabilityCondition != null)
+                return accountActionDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
             return true;
         }
 

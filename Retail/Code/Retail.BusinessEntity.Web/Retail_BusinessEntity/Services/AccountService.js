@@ -35,7 +35,7 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
 
-        function defineAccountViewTabsAndMenuActions(accountBEDefinitionId, account, accountViewDefinitions, gridAPI) {
+        function defineAccountViewTabs(accountBEDefinitionId, account, gridAPI, accountViewDefinitions) {
             if (account == undefined || account.AvailableAccountViews == undefined || account.AvailableAccountViews.length == 0)
                 return;
 
@@ -45,14 +45,15 @@
 
                 var currentAccountViewDefinitionId = account.AvailableAccountViews[index];
                 var accountViewDefinition = UtilsService.getItemByVal(accountViewDefinitions, currentAccountViewDefinitionId, "AccountViewDefinitionId");
+
                 addDrillDownTab(accountViewDefinition);
             }
 
             setDrillDownTabs();
 
-
             function addDrillDownTab(accountViewDefinition) {
-                if (accountViewDefinition.DrillDownSectionName == undefined || accountViewDefinition.Settings == undefined || accountViewDefinition.Settings.RuntimeEditor == undefined)
+                if (accountViewDefinition == undefined || accountViewDefinition.DrillDownSectionName == undefined ||
+                    accountViewDefinition.Settings == undefined || accountViewDefinition.Settings.RuntimeEditor == undefined)
                     return;
 
                 var drillDownTab = {};
@@ -101,7 +102,7 @@
         return {
             addAccount: addAccount,
             editAccount: editAccount,
-            defineAccountViewTabsAndMenuActions: defineAccountViewTabsAndMenuActions,
+            defineAccountViewTabs: defineAccountViewTabs,
             openAccount360DegreeEditor: openAccount360DegreeEditor
         };
     }

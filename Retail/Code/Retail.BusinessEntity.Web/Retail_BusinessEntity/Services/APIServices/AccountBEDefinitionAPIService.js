@@ -36,13 +36,19 @@
             });
         }
         
+        function GetAccountActionDefinitions(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountActionDefinitions"), {
+                accountBEDefinitionId: accountBEDefinitionId
+            });
+        }
 
         return {
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
             GetAccountActionDefinitionSettingsConfigs: GetAccountActionDefinitionSettingsConfigs,
             GetAccountGridColumnAttributes: GetAccountGridColumnAttributes,
             GetAccountViewDefinitions: GetAccountViewDefinitions,
-            GetAccountViewDefinitionsByAccountId: GetAccountViewDefinitionsByAccountId
+            GetAccountViewDefinitionsByAccountId: GetAccountViewDefinitionsByAccountId,
+            GetAccountActionDefinitions: GetAccountActionDefinitions
         };
     }
 
