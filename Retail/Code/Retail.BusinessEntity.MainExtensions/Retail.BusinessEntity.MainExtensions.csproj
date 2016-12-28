@@ -131,6 +131,10 @@
     <Compile Include="ChargingPolicyParts\RateValues\GenericRuleRateValueDefinition.cs" />
     <Compile Include="ChargingPolicyParts\RateValues\SingleRateValue.cs" />
     <Compile Include="ChargingPolicyParts\RateValues\SingleRateValueDefinition.cs" />
+    <Compile Include="ContractTypes\PostPaid\PostPaidDefinitionSettings.cs" />
+    <Compile Include="ContractTypes\PostPaid\PostPaidSettings.cs" />
+    <Compile Include="ContractTypes\PrePaid\PrePaidDefinitionSettings.cs" />
+    <Compile Include="ContractTypes\PrePaid\PrePaidSettings.cs" />
     <Compile Include="DurationVolumes\VolumeByDuration.cs" />
     <Compile Include="DurationVolumes\VolumePerUnit.cs" />
     <Compile Include="FileAccountConvertors\CompanyConvertor.cs" />

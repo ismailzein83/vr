@@ -49,7 +49,7 @@ namespace Retail.BusinessEntity.Entities
 
         int CreditClassId { get; }
 
-        int PackageGroupId { get; }
+        int ContractId { get; }
     }
 
     public interface IAccountProfile

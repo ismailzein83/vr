@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class PackageGroupSettings
-    {
-        public List<PackageGroupItem> Packages { get; set; }
-    }
-
-    public class PackageGroupItem
+    public class ContractPackageItem
     {
         public int PackageId { get; set; }
 
