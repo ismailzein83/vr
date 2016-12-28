@@ -507,6 +507,7 @@
     <None Include="common.Countries.sql" />
     <None Include="TOneWhS_BE.CodeGroup.sql" />
     <None Include="VR_NumberingPlan.CodeGroup.sql" />
+    <None Include="common.Currency.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
