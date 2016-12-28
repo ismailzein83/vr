@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="NP_IVSwitch_CodecProfileEditorController" width="'40%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_CodecProfileEditorController" vr-modalcontent size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formCodecProfileEditor">
             <vr-tabs>
@@ -8,9 +8,9 @@
                             <vr-textbox label="Profile Name" value="scopeModel.name" isrequired></vr-textbox>
                         </vr-columns>
                     </vr-row>
-                        <vr-columns width="fullrow" simplecol>
-                            <np-ivswitch-codecdef-grid on-ready="scopeModel.onGridReady"></np-ivswitch-codecdef-grid> 
-                        </vr-columns>                    
+                    <vr-columns width="fullrow" simplecol>
+                        <np-ivswitch-codecdef-grid on-ready="scopeModel.onGridReady"></np-ivswitch-codecdef-grid>
+                    </vr-columns>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
@@ -18,7 +18,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" haspermission="hasSaveCodecProfilePermission"  formname="formCodecProfileEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" haspermission="hasSaveCodecProfilePermission" formname="formCodecProfileEditor" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

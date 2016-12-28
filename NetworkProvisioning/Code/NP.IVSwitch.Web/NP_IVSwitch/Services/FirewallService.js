@@ -11,7 +11,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onfirewallAdded = onFirewallAdded;
+                modalScope.onFirewallAdded = onFirewallAdded;
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Firewall/FirewallEditor.html', null, settings);
         };

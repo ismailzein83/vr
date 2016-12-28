@@ -17,7 +17,7 @@
             };
             $scope.add = function () {
                 var onFirewallAdded = function (addedFirewall) {
-                    gridAPI.onfirewallAdded(addedFirewall);
+                    gridAPI.onFirewallAdded(addedFirewall);
                 };
                 npIvSwitchFirewallService.addFirewall(onFirewallAdded);
             };
