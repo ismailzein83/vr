@@ -58,7 +58,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onSelectorCodecProfileReady = function (api) {
@@ -278,7 +278,7 @@
                     var selectorDomainPayload = {};
                     if (endPointEntity != undefined && endPointEntity.DomainId != undefined)
                         selectorDomainPayload.selectedIds = endPointEntity.DomainId;
-
+                    else selectorDomainPayload.selectedIds = 1;
                     VRUIUtilsService.callDirectiveLoad(selectorDomainAPI, selectorDomainPayload, selectorDomainLoadDeferred);
                 });
 
