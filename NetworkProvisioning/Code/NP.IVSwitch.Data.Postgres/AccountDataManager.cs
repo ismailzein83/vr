@@ -23,32 +23,28 @@ namespace NP.IVSwitch.Data.Postgres
 
         private Account AccountMapper(IDataReader reader)
         {
-
-            Account account = new Account();
-
-            account.AccountId = (int)reader["account_id"];
-            account.TypeId = (AccountType)(Int16)reader["type_id"];
-            account.FirstName = reader["first_name"] as string;
-            account.LastName = reader["last_name"] as string;
-            account.CompanyName = reader["company_name"] as string;
-            account.ContactDisplay = reader["contact_display"] as string;
-            account.Email = reader["email"] as string;
-            account.WebSite = GetReaderValue<string>(reader, "web_site");
-            account.BillingCycle = (Int16)reader["cycle_id"];
-            account.TaxGroupId = (Int16)reader["tax_group_id"];
-            account.PaymentTerms = (Int16)reader["pay_terms"];
-            account.CurrentState = (State)(Int16)reader["state_id"];
-            account.CreditLimit = (decimal)reader["credit_limit"];
-            account.CreditThreshold = (decimal)reader["threshold_credit"];
-            account.CurrentBalance = (decimal)reader["balance"];
-            account.LogAlias = reader["log_alias"] as string;
-            account.Address = reader["address"] as string;
-            account.PeerVendorId = (int)reader["peer_account_id"];
-            account.ChannelsLimit = (int)reader["channels_limit"];
-
-
-
-            return account;
+            return new Account
+            {
+                AccountId = (int)reader["account_id"],
+                TypeId = (AccountType)(Int16)reader["type_id"],
+                FirstName = reader["first_name"] as string,
+                LastName = reader["last_name"] as string,
+                CompanyName = reader["company_name"] as string,
+                ContactDisplay = reader["contact_display"] as string,
+                Email = reader["email"] as string,
+                WebSite = GetReaderValue<string>(reader, "web_site"),
+                BillingCycle = (Int16)reader["cycle_id"],
+                TaxGroupId = (Int16)reader["tax_group_id"],
+                PaymentTerms = (Int16)reader["pay_terms"],
+                CurrentState = (State)(Int16)reader["state_id"],
+                CreditLimit = (decimal)reader["credit_limit"],
+                CreditThreshold = (decimal)reader["threshold_credit"],
+                CurrentBalance = (decimal)reader["balance"],
+                LogAlias = reader["log_alias"] as string,
+                Address = reader["address"] as string,
+                PeerVendorId = (int)reader["peer_account_id"],
+                ChannelsLimit = (int)reader["channels_limit"]
+            };
         }
         public void UpdateCustomerChannelLimit(int accountId)
         {
@@ -117,17 +113,6 @@ namespace NP.IVSwitch.Data.Postgres
             }
             return false;
         }
-
-        private void MapEnum(Account account, out int currentState, out int typeId)
-        {
-            var currentStateValue = Enum.Parse(typeof(State), account.CurrentState.ToString());
-            currentState = (int)currentStateValue;
-
-            var typeIdValue = Enum.Parse(typeof(AccountType), account.TypeId.ToString());
-            typeId = (int)typeIdValue;
-
-        }
-
         private Object CheckIfNull(String parameter)
         {
 

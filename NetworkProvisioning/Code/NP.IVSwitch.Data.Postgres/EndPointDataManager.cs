@@ -105,7 +105,7 @@ namespace NP.IVSwitch.Data.Postgres
                                    channels_limit=@channels_limit, max_call_dura=@max_call_dura,rtp_mode=@rtp_mode,domain_id=@domain_id,
                                    host=@host,tech_prefix=@tech_prefix 
                                    WHERE  user_id = @user_id AND NOT EXISTS(SELECT 1 FROM  access_list WHERE (user_id != @user_id and
-                                   (domain_id=@domain_id and host=@host )))";
+                                    (domain_id=@domain_id and host=@host and tech_prefix=@tech_prefix )))";
             int recordsEffected = ExecuteNonQueryText(cmdText, cmd =>
             {
                 cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
@@ -207,51 +207,38 @@ namespace NP.IVSwitch.Data.Postgres
         }
         private int? InserUser(EndPoint endPoint, int groupId, AccessList accessList)
         {
-            string columnField = "", selectField = "";
-            if (endPoint.TechPrefix != null)
-            {
-                columnField = ",tech_prefix";
-                selectField = ", @tech_prefix";
-            }
-            String cmdText1 = string.Format(@"INSERT INTO users(account_id,group_id, trans_rule_id,state_id , 
-                                                 channels_limit ,max_call_dura,rtp_mode,domain_id,type_id, tariff_id,route_table_id
-                                                  {0})
+            String cmdText1 = @"INSERT INTO users(account_id,group_id, trans_rule_id,state_id , 
+                                                 channels_limit ,max_call_dura,rtp_mode,domain_id,
+                                                  tech_prefix,type_id, tariff_id,route_table_id)
 	                             SELECT  @account_id,  @group_id, @trans_rule_id,@state_id,
-                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id,@type_id,@tariff_id,@route_table_id  {1}
- 	                             returning  user_id;", columnField, selectField);
+                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id, @tech_prefix ,@type_id,@tariff_id,@route_table_id
+ 	                             returning  user_id;";
 
             return (int?)ExecuteScalarText(cmdText1, cmd =>
             {
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                 cmd.Parameters.AddWithValue("@group_id", groupId);
                 cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
-                cmd.Parameters.AddWithValue("@state_id", 1);
+                cmd.Parameters.AddWithValue("@state_id", (int)endPoint.CurrentState);
                 cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
-                cmd.Parameters.AddWithValue("@rtp_mode", 1);
+                cmd.Parameters.AddWithValue("@rtp_mode", (int)endPoint.RtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
+                cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix ?? ".");
                 cmd.Parameters.AddWithValue("@type_id", (int)endPoint.EndPointType);
                 cmd.Parameters.AddWithValue("@route_table_id", accessList.RouteTableId);
                 cmd.Parameters.AddWithValue("@tariff_id", accessList.TariffId);
-                if (endPoint.TechPrefix != null) cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);
             }
                 );
         }
         private bool InsertAcl(int endPointId, EndPoint endPoint, int groupId, AccessList accessList)
         {
-            string columnField = "", selectField = "";
-            if (endPoint.TechPrefix != null)
-            {
-                columnField = ",tech_prefix";
-                selectField = ", @tech_prefix";
-            }
-            String cmdText = string.Format(@"INSERT INTO access_list(user_id,account_id,description,group_id, 
+            String cmdText = @"INSERT INTO access_list(user_id,account_id,description,group_id, 
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit,  max_call_dura,rtp_mode,domain_id,
-                                    host,tariff_id, route_table_id {0})
+                                    host,tech_prefix,tariff_id, route_table_id)
 	                             SELECT  @user_id,@account_id, @description, @group_id,   @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
-                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id,@host,@tariff_id,@route_table_id {1}
-                                 WHERE NOT EXISTS(SELECT 1 FROM  access_list WHERE (domain_id=@domain_id and host=@host ))",
-                columnField, selectField);
+                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id,@host, @tech_prefix,@tariff_id,@route_table_id
+                                 WHERE NOT EXISTS(SELECT 1 FROM  access_list WHERE (domain_id=@domain_id and host=@host and tech_prefix=@tech_prefix))";
 
             int recordAffected = ExecuteNonQueryText(cmdText, cmd =>
             {
@@ -268,9 +255,9 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@rtp_mode", (int)endPoint.RtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
                 cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
+                cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix ?? ".");
                 cmd.Parameters.AddWithValue("@route_table_id", accessList.RouteTableId);
                 cmd.Parameters.AddWithValue("@tariff_id", accessList.TariffId);
-                if (endPoint.TechPrefix != null) cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix);
             }
                 );
             return recordAffected > 0;
