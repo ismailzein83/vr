@@ -22,11 +22,17 @@ app.directive('vrPackagedefinitionSettings', ['UtilsService', 'VRUIUtilsService'
             var packageDefinitionEntity;
             var businessEntityDefinitionSelectorAPI;
             var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var extendedSettingsAPI;
+            var extendedSettingsReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     businessEntityDefinitionSelectorAPI = api;
                     businessEntityDefinitionSelectorReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onExtendedSettingsReady = function (api) {
+                    extendedSettingsAPI = api;
+                    extendedSettingsReadyDeferred.resolve();
                 };
                 defineAPI();
             }
@@ -42,6 +48,7 @@ app.directive('vrPackagedefinitionSettings', ['UtilsService', 'VRUIUtilsService'
                         }
                     }
                     promises.push(loadBusinessEntityDefinitionSelector());
+                    promises.push(loadExtendedSettings());
                     function loadBusinessEntityDefinitionSelector() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         businessEntityDefinitionSelectorReadyDeferred.promise.then(function () {
@@ -57,6 +64,15 @@ app.directive('vrPackagedefinitionSettings', ['UtilsService', 'VRUIUtilsService'
                         });
 
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
+                    }
+                    function loadExtendedSettings() {
+                        var extendedSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+                        extendedSettingsReadyDeferred.promise.then(function () {
+                            var extendedSettingsPayload =  packageDefinitionEntity != undefined && packageDefinitionEntity.Settings != undefined ? {extendedSettings :packageDefinitionEntity.Settings.ExtendedSettings} : undefined;
+                            VRUIUtilsService.callDirectiveLoad(extendedSettingsAPI, extendedSettingsPayload, extendedSettingsLoadDeferred);
+                        });
+
+                        return extendedSettingsLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -74,7 +90,8 @@ app.directive('vrPackagedefinitionSettings', ['UtilsService', 'VRUIUtilsService'
             function GetAccountSettings() {
                 return {
                     $type: "Retail.BusinessEntity.Entities.PackageDefinitionSettings,  Retail.BusinessEntity.Entities",
-                     AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds()
+                    AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds(),
+                    ExtendedSettings: extendedSettingsAPI.getData()
                 };
             }
         }

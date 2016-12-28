@@ -178,7 +178,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\MainExtensions\ExtendedSettings\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +285,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-accountbalance.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\Templates\AccountBalanceTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\MainExtensions\ExtendedSettings\Templates\PricingPackageDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\MainExtensions\ExtendedSettings\vr-packagedefinition-extendedsettings-pricing.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\vr-packagedefinition-extendedsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\Templates\VRPackageDefinitionSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\vr-packagedefinition-settings.js" />

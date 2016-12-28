@@ -55,19 +55,18 @@
 
             function defineAPI() {
                 var api = {};
-                var serviceSettings;
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var settings;
+                    var extendedSettings;
 
                     if (payload != undefined) {
-                        settings = payload.settings;
+                        extendedSettings = payload.extendedSettings;
                     }
 
-                    if (settings != undefined) {
+                    if (extendedSettings != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -81,9 +80,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (settings != undefined && settings.SwitchIntegration != null) {
+                                if (extendedSettings != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, settings.SwitchIntegration.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, extendedSettings.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -95,7 +94,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { switchIntegration: settings.SwitchIntegration };
+                            var directivePayload = { extendedSettings: extendedSettings };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -144,7 +143,7 @@
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
-                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
+                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.DefinitionEditor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
             return template;
 
         }
