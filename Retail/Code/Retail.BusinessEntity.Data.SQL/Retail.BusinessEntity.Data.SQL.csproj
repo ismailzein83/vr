@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBEDataManager.cs" />
     <Compile Include="AccountDataManager.cs" />
     <Compile Include="AccountPackageDataManager.cs" />
     <Compile Include="AccountPartDefinitionDataManager.cs" />
