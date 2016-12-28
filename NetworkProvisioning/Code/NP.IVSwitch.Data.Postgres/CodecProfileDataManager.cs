@@ -65,7 +65,7 @@ namespace NP.IVSwitch.Data.Postgres
 
             String cmdText = @"UPDATE codec_profiles
 	                             SET profile_name = @psgname, codec_string = @psgcodecstring, ui_codec_display = @psguicodecdisplay
-                                 WHERE  codec_profile_id = @psgid and  NOT EXISTS(SELECT 1 FROM  trans_rules WHERE codec_profile_id != @psgid and profile_name = @psgname);";
+                                 WHERE  codec_profile_id = @psgid and  NOT EXISTS(SELECT 1 FROM  codec_profiles WHERE codec_profile_id != @psgid and LOWER(profile_name) = LOWER(@psgname));";
 
             int recordsEffected = ExecuteNonQueryText(cmdText, (cmd) =>
             {
@@ -91,7 +91,7 @@ namespace NP.IVSwitch.Data.Postgres
 
             String cmdText = @"INSERT INTO codec_profiles(profile_name,codec_string,ui_codec_display)
 	                             SELECT @psgname,@psgcodecstring, @psguicodecdisplay
-	                             WHERE (NOT EXISTS(SELECT 1 FROM codec_profiles WHERE  profile_name = @psgname))
+	                             WHERE (NOT EXISTS(SELECT 1 FROM codec_profiles WHERE  LOWER(profile_name) =LOWER(@psgname) ))
 	                             returning  codec_profile_id;";
 
             codecProfileId = ExecuteScalarText(cmdText, (cmd) =>
