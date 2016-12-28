@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountBEController.cs" />
     <Compile Include="Controllers\AccountConditionController.cs" />
     <Compile Include="Controllers\AccountBEDefinitionController.cs" />
     <Compile Include="Controllers\AccountIdentificationController.cs" />
