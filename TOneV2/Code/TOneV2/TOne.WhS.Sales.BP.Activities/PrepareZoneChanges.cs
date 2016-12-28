@@ -38,19 +38,28 @@ namespace TOne.WhS.Sales.BP.Activities
 			IEnumerable<DataByZone> dataByZone = DataByZone.Get(context);
 			IEnumerable<NewCustomerCountry> newCountries = NewCustomerCountries.Get(context);
 
+			IEnumerable<SalePLZoneChange> zoneChanges = null;
+			
 			IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(ratePlanContext.OwnerType, ratePlanContext.OwnerId, ratePlanContext.EffectiveDate);
-			SaleEntityZoneRateLocator futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, null, true));
-
-			IEnumerable<SalePLZoneChange> zoneChanges;
+			SaleEntityZoneRateLocator futureRateLocator;
 
 			if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
 			{
-				zoneChanges = GetSellingProductZoneChanges(dataByZone, dataByCustomer, futureRateLocator);
+				if (dataByCustomer != null && dataByCustomer.Count() > 0)
+				{
+					futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, null, true));
+					zoneChanges = GetSellingProductZoneChanges(dataByZone, dataByCustomer, futureRateLocator);
+				}
 			}
 			else
 			{
+				if (dataByCustomer == null || dataByCustomer.Count() == 0)
+					throw new Vanrise.Entities.ValidationException(string.Format("dataByCustomer was not set for Customer '{0}'", ratePlanContext.OwnerId));
+
 				RoutingCustomerInfoDetails customerData = dataByCustomer.FirstOrDefault();
 				Dictionary<int, IEnumerable<SaleZone>> newCountryZonesByCountry = GetNewCountryZonesByCountry(newCountries, ratePlanContext.OwnerSellingNumberPlanId, ratePlanContext.EffectiveDate);
+
+				futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, null, true));
 				zoneChanges = GetCustomerZoneChanges(customerData.CustomerId, customerData.SellingProductId, futureRateLocator, dataByZone, newCountryZonesByCountry);
 			}
 
