@@ -504,6 +504,9 @@
     <None Include="TOne.Ntegra.PostDeployment.sql" />
     <None Include="Retail.Ntegra.PostDeployment.sql" />
     <None Include="Retail_Ringo.PostDeployment.sql" />
+    <None Include="common.Countries.sql" />
+    <None Include="TOneWhS_BE.CodeGroup.sql" />
+    <None Include="VR_NumberingPlan.CodeGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
