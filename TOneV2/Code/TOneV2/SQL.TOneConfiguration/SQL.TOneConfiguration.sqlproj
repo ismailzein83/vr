@@ -501,6 +501,8 @@
     <None Include="Invoice.PostDeployment.sql" />
     <None Include="VR_NumberingPlan.PostDeployment.sql" />
     <None Include="CloudXPoint.PostDeployment.sql" />
+    <None Include="TOne.Ntegra.PostDeployment.sql" />
+    <None Include="Retail.Ntegra.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
