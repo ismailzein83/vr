@@ -652,7 +652,7 @@ namespace Vanrise.Data.SQL
             return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
         }
 
-        bool IsDataUpdated(ref object lastReceivedDataInfo, object newReceivedDataInfo)
+        protected bool IsDataUpdated(ref object lastReceivedDataInfo, object newReceivedDataInfo)
         {
             if (newReceivedDataInfo == null)
                 return false;
