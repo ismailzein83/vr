@@ -174,7 +174,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'ManageSellingCountries':
                 return {
-                	text: 'Manage Selling Countries',
+                    text: 'Manage Selling Countries',
                     class: 'glyphicon  glyphicon-plus-sign'
                 };
             case 'Download':
@@ -294,6 +294,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Generate Invoice',
                     class: "glyphicon glyphicon-retweet"
                 };
+            case 'Generate':
+                return {
+                    text: 'Generate',
+                    class: "glyphicon glyphicon-retweet"
+                };
             case 'Analyze':
                 return {
                     text: 'Analyze',
@@ -314,26 +319,26 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Exclude All',
                     class: "glyphicon glyphicon-eject"
                 };
-        	case "Load":
-        		return {
-        			text: "Load",
-        			class: "glyphicon glyphicon-search"
-        		};
-        	case "Run":
-        		return {
-        			text: "Run",
-        			class: "glyphicon glyphicon-play"
-        		};
-        	case "CalculateRate":
-        		return {
-        			text: "Calculate Rate",
-        			class: "glyphicon glyphicon-play"
-        		};
-        	case "Skip":
-        		return {
-        			text: "Skip",
-        			class: "glyphicon glyphicon-step-forward"
-        		};
-        } 
+            case "Load":
+                return {
+                    text: "Load",
+                    class: "glyphicon glyphicon-search"
+                };
+            case "Run":
+                return {
+                    text: "Run",
+                    class: "glyphicon glyphicon-play"
+                };
+            case "CalculateRate":
+                return {
+                    text: "Calculate Rate",
+                    class: "glyphicon glyphicon-play"
+                };
+            case "Skip":
+                return {
+                    text: "Skip",
+                    class: "glyphicon glyphicon-step-forward"
+                };
+        }
     }
 }]);
