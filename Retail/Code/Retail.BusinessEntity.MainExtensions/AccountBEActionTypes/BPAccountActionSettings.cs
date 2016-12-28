@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType
+namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
 {
     public class BPAccountActionSettings : AccountActionDefinitionSettings
     {

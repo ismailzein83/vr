@@ -34,7 +34,7 @@ app.directive('retailBeAccountactiondefinitionsettingsEditaccount', ['UtilsServi
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType.EditAccountActionSettings, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountBEActionTypes.EditAccountActionSettings, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

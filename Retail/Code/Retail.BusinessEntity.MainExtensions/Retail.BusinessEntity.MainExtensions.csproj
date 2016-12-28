@@ -116,9 +116,9 @@
     <Compile Include="AccountConditions\FilterGroupAccountCondition.cs" />
     <Compile Include="AccountParts\AccountPartPersonalInfo.cs" />
     <Compile Include="AccountParts\AccountPartPersonalInfoDefinition.cs" />
-    <Compile Include="BEActions\AccountBEActionType\BPAccountActionSettings.cs" />
-    <Compile Include="BEActions\AccountBEActionType\EditAccountActionSettings.cs" />
-    <Compile Include="BEActions\AccountBEActionType\Open360DegreeAccountActionSettings.cs" />
+    <Compile Include="AccountBEActionTypes\BPAccountActionSettings.cs" />
+    <Compile Include="AccountBEActionTypes\EditAccountActionSettings.cs" />
+    <Compile Include="AccountBEActionTypes\Open360DegreeAccountActionSettings.cs" />
     <Compile Include="ChangeRoutingGroupProvisionerDefinitionSetting.cs" />
     <Compile Include="ChangeRoutingGroupProvisionerRuntimeSetting.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariff.cs" />
@@ -183,7 +183,9 @@
       <Name>Retail.Voice.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BEActions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

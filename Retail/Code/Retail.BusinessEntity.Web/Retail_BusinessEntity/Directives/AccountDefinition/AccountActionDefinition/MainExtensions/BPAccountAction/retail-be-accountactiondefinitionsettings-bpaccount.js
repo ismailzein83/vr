@@ -64,7 +64,7 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType.BPAccountActionSettings, Retail.BusinessEntity.MainExtensions',
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountBEActionTypes.BPAccountActionSettings, Retail.BusinessEntity.MainExtensions',
                         BPDefinitionSettings: bPDefinitionSettingsApi.getData()
                     };
                 };

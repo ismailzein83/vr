@@ -35,7 +35,7 @@ app.directive('retailBeAccountactiondefinitionsettingsOpen360degreeaccount', ['U
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType.Open360DegreeAccountActionSettings, Retail.BusinessEntity.MainExtensions'
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountBEActionTypes.Open360DegreeAccountActionSettings, Retail.BusinessEntity.MainExtensions'
                     };
                 };
 

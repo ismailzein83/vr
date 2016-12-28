@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.BEActions.AccountBEActionType
+namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
 {
-    public class EditAccountActionSettings : AccountActionDefinitionSettings
+    public class Open360DegreeAccountActionSettings : AccountActionDefinitionSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("2504A630-D16B-43DC-8505-F85E3DFD0568"); }
+            get { return new Guid("1819FC7B-B159-49CD-B678-261B3D0F41D5"); }
         }
 
         public override string ClientActionName
         {
-            get { return "Edit"; }
+            get { return "Open360Degree"; }
         }
     }
 }
