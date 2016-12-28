@@ -503,6 +503,7 @@
     <None Include="CloudXPoint.PostDeployment.sql" />
     <None Include="TOne.Ntegra.PostDeployment.sql" />
     <None Include="Retail.Ntegra.PostDeployment.sql" />
+    <None Include="Retail_Ringo.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
