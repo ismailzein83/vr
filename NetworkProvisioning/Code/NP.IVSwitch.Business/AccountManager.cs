@@ -31,8 +31,12 @@ namespace NP.IVSwitch.Business
                 LogAlias = carrierProfile.Settings.Company,
                 WebSite = carrierProfile.Settings.Website,
                 Email = Guid.NewGuid() + "@guid.com",
+                Address = carrierProfile.Settings.Address,
                 TypeId = accountType,
-                CurrentState = State.Active
+                CurrentState = State.Active,
+                BillingCycle = 1,
+                TaxGroupId = 1,
+                PaymentTerms = 3
             };
             return account;
         }
