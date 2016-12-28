@@ -41,9 +41,26 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RingoMessageDataManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.Ringo.Data\Retail.Ringo.Data.csproj">
+      <Project>{c5db9130-7e65-462f-98d0-c7790685d007}</Project>
+      <Name>Retail.Ringo.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.Entities\Retail.Ringo.Entities.csproj">
+      <Project>{9b58744d-1e39-499a-860f-264d658abe40}</Project>
+      <Name>Retail.Ringo.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

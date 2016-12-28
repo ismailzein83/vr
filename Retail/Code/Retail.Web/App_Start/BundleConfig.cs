@@ -31,7 +31,8 @@ namespace Retail.Web
                 "~/Client/Modules/WhS_Routing", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_Invoice", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Retail_Invoice", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_NumberingPlan", "*.js", true);
+                "~/Client/Modules/VR_NumberingPlan", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/Retail_Ringo", "*.js", true);
             bundles.Add(modulesJSBundle);
         }
     }

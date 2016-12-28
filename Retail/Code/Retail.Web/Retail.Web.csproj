@@ -699,6 +699,26 @@
       <Project>{30dce0ef-eea6-456a-9778-469c46f737ea}</Project>
       <Name>Retail.Invoice.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.Business\Retail.Ringo.Business.csproj">
+      <Project>{c6098267-9bb4-4f28-8a80-70132fb0bc82}</Project>
+      <Name>Retail.Ringo.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.Data.SQL\Retail.Ringo.Data.SQL.csproj">
+      <Project>{76e94da4-c4eb-4972-9a9f-524d080ac388}</Project>
+      <Name>Retail.Ringo.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.Data\Retail.Ringo.Data.csproj">
+      <Project>{c5db9130-7e65-462f-98d0-c7790685d007}</Project>
+      <Name>Retail.Ringo.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.Entities\Retail.Ringo.Entities.csproj">
+      <Project>{9b58744d-1e39-499a-860f-264d658abe40}</Project>
+      <Name>Retail.Ringo.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.Web\Retail.Ringo.Web.csproj">
+      <Project>{63cd6fff-d821-4d20-9661-c7c3f1a6ab63}</Project>
+      <Name>Retail.Ringo.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.SMS.Entities\Retail.SMS.Entities.csproj">
       <Project>{95c33c91-e6f0-4d60-937b-61bd35564a6c}</Project>
       <Name>Retail.SMS.Entities</Name>

@@ -1,0 +1,24 @@
+﻿<vr-panel ng-controller="Retail_Ringo_MNPReportManagementController">
+    <vr-form name="formFilter">
+
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="From Date" isrequired value="scopeModel.fromDate" type="date"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker label="To Date" isrequired value="scopeModel.toDate" type="date"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Generate" formname="formFilter" data-onclick="scopeModel.generateReport"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+    </vr-form>
+</vr-panel>
