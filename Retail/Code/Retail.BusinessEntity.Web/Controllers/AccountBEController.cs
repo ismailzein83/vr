@@ -49,5 +49,21 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.UpdateAccount(accountDefinitionId, account);
         }
+
+        [HttpGet]
+        [Route("GetAccountsInfo")]
+        public IEnumerable<AccountInfo> GetAccountsInfo(Guid accountDefinitionId, string nameFilter, string serializedFilter)
+        {
+            AccountFilter accountFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<AccountFilter>(serializedFilter) : null;
+            return _manager.GetAccountsInfo(accountDefinitionId, nameFilter, accountFilter);
+        }
+
+
+        //[HttpPost]
+        //[Route("GetAccountsInfoByIds")]
+        //public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountDefinitionId, HashSet<long> accountIds)
+        //{
+        //    return _manager.GetAccountsInfoByIds(accountDefinitionId, accountIds);
+        //}
     }
 }

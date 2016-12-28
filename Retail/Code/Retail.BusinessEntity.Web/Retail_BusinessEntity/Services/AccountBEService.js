@@ -98,7 +98,6 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/Account360DegreeEditor.html', parameters, settings);
         };
 
-
         return {
             addAccount: addAccount,
             editAccount: editAccount,

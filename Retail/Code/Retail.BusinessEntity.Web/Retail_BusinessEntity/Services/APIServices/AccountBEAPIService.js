@@ -32,6 +32,19 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccount'), account);
         }
 
+        function GetAccountsInfo(accountDefinitionId, nameFilter, serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfo"), {
+                accountDefinitionId: accountDefinitionId,
+                nameFilter: nameFilter,
+                serializedFilter: serializedFilter
+            });
+        }
+
+        //function GetAccountsInfoByIds(accountIds) {
+        //    return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfoByIds"), accountIds);
+        //}
+
+
         //function GetAccountEditorRuntime(accountTypeId, parentAccountId) {
         //    return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountEditorRuntime'), {
         //        accountTypeId: accountTypeId,
@@ -51,17 +64,6 @@
         //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateAccount']));
         //}
 
-        //function GetAccountsInfo(nameFilter, serializedFilter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfo"), {
-        //        nameFilter: nameFilter,
-        //        serializedFilter: serializedFilter
-        //    });
-        //}
-
-        //function GetAccountsInfoByIds(accountIds) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfoByIds"), accountIds);
-        //}
-
         //function GetAccountDetail(accountId) {
         //    return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountDetail"), {
         //        accountId: accountId
@@ -75,12 +77,12 @@
             GetAccountName: GetAccountName,
             AddAccount: AddAccount,
             UpdateAccount: UpdateAccount,
+            GetAccountsInfo: GetAccountsInfo,
+            //GetAccountsInfoByIds: GetAccountsInfoByIds
             //GetAccountEditorRuntime: GetAccountEditorRuntime,
             //HasViewAccountsPermission: HasViewAccountsPermission,
             //HasAddAccountPermission: HasAddAccountPermission,
             //HasUpdateAccountPermission: HasUpdateAccountPermission,
-            //GetAccountsInfo: GetAccountsInfo,
-            //GetAccountsInfoByIds: GetAccountsInfoByIds
         };
     }
 

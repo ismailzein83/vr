@@ -61,7 +61,7 @@ namespace Retail.BusinessEntity.Business
 
             foreach (AccountGridColumnDefinition itm in accountGridDefinition.ColumnDefinitions)
             {
-                if (!IsColumnAvailable(parentAccountId, itm))
+                if (!IsColumnAvailable(accountBEDefinitionId, parentAccountId, itm))
                     continue;
 
                 GenericFieldDefinitionInfo genericFieldDefinitionInfo = genericFieldDefinitionInfos.FindRecord(x => x.Name == itm.FieldName);
@@ -99,7 +99,7 @@ namespace Retail.BusinessEntity.Business
         }
         public List<AccountViewDefinition> GetAccountViewDefinitionsByAccountId(Guid accountBEDefinitionId, long accountId)
         {
-            Account account = new AccountManager().GetAccount(accountId);
+            Account account = new AccountBEManager().GetAccount(accountBEDefinitionId, accountId);
             if (account == null)
                 throw new NullReferenceException(string.Format("accountId: {0}", accountId));
 
@@ -152,7 +152,7 @@ namespace Retail.BusinessEntity.Business
             return businessEntityDefinition.Settings as AccountBEDefinitionSettings;
         }
 
-        private bool IsColumnAvailable(long? parentAccountId, AccountGridColumnDefinition gridColumnDefinition)
+        private bool IsColumnAvailable(Guid accountBEDefinitionId, long? parentAccountId, AccountGridColumnDefinition gridColumnDefinition)
         {
             bool isRoot = parentAccountId.HasValue ? false : true;
 
@@ -165,7 +165,7 @@ namespace Retail.BusinessEntity.Business
             if (gridColumnDefinition.SubAccountsAvailabilityCondition != null)
             {
                 AccountConditionEvaluationContext context = new AccountConditionEvaluationContext();
-                context.Account = new AccountManager().GetAccount(parentAccountId.Value);
+                context.Account = new AccountBEManager().GetAccount(accountBEDefinitionId, parentAccountId.Value);
                 return gridColumnDefinition.SubAccountsAvailabilityCondition.Evaluate(context);
             }
 

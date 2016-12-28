@@ -148,6 +148,42 @@ namespace Retail.BusinessEntity.Business
             return (account != null) ? account.Name : null;
         }
 
+        public IEnumerable<AccountInfo> GetAccountsInfo(Guid accountDefinitionId, string nameFilter, AccountFilter filter)
+        {
+            IEnumerable<Account> allAccounts = GetCachedAccounts(accountDefinitionId).Values;
+            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
+            Func<Account, bool> filterFunc = null;
+
+            filterFunc = (account) =>
+            {
+                if (nameFilterLower != null && !account.Name.Trim().ToLower().StartsWith(nameFilterLower))
+                    return false;
+
+                if (filter != null && filter.Filters != null)
+                {
+                    var context = new AccountFilterContext() { Account = account };
+                    if (filter.Filters.Any(x => x.IsExcluded(context)))
+                        return false;
+                }
+
+                return true;
+            };
+            return allAccounts.MapRecords(AccountInfoMapper, filterFunc).OrderBy(x => x.Name);
+        }
+
+        //public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountDefinitionId, HashSet<long> accountIds)
+        //{
+        //    List<AccountInfo> accountInfos = new List<AccountInfo>();
+        //    var accounts = GetCachedAccounts(accountDefinitionId);
+        //    foreach (var accountId in accountIds)
+        //    {
+        //        var account = accounts.GetRecord(accountId);
+        //        if (account != null)
+        //            accountInfos.Add(AccountInfoMapper(account));
+        //    }
+        //    return accountInfos.OrderBy(x => x.Name);
+        //}
+
         #endregion
 
         #region Private Classes
@@ -381,6 +417,15 @@ namespace Retail.BusinessEntity.Business
             var status = statusDefinitionManager.GetStatusDefinition(statusID);
             var style = styleDefinitionManager.GetStyleDefinition(status.Settings.StyleDefinitionId);
             return style.StyleDefinitionSettings.StyleFormatingSettings;
+        }
+
+        private AccountInfo AccountInfoMapper(Account account)
+        {
+            return new AccountInfo
+            {
+                AccountId = account.AccountId,
+                Name = account.Name
+            };
         }
 
         #endregion
