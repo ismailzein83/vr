@@ -29,6 +29,12 @@
             });
 
         }
+        function GetCarrierAccountName(carrierAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccountName"), {
+                carrierAccountId: carrierAccountId
+            });
+
+        }
         function GetCarrierAccountInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccountInfo"), {
                 serializedFilter: serializedFilter
@@ -69,6 +75,7 @@
             GetCustomerGroupTemplates: GetCustomerGroupTemplates,
             GetFilteredCarrierAccounts: GetFilteredCarrierAccounts,
             GetCarrierAccount: GetCarrierAccount,
+            GetCarrierAccountName:GetCarrierAccountName,
             GetCarrierAccountCurrencyId: GetCarrierAccountCurrencyId,
             GetCustomersBySellingNumberPlanId : GetCustomersBySellingNumberPlanId,
             AddCarrierAccount: AddCarrierAccount,

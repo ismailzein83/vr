@@ -251,7 +251,13 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierAccountEntity ? carrierAccountEntity.NameSuffix : null, 'Carrier Account', $scope) : UtilsService.buildTitleForAddEditor('Carrier Account');
+            if (isEditMode)
+                WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(carrierAccountId)
+                .then(function (response) {
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(response, 'Carrier Account', $scope);
+                });
+            else 
+              $scope.title =  UtilsService.buildTitleForAddEditor('Carrier Account');
         }
 
         function loadCarrierProfileDirective() {

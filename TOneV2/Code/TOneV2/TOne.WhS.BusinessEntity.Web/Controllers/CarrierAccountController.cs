@@ -94,5 +94,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetSuppliersWithZonesGroupsTemplates();
         }
+        [HttpGet]
+        [Route("GetCarrierAccountName")]
+        public string GetCarrierAccountName(int carrierAccountId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetCarrierAccountName(carrierAccountId);
+        }
+        
     }
 }
