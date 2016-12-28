@@ -36,7 +36,8 @@ namespace NP.IVSwitch.Business
                 CurrentState = State.Active,
                 BillingCycle = 1,
                 TaxGroupId = 1,
-                PaymentTerms = 3
+                PaymentTerms = 3,
+                CreditLimit = -1
             };
             return account;
         }
