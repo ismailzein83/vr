@@ -49,7 +49,7 @@ namespace NP.IVSwitch.Data.Postgres
 	                             SET trans_rule_name = @psgname
                                  {0}
                                  {1}
-                                 WHERE  trans_rule_id = @psgid and  NOT EXISTS(SELECT 1 FROM  trans_rules WHERE trans_rule_id != @psgid and trans_rule_name = @psgname);"
+                                 WHERE  trans_rule_id = @psgid and  NOT EXISTS(SELECT 1 FROM  trans_rules WHERE trans_rule_id != @psgid and  LOWER(trans_rule_name) =  LOWER(@psgname));"
                 , translationRule.DNISPattern != null ? " , dnis_pattern = @psgdnis" : " ,dnis_pattern = DEFAULT"
                 , translationRule.CLIPattern != null ? ",cli_pattern = @psgcli" : ",cli_pattern = DEFAULT");
 
@@ -69,7 +69,7 @@ namespace NP.IVSwitch.Data.Postgres
         {
             String cmdText = string.Format(@"INSERT INTO trans_rules(trans_rule_name {0} {1})
 	                             SELECT @psgname {2} {3}
-	                             WHERE (NOT EXISTS(SELECT 1 FROM trans_rules WHERE  trans_rule_name = @psgname))
+	                             WHERE (NOT EXISTS(SELECT 1 FROM trans_rules WHERE   LOWER(trans_rule_name) =  LOWER(@psgname) ))
 	                             returning  trans_rule_id;", translationRule.DNISPattern != null ? ",dnis_pattern" : ""
                 , translationRule.CLIPattern != null ? ",cli_pattern" : "",
                 translationRule.DNISPattern != null ? ",@psgdnis" : ""
