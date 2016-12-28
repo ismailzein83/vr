@@ -21,10 +21,10 @@ namespace TOne.WhS.Analytics.Business
         {
             ValidateVariationReportQuery(input.Query);
 
-           
+
             return BigDataManager.Instance.RetrieveData(input, new VariationReportRequestHandler()
             {
-             Query = input.Query   
+                Query = input.Query
             });
         }
 
@@ -37,7 +37,7 @@ namespace TOne.WhS.Analytics.Business
             #region Fields / Constructors
 
             public VariationReportQuery Query { get; set; }
-            public CarrierAccountManager CarrierAccountManager  = new CarrierAccountManager();
+            public CarrierAccountManager CarrierAccountManager = new CarrierAccountManager();
             public CarrierProfileManager CarrierProfileManager = new CarrierProfileManager();
             public SaleZoneManager SaleZoneManager = new SaleZoneManager();
             public List<TimePeriod> TimePeriods;
@@ -49,7 +49,7 @@ namespace TOne.WhS.Analytics.Business
             #endregion
 
             protected override BigResult<VariationReportRecord> AllRecordsToBigResult(DataRetrievalInput<VariationReportQuery> input, IEnumerable<VariationReportRecord> allRecords)
-            {          
+            {
                 var variationReportBigResult = new VariationReportBigResult();
 
                 if (input.Query.ParentDimensions == null)
@@ -321,34 +321,48 @@ namespace TOne.WhS.Analytics.Business
                 sheet.SheetName = "Variation Report";
 
                 sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
-            
-                var result = context.BigResult  as VariationReportBigResult;
+
+                var result = context.BigResult as VariationReportBigResult;
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = result.DimensionTitle });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Periods AVG" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Periods %" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Previous Period %" });
 
-                foreach (var period in result.TimePeriods)
+
+                int i = 0;
+
+                do
                 {
+                    if (i == 1)
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Previous Period %" });
+                    else
+                    {
+                        var period = result.TimePeriods[i];
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = period.PeriodDescription, Width = 40 });
+                    }
+                    i++;
+                } while (i < result.TimePeriods.Count());
 
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = period.PeriodDescription, Width = 40 });
-                }
-                   
+
                 sheet.Rows = new List<ExportExcelRow>();
                 foreach (var record in context.BigResult.Data)
                 {
                     var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                     row.Cells.Add(new ExportExcelCell() { Value = record.DimensionName });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Average});
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Percentage});
-                    row.Cells.Add(new ExportExcelCell() { Value = record.PreviousPeriodPercentage });
-
-                    foreach (var v in record.TimePeriodValues)
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Average });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Percentage });
+                    int j = 0;
+                    do
                     {
-
-                        row.Cells.Add(new ExportExcelCell() { Value = v });
-                    }
+                        if (j == 1)
+                            row.Cells.Add(new ExportExcelCell() { Value = record.PreviousPeriodPercentage });
+                        else
+                        {
+                            var value = record.TimePeriodValues[j];
+                            row.Cells.Add(new ExportExcelCell() { Value = value });
+                        }
+                        j++;
+                    } while (j < record.TimePeriodValues.Count());
 
                     sheet.Rows.Add(row);
                 }
