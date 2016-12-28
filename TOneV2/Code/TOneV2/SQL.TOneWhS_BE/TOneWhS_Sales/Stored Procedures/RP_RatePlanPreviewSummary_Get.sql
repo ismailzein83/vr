@@ -26,7 +26,8 @@ Select @ProcessInstanceID = @ProcessInstanceID_IN
 		NewDefaultServices,
 		ClosedDefaultServiceEffectiveOn,
 		NumberOfNewSaleZoneServices,
-		NumberOfClosedSaleZoneServices
+		NumberOfClosedSaleZoneServices,
+		NumberOfChangedCountries
 	
 	from [TOneWhS_Sales].RP_RatePlanPreview_Summary WITH(NOLOCK) 
 	where ProcessInstanceID = @ProcessInstanceID

@@ -11,8 +11,11 @@
     [NewDefaultServices]                    NVARCHAR (MAX) NULL,
     [ClosedDefaultServiceEffectiveOn]       DATETIME       NULL,
     [NumberOfNewSaleZoneServices]           INT            NOT NULL,
-    [NumberOfClosedSaleZoneServices]        INT            NOT NULL
+    [NumberOfClosedSaleZoneServices]        INT            NOT NULL,
+    [NumberOfChangedCountries]              INT            NOT NULL
 );
+
+
 
 
 
