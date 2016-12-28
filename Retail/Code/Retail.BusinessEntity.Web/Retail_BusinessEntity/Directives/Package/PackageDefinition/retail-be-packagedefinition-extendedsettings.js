@@ -149,6 +149,6 @@
         }
     }
 
-    app.directive('vrPackagedefinitionExtendedsettings', PackageDefinitionExtendedSettingsDirective);
+    app.directive('retailBePackagedefinitionExtendedsettings', PackageDefinitionExtendedSettingsDirective);
 
 })(app);

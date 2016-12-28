@@ -285,11 +285,12 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-accountbalance.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\Templates\AccountBalanceTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\MainExtensions\ExtendedSettings\Templates\PricingPackageDefinitionSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\MainExtensions\ExtendedSettings\vr-packagedefinition-extendedsettings-pricing.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\vr-packagedefinition-extendedsettings.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\Templates\VRPackageDefinitionSettings.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\PackageDefinition\vr-packagedefinition-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\PricingPackageDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\retail-be-packagedefinition-extendedsettings-pricing.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\retail-be-packagedefinition-extendedsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\Templates\VRPackageDefinitionSettings.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\retail-be-packagedefinition-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\retail-be-packagedefinition-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\Templates\InvoiceSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\retail-be-invoice-setting-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\retail-be-invoicesettings-editor.js" />

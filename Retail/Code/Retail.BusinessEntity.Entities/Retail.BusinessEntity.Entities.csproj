@@ -111,6 +111,7 @@
     <Compile Include="Package\Definition\PackageDefinition.cs" />
     <Compile Include="Package\Definition\PackageDefinitionConfig.cs" />
     <Compile Include="Package\Definition\PackageDefinitionExtendedSettings.cs" />
+    <Compile Include="Package\Definition\PackageDefinitionInfo.cs" />
     <Compile Include="Package\Definition\PackageDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountGridDefinition.cs" />
     <Compile Include="AccountDefinition\AccountViewDefinition.cs" />

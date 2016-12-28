@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrPackagedefinitionSettings', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -14,7 +14,7 @@ app.directive('vrPackagedefinitionSettings', ['UtilsService', 'VRUIUtilsService'
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Extensions/PackageDefinition/Templates/VRPackageDefinitionSettings.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageDefinition/Templates/VRPackageDefinitionSettings.html'
         };
 
         function PackageDefinitionSettings($scope, ctrl, $attrs) {

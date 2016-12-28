@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public abstract class PackageExtendedSettings
     {
-        public abstract Guid ConfigId { get; }
+        //public abstract Guid ConfigId { get; }
 
         public virtual PackageExtendedSettingsEditorRuntime GetEditorRuntime()
         {

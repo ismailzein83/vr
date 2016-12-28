@@ -20,5 +20,13 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageDefinitionManager manager = new PackageDefinitionManager();
             return manager.GetPackageDefinitionExtendedSettingsConfigs();
         }
+
+        [HttpGet]
+        [Route("GetPackageDefinitionsInfo")]
+        public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo(string serializedFilter = null)
+        {
+            PackageDefinitionManager manager = new PackageDefinitionManager();
+            return manager.GetPackageDefinitionsInfo();
+        }
     }
 }

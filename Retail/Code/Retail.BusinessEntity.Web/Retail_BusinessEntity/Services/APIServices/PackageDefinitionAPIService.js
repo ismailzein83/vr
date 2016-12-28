@@ -10,8 +10,14 @@
         function GetPackageDefinitionExtendedSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackageDefinitionExtendedSettingsConfigs"));
         }
+        function GetPackageDefinitionsInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackageDefinitionsInfo"), {
+                serializedFilter: serializedFilter
+            });
+        }
         return ({
-            GetPackageDefinitionExtendedSettingsConfigs: GetPackageDefinitionExtendedSettingsConfigs,
+            GetPackageDefinitionsInfo: GetPackageDefinitionsInfo,
+            GetPackageDefinitionExtendedSettingsConfigs: GetPackageDefinitionExtendedSettingsConfigs
         });
     }
 

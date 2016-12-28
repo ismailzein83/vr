@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrPackagedefinitionExtendedsettingsPricing', ['UtilsService',
+app.directive('retailBePackagedefinitionExtendedsettingsPricing', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
@@ -15,7 +15,7 @@ app.directive('vrPackagedefinitionExtendedsettingsPricing', ['UtilsService',
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Extensions/PackageDefinition/MainExtensions/ExtendedSettings/Templates/PricingPackageDefinitionSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageDefinition/MainExtensions/ExtendedSettings/Templates/PricingPackageDefinitionSettingsTemplate.html'
         };
 
         function PricingPackageDefinitionSettings($scope, ctrl, $attrs) {

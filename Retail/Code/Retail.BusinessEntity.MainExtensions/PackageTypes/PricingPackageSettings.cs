@@ -10,11 +10,6 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
     public class PricingPackageSettings : PackageExtendedSettings, IPackageFixedChargingPolicy, IPackageUsageChargingPolicy
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("B78610BA-4CA2-4E60-8143-73CEF6E99D14"); }
-        }
-
         public int? FixedChargingPolicyId { get; set; }
 
         public Dictionary<Guid, ServiceTypeUsageChargingPolicySettings> ServiceTypeUsageChargingPolicies { get; set; }

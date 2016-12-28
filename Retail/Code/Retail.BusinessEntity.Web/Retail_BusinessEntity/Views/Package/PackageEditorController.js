@@ -12,8 +12,8 @@
         var packageEntity;
         var extendedSettingsEditorRuntime;
 
-        var packageExtendedSettingsSelectorAPI;
-        var packageExtendedSettingsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var packageDefinitionSelectorAPI;
+        var packageDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var packageExtendedSettingsDirectiveAPI;
         var packageExtendedSettingsDirectiveReadyDeferred;
@@ -33,11 +33,9 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.packageExtendedSettingsTemplateConfigs = [];
-            $scope.scopeModel.selectedPackageExtendedSettingsTemplateConfig;
-
-            $scope.scopeModel.onPackageExtendedSettingsSelectorReady = function (api) {
-                packageExtendedSettingsSelectorAPI = api;
-                packageExtendedSettingsSelectorReadyDeferred.resolve();
+            $scope.scopeModel.onPackageDefinitionsSelectorReady = function (api) {
+                packageDefinitionSelectorAPI = api;
+                packageDefinitionSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onPackageExtendedSettingsDirectiveReady = function (api) {
@@ -94,7 +92,55 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadPackageExtendedSettingsSelector, loadPackageExtendedSettingsDirectiveWrapper])
+            function setTitle() {
+                $scope.title =
+                    isEditMode ? UtilsService.buildTitleForUpdateEditor(packageEntity ? packageEntity.Name : undefined, 'Package') : UtilsService.buildTitleForAddEditor('Package');
+            }
+            function loadStaticSection() {
+                if (packageEntity != undefined) {
+                    $scope.scopeModel.name = packageEntity.Name;
+                    $scope.scopeModel.description = packageEntity.Description;
+                }
+            }
+            function loadPackageDefinitionsSelector() {
+                var packageDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                packageDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var packageDefinitionPayload;
+                    if (packageEntity != undefined && packageEntity.Settings != undefined) {
+                        packageDefinitionPayload = {
+                            selectedIds: packageEntity.Settings.PackageDefinitionId,
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(packageDefinitionSelectorAPI, packageDefinitionPayload, packageDefinitionSelectorLoadDeferred);
+                });
+                return packageDefinitionSelectorLoadDeferred.promise;
+            }
+            function loadPackageExtendedSettingsDirectiveWrapper() {
+                if (!isEditMode)
+                    return;
+
+                packageExtendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                var packageExtendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                packageExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
+                    packageExtendedSettingsDirectiveReadyDeferred = undefined;
+
+                    var packageExtendedSettingsDirectivePayload;
+                    if (packageEntity != undefined && packageEntity.Settings != undefined && packageEntity.Settings.ExtendedSettings) {
+
+                        packageExtendedSettingsDirectivePayload = {
+                            extendedSettings: packageEntity.Settings.ExtendedSettings,
+                            extendedSettingsEditorRuntime: extendedSettingsEditorRuntime
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(packageExtendedSettingsDirectiveAPI, packageExtendedSettingsDirectivePayload, packageExtendedSettingsDirectiveLoadDeferred);
+                });
+
+                return packageExtendedSettingsDirectiveLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadPackageDefinitionsSelector, loadPackageExtendedSettingsDirectiveWrapper])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -102,68 +148,9 @@
                   $scope.isLoading = false;
               });
         }
-        function setTitle() {
-            $scope.title =
-                isEditMode ? UtilsService.buildTitleForUpdateEditor(packageEntity ? packageEntity.Name : undefined, 'Package') : UtilsService.buildTitleForAddEditor('Package');
-        }
-        function loadStaticSection() {
-            if (packageEntity != undefined) {
-                $scope.scopeModel.name = packageEntity.Name;
-                $scope.scopeModel.description = packageEntity.Description;
-            }
-        }
-        function loadPackageExtendedSettingsSelector() {
+     
 
-            var packageExtendedSettingsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-            packageExtendedSettingsSelectorReadyDeferred.promise.then(function () {
-
-                Retail_BE_PackageAPIService.GetPackageExtendedSettingsTemplateConfigs().then(function (response) {
-                    if (response != null) {
-                        for (var i = 0; i < response.length; i++) {
-                            $scope.scopeModel.packageExtendedSettingsTemplateConfigs.push(response[i]);
-                        }
-
-                        var extendedSettings;
-                        if (packageEntity != undefined && packageEntity.Settings != undefined)
-                            extendedSettings = packageEntity.Settings.ExtendedSettings;
-
-                        if (extendedSettings != undefined && extendedSettings.ConfigId != null) {
-                            $scope.scopeModel.selectedPackageExtendedSettingsTemplateConfig =
-                                UtilsService.getItemByVal($scope.scopeModel.packageExtendedSettingsTemplateConfigs, extendedSettings.ConfigId, 'ExtensionConfigurationId');
-                        }
-                    }
-
-                    packageExtendedSettingsSelectorLoadDeferred.resolve();
-                });
-            });
-
-            return packageExtendedSettingsSelectorLoadDeferred.promise;
-        }
-        function loadPackageExtendedSettingsDirectiveWrapper() {
-            if (!isEditMode)
-                return;
-
-            packageExtendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-            var packageExtendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            packageExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
-                packageExtendedSettingsDirectiveReadyDeferred = undefined;
-
-                var packageExtendedSettingsDirectivePayload;
-                if (packageEntity != undefined && packageEntity.Settings != undefined && packageEntity.Settings.ExtendedSettings) {
-
-                    packageExtendedSettingsDirectivePayload = {
-                        extendedSettings: packageEntity.Settings.ExtendedSettings,
-                        extendedSettingsEditorRuntime: extendedSettingsEditorRuntime
-                    };
-                }
-                VRUIUtilsService.callDirectiveLoad(packageExtendedSettingsDirectiveAPI, packageExtendedSettingsDirectivePayload, packageExtendedSettingsDirectiveLoadDeferred);
-            });
-
-            return packageExtendedSettingsDirectiveLoadDeferred.promise;
-        }
+      
 
 
         function insertPackage() {
@@ -204,11 +191,19 @@
                 Name: $scope.scopeModel.name,
                 Description: $scope.scopeModel.description,
                 Settings: {
+                    PackageDefinitionId:packageDefinitionSelectorAPI.getSelectedIds(),
                     ExtendedSettings: packageExtendedSettingsDirectiveAPI.getData()
                 }
             };
 
             return obj;
+        }
+
+
+        function getContext()
+        {
+            var context;
+            return context;
         }
     }
 

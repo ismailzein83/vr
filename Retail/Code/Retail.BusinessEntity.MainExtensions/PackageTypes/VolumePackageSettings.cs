@@ -11,10 +11,10 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
     public class VolumePackageSettings : PackageExtendedSettings, Retail.Voice.Entities.IPackageSettingVoiceUsageCharger
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("E8EC8C13-DC47-46F1-95FE-082F4760A0A0"); }
-        }
+        //public override Guid ConfigId
+        //{
+        //    get { return new Guid("E8EC8C13-DC47-46F1-95FE-082F4760A0A0"); }
+        //}
 
         public List<VoiceVolumePackageItem> VoiceItems { get; set; }
 
