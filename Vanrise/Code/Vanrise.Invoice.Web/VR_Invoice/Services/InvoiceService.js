@@ -1,25 +1,27 @@
 ﻿"use strict";
-app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','UtilsService','VRUIUtilsService','VR_Invoice_InvoiceAPIService','VRNotificationService','VR_Invoice_InvoiceActionService',
+app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'VR_Invoice_InvoiceActionService',
     function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, VR_Invoice_InvoiceActionService) {
 
 
         function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings) {
             if (subSections == null)
                 return;
+
             if (dataItem.menuActions != undefined)
                 dataItem.menuActions.length = 0;
+
             var drillDownTabs = [];
 
             for (var i = 0; i < subSections.length; i++) {
                 var subSection = subSections[i];
-                if (dataItem.SectionsTitle != undefined && UtilsService.contains(dataItem.SectionsTitle, subSection.SectionTitle))
-                {
+                if (dataItem.SectionsTitle != undefined && UtilsService.contains(dataItem.SectionsTitle, subSection.SectionTitle)) {
                     addDrillDownTab(subSection);
                 }
             }
 
             setDrillDownTabs();
             setMenuActions();
+
             function addDrillDownTab(subSection) {
                 var drillDownTab = {};
                 var cofigItem = UtilsService.getItemByVal(subSectionConfigs, subSection.Settings.ConfigId, "ExtensionConfigurationId");
@@ -51,6 +53,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
             }
             function setMenuActions() {
                 dataItem.menuActions = [];
+
                 if (dataItem.ActionTypeNames != undefined) {
                     for (var j = 0; j < dataItem.ActionTypeNames.length; j++) {
                         var invoiceGridAction = dataItem.ActionTypeNames[j];
@@ -63,7 +66,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                         }
                     }
                 }
-               
+
                 function addgridMenuAction(invoiceGridAction, invoiceAction, actionType) {
                     dataItem.menuActions.push({
                         name: invoiceGridAction.Title,
@@ -104,12 +107,9 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService','SecurityService','Ut
                     });
                 }
             }
-
-
         }
-        
-        return ({
 
-            defineInvoiceTabsAndMenuActions: defineInvoiceTabsAndMenuActions,
+        return ({
+            defineInvoiceTabsAndMenuActions: defineInvoiceTabsAndMenuActions
         });
     }]);
