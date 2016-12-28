@@ -9,8 +9,8 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericBEDefinitionSettings : BusinessEntityDefinitionSettings
     {
-        public static Guid _configId = new Guid("6F3FBD7B-275A-4D92-8E06-AD7F7B04C7D6");
-        public override Guid ConfigId { get { return _configId; } }
+        public static Guid s_configId = new Guid("6F3FBD7B-275A-4D92-8E06-AD7F7B04C7D6");
+        public override Guid ConfigId { get { return s_configId; } }
 
         public override string DefinitionEditor 
         { 

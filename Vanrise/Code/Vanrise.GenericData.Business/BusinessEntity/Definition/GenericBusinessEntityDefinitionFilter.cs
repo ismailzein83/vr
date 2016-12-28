@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Business
             if (context.entityDefinition == null || context.entityDefinition.Settings == null)
                 return false;
 
-            if (context.entityDefinition.Settings.ConfigId != new GenericBEDefinitionSettings().ConfigId)
+            if (context.entityDefinition.Settings.ConfigId != GenericBEDefinitionSettings.s_configId)
                 return false;
 
             return true;
