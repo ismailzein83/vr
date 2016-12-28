@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ContractPackageItem
+    public class AccountRecurringPriceRuleSet
     {
-        public int PackageId { get; set; }
+        public string Name { get; set; }
 
-        public int CurrencyId { get; set; }
-
-        public Decimal? Price { get; set; }
+        public AccountRecurringPriceRuleSetSettings Settings { get; set; }
     }
 }

@@ -10,8 +10,12 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid ContractDefinitionId { get; set; }
 
+        public int PricingCurrencyId { get; set; }
+
         public List<ContractPackageItem> Packages { get; set; }
 
+        public List<AccountRecurringPriceRuleSet> RecurringPricingRuleSets { get; set; }
+        
         public ContractExtendedSettings ExtendedSettings { get; set; }
     }
 }

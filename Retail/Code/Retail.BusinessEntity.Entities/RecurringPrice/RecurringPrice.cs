@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ContractPackageItem
+    public class RecurringPrice
     {
-        public int PackageId { get; set; }
+        public RecurringPeriodSettings RecurringPeriod { get; set; }
 
-        public int CurrencyId { get; set; }
-
-        public Decimal? Price { get; set; }
+        public Decimal? RecurringFee { get; set; }
     }
 }
