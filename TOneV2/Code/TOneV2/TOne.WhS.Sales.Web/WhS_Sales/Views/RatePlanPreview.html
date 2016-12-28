@@ -1,156 +1,161 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanPreviewController" width="'65%'" vr-loader="isLoading">
-    <vr-modalbody>
-        <vr-form name="formRatePlanPreview">
-            <vr-tabs>
-                <vr-tab header="'Summary'">
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-section title="Zone Changes">
-                                <vr-section title="Rate Changes" level="2">
-                                    <vr-row>
-                                        <vr-columns width="1/2row">
-                                            <vr-label>New: </vr-label>
-                                            <vr-label isvalue>{{scopeModel.numberOfNewRates}}</vr-label>
-                                        </vr-columns>
-                                        <vr-columns width="1/2row">
-                                            <vr-label>Increases: </vr-label>
-                                            <vr-label isvalue>{{scopeModel.numberOfIncreasedRates}}</vr-label>
-                                        </vr-columns>
-                                        <vr-columns width="1/2row">
-                                            <vr-label>Changes: </vr-label>
-                                            <vr-label isvalue>{{scopeModel.numberOfClosedRates}}</vr-label>
-                                        </vr-columns>
-                                        <vr-columns width="1/2row">
-                                            <vr-label>Decreases: </vr-label>
-                                            <vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
-                                        </vr-columns>
-                                    </vr-row>
-                                </vr-section>
-                                <vr-section title="Routing Product Changes" level="2">
-                                    <vr-row>
-                                        <vr-columns width="fullrow">
-                                            <vr-label>New: </vr-label>
-                                            <vr-label isvalue>{{scopeModel.numberOfNewSaleZoneRoutingProducts}}</vr-label>
-                                        </vr-columns>
-                                        <vr-columns width="fullrow">
-                                            <vr-label>Changes: </vr-label>
-                                            <vr-label isvalue>{{scopeModel.numberOfClosedSaleZoneRoutingProducts}}</vr-label>
-                                        </vr-columns>
-                                    </vr-row>
-                                </vr-section>
-                                <vr-section title="Service Changes" level="2">
-                                    <vr-row>
-                                        <vr-columns width="fullrow">
-                                            <vr-label>New: </vr-label>
-                                            <vr-label isvalue>{{scopeModel.numberOfNewSaleZoneServices}}</vr-label>
-                                        </vr-columns>
-                                        <vr-columns width="fullrow">
-                                            <vr-label>Changes: </vr-label>
-                                            <vr-label isvalue>{{scopeModel.numberOfClosedSaleZoneServices}}</vr-label>
-                                        </vr-columns>
-                                    </vr-row>
-                                </vr-section>
-                            </vr-section>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-validation-group validationcontext="DefaultGroup">
-                                <vr-validator validate="scopeModel.validateDefaultRoutingProduct()">
-                                    <vr-section title="Default Changes">
-                                        <vr-section title="Routing Product Changes" level="2">
-                                            <vr-row>
-                                                <vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName">
-                                                    <vr-label>New: </vr-label>
-                                                    <vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
-                                                </vr-columns>
-                                                <vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName == null && scopeModel.effectiveOn != null">
-                                                    <vr-label>Change (Default): </vr-label>
-                                                    <vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
-                                                </vr-columns>
-                                                <vr-columns width="fullrow" ng-show="scopeModel.effectiveOn == null">
-                                                    <vr-label isvalue>No changes</vr-label>
-                                                </vr-columns>
-                                            </vr-row>
-                                        </vr-section>
-                                        <vr-section title="Service Changes" level="2">
-                                            <vr-row>
-                                                <vr-columns width="fullrow" ng-show="scopeModel.showSummaryServiceViewer">
-                                                    <vr-label>New</vr-label>
-                                                    <vr-whs-be-services-viewer on-ready="scopeModel.onSummaryServiceViewerReady"></vr-whs-be-services-viewer>
-                                                </vr-columns>
-                                                <vr-columns width="fullrow" ng-show="scopeModel.closedDefaultServiceEffectiveOn">
-                                                    <vr-label>Closed On: </vr-label>
-                                                    <vr-label isvalue>{{scopeModel.closedDefaultServiceEffectiveOn}}</vr-label>
-                                                </vr-columns>
-                                                <vr-columns width="fullrow" ng-show="scopeModel.showSummaryServiceViewer == null &&  scopeModel.closedDefaultServiceEffectiveOn == null">
-                                                    <vr-label isvalue>No changes</vr-label>
-                                                </vr-columns>
-                                            </vr-row>
-                                        </vr-section>
-                                    </vr-section>
-                                </vr-validator>
-                            </vr-validation-group>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Default Changes'">
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-section title="Routing Product Changes">
-                                <vr-row>
-                                    <vr-columns width="1/2row" ng-show="scopeModel.currentDefaultRoutingProductName != null">
-                                        <vr-label>Current:</vr-label>
-                                        <vr-label isvalue>{{scopeModel.currentDefaultRoutingProductName}}</vr-label>
-                                    </vr-columns>
-                                    <vr-columns width="1/2row" ng-show="scopeModel.newDefaultRoutingProductName != null">
-                                        <vr-label>New:</vr-label>
-                                        <vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
-                                    </vr-columns>
-                                    <vr-columns width="1/2row" ng-show="scopeModel.effectiveOn != null">
-                                        <vr-label>Effective On:</vr-label>
-                                        <vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
-                                    </vr-columns>
-                                </vr-row>
-                            </vr-section>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-section title="Service Changes">
-                                <vr-row>
-                                    <vr-columns width="1/2row" ng-show="scopeModel.showCurrentDefaultServiceViewer">
-                                        <vr-label>Current:</vr-label>
-                                        <vr-whs-be-services-viewer on-ready="scopeModel.onCurrentDefaultServiceViewerReady"></vr-whs-be-services-viewer>
-                                    </vr-columns>
-                                    <vr-columns width="1/2row" ng-show="scopeModel.showNewDefaultServiceViewer">
-                                        <vr-label>New:</vr-label>
-                                        <vr-whs-be-services-viewer on-ready="scopeModel.onNewDefaultServiceViewerReady"></vr-whs-be-services-viewer>
-                                    </vr-columns>
-                                    <vr-columns width="1/2row" ng-show="scopeModel.defaultServicePreview.effectiveOn != undefined">
-                                        <vr-label>Effective On:</vr-label>
-                                        <vr-label isvalue>{{scopeModel.defaultServicePreview.effectiveOn}}</vr-label>
-                                    </vr-columns>
-                                    <vr-columns width="1/2row" ng-show="scopeModel.defaultServicePreview.effectiveUntil != undefined">
-                                        <vr-label>Effective Until:</vr-label>
-                                        <vr-label isvalue>{{scopeModel.defaultServicePreview.effectiveUntil}}</vr-label>
-                                    </vr-columns>
-                                </vr-row>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Zone Rate Changes'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-whs-sales-ratepreview-grid on-ready="scopeModel.onRatePreviewGridReady"></vr-whs-sales-ratepreview-grid>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Zone Routing Product Changes'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-whs-sales-salezoneroutingproductpreview-grid on-ready="scopeModel.onSaleZoneRoutingProductPreviewGridReady"></vr-whs-sales-salezoneroutingproductpreview-grid>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-				<vr-tab header="'Country Changes'">
+	<vr-modalbody>
+		<vr-form name="formRatePlanPreview">
+			<vr-tabs>
+				<vr-tab header="'Summary'">
+					<vr-row>
+						<vr-columns width="1/2row">
+							<vr-section title="Zone Changes">
+								<vr-section title="Rate Changes" level="2">
+									<vr-row>
+										<vr-columns width="1/2row">
+											<vr-label>New: </vr-label>
+											<vr-label isvalue>{{scopeModel.numberOfNewRates}}</vr-label>
+										</vr-columns>
+										<vr-columns width="1/2row">
+											<vr-label>Increases: </vr-label>
+											<vr-label isvalue>{{scopeModel.numberOfIncreasedRates}}</vr-label>
+										</vr-columns>
+										<vr-columns width="1/2row">
+											<vr-label>Changes: </vr-label>
+											<vr-label isvalue>{{scopeModel.numberOfClosedRates}}</vr-label>
+										</vr-columns>
+										<vr-columns width="1/2row">
+											<vr-label>Decreases: </vr-label>
+											<vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
+										</vr-columns>
+									</vr-row>
+								</vr-section>
+								<vr-section title="Routing Product Changes" level="2">
+									<vr-row>
+										<vr-columns width="fullrow">
+											<vr-label>New: </vr-label>
+											<vr-label isvalue>{{scopeModel.numberOfNewSaleZoneRoutingProducts}}</vr-label>
+										</vr-columns>
+										<vr-columns width="fullrow">
+											<vr-label>Changes: </vr-label>
+											<vr-label isvalue>{{scopeModel.numberOfClosedSaleZoneRoutingProducts}}</vr-label>
+										</vr-columns>
+									</vr-row>
+								</vr-section>
+								<vr-section title="Service Changes" level="2">
+									<vr-row>
+										<vr-columns width="fullrow">
+											<vr-label>New: </vr-label>
+											<vr-label isvalue>{{scopeModel.numberOfNewSaleZoneServices}}</vr-label>
+										</vr-columns>
+										<vr-columns width="fullrow">
+											<vr-label>Changes: </vr-label>
+											<vr-label isvalue>{{scopeModel.numberOfClosedSaleZoneServices}}</vr-label>
+										</vr-columns>
+									</vr-row>
+								</vr-section>
+							</vr-section>
+						</vr-columns>
+						<vr-columns width="1/2row">
+
+							<vr-section title="Default Changes">
+								<vr-section title="Routing Product Changes" level="2">
+									<vr-row>
+										<vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName">
+											<vr-label>New: </vr-label>
+											<vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
+										</vr-columns>
+										<vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName == null && scopeModel.effectiveOn != null">
+											<vr-label>Change (Default): </vr-label>
+											<vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
+										</vr-columns>
+										<vr-columns width="fullrow" ng-show="scopeModel.effectiveOn == null">
+											<vr-label isvalue>No changes</vr-label>
+										</vr-columns>
+									</vr-row>
+								</vr-section>
+								<vr-section title="Service Changes" level="2">
+									<vr-row>
+										<vr-columns width="fullrow" ng-show="scopeModel.showSummaryServiceViewer">
+											<vr-label>New</vr-label>
+											<vr-whs-be-services-viewer on-ready="scopeModel.onSummaryServiceViewerReady"></vr-whs-be-services-viewer>
+										</vr-columns>
+										<vr-columns width="fullrow" ng-show="scopeModel.closedDefaultServiceEffectiveOn">
+											<vr-label>Closed On: </vr-label>
+											<vr-label isvalue>{{scopeModel.closedDefaultServiceEffectiveOn}}</vr-label>
+										</vr-columns>
+										<vr-columns width="fullrow" ng-show="scopeModel.showSummaryServiceViewer == null &&  scopeModel.closedDefaultServiceEffectiveOn == null">
+											<vr-label isvalue>No changes</vr-label>
+										</vr-columns>
+									</vr-row>
+								</vr-section>
+							</vr-section>
+							<vr-section title="Country Changes" ng-show="scopeModel.showCountrySummary">
+								<vr-row>
+									<vr-columns width="fullrow">
+										<vr-label>Ended: </vr-label>
+										<vr-label isvalue>{{scopeModel.numberOfChangedCountries}}</vr-label>
+									</vr-columns>
+								</vr-row>
+							</vr-section>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+				<vr-tab header="'Default Changes'">
+					<vr-row>
+						<vr-columns width="1/2row">
+							<vr-section title="Routing Product Changes">
+								<vr-row>
+									<vr-columns width="1/2row" ng-show="scopeModel.currentDefaultRoutingProductName != null">
+										<vr-label>Current:</vr-label>
+										<vr-label isvalue>{{scopeModel.currentDefaultRoutingProductName}}</vr-label>
+									</vr-columns>
+									<vr-columns width="1/2row" ng-show="scopeModel.newDefaultRoutingProductName != null">
+										<vr-label>New:</vr-label>
+										<vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
+									</vr-columns>
+									<vr-columns width="1/2row" ng-show="scopeModel.effectiveOn != null">
+										<vr-label>Effective On:</vr-label>
+										<vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
+									</vr-columns>
+								</vr-row>
+							</vr-section>
+						</vr-columns>
+						<vr-columns width="1/2row">
+							<vr-section title="Service Changes">
+								<vr-row>
+									<vr-columns width="1/2row" ng-show="scopeModel.showCurrentDefaultServiceViewer">
+										<vr-label>Current:</vr-label>
+										<vr-whs-be-services-viewer on-ready="scopeModel.onCurrentDefaultServiceViewerReady"></vr-whs-be-services-viewer>
+									</vr-columns>
+									<vr-columns width="1/2row" ng-show="scopeModel.showNewDefaultServiceViewer">
+										<vr-label>New:</vr-label>
+										<vr-whs-be-services-viewer on-ready="scopeModel.onNewDefaultServiceViewerReady"></vr-whs-be-services-viewer>
+									</vr-columns>
+									<vr-columns width="1/2row" ng-show="scopeModel.defaultServicePreview.effectiveOn != undefined">
+										<vr-label>Effective On:</vr-label>
+										<vr-label isvalue>{{scopeModel.defaultServicePreview.effectiveOn}}</vr-label>
+									</vr-columns>
+									<vr-columns width="1/2row" ng-show="scopeModel.defaultServicePreview.effectiveUntil != undefined">
+										<vr-label>Effective Until:</vr-label>
+										<vr-label isvalue>{{scopeModel.defaultServicePreview.effectiveUntil}}</vr-label>
+									</vr-columns>
+								</vr-row>
+							</vr-section>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+				<vr-tab header="'Zone Rate Changes'">
+					<vr-row>
+						<vr-columns width="fullrow">
+							<vr-whs-sales-ratepreview-grid on-ready="scopeModel.onRatePreviewGridReady"></vr-whs-sales-ratepreview-grid>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+				<vr-tab header="'Zone Routing Product Changes'">
+					<vr-row>
+						<vr-columns width="fullrow">
+							<vr-whs-sales-salezoneroutingproductpreview-grid on-ready="scopeModel.onSaleZoneRoutingProductPreviewGridReady"></vr-whs-sales-salezoneroutingproductpreview-grid>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+				<vr-tab header="'Country Changes'" ng-show="scopeModel.showCountryTab">
 					<vr-row>
 						<vr-columns width="fullrow">
 							<vr-tabs>
@@ -172,15 +177,15 @@
 						</vr-columns>
 					</vr-row>
 				</vr-tab>
-            </vr-tabs>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRatePlanPreview" data-onclick="scopeModel.save" validationcontext="DefaultGroup"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formRatePlanPreview" data-onclick="scopeModel.save"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>

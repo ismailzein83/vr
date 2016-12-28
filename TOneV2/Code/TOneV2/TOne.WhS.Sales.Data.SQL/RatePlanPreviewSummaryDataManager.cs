@@ -59,7 +59,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 newDefaultServices,
                 summary.ClosedDefaultServiceEffectiveOn,
                 summary.NumberOfNewSaleZoneServices,
-                summary.NumberOfClosedSaleZoneServices
+                summary.NumberOfClosedSaleZoneServices,
+				summary.NumberOfChangedCountries
             );
         }
         
@@ -84,7 +85,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 NewDefaultServices = newDefaultServices != null ? Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(newDefaultServices) : null,
                 ClosedDefaultServiceEffectiveOn = GetReaderValue<DateTime?>(reader, "ClosedDefaultServiceEffectiveOn"),
                 NumberOfNewSaleZoneServices = (int)reader["NumberOfNewSaleZoneServices"],
-                NumberOfClosedSaleZoneServices = (int)reader["NumberOfClosedSaleZoneServices"]
+                NumberOfClosedSaleZoneServices = (int)reader["NumberOfClosedSaleZoneServices"],
+				NumberOfChangedCountries = (int)reader["NumberOfChangedCountries"]
             };
         }
         

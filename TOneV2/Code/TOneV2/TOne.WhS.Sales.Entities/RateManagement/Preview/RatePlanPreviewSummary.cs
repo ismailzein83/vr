@@ -32,5 +32,7 @@ namespace TOne.WhS.Sales.Entities
         public int NumberOfNewSaleZoneServices { get; set; }
 
         public int NumberOfClosedSaleZoneServices { get; set; }
+
+		public int NumberOfChangedCountries { get; set; }
     }
 }
