@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountRecurringPriceRuleSets\ApplyFirstAccountRecurringPriceRuleSetSettings.cs" />
+    <Compile Include="AccountRecurringPriceRuleSets\SingleRuleAccountRecurringPriceRuleSetSettings.cs" />
     <Compile Include="AccountViews\AccountIdentificationRules.cs" />
     <Compile Include="AccountViews\AccountInfo.cs" />
     <Compile Include="AccountViews\AccountPackages.cs" />
