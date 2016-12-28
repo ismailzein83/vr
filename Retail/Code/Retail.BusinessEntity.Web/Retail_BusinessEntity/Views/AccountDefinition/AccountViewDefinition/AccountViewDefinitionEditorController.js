@@ -87,7 +87,7 @@
                     var accountConditionSelectivePayload;
                     if (accountViewDefinitionEntity != undefined) {
                         accountConditionSelectivePayload = {
-                            accountCondition: accountViewDefinitionEntity.AvailabilityCondition
+                            filterObject: accountViewDefinitionEntity.AvailabilityCondition
                         };
                     }
                     VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);

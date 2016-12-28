@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public static Guid s_configId = new Guid("70D4A6AD-10CC-4F0B-8364-7D8EF3C044C4");
         public override Guid ConfigId { get { return s_configId; } }
-
+        public override string SelectorFilterEditor { get { return "retail-be-accountcondition-selective"; } }
         public override string DefinitionEditor
         { 
             get { return "retail-be-accountbedefinitions-editor"; } 

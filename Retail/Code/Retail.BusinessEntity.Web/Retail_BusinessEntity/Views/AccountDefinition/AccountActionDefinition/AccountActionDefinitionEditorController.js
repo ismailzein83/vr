@@ -65,7 +65,6 @@
             }
             function loadSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
                 settingsDirectiveReadyDeferred.promise.then(function () {
                     var settingsDirectivePayload;
                     if (accountActionDefinitionEntity != undefined) {
@@ -80,11 +79,10 @@
                 var accountConditionSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 accountConditionSelectiveReadyDeferred.promise.then(function () {
-
                     var accountConditionSelectivePayload;
                     if (accountActionDefinitionEntity != undefined) {
                         accountConditionSelectivePayload = {
-                            accountCondition: accountActionDefinitionEntity.AvailabilityCondition
+                            filterObject: accountActionDefinitionEntity.AvailabilityCondition
                         };
                     }
                     VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
