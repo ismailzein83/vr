@@ -68,6 +68,8 @@
 
     <add key="LoggingDBConnStringKey" value="LogDBConnString"/>
     <add key="InvoiceDBConnStringKey" value="ConfigurationDBConnString"/>
+
+    <add key="MNPReportPath" value="/Client/Modules/Retail_Ringo/Reports/MNP Report.xls"/>
   </appSettings>
 
   <system.web>
