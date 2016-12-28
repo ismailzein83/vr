@@ -21,14 +21,13 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                 }
             }
 
-            function addGridMenuAction(accountAction, actionType) {
+            function addGridMenuAction(accountActionDefinition, actionType) {
                 account.menuActions.push({
-                    name: accountAction.Name,
+                    name: accountActionDefinition.Name,
                     clicked: function (account) {
                         var payload = {
                             accountBEDefinitionId: accountBEDefinitionId,
                             account: account,
-                            accountActionDefinition: accountActionDefinition,
                             onItemUpdated: function (updatedItem) {
                                 Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions);
                                 defineAccountMenuActions(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions, accountActionDefinitions);
@@ -55,7 +54,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                         //            promiseDeffered.resolve();
                         //        }
 
-                        //        promiseDeffered.resolve();
+                        //        promiseDeffered.resolve(); 
 
                         //    }).catch(function (error) {
                         //        promiseDeffered.reject(error);
@@ -105,6 +104,22 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             };
             registerActionType(actionType);
         }
+        function registerOpen360DegreeAccount() {
+
+            var actionType = {
+                ActionTypeName: "Open360Degree",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var account = payload.account;
+
+                    Retail_BE_AccountService.openAccount360DegreeEditor(accountBEDefinitionId, account.Entity.AccountId);
+                }
+            };
+            registerActionType(actionType);
+        }
         function registerBPActionAccount() {
 
             var actionType = {
@@ -122,6 +137,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
             registerEditAccount: registerEditAccount,
+            registerOpen360DegreeAccount: registerOpen360DegreeAccount,
             registerBPActionAccount: registerBPActionAccount
         });
     }]);
