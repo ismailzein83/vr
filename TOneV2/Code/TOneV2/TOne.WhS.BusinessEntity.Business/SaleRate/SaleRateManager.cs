@@ -352,6 +352,15 @@ namespace TOne.WhS.BusinessEntity.Business
 				return entity;
 			}
 
+            protected override ResultProcessingHandler<SaleRateDetail> GetResultProcessingHandler(DataRetrievalInput<SaleRateQuery> input, BigResult<SaleRateDetail> bigResult)
+            {
+                return new ResultProcessingHandler<SaleRateDetail>
+                {
+                    ExportExcelHandler = new SaleRateDetailExportExcelHandler()
+                };
+            }
+            
+
 			private Decimal GetConvertedRate(SaleRate saleRate, int? targetCurrencyId, DateTime? rateConversionEffectiveDate)
 			{
 				int currencyId = _saleRateManager.GetCurrencyId(saleRate);
@@ -391,6 +400,39 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			return sellDatesByCountry;
 		}
+
+        private class SaleRateDetailExportExcelHandler : ExcelExportHandler<SaleRateDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SaleRateDetail> context)
+            {
+                if (context.BigResult == null || context.BigResult.Data == null)
+                    return;
+
+                var sheet = new ExportExcelSheet();
+                sheet.SheetName = "Sales Rates";
+
+                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                    row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Rate });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
+                    sheet.Rows.Add(row);
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
 		
 		#endregion
 	}

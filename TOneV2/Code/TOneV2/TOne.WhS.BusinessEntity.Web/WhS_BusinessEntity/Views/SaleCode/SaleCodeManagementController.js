@@ -18,7 +18,7 @@
         load();
 
         function defineScope() {
-            $scope.effectiveOn = Date.now();
+            $scope.effectiveOn =  new Date();
             $scope.searchClicked = function () {
                 var queryHandler = {
                     $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business"

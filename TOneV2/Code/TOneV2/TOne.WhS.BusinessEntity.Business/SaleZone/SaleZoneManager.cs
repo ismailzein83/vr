@@ -9,6 +9,7 @@ using Vanrise.Caching;
 using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -51,7 +52,12 @@ namespace TOne.WhS.BusinessEntity.Business
 				
 				return true;
 			};
-			return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, saleZones.ToBigResult(input, filterFunc, SaleZoneDetailMapper));
+            var resultProcessingHandler = new ResultProcessingHandler<SaleZoneDetail>()
+            {
+                ExportExcelHandler = new SaleZoneDetailExportExcelHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, saleZones.ToBigResult(input, filterFunc, SaleZoneDetailMapper), resultProcessingHandler);
 		}
 
 		public IEnumerable<SaleZone> GetSaleZonesBySellingNumberPlan(int sellingNumberPlanId)
@@ -425,6 +431,46 @@ namespace TOne.WhS.BusinessEntity.Business
 		public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
 		{
 			throw new NotImplementedException();
-		}
-	}
+        }
+
+        #region Private Classes
+
+        private class SaleZoneDetailExportExcelHandler : ExcelExportHandler<SaleZoneDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SaleZoneDetail> context)
+            {
+                if (context.BigResult == null || context.BigResult.Data == null)
+                    return;
+
+                var sheet = new ExportExcelSheet();
+                sheet.SheetName = "Sales Zones";
+
+                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Country" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Begin Effective Date",  CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "End Effective Date" ,  CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SaleZoneId });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.CountryName });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.SellingNumberPlanName });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
+                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
+                    sheet.Rows.Add(row);
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+
+
+        #endregion
+    }
 }
