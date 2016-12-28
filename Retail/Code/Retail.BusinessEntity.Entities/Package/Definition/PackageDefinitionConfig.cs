@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class PackageDefinitionConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Retail_BE_PackageDefinitionConfig";
+        public const string EXTENSION_TYPE = "Retail_BE_PackageDefinition";
 
         public string DefinitionEditor { get; set; }
     }

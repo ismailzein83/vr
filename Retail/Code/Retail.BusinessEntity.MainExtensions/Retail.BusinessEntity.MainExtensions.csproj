@@ -135,6 +135,7 @@
     <Compile Include="DurationVolumes\VolumePerUnit.cs" />
     <Compile Include="FileAccountConvertors\CompanyConvertor.cs" />
     <Compile Include="FileAccountConvertors\UserConvertor.cs" />
+    <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\PricingPackageSettings.cs" />
     <Compile Include="PackageTypes\VolumePackageSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
