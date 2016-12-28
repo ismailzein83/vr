@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Entities
     public class BusinessEntityDefinitionInfo
     {
         public Guid BusinessEntityDefinitionId { get; set; }
-
         public string Name { get; set; }
+        public string SelectorFilterEditor { get; set; }
     }
 }

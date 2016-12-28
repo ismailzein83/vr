@@ -209,7 +209,8 @@ namespace Vanrise.GenericData.Business
             return new BusinessEntityDefinitionInfo()
             {
                 BusinessEntityDefinitionId = beDefinition.BusinessEntityDefinitionId,
-                Name = beDefinition.Name
+                Name = beDefinition.Name,
+                SelectorFilterEditor = beDefinition.Settings.SelectorFilterEditor
             };
         }
         BusinessEntityDefinitionDetail BusinessEntityDefinitionDetailMapper(BusinessEntityDefinition beDefinition)

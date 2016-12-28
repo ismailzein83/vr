@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public Guid BusinessEntityDefinitionId { get; set; }
         public bool IsNullable { get; set; }
-
+        public Object SelectorFilter { get; set; }
         public override DataRecordFieldOrderType OrderType
         {
             get
