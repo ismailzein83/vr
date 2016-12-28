@@ -143,6 +143,7 @@
     <Compile Include="AccountServiceGenericFields\AccountServiceStatusGenericField.cs" />
     <Compile Include="AccountServiceGenericFields\AccountServiceTypeGenericField.cs" />
     <Compile Include="AccountServiceManager.cs" />
+    <Compile Include="Context\PackageDefinitionServiceTypeFilterContext.cs" />
     <Compile Include="DistributorManager.cs" />
     <Compile Include="Extensions\DistributorSynchronizer.cs" />
     <Compile Include="Extensions\PosSynchronizer.cs" />

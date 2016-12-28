@@ -57,13 +57,16 @@ app.directive('retailBeServicetypeSelector', ['Retail_BE_ServiceTypeAPIService',
 
                 var selectedIds;
                 var excludedServiceTypeIds;
+                var filter;
 
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                     excludedServiceTypeIds = payload.excludedServiceTypeIds;
+                    if (payload.filter != undefined)
+                        filter = payload.filter;
                 }
-
-                var filter = {};
+                if (filter == undefined)
+                    filter = {};
                 filter.ExcludedServiceTypeIds = excludedServiceTypeIds;
 
                 return Retail_BE_ServiceTypeAPIService.GetServiceTypesInfo(UtilsService.serializetoJson(filter)).then(function (response) {

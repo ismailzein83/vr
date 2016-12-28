@@ -8,6 +8,7 @@
 
         var isEditMode;
 
+        var context;
         var serviceTypeId;
         var serviceTypeName;
         var usageChargingPolicyId;
@@ -31,12 +32,13 @@
 
             if (parameters != undefined) {
                 excludedServiceTypeIds = parameters.excludedServiceTypeIds;
-
+                context = parameters.context;
                 if (parameters.pricingPackageSetting != undefined) {
                     serviceTypeId = parameters.pricingPackageSetting.ServiceTypeId;
                     serviceTypeName = parameters.pricingPackageSetting.ServiceTypeName;
                     usageChargingPolicyId = parameters.pricingPackageSetting.UsageChargingPolicyId;
                     usageChargingPolicyName = parameters.pricingPackageSetting.UsageChargingPolicyName;
+
                 }
             }
             isEditMode = (serviceTypeId != undefined);
@@ -107,11 +109,19 @@
             var loadServiceTypeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
             serviceTypeReadyPromiseDeferred.promise.then(function () {
+                var filters;
+                if (context != undefined && context.getServiceTypeFilter != undefined)
+                {
+                    filters = [];
+                    filters.push(context.getServiceTypeFilter());
+                }
                 var serviceTypeDirectivePayload = {
                     selectedIds: serviceTypeId,
-                    excludedServiceTypeIds: excludedServiceTypeIds
+                    excludedServiceTypeIds: excludedServiceTypeIds,
+                    filter: {
+                        Filters: filters
+                    }
                 };
-
                 VRUIUtilsService.callDirectiveLoad(serviceTypeAPI, serviceTypeDirectivePayload, loadServiceTypeDirectivePromiseDeferred);
             });
 
@@ -130,7 +140,6 @@
                     selectedIds: usageChargingPolicyId,
                     filter: { ServiceTypeId: serviceTypeId }
                 };
-
                 VRUIUtilsService.callDirectiveLoad(chargingPolicyAPI, chargingPolicyDirectivePayload, loadChargingPolicyDirectivePromiseDeferred);
 
             });

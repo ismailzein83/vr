@@ -15,16 +15,21 @@ namespace Retail.BusinessEntity.Business
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<PackageDefinitionConfig>(PackageDefinitionConfig.EXTENSION_TYPE);
         }
-
-
         public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo()
         {
-            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-            var packageDefinitions = vrComponentTypeManager.GetComponentTypes<PackageDefinitionSettings,PackageDefinition>();
+            var packageDefinitions = GetPackageDefinitions();
             return packageDefinitions.MapRecords(PackageDefinitionInfoMapper);
         }
-
-
+        public PackageDefinition GetPackageDefinitionById(Guid packageDefinitionId)
+        {
+            var packageDefinitions = GetPackageDefinitions();
+            return packageDefinitions.FindRecord(x => x.VRComponentTypeId == packageDefinitionId);
+        }
+        public IEnumerable<PackageDefinition> GetPackageDefinitions()
+        {
+            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
+            return vrComponentTypeManager.GetComponentTypes<PackageDefinitionSettings, PackageDefinition>();
+        }
 
         #region Mapper
         public PackageDefinitionInfo PackageDefinitionInfoMapper(PackageDefinition packageDefinition)

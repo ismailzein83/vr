@@ -32,7 +32,7 @@
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var context;
             function initializeController() {
                 ctrl.pricingPackageSettings = [];
 
@@ -54,7 +54,7 @@
                         }
                     }
 
-                    Retail_BE_PricingPackageSettingsService.addPricingPackageSetting(excludedServiceTypeIds, onPackageSettingAdded);
+                    Retail_BE_PricingPackageSettingsService.addPricingPackageSetting(excludedServiceTypeIds, onPackageSettingAdded, getContext());
                 };
                 ctrl.onDeletePricingPackageSetting = function (pricingPackageSetting) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -79,7 +79,7 @@
                     if (payload != undefined) {
                         pricingPackageSettings = payload.extendedSettings;
                         pricingPackageSettingsEditorRuntime = payload.extendedSettingsEditorRuntime;
-
+                        context = payload.context;
                         if (pricingPackageSettings != undefined) {
                             serviceTypeUsageChargingPolicies = pricingPackageSettings.ServiceTypeUsageChargingPolicies;
                         }
@@ -142,7 +142,14 @@
                     ctrl.pricingPackageSettings[index] = updatedPricingPackageSetting;
                 };
 
-                Retail_BE_PricingPackageSettingsService.editPricingPackageSetting(pricingPackageSetting, onPricingPackageSettingUpdated);
+                Retail_BE_PricingPackageSettingsService.editPricingPackageSetting(pricingPackageSetting, onPricingPackageSettingUpdated, getContext());
+            }
+            function getContext()
+            {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
     }

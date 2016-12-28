@@ -211,6 +211,7 @@
     <Compile Include="RevenueComparison\RevenueComparisonDetail.cs" />
     <Compile Include="RevenueComparison\RevenueComparisonQuery.cs" />
     <Compile Include="ServiceType\AccountServiceGenericField.cs" />
+    <Compile Include="ServiceType\IServiceTypeFilter.cs" />
     <Compile Include="ServiceType\ServiceType.cs" />
     <Compile Include="Package\Package.cs" />
     <Compile Include="Package\PackageDetail.cs" />

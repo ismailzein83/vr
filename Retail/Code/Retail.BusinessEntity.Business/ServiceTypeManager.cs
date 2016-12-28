@@ -86,7 +86,8 @@ namespace Retail.BusinessEntity.Business
             {
                 if (filter.ExcludedServiceTypeIds != null && filter.ExcludedServiceTypeIds.Count() > 0 && filter.ExcludedServiceTypeIds.Contains(serviceType.ServiceTypeId))
                     return false;
-
+                if (filter.Filters != null && !CheckIfFilterIsMatch(serviceType, filter.Filters))
+                   return false;
                 return true;
             };
 
@@ -206,7 +207,16 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Methods
-
+        private bool CheckIfFilterIsMatch(ServiceType entityDefinition, List<IServiceTypeFilter> filters)
+        {
+            PackageDefinitionServiceTypeFilterContext context = new PackageDefinitionServiceTypeFilterContext { entityDefinition = entityDefinition };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
         private Dictionary<Guid, ServiceType> GetCachedServiceTypes()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetServiceTypes", () =>

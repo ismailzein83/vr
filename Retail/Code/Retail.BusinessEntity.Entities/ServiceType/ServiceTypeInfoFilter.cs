@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class ServiceTypeInfoFilter
     {
         public IEnumerable<Guid> ExcludedServiceTypeIds { get; set; }
+        public List<IServiceTypeFilter> Filters { get; set; }
+
     }
 }

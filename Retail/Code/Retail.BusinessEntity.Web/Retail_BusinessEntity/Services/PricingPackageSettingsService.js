@@ -7,10 +7,11 @@
     function PricingPackageSettingsService(VRModalService) {
 
 
-        function addPricingPackageSetting(excludedServiceTypeIds, onPricingPackageSettingsAdded) {
+        function addPricingPackageSetting(excludedServiceTypeIds, onPricingPackageSettingsAdded,context) {
 
             var parameters = {
-                excludedServiceTypeIds: excludedServiceTypeIds // passed for validation
+                excludedServiceTypeIds: excludedServiceTypeIds ,// passed for validation
+                context:context
             };
 
             var modalSettings = {};
@@ -22,10 +23,11 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageExtendedSettings/PricingPackageSettingsEditor.html', parameters, modalSettings);
         }
 
-        function editPricingPackageSetting(pricingPackageSetting, onPricingPackageSettingsUpdated) {
+        function editPricingPackageSetting(pricingPackageSetting, onPricingPackageSettingsUpdated, context) {
 
             var parameters = {
                 pricingPackageSetting: pricingPackageSetting,
+                context: context
             };
 
             var modalSettings = {};
