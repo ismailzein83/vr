@@ -105,7 +105,7 @@ namespace NP.IVSwitch.Data.Postgres
                                    channels_limit=@channels_limit, max_call_dura=@max_call_dura,rtp_mode=@rtp_mode,domain_id=@domain_id,
                                    host=@host,tech_prefix=@tech_prefix 
                                    WHERE  user_id = @user_id AND NOT EXISTS(SELECT 1 FROM  access_list WHERE (user_id != @user_id and
-                                                                            (domain_id=@domain_id and host=@host and tech_prefix=@tech_prefix )))";
+                                   (domain_id=@domain_id and host=@host )))";
             int recordsEffected = ExecuteNonQueryText(cmdText, cmd =>
             {
                 cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
