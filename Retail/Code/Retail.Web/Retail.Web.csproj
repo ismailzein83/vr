@@ -403,6 +403,12 @@
     <Reference Include="Vanrise.Integration.Adapters.MySQLReceiveAdapter">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.MySQLReceiveAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.PostgresReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.PostgresReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.SFTPReceiveAdapter">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SFTPReceiveAdapter.dll</HintPath>
     </Reference>
