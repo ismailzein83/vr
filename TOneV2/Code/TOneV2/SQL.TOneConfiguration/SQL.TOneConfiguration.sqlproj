@@ -508,6 +508,7 @@
     <None Include="TOneWhS_BE.CodeGroup.sql" />
     <None Include="VR_NumberingPlan.CodeGroup.sql" />
     <None Include="common.Currency.sql" />
+    <None Include="INSOFT.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
