@@ -180,9 +180,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
-    <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountActionDefinition\" />
-    <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountGridDefinition\" />
-    <Folder Include="Retail_BusinessEntity\Views\AccountDefinition\AccountViewDefinition\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
