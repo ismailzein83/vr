@@ -14,6 +14,6 @@ namespace Vanrise.Integration.Entities
             {
                 return 1;
             }
-        }
+        }     
     }
 }

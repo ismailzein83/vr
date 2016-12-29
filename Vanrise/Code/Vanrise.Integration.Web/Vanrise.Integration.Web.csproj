@@ -110,9 +110,11 @@
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
     <Content Include="Integration\Constants\ModuleConfig.js" />
+    <Content Include="Integration\Directives\Adapter\Templates\AdapterPostgresTemplate.html" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterDBTemplate.html" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterFTPTemplate.html" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterFileTemplate.html" />
+    <Content Include="Integration\Directives\Adapter\vr-integration-adapter-postgres.js" />
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-db.js" />
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-ftp.js" />
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-file.js" />

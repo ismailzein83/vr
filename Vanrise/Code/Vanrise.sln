@@ -326,9 +326,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.NumberingPlan.BP.Ac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.NumberingPlan.BP.Arguments", "Vanrise.NumberingPlan.BP.Arguments\Vanrise.NumberingPlan.BP.Arguments.csproj", "{96358D6E-0962-43EE-92BA-6148A94A6B26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.PostgresReceiveAdapter", "Vanrise.Integration.Adapters.PostgresReceiveAdapter\Vanrise.Integration.Adapters.PostgresReceiveAdapter.csproj", "{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments", "Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments\Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments.csproj", "{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 138
+		SccNumberOfProjects = 140
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -880,6 +884,14 @@ Global
 		SccProjectTopLevelParentUniqueName137 = Vanrise.sln
 		SccProjectName137 = Vanrise.NumberingPlan.BP.Arguments
 		SccLocalPath137 = Vanrise.NumberingPlan.BP.Arguments
+		SccProjectUniqueName138 = Vanrise.Integration.Adapters.PostgresReceiveAdapter\\Vanrise.Integration.Adapters.PostgresReceiveAdapter.csproj
+		SccProjectTopLevelParentUniqueName138 = Vanrise.sln
+		SccProjectName138 = Vanrise.Integration.Adapters.PostgresReceiveAdapter
+		SccLocalPath138 = Vanrise.Integration.Adapters.PostgresReceiveAdapter
+		SccProjectUniqueName139 = Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments\\Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments.csproj
+		SccProjectTopLevelParentUniqueName139 = Vanrise.sln
+		SccProjectName139 = Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments
+		SccLocalPath139 = Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2006,6 +2018,22 @@ Global
 		{96358D6E-0962-43EE-92BA-6148A94A6B26}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96358D6E-0962-43EE-92BA-6148A94A6B26}.Release|x64.ActiveCfg = Release|Any CPU
 		{96358D6E-0962-43EE-92BA-6148A94A6B26}.Release|x86.ActiveCfg = Release|Any CPU
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}.Release|x64.ActiveCfg = Release|Any CPU
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20}.Release|x86.ActiveCfg = Release|Any CPU
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}.Release|x64.ActiveCfg = Release|Any CPU
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2153,5 +2181,7 @@ Global
 		{23F1FFBD-2107-4D5E-8C62-3A341749790E} = {A3A92219-95E9-48DC-9808-B64E2A09C226}
 		{9EB7951C-6F26-4B77-8982-60D06E61474C} = {A3A92219-95E9-48DC-9808-B64E2A09C226}
 		{96358D6E-0962-43EE-92BA-6148A94A6B26} = {A3A92219-95E9-48DC-9808-B64E2A09C226}
+		{DF8E208A-60E7-44E1-A8C3-5B30083E5F20} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
+		{F3EAA11E-1F77-4E0A-84E8-2BEBEFAF0A13} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
 	EndGlobalSection
 EndGlobal
