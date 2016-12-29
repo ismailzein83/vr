@@ -25,15 +25,16 @@ namespace TOne.WhS.CodePreparation.Business
             if (zoneTopProcess.ChangeType == ZoneChangeType.New || zoneTopProcess.ChangeType == ZoneChangeType.Renamed)
                 return true;
 
-            if (zoneTopProcess.CodesToAdd != null && zoneTopProcess.CodesToAdd.Count() > 0)
+            if (zoneTopProcess.CodesToAdd.Count() > 0 && zoneTopProcess.BED > DateTime.Today.Date)
             {
-                if (zoneTopProcess.BED > DateTime.Today.Date)
-                    return false;
+                context.Message = string.Format("Can not add code to the pending effective zone {0}", zoneTopProcess.ZoneName);
+                return false;
             }
 
-            if (zoneTopProcess.CodesToMove != null && zoneTopProcess.CodesToMove.Count() > 0)
+            if (zoneTopProcess.CodesToMove.Count() > 0 && zoneTopProcess.BED > DateTime.Today.Date)
             {
-                return !(zoneTopProcess.BED > DateTime.Today.Date);
+                context.Message = string.Format("Can not move code to the pending effective zone {0}", zoneTopProcess.ZoneName);
+                return false;
             }
 
             return true;

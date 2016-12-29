@@ -20,13 +20,15 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             ImportedDataByZone zone = context.Target as ImportedDataByZone;
 
             foreach (var importedCode in zone.ImportedCodes)
             {
                 if (string.IsNullOrEmpty(importedCode.Code))
+                {
+                    context.Message = string.Format("Zone {0} has a missing code", zone.ZoneName);
                     return false;
+                }
             }
 
             return true;            

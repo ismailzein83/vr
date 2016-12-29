@@ -26,7 +26,12 @@ namespace TOne.WhS.CodePreparation.Business
             CountryToProcess country = context.Target as CountryToProcess;
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             
-            return saleZoneManager.IsCountryEmpty(cpContext.SellingNumberPlanId, country.CountryId , DateTime.Now );
+            bool result = saleZoneManager.IsCountryEmpty(cpContext.SellingNumberPlanId, country.CountryId , DateTime.Now );
+
+            if(result == false)
+                context.Message = string.Format("Effective date can not be less than date of today");
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

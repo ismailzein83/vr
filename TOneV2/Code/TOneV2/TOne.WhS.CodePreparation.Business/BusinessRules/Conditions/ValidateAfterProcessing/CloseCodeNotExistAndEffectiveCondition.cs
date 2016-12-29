@@ -20,16 +20,15 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
 
-
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
 
-            if (zoneToProcess.CodesToClose != null)
+            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
-                foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+                if (codeToClose.ChangedExistingCodes.Count() == 0 || !codeToClose.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code
+                    && item.ParentZone.ZoneEntity.Name.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    if (codeToClose.ChangedExistingCodes.Count() == 0 || !codeToClose.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code 
-                        && item.ParentZone.ZoneEntity.Name.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)))
-                        return false;
+                    context.Message = string.Format("Zone {0} has the code {1} to be closed that does not exist or not effective", zoneToProcess.ZoneName, codeToClose.Code);
+                    return false;
                 }
             }
 

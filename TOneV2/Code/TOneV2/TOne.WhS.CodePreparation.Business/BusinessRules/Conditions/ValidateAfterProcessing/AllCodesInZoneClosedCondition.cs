@@ -21,13 +21,24 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
+            bool result;
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             if (zoneToProcess != null)
-                return !(zoneToProcess.ChangeType == Entities.ZoneChangeType.Deleted);
+            {
+                result = !(zoneToProcess.ChangeType == Entities.ZoneChangeType.Deleted);
+               
+                if (result == false)
+                    context.Message = string.Format("All codes in zone '{0}' are closed. Zone '{0}' will be closed", zoneToProcess.ZoneName);
+
+                return result;
+            }
 
             NotImportedZone notImportedZone = context.Target as NotImportedZone;
-            return !notImportedZone.HasChanged;
+            result = !notImportedZone.HasChanged;
+            if (result == false)
+                context.Message = string.Format("All codes in zone '{0}' are closed. Zone '{0}' will be closed", notImportedZone.ZoneName);
+
+            return result;
 
         }
 

@@ -33,7 +33,10 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 			SaleEntityZoneRate sellingProductRate = ratePlanContext.RateLocator.GetSellingProductZoneRate(sellingProductId.Value, zoneData.ZoneId);
 
 			if (zoneData.NormalRateToClose != null && (sellingProductRate == null || sellingProductRate.Rate == null))
-				return false;
+            {
+                context.Message = string.Format("Selling Product does not have a Normal Rate for Zone '{0}'", zoneData.ZoneName);
+                return false;
+            }
 
 			return true;
 		}

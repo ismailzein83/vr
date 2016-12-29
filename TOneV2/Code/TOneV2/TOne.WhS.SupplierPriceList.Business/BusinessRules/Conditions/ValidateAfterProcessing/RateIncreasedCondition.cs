@@ -19,7 +19,12 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             ImportedRate importedRate = context.Target as ImportedRate;
 
-            return !(importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(item => item.RateEntity.Rate < importedRate.Rate));
+            var result = !(importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(item => item.RateEntity.Rate < importedRate.Rate));
+
+            if(result == false)
+                context.Message = string.Format("The rate of zone {0} has been increased", importedRate.ZoneName);
+
+            return result;
         }
         public override string GetMessage(IRuleTarget target)
         {

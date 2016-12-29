@@ -321,7 +321,9 @@
 
                 if ($scope.currentNode != undefined) {
                     if ($scope.currentNode.type == 'Zone') {
-                        return codesGridAPI.loadGrid(getCodesFilterObject());
+                        return codesGridAPI.loadGrid(getCodesFilterObject()).then(function () {
+                            setZoneStateVisibility($scope.currentNode.DraftStatus, $scope.currentNode.status);
+                        });
                     }
                 }
             }

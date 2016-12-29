@@ -20,8 +20,13 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             CodeToMove codeToMove = context.Target as CodeToMove;
-            return (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToMove.Code
-                        && item.ParentZone.ZoneEntity.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase)));
+            var result = (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToMove.Code
+                         && item.ParentZone.ZoneEntity.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase)));
+
+            if (result == false)
+               context.Message = string.Format("Code {0} does not exist in zone {1} and can not be moved", codeToMove.Code, codeToMove.OldZoneName);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

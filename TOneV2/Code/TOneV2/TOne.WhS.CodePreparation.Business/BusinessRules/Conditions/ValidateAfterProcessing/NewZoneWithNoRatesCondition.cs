@@ -20,10 +20,16 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            bool result = true;
             ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
-            if(zoneTopProcess.ChangeType == ZoneChangeType.New)
-                return zoneTopProcess.RatesToAdd.Count() > 0;
-            return true;
+
+            if (zoneTopProcess.ChangeType == ZoneChangeType.New)
+                result = zoneTopProcess.RatesToAdd.Count() > 0;
+
+            if (result == false)
+                context.Message = string.Format("Zone '{0}' has been created without rates", zoneTopProcess.ZoneName);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

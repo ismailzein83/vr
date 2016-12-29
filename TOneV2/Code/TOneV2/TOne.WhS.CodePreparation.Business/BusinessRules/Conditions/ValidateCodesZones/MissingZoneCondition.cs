@@ -19,8 +19,11 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedCode importedCode = context.Target as ImportedCode;
+            var result = !string.IsNullOrEmpty(importedCode.ZoneName);
+            if(result == false)
+                context.Message = string.Format("Code {0} has a missing zone", importedCode.Code);
 
-            return !string.IsNullOrEmpty(importedCode.ZoneName);
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

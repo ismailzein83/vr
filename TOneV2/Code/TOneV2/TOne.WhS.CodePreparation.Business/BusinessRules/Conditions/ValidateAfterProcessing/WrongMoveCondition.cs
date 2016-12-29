@@ -20,7 +20,12 @@ namespace TOne.WhS.CodePreparation.Business
         {
             CodeToAdd codeToAdd = context.Target as CodeToAdd;
 
-            return !(codeToAdd.ChangedExistingCodes != null && codeToAdd.ChangedExistingCodes.Count() > 0);
+            var result = !(codeToAdd.ChangedExistingCodes != null && codeToAdd.ChangedExistingCodes.Count() > 0);
+
+            if(result ==  false)
+                context.Message = string.Format("Code {0} already exists", codeToAdd.Code);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

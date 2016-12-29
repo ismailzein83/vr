@@ -25,7 +25,10 @@ namespace TOne.WhS.SupplierPriceList.Business
             foreach (var importedCode in zone.ImportedCodes)
             {
                 if (importedCode.BED == DateTime.MinValue)
+                {
+                    context.Message = string.Format("Zone {0} has a missing begin effective date", zone.ZoneName);
                     return false;
+                }
             }
 
             return true;

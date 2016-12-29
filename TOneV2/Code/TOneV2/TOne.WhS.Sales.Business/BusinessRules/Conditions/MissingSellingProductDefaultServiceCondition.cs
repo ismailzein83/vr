@@ -24,7 +24,10 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (defaultData.OwnerType == SalePriceListOwnerType.SellingProduct)
             {
                 if (defaultData.CurrentServices == null && defaultData.DefaultServiceToAdd == null)
+                {
+                    context.Message = String.Format("Missing default service");
                     return false;
+                }
             }
 
             return true;

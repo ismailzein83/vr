@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Sales.Business.BusinessRules
 {
@@ -17,7 +18,15 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 		public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
 		{
 			var countryToChange = context.Target as CustomerCountryToChange;
-			return (countryToChange.CloseEffectiveDate >= DateTime.Now.Date);
+			var result = (countryToChange.CloseEffectiveDate >= DateTime.Now.Date);
+
+            if(result == false)
+            {
+                CountryManager countryManager = new CountryManager();
+                context.Message = string.Format("EED '{0}' of Country '{1}' must be greater than or equal to today's date", countryToChange.CloseEffectiveDate, countryManager.GetCountryName(countryToChange.CountryId));
+            }
+
+            return result;
 		}
 
 		public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)

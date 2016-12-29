@@ -18,32 +18,31 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
-            
 
-            if(zoneToProcess.CodesToAdd != null)
+            foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
             {
-                foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
+                if (!Vanrise.Common.Utilities.IsNumeric(codeToAdd.Code, 0))
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToAdd.Code, 0))
-                        return false;
+                    context.Message = string.Format("Zone {0} has a Code {1} that is not a positive number", zoneToProcess.ZoneName, codeToAdd.Code);
+                    return false;
                 }
             }
 
-            if (zoneToProcess.CodesToMove != null)
+            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
-                foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+                if (!Vanrise.Common.Utilities.IsNumeric(codeToMove.Code, 0))
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToMove.Code, 0))
-                        return false;
+                    context.Message = string.Format("Zone {0} has a Code {1} that is not a positive number", zoneToProcess.ZoneName, codeToMove.Code);
+                    return false;
                 }
             }
 
-            if (zoneToProcess.CodesToClose != null)
+            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
-                foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+                if (!Vanrise.Common.Utilities.IsNumeric(codeToClose.Code, 0))
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToClose.Code, 0))
-                        return false;
+                    context.Message = string.Format("Zone {0} has a Code {1} that is not a positive number", zoneToProcess.ZoneName, codeToClose.Code);
+                    return false;
                 }
             }
 

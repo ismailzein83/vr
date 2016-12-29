@@ -22,20 +22,22 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedDataByZone zone = context.Target as ImportedDataByZone;
 
-            bool result = true;
-
-            if (zone.ImportedCodes != null)
+            var firstCode = zone.ImportedCodes.FirstOrDefault();
+            if (firstCode != null)
             {
-                var firstCode = zone.ImportedCodes.FirstOrDefault();
-                if (firstCode != null)
+                int? firstCodeCountryId = firstCode.CodeGroup != null ? firstCode.CodeGroup.CountryId : (int?)null;
+
+                foreach (ImportedCode importedCode in zone.ImportedCodes)
                 {
-                    int? firstCodeCountryId = firstCode.CodeGroup != null ? firstCode.CodeGroup.CountryId : (int?)null;
-                    Func<ImportedCode, bool> pred = new Func<ImportedCode, bool>((code) => code.CodeGroup != null && firstCodeCountryId.HasValue && code.CodeGroup.CountryId != firstCodeCountryId.Value);
-                    result = !zone.ImportedCodes.Any(pred);
+                    if (importedCode.CodeGroup != null && firstCodeCountryId.HasValue && importedCode.CodeGroup.CountryId != firstCodeCountryId.Value)
+                    {
+                        context.Message = string.Format("Zone {0} has the codes {1}, {2} belongs to different countries", zone.ZoneName, firstCode.Code, importedCode.Code);
+                        return false;
+                    }
                 }
             }
 
-            return result;
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)

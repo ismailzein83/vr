@@ -21,6 +21,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            bool result = true;
             ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
 
             ExistingZoneInfoByZoneName existingZonesInfoByZoneName = cpContext.ExistingZonesInfoByZoneName;
@@ -36,9 +37,16 @@ namespace TOne.WhS.CodePreparation.Business
             int zoneToProcessCountryId = zoneToProcess.AddedZones.First().CountryId;
 
             if (existingZonesInfoByZoneName.TryGetValue(zoneToProcess.ZoneName, out existingZoneInfoInContext))
-                return existingZoneInfoInContext.CountryId == zoneToProcessCountryId;
-
-            return true;
+            {
+                if(existingZoneInfoInContext.CountryId != zoneToProcessCountryId)
+                {
+                    CountryManager manager = new CountryManager();
+                    result = false;
+                    string countryName = manager.GetCountryName(zoneToProcess.AddedZones.First().CountryId);
+                    context.Message = string.Format("Zone {0} has a code that belongs to the code group of country {1}", zoneToProcess.ZoneName, countryName);
+                }
+            }
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

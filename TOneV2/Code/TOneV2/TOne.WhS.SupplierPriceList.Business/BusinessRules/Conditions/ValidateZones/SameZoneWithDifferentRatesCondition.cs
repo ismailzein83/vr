@@ -28,7 +28,10 @@ namespace TOne.WhS.SupplierPriceList.Business
                                         select newRates;
 
             if (distinctImportedNormalRates.Count() > 1)
+            {
+                context.Message = string.Format("Zone {0} has different rates", zone.ZoneName);
                 return false;
+            }
 
             foreach (KeyValuePair<int, List<ImportedRate>> kvp in zone.ImportedOtherRates)
             {
@@ -37,7 +40,10 @@ namespace TOne.WhS.SupplierPriceList.Business
                                              select newRates;
 
                 if (distinctImportedOtherRates.Count() > 1)
+                {
+                    context.Message = string.Format("Zone {0} has different rates", zone.ZoneName);
                     return false;
+                }
             }
 
             return true;

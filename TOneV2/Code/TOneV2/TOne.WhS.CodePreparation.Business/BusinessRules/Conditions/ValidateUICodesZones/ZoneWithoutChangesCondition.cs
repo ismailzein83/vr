@@ -18,8 +18,11 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             NewZone newZone = context.Target as NewZone;
+            var result = newZone.hasChanges;
+
+            if(result == false)
+                context.Message = string.Format("Zone {0} has no codes, creation of zone has been canceled", newZone.Name);
 
             return newZone.hasChanges;
         }

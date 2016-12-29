@@ -11,26 +11,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 {
     public class OtherRateBEDLessThanValidBEDCondition : BusinessRuleCondition
     {
-        public override string GetMessage(IRuleTarget target)
-        {
-			DataByZone zone = (target as DataByZone);
-			string zoneBED = UtilitiesManager.GetDateTimeAsString(zone.BED);
-
-			var messageBuilder = new StringBuilder(string.Format("BED of the Other Rate of Zone '{0}' must be greater than", zone.ZoneName));
-
-			if (zone.SoldOn.HasValue)
-			{
-				string soldOn = UtilitiesManager.GetDateTimeAsString(zone.SoldOn.Value);
-				messageBuilder.Append(string.Format(" the maximum between the BED '{0}' of the Zone and the date '{1}' when the Country was sold", zoneBED, soldOn));
-			}
-			else
-			{
-				messageBuilder.Append(string.Format(" the BED '{0}' of the Zone", zoneBED));
-			}
-
-			return messageBuilder.ToString();
-        }
-
         public override bool ShouldValidate(IRuleTarget target)
         {
             return (target as DataByZone != null);
@@ -70,6 +50,26 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             }
 
             return true;
+        }
+
+        public override string GetMessage(IRuleTarget target)
+        {
+            DataByZone zone = (target as DataByZone);
+            string zoneBED = UtilitiesManager.GetDateTimeAsString(zone.BED);
+
+            var messageBuilder = new StringBuilder(string.Format("BED of the Other Rate of Zone '{0}' must be greater than", zone.ZoneName));
+
+            if (zone.SoldOn.HasValue)
+            {
+                string soldOn = UtilitiesManager.GetDateTimeAsString(zone.SoldOn.Value);
+                messageBuilder.Append(string.Format(" the maximum between the BED '{0}' of the Zone and the date '{1}' when the Country was sold", zoneBED, soldOn));
+            }
+            else
+            {
+                messageBuilder.Append(string.Format(" the BED '{0}' of the Zone", zoneBED));
+            }
+
+            return messageBuilder.ToString();
         }
     }
 }

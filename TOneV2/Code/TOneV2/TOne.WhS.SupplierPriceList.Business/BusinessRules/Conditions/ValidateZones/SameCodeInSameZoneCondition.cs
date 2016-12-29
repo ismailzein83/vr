@@ -26,7 +26,10 @@ namespace TOne.WhS.SupplierPriceList.Business
             foreach (var importedCode in zone.ImportedCodes)
             {
                 if (zone.ImportedCodes.Where(x => x.Code == importedCode.Code).Count() > 1)
+                {
+                    context.Message = string.Format("Zone {0} has the code {1} multiple times", zone.ZoneName, importedCode.Code);
                     return false;
+                }
             }
 
             return true;

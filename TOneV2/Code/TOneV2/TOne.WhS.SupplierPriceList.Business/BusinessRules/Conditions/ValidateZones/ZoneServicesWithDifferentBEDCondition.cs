@@ -25,14 +25,22 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             foreach (KeyValuePair<int, List<ImportedZoneService>> item in importedDataByZone.ImportedZoneServicesToValidate)
                 if (item.Value.Any(itm => itm.BED != item.Value.First().BED))
+                {
+                    context.Message = string.Format("Zone {0} has services with different BED, minimum BED has been selected", importedDataByZone.ZoneName);
                     return false;
+                }
 
             List<ImportedZoneService> importedZoneServices = new List<ImportedZoneService>();
 
             foreach (KeyValuePair<int, List<ImportedZoneService>> item in importedDataByZone.ImportedZoneServicesToValidate)
                 importedZoneServices.Add(item.Value.First());
 
-            return importedZoneServices.All(item => item.BED == importedZoneServices.First().BED);
+            var result = importedZoneServices.All(item => item.BED == importedZoneServices.First().BED);
+
+            if(result == false)
+                context.Message = string.Format("Zone {0} has services with different BED, minimum BED has been selected", importedDataByZone.ZoneName);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

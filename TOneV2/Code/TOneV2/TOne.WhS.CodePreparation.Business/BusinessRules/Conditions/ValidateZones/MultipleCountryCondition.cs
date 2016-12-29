@@ -19,9 +19,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             ZoneToProcess zone = context.Target as ZoneToProcess;
-
             bool result = true;
             bool resultOfCodeToAdd = true;
             bool resultOfCodeToMove = true;
@@ -68,10 +66,14 @@ namespace TOne.WhS.CodePreparation.Business
 
 
             if (firstCodeToAddCountryId != null && firstCodeToMoveCountryId != null && firstCodeToCloseCountryId != null)
-                result = (firstCodeToAddCountryId  == firstCodeToCloseCountryId) && (firstCodeToAddCountryId == firstCodeToMoveCountryId);
-
-            return resultOfCodeToAdd && resultOfCodeToMove && resultOfCodeToClose && result;
-        
+                result = (firstCodeToAddCountryId == firstCodeToCloseCountryId) && (firstCodeToAddCountryId == firstCodeToMoveCountryId);
+          
+            bool finalResult = resultOfCodeToAdd && resultOfCodeToMove && resultOfCodeToClose && result;
+            
+            if (finalResult == false)
+                context.Message = string.Format("Zone {0} has multiple codes that belong to different countries", zone.ZoneName);
+           
+            return finalResult;
         }
 
         public override string GetMessage(IRuleTarget target)

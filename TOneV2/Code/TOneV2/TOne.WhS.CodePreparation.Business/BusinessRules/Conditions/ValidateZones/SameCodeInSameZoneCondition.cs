@@ -21,15 +21,33 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
 
-            if (zoneToProcess.CodesToAdd.GroupBy(x => x.Code).Any(x => x.Count() > 1))
-                return false;
+            foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
+            {
+                if (zoneToProcess.CodesToAdd.FindAllRecords(item => item.Code == codeToAdd.Code).Count() > 1)
+                {
+                    context.Message = string.Format("Zone {0} has a duplicate code {1}", zoneToProcess.ZoneName, codeToAdd.Code);
+                    return false;
+                }
+            }
 
-            if (zoneToProcess.CodesToClose.GroupBy(x => x.Code).Any(x => x.Count() > 1))
-                return false;
+            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+            {
+                if (zoneToProcess.CodesToClose.FindAllRecords(item => item.Code == codeToClose.Code).Count() > 1)
+                {
+                    context.Message = string.Format("Zone {0} has a duplicate code {1}", zoneToProcess.ZoneName, codeToClose.Code);
+                    return false;
+                }
+            }
 
-            if (zoneToProcess.CodesToMove.Any(x => x.ZoneName.Equals(x.OldZoneName, StringComparison.InvariantCultureIgnoreCase)))
-                return false;
-
+            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+            {
+                if (codeToMove.ZoneName.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    context.Message = string.Format("Zone {0} has a duplicate code {1}", zoneToProcess.ZoneName, codeToMove.Code);
+                    return false;
+                }
+            }
+          
             return true;
         }
 

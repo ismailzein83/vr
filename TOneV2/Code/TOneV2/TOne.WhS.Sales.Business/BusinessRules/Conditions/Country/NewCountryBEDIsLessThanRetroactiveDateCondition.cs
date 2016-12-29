@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Sales.Business.BusinessRules
 {
@@ -19,7 +20,15 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 		{
 			var countryToAdd = context.Target as CustomerCountryToAdd;
 			IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
-			return (countryToAdd.BED >= ratePlanContext.RetroactiveDate);
+			var result = (countryToAdd.BED >= ratePlanContext.RetroactiveDate);
+
+            if(result == false)
+            {
+                CountryManager countryManager = new CountryManager();
+                context.Message = string.Format("BED '{0}' of Country '{1}' must be greater than or equal to the Retroactive date", countryToAdd.BED, countryManager.GetCountryName(countryToAdd.CountryId));
+            }
+
+            return result;
 		}
 
 		public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)

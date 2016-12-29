@@ -15,13 +15,15 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedCode importedCode = context.Target as ImportedCode;
-
+            bool result = true;
             if (importedCode.ChangeType == CodeChangeType.New || importedCode.ChangeType == CodeChangeType.Moved)
             {
-                return (Vanrise.Common.ExtensionMethods.VRLessThanOrEqual(DateTime.Today.Date, importedCode.BED));
+                result = Vanrise.Common.ExtensionMethods.VRLessThanOrEqual(DateTime.Today.Date, importedCode.BED);
+                if (result == false)
+                    context.Message = string.Format("Code {0} has been opened in a period less than system period", importedCode.Code);
             }
 
-            return true;
+            return result;
         }
 
 

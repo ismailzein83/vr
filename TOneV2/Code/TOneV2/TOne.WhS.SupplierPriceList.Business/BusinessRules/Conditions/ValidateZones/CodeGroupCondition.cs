@@ -19,7 +19,12 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedCode code = context.Target as ImportedCode;
-            return code.CodeGroup != null;
+            var result =  code.CodeGroup != null;
+
+            if(result == false)
+                context.Message = string.Format("Code {0} not assigned to a code group", code.Code);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

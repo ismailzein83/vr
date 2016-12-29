@@ -21,7 +21,12 @@ namespace TOne.WhS.SupplierPriceList.Business
                 return true;
 
             IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-            return !notImportedZone.EED.VRLessThanOrEqual(DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
+            var result = !notImportedZone.EED.VRLessThanOrEqual(DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
+
+            if (result == false)
+                context.Message = string.Format("Zone {0} has been closed in a period less than system period", notImportedZone.ZoneName);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

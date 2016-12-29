@@ -16,13 +16,17 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedZone importedZone = context.Target as ImportedZone;
+            bool result = true;
 
             if(importedZone.ChangeType == ZoneChangeType.New || importedZone.ChangeType == ZoneChangeType.Renamed)
             {
-                return (Vanrise.Common.ExtensionMethods.VRLessThanOrEqual(DateTime.Today.Date, importedZone.BED));
+                result = (Vanrise.Common.ExtensionMethods.VRLessThanOrEqual(DateTime.Today.Date, importedZone.BED));
+
+                if(result == false)
+                    context.Message = string.Format("Zone {0} has been opened in a period less than system period", importedZone.ZoneName);
             }
 
-            return true;
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

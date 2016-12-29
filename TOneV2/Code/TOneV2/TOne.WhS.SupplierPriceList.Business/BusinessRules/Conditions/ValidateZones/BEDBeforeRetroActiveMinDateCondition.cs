@@ -30,13 +30,20 @@ namespace TOne.WhS.SupplierPriceList.Business
 			foreach (var importedCode in zone.ImportedCodes)
 			{
 				if (importedCode.BED < minimumRetroActiveDate)
-					return false;
+                {
+                    context.Message = string.Format("Zone {0} has the code {1} with BED less than minimum retro active date", zone.ZoneName, importedCode.Code);
+                    return false;
+                }
+					
 			}
 
 			foreach (var importedNormalRate in zone.ImportedNormalRates)
 			{
 				if (importedNormalRate.BED < minimumRetroActiveDate)
-					return false;
+                {
+                    context.Message = string.Format("Zone {0} has a normal rate with BED less than minimum retro active date", zone.ZoneName);
+                    return false;
+                }
 			}
 
 			foreach (var importedOtherRate in zone.ImportedOtherRates)
@@ -46,7 +53,12 @@ namespace TOne.WhS.SupplierPriceList.Business
 					foreach (var otherRate in importedOtherRate.Value)
 					{
 						if (otherRate.BED < minimumRetroActiveDate)
-							return false;
+                        {
+                            RateTypeManager rateTypeManager = new RateTypeManager();
+                            string rateTypeName = rateTypeManager.GetRateTypeName(otherRate.RateTypeId.Value);
+                            context.Message = string.Format("Zone {0} has {1} rate with BED less than minimum retro active date", zone.ZoneName, rateTypeName);
+                            return false;
+                        }
 					}
 				}
 			}
@@ -58,11 +70,15 @@ namespace TOne.WhS.SupplierPriceList.Business
 					foreach (var serviceGroup in importedZoneServiceGroup.Value)
 					{
 						if (serviceGroup.BED < minimumRetroActiveDate)
-							return false;
+                        {
+                            ZoneServiceConfigManager serviceConfigManager = new ZoneServiceConfigManager();
+                            string serviceSymbol = serviceConfigManager.GetServiceSymbol(serviceGroup.ServiceId);
+                            context.Message = string.Format("Zone {0} has the service {1} with BED less than minimum retro active date", zone.ZoneName, serviceSymbol);
+                            return false;
+                        }
 					}
 				}
 			}
-
 
 			return true;
 		}

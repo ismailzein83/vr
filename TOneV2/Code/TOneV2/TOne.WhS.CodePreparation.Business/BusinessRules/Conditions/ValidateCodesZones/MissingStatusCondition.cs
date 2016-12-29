@@ -18,8 +18,12 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedCode importedData = context.Target as ImportedCode;
+            bool result = importedData.Status != null;
 
-            return importedData.Status != null;
+            if(result == false)
+                context.Message = string.Format("Code {0} has a missing status", importedData.Code);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

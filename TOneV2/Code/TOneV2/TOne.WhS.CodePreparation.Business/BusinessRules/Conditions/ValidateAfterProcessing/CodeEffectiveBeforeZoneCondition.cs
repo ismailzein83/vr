@@ -19,26 +19,23 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             ZoneToProcess zone = context.Target as ZoneToProcess;
 
-            if (zone.CodesToAdd != null)
+            foreach (CodeToAdd codeToAdd in zone.CodesToAdd)
             {
-                foreach (CodeToAdd codeToAdd in zone.CodesToAdd)
+                if (zone.ExistingZones.Any(item => item.BED > codeToAdd.BED))
                 {
-                    if (zone.ExistingZones.Any(item => item.BED > codeToAdd.BED))
-                        return false;
+                    context.Message = string.Format("Zone {0} has the code {1} with effective date less than the effective date of the zone", zone.ZoneName, codeToAdd.Code);
+                    return false;
                 }
-
             }
 
-
-            if (zone.CodesToMove != null)
+            foreach (CodeToMove codeToMove in zone.CodesToMove)
             {
-                foreach (CodeToMove codeToMove in zone.CodesToMove)
+                if (zone.ExistingZones.Any(item => item.BED > codeToMove.BED))
                 {
-                    if (zone.ExistingZones.Any(item => item.BED > codeToMove.BED))
-                        return false;
+                    context.Message = string.Format("Zone {0} has a code {1} with effective date less than the effective date of the zone", zone.ZoneName, codeToMove.Code);
+                    return false;
                 }
             }
 
