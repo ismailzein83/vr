@@ -19,6 +19,7 @@ namespace Vanrise.BusinessProcess
 
         public IRuleTarget Target { get; set; }
 
+        public string Message { get; set; }
 
         public T GetExtension<T>() where T : class
         {

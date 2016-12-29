@@ -62,9 +62,10 @@ namespace Vanrise.BusinessProcess.WFActivities
                     if (rule.Condition.Validate(validationContext))
                         continue;
 
+
                     BusinessRuleActionExecutionContext actionContext = new BusinessRuleActionExecutionContext() { Target = target };
                     rule.Action.Execute(actionContext);
-                    violatedBusinessRulesByTarget.Add(new BPViolatedRule() { Target = target, Rule = rule });
+                    violatedBusinessRulesByTarget.Add(new BPViolatedRule() { Target = target, Rule = rule, Message = validationContext.Message });
                     if (actionContext.StopExecution)
                     {
                         stopExecutionFlag = true;
@@ -86,7 +87,7 @@ namespace Vanrise.BusinessProcess.WFActivities
                     TargetKey = violatedRule.Target.Key,
                     TargetType = violatedRule.Target.TargetType,
                     Severity = violatedRule.Rule.Action.GetSeverity(),
-                    Message = violatedRule.Rule.Condition.GetMessage(violatedRule.Target)
+                    Message = violatedRule.Message
                 };
 
                 messages.Add(msg);

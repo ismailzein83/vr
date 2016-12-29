@@ -9,7 +9,7 @@ namespace Vanrise.BusinessProcess.Entities
     public interface IBusinessRuleConditionValidateContext
     {
         IRuleTarget Target { get; set; }
-
+        string Message { get; set; }
         T GetExtension<T>() where T : class;
     }
 }
