@@ -46,16 +46,19 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.disabledZone = true;
+            $scope.disabledZone = function () {
+                if ($scope.zoneValue == undefined)
+                    return true;
+                if (UtilsService.getItemIndexByStringVal($scope.zones, $scope.zoneValue, "zone", true) != -1)
+                    return true;
+                return false;
 
-            $scope.onZoneValueChange = function (value) {
-                $scope.disabledZone = (value == undefined) || UtilsService.getItemIndexByStringVal($scope.zones, value, "zone", true) != -1;
             };
 
+           
             $scope.addZoneValue = function () {
                 $scope.zones.push({ zone: $scope.zoneValue });
                 $scope.zoneValue = undefined;
-                $scope.disabledZone = true;
             };
         }
 
