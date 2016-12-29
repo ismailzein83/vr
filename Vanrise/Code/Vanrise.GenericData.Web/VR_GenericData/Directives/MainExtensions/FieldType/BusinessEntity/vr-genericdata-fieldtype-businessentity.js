@@ -41,17 +41,17 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.onSelectorFilterEditorDirectiveReady = function (api) {
                     selectorFilterEditorAPI = api;
-                    selectorFilterEditorReadyDeferred.resolve();
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingSelectorFilter = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, undefined, setLoader, selectorFilterEditorReadyDeferred);
                 };
                 $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (value) {
-
                     if (value != undefined && value.SelectorFilterEditor != undefined) {
-                        selectorFilterEditorReadyDeferred.promise.then(function () {
-                            var setLoader = function (value) {
-                                $scope.scopeModel.isLoadingSelectorFilter = value;
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, undefined, setLoader, selectedBusinessEntityDefinitionReadyPromiseDeferred);
-                        });
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingSelectorFilter = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, undefined, setLoader, selectedBusinessEntityDefinitionReadyPromiseDeferred);
                     }
                 }
                 $scope.scopeModel.onSelectorReady = function (api) {
@@ -93,6 +93,7 @@
                             var loadSelectorFilterEditorPromiseDeferred = UtilsService.createPromiseDeferred();
                             UtilsService.waitMultiplePromises([selectorFilterEditorReadyDeferred.promise, selectedBusinessEntityDefinitionReadyPromiseDeferred.promise])
                                 .then(function () {
+                                    selectorFilterEditorReadyDeferred = undefined;
                                     selectedBusinessEntityDefinitionReadyPromiseDeferred = undefined;
                                     var directivePayload = { filterObject: payload.SelectorFilter };
                                     VRUIUtilsService.callDirectiveLoad(selectorFilterEditorAPI, directivePayload, loadSelectorFilterEditorPromiseDeferred);
