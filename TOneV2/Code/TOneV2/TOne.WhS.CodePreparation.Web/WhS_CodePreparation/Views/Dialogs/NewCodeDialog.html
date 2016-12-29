@@ -1,20 +1,28 @@
-﻿<div vr-modalcontent ng-controller="WhS_CP_NewCodeDialogController" vr-loader="isGettingData" width="'60%'">
+﻿<div vr-modalcontent ng-controller="WhS_CP_NewCodeDialogController" vr-loader="isGettingData">
     <vr-modalbody>
         <vr-form name="formCodeDialog">
             <vr-row removeline>
-                <vr-columns width="1/3row">
+
+                <vr-columns width="1/2row">
                     <vr-label>Code</vr-label>
-                    <vr-textbox value="codeValue" minvalue="0" decimalprecision="0" type="number" onvaluechanged="onCodeValueChange"></vr-textbox>                  
+                    <vr-textbox value="codeValue" minvalue="0" decimalprecision="0" type="number" onvaluechanged="onCodeValueChange"></vr-textbox>
+                    <!--<vr-validator validate="ValidateCodes()">
+
+                    </vr-validator>-->
                 </vr-columns>
-                <vr-columns withemptyline width="1/2row" haschildcolumns>
+                <vr-columns withemptyline width="1/2row">
                     <vr-button type="Add" data-onclick="addCodeValue" vr-disabled="disabledCode" standalone></vr-button>
                 </vr-columns>
+
             </vr-row>
+
             <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-validator validate="validateCodes()">
-                        <vr-datalist maxitemsperrow="4" datasource="codes" autoremoveitem="true" enabletitle>
-                            {{dataItem.code}}
+                        <vr-datalist maxitemsperrow="3" datasource="codes" autoremoveitem="true">
+                            <vr-validator validate="dataItem.message" normalheight>
+                                {{dataItem.code}}
+                            </vr-validator>
                         </vr-datalist>
                     </vr-validator>
                 </vr-columns>

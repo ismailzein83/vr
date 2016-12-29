@@ -99,7 +99,6 @@
                                     ctrl.value = undefined;
                                     $scope.$apply();
                                 });
-
                             }
                             if (!newValue == "") {
 
@@ -132,6 +131,7 @@
                                 if (isNaN(newValue) && (newValue != '-') && (newValue != '.')) {
                                     ctrl.value = oldValue;
                                     retrunedValue = undefined;
+                                    return;
                                 }
 
 
