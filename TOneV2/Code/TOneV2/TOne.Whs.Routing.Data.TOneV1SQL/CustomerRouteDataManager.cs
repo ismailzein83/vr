@@ -249,7 +249,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             DateTime startDate = DateTime.Now;
             ExecuteNonQueryText(query, null);
             DateTime endDate = DateTime.Now;
-            trackStep(string.Format("Building Indexes for {0} table took {1} minutes", obejctName, (endDate - startDate).TotalMinutes));
+            trackStep(string.Format("Building Indexes for {0} table took {1}", obejctName, endDate.Subtract(startDate)));
         }
 
         #region Queries
@@ -265,7 +265,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         const string query_DropCodeMatchTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch' AND TABLE_SCHEMA = 'dbo')
                                                       drop table dbo.CodeMatch;";
 
-        const string query_CreateZoneRateIndexes =  @"  CREATE NONCLUSTERED INDEX [IX_ZoneRates_ServicesFlag] ON [dbo].[ZoneRates_Temp]
+        const string query_CreateZoneRateIndexes = @"  CREATE NONCLUSTERED INDEX [IX_ZoneRates_ServicesFlag] ON [dbo].[ZoneRates_Temp]
                                                         (
                                                             [ServicesFlag] ASC
                                                         )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];
@@ -279,7 +279,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                             [CustomerID],[ServicesFlag],[ProfileId],[ActiveRate],[IsTOD]
                                                         )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [{0}];";
 
-        const string query_CreateCodeMatchIndexes=@"  CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Code] ON [dbo].[CodeMatch_Temp] 
+        const string query_CreateCodeMatchIndexes = @"  CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Code] ON [dbo].[CodeMatch_Temp] 
                                                       (
 	                                                      [Code] ASC
                                                       );

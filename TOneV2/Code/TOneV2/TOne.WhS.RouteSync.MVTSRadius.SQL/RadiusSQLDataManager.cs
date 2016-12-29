@@ -216,12 +216,10 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         {
             _radiusConnectionString = radiusConnectionString;
         }
-
         protected override string GetConnectionString()
         {
             return _radiusConnectionString.ConnectionString;
         }
-
         public void ApplyRadiusRoutesForDB(BaseBulkInsertInfo radiusRouteStreamBulkInsertInfo, BaseBulkInsertInfo radiusRoutePercentageStreamBulkInsertInfo)
         {
             Parallel.For(0, 2, (i) =>
@@ -233,7 +231,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
                 }
             });
         }
-
         public void PrepareTables()
         {
             StringBuilder query = new StringBuilder();
@@ -243,16 +240,19 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             query.AppendLine(query_CreateRadiusRoutePercentageTempTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
-
         public void SwapTables()
         {
             StringBuilder query = new StringBuilder();
+
+            query.AppendLine(query_CreateIndexes);
             query.AppendLine(query_SwapRadiusRouteTable);
             query.AppendLine(query_SwapRadiusRoutePercentageTable);
+
             ExecuteNonQueryText(query.ToString(), null);
         }
 
         #region Constants
+
         const string query_SwapRadiusRouteTable = @"IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'dbo.[RadiusRoute_Old]') AND s.type in (N'U'))
 		                                            begin
 			                                            DROP TABLE [dbo].[RadiusRoute_Old]
@@ -303,7 +303,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 	                                                                [Statistics] [int] NOT NULL) 
                                                                     ON [PRIMARY]";
 
-
         const string query_CreateRadiusRoutePercentageTable = @"IF NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'dbo.[RadiusRoutePercentage]') AND s.type in (N'U'))
                                                                   begin                                                                                              CREATE TABLE [dbo].[RadiusRoutePercentage](
 	                                                                [Customer] [varchar](50) NOT NULL,
@@ -323,6 +322,21 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 	                                                          [IsPercentage] [varchar](1) NOT NULL) 
                                                               ON [PRIMARY]
                                                           end";
+
+        const string query_CreateIndexes = @"
+                            CREATE  nonCLUSTERED INDEX customercode ON dbo.RadiusRoute_Temp
+	                            (
+	                            Customer,
+	                            Code
+	                            ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+                           CREATE  NonCLUSTERED INDEX CustomerCode ON dbo.RadiusRoutePercentage_Temp
+	                            (
+	                            Customer,
+	                            Code
+	                            ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]";
+
         #endregion
+
     }
 }

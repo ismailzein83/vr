@@ -85,12 +85,22 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
             short index = 0;
             foreach (var optionString in options)
             {
+
                 string[] supplierOptionEntries = optionString.Split(',');
+                string percentage = supplierOptionEntries.Length < 3 ? supplierOptionEntries[2] : null;
+                decimal? calculatedPercentage = null;
+                if (!string.IsNullOrEmpty(percentage))
+                {
+                    decimal tempPercentage = Convert.ToDecimal(percentage);
+                    if (tempPercentage > 0)
+                        calculatedPercentage = tempPercentage;
+                }
+
                 SupplierOption supplierOption = new SupplierOption
                 {
                     SupplierId = supplierOptionEntries[0],
                     IsLoss = supplierOptionEntries.Length > 1 && supplierOptionEntries[1].Equals("1"),
-                    Percentage = supplierOptionEntries.Length < 3 || string.IsNullOrEmpty(supplierOptionEntries[2]) ? default(decimal?) : Convert.ToDecimal(supplierOptionEntries[2]),
+                    Percentage = calculatedPercentage,
                     Priority = index++
                 };
 

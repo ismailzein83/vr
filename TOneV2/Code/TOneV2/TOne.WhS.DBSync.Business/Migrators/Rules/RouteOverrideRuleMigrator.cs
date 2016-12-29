@@ -367,7 +367,7 @@ namespace TOne.WhS.DBSync.Business
             return sourceRule.SupplierOptions.Select(option => new RouteOptionSettings
             {
                 SupplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId,
-                Percentage = (decimal?)option.Percentage
+                Percentage = option.Percentage
             }).ToList();
         }
     }
