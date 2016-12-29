@@ -19,28 +19,36 @@ namespace TestRuntime
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
 
+            long startingId;
+            int batchSize = 50000;
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDR");
+
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, batchSize, out startingId);
+
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
 
             IDataReader reader = importedData.Reader;
 
+            long currentCDRId = startingId;
             int rowCount = 0;
             while (reader.Read())
             {
                 dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+                cdr.Id = currentCDRId;
                 cdr.SwitchId = 5;
                 cdr.IDonSwitch = Utils.GetReaderValue<long>(reader, "IDonSwitch");
                 cdr.Tag = reader["Tag"] as string;
                 cdr.AttemptDateTime = (DateTime)reader["AttemptDateTime"];
-                cdr.AlertDateTime = Utils.GetReaderValue<DateTime?>(reader, "AlertDateTime");
-                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "ConnectDateTime");
-                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+                cdr.AlertDateTime = Utils.GetReaderValue<DateTime>(reader, "AlertDateTime");
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime>(reader, "ConnectDateTime");
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime>(reader, "DisconnectDateTime");
                 cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, "DurationInSeconds");
                 cdr.InTrunk = reader["IN_TRUNK"] as string;
                 cdr.InCircuit = reader["IN_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["IN_CIRCUIT"]) : default(Int64);
                 cdr.InCarrier = reader["IN_CARRIER"] as string;
                 cdr.InIP = reader["IN_IP"] as string;
                 cdr.OutTrunk = reader["OUT_TRUNK"] as string;
-                cdr.OutCircuit = reader["OUT_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["OUT_CIRCUIT"]) : default(Int64); 
+                cdr.OutCircuit = reader["OUT_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["OUT_CIRCUIT"]) : default(Int64);
                 cdr.OutCarrier = reader["OUT_CARRIER"] as string;
                 cdr.OutIP = reader["OUT_IP"] as string;
 
@@ -52,12 +60,15 @@ namespace TestRuntime
                 cdr.CauseTo = reader["CAUSE_TO"] as string;
                 cdr.IsRerouted = reader["IsRerouted"] != DBNull.Value ? ((reader["IsRerouted"] as string) == "Y") : false;
                 cdr.CDPNOut = reader["CDPNOut"] as string;
+                cdr.CDPNIn = reader["CDPNIn"] as string;
                 cdr.SIP = reader["SIP"] as string;
 
                 cdrs.Add(cdr);
                 importedData.LastImportedId = reader["CDRID"];
+
+                currentCDRId++;
                 rowCount++;
-                if (rowCount == 50000)
+                if (rowCount == batchSize)
                     break;
 
             }
