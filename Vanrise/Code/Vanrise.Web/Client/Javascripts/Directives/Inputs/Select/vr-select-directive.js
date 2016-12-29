@@ -675,18 +675,16 @@
 
                         ctrl.search = function () {
                             ctrl.setdatasource([]);
-                            if (!ctrl.isRemoteLoad()) return;
+                            if (!ctrl.isRemoteLoad()) return; console.log(iAttrs.limitcharactercount);
                             if (ctrl.filtername.length > (iAttrs.limitcharactercount - 1) && typeof ctrl.datasource !== 'undefined' && ctrl.datasource != null) {
-                                if (ctrl.datasource(ctrl.filtername).then != undefined) {
-
+                                var promise = ctrl.datasource(ctrl.filtername);
+                                if (promise != null && promise.then != undefined) {
                                     ctrl.showloading = true;
-                                    ctrl.datasource(ctrl.filtername).then(function (items) {
-                                        ctrl.setdatasource(items);
+                                    promise.then(function (items) {
+                                        ctrl.setdatasource(items);                                      
+                                    }).finally(function () {
                                         ctrl.showloading = false;
-                                    }, function (msg) {
-                                        console.log(msg);
                                     });
-
                                 }
 
                             }
