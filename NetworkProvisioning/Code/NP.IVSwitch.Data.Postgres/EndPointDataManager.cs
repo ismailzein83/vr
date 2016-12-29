@@ -125,11 +125,12 @@ namespace NP.IVSwitch.Data.Postgres
             return (recordsEffected > 0);
         }
 
-        public bool SipInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId)
+        public bool SipInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId, string carrierAccountName)
         {
             insertedId = -1;
             int groupId = GetGroupId(endPoint, endPointInfoList);
-            int? endPointId = ExecuteSipInsert(endPoint, groupId);
+            AccessList accessList = PrepareDataForInsert(endPoint.AccountId, groupId, carrierAccountName);
+            int? endPointId = ExecuteSipInsert(endPoint, groupId, accessList);
             if (!endPointId.HasValue) return false;
             insertedId = Convert.ToInt32(endPointId);
             return true;
@@ -152,9 +153,10 @@ namespace NP.IVSwitch.Data.Postgres
         }
         public bool Insert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
         {
+            List<EndPointInfo> joinedEndPoint = userEndPoints.Concat(aclEndPoints).ToList();
             if (endPoint.EndPointType == UserType.ACL)
-                return AclInsert(endPoint, userEndPoints, aclEndPoints, out insertedId, carrierAccountName);
-            return SipInsert(endPoint, userEndPoints, out insertedId);
+                return AclInsert(endPoint, joinedEndPoint, aclEndPoints, out insertedId, carrierAccountName);
+            return SipInsert(endPoint, joinedEndPoint, out insertedId, carrierAccountName);
         }
 
         public bool Update(EndPoint endPoint)
@@ -167,13 +169,13 @@ namespace NP.IVSwitch.Data.Postgres
         #endregion
 
         #region private functions
-        private int? ExecuteSipInsert(EndPoint endPoint, int groupId)
+        private int? ExecuteSipInsert(EndPoint endPoint, int groupId, AccessList accessList)
         {
             String cmdText = @"INSERT INTO users(account_id,description,group_id, 
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, max_call_dura,rtp_mode,domain_id,
-                                    sip_login,sip_password, tech_prefix,type_id)
+                                    sip_login,sip_password, tech_prefix,type_id, tariff_id,route_table_id)
 	                             SELECT  @account_id, @description, @group_id,   @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
-                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id,@sip_login, @sip_password , @tech_prefix,@type_id
+                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id,@sip_login, @sip_password , @tech_prefix,@type_id,@tariff_id,@route_table_id
                                    WHERE   NOT EXISTS(SELECT 1 FROM  users WHERE (domain_id=@domain_id and sip_login=@sip_login and tech_prefix=@tech_prefix))
  	                             returning  user_id;";
 
@@ -190,18 +192,20 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
                 cmd.Parameters.AddWithValue("@rtp_mode", (int)endPoint.RtpMode);
                 cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
-                var prmSipLogin = new Npgsql.NpgsqlParameter("@sip_login", DbType.String)
+                var prmSipLogin = new NpgsqlParameter("@sip_login", DbType.String)
                 {
                     Value = CheckIfNull(endPoint.SipLogin)
                 };
                 cmd.Parameters.Add(prmSipLogin);
-                var prmPassword = new Npgsql.NpgsqlParameter("@sip_password", DbType.String)
+                var prmPassword = new NpgsqlParameter("@sip_password", DbType.String)
                 {
                     Value = CheckIfNull(endPoint.SipPassword)
                 };
                 cmd.Parameters.Add(prmPassword);
                 cmd.Parameters.AddWithValue("@tech_prefix", ".");
                 cmd.Parameters.AddWithValue("@type_id", (int)endPoint.EndPointType);
+                cmd.Parameters.AddWithValue("@route_table_id", accessList.RouteTableId);
+                cmd.Parameters.AddWithValue("@tariff_id", accessList.TariffId);
             }
                 );
         }
@@ -269,7 +273,7 @@ namespace NP.IVSwitch.Data.Postgres
         }
         private AccessList CheckAccessListExistense(int accountId, int groupId)
         {
-            string query = @"select route_table_id,tariff_id,user_id from access_list
+            string query = @"select route_table_id,tariff_id,user_id from users
                              where account_id =  @account_id and group_id = @group_id";
             List<AccessList> accessLists = GetItemsText(query, AccessListMapper, cmd =>
              {
@@ -298,7 +302,6 @@ namespace NP.IVSwitch.Data.Postgres
             tariffDataManager.CreateTariffTable(insertedTariffId);
 
 
-            int insertedRouteId = -1;
             String cmdText2 = @"INSERT INTO route_tables(route_table_name,description)
                                SELECT @route_table_name, @description
   	                           returning  route_table_id;";
@@ -312,7 +315,7 @@ namespace NP.IVSwitch.Data.Postgres
 
             if (routeId == null) return null;
 
-            insertedRouteId = Convert.ToInt32(routeId);
+            var insertedRouteId = Convert.ToInt32(routeId);
             RouteTableDataManager routeTableDataManager = new RouteTableDataManager(IvSwitchSync.RouteConnectionString, IvSwitchSync.OwnerName);
             routeTableDataManager.CreateRouteTable(insertedRouteId);
 
@@ -322,18 +325,9 @@ namespace NP.IVSwitch.Data.Postgres
                 TariffId = insertedTariffId
             };
         }
-        private void MapEnum(EndPoint endPoint, out int currentState, out int rtpMode)
-        {
-            var currentStateValue = Enum.Parse(typeof(State), endPoint.CurrentState.ToString());
-            currentState = (int)currentStateValue;
-            var rtpModeValue = Enum.Parse(typeof(RtpMode), endPoint.RtpMode.ToString());
-            rtpMode = (int)rtpModeValue;
-        }
         private Object CheckIfNull(String parameter)
         {
-
             return (String.IsNullOrEmpty(parameter)) ? (Object)DBNull.Value : parameter;
-
         }
         private int GetGroupId(EndPoint endPoint, List<EndPointInfo> endPointInfoList)
         {
