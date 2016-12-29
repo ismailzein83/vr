@@ -95,7 +95,7 @@
                                 .then(function () {
                                     selectorFilterEditorReadyDeferred = undefined;
                                     selectedBusinessEntityDefinitionReadyPromiseDeferred = undefined;
-                                    var directivePayload = { filterObject: payload.SelectorFilter };
+                                    var directivePayload = { beFilter: payload.SelectorFilter };
                                     VRUIUtilsService.callDirectiveLoad(selectorFilterEditorAPI, directivePayload, loadSelectorFilterEditorPromiseDeferred);
                                 });
 

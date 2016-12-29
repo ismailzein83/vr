@@ -147,7 +147,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                     $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
                                         var payload = {
                                             businessEntityDefinitionId: fieldType.BusinessEntityDefinitionId,
-                                            fieldTitle: $scope.scopeModel.fieldTitle
+                                            fieldTitle: $scope.scopeModel.fieldTitle,
+                                            beFilter: fieldType.SelectorFilter
                                         };
                                         if (fieldValue != undefined) {
                                             payload.selectedIds = ($attrs.selectionmode == "dynamic" && missingGroupSelectorUIControl) ? fieldValue.Values : fieldValue;
