@@ -84,15 +84,25 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                 var api = {};
 
                 api.load = function (payload) {
-
                     var selectedIds;
 
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        if(payload.beFilter != undefined)
+                        {
+                            if (filter == undefined)
+                                filter = {};
+                            if (filter.Filters == undefined)
+                              filter.Filters = [];
+                            filter.Filters.push({
+                                $type: "Retail.BusinessEntity.Business.AccountConditionAccountFilter,Retail.BusinessEntity.Business",
+                                AccountCondition: payload.beFilter
+                            });
+                        }
                     }
-
+                    // check BEDefinitionID name
                     if (selectedIds != undefined) {
                         var selectedAccountIds = [];
                         if (attrs.ismultipleselection != undefined)

@@ -123,7 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountBalanceEnabledAccountFilter.cs" />
+    <Compile Include="Filters\IAccountFilter\AccountBalanceEnabledAccountFilter.cs" />
     <Compile Include="AccountBEManager.cs" />
     <Compile Include="AccountConditionManager.cs" />
     <Compile Include="AccountBEDefinitionManager.cs" />
@@ -150,6 +150,7 @@
     <Compile Include="Extensions\AgentSynchronizer.cs" />
     <Compile Include="Extensions\SubscriberAccountBalanceManager.cs" />
     <Compile Include="Extensions\SubscriberAccountBalanceSetting.cs" />
+    <Compile Include="Filters\IAccountFilter\AccountConditionAccountFilter.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionFilter.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionViewFilter.cs" />
     <Compile Include="Filters\PackageDefinitionServiceTypeFilter.cs" />
