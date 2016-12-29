@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailBeAccountactiondefinitions", ["UtilsService", "VRNotificationService", "Retail_BE_AccountBEDefinitionService",
+app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VRNotificationService", "Retail_BE_AccountBEDefinitionService",
     function (UtilsService, VRNotificationService, Retail_BE_AccountBEDefinitionService) {
 
         var directiveDefinitionObject = {
@@ -21,7 +21,7 @@ app.directive("retailBeAccountactiondefinitions", ["UtilsService", "VRNotificati
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/Templates/AccountActionDefinitionsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/Templates/AccountActionDefinitionsManagementTemplate.html"
 
         };
 

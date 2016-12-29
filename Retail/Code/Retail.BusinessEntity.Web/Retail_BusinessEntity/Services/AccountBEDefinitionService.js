@@ -14,7 +14,7 @@
                 modalScope.onColumnDefinitionAdded = onColumnDefinitionAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountGridDefinition/GridColumnDefinitionEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/GridColumnDefinitionEditor.html', null, modalSettings);
         };
         function editGridColumnDefinition(columnDefinition, onColumnDefinitionUpdated) {
 
@@ -28,7 +28,7 @@
                 modalScope.onColumnDefinitionUpdated = onColumnDefinitionUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountGridDefinition/GridColumnDefinitionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/GridColumnDefinitionEditor.html', parameters, modalSettings);
         }
 
         function addAccountViewDefinition(onAccountViewDefinitionAdded) {
@@ -39,7 +39,7 @@
                 modalScope.onAccountViewDefinitionAdded = onAccountViewDefinitionAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountViewDefinition/AccountViewDefinitionEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/Templates/AccountViewDefinitionEditor.html', null, modalSettings);
 
         }
         function editAccountViewDefinition(accountViewDefinitionEntity, onAccountViewDefinitionUpdated) {
@@ -54,7 +54,7 @@
                 modalScope.onAccountViewDefinitionUpdated = onAccountViewDefinitionUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountViewDefinition/AccountViewDefinitionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/Templates/AccountViewDefinitionEditor.html', parameters, modalSettings);
         }
 
         function addAccountActionDefinition(onAccountActionDefinitionAdded) {
@@ -65,7 +65,7 @@
                 modalScope.onAccountActionDefinitionAdded = onAccountActionDefinitionAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountActionDefinition/AccountActionDefinitionEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/Templates/AccountActionDefinitionEditor.html', null, modalSettings);
 
         }
         function editAccountActionDefinition(accountActionDefinitionEntity, onAccountActionDefinitionUpdated) {
@@ -80,7 +80,7 @@
                 modalScope.onAccountActionDefinitionUpdated = onAccountActionDefinitionUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountDefinition/AccountActionDefinition/AccountActionDefinitionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/Templates/AccountActionDefinitionEditor.html', parameters, modalSettings);
         }
 
         return {
