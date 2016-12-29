@@ -28,7 +28,7 @@ namespace Retail.BusinessEntity.Entities
 
         public override string SelectorUIControl
         {
-            get { return ""; }
+            get { return "retail-be-account-selector"; }
         }
 
         public Guid StatusGroupId { get; set; }

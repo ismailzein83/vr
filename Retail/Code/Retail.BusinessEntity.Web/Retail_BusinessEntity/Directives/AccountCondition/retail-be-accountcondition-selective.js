@@ -59,7 +59,7 @@
                     var accountCondition;
 
                     if (payload != undefined) {
-                        accountCondition = payload.filterObject;
+                        accountCondition = payload.beFilter;
                     }
 
                     var getAccountConditionTemplateConfigsPromise = getAccountConditionTemplateConfigs();
