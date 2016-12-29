@@ -228,8 +228,12 @@ e22337
 f79624
 9e1f63
 01a4b5*/
-.modal-header {    
+.vr-modal-header {    
     background-color: #20407D !important;
+    color: #FFF;
+}
+.vr-modal-header-inback {    
+    background-color: #6b7892 !important;
     color: #FFF;
 }
 .action-bar {

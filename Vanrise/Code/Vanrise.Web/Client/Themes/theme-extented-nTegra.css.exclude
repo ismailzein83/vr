@@ -154,8 +154,12 @@
   background: -moz-linear-gradient(bottom,#BCBCBC,#496796); /*Fx 3.6-15*/
   background: linear-gradient(to bottom, #BCBCBC, #496796); /*Standard*/
 }
-.modal-header {
+.vr-modal-header {
     background-color: #2E509B !important;
+    color: #FFF;
+}
+.vr-modal-header-inback {    
+    background-color: #6b7892 !important;
     color: #FFF;
 }
 .action-bar {

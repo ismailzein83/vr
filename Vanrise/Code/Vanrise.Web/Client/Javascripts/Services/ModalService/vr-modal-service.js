@@ -81,7 +81,9 @@
 
             modalScope.$on('modal.hide.before', function () {
                 if ($('.modal-header').eq($('.modal-dialog').length - 2).attr('readonly') == undefined) {
-                    $('.modal-header').eq($('.modal-dialog').length - 2).addClass('modal-header');
+                    $('.modal-header').eq($('.modal-dialog').length - 2).removeClass('vr-modal-header-inback');
+                    $('.modal-header').eq($('.modal-dialog').length - 2).addClass('vr-modal-header');
+
                 }
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });

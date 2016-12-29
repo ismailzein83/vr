@@ -2569,9 +2569,8 @@ vr-tab vr-columns[tabs="true"] > div[class^="col"] {
 /*end of vr-tabs*/
 
 vr-listitem div[class^="col"] {
-    padding: 1px;
+    padding: 5px;
 }
-
 
 /*start of vr-cellviewer*/
 .vr-cellviewer-watermark {
@@ -2867,6 +2866,7 @@ vr-validator[vr-input] > div:nth-child(1){
     top:10px;
     right:5px
 }
+
 @media (min-width: 768px) {
     .vr-modal-sm {
         width: 70%;

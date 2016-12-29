@@ -45,15 +45,14 @@ app.directive('vrModalcontent', [function () {
              if ($('.modal-dialog').length > 0) {
                 style = "top:" + ($('.modal-dialog').length) * 10 + "px; left:" + ($('.modal-dialog').length) * 10 + "px;";
                 if ($('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly') == undefined) {
-                    $('.modal-header').eq($('.modal-dialog').length - 1).css({
-                        backgroundColor: "#6b7892"
-                    });
+                    $('.modal-header').eq($('.modal-dialog').length - 1).removeClass('vr-modal-header');
+                    $('.modal-header').eq($('.modal-dialog').length - 1).addClass('vr-modal-header-inback');
                 }
                
             }
              var newElement = '<div class="modal-dialog ' + classmodal + '" ' + resClass + ' style="' + style + '" >'
                                   + '  <div class="modal-content" >'
-                                    + '    <div class="modal-header" ng-show="title">'
+                                    + '    <div class="modal-header vr-modal-header" ng-show="title">'
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'
                                         + '    <h5 class="modal-title" ng-bind="title"></h5>'
                                         + '</div>'
