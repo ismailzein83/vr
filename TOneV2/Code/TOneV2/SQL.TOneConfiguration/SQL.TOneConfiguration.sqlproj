@@ -509,6 +509,7 @@
     <None Include="VR_NumberingPlan.CodeGroup.sql" />
     <None Include="common.Currency.sql" />
     <None Include="INSOFT.PostDeployment.sql" />
+    <None Include="User_Guides.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
