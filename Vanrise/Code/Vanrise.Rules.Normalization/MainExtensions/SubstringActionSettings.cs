@@ -15,18 +15,19 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 
         public override string GetDescription()
         {
-            return string.Format("Substring: Start Index = {0}, Length = {1}", StartIndex-1, Length);
+            return string.Format("Substring: Start Index = {0}, Length = {1}", StartIndex, Length);
         }
 
         public override void Execute(INormalizeNumberActionContext context, NormalizeNumberTarget target)
         {
             if (this.StartIndex >= 1 && this.StartIndex <= target.PhoneNumber.Length)
             {
-                int maxValidSubStringLength = target.PhoneNumber.Length - this.StartIndex + 1; // +1 to include the first number in the max valid length
-                
+                var startIndex = this.StartIndex - 1;
+                int maxValidSubStringLength = target.PhoneNumber.Length - startIndex;
+
                 target.PhoneNumber = (this.Length.HasValue && this.Length.Value <= maxValidSubStringLength) ?
-                    target.PhoneNumber.Substring(this.StartIndex - 1, this.Length.Value) :
-                    target.PhoneNumber = target.PhoneNumber.Substring(this.StartIndex - 1, maxValidSubStringLength);
+                    target.PhoneNumber.Substring(startIndex, this.Length.Value) :
+                    target.PhoneNumber = target.PhoneNumber.Substring(startIndex, maxValidSubStringLength);
             }
 
             //if (target.PhoneNumber.Length > this.StartIndex - 1)
