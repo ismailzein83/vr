@@ -1,3 +1,3 @@
 ﻿"use strict";
-appControllers.controller('DefaultController', ['$scope', '$http','ValuesAPIService',function DefaultController($scope, $http, ValuesAPIService) {
+appControllers.controller('DefaultController', ['$scope', '$http',function DefaultController($scope, $http) {
 }]);

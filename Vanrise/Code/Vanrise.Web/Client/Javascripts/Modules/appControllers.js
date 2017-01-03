@@ -12,32 +12,7 @@ var appControllers = angular.module('appControllers', [
     'ui.codemirror',
     'ngWYSIWYG'
 ]);
-
-
-
-appControllers.directive('numberFiled', function () {
-    return {
-        restrict: 'EA',
-        template: '<input name="{{inputName}}" ng-model="inputValue" placeholder="{{placeHolder}}" class="form-control" />',
-        scope: {
-            inputValue: '=',
-            inputName: '=',
-            placeHolder: '='
-        },
-        link: function (scope) {
-            scope.$watch('inputValue', function (newValue, oldValue) {
-                var arr = String(newValue).split("");
-                if (arr.length === 0) return;
-                if (arr.length === 1 && (arr[0] == '-' || arr[0] === '.')) return;
-                if (arr.length === 2 && newValue === '-.') return;
-                if (isNaN(newValue)) {
-                    scope.inputValue = oldValue;
-                }
-            });
-        }
-    };
-});
-appControllers.directive('draggable', function ($document) {
+appControllers.directive('draggable',['$document', function ($document) {
     "use strict";
     return function (scope, element) {
         var startX = 0,
@@ -74,10 +49,10 @@ appControllers.directive('draggable', function ($document) {
             $document.unbind('mouseup', mouseup);
         }
     };
-});
+}]);
 
 
-appControllers.directive('draggablemodal', function ($document) {
+appControllers.directive('draggablemodal',['$document',function ($document) {
     "use strict";
     return function (scope, element) {
         var startX = 0,
@@ -111,45 +86,9 @@ appControllers.directive('draggablemodal', function ($document) {
             $document.unbind('mouseup', mouseup);
         }
     };
-});
+}]);
 
-
-appControllers.directive('resizbalemodal', function ($document) {
-    "use strict";
-    return function (scope, element) {
-        var startX = 0,
-          startY = 0,
-          x = 0,
-          y = 0;
-        element.parents().find('.resize-modal').last().css({
-            cursor: '-webkit-grab'
-        });
-        element.parents().find('.resize-modal').last().on('mousedown', function (event) {
-            // Prevent default dragging of selected content
-            event.preventDefault();
-            startX = event.screenX - x;
-            startY = event.screenY - y;
-            $document.on('mousemove', mousemove);
-            $document.on('mouseup', mouseup);
-           // scope.$broadcast("start-drag");
-        });
-
-        function mousemove(event) {
-            y = (event.screenY - startY > 0 && event.screenY - startY < innerHeight - element.innerHeight()) ? event.screenY - startY : y;
-            x = (event.screenX - startX < innerWidth) ? event.screenX - startX : x;
-            element.parents().find('.modal-content').last().css({
-                heigth: y + 'px',
-                width: x + 'px'
-            });
-        }
-
-        function mouseup() {
-            $document.unbind('mousemove', mousemove);
-            $document.unbind('mouseup', mouseup);
-        }
-    };
-});
-appControllers.directive('clickOutside', function ($document) {
+appControllers.directive('clickOutside',['$document', function ($document) {
     "use strict";
     return {
         restrict: 'A',
@@ -183,4 +122,4 @@ appControllers.directive('clickOutside', function ($document) {
             });
         }
     };
-})
+}])

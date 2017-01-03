@@ -2,7 +2,9 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
+.controller('mainCtrl', ['$scope','$rootScope','VR_Sec_MenuAPIService','SecurityService','BaseAPIService','VR_Sec_PermissionAPIService','notify','$animate','$cookies','$timeout','MenuItemTypeEnum','UtilsService','VRModalService',
+    function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
+    Waves.displayEffect();
     $rootScope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
             SecurityService.setAccessCookieName(cookieName);
@@ -15,14 +17,28 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         }
         $scope.userDisplayName = userInfo.UserDisplayName;
     };
-
     $rootScope.setLoginURL = function (loginURL) {
         if (loginURL != undefined && loginURL != '') {
             SecurityService.setLoginURL(loginURL);
             BaseAPIService.setLoginURL(loginURL);
         }
     };
+    $scope.obj = {};
+    $scope.obj.testValue = "";
+    $scope.obj.testValidate = function () {
+        if ($scope.obj.testval == undefined && $scope.obj.testval2 == undefined)
+            return "req val";
+        return null;
+    };
+    var testApi;
+    $scope.onReadTest = function (api) {
+        testApi = api;
+    };
     
+    $scope.getTestApiData = function () {
+        console.log(testApi.getData());
+    }
+
     $rootScope.onValidationMessageShown = function (e) {      
         var self = angular.element(e.currentTarget);
         var selfHeight = $(self).height();
@@ -42,51 +58,37 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $(tooltip).removeClass('tooltip-error-right');
             $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft })
         }
-
         e.stopPropagation();
     };
-    
-    $scope.getStyle = function () {
-
-        if ($("div[ng-cloak]").length > 0) {
-            return "{'display':'block'}";
-        }
-        else
-            return "{'display':'none'}";
-    };
-    $scope.obj = {};
-    $scope.obj.table = [{ name: 'test 1', groupename: 'G1' }, { name: 'test 2', groupename: 'G1' }, { name: 'test 3', groupename: 'G3' }, { name: 'test 4', groupename: 'G3' }];
-    $scope.obj.remove = function (obj) {
-        console.log(obj);
-        $scope.obj.table.splice($scope.obj.table.indexOf(obj), 1);
-
-    };
-    $scope.obj.delete = function (obj) {
-        console.log(obj);
-        //$scope.obj.table.splice($scope.obj.table.indexOf(obj), 1);
-
-    };
-    $('#dt1').datetimepicker();
-    VR_Sec_PermissionAPIService.GetEffectivePermissions().then(function (response) {
-        $rootScope.effectivePermissionsWrapper = response;
-    }
-    );
    
-    
- 
-    Waves.displayEffect();
+    VR_Sec_PermissionAPIService.GetEffectivePermissions().then(function (response) {
+            $rootScope.effectivePermissionsWrapper = response;
+        }
+    );
     var dropdownHidingTimeoutHandlerc;
+    $scope.showMenu = function (e) {
+        var $this = angular.element(e.currentTarget);
+        clearTimeout(dropdownHidingTimeoutHandlerc);
+        if (!$this.hasClass('open')) {
+            $('.dropdown-toggle', $this).dropdown('toggle');
+            $($this).find('.dropdown-menu').first().stop(true, true).slideDown();
+        }
+    };
+    $scope.hideMenu = function (e) {
+        var $this = angular.element(e.currentTarget);
+        dropdownHidingTimeoutHandlerc = setTimeout(function () {
+            if ($this.hasClass('open')) {
+                $('.dropdown-toggle', $this).dropdown('toggle');
+                $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
+            }
+        }, 200);
 
+    };
     $animate.enabled($('#sidebar-wrapper'));
-    //$animate.enabled(false, $('#sidebar-wrapper'));
     $animate.enabled(true, $('#collapsedmenu'));
-
     $scope.toogled = true;
     $scope.toggledpanel = function () {
-
         $scope.toogled = !$scope.toogled;
-
-
     };
     $scope.getPageName = function () {
         if ($scope.currentPage != null)
@@ -96,10 +98,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     };
     $scope.pinned = true;
     $scope.pinpanel = function () {
-
         $scope.pinned = !$scope.pinned;
-
-
     };
     $scope.showToogled = function () {
         $scope.toogled = true;
@@ -128,42 +127,18 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
        }, 500);
 
     };
-
     $scope.logout = function () {
         SecurityService.deleteAccessCookie();
         SecurityService.redirectToLoginPage(true);
     };
-
-    $scope.showMenu = function (e) {
-        var $this = angular.element(e.currentTarget);
-        clearTimeout(dropdownHidingTimeoutHandlerc);
-        if (!$this.hasClass('open')) {
-            $('.dropdown-toggle', $this).dropdown('toggle');
-            $($this).find('.dropdown-menu').first().stop(true, true).slideDown();
-        }
-    };
-    $scope.hideMenu = function (e) {
-        var $this = angular.element(e.currentTarget);
-        dropdownHidingTimeoutHandlerc = setTimeout(function () {
-            if ($this.hasClass('open')) {
-                $('.dropdown-toggle', $this).dropdown('toggle');
-                $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
-            }
-        }, 200);
-
-    };
- 
     $scope.openSupportModal = function () {
-
         var modalSettings = {
         };
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Support";
-
         };
         VRModalService.showModal('/Client/Modules/Common/Views/Support.html', null, modalSettings);
     };
-
     $scope.openResetPasswordModal = function () {
 
         var modalSettings = {
@@ -182,7 +157,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             modalScope.onProfileUpdated = function (response) {
                 $scope.userDisplayName = response.Name;
             };
-
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);
     };
@@ -198,8 +172,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $scope.menuItemsCurrent = item;
         }
     };
-
-   
     $scope.menusubItemsCurrent = null;
     $scope.setIndexSub = function (o) {
         if ($scope.menusubItemsCurrent != null && $scope.menusubItemsCurrent.Id == o.Id) {
@@ -209,7 +181,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $scope.menusubItemsCurrent = o;
         }
     };
-   
     $scope.parent = null;
     $scope.child = null;
     $scope.setActiveClass = function (e, p, c) {
@@ -220,34 +191,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         }
         $scope.parent = p;
         $scope.child = c;
-
     };
-    $rootScope.hisnav = [];
-    $rootScope.showsubview = function (page) {
-        $rootScope.$broadcast(page + "-show");
-
-    };
-    $rootScope.hidesubview = function (page, $index) {
-        if ($index == 0) {
-            $rootScope.hisnav.length = 0;
-        }
-        else {
-            $rootScope.hisnav.pop();
-        }
-        setTimeout(function () {
-            $rootScope.$broadcast(page);
-        }, 10);
-
-    };
-    $rootScope.ishideView = function (val) {
-        var obj = $scope.findExisteObj($rootScope.hisnav, val, 'name');
-        if (obj != null) {
-            return obj.show;
-        }
-        else return false;
-
-    };
-
     $rootScope.toggletime = function (e) {
         //   e.preventDefault();
         //   e.stopPropagation();
@@ -378,7 +322,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         return res;
     }
    
-});
+}]);
 
 app.controller('loginCtrl', function loginCtrl($scope, SecurityService) {
     $scope.setCookieName = function (cookieName) {
