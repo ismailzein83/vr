@@ -379,6 +379,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Documents\User_Guide.pdf" />
     <None Include="Properties\PublishProfiles\Xbooster.pubxml" />
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
