@@ -9,7 +9,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
 {
     public class IVSwitchConvertedRoute : ConvertedRoute
     {
-        public int CustomerID { get; set; }
+        public string CustomerID { get; set; }
         public List<IVSwitchRoute> Routes { get; set; }
         public string RouteTableName { get; set; }
         public List<IVSwitchTariff> Tariffs { get; set; }

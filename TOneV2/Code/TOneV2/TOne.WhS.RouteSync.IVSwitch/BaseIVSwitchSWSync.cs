@@ -47,7 +47,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
         {
-            Dictionary<int, PreparedRoute> customerRoutes = new Dictionary<int, PreparedRoute>();
+            Dictionary<string, PreparedRoute> customerRoutes = new Dictionary<string, PreparedRoute>();
             foreach (var convertedRoute in context.ConvertedRoutes)
             {
                 IVSwitchConvertedRoute ivSwitchConvertedRoute = (IVSwitchConvertedRoute)convertedRoute;
@@ -74,7 +74,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            Dictionary<int, PreparedRoute> routes = (Dictionary<int, PreparedRoute>)context.PreparedItemsForApply;
+            Dictionary<string, PreparedRoute> routes = (Dictionary<string, PreparedRoute>)context.PreparedItemsForApply;
             IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
             IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
             foreach (var item in routes.Values)
@@ -136,6 +136,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             IVSwitchConvertedRoute ivSwitch = new IVSwitchConvertedRoute
             {
+                CustomerID = route.CustomerId,
                 Routes = new List<IVSwitchRoute>(),
                 Tariffs = new List<IVSwitchTariff>(),
                 RouteTableName = string.Format("rt{0}", endPoint.RouteTableId),
