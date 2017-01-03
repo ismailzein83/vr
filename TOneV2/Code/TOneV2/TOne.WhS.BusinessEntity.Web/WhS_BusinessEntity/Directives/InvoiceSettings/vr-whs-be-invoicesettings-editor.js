@@ -30,12 +30,21 @@ app.directive('vrWhsBeInvoicesettingsEditor', ['UtilsService', 'VRUIUtilsService
                 ctrl.isValid = function () {
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
                         var count = 0;
+                        var exist = 0;
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var item = ctrl.datasource[i];
+                            exist = 0;
+                            for (var j = 0; j < ctrl.datasource.length; j++) {
+                                if (item.Entity.Name == ctrl.datasource[j].Entity.Name)
+                                    exist = exist + 1;
+                            }
                             if (item.Entity.IsDefault) {
                                 count = count + 1;
                             }
+                            if (exist > 1)
+                                return "Multiple name exist.";
                         }
+
                         if (count == 1)
                             return null;
                         if (count > 1)

@@ -9,6 +9,8 @@
                     <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
                                  on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeInvoiceSetting" hidegridmenu>
                         <vr-datagridcolumn headertext="'Title'" field="'Entity.Name'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Due Period'" field="'Entity.DuePeriod'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Serial Number'" field="'Entity.SerialNumberPattern'" widthfactor="10" disablesorting></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Default'" f widthfactor="10" disablesorting>
                             <vr-icon icontype="dataItem.Entity.IsDefault"></vr-icon>
                         </vr-datagridcolumn>
