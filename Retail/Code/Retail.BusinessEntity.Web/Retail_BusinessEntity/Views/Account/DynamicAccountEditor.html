@@ -1,34 +1,9 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_AccountEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Retail_BE_DynamicAccountEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formAccountEditor">
-            <vr-tabs>
-                <vr-tab header="'Definition'">
-                    <vr-row removeline>
-                        <vr-columns width="1/2row">
-                            <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
-                        </vr-columns>
-                        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
-                                                        onselectionchanged="scopeModel.onAccountTypeSelectionChanged"
-                                                        normal-col-num="6"
-                                                        isrequired="true">
-                        </retail-be-accounttype-selector>
-                    </vr-row>
-                    <vr-row ng-repeat="notRequiredPart in scopeModel.notRequiredParts">
-                        <vr-columns width="fullrow">
-                            <vr-label>{{notRequiredPart.definition.Title}}</vr-label>
-                            <vr-switch value="notRequiredPart.isSelected"></vr-switch>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <retail-be-account-parts on-ready="scopeModel.onRequiredPartsDirectiveReady"></retail-be-account-parts>
-                <span ng-repeat="notRequiredPart in scopeModel.notRequiredParts" vr-loader="notRequiredPart.isLoading">
-                    <vr-directivewrapper directive="notRequiredPart.runtimeEditor"
-                                         on-ready="notRequiredPart.onDirectiveReady"
-                                         normal-col-num="6"
-                                         ng-if="notRequiredPart.isSelected">
-                    </vr-directivewrapper>
-                </span>
-            </vr-tabs>
+
+            <retail-be-account-editor on-ready="scopeModel.onAccountEditorDirectiveReady"></retail-be-account-editor>
+
         </vr-form>
     </vr-modalbody>
     <div>
