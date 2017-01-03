@@ -58,7 +58,20 @@ as (select * from (values
 ('E5EBA8E1-B0DC-4977-B770-2B9F62DCBC17','DurationTariff','Duration Tariff','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_DurationTariff"}'),
 ('7E54E33D-EF53-4DA9-9786-DC6721BEF618','RateValue','Rate Value','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_RateValue"}'),
 ('BE74A60E-D312-4B4F-BD76-5B7BE81ABE62','Send Email', 'Send Email','VR_AccountBalance_BalanceAlert_VRAction','{"Editor":"retail-be-accountaction-email"}'),
-('497557D1-399E-4AF5-BA10-A03338D1CAF4','FixedBalanceAlertThreshold','Fixed','VR_Notification_BalanceAlertThreshold','{"Editor":"retail-be-balancealertrule-threshold-fixed"}')
+('497557D1-399E-4AF5-BA10-A03338D1CAF4','FixedBalanceAlertThreshold','Fixed','VR_Notification_BalanceAlertThreshold','{"Editor":"retail-be-balancealertrule-threshold-fixed"}'),
+
+('FB2D7DC4-AF79-4068-8452-1058AF7544D7','PriceVoiceEventStep','PriceVoiceEventStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"retail-voice-pricevoiceeventstep","StepPreviewUIControl":"retail-voice-pricevoiceeventstep-preview"}'),
+('2FF81206-1E07-4E66-9E35-7F53BF049AB3','Retail_Voice_VoiceServiceType','Voice','Retail_BE_ServiceTypeExtendedSettingsConfig','{"Editor":"retail-voice-voiceservicetype"}'),
+('B0B5BC1F-E899-4AE5-AEFB-4FCD5D1BA140','Retail_Voice_StandardPolicyEvaluator','Standard','Retail_Voice_VoiceChargingPolicyEvaluatorConfig','{"Editor":"retail-voice-standardpolicyevaluator"}'),
+('BA8A44F4-506F-4B5D-8784-7765FB170E94','Retail_BE_RetailAccountPropertyEvaluator','Account Attribute','Retail_BE_RetailAccountObjectType_PropertyEvaluator','{"Editor":"retail-be-retailaccount-propertyevaluator"}'),
+('1B1AF5DD-52EB-42C7-97EF-8CE824BB7D03','FilterGroupAccountCondition','Expression','Retail_BE_AccountConditionConfig','{"Editor":"retail-be-accountcondition-filtergroup"}'),
+('A9475C63-ECA4-4C01-B9FF-11DF8AA4C157','Financial Transactions','Financial Transactions','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-financialtransactions"}'),
+('A8098DDE-51C2-4922-B346-32AFF202A4C1','Identification Rules','Identification Rules','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-identificationrules"}'),
+('71AB18ED-F2AC-4E71-B4E4-4826D092A201','Services','Services','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-services"}'),
+('9A5B27E1-4928-4B71-B548-71C2F89444A5','SubAccounts','Sub Accounts','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-subaccounts"}'),
+('30064FB0-193D-4C41-A4B9-BFB7E236656B','AccountInfo','Account Info','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-accountinfo"}'),
+('0FF1E64B-15D4-45B8-B616-DDC9B0B78F74','Actions','Actions','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-actions"}'),
+('BB2CBAE6-05A1-4132-A2E0-F6C761B273DA','Packages','Packages','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-packages"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
