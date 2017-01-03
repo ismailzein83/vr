@@ -14,10 +14,13 @@ namespace Vanrise.Entities
     public class CompanySetting
     {
         public string CompanyName { get; set; }
+        public string ProfileName { get; set; }
         public long CompanyLogo { get; set; }
         public string RegistrationAddress { get; set; }
         public string RegistrationNumber { get; set; }
         public string VatId { get; set; }
         public bool IsDefault { get; set; }
+        public string BillingEmails { get; set; }
+        public List<Guid> BankDetails { get; set; }
     }
 }

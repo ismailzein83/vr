@@ -6,6 +6,9 @@
                     <vr-textbox value="scopeModel.companyName" label="Company Name" isrequired="true"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.profileName" label="Profile Name" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
                     <vr-textbox value="scopeModel.registrationNumber" label="Registration Number" isrequired="true"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
@@ -24,6 +27,16 @@
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-preview-image height="80px" width="150px" value="scopeModel.companyLogo.fileId"> </vr-preview-image>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-common-bank-detail-selector on-ready="onBankDirectiveReady" ismultipleselection selectedvalues="bank" isrequired="true" ></vr-common-bank-detail-selector>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox-multiple value="scopeModel.toMail" datatype="email" label="Email(s)" isrequired></vr-textbox-multiple>
                 </vr-columns>
             </vr-row>
         </vr-form>

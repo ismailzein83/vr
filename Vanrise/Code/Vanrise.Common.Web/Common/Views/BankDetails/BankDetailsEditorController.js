@@ -71,6 +71,7 @@
 
             if (bankDetailEntity == undefined)
                 return;
+            $scope.bankDetailId = bankDetailEntity.BankDetailId;
             $scope.bank = bankDetailEntity.Bank;
             $scope.accountCode= bankDetailEntity.AccountCode;
             $scope.accountHolder= bankDetailEntity.AccountHolder;
@@ -78,7 +79,7 @@
             $scope.address= bankDetailEntity.Address;
             $scope.accountNumber= bankDetailEntity.AccountNumber;
             $scope.swiftCode= bankDetailEntity.SwiftCode;
-            $scope.sortCode= bankDetailEntity.SortCode;
+            $scope.sortCode = bankDetailEntity.SortCode;
 
         }
 
@@ -112,12 +113,14 @@
 
         function insertBankDetails() {
             var bankDetailsObject = buildBankDetailsObjFromScope();
+            bankDetailsObject.BankDetailId = UtilsService.guid();
             if ($scope.onBankDetailsAdded != undefined)
                 $scope.onBankDetailsAdded(bankDetailsObject);
             $scope.modalContext.closeModal();
         }
         function updateBankDetails() {
-            var bankDetailsObject = buildBankDetailsObjFromScope();
+            var bankDetailsObject = buildBankDetailsObjFromScope(); 
+            bankDetailsObject.BankDetailId = $scope.bankDetailId;
             if ($scope.onBankDetailsUpdated != undefined)
                 $scope.onBankDetailsUpdated(bankDetailsObject);
             $scope.modalContext.closeModal();

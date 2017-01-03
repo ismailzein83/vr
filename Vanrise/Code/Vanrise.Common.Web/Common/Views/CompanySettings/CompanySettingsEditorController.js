@@ -9,6 +9,10 @@
         var isEditMode;
         var companySettingEntity;
 
+        var bankDirectiveApi;
+        var bankReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var bankSelectedPromiseDeferred;
+
         loadParameters();
         defineScope();
         load();
@@ -35,6 +39,10 @@
                 $scope.modalContext.closeModal()
             };
 
+            $scope.onBankDirectiveReady = function (api) {
+                bankDirectiveApi = api;
+                bankReadyPromiseDeferred.resolve();
+            };
 
         }
 
@@ -44,7 +52,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -60,11 +68,30 @@
                 $scope.title = UtilsService.buildTitleForAddEditor("Company Setting");
         }
 
+
+        function loadBankDetail() {
+            var loadBankPromiseDeferred = UtilsService.createPromiseDeferred();
+            
+            bankReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload;
+                    if (companySettingEntity != undefined && companySettingEntity.BankDetails != undefined) {
+                        directivePayload = {
+                            selectedIds: companySettingEntity.BankDetails
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(bankDirectiveApi, directivePayload, loadBankPromiseDeferred);
+                });
+            return loadBankPromiseDeferred.promise;
+        }
+
         function loadStaticData() {
 
             if (companySettingEntity == undefined)
                 return;
             $scope.scopeModel.companyName = companySettingEntity.CompanyName;
+            $scope.scopeModel.profileName = companySettingEntity.ProfileName;
             $scope.scopeModel.registrationNumber = companySettingEntity.RegistrationNumber;
             $scope.scopeModel.registrationAddress = companySettingEntity.RegistrationAddress;
             $scope.scopeModel.vatId = companySettingEntity.VatId;
@@ -76,16 +103,22 @@
             else
                 $scope.scopeModel.companyLogo = null;
 
+            if (companySettingEntity.BillingEmails != undefined) {
+                $scope.scopeModel.toMail = companySettingEntity.BillingEmails.split(";");
+            }
         }
 
         function buildCompanySettingsObjFromScope() {
             var obj = {
                 CompanyName: $scope.scopeModel.companyName,
+                ProfileName: $scope.scopeModel.profileName,
                 RegistrationNumber: $scope.scopeModel.registrationNumber,
                 RegistrationAddress: $scope.scopeModel.registrationAddress,
                 VatId: $scope.scopeModel.vatId,
                 CompanyLogo: ($scope.scopeModel.companyLogo != null) ? $scope.scopeModel.companyLogo.fileId : 0,
-                IsDefault:$scope.scopeModel.isDefault
+                IsDefault: $scope.scopeModel.isDefault,
+                BillingEmails: $scope.scopeModel.toMail.join(";"),
+                BankDetails: bankDirectiveApi.getSelectedIds()
             };
             return obj;
         }
