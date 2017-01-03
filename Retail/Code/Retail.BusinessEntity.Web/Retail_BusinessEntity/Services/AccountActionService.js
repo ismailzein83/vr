@@ -28,6 +28,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                         var payload = {
                             accountBEDefinitionId: accountBEDefinitionId,
                             account: account,
+                            accountActionDefinition: accountActionDefinition,
                             onItemUpdated: function (updatedItem) {
                                 Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions);
                                 defineAccountMenuActions(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions, accountActionDefinitions);
@@ -92,7 +93,6 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
 
                     var accountBEDefinitionId = payload.accountBEDefinitionId;
                     var account = payload.account;
-                    var accountActionDefinition = payload.accountActionDefinition;
                     var onItemUpdated = payload.onItemUpdated;
 
                     var onAccountUpdated = function (updatedAccount) {
