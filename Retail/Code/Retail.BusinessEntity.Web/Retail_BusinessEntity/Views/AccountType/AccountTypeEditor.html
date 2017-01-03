@@ -12,35 +12,41 @@
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
-                                                                              customlabel="Account Definition" hideremoveicon isrequired="true">
+                                                                              onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"
+                                                                              customlabel="Account Definition" isrequired="true" hideremoveicon>
                             </vr-genericdata-businessentitydefinition-selector>
                         </vr-columns>
-
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Settings'">
+                <vr-tab header="'Settings'" ng-show="scopeModel.showSettings">
                     <vr-row>
-                        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
-                                                        normal-col-num="6"
-                                                        ismultipleselection="true"
-                                                        customlabel="Parent Account Types"
-                                                        isrequired="!scopeModel.canBeRootAccount">
-                        </retail-be-accounttype-selector>
+                        <span vr-loader="scopeModel.isAccountTypeSelectorLoading">
+                            <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                                            normal-col-num="6"
+                                                            ismultipleselection="true"
+                                                            customlabel="Parent Account Types"
+                                                            isrequired="!scopeModel.canBeRootAccount">
+                            </retail-be-accounttype-selector>
+                        </span>
                         <vr-columns width="1/2row">
                             <vr-switch label="Can Be Root Account" value="scopeModel.canBeRootAccount"></vr-switch>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <retail-be-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady" normal-col-num="6" customlabel="Initial Status" isrequired="true"></retail-be-statusdefinition-selector>
+                        <retail-be-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady"
+                                                             customlabel="Initial Status"
+                                                             normal-col-num="6"
+                                                             isrequired="true">
+                        </retail-be-statusdefinition-selector>
                     </vr-row>
                     <vr-row>
                         <retail-be-accountpartdefinition-selector on-ready="scopeModel.onPartDefinitionSelectorReady"
-                                                                  normal-col-num="6"
-                                                                  ismultipleselection="true"
                                                                   onselectitem="scopeModel.onSelectItem"
                                                                   ondeselectitem="scopeModel.onDeselectItem"
                                                                   selectedvalues="scopeModel.selectedPartDefinitions"
-                                                                  customlabel="Sections">
+                                                                  normal-col-num="6"
+                                                                  customlabel="Sections"
+                                                                  ismultipleselection="true">
                         </retail-be-accountpartdefinition-selector>
                     </vr-row>
                     <vr-row>
@@ -69,7 +75,6 @@
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>
-
                 </vr-tab>
             </vr-tabs>
         </vr-form>

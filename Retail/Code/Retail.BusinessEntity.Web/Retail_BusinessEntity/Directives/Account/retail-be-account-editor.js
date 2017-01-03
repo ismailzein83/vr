@@ -141,7 +141,10 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                         _promises.push(accountTypeSelectorLoadDeferred.promise);
 
                         var accountTypeSelectorPayload = {
-                            filter: { ParentAccountId: parentAccountId }
+                            filter: {
+                                AccountBEDefinitionId: accountBEDefinitionId,
+                                ParentAccountId: parentAccountId
+                            }
                         };
 
                         if (accountEntity != undefined) {

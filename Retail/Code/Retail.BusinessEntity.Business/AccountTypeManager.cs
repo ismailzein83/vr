@@ -43,9 +43,11 @@ namespace Retail.BusinessEntity.Business
             Func<AccountType, bool> filterExpression = null;
             if (filter != null)
             {
-
                 filterExpression = (accountType) =>
                     {
+                        if (filter.AccountBEDefinitionId != accountType.AccountBEDefinitionId)
+                            return false;
+
                         if (filter.ParentAccountId.HasValue)
                         {
                             var accountManager = new AccountManager();
@@ -59,8 +61,10 @@ namespace Retail.BusinessEntity.Business
                         {
                             return false;
                         }
+
                         if (filter.RootAccountTypeOnly && (accountType.Settings == null || !accountType.Settings.CanBeRootAccount))
                             return false;
+                        
                         return true;
                     };
 
