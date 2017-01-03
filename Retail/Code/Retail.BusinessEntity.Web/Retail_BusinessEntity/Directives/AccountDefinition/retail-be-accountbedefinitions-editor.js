@@ -24,6 +24,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
         function AccountBeDefinitionsSettingsEditorCtor(ctrl, $scope, $attrs) {
 
+            var statusDefinitionSelectorAPI;
+            var statusDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
+
             var accountGridDefinitionDirectiveAPI;
             var accountGridDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
 
@@ -35,7 +38,10 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
+                    statusDefinitionSelectorAPI = api;
+                    statusDefinitionSelectorDeferred.resolve();
+                };
                 $scope.scopeModel.onAccountGridDefinitionReady = function (api) {
                     accountGridDefinitionDirectiveAPI = api;
                     accountGridDefinitionDirectiveDeferred.resolve();
@@ -48,7 +54,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     accountActionDefinitionDirectiveAPI = api;
                     accountActionDefinitionDirectiveDeferred.resolve();
                 }
-                UtilsService.waitMultiplePromises([accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise, statusDefinitionSelectorDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -61,10 +67,12 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountGridDefinition;
                     var accountViewDefinitions;
                     var accountActionDefinitions;
+                    var statusGroupId;
                     if (payload != undefined && payload.businessEntityDefinitionSettings != undefined) {
                         accountGridDefinition = payload.businessEntityDefinitionSettings.GridDefinition;
                         accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
                         accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
+                        statusGroupId = payload.businessEntityDefinitionSettings.StatusGroupId;
                     }
 
                     //Loading AccountGridDefinition Directive
@@ -79,35 +87,49 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountActionDefinitionLoadPromise = getAccountActionDefinitionLoadPromise();
                     promises.push(accountActionDefinitionLoadPromise);
 
+                    //Loading Status Definition Directive
+                    var statusDefinitionSelectorLoadPromise = loadStatusDefinitionSelectorLoadPromise();
+                    promises.push(statusDefinitionSelectorLoadPromise);
+
                     function getAccountGridDefinitionLoadPromise() {
                         var accountGridDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        var accountGridDefinitionPayload = {
-                            accountGridDefinition: accountGridDefinition
-                        };
-                        VRUIUtilsService.callDirectiveLoad(accountGridDefinitionDirectiveAPI, accountGridDefinitionPayload, accountGridDefitnionLoadDeferred);
-
+                        accountGridDefinitionDirectiveDeferred.promise.then(function () {
+                            var accountGridDefinitionPayload = {
+                                accountGridDefinition: accountGridDefinition
+                            };
+                            VRUIUtilsService.callDirectiveLoad(accountGridDefinitionDirectiveAPI, accountGridDefinitionPayload, accountGridDefitnionLoadDeferred);
+                        });
                         return accountGridDefitnionLoadDeferred.promise;
                     }
                     function getAccountViewDefinitionLoadPromise() {
                         var accountViewDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        var accountViewDefinitionPayload = {
-                            accountViewDefinitions: accountViewDefinitions
-                        };
-                        VRUIUtilsService.callDirectiveLoad(accountViewDefinitionDirectiveAPI, accountViewDefinitionPayload, accountViewDefitnionLoadDeferred);
-
+                        accountViewDefinitionDirectiveDeferred.promise.then(function () {
+                            var accountViewDefinitionPayload = {
+                                accountViewDefinitions: accountViewDefinitions
+                            };
+                            VRUIUtilsService.callDirectiveLoad(accountViewDefinitionDirectiveAPI, accountViewDefinitionPayload, accountViewDefitnionLoadDeferred);
+                        });
                         return accountViewDefitnionLoadDeferred.promise;
                     }
                     function getAccountActionDefinitionLoadPromise() {
                         var accountActionDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        var accountActionDefinitionPayload = {
-                            accountActionDefinitions: accountActionDefinitions
-                        };
-                        VRUIUtilsService.callDirectiveLoad(accountActionDefinitionDirectiveAPI, accountActionDefinitionPayload, accountActionDefitnionLoadDeferred);
-
+                        accountActionDefinitionDirectiveDeferred.promise.then(function () {
+                            var accountActionDefinitionPayload = {
+                                accountActionDefinitions: accountActionDefinitions
+                            };
+                            VRUIUtilsService.callDirectiveLoad(accountActionDefinitionDirectiveAPI, accountActionDefinitionPayload, accountActionDefitnionLoadDeferred);
+                        });
                         return accountActionDefitnionLoadDeferred.promise;
+                    }
+                    function loadStatusDefinitionSelectorLoadPromise() {
+                        var statusDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
+                        statusDefinitionSelectorDeferred.promise.then(function () {
+                            var accountActionDefinitionPayload = {
+                                selectedIds: statusGroupId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, accountActionDefinitionPayload, statusDefinitionLoadDeferred);
+                        });
+                        return statusDefinitionLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -118,6 +140,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         GridDefinition: accountGridDefinitionDirectiveAPI.getData(),
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
+                        StatusGroupId: statusDefinitionSelectorAPI.getSelectedIds()
                     };
 
                     return obj;
