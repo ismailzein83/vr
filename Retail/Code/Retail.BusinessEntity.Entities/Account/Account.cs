@@ -34,13 +34,24 @@ namespace Retail.BusinessEntity.Entities
         public long? ParentAccountId { get; set; }
         public string SourceId { get; set; }
         public ExecutedActions ExecutedActions { get; set; }
+    }
 
+    public class AccountToInsert : BaseAccount
+    {
+        public string SourceId { get; set; }
 
+        public Guid AccountBEDefinitionId { get; set; }
+
+        public Guid StatusId { get; set; }
+
+        public long? ParentAccountId { get; set; }
     }
 
     public class AccountToEdit : BaseAccount
     {
         public string SourceId { get; set; }
+
+        public Guid AccountBEDefinitionId { get; set; }
     }
 
     public interface IAccountPayment

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SubAccountsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountService'];
+    SubAccountsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountBEService'];
 
-    function SubAccountsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountService) {
+    function SubAccountsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountBEService) {
         return {
             restrict: 'E',
             scope: {
@@ -30,6 +30,7 @@
         function SubAccountsViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
             var parentAccountId;
 
             var gridAPI;
@@ -47,7 +48,7 @@
                         gridAPI.onAccountAdded(addedSubcAccount);
                     };
 
-                    Retail_BE_AccountService.addAccount(parentAccountId, onSubAccountAdded);
+                    Retail_BE_AccountBEService.addAccount(accountBEDefinitionId, parentAccountId, onSubAccountAdded);
                 };
             }
             function defineAPI() {
@@ -58,6 +59,7 @@
                     $scope.scopeModel.isGridLoading = true;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
                     }
 

@@ -11,9 +11,9 @@ namespace Retail.BusinessEntity.Data
     {
         IEnumerable<Account> GetAccounts(Guid accountBEDefinitionId);
 
-        bool Insert(Account account, out long insertedId);
+        bool Insert(AccountToInsert accountToInsert, out long insertedId);
 
-        bool Update(AccountToEdit account, long? parentId);
+        bool Update(AccountToEdit accountToEdit, long? parentId);
 
         bool AreAccountsUpdated(Guid accountBEDefinitionId, ref object updateHandle);
     }

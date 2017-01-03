@@ -1,13 +1,15 @@
 ﻿(function (appControllers) {
 
-    'use stict';
+    'use strict';
 
     AccountBEService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
 
     function AccountBEService(VRModalService, VRNotificationService, UtilsService, VRUIUtilsService) {
 
-        function addAccount(parentAccountId, onAccountAdded) {
+        function addAccount(accountBEDefinitionId, parentAccountId, onAccountAdded) {
+
             var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
                 parentAccountId: parentAccountId
             };
 
@@ -20,8 +22,10 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
 
-        function editAccount(accountId, parentAccountId, onAccountUpdated) {
+        function editAccount(accountBEDefinitionId, accountId, parentAccountId, onAccountUpdated) {
+
             var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId,
                 parentAccountId: parentAccountId
             };
@@ -36,7 +40,7 @@
         };
 
         function defineAccountViewTabs(accountBEDefinitionId, account, gridAPI, accountViewDefinitions) {
-            if (account == undefined || account.AvailableAccountViews == undefined || account.AvailableAccountViews.length == 0)
+            if (accountBEDefinitionId == undefined || account == undefined || account.AvailableAccountViews == undefined || account.AvailableAccountViews.length == 0)
                 return;
 
             var drillDownTabs = [];
@@ -104,6 +108,7 @@
             defineAccountViewTabs: defineAccountViewTabs,
             openAccount360DegreeEditor: openAccount360DegreeEditor
         };
+
     }
 
     appControllers.service('Retail_BE_AccountBEService', AccountBEService);

@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Business
     public class AccountManager : IBusinessEntityManager
     {
         #region Public Methods
-
+         
         public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
             var recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
@@ -69,69 +69,10 @@ namespace Retail.BusinessEntity.Business
             return cachedAccounts.GetRecord(accountId);
         }
 
-        public Account GetSelfOrParentAccountOfType(long accountId, Guid accountTypeId)
-        {
-            var account = GetAccount(accountId);
-            if (account == null)
-                throw new NullReferenceException(String.Format("Account '{0}'", account));
-            if (account.TypeId == accountTypeId)
-                return account;
-            else if (account.ParentAccountId.HasValue)
-                return GetSelfOrParentAccountOfType(account.ParentAccountId.Value, accountTypeId);
-            else return null;
-        }
-
-        public Account GetAccountBySourceId(string sourceId)
-        {
-            Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId();
-            return cachedAccounts.GetRecord(sourceId);
-        }
         public AccountDetail GetAccountDetail(long accountId)
         {
             var account = GetAccount(accountId);
             return account != null ? AccountDetailMapper(account) : null;
-        }
-
-        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter, AccountFilter filter)
-        {
-            IEnumerable<Account> allAccounts = GetCachedAccounts().Values;
-            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
-            Func<Account, bool> filterFunc = null;
-
-            filterFunc = (account) =>
-            {
-                if (nameFilterLower != null && !account.Name.Trim().ToLower().StartsWith(nameFilterLower))
-                    return false;
-
-                if (filter != null && filter.Filters != null)
-                {
-                    var context = new AccountFilterContext() { Account = account };
-                    if (filter.Filters.Any(x => x.IsExcluded(context)))
-                        return false;
-                }
-
-                return true;
-            };
-            return allAccounts.MapRecords(AccountInfoMapper, filterFunc).OrderBy(x => x.Name);
-        }
-
-        public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
-        {
-            List<AccountInfo> accountInfos = new List<AccountInfo>();
-            var accounts = GetCachedAccounts();
-            foreach (var accountId in accountIds)
-            {
-                var account = accounts.GetRecord(accountId);
-                if (account != null)
-                    accountInfos.Add(AccountInfoMapper(account));
-            }
-            return accountInfos.OrderBy(x => x.Name);
-        }
-
-        public string GetAccountName(long accountId)
-        {
-            Account account = this.GetAccount(accountId);
-            return (account != null) ? account.Name : null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account account)
@@ -177,26 +118,6 @@ namespace Retail.BusinessEntity.Business
             return dataManager.Insert(account, out accountId);
         }
 
-        public bool UpdateStatus(long accountId, Guid statusId)
-        {
-            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
-            bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
-            if (updateStatus)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-            }
-            return updateStatus;
-        }
-        public bool UpdateExecutedActions(long accountId, ExecutedActions executedActions)
-        {
-            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
-            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountId, executedActions);
-            if (updateExecutedAction)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-            }
-            return updateExecutedAction;
-        }
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit account)
         {
 
@@ -219,7 +140,6 @@ namespace Retail.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-
         internal bool TryUpdateAccount(AccountToEdit account)
         {
             long? parentId;
@@ -228,6 +148,155 @@ namespace Retail.BusinessEntity.Business
             IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
 
             return dataManager.Update(account, parentId);
+        }
+
+        public string GetAccountName(long accountId)
+        {
+            Account account = this.GetAccount(accountId);
+            return (account != null) ? account.Name : null;
+        }
+
+        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter, AccountFilter filter)
+        {
+            IEnumerable<Account> allAccounts = GetCachedAccounts().Values;
+            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
+            Func<Account, bool> filterFunc = null;
+
+            filterFunc = (account) =>
+            {
+                if (nameFilterLower != null && !account.Name.Trim().ToLower().StartsWith(nameFilterLower))
+                    return false;
+
+                if (filter != null && filter.Filters != null)
+                {
+                    var context = new AccountFilterContext() { Account = account };
+                    if (filter.Filters.Any(x => x.IsExcluded(context)))
+                        return false;
+                }
+
+                return true;
+            };
+            return allAccounts.MapRecords(AccountInfoMapper, filterFunc).OrderBy(x => x.Name);
+        }
+
+        public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
+        {
+            List<AccountInfo> accountInfos = new List<AccountInfo>();
+            var accounts = GetCachedAccounts();
+            foreach (var accountId in accountIds)
+            {
+                var account = accounts.GetRecord(accountId);
+                if (account != null)
+                    accountInfos.Add(AccountInfoMapper(account));
+            }
+            return accountInfos.OrderBy(x => x.Name);
+        }
+
+        public AccountEditorRuntime GetAccountEditorRuntime(Guid accountTypeId, int? parentAccountId)
+        {
+            var accountEditorRuntime = new AccountEditorRuntime();
+
+            var accountPartDefinitionManager = new AccountPartDefinitionManager();
+
+            var runtimeParts = new List<AccountPartRuntime>();
+
+            IEnumerable<AccountTypePartSettings> partSettingsList = GetAccountTypePartDefinitionSettingsList(accountTypeId);
+            if (partSettingsList != null && partSettingsList.Count() > 0)
+            {
+                foreach (AccountTypePartSettings partSettings in partSettingsList)
+                {
+                    bool isPartFoundOrInherited = this.IsPartFoundOrInherited(parentAccountId, partSettings.PartDefinitionId);
+
+                    if (partSettings.AvailabilitySettings == AccountPartAvailabilityOptions.AlwaysAvailable || !isPartFoundOrInherited)
+                    {
+                        var accountPartRuntime = new AccountPartRuntime();
+
+                        AccountPartDefinition partDefinition = accountPartDefinitionManager.GetAccountPartDefinition(partSettings.PartDefinitionId);
+                        if (partDefinition == null)
+                            throw new NullReferenceException("partDefinition");
+
+                        accountPartRuntime.PartDefinition = partDefinition;
+
+                        if (partSettings.RequiredSettings == AccountPartRequiredOptions.RequiredIfNotInherited)
+                            accountPartRuntime.IsRequired = !isPartFoundOrInherited;
+                        else
+                            accountPartRuntime.IsRequired = (partSettings.RequiredSettings == AccountPartRequiredOptions.Required);
+
+                        runtimeParts.Add(accountPartRuntime);
+                    }
+                }
+            }
+
+            if (runtimeParts.Count > 0)
+                accountEditorRuntime.Parts = runtimeParts;
+            AccountTypeManager manager = new AccountTypeManager();
+
+
+            return accountEditorRuntime;
+        }
+
+        public bool IsAccountMatchWithFilterGroup(Account account, RecordFilterGroup filterGroup)
+        {
+            return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(account));
+        }
+
+        public CompanySetting GetCompanySetting(long accountId)
+        {
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            return configManager.GetDefaultCompanySetting();
+        }
+
+
+        public Account GetSelfOrParentAccountOfType(long accountId, Guid accountTypeId)
+        {
+            var account = GetAccount(accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("Account '{0}'", account));
+            if (account.TypeId == accountTypeId)
+                return account;
+            else if (account.ParentAccountId.HasValue)
+                return GetSelfOrParentAccountOfType(account.ParentAccountId.Value, accountTypeId);
+            else return null;
+        }
+        public long? GetFinancialAccountId(long? accountId)
+        {
+            if (!accountId.HasValue)
+                return null;
+
+            IAccountPayment accountPayment;
+            if (HasAccountPayment(accountId.Value, false, out accountPayment))
+                return accountId;
+
+            var account = GetAccount(accountId.Value);
+            return GetFinancialAccountId(account.ParentAccountId);
+        }
+
+
+        public Account GetAccountBySourceId(string sourceId)
+        {
+            Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId();
+            return cachedAccounts.GetRecord(sourceId);
+        }
+
+        public bool UpdateStatus(long accountId, Guid statusId)
+        {
+            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+            bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
+            if (updateStatus)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            return updateStatus;
+        }
+        public bool UpdateExecutedActions(long accountId, ExecutedActions executedActions)
+        {
+            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountId, executedActions);
+            if (updateExecutedAction)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            return updateExecutedAction;
         }
 
         public bool TryGetAccountPart(long accountId, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
@@ -282,7 +351,6 @@ namespace Retail.BusinessEntity.Business
                 return false;
             }
         }
-
         public bool HasAccountProfile(long accountId, bool getInherited, out IAccountProfile accountProfile)
         {
             var account = GetAccount(accountId);
@@ -310,33 +378,9 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        public long? GetFinancialAccountId(long? accountId)
-        {
-            if (!accountId.HasValue)
-                return null;
-
-            IAccountPayment accountPayment;
-            if (HasAccountPayment(accountId.Value, false, out accountPayment))
-                return accountId;
-
-            var account = GetAccount(accountId.Value);
-            return GetFinancialAccountId(account.ParentAccountId);
-        }
-
-        public bool IsAccountMatchWithFilterGroup(Account account, RecordFilterGroup filterGroup)
-        {
-            return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(account));
-        }
-
         public int GetAccountDuePeriod(long accountId)
         {
             return 0;
-        }
-
-        public CompanySetting GetCompanySetting(long accountId)
-        {
-            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
-            return configManager.GetDefaultCompanySetting();
         }
 
         public Guid GetDefaultInvoiceEmailId(long accountId)
@@ -346,7 +390,6 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException("retailSubscriberInvoiceSettings");
             return retailSubscriberInvoiceSettings.DefaultEmailId;
         }
-
 
         private SubscriberInvoiceSettings GetRetailDefaulSubscriberInvoiceSettings()
         {
@@ -364,53 +407,11 @@ namespace Retail.BusinessEntity.Business
             throw new NullReferenceException("setting.SubscriberInvoiceSettings");
         }
 
-
         #endregion
 
         #region Get Account Editor Runtime
 
-        public AccountEditorRuntime GetAccountEditorRuntime(Guid accountTypeId, int? parentAccountId)
-        {
-            var accountEditorRuntime = new AccountEditorRuntime();
 
-            var accountPartDefinitionManager = new AccountPartDefinitionManager();
-
-            var runtimeParts = new List<AccountPartRuntime>();
-
-            IEnumerable<AccountTypePartSettings> partSettingsList = GetAccountTypePartDefinitionSettingsList(accountTypeId);
-            if (partSettingsList != null && partSettingsList.Count() > 0)
-            {
-                foreach (AccountTypePartSettings partSettings in partSettingsList)
-                {
-                    bool isPartFoundOrInherited = this.IsPartFoundOrInherited(parentAccountId, partSettings.PartDefinitionId);
-
-                    if (partSettings.AvailabilitySettings == AccountPartAvailabilityOptions.AlwaysAvailable || !isPartFoundOrInherited)
-                    {
-                        var accountPartRuntime = new AccountPartRuntime();
-
-                        AccountPartDefinition partDefinition = accountPartDefinitionManager.GetAccountPartDefinition(partSettings.PartDefinitionId);
-                        if (partDefinition == null)
-                            throw new NullReferenceException("partDefinition");
-
-                        accountPartRuntime.PartDefinition = partDefinition;
-
-                        if (partSettings.RequiredSettings == AccountPartRequiredOptions.RequiredIfNotInherited)
-                            accountPartRuntime.IsRequired = !isPartFoundOrInherited;
-                        else
-                            accountPartRuntime.IsRequired = (partSettings.RequiredSettings == AccountPartRequiredOptions.Required);
-
-                        runtimeParts.Add(accountPartRuntime);
-                    }
-                }
-            }
-
-            if (runtimeParts.Count > 0)
-                accountEditorRuntime.Parts = runtimeParts;
-            AccountTypeManager manager = new AccountTypeManager();
-
-
-            return accountEditorRuntime;
-        }
 
         private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(Guid accountTypeId)
         {

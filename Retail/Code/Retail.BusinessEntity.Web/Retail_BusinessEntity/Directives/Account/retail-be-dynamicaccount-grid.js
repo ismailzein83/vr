@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountService', 'Retail_BE_AccountActionService',
-    function (VRNotificationService, UtilsService, Retail_BE_AccountAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_BE_AccountService, Retail_BE_AccountActionService) {
+app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountActionService',
+    function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_BE_AccountActionService) {
         return {
             restrict: 'E',
             scope: {
@@ -41,12 +41,12 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-                    return Retail_BE_AccountAPIService.GetFilteredAccounts(dataRetrievalInput).then(function (response) {
+                    return Retail_BE_AccountBEAPIService.GetFilteredAccounts(dataRetrievalInput).then(function (response) {
 
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var account = response.Data[i];
-                                Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, account, gridAPI, accountViewDefinitions);
+                                Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, account, gridAPI, accountViewDefinitions);
                                 Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, account, gridAPI, accountViewDefinitions, accountActionDefinitions);
                             }
                         }
@@ -185,7 +185,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                 };
 
                 api.onAccountAdded = function (addedAccount) {
-                    Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, addedAccount, gridAPI, accountViewDefinitions);
+                    Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, addedAccount, gridAPI, accountViewDefinitions);
                     Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, addedAccount, gridAPI, accountViewDefinitions, accountActionDefinitions);
                     gridAPI.itemAdded(addedAccount);
                 };
@@ -206,18 +206,18 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
             }
             function editAccount(account) {
                 var onAccountUpdated = function (updatedAccount) {
-                    Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, updatedAccount, gridAPI, accountViewDefinitions);
+                    Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, updatedAccount, gridAPI, accountViewDefinitions);
                     Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, updatedAccount, gridAPI, accountViewDefinitions, accountActionDefinitions);
                     gridAPI.itemUpdated(updatedAccount);
                 };
 
-                Retail_BE_AccountService.editAccount(account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
+                Retail_BE_AccountBEService.editAccount(accountBEDefinitionId, account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
             }
             function openAccount360DegreeEditor(account) {
-                Retail_BE_AccountService.openAccount360DegreeEditor(accountBEDefinitionId, account.Entity.AccountId);
+                Retail_BE_AccountBEService.openAccount360DegreeEditor(accountBEDefinitionId, account.Entity.AccountId);
             }
-            function hasEditAccountPermission() {
-                return Retail_BE_AccountAPIService.HasUpdateAccountPermission();
-            }
+            //function hasEditAccountPermission() {
+            //    return Retail_BE_AccountBEAPIService.HasUpdateAccountPermission();
+            //}
         }
     }]);

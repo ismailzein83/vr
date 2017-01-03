@@ -1,1 +1,42 @@
-﻿
+﻿<div vr-modalcontent ng-controller="Retail_BE_AccountEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formAccountEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                                        onselectionchanged="scopeModel.onAccountTypeSelectionChanged"
+                                                        normal-col-num="6"
+                                                        isrequired="true">
+                        </retail-be-accounttype-selector>
+                    </vr-row>
+                    <vr-row ng-repeat="notRequiredPart in scopeModel.notRequiredParts">
+                        <vr-columns width="fullrow">
+                            <vr-label>{{notRequiredPart.definition.Title}}</vr-label>
+                            <vr-switch value="notRequiredPart.isSelected"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <retail-be-account-parts on-ready="scopeModel.onRequiredPartsDirectiveReady"></retail-be-account-parts>
+                <span ng-repeat="notRequiredPart in scopeModel.notRequiredParts" vr-loader="notRequiredPart.isLoading">
+                    <vr-directivewrapper directive="notRequiredPart.runtimeEditor"
+                                         on-ready="notRequiredPart.onDirectiveReady"
+                                         normal-col-num="6"
+                                         ng-if="notRequiredPart.isSelected">
+                    </vr-directivewrapper>
+                </span>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formAccountEditor" data-onclick="scopeModel.save" haspermission="scopeModel.hasSaveAccountPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

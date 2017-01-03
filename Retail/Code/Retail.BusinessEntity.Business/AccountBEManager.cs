@@ -62,13 +62,19 @@ namespace Retail.BusinessEntity.Business
             return DataRetrievalManager.Instance.ProcessResult(input, bigResult);
         }
 
-        public Account GetAccount(Guid accountDefinitionId, long accountId)
+        public Account GetAccount(Guid accountBEDefinitionId, long accountId)
         {
-            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(accountDefinitionId);
+            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(accountBEDefinitionId);
             return cachedAccounts.GetRecord(accountId);
         }
 
-        public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Guid accountDefinitionId, Account account)
+        public AccountDetail GetAccountDetail(Guid accountBEDefinitionId, long accountId)
+        {
+            var account = this.GetAccount(accountBEDefinitionId, accountId);
+            return account != null ? AccountDetailMapper(account) : null;
+        }
+
+        public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(AccountToInsert accountToInsert)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountDetail>();
 
@@ -76,12 +82,12 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
             long accountId;
 
-            if (TryAddAccount(accountDefinitionId, account, out accountId))
+            if (TryAddAccount(accountToInsert, out accountId))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountDefinitionId);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                account.AccountId = accountId;
-                insertOperationOutput.InsertedObject = AccountDetailMapper(account);
+                accountToInsert.AccountId = accountId;
+                insertOperationOutput.InsertedObject = AccountDetailMapper(this.GetAccount(accountToInsert.AccountBEDefinitionId, accountToInsert.AccountId));
             }
             else
             {
@@ -90,39 +96,39 @@ namespace Retail.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        internal bool TryAddAccount(Guid accountDefinitionId, Account account, out long accountId)
+        internal bool TryAddAccount(AccountToInsert accountToInsert, out long accountId)
         {
-            ValidateAccountToAdd(accountDefinitionId, account);
+            ValidateAccountToAdd(accountToInsert);
 
-            if (account.StatusId == Guid.Empty)
+            if (accountToInsert.StatusId == Guid.Empty)
             {
                 var accountTypeManager = new AccountTypeManager();
-                var accountType = accountTypeManager.GetAccountType(account.TypeId);
+                var accountType = accountTypeManager.GetAccountType(accountToInsert.TypeId);
                 if (accountType == null)
                     throw new NullReferenceException("AccountType is null");
                 if (accountType.Settings == null)
                     throw new NullReferenceException("AccountType settings is null");
 
-                account.StatusId = accountType.Settings.InitialStatusId;
+                accountToInsert.StatusId = accountType.Settings.InitialStatusId;
             }
 
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
 
-            return dataManager.Insert(account, out accountId);
+            return dataManager.Insert(accountToInsert, out accountId);
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(Guid accountDefinitionId, AccountToEdit account)
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit accountToEdit)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            if (TryUpdateAccount(accountDefinitionId, account))
+            if (TryUpdateAccount(accountToEdit))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountDefinitionId);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToEdit.AccountBEDefinitionId);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = AccountDetailMapper(this.GetAccount(accountDefinitionId, account.AccountId));
+                updateOperationOutput.UpdatedObject = AccountDetailMapper(this.GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId));
             }
             else
             {
@@ -131,26 +137,25 @@ namespace Retail.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-
-        internal bool TryUpdateAccount(Guid accountDefinitionId, AccountToEdit account)
+        internal bool TryUpdateAccount(AccountToEdit accountToEdit)
         {
             long? parentId;
-            ValidateAccountToEdit(accountDefinitionId, account, out parentId);
+            ValidateAccountToEdit(accountToEdit, out parentId);
 
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
 
-            return dataManager.Update(account, parentId);
+            return dataManager.Update(accountToEdit, parentId);
         }
 
-        public string GetAccountName(Guid accountDefinitionId, long accountId)
+        public string GetAccountName(Guid accountBEDefinitionId, long accountId)
         {
-            Account account = this.GetAccount(accountDefinitionId, accountId);
+            Account account = this.GetAccount(accountBEDefinitionId, accountId);
             return (account != null) ? account.Name : null;
         }
 
-        public IEnumerable<AccountInfo> GetAccountsInfo(Guid accountDefinitionId, string nameFilter, AccountFilter filter)
+        public IEnumerable<AccountInfo> GetAccountsInfo(Guid accountBEDefinitionId, string nameFilter, AccountFilter filter)
         {
-            IEnumerable<Account> allAccounts = GetCachedAccounts(accountDefinitionId).Values;
+            IEnumerable<Account> allAccounts = GetCachedAccounts(accountBEDefinitionId).Values;
             string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
             Func<Account, bool> filterFunc = null;
 
@@ -171,10 +176,10 @@ namespace Retail.BusinessEntity.Business
             return allAccounts.MapRecords(AccountInfoMapper, filterFunc).OrderBy(x => x.Name);
         }
 
-        //public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountDefinitionId, HashSet<long> accountIds)
+        //public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountBEDefinitionId, HashSet<long> accountIds)
         //{
         //    List<AccountInfo> accountInfos = new List<AccountInfo>();
-        //    var accounts = GetCachedAccounts(accountDefinitionId);
+        //    var accounts = GetCachedAccounts(accountBEDefinitionId);
         //    foreach (var accountId in accountIds)
         //    {
         //        var account = accounts.GetRecord(accountId);
@@ -184,8 +189,62 @@ namespace Retail.BusinessEntity.Business
         //    return accountInfos.OrderBy(x => x.Name);
         //}
 
-        #endregion
+        public AccountEditorRuntime GetAccountEditorRuntime(Guid accountBEDefinitionId, Guid accountTypeId, int? parentAccountId)
+        {
+            var accountEditorRuntime = new AccountEditorRuntime();
 
+            var accountPartDefinitionManager = new AccountPartDefinitionManager();
+
+            var runtimeParts = new List<AccountPartRuntime>();
+
+            IEnumerable<AccountTypePartSettings> partSettingsList = GetAccountTypePartDefinitionSettingsList(accountTypeId);
+            if (partSettingsList != null && partSettingsList.Count() > 0)
+            {
+                foreach (AccountTypePartSettings partSettings in partSettingsList)
+                {
+                    bool isPartFoundOrInherited = this.IsPartFoundOrInherited(accountBEDefinitionId, parentAccountId, partSettings.PartDefinitionId);
+
+                    if (partSettings.AvailabilitySettings == AccountPartAvailabilityOptions.AlwaysAvailable || !isPartFoundOrInherited)
+                    {
+                        var accountPartRuntime = new AccountPartRuntime();
+
+                        AccountPartDefinition partDefinition = accountPartDefinitionManager.GetAccountPartDefinition(partSettings.PartDefinitionId);
+                        if (partDefinition == null)
+                            throw new NullReferenceException("partDefinition");
+
+                        accountPartRuntime.PartDefinition = partDefinition;
+
+                        if (partSettings.RequiredSettings == AccountPartRequiredOptions.RequiredIfNotInherited)
+                            accountPartRuntime.IsRequired = !isPartFoundOrInherited;
+                        else
+                            accountPartRuntime.IsRequired = (partSettings.RequiredSettings == AccountPartRequiredOptions.Required);
+
+                        runtimeParts.Add(accountPartRuntime);
+                    }
+                }
+            }
+
+            if (runtimeParts.Count > 0)
+                accountEditorRuntime.Parts = runtimeParts;
+            AccountTypeManager manager = new AccountTypeManager();
+
+
+            return accountEditorRuntime;
+        }
+
+        public bool IsAccountMatchWithFilterGroup(Account account, RecordFilterGroup filterGroup)
+        {
+            return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(account));
+        }
+
+        public CompanySetting GetCompanySetting(long accountId)
+        {
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            return configManager.GetDefaultCompanySetting();
+        }
+
+        #endregion
+         
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
@@ -193,9 +252,9 @@ namespace Retail.BusinessEntity.Business
             IAccountBEDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
             object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(Guid accountDefinitionId)
+            protected override bool ShouldSetCacheExpired(Guid accountBEDefinitionId)
             {
-                return _dataManager.AreAccountsUpdated(accountDefinitionId, ref _updateHandle);
+                return _dataManager.AreAccountsUpdated(accountBEDefinitionId, ref _updateHandle);
             }
         }
 
@@ -240,24 +299,24 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        public Dictionary<long, Account> GetCachedAccounts(Guid accountDefinitionId)
+        public Dictionary<long, Account> GetCachedAccounts(Guid accountBEDefinitionId)
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetAccounts_{0}", accountDefinitionId), accountDefinitionId,
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetAccounts_{0}", accountBEDefinitionId), accountBEDefinitionId,
                 () =>
                 {
                     IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-                    IEnumerable<Account> accounts = dataManager.GetAccounts(accountDefinitionId);
+                    IEnumerable<Account> accounts = dataManager.GetAccounts(accountBEDefinitionId);
                     return accounts.ToDictionary(kvp => kvp.AccountId, kvp => kvp);
                 });
         }
 
-        Dictionary<long, AccountTreeNode> GetCacheAccountTreeNodes(Guid accountDefinitionId)
+        Dictionary<long, AccountTreeNode> GetCacheAccountTreeNodes(Guid accountBEDefinitionId)
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCacheAccountTreeNodes_{0}", accountDefinitionId), accountDefinitionId,
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCacheAccountTreeNodes_{0}", accountBEDefinitionId), accountBEDefinitionId,
                 () =>
                 {
                     Dictionary<long, AccountTreeNode> treeNodes = new Dictionary<long, AccountTreeNode>();
-                    foreach (var account in GetCachedAccounts(accountDefinitionId).Values)
+                    foreach (var account in GetCachedAccounts(accountBEDefinitionId).Values)
                     {
                         AccountTreeNode node = new AccountTreeNode
                         {
@@ -292,49 +351,92 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-        #region Validation Methods
+        #region Get Account Editor Runtime
 
-        private void ValidateAccountToAdd(Guid accountDefinitionId, Account account)
+        private IEnumerable<AccountTypePartSettings> GetAccountTypePartDefinitionSettingsList(Guid accountTypeId)
         {
-            ValidateAccount(accountDefinitionId, account.AccountId, account.Name, account.ParentAccountId);
+            var accountTypeManager = new AccountTypeManager();
+            AccountType accountType = accountTypeManager.GetAccountType(accountTypeId);
+            if (accountType == null)
+                throw new NullReferenceException("accountType");
+            if (accountType.Settings == null)
+                throw new NullReferenceException("accountType.Settings");
+            return accountType.Settings.PartDefinitionSettings;
         }
 
-        private void ValidateAccountToEdit(Guid accountDefinitionId, AccountToEdit account, out long? parentAccountId)
+        private bool IsPartFoundOrInherited(Guid accountBEDefinitionId, long? accountId, Guid partDefinitionId)
         {
-            Account accountEntity = this.GetAccount(accountDefinitionId, account.AccountId);
+            if (!accountId.HasValue)
+                return false;
+
+            Account account = this.GetAccount(accountBEDefinitionId, accountId.Value);
+            if (account == null)
+                throw new NullReferenceException("account");
+            if (account.Settings == null)
+                throw new NullReferenceException("account.Settings");
+
+            if (account.Settings.Parts == null)
+                return false;
+
+            AccountPart accountPart;
+            bool isPartFound = account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart);
+
+            if (isPartFound)
+                return true;
+
+            return IsPartFoundOrInherited(accountBEDefinitionId, account.ParentAccountId, partDefinitionId);
+        }
+
+        #endregion
+
+        #region Validation Methods
+
+        private void ValidateAccountToAdd(AccountToInsert accountToInsert)
+        {
+            ValidateAccount(accountToInsert.AccountBEDefinitionId, accountToInsert.TypeId, accountToInsert.AccountId, accountToInsert.Name, accountToInsert.ParentAccountId);
+        }
+
+        private void ValidateAccountToEdit(AccountToEdit accountToEdit, out long? parentAccountId)
+        {
+            Account accountEntity = this.GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
 
             if (accountEntity == null)
-                throw new DataIntegrityValidationException(String.Format("Account '{0}' does not exist", account.AccountId));
+                throw new DataIntegrityValidationException(String.Format("Account '{0}' does not exist", accountToEdit.AccountId));
 
             parentAccountId = accountEntity.ParentAccountId;
-            ValidateAccount(accountDefinitionId, account.AccountId, account.Name, accountEntity.ParentAccountId);
+            ValidateAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.TypeId, accountToEdit.AccountId, accountToEdit.Name, accountEntity.ParentAccountId);
 
             if (parentAccountId.HasValue)
             {
-                IEnumerable<long> subAccountIds = this.GetSubAccountIds(accountDefinitionId, parentAccountId.Value);
+                IEnumerable<long> subAccountIds = this.GetSubAccountIds(accountToEdit.AccountBEDefinitionId, parentAccountId.Value);
                 if (subAccountIds == null || subAccountIds.Count() == 0)
                     throw new DataIntegrityValidationException(String.Format("ParentAccount '{0}' does not have any sub accounts", parentAccountId));
-                if (!subAccountIds.Contains(account.AccountId))
-                    throw new DataIntegrityValidationException(String.Format("Account '{0}' is not a sub account of Account '{1}'", account.AccountId, parentAccountId));
+                if (!subAccountIds.Contains(accountToEdit.AccountId))
+                    throw new DataIntegrityValidationException(String.Format("Account '{0}' is not a sub account of Account '{1}'", accountToEdit.AccountId, parentAccountId));
             }
         }
 
-        private void ValidateAccount(Guid accountDefinitionId, long accountId, string name, long? parentAccountId)
+        private void ValidateAccount(Guid accountBEDefinitionId, Guid accountTypeId, long accountId, string name, long? parentAccountId)
         {
+            var accountType = new AccountTypeManager().GetAccountType(accountTypeId);
+            if (accountType.AccountBEDefinitionId != accountBEDefinitionId)
+                throw new DataIntegrityValidationException(string.Format("accountType.AccountBEDefinitionId '{0}' is different than passed accountBEDefinitionId '{1}'",
+                    accountType.AccountBEDefinitionId, accountBEDefinitionId));
+
             if (String.IsNullOrWhiteSpace(name))
                 throw new MissingArgumentValidationException("Account.Name");
 
             if (parentAccountId.HasValue)
             {
-                Account parentAccount = this.GetAccount(accountDefinitionId, parentAccountId.Value);
+                Account parentAccount = this.GetAccount(accountBEDefinitionId, parentAccountId.Value);
                 if (parentAccount == null)
                     throw new DataIntegrityValidationException(String.Format("ParentAccount '{0}' does not exist", parentAccountId));
             }
         }
 
-        private IEnumerable<long> GetSubAccountIds(Guid accountDefinitionId, long parentAccountId)
+        private IEnumerable<long> GetSubAccountIds(Guid accountBEDefinitionId, long parentAccountId)
         {
-            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(accountDefinitionId);
+            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(accountBEDefinitionId);
             return cachedAccounts.MapRecords(itm => itm.Value.AccountId, itm => itm.Value.ParentAccountId.HasValue && itm.Value.ParentAccountId == parentAccountId);
         }
 
@@ -361,21 +463,17 @@ namespace Retail.BusinessEntity.Business
             var accountTreeNode = GetCacheAccountTreeNodes(accountBEDefinitionId).GetRecord(account.AccountId);
 
             //Dynamic Part
-            IEnumerable<GenericFieldDefinitionInfo> genericFieldDefinitionInfos = accountTypeManager.GetGenericFieldDefinitionsInfo();
             Dictionary<string, AccountFieldValue> fieldValues = new Dictionary<string, AccountFieldValue>();
+            Dictionary<string, AccountGenericField> accountGenericFields = accountTypeManager.GetAccountGenericFields();
 
-            foreach (var field in genericFieldDefinitionInfos)
+            foreach (var field in accountGenericFields.Values)
             {
                 if (columns != null && !columns.Contains(field.Name))
                     continue;
 
+                object value = field.GetValue(new AccountGenericFieldContext(account));
+                
                 AccountFieldValue accountFieldValue = new AccountFieldValue();
-
-                AccountGenericField accountGenericField = new AccountTypeManager().GetAccountGenericField(field.Name);
-                if (accountGenericField == null)
-                    throw new NullReferenceException(String.Format("accountGenericField '{0}'", field.Name));
-
-                object value = accountGenericField.GetValue(new AccountGenericFieldContext(account));
                 accountFieldValue.Value = value;
                 accountFieldValue.Description = field.FieldType.GetDescription(value);
 

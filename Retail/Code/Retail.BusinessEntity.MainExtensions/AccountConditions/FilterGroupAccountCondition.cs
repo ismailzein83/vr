@@ -15,10 +15,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountConditions
 
         public RecordFilterGroup FilterGroup { get; set; }
 
-        static AccountManager s_accountManager = new AccountManager();
+        static AccountBEManager s_accountBEManager = new AccountBEManager();
         public override bool Evaluate(IAccountConditionEvaluationContext context)
         {
-            return s_accountManager.IsAccountMatchWithFilterGroup(context.Account, this.FilterGroup);
+            return s_accountBEManager.IsAccountMatchWithFilterGroup(context.Account, this.FilterGroup);
         }
     }
 

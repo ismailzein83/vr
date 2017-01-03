@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountBEDefinitionManager
     {
-        #region Public Methods
+        #region Public Methods 
 
         public AccountGridDefinition GetAccountGridDefinition(Guid accountBEDefinitionId)
         {

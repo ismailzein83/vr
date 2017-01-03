@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountManagementController.$inject = ['$scope', 'Retail_BE_AccountService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
+    AccountManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountTypeAPIService'];
 
-    function AccountManagementController($scope, Retail_BE_AccountService, Retail_BE_AccountAPIService, Retail_BE_AccountTypeAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
+    function AccountManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountTypeAPIService) {
 
         var accountFields;
         var viewId;
@@ -85,12 +85,12 @@
                     gridAPI.onAccountAdded(addedAccount);
                 };
 
-                Retail_BE_AccountService.addAccount(undefined, onAccountAdded);
+                Retail_BE_AccountBEService.addAccount(accountBEDefinitionId, undefined, onAccountAdded);
             };
 
-            $scope.scopeModel.hasAddAccountPermission = function () {
-                return Retail_BE_AccountAPIService.HasAddAccountPermission();
-            };
+            //$scope.scopeModel.hasAddAccountPermission = function () {
+            //    return Retail_BE_AccountBEAPIService.HasAddAccountPermission();
+            //};
         }
         function load() {
             $scope.scopeModel.isLoading = true;

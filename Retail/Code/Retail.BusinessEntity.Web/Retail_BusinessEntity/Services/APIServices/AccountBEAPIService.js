@@ -12,24 +12,33 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredAccounts'), input);
         }
 
-        function GetAccount(accountId) {
+        function GetAccount(accountBEDefinitionId, accountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccount'), {
+                accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId
             });
         }
 
-        function GetAccountName(accountId) {
+        function GetAccountName(accountBEDefinitionId, accountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountName'), {
+                accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId
             });
         }
 
-        function AddAccount(account) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAccount'), account);
+        function GetAccountDetail(accountBEDefinitionId, accountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountDetail"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId
+            });
         }
 
-        function UpdateAccount(account) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccount'), account);
+        function AddAccount(accountToInsert) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAccount'), accountToInsert);
+        }
+
+        function UpdateAccount(accountToEdit) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccount'), accountToEdit);
         }
 
         function GetAccountsInfo(accountDefinitionId, nameFilter, serializedFilter) {
@@ -45,12 +54,13 @@
         //}
 
 
-        //function GetAccountEditorRuntime(accountTypeId, parentAccountId) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountEditorRuntime'), {
-        //        accountTypeId: accountTypeId,
-        //        parentAccountId: parentAccountId
-        //    });
-        //}
+        function GetAccountEditorRuntime(accountBEDefinitionId, accountTypeId, parentAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountEditorRuntime'), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountTypeId: accountTypeId,
+                parentAccountId: parentAccountId
+            });
+        }
 
         //function HasAddAccountPermission() {
         //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddAccount']));
@@ -72,14 +82,14 @@
 
         return {
             GetFilteredAccounts: GetFilteredAccounts,
-            GetAccountDetail: GetAccountDetail,
             GetAccount: GetAccount,
             GetAccountName: GetAccountName,
+            GetAccountDetail: GetAccountDetail,
             AddAccount: AddAccount,
             UpdateAccount: UpdateAccount,
             GetAccountsInfo: GetAccountsInfo,
             //GetAccountsInfoByIds: GetAccountsInfoByIds
-            //GetAccountEditorRuntime: GetAccountEditorRuntime,
+            GetAccountEditorRuntime: GetAccountEditorRuntime,
             //HasViewAccountsPermission: HasViewAccountsPermission,
             //HasAddAccountPermission: HasAddAccountPermission,
             //HasUpdateAccountPermission: HasUpdateAccountPermission,

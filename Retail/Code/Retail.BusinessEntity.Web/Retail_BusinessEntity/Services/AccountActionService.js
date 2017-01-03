@@ -1,6 +1,6 @@
 ﻿
-app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountService) {
+app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService',
+    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService) {
 
         var actionTypes = [];
 
@@ -29,7 +29,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                             accountBEDefinitionId: accountBEDefinitionId,
                             account: account,
                             onItemUpdated: function (updatedItem) {
-                                Retail_BE_AccountService.defineAccountViewTabs(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions);
+                                Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions);
                                 defineAccountMenuActions(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions, accountActionDefinitions);
                                 gridAPI.itemUpdated(updatedItem);
                             }
@@ -99,7 +99,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedAccount);
                     };
-                    Retail_BE_AccountService.editAccount(account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
+                    Retail_BE_AccountBEService.editAccount(accountBEDefinitionId, account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
                 }
             };
             registerActionType(actionType);
@@ -115,7 +115,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                     var accountBEDefinitionId = payload.accountBEDefinitionId;
                     var account = payload.account;
 
-                    Retail_BE_AccountService.openAccount360DegreeEditor(accountBEDefinitionId, account.Entity.AccountId);
+                    Retail_BE_AccountBEService.openAccount360DegreeEditor(accountBEDefinitionId, account.Entity.AccountId);
                 }
             };
             registerActionType(actionType);

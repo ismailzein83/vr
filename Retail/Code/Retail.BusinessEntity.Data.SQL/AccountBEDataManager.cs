@@ -28,11 +28,11 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("Retail.sp_Account_GetByDefinition", AccountMapper, accountBEDefinitionId);
         }
 
-        public bool Insert(Account account, out long insertedId)
+        public bool Insert(AccountToInsert accountToInsert, out long insertedId)
         {
             object accountId;
-            string serializedSettings = account.Settings != null ? Vanrise.Common.Serializer.Serialize(account.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, account.Name, account.TypeId, serializedSettings, account.ParentAccountId, account.StatusId, account.SourceId);
+            string serializedSettings = accountToInsert.Settings != null ? Vanrise.Common.Serializer.Serialize(accountToInsert.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, accountToInsert.Name, accountToInsert.TypeId, serializedSettings, accountToInsert.ParentAccountId, accountToInsert.StatusId, accountToInsert.SourceId);
 
             if (affectedRecords > 0)
             {
@@ -44,20 +44,20 @@ namespace Retail.BusinessEntity.Data.SQL
             return false;
         }
 
-        public bool Update(AccountToEdit account, long? parentId)
+        public bool Update(AccountToEdit accountToEdit, long? parentId)
         {
-            string serializedSettings = account.Settings != null ? Vanrise.Common.Serializer.Serialize(account.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", account.AccountId, account.Name, account.TypeId, serializedSettings, parentId, account.SourceId);
+            string serializedSettings = accountToEdit.Settings != null ? Vanrise.Common.Serializer.Serialize(accountToEdit.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", accountToEdit.AccountId, accountToEdit.Name, accountToEdit.TypeId, serializedSettings, parentId, accountToEdit.SourceId);
             return (affectedRecords > 0);
         }
 
         public bool AreAccountsUpdated(Guid accountBEDefinitionId, ref object updateHandle)
         {
-            string query = String.Format("SELECT MAX(timestamp) " +
+            string query = String.Format("SELECT MAX(a.timestamp) " +
                                          "FROM [Retail].[Account] a with(nolock) " + 
                                          "Join [Retail_BE].[AccountType] t with(nolock) " + 
                                          "on a.[TypeID] = t.[ID] " +
-                                         "where t.[AccountBEDefinitionID] = {0}", accountBEDefinitionId);
+                                         "where t.[AccountBEDefinitionID] = '{0}'", accountBEDefinitionId);
 
             var newReceivedDataInfo = ExecuteScalarText(query, null);
             return base.IsDataUpdated(ref updateHandle, newReceivedDataInfo);
