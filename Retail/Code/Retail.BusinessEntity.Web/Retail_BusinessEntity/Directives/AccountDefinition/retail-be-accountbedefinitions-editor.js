@@ -125,6 +125,11 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         var statusDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
                         statusDefinitionSelectorDeferred.promise.then(function () {
                             var accountActionDefinitionPayload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business"
+                                    }]
+                                },
                                 selectedIds: statusGroupId
                             };
                             VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, accountActionDefinitionPayload, statusDefinitionLoadDeferred);

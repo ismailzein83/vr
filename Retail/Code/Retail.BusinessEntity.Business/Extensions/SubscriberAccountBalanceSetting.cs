@@ -21,5 +21,6 @@ namespace Retail.BusinessEntity.Business
         {
             return new SubscriberAccountBalanceManager();
         }
+        public Guid AccountBEDefinitionId { get; set; }
     }
 }

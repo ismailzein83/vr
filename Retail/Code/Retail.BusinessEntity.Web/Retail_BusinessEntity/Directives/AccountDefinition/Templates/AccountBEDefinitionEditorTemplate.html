@@ -1,6 +1,10 @@
 ﻿<vr-tab header="'Settings'">
-    <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady" isrequired="true" normal-col-num="6">
-    </vr-common-statusdefinition-selector>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-genericdata-businessentitydefinition-selector customlabel="Status Group" on-ready="scopeModel.onStatusDefinitionSelectorReady" isrequired="true" normal-col-num="6">
+            </vr-genericdata-businessentitydefinition-selector>
+        </vr-columns>
+    </vr-row>
 </vr-tab>
 <vr-tab header="'Grid Columns'">
     <retail-be-accountgriddefinition-management on-ready="scopeModel.onAccountGridDefinitionReady" isrequired="true" normal-col-num="6"></retail-be-accountgriddefinition-management>
