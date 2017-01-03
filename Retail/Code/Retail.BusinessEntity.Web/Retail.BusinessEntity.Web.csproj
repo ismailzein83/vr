@@ -250,6 +250,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountService\retail-be-accountservice-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\Templates\AccountServiceGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountidentificationrules-view.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountinfo-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountpackages-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountservices-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-actions-view.js" />
@@ -258,6 +259,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountIdentificationRulesViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountPackagesViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountServicesViewTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountInfoViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\ActionsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\FinancialTransactionsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\SubAccountsViewTemplate.html" />

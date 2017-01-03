@@ -107,6 +107,7 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                     function getAccount() {
                         return Retail_BE_AccountBEAPIService.GetAccount(accountBEDefinitionId, accountId).then(function (response) {
                             accountEntity = response;
+                            parentAccountId = response.ParentAccountId;
                         });
                     }
 

@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
         {
             get
             {
-                return null;
+                return "retail-be-accountinfo-view";
             }
             set
             {
