@@ -306,7 +306,6 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(String.Format("account '{0}'", accountId));
             return TryGetAccountPart(account, partDefinitionId, getInherited, out accountPart);
         }
-
         public bool TryGetAccountPart(Account account, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
         {
             if (account.Settings != null && account.Settings.Parts != null && account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart))
@@ -647,30 +646,30 @@ namespace Retail.BusinessEntity.Business
 
             var accountTreeNode = GetCacheAccountTreeNodes().GetRecord(account.AccountId);
 
-            //Dynamic Part
-            IEnumerable<GenericFieldDefinitionInfo> genericFieldDefinitionInfos = accountTypeManager.GetGenericFieldDefinitionsInfo();
-            Dictionary<string, AccountFieldValue> fieldValues = new Dictionary<string, AccountFieldValue>();
+            ////Dynamic Part
+            //IEnumerable<GenericFieldDefinitionInfo> genericFieldDefinitionInfos = accountTypeManager.GetGenericFieldDefinitionsInfo();
+            //Dictionary<string, AccountFieldValue> fieldValues = new Dictionary<string, AccountFieldValue>();
 
-            foreach (var field in genericFieldDefinitionInfos)
-            {
-                if (columns != null && !columns.Contains(field.Name))
-                    continue;
+            //foreach (var field in genericFieldDefinitionInfos)
+            //{
+            //    if (columns != null && !columns.Contains(field.Name))
+            //        continue;
 
-                AccountFieldValue accountFieldValue = new AccountFieldValue();
+            //    AccountFieldValue accountFieldValue = new AccountFieldValue();
 
-                AccountGenericField accountGenericField = new AccountTypeManager().GetAccountGenericField(field.Name);
-                if (accountGenericField == null)
-                    throw new NullReferenceException(String.Format("accountGenericField '{0}'", field.Name));
+            //    AccountGenericField accountGenericField = new AccountTypeManager().GetAccountGenericField(field.Name);
+            //    if (accountGenericField == null)
+            //        throw new NullReferenceException(String.Format("accountGenericField '{0}'", field.Name));
 
-                object value = accountGenericField.GetValue(new AccountGenericFieldContext(account));
-                accountFieldValue.Value = value;
-                accountFieldValue.Description = field.FieldType.GetDescription(value);
+            //    object value = accountGenericField.GetValue(new AccountGenericFieldContext(account));
+            //    accountFieldValue.Value = value;
+            //    accountFieldValue.Description = field.FieldType.GetDescription(value);
 
-                fieldValues.Add(field.Name, accountFieldValue);
-            }
+            //    fieldValues.Add(field.Name, accountFieldValue);
+            //}
 
-            List<AccountViewDefinition> accountViewDefinitions = accountBEDefinitionManager.GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
-            List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionManager.GetAccountActionDefinitionsByAccount(accountBEDefinitionId, account);
+            //List<AccountViewDefinition> accountViewDefinitions = accountBEDefinitionManager.GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
+            //List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionManager.GetAccountActionDefinitionsByAccount(accountBEDefinitionId, account);
 
             return new AccountDetail()
             {
@@ -680,10 +679,10 @@ namespace Retail.BusinessEntity.Business
                 TotalSubAccountCount = accountTreeNode.TotalSubAccountsCount,
                 StatusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId),
                 NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
-                NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId),
-                FieldValues = fieldValues,
-                AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null,
-                AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Select(itm => itm.AccountActionDefinitionId).ToList() : null
+                NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId)
+                //FieldValues = fieldValues,
+                //AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null,
+                //AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Select(itm => itm.AccountActionDefinitionId).ToList() : null
             };
         }
 
