@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class AccountRecurringPriceRuleSetSettings
+    public abstract class AccountRecurringChargeRuleSetSettings
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract List<RecurringPrice> GetApplicablePrices(IAccountRecurringPriceRuleSetContext context);
+        public abstract List<ApplicableRecurringCharge> GetApplicableCharges(IAccountRecurringChargeRuleSetContext context);
     }
 
-    public interface IAccountRecurringPriceRuleSetContext
+    public interface IAccountRecurringChargeRuleSetContext
     {
         Account Account { get; }
     }

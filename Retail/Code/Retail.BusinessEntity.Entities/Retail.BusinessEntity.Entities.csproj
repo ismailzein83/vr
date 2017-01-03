@@ -202,11 +202,13 @@
     <Compile Include="POS\POSInfo.cs" />
     <Compile Include="POS\POSSetting.cs" />
     <Compile Include="POS\SourcePOS.cs" />
+    <Compile Include="RecurringCharge\RecurringChargeDefinition.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />
-    <Compile Include="RecurringPrice\AccountRecurringPriceRule.cs" />
-    <Compile Include="RecurringPrice\AccountRecurringPriceRuleSet.cs" />
-    <Compile Include="RecurringPrice\AccountRecurringPriceRuleSetSettings.cs" />
-    <Compile Include="RecurringPrice\RecurringPrice.cs" />
+    <Compile Include="RecurringCharge\AccountRecurringChargeRule.cs" />
+    <Compile Include="RecurringCharge\AccountRecurringChargeRuleSet.cs" />
+    <Compile Include="RecurringCharge\AccountRecurringChargeRuleSetSettings.cs" />
+    <Compile Include="RecurringCharge\ApplicableRecurringCharge.cs" />
+    <Compile Include="RecurringCharge\AccountRecurringChargeEvaluator.cs" />
     <Compile Include="RevenueComparison\RevenueComparison.cs" />
     <Compile Include="RevenueComparison\RevenueComparisonDetail.cs" />
     <Compile Include="RevenueComparison\RevenueComparisonQuery.cs" />

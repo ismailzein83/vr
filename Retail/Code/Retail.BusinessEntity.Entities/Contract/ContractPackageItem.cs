@@ -10,8 +10,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public int PackageId { get; set; }
 
-        public int CurrencyId { get; set; }
-
         public Decimal? Price { get; set; }
     }
 }

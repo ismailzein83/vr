@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountRecurringPriceRuleSet
+    public class AccountRecurringChargeRuleSet
     {
+        public Guid AccountRecurringChargeRuleSetId { get; set; }
+
         public string Name { get; set; }
 
-        public AccountRecurringPriceRuleSetSettings Settings { get; set; }
+        public AccountRecurringChargeRuleSetSettings Settings { get; set; }
     }
 }

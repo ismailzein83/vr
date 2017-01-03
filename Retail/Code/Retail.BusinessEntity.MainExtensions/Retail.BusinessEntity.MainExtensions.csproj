@@ -104,8 +104,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountRecurringPriceRuleSets\ApplyFirstAccountRecurringPriceRuleSetSettings.cs" />
-    <Compile Include="AccountRecurringPriceRuleSets\SingleRuleAccountRecurringPriceRuleSetSettings.cs" />
+    <Compile Include="AccountRecurringChargeEvaluators\FixedChargeAccountRecurringChargeEvaluator.cs" />
+    <Compile Include="AccountRecurringChargeRuleSets\ApplyFirstAccountRecurringChargeRuleSetSettings.cs" />
+    <Compile Include="AccountRecurringChargeRuleSets\SingleRuleAccountRecurringChargeRuleSetSettings.cs" />
     <Compile Include="AccountViews\AccountIdentificationRules.cs" />
     <Compile Include="AccountViews\AccountInfo.cs" />
     <Compile Include="AccountViews\AccountPackages.cs" />
