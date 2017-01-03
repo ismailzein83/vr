@@ -27,8 +27,17 @@ app.directive("retailBeExtendedsettingsAccountbalance", ["UtilsService", "VRNoti
 
         function AccountBalanceTemplate($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var beDefinitionSelectorApi;
+            var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var extendedSettingsEntity;
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                    beDefinitionSelectorApi = api;
+                    beDefinitionSelectorPromiseDeferred.resolve();
+                };
                 defineAPI();
             }
 
@@ -37,14 +46,39 @@ app.directive("retailBeExtendedsettingsAccountbalance", ["UtilsService", "VRNoti
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        extendedSettingsEntity = payload.extendedSettingsEntity;
                     }
                     var promises = [];
+                    var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
+                    promises.push(businessEntityDefinitionSelectorLoadPromise);
+
+                    function getBusinessEntityDefinitionSelectorLoadPromise() {
+                        var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        beDefinitionSelectorPromiseDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
+                                    }]
+                                }
+                            };
+                            if (payload != undefined) {
+                                selectorPayload.selectedIds = extendedSettingsEntity != undefined ? extendedSettingsEntity.AccountBEDefinitionId : undefined;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
+                        });
+                        return businessEntityDefinitionSelectorLoadDeferred.promise;
+                    }
+
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.Business.SubscriberAccountBalanceSetting ,Retail.BusinessEntity.Business",
+                        AccountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds()
                     };
                 };
 
