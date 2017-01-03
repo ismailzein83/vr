@@ -262,10 +262,12 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\FinancialTransactionsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\SubAccountsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-convertor-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-genericfielddefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-synchronizer-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-dynamicaccount-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountConvertorEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGenericFieldDefinitionSelectorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountSynchronizerEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\DynamicAccountGridTemplate.html" />
