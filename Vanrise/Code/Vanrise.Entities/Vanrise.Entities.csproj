@@ -73,6 +73,11 @@
     <Compile Include="Settings\ProductInfoTechnicalSettings\ProductInfo.cs" />
     <Compile Include="Settings\ProductInfoTechnicalSettings\ProductInfoTechnicalSettings.cs" />
     <Compile Include="SourceCountryReaderConfig.cs" />
+    <Compile Include="StatusDefinition\StatusDefinition.cs" />
+    <Compile Include="StatusDefinition\StatusDefinitionDetail.cs" />
+    <Compile Include="StatusDefinition\StatusDefinitionFilter.cs" />
+    <Compile Include="StatusDefinition\StatusDefinitionInfo.cs" />
+    <Compile Include="StatusDefinition\StatusDefinitionQuery.cs" />
     <Compile Include="TextFilterType.cs" />
     <Compile Include="TextManipulation\ITextManipulationActionContext.cs" />
     <Compile Include="TextManipulation\ITextManipulationContext.cs" />

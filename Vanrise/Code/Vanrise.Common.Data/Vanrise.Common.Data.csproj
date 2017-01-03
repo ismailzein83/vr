@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="CommonDataManagerFactory.cs" />
     <Compile Include="IBigDataServiceDataManager.cs" />
+    <Compile Include="IStatusDefinitionDataManager.cs" />
     <Compile Include="IUserActionAuditDataManager.cs" />
     <Compile Include="IVRComponentTypeDataManager.cs" />
     <Compile Include="IZoneTimeDataManager.cs" />

@@ -124,6 +124,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\MasterLogController.cs" />
+    <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\UserActionAuditController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
@@ -193,6 +194,11 @@
     <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-companysettings-editor.js" />
+    <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\Templates\StatusDefinitionBEEditor.html" />
+    <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\vr-common-statusdefinitionbe-editor.js" />
+    <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionGridTemplate.html" />
+    <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-grid.js" />
+    <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-selector.js" />
     <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditGridTemplate.html" />
     <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditSearch.html" />
     <Content Include="Common\Directives\UserActionAudit\vr-common-useractionaudit-grid.js" />
@@ -296,6 +302,7 @@
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
     <Content Include="Common\Services\APIServices\MasterLogAPIService.js" />
+    <Content Include="Common\Services\APIServices\StatusDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\UserActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
@@ -317,6 +324,7 @@
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\CompanySettingService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
+    <Content Include="Common\Services\StatusDefinitionService.js" />
     <Content Include="Common\Services\UserActionAuditService.js" />
     <Content Include="Common\Services\VRComponentTypeService.js" />
     <Content Include="Common\Services\VRTimeZoneService.js" />
@@ -394,6 +402,10 @@
     <Content Include="Common\Views\Settings\SettingsEditor.html" />
     <Content Include="Common\Views\Settings\SettingsEditorController.js" />
     <Content Include="Common\Views\StartupPage.html" />
+    <Content Include="Common\Views\StatusDefinition\StatusDefinitionEditor.html" />
+    <Content Include="Common\Views\StatusDefinition\StatusDefinitionEditorController.js" />
+    <Content Include="Common\Views\StatusDefinition\StatusDefinitionManagement.html" />
+    <Content Include="Common\Views\StatusDefinition\StatusDefinitionManagementController.js" />
     <Content Include="Common\Views\StyleDefinition\StyleDefinitionEditor.html" />
     <Content Include="Common\Views\StyleDefinition\StyleDefinitionEditorController.js" />
     <Content Include="Common\Views\StyleDefinition\StyleDefinitionManagement.html" />

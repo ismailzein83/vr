@@ -1,0 +1,28 @@
+﻿<vr-panel ng-controller="VR_Common_StatusDefinitionManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox label="Name" value="name"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-genericdata-businessentitydefinition-selector customlabel="Status Group" on-ready="onBusinessEntityDefinitionSelectorReady">
+                    </vr-genericdata-businessentitydefinition-selector>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="add" haspermission="hasAddStatusDefinitionPermission"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-common-statusdefinition-grid on-ready="onGridReady"> </vr-common-statusdefinition-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

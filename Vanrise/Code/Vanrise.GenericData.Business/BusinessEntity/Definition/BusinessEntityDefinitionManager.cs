@@ -14,7 +14,7 @@ using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.Business
 {
-    public class BusinessEntityDefinitionManager
+    public class BusinessEntityDefinitionManager : IBusinessEntityDefinitionManager
     {
         #region Public Methods
 
