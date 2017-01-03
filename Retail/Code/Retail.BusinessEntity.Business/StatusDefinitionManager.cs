@@ -16,29 +16,29 @@ namespace Retail.BusinessEntity.Business
 
         #region Public Methods
 
-        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
+        public Retail.BusinessEntity.Entities.StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
         {
-            Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
+            Dictionary<Guid, Retail.BusinessEntity.Entities.StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
             return cachedStatusDefinitions.GetRecord(statusDefinitionId);
         }
 
         public string GetStatusDefinitionName(Guid statusDefinitionId)
         {
-            StatusDefinition statusDefinition = this.GetStatusDefinition(statusDefinitionId);
+            Retail.BusinessEntity.Entities.StatusDefinition statusDefinition = this.GetStatusDefinition(statusDefinitionId);
             return (statusDefinition != null) ? statusDefinition.Name : null;
         }
 
-        public IDataRetrievalResult<StatusDefinitionDetail> GetFilteredStatusDefinitions(DataRetrievalInput<StatusDefinitionQuery> input)
+        public IDataRetrievalResult<Retail.BusinessEntity.Entities.StatusDefinitionDetail> GetFilteredStatusDefinitions(DataRetrievalInput<Retail.BusinessEntity.Entities.StatusDefinitionQuery> input)
         {
             var allStatusDefinitions = GetCachedStatusDefinitions();
-            Func<StatusDefinition, bool> filterExpression = (x) => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
+            Func<Retail.BusinessEntity.Entities.StatusDefinition, bool> filterExpression = (x) => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
                                                                     (input.Query.EntityTypes == null || input.Query.EntityTypes.Contains(x.EntityType)));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStatusDefinitions.ToBigResult(input, filterExpression, StatusDefinitionDetailMapper));
         }
 
-        public Vanrise.Entities.InsertOperationOutput<StatusDefinitionDetail> AddStatusDefinition(StatusDefinition statusDefinitionItem)
+        public Vanrise.Entities.InsertOperationOutput<Retail.BusinessEntity.Entities.StatusDefinitionDetail> AddStatusDefinition(Retail.BusinessEntity.Entities.StatusDefinition statusDefinitionItem)
         {
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<StatusDefinitionDetail>();
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<Retail.BusinessEntity.Entities.StatusDefinitionDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -61,9 +61,9 @@ namespace Retail.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<StatusDefinitionDetail> UpdateStatusDefinition(StatusDefinition statusDefinitionItem)
+        public Vanrise.Entities.UpdateOperationOutput<Retail.BusinessEntity.Entities.StatusDefinitionDetail> UpdateStatusDefinition(Retail.BusinessEntity.Entities.StatusDefinition statusDefinitionItem)
         {
-            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<StatusDefinitionDetail>();
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<Retail.BusinessEntity.Entities.StatusDefinitionDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -84,9 +84,9 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionsInfo(StatusDefinitionFilter filter)
+        public IEnumerable<Retail.BusinessEntity.Entities.StatusDefinitionInfo> GetStatusDefinitionsInfo(Retail.BusinessEntity.Entities.StatusDefinitionFilter filter)
         {
-            Func<StatusDefinition, bool> filterExpression = null;
+            Func<Retail.BusinessEntity.Entities.StatusDefinition, bool> filterExpression = null;
             if (filter != null)
             {
                 filterExpression = (item) =>
@@ -99,9 +99,9 @@ namespace Retail.BusinessEntity.Business
             return this.GetCachedStatusDefinitions().MapRecords(StatusDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
-        public IEnumerable<StatusDefinition> GetFilteredStatusDefinitions(StatusDefinitionFilter filter)
+        public IEnumerable<Retail.BusinessEntity.Entities.StatusDefinition> GetFilteredStatusDefinitions(Retail.BusinessEntity.Entities.StatusDefinitionFilter filter)
         {
-            Func<StatusDefinition, bool> filterExpression = null;
+            Func<Retail.BusinessEntity.Entities.StatusDefinition, bool> filterExpression = null;
             if (filter != null)
             {
                 filterExpression = item =>
@@ -114,7 +114,7 @@ namespace Retail.BusinessEntity.Business
             return GetCachedStatusDefinitions().FindAllRecords(filterExpression);
         }
 
-        public IEnumerable<StatusDefinition> GetAllStatusDefinitions()
+        public IEnumerable<Retail.BusinessEntity.Entities.StatusDefinition> GetAllStatusDefinitions()
         {
             return this.GetCachedStatusDefinitions().MapRecords(x => x).OrderBy(x => x.Name);
         }
@@ -138,7 +138,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<Guid, StatusDefinition> GetCachedStatusDefinitions()
+        Dictionary<Guid, Retail.BusinessEntity.Entities.StatusDefinition> GetCachedStatusDefinitions()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetStatusDefinition",
                () =>
@@ -152,9 +152,9 @@ namespace Retail.BusinessEntity.Business
 
         #region Mappers
 
-        public StatusDefinitionDetail StatusDefinitionDetailMapper(StatusDefinition statusDefinition)
+        public Retail.BusinessEntity.Entities.StatusDefinitionDetail StatusDefinitionDetailMapper(Retail.BusinessEntity.Entities.StatusDefinition statusDefinition)
         {
-            StatusDefinitionDetail satatusDefinitionDetail = new StatusDefinitionDetail()
+            Retail.BusinessEntity.Entities.StatusDefinitionDetail satatusDefinitionDetail = new Retail.BusinessEntity.Entities.StatusDefinitionDetail()
             {
                 Entity = statusDefinition,
                 EntityTypeDescription = Utilities.GetEnumDescription(statusDefinition.EntityType)
@@ -162,9 +162,9 @@ namespace Retail.BusinessEntity.Business
             return satatusDefinitionDetail;
         }
 
-        public StatusDefinitionInfo StatusDefinitionInfoMapper(StatusDefinition statusDefinition)
+        public Retail.BusinessEntity.Entities.StatusDefinitionInfo StatusDefinitionInfoMapper(Retail.BusinessEntity.Entities.StatusDefinition statusDefinition)
         {
-            StatusDefinitionInfo statusDefinitionInfo = new StatusDefinitionInfo()
+            Retail.BusinessEntity.Entities.StatusDefinitionInfo statusDefinitionInfo = new Retail.BusinessEntity.Entities.StatusDefinitionInfo()
             {
                 StatusDefinitionId = statusDefinition.StatusDefinitionId,
                 Name = statusDefinition.Name

@@ -98,7 +98,7 @@ namespace Retail.BusinessEntity.Business
         public List<EntityStatusChargeInfo> GetStatusChargeInfos(int entityTypeId)
         {
             StatusDefinitionManager manager = new StatusDefinitionManager();
-            StatusDefinitionFilter filter = new StatusDefinitionFilter
+            Retail.BusinessEntity.Entities.StatusDefinitionFilter filter = new Retail.BusinessEntity.Entities.StatusDefinitionFilter
             {
                 EntityType = (EntityType)entityTypeId
             };
