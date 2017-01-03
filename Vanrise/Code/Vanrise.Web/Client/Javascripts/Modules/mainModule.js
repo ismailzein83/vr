@@ -331,8 +331,8 @@ app.controller('loginCtrl', function loginCtrl($scope, SecurityService) {
     };
 });
 app.controller('DocumentCtrl',['$scope', function documentCtrl($scope) {
-    $scope.downloadDocument = function () {
-        window.open('/Documents/User_Guide.pdf');
+    $scope.downloadDocument = function (file) {
+        window.open(file);
     };
 }]);
 angular.module('mainModule')
