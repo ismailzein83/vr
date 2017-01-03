@@ -1,5 +1,16 @@
 ﻿<vr-panel ng-controller="DocumentCtrl">
-    <vr-form name="formFilter">
-        <a href="" ng-click="downloadDocument()">Download User Guid</a>
+    <vr-form name="formFilter">        
+        <vr-row>
+            <!--begin section to be repeated-->
+            <vr-columns width="fullrow">
+                <a href="" ng-click="downloadDocument('/Documents/User_Guide.pdf')">CCT User Guid</a>
+            </vr-columns>
+            <!--end section to be repeated-->
+            <!--begin section to be repeated-->
+            <vr-columns width="fullrow">
+                <a href="" ng-click="downloadDocument('/Documents/User_Guide.pdf')">Supplier Rate Management User Guid</a>
+            </vr-columns>
+            <!--end section to be repeated-->
+        </vr-row>        
     </vr-form>
 </vr-panel>
