@@ -1181,6 +1181,7 @@
     <Content Include="Client\Views\ChartPrototypes\HighChartSparkline.html" />
     <Content Include="Client\Views\ChartPrototypes\ZingChart.html" />
     <Content Include="Client\Views\Default.html" />
+    <Content Include="Client\Views\Documents.html" />
     <Content Include="Client\Views\TestView.html" />
     <Content Include="Client\Views\TreeView.html" />
     <Content Include="Global.asax" />

@@ -330,7 +330,11 @@ app.controller('loginCtrl', function loginCtrl($scope, SecurityService) {
             SecurityService.setAccessCookieName(cookieName);
     };
 });
-
+app.controller('DocumentCtrl',['$scope', function documentCtrl($scope) {
+    $scope.downloadDocument = function () {
+        window.open('/Documents/User_Guide.pdf');
+    };
+}]);
 angular.module('mainModule')
 .config(function ($popoverProvider) {
     angular.extend($popoverProvider.defaults, {

@@ -39,7 +39,9 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Views/Default.html',
             controller: 'DefaultController'
         }).
-        otherwise({
+         when('/Documents', {
+             templateUrl: '/Client/Views/Documents.html'
+         }).otherwise({
             redirectTo: '/default'
         });
  }]);
