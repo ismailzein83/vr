@@ -47,7 +47,8 @@
                 onaddclicked: "=",
                 hint: '@',
                 haspermission: '=',
-                hasviewpermission: '='
+                hasviewpermission: '=',
+                limitcharactercount:'='
             },
             controller: function ($scope, $element, $attrs) {
                 if (rootScope == undefined)
@@ -60,6 +61,8 @@
                 controller.validate = function () {
                     return VRValidationService.validate(controller.selectedvalues, $scope, $attrs);
                 };
+                if (controller.limitcharactercount == undefined)
+                    controller.limitcharactercount = 2;
 
                 controller.boundDataSource = [];
                 var itemsToAddToSource;
@@ -152,7 +155,7 @@
                 //Configuration
                 angular.extend(this, {
                     ValidationMessagesEnum: validationMessagesEnum,
-                    limitcharactercount: $attrs.limitcharactercount,
+                    //limitcharactercount: $attrs.limitcharactercount,
                     limitHeight: (($attrs.limitheight != undefined) ? 'limit-height' : ''),
                     selectlbl: $attrs.selectlbl,
                     filtername: '',
@@ -382,6 +385,15 @@
                             controller.selectedvalues = undefined;
                     }
                 };
+                api.setLimitCharacterCount = function (count) {
+                    controller.limitcharactercount = count;
+                };
+                api.loadDataSource = function (nameFilter) {
+                    return controller.datasource(nameFilter).then(function (items) {
+                        controller.setdatasource(items);
+                        return items;
+                    });
+                };
                 if (controller.onReady != null) {
                     controller.onReady(api);
                 }
@@ -602,8 +614,11 @@
                             ctrl.muteAction(e);
                             ctrl.selectedvalues = [];
                             ctrl.selectedvalues.length = 0;
-                            if (isSingle != undefined)
+                            if (isSingle != undefined) {                               
+                                //$('.dropdown-menu').hide();
                                 ctrl.selectedvalues = undefined;
+                            }
+                               
                         };
 
                         function selectItem(e, item) {
@@ -675,8 +690,8 @@
 
                         ctrl.search = function () {
                             ctrl.setdatasource([]);
-                            if (!ctrl.isRemoteLoad()) return; console.log(iAttrs.limitcharactercount);
-                            if (ctrl.filtername.length > (iAttrs.limitcharactercount - 1) && typeof ctrl.datasource !== 'undefined' && ctrl.datasource != null) {
+                            if (!ctrl.isRemoteLoad()) return;
+                            if (ctrl.filtername.length > (ctrl.limitcharactercount - 1) && typeof ctrl.datasource !== 'undefined' && ctrl.datasource != null) {
                                 var promise = ctrl.datasource(ctrl.filtername);
                                 if (promise != null && promise.then != undefined) {
                                     ctrl.showloading = true;
