@@ -15,5 +15,7 @@ namespace Vanrise.Rules.Pricing
         int? DestinationCurrencyId { get; }
 
         int SourceCurrencyId { get; }
+
+        bool IsExtraChargeApplied { get; set; }
     }
 }

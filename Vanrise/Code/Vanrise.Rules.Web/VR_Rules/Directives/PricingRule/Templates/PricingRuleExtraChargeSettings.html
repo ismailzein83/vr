@@ -14,8 +14,14 @@
         <vr-validator validate="ctrl.isValid()">
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true"
                          on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
-                <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="5"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="15">
+                <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="10"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'From Rate'" widthfactor="10">
+                    <vr-textbox value="dataItem.fromRate" customvalidate="dataItem.validate(dataItem)" type="number" label="From Rate" isrequired minvalue="0"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'To Rate'" widthfactor="10">
+                    <vr-textbox value="dataItem.toRate" customvalidate="dataItem.validate(dataItem)" type="number" label="To Rate" isrequired minvalue="0"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="10">
                     <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
                 </vr-datagridcolumn>
             </vr-datagrid>

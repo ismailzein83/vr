@@ -24,11 +24,11 @@ function ($compile) {
 
 
     function percentageExtraChargeCtor(ctrl, $scope, $attrs) {
-        ctrl.validate = function () {
-            if (ctrl.fromRate != undefined && ctrl.toRate != undefined && parseFloat(ctrl.fromRate) > parseFloat(ctrl.toRate))
-                return 'From Rate should be less than To Rate';
-            return undefined;
-        };
+        //ctrl.validate = function () {
+        //    if (ctrl.fromRate != undefined && ctrl.toRate != undefined && parseFloat(ctrl.fromRate) > parseFloat(ctrl.toRate))
+        //        return 'From Rate should be less than To Rate';
+        //    return undefined;
+        //};
         function initializeController() {
 
             defineAPI();
@@ -40,8 +40,8 @@ function ($compile) {
             api.getData = function () {
                 var obj = {
                     $type: "Vanrise.Rules.Pricing.MainExtensions.ExtraCharge.PercentageExtraChargeSettings,Vanrise.Rules.Pricing.MainExtensions",
-                    FromRate: ctrl.fromRate,
-                    ToRate: ctrl.toRate,
+                    //FromRate: ctrl.fromRate,
+                    //ToRate: ctrl.toRate,
                     ExtraPercentage: ctrl.extraPercentage
                 };
                 return obj;
@@ -49,8 +49,8 @@ function ($compile) {
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    ctrl.fromRate = payload.FromRate;
-                    ctrl.toRate = payload.ToRate;
+                    //ctrl.fromRate = payload.FromRate;
+                    //ctrl.toRate = payload.ToRate;
                     ctrl.extraPercentage = payload.ExtraPercentage;
                 }
             };

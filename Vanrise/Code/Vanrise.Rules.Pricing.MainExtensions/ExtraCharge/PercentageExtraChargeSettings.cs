@@ -36,7 +36,10 @@ namespace Vanrise.Rules.Pricing.MainExtensions.ExtraCharge
 
 
             if (context.Rate >= convertedFromRate && context.Rate < convertedToRate)
+            {
                 context.Rate += (this.ExtraPercentage * context.Rate / 100);
+                context.IsExtraChargeApplied = true;
+            }
         }
 
         public override string GetDescription()

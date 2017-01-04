@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Vanrise.Rules.Pricing
 {
@@ -26,6 +22,8 @@ namespace Vanrise.Rules.Pricing
             foreach (var action in this.Actions)
             {
                 action.Execute(actionContext);
+                if (actionContext.IsExtraChargeApplied)
+                    break;
             }
             context.ExtraChargeRate = actionContext.Rate - context.Rate;
             context.Rate = actionContext.Rate;

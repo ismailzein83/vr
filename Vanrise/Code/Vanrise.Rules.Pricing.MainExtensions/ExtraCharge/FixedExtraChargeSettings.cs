@@ -39,7 +39,10 @@ namespace Vanrise.Rules.Pricing.MainExtensions.ExtraCharge
             }
 
             if (context.Rate >= convertedFromRate && context.Rate < convertedToRate)
+            {
                 context.Rate += convertedExtraAmount;
+                context.IsExtraChargeApplied = true;
+            }
         }
 
         public override string GetDescription()

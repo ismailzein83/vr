@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Pricing
 {
@@ -14,6 +10,8 @@ namespace Vanrise.Rules.Pricing
 
         public int? DestinationCurrencyId { get; set; }
 
-        public int SourceCurrencyId{ get; set; }
+        public int SourceCurrencyId { get; set; }
+
+        public bool IsExtraChargeApplied { get; set; }
     }
 }

@@ -39,18 +39,41 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
             };
 
             ctrl.isValid = function () {
+                if (ctrl.datasource.length == 0)
+                    return "You Should Select at least one filter type ";
 
-                if (ctrl.datasource.length > 0)
-                    return null;
-                return "You Should Select at least one filter type ";
+                for (var x = 0; x < ctrl.datasource.length; x++) {
+                    var currentItem = ctrl.datasource[x];
+                    var currentItemFromRate = parseFloat(currentItem.fromRate);
+                    var currentItemToRate = parseFloat(currentItem.toRate);
+                    for (var y = 0; y < ctrl.datasource.length; y++) {
+                        if (x == y)
+                            continue;
+                        var otherItem = ctrl.datasource[y];
+                        var otherItemFromRate = parseFloat(otherItem.fromRate);
+                        var otherItemToRate = parseFloat(otherItem.toRate);
+
+                        if ((currentItemToRate > otherItemFromRate && currentItemFromRate <= otherItemFromRate)
+                            || (currentItemFromRate < otherItemToRate && currentItemToRate >= otherItemToRate))
+                            return "Rates Overlapped";
+                    }
+                }
+
+                return null;
             };
+
             ctrl.disableAddButton = true;
             ctrl.addFilter = function () {
                 var dataItem = {
                     id: ctrl.datasource.length + 1,
                     configId: ctrl.selectedTemplate.ExtensionConfigurationId,
                     editor: ctrl.selectedTemplate.Editor,
-                    name: ctrl.selectedTemplate.Title
+                    name: ctrl.selectedTemplate.Title,
+                    validate: function (item) {
+                        if (item.fromRate != undefined && item.toRate != undefined && parseFloat(item.fromRate) >= parseFloat(item.toRate))
+                            return 'From Rate should be less than To Rate';
+                        return null;
+                    }
                 };
                 dataItem.onDirectiveReady = function (api) {
                     dataItem.directiveAPI = api;
@@ -90,6 +113,8 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 angular.forEach(ctrl.datasource, function (item) {
                     var obj = item.directiveAPI.getData();
                     obj.ConfigId = item.configId;
+                    obj.FromRate = item.fromRate;
+                    obj.ToRate = item.toRate;
                     actionList.push(obj);
                 });
 
@@ -145,7 +170,14 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                         id: ctrl.datasource.length + 1,
                         configId: matchItem.ExtensionConfigurationId,
                         editor: matchItem.Editor,
-                        name: matchItem.Title
+                        name: matchItem.Title,
+                        fromRate: filterItem.payload.FromRate,
+                        toRate: filterItem.payload.ToRate,
+                        validate: function (item) {
+                            if (item.fromRate != undefined && item.toRate != undefined && parseFloat(item.fromRate) >= parseFloat(item.toRate))
+                                return 'From Rate should be less than To Rate';
+                            return null;
+                        }
                     };
                     var dataItemPayload = filterItem.payload;
 
