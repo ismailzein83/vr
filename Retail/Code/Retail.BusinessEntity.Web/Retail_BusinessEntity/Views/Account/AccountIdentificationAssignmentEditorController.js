@@ -6,6 +6,7 @@
 
     function AccountIdentificationAssignmentEditorController($scope, Retail_BE_AccountIdentificationAPIService, VR_GenericData_GenericRule, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRValidationService) {
 
+        var accountBEDefinitionId;
         var accountId;
 
         var ruleDefinitionSelectorAPI;
@@ -19,10 +20,10 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountId = parameters.accountId;
             }
         }
-
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -31,15 +32,14 @@
                 ruleDefinitionSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal();
-            };
-
             $scope.scopeModel.assignIdentificationRule = function () {
                 addGenericRule(ruleDefinitionSelectorAPI.getSelectedIds());
             };
-        }
 
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal();
+            };
+        }
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -71,7 +71,12 @@
 
             ruleDefinitionSelectorReadyDeferred.promise.then(function () {
                 var ruleDefinitionPayload = {
-                    filter: { Filters: [{ $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter,Retail.BusinessEntity.Business" }] }
+                    filter: {
+                        Filters: [{
+                            $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter, Retail.BusinessEntity.Business",
+                            AccountBEDefinitionId: accountBEDefinitionId
+                        }]
+                    }
                 };
 
                 VRUIUtilsService.callDirectiveLoad(ruleDefinitionSelectorAPI, ruleDefinitionPayload, ruleDefinitionLoadDeferred);
@@ -92,7 +97,7 @@
 
             var preDefinedData = {
                 settings: {
-                    Value: accountId,
+                    Value: accountId
                 }
             };
 

@@ -30,6 +30,7 @@
         function AccountIdentificationRulesViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
             var parentAccountId;
 
             var gridAPI;
@@ -47,7 +48,9 @@
                         gridAPI.onAccountIdentificationRuleAdded(addedService);
                     };
 
-                    Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(parentAccountId, onAccountIdentificationRuleAdded);
+                    console.log("here wer go")
+
+                    Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(accountBEDefinitionId, parentAccountId, onAccountIdentificationRuleAdded);
                 };
             }
             function defineAPI() {
@@ -58,10 +61,11 @@
                     $scope.scopeModel.isGridLoading = true;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
                     }
 
-                    return gridAPI.load(buildGridPayload(payload)).then(function () {
+                    return gridAPI.load(buildGridPayload()).then(function () {
                         $scope.scopeModel.isGridLoading = false;
                     });
                 };
@@ -71,14 +75,12 @@
                 }
             }
 
-            function buildGridPayload(loadPayload) {
+            function buildGridPayload() {
 
-                var accountIdentificationRulesGridPayload;
-                if (loadPayload != undefined) {
-                    accountIdentificationRulesGridPayload = {
-                        AccountId: loadPayload.parentAccountId
-                    };
-                }
+                var accountIdentificationRulesGridPayload = {
+                    accountBEDefinitionId: accountBEDefinitionId,
+                    AccountId: parentAccountId
+                };
                 return accountIdentificationRulesGridPayload;
             }
         }

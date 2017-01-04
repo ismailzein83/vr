@@ -8,6 +8,8 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountIdentificationQuery
     {
+        public Guid AccountBEDefinitionId { get; set; }
+
         public long AccountId { get; set; }
     }
 }

@@ -30,6 +30,9 @@
         function FinancialTransactionsViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
+            var parentAccountId;
+
             var gridAPI;
 
             function initializeController() {
@@ -45,7 +48,12 @@
 
                 api.load = function (payload) {
 
-                    return gridAPI.loadDirective(buildGridPayload(payload));
+                    if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
+                        parentAccountId = payload.parentAccountId;
+                    }
+
+                    return gridAPI.loadDirective(buildGridPayload());
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -53,11 +61,10 @@
                 }
             }
 
-            function buildGridPayload(loadPayload) {
-
-                var parentAccountId = loadPayload != undefined ? loadPayload.parentAccountId : undefined;
+            function buildGridPayload() {
 
                 var billingTransactionGridPayload = {
+                    accountBEDefinitionId: accountBEDefinitionId,
                     AccountsIds: [parentAccountId],
                     AccountTypeId: "20b0c83e-6f53-49c7-b52f-828a19e6dc2a"
                 };

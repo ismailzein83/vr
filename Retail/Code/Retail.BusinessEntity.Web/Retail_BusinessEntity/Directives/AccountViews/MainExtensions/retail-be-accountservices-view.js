@@ -30,6 +30,7 @@
         function AccountServicesViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
             var parentAccountId;
 
             var gridAPI;
@@ -58,10 +59,11 @@
                     $scope.scopeModel.isGridLoading = true;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
                     }
 
-                    return gridAPI.loadGrid(buildGridPayload(payload)).then(function () {
+                    return gridAPI.loadGrid(buildGridPayload()).then(function () {
                         $scope.scopeModel.isGridLoading = false;
                     });
                 };
@@ -71,14 +73,12 @@
                 }
             }
 
-            function buildGridPayload(loadPayload) {
+            function buildGridPayload() {
 
-                var accountServiceGridPayload;
-                if (loadPayload != undefined) {
-                    accountServiceGridPayload = {
-                        AccountId: loadPayload.parentAccountId
-                    };
-                }
+                var accountServiceGridPayload = {
+                    accountBEDefinitionId: accountBEDefinitionId,
+                    AccountId: parentAccountId
+                };
                 return accountServiceGridPayload;
             }
         }

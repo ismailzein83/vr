@@ -208,7 +208,7 @@ app.directive('retailBeAccountGrid', ['Retail_BE_AccountAPIService', 'Retail_BE_
                             var onAccountIdentificationRuleAdded = function (addedIdentificationRule) {
                                 account.accountIdentificationRulesGridAPI.onAccountIdentificationRuleAdded(addedIdentificationRule);
                             };
-                            Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(account.Entity.AccountId, onAccountIdentificationRuleAdded);
+                            Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(undefined, account.Entity.AccountId, onAccountIdentificationRuleAdded);
                         }
                     }];
 

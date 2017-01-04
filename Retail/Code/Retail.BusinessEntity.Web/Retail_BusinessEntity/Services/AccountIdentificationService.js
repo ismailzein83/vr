@@ -7,9 +7,10 @@
     function AccountIdentificationService(VRModalService, VRNotificationService)
     {
 
-        function assignIdentificationRuleToAccount(accountId, onAccountIdentificationRuleAdded)
+        function assignIdentificationRuleToAccount(accountBEDefinitionId, accountId, onAccountIdentificationRuleAdded)
         {
             var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId
             };
 

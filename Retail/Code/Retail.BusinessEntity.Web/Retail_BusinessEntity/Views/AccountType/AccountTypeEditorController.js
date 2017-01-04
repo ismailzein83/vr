@@ -173,10 +173,10 @@
                 if (!isEditMode)
                     return;
 
-                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
                 if (businessEntityDefinitionSelectionChangedDeferred == undefined)
                     businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
+                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 UtilsService.waitMultiplePromises([accountTypeSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
                     businessEntityDefinitionSelectionChangedDeferred = undefined;

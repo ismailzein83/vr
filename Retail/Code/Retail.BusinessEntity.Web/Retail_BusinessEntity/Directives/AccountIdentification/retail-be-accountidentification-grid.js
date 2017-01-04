@@ -22,9 +22,10 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
     {
         this.initializeController = initializeController;
        
+        var accountBEDefinitionId;
+        var accountId;
 
         var gridAPI;
-        var accountId;
 
         function initializeController()
         {
@@ -50,12 +51,13 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
 
             defineMenuActions();
         }
-
         function defineAPI()
         {
             var api = {};
 
             api.load = function (query) {
+
+                accountBEDefinitionId = query.accountBEDefinitionId;
                 accountId = query.AccountId;
                 return gridAPI.retrieveData(query);
             };
@@ -68,14 +70,12 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
                 ctrl.onReady(api);
         }
 
-
         function defineMenuActions() {
             $scope.scopeModel.menuActions.push({
                 name: 'Edit',
                 clicked: editAccountIdentificationRule
             });
         }
-
         function editAccountIdentificationRule(identificationRule) {
             var onAccountIdentificationUpdated = function () {
                 return gridAPI.retrieveData({ AccountId: accountId });
@@ -93,8 +93,5 @@ app.directive('retailBeAccountidentificationGrid', ['Retail_BE_AccountIdentifica
 
             VR_GenericData_GenericRule.editGenericRule(identificationRule.GenericRuleId, identificationRule.GenericRuleDefinitionId,onAccountIdentificationUpdated, preDefinedData, accessibility);
         }
-
-
-       
     }
 }]);

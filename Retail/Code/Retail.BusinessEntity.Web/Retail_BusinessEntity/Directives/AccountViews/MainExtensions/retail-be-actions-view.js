@@ -30,6 +30,9 @@
         function ActionsViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
+            var parentAccountId;
+
             var gridAPI;
 
             function initializeController() {
@@ -45,6 +48,11 @@
 
                 api.load = function (payload) {
 
+                    if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
+                        parentAccountId = payload.parentAccountId;
+                    }
+
                     return gridAPI.loadGrid(buildGridPayload(payload));
                 };
 
@@ -55,9 +63,8 @@
 
             function buildGridPayload(loadPayload) {
 
-                var parentAccountId = loadPayload != undefined ? loadPayload.parentAccountId : undefined;
-
                 var actionGridPayload = {
+                    accountBEDefinitionId: accountBEDefinitionId,
                     EntityId: Retail_BE_ActionDefinitionService.getEntityId(Retail_BE_EntityTypeEnum.Account.value, parentAccountId)
                 };
                 return actionGridPayload;

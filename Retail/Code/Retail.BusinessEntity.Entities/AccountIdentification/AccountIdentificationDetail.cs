@@ -19,6 +19,5 @@ namespace Retail.BusinessEntity.Entities
         public DateTime? EED { get; set; }
 
         public String Criteria { get; set; }
-
     }
 }

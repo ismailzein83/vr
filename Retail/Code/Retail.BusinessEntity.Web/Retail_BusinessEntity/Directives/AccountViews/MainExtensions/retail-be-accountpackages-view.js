@@ -30,6 +30,7 @@
         function AccountPackagesViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
             var parentAccountId;
 
             var gridAPI;
@@ -58,10 +59,11 @@
                     $scope.scopeModel.isGridLoading = true;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
                     }
 
-                    return gridAPI.load(buildGridPayload(payload)).then(function () {
+                    return gridAPI.load(buildGridPayload()).then(function () {
                         $scope.scopeModel.isGridLoading = false;
                     });
                 };
@@ -71,14 +73,12 @@
                 }
             }
 
-            function buildGridPayload(loadPayload) {
+            function buildGridPayload() {
 
-                var accountPackageGridPayload;
-                if (loadPayload != undefined) {
-                    accountPackageGridPayload = {
-                        AssignedToAccountId: loadPayload.parentAccountId
-                    };
-                }
+                var accountPackageGridPayload = {
+                    accountBEDefinitionId: accountBEDefinitionId,
+                    AssignedToAccountId: parentAccountId
+                };
                 return accountPackageGridPayload;
             }
         }

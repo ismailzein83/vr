@@ -14,27 +14,35 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountIdentificationManager
     {
-        public IEnumerable<MappingRule> GetAccountMappingRules(long accountId)
-        {
-            return GetAllAccountsMappingRulesByAccountId().GetRecord(accountId);
-        }
-
+        #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<AccountIdentificationDetail> GetFilteredAccountIdentificationRules(Vanrise.Entities.DataRetrievalInput<AccountIdentificationQuery> input)
         {
-            IEnumerable<MappingRule> mappingRules = this.GetAccountMappingRules(input.Query.AccountId);
+            IEnumerable<MappingRule> mappingRules = this.GetAccountMappingRules(input.Query.AccountBEDefinitionId, input.Query.AccountId);
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, mappingRules.ToBigResult(input, null, AccountIdentificationMapper));
         }
 
-        #region PrivateMethods
-
-        private Dictionary<long, List<MappingRule>> GetAllAccountsMappingRulesByAccountId()
+        public IEnumerable<MappingRule> GetAccountMappingRules(Guid accountBEDefinitionId, long accountId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllAccountsMappingRulesByAccountId",
+            return GetAllAccountsMappingRulesByAccountId(accountBEDefinitionId).GetRecord(accountId);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private struct GetAllAccountsMappingRulesByAccountIdCacheName
+        {
+            public Guid AccountBEDefinitionId { get; set; }
+        }
+        private Dictionary<long, List<MappingRule>> GetAllAccountsMappingRulesByAccountId(Guid accountBEDefinitionId)
+        {
+            var cacheName = new GetAllAccountsMappingRulesByAccountIdCacheName { AccountBEDefinitionId = accountBEDefinitionId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
-                    HashSet<Guid> accountMappingRuleDefinitionIds = GetAccountMappingRuleDefinitionsIds();
+                    HashSet<Guid> accountMappingRuleDefinitionIds = GetAccountMappingRuleDefinitionsIds(accountBEDefinitionId);
                     MappingRuleManager mappingRuleManager = new MappingRuleManager();
                     var allRules = mappingRuleManager.GetAllRules().FindAllRecords(itm => accountMappingRuleDefinitionIds.Contains(itm.DefinitionId));
                     if (allRules != null)
@@ -54,18 +62,18 @@ namespace Retail.BusinessEntity.Business
                 });
         }
 
-        HashSet<Guid> GetAccountMappingRuleDefinitionsIds()
+        private HashSet<Guid> GetAccountMappingRuleDefinitionsIds(Guid accountBEDefinitionId)
         {
-            var accountMappingRuleDefinitions = GetAccountMappingRuleDefinitions();
+            var accountMappingRuleDefinitions = GetAccountMappingRuleDefinitions(accountBEDefinitionId);
             if (accountMappingRuleDefinitions == null)
                 return new HashSet<Guid>();
             return new HashSet<Guid>(accountMappingRuleDefinitions.Select(itm => itm.GenericRuleDefinitionId));
         }
 
-        private static IEnumerable<GenericRuleDefinition> GetAccountMappingRuleDefinitions()
+        private static IEnumerable<GenericRuleDefinition> GetAccountMappingRuleDefinitions(Guid accountBEDefinitionId)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            return ruleDefinitionManager.GetGenericRulesDefinitons().FindAllRecords(ruleDefinition => AccountMappingRuleDefinitionFilter.IsAccountIdentificationRuleDefinition(ruleDefinition));
+            return ruleDefinitionManager.GetGenericRulesDefinitons().FindAllRecords(ruleDefinition => AccountMappingRuleDefinitionFilter.IsAccountIdentificationRuleDefinition(accountBEDefinitionId, ruleDefinition));
         }
 
         #endregion
@@ -127,7 +135,5 @@ namespace Retail.BusinessEntity.Business
 
 
         #endregion
-
-
     }
 }

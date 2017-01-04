@@ -7,6 +7,7 @@
     function ServiceTypeEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_ServiceTypeAPIService, Retail_BE_EntityTypeEnum) {
         var isEditMode;
 
+        var accountBEDefinitionId;
         var serviceTypeId;
         var serviceTypeEntity;
 
@@ -27,6 +28,7 @@
 
         var businessEntityDefinitionSelectorAPI;
         var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var businessEntityDefinitionSelectionChangedDeferred;
 
         loadParameters();
         defineScope();
@@ -45,11 +47,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.extendedSettingsTemplateConfigs = [];
             $scope.scopeModel.selectedExtendedSettingsTemplateConfig;
-
-            $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
-                businessEntityDefinitionSelectorAPI = api;
-                businessEntityDefinitionSelectorReadyDeferred.resolve();
-            };
+            $scope.scopeModel.showGenericRuleDefinitionSelector = false;
 
             $scope.scopeModel.onExtendedSettingsSelectorReady = function (api) {
                 extendedSettingsSelectorAPI = api;
@@ -74,6 +72,31 @@
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, extendedSettingsDirectiveAPI, undefined, setLoader, extendedSettingsDirectiveReadyDeferred);
             };
+            $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                businessEntityDefinitionSelectorAPI = api;
+                businessEntityDefinitionSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (selectedItem) {
+
+                if (selectedItem != undefined) {
+                    accountBEDefinitionId = selectedItem.BusinessEntityDefinitionId;
+                    $scope.scopeModel.showGenericRuleDefinitionSelector = true;
+
+                    var ruleDefinitionPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter, Retail.BusinessEntity.Business",
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            }]
+                        }
+                    };
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isGenericRuleDefinitionSelectorLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, ruleDefinitionSelectorAPI, ruleDefinitionPayload, setLoader, businessEntityDefinitionSelectionChangedDeferred);
+                }
+            }
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateServiceType() : insertServiceType();
@@ -169,11 +192,25 @@
                 return chargingPolicyLoadDeferred.promise;
             }
             function loadRuleDefinitionSelector() {
+                if (!isEditMode || accountBEDefinitionId == undefined)
+                    return;
+
+                if (businessEntityDefinitionSelectionChangedDeferred == undefined)
+                    businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
                 var ruleDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
 
-                ruleDefinitionSelectorReadyDeferred.promise.then(function () {
-                    var ruleDefinitionPayload = { filter: { Filters: [{ $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter,Retail.BusinessEntity.Business" }] } };
+                UtilsService.waitMultiplePromises([ruleDefinitionSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
+                    businessEntityDefinitionSelectionChangedDeferred = undefined;
 
+                    var ruleDefinitionPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Business.AccountMappingRuleDefinitionFilter, Retail.BusinessEntity.Business",
+                                AccountBEDefinitionId: accountBEDefinitionId //"9a427357-cf55-4f33-99f7-745206dee7cd"
+                            }]
+                        }
+                    };
                     if (serviceTypeEntity != undefined && serviceTypeEntity.Settings != undefined) {
                         ruleDefinitionPayload.selectedIds = serviceTypeEntity.Settings.IdentificationRuleDefinitionId;
                     }
@@ -227,13 +264,14 @@
                                 $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business",
                             }]
                         },
-                        selectedIds:serviceTypeEntity != undefined?serviceTypeEntity.AccountBEDefinitionId:undefined
+                        selectedIds: serviceTypeEntity != undefined ? serviceTypeEntity.AccountBEDefinitionId : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(businessEntityDefinitionSelectorAPI, payload, businessEntityDefinitionSelectorLoadDeferred);
                 });
 
                 return businessEntityDefinitionSelectorLoadDeferred.promise;
             }
+
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadExtendedSettingsSelector, loadChargingPolicy,
                                     loadRuleDefinitionSelector, loadStatusDefinitionSelector, loadExtendedSettingsDirectiveWrapper, loadBusinessEntityDefinitionSelector])
                 .catch(function (error) {
@@ -243,7 +281,6 @@
                     $scope.scopeModel.isLoading = false;
                 });
         }
-      
 
         function updateServiceType() {
             $scope.scopeModel.isLoading = true;
@@ -273,7 +310,7 @@
                 ChargingPolicyDefinitionSettings: chargingPolicyAPI.getData(),
                 InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds(),
                 ExtendedSettings: extendedSettingsDirectiveAPI.getData(),
-                AccountBEDefinitionId:businessEntityDefinitionSelectorAPI.getSelectedIds()
+                AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds()
             };
         }
     }

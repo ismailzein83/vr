@@ -71,8 +71,6 @@
                             var accountEditorDirectivePayload = {
                                 accountBEDefinitionId: accountBEDefinitionId,
                                 accountId: accountId
-                                //parentAccountId: parentAccountId
-                                //onAccountLoaded: buildOnAccountLoaded()
                             };
                             VRUIUtilsService.callDirectiveLoad(accountEditorDirectiveAPI, accountEditorDirectivePayload, accountEditorLoadDeferred);
                         });

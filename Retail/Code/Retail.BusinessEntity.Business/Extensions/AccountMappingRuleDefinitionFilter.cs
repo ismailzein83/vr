@@ -12,10 +12,12 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountMappingRuleDefinitionFilter : IGenericRuleDefinitionFilter
     {
+        public Guid AccountBEDefinitionId { get; set; }
+
         public bool IsMatched(IGenericRuleDefinitionFilterContext context)
         {
             ValidateInput(context);
-            return IsAccountIdentificationRuleDefinition(context.RuleDefinition);
+            return IsAccountIdentificationRuleDefinition(this.AccountBEDefinitionId, context.RuleDefinition);
         }
 
         private void ValidateInput(IGenericRuleDefinitionFilterContext context)
@@ -28,7 +30,7 @@ namespace Retail.BusinessEntity.Business
                 throw new ArgumentNullException(String.Format("context.RuleDefinition.SettingsDefinition. RuleDefinitionId '{0}'", context.RuleDefinition.GenericRuleDefinitionId));
         }
 
-        internal static bool IsAccountIdentificationRuleDefinition(GenericRuleDefinition ruleDefinition)
+        internal static bool IsAccountIdentificationRuleDefinition(Guid accountBEDefinitionId, GenericRuleDefinition ruleDefinition)
         {
             var mappingRuleDefinitionSettings = ruleDefinition.SettingsDefinition as MappingRuleDefinitionSettings;
             if (mappingRuleDefinitionSettings != null)
@@ -37,8 +39,8 @@ namespace Retail.BusinessEntity.Business
                 if (businessEntityFieldType != null)
                 {
                     BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
-                    var subscriberAccountBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(Account.BUSINESSENTITY_DEFINITION_NAME);
-                    return businessEntityFieldType.BusinessEntityDefinitionId == subscriberAccountBEDefinitionId;
+                    var accountBEDefinition = beDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
+                    return businessEntityFieldType.BusinessEntityDefinitionId == accountBEDefinition.BusinessEntityDefinitionId;
                 }
             }
             return false;
