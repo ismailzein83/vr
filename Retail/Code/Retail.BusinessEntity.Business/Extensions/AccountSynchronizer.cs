@@ -14,12 +14,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountSynchronizer : TargetBESynchronizer
     {
-        //IGenericRuleManager _ruleManager;
-        //public AccountSynchronizer()
-        //    : base()
-        //{
-        //    _ruleManager = GetRuleManager(new Guid("E30037DA-29C6-426A-A581-8EB0EDD1D5E3"));
-        //}
+        public Guid AccountBEDefinitionId { get; set; }
         public override string Name
         {
             get
@@ -28,21 +23,21 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        #region Public Methods
         public override void Initialize(ITargetBESynchronizerInitializeContext context)
         {
             context.InitializationData = new AccountManager().GetCachedAccountsBySourceId();
         }
-
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             if (context.TargetBE == null)
                 throw new NullReferenceException("context.TargetBE");
-            AccountManager accountManager = new AccountManager();
+            AccountBEManager accountManager = new AccountBEManager();
             foreach (var targetAccount in context.TargetBE)
             {
                 SourceAccountData accountData = targetAccount as SourceAccountData;
                 long accountId;
-                accountManager.TryAddAccount(accountData.Account, out accountId);
+                accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId);
                 if (accountId > 0 && accountData.IdentificationRulesToInsert != null)
                     foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
                     {
@@ -51,17 +46,6 @@ namespace Retail.BusinessEntity.Business
                         manager.TryAddGenericRule(mappingRule);
                     }
             }
-        }
-        IGenericRuleManager GetRuleManager(Guid ruleDefinitionId)
-        {
-            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
-
-            GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
-            GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);
-
-            Type managerType = Type.GetType(ruleTypeConfig.RuleManagerFQTN);
-            return Activator.CreateInstance(managerType) as IGenericRuleManager;
         }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
@@ -83,7 +67,7 @@ namespace Retail.BusinessEntity.Business
         {
             if (context.TargetBE == null)
                 throw new NullReferenceException("context.TargetBE");
-            AccountManager accountManager = new AccountManager();
+            AccountBEManager accountManager = new AccountBEManager();
 
             foreach (var target in context.TargetBE)
             {
@@ -95,10 +79,40 @@ namespace Retail.BusinessEntity.Business
                     AccountId = accountData.Account.AccountId,
                     Name = accountData.Account.Name,
                     TypeId = accountData.Account.TypeId,
-                    SourceId = accountData.Account.SourceId
+                    SourceId = accountData.Account.SourceId,
+                    AccountBEDefinitionId = this.AccountBEDefinitionId
                 };
                 accountManager.TryUpdateAccount(editAccount);
             }
         }
+
+        #endregion
+
+        #region Private Methods
+        AccountToInsert GetAccountToInsert(Account account)
+        {
+            return new AccountToInsert
+            {
+                AccountBEDefinitionId = this.AccountBEDefinitionId,
+                Name = account.Name,
+                Settings = account.Settings,
+                SourceId = account.SourceId,
+                StatusId = account.StatusId,
+                TypeId = account.TypeId,
+                ParentAccountId = account.ParentAccountId
+            };
+        }
+        IGenericRuleManager GetRuleManager(Guid ruleDefinitionId)
+        {
+            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
+
+            GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
+            GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);
+
+            Type managerType = Type.GetType(ruleTypeConfig.RuleManagerFQTN);
+            return Activator.CreateInstance(managerType) as IGenericRuleManager;
+        }
+        #endregion
     }
 }
