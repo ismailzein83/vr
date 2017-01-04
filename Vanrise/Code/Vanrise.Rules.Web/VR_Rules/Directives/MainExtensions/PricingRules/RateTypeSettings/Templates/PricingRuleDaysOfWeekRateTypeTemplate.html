@@ -1,5 +1,6 @@
 ﻿<vr-row removeline>
-    <vr-columns width="1/3row" >
+
+    <vr-columns width="1/3row">
         <vr-select ismultipleselection datatextfield="description" datavaluefield="value"
                    label="Days Of Week" datasource="ctrl.daysOfWeek" selectedvalues="ctrl.selectedDaysOfWeek" isrequired></vr-select>
     </vr-columns>
@@ -17,15 +18,16 @@
                 </vr-columns>
             </vr-row>
         </vr-validator>
-        <vr-row removeline>
-            <vr-columns width="fullrow">
-                <vr-datalist maxitemsperrow="2" datasource="ctrl.times" autoremoveitem="true">
-                    {{dataItem.FromTime.Hour}}:
-                    <span ng-if="dataItem.FromTime.Minute >= 10">{{dataItem.FromTime.Minute}}</span><span ng-if="dataItem.FromTime.Minute < 10">0{{dataItem.FromTime.Minute}}</span>
-                    to {{dataItem.ToTime.Hour}}:
-                    <span ng-if="dataItem.ToTime.Minute >= 10">{{dataItem.ToTime.Minute}}</span><span ng-if="dataItem.ToTime.Minute < 10">0{{dataItem.ToTime.Minute}}</span>
-                </vr-datalist>
-            </vr-columns>
-        </vr-row>
+    </vr-columns>
+
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-datalist maxitemsperrow="2" datasource="ctrl.times" autoremoveitem="true">
+            {{dataItem.FromTime.Hour}}:
+            <span ng-if="dataItem.FromTime.Minute >= 10">{{dataItem.FromTime.Minute}}</span><span ng-if="dataItem.FromTime.Minute < 10">0{{dataItem.FromTime.Minute}}</span>
+            to {{dataItem.ToTime.Hour}}:
+            <span ng-if="dataItem.ToTime.Minute >= 10">{{dataItem.ToTime.Minute}}</span><span ng-if="dataItem.ToTime.Minute < 10">0{{dataItem.ToTime.Minute}}</span>
+        </vr-datalist>
     </vr-columns>
 </vr-row>
