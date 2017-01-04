@@ -147,9 +147,10 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 //selectedDate.setSeconds(0);
                 //selectedDate.setMilliseconds(0);
                 var modelValue = $scope.ctrl.value;
-                if (modelValue != undefined && !(modelValue instanceof Date))
-                    modelValue = new Date(modelValue);
-                if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
+                    if (modelValue != undefined && !(modelValue instanceof Date))
+                        modelValue = UtilsService.createDateFromString(modelValue);
+                    
+                    if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
                     isUserChange = true;
                     var unspecifiedHour = 0;
                     var unspecifiedMinute = 0;
@@ -188,7 +189,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     }
                     else {
                         var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), unspecifiedSecond, unspecifiedMillisecond));
-                        //var date = moment.utc(selectedDate).format("L LT"); 
+                        //var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date;
 
                     }
@@ -278,7 +279,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     //date = convertedDate;
                 }
                 else {
-                    date = ctrl.value instanceof Date ? ctrl.value : (new Date(ctrl.value));
+                    date = ctrl.value instanceof Date ? ctrl.value : (UtilsService.createDateFromString(ctrl.value));
                 }
                 if ((selectedDate == undefined || (date != undefined && selectedDate.toString() != date.toString())) &&  divDatePicker.data("DateTimePicker")) {
                     divDatePicker.data("DateTimePicker").date(date);
