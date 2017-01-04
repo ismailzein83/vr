@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsSplZonepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_ZoneChangeTypeEnum", "WhS_SupPL_RateChangeTypeEnum", "VRUIUtilsService", "VRNotificationService",
-function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeEnum, WhS_SupPL_RateChangeTypeEnum, VRUIUtilsService, VRNotificationService) {
+app.directive("whsSplZonepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_ZoneChangeTypeEnum", "WhS_SupPL_RateChangeTypeEnum", "WhS_SupPL_ZoneServiceChangeTypeEnum", "VRUIUtilsService", "VRNotificationService",
+function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeEnum, WhS_SupPL_RateChangeTypeEnum, WhS_SupPL_ZoneServiceChangeTypeEnum, VRUIUtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -185,6 +185,12 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Decrease.description;
                     break;
 
+            }
+
+            if (dataItem.ZoneServicesChangeType != WhS_SupPL_ZoneServiceChangeTypeEnum.NotChanged.value)
+            {
+                dataItem.showServiceChanges = true;
+                dataItem.serviceChanges = 1;
             }
 
         }

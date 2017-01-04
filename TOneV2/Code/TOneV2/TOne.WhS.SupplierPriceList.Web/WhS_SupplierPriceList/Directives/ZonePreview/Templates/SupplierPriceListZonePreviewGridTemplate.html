@@ -21,6 +21,11 @@
     <vr-datagridcolumn headertext="'Deleted Codes'" field="'DeletedCodes'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Moved Codes From'" field="'CodesMovedFrom'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Moved Codes To'" field="'CodesMovedTo'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Service Changes'" fixedwidth="'75'">
+        <span ng-show="dataItem.showServiceChanges">
+            <vr-icon icontype="dataItem.serviceChanges"></vr-icon>
+        </span>
+    </vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

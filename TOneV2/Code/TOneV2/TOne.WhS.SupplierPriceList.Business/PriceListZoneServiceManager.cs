@@ -214,10 +214,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 bool shouldNotAddZoneService;
                 CloseExistingOverlapedZoneServices(importedZoneService, matchExistingZoneServices, out shouldNotAddZoneService);
                 if (!shouldNotAddZoneService)
-                {
-                    importedZoneService.ChangeType = ZoneServiceChangeType.New;
                     AddImportedZoneService(importedZoneService, newAndExistingZones, existingZonesByName, supplierId);
-                }
             }
             else
             {
@@ -278,6 +275,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (SameZoneServices(importedZoneService, existingZoneService))
                     {
+                        importedZoneService.ChangeType = ZoneServiceChangeType.NotChanged;
                         if (importedZoneService.EED == existingZoneService.EED)
                         {
                             shouldNotAddZoneService = true;
@@ -295,6 +293,9 @@ namespace TOne.WhS.SupplierPriceList.Business
                             break;
                         }
                     }
+                    else
+                        importedZoneService.ChangeType = ZoneServiceChangeType.New;
+
                     DateTime existingZoneServiceEed = Utilities.Max(importedZoneService.BED, existingZoneService.BED);
                     existingZoneService.ChangedZoneService = new ChangedZoneService
                     {
@@ -303,6 +304,8 @@ namespace TOne.WhS.SupplierPriceList.Business
                     };
                     importedZoneService.ChangedExistingZoneServices.Add(existingZoneService);
                 }
+                else
+                    importedZoneService.ChangeType = ZoneServiceChangeType.New;
             }
         }
 

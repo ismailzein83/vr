@@ -116,7 +116,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 NewCodes = GetReaderValue<int>(reader, "NewCodes"),
                 DeletedCodes = GetReaderValue<int>(reader, "DeletedCodes"),
                 CodesMovedFrom = GetReaderValue<int>(reader, "CodesMovedFrom"),
-                CodesMovedTo = GetReaderValue<int>(reader, "CodesMovedTo")
+                CodesMovedTo = GetReaderValue<int>(reader, "CodesMovedTo"),
+                ZoneServicesChangeType = (ZoneServiceChangeType)GetReaderValue<int>(reader, "ZoneServiceChangeType")
 
             };
             return zoneRatePreviewDetail;
