@@ -87,8 +87,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function load() {
             $scope.isLoading = true;
             VR_AccountBalance_LiveBalanceAPIService.GetCurrentAccountBalance(accountsIds[0], accountTypeId).then(function (response) {
-                $scope.balance = response.CurrentBalance;
-                $scope.currency = response.CurrencyDescription;
+                if (response)
+                {
+                    $scope.balance = response.CurrentBalance;
+                    $scope.currency = response.CurrencyDescription;
+                }
+       
             }).finally(function () {
                 $scope.isLoading = false;
             })

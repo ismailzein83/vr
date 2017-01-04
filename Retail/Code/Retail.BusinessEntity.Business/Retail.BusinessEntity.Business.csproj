@@ -123,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBalanceManager.cs" />
     <Compile Include="Filters\IAccountFilter\AccountBalanceEnabledAccountFilter.cs" />
     <Compile Include="AccountBEManager.cs" />
     <Compile Include="AccountConditionManager.cs" />

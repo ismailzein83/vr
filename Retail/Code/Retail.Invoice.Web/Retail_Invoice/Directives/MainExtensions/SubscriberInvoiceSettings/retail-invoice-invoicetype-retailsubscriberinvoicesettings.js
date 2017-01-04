@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["UtilsService", "VRNotificationService",
-    function (UtilsService, VRNotificationService) {
+app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["UtilsService", "VRNotificationService","VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -28,7 +28,17 @@ app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["Utils
         function SubscriberInvoiceSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             $scope.scopeModel = {};
+
+            var beDefinitionSelectorApi;
+            var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
+                $scope.scopeModel = {};
+
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                    beDefinitionSelectorApi = api;
+                    beDefinitionSelectorPromiseDeferred.resolve();
+                };
                 defineAPI();
             }
 
@@ -36,13 +46,40 @@ app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["Utils
                 var api = {};
 
                 api.load = function (payload) {
-                    
+                    console.log(payload);
+                    var promises = [];
+
+                    //Loading BusinessEntityDefinition Selector
+                    var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
+                    promises.push(businessEntityDefinitionSelectorLoadPromise);
+
+                    function getBusinessEntityDefinitionSelectorLoadPromise() {
+                        var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        beDefinitionSelectorPromiseDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
+                                    }]
+                                }
+                            };
+                            if (payload != undefined && payload.extendedSettingsEntity != undefined) {
+                                selectorPayload.selectedIds = payload.extendedSettingsEntity.AcountBEDefinitionId;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
+                        });
+                        return businessEntityDefinitionSelectorLoadDeferred.promise;
+                    }
+                    return UtilsService.waitMultiplePromises(promises);
+
                 };
 
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.Invoice.Business.RetailSubscriberInvoiceSettings, Retail.Invoice.Business"
+                        $type: "Retail.Invoice.Business.RetailSubscriberInvoiceSettings, Retail.Invoice.Business",
+                        AcountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds()
                     };
                 };
 

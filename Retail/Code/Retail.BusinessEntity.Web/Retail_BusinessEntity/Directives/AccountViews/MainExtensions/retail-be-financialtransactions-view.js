@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FinancialTransactionsViewDirective.$inject = ['UtilsService', 'VRNotificationService'];
+    FinancialTransactionsViewDirective.$inject = ['UtilsService', 'VRNotificationService','Retail_BE_AccountBalanceTypeAPIService'];
 
-    function FinancialTransactionsViewDirective(UtilsService, VRNotificationService) {
+    function FinancialTransactionsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountBalanceTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -33,6 +33,8 @@
             var accountBEDefinitionId;
             var parentAccountId;
 
+            var accountTypeId;
+
             var gridAPI;
 
             function initializeController() {
@@ -52,8 +54,34 @@
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
                     }
+                     
+                    function getAccountTypeId()
+                    {
+                        return Retail_BE_AccountBalanceTypeAPIService.GetAccountBalanceTypeId(accountBEDefinitionId).then(function (response) {
+                            accountTypeId = response;
+                        });
+                    }
 
-                    return gridAPI.loadDirective(buildGridPayload());
+                    var promises = [];
+
+                    var promiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(promiseDeferred.promise);
+                    getAccountTypeId().then(function () {
+                        var promise =  gridAPI.loadDirective(buildGridPayload());
+                        if (promise != undefined)
+                        {
+                            promise.then(function () {
+                                promiseDeferred.resolve();
+                            }).catch(function (error) {
+                                promiseDeferred.reject(error);
+                            });
+                        }else
+                        {
+                            promiseDeferred.resolve();
+                        }
+                          
+                    });
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -66,7 +94,7 @@
                 var billingTransactionGridPayload = {
                     accountBEDefinitionId: accountBEDefinitionId,
                     AccountsIds: [parentAccountId],
-                    AccountTypeId: "20b0c83e-6f53-49c7-b52f-828a19e6dc2a"
+                    AccountTypeId: accountTypeId
                 };
                 return billingTransactionGridPayload;
             }

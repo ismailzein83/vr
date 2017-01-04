@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountBalanceController.cs" />
     <Compile Include="Controllers\AccountBEController.cs" />
     <Compile Include="Controllers\AccountConditionController.cs" />
     <Compile Include="Controllers\AccountBEDefinitionController.cs" />
@@ -494,6 +495,7 @@
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBalanceTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountConditionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEDefinitionAPIService.js" />

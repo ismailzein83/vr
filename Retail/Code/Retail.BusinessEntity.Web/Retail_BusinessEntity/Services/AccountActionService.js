@@ -1,6 +1,6 @@
 ﻿
-app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService) {
+app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService','Retail_BE_ActionRuntimeService',
+    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_ActionRuntimeService) {
 
         var actionTypes = [];
 
@@ -125,7 +125,15 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             var actionType = {
                 ActionTypeName: "BPAction",
                 ExecuteAction: function (payload) {
-
+                    if (payload == undefined)
+                        return;
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var onItemUpdated = payload.onItemUpdated;
+                    var onActionExecuted = function () {
+                        if (onItemUpdated != undefined)
+                            onItemUpdated(updatedAccount);
+                    };
+                    Retail_BE_ActionRuntimeService.openActionRuntime(0,accountBEDefinitionId,  onActionExecuted);
                 }
             };
             registerActionType(actionType);
