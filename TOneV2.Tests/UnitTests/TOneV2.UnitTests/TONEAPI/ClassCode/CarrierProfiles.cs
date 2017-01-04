@@ -79,7 +79,7 @@ namespace TONEAPI.ClassCode
         {
             connect con = new connect();
 
-            string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CarrierProfile/GetFilteredCarrierProfiles ";
+            string endPoint = "http://192.168.110.195:8103" + "/api/WhS_BE/CarrierProfile/GetFilteredCarrierProfiles ";
 
 
             var client = new RestClient(endpoint: endPoint,
@@ -117,7 +117,7 @@ namespace TONEAPI.ClassCode
         public string createprofile(RestClient rs, Uri ur, string token, string data)
         {
             connect con = new connect();
-            string EndPoint = @"http://192.168.110.195:8585/api/WhS_BE/CarrierProfile/AddCarrierProfile";
+            string EndPoint = @"http://192.168.110.195:8103/api/WhS_BE/CarrierProfile/AddCarrierProfile";
             var client = new RestClient(endpoint: EndPoint,
                               method: HttpVerb.POST);
                 client.PostData = data;

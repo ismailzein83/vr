@@ -10,9 +10,9 @@ namespace TONEAPI.ClassCode
     public class SaleZoneProcess
     {
 
-        public string GetSaleZones(string _Token, string _api, string _postData)
+        public string GetSaleZones(string _Token, string _api, string _postData, string connections)
         {
-            string endPoint = "http://192.168.110.195:8585" + _api;
+            string endPoint = "http://192.168.110.195:8103" + _api;
             string RgetNumberPlan;
 
             var client = new RestClient(endpoint: endPoint,
@@ -32,13 +32,13 @@ namespace TONEAPI.ClassCode
 
 
                 connect con = new connect();
-                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SaleZone' and httpmethod='Post'");
+                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SaleZone' and httpmethod='Post'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query, connections);
 
 
                 List<DatumSZ> LC = ds1.Tables[0].AsEnumerable().Select(row => new DatumSZ

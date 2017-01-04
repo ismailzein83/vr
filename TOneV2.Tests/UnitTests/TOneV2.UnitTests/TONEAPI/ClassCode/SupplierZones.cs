@@ -42,21 +42,21 @@ namespace TONEAPI.ClassCode
             public IList<Datum> Data { get; set; }
             public int TotalCount { get; set; }
         }
-       
 
-        public string getfiltercarriers(RestClient rs, Uri ur, string token, string param)
+
+        public string getfiltercarriers(RestClient rs, Uri ur, string token, string param, string connections)
         {
             connect con = new connect();
             string results = "";
 
-            string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CarrierAccount/GetCarrierAccountInfo";
+            string endPoint = ur.ToString() + "/api/WhS_BE/CarrierAccount/GetCarrierAccountInfo";
 
 
             var client = new RestClient(endpoint: endPoint,
                             method: HttpVerb.POST,
                             contenttype: "application/json;charset=UTF-8",
                             postData: "");
-            string parameters = "{\"Query\":{},\"SortByColumnName\":\"Entity.CarrierProfileId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":40}";
+            string parameters = "{\"Query\":{\"SupplierId\":170,\"EffectiveOn\":\"2017-01-04T00:00:00\"},\"SortByColumnName\":\"Entity.Name\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":40000}";
             string account = client.Getresposnse(ur, token);
             try
             {
@@ -65,16 +65,16 @@ namespace TONEAPI.ClassCode
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'SupplierZone','SupplierZone','success','get countries SupplierZone',getdate(),'API'");
                 results = results + "Success: get Countries for page supplier zone \n|";
 
-                
 
 
-                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierZones' and httpmethod='GET'");
+
+                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierZones' and httpmethod='GET'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query, connections);
 
 
                 List<Carrierfiltered> LC = ds1.Tables[0].AsEnumerable().Select(row => new Carrierfiltered
@@ -127,10 +127,10 @@ namespace TONEAPI.ClassCode
             return results;
         }
 
-        public string getsupplierzones(RestClient rs, Uri ur, string token, string param)
+        public string getsupplierzones(RestClient rs, Uri ur, string token, string param, string connections)
         {
             connect con = new connect();
-              string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/SupplierZone/GetFilteredSupplierZones";
+              string endPoint = ur.ToString() + "/api/WhS_BE/SupplierZone/GetFilteredSupplierZones";
 
 
             var client = new RestClient(endpoint: endPoint,
@@ -160,16 +160,16 @@ namespace TONEAPI.ClassCode
                     CountryId = row.Entity.CountryId
                     
                 }).ToList();
-                   
-               
-               
-                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierZones' and httpmethod='POST'");
+
+
+
+                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierZones' and httpmethod='POST'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query, connections);
 
 
                 List<Entity> LC = ds1.Tables[0].AsEnumerable().Select(row => new Entity

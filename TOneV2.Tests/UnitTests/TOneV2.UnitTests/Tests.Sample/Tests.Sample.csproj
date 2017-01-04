@@ -44,6 +44,13 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Serialization" />
+    <Reference Include="TOne.WhS.BusinessEntity.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Data.SQL">
+      <HintPath>..\..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="TOne.WhS.BusinessEntity.Entities">
       <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
     </Reference>
@@ -53,6 +60,9 @@
     <Reference Include="TOne.WhS.SupplierPriceList.Entities">
       <HintPath>..\..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.SupplierPriceList.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Caching.dll</HintPath>
@@ -60,6 +70,9 @@
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Entities\bin\Debug\Vanrise.Entities.dll</HintPath>
@@ -96,6 +109,7 @@
   <ItemGroup>
     <Compile Include="connect.cs" />
     <Compile Include="ExistingCodes.cs" />
+    <Compile Include="FakeManagers\CodeGroupDataManager.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

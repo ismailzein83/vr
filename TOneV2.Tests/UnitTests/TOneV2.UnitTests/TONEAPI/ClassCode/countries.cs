@@ -11,7 +11,7 @@ namespace TONEAPI.ClassCode
 {
     public class countries
     {
-        public string getcountires(RestClient rs, Uri ur, string token)
+        public string getcountires(RestClient rs, Uri ur, string token,string connections)
         {
             connect con = new connect();
             string country = rs.Getresposnse(ur, token);
@@ -22,14 +22,14 @@ namespace TONEAPI.ClassCode
                             JsonConvert.DeserializeObject<List<Countryclass>>(country);
                 result = result + "Success: get Countries  \n|";
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','Get Countries','Success','Get Countries',getdate(),'API'");
-               
-                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='country' and httpmethod='GET'");
+
+                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='country' and httpmethod='GET'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query, connections);
 
 
                 List<Countryclass> LC = ds1.Tables[0].AsEnumerable().Select(row => new Countryclass
@@ -83,14 +83,14 @@ namespace TONEAPI.ClassCode
         public string createcountry(RestClient rs, Uri ur, string token, string data)
         {
             connect con = new connect();
-            //   string endPoint = @"http://192.168.110.195:8585/api/VRCommon/Country/AddCountry";
+            //   string endPoint = @"http://192.168.110.195:8103/api/VRCommon/Country/AddCountry";
             //RestClient  client = new RestClient(endpoint: endPoint,
             //                          method: HttpVerb.POST,
             //                          contenttype: "application/json;charset=UTF-8",
             //                          Auth_token:token,
             //                          postData: "{\"CountryId\":\"0\",  \"Name\":\"Batatas\"}");
 
-            rs.EndPoint = @"http://192.168.110.195:8585/api/VRCommon/Country/AddCountry";
+            rs.EndPoint = ur.ToString();
             //RestClient  client = new RestClient(endpoint: endPoint,
 
             rs.PostData = data;

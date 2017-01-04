@@ -10,11 +10,11 @@ namespace TONEAPI.ClassCode
     public class cities
     {
 
-        public string getcities( string token)
+        public string getcities(string token, Uri ur, string connections)
         {
             connect con = new connect();
 
-            string endPoint = "http://192.168.110.195:8585" + "/api/VRCommon/City/GetFilteredCities";
+            string endPoint = ur.ToString() + "/api/VRCommon/City/GetFilteredCities";
 
 
             var client = new RestClient(endpoint: endPoint,
@@ -33,14 +33,14 @@ namespace TONEAPI.ClassCode
                             JsonConvert.DeserializeObject < jasonresp > (city);
                 result = result + "Success: get city   \n";
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Get Cities','Success','Get cities',getdate(),'API'");
-         
-                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='city' and httpmethod='GET'");
+
+                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='city' and httpmethod='GET'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query, connections);
 
 
                 List<City> LC = ds1.Tables[0].AsEnumerable().Select(row => new City
@@ -103,10 +103,10 @@ namespace TONEAPI.ClassCode
         // Add city To database 
 
 
-        public String Addcity(String _PostData, String _Token)
+        public String Addcity(String _PostData, String _Token, string connections, Uri ur)
         {
             connect con = new connect();
-            string endPoint = "http://192.168.110.195:8585" + "/api/VRCommon/City/AddCity";
+            string endPoint = ur.ToString() + "/api/VRCommon/City/AddCity";
             string raddcountry;
 
             var client = new RestClient(endpoint: endPoint,

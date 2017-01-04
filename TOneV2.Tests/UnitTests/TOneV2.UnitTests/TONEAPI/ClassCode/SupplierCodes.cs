@@ -38,12 +38,12 @@ namespace TONEAPI.ClassCode
             public int TotalCount { get; set; }
         }
 
-        public string getfiltercarriers(RestClient rs, Uri ur, string token, string param)
+        public string getfiltercarriers(RestClient rs, Uri ur, string token, string param, string connections)
         {
             connect con = new connect();
             string results = "";
 
-            string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CarrierAccount/GetCarrierAccountInfo";
+            string endPoint = ur.ToString() + "/api/WhS_BE/CarrierAccount/GetCarrierAccountInfo";
 
 
             var client = new RestClient(endpoint: endPoint,
@@ -61,13 +61,13 @@ namespace TONEAPI.ClassCode
 
 
 
-                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierCodes' and httpmethod='GET'");
+                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierCodes' and httpmethod='GET'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query, connections);
 
 
                 List<Carrierfiltered> LC = ds1.Tables[0].AsEnumerable().Select(row => new Carrierfiltered
@@ -120,10 +120,10 @@ namespace TONEAPI.ClassCode
             return results;
         }
 
-        public string getsupplierCodes(RestClient rs, Uri ur, string token, string param)
+        public string getsupplierCodes(RestClient rs, Uri ur, string token, string param, string connections)
         {
             connect con = new connect();
-            string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/SupplierCode/GetFilteredSupplierCodes";
+            string endPoint = ur.ToString() + "/api/WhS_BE/SupplierCode/GetFilteredSupplierCodes";
 
 
             var client = new RestClient(endpoint: endPoint,
@@ -158,14 +158,14 @@ namespace TONEAPI.ClassCode
                 }).ToList();
 
 
-               
-                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierCodes' and httpmethod='POST'");
+
+                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='SupplierCodes' and httpmethod='POST'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query, connections);
 
 
                 //List<Entity> LC = ds1.Tables[0].AsEnumerable().Select(row => new Entity

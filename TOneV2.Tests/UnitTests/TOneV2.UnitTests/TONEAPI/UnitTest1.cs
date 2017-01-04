@@ -89,6 +89,7 @@ namespace TONEAPI
 
         private MocData GetMocDatadatabase(string usercase)
         {
+            string connections = "";
             MocData data = new MocData();
 
             CodeGroup codeGroup1 = new CodeGroup()
@@ -109,9 +110,9 @@ namespace TONEAPI
             List<SupplierCode> c = new List<SupplierCode>();
             List<SupplierRate> r = new List<SupplierRate>();
             connect con = new connect();
-            z = con.getzonedata("select zonename,supplierid,zoneid,bed,eed,countryid from zonecases where testcase='" + usercase + "'");
-            c = con.getcodedata("SELECT [codeid]      ,[code]      ,[zoneid]      ,[BED]      ,[EED]  FROM [Codecases]  where testcase='" + usercase + "'");
-            r = con.getratedata("SELECT [zoneid]      ,[rate]      ,[currencyid]      ,[rateid]      ,[bed]      ,[eed]  FROM [ratecases] where testcase='" + usercase + "'");
+            z = con.getzonedata("select zonename,supplierid,zoneid,bed,eed,countryid from zonecases where testcase='" + usercase + "'", connections);
+            c = con.getcodedata("SELECT [codeid]      ,[code]      ,[zoneid]      ,[BED]      ,[EED]  FROM [Codecases]  where testcase='" + usercase + "'", connections);
+            r = con.getratedata("SELECT [zoneid]      ,[rate]      ,[currencyid]      ,[rateid]      ,[bed]      ,[eed]  FROM [ratecases] where testcase='" + usercase + "'", connections);
 
             TOne.WhS.BusinessEntity.Entities.SupplierPriceList priceList = new TOne.WhS.BusinessEntity.Entities.SupplierPriceList()
             {
@@ -133,6 +134,7 @@ namespace TONEAPI
 
         public bool process_pricelist_testcase(string testcase, string description, int pricelisttype)
         {
+            string connections = "";
             ObjectFactory.AddExplicitImplementation<ICodeGroupDataManager, CodeGroupDataManager>();
             MocData data = GetMocDatadatabase(testcase);
             //  MocData data = GetMocData();
@@ -144,8 +146,8 @@ namespace TONEAPI
             //List<ImportedRate> importedRates = this.GetImportedRate();
             connect con = new connect();
 
-            List<ImportedCode> importedCodes = con.getnewcode("SELECT [zonename]      ,[code]      ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [importeddatacases] where testcase='" + testcase + "'");
-            List<ImportedRate> importedRates = con.getnewrate("SELECT distinct [zonename]   ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [importeddatacases] where testcase='" + testcase + "'");
+            List<ImportedCode> importedCodes = con.getnewcode("SELECT [zonename]      ,[code]      ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [importeddatacases] where testcase='" + testcase + "'", connections);
+            List<ImportedRate> importedRates = con.getnewrate("SELECT distinct [zonename]   ,[rate]      ,[bed]      ,[service]      ,[otherrate],currency  FROM [importeddatacases] where testcase='" + testcase + "'", connections);
             IEnumerable<ImportedZone> importedZones = this.StructureDataByZones(importedCodes, importedRates);
 
 
@@ -170,7 +172,7 @@ namespace TONEAPI
                 ptype = SupplierPriceListType.Full;
             }
             string pdate = "";
-            DataSet ddate = con.getdata("SELECT [pricelistdate]   FROM [testcasedate] where testcase='" + testcase + "'");
+            DataSet ddate = con.getdata("SELECT [pricelistdate]   FROM [testcasedate] where testcase='" + testcase + "'", connections);
             foreach(DataRow _r in ddate.Tables[0].Rows)
             {
                 pdate = _r["pricelistdate"].ToString();
@@ -235,7 +237,7 @@ namespace TONEAPI
             bool changedzone = false;
             bool changedcode = false;
             bool changedrate = false;
-            List<SupplierZone> resultzone = con.getresultzonedata("SELECT [zoneid] ,[zonename]  ,[bed] ,[eed] FROM [resultzone] where zoneid =0 and testcase='" + testcase + "'");
+            List<SupplierZone> resultzone = con.getresultzonedata("SELECT [zoneid] ,[zonename]  ,[bed] ,[eed] FROM [resultzone] where zoneid =0 and testcase='" + testcase + "'", connections);
             if (resultzone.Count < 1)
             {
                 newzone = true;
@@ -257,7 +259,7 @@ namespace TONEAPI
             }
 
             // check new codes
-            List<SupplierCode> resultcode = con.getresultcodedata("SELECT [codeid]      ,[code]      ,[bed]      ,[eed]  FROM [resultcode] where codeid =0 and testcase='" + testcase + "'");
+            List<SupplierCode> resultcode = con.getresultcodedata("SELECT [codeid]      ,[code]      ,[bed]      ,[eed]  FROM [resultcode] where codeid =0 and testcase='" + testcase + "'", connections);
             if (resultcode.Count < 1)
             {
                 newcode = true;
@@ -280,7 +282,7 @@ namespace TONEAPI
 
             // check new rates 
 
-            List<SupplierRate> resultrate = con.getresultratedata("SELECT [rateid]      ,[rate]      ,[bed]      ,[eed]      ,[service]  FROM [resultrate] where rateid =0 and testcase='" + testcase + "'");
+            List<SupplierRate> resultrate = con.getresultratedata("SELECT [rateid]      ,[rate]      ,[bed]      ,[eed]      ,[service]  FROM [resultrate] where rateid =0 and testcase='" + testcase + "'", connections);
             if (resultrate.Count < 1)
             {
                 newrate = true;
@@ -303,7 +305,7 @@ namespace TONEAPI
 
             // check changed zones
 
-            List<SupplierZone> resultzonechanged = con.getresultzonedata("SELECT [zoneid] ,[zonename]  ,[bed] ,[eed] FROM [resultzone] where zoneid >0 and testcase='" + testcase + "'");
+            List<SupplierZone> resultzonechanged = con.getresultzonedata("SELECT [zoneid] ,[zonename]  ,[bed] ,[eed] FROM [resultzone] where zoneid >0 and testcase='" + testcase + "'", connections);
             if (resultzonechanged.Count < 1)
             {
                 changedzone = true;
@@ -326,7 +328,7 @@ namespace TONEAPI
 
             // check changed codes
 
-            List<SupplierCode> resultcodechanged = con.getresultcodedata("SELECT [codeid]      ,[code]      ,[bed]      ,[eed]  FROM [resultcode] where codeid >0 and testcase='" + testcase + "'");
+            List<SupplierCode> resultcodechanged = con.getresultcodedata("SELECT [codeid]      ,[code]      ,[bed]      ,[eed]  FROM [resultcode] where codeid >0 and testcase='" + testcase + "'", connections);
             if (resultcodechanged.Count < 1)
             {
                 changedcode = true;
@@ -350,7 +352,7 @@ namespace TONEAPI
 
             // check changed rates
 
-            List<SupplierRate> resultratechanged = con.getresultratedata("SELECT [rateid]      ,[rate]      ,[bed]      ,[eed]      ,[service]  FROM [resultrate] where rateid >0 and testcase='" + testcase + "'");
+            List<SupplierRate> resultratechanged = con.getresultratedata("SELECT [rateid]      ,[rate]      ,[bed]      ,[eed]      ,[service]  FROM [resultrate] where rateid >0 and testcase='" + testcase + "'", connections);
             if (resultratechanged.Count < 1)
             {
                 changedrate = true;

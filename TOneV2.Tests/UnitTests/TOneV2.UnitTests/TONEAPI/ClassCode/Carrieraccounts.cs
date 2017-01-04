@@ -39,17 +39,17 @@ namespace TONEAPI.ClassCode
             public int? SellingNumberPlanId { get; set; }
             public int AccountType { get; set; }
         }
-        public string getaccounts(RestClient rs, Uri ur, string token)
+        public string getaccounts(RestClient rs, Uri ur, string token, string connections)
         {
 
-            string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CarrierAccount/GetFilteredCarrierAccounts";
+            string endPoint = ur.ToString() ;
 
 
             var client = new RestClient(endpoint: endPoint,
                             method: HttpVerb.POST,
                             contenttype: "application/json;charset=UTF-8",
-                            postData: "{\"Query\":{},\"SortByColumnName\":\"Entity.CarrierAccountId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":40}");
-            string parameters = "{\"Query\":{},\"SortByColumnName\":\"Entity.CarrierProfileId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":40}";
+                            postData: "{\"Query\":{},\"SortByColumnName\":\"Entity.CarrierAccountId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":4000}");
+            string parameters = "{\"Query\":{},\"SortByColumnName\":\"Entity.CarrierProfileId\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":4000}";
             string account = client.MakeRequested(parameters, token);
             string result = "";
             connect con = new connect();
@@ -77,13 +77,13 @@ namespace TONEAPI.ClassCode
 
 
              
-                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='Carrieraccount' and httpmethod='POST'");
+                DataSet ds = con.getdata("SELECT       [validatequery]  FROM [ToneV2testing].[dbo].[testtable]  where unittype='Carrieraccount' and httpmethod='POST'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query,connections);
 
 
                 List<carrieraccountdet> LC = ds1.Tables[0].AsEnumerable().Select(row => new carrieraccountdet
@@ -136,7 +136,7 @@ namespace TONEAPI.ClassCode
           public string createaccount(RestClient rs, Uri ur, string token, string data)
         {
             connect con = new connect();
-            string EndPoint = @"http://192.168.110.195:8585/api/WhS_BE/CarrierAccount/AddCarrierAccount";
+            string EndPoint =  ur.ToString() ;
             var client = new RestClient(endpoint: EndPoint,
                               method: HttpVerb.POST);
                 client.PostData = data;

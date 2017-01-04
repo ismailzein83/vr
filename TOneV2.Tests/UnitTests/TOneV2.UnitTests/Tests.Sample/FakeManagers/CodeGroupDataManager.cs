@@ -1,13 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 
-
-namespace TONEAPI.FakreManagers
+namespace Tests.Sample
 {
     public class CodeGroupDataManager : ICodeGroupDataManager
     {
@@ -18,9 +16,8 @@ namespace TONEAPI.FakreManagers
 
         public List<TOne.WhS.BusinessEntity.Entities.CodeGroup> GetCodeGroups()
         {
-            string cons = "";
             connect con = new connect();
-            List<TOne.WhS.BusinessEntity.Entities.CodeGroup> codeGroups = con.getcodegroup("SELECT  [ID] ,[CountryID],[Code] FROM [MvtsProDemoV2].[TOneWhS_BE].[CodeGroup]",cons);
+            List<TOne.WhS.BusinessEntity.Entities.CodeGroup> codeGroups = con.getcodegroup("SELECT  [ID] ,[CountryID],[Code] FROM [MvtsProDemoV2].[TOneWhS_BE].[CodeGroup]");
 
 
             //TOne.WhS.BusinessEntity.Entities.CodeGroup c1 = new TOne.WhS.BusinessEntity.Entities.CodeGroup() { Code = "961", CodeGroupId = 1, CountryId = 1 };

@@ -20,7 +20,7 @@ namespace Tests.Sample
 
         public List<CodeGroup> getcodegroup(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemov2;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemov2;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<CodeGroup>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -45,7 +45,7 @@ namespace Tests.Sample
         }
         public List<SupplierZone> getzonedata(string query)
         {
-             SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+             SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<SupplierZone>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -71,7 +71,7 @@ namespace Tests.Sample
         }
         public List<SupplierCode> getcodedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<SupplierCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -99,7 +99,7 @@ namespace Tests.Sample
 
         public List<SupplierRate> getratedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<SupplierRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -130,7 +130,7 @@ namespace Tests.Sample
 
         public List<SupplierZone> getresultzonedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<SupplierZone>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -156,7 +156,7 @@ namespace Tests.Sample
 
         public List<SupplierCode> getresultcodedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<SupplierCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -181,7 +181,7 @@ namespace Tests.Sample
         }
         public List<SupplierRate> getresultratedata(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<SupplierRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -207,7 +207,7 @@ namespace Tests.Sample
 
         public List<ImportedRate> getnewrate(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<ImportedRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -232,7 +232,7 @@ namespace Tests.Sample
         }
         public List<ImportedCode> getnewcode(string query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
             var ddd = new List<ImportedCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -258,7 +258,7 @@ namespace Tests.Sample
 
         public DataSet getdata(string Query)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=no@cce$$dev");
 
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();

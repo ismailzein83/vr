@@ -11,7 +11,7 @@ namespace TONEAPI.ClassCode
 
     public class EntityCG
     {
-        public int CodeGroupId { get; set; }
+        public int Id { get; set; }
         public  string  Code { get; set; }
         public int CountryId { get; set; }
       //  public object SourceId { get; set; }

@@ -32,7 +32,7 @@ namespace TONEAPI.ClassCode
         public string getswitches(RestClient rs, Uri ur, string token)
         {
             connect con = new connect();
-            string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/Switch/GetFilteredSwitches  ";
+            string endPoint = "http://192.168.110.195:8103" + "/api/WhS_BE/Switch/GetFilteredSwitches  ";
 
 
             var client = new RestClient(endpoint: endPoint,
@@ -72,7 +72,7 @@ namespace TONEAPI.ClassCode
 
             try
             {
-                string EndPoint = @"http://192.168.110.195:8585/api/WhS_BE/Switch/AddSwitch";
+                string EndPoint = @"http://192.168.110.195:8103/api/WhS_BE/Switch/AddSwitch";
                 var client = new RestClient(endpoint: EndPoint,
                                   method: HttpVerb.POST);
                 client.PostData = data;

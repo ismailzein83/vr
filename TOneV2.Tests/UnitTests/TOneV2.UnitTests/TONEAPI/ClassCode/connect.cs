@@ -16,9 +16,9 @@ namespace TONEAPI
     {
 
 
-        public DataSet getdatas(string Query)
+        public DataSet getdatas(string Query,string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=ToneV2ConfigurationStructure;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
 
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -33,9 +33,9 @@ namespace TONEAPI
 
 
         }
-        public DataSet getdata2(string Query)
+        public DataSet getdata2(string Query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=TOneV2_QA;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
 
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -50,9 +50,9 @@ namespace TONEAPI
 
 
         }
-        public DataSet getdatatesting(string Query)
+        public DataSet getdatatesting(string Query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
 
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -70,7 +70,7 @@ namespace TONEAPI
         public void updatedata(string Query)
         {
 
-            using (SqlConnection openCon = new SqlConnection("Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=QAP@ssw0rd"))
+            using (SqlConnection openCon = new SqlConnection("Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=no@cce$$dev"))
              {
               string saveStaff = Query;
 
@@ -84,9 +84,9 @@ namespace TONEAPI
                        }
              }
         }
-        public List<CodeGroup> getcodegroup(string query)
+        public List<CodeGroup> getcodegroup(string query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemov2;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<CodeGroup>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -109,9 +109,9 @@ namespace TONEAPI
 
 
         }
-        public List<SupplierZone> getzonedata(string query)
+        public List<SupplierZone> getzonedata(string query, string connections)
         {
-             SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+             SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<SupplierZone>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -135,9 +135,9 @@ namespace TONEAPI
 
           
         }
-        public List<SupplierCode> getcodedata(string query)
+        public List<SupplierCode> getcodedata(string query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<SupplierCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -161,9 +161,9 @@ namespace TONEAPI
 
 
         }
-        public List<SupplierRate> getratedata(string query)
+        public List<SupplierRate> getratedata(string query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<SupplierRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -189,9 +189,9 @@ namespace TONEAPI
 
 
         }
-        public List<SupplierZone> getresultzonedata(string query)
+        public List<SupplierZone> getresultzonedata(string query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<SupplierZone>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -214,9 +214,9 @@ namespace TONEAPI
 
 
         }
-        public List<SupplierCode> getresultcodedata(string query)
+        public List<SupplierCode> getresultcodedata(string query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<SupplierCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -239,9 +239,9 @@ namespace TONEAPI
 
 
         }
-        public List<SupplierRate> getresultratedata(string query)
+        public List<SupplierRate> getresultratedata(string query,string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<SupplierRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -264,9 +264,9 @@ namespace TONEAPI
 
 
         }
-        public List<ImportedRate> getnewrate(string query)
+        public List<ImportedRate> getnewrate(string query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<ImportedRate>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -289,9 +289,9 @@ namespace TONEAPI
 
 
         }
-        public List<ImportedCode> getnewcode(string query)
+        public List<ImportedCode> getnewcode(string query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
             var ddd = new List<ImportedCode>();
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();
@@ -314,9 +314,9 @@ namespace TONEAPI
 
 
         }
-        public DataSet getdata(string Query)
+        public DataSet getdata(string Query, string connections)
         {
-            SqlConnection myConn = new SqlConnection("Server=192.168.110.195;Database=mvtsprodemox;User ID=sa;Password=QAP@ssw0rd");
+            SqlConnection myConn = new SqlConnection(connections);
 
             SqlDataAdapter da = new SqlDataAdapter();
             myConn.Open();

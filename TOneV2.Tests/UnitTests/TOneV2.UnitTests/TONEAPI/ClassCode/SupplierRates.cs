@@ -39,7 +39,7 @@ namespace TONEAPI.ClassCode
             public int TotalCount { get; set; }
         }
 
-        public string getsupplierrate(RestClient rc , Uri ur, string token , string parameter)
+        public string getsupplierrate(RestClient rc, Uri ur, string token, string parameter, string connections)
         {
          
             string result = rc.MakeRequested(parameter, token);
@@ -59,7 +59,7 @@ namespace TONEAPI.ClassCode
 
             connect con = new connect();
 
-            DataSet dsk = con.getdata2("SELECT TOP 1000 [ID]      ,[PriceListID]      ,[ZoneID]      ,[CurrencyID]      ,[NormalRate]      ,[OtherRates]      ,[BED]      ,[EED]      ,[timestamp]      ,[SourceID]  FROM [TOneV2_QA].[TOneWhS_BE].[SupplierRate] WHERE PriceListID IN ( SELECT TOP 1000 [ID]   FROM [TOneV2_QA].[TOneWhS_BE].[SupplierPriceList] WHERE SupplierID=55)");
+            DataSet dsk = con.getdata2("SELECT TOP 1000 [ID]      ,[PriceListID]      ,[ZoneID]      ,[CurrencyID]      ,[NormalRate]      ,[OtherRates]      ,[BED]      ,[EED]      ,[timestamp]      ,[SourceID]  FROM [TOneV2_QA].[TOneWhS_BE].[SupplierRate] WHERE PriceListID IN ( SELECT TOP 1000 [ID]   FROM [TOneV2_QA].[TOneWhS_BE].[SupplierPriceList] WHERE SupplierID=55)", connections);
 
             List<Entity> fromdatabase = new List<Entity>();
 

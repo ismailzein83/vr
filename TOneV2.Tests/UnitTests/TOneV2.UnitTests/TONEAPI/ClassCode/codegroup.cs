@@ -10,11 +10,11 @@ namespace TONEAPI.ClassCode
     public class codegroup
     {
 
-        public string getcodegroup( string token)
+        public string getcodegroup(string token, string connections, Uri ur)
         {
             connect con = new connect();
 
-            string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CodeGroup/GetFilteredCodeGroups";
+            string endPoint = ur.ToString() + "api/WhS_BE/CodeGroup/GetFilteredCodeGroups";
 
 
             var client = new RestClient(endpoint: endPoint,
@@ -34,20 +34,20 @@ namespace TONEAPI.ClassCode
                 result = result + "Success: get codegroup  \n";
 
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Get CodeGroup','success','Success getting code group',getdate(),'API'");
-                DataSet ds = con.getdata("SELECT   [validatequery]  FROM [TONEV2TESTAPI].[dbo].[testtable]  where unittype='codeGroup' and httpmethod='GET'");
+                DataSet ds = con.getdata("SELECT   [validatequery]  FROM [TONEV2testing].[dbo].[testtable]  where unittype='codeGroup' and httpmethod='GET'", connections);
                 string query = "";
                 foreach (DataRow _r in ds.Tables[0].Rows)
                 {
                     query = _r["validatequery"].ToString();
                 }
-                DataSet ds1 = con.getdata(query);
+                DataSet ds1 = con.getdata(query, connections);
 
 
                 List<EntityCG> LC = ds1.Tables[0].AsEnumerable().Select(row => new EntityCG
                 {
 
                      Code = row.Field<string>("Code"),
-                     CodeGroupId = row.Field<int>("CodeGroupID"),
+                     Id = row.Field<int>("ID"),
                      CountryId= row.Field<int>("CountryID"),
 
                 }).ToList();
@@ -67,7 +67,7 @@ namespace TONEAPI.ClassCode
                                bool correctcodegroup = false;
                                foreach (EntityCG c in LC)
                                {
-                                   if (ff.Any(countr => countr.Entity.Code == c.Code &&  countr.Entity.CodeGroupId == c.CodeGroupId &&  countr.Entity.CountryId == c.CountryId))
+                                   if (ff.Any(countr => countr.Entity.Code == c.Code &&  countr.Entity.Id == c.Id &&  countr.Entity.CountryId == c.CountryId))
                                    {
                                        correctcodegroup = true;
                                    }
@@ -98,10 +98,10 @@ namespace TONEAPI.ClassCode
         // Add codegroup To database 
 
 
-        public String Addcodegroup(String _PostData, String _Token)
+        public String Addcodegroup(String _PostData, String _Token,Uri ur)
         {
             connect con = new connect();
-            string endPoint = "http://192.168.110.195:8585" + "/api/WhS_BE/CodeGroup/AddCodeGroup";
+            string endPoint =  ur.ToString() + "/api/WhS_BE/CodeGroup/AddCodeGroup";
             string raddcountry;
 
             var client = new RestClient(endpoint: endPoint,

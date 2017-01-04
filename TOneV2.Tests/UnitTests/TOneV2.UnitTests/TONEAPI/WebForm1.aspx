@@ -13,7 +13,7 @@
         T.One V2 test API<br />
         <br />
         <asp:Label ID="Label1" runat="server" Text="URL" Width="65px"></asp:Label>
-        <asp:TextBox ID="TextBox1" runat="server" Width="456px">http://192.168.110.195:8585</asp:TextBox>
+        <asp:TextBox ID="TextBox1" runat="server" Width="456px">http://192.168.110.195:8103</asp:TextBox>
         <br />
         <asp:Label ID="Label2" runat="server" Text="Username" Width="65px"></asp:Label>
         <asp:TextBox ID="TextBox2" runat="server" Width="266px">admin@vanrise.com</asp:TextBox>
