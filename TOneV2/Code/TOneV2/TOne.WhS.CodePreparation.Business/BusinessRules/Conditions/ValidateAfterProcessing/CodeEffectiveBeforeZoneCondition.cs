@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (zone.ExistingZones.Any(item => item.BED > codeToAdd.BED))
                 {
-                    context.Message = string.Format("Zone {0} has the code {1} with effective date less than the effective date of the zone", zone.ZoneName, codeToAdd.Code);
+                    context.Message = string.Format("Can not add code {0} at zone {1} with an effective date less than the effective date of its zone", codeToAdd.Code, zone.ZoneName);
                     return false;
                 }
             }
@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (zone.ExistingZones.Any(item => item.BED > codeToMove.BED))
                 {
-                    context.Message = string.Format("Zone {0} has a code {1} with effective date less than the effective date of the zone", zone.ZoneName, codeToMove.Code);
+                    context.Message = string.Format("Can not move code {0} at zone {1} with an effective date less than the effective date of its zone", codeToMove.Code, zone.ZoneName);
                     return false;
                 }
             }

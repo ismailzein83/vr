@@ -28,7 +28,7 @@ namespace TOne.WhS.CodePreparation.Business
 
                 if (existingCodeToClose != null && existingCodeToClose.CodeEntity.EED.HasValue)
                 {
-                    context.Message = string.Format("Zone {0} has the pending closed code {1} that can not be closed", zoneToProcess.ZoneName, codeToClose.Code);
+                    context.Message = string.Format("Can not close code {0} at zone {1} because code is already pending closed", codeToClose.Code, zoneToProcess.ZoneName);
                     return false;
                 }
             }
@@ -39,7 +39,7 @@ namespace TOne.WhS.CodePreparation.Business
 
                 if (existingCodeToMove != null && existingCodeToMove.CodeEntity.EED.HasValue)
                 {
-                    context.Message = string.Format("Zone {0} has the pending closed code {1} that can not be moved", zoneToProcess.ZoneName, codeToMove.Code);
+                    context.Message = string.Format("Can not move code {0} at zone {1} because code is already pending closed", codeToMove.Code, zoneToProcess.ZoneName);
                     return false;
                 }
             }

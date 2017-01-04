@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                 {
-                    string.Format("Zone {0} has a pending effective code {1} that can not be closed", zoneToProcess.RecentZoneName, codeToClose.Code);
+                    string.Format("Can not close code {0} at zone {1} because code is pending effective", codeToClose.Code, zoneToProcess.RecentZoneName);
                     return false;
                 }
             }
@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                 {
-                    string.Format("Zone {0} has a pending effective code {1} that can not be moved", zoneToProcess.RecentZoneName, codeToMove.Code);
+                    string.Format("Can not move code {0} at zone {1} because code is pending effective", codeToMove.Code, zoneToProcess.RecentZoneName);
                     return false;
                 }
             }
