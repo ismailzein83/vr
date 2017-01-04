@@ -54,6 +54,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '  <vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
+                   + '  limitcharactercount="ctrl.limitcharactercount"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
                    + '  onblurdropdown="ctrl.onblurdropdown" '
                    + '  datasource="ctrl.search"'
@@ -155,7 +156,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 var api = {};
 
                 api.load = function (payload) {
-
                     selectorApi.clearDataSource();
                     var selectedIds;
                     var payloadSellingNumberPlanId;
@@ -170,6 +170,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                     if (payloadSellingNumberPlanId != undefined) {
 
+                        var promises = [];
+
+
                         sellingNumberPlanId = payload.sellingNumberPlanId;
 
                         saleZoneSelectorCtrl.isSellingNumberPlanVisible = false;
@@ -177,10 +180,19 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                             var input = {
                                 SaleZoneIds: selectedIds,
                                 SellingNumberPlanId: payload.sellingNumberPlanId,
-                                SaleZoneFilterSettings: { RoutingProductId: (filter != undefined && filter.SaleZoneFilterSettings != undefined) ? filter.SaleZoneFilterSettings.RoutingProductId : undefined }
+                                SaleZoneFilterSettings: {
+                                    RoutingProductId: (filter != undefined && filter.SaleZoneFilterSettings != undefined) ? filter.SaleZoneFilterSettings.RoutingProductId : undefined
+                                }
                             };
-                            return GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input);
+                            promises.push(GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input));
                         }
+
+                        if (filter.CountryIds != undefined && filter.CountryIds.length == 1) {
+                            saleZoneSelectorCtrl.limitcharactercount = 0 ;
+                            promises.push(selectorApi.loadDataSource("").then(function (res) {
+                            }));
+                        }
+                        return UtilsService.waitMultiplePromises(promises);
                     }
 
                     else {
@@ -247,7 +259,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                             });
 
-                            return loadSellingNumberPlanSectionPromiseDeferred.promise;
+                            return loadSellingNumberPlanSectionPromiseDeferred.promise
 
                         }
 
@@ -257,7 +269,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                                 var payloadDirective;
                                 VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, payloadDirective, loadSellingNumberPlanPromiseDeferred);
                             });
-                            return loadSellingNumberPlanPromiseDeferred.promise;
                         }
                     }
                 };

@@ -58,7 +58,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                    + ' onselectionchanged="ctrl.onSupplierSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
                    + ' </span>'
                    + '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-                   + '<vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"'
+                   + '<vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"  limitcharactercount="ctrl.limitcharactercount"'
                    + 'isrequired="ctrl.isrequired" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"' + label + 'onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" entityName="Supplier Zone"></vr-select>'
                    + '</vr-columns>';
         }
@@ -141,12 +141,18 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                     }
 
                     if (supplierId != undefined) {
+                        var promises = [];
                         ctrl.isSupplierVisible = false;
 
                         if (selectedIds != undefined) {
-                            return GetSupplierZonesInfo($attrs, ctrl, selectedIds, supplierId);
+                            promises.push(GetSupplierZonesInfo($attrs, ctrl, selectedIds, supplierId));
                         }
 
+                        if (filter.CountryIds != undefined && filter.CountryIds.length == 1) {
+                            ctrl.limitcharactercount = 0;
+                            promises.push(selectorApi.loadDataSource("").then(function (res) {}));
+                        }
+                        return UtilsService.waitMultiplePromises(promises);
                     }
 
                     else {
