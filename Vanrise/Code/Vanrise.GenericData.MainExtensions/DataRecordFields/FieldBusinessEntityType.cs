@@ -48,28 +48,37 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (value == null)
                 return null;
 
-            BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();
-            var beManager = GetBusinessEntityManager();
-            var entityDescriptions = new List<string>();
-
-            IEnumerable<object> valueAsList = FieldTypeHelper.ConvertFieldValueToList<object>(value);
-            if (valueAsList != null)
+            var beValues = value as BusinessEntityValues;
+            if (beValues != null)
             {
-                if (valueAsList.Count() == 0)
-                    return null;
-                else
-                {
-                    foreach (var entityId in valueAsList)
-                    {
-                        entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = entityId }));
-                    }
-                }
+                return beValues.GetDescription();
             }
             else
             {
-                entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = value }));
+                BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();
+                var beManager = GetBusinessEntityManager();
+                var entityDescriptions = new List<string>();
+
+                IEnumerable<object> valueAsList = FieldTypeHelper.ConvertFieldValueToList<object>(value);
+
+                if (valueAsList != null)
+                {
+                    if (valueAsList.Count() == 0)
+                        return null;
+                    else
+                    {
+                        foreach (var entityId in valueAsList)
+                        {
+                            entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = entityId }));
+                        }
+                    }
+                }
+                else
+                {
+                    entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = value }));
+                }
+                return String.Join(",", entityDescriptions);
             }
-            return String.Join(",", entityDescriptions);
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
