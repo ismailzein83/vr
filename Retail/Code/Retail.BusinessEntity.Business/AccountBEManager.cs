@@ -166,7 +166,7 @@ namespace Retail.BusinessEntity.Business
 
                 if (filter != null && filter.Filters != null)
                 {
-                    var context = new AccountFilterContext() { Account = account };
+                    var context = new AccountFilterContext() { Account = account, AccountBEDefinitionId = accountBEDefinitionId };
                     if (filter.Filters.Any(x => x.IsExcluded(context)))
                         return false;
                 }
@@ -237,10 +237,92 @@ namespace Retail.BusinessEntity.Business
             return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(account));
         }
 
+        public bool HasAccountPayment(Guid accountBEDefinitionId, long accountId, bool getInherited, out IAccountPayment accountPayment)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("account '{0}'", accountId));
+
+            if (account.Settings == null)
+                throw new NullReferenceException(String.Format("account.Settings '{0}'", accountId));
+
+            if (account.Settings.Parts != null)
+            {
+                foreach (var part in account.Settings.Parts)
+                {
+                    accountPayment = part.Value.Settings as IAccountPayment;
+                    if (accountPayment != null)
+                        return true;
+                }
+            }
+            if (getInherited && account.ParentAccountId.HasValue)
+                return HasAccountPayment(accountBEDefinitionId, account.ParentAccountId.Value, true, out accountPayment);
+            else
+            {
+                accountPayment = null;
+                return false;
+            }
+        }
+        public bool HasAccountProfile(Guid accountBEDefinitionId, long accountId, bool getInherited, out IAccountProfile accountProfile)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("account '{0}'", accountId));
+
+            if (account.Settings == null)
+                throw new NullReferenceException(String.Format("account.Settings '{0}'", accountId));
+
+            if (account.Settings.Parts != null)
+            {
+                foreach (var part in account.Settings.Parts)
+                {
+                    accountProfile = part.Value.Settings as IAccountProfile;
+                    if (accountProfile != null)
+                        return true;
+                }
+            }
+            if (getInherited && account.ParentAccountId.HasValue)
+                return HasAccountProfile(accountBEDefinitionId, account.ParentAccountId.Value, true, out accountProfile);
+            else
+            {
+                accountProfile = null;
+                return false;
+            }
+        }
+
+        public int GetAccountDuePeriod(long accountId)
+        {
+            return 0;
+        }
+
         public CompanySetting GetCompanySetting(long accountId)
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             return configManager.GetDefaultCompanySetting();
+        }
+
+        public Guid GetDefaultInvoiceEmailId(long accountId)
+        {
+            var retailSubscriberInvoiceSettings = GetRetailDefaulSubscriberInvoiceSettings();
+            if (retailSubscriberInvoiceSettings == null)
+                throw new NullReferenceException("retailSubscriberInvoiceSettings");
+            return retailSubscriberInvoiceSettings.DefaultEmailId;
+        }
+
+        private SubscriberInvoiceSettings GetRetailDefaulSubscriberInvoiceSettings()
+        {
+            SettingManager settingManager = new SettingManager();
+            InvoiceSettings settings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
+
+            if (settings == null || settings.SubscriberInvoiceSettings == null)
+                throw new NullReferenceException("setting.SubscriberInvoiceSettings");
+
+            foreach (var item in settings.SubscriberInvoiceSettings)
+            {
+                if (item.IsDefault)
+                    return item;
+            }
+            throw new NullReferenceException("setting.SubscriberInvoiceSettings");
         }
 
         #endregion
@@ -566,7 +648,44 @@ namespace Retail.BusinessEntity.Business
 
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
-            throw new NotImplementedException();
+            switch (context.InfoType)
+            {
+                case Vanrise.AccountBalance.Entities.AccountInfo.BEInfoType:
+                    {
+                        var account = context.Entity as Account;
+                        StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
+                        var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
+                        Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
+                        {
+                            Name = account.Name,
+                            StatusDescription = statusDesciption,
+                        };
+                        var currency = GetCurrencyId(account.Settings.Parts.Values);
+                        if (currency.HasValue)
+                        {
+                            accountInfo.CurrencyId = currency.Value;
+                        }
+                        else
+                        {
+                            throw new Exception(string.Format("Account {0} does not have currency", accountInfo.Name));
+                        }
+                        return accountInfo;
+                    }
+                default: return null;
+            }
+        }
+
+        private int? GetCurrencyId(IEnumerable<AccountPart> parts)
+        {
+            foreach (AccountPart part in parts)
+            {
+                var actionpartSetting = part.Settings as IAccountPayment;
+                if (actionpartSetting != null)
+                {
+                    return actionpartSetting.CurrencyId;
+                }
+            }
+            return null;
         }
 
         #endregion
