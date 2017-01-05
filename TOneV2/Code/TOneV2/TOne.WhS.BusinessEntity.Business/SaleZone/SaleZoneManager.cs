@@ -259,8 +259,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
 		public bool IsCountryEmpty(int sellingNumberPlanId, int countryId, DateTime effectiveOn)
 		{
-			IEnumerable<SaleZone> allSaleZones = GetCachedSaleZones().Values;
-			return AnySaleZoneEffectiveAfterExists(allSaleZones, countryId, effectiveOn);
+            IEnumerable<SaleZone> allSaleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+			return !AnySaleZoneEffectiveAfterExists(allSaleZones, countryId, effectiveOn);
 		}
 
 		public bool AnySaleZoneEffectiveAfterExists(IEnumerable<SaleZone> saleZones, int countryId, DateTime effectiveOn)
