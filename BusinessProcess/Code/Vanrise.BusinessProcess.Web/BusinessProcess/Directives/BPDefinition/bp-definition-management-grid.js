@@ -166,7 +166,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
             };
 
             var onProcessInputsCreated = function () {
-                VRNotificationService.showSuccess("Bussiness Instances created succesfully;  Open nested grid to see the created instances");
+                VRNotificationService.showSuccess("Business Instances created succesfully;  Open nested grid to see the created instances");
             };
             BusinessProcess_BPInstanceService.startNewInstance(bpDefinitionObj, onProcessInputCreated, onProcessInputsCreated);
         };

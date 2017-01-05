@@ -41,7 +41,7 @@ function NewInstanceEditorController($scope, BusinessProcess_BPInstanceAPIServic
                 }
                 else {
                     BusinessProcess_BPInstanceAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
-                        if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
+                        if (VRNotificationService.notifyOnItemAdded("Business Instance", response)) {
                             if ($scope.onProcessInputCreated != undefined)
                                 $scope.onProcessInputCreated(response.ProcessInstanceId);
                             $scope.modalContext.closeModal();
