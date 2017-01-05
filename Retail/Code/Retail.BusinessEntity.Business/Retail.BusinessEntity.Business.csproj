@@ -165,6 +165,8 @@
     <Compile Include="Extensions\BalanceAlertAccountAction.cs" />
     <Compile Include="Extensions\ChargingPolicyRuleDefinitionFilter.cs" />
     <Compile Include="PopManager.cs" />
+    <Compile Include="ProductDefinitionManager.cs" />
+    <Compile Include="ProductManager.cs" />
     <Compile Include="RequestManager.cs" />
     <Compile Include="RevenueComparisonManager.cs" />
     <Compile Include="StatusChargingManager.cs" />
