@@ -70,7 +70,7 @@
                 }
 
             };
-            $scope.beginEffectiveDate = new Date();
+            $scope.beginEffectiveDate = UtilsService.getDateFromDateTime(new Date());
             $scope.validateEffectiveDate = function () {
                 return VRValidationService.validateTimeEqualorGreaterthanToday($scope.beginEffectiveDate);
             };
