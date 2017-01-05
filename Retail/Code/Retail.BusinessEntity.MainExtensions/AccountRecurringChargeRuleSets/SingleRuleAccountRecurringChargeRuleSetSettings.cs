@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountRecurringChargeRuleSets
         
         public AccountCondition Condition { get; set; }
 
-        public AccountRecurringChargeEvaluator RecurringChargeEvaluator { get; set; }
+        public AccountChargeEvaluator ChargeEvaluator { get; set; }
 
         public override List<ApplicableRecurringCharge> GetApplicableCharges(IAccountRecurringChargeRuleSetContext context)
         {

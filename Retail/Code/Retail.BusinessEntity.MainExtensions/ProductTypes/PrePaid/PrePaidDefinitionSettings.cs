@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.ContractTypes.PrePaid
+namespace Retail.BusinessEntity.MainExtensions.ProductTypes.PrePaid
 {
-    public class PrePaidDefinitionSettings : ContractDefinitionExtendedSettings
+    public class PrePaidDefinitionSettings : ProductDefinitionExtendedSettings
     {
         public override Guid ConfigId
         {

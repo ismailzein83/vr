@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class ContractExtendedSettings
+    public abstract class ProductExtendedSettings
     {
     }
 }

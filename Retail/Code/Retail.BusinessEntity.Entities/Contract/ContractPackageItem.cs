@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ContractPackageItem
+    public class ProductPackageItem
     {
         public int PackageId { get; set; }
 
-        public Decimal? Price { get; set; }
+        public AccountChargeEvaluator ChargeEvaluator { get; set; }
     }
 }

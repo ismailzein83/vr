@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class Contract
+    public class Product
     {
-        public int ContractId { get; set; }
+        public int ProductId { get; set; }
 
         public string Name { get; set; }
 
-        public ContractSettings Settings { get; set; }
+        public ProductSettings Settings { get; set; }
     }
 }

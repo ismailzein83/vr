@@ -60,7 +60,7 @@ namespace Retail.BusinessEntity.Entities
 
         int CreditClassId { get; }
 
-        int ContractId { get; }
+        int ProductId { get; }
     }
 
     public interface IAccountProfile

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ContractDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
+    public class ProductDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
     {
         public override Guid VRComponentTypeConfigId
         {
@@ -14,6 +14,6 @@ namespace Retail.BusinessEntity.Entities
         }
         public Guid AccountBEDefinitionId { get; set; }
 
-        public ContractDefinitionExtendedSettings ExtendedSettings { get; set; }
+        public ProductDefinitionExtendedSettings ExtendedSettings { get; set; }
     }
 }

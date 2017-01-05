@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class AccountRecurringChargeEvaluator
+    public abstract class AccountChargeEvaluator
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract Decimal Evaluate(IAccountRecurringChargeEvaluatorContext context);
+        public abstract Decimal Evaluate(IAccountChargeEvaluatorContext context);
     }
 
-    public interface IAccountRecurringChargeEvaluatorContext
+    public interface IAccountChargeEvaluatorContext
     {
         Account Account { get; }
 

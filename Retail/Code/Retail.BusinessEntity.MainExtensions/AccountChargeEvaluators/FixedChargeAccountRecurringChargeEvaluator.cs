@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.AccountRecurringChargeEvaluators
+namespace Retail.BusinessEntity.MainExtensions.AccountChargeEvaluators
 {
-    public class FixedChargeAccountRecurringChargeEvaluator : AccountRecurringChargeEvaluator
+    public class FixedChargeAccountChargeEvaluator : AccountChargeEvaluator
     {
         public override Guid ConfigId
         {
@@ -16,7 +16,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountRecurringChargeEvaluators
 
         public Decimal Charge { get; set; }
 
-        public override decimal Evaluate(IAccountRecurringChargeEvaluatorContext context)
+        public override decimal Evaluate(IAccountChargeEvaluatorContext context)
         {
             return this.Charge;
         }

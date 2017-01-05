@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public override Guid ConfigId { get { return _ConfigId; } }
         public int CreditClassId { get; set; }
         public int CurrencyId { get; set; }
-        public int ContractId { get; set; }
+        public int ProductId { get; set; }
 
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {

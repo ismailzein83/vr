@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ContractDefinition : Vanrise.Entities.VRComponentType<ContractDefinitionSettings>
+    public class ProductDefinition : Vanrise.Entities.VRComponentType<ProductDefinitionSettings>
     {
+
     }
 }

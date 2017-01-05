@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class ContractDefinitionExtendedSettings
+    public abstract class ProductDefinitionExtendedSettings
     {
         public abstract Guid ConfigId { get; }
 

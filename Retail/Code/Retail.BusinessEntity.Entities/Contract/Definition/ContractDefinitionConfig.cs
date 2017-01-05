@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ContractDefinitionConfig : ExtensionConfiguration
+    public class ProductDefinitionConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Retail_BE_ContractDefinition";
+        public const string EXTENSION_TYPE = "Retail_BE_ProductDefinition";
 
         public string DefinitionEditor { get; set; }
     }

@@ -16,6 +16,6 @@ namespace Retail.BusinessEntity.Entities
 
         public Guid RecurringChargeDefinitionId { get; set; }
 
-        public AccountRecurringChargeEvaluator RecurringChargeEvaluator { get; set; }
+        public AccountChargeEvaluator ChargeEvaluator { get; set; }
     }
 }

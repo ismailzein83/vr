@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.ContractTypes.PostPaid
+namespace Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid
 {
-    public class PostPaidSettings : ContractExtendedSettings
+    public class PostPaidSettings : ProductExtendedSettings
     {
         public Decimal CreditLimit { get; set; }
 
