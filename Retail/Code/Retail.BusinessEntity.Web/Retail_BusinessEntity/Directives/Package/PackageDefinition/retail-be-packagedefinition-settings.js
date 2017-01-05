@@ -14,7 +14,7 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageDefinition/Templates/VRPackageDefinitionSettings.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageDefinition/Templates/PackageDefinitionSettings.html'
         };
 
         function PackageDefinitionSettings($scope, ctrl, $attrs) {

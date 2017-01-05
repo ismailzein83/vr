@@ -296,7 +296,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\PricingPackageDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\retail-be-packagedefinition-extendedsettings-pricing.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\retail-be-packagedefinition-extendedsettings.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\Templates\VRPackageDefinitionSettings.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\Templates\PackageDefinitionSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\retail-be-packagedefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\retail-be-packagedefinition-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\Templates\InvoiceSettingsTemplate.html" />
