@@ -64,7 +64,6 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
                 }
             };
 
-
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SalePriceListTemplateAPIService.GetFilteredSalePriceLists(dataRetrievalInput)
                     .then(function (response) {
@@ -75,7 +74,11 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, WhS_BE_SalePric
                     });
             };
 
-            
+
+            $scope.removeMappedCol = function (dataItem) {
+                var index = $scope.mappedCols.indexOf(dataItem);
+                $scope.mappedCols.splice(index, 1);
+            };
  
            
         }
