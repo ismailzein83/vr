@@ -69,6 +69,7 @@
     <Compile Include="CreditClassDataManager.cs" />
     <Compile Include="Pop\PopDataManager.cs" />
     <Compile Include="POSDataManager.cs" />
+    <Compile Include="ProductDataManager.cs" />
     <Compile Include="ServiceTypeDataManager.cs" />
     <Compile Include="StatusChargingSetDataManager.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
