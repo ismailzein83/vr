@@ -28,7 +28,7 @@ namespace TOne.WhS.CodePreparation.Business
 
                 if (existingCodeToClose != null && existingCodeToClose.CodeEntity.EED.HasValue)
                 {
-                    context.Message = string.Format("Can not close code {0} at zone {1} because code is already pending closed", codeToClose.Code, zoneToProcess.ZoneName);
+                    context.Message = string.Format("Can not close code {0} at zone {1} because this code is already pending closed", codeToClose.Code, zoneToProcess.ZoneName);
                     return false;
                 }
             }

@@ -27,7 +27,7 @@ namespace TOne.WhS.CodePreparation.Business
                 if (codeToClose.ChangedExistingCodes.Count() == 0 || !codeToClose.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code
                     && item.ParentZone.ZoneEntity.Name.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    context.Message = string.Format("Can not close code {0} at zone {1} because either code does not exist or it is not effective", codeToClose.Code, zoneToProcess.ZoneName);
+                    context.Message = string.Format("Can not close code {0} at zone {1} because this code either does not exist or is not effective", codeToClose.Code, zoneToProcess.ZoneName);
                     return false;
                 }
             }
