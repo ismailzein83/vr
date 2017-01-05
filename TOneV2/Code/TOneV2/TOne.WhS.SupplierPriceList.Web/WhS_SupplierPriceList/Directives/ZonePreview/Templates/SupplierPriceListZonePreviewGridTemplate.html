@@ -4,28 +4,28 @@
              pagingtype="'PagingOnScroll'"
              menuactions="[]">
     <vr-datagridcolumn headertext="'Zone Name'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Zone Change Type'">
+    <vr-datagridcolumn fixedwidth="'35'">
         <vr-icon iconurl="dataItem.ZoneStatusIconUrl" tooltip="dataItem.ZoneStatusIconTooltip"></vr-icon>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Zone BED'" field="'ZoneBED'" type="'Datetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Zone EED'" field="'ZoneEED'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'System Rate'" field="'SystemRate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'System Rate BED'" field="'SystemRateBED'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'System Rate EED'" field="'SystemRateEED'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Rate Change Type'">
+    <vr-datagridcolumn headertext="'System Rate'" field="'SystemRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'75'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Imported Rate'" field="'ImportedRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'90'"></vr-datagridcolumn>
+    <vr-datagridcolumn fixedwidth="'35'">
         <vr-icon iconurl="dataItem.RateStatusIconUrl" tooltip="dataItem.RateStatusIconTooltip" inline></vr-icon>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Imported Rate'" field="'ImportedRate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Imported Rate BED'" field="'ImportedRateBED'" type="'Datetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'New Codes'" field="'NewCodes'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Deleted Codes'" field="'DeletedCodes'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Moved Codes From'" field="'CodesMovedFrom'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Moved Codes To'" field="'CodesMovedTo'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Service Changes'" fixedwidth="'75'">
+    <vr-datagridcolumn headertext="'System Rate BED'" field="'SystemRateBED'" type="'Datetime'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Imported Rate BED'" field="'ImportedRateBED'" type="'Datetime'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'System Rate EED'" field="'SystemRateEED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Services Changed'" fixedwidth="'110'">
         <span ng-show="dataItem.showServiceChanges">
             <vr-icon icontype="dataItem.serviceChanges"></vr-icon>
         </span>
     </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'N.Codes'" field="'NewCodes'" type="'Text'" fixedwidth="'75'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'D.Codes'" field="'DeletedCodes'" type="'Text'" fixedwidth="'75'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Codes From'" field="'CodesMovedFrom'" type="'Text'" fixedwidth="'75'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Codes To'" field="'CodesMovedTo'" type="'Text'" fixedwidth="'75'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
