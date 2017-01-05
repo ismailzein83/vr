@@ -13,11 +13,9 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
     {
         public InArgument<Guid> ActionDefinitionId { get; set; }
         [RequiredArgument]
-        public InArgument<EntityType> EntityType { get; set; }
-
+        public InArgument<Guid> AccountBEDefinitionId { get; set; }
         [RequiredArgument]
-        public InArgument<long> EntityId { get; set; }
-
+        public InArgument<long> AccountId { get; set; }
         [RequiredArgument]
         public InArgument<Guid> StatusDefinitionId { get; set; }
 
@@ -26,36 +24,21 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
         
         protected override void Execute(CodeActivityContext context)
         {
-            var entityType = this.EntityType.Get(context);
-            var entityId = this.EntityId.Get(context);
+            var accountBEDefinitionId = this.AccountBEDefinitionId.Get(context);
+            var accountId = this.AccountId.Get(context);
             var executedActionsData = this.ExecutedActionsData.Get(context);
             var statusDefinitionId =  this.StatusDefinitionId.Get(context);
-            switch(entityType)
+            AccountManager accountManager = new AccountManager();
+            AccountBEManager accountBEManager = new AccountBEManager();
+            accountManager.UpdateStatus( accountId, statusDefinitionId);
+            var account = accountBEManager.GetAccount(accountBEDefinitionId,accountId);
+            ExecutedActions accountActions = account.ExecutedActions;
+            if (accountActions == null)
             {
-                case Retail.BusinessEntity.Entities.EntityType.Account:
-                    AccountManager accountManager = new AccountManager();
-                    accountManager.UpdateStatus(entityId, statusDefinitionId);
-                    var account = accountManager.GetAccount(entityId);
-                    ExecutedActions accountActions = account.ExecutedActions;
-                    if (accountActions == null)
-                    {
-                        accountActions = new ExecutedActions();
-                    }
-                    accountActions.ExecutedActionsData = executedActionsData;
-                    accountManager.UpdateExecutedActions(entityId, accountActions);
-                    break;
-                case Retail.BusinessEntity.Entities.EntityType.AccountService:
-                    AccountServiceManager accountServiceManager = new AccountServiceManager();
-                    accountServiceManager.UpdateStatus(entityId, statusDefinitionId);
-                    var accountService = accountServiceManager.GetAccountService(entityId);
-                    ExecutedActions serviceActions = accountService.ExecutedActions;
-                    if (serviceActions == null)
-                    {
-                        serviceActions = new ExecutedActions();
-                    }
-                    accountServiceManager.UpdateExecutedActions(entityId,serviceActions);
-                    break;
+                accountActions = new ExecutedActions();
             }
+            accountActions.ExecutedActionsData = executedActionsData;
+            accountManager.UpdateExecutedActions(accountId, accountActions);
         }
     }
 }

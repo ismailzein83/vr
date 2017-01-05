@@ -6,10 +6,9 @@
 
     function ActionRuntimeEditorController($scope, Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum) {
 
-        var actionDefinitionId;
-        var actionDefinitionEntity;
-        var entityId;
-
+        var accountActionDefinition;
+        var accountBEDefinitionId;
+        var accountId;
         var directiveAPI;
         var directiveReadyDeferred;
 
@@ -21,8 +20,9 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                actionDefinitionId = parameters.actionDefinitionId;
-                entityId = parameters.entityId;
+                accountId = parameters.accountId;
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
+                accountActionDefinition = parameters.accountActionDefinition;
                 onActionExecuted = parameters.onActionExecuted;
             }
         }
@@ -46,9 +46,10 @@
             $scope.scopeModel.start = function () {
                 var inputArguments = {
                     $type: "Retail.BusinessEntity.Entities.ActionBPInputArgument, Retail.BusinessEntity.Entities",
-                    ActionDefinitionId: actionDefinitionEntity.ActionDefinitionId,
-                    ActionEntityId: entityId,
+                    ActionDefinitionId: accountActionDefinition.AccountActionDefinitionId,
+                    AccountBEDefinitionId: accountBEDefinitionId,
                     ActionBPSettings: directiveAPI.getData(),
+                    AccountId: accountId
                 };
                 var input = {
                     InputArguments: inputArguments
@@ -76,20 +77,8 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-
-            UtilsService.waitMultipleAsyncOperations([getActionDefinition]).then(function () {
-                loadAllControls().finally(function () {
-                });
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.scopeModel.isLoading = false;
-            });
-        }
-
-        function getActionDefinition() {
-            return Retail_BE_ActionDefinitionAPIService.GetActionDefinition(actionDefinitionId).then(function (response) {
-                actionDefinitionEntity = response;
-            });
+            loadAllControls();
+           
         }
 
         function loadAllControls() {
@@ -101,7 +90,7 @@
         }
 
         function setTitle() {
-            var actionDefinitionName = (actionDefinitionEntity != undefined) ? actionDefinitionEntity.Name : undefined;
+            var actionDefinitionName = (accountActionDefinition != undefined) ? accountActionDefinition.Name : undefined;
             $scope.title = actionDefinitionName;
         }
 
@@ -111,20 +100,20 @@
                     for (var i = 0; i < response.length; i++) {
                         $scope.scopeModel.extensionConfigs.push(response[i]);
                     }
-                    if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined)
-                        $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, actionDefinitionEntity.Settings.BPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
+                    if (accountActionDefinition != undefined && accountActionDefinition.ActionDefinitionSettings != undefined && accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings != undefined)
+                        $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
                 }
             });
         }
 
         function loadDirective() {
-            if (actionDefinitionEntity != undefined && actionDefinitionEntity.Settings != undefined && actionDefinitionEntity.Settings.BPDefinitionSettings != undefined) {
+            if (accountActionDefinition != undefined && accountActionDefinition.ActionDefinitionSettings != undefined && accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings != undefined) {
                 directiveReadyDeferred = UtilsService.createPromiseDeferred();
                 var directiveLoadDeferred = UtilsService.createPromiseDeferred();
                 directiveReadyDeferred.promise.then(function () {
                     directiveReadyDeferred = undefined;
                     var directivePayload = {
-                        bpDefinitionSettings: actionDefinitionEntity.Settings.BPDefinitionSettings
+                        bpDefinitionSettings: accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings
                     }; 
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                 });

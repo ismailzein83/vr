@@ -50,7 +50,7 @@ namespace Retail.BusinessEntity.Business.Extensions
             context.BPInputArgument = new ActionBPInputArgument
             {
                 ActionDefinitionId = this.ActionDefinitionId,
-                ActionEntityId = entityId,
+                AccountId = entityId,
                 ActionBPSettings = this.ActionBPSettings
             };
             return true;

@@ -6,13 +6,14 @@
 
     function ActionRuntimeService(VRModalService) {
 
-        function openActionRuntime(entityId, actionDefinitionId, onActionExecuted) {
+        function openActionRuntime(accountBEDefinitionId, accountActionDefinition,accountId, onActionExecuted) {
             var settings = {};
             settings.onScopeReady = function (modalScope) {
             };
             var parameters = {
-                entityId: entityId,
-                actionDefinitionId: actionDefinitionId,
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountActionDefinition: accountActionDefinition,
+                accountId:accountId,
                 onActionExecuted: onActionExecuted
             };
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Action/Runtime/ActionRuntimeEditor.html', parameters, settings);

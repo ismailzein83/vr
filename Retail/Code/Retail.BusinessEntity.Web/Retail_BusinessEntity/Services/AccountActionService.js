@@ -127,13 +127,15 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                 ExecuteAction: function (payload) {
                     if (payload == undefined)
                         return;
+                    var accountActionDefinition = payload.accountActionDefinition;
                     var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var accountId = payload.account.Entity.AccountId;
                     var onItemUpdated = payload.onItemUpdated;
                     var onActionExecuted = function () {
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedAccount);
                     };
-                    Retail_BE_ActionRuntimeService.openActionRuntime(0,accountBEDefinitionId,  onActionExecuted);
+                    Retail_BE_ActionRuntimeService.openActionRuntime(accountBEDefinitionId,accountActionDefinition,accountId,  onActionExecuted);
                 }
             };
             registerActionType(actionType);

@@ -11,10 +11,17 @@ using Vanrise.GenericData.Business;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountBEDefinitionManager
+    public class AccountBEDefinitionManager : IAccountBEDefinitionManager
     {
         #region Public Methods 
 
+        public AccountActionDefinitionSettings GetAccountActionDefinitionSettings(Guid accountBEDefinitionId, Guid actionDefinitionId)
+        {
+            var accountActionDefinition = GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
+            if(accountActionDefinition == null )
+                throw new NullReferenceException(string.Format("accountActionDefinition of accountBEDefinitionId {0} nad actionDefinitionId {1}",accountBEDefinitionId,actionDefinitionId));
+            return accountActionDefinition.ActionDefinitionSettings;
+        }
         public AccountGridDefinition GetAccountGridDefinition(Guid accountBEDefinitionId)
         {
             AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
@@ -130,6 +137,15 @@ namespace Retail.BusinessEntity.Business
             return extensionConfigurationManager.GetExtensionConfigurations<AccountActionDefinitionConfig>(AccountActionDefinitionConfig.EXTENSION_TYPE);
         }
 
+        public AccountActionDefinition GetAccountActionDefinition(Guid accountBEDefinitionId, Guid actionDefinitionId)
+        {
+            var accountActionDefinitions = GetAccountActionDefinitions(accountBEDefinitionId);
+            if (accountActionDefinitions == null)
+                throw new NullReferenceException(String.Format("accountActionDefinitions AccountBEDefinitionId '{0}'", accountBEDefinitionId));
+
+            return accountActionDefinitions.FirstOrDefault(x => x.AccountActionDefinitionId == actionDefinitionId);
+        }
+
         #endregion
 
         #region Private Methods
@@ -185,5 +201,7 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+
+      
     }
 }

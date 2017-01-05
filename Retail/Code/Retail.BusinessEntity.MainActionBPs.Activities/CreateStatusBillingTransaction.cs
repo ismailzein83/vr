@@ -10,11 +10,9 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
 
     public sealed class CreateStatusBillingTransaction : CodeActivity
     {
-        //[RequiredArgument]
-        public InArgument<EntityType> EntityType { get; set; }
 
         //[RequiredArgument]
-        public InArgument<long> EntityId { get; set; }
+        public InArgument<long> AccountId { get; set; }
 
         //[RequiredArgument]
         public InArgument<Guid> StatusDefinitionId { get; set; }
