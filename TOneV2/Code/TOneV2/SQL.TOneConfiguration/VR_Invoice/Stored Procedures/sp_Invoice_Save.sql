@@ -8,6 +8,7 @@
 	@IssueDate datetime,
 	@DueDate datetime,
 	@Details nvarchar(MAX),
+	@Notes nvarchar(MAX),
 	@InvoiceIdToDelete bigint = Null,
 	@ID bigint out
 AS
@@ -19,7 +20,7 @@ BEGIN
 		Where ID =@InvoiceIdToDelete;
   	END
 
-	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details)
-	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details)
+	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,Notes)
+	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details,@Notes)
 	SET @ID = @@Identity
 END
