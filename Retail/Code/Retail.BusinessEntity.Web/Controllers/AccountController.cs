@@ -13,73 +13,73 @@ namespace Retail.BusinessEntity.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "Account")]
     public class AccountController : BaseAPIController
     {
-        //AccountManager _manager = new AccountManager();
+        AccountManager _manager = new AccountManager();
 
-        //[HttpPost]
-        //[Route("GetFilteredAccounts")]
-        //public object GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
-        //{
-        //    return GetWebResponse(input, _manager.GetFilteredAccounts(input));
-        //}
+        [HttpPost]
+        [Route("GetFilteredAccounts")]
+        public object GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredAccounts(input));
+        }
 
-        //[HttpGet]
-        //[Route("GetAccount")]
-        //public Account GetAccount(long accountId)
-        //{
-        //    return _manager.GetAccount(accountId);
-        //}
+        [HttpGet]
+        [Route("GetAccount")]
+        public Account GetAccount(long accountId)
+        {
+            return _manager.GetAccount(accountId);
+        }
 
-        //[HttpGet]
-        //[Route("GetAccountsInfo")]
-        //public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter, string serializedFilter)
-        //{
-        //    AccountFilter accountFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<AccountFilter>(serializedFilter) : null;
-        //    return _manager.GetAccountsInfo(nameFilter, accountFilter);
-        //}
-
-
-        //[HttpPost]
-        //[Route("GetAccountsInfoByIds")]
-        //public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
-        //{
-        //    return _manager.GetAccountsInfoByIds(accountIds);
-        //}
-
-        //[HttpGet]
-        //[Route("GetAccountName")]
-        //public string GetAccountName(long accountId)
-        //{
-        //    return _manager.GetAccountName(accountId);
-        //}
-
-        //[HttpGet]
-        //[Route("GetAccountEditorRuntime")]
-        //public AccountEditorRuntime GetAccountEditorRuntime(Guid accountTypeId, int? parentAccountId = null)
-        //{
-        //    return _manager.GetAccountEditorRuntime(accountTypeId, parentAccountId);
-        //}
+        [HttpGet]
+        [Route("GetAccountsInfo")]
+        public IEnumerable<AccountInfo> GetAccountsInfo(string nameFilter, string serializedFilter)
+        {
+            AccountFilter accountFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<AccountFilter>(serializedFilter) : null;
+            return _manager.GetAccountsInfo(nameFilter, accountFilter);
+        }
 
 
-        //[HttpGet]
-        //[Route("GetAccountDetail")]
-        //public AccountDetail GetAccountDetail(long accountId)
-        //{
-        //    return _manager.GetAccountDetail(accountId);
-        //}
+        [HttpPost]
+        [Route("GetAccountsInfoByIds")]
+        public IEnumerable<AccountInfo> GetAccountsInfoByIds(HashSet<long> accountIds)
+        {
+            return _manager.GetAccountsInfoByIds(accountIds);
+        }
+
+        [HttpGet]
+        [Route("GetAccountName")]
+        public string GetAccountName(long accountId)
+        {
+            return _manager.GetAccountName(accountId);
+        }
+
+        [HttpGet]
+        [Route("GetAccountEditorRuntime")]
+        public AccountEditorRuntime GetAccountEditorRuntime(Guid accountTypeId, int? parentAccountId = null)
+        {
+            return _manager.GetAccountEditorRuntime(accountTypeId, parentAccountId);
+        }
 
 
-        //[HttpPost]
-        //[Route("AddAccount")]
-        //public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account account)
-        //{
-        //    return _manager.AddAccount(account);
-        //}
+        [HttpGet]
+        [Route("GetAccountDetail")]
+        public AccountDetail GetAccountDetail(long accountId)
+        {
+            return _manager.GetAccountDetail(accountId);
+        }
 
-        //[HttpPost]
-        //[Route("UpdateAccount")]
-        //public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit account)
-        //{
-        //    return _manager.UpdateAccount(account);
-        //}
+
+        [HttpPost]
+        [Route("AddAccount")]
+        public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(Account account)
+        {
+            return _manager.AddAccount(account);
+        }
+
+        [HttpPost]
+        [Route("UpdateAccount")]
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit account)
+        {
+            return _manager.UpdateAccount(account);
+        }
     }
 }
