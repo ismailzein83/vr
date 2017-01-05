@@ -384,7 +384,7 @@ namespace Vanrise.Fzero.Services.Report
 
                 string ReportID;
 
-                string ReportIDBeforeCounter = "FZ" + MobileOperatorName.Substring(0, 1) + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
+                string ReportIDBeforeCounter = "FZ" + MobileOperatorName.Substring(0, 1) + "S" + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
 
 
                 Vanrise.Fzero.Bypass.Report LastReport = Vanrise.Fzero.Bypass.Report.Load(ReportIDBeforeCounter);
@@ -394,7 +394,7 @@ namespace Vanrise.Fzero.Services.Report
                 }
                 else
                 {
-                    ReportID = ReportIDBeforeCounter + (int.Parse(LastReport.ReportID.Replace("- Repeated Numbers", "").Substring(9)) + 1).ToString("D4");
+                    ReportID = ReportIDBeforeCounter + (int.Parse(LastReport.ReportID.Replace("- Repeated Numbers", "").Substring(10)) + 1).ToString("D4");
                 }
                 ErrorLog("ReportID: " + ReportID);
                 report.ReportID = ReportID;
