@@ -64,6 +64,7 @@
     <Compile Include="IDistributorDataManager.cs" />
     <Compile Include="IPopDataManager.cs" />
     <Compile Include="IPOSDataManager.cs" />
+    <Compile Include="IProductDataManager.cs" />
     <Compile Include="IServiceTypeDataManager.cs" />
     <Compile Include="IStatusChargingSetDataManager.cs" />
     <Compile Include="IStatusDefinitionDataManager.cs" />
