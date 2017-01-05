@@ -41,17 +41,17 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccount'), accountToEdit);
         }
 
-        function GetAccountsInfo(accountDefinitionId, nameFilter, serializedFilter) {
+        function GetAccountsInfo(accountBEDefinitionId, nameFilter, serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfo"), {
-                accountDefinitionId: accountDefinitionId,
+                accountBEDefinitionId: accountBEDefinitionId,
                 nameFilter: nameFilter,
                 serializedFilter: serializedFilter
             });
         }
 
-        //function GetAccountsInfoByIds(accountIds) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfoByIds"), accountIds);
-        //}
+        function GetAccountsInfoByIds(accountDefinitionId, accountIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfoByIds"), accountDefinitionId, accountIds);
+        }
 
 
         function GetAccountEditorRuntime(accountBEDefinitionId, accountTypeId, parentAccountId) {
@@ -88,7 +88,7 @@
             AddAccount: AddAccount,
             UpdateAccount: UpdateAccount,
             GetAccountsInfo: GetAccountsInfo,
-            //GetAccountsInfoByIds: GetAccountsInfoByIds
+            GetAccountsInfoByIds: GetAccountsInfoByIds,
             GetAccountEditorRuntime: GetAccountEditorRuntime,
             //HasViewAccountsPermission: HasViewAccountsPermission,
             //HasAddAccountPermission: HasAddAccountPermission,

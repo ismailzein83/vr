@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUtilsService', 'UtilsService',
-    function (Retail_BE_AccountAPIService, VRUIUtilsService, UtilsService) {
+app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUIUtilsService', 'UtilsService',
+    function (Retail_BE_AccountBEAPIService, VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -11,7 +11,8 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                 isrequired: "=",
                 isdisabled: "=",
                 selectedvalues: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                customlabel: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -20,7 +21,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             },
             controllerAs: 'ctrl',
-            bindToController: true,          
+            bindToController: true,
             template: function (element, attrs) {
                 return getAccountTemplate(attrs);
             }
@@ -37,6 +38,9 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                 multipleselection = "ismultipleselection";
             }
 
+            if (attrs.customlabel != undefined) {
+                label = attrs.customlabel;
+            }
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '<vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
@@ -59,7 +63,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
 
             var filter = {};
             var selectorAPI;
-
+            var accountBeDefinitionId;
             function initializeController() {
 
                 ctrl.onSelectorReady = function (api) {
@@ -75,7 +79,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                     var serializedFilter = "";
                     if (filter != undefined)
                         serializedFilter = UtilsService.serializetoJson(filter);
-                    return Retail_BE_AccountAPIService.GetAccountsInfo(nameFilter, serializedFilter);
+                    return Retail_BE_AccountBEAPIService.GetAccountsInfo(accountBeDefinitionId, nameFilter, serializedFilter);
                 };
 
             }
@@ -88,14 +92,14 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
 
 
                     if (payload != undefined) {
+                        accountBeDefinitionId = payload.AccountBEDefinitionId
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
-                        if(payload.beFilter != undefined)
-                        {
+                        if (payload.beFilter != undefined) {
                             if (filter == undefined)
                                 filter = {};
                             if (filter.Filters == undefined)
-                              filter.Filters = [];
+                                filter.Filters = [];
                             filter.Filters.push({
                                 $type: "Retail.BusinessEntity.Business.AccountConditionAccountFilter,Retail.BusinessEntity.Business",
                                 AccountCondition: payload.beFilter
@@ -113,7 +117,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
                         return GetAccountsInfo(attrs, ctrl, selectedAccountIds);
                     }
 
-                     
+
                 };
 
 
@@ -130,7 +134,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountAPIService', 'VRUIUt
 
             function GetAccountsInfo(attrs, ctrl, selectedIds) {
                 ctrl.datasource = [];
-                return Retail_BE_AccountAPIService.GetAccountsInfoByIds(selectedIds).then(function (response) {
+                return Retail_BE_AccountBEAPIService.GetAccountsInfoByIds(accountBeDefinitionId, selectedIds).then(function (response) {
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
                     });

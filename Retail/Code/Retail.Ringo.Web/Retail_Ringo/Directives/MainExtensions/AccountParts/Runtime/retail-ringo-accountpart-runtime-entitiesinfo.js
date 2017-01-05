@@ -81,9 +81,11 @@ app.directive('retailRingoAccountpartRuntimeEntitiesinfo', ["UtilsService", "VRU
             promises.push(loadAgentPromiseDeferred.promise);
 
 
-            var agentPayload;
+            var agentPayload = {
+                AccountBEDefinitionId: "2F57CDE2-033E-48F9-BD33-03113D77C9AC"
+            };
+
             if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.AgentId != undefined) {
-                agentPayload = {};
                 agentPayload.selectedIds = mainPayload.partSettings.AgentId;
             }
 
@@ -96,9 +98,10 @@ app.directive('retailRingoAccountpartRuntimeEntitiesinfo', ["UtilsService", "VRU
             promises.push(loadPosPromiseDeferred.promise);
 
 
-            var posPayload;
+            var posPayload = {
+                AccountBEDefinitionId: "B2B211BC-ECE0-4C8E-9B40-7958D05FF753"
+            };
             if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.PosId != undefined) {
-                posPayload = {};
                 posPayload.selectedIds = mainPayload.partSettings.PosId;
             }
 
@@ -111,9 +114,11 @@ app.directive('retailRingoAccountpartRuntimeEntitiesinfo', ["UtilsService", "VRU
             promises.push(loadDistributorPromiseDeferred.promise);
 
 
-            var distributorload;
+            var distributorload = {
+                AccountBEDefinitionId: "A24B5BD3-1FD8-4C5B-BA2F-E09C1F369D88"
+            };
             if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.DistributorId != undefined) {
-                distributorload = {};
+
                 distributorload.selectedIds = mainPayload.partSettings.DistributorId;
             }
 

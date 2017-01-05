@@ -65,12 +65,12 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetAccountsInfo(accountBEDefinitionId, nameFilter, accountFilter);
         }
 
-        //[HttpPost]
-        //[Route("GetAccountsInfoByIds")]
-        //public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountBEDefinitionId, HashSet<long> accountIds)
-        //{
-        //    return _manager.GetAccountsInfoByIds(accountBEDefinitionId, accountIds);
-        //}
+        [HttpPost]
+        [Route("GetAccountsInfoByIds")]
+        public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountBEDefinitionId, HashSet<long> accountIds)
+        {
+            return _manager.GetAccountsInfoByIds(accountBEDefinitionId, accountIds);
+        }
 
         [HttpGet]
         [Route("GetAccountEditorRuntime")]

@@ -176,18 +176,18 @@ namespace Retail.BusinessEntity.Business
             return allAccounts.MapRecords(AccountInfoMapper, filterFunc).OrderBy(x => x.Name);
         }
 
-        //public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountBEDefinitionId, HashSet<long> accountIds)
-        //{
-        //    List<AccountInfo> accountInfos = new List<AccountInfo>();
-        //    var accounts = GetCachedAccounts(accountBEDefinitionId);
-        //    foreach (var accountId in accountIds)
-        //    {
-        //        var account = accounts.GetRecord(accountId);
-        //        if (account != null)
-        //            accountInfos.Add(AccountInfoMapper(account));
-        //    }
-        //    return accountInfos.OrderBy(x => x.Name);
-        //}
+        public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountBEDefinitionId, HashSet<long> accountIds)
+        {
+            List<AccountInfo> accountInfos = new List<AccountInfo>();
+            var accounts = GetCachedAccounts(accountBEDefinitionId);
+            foreach (var accountId in accountIds)
+            {
+                var account = accounts.GetRecord(accountId);
+                if (account != null)
+                    accountInfos.Add(AccountInfoMapper(account));
+            }
+            return accountInfos.OrderBy(x => x.Name);
+        }
 
         public AccountEditorRuntime GetAccountEditorRuntime(Guid accountBEDefinitionId, Guid accountTypeId, int? parentAccountId)
         {
