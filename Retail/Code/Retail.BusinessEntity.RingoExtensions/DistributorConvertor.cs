@@ -9,7 +9,7 @@ using Retail.BusinessEntity.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
 
-namespace Retail.BusinessEntity.RingoExtensions
+namespace Retail.Ringo.MainExtensions
 {
     public class DistributorConvertor : TargetBEConvertor
     {
@@ -38,9 +38,9 @@ namespace Retail.BusinessEntity.RingoExtensions
                     string[] accountRecords = parser.ReadFields();
                     if (accountRecords != null)
                     {
-                        SourceDistributor distributorData = new SourceDistributor
+                        SourceAccountData distributorData = new SourceAccountData
                         {
-                            Distributor = new Distributor()
+                             Account = new  Account()
                         };
                         accountRecords = accountRecords.Select(s => s.Trim('\'')).ToArray();
                         var sourceId = accountRecords[36];
@@ -49,9 +49,9 @@ namespace Retail.BusinessEntity.RingoExtensions
                         ITargetBE targetBe;
                         if (!targetBes.TryGetValue(sourceId, out targetBe))
                         {
-                            distributorData.Distributor.SourceId = sourceId;
-                            distributorData.Distributor.Name = accountRecords[37];
-                            distributorData.Distributor.Type = accountRecords[38];
+                            distributorData.Account.SourceId = sourceId;
+                            distributorData.Account.Name = accountRecords[37];
+                            distributorData.Account.TypeId = new Guid("FE70C894-36FD-412F-BFD3-D4C0E543925C");
                             targetBes.Add(sourceId, distributorData);
                         }
                     }
@@ -64,18 +64,18 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
-            SourceDistributor existingBe = context.ExistingBE as SourceDistributor;
-            SourceDistributor newBe = context.NewBE as SourceDistributor;
+            SourceAccountData existingBe = context.ExistingBE as SourceAccountData;
+            SourceAccountData newBe = context.NewBE as SourceAccountData;
 
-            SourceDistributor finalBe = new SourceDistributor
+            SourceAccountData finalBe = new SourceAccountData
             {
-                Distributor = Serializer.Deserialize<Distributor>(Serializer.Serialize(existingBe.Distributor))
+                 Account = Serializer.Deserialize<Account>(Serializer.Serialize(existingBe.Account))
             };
 
-            finalBe.Distributor.Name = newBe.Distributor.Name;
-            finalBe.Distributor.Settings = newBe.Distributor.Settings;
-            finalBe.Distributor.Type = newBe.Distributor.Type;
-            finalBe.Distributor.SourceId = newBe.Distributor.SourceId;
+            finalBe.Account.Name = newBe.Account.Name;
+            finalBe.Account.Settings = newBe.Account.Settings;
+            finalBe.Account.TypeId = newBe.Account.TypeId;
+            finalBe.Account.SourceId = newBe.Account.SourceId;
             
             context.FinalBE = finalBe;
         }

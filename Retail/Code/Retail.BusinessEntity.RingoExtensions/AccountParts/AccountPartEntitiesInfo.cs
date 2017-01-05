@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Retail.BusinessEntity.Entities;
 
-namespace Retail.BusinessEntity.RingoExtensions.AccountParts
+namespace Retail.Ringo.MainExtensions.AccountParts
 {
     public class AccountPartEntitiesInfo : AccountPartSettings
     {

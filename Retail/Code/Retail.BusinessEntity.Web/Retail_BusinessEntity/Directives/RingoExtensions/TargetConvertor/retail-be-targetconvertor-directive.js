@@ -31,8 +31,7 @@ app.directive('retailBeTargetconvertorDirective', ['VRNotificationService',
                 };
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.RingoExtensions.RingoFileAccountConvertor, Retail.BusinessEntity.RingoExtensions"
-
+                        $type: "Retail.Ringo.MainExtensions.RingoFileAccountConvertor, Retail.Ringo.MainExtensions"
                     };
                 };
                 if (ctrl.onReady != null)

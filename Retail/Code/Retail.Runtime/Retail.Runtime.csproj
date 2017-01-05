@@ -599,9 +599,9 @@
       <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
       <Name>Retail.BusinessEntity.MainExtensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Retail.BusinessEntity.RingoExtensions\Retail.BusinessEntity.RingoExtensions.csproj">
+    <ProjectReference Include="..\Retail.BusinessEntity.RingoExtensions\Retail.Ringo.MainExtensions.csproj">
       <Project>{79ee241b-c553-470e-a091-03fbbccd971f}</Project>
-      <Name>Retail.BusinessEntity.RingoExtensions</Name>
+      <Name>Retail.Ringo.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.Data.Entities\Retail.Data.Entities.csproj">
       <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>

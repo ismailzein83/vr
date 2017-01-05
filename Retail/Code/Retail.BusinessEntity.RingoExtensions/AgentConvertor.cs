@@ -9,7 +9,7 @@ using Retail.BusinessEntity.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
 
-namespace Retail.BusinessEntity.RingoExtensions
+namespace Retail.Ringo.MainExtensions
 {
     public class AgentConvertor : TargetBEConvertor
     {
@@ -38,9 +38,9 @@ namespace Retail.BusinessEntity.RingoExtensions
                     string[] accountRecords = parser.ReadFields();
                     if (accountRecords != null)
                     {
-                        SourceAgent agentData = new SourceAgent
+                        SourceAccountData agentData = new SourceAccountData
                         {
-                            Agent = new Agent()
+                            Account = new Account()
                         };
                         accountRecords = accountRecords.Select(s => s.Trim('\'')).ToArray();
                         var sourceId = accountRecords[33];
@@ -49,9 +49,9 @@ namespace Retail.BusinessEntity.RingoExtensions
                         ITargetBE targetBe;
                         if (!targetBes.TryGetValue(sourceId, out targetBe))
                         {
-                            agentData.Agent.SourceId = sourceId;
-                            agentData.Agent.Name = accountRecords[34];
-                            agentData.Agent.Type = accountRecords[35];
+                            agentData.Account.SourceId = sourceId;
+                            agentData.Account.Name = accountRecords[34];
+                            agentData.Account.TypeId = new Guid("DB660252-CF7C-4141-A173-F4C8BF0B2566");
                             targetBes.Add(sourceId, agentData);
                         }
                     }
@@ -64,17 +64,17 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
-            SourceAgent existingBe = context.ExistingBE as SourceAgent;
-            SourceAgent newBe = context.NewBE as SourceAgent;
+            SourceAccountData existingBe = context.ExistingBE as SourceAccountData;
+            SourceAccountData newBe = context.NewBE as SourceAccountData;
 
-            SourceAgent finalBe = new SourceAgent
+            SourceAccountData finalBe = new SourceAccountData
             {
-                Agent = Serializer.Deserialize<Agent>(Serializer.Serialize(existingBe.Agent))
+                Account = Serializer.Deserialize<Account>(Serializer.Serialize(existingBe.Account))
             };
 
-            finalBe.Agent.Name = newBe.Agent.Name;
-            finalBe.Agent.Settings = newBe.Agent.Settings;
-            finalBe.Agent.Type = newBe.Agent.Type;
+            finalBe.Account.Name = newBe.Account.Name;
+            finalBe.Account.Settings = newBe.Account.Settings;
+            finalBe.Account.TypeId = newBe.Account.TypeId;
 
             context.FinalBE = finalBe;
         }

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeCrmaccountConvertorEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailRingoAgentConvertorEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -10,7 +10,7 @@ app.directive('retailBeCrmaccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new retailBeCrmaccountConvertorEditorCtor(ctrl, $scope, $attrs);
+                var ctor = new retailBeAgentConvertorEditorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -18,10 +18,10 @@ app.directive('retailBeCrmaccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/CRMAccount/Templates/CRMAccountConvertorEditor.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Agent/Templates/AgentConvertorEditor.html"
         };
 
-        function retailBeCrmaccountConvertorEditorCtor(ctrl, $scope, $attrs) {
+        function retailBeAgentConvertorEditorCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             $scope.scopeModel = {};
@@ -39,8 +39,8 @@ app.directive('retailBeCrmaccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.Ringo.MainExtensions.CrmAccountConvertor, Retail.Ringo.MainExtensions",
-                        Name: "CRM Account Convertor"
+                        $type: "Retail.BusinessEntity.RingoExtensions.AgentConvertor, Retail.BusinessEntity.RingoExtensions",
+                        Name: "Agent Convertor"
                     };
                     return data;
                 };

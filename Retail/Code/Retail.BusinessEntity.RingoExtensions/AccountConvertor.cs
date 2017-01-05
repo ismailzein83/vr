@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualBasic.FileIO;
 using System.IO;
 using System.Linq;
+using Microsoft.VisualBasic.FileIO;
+using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
+using Retail.Ringo.MainExtensions.AccountParts;
 using Vanrise.BEBridge.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Retail.BusinessEntity.Business;
-using Retail.BusinessEntity.RingoExtensions.AccountParts;
-using Vanrise.Common;
 using Vanrise.GenericData.Entities;
-using Vanrise.GenericData.Transformation.Entities;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
+using Vanrise.GenericData.Transformation.Entities;
 
-namespace Retail.BusinessEntity.RingoExtensions
+namespace Retail.Ringo.MainExtensions
 {
     public class AccountConvertor : TargetBEConvertor
     {
+        CurrencySettingData _currencySettingData;
+
+        #region Properties
+        public Guid AgentBEDefinitionId { get; set; }
+        public Guid DistributorBEDefinitionId { get; set; }
+        public Guid PosBEDefinitionId { get; set; }
         public override string Name
         {
             get
@@ -27,8 +33,14 @@ namespace Retail.BusinessEntity.RingoExtensions
             }
         }
 
+        #endregion
+
+        #region Public Methods
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
+            SettingManager settingManager = new SettingManager();
+            var _systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
+            _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;
 
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;
 
@@ -58,6 +70,7 @@ namespace Retail.BusinessEntity.RingoExtensions
 
                         accountData.Account.Name = accountName;
                         accountData.Account.SourceId = sourceId;
+                        accountData.Account.TypeId = new Guid("19A97F72-8C56-441E-A74D-AA185961B242");
                         FillAccountSettings(accountData, accountRecords);
                         accountData.Account.StatusId = Guid.Parse("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B");
                         lstTargets.Add(accountData);
@@ -68,30 +81,6 @@ namespace Retail.BusinessEntity.RingoExtensions
             }
             context.TargetBEs = lstTargets;
         }
-
-        private MappingRule GetMappingRule(string msisdn, string accountName)
-        {
-            MappingRule rule = new MappingRule
-            {
-                BeginEffectiveTime = DateTime.Parse("2000-01-01"),
-                Settings = new MappingRuleSettings(),
-                Criteria = new GenericRuleCriteria
-                {
-                    FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
-                },
-                DefinitionId = new Guid("E30037DA-29C6-426A-A581-8EB0EDD1D5E3"),
-                Description = string.Format("{0} Identification Rule", accountName)
-            };
-            rule.Criteria.FieldsValues.Add("MSISDN", new StaticValues
-            {
-                Values = new List<object>
-                {
-                    msisdn
-                }
-            });
-            return rule;
-        }
-
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
             SourceAccountData existingBe = context.ExistingBE as SourceAccountData;
@@ -106,10 +95,9 @@ namespace Retail.BusinessEntity.RingoExtensions
             UpdateResidentialInfoPart(finalBe, newBe);
             UpdateActivationInfoPart(finalBe, newBe);
             UpdateEntitiesPart(finalBe, newBe);
-
+            finalBe.Account.TypeId = newBe.Account.TypeId;
             context.FinalBE = finalBe;
         }
-
         public override bool CompareBeforeUpdate
         {
             get
@@ -117,6 +105,10 @@ namespace Retail.BusinessEntity.RingoExtensions
                 return base.CompareBeforeUpdate;
             }
         }
+
+        #endregion
+
+        #region Private Methods
 
         #region Account Settings Part
 
@@ -131,7 +123,20 @@ namespace Retail.BusinessEntity.RingoExtensions
             FillResidentialProfilePart(accountData, accountRecords);
             FillActivationPart(accountData, accountRecords);
             FillEntitiesPart(accountData, accountRecords);
+            FillFinancialPart(accountData, accountRecords);
             FillOtherPart(accountData, accountRecords);
+        }
+
+        private void FillFinancialPart(SourceAccountData accountData, string[] accountRecords)
+        {
+
+            accountData.Account.Settings.Parts.Add(AccountPartFinancial._ConfigId, new AccountPart
+            {
+                Settings = new AccountPartFinancial
+                {
+                    CurrencyId = _currencySettingData.CurrencyId
+                }
+            });
         }
 
         void FillOtherPart(SourceAccountData accountData, string[] accountRecords)
@@ -164,22 +169,19 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         void FillEntitiesPart(SourceAccountData accountData, string[] accountRecords)
         {
-            POSManager posManager = new POSManager();
-            PointOfSale pointOfSale = posManager.GetPOSBySourceId(accountRecords[30]);
+            AccountBEManager accountBeManager = new AccountBEManager();
 
-            AgentManager agentManager = new AgentManager();
-            Agent agent = agentManager.GetAgentBySourceId(accountRecords[33]);
-
-            DistributorManager distributorManager = new DistributorManager();
-            Distributor distributor = distributorManager.GetDistributorBySourceId(accountRecords[36]);
+            Account pointOfSale = accountBeManager.GetAccountBySourceId(this.PosBEDefinitionId, accountRecords[30]);
+            Account agent = accountBeManager.GetAccountBySourceId(this.AgentBEDefinitionId, accountRecords[33]);
+            Account distributor = accountBeManager.GetAccountBySourceId(this.DistributorBEDefinitionId, accountRecords[36]);
 
             accountData.Account.Settings.Parts.Add(AccountPartEntitiesInfo._ConfigId, new AccountPart
             {
                 Settings = new AccountPartEntitiesInfo
                 {
-                    PosId = pointOfSale == null ? 0 : pointOfSale.Id,
-                    AgentId = agent == null ? 0 : agent.Id,
-                    DistributorId = distributor == null ? 0 : distributor.Id
+                    PosId = pointOfSale == null ? 0 : pointOfSale.AccountId,
+                    AgentId = agent == null ? 0 : agent.AccountId,
+                    DistributorId = distributor == null ? 0 : distributor.AccountId
                 }
             });
         }
@@ -276,5 +278,31 @@ namespace Retail.BusinessEntity.RingoExtensions
         }
 
         #endregion
+
+        private MappingRule GetMappingRule(string msisdn, string accountName)
+        {
+            MappingRule rule = new MappingRule
+            {
+                BeginEffectiveTime = DateTime.Parse("2000-01-01"),
+                Settings = new MappingRuleSettings(),
+                Criteria = new GenericRuleCriteria
+                {
+                    FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
+                },
+                DefinitionId = new Guid("E30037DA-29C6-426A-A581-8EB0EDD1D5E3"),
+                Description = string.Format("{0} Identification Rule", accountName)
+            };
+            rule.Criteria.FieldsValues.Add("MSISDN", new StaticValues
+            {
+                Values = new List<object>
+                {
+                    msisdn
+                }
+            });
+            return rule;
+        }
+
+        #endregion
+
     }
 }

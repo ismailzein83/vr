@@ -9,7 +9,7 @@ using Retail.BusinessEntity.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
 
-namespace Retail.BusinessEntity.RingoExtensions
+namespace Retail.Ringo.MainExtensions
 {
     public class PointOfSaleConvertor : TargetBEConvertor
     {
@@ -38,9 +38,9 @@ namespace Retail.BusinessEntity.RingoExtensions
                     string[] accountRecords = parser.ReadFields();
                     if (accountRecords != null)
                     {
-                        SourcePOS posData = new SourcePOS
+                        SourceAccountData posData = new SourceAccountData
                         {
-                            PointOfSale = new PointOfSale()
+                            Account = new Account()
                         };
                         accountRecords = accountRecords.Select(s => s.Trim('\'')).ToArray();
 
@@ -50,9 +50,9 @@ namespace Retail.BusinessEntity.RingoExtensions
                         ITargetBE targetBe;
                         if (!targetBes.TryGetValue(sourceId, out targetBe))
                         {
-                            posData.PointOfSale.SourceId = sourceId;
-                            posData.PointOfSale.Name = accountRecords[31];
-                            posData.PointOfSale.Type = accountRecords[32];
+                            posData.Account.SourceId = sourceId;
+                            posData.Account.Name = accountRecords[31];
+                            posData.Account.TypeId = new Guid("2A4D4D3A-EC47-4CB0-9D72-23263A20BA71");
                             targetBes.Add(sourceId, posData);
                         }
                     }
@@ -65,17 +65,17 @@ namespace Retail.BusinessEntity.RingoExtensions
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
-            SourcePOS existingBe = context.ExistingBE as SourcePOS;
-            SourcePOS newBe = context.NewBE as SourcePOS;
+            SourceAccountData existingBe = context.ExistingBE as SourceAccountData;
+            SourceAccountData newBe = context.NewBE as SourceAccountData;
 
-            SourcePOS finalBe = new SourcePOS
+            SourceAccountData finalBe = new SourceAccountData
             {
-                PointOfSale = Serializer.Deserialize<PointOfSale>(Serializer.Serialize(existingBe.PointOfSale))
+                Account = Serializer.Deserialize<Account>(Serializer.Serialize(existingBe.Account))
             };
 
-            finalBe.PointOfSale.Name = newBe.PointOfSale.Name;
-            finalBe.PointOfSale.Settings = newBe.PointOfSale.Settings;
-            finalBe.PointOfSale.Type = newBe.PointOfSale.Type;
+            finalBe.Account.Name = newBe.Account.Name;
+            finalBe.Account.Settings = newBe.Account.Settings;
+            finalBe.Account.TypeId = newBe.Account.TypeId;
 
             context.FinalBE = finalBe;
         }

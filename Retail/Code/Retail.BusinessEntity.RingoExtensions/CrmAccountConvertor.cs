@@ -7,13 +7,13 @@ using Newtonsoft.Json.Linq;
 using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
-using Retail.BusinessEntity.RingoExtensions.AccountParts;
+using Retail.Ringo.MainExtensions.AccountParts;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
-namespace Retail.BusinessEntity.RingoExtensions
+namespace Retail.Ringo.MainExtensions
 {
     public class CrmAccountConvertor : TargetBEConvertor
     {

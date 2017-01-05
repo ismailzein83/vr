@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Retail.BusinessEntity.Business;
-using Retail.BusinessEntity.RingoExtensions;
+using Retail.Ringo.MainExtensions;
 using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.BEBridge.BP.Arguments;
@@ -123,19 +123,19 @@ namespace Retail.Runtime.Tasks
                     ,
                     new EntitySyncDefinition
                     {
-                        TargetBESynchronizer = new AgentSynchronizer {ConfigId = Guid.NewGuid()},
+                        TargetBESynchronizer = new AccountSynchronizer {ConfigId = Guid.NewGuid()},
                         TargetBEConvertor = new AgentConvertor {ConfigId = Guid.NewGuid()}
                     }
                     ,
                     new EntitySyncDefinition
                     {
                         TargetBEConvertor = new DistributorConvertor {ConfigId = Guid.NewGuid()},
-                        TargetBESynchronizer = new DistributorSynchronizer {ConfigId = Guid.NewGuid()}
+                        TargetBESynchronizer = new AccountSynchronizer {ConfigId = Guid.NewGuid()}
                     }
                     ,
                     new EntitySyncDefinition
                     {
-                        TargetBESynchronizer = new PosSynchronizer {ConfigId = Guid.NewGuid()},
+                        TargetBESynchronizer = new AccountSynchronizer {ConfigId = Guid.NewGuid()},
                         TargetBEConvertor = new PointOfSaleConvertor {ConfigId = Guid.NewGuid()}
                     }
                 }

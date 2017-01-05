@@ -107,11 +107,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Retail_Ringo\Directives\" />
     <Folder Include="Retail_Ringo\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Ringo\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-entitiesinfo.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-otherinfo.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\Templates\AccountTypeEntitiesInfoPartDefinitionTemplate.html" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\Templates\AccountTypeOtherInfoPartDefinitionTemplate.html" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Runtime\retail-ringo-accountpart-runtime-entitiesinfo.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Runtime\retail-ringo-accountpart-runtime-otherinfo.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Runtime\Templates\AccountTypeEntitiesInfoPartRuntimeTemplate.html" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Runtime\Templates\AccountTypeOtherInfoPartRuntimeTemplate.html" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\Account\retail-ringo-account-convertor-editor.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\Account\Templates\AccountConvertorEditor.html" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\Agent\retail-ringo-agent-convertor-editor.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\Agent\Templates\AgentConvertorEditor.html" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\Distributor\retail-ringo-distributor-convertor-editor.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\Distributor\Templates\DistributorConvertorEditor.html" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\Pos\retail-ringo-pos-convertor-editor.js" />
+    <Content Include="Retail_Ringo\Directives\MainExtensions\Pos\Templates\PosConvertorEditor.html" />
     <Content Include="Retail_Ringo\Services\APIServices\RingoReportSheetAPIService.js" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagement.html" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagementController.js" />

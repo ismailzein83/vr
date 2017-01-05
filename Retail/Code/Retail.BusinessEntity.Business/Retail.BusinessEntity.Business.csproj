@@ -145,10 +145,6 @@
     <Compile Include="AccountServiceGenericFields\AccountServiceTypeGenericField.cs" />
     <Compile Include="AccountServiceManager.cs" />
     <Compile Include="Context\PackageDefinitionServiceTypeFilterContext.cs" />
-    <Compile Include="DistributorManager.cs" />
-    <Compile Include="Extensions\DistributorSynchronizer.cs" />
-    <Compile Include="Extensions\PosSynchronizer.cs" />
-    <Compile Include="Extensions\AgentSynchronizer.cs" />
     <Compile Include="Extensions\SubscriberAccountBalanceManager.cs" />
     <Compile Include="Extensions\SubscriberAccountBalanceSetting.cs" />
     <Compile Include="Filters\IAccountFilter\AccountConditionAccountFilter.cs" />
@@ -157,8 +153,6 @@
     <Compile Include="Filters\PackageDefinitionServiceTypeFilter.cs" />
     <Compile Include="PackageDefinitionManager.cs" />
     <Compile Include="PackageServiceUsageChargingPolicyContext.cs" />
-    <Compile Include="POSManager.cs" />
-    <Compile Include="AgentManager.cs" />
     <Compile Include="OperatorDeclaredInfoManager.cs" />
     <Compile Include="AccountTypeManager.cs" />
     <Compile Include="Action\ActionDefinitionManager.cs" />
