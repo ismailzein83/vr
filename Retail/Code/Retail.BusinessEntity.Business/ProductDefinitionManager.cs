@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Common;
-
+ 
 namespace Retail.BusinessEntity.Business
 {
     public class ProductDefinitionManager

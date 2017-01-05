@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Retail.BusinessEntity.Data
 {
     public interface IProductDataManager : IDataManager
-    {
+    { 
         List<Product> GetProducts();
 
         bool AreProductUpdated(ref object updateHandle);

@@ -331,6 +331,28 @@ namespace Retail.BusinessEntity.Business
             return cachedAccounts.GetRecord(sourceId);
         }
 
+        public bool UpdateStatus(Guid accountBEDefinitionId, long accountId, Guid statusId)
+        {
+            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+            bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
+            if (updateStatus)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
+            }
+            return updateStatus;
+        }
+
+        public bool UpdateExecutedActions(Guid accountBEDefinitionId, long accountId, ExecutedActions executedActions)
+        {
+            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountId, executedActions);
+            if (updateExecutedAction)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
+            }
+            return updateExecutedAction;
+        }
+
         #endregion
 
         #region Private Classes

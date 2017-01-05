@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
 
         }
-
+         
         #endregion
 
         #region Public Methods

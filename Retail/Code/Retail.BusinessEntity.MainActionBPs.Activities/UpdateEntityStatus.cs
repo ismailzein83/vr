@@ -28,9 +28,9 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             var accountId = this.AccountId.Get(context);
             var executedActionsData = this.ExecutedActionsData.Get(context);
             var statusDefinitionId =  this.StatusDefinitionId.Get(context);
-            AccountManager accountManager = new AccountManager();
+
             AccountBEManager accountBEManager = new AccountBEManager();
-            accountManager.UpdateStatus( accountId, statusDefinitionId);
+            accountBEManager.UpdateStatus(accountBEDefinitionId, accountId, statusDefinitionId);
             var account = accountBEManager.GetAccount(accountBEDefinitionId,accountId);
             ExecutedActions accountActions = account.ExecutedActions;
             if (accountActions == null)
@@ -38,7 +38,7 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
                 accountActions = new ExecutedActions();
             }
             accountActions.ExecutedActionsData = executedActionsData;
-            accountManager.UpdateExecutedActions(accountId, accountActions);
+            accountBEManager.UpdateExecutedActions(accountBEDefinitionId, accountId, accountActions);
         }
     }
 }

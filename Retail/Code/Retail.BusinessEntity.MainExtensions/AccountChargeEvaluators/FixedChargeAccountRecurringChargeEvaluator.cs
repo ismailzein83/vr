@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountChargeEvaluators
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("8FEF1186-28BF-47FF-9C9B-3A2873F48F15"); }
         }
 
         public Decimal Charge { get; set; }

@@ -437,6 +437,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\retail-be-productdefinition-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionExtendedSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\retail-be-product-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\Templates\ProductGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
@@ -478,6 +480,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\ProductAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />
@@ -501,6 +504,7 @@
     <Content Include="Retail_BusinessEntity\Services\CreditClassService.js" />
     <Content Include="Retail_BusinessEntity\Services\PricingPackageSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\PopService.js" />
+    <Content Include="Retail_BusinessEntity\Services\ProductService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusChargingSetService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
@@ -574,6 +578,10 @@
     <Content Include="Retail_BusinessEntity\Views\Pop\PopEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Pop\PopManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Pop\PopManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Product\ProductEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Product\ProductEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Product\ProductManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\Product\ProductManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\RevenueComparison\RevenueComparisonManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\RevenueComparison\RevenueComparisonManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\ServiceType\ChargingPolicyPartEditor.html" />

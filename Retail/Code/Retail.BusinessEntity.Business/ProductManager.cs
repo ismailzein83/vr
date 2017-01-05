@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
-
+ 
 namespace Retail.BusinessEntity.Business
 {
     public class ProductManager
