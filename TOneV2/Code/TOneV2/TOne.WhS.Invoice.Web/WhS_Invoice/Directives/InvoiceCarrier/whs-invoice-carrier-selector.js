@@ -101,7 +101,13 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     else
                         loadCarrierAccounts(attrs, setLoader);
                 };
-
+                ctrl.onselectionchanged = function (selectedCarrier)
+                {
+                    if (selectedCarrier != undefined && context != undefined && context.reloadBillingPeriod != undefined)
+                    {
+                        context.reloadBillingPeriod();
+                    }
+                }
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
