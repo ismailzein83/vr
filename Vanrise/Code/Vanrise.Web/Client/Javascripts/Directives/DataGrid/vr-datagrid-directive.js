@@ -1036,6 +1036,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     calculateDataColumnsSectionWidth();
                 };
                 ctrl.showExpandCollapseIcon = function (dataItem) {
+                    if (dataItem.isDeleted)
+                        return false;
                     if (ctrl.showexpand != undefined && typeof (ctrl.showexpand) == 'function') {
                         var showExpand = ctrl.showexpand(dataItem);
                         return showExpand;

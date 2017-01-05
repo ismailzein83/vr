@@ -71,13 +71,24 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', '
                     dataItem.menuActions.push({
                         name: invoiceGridAction.Title,
                         clicked: function (dataItem) {
-                            var payload = {
+                            var payloadContext = {
                                 invoice: dataItem,
-                                invoiceAction: invoiceAction
+                                invoiceAction: invoiceAction,
+                                onItemAdded: function (item) {
+                                    defineInvoiceTabsAndMenuActions(item, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
+                                    gridAPI.itemAdded(item);
+                                },
+                                onItemUpdated: function (item) {
+                                    defineInvoiceTabsAndMenuActions(item, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
+                                    gridAPI.itemUpdated(item);
+                                },
+                                onItemDeleted: function (item) {
+                                    gridAPI.itemDeleted(item);
+                                }
                             };
                             var promiseDeffered = UtilsService.createPromiseDeferred();
 
-                            var promise = actionType.actionMethod(payload);
+                            var promise = actionType.actionMethod(payloadContext);
                             if (promise != undefined && promise.then != undefined) {
                                 promise.then(function (response) {
                                     if (invoiceGridAction.ReloadGridItem && response) {
@@ -85,7 +96,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', '
                                         var invoiceId = dataItem.Entity.InvoiceId;
                                         return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
                                             gridAPI.itemUpdated(response);
-                                            defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions);
+                                            defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
                                             promiseDeffered.resolve();
                                         }).catch(function (error) {
                                             promiseDeffered.reject(error);

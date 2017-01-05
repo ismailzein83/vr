@@ -56,8 +56,10 @@ namespace Vanrise.Invoice.Business
                     InvoiceTypeManager manager = new InvoiceTypeManager();
                     var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
                     GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId);
-                    var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails);
+                    Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails);
                     invoice.SerialNumber = currentInvocie.SerialNumber;
+                    invoice.Note = currentInvocie.Note;
+
                     if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, createInvoiceInput.InvoiceId, out insertedInvoiceId))
                     {
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;

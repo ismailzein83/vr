@@ -96,12 +96,16 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             var actionType = {
                 ActionTypeName: "RecreateInvoiceAction",
                 actionMethod: function (payload) {
-                    var promiseDeffered = UtilsService.createPromiseDeferred();
                     var onGenerateInvoice = function (invoiceGenerated) {
-                        promiseDeffered.resolve(invoiceGenerated);
+                        if(payload.onItemAdded != undefined)
+                        {
+                            payload.onItemAdded(invoiceGenerated);
+                        }
+                        if (payload.onItemDeleted != undefined) {
+                            payload.onItemDeleted(payload.invoice);
+                        }
                     };
                     reGenerateInvoice(onGenerateInvoice, payload.invoice.Entity.InvoiceTypeId, payload.invoice.Entity.InvoiceId);
-                    return promiseDeffered.promise;
                 }
             };
             registerActionType(actionType);

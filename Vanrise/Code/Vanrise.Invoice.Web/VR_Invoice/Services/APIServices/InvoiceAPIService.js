@@ -50,6 +50,12 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
+        //function GetBillingInterval(invoiceTypeId, partnerId) {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetBillingInterval'), {
+        //        invoiceTypeId: invoiceTypeId,
+        //        partnerId: partnerId
+        //    });
+        //}
 
         return ({
             GetInvoice: GetInvoice,
@@ -61,6 +67,7 @@
             SetInvoiceLocked: SetInvoiceLocked,
             ReGenerateInvoice: ReGenerateInvoice,
             UpdateInvoiceNote: UpdateInvoiceNote,
+            //GetBillingInterval: GetBillingInterval
         });
     }
 

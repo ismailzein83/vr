@@ -39,6 +39,10 @@ namespace Vanrise.Invoice.Business
             var duePeriod = partnerManager.GetPartnerDuePeriod(this.InvoiceTypeId, this.PartnerId);
             
             this.GeneratedInvoice = context.Invoice;
+
+
+            var serialNumber = invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern;
+
             this._Invoice = new Entities.Invoice
             {
                 Details = GeneratedInvoice.InvoiceDetails,
@@ -49,6 +53,23 @@ namespace Vanrise.Invoice.Business
                 IssueDate = this.IssueDate,
                 DueDate = this.IssueDate.AddDays(duePeriod),
             };
+
+
+            InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
+            {
+                Invoice = this._Invoice,
+                InvoiceTypeId = this.InvoiceTypeId
+            };
+            foreach (var part in invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberParts)
+            {
+                if (invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern != null && invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                {
+                    serialNumber = serialNumber.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberContext));
+                }
+            }
+
+            this._Invoice.SerialNumber = serialNumber;
+           
             this.IsLoaded = true;
         }
         public GeneratedInvoice GeneratedInvoice { get; set; }

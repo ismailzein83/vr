@@ -73,7 +73,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     invoiceGridActions = payload.invoiceGridActions;
                                     invoiceTypeId = payload.InvoiceTypeId;
                                     invoiceItemGroupings = payload.invoiceItemGroupings;
-                                    //defineMenuActions(payload.invoiceGridActions);
+                                  
                                 }
                                 gridAPI.retrieveData(query).then(function () {
                                     promiseDeferred.resolve();
@@ -153,65 +153,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                     }
                 }
             }
-
-            function defineMenuActions(invoiceGridActions) {
-                $scope.gridMenuActions.length = 0;
-                if (invoiceGridActions != undefined)
-                {
-                    for(var i=0;i<invoiceGridActions.length;i++)
-                    {
-                        var invoiceGridAction = invoiceGridActions[i];
-                        var actionType = VR_Invoice_InvoiceActionService.getActionTypeIfExist(invoiceGridAction.Settings.ActionTypeName);
-                        if(actionType != undefined)
-                        {
-                            addgridMenuAction(invoiceGridAction,actionType);
-                        }
-                    }
-                    function addgridMenuAction(invoiceGridAction, actionType)
-                    {
-                        $scope.gridMenuActions.push({
-                            name: invoiceGridAction.Title,
-                            clicked: function (dataItem) {
-                                var payload = {
-                                    invoice: dataItem,
-                                    invoiceGridAction: invoiceGridAction
-                                };
-                                var promiseDeffered = UtilsService.createPromiseDeferred();
-
-                                var promise = actionType.actionMethod(payload);
-                                if (promise != undefined && promise.then != undefined)
-                                {
-                                    ctrl.isLodingGrid = true;
-
-                                    promise.then(function (response) {
-                                        if (invoiceGridAction.ReloadGridItem && response)
-                                        {
-                                            var invoiceId = dataItem.Entity.InvoiceId;
-                                            return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
-                                                promiseDeffered.resolve();
-                                                gridAPI.itemUpdated(response);
-                                            }).catch(function (error) {
-                                                promiseDeffered.reject(error);
-                                            });
-                                        }else
-                                        {
-                                          promiseDeffered.resolve();
-                                        }
-                                    }).catch(function (error) {
-                                        promiseDeffered.reject(error);
-                                    }).finally(function () {
-                                        ctrl.isLodingGrid = false;
-                                    });
-                                } else
-                                {
-                                    promiseDeffered.resolve();
-                                }
-                                return promiseDeffered.promise;
-                            }
-                        });
-                    }
-                }
-            }
+      
         }
 
         return directiveDefinitionObject;
