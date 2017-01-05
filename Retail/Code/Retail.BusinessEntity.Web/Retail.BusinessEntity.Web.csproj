@@ -460,6 +460,16 @@
     <Content Include="Retail_BusinessEntity\Directives\Pos\Templates\PosConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Pos\Templates\PosSynchronizerEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Pos\Templates\PosGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\MainExtensions\ExtendedSettings\retail-be-productdefinition-extendedsettings-postpaid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\MainExtensions\ExtendedSettings\retail-be-productdefinition-extendedsettings-prepaid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\MainExtensions\ExtendedSettings\Templates\PostPaidDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\MainExtensions\ExtendedSettings\Templates\PrePaidDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\retail-be-productdefinition-extendedsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\retail-be-productdefinition-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\retail-be-productdefinition-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionExtendedSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionSelectorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
