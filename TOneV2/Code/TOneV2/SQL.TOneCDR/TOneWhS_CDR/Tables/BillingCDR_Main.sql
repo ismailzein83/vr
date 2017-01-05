@@ -49,8 +49,12 @@
     [SaleExtraChargeRuleId]       INT             NULL,
     [CostExtraChargeValue]        DECIMAL (20, 4) NULL,
     [SaleExtraChargeValue]        DECIMAL (20, 4) NULL,
-    [CountryId]                   INT             NULL
+    [CountryId]                   INT             NULL,
+    [SaleExtraChargeRateValue]    DECIMAL (20, 8) NULL,
+    [CostExtraChargeRateValue]    DECIMAL (20, 8) NULL
 );
+
+
 
 
 

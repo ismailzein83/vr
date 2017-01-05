@@ -35,7 +35,11 @@
     [PortOUT]                     VARCHAR (42)    NULL,
     [CustomerProfileId]           INT             NULL,
     [SupplierProfileId]           INT             NULL,
-    [ReleaseSourceSCount]         INT             NULL);
+    [ReleaseSourceSCount]         INT             NULL,
+    [SaleExtraCharges]            DECIMAL (20, 4) NULL,
+    [CostExtraCharges]            DECIMAL (20, 4) NULL);
+
+
 
 
 
