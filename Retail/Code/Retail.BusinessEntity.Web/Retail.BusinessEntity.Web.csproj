@@ -515,6 +515,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\DistributorAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AgentAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\ProductDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />
