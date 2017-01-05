@@ -177,6 +177,7 @@
     <Compile Include="Controllers\TelestSwitchController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
+    <Compile Include="Controllers\ProductDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
