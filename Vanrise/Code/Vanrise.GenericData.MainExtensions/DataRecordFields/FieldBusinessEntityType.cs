@@ -46,7 +46,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override string GetDescription(object value)
         {
             if (value == null)
-                return null;
+            {
+                return new BusinessEntityDefinitionManager().GetBusinessEntityNullDisplayText(this.BusinessEntityDefinitionId);
+            }
 
             var beValues = value as BusinessEntityValues;
             if (beValues != null)
@@ -177,5 +179,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             ObjectListRecordFilter objectListRecordFilter = filter as ObjectListRecordFilter;
             return string.Format(" {0} {1} ( {2} ) ", objectListRecordFilter.FieldName, Utilities.GetEnumDescription(objectListRecordFilter.CompareOperator), GetDescription(objectListRecordFilter.Values.Cast<Object>().ToList()));
         }
+
     }
 }

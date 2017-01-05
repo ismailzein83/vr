@@ -211,7 +211,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         SaleCurrencyId = currencyId,
                         OriginalSaleCurrencyId = Convert.ToInt32(saleCurrencyId.Value),
                         SaleRate = saleRate != null ? Convert.ToDecimal(saleRate.Value) : default(Decimal),
-                        SaleRateTypeId = saleRateTypeId != null && saleRateTypeId.Value != null ? Convert.ToInt32(saleRateTypeId.Value) : default(int),
+                        SaleRateTypeId = saleRateTypeId != null && saleRateTypeId.Value != null ? Convert.ToInt32(saleRateTypeId.Value) : default(int?),
                         SaleZoneId = Convert.ToInt64(saleZoneId.Value),
                         InvoiceMeasures = new InvoiceMeasures
                         {
@@ -301,7 +301,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public int CustomerId { get; set; }
             public int OriginalSaleCurrencyId { get; set; }
             public Decimal SaleRate { get; set; }
-            public int SaleRateTypeId { get; set; }
+            public int? SaleRateTypeId { get; set; }
             public int SaleCurrencyId { get; set; }
 
         }

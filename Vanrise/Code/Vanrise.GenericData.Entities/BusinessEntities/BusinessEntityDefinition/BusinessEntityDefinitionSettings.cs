@@ -15,5 +15,6 @@ namespace Vanrise.GenericData.Entities
         public virtual string DefinitionEditor { get; set; }
         public virtual string IdType { get; set; }
         public virtual string SelectorFilterEditor { get; set; }
+        public virtual string NullDisplayText { get; set; }
     }
 }

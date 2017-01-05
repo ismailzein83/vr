@@ -182,8 +182,7 @@ namespace Vanrise.Invoice.Business
                 {
                     var dimensionValue = new InvoiceGroupingDimensionValue();
                     dimensionValue.Value = invoiceItemRecord.GroupingValuesByDimensionId[dimId].Value;
-                    if (dimensionValue.Value != null && dimensionValue.Value != DBNull.Value)
-                        dimensionValue.Name = groupingInvoiceItemQueryContext.GetDimensionItemField(dimId).FieldType.GetDescription(dimensionValue.Value);
+                    dimensionValue.Name = groupingInvoiceItemQueryContext.GetDimensionItemField(dimId).FieldType.GetDescription(dimensionValue.Value);
                     analyticRecord.DimensionValues[dimIndex] = dimensionValue;
                     dimIndex++;
                 }

@@ -152,7 +152,11 @@ namespace Vanrise.GenericData.Business
             }
             return null;
         }
-
+        public string GetBusinessEntityNullDisplayText(Guid businessEntityDefinitionId)
+        {
+            var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
+            return beDefinition != null && beDefinition.Settings  != null ? beDefinition.Settings.NullDisplayText : null;
+        }
         public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
