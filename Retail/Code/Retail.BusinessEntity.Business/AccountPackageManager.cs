@@ -16,6 +16,7 @@ namespace Retail.BusinessEntity.Business
         #region Fields
 
         AccountManager _accountManager = new AccountManager();
+        //AccountTypeManager _accountTypeManager = new AccountTypeManager();
         PackageManager _packageManager = new PackageManager();
 
         #endregion
@@ -157,6 +158,7 @@ namespace Retail.BusinessEntity.Business
 
         AccountPackageDetail AccountPackageDetailMapper(AccountPackage accountPackage)
         {
+
             return new AccountPackageDetail()
             {
                 Entity = accountPackage,

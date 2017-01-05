@@ -13,12 +13,13 @@ namespace Retail.Invoice.Business
 {
     public class RetailSubscriberInvoiceSettings : InvoiceTypeExtendedSettings
     {
+        public Guid AcountBEDefinitionId { get; set; }
 
         public override Guid ConfigId
         {
             get { return new Guid("2f5c2fb4-4380-4a18-986c-210459134b4b"); }
         }
-        public Guid AcountBEDefinitionId { get; set; }
+
         public override BillingPeriod GetBillingPeriod(IExtendedSettingsBillingPeriodContext context)
         {
             throw new NotImplementedException();
@@ -29,14 +30,15 @@ namespace Retail.Invoice.Business
             switch (context.InfoType)
             {
                 case "MailTemplate":
-                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                    Guid invoiceTemplateId = Guid.Empty;
                     var invoiceDetails = context.Invoice.Details as RetailSubscriberInvoiceDetails;
                     long accountId = Convert.ToInt32(context.Invoice.PartnerId);
-                    Guid invoiceTemplateId = Guid.Empty;
-                    AccountBEManager accountManager = new AccountBEManager();
-                    var account = accountManager.GetAccount(this.AcountBEDefinitionId,accountId);
-                    AccountManager accountManager1 = new AccountManager();
-                    invoiceTemplateId = accountManager1.GetDefaultInvoiceEmailId(accountId);
+
+                    AccountBEManager accountBEManager = new AccountBEManager();
+                    var account = accountBEManager.GetAccount(this.AcountBEDefinitionId, accountId);
+                    invoiceTemplateId = accountBEManager.GetDefaultInvoiceEmailId(accountId);
+
+                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("Account", account);
                     objects.Add("Invoice", context.Invoice);
                     VRMailManager vrMailManager = new VRMailManager();
@@ -53,12 +55,12 @@ namespace Retail.Invoice.Business
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new RetailSubscriberInvoiceGenerator();
+            return new RetailSubscriberInvoiceGenerator(this.AcountBEDefinitionId);
         }
 
         public override InvoicePartnerSettings GetPartnerSettings()
         {
-            return new RetailSubscriberPartnerSettings();
+            return new RetailSubscriberPartnerSettings(this.AcountBEDefinitionId);
         }
     }
 }

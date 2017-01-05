@@ -10,15 +10,21 @@ namespace Retail.BusinessEntity.Business
 {
     public class SubscriberAccountBalanceManager : IAccountManager
     {
-        public dynamic GetAccount(IAccountContext context)
+        Guid _accountBEDefinitionId;
+        public SubscriberAccountBalanceManager(Guid accountBEDefinitionId)
         {
-            AccountManager accountManager = new AccountManager();
-            return accountManager.GetAccount(context.AccountId);
+            _accountBEDefinitionId = accountBEDefinitionId;
+        }
+
+        public dynamic GetAccount(IAccountContext context) 
+        {
+            AccountBEManager accountBEManager = new AccountBEManager();
+            return accountBEManager.GetAccount(this._accountBEDefinitionId, context.AccountId);
         }
         public Vanrise.AccountBalance.Entities.AccountInfo GetAccountInfo(IAccountInfoContext context)
         {
-            AccountManager accountManager = new AccountManager();
-            var account = accountManager.GetAccount(context.AccountId);
+            AccountBEManager accountBEManager = new AccountBEManager();
+            var account = accountBEManager.GetAccount(this._accountBEDefinitionId, context.AccountId);
             Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
             {
                 Name = account.Name,

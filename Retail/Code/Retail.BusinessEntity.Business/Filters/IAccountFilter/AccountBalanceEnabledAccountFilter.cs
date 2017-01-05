@@ -13,9 +13,9 @@ namespace Retail.BusinessEntity.Business
         {
             if (context.Account != null)
             {
-                AccountManager accountManager = new AccountManager();
+                AccountBEManager accountBEManager = new AccountBEManager();
                 IAccountPayment accountPayment;
-                return !accountManager.HasAccountPayment(context.Account.AccountId, false, out accountPayment);
+                return !accountBEManager.HasAccountPayment(context.AccountBEDefinitionId, context.Account.AccountId, false, out accountPayment);
             }
             return false;
         }

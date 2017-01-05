@@ -325,8 +325,14 @@ namespace Retail.BusinessEntity.Business
             throw new NullReferenceException("setting.SubscriberInvoiceSettings");
         }
 
+        public Account GetAccountBySourceId(Guid accountBEDefinitionId, string sourceId)
+        {
+            Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId(accountBEDefinitionId);
+            return cachedAccounts.GetRecord(sourceId);
+        }
+
         #endregion
-         
+
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
@@ -381,14 +387,33 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
+        private struct GetCachedAccountsCacheName
+        {
+            public Guid AccountBEDefinitionId { get; set; }
+        }
         public Dictionary<long, Account> GetCachedAccounts(Guid accountBEDefinitionId)
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetAccounts_{0}", accountBEDefinitionId), accountBEDefinitionId,
+            var cacheName = new GetCachedAccountsCacheName { AccountBEDefinitionId = accountBEDefinitionId };
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, accountBEDefinitionId,
                 () =>
                 {
                     IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
                     IEnumerable<Account> accounts = dataManager.GetAccounts(accountBEDefinitionId);
                     return accounts.ToDictionary(kvp => kvp.AccountId, kvp => kvp);
+                });
+        }
+
+        private struct GetCachedAccountsBySourceIdCacheName
+        {
+            public Guid AccountBEDefinitionId { get; set; }
+        }
+        public Dictionary<string, Account> GetCachedAccountsBySourceId(Guid accountBEDefinitionId)
+        {
+            var cacheName = new GetCachedAccountsBySourceIdCacheName { AccountBEDefinitionId = accountBEDefinitionId };
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, accountBEDefinitionId,
+                () =>
+                {
+                    return GetCachedAccounts(accountBEDefinitionId).Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
                 });
         }
 
@@ -430,6 +455,8 @@ namespace Retail.BusinessEntity.Business
                     return treeNodes;
                 });
         }
+
+
 
         #endregion
 
@@ -554,7 +581,7 @@ namespace Retail.BusinessEntity.Business
                     continue;
 
                 object value = field.GetValue(new AccountGenericFieldContext(account));
-                
+
                 AccountFieldValue accountFieldValue = new AccountFieldValue();
                 accountFieldValue.Value = value;
                 accountFieldValue.Description = field.FieldType.GetDescription(value);

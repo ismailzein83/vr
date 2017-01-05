@@ -17,12 +17,6 @@ namespace Retail.Voice.Business
         AccountManager _accountManager = new AccountManager();
         AccountPackageManager _accountPackageManager = new AccountPackageManager();
 
-        public VoiceChargingManager()
-        {
-            _accountManager = new AccountManager();
-            _accountPackageManager = new AccountPackageManager();
-        }
-
         #endregion
 
         #region Public Methods
@@ -204,33 +198,33 @@ namespace Retail.Voice.Business
             return accountPackages;
         }
 
-        private List<Package> GetAllAccountPackagesByPriority(long accountId)
-        {
-            List<int> accountPackagesIds = null;
-            GetAccountPackagesByPriority(accountId, accountPackagesIds);
-            List<Package> accountPackages = new PackageManager().GetPackagesByIds(accountPackagesIds);
+        //private List<Package> GetAllAccountPackagesByPriority(long accountId)
+        //{
+        //    List<int> accountPackagesIds = null;
+        //    GetAccountPackagesByPriority(accountId, accountPackagesIds);
+        //    List<Package> accountPackages = new PackageManager().GetPackagesByIds(accountPackagesIds);
 
-            return accountPackages;
-        }
+        //    return accountPackages;
+        //}
 
-        private void GetAccountPackagesByPriority(long? accountId, List<int> accountPackagesIds)
-        {
-            if (!accountId.HasValue)
-                return;
+        //private void GetAccountPackagesByPriority(long? accountId, List<int> accountPackagesIds)
+        //{
+        //    if (!accountId.HasValue)
+        //        return;
 
-            if (accountPackagesIds == null)
-                accountPackagesIds = new List<int>();
+        //    if (accountPackagesIds == null)
+        //        accountPackagesIds = new List<int>();
 
-            IEnumerable<int> tempAccountPackagesIds = _accountPackageManager.GetPackageIdsAssignedToAccount(accountId.Value);
-            if (tempAccountPackagesIds != null)
-                accountPackagesIds.AddRange(tempAccountPackagesIds);
+        //    IEnumerable<int> tempAccountPackagesIds = _accountPackageManager.GetPackageIdsAssignedToAccount(accountId.Value);
+        //    if (tempAccountPackagesIds != null)
+        //        accountPackagesIds.AddRange(tempAccountPackagesIds);
 
-            Account account = _accountManager.GetAccount(accountId.Value);
-            if (account == null)
-                return;
+        //    Account account = _accountManager.GetAccount(accountId.Value);
+        //    if (account == null)
+        //        return;
 
-            GetAccountPackagesByPriority(account.ParentAccountId, accountPackagesIds);
-        }
+        //    GetAccountPackagesByPriority(account.ParentAccountId, accountPackagesIds);
+        //}
 
         #endregion
     }

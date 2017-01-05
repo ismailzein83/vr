@@ -9,18 +9,21 @@ namespace Retail.BusinessEntity.Business
 {
     public class SubscriberAccountBalanceSetting : AccountTypeExtendedSettings
     {
+        public Guid AccountBEDefinitionId { get; set; }
+
         public override Guid ConfigId
         {
             get { return new Guid("FEB17AE0-6CD4-467B-A7FA-4FEE9D8538EC"); }
         }
+
         public override string AccountSelector
         {
             get { return "retail-be-extendedsettings-account-selector"; }
         }
+
         public override IAccountManager GetAccountManager()
         {
-            return new SubscriberAccountBalanceManager();
+            return new SubscriberAccountBalanceManager(this.AccountBEDefinitionId);
         }
-        public Guid AccountBEDefinitionId { get; set; }
     }
 }

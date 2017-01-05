@@ -18,11 +18,15 @@ namespace Retail.BusinessEntity.Entities
 
     public interface IAccountFilterContext
     {
+        Guid AccountBEDefinitionId { get; }
+
         Account Account { get; }
     }
 
     public class AccountFilterContext : IAccountFilterContext
     {
+        public  Guid AccountBEDefinitionId { get; set; }
+
         public Account Account { get; set; }
     }
 }

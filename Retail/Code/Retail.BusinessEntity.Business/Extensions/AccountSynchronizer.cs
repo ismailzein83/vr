@@ -26,7 +26,7 @@ namespace Retail.BusinessEntity.Business
         #region Public Methods
         public override void Initialize(ITargetBESynchronizerInitializeContext context)
         {
-            context.InitializationData = new AccountManager().GetCachedAccountsBySourceId();
+            context.InitializationData = new AccountBEManager().GetCachedAccountsBySourceId(this.AccountBEDefinitionId);
         }
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {

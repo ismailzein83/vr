@@ -15,6 +15,12 @@ namespace Retail.Invoice.Business
 {
     public class RetailSubscriberInvoiceGenerator : InvoiceGenerator
     {
+        Guid _acountBEDefinitionId;
+        public RetailSubscriberInvoiceGenerator(Guid acountBEDefinitionId)
+        {
+            this._acountBEDefinitionId = acountBEDefinitionId;
+        }
+
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
             List<string> listMeasures = new List<string> { "Amount", "CountCDRs", "TotalDuration" };
@@ -22,14 +28,14 @@ namespace Retail.Invoice.Business
 
             string dimensionName = "FinancialAccountId";
 
-            AccountManager accountManager = new AccountManager();
+            AccountBEManager accountBEManager = new AccountBEManager();
             IAccountPayment accountPayment;
             long accountId = Convert.ToInt32(context.PartnerId);
-            if (!accountManager.HasAccountPayment(accountId, false, out accountPayment))
+            if (!accountBEManager.HasAccountPayment(this._acountBEDefinitionId, accountId, false, out accountPayment))
                 throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", accountId));
 
             int currencyId = accountPayment.CurrencyId;
-            Account account = accountManager.GetAccount(accountId);
+            Account account = accountBEManager.GetAccount(this._acountBEDefinitionId, accountId);
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, accountId, context.FromDate, context.GeneratedToDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
@@ -204,7 +210,7 @@ namespace Retail.Invoice.Business
         public class InvoiceBillingRecord
         {
             public decimal Amount { get; set; }
-            
+
             public Guid? ServiceTypeId { get; set; }
 
             public long? ZoneId { get; set; }

@@ -50,8 +50,8 @@ namespace Retail.BusinessEntity.Business
 
                         if (filter.ParentAccountId.HasValue)
                         {
-                            var accountManager = new AccountManager();
-                            Account parentAccount = accountManager.GetAccount(filter.ParentAccountId.Value);
+                            var accountBEManager = new AccountBEManager();
+                            Account parentAccount = accountBEManager.GetAccount(filter.AccountBEDefinitionId, filter.ParentAccountId.Value);
                             if (parentAccount == null)
                                 throw new NullReferenceException("parentAccount");
                             if (accountType.Settings == null || accountType.Settings.SupportedParentAccountTypeIds == null || !accountType.Settings.SupportedParentAccountTypeIds.Contains(parentAccount.TypeId))
@@ -73,10 +73,10 @@ namespace Retail.BusinessEntity.Business
             return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
         }
 
-        public IEnumerable<Guid> GetSupportedParentAccountTypeIds(long parentAccountId)
+        public IEnumerable<Guid> GetSupportedParentAccountTypeIds(Guid accountBEDefinitionId, long parentAccountId)
         {
-            var accountManager = new AccountManager();
-            Account parentAccount = accountManager.GetAccount(parentAccountId);
+            var accountBEManager = new AccountBEManager();
+            Account parentAccount = accountBEManager.GetAccount(accountBEDefinitionId, parentAccountId);
             if (parentAccount == null)
                 throw new NullReferenceException("parentAccount");
             AccountType parentAccountType = this.GetAccountType(parentAccount.TypeId);

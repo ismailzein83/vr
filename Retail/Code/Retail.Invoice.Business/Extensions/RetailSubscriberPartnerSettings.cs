@@ -27,6 +27,13 @@ namespace Retail.Invoice.Business
 
     public class RetailSubscriberPartnerSettings : InvoicePartnerSettings
     {
+        Guid _acountBEDefinitionId;
+
+        public RetailSubscriberPartnerSettings (Guid acountBEDefinitionId)
+        {
+            this._acountBEDefinitionId = acountBEDefinitionId;
+        }
+
         public override string PartnerFilterSelector
         {
             get
@@ -50,8 +57,8 @@ namespace Retail.Invoice.Business
 
         public override int GetPartnerDuePeriod(IPartnerDuePeriodContext context)
         {
-            AccountManager accountManager = new AccountManager();
-            return accountManager.GetAccountDuePeriod(Convert.ToInt32(context.PartnerId));
+            AccountBEManager accountBEManager = new AccountBEManager();
+            return accountBEManager.GetAccountDuePeriod(Convert.ToInt32(context.PartnerId));
         }
 
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
@@ -63,20 +70,20 @@ namespace Retail.Invoice.Business
                     long partnerId = Convert.ToInt32(context.PartnerId);
                     CurrencyManager currencyManager = new CurrencyManager();
 
-                    AccountManager accountManager = new AccountManager();
-                    CompanySetting companySetting = accountManager.GetCompanySetting(partnerId);
-                    var account = accountManager.GetAccount(partnerId);
-                    string accountName = accountManager.GetAccountName(account.AccountId);
+                    AccountBEManager accountBEManager = new AccountBEManager();
+                    CompanySetting companySetting = accountBEManager.GetCompanySetting(partnerId);
+                    var account = accountBEManager.GetAccount(this._acountBEDefinitionId, partnerId);
+                    string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, account.AccountId);
 
                     IAccountPayment accountPayment;
-                    accountManager.HasAccountPayment(account.AccountId, false, out accountPayment);
+                    accountBEManager.HasAccountPayment(this._acountBEDefinitionId, account.AccountId, false, out accountPayment);
                     string currencySymbol = currencyManager.GetCurrencySymbol(accountPayment.CurrencyId);
 
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountName, accountName, true);
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
 
                     IAccountProfile accountProfile;
-                    accountManager.HasAccountProfile(account.AccountId, false, out accountProfile);
+                    accountBEManager.HasAccountProfile(this._acountBEDefinitionId, account.AccountId, false, out accountProfile);
 
                     if (accountProfile != null)
                     {
@@ -115,8 +122,8 @@ namespace Retail.Invoice.Business
 
         public override string GetPartnerName(IPartnerNameManagerContext context)
         {
-            AccountManager accountManager = new AccountManager();
-            return accountManager.GetAccountName(Convert.ToInt64(context.PartnerId));
+            AccountBEManager accountBEManager = new AccountBEManager();
+            return accountBEManager.GetAccountName(this._acountBEDefinitionId, Convert.ToInt64(context.PartnerId));
         }
 
         private void AddRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, RDLCParameter key, string value, bool isVisible)
