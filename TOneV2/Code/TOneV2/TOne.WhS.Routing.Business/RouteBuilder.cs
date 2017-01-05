@@ -95,7 +95,7 @@ namespace TOne.WhS.Routing.Business
                             if (soldCustomers.Contains(routingCustomerInfo.CustomerId))
                                 continue;
 
-                            CheckAndAddIfParentCountryIsSold(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleCodeMatch);
+                            CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleCodeMatch, codeGroup.CountryId);
                         }
                     }
                 }
@@ -104,8 +104,8 @@ namespace TOne.WhS.Routing.Business
             return customerRoutes;
         }
 
-        private void CheckAndAddIfParentCountryIsSold(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager,
-            List<CustomerRoute> customerRoutes, HashSet<int> countryIdsHavingParentCode, string routeCode, SaleCodeMatch saleCodeMatch)
+        private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager,
+            List<CustomerRoute> customerRoutes, HashSet<int> countryIdsHavingParentCode, string routeCode, SaleCodeMatch saleCodeMatch, int routeCodeCountryId)
         {
             HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
             {
@@ -116,7 +116,7 @@ namespace TOne.WhS.Routing.Business
             if (soldCountries == null)
                 return;
 
-            if (countryIdsHavingParentCode.Any(soldCountries.Contains))
+            if (soldCountries.Contains(routeCodeCountryId) || countryIdsHavingParentCode.Any(soldCountries.Contains))
             {
                 customerRoutes.Add(new CustomerRoute() { Code = routeCode, CorrespondentType = CorrespondentType.Other, CustomerId = customerId, SaleZoneId = saleCodeMatch.SaleZoneId });
             }
