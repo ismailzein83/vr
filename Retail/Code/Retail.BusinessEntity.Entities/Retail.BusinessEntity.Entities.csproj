@@ -80,8 +80,12 @@
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="Product\Product.cs" />
+    <Compile Include="Product\ProductDetail.cs" />
     <Compile Include="Product\ProductExtendedSettings.cs" />
+    <Compile Include="Product\ProductInfo.cs" />
+    <Compile Include="Product\ProductInfoFilter.cs" />
     <Compile Include="Product\ProductPackageItem.cs" />
+    <Compile Include="Product\ProductQuery.cs" />
     <Compile Include="Product\ProductSettings.cs" />
     <Compile Include="Product\Definition\ProductDefinition.cs" />
     <Compile Include="Product\Definition\ProductDefinitionConfig.cs" />
