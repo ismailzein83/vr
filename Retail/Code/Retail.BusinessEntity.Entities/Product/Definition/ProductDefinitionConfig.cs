@@ -13,4 +13,11 @@ namespace Retail.BusinessEntity.Entities
 
         public string DefinitionEditor { get; set; }
     }
+
+    public class ProductDefinitionInfo
+    {
+        public Guid ProductDefinitionId { get; set; }
+        public string Name { get; set; }
+        public string RuntimeEditor { get; set; }
+    }
 }
