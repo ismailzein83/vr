@@ -173,16 +173,19 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                 case WhS_SupPL_RateChangeTypeEnum.New.value:
                     dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.New.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.New.description;
+                    dataItem.RateChangeTypeIconType = WhS_SupPL_RateChangeTypeEnum.New.iconType;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Increase.value:
                     dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Increase.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Increase.description;
+                    dataItem.RateChangeTypeIconType = WhS_SupPL_RateChangeTypeEnum.Increase.iconType;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Decrease.value:
                     dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Decrease.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Decrease.description;
+                    dataItem.RateChangeTypeIconType = WhS_SupPL_RateChangeTypeEnum.Decrease.iconType;
                     break;
 
             }
