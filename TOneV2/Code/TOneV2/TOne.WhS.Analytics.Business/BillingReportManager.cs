@@ -96,7 +96,7 @@ namespace TOne.WhS.Analytics.Business
                     if (monthValue != null)
                     {
                         if (monthValue.Name != arrayOfDate[monthCount])
-                            while (monthValue.Name != arrayOfDate[monthCount])
+                            while (monthCount < arrayOfDate.Count && monthValue.Name != arrayOfDate[monthCount])
                             {
                                 businessCaseStatus = new BusinessCaseStatus();
                                 businessCaseStatus.MonthYear = arrayOfDate[monthCount];
