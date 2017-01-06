@@ -148,7 +148,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                             promises.push(GetSupplierZonesInfo($attrs, ctrl, selectedIds, supplierId));
                         }
 
-                        if (filter.CountryIds != undefined && filter.CountryIds.length == 1) {
+                        if (filter != undefined && filter.CountryIds != undefined && filter.CountryIds.length == 1) {
                             ctrl.limitcharactercount = 0;
                             promises.push(selectorApi.loadDataSource("").then(function (res) {}));
                         }
