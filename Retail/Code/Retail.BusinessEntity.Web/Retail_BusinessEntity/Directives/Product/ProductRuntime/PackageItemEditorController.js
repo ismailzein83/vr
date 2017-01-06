@@ -8,8 +8,9 @@
 
         var isEditMode;
 
-        var context;
         var packageItemEntity;
+        var productDefinitionId;
+        var excludedPackageIds;
 
         var packageSelectorAPI;
         var packageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -24,12 +25,14 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            console.log(context);
+            console.log(parameters);
 
             if (parameters != undefined) {
                 packageItemEntity = parameters.packageItem;
-                context = parameters.context;
+                productDefinitionId = parameters.productDefinitionId;
+                excludedPackageIds = parameters.excludedPackageIds;
             }
+
             isEditMode = (packageItemEntity != undefined);
         }
         function defineScope() {
@@ -69,8 +72,8 @@
         }
         function setTitle() {
             $scope.title = (isEditMode) ?
-                UtilsService.buildTitleForUpdateEditor((packageItemEntity != undefined) ? packageItemEntity.FieldName : null, 'Column') :
-                UtilsService.buildTitleForAddEditor('Column');
+                UtilsService.buildTitleForUpdateEditor((packageItemEntity != undefined) ? packageItemEntity.FieldName : null, 'Package') :
+                UtilsService.buildTitleForAddEditor('Package');
         }
         function loadStaticData() {
             if (packageItemEntity == undefined)
@@ -81,11 +84,17 @@
 
             packageSelectorReadyDeferred.promise.then(function () {
 
-                var packageSelectorPayload;
+                var packageSelectorPayload = {
+                    filter: {
+                        ExcludedPackageIds: excludedPackageIds,
+                        Filters: [{
+                            $type: "Retail.BusinessEntity.Business.ProductDefinitionPackageFilter, Retail.BusinessEntity.Business",
+                            ProductDefinitionId: productDefinitionId
+                        }]
+                    }
+                };
                 if (packageItemEntity != undefined) {
-                    packageSelectorPayload = {
-                        selectedIds: packageItemEntity.PackageId
-                    };
+                    packageSelectorPayload.selectedIds = packageItemEntity.PackageId;
                 }
                 VRUIUtilsService.callDirectiveLoad(packageSelectorAPI, packageSelectorPayload, packageSelectorLoadDeferred);
             });
@@ -110,36 +119,37 @@
         }
 
         function insert() {
-            var columnDefinitionObject = buildColumnDefinitionObjectFromScope();
+            var packageItemObject = buildPackageItemObjectFromScope();
 
-            if ($scope.onColumnDefinitionAdded != undefined && typeof ($scope.onColumnDefinitionAdded) == 'function') {
-                $scope.onColumnDefinitionAdded(columnDefinitionObject);
+            if ($scope.onPackageItemAdded != undefined && typeof ($scope.onPackageItemAdded) == 'function') {
+                $scope.onPackageItemAdded(packageItemObject);
             }
             $scope.modalContext.closeModal();
         }
         function update() {
-            var columnDefinitionObject = buildColumnDefinitionObjectFromScope();
+            var packageItemObject = buildPackageItemObjectFromScope();
 
-            if ($scope.onColumnDefinitionUpdated != undefined && typeof ($scope.onColumnDefinitionUpdated) == 'function') {
-                $scope.onColumnDefinitionUpdated(columnDefinitionObject);
+            if ($scope.onPackageItemUpdated != undefined && typeof ($scope.onPackageItemUpdated) == 'function') {
+                $scope.onPackageItemUpdated(packageItemObject);
             }
             $scope.modalContext.closeModal();
         }
 
-        function buildColumnDefinitionObjectFromScope() {
+        function buildPackageItemObjectFromScope() {
 
-            var accountGenericFieldDefinitionSelectorObj = packageSelectorAPI.getData();
+            //var accountGenericFieldDefinitionSelectorObj = packageSelectorAPI.getData();
+
+            var selectedPackage = $scope.scopeModel.selectedPackage;
+
+            console.log(selectedPackage);
 
             return {
-                FieldName: accountGenericFieldDefinitionSelectorObj != undefined ? accountGenericFieldDefinitionSelectorObj.Name : undefined,
-                Header: $scope.scopeModel.header,
-                IsAvailableInRoot: $scope.scopeModel.IsAvailableInRoot,
-                IsAvailableInSubAccounts: $scope.scopeModel.IsAvailableInSubAccounts,
-                SubAccountsAvailabilityCondition: $scope.scopeModel.IsAvailableInSubAccounts == true ? accountConditionSelectiveAPI.getData() : null
+                PackageId: selectedPackage != undefined ? selectedPackage.PackageId : undefined,
+                PackageName: selectedPackage != undefined ? selectedPackage.Name : undefined
             };
         }
     }
 
-    appControllers.controller('Retail_BE_ProductPackageItemEditorController', ProductPackageItemController);
+    appControllers.controller('Retail_BE_PackageItemEditorController', ProductPackageItemController);
 
 })(appControllers);

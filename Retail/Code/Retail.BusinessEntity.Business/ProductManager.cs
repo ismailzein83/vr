@@ -35,6 +35,30 @@ namespace Retail.BusinessEntity.Business
             return cachedProducts.GetRecord(productId);
         }
 
+        public ProductEditorRuntime GetProductEditorRuntime(int productId)
+        {
+            var packageNameByIds = new Dictionary<int,string>();
+            var product = GetProduct(productId);
+
+            PackageManager packageManager = new PackageManager();
+
+            string packageName;
+            if (product != null && product.Settings != null && product.Settings.Packages != null)
+            {
+                foreach (var packageItem in product.Settings.Packages)
+                {
+                    if (!packageNameByIds.TryGetValue(packageItem.PackageId, out packageName))
+                        packageNameByIds.Add(packageItem.PackageId, packageManager.GetPackageName(packageItem.PackageId));
+                }
+            }
+
+            ProductEditorRuntime editorRuntime = new ProductEditorRuntime();
+            editorRuntime.PackageNameByIds = packageNameByIds;
+            editorRuntime.Entity = product;
+
+            return editorRuntime;
+        }
+
         public Vanrise.Entities.InsertOperationOutput<ProductDetail> AddProduct(Product productItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<ProductDetail>();
@@ -153,3 +177,4 @@ namespace Retail.BusinessEntity.Business
         #endregion
     }
 }
+ 

@@ -13,8 +13,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredProducts'), input);
         }
 
-        function GetProduct(productId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetProduct'), {
+        function GetProductEditorRuntime(productId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetProductEditorRuntime'), {
                 productId: productId
             });
         }
@@ -44,7 +44,7 @@
 
         return ({
             GetFilteredProducts: GetFilteredProducts,
-            GetProduct: GetProduct,
+            GetProductEditorRuntime: GetProductEditorRuntime,
             AddProduct: AddProduct,
             HasAddProductPermission: HasAddProductPermission,
             UpdateProduct: UpdateProduct,

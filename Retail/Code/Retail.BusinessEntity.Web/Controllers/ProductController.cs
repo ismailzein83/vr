@@ -24,10 +24,10 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetProduct")]
-        public Product GetProduct(int productId)
+        [Route("GetProductEditorRuntime")]
+        public ProductEditorRuntime GetProductEditorRuntime(int productId)
         {
-            return _manager.GetProduct(productId);
+            return _manager.GetProductEditorRuntime(productId);
         }
 
         [HttpPost]

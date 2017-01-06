@@ -10,8 +10,9 @@
 
         var productId;
         var productEntity;
+        var productEditorRuntime
         var productDefinitionId;
-        var extendedSettingsEditorRuntime;
+        //var extendedSettingsEditorRuntime;
 
         var productDefinitionSelectorAPI;
         var productDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -74,7 +75,7 @@
                         var packageItemsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                         packageItemsDirectiveReadyDeferred.promise.then(function () {
-                            var packageItemsPayload;
+                            var packageItemsPayload = { productDefinitionId: productDefinitionId };
                             VRUIUtilsService.callDirectiveLoad(packageItemsDirectiveAPI, packageItemsPayload, packageItemsDirectiveLoadDeferred);
                         });
 
@@ -139,8 +140,9 @@
         }
 
         function getProduct() {
-            return Retail_BE_ProductAPIService.GetProduct(productId).then(function (product) {
-                productEntity = product;
+            return Retail_BE_ProductAPIService.GetProductEditorRuntime(productId).then(function (response) {
+                productEditorRuntime = response;
+                productEntity = productEditorRuntime.Entity;
             });
         }
 
@@ -191,9 +193,10 @@
 
             UtilsService.waitMultiplePromises([packageItemsDirectiveReadyDeferred.promise, productDefinitionSelectionChangedDeferred.promise]).then(function () {
 
-                var packageItemsPayload = { context: getContext() };
-                if (productEntity != undefined) {
-                    packageItemsPayload.packages = productEntity.Packages;
+                var packageItemsPayload = { productDefinitionId: productDefinitionId };
+                if (productEntity != undefined && productEntity.Settings != undefined) {
+                    packageItemsPayload.packageNameByIds = productEditorRuntime.PackageNameByIds;
+                    packageItemsPayload.packages = productEntity.Settings.Packages;
                 }
                 VRUIUtilsService.callDirectiveLoad(packageItemsDirectiveAPI, packageItemsPayload, packageItemsDirectiveLoadDeferred);
             });
@@ -267,6 +270,7 @@
                 Name: $scope.scopeModel.name,
                 Settings: {
                     ProductDefinitionId: productDefinitionSelectorAPI.getSelectedIds(),
+                    Packages: packageItemsDirectiveAPI.getData(),
                     ExtendedSettings: productExtendedSettingsDirectiveAPI.getData()
                 }
             };
@@ -274,20 +278,17 @@
             return obj;
         }
 
-        function getContext() {
-            var context = {
-                getProductDefinitionPackageFilter: function () {
-                    return {
-                        $type: "Retail.BusinessEntity.Business.ProductDefinitionPackageFilter, Retail.BusinessEntity.Business",
-                        ProductDefinitionId: productDefinitionId
-                    };
-                }
-            };
-
-            console.log(context);
-
-            return context;
-        }
+        //function getContext() {
+        //    var context = {
+        //        getProductDefinitionPackageFilter: function () {
+        //            return {
+        //                $type: "Retail.BusinessEntity.Business.ProductDefinitionPackageFilter, Retail.BusinessEntity.Business",
+        //                ProductDefinitionId: productDefinitionId
+        //            };
+        //        }
+        //    };
+        //    return context;
+        //}
     }
 
     appControllers.controller('Retail_BE_ProductEditorController', productEditorController);

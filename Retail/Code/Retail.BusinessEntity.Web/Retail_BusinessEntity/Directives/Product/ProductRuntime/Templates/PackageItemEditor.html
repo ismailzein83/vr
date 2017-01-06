@@ -1,9 +1,10 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_ProductPackageItemEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Retail_BE_PackageItemEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formVRObjectTypePropertyDefinitionEditor">
 
             <vr-row>
                 <retail-be-package-selector on-ready="scopeModel.onPackageSelectorReady"
+                                            selectedvalues="scopeModel.selectedPackage"
                                             normal-col-num="6"
                                             isrequired="true">
                 </retail-be-package-selector>

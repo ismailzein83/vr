@@ -24,14 +24,14 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/ProductPackageItemManagementTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/PackageItemManagementTemplate.html'
         };
 
         function PackageItemManagementCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var context;
-            //var accountFields;
+            var productDefinitionId;
+            var packageNameByIds;
 
             var gridAPI;
 
@@ -45,17 +45,16 @@
                 };
 
                 $scope.scopeModel.onAddPackageItem = function () {
-                    var onPackageAdded = function (addedPackageItem) {
-                        //extendColumnDefinitionObj(addedColumnDefinition);
+                    var onPackageItemAdded = function (addedPackageItem) {
                         $scope.scopeModel.packageItems.push({ Entity: addedPackageItem });
                     };
 
-                    Retail_BE_ProductService.addProductPackageItem(getContext(), onPackageAdded);
+                    Retail_BE_ProductService.addProductPackageItem(productDefinitionId, getExcludedPackageIds(), onPackageItemAdded);
                 };
-                $scope.scopeModel.onDeletePackageItem = function (columnDefinition) {
+                $scope.scopeModel.onDeletePackageItem = function (deletedPackageItem) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.packageItems, columnDefinition.Entity.FieldName, 'Entity.FieldName');
+                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.packageItems, deletedPackageItem.Entity.PackageName, 'Entity.PackageName');
                             $scope.scopeModel.packageItems.splice(index, 1);
                         }
                     });
@@ -72,12 +71,18 @@
                     var packages;
 
                     if (payload != undefined) {
-                        packages = payload.Packages;
-                        context = payload.context;
+                        productDefinitionId = payload.productDefinitionId;
+                        packageNameByIds = payload.packageNameByIds;
+                        packages = payload.packages;
                     }
 
-                    if (packages != undefined)
-                        $scope.scopeModel.packageItems = packages;
+                    if (packages != undefined) {
+                        for (var index = 0; index < packages.length; index++) {
+                            var currentPackageItem = packages[index];
+                            currentPackageItem = extendPackageItemObj(currentPackageItem)
+                            $scope.scopeModel.packageItems.push({ Entity: currentPackageItem });
+                        }
+                    }
 
                     //var loadAccountFieldsPromise = loadAccountFields();
                     //promises.push(loadAccountFieldsPromise);
@@ -111,15 +116,12 @@
                     var packageItems;
                     if ($scope.scopeModel.packageItems.length > 0) {
                         packageItems = [];
-                        for (var i = 0; i < $scope.scopeModel.packageItems.length; i++) {
-                            var columnDefinition = $scope.scopeModel.packageItems[i].Entity;
-                            packageItems.push(columnDefinition);
+                        for (var index = 0; index < $scope.scopeModel.packageItems.length; index++) {
+                            var packageItem = $scope.scopeModel.packageItems[index].Entity;
+                            packageItems.push(packageItem);
                         }
                     }
-
-                    return {
-                        ColumnDefinitions: packageItems
-                    };
+                    return packageItems;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -135,33 +137,37 @@
             }
             function editPackageItem(packageItem) {
                 var onPackageItemUpdated = function (updatedPackageItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.packageItems, columnDefinition.Entity.FieldName, 'Entity.FieldName');
-                    //extendColumnDefinitionObj(updatedPackageItem);
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.packageItems, updatedPackageItem.Entity.PackageName, 'Entity.PackageName');
                     $scope.scopeModel.packageItems[index] = { Entity: updatedPackageItem };
                 };
 
-                Retail_BE_ProductService.editProductPackageItem(packageItem.Entity, getContext(), onPackageItemUpdated);
+                Retail_BE_ProductService.editProductPackageItem(packageItem.Entity, productDefinitionId, getExcludedPackageIds(), onPackageItemUpdated);
             }
 
-            function getContext(){
-                return context;
+            function extendPackageItemObj(packageItem) {
+                if (packageItem == undefined)
+                    return;
+
+                return {
+                    PackageId: packageItem.PackageId,
+                    PackageName: packageNameByIds[packageItem.PackageId]
+                }
             }
+            function getExcludedPackageIds() {
+                var packageItems = $scope.scopeModel.packageItems;
+                if (packageItems.length == 0)
+                    return;
 
-            //function extendColumnDefinitionObj(columnDefinition) {
-            //    if (accountFields == undefined)
-            //        return;
-
-            //    for (var index = 0; index < accountFields.length; index++) {
-            //        var currentAccountField = accountFields[index];
-            //        if (columnDefinition.FieldName == currentAccountField.Name) {
-            //            columnDefinition.FieldTitle = currentAccountField.Title;
-            //            return;
-            //        }
-            //    }
-            //}
+                var excludedPackageIds = [];
+                for (var i = 0; i < packageItems.length; i++) {
+                    var currentPackageItem = packageItems[i].Entity;
+                    excludedPackageIds.push(currentPackageItem.PackageId);
+                }
+                return excludedPackageIds;
+            }
         }
     }
 
-    app.directive('retailBeProductpackageitemManagement', ProductPackageItemManagementDirective);
+    app.directive('retailBePackageitemManagement', ProductPackageItemManagementDirective);
 
 })(app);

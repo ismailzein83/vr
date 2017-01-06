@@ -14,4 +14,11 @@ namespace Retail.BusinessEntity.Entities
 
         public ProductSettings Settings { get; set; }
     }
+
+    public class ProductEditorRuntime
+    {
+        public Product Entity { get; set; }
+
+        public Dictionary<int, string> PackageNameByIds { get; set; }
+    }
 }

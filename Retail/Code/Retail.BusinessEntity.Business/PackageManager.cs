@@ -142,13 +142,16 @@ namespace Retail.BusinessEntity.Business
                 if (filter.AssignedToAccountId.HasValue)
                 {
                     var accountPackageManager = new AccountPackageManager();
-                    packageIdsAssignedToAccount = accountPackageManager.GetPackageIdsAssignedToAccount(filter.AssignedToAccountId.Value);
+                    packageIdsAssignedToAccount = accountPackageManager.GetPackageIdsAssignedToAccount(filter.AssignedToAccountId.Value); 
                     //filterExpression = (package) => !packageIdsAssignedToAccount.Contains(package.PackageId);
                 }
 
                 filterExpression = (package) =>
                 {
                     if (filter.Filters != null && !CheckIfFilterIsMatch(package, filter.Filters))
+                        return false;
+
+                    if (filter.ExcludedPackageIds != null && filter.ExcludedPackageIds.Contains(package.PackageId))
                         return false;
 
                     if (packageIdsAssignedToAccount != null && packageIdsAssignedToAccount.Contains(package.PackageId))

@@ -10,6 +10,8 @@ namespace Retail.BusinessEntity.Entities
     {
         public int? AssignedToAccountId { get; set; }
 
+        public List<int> ExcludedPackageIds { get; set; }
+
         public List<IPackageFilter> Filters { get; set; }
     }
 }
