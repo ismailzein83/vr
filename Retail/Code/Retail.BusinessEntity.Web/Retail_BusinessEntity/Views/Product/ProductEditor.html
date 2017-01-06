@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_ProductEditorController" vr-loader="isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="Retail_BE_ProductEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formProductEditor">
 
@@ -8,11 +8,14 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.name" label="Product Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <retail-be-productdefinition-selector on-ready="scopeModel.onProductDefinitionsSelectorReady"
-                                                              onselectionchanged="scopeModel.onProductDefinitionsSelectionChanged"
-                                                              selectedvalues="scopeModel.selectedProductDefinition"
-                                                              normal-col-num="6" isrequired="true" hideremoveicon>
-                        </retail-be-productdefinition-selector>
+                        <span vr-disabled="scopeModel.isProductDefinitionSelectorDisabled">
+                            <retail-be-productdefinition-selector on-ready="scopeModel.onProductDefinitionsSelectorReady"
+                                                                  onselectionchanged="scopeModel.onProductDefinitionsSelectionChanged"
+                                                                  selectedvalues="scopeModel.selectedProductDefinition"
+                                                                  normal-col-num="6" isrequired="true" hideremoveicon>
+                            </retail-be-productdefinition-selector>
+                        </span>
+
                     </vr-row>
                 </vr-tab>
                 <vr-directivewrapper ng-if="scopeModel.selectedProductDefinition != undefined"
@@ -20,6 +23,9 @@
                                      on-ready="scopeModel.onProductExtendedSettingsDirectiveReady"
                                      vr-loader="scopeModel.isProductExtendedSettingsDirectiveLoading">
                 </vr-directivewrapper>
+                <vr-tab header="'Packages'" ng-if="scopeModel.selectedProductDefinition != undefined" vr-loader="scopeModel.isPackagesTabLoading">
+                    <retail-be-productpackageitem-management on-ready="scopeModel.onPackageItemsDirectiveReady"></retail-be-productpackageitem-management>
+                </vr-tab>
             </vr-tabs>
 
         </vr-form>

@@ -10,7 +10,7 @@ using Vanrise.Entities;
  
 namespace Retail.BusinessEntity.Business
 {
-    public class ProductManager
+    public class ProductManager 
     {
         #region Public Methods
 

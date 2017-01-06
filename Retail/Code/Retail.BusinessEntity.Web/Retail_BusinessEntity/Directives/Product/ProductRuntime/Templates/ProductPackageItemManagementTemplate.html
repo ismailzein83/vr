@@ -1,9 +1,15 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿
 
-</body>
-</html>
+<vr-button type="Add" data-onclick="scopeModel.onAddPackageItem" standalone></vr-button>
+
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.packageItems"
+             menuactions="scopeModel.menuActions"
+             ondeleterow="scopeModel.onDeletePackageItem"
+             enabledraggablerow="true"
+             hidegridmenu>
+
+    <vr-datagridcolumn field="'Entity.PackageId'" headertext="'Package Id'" type="'Text'" widthfactor="1" disablesorting></vr-datagridcolumn>
+</vr-datagrid>
+
+

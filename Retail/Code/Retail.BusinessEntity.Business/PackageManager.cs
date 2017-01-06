@@ -134,6 +134,7 @@ namespace Retail.BusinessEntity.Business
         {
             var packages = GetCachedPackages();
 
+            IEnumerable<int> packageIdsAssignedToAccount = null;
             Func<Package, bool> filterExpression = null;
 
             if (filter != null)
@@ -141,9 +142,20 @@ namespace Retail.BusinessEntity.Business
                 if (filter.AssignedToAccountId.HasValue)
                 {
                     var accountPackageManager = new AccountPackageManager();
-                    IEnumerable<int> packageIdsAssignedToAccount = accountPackageManager.GetPackageIdsAssignedToAccount(filter.AssignedToAccountId.Value);
-                    filterExpression = (package) => !packageIdsAssignedToAccount.Contains(package.PackageId);
+                    packageIdsAssignedToAccount = accountPackageManager.GetPackageIdsAssignedToAccount(filter.AssignedToAccountId.Value);
+                    //filterExpression = (package) => !packageIdsAssignedToAccount.Contains(package.PackageId);
                 }
+
+                filterExpression = (package) =>
+                {
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(package, filter.Filters))
+                        return false;
+
+                    if (packageIdsAssignedToAccount != null && packageIdsAssignedToAccount.Contains(package.PackageId))
+                        return false;
+
+                    return true;
+                };
             }
 
             return packages.MapRecords(PackageInfoMapper, filterExpression);
@@ -184,7 +196,7 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-        #region Private Members
+        #region Private Methods
 
         private Dictionary<int, Package> GetCachedPackages()
         {
@@ -195,6 +207,17 @@ namespace Retail.BusinessEntity.Business
                    IEnumerable<Package> packages = dataManager.GetPackages();
                    return packages.ToDictionary(cn => cn.PackageId, cn => cn);
                });
+        }
+
+        private bool CheckIfFilterIsMatch(Package package, List<IPackageFilter> filters)
+        {
+            PackageFilterContext context = new PackageFilterContext { Package = package };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
 
         #endregion

@@ -50,7 +50,7 @@
 
                     var currencyId;
 
-                    if (payload != undefined && payload.extendedSettings) {
+                    if (payload != undefined && payload.extendedSettings != undefined) {
                         $scope.scopeModel.creditLimit = payload.extendedSettings.CreditLimit;
                         currencyId = payload.extendedSettings.CurrencyId;
                     }

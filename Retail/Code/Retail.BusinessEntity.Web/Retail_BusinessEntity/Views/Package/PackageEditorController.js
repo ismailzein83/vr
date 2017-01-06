@@ -14,8 +14,7 @@
 
         var packageDefinitionSelectorAPI;
         var packageDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var packageDefinitionSelectedReadyDeferred;
+        var packageDefinitionSelectionChangedDeferred;
 
         var packageExtendedSettingsDirectiveAPI;
         var packageExtendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -35,23 +34,27 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.packageExtendedSettingsTemplateConfigs = [];
+
             $scope.scopeModel.onPackageDefinitionsSelectorReady = function (api) {
                 packageDefinitionSelectorAPI = api;
                 packageDefinitionSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.onPackageDefinitionsSelectionChanged = function () {
-                packageExtendedSettingsDirectiveReadyDeferred.promise.then(function(){
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isPackageExtendedSettingsDirectiveLoading = value;
-                    };
-                    var payload = { context: getContext() };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, packageExtendedSettingsDirectiveAPI, payload, setLoader, packageDefinitionSelectedReadyDeferred);
-
-                });
-            };
             $scope.scopeModel.onPackageExtendedSettingsDirectiveReady = function (api) {
                 packageExtendedSettingsDirectiveAPI = api;
                 packageExtendedSettingsDirectiveReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onPackageDefinitionsSelectionChanged = function (selectedItem) {
+
+                if (selectedItem != undefined) {
+                    packageExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isPackageExtendedSettingsDirectiveLoading = value;
+                        };
+                        var payload = { context: getContext() };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, packageExtendedSettingsDirectiveAPI, payload, setLoader, packageDefinitionSelectionChangedDeferred);
+                    });
+                }
             };
 
             $scope.scopeModel.save = function () {
@@ -100,45 +103,6 @@
         }
 
         function loadAllControls() {
-            function setTitle() {
-                $scope.title =
-                    isEditMode ? UtilsService.buildTitleForUpdateEditor(packageEntity ? packageEntity.Name : undefined, 'Package') : UtilsService.buildTitleForAddEditor('Package');
-            }
-            function loadStaticSection() {
-                if (packageEntity != undefined) {
-                    $scope.scopeModel.name = packageEntity.Name;
-                    $scope.scopeModel.description = packageEntity.Description;
-                }
-            }
-            function loadPackageDefinitionsSelector() {
-                if (packageEntity != undefined)
-                    packageDefinitionSelectedReadyDeferred = UtilsService.createPromiseDeferred();
-                var packageDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                packageDefinitionSelectorReadyDeferred.promise.then(function () {
-                    var packageDefinitionPayload = { context: getContext() };;
-                    if (packageEntity != undefined && packageEntity.Settings != undefined) {
-                        packageDefinitionPayload.selectedIds = packageEntity.Settings.PackageDefinitionId;
-                    }
-                    VRUIUtilsService.callDirectiveLoad(packageDefinitionSelectorAPI, packageDefinitionPayload, packageDefinitionSelectorLoadDeferred);
-                });
-                return packageDefinitionSelectorLoadDeferred.promise;
-            }
-            function loadPackageExtendedSettingsDirectiveWrapper() {
-                if (!isEditMode)
-                    return;
-                var packageExtendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                UtilsService.waitMultiplePromises([packageExtendedSettingsDirectiveReadyDeferred.promise, packageDefinitionSelectedReadyDeferred.promise]).then(function () {
-                    packageDefinitionSelectedReadyDeferred = undefined;
-                    var packageExtendedSettingsDirectivePayload = {context:getContext()};
-                    if (packageEntity != undefined && packageEntity.Settings != undefined && packageEntity.Settings.ExtendedSettings) {
-                        packageExtendedSettingsDirectivePayload.extendedSettings = packageEntity.Settings.ExtendedSettings;
-                        packageExtendedSettingsDirectivePayload.extendedSettingsEditorRuntime = extendedSettingsEditorRuntime;
-                    }
-                    VRUIUtilsService.callDirectiveLoad(packageExtendedSettingsDirectiveAPI, packageExtendedSettingsDirectivePayload, packageExtendedSettingsDirectiveLoadDeferred);
-                });
-
-                return packageExtendedSettingsDirectiveLoadDeferred.promise;
-            }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadPackageDefinitionsSelector, loadPackageExtendedSettingsDirectiveWrapper])
                .catch(function (error) {
@@ -148,7 +112,50 @@
                   $scope.isLoading = false;
               });
         }
+        function setTitle() {
+            $scope.title =
+                isEditMode ? UtilsService.buildTitleForUpdateEditor(packageEntity ? packageEntity.Name : undefined, 'Package') : UtilsService.buildTitleForAddEditor('Package');
+        }
+        function loadStaticSection() {
+            if (packageEntity != undefined) {
+                $scope.scopeModel.name = packageEntity.Name;
+                $scope.scopeModel.description = packageEntity.Description;
+            }
+        }
+        function loadPackageDefinitionsSelector() {
+            if (packageEntity != undefined)
+                packageDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
+            var packageDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            packageDefinitionSelectorReadyDeferred.promise.then(function () {
+                var packageDefinitionPayload = { context: getContext() };
+                if (packageEntity != undefined && packageEntity.Settings != undefined) {
+                    packageDefinitionPayload.selectedIds = packageEntity.Settings.PackageDefinitionId;
+                }
+                VRUIUtilsService.callDirectiveLoad(packageDefinitionSelectorAPI, packageDefinitionPayload, packageDefinitionSelectorLoadDeferred);
+            });
+
+            return packageDefinitionSelectorLoadDeferred.promise;
+        }
+        function loadPackageExtendedSettingsDirectiveWrapper() {
+            if (!isEditMode)
+                return;
+
+            var packageExtendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            UtilsService.waitMultiplePromises([packageExtendedSettingsDirectiveReadyDeferred.promise, packageDefinitionSelectionChangedDeferred.promise]).then(function () {
+                packageDefinitionSelectionChangedDeferred = undefined;
+                var packageExtendedSettingsDirectivePayload = { context: getContext() };
+                if (packageEntity != undefined && packageEntity.Settings != undefined && packageEntity.Settings.ExtendedSettings) {
+                    packageExtendedSettingsDirectivePayload.extendedSettings = packageEntity.Settings.ExtendedSettings;
+                    packageExtendedSettingsDirectivePayload.extendedSettingsEditorRuntime = extendedSettingsEditorRuntime;
+                }
+                VRUIUtilsService.callDirectiveLoad(packageExtendedSettingsDirectiveAPI, packageExtendedSettingsDirectivePayload, packageExtendedSettingsDirectiveLoadDeferred);
+            });
+
+            return packageExtendedSettingsDirectiveLoadDeferred.promise;
+        }
 
         function insertPackage() {
             $scope.isLoading = true;
@@ -196,7 +203,6 @@
             return obj;
         }
 
-
         function getContext()
         {
             var context = {
@@ -212,4 +218,5 @@
     }
 
     appControllers.controller('Retail_BE_PackageEditorController', packageEditorController);
+
 })(appControllers);

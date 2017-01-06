@@ -79,6 +79,7 @@
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="Account\AccountFilter.cs" />
+    <Compile Include="Package\IPackageFilter.cs" />
     <Compile Include="Product\Product.cs" />
     <Compile Include="Product\ProductDetail.cs" />
     <Compile Include="Product\ProductExtendedSettings.cs" />

@@ -31,17 +31,17 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Product/ProductEditor.html', parameters, settings);
         }
 
-        function addProductPackageItem(onPackageAdded) {
+        function addProductPackageItem(context, onPackageItemAdded) {
 
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onPackageAdded = onPackageAdded
+                modalScope.onPackageItemAdded = onPackageItemAdded
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/ProductPackageItemEditor.html', null, settings);
         };
-        function editProductPackageItem(packageId, onPackageUpdated) {
+        function editProductPackageItem(packageId, context, onPackageItemUpdated) {
 
             var parameters = {
                 productId: productId
@@ -50,7 +50,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onPackageUpdated = onPackageUpdated;
+                modalScope.onPackageItemUpdated = onPackageItemUpdated;
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/ProductPackageItemEditor.html', parameters, settings);

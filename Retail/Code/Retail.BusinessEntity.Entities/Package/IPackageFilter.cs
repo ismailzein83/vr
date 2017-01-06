@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class PackageFilter
+    public interface IPackageFilter
     {
-        public int? AssignedToAccountId { get; set; }
+        bool IsMatched(IPackageFilterContext context);
+    }
 
-        public List<IPackageFilter> Filters { get; set; }
+    public interface IPackageFilterContext
+    {
+        Package Package { get; }
     }
 }
