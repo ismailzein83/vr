@@ -81,10 +81,16 @@ namespace Vanrise.Invoice.Business
                         groupingValue.Value.AllValues = new List<dynamic>();
                     groupingValue.Value.AllValues.Add(invoiceItemRecord.GroupingValuesByDimensionId[groupingValue.Key].Value);
                 }
-                GroupingInvoiceItemDetail analyticRecord = BuildGroupingInvoiceItemDetail(groupingInvoiceItemQueryContext, matchRecord, requestedDimensionIds, measureIds);
-                records.Add(analyticRecord);
+
                 #endregion
 
+            }
+
+
+            foreach (var item in groupedRecordsByDimensionsKey.Values)
+            {
+                GroupingInvoiceItemDetail analyticRecord = BuildGroupingInvoiceItemDetail(groupingInvoiceItemQueryContext, item, requestedDimensionIds, measureIds);
+                records.Add(analyticRecord);
             }
             return records;
         }
