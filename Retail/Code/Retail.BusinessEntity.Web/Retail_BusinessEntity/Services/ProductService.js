@@ -44,7 +44,7 @@
                 modalScope.onPackageItemAdded = onPackageItemAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/PackageItemEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/ProductPackageItemEditor.html', parameters, settings);
         };
         function editProductPackageItem(packageItem, productDefinitionId, excludedPackageIds, onPackageItemUpdated) {
 
@@ -60,7 +60,7 @@
                 modalScope.onPackageItemUpdated = onPackageItemUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/PackageItemEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/ProductPackageItemEditor.html', parameters, settings);
         }
 
 

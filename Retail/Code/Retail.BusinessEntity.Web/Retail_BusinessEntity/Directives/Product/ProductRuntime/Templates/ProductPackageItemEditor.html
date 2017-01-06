@@ -1,6 +1,6 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_PackageItemEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Retail_BE_ProductPackageItemEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
-        <vr-form name="formVRObjectTypePropertyDefinitionEditor">
+        <vr-form name="formPackageItemEditor">
 
             <vr-row>
                 <retail-be-package-selector on-ready="scopeModel.onPackageSelectorReady"
@@ -18,7 +18,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formVRObjectTypePropertyDefinitionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formPackageItemEditor" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

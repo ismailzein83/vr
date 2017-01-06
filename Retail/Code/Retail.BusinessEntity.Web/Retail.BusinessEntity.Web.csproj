@@ -442,12 +442,12 @@
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\retail-be-productextendedsettings-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\Templates\PrePaidSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\PackageItemEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-packageitem-accountchargeevaluator.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-productpackageitem-accountchargeevaluator.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-product-grid.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-packageitem-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-productpackageitem-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductGridTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\PackageItemEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\PackageItemManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductPackageItemEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductPackageItemManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />

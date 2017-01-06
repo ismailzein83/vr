@@ -86,7 +86,7 @@
 
                 var packageSelectorPayload = {
                     filter: {
-                        ExcludedPackageIds: excludedPackageIds,
+                        //ExcludedPackageIds: excludedPackageIds,
                         Filters: [{
                             $type: "Retail.BusinessEntity.Business.ProductDefinitionPackageFilter, Retail.BusinessEntity.Business",
                             ProductDefinitionId: productDefinitionId
@@ -150,6 +150,6 @@
         }
     }
 
-    appControllers.controller('Retail_BE_PackageItemEditorController', ProductPackageItemController);
+    appControllers.controller('Retail_BE_ProductPackageItemEditorController', ProductPackageItemController);
 
 })(appControllers);

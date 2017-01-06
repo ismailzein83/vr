@@ -24,7 +24,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/PackageItemManagementTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/ProductPackageItemManagementTemplate.html'
         };
 
         function PackageItemManagementCtor($scope, ctrl) {
@@ -168,6 +168,6 @@
         }
     }
 
-    app.directive('retailBePackageitemManagement', ProductPackageItemManagementDirective);
+    app.directive('retailBeProductpackageitemManagement', ProductPackageItemManagementDirective);
 
 })(app);
