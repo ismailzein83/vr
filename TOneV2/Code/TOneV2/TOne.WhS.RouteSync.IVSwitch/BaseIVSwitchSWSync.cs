@@ -173,7 +173,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             Preference = priority,
                             StateId = 1,
                             HuntStop = 0,
-                            WakeUpTime = DateTime.UtcNow,
+                            WakeUpTime = preparedData._switchTime,
                             Description = name
                         };
                         if (supplierGateWay.Percentage != 0)

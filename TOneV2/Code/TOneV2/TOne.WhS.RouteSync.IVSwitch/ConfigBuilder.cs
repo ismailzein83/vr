@@ -49,7 +49,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
             PreparedConfiguration preparedConfiguration = new PreparedConfiguration
             {
                 CustomerDefinitions = new Dictionary<string, CustomerDefinition>(),
-                SupplierDefinitions = new Dictionary<string, SupplierDefinition>()
+                SupplierDefinitions = new Dictionary<string, SupplierDefinition>(),
+                _switchTime = MasterDataManager.GetSwitchDate()
             };
             Dictionary<string, string> routeTableIds = RouteDataManager.GetAccessListTableNames();
             Dictionary<string, string> tariffTableIds = TariffDataManager.GetRoutesTableNames();

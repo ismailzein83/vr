@@ -32,7 +32,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return new PreparedConfiguration
             {
                 CustomerDefinitions = GetConfiguredCustomers(),
-                SupplierDefinitions = GetConfiguredSuppliers()
+                SupplierDefinitions = GetConfiguredSuppliers(),
+                _switchTime = MasterDataManager.GetSwitchDate()
             };
         }
 

@@ -12,6 +12,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         public Dictionary<string, SupplierDefinition> SupplierDefinitions { get; set; }
 
         public int BlockRouteId;
+        public DateTime _switchTime;
 
         private static PreparedConfiguration BuildBuiltInConfiguration(BuiltInIVSwitchSWSync sync)
         {

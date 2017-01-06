@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Vanrise.Data.Postgres;
@@ -34,6 +35,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return @"select distinct route_id,account_id,group_id from routes where route_id is not null ";
         }
 
+        public DateTime GetSwitchDate()
+        {
+            string query = "select current_timestamp;";
+            return (DateTime)ExecuteScalarText(query, null);
+        }
         public List<AccessListTable> GetAccessListTables()
         {
             string query = GetCustomerQuery();
