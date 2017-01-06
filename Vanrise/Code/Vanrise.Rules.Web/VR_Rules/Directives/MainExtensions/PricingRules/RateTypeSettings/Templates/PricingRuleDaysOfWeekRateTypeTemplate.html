@@ -1,33 +1,35 @@
-﻿<vr-row removeline>
+﻿<vr-validator validate="ctrl.validateAddedTime()">
+    <vr-row removeline>
 
-    <vr-columns width="1/3row">
-        <vr-select ismultipleselection datatextfield="description" datavaluefield="value"
-                   label="Days Of Week" datasource="ctrl.daysOfWeek" selectedvalues="ctrl.selectedDaysOfWeek" isrequired></vr-select>
-    </vr-columns>
-    <vr-columns width="2/3row">
-        <vr-validator validate="ctrl.validateTime()">
-            <vr-row removeline>
-                <vr-columns width="1/3row">
-                    <vr-datetimepicker label="From Time" value="ctrl.fromTime" type="time"></vr-datetimepicker>
-                </vr-columns>
-                <vr-columns width="1/3row">
-                    <vr-datetimepicker label="To Time" value="ctrl.toTime" type="time"></vr-datetimepicker>
-                </vr-columns>
-                <vr-columns width="normal" withemptyline>
-                    <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddButton()"></vr-button>
-                </vr-columns>
-            </vr-row>
-        </vr-validator>
-    </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-select ismultipleselection datatextfield="description" datavaluefield="value"
+                       label="Days Of Week" datasource="ctrl.daysOfWeek" selectedvalues="ctrl.selectedDaysOfWeek" isrequired></vr-select>
+        </vr-columns>
+        <vr-columns width="2/3row">
+            <vr-validator validate="ctrl.validateTime()">
+                <vr-row removeline>
+                    <vr-columns width="1/3row">
+                        <vr-datetimepicker label="From Time" value="ctrl.fromTime" type="time"></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns width="1/3row">
+                        <vr-datetimepicker label="To Time" value="ctrl.toTime" type="time"></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns width="normal" withemptyline>
+                        <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddButton()"></vr-button>
+                    </vr-columns>
+                </vr-row>
+            </vr-validator>
+        </vr-columns>
 
-</vr-row>
-<vr-row removeline>
-    <vr-columns width="fullrow">
-        <vr-datalist maxitemsperrow="2" datasource="ctrl.times" autoremoveitem="true">
-            {{dataItem.FromTime.Hour}}:
-            <span ng-if="dataItem.FromTime.Minute >= 10">{{dataItem.FromTime.Minute}}</span><span ng-if="dataItem.FromTime.Minute < 10">0{{dataItem.FromTime.Minute}}</span>
-            to {{dataItem.ToTime.Hour}}:
-            <span ng-if="dataItem.ToTime.Minute >= 10">{{dataItem.ToTime.Minute}}</span><span ng-if="dataItem.ToTime.Minute < 10">0{{dataItem.ToTime.Minute}}</span>
-        </vr-datalist>
-    </vr-columns>
-</vr-row>
+    </vr-row>
+    <vr-row removeline>
+        <vr-columns width="fullrow">
+            <vr-datalist maxitemsperrow="2" datasource="ctrl.times" autoremoveitem="true">
+                {{dataItem.FromTime.Hour}}:
+                <span ng-if="dataItem.FromTime.Minute >= 10">{{dataItem.FromTime.Minute}}</span><span ng-if="dataItem.FromTime.Minute < 10">0{{dataItem.FromTime.Minute}}</span>
+                to {{dataItem.ToTime.Hour}}:
+                <span ng-if="dataItem.ToTime.Minute >= 10">{{dataItem.ToTime.Minute}}</span><span ng-if="dataItem.ToTime.Minute < 10">0{{dataItem.ToTime.Minute}}</span>
+            </vr-datalist>
+        </vr-columns>
+    </vr-row>
+</vr-validator>

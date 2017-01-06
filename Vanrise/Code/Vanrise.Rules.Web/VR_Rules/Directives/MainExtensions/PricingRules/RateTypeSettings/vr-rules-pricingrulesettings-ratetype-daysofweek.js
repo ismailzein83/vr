@@ -36,8 +36,11 @@ function ($compile, DaysOfWeekEnum, UtilsService, VRValidationService) {
                     FromTime: ctrl.fromTime,
                     ToTime: ctrl.toTime
                 };
-                if (!isFilterExisting())
+                if (!isFilterExisting()) {
                     ctrl.times.push(filter);
+                    ctrl.fromTime = undefined;
+                    ctrl.toTime = undefined;
+                }
             };
 
             ctrl.disableAddButton = function () {
@@ -50,6 +53,13 @@ function ($compile, DaysOfWeekEnum, UtilsService, VRValidationService) {
                 return VRValidationService.validateTimeRange(ctrl.fromTime, ctrl.toTime);
             };
 
+            ctrl.validateAddedTime = function () {
+                if (ctrl.selectedDaysOfWeek != undefined && ctrl.selectedDaysOfWeek.length > 0 && (ctrl.times == undefined || ctrl.times.length == 0)) {
+                    return 'At least one time interval should be added.'
+                }
+                return null;
+            };
+            
             function isFilterExisting() {
                 if (ctrl.times.length == 0)
                     return false;
