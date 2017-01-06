@@ -187,8 +187,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                             promises.push(GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input));
                         }
 
-                        if (filter.CountryIds != undefined && filter.CountryIds.length == 1) {
-                            saleZoneSelectorCtrl.limitcharactercount = 0 ;
+                        if (filter != undefined && filter.CountryIds != undefined && filter.CountryIds.length == 1) {
+                            saleZoneSelectorCtrl.limitcharactercount = 0;
                             promises.push(selectorApi.loadDataSource("").then(function (res) {
                             }));
                         }
