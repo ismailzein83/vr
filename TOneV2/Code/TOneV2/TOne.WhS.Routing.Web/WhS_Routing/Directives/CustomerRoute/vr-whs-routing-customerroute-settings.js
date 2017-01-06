@@ -34,13 +34,20 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
             var api = {};
 
             api.load = function (payload) {
+                if (payload != undefined) {
+                    if (payload.CustomerRoute != undefined) {
+                        ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
+                        ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.AddBlockedOptions;
+                    }
+                    if (payload.ProductRoute != undefined) {
+                        ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
+                    }
 
-                if (payload != undefined && payload.CustomerRoute != undefined) {
-                    ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
-                    ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.AddBlockedOptions;
-                }
-                if (payload != undefined && payload.ProductRoute != undefined) {
-                    ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
+                    if (payload.IncludedRules != undefined) {
+                        ctrl.includeRateTypeRules = payload.IncludedRules.IncludeRateTypeRules;
+                        ctrl.includeExtraChargeRules = payload.IncludedRules.IncludeExtraChargeRules;
+                        ctrl.includeTariffRules = payload.IncludedRules.IncludeTariffRules;
+                    }
                 }
             };
 
@@ -55,6 +62,12 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     ProductRoute: {
                         $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
                         AddBlockedOptions: ctrl.productRouteAddBlockedOptions
+                    },
+                    IncludedRules: {
+                        $type: "TOne.WhS.Routing.Entities.IncludedRulesConfiguration, TOne.WhS.Routing.Entities",
+                        IncludeRateTypeRules: ctrl.includeRateTypeRules,
+                        IncludeExtraChargeRules: ctrl.includeExtraChargeRules,
+                        IncludeTariffRules: ctrl.includeTariffRules
                     }
                 };
                 return obj;

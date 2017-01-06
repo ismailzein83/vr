@@ -6,7 +6,9 @@ namespace TOne.WhS.Routing.Entities
         public CustomerRouteBuildConfiguration CustomerRoute { get; set; }
 
         public ProductRouteBuildConfiguration ProductRoute { get; set; }
-    } 
+
+        public IncludedRulesConfiguration IncludedRules { get; set; }
+    }
 
 
     public class CustomerRouteBuildConfiguration
@@ -20,5 +22,13 @@ namespace TOne.WhS.Routing.Entities
     {
         public bool AddBlockedOptions { get; set; }
     }
+
+    public class IncludedRulesConfiguration
+    {
+        public bool IncludeRateTypeRules { get; set; }
+
+        public bool IncludeExtraChargeRules { get; set; }
+
+        public bool IncludeTariffRules { get; set; }
+    }
 }
- 

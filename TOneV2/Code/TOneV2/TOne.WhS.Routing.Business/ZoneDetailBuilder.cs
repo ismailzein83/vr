@@ -62,6 +62,8 @@ namespace TOne.WhS.Routing.Business
             TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
             Guid customerTransformationId = routingConfigManager.GetCustomerTransformationId();
 
+            IncludedRulesConfiguration includedRulesConfiguration = routingConfigManager.GetIncludedRulesConfiguration();
+
             DataTransformer dataTransformer = new DataTransformer();
             var carrierAccountManager = new CarrierAccountManager();
 
@@ -117,6 +119,7 @@ namespace TOne.WhS.Routing.Business
                             context.SetRecordValue("OtherRates", customerZoneRate.RatesByRateType);
                             context.SetRecordValue("EffectiveDate", effectiveOn);
                             context.SetRecordValue("IsEffectiveInFuture", isEffectiveInFuture);
+                            context.SetRecordValue("IncludedRulesConfiguration", includedRulesConfiguration);
                         });
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
@@ -160,6 +163,7 @@ namespace TOne.WhS.Routing.Business
 
             TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
             Guid supplierTransformationId = routingConfigManager.GetSupplierTransformationId();
+            IncludedRulesConfiguration includedRulesConfiguration = routingConfigManager.GetIncludedRulesConfiguration();
 
             SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
@@ -194,6 +198,7 @@ namespace TOne.WhS.Routing.Business
                             context.SetRecordValue("OtherRates", supplierZoneRate.RatesByRateType);
                             context.SetRecordValue("EffectiveDate", effectiveOn);
                             context.SetRecordValue("IsEffectiveInFuture", isEffectiveInFuture);
+                            context.SetRecordValue("IncludedRulesConfiguration", includedRulesConfiguration);
                         });
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");

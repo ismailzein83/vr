@@ -23,6 +23,16 @@ namespace TOne.WhS.Routing.Business
             return GetProductRouteBuildConfiguration().AddBlockedOptions;
         }
 
+        public IncludedRulesConfiguration GetIncludedRulesConfiguration()
+        {
+            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
+
+            if (routeBuildConfiguration.IncludedRules == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration.IncludedRules");
+
+            return routeBuildConfiguration.IncludedRules;
+        }
+
         public Dictionary<Guid, RouteOptionRuleTypeConfiguration> GetRouteOptionRuleTypeConfigurationForCustomerRoutes()
         {
             CustomerRouteOptionRuleTypeConfiguration customerRouteOptionRuleTypeConfiguration = GetCustomerRouteOptionRuleTypeConfiguration();
