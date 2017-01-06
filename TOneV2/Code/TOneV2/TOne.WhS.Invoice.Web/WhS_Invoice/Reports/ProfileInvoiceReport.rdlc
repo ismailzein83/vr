@@ -1114,7 +1114,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!OriginalSaleAmount.Value,2)</Value>
+                              <Value>=FormatNumber(Fields!SaleAmount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
