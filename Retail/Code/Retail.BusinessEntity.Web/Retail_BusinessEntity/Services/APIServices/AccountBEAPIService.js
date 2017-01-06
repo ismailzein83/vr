@@ -42,15 +42,15 @@
         }
 
         function GetAccountsInfo(accountBEDefinitionId, nameFilter, serializedFilter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfo"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountsInfo'), {
                 accountBEDefinitionId: accountBEDefinitionId,
                 nameFilter: nameFilter,
                 serializedFilter: serializedFilter
             });
         }
 
-        function GetAccountsInfoByIds(accountDefinitionId, accountIds) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountsInfoByIds"), accountDefinitionId, accountIds);
+        function GetAccountsInfoByIds(filter) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountsInfoByIds'), filter);
         }
 
 

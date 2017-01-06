@@ -33,7 +33,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetAccountName")]
         public string GetAccountName(Guid accountBEDefinitionId, long accountId)
         {
-            return _manager.GetAccountName(accountBEDefinitionId,accountId);
+            return _manager.GetAccountName(accountBEDefinitionId, accountId);
         }
 
         [HttpGet]
@@ -67,9 +67,9 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("GetAccountsInfoByIds")]
-        public IEnumerable<AccountInfo> GetAccountsInfoByIds(Guid accountBEDefinitionId, HashSet<long> accountIds)
+        public IEnumerable<AccountInfo> GetAccountsInfoByIds(AccountInfoFilter filter)
         {
-            return _manager.GetAccountsInfoByIds(accountBEDefinitionId, accountIds);
+            return _manager.GetAccountsInfoByIds(filter.AccountBEDefinition, filter.AccountIds);
         }
 
         [HttpGet]
@@ -78,5 +78,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountEditorRuntime(accountBEDefinitionId, accountTypeId, parentAccountId);
         }
+    }
+
+    public class AccountInfoFilter
+    {
+        public Guid AccountBEDefinition { get; set; }
+        public HashSet<long> AccountIds { get; set; }
     }
 }

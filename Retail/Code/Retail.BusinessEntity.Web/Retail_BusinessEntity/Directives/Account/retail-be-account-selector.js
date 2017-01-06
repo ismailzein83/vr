@@ -92,7 +92,10 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
 
 
                     if (payload != undefined) {
-                        accountBeDefinitionId = payload.AccountBEDefinitionId
+                        if (payload.businessEntityDefinitionId != undefined)
+                            accountBeDefinitionId = payload.businessEntityDefinitionId;
+                        else
+                            accountBeDefinitionId = payload.AccountBEDefinitionId
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                         if (payload.beFilter != undefined) {
@@ -134,7 +137,11 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
 
             function GetAccountsInfo(attrs, ctrl, selectedIds) {
                 ctrl.datasource = [];
-                return Retail_BE_AccountBEAPIService.GetAccountsInfoByIds(accountBeDefinitionId, selectedIds).then(function (response) {
+                var filter = {
+                    AccountBEDefinition: accountBeDefinitionId,
+                    AccountIds: selectedIds
+                };
+                return Retail_BE_AccountBEAPIService.GetAccountsInfoByIds(filter).then(function (response) {
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
                     });

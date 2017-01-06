@@ -39,8 +39,8 @@ app.directive('retailRingoAgentConvertorEditor', ['UtilsService', 'VRUIUtilsServ
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.BusinessEntity.RingoExtensions.AgentConvertor, Retail.BusinessEntity.RingoExtensions",
-                        Name: "Agent Convertor"
+                        $type: "Retail.Ringo.MainExtensions.AgentConvertor, Retail.Ringo.MainExtensions",
+                        Name: "Reseller Convertor"
                     };
                     return data;
                 };

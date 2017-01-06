@@ -39,7 +39,7 @@ app.directive('retailRingoPosConvertorEditor', ['UtilsService', 'VRUIUtilsServic
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.BusinessEntity.RingoExtensions.PointOfSaleConvertor, Retail.BusinessEntity.RingoExtensions",
+                        $type: "Retail.Ringo.MainExtensions.PointOfSaleConvertor, Retail.Ringo.MainExtensions",
                         Name: "POS Convertor"
                     };
                     return data;

@@ -39,7 +39,7 @@ app.directive('retailRingoDistributorConvertorEditor', ['UtilsService', 'VRUIUti
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.BusinessEntity.RingoExtensions.DistributorConvertor, Retail.BusinessEntity.RingoExtensions",
+                        $type: "Retail.Ringo.MainExtensions.DistributorConvertor, Retail.Ringo.MainExtensions",
                         Name: "Distributor Convertor"
                     };
                     return data;
