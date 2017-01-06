@@ -24,7 +24,8 @@ namespace Vanrise.Runtime
         }
 
         private RuntimeHost(List<RuntimeService> services, bool tryHostRuntimeManager)
-        {            
+        {
+            Vanrise.Common.Utilities.CompilePredefinedPropValueReaders();
             _services = services;
             TimeSpan timerInterval = TimeSpan.FromSeconds(1);
             if (services != null && services.Count > 0)
