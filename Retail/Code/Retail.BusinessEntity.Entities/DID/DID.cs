@@ -10,6 +10,8 @@ namespace Retail.BusinessEntity.Entities
     {
         public int DIDId { get; set; }
 
+        public string Number { get; set; }
+
         public DIDSettings Settings { get; set; }
     }
 }
