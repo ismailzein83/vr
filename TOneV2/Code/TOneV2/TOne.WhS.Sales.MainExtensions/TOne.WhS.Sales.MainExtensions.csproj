@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkActions\ActionTypes\RateBulkAction.cs" />
+    <Compile Include="BulkActions\ApplicationZoneFilters\AllApplicableZones.cs" />
+    <Compile Include="BulkActions\ApplicationZoneFilters\SpecificApplicableZones.cs" />
     <Compile Include="CostCalculation\AvgCostCalculation.cs" />
     <Compile Include="CostCalculation\PercentageCostCalculation.cs" />
     <Compile Include="CostCalculation\RoutePercentageCostCalculation.cs" />
