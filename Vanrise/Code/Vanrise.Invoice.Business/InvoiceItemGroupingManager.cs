@@ -46,7 +46,7 @@ namespace Vanrise.Invoice.Business
                 {
                     invoiceItemRecord.GroupingValuesByDimensionId.Add(dimension.DimensionItemFieldId, new InvoiceItemGroupingValue
                     {
-                        Value =  invoiceItem.Details.GetType().GetProperty(dimension.FieldName).GetValue(invoiceItem.Details, null),
+                        Value = invoiceItem.Details.GetType().GetProperty(dimension.FieldName).GetValue(invoiceItem.Details, null)
                     //Vanrise.Common.Utilities.GetPropValueReader(dimension.FieldName).GetPropertyValue(invoiceItem.Details)
                     });
                 }
@@ -55,8 +55,7 @@ namespace Vanrise.Invoice.Business
                     invoiceItemRecord.AggValuesByAggId.Add(measure.AggregateItemFieldId, new InvoiceItemAggValue
                     {
 
-                        Value = invoiceItem.Details.GetType().GetProperty(measure.FieldName).GetValue(invoiceItem.Details, null),
-                        
+                        Value = invoiceItem.Details.GetType().GetProperty(measure.FieldName).GetValue(invoiceItem.Details, null)
                         //Vanrise.Common.Utilities.GetPropValueReader(measure.FieldName).GetPropertyValue(invoiceItem.Details)
                     });
                 }
@@ -82,20 +81,11 @@ namespace Vanrise.Invoice.Business
                         groupingValue.Value.AllValues = new List<dynamic>();
                     groupingValue.Value.AllValues.Add(invoiceItemRecord.GroupingValuesByDimensionId[groupingValue.Key].Value);
                 }
+                GroupingInvoiceItemDetail analyticRecord = BuildGroupingInvoiceItemDetail(groupingInvoiceItemQueryContext, matchRecord, requestedDimensionIds, measureIds);
+                records.Add(analyticRecord);
                 #endregion
 
             }
-            #region MappDetailsRecord
-
-            foreach (var invoiceItem in groupedRecordsByDimensionsKey.Values)
-            {
-                GroupingInvoiceItemDetail analyticRecord = BuildGroupingInvoiceItemDetail(groupingInvoiceItemQueryContext, invoiceItem, requestedDimensionIds, measureIds);
-               
-                records.Add(analyticRecord);
-            }
-
-            #endregion
-
             return records;
         }
         private bool ApplyFilters(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, InvoiceItemRecord invoiceItemRecord, List<InvoiceGroupingDimensionFilter> dimensionFilters)

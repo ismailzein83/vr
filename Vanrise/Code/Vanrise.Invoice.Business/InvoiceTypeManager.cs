@@ -187,7 +187,10 @@ namespace Vanrise.Invoice.Business
                 return DoesUserHaveAccess(invoiceType.Settings.Security.GenerateRequiredPermission);
             return true;
         }
-
+        public IEnumerable<InvoiceType> GetInvoiceTypes()
+        {
+            return GetCachedInvoiceTypes().Values;
+        }
 
         #endregion
 

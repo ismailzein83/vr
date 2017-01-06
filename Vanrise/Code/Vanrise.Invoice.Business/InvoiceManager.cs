@@ -63,7 +63,7 @@ namespace Vanrise.Invoice.Business
                     if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, createInvoiceInput.InvoiceId, out insertedInvoiceId))
                     {
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                        var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
+                        var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType);
                         updateOperationOutput.UpdatedObject = invoiceDetail;
                         updateOperationOutput.Message = "Invoice Generated Successfully.";
                         updateOperationOutput.ShowExactMessage = true;
@@ -131,7 +131,7 @@ namespace Vanrise.Invoice.Business
                 if (SaveInvoice(generatedInvoice.InvoiceItemSets,invoice,null,out insertedInvoiceId))
                 {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId));
+                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId),invoiceType);
                     insertOperationOutput.InsertedObject = invoiceDetail;
                     insertOperationOutput.Message = "Invoice Generated Successfully.";
                     insertOperationOutput.ShowExactMessage = true;
@@ -191,7 +191,9 @@ namespace Vanrise.Invoice.Business
         public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return InvoiceDetailMapper(dataManager.GetInvoice(invoiceId));
+            var invoice = dataManager.GetInvoice(invoiceId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
+            return InvoiceDetailMapper(invoice,invoiceType);
         }
 
 
@@ -235,20 +237,16 @@ namespace Vanrise.Invoice.Business
 
         #region Mappers
 
-        private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice)
+        private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice, InvoiceType invoiceType)
         {
 
-            var invoiceDetail = InvoiceDetailMapper1(invoice);
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
+            var invoiceDetail = InvoiceDetailMapper1(invoice, invoiceType);
             InvoiceDetailMapper2(invoiceDetail, invoiceType);
             return invoiceDetail;
         }
 
-        private static InvoiceDetail InvoiceDetailMapper1(Entities.Invoice invoice)
+        private static InvoiceDetail InvoiceDetailMapper1(Entities.Invoice invoice,InvoiceType invoiceType)
         {
-
-            InvoiceTypeManager manager = new InvoiceTypeManager();
-            var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
 
 
             string partnerName = null;
@@ -284,7 +282,9 @@ namespace Vanrise.Invoice.Business
             invoiceDetail.Items = new List<InvoiceDetailObject>();
             foreach (var field in dataRecordType.Fields)
             {
-                var fieldValue = Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
+                var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
+                    //Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
+             
                 if (fieldValue != null)
                 {
                     invoiceDetail.Items.Add(new InvoiceDetailObject
@@ -336,7 +336,12 @@ namespace Vanrise.Invoice.Business
             }
             public override InvoiceDetail EntityDetailMapper(Entities.Invoice entity)
             {
-                return InvoiceManager.InvoiceDetailMapper1(entity);
+                return null;
+            }
+            protected override Vanrise.Entities.BigResult<InvoiceDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<InvoiceQuery> input, IEnumerable<Entities.Invoice> allRecords)
+            {
+                InvoiceType invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId);
+                return allRecords.ToBigResult(input, null, (entity) => InvoiceManager.InvoiceDetailMapper1(entity,invoiceType));
             }
             public override IEnumerable<Entities.Invoice> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
             {

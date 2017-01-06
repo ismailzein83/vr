@@ -14,7 +14,8 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart
         public string FieldName { get; set; }
         public override string GetPartText(IInvoiceItemConcatenatedPartContext context)
         {
-            return context.InvoiceItemDetails != null ? Convert.ToString(Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.InvoiceItemDetails)) : null;
+            return context.InvoiceItemDetails != null ? Convert.ToString(context.InvoiceItemDetails.GetType().GetProperty(this.FieldName).GetValue(context.InvoiceItemDetails, null)) : null;
+            //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.InvoiceItemDetails)
         }
     }
 }

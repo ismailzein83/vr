@@ -68,6 +68,7 @@
     <Compile Include="InvoiceSequenceManager.cs" />
     <Compile Include="InvoiceTypeConfigsManager.cs" />
     <Compile Include="InvoiceTypeManager.cs" />
+    <Compile Include="InvoiceTypeGroupingItemPropValueReaderCompilationStep.cs" />
     <Compile Include="PartnerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
