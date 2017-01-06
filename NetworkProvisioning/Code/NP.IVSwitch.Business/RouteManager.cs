@@ -182,6 +182,12 @@ namespace NP.IVSwitch.Business
             return updateOperationOutput;
         }
 
+        public DateTime GetSwitchDateTime()
+        {
+            IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+            Helper.SetSwitchConfig(dataManager);
+            return dataManager.GetSwitchDateTime();
+        }
         #endregion
 
         #region Private Classes
@@ -203,10 +209,7 @@ namespace NP.IVSwitch.Business
         Dictionary<int, Route> GetCachedRoutes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoute",
-                () =>
-                {
-                    return PrepareCachedRoutes();
-                });
+                PrepareCachedRoutes);
         }
 
         private Dictionary<int, Route> PrepareCachedRoutes()

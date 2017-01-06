@@ -39,7 +39,11 @@ namespace NP.IVSwitch.Data.Postgres
             };
             return route;
         }
-
+        public DateTime GetSwitchDateTime()
+        {
+            string query = "select current_timestamp;";
+            return (DateTime)ExecuteScalarText(query, null);
+        }
 
         public List<Route> GetRoutes()
         {

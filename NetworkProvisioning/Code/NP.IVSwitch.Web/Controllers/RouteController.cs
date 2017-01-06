@@ -21,7 +21,7 @@ namespace NP.IVSwitch.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredRoutes(input));
         }
-         
+
 
         [HttpGet]
         [Route("GetRoute")]
@@ -42,6 +42,13 @@ namespace NP.IVSwitch.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<RouteDetail> UpdateRoute(RouteToAdd routeItem)
         {
             return _manager.UpdateRoute(routeItem);
+        }
+
+        [HttpGet]
+        [Route("GetSwitchDateTime")]
+        public DateTime GetSwitchDateTime()
+        {
+            return _manager.GetSwitchDateTime();
         }
     }
 }

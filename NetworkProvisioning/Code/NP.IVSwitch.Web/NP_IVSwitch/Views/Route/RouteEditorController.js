@@ -2,14 +2,14 @@
 
     "use strict";
 
-    RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum','NP_IVSwitch_TransportModeEnum'];
+    RouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteAPIService', 'VRNotificationService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'NP_IVSwitch_StateEnum', 'NP_IVSwitch_TransportModeEnum'];
 
-    function RouteEditorController($scope, NP_IVSwitch_RouteAPIService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum,   NP_IVSwitch_TransportModeEnum) {
+    function RouteEditorController($scope, npIvSwitchRouteApiService, VRNotificationService, UtilsService, VRNavigationService, VRUIUtilsService, NP_IVSwitch_StateEnum, NP_IVSwitch_TransportModeEnum) {
 
         var isEditMode;
- 
+
         var routeId;
-        var carrierAccountId ;
+        var carrierAccountId;
 
         var routeEntity;
 
@@ -29,21 +29,21 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
- 
+
             if (parameters != undefined && parameters != null) {
-                 routeId = parameters.RouteId;
-                 carrierAccountId = parameters.CarrierAccountId;
-                }
+                routeId = parameters.RouteId;
+                carrierAccountId = parameters.CarrierAccountId;
+            }
 
             isEditMode = (routeId != undefined);
-         }
+        }
+
         function defineScope() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.port = "5060";
             $scope.scopeModel.connectiontimeout = "60";
             $scope.scopeModel.transportmodeid = { value: 1, description: "UDP" };
-            $scope.scopeModel.wakeuptime = Date.now();
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -55,7 +55,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onSelectorCodecProfileReady = function (api) {
@@ -100,7 +100,7 @@
                     $scope.scopeModel.transportmodeid = SelectedItem;
                 }
             };
-           
+
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -115,97 +115,98 @@
             }
             else {
                 loadAllControls();
-            }            
+            }
         }
 
 
         function getRoute() {
-            return NP_IVSwitch_RouteAPIService.GetRoute(routeId).then(function (response) {
-                routeEntity = response;                
+            return npIvSwitchRouteApiService.GetRoute(routeId).then(function (response) {
+                routeEntity = response;
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule, loadWakeUpTime]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-
-            function setTitle() {
-                if (isEditMode) {
-                    var routeName = (routeEntity != undefined) ? routeEntity.Description : null;
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(routeName, 'Route');
-                }
-                else {
-                    $scope.title = UtilsService.buildTitleForAddEditor('Route');
-                }
+        }
+        function setTitle() {
+            if (isEditMode) {
+                var routeName = (routeEntity != undefined) ? routeEntity.Description : null;
+                $scope.title = UtilsService.buildTitleForUpdateEditor(routeName, 'Route');
             }
-            function loadStaticData() {
+            else {
+                $scope.title = UtilsService.buildTitleForAddEditor('Route');
+            }
+        }
+        function loadStaticData() {
 
-                $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
-                $scope.scopeModel.transportmode = UtilsService.getArrayEnum(NP_IVSwitch_TransportModeEnum);
+            $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
+            $scope.scopeModel.transportmode = UtilsService.getArrayEnum(NP_IVSwitch_TransportModeEnum);
+            if (routeEntity == undefined) {
 
- 
-                if (routeEntity == undefined) {
+                $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
 
-                    $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
-  
-                    return;
-                }
-                $scope.scopeModel.description = routeEntity.Description;
-                $scope.scopeModel.logalias = routeEntity.LogAlias;
+                return;
+            }
+            $scope.scopeModel.description = routeEntity.Description;
+            $scope.scopeModel.logalias = routeEntity.LogAlias;
 
-                $scope.scopeModel.channelslimit = routeEntity.ChannelsLimit;
-                $scope.scopeModel.host = routeEntity.Host;
-                $scope.scopeModel.port = routeEntity.Port;
-                $scope.scopeModel.connectiontimeout = routeEntity.ConnectionTimeOut;
-                $scope.scopeModel.percentage = routeEntity.Percentage;
- 
-                if (routeEntity.TransportModeId != undefined)
-                    $scope.scopeModel.transportmodeid = $scope.scopeModel.transportmode[routeEntity.TransportModeId - 1];
-                if (routeEntity.CurrentState != undefined)
-                    $scope.scopeModel.currentstate = $scope.scopeModel.states[routeEntity.CurrentState - 1];
-                if (routeEntity.WakeUpTime != undefined)
-                $scope.scopeModel.wakeuptime = routeEntity.WakeUpTime;                 
+            $scope.scopeModel.channelslimit = routeEntity.ChannelsLimit;
+            $scope.scopeModel.host = routeEntity.Host;
+            $scope.scopeModel.port = routeEntity.Port;
+            $scope.scopeModel.connectiontimeout = routeEntity.ConnectionTimeOut;
+            $scope.scopeModel.percentage = routeEntity.Percentage;
 
-             }
+            if (routeEntity.TransportModeId != undefined)
+                $scope.scopeModel.transportmodeid = $scope.scopeModel.transportmode[routeEntity.TransportModeId - 1];
+            if (routeEntity.CurrentState != undefined)
+                $scope.scopeModel.currentstate = $scope.scopeModel.states[routeEntity.CurrentState - 1];
 
-            function loadSelectorCodecProfile() {
-                var selectorCodecProfileLoadDeferred = UtilsService.createPromiseDeferred();
 
-                selectorCodecProfileReadyDeferred.promise.then(function () {
-                    var selectorCodecProfilePayload = {};
- 
-                    if (routeEntity != undefined && routeEntity.CodecProfileId != 0)  
-                        selectorCodecProfilePayload.selectedIds = routeEntity.CodecProfileId;           
+        }
+        function loadSelectorCodecProfile() {
+            var selectorCodecProfileLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    VRUIUtilsService.callDirectiveLoad(selectorCodecProfileAPI, selectorCodecProfilePayload, selectorCodecProfileLoadDeferred);
+            selectorCodecProfileReadyDeferred.promise.then(function () {
+                var selectorCodecProfilePayload = {};
+
+                if (routeEntity != undefined && routeEntity.CodecProfileId != 0)
+                    selectorCodecProfilePayload.selectedIds = routeEntity.CodecProfileId;
+
+                VRUIUtilsService.callDirectiveLoad(selectorCodecProfileAPI, selectorCodecProfilePayload, selectorCodecProfileLoadDeferred);
+            });
+
+            return selectorCodecProfileLoadDeferred.promise;
+        }
+        function loadSelectorTranslationRule() {
+            var selectorTranslationRuleLoadDeferred = UtilsService.createPromiseDeferred();
+
+            selectorTranslationRuleReadyDeferred.promise.then(function () {
+                var selectorTranslationRulePayload = {};
+                if (routeEntity != undefined && routeEntity.TransRuleId != 0)
+                    selectorTranslationRulePayload.selectedIds = routeEntity.TransRuleId;
+
+                VRUIUtilsService.callDirectiveLoad(selectorTranslationRuleAPI, selectorTranslationRulePayload, selectorTranslationRuleLoadDeferred);
+            });
+
+            return selectorTranslationRuleLoadDeferred.promise;
+        }
+        function loadWakeUpTime() {
+            if (routeEntity != undefined && routeEntity.WakeUpTime != undefined)
+                $scope.scopeModel.wakeuptime = routeEntity.WakeUpTime;
+            else
+                npIvSwitchRouteApiService.GetSwitchDateTime().then(function (response) {
+                    $scope.scopeModel.wakeuptime = response;
                 });
-
-                return selectorCodecProfileLoadDeferred.promise;
-            }
-
-            function loadSelectorTranslationRule() {
-                var selectorTranslationRuleLoadDeferred = UtilsService.createPromiseDeferred();
-
-                selectorTranslationRuleReadyDeferred.promise.then(function () {
-                    var selectorTranslationRulePayload = {};
-                    if (routeEntity != undefined && routeEntity.TransRuleId != 0)
-                        selectorTranslationRulePayload.selectedIds = routeEntity.TransRuleId;
-
-                    VRUIUtilsService.callDirectiveLoad(selectorTranslationRuleAPI, selectorTranslationRulePayload, selectorTranslationRuleLoadDeferred);
-                });
-
-                return selectorTranslationRuleLoadDeferred.promise;
-            }
-
         }
 
         function insert() {
             $scope.scopeModel.isLoading = true;
-     
-            return NP_IVSwitch_RouteAPIService.AddRoute(buildRouteObjFromScope()).then(function (response) {
+
+            return npIvSwitchRouteApiService.AddRoute(buildRouteObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Route', response, 'Name')) {
 
                     if ($scope.onRouteAdded != undefined)
@@ -220,8 +221,8 @@
         }
         function update() {
             $scope.scopeModel.isLoading = true;
-        
-             return NP_IVSwitch_RouteAPIService.UpdateRoute(buildRouteObjFromScope()).then(function (response) {
+
+            return npIvSwitchRouteApiService.UpdateRoute(buildRouteObjFromScope()).then(function (response) {
 
 
                 if (VRNotificationService.notifyOnItemUpdated('Route', response, 'Name')) {
@@ -241,24 +242,24 @@
         function buildRouteObjFromScope() {
             return {
 
-                  Entity: {
-                      RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
-                      Description: $scope.scopeModel.description,
-                      ChannelsLimit: $scope.scopeModel.channelslimit,
-                      LogAlias : $scope.scopeModel.logalias,
-                      Host : $scope.scopeModel.host,
-                      Port: $scope.scopeModel.port,
-                      ConnectionTimeOut :$scope.scopeModel.connectiontimeout,
-                      CurrentState: $scope.scopeModel.currentstate.value,
-                      CodecProfileId: $scope.scopeModel.codecprofileid,
-                      TransRuleId: $scope.scopeModel.translationruleid,
-                      WakeUpTime: $scope.scopeModel.wakeuptime,
-                      TransportModeId: $scope.scopeModel.transportmodeid.value,
-                      Percentage : $scope.scopeModel.percentage
-                   },
+                Entity: {
+                    RouteId: routeEntity != undefined ? routeEntity.RouteId : undefined,
+                    Description: $scope.scopeModel.description,
+                    ChannelsLimit: $scope.scopeModel.channelslimit,
+                    LogAlias: $scope.scopeModel.logalias,
+                    Host: $scope.scopeModel.host,
+                    Port: $scope.scopeModel.port,
+                    ConnectionTimeOut: $scope.scopeModel.connectiontimeout,
+                    CurrentState: $scope.scopeModel.currentstate.value,
+                    CodecProfileId: $scope.scopeModel.codecprofileid,
+                    TransRuleId: $scope.scopeModel.translationruleid,
+                    WakeUpTime: $scope.scopeModel.wakeuptime,
+                    TransportModeId: $scope.scopeModel.transportmodeid.value,
+                    Percentage: $scope.scopeModel.percentage
+                },
 
-                  CarrierAccountId:   carrierAccountId
-               
+                CarrierAccountId: carrierAccountId
+
             };
         }
     }
