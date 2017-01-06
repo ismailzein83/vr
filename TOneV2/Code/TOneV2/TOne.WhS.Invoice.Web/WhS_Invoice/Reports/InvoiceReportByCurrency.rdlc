@@ -1675,7 +1675,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SaleAmount.Value,2)</Value>
+                              <Value>=FormatNumber(Fields!OriginalSaleAmount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -2238,7 +2238,7 @@
         </Field>
         <Field Name="SaleRateTypeId">
           <DataField>SaleRateTypeId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+          <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="SaleRateTypeIdDescription">
           <DataField>SaleRateTypeIdDescription</DataField>
