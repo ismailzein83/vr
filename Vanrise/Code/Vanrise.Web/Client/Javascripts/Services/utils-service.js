@@ -465,13 +465,13 @@
         function downloadFile(data, headers) {
             var octetStreamMime = 'application/octet-stream';
             var success = false;
-            headers = headers();
+            headersTab = headers();
             var matcher = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i;
 
-            var results = headers['content-disposition'].match(matcher);
+            var results = headersTab['content-disposition'].match(matcher);
             var name = replaceAll(results[1], "\"", ""); //for UI side fixing
             var filename = replaceAll(name, "%20", " ");
-            var contentType = headers['content-type'] || octetStreamMime;
+            var contentType = headersTab['content-type'] || octetStreamMime;
             try {
                 var blob = new Blob([data], { type: contentType });
                 if (navigator.msSaveBlob)
