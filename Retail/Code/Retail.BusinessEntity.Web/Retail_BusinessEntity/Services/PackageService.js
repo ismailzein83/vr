@@ -16,7 +16,6 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageEditor.html', null, settings);
         }
-
         function editPackage(packageId, onPackageUpdated) {
 
             var parameters = {
@@ -32,7 +31,6 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageEditor.html', parameters, modalSettings);
         }
 
-
         function addService(onServiceAdded) {
             var settings = {};
 
@@ -43,7 +41,6 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/ServiceEditor.html', null, settings);
         }
-
         function editService(serviceEntity, onServiceUpdated) {
             var modalSettings = {
             };
@@ -71,7 +68,6 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageItemEditor.html', parameters, settings);
         }
-
         function editPackageItem(packageItem, onPackageItemUpdated,context) {
             var modalSettings = {
             };

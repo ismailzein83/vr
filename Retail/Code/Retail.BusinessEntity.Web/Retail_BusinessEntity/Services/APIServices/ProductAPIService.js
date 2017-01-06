@@ -43,7 +43,7 @@
         //}
 
         return ({
-            GetFilteredProducts: GetFilteredProduct,
+            GetFilteredProducts: GetFilteredProducts,
             GetProduct: GetProduct,
             AddProduct: AddProduct,
             HasAddProductPermission: HasAddProductPermission,

@@ -13,5 +13,13 @@ namespace Retail.BusinessEntity.MainExtensions.ProductTypes.PrePaid
         {
             get { return new Guid("360ADAB8-1516-4A3D-BDB7-0655C6A0965B"); }
         }
+
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "retail-be-productextendedsettings-prepaid";
+            }
+        }
     }
 }

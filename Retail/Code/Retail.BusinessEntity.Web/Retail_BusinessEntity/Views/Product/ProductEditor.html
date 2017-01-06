@@ -1,9 +1,36 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<div vr-modalcontent ng-controller="Retail_BE_ProductEditorController" vr-loader="isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form name="formProductEditor">
 
-</body>
-</html>
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Product Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <retail-be-productdefinition-selector on-ready="scopeModel.onProductDefinitionsSelectorReady"
+                                                              onselectionchanged="scopeModel.onProductDefinitionsSelectionChanged"
+                                                              selectedvalues="scopeModel.selectedProductDefinition"
+                                                              normal-col-num="6" isrequired="true" hideremoveicon>
+                        </retail-be-productdefinition-selector>
+                    </vr-row>
+                </vr-tab>
+                <vr-directivewrapper ng-if="scopeModel.selectedProductDefinition != undefined"
+                                     directive="scopeModel.selectedProductDefinition.RuntimeEditor"
+                                     on-ready="scopeModel.onProductExtendedSettingsDirectiveReady"
+                                     vr-loader="scopeModel.isProductExtendedSettingsDirectiveLoading">
+                </vr-directivewrapper>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formProductEditor" haspermission="hasSaveProductPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+
