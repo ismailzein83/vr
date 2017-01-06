@@ -79,6 +79,8 @@
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="Account\AccountFilter.cs" />
+    <Compile Include="DID\DID.cs" />
+    <Compile Include="DID\DIDSettings.cs" />
     <Compile Include="Package\IPackageFilter.cs" />
     <Compile Include="Product\Product.cs" />
     <Compile Include="Product\ProductDetail.cs" />
