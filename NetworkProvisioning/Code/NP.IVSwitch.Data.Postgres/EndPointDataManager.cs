@@ -237,33 +237,20 @@ namespace NP.IVSwitch.Data.Postgres
         }
         private bool InsertAcl(int endPointId, EndPoint endPoint, int groupId, AccessList accessList)
         {
-            String cmdText = @"INSERT INTO access_list(user_id,account_id,description,group_id, 
-                                   log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit,  max_call_dura,rtp_mode,domain_id,
-                                    host,tech_prefix,tariff_id, route_table_id)
-	                             SELECT  @user_id,@account_id, @description, @group_id,   @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
-                                 @channels_limit,   @max_call_dura, @rtp_mode, @domain_id,@host, @tech_prefix,@tariff_id,@route_table_id
-                                 WHERE NOT EXISTS(SELECT 1 FROM  access_list WHERE (domain_id=@domain_id and host=@host and tech_prefix=@tech_prefix))";
-
-            int recordAffected = ExecuteNonQueryText(cmdText, cmd =>
-            {
-                cmd.Parameters.AddWithValue("@user_id", endPointId);
-                cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
-                cmd.Parameters.AddWithValue("@description", endPoint.Description);
-                cmd.Parameters.AddWithValue("@group_id", groupId);
-                cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
-                cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
-                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
-                cmd.Parameters.AddWithValue("@state_id", (int)endPoint.CurrentState);
-                cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
-                cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
-                cmd.Parameters.AddWithValue("@rtp_mode", (int)endPoint.RtpMode);
-                cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
-                cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
-                cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix ?? ".");
-                cmd.Parameters.AddWithValue("@route_table_id", accessList.RouteTableId);
-                cmd.Parameters.AddWithValue("@tariff_id", accessList.TariffId);
-            }
-                );
+            string queries =
+                string.Format(@"
+                                INSERT INTO access_list(
+	                            host, domain_id, tech_prefix, user_id, account_id, description
+                                , trans_rule_id, state_id, channels_limit, log_alias
+                                , tariff_id, route_table_id
+                                , codec_profile_id, group_id, max_call_dura, rtp_mode)
+	                            VALUES ('{0}', {1}, '{2}', {3}, {4}, '{5}',{6}, {7}, {8}, '{9}', {10}, {11}, {12}, {13}, {14}, {15});"
+                    , endPoint.Host, (int)endPoint.DomainId, endPoint.TechPrefix ?? ".", endPointId, endPoint.AccountId,
+                    endPoint.Description, endPoint.TransRuleId
+                    , (int)endPoint.CurrentState, endPoint.ChannelsLimit, endPoint.LogAlias, accessList.TariffId,
+                    accessList.RouteTableId, endPoint.CodecProfileId, groupId, endPoint.MaxCallDuration
+                    , (int)endPoint.RtpMode);
+            int recordAffected = ExecuteNonQueryText(queries, null);
             return recordAffected > 0;
         }
         private AccessList PrepareDataForInsert(int accountId, int groupId, string carrierAccountName)
