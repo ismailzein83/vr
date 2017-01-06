@@ -117,9 +117,9 @@
                         </div>
                     </div>
                     <div class="clock">
-                        <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
+                        <span ng-bind="$root.clock  | date:'EEE dd MMM , yyyy'"></span>
 
-                        <span style="color: #6a6a6a;font-weight:bold" ng-bind="clock  | date:'hh:mm:ss'"> </span>
+                        <span style="color: #6a6a6a;font-weight:bold" ng-bind="$root.clock  | date:'hh:mm:ss'"> </span>
 
                     </div>
 
@@ -156,9 +156,9 @@
                         </div>
                         <div class="clock collapsed-clock" style="z-index:-1">
 
-                            <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
+                            <span ng-bind="$root.clock  | date:'EEE dd MMM , yyyy'"></span>
 
-                            <span style="color: #6a6a6a; font-weight: bold" ng-bind="clock  | date:'hh:mm'"> </span>
+                            <span style="color: #6a6a6a; font-weight: bold" ng-bind="$root.clock  | date:'hh:mm'"></span>
 
                         </div>
                     </div>

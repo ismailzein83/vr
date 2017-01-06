@@ -23,6 +23,7 @@ namespace Vanrise.Web
             config.Filters.Add(new ExceptionFilter());
             config.Filters.Add(new AuthenticationFilter());
             config.Filters.Add(new AuthorizationFilter());
+            config.Filters.Add(new InfoAppenderFilter());
 
             var json = config.Formatters.JsonFormatter;
             json.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;

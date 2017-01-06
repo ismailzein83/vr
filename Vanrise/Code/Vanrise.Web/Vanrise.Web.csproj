@@ -145,6 +145,7 @@
     <Content Include="Client\CSViews\Security\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\InfoAppenderFilter.cs" />
     <Compile Include="App_Start\ActionAuditFilter.cs" />
     <Compile Include="App_Start\AuthorizationFilter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />

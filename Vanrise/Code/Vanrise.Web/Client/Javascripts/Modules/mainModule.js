@@ -2,8 +2,8 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope','$rootScope','VR_Sec_MenuAPIService','SecurityService','BaseAPIService','VR_Sec_PermissionAPIService','notify','$animate','$cookies','$timeout','MenuItemTypeEnum','UtilsService','VRModalService',
-    function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
+.controller('mainCtrl', ['$scope','$rootScope','VR_Sec_MenuAPIService','SecurityService','BaseAPIService','VR_Sec_PermissionAPIService','notify','$animate','$cookies','$timeout','MenuItemTypeEnum','UtilsService','VRModalService','VRNavigationService',
+function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService ,VRNavigationService) {
     Waves.displayEffect();
     $rootScope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
@@ -199,16 +199,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $('.date-section').removeClass('in');
         $('.time-section').addClass('in');
     };
-
-    $scope.clock = ""; // initialise the time variable
-    $scope.tickInterval = 1000; //ms
-    
-    var tick = function () {
-        $scope.clock = Date.now(); // get the current time
-        setTimeout(tick, $scope.tickInterval); // reset the timer
-    };
-    setTimeout(tick, $scope.tickInterval);
-
     var allMenuItems = [];   
     VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
 

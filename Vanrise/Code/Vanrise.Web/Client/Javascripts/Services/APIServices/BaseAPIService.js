@@ -9,7 +9,7 @@ app.config(['$httpProvider', function ($httpProvider) {
         };
     });
 }]);
-app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify, DataRetrievalResultTypeEnum, $injector, HttpStatusCodeEnum, UtilsService) {
+app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notify', 'DataRetrievalResultTypeEnum', '$injector', 'HttpStatusCodeEnum', 'UtilsService', function BaseAPIService($http, $q, $location,  $rootScope, notify, DataRetrievalResultTypeEnum, $injector, HttpStatusCodeEnum, UtilsService) {
 
     var loginURL = '/Security/Login';
     var paymnetURL = '/Security/Payment';
@@ -57,6 +57,8 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
         $http.get(url, urlParameters)
             .success(function (response, status, headers, config) {
                 var returnedResponse;
+                headers = headers();
+                $rootScope.clock = UtilsService.dateToServerFormat(headers.serverdate);
                 if (options != undefined && options.returnAllResponseParameters) {
                     returnedResponse = {
                         data: response,
@@ -112,6 +114,8 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
         };
         $http(req)
             .success(function (response, status, headers, config) {
+                headers = headers();
+                $rootScope.clock = UtilsService.dateToServerFormat(headers.serverdate);
                 var returnedResponse;
                 if (isExport || (options != undefined && options.returnAllResponseParameters)) {
                     returnedResponse = {
@@ -171,4 +175,4 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
         }
         return false;
     }
-});
+}]);
