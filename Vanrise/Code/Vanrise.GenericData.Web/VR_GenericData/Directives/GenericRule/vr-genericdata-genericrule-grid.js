@@ -102,12 +102,12 @@
             
            // function defineMenuActions() {
             $scope.gridMenuActions = function () {
-               return [{
+                return [{
                     name: 'Edit',
                     clicked: editGenericRule,
                     haspermission: hasEditGenericRulePermission
                 }];
-            }
+            };
           //  }
 
             function hasEditGenericRulePermission(genericRule) {

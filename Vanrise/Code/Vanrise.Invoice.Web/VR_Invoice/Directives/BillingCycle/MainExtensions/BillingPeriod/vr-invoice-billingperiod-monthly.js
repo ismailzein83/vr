@@ -48,7 +48,7 @@ app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VR_Invoice_Invo
                             monthlyId: ctrl.selectedMonthlyType.value,
                             monthlyType: ctrl.selectedMonthlyType.description,
                             specificDay: ctrl.specificDay
-                        }
+                        };
                         ctrl.data.push(obj);
                         ctrl.specificDay = undefined;
                         ctrl.selectedMonthlyType = undefined;

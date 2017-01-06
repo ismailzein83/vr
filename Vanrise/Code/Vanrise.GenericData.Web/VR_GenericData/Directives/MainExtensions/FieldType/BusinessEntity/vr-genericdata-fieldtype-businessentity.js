@@ -53,7 +53,7 @@
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, undefined, setLoader, selectedBusinessEntityDefinitionReadyPromiseDeferred);
                     }
-                }
+                };
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
 

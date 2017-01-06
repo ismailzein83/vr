@@ -61,7 +61,7 @@
                     loadAllControls().then(function () {
                         $scope.scopeModel.gridloadded = true;
                         hasAddGenericRulePermission();
-                    })
+                    });
                 }
             };
            
@@ -125,7 +125,7 @@
                             ViewId: viewId
                         }]
                     }
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(genericRuleDefinitionAPI, payLoad, loadGenericRuleDefinitionSelectorPromiseDeferred);
             });
             return loadGenericRuleDefinitionSelectorPromiseDeferred.promise.then(function () {

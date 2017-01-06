@@ -59,10 +59,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                         $scope.documents.push(documentItem);
                     };
 
-                   
+
                     return directiveAPI;
                 }
-            }
+            };
 
             $scope.removeDocument = function (dataItem) {
                
@@ -150,8 +150,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     FileId: document.documentAttachment.fileId,
                     CategoryId: document.directiveAPI.getSelectedIds(),
                     Description: document.documentDescription,
-                    CreatedOn : document.createdOn
-                }
+                    CreatedOn: document.createdOn
+                };
 
                 if (documentsPayload == undefined || document.createdOn == undefined)
                     documentSetting.CreatedOn = new Date();

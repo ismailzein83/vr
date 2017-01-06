@@ -105,7 +105,6 @@
                         ctrl.muteAction = function (e) {
                             BaseDirService.muteAction(e);
                         };
-                        console.log()
                         var validationOptionsInput = {};
                         if (iAttrs.datatype === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.datatype) === TextboxTypeEnum.Email.name)
                             validationOptionsInput.emailValidation = true;

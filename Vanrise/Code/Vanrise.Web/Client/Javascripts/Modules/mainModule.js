@@ -37,7 +37,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     
     $scope.getTestApiData = function () {
         console.log(testApi.getData());
-    }
+    };
 
     $rootScope.onValidationMessageShown = function (e) {      
         var self = angular.element(e.currentTarget);

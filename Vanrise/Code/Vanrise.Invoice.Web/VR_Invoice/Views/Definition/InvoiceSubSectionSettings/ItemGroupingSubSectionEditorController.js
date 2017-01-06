@@ -151,7 +151,7 @@
                     }
                 }
                 return fields;
-            }
+            };
             return currentContext;
         }
     }

@@ -80,7 +80,7 @@
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoading = false;
-            })
+            });
             
 
             function loadAllControls() {

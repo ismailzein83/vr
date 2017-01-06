@@ -35,7 +35,7 @@
                             loadDirective: function (directiveAPI) {
                                 return directiveAPI.load();
                             }
-                        }
+                        };
                         $scope.drillDownDirectiveTabs.push(tabDefinition);
                     }
                 }

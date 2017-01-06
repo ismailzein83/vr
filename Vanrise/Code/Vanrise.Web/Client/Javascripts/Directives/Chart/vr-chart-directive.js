@@ -250,7 +250,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
 
                         formatter: function () {
                             var s = this.key;
-                            s += '<br/><span style="color:' + this.point.color + '">\u25CF</span> ' + this.series.name + ': <b>' + formatValue(this.point.y) + '</b>'
+                            s += '<br/><span style="color:' + this.point.color + '">\u25CF</span> ' + this.series.name + ': <b>' + formatValue(this.point.y) + '</b>';
                             return s;
                         },
                         shared: true

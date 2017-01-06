@@ -97,7 +97,7 @@
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterDirectivePayload, setLoader, tableSelectorSelectionChanged);
                         });
                     }
-                }
+                };
 
                 defineColumnWidth();
                 defineAPI();
@@ -181,7 +181,7 @@
                         data.WidgetTitle = $scope.scopeModel.widgetTitle;
                         data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
                         data.ShowTitle = $scope.scopeModel.showTitle;
-                        data.RecordFilter = recordFilterDirectiveAPI.getData().filterObj
+                        data.RecordFilter = recordFilterDirectiveAPI.getData().filterObj;
                     }
                 }
                 return data;
@@ -252,7 +252,7 @@
                         }
                         return fields;
                     }
-                }
+                };
                 return context;
             };
         }
