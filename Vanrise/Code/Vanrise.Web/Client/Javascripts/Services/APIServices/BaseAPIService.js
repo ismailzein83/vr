@@ -57,8 +57,8 @@ app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notif
         $http.get(url, urlParameters)
             .success(function (response, status, headers, config) {
                 var returnedResponse;
-                headers = headers();
-                $rootScope.clock = UtilsService.dateToServerFormat(headers.serverdate);
+                headersTab = headers();
+                $rootScope.clock = UtilsService.dateToServerFormat(headersTab.serverdate);
                 if (options != undefined && options.returnAllResponseParameters) {
                     returnedResponse = {
                         data: response,
@@ -114,8 +114,8 @@ app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notif
         };
         $http(req)
             .success(function (response, status, headers, config) {
-                headers = headers();
-                $rootScope.clock = UtilsService.dateToServerFormat(headers.serverdate);
+                headersTab = headers();
+                $rootScope.clock = UtilsService.dateToServerFormat(headersTab.serverdate);
                 var returnedResponse;
                 if (isExport || (options != undefined && options.returnAllResponseParameters)) {
                     returnedResponse = {
