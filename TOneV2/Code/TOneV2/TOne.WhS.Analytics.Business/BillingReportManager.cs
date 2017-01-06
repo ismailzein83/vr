@@ -86,60 +86,44 @@ namespace TOne.WhS.Analytics.Business
 
             var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             int monthCount = 0;
+            for (int i = 0; i < arrayOfDate.Count(); i++)
+            {
+                BusinessCaseStatus busCaseStatus = new BusinessCaseStatus();
+                busCaseStatus.MonthYear = arrayOfDate[i];
+                busCaseStatus.Amount = 0;
+                busCaseStatus.Durations = 0;
+                listBusinessCaseStatus.Add(busCaseStatus);
+            }
+
             if (result != null)
             {
                 foreach (var analyticRecord in result.Data)
                 {
-                    BusinessCaseStatus businessCaseStatus = new BusinessCaseStatus();
-
                     var monthValue = analyticRecord.DimensionValues[0];
                     if (monthValue != null)
                     {
-                        if (monthValue.Name != arrayOfDate[monthCount])
-                            while (monthCount < arrayOfDate.Count && monthValue.Name != arrayOfDate[monthCount])
+                        foreach (var caseStatus in listBusinessCaseStatus)
+                        {
+                            if (caseStatus.MonthYear == monthValue.Name)
                             {
-                                businessCaseStatus = new BusinessCaseStatus();
-                                businessCaseStatus.MonthYear = arrayOfDate[monthCount];
-                                businessCaseStatus.Amount = 0;
-                                businessCaseStatus.Durations = 0;
-                                listBusinessCaseStatus.Add(businessCaseStatus);
-                                monthCount = monthCount + 1;
+                                caseStatus.MonthYear = monthValue.Name;
+                                MeasureValue net;
+                                if (isSale)
+                                    analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out net);
+                                else
+                                    analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out net);
+                                caseStatus.Amount = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
+
+                                MeasureValue duration;
+                                if (isSale)
+                                    analyticRecord.MeasureValues.TryGetValue("SaleDuration", out duration);
+                                else
+                                    analyticRecord.MeasureValues.TryGetValue("CostDuration", out duration);
+                                caseStatus.Durations = Convert.ToDecimal(duration.Value ?? 0.0); 
                             }
-
-                        businessCaseStatus = new BusinessCaseStatus();
-                        businessCaseStatus.MonthYear = monthValue.Name;
-                        MeasureValue net;
-                        if (isSale)
-                            analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out net);
-                        else
-                            analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out net);
-                        businessCaseStatus.Amount = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
-
-
-                        MeasureValue duration;
-                        if (isSale)
-                            analyticRecord.MeasureValues.TryGetValue("SaleDuration", out duration);
-                        else
-                            analyticRecord.MeasureValues.TryGetValue("CostDuration", out duration);
-                        businessCaseStatus.Durations = Convert.ToDecimal(duration.Value ?? 0.0);
-                        listBusinessCaseStatus.Add(businessCaseStatus);
-                        monthCount = monthCount + 1;
+                        }
                     }
                 }
-                if (result.Data.Count() > 0)
-                {
-                    while (monthCount < arrayOfDate.Count )
-                    {
-                        BusinessCaseStatus businessCaseStatus = new BusinessCaseStatus();
-                        businessCaseStatus.MonthYear = arrayOfDate[monthCount];
-                        businessCaseStatus.Amount = 0;
-                        businessCaseStatus.Durations = 0;
-                        listBusinessCaseStatus.Add(businessCaseStatus);
-                        monthCount = monthCount + 1;
-                    }
-                }
-                
-
             }
                 
             return listBusinessCaseStatus;
