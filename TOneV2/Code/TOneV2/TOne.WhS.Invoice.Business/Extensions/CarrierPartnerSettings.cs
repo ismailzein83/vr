@@ -57,75 +57,81 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public bool UseMaskInfo { get; set; }
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
+            string[] partner = context.PartnerId.Split('_');
+            int partnerId = Convert.ToInt32(partner[1]);
             switch (context.InfoType)
             {
                 case "InvoiceRDLCReport":
-                    Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
-                    string[] partner = context.PartnerId.Split('_');
-                    CurrencyManager currencyManager = new CurrencyManager();
-                    CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                    CarrierProfile carrierProfile = null;
-                    string carrierName = null;
-                    string currencySymbol = null;
-                    CompanySetting companySetting = null;
-                    int partnerId = Convert.ToInt32(partner[1]);
-                    if (partner[0].Equals("Profile"))
                     {
-                        companySetting = carrierProfileManager.GetCompanySetting(partnerId);
-                        carrierProfile = carrierProfileManager.GetCarrierProfile(partnerId);
-                        carrierName = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId);
-                        currencySymbol = currencyManager.GetCurrencySymbol(carrierProfile.Settings.CurrencyId);
-                    }
-                    else if (partner[0].Equals("Account"))
-                    {
-                        CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                        companySetting = carrierAccountManager.GetCompanySetting(partnerId);
-                        var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId));
-                        carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
-                        carrierName = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
-                        currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
-                    }
+                        #region InvoiceRDLCReport
+                        Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
+                        CurrencyManager currencyManager = new CurrencyManager();
+                        CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                        CarrierProfile carrierProfile = null;
+                        string carrierName = null;
+                        string currencySymbol = null;
+                        CompanySetting companySetting = null;
+                        if (partner[0].Equals("Profile"))
+                        {
+                            companySetting = carrierProfileManager.GetCompanySetting(partnerId);
+                            carrierProfile = carrierProfileManager.GetCarrierProfile(partnerId);
+                            carrierName = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId);
+                            currencySymbol = currencyManager.GetCurrencySymbol(carrierProfile.Settings.CurrencyId);
+                        }
+                        else if (partner[0].Equals("Account"))
+                        {
+                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                            companySetting = carrierAccountManager.GetCompanySetting(partnerId);
+                            var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId));
+                            carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
+                            carrierName = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
+                            currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
+                        }
 
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Customer, carrierName, true);
-                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
-                    if (carrierProfile != null)
-                    {
-                        
-                        if (carrierProfile.Settings.Address != null)
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, carrierProfile.Settings.Address, true);
-                        if (carrierProfile.Settings.PhoneNumbers != null)
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Customer, carrierName, true);
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
+                        if (carrierProfile != null)
                         {
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, carrierProfile.Settings.PhoneNumbers.ElementAtOrDefault(0), true);
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone1, carrierProfile.Settings.PhoneNumbers.ElementAtOrDefault(1), true);
-                        }
-                        if (carrierProfile.Settings.Faxes != null)
-                        {
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, carrierProfile.Settings.Faxes.ElementAtOrDefault(0), true);
-                        }
-                        if (carrierProfile.Settings.RegistrationNumber != null)
-                        {
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerRegNo, carrierProfile.Settings.RegistrationNumber, true);
-                        }
-                        if (carrierProfile.Settings.TaxSetting != null && carrierProfile.Settings.TaxSetting.VATId != null)
-                        {
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerVatID, carrierProfile.Settings.TaxSetting.VATId, true);
-                        }
-                    }
-                    if (companySetting != null)
-                    {
-                        VRFileManager fileManager = new VRFileManager();
-                        var logo = fileManager.GetFile(companySetting.CompanyLogo);
-                        if (logo != null)
-                        {
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
-                        }
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegNo, companySetting.RegistrationNumber, true);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Name, companySetting.CompanyName, true);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
 
+                            if (carrierProfile.Settings.Address != null)
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, carrierProfile.Settings.Address, true);
+                            if (carrierProfile.Settings.PhoneNumbers != null)
+                            {
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, carrierProfile.Settings.PhoneNumbers.ElementAtOrDefault(0), true);
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone1, carrierProfile.Settings.PhoneNumbers.ElementAtOrDefault(1), true);
+                            }
+                            if (carrierProfile.Settings.Faxes != null)
+                            {
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, carrierProfile.Settings.Faxes.ElementAtOrDefault(0), true);
+                            }
+                            if (carrierProfile.Settings.RegistrationNumber != null)
+                            {
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerRegNo, carrierProfile.Settings.RegistrationNumber, true);
+                            }
+                            if (carrierProfile.Settings.TaxSetting != null && carrierProfile.Settings.TaxSetting.VATId != null)
+                            {
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.CustomerVatID, carrierProfile.Settings.TaxSetting.VATId, true);
+                            }
+                        }
+                        if (companySetting != null)
+                        {
+                            VRFileManager fileManager = new VRFileManager();
+                            var logo = fileManager.GetFile(companySetting.CompanyLogo);
+                            if (logo != null)
+                            {
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Image, Convert.ToBase64String(logo.Content), true);
+                            }
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegNo, companySetting.RegistrationNumber, true);
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Name, companySetting.CompanyName, true);
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
+
+                        }
+                        return rdlcReportParameters;
+                        #endregion
                     }
-                    return rdlcReportParameters;
+                
+                    
             }
             return null;
         }

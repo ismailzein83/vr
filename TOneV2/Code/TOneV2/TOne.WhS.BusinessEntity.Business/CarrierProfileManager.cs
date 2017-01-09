@@ -196,7 +196,39 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
+        public IEnumerable<VRTaxItemDetail> GetTaxItemDetails(int carrierProfileId)
+        {
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            List<VRTaxItemDetail> taxItemDetails = new List<VRTaxItemDetail>();
 
+            var taxesDefinitions = GetTaxesDefinition();
+            if(taxesDefinitions != null)
+            {
+                var carrierProfile = GetCarrierProfile(carrierProfileId);
+                if (carrierProfile.Settings.TaxSetting != null)
+                {
+                    taxItemDetails.Add(new VRTaxItemDetail
+                    {
+                        TaxName = "VAT",
+                        Value = carrierProfile.Settings.TaxSetting.VAT
+                    });
+                    foreach (var tax in carrierProfile.Settings.TaxSetting.Items)
+                    {
+                        var taxDefinition = taxesDefinitions.FirstOrDefault(x=>x.ItemId == tax.ItemId);
+                        if (taxDefinition != null)
+                        {
+                            taxItemDetails.Add(new VRTaxItemDetail
+                            {
+                                TaxName = taxDefinition.Title,
+                                Value = tax.Value
+                            });
+                        }
+                       
+                    }
+                }
+            }
+            return taxItemDetails;
+        }
 
         #endregion
 

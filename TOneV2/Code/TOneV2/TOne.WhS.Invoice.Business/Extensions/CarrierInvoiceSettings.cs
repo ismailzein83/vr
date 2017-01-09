@@ -33,40 +33,58 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
-
-           
+            string[] partner = context.Invoice.PartnerId.Split('_');
+            int partnerId = Convert.ToInt32(partner[1]);
             switch(context.InfoType)
             {
                 case "MailTemplate":
-                 
-                    
-                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    var invoiceDetails = context.Invoice.Details as CustomerInvoiceDetails;
-                    objects.Add("CustomerInvoice", context.Invoice);
-                    string[] partner = context.Invoice.PartnerId.Split('_');
-                    CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                    CarrierProfile carrierProfile = null;
-                    Guid  invoiceTemplateId = Guid.Empty;
-                    switch(partner[0])
                     {
-                        case "Account":
+
+                        Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                        var invoiceDetails = context.Invoice.Details as CustomerInvoiceDetails;
+                        objects.Add("CustomerInvoice", context.Invoice);
+                        CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                        CarrierProfile carrierProfile = null;
+                        Guid invoiceTemplateId = Guid.Empty;
+                        switch (partner[0])
+                        {
+                            case "Account":
+                                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                                var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partner[1]));
+                                carrierProfile = carrierProfileManager.GetCarrierProfile(account.CarrierProfileId);
+                                invoiceTemplateId = carrierAccountManager.GetDefaultInvoiceEmailId(Convert.ToInt32(partner[1]));
+                                break;
+                            case "Profile":
+                                carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partner[1]));
+                                invoiceTemplateId = carrierProfileManager.GetDefaultInvoiceEmailId(Convert.ToInt32(partner[1]));
+                                break;
+                        }
+                        if (carrierProfile != null)
+                        {
+                            objects.Add("Profile", carrierProfile);
+                        }
+                        VRMailManager vrMailManager = new VRMailManager();
+                        VRMailEvaluatedTemplate template = vrMailManager.EvaluateMailTemplate(invoiceTemplateId, objects);
+                        return template;
+                    }
+                case "Taxes":
+                    {
+                        #region Taxes
+                        CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                        IEnumerable<VRTaxItemDetail> taxItemDetails = null;
+                        if (partner[0].Equals("Profile"))
+                        {
+                            taxItemDetails = carrierProfileManager.GetTaxItemDetails(partnerId);
+                        }
+                        else if (partner[0].Equals("Account"))
+                        {
                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                            var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partner[1]));
-                            carrierProfile = carrierProfileManager.GetCarrierProfile(account.CarrierProfileId);
-                            invoiceTemplateId = carrierAccountManager.GetDefaultInvoiceEmailId(Convert.ToInt32(partner[1]));
-                            break;
-                        case "Profile":
-                            carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partner[1]));
-                            invoiceTemplateId = carrierProfileManager.GetDefaultInvoiceEmailId(Convert.ToInt32(partner[1]));
-                               break;
+                            var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId));
+                            taxItemDetails = carrierProfileManager.GetTaxItemDetails(carrierAccount.CarrierProfileId);
+                        }
+                        return taxItemDetails;
+                        #endregion
                     }
-                    if(carrierProfile != null)
-                    {
-                         objects.Add("Profile", carrierProfile);
-                    }
-                    VRMailManager vrMailManager = new VRMailManager();
-                    VRMailEvaluatedTemplate template = vrMailManager.EvaluateMailTemplate(invoiceTemplateId, objects);
-                    return template;
             }
             return null;
         }
