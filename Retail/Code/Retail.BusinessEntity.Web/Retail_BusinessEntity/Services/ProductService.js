@@ -63,12 +63,42 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/ProductPackageItemEditor.html', parameters, settings);
         }
 
+        function addRecurringChargeRuleSet(onRecurringChargeRuleSetAdded) {
+
+            var parameters = {
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onRecurringChargeRuleSetAdded = onRecurringChargeRuleSetAdded
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/RecurringChargeRuleSetEditor.html', parameters, settings);
+        };
+        function editRecurringChargeRuleSet(recurringChargeRuleSet, onRecurringChargeRuleSetUpdated) {
+
+            var parameters = {
+                recurringChargeRuleSet: recurringChargeRuleSet
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onPackageItemUpdated = onPackageItemUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/RecurringChargeRuleSetEditor.html', parameters, settings);
+        }
+
 
         return {
             addProduct: addProduct,
             editProduct: editProduct,
             addProductPackageItem: addProductPackageItem,
-            editProductPackageItem: editProductPackageItem
+            editProductPackageItem: editProductPackageItem,
+            addRecurringChargeRuleSet: addRecurringChargeRuleSet,
+            editRecurringChargeRuleSet: editRecurringChargeRuleSet
         };
     }
 

@@ -1,9 +1,31 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<div vr-modalcontent ng-controller="Retail_BE_RecurringChargeRuleSetEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formPackageItemEditor">
 
-</body>
-</html>
+            <!--<vr-row>
+                <span vr-disabled="scopeModel.isPackageSelectorDisabled">
+                    <retail-be-package-selector on-ready="scopeModel.onPackageSelectorReady"
+                                                selectedvalues="scopeModel.selectedPackage"
+                                                normal-col-num="6"
+                                                isrequired="true">
+                    </retail-be-package-selector>
+                </span>
+            </vr-row>-->
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.name" label="'Name'"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <!--<retail-be-productpackageitem-accountchargeevaluator on-ready="scopeModel.onAccountChargeEvaluatorSelectiveReady" normal-col-num="6"></retail-be-productpackageitem-accountchargeevaluator>-->
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPackageItemEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

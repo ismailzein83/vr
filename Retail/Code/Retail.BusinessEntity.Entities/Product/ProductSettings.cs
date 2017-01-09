@@ -14,7 +14,7 @@ namespace Retail.BusinessEntity.Entities
 
         public Dictionary<int, ProductPackageItem> Packages { get; set; }
 
-        public List<AccountRecurringChargeRuleSet> RecurringPricingRuleSets { get; set; }
+        public List<AccountRecurringChargeRuleSet> RecurringChargeRuleSets { get; set; }
         
         public ProductExtendedSettings ExtendedSettings { get; set; }
     }

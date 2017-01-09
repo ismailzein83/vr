@@ -19,14 +19,17 @@
 
                     </vr-row>
                 </vr-tab>
+                <vr-tab header="'Packages'" ng-if="scopeModel.selectedProductDefinition != undefined" vr-loader="scopeModel.isPackagesTabLoading">
+                    <retail-be-productpackageitem-management on-ready="scopeModel.onPackageItemsDirectiveReady"></retail-be-productpackageitem-management>
+                </vr-tab>
+                <!--<vr-tab header="'Recurring Charge'" ng-if="scopeModel.selectedProductDefinition != undefined" vr-loader="scopeModel.isRecurringChargeRuleSetsTabLoading">
+                    <retail-be-recurringchargeruleset-management on-ready="scopeModel.onRecurringChargeRuleSetsDirectiveReady"></retail-be-recurringchargeruleset-management>
+                </vr-tab>-->
                 <vr-directivewrapper ng-if="scopeModel.selectedProductDefinition != undefined"
                                      directive="scopeModel.selectedProductDefinition.RuntimeEditor"
                                      on-ready="scopeModel.onProductExtendedSettingsDirectiveReady"
                                      vr-loader="scopeModel.isProductExtendedSettingsDirectiveLoading">
                 </vr-directivewrapper>
-                <vr-tab header="'Packages'" ng-if="scopeModel.selectedProductDefinition != undefined" vr-loader="scopeModel.isPackagesTabLoading">
-                    <retail-be-productpackageitem-management on-ready="scopeModel.onPackageItemsDirectiveReady"></retail-be-productpackageitem-management>
-                </vr-tab>
             </vr-tabs>
 
         </vr-form>

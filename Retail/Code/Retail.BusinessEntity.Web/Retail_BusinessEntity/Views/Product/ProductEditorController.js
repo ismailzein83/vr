@@ -12,7 +12,6 @@
         var productEntity;
         var productEditorRuntime
         var productDefinitionId;
-        //var extendedSettingsEditorRuntime;
 
         var productDefinitionSelectorAPI;
         var productDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -20,6 +19,9 @@
 
         var packageItemsDirectiveAPI;
         var packageItemsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var recurringChargeRuleSetsDirectiveAPI;
+        var recurringChargeRuleSetsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var productExtendedSettingsDirectiveAPI;
         var productExtendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -34,6 +36,7 @@
             if (parameters != undefined) {
                 productId = parameters.productId;
             }
+
             isEditMode = (productId != undefined);
         }
         function defineScope() {
@@ -48,6 +51,10 @@
             $scope.scopeModel.onPackageItemsDirectiveReady = function (api) {
                 packageItemsDirectiveAPI = api;
                 packageItemsDirectiveReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onRecurringChargeRuleSetsDirectiveReady = function (api) {
+                recurringChargeRuleSetsDirectiveAPI = api;
+                recurringChargeRuleSetsDirectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.onProductExtendedSettingsDirectiveReady = function (api) {
                 productExtendedSettingsDirectiveAPI = api;
@@ -173,7 +180,7 @@
             var productDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             productDefinitionSelectorReadyDeferred.promise.then(function () {
-                
+
                 var productDefinitionPayload = {};
                 if (productEntity != undefined && productEntity.Settings != undefined) {
                     productDefinitionPayload.selectedIds = productEntity.Settings.ProductDefinitionId;
@@ -205,6 +212,32 @@
                 $scope.scopeModel.isPackagesTabLoading = false;
             });
         }
+        function loadRecurringChargeRuleSetsDirective() {
+            //if (!isEditMode)
+            //    return;
+
+            $scope.scopeModel.isRecurringChargeRuleSetsTabLoading = true;
+
+            var recurringChargeRuleSetsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            //UtilsService.waitMultiplePromises([packageItemsDirectiveReadyDeferred.promise, productDefinitionSelectionChangedDeferred.promise]).then(function () {
+
+            recurringChargeRuleSetsDirectiveReadyDeferred.promise.then(function () {
+
+                //var recurringChargeRuleSetsPayload = { productDefinitionId: productDefinitionId };
+                var recurringChargeRuleSetsPayload;
+                if (productEntity != undefined && productEntity.Settings != undefined) {
+                    var recurringChargeRuleSetsPayload = {
+                        recurringChargeRuleSets: productEntity.Settings.RecurringChargeRuleSets
+                    }
+                }
+                VRUIUtilsService.callDirectiveLoad(recurringChargeRuleSetsDirectiveAPI, recurringChargeRuleSetsPayload, recurringChargeRuleSetsDirectiveLoadDeferred);
+            });
+
+            return recurringChargeRuleSetsDirectiveLoadDeferred.promise.then(function () {
+                $scope.scopeModel.isRecurringChargeRuleSetsTabLoading = false;
+            });
+        }
         function loadProductExtendedSettingsDirectiveWrapper() {
             if (!isEditMode)
                 return;
@@ -215,12 +248,9 @@
 
             UtilsService.waitMultiplePromises([productExtendedSettingsDirectiveReadyDeferred.promise, productDefinitionSelectionChangedDeferred.promise]).then(function () {
 
-                //var productExtendedSettingsDirectivePayload = { context: getContext() };
-
                 var productExtendedSettingsDirectivePayload = {};
                 if (productEntity != undefined && productEntity.Settings != undefined && productEntity.Settings.ExtendedSettings) {
                     productExtendedSettingsDirectivePayload.extendedSettings = productEntity.Settings.ExtendedSettings;
-                    //productExtendedSettingsDirectivePayload.extendedSettingsEditorRuntime = extendedSettingsEditorRuntime;
                 }
                 VRUIUtilsService.callDirectiveLoad(productExtendedSettingsDirectiveAPI, productExtendedSettingsDirectivePayload, productExtendedSettingsDirectiveLoadDeferred);
             });
@@ -274,21 +304,8 @@
                     ExtendedSettings: productExtendedSettingsDirectiveAPI.getData()
                 }
             };
-
             return obj;
         }
-
-        //function getContext() {
-        //    var context = {
-        //        getProductDefinitionPackageFilter: function () {
-        //            return {
-        //                $type: "Retail.BusinessEntity.Business.ProductDefinitionPackageFilter, Retail.BusinessEntity.Business",
-        //                ProductDefinitionId: productDefinitionId
-        //            };
-        //        }
-        //    };
-        //    return context;
-        //}
     }
 
     appControllers.controller('Retail_BE_ProductEditorController', productEditorController);
