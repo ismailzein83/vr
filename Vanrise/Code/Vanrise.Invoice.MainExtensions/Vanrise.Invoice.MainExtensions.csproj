@@ -71,6 +71,7 @@
     <Compile Include="InvoiceActionSettings\OpenRDLCReportActionManager.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceFileConvertor\InvoiceRDLCFileConverter.cs" />
     <Compile Include="InvoiceDataSourceSettings\ItemGroupingDataSourceSettings.cs" />
+    <Compile Include="InvoiceDataSourceSettings\TaxesDataSourceSettings.cs" />
     <Compile Include="InvoiceGeneratorActionFilter\InvoiceGeneratorActionFilterGroupCondition.cs" />
     <Compile Include="InvoiceActionSettings\LockInvoiceAction.cs" />
     <Compile Include="InvoiceActionSettings\RecreateInvoiceAction.cs" />
