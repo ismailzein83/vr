@@ -116,7 +116,7 @@
             return '<vr-row><vr-columns colnum="{{sourceBeReaderDefinitionCtrl.normalColNum * 2}}">'
                     + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="sourceBeReaderDefinitionCtrl.isrequired" hideremoveicon></vr-select>'
                 + '</vr-columns></vr-row>'
-                + '<vr-row><vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{sourceBeReaderDefinitionCtrl.normalColNum}}" isrequired="sourceBeReaderDefinitionCtrl.isrequired" customvalidate="sourceBeReaderDefinitionCtrl.customvalidate"></vr-directivewrapper></vr-row>';
+                + '<vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{sourceBeReaderDefinitionCtrl.normalColNum}}" isrequired="sourceBeReaderDefinitionCtrl.isrequired" customvalidate="sourceBeReaderDefinitionCtrl.customvalidate"></vr-directivewrapper>';
         }
     }
 

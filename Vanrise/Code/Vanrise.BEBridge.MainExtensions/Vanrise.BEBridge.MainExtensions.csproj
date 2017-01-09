@@ -76,6 +76,7 @@
     <Compile Include="SourceBEReaders\MicrosoftCRMSourceReader.cs" />
     <Compile Include="SourceBEReaders\FileSourceReader.cs" />
     <Compile Include="SourceBEReaders\FTPSourceReader.cs" />
+    <Compile Include="SourceBEReaders\SqlSourceReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">
