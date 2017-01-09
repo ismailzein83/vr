@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBAdapterRangesState.cs" />
-    <Compile Include="DBAdapterState.cs" />
     <Compile Include="DbBaseReceiveAdapter.cs" />
     <Compile Include="PostgresReceiveAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

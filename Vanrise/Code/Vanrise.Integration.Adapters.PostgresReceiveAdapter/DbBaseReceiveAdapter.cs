@@ -81,13 +81,13 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
                 prm.Value = value;
         }
 
-        public void UpdateParametersValues(DbCommand command, DBAdapterRangeState rangeToRead)
+        public void UpdateParametersValues(DbCommand command, DbAdapterRangeState rangeToRead)
         {
             SetParameterValue(command.Parameters["@RangeStart"], rangeToRead.LastImportedId != null ? rangeToRead.LastImportedId : rangeToRead.RangeStart);
             SetParameterValue(command.Parameters["@RangeEnd"], rangeToRead.RangeEnd);
         }
 
-        public void ReadRange(IAdapterImportDataContext context, DbBaseAdapterArgument dbAdapterArgument, bool isLastRange, DBAdapterRangeState rangeToRead, string queryWithTop1, string queryWithNoTop, ref DBReaderImportedData data, DbCommand command)
+        public void ReadRange(IAdapterImportDataContext context, DbBaseAdapterArgument dbAdapterArgument, bool isLastRange, DbAdapterRangeState rangeToRead, string queryWithTop1, string queryWithNoTop, ref DBReaderImportedData data, DbCommand command)
         {
             LogInformation("Started Reading Range {0} - {1}. Last Imported Id: {2}", rangeToRead.RangeStart, rangeToRead.RangeEnd, rangeToRead.LastImportedId);
             DateTime rangeReadStart = DateTime.Now;
@@ -141,9 +141,9 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
 
                 context.GetStateWithLock((state) =>
                 {
-                    DBAdapterRangesState rangesState = state as DBAdapterRangesState;
+                    DbAdapterRangesState rangesState = state as DbAdapterRangesState;
 
-                    DBAdapterRangeState matchCurrentRange = GetMatchRangeFromState(rangeToRead, rangesState);
+                    DbAdapterRangeState matchCurrentRange = GetMatchRangeFromState(rangeToRead, rangesState);
                     matchCurrentRange.LastImportedId = rangeToRead.LastImportedId;
                     matchCurrentRange.RangeStart = rangeToRead.RangeStart;
                     matchCurrentRange.RangeEnd = rangeToRead.RangeEnd;
@@ -162,7 +162,7 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
             LogInformation("Finished Reading Range {0} - {1} in {2}. Last Imported Id: {3}", rangeToRead.RangeStart, rangeToRead.RangeEnd, (DateTime.Now - rangeReadStart), rangeToRead.LastImportedId);
         }
 
-        private bool TrySetRangeEnd(IAdapterImportDataContext context, DbBaseAdapterArgument dbAdapterArgument, DBAdapterRangeState rangeToRead, string queryWithTop1, string queryWithNoTop, DbCommand command)
+        private bool TrySetRangeEnd(IAdapterImportDataContext context, DbBaseAdapterArgument dbAdapterArgument, DbAdapterRangeState rangeToRead, string queryWithTop1, string queryWithNoTop, DbCommand command)
         {
             command.CommandText = queryWithTop1;
             using (var reader = command.ExecuteReader())
@@ -184,7 +184,7 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
                 return false;
         }
 
-        private void OpenRangeEndAndTryGetData(IAdapterImportDataContext context, DbBaseAdapterArgument dbAdapterArgument, DBAdapterRangeState rangeToRead, string queryWithTop1, string queryWithNoTop, ref DBReaderImportedData data, DbCommand command)
+        private void OpenRangeEndAndTryGetData(IAdapterImportDataContext context, DbBaseAdapterArgument dbAdapterArgument, DbAdapterRangeState rangeToRead, string queryWithTop1, string queryWithNoTop, ref DBReaderImportedData data, DbCommand command)
         {
             command.CommandText = queryWithTop1;
             var originalRangeEnd = rangeToRead.RangeEnd;
@@ -205,7 +205,7 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
                 //ensure that the current range is the last range and update it in the adapter state
                 context.GetStateWithLock((state) =>
                 {
-                    DBAdapterRangesState rangesState = state as DBAdapterRangesState;
+                    DbAdapterRangesState rangesState = state as DbAdapterRangesState;
                     var matchRange = GetMatchRangeFromState(rangeToRead, rangesState);
                     if (rangesState.Ranges.IndexOf(matchRange) == rangesState.Ranges.Count - 1)//last range
                         matchRange.RangeEnd = rangeToRead.RangeEnd;
@@ -234,7 +234,7 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
                 rangeToRead.RangeEnd = originalRangeEnd;
         }
 
-        private void LogBatchReadingProgress(DBAdapterRangeState rangeToRead, DateTime batchReadStart, object newLastImportedId)
+        private void LogBatchReadingProgress(DbAdapterRangeState rangeToRead, DateTime batchReadStart, object newLastImportedId)
         {
             if (newLastImportedId == null || newLastImportedId == DBNull.Value)
                 LogError("LastImportedId is Null in Range {0} - {1}. Original LastImportedId '{2}'", rangeToRead.RangeStart, rangeToRead.RangeEnd, rangeToRead.LastImportedId);
@@ -244,13 +244,13 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
                 LogWarning("Batch Read From Range {0} - {1} in {2}. LastImportedId is not changed '{3}'", rangeToRead.RangeStart, rangeToRead.RangeEnd, (DateTime.Now - batchReadStart), newLastImportedId);
         }
 
-        public void ReleaseRange(IAdapterImportDataContext context, DBAdapterRangeState range)
+        public void ReleaseRange(IAdapterImportDataContext context, DbAdapterRangeState range)
         {
             context.GetStateWithLock((state) =>
             {
-                DBAdapterRangesState rangesState = state as DBAdapterRangesState;
+                DbAdapterRangesState rangesState = state as DbAdapterRangesState;
 
-                DBAdapterRangeState matchCurrentRange = GetMatchRangeFromState(range, rangesState);
+                DbAdapterRangeState matchCurrentRange = GetMatchRangeFromState(range, rangesState);
                 range = matchCurrentRange;
                 range.LockedByProcessId = null;
                 var indexOfCurrentRange = rangesState.Ranges.IndexOf(range);
@@ -277,21 +277,21 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
             });
 
         }
-        private DBAdapterRangeState GetMatchRangeFromState(DBAdapterRangeState range, DBAdapterRangesState rangesState)
+        private DbAdapterRangeState GetMatchRangeFromState(DbAdapterRangeState range, DbAdapterRangesState rangesState)
         {
             return rangesState.Ranges.FirstOrDefault(itm => itm.RangeId == range.RangeId);
         }
-        public DBAdapterRangeState GetAndLockNextRangeToRead(IAdapterImportDataContext context, DBAdapterRangeState currentRange, DbBaseAdapterArgument dbAdapterArgument, out bool isLastRange)
+        public DbAdapterRangeState GetAndLockNextRangeToRead(IAdapterImportDataContext context, DbAdapterRangeState currentRange, DbBaseAdapterArgument dbAdapterArgument, out bool isLastRange)
         {
-            DBAdapterRangeState rangeToRead = null;
+            DbAdapterRangeState rangeToRead = null;
 
             bool islastRange_local = false;
 
             context.GetStateWithLock((state) =>
             {
-                DBAdapterRangesState rangesState = state as DBAdapterRangesState;
+                DbAdapterRangesState rangesState = state as DbAdapterRangesState;
                 if (rangesState == null)
-                    rangesState = new DBAdapterRangesState { Ranges = new List<DBAdapterRangeState>() };
+                    rangesState = new DbAdapterRangesState { Ranges = new List<DbAdapterRangeState>() };
 
                 RunningProcessManager runningProcessManager = new RunningProcessManager();
                 IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
@@ -316,7 +316,7 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
 
                 if (rangeToRead == null)
                 {
-                    DBAdapterRangeState lastRange = rangesState.Ranges.LastOrDefault();
+                    DbAdapterRangeState lastRange = rangesState.Ranges.LastOrDefault();
                     if (lastRange == null //no ranges yet (first time import)
                             ||
                             lastRange.LastImportedId != null)//last range has imported data
@@ -338,10 +338,10 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
             return rangeToRead;
         }
 
-        private DBAdapterRangeState CreateRange(DbBaseAdapterArgument dbAdapterArgument, DBAdapterRangesState rangesState)
+        private DbAdapterRangeState CreateRange(DbBaseAdapterArgument dbAdapterArgument, DbAdapterRangesState rangesState)
         {
-            DBAdapterRangeState lastRange = rangesState.Ranges.LastOrDefault();
-            DBAdapterRangeState newRange = new DBAdapterRangeState() { RangeId = Guid.NewGuid() };
+            DbAdapterRangeState lastRange = rangesState.Ranges.LastOrDefault();
+            DbAdapterRangeState newRange = new DbAdapterRangeState() { RangeId = Guid.NewGuid() };
             if (lastRange != null)
             {
                 newRange.RangeStart = lastRange.RangeEnd;
@@ -350,7 +350,7 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
             return newRange;
         }
 
-        private static void SetRangeEnd(DBAdapterRangeState range, DbBaseAdapterArgument dbAdapterArgument)
+        private static void SetRangeEnd(DbAdapterRangeState range, DbBaseAdapterArgument dbAdapterArgument)
         {
             if (dbAdapterArgument.NumberOffSet.HasValue)
                 range.RangeEnd = Convert.ToInt64(range.RangeStart) + dbAdapterArgument.NumberOffSet.Value;

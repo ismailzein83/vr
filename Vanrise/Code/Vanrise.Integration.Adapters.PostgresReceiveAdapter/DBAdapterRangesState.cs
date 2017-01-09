@@ -7,12 +7,12 @@ using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.DBReceiveAdapter
 {
-    public class DBAdapterRangesState : BaseAdapterState
+    public class DbAdapterRangesState : BaseAdapterState
     {
-        public List<DBAdapterRangeState> Ranges { get; set; }
+        public List<DbAdapterRangeState> Ranges { get; set; }
     }
 
-    public class DBAdapterRangeState
+    public class DbAdapterRangeState
     {
         public Guid RangeId { get; set; }
 

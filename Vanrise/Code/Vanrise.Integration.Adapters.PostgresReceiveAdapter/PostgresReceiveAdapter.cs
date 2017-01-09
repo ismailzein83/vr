@@ -27,7 +27,7 @@ namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
         public void RunInParallelMode(IAdapterImportDataContext context, DbBaseAdapterArgument dbAdapterArgument)
         {
             bool isLastRange;
-            DBAdapterRangeState rangeToRead = GetAndLockNextRangeToRead(context, null, dbAdapterArgument, out isLastRange);
+            DbAdapterRangeState rangeToRead = GetAndLockNextRangeToRead(context, null, dbAdapterArgument, out isLastRange);
 
             if (rangeToRead == null)
             {

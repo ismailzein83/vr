@@ -77,6 +77,7 @@
     <Compile Include="InvoiceActionSettings\RecreateInvoiceAction.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\SendEmailAction.cs" />
     <Compile Include="InvoiceActionSettings\SetInvoicePaidAction.cs" />
+    <Compile Include="InvoiceReader\InvoiceSourceReader.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionController.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSection.cs" />
     <Compile Include="InvoiceUISubSectionSettings\InvoiceItemSubSection.cs" />
@@ -101,6 +102,10 @@
     <Compile Include="VRObjectTypes\InvoiceObjectType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">
+      <Project>{9e370ac3-9718-4e10-ab12-b71605880d67}</Project>
+      <Name>Vanrise.BEBridge.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
       <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
       <Name>Vanrise.Common.Business</Name>
