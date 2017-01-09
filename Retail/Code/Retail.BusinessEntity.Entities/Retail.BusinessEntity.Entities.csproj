@@ -84,6 +84,7 @@
     <Compile Include="Package\IPackageFilter.cs" />
     <Compile Include="Product\Product.cs" />
     <Compile Include="Product\ProductDetail.cs" />
+    <Compile Include="Product\ProductEditorRuntime.cs" />
     <Compile Include="Product\ProductExtendedSettings.cs" />
     <Compile Include="Product\ProductInfo.cs" />
     <Compile Include="Product\ProductInfoFilter.cs" />
