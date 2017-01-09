@@ -15,8 +15,8 @@
         var packageSelectorAPI;
         var packageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var accountConditionSelectiveAPI;
-        var accountConditionSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountChargeEvaluatorSelectiveAPI;
+        var accountChargeEvaluatorSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -24,8 +24,6 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
-            console.log(parameters);
 
             if (parameters != undefined) {
                 packageItemEntity = parameters.packageItem;
@@ -37,15 +35,16 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.isPackageSelectorDisabled = isEditMode ? true : false;
 
             $scope.scopeModel.onPackageSelectorReady = function (api) {
                 packageSelectorAPI = api;
                 packageSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onAccountConditionSelectiveReady = function (api) {
-                accountConditionSelectiveAPI = api;
-                accountConditionSelectiveReadyDeferred.resolve();
+            $scope.scopeModel.onAccountChargeEvaluatorSelectiveReady = function (api) {
+                accountChargeEvaluatorSelectiveAPI = api;
+                accountChargeEvaluatorSelectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -64,7 +63,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPackageSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPackageSelector, loadAccountChargeEvaluatorSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -72,7 +71,7 @@
         }
         function setTitle() {
             $scope.title = (isEditMode) ?
-                UtilsService.buildTitleForUpdateEditor((packageItemEntity != undefined) ? packageItemEntity.FieldName : null, 'Package') :
+                UtilsService.buildTitleForUpdateEditor((packageItemEntity != undefined) ? packageItemEntity.PackageName : null, 'Package') :
                 UtilsService.buildTitleForAddEditor('Package');
         }
         function loadStaticData() {
@@ -86,7 +85,7 @@
 
                 var packageSelectorPayload = {
                     filter: {
-                        //ExcludedPackageIds: excludedPackageIds,
+                        ExcludedPackageIds: !isEditMode ? excludedPackageIds: undefined,
                         Filters: [{
                             $type: "Retail.BusinessEntity.Business.ProductDefinitionPackageFilter, Retail.BusinessEntity.Business",
                             ProductDefinitionId: productDefinitionId
@@ -101,21 +100,21 @@
 
             return packageSelectorLoadDeferred.promise;
         }
-        function loadAccountConditionSelective() {
-            var accountConditionSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadAccountChargeEvaluatorSelective() {
+            var accountChargeEvaluatorSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            accountConditionSelectiveReadyDeferred.promise.then(function () {
+            accountChargeEvaluatorSelectiveReadyDeferred.promise.then(function () {
 
-                var accountConditionSelectivePayload;
+                var accountChargeEvaluatorSelectivePayload;
                 if (packageItemEntity != undefined) {
-                    accountConditionSelectivePayload = {
-                        beFilter: packageItemEntity.SubAccountsAvailabilityCondition
+                    accountChargeEvaluatorSelectivePayload = {
+                        chargeEvaluator: packageItemEntity.ChargeEvaluator
                     };
                 }
-                VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(accountChargeEvaluatorSelectiveAPI, accountChargeEvaluatorSelectivePayload, accountChargeEvaluatorSelectiveLoadDeferred);
             });
 
-            return accountConditionSelectiveLoadDeferred.promise;
+            return accountChargeEvaluatorSelectiveLoadDeferred.promise;
         }
 
         function insert() {
@@ -137,15 +136,12 @@
 
         function buildPackageItemObjectFromScope() {
 
-            //var accountGenericFieldDefinitionSelectorObj = packageSelectorAPI.getData();
-
             var selectedPackage = $scope.scopeModel.selectedPackage;
-
-            console.log(selectedPackage);
 
             return {
                 PackageId: selectedPackage != undefined ? selectedPackage.PackageId : undefined,
-                PackageName: selectedPackage != undefined ? selectedPackage.Name : undefined
+                PackageName: selectedPackage != undefined ? selectedPackage.Name : undefined,
+                ChargeEvaluator: accountChargeEvaluatorSelectiveAPI.getData()
             };
         }
     }

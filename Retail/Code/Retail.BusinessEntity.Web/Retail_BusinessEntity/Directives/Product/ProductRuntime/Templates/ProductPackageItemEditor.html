@@ -3,16 +3,16 @@
         <vr-form name="formPackageItemEditor">
 
             <vr-row>
-                <retail-be-package-selector on-ready="scopeModel.onPackageSelectorReady"
-                                            selectedvalues="scopeModel.selectedPackage"
-                                            normal-col-num="6"
-                                            isrequired="true">
-                </retail-be-package-selector>
+                <span vr-disabled="scopeModel.isPackageSelectorDisabled">
+                    <retail-be-package-selector on-ready="scopeModel.onPackageSelectorReady"
+                                                selectedvalues="scopeModel.selectedPackage"
+                                                normal-col-num="6"
+                                                isrequired="true">
+                    </retail-be-package-selector>
+                </span>
             </vr-row>
-            <!--<retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
-                                                  ng-show="scopeModel.IsAvailableInSubAccounts">
-            </retail-be-accountcondition-selective>-->
-
+            <retail-be-productpackageitem-accountchargeevaluator on-ready="scopeModel.onAccountChargeEvaluatorSelectiveReady" normal-col-num="6"></retail-be-productpackageitem-accountchargeevaluator>
+        
         </vr-form>
     </vr-modalbody>
     <div>

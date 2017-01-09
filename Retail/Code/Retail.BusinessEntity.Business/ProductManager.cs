@@ -45,7 +45,7 @@ namespace Retail.BusinessEntity.Business
             string packageName;
             if (product != null && product.Settings != null && product.Settings.Packages != null)
             {
-                foreach (var packageItem in product.Settings.Packages)
+                foreach (var packageItem in product.Settings.Packages.Values)
                 {
                     if (!packageNameByIds.TryGetValue(packageItem.PackageId, out packageName))
                         packageNameByIds.Add(packageItem.PackageId, packageManager.GetPackageName(packageItem.PackageId));

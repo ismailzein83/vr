@@ -167,6 +167,7 @@
     <Compile Include="Controllers\CreditClassController.cs" />
     <Compile Include="Controllers\PopController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\RecurringChargeController.cs" />
     <Compile Include="Controllers\RevenueComparisonController.cs" />
     <Compile Include="Controllers\StatusChargingSetController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
@@ -437,6 +438,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\retail-be-productdefinition-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionExtendedSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\AccountChargeEvaluators\retail-be-accountchargeevaluator-fixedcharge.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\AccountChargeEvaluators\Templates\FixedChargeAccountChargeEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\retail-be-productextendedsettings-prepaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\Templates\PostPaidSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\retail-be-productextendedsettings-postpaid.js" />
@@ -492,6 +495,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />

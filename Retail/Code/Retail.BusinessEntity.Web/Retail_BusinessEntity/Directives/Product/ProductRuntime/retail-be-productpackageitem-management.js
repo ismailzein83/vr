@@ -76,37 +76,20 @@
                         packages = payload.packages;
                     }
 
+                    //Loading Grid
+                    var packageItemsByPriority = {};
                     if (packages != undefined) {
-                        for (var index = 0; index < packages.length; index++) {
-                            var currentPackageItem = packages[index];
-                            currentPackageItem = extendPackageItemObj(currentPackageItem)
-                            $scope.scopeModel.packageItems.push({ Entity: currentPackageItem });
+                        for (var key in packages) {
+                            if (key != "$type") {
+                                var currentPackageItem = packages[key];
+                                currentPackageItem = extendPackageItemObj(currentPackageItem);
+                                packageItemsByPriority[currentPackageItem.Priority] = currentPackageItem;
+                            }
                         }
                     }
-
-                    //var loadAccountFieldsPromise = loadAccountFields();
-                    //promises.push(loadAccountFieldsPromise);
-
-                    //loadAccountFieldsPromise.then(function () {
-
-                    //    //Loading ColumnDefinitions Grid
-                    //    if (accountGridDefinition != undefined && accountGridDefinition.ColumnDefinitions != undefined) {
-                    //        for (var index in accountGridDefinition.ColumnDefinitions) {
-                    //            if (index != "$type") {
-                    //                var columnDefinition = accountGridDefinition.ColumnDefinitions[index];
-                    //                extendColumnDefinitionObj(columnDefinition);
-                    //                $scope.scopeModel.packageItems.push({ Entity: columnDefinition });
-                    //            }
-                    //        }
-                    //    }
-                    //});
-
-                    //function loadAccountFields() {
-
-                    //    return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo().then(function (response) {
-                    //        accountFields = response;
-                    //    });
-                    //}
+                    for (var priority in packageItemsByPriority) {
+                        $scope.scopeModel.packageItems.push({ Entity: packageItemsByPriority[priority] });
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -115,10 +98,12 @@
 
                     var packageItems;
                     if ($scope.scopeModel.packageItems.length > 0) {
-                        packageItems = [];
+                        packageItems = {};
+                        var priority = 1;
                         for (var index = 0; index < $scope.scopeModel.packageItems.length; index++) {
                             var packageItem = $scope.scopeModel.packageItems[index].Entity;
-                            packageItems.push(packageItem);
+                            packageItem.Priority = priority++;
+                            packageItems[packageItem.PackageId] = packageItem;
                         }
                     }
                     return packageItems;
@@ -137,7 +122,7 @@
             }
             function editPackageItem(packageItem) {
                 var onPackageItemUpdated = function (updatedPackageItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.packageItems, updatedPackageItem.Entity.PackageName, 'Entity.PackageName');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.packageItems, updatedPackageItem.PackageName, 'Entity.PackageName');
                     $scope.scopeModel.packageItems[index] = { Entity: updatedPackageItem };
                 };
 
@@ -148,10 +133,8 @@
                 if (packageItem == undefined)
                     return;
 
-                return {
-                    PackageId: packageItem.PackageId,
-                    PackageName: packageNameByIds[packageItem.PackageId]
-                }
+                packageItem.PackageName = packageNameByIds[packageItem.PackageId];
+                return packageItem;
             }
             function getExcludedPackageIds() {
                 var packageItems = $scope.scopeModel.packageItems;

@@ -10,6 +10,8 @@ namespace Retail.BusinessEntity.Entities
     {
         public int PackageId { get; set; }
 
+        public int Priority { get; set; }
+
         public AccountChargeEvaluator ChargeEvaluator { get; set; }
     }
 }

@@ -169,6 +169,7 @@
     <Compile Include="PopManager.cs" />
     <Compile Include="ProductDefinitionManager.cs" />
     <Compile Include="ProductManager.cs" />
+    <Compile Include="RecurringChargeManager.cs" />
     <Compile Include="RequestManager.cs" />
     <Compile Include="RevenueComparisonManager.cs" />
     <Compile Include="StatusChargingManager.cs" />

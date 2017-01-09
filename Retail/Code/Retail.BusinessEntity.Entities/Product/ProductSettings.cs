@@ -12,7 +12,7 @@ namespace Retail.BusinessEntity.Entities
 
         public int PricingCurrencyId { get; set; }
 
-        public List<ProductPackageItem> Packages { get; set; }
+        public Dictionary<int, ProductPackageItem> Packages { get; set; }
 
         public List<AccountRecurringChargeRuleSet> RecurringPricingRuleSets { get; set; }
         
