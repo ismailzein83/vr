@@ -445,6 +445,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-productpackageitem-accountchargeevaluator.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-product-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-productpackageitem-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\AccountChargeEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductPackageItemEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductPackageItemManagementTemplate.html" />
