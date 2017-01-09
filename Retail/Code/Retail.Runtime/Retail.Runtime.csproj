@@ -627,6 +627,26 @@
       <Project>{59eff472-b705-4ac1-b04c-c23ed4c82020}</Project>
       <Name>Retail.Voice.MainExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Business\Retail.Zajil.Business.csproj">
+      <Project>{5725b506-d34a-481c-b630-3d0ae3aa410b}</Project>
+      <Name>Retail.Zajil.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Data.SQL\Retail.Zajil.Data.SQL.csproj">
+      <Project>{c138c333-cb11-460a-8559-ae2e5e3aa087}</Project>
+      <Name>Retail.Zajil.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Data\Retail.Zajil.Data.csproj">
+      <Project>{7ccae9ac-6cea-419a-b08a-5b827b8746c6}</Project>
+      <Name>Retail.Zajil.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Entities\Retail.Zajil.Entities.csproj">
+      <Project>{cb49d2bd-4f30-4841-92ca-c98a1b9128df}</Project>
+      <Name>Retail.Zajil.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.MainExtensions\Retail.Zajil.MainExtensions.csproj">
+      <Project>{edbaa879-19f5-43da-9205-998e5529ffca}</Project>
+      <Name>Retail.Zajil.MainExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

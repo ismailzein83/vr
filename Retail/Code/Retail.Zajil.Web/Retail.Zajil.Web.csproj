@@ -7,12 +7,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{63CD6FFF-D821-4D20-9661-C7C3F1A6AB63}</ProjectGuid>
+    <ProjectGuid>{EC403AB6-B9FD-4437-8AE9-935F26F3C939}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Retail.Ringo.Web</RootNamespace>
-    <AssemblyName>Retail.Ringo.Web</AssemblyName>
+    <RootNamespace>Retail.Zajil.Web</RootNamespace>
+    <AssemblyName>Retail.Zajil.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -48,10 +48,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
@@ -64,10 +61,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
@@ -79,8 +72,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -88,12 +87,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Web.Base">
@@ -105,53 +99,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\RingoMessageController.cs" />
-    <Compile Include="Controllers\RingoReportSheetController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Retail_Ringo\Constant\ModuleConfig.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-entitiesinfo.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-otherinfo.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\Templates\AccountTypeEntitiesInfoPartDefinitionTemplate.html" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\Templates\AccountTypeOtherInfoPartDefinitionTemplate.html" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Runtime\retail-ringo-accountpart-runtime-entitiesinfo.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Runtime\retail-ringo-accountpart-runtime-otherinfo.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Runtime\Templates\AccountTypeEntitiesInfoPartRuntimeTemplate.html" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Runtime\Templates\AccountTypeOtherInfoPartRuntimeTemplate.html" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\Account\retail-ringo-account-convertor-editor.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\Account\Templates\AccountConvertorEditor.html" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\Agent\retail-ringo-agent-convertor-editor.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\Agent\Templates\AgentConvertorEditor.html" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\Distributor\retail-ringo-distributor-convertor-editor.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\Distributor\Templates\DistributorConvertorEditor.html" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\Pos\retail-ringo-pos-convertor-editor.js" />
-    <Content Include="Retail_Ringo\Directives\MainExtensions\Pos\Templates\PosConvertorEditor.html" />
-    <Content Include="Retail_Ringo\Services\APIServices\RingoReportSheetAPIService.js" />
-    <Content Include="Retail_Ringo\Views\RingoMNPReportManagement.html" />
-    <Content Include="Retail_Ringo\Views\RingoMNPReportManagementController.js" />
+    <Content Include="Retail_Zajil\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\retail-zajil-account-convertor-editor.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Templates\AccountConvertorEditor.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Retail.Ringo.Business\Retail.Ringo.Business.csproj">
-      <Project>{c6098267-9bb4-4f28-8a80-70132fb0bc82}</Project>
-      <Name>Retail.Ringo.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Retail.Ringo.Data.SQL\Retail.Ringo.Data.SQL.csproj">
-      <Project>{76e94da4-c4eb-4972-9a9f-524d080ac388}</Project>
-      <Name>Retail.Ringo.Data.SQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Retail.Ringo.Data\Retail.Ringo.Data.csproj">
-      <Project>{c5db9130-7e65-462f-98d0-c7790685d007}</Project>
-      <Name>Retail.Ringo.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Retail.Ringo.Entities\Retail.Ringo.Entities.csproj">
-      <Project>{9b58744d-1e39-499a-860f-264d658abe40}</Project>
-      <Name>Retail.Ringo.Entities</Name>
-    </ProjectReference>
+    <Folder Include="Controllers\" />
+    <Folder Include="Retail_Zajil\Services\APIServices\" />
+    <Folder Include="Retail_Zajil\Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Retail_Ringo\Reports\MNP Report.xls" />
+    <ProjectReference Include="..\Retail.Zajil.Business\Retail.Zajil.Business.csproj">
+      <Project>{5725b506-d34a-481c-b630-3d0ae3aa410b}</Project>
+      <Name>Retail.Zajil.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Data.SQL\Retail.Zajil.Data.SQL.csproj">
+      <Project>{c138c333-cb11-460a-8559-ae2e5e3aa087}</Project>
+      <Name>Retail.Zajil.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Data\Retail.Zajil.Data.csproj">
+      <Project>{7ccae9ac-6cea-419a-b08a-5b827b8746c6}</Project>
+      <Name>Retail.Zajil.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Entities\Retail.Zajil.Entities.csproj">
+      <Project>{cb49d2bd-4f30-4841-92ca-c98a1b9128df}</Project>
+      <Name>Retail.Zajil.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.MainExtensions\Retail.Zajil.MainExtensions.csproj">
+      <Project>{edbaa879-19f5-43da-9205-998e5529ffca}</Project>
+      <Name>Retail.Zajil.MainExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -166,9 +146,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>16515</DevelopmentServerPort>
+          <DevelopmentServerPort>62245</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:16494/</IISUrl>
+          <IISUrl>http://localhost:62245/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

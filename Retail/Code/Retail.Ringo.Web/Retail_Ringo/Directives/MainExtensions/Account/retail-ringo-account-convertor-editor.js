@@ -18,7 +18,7 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Account/Templates/AccountConvertorEditor.html"
+            templateUrl: "/Client/Modules/Retail_Ringo/Directives/MainExtensions/Account/Templates/AccountConvertorEditor.html"
         };
 
         function retailBeAccountConvertorEditorCtor(ctrl, $scope, $attrs) {
