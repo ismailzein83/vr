@@ -2,12 +2,13 @@
 
     'use strict';
 
-    PackageAssignmentEditorController.$inject = ['$scope', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRValidationService'];
+    PackageAssignmentEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRValidationService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountBEAPIService'];
 
-    function PackageAssignmentEditorController($scope, Retail_BE_AccountPackageAPIService, Retail_BE_AccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRValidationService)
+    function PackageAssignmentEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRValidationService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountBEAPIService)
     {
         var isEditMode;
 
+        var accountBEDefinitionId;
         var accountId;
         var accountPackageId;
         var accountPackageEntity;
@@ -23,13 +24,13 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountId = parameters.accountId;
                 accountPackageId = parameters.accountPackageId;
             }
 
             isEditMode = (accountPackageId != undefined);
         }
-
         function defineScope()
         {
             $scope.scopeModel = {};
@@ -49,16 +50,14 @@
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateAccountPackage() : insertAccountPackage();
             };
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal()
+            };
 
             $scope.scopeModel.hasSaveAccountPackagePermission = function () {
                 return (isEditMode) ? Retail_BE_AccountPackageAPIService.HasUpdateAccountPackagePermission() : Retail_BE_AccountPackageAPIService.HasAddAccountPackagePermission();
             };
-
-            $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
-            };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -90,7 +89,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function setTitle()
         {
             if (isEditMode)
@@ -109,22 +107,25 @@
                     $scope.title += ': ' + accountName + ' - ' + packageName;
             }
             else {
-                return Retail_BE_AccountAPIService.GetAccountName(accountId).then(function (response) {
+                return Retail_BE_AccountBEAPIService.GetAccountName(accountBEDefinitionId, accountId).then(function (response) {
                     $scope.title = 'Assign Package for ' + response;
                 });
             }
         }
-
         function loadPackageSelector() {
             var packageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             packageSelectorReadyDeferred.promise.then(function ()
             {
-                var packageSelectorPayload = {};
-
-                packageSelectorPayload.filter = {};
-                packageSelectorPayload.filter.AssignedToAccountId = accountId;
-
+                var packageSelectorPayload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Retail.BusinessEntity.Business.AccountPackageFilter, Retail.BusinessEntity.Business",
+                            AccountBEDefinitionId: accountBEDefinitionId,
+                            AssignedToAccountId: accountId
+                        }]
+                    }
+                };
                 if (accountPackageEntity != undefined) {
                     packageSelectorPayload.selectedIds = accountPackageEntity.PackageId;
                 }
@@ -134,10 +135,10 @@
 
             return packageSelectorLoadDeferred.promise;
         }
-
         function loadStaticData() {
             if (accountPackageEntity == undefined)
                 return;
+
             $scope.scopeModel.bed = accountEntity.BED;
             $scope.scopeModel.eed = accountEntity.EED;
         }
@@ -160,7 +161,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function updateAccountPackage()
         {
             $scope.scopeModel.isLoading = true;

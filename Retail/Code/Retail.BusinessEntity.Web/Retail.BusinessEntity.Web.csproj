@@ -446,6 +446,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\Templates\PrePaidSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\PackageItemEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\RecurringChargeRuleSetEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-product-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-productpackageitem-accountchargeevaluator.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-product-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-productpackageitem-management.js" />

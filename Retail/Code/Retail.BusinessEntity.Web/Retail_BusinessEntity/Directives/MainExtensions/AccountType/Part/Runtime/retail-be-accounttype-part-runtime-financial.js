@@ -1,87 +1,103 @@
 ﻿'use strict';
 
-app.directive('retailBeAccounttypePartRuntimeFinancial', [  "UtilsService", "VRUIUtilsService",
-    function (  UtilsService, VRUIUtilsService) {
-    return {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var accountTypeFinancialPartRuntime = new AccountTypeFinancialPartRuntime($scope, ctrl, $attrs);
-            accountTypeFinancialPartRuntime.initializeController();
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/AccountType/Part/Runtime/Templates/AccountTypeFinancialPartRuntimeTemplate.html'
-    };
+app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIUtilsService",
+    function (UtilsService, VRUIUtilsService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var accountTypeFinancialPartRuntime = new AccountTypeFinancialPartRuntime($scope, ctrl, $attrs);
+                accountTypeFinancialPartRuntime.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/AccountType/Part/Runtime/Templates/AccountTypeFinancialPartRuntimeTemplate.html'
+        };
 
-    function AccountTypeFinancialPartRuntime($scope, ctrl, $attrs) {
-        this.initializeController = initializeController;
+        function AccountTypeFinancialPartRuntime($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-        var creditClassSelectorAPI;
-        var creditClassReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var currencySelectorAPI;
+            var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var currencySelectorAPI;
-        var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var creditClassSelectorAPI;
+            var creditClassReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var paymentMethodDirectiveAPI;
-        var paymentMethodReadyPromiseDeferred;
+            var productSelectorAPI;
+            var productSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            function initializeController() {
+                $scope.scopeModel = {};
 
-        function initializeController() {
-            $scope.scopeModel = {};
-        
-            $scope.scopeModel.onCreditClassDirectiveReady = function (api) {
-                creditClassSelectorAPI = api;
-                creditClassReadyPromiseDeferred.resolve();
-            };
-            $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
-                currencySelectorAPI = api;
-                currencySelectorReadyPromiseDeferred.resolve();
-            };
-           
-            defineAPI();
-        }
-        function defineAPI() {
-            var api = {};
-
-            api.load = function (payload) {
-                var promises = [];
-                if (payload != undefined && payload.partSettings != undefined)
-                {
-                }
-
-                var creditClassSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                creditClassReadyPromiseDeferred.promise.then(function () {
-                    var directivePayload = (payload != undefined && payload.partSettings != undefined) ? { selectedIds: payload.partSettings.CreditClassId } : undefined;
-                    VRUIUtilsService.callDirectiveLoad(creditClassSelectorAPI, directivePayload, creditClassSelectorLoadPromiseDeferred);
-                });
-                promises.push(creditClassSelectorLoadPromiseDeferred.promise);
-
-                var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                currencySelectorReadyPromiseDeferred.promise.then(function () {
-                    var directivePayload = (payload != undefined && payload.partSettings != undefined) ? { selectedIds: payload.partSettings.CurrencyId } : undefined;
-
-                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, directivePayload, loadCurrencySelectorPromiseDeferred);
-                    });
-                promises.push(loadCurrencySelectorPromiseDeferred.promise);
-
-                return UtilsService.waitMultiplePromises(promises);
-            };
-
-            api.getData = function () {
-                return {
-                    $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancial,Retail.BusinessEntity.MainExtensions',
-                    CurrencyId: currencySelectorAPI.getSelectedIds(),             
-                    CreditClassId: creditClassSelectorAPI.getSelectedIds()
+                $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
+                    currencySelectorAPI = api;
+                    currencySelectorReadyPromiseDeferred.resolve();
                 };
-            };
+                $scope.scopeModel.onCreditClassDirectiveReady = function (api) {
+                    creditClassSelectorAPI = api;
+                    creditClassReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onProductDirectiveReady = function (api) {
+                    productSelectorAPI = api;
+                    productSelectorReadyPromiseDeferred.resolve();
+                };
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+                defineAPI();
+            }
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+                    var promises = [];
+
+                    var partSettings;
+
+                    if (payload != undefined) {
+                        partSettings = payload.partSettings;
+                    }
+
+                    //Loading Currency Selector
+                    var currencySelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    currencySelectorReadyPromiseDeferred.promise.then(function () {
+                        var currencySelectorPayload = partSettings != undefined ? { selectedIds: partSettings.CurrencyId } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadPromiseDeferred);
+                    });
+                    promises.push(currencySelectorLoadPromiseDeferred.promise);
+
+                    //Loading CreditClass Selector
+                    var creditClassSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    creditClassReadyPromiseDeferred.promise.then(function () {
+                        var creditClassSelectorPayload = partSettings != undefined ? { selectedIds: partSettings.CreditClassId } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(creditClassSelectorAPI, creditClassSelectorPayload, creditClassSelectorLoadPromiseDeferred);
+                    });
+                    promises.push(creditClassSelectorLoadPromiseDeferred.promise);
+
+                    //Loading Product Selector
+                    var productSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    currencySelectorReadyPromiseDeferred.promise.then(function () {
+                        var productSelectorPayload = partSettings != undefined ? { selectedIds: partSettings.ProductId } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(productSelectorAPI, productSelectorPayload, productSelectorLoadPromiseDeferred);
+                    });
+                    promises.push(productSelectorLoadPromiseDeferred.promise);
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
+                api.getData = function () {
+                    return {
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancial,Retail.BusinessEntity.MainExtensions',
+                        CurrencyId: currencySelectorAPI.getSelectedIds(),
+                        CreditClassId: creditClassSelectorAPI.getSelectedIds(),
+                        ProductId: productSelectorAPI.getSelectedIds()
+                    };
+                };
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
         }
-    }
-}]);
+    }]);
 

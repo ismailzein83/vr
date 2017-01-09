@@ -6,9 +6,10 @@
 
     function AccountPackageService(VRModalService, VRNotificationService)
     {
-        function assignPackageToAccount(accountId, onAccountPackageAdded)
+        function assignPackageToAccount(accountBEDefinitionId, accountId, onAccountPackageAdded)
         {
             var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId
             };
 

@@ -1,6 +1,17 @@
-﻿<vr-tab header="'Financial'">
+﻿
+<vr-tab header="'Financial'">
     <vr-row removeline>
-        <vr-common-currency-selector selectedvalues="scopeModel.currency" normal-col-num="4" on-ready="scopeModel.onCurrencyDirectiveReady" isrequired="true"></vr-common-currency-selector>
-        <retail-be-creditclass-selector normal-col-num="4" on-ready="scopeModel.onCreditClassDirectiveReady" isrequired="true"></retail-be-creditclass-selector>
+        <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady" 
+                                     selectedvalues="scopeModel.currency" 
+                                     normal-col-num="4" isrequired="true">
+        </vr-common-currency-selector>
+        <retail-be-creditclass-selector on-ready="scopeModel.onCreditClassDirectiveReady" 
+                                        normal-col-num="4" 
+                                        isrequired="true">
+        </retail-be-creditclass-selector>
+        <retail-be-product-selector on-ready="scopeModel.onProductDirectiveReady"
+                                    normal-col-num="4"
+                                    isrequired="true">
+        </retail-be-product-selector>
     </vr-row>
 </vr-tab>

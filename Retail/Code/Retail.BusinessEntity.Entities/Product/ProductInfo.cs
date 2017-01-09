@@ -8,5 +8,8 @@ namespace Retail.BusinessEntity.Entities
 {
     public class ProductInfo
     {
+        public int ProductId { get; set; }
+
+        public string Name { get; set; }
     }
 }

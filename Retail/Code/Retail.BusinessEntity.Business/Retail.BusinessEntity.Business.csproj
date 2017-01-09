@@ -150,6 +150,7 @@
     <Compile Include="Filters\IAccountFilter\AccountConditionAccountFilter.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionFilter.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionViewFilter.cs" />
+    <Compile Include="Filters\IPackageFilter\AccountPackageFilter.cs" />
     <Compile Include="Filters\IPackageFilter\PackageFilterContext.cs" />
     <Compile Include="Filters\IPackageFilter\ProductDefinitionPackageFilter.cs" />
     <Compile Include="Filters\PackageDefinitionServiceTypeFilter.cs" />

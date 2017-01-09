@@ -36,11 +36,11 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateProduct']));
         }
 
-        //function GetProductesInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetProductesInfo"), {
-        //        filter: filter
-        //    });
-        //}
+        function GetProductsInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetProductsInfo"), {
+                serializedFilter: serializedFilter
+            });
+        }
 
         return ({
             GetFilteredProducts: GetFilteredProducts,
@@ -48,8 +48,8 @@
             AddProduct: AddProduct,
             HasAddProductPermission: HasAddProductPermission,
             UpdateProduct: UpdateProduct,
-            HasUpdateProductPermission: HasUpdateProductPermission
-            //GetProductesInfo: GetProductesInfo,
+            HasUpdateProductPermission: HasUpdateProductPermission,
+            GetProductsInfo: GetProductsInfo
         });
     }
 

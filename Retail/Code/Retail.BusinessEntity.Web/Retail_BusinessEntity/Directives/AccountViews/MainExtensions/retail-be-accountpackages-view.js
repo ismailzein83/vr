@@ -48,7 +48,7 @@
                         gridAPI.onAccountPackageAdded(addedPackage);
                     };
 
-                    Retail_BE_AccountPackageService.assignPackageToAccount(parentAccountId, onAccountPackageAdded);
+                    Retail_BE_AccountPackageService.assignPackageToAccount(accountBEDefinitionId, parentAccountId, onAccountPackageAdded);
                 };
             }
             function defineAPI() {

@@ -44,12 +44,12 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.UpdateProduct(productItem);
         }
 
-        //[HttpGet]
-        //[Route("GetProductesInfo")]
-        //public IEnumerable<ProductInfo> GetProductesInfo(string filter = null)
-        //{
-        //    ProductFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<ProductFilter>(filter) : null;
-        //    return _manager.GetProductesInfo(deserializedFilter);
-        //}
+        [HttpGet]
+        [Route("GetProductsInfo")]
+        public IEnumerable<ProductInfo> GetProductsInfo(string filter = null)
+        {
+            ProductInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<ProductInfoFilter>(filter) : null;
+            return _manager.GetProductsInfo(deserializedFilter);
+        }
     }
 }

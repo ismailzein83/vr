@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
-using Vanrise.Entities;
  
 namespace Retail.BusinessEntity.Business
 {
@@ -14,7 +13,7 @@ namespace Retail.BusinessEntity.Business
     {
         #region Public Methods
 
-        public IDataRetrievalResult<ProductDetail> GetFilteredProducts(DataRetrievalInput<ProductQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<ProductDetail> GetFilteredProducts(Vanrise.Entities.DataRetrievalInput<ProductQuery> input)
         {
             var allProducts = GetCachedProducts();
             Func<Product, bool> filterExpression =
@@ -107,20 +106,39 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        //public IEnumerable<ProductInfo> GetProductsInfo(ProductFilter filter)
-        //{
-        //    Func<Product, bool> filterExpression = null;
-        //    if (filter != null)
-        //    {
-        //        filterExpression = (item) =>
-        //        {
-        //            if (filter.EntityType == null || item.EntityType == filter.EntityType)
-        //                return true;
-        //            return false;
-        //        };
-        //    }
-        //    return this.GetCachedProducts().MapRecords(ProductInfoMapper, filterExpression).OrderBy(x => x.Name);
-        //}
+        public IEnumerable<ProductInfo> GetProductsInfo(ProductInfoFilter filter)
+        {
+            Func<Product, bool> filterExpression = null;
+            //if (filter != null)
+            //{
+            //    filterExpression = (item) =>
+            //    {
+            //        if (filter.EntityType == null || item.EntityType == filter.EntityType)
+            //            return true;
+            //        return false;
+            //    };
+            //}
+
+            return this.GetCachedProducts().MapRecords(ProductInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
+        public IEnumerable<int> GetProductPackageIds(int productId)
+        {
+            Product product = new ProductManager().GetProduct(productId);
+            if (product == null)
+                throw new NullReferenceException(string.Format("product Id: {0}", productId));
+
+            if (product.Settings == null)
+                throw new NullReferenceException(string.Format("product.Settings of productId: {0}", productId));
+
+            if (product.Settings.Packages == null)
+                throw new NullReferenceException(string.Format("product.Settings.Packages of productId: {0}", productId));
+
+            if (product.Settings.Packages.Count == 0)
+                return null;
+
+            return product.Settings.Packages.Values.Select(itm => itm.PackageId);
+        }
 
         #endregion
 
@@ -164,15 +182,15 @@ namespace Retail.BusinessEntity.Business
             return productDetail;
         }
 
-        //public ProductInfo ProductInfoMapper(Product product)
-        //{
-        //    ProductInfo productInfo = new ProductInfo()
-        //    {
-        //        ProductId = product.ProductId,
-        //        Name = product.Name
-        //    };
-        //    return productInfo;
-        //}
+        public ProductInfo ProductInfoMapper(Product product)
+        {
+            ProductInfo productInfo = new ProductInfo()
+            {
+                ProductId = product.ProductId,
+                Name = product.Name
+            };
+            return productInfo;
+        }
 
         #endregion
     }

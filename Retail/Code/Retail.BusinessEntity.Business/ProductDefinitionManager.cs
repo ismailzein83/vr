@@ -37,6 +37,19 @@ namespace Retail.BusinessEntity.Business
             return templateConfigManager.GetExtensionConfigurations<ProductDefinitionConfig>(ProductDefinitionConfig.EXTENSION_TYPE);
         }
 
+        public Guid GetProductDefinitionAccountBEDefId(Guid productDefinitionId)
+        {
+            ProductDefinitionManager productDefinitionManager = new ProductDefinitionManager();
+            ProductDefinition productDefinition = productDefinitionManager.GetPackageDefinitionById(productDefinitionId);
+            if (productDefinition == null)
+                throw new NullReferenceException(string.Format("productDefinition of packageDefinitionId: {0}", productDefinitionId));
+
+            if (productDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("productDefinition.Settings of packageDefinitionId: {0}", productDefinitionId));
+
+            return productDefinition.Settings.AccountBEDefinitionId;
+        }
+
         #endregion
 
         #region Mapper
