@@ -38,6 +38,7 @@ app.directive("vrInvoiceBillingperiodWeekly", ["UtilsService", "VR_Invoice_Invoi
                 api.load = function (payload) {
                     $scope.scopeModel.dailyTypes = UtilsService.getArrayEnum(VR_Invoice_InvoiceDailyEnum);
                     if (payload != undefined) {
+                        $scope.scopeModel.selectedDailyType = UtilsService.getItemByVal($scope.scopeModel.dailyTypes, payload.DailyType, 'value');
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
@@ -46,7 +47,7 @@ app.directive("vrInvoiceBillingperiodWeekly", ["UtilsService", "VR_Invoice_Invoi
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.WeeklyBillingPeriod ,Vanrise.Invoice.MainExtensions",
-                        dailyTypes: $scope.scopeModel.dailyTypes
+                        DailyType: $scope.scopeModel.selectedDailyType.value
                     };
                 };
 
