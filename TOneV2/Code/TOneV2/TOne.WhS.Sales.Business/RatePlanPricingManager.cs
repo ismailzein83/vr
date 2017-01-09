@@ -100,6 +100,9 @@ namespace TOne.WhS.Sales.Business
 
 			foreach (SaleZone zone in saleZones)
 			{
+				if (zone.EED.HasValue)
+					continue;
+
 				ZoneItem zoneItem = new ZoneItem()
 				{
 					ZoneId = zone.SaleZoneId,

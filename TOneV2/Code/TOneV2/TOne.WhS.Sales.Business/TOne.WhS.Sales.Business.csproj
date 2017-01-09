@@ -90,6 +90,7 @@
     <Compile Include="BusinessRules\Conditions\SellingProductZoneRateIsEndedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ServiceBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ServiceEEDGreaterThanZoneEED.cs" />
+    <Compile Include="BusinessRules\Conditions\ZoneIsPendingClosedAndChangedCondition.cs" />
     <Compile Include="Context\RatePlanContext.cs" />
     <Compile Include="DefaultItemManager.cs" />
     <Compile Include="NotificationContext.cs" />

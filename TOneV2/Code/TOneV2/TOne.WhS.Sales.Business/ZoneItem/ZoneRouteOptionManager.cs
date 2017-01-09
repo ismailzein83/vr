@@ -73,7 +73,7 @@ namespace TOne.WhS.Sales.Business
 
         void SetCalculatedRate(ZoneItem zoneItem)
         {
-            if (_rateCalculationMethod == null)
+            if (zoneItem.ZoneEED.HasValue || _rateCalculationMethod == null)
                 return;
 
             decimal? cost = null;

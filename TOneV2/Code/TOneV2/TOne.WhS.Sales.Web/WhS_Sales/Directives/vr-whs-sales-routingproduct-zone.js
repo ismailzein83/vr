@@ -76,6 +76,8 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 				if (payload != undefined) {
 
 					zoneItem = payload.zoneItem;
+					ctrl.isCountryEnded = zoneItem.IsCountryEnded;
+					ctrl.isZonePendingClosed = zoneItem.IsZonePendingClosed;
 
 					ctrl.currentName = zoneItem.CurrentRoutingProductName;
 					if (zoneItem.IsCurrentRoutingProductEditable === false)

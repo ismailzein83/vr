@@ -12,6 +12,7 @@
 			<vr-datagridcolumn headertext="'Zone'" type="'Text'" widthfactor="19" disablesorting="true">
 				<vr-label isvalue="true" ellipsis><a href="" ng-click="viewScope.onZoneNameClicked(dataItem)" title="{{dataItem.ZoneName}}">{{dataItem.ZoneName}}</a></vr-label><span ng-if="dataItem.IsFutureZone">*</span>
 			</vr-datagridcolumn>
+
 			<vr-datagridcolumn headertext="'Product'"
 							   type="'Text'"
 							   isfielddynamic="true"
@@ -70,13 +71,15 @@
 			</vr-datagridcolumn>
 
 			<vr-datagridcolumn headertext="'New Rate'" widthfactor="7" disablesorting="true">
-				<vr-textbox type="number"
-							value="dataItem.NewRate"
-							customvalidate="dataItem.validateNewRate()"
-							onvaluechanged="viewScope.onNewRateChanged(dataItem)"
-							onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
-							tonextinput>
-				</vr-textbox>
+				<span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
+					<vr-textbox type="number"
+								value="dataItem.NewRate"
+								customvalidate="dataItem.validateNewRate()"
+								onvaluechanged="viewScope.onNewRateChanged(dataItem)"
+								onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
+								tonextinput>
+					</vr-textbox>
+				</span>
 			</vr-datagridcolumn>
 
 			<vr-datagridcolumn isfielddynamic="true" widthfactor="3">
@@ -86,28 +89,32 @@
 			</vr-datagridcolumn>
 
 			<vr-datagridcolumn headertext="'BED'" widthfactor="11" disablesorting="true">
-				<span vr-disabled="true">
-					<vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null" customvalidate="dataItem.validateRateChangeDates()" disablefocus></vr-datetimepicker>
+				<span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
+					<span vr-disabled="true">
+						<vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null" customvalidate="dataItem.validateRateChangeDates()" disablefocus></vr-datetimepicker>
+					</span>
+					<vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED" disablefocus></vr-datetimepicker>
 				</span>
-				<vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED" disablefocus></vr-datetimepicker>
 			</vr-datagridcolumn>
 
 			<vr-datagridcolumn headertext="'EED'" widthfactor="11" disablesorting="true">
-				<span vr-disabled="dataItem.isSellingProductZone">
-					<span vr-disabled="!dataItem.IsCurrentRateEditable">
+				<span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
+					<span vr-disabled="dataItem.isSellingProductZone">
+						<span vr-disabled="!dataItem.IsCurrentRateEditable">
+							<vr-datetimepicker type="date"
+											   value="dataItem.CurrentRateEED"
+											   onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
+											   ng-hide="dataItem.NewRate != null"
+											   customvalidate="dataItem.validateRateChangeDates()" disablefocus>
+							</vr-datetimepicker>
+						</span>
 						<vr-datetimepicker type="date"
-										   value="dataItem.CurrentRateEED"
-										   onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
-										   ng-hide="dataItem.NewRate != null"
-										   customvalidate="dataItem.validateRateChangeDates()" disablefocus>
+										   value="dataItem.NewRateEED"
+										   ng-show="dataItem.NewRate != null"
+										   customvalidate="dataItem.validateNewRateDates()"
+										   disablefocus>
 						</vr-datetimepicker>
 					</span>
-					<vr-datetimepicker type="date"
-									   value="dataItem.NewRateEED"
-									   ng-show="dataItem.NewRate != null"
-									   customvalidate="dataItem.validateNewRateDates()"
-									   disablefocus>
-					</vr-datetimepicker>
 				</span>
 			</vr-datagridcolumn>
 

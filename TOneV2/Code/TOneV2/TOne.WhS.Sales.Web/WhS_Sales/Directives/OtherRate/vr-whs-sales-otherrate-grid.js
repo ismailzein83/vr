@@ -75,6 +75,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             {
             	zoneItem = query.zoneItem;
             	settings = query.settings;
+            	$scope.isCountryEnded = query.zoneItem.IsCountryEnded;
+            	$scope.isZonePendingClosed = query.zoneItem.IsZonePendingClosed;
 
             	$scope.isSellingProductZone = zoneItem.isSellingProductZone;
 
@@ -94,6 +96,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             	for (var i = 0; i < zoneItem.RateTypes.length; i++)
             	{
             		var otherRate = {};
+
+
 
             		otherRate.RateTypeId = zoneItem.RateTypes[i].RateTypeId;
             		otherRate.Name = zoneItem.RateTypes[i].Name;
