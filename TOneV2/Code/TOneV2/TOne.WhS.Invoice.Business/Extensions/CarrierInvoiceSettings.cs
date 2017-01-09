@@ -20,7 +20,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             get { return new Guid("FAD2C45F-FB61-4D65-9896-4CCADC2A656F"); }
         }
-        public InvoiceType InvoiceType { get; set; }
         public override InvoiceGenerator GetInvoiceGenerator()
         {
             return new CustomerInvoiceGenerator();
@@ -28,7 +27,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
         public override InvoicePartnerSettings GetPartnerSettings()
         {
-            return new CarrierPartnerSettings { InvoiceType = this.InvoiceType };
+            return new CarrierPartnerSettings();
         }
 
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
@@ -85,12 +84,41 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         return taxItemDetails;
                         #endregion
                     }
+                case "BankDetails":
+                    {
+                        #region BankDetails
+                        IEnumerable<Guid> bankDetails = null;
+                        if (partner[0].Equals("Profile"))
+                        {
+                            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                            bankDetails = carrierProfileManager.GetBankDetails(partnerId);
+                        }
+                        else if (partner[0].Equals("Account"))
+                        {
+                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                            bankDetails = carrierAccountManager.GetBankDetails(partnerId);
+                        }
+                        return bankDetails;
+                        #endregion
+                    }
             }
             return null;
         }
 
         public override BillingPeriod GetBillingPeriod(IExtendedSettingsBillingPeriodContext context)
         {
+            //string[] partner = context.PartnerId.Split('_');
+            //int partnerId = Convert.ToInt32(partner[1]);
+            //switch (partner[0])
+            //{
+            //    case "Account":
+            //       CarrierProfileManager carrierProfileManager1 = new CarrierProfileManager();
+            //       return carrierProfileManager1.GetBillingPeriod(Convert.ToInt32(partner[1]));
+            //    case "Profile":
+            //        CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            //       return carrierProfileManager.GetBillingPeriod(Convert.ToInt32(partner[1]));
+            //}
+            //return null;
             throw new NotImplementedException();
         }
 

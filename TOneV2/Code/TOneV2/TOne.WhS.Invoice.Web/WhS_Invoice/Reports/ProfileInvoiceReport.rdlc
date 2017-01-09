@@ -1870,9 +1870,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>Vanrise.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>DataSourceBankDetails</rd:TableName>
+        <rd:TableName>RDLCBankDetails</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetBankDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>Vanrise.Invoice.Entities.DataSourceBankDetails, Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceType>Vanrise.Invoice.Entities.RDLCBankDetails, Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="ItemsDetails">

@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Invoice.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierProfileManager : IBusinessEntityManager
@@ -194,15 +195,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("customerInvoiceSettings");
             return customerInvoiceSettings.DefaultEmailId;
         }
-        #endregion
-
         public IEnumerable<VRTaxItemDetail> GetTaxItemDetails(int carrierProfileId)
         {
-            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             List<VRTaxItemDetail> taxItemDetails = new List<VRTaxItemDetail>();
-
             var taxesDefinitions = GetTaxesDefinition();
-            if(taxesDefinitions != null)
+            if (taxesDefinitions != null)
             {
                 var carrierProfile = GetCarrierProfile(carrierProfileId);
                 if (carrierProfile.Settings.TaxSetting != null)
@@ -214,7 +211,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     });
                     foreach (var tax in carrierProfile.Settings.TaxSetting.Items)
                     {
-                        var taxDefinition = taxesDefinitions.FirstOrDefault(x=>x.ItemId == tax.ItemId);
+                        var taxDefinition = taxesDefinitions.FirstOrDefault(x => x.ItemId == tax.ItemId);
                         if (taxDefinition != null)
                         {
                             taxItemDetails.Add(new VRTaxItemDetail
@@ -223,13 +220,42 @@ namespace TOne.WhS.BusinessEntity.Business
                                 Value = tax.Value
                             });
                         }
-                       
+
                     }
                 }
             }
             return taxItemDetails;
         }
+        public IEnumerable<Guid> GetBankDetails(int carrierProfileId)
+        {
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            var companySettings = GetCompanySetting(carrierProfileId);
+            return companySettings.BankDetails;
+        }
+        public List<VRTaxItemDefinition> GetTaxesDefinition()
+        {
+            BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
+            if (setting.TaxesDefinition == null)
+                throw new NullReferenceException("setting.TaxesDefinition");
+            return setting.TaxesDefinition.ItemDefinitions;
+        }
+        public BillingPeriod GetBillingPeriod(int carrierProfileId)
+        {
+           var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
+           if (customerInvoiceSettings == null)
+               throw new NullReferenceException(string.Format("customerInvoiceSettings"));
+           return customerInvoiceSettings.BillingPeriod;
+        }
+        public int GetDuePeriod(int carrierProfileId)
+        {
+            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
+            if (customerInvoiceSettings == null)
+                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
+            return customerInvoiceSettings.DuePeriod;
+        }
+        #endregion
 
+      
         #endregion
 
         #region Validation Methods
@@ -331,9 +357,16 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
+      
         private CustomerInvoiceSettings GetCustomerInvoiceSettings(int carrierProfileId)
         {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
             ConfigManager configManager = new ConfigManager();
+
+            if(carrierProfile.Settings.InvoiceSettingId.HasValue)
+            {
+               return configManager.GetInvoiceSettingsbyGuid(carrierProfile.Settings.InvoiceSettingId.Value)
+            }
             return configManager.GetDefaultCustomerInvoiceSettings();
         }
         #endregion
@@ -368,14 +401,6 @@ namespace TOne.WhS.BusinessEntity.Business
             if (setting == null)
                 throw new NullReferenceException("BusinessEntityTechnicalSettingsData");
             return setting;
-        }
-
-        public List<VRTaxItemDefinition> GetTaxesDefinition()
-        {
-            BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
-            if (setting.TaxesDefinition == null)
-                throw new NullReferenceException("setting.TaxesDefinition");
-            return setting.TaxesDefinition.ItemDefinitions;
         }
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)

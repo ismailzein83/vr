@@ -29,29 +29,18 @@ namespace TOne.WhS.Invoice.Business.Extensions
     }
     public class CarrierPartnerSettings : InvoicePartnerSettings
     {
-        public InvoiceType InvoiceType { get; set; }
         public override string PartnerFilterSelector
         {
             get
             {
-                switch (this.InvoiceType)
-                {
-                    case Extensions.InvoiceType.Customer: return "whs-invoice-carrier-customer-filter-selector";
-                    case Extensions.InvoiceType.Supplier: return "";
-                    default: return null;
-                }
+                return "whs-invoice-carrier-customer-filter-selector";
             }
         }
         public override string PartnerSelector
         {
             get
             {
-                switch (this.InvoiceType)
-                {
-                    case Extensions.InvoiceType.Customer: return "whs-invoice-carrier-customer-selector";
-                    case Extensions.InvoiceType.Supplier: return "whs-invoice-carrier-supplier-selector";
-                    default: return null;
-                }
+                return "whs-invoice-carrier-customer-selector";
             }
         }
         public bool UseMaskInfo { get; set; }
@@ -166,19 +155,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public override int GetPartnerDuePeriod(IPartnerDuePeriodContext context)
         {
             string[] partnerId = context.PartnerId.Split('_');
-            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
 
             if (partnerId[0].Equals("Profile"))
             {
-                var carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partnerId[1]));
-                return carrierProfile.Settings.DuePeriod;
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+
+                return carrierProfileManager.GetDuePeriod(Convert.ToInt32(partnerId[1]));
             }
             else if (partnerId[0].Equals("Account"))
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId[1]));
-                var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
-                return carrierProfile.Settings.DuePeriod;
+                return carrierAccountManager.GetDuePeriod(Convert.ToInt32(partnerId[1]));
             }
             return 0;
         }

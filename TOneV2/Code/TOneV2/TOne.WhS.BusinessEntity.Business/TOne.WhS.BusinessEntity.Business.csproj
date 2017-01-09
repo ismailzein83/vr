@@ -77,6 +77,10 @@
     <Reference Include="Vanrise.GenericData.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>

@@ -454,6 +454,12 @@ namespace TOne.WhS.BusinessEntity.Business
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             return configManager.GetDefaultCompanySetting();
         }
+
+        public IEnumerable<Guid> GetBankDetails(int carrierAccountId)
+        {
+            var companySettings = GetCompanySetting(carrierAccountId);
+            return companySettings.BankDetails;
+        }
         public Guid GetDefaultInvoiceEmailId(int carrierAccountId)
         {
             var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
@@ -461,7 +467,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("customerInvoiceSettings");
             return customerInvoiceSettings.DefaultEmailId;
         }
-
+        public int GetDuePeriod(int carrierAccountId)
+        {
+            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
+            if (customerInvoiceSettings == null)
+                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
+            return customerInvoiceSettings.DuePeriod;
+        }
         #endregion
 
         #endregion

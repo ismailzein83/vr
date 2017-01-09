@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsInvoiceInvoicetypeCarrierinvoicesettings", ["UtilsService", "VRNotificationService","WhS_Invoice_InvoiceTypeEnum",
-    function (UtilsService, VRNotificationService, WhS_Invoice_InvoiceTypeEnum) {
+app.directive("whsInvoiceInvoicetypeCarrierinvoicesettings", ["UtilsService", "VRNotificationService",
+    function (UtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
 
@@ -29,7 +29,6 @@ app.directive("whsInvoiceInvoicetypeCarrierinvoicesettings", ["UtilsService", "V
             this.initializeController = initializeController;
             $scope.scopeModel = {};
             function initializeController() {
-                $scope.scopeModel.invoiceTypes = UtilsService.getArrayEnum(WhS_Invoice_InvoiceTypeEnum);
                 defineAPI();
             }
 
@@ -39,7 +38,6 @@ app.directive("whsInvoiceInvoicetypeCarrierinvoicesettings", ["UtilsService", "V
                 api.load = function (payload) {
                     if (payload != undefined) {
                         if (payload.extendedSettingsEntity != undefined) {
-                            $scope.scopeModel.selectedInvoiceType = UtilsService.getItemByVal($scope.scopeModel.invoiceTypes, payload.extendedSettingsEntity.InvoiceType, "value");
                         }
                     }
                 };
@@ -48,8 +46,6 @@ app.directive("whsInvoiceInvoicetypeCarrierinvoicesettings", ["UtilsService", "V
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Invoice.Business.Extensions.CarrierInvoiceSettings ,TOne.WhS.Invoice.Business",
-                        InvoiceType: $scope.scopeModel.selectedInvoiceType.value
-
                     };
                 };
 
