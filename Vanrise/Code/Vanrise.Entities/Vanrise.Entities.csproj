@@ -96,6 +96,8 @@
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentPDF.cs" />
     <Compile Include="VRMail\VRMailEvaluatedTemplate.cs" />
+    <Compile Include="VRTax\RDLCTaxItemDetail.cs" />
+    <Compile Include="VRTax\VRTaxDetail.cs" />
     <Compile Include="VRTax\VRTaxesDefinition.cs" />
     <Compile Include="VRTax\VRTaxItem.cs" />
     <Compile Include="VRTax\VRTaxItemDefinition.cs" />
