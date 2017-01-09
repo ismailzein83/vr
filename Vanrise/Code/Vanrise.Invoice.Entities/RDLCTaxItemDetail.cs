@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Entities
+namespace Vanrise.Invoice.Entities
 {
     public class RDLCTaxItemDetail
     {
