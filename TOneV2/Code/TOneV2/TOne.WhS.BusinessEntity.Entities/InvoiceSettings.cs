@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class InvoiceSettings:SettingData
     {
-        public const string SETTING_TYPE = "WhS_Invoice_InvoiceSettings";
+        public const string SETTING_TYPE = "WhS_BE_InvoiceSettings";
         public List<CustomerInvoiceSettings> CustomerInvoiceSettings { get; set; }
     }
     public class CustomerInvoiceSettings

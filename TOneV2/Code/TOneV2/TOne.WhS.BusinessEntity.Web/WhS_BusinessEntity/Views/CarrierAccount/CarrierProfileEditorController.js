@@ -19,6 +19,9 @@
         var currencySelectorAPI;
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceSettingsSelectorAPI;
+        var invoiceSettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var documentsGridAPI;
         var documentsGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -65,6 +68,11 @@
             $scope.onCityyDirectiveReady = function (api) {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModal.onInvoiceSettingSelectorReady = function (api) {
+                invoiceSettingsSelectorAPI = api;
+                invoiceSettingsSelectorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModal.onCurrencySelectorReady = function (api) {
@@ -165,7 +173,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDocuments])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDocuments, loadInvoiceSettingSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -192,6 +200,22 @@
             });
 
             return loadCurrencySelectorPromiseDeferred.promise;
+        }
+
+        function loadInvoiceSettingSelector() {
+            var loadInvoiceSettingSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            invoiceSettingsSelectorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = {
+                    selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.InvoiceSettingId : undefined)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(invoiceSettingsSelectorAPI, payload, loadInvoiceSettingSelectorPromiseDeferred);
+
+            });
+
+            return loadInvoiceSettingSelectorPromiseDeferred.promise;
         }
 
         function loadCountryCitySection() {
@@ -398,6 +422,7 @@
                     CountryId: countryDirectiveApi.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     CityId: cityDirectiveAPI.getSelectedIds(),
+                    InvoiceSettingId: invoiceSettingsSelectorAPI.getSelectedIds(),
                     Company: $scope.scopeModal.company,
                     Website: $scope.scopeModal.website,
                     RegistrationNumber: $scope.scopeModal.registrationNumber,

@@ -30,11 +30,8 @@
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-common-bank-detail-selector on-ready="onBankDirectiveReady" ismultipleselection selectedvalues="bank" isrequired="true" ></vr-common-bank-detail-selector>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
+                <vr-common-bank-detail-selector normal-col-num="6" on-ready="onBankDirectiveReady" ismultipleselection selectedvalues="bank" isrequired="true"></vr-common-bank-detail-selector>
+
                 <vr-columns width="1/2row">
                     <vr-textbox-multiple value="scopeModel.toMail" datatype="email" label="Email(s)" isrequired></vr-textbox-multiple>
                 </vr-columns>
