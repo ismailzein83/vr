@@ -21,5 +21,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountRecurringChargeEvaluatorExtensionConfigs();
         }
+
+        [HttpGet]
+        [Route("GetAccountRecurringChargeRuleSetSettingsExtensionConfigs")]
+        public IEnumerable<AccountRecurringChargeRuleSetSettingsConfig> GetAccountRecurringChargeRuleSetSettingsExtensionConfigs()
+        {
+            return _manager.GetAccountRecurringChargeRuleSetSettingsExtensionConfigs();
+        }
     }
 }

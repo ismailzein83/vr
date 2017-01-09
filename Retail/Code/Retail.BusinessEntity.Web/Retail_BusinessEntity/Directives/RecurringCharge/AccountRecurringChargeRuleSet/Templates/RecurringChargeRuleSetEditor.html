@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_RecurringChargeRuleSetEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formPackageItemEditor">
+
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                </vr-columns>
+                <retail-be-recurringchargeruleset-settings on-ready="scopeModel.onRecurringChargeRuleSetSettingsReady" normal-col-num="6"></retail-be-recurringchargeruleset-settings>
+            </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPackageItemEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

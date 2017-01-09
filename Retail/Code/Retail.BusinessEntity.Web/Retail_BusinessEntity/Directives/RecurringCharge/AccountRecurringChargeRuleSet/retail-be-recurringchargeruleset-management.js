@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecurringChargeRuleSetManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_ProductService'];
+    RecurringChargeRuleSetManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_RecurringChargeService'];
 
-    function RecurringChargeRuleSetManagementDirective(UtilsService, VRNotificationService, Retail_BE_ProductService) {
+    function RecurringChargeRuleSetManagementDirective(UtilsService, VRNotificationService, Retail_BE_RecurringChargeService) {
         return {
             restrict: 'E',
             scope: {
@@ -24,7 +24,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/RecurringChargeRuleSetManagementTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountRecurringChargeRuleSet/Templates/RecurringChargeRuleSetManagementTemplate.html'
         };
 
         function RecurringChargeRuleSetManagementCtor($scope, ctrl) {
@@ -49,7 +49,7 @@
                         $scope.scopeModel.recurringChargeRuleSets.push({ Entity: addedRecurringChargeRuleSet });
                     };
 
-                    Retail_BE_ProductService.addRecurringChargeRuleSet(onRecurringChargeRuleSetAdded);
+                    Retail_BE_RecurringChargeService.addAccountRecurringChargeRuleSet(onRecurringChargeRuleSetAdded);
                 };
                 $scope.scopeModel.onDeleteRecurringChargeRuleSet = function (deletedRecurringChargeRuleSet) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -119,7 +119,7 @@
                     $scope.scopeModel.recurringChargeRuleSets[index] = { Entity: updatedRecurringChargeRuleSet };
                 };
 
-                Retail_BE_ProductService.editRecurringChargeRuleSet(recurringChargeRuleSet.Entity, onRecurringChargeRuleSetUpdated);
+                Retail_BE_RecurringChargeService.editAccountRecurringChargeRuleSet(recurringChargeRuleSet.Entity, onRecurringChargeRuleSetUpdated);
             }
 
             //function extendRecurringChargeRuleSetObj(recurringChargeRuleSet) {

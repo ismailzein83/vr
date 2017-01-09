@@ -17,11 +17,11 @@
         var productDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var productDefinitionSelectionChangedDeferred;
 
-        var packageItemsDirectiveAPI;
-        var packageItemsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
         var recurringChargeRuleSetsDirectiveAPI;
         var recurringChargeRuleSetsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var packageItemsDirectiveAPI;
+        var packageItemsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var productExtendedSettingsDirectiveAPI;
         var productExtendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -48,13 +48,13 @@
                 productDefinitionSelectorAPI = api;
                 productDefinitionSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.onPackageItemsDirectiveReady = function (api) {
-                packageItemsDirectiveAPI = api;
-                packageItemsDirectiveReadyDeferred.resolve();
-            };
             $scope.scopeModel.onRecurringChargeRuleSetsDirectiveReady = function (api) {
                 recurringChargeRuleSetsDirectiveAPI = api;
                 recurringChargeRuleSetsDirectiveReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onPackageItemsDirectiveReady = function (api) {
+                packageItemsDirectiveAPI = api;
+                packageItemsDirectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.onProductExtendedSettingsDirectiveReady = function (api) {
                 productExtendedSettingsDirectiveAPI = api;
@@ -155,7 +155,8 @@
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductDefinitionsSelector, loadPackageItemsDirective, loadProductExtendedSettingsDirectiveWrapper])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductDefinitionsSelector, loadRecurringChargeRuleSetsDirective,
+                        loadPackageItemsDirective, loadProductExtendedSettingsDirectiveWrapper])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -190,6 +191,22 @@
 
             return productDefinitionSelectorLoadDeferred.promise;
         }
+        function loadRecurringChargeRuleSetsDirective() {
+            var recurringChargeRuleSetsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            recurringChargeRuleSetsDirectiveReadyDeferred.promise.then(function () {
+
+                var recurringChargeRuleSetsPayload;
+                if (productEntity != undefined && productEntity.Settings != undefined) {
+                    var recurringChargeRuleSetsPayload = {
+                        recurringChargeRuleSets: productEntity.Settings.RecurringChargeRuleSets
+                    }
+                }
+                VRUIUtilsService.callDirectiveLoad(recurringChargeRuleSetsDirectiveAPI, recurringChargeRuleSetsPayload, recurringChargeRuleSetsDirectiveLoadDeferred);
+            });
+
+            return recurringChargeRuleSetsDirectiveLoadDeferred.promise;
+        }
         function loadPackageItemsDirective() {
             if (!isEditMode)
                 return;
@@ -210,32 +227,6 @@
 
             return packageItemsDirectiveLoadDeferred.promise.then(function () {
                 $scope.scopeModel.isPackagesTabLoading = false;
-            });
-        }
-        function loadRecurringChargeRuleSetsDirective() {
-            //if (!isEditMode)
-            //    return;
-
-            $scope.scopeModel.isRecurringChargeRuleSetsTabLoading = true;
-
-            var recurringChargeRuleSetsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            //UtilsService.waitMultiplePromises([packageItemsDirectiveReadyDeferred.promise, productDefinitionSelectionChangedDeferred.promise]).then(function () {
-
-            recurringChargeRuleSetsDirectiveReadyDeferred.promise.then(function () {
-
-                //var recurringChargeRuleSetsPayload = { productDefinitionId: productDefinitionId };
-                var recurringChargeRuleSetsPayload;
-                if (productEntity != undefined && productEntity.Settings != undefined) {
-                    var recurringChargeRuleSetsPayload = {
-                        recurringChargeRuleSets: productEntity.Settings.RecurringChargeRuleSets
-                    }
-                }
-                VRUIUtilsService.callDirectiveLoad(recurringChargeRuleSetsDirectiveAPI, recurringChargeRuleSetsPayload, recurringChargeRuleSetsDirectiveLoadDeferred);
-            });
-
-            return recurringChargeRuleSetsDirectiveLoadDeferred.promise.then(function () {
-                $scope.scopeModel.isRecurringChargeRuleSetsTabLoading = false;
             });
         }
         function loadProductExtendedSettingsDirectiveWrapper() {

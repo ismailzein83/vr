@@ -12,11 +12,8 @@
         var productDefinitionId;
         var excludedPackageIds;
 
-        //var packageSelectorAPI;
-        //var packageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
-        //var accountChargeEvaluatorSelectiveAPI;
-        //var accountChargeEvaluatorSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var recurringChargeRuleSetSettingsSelectiveAPI;
+        var recurringChargeRuleSetSettingsSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -33,17 +30,11 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            //$scope.scopeModel.isPackageSelectorDisabled = isEditMode ? true : false;
 
-            //$scope.scopeModel.onPackageSelectorReady = function (api) {
-            //    packageSelectorAPI = api;
-            //    packageSelectorReadyDeferred.resolve();
-            //};
-
-            //$scope.scopeModel.onAccountChargeEvaluatorSelectiveReady = function (api) {
-            //    accountChargeEvaluatorSelectiveAPI = api;
-            //    accountChargeEvaluatorSelectiveReadyDeferred.resolve();
-            //};
+            $scope.scopeModel.onRecurringChargeRuleSetSettingsReady = function (api) {
+                recurringChargeRuleSetSettingsSelectiveAPI = api;
+                recurringChargeRuleSetSettingsSelectiveReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -61,7 +52,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRecurringChargeRuleSetSettingsSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -78,43 +69,21 @@
 
             $scope.scopeModel.name = recurringChargeRuleSetEntity.Name;
         }
-        function loadPackageSelector() {
-            var packageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadRecurringChargeRuleSetSettingsSelective() {
+            var recurringChargeRuleSetSettingsSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            packageSelectorReadyDeferred.promise.then(function () {
+            recurringChargeRuleSetSettingsSelectiveReadyDeferred.promise.then(function () {
 
-                var packageSelectorPayload = {
-                    filter: {
-                        ExcludedPackageIds: !isEditMode ? excludedPackageIds : undefined,
-                        Filters: [{
-                            $type: "Retail.BusinessEntity.Business.ProductDefinitionPackageFilter, Retail.BusinessEntity.Business",
-                            ProductDefinitionId: productDefinitionId
-                        }]
-                    }
-                };
+                var recurringChargeRuleSetSettingsSelectivePayload;
                 if (recurringChargeRuleSetEntity != undefined) {
-                    packageSelectorPayload.selectedIds = recurringChargeRuleSetEntity.PackageId;
-                }
-                VRUIUtilsService.callDirectiveLoad(packageSelectorAPI, packageSelectorPayload, packageSelectorLoadDeferred);
-            });
-
-            return packageSelectorLoadDeferred.promise;
-        }
-        function loadAccountChargeEvaluatorSelective() {
-            var accountChargeEvaluatorSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            accountChargeEvaluatorSelectiveReadyDeferred.promise.then(function () {
-
-                var accountChargeEvaluatorSelectivePayload;
-                if (recurringChargeRuleSetEntity != undefined) {
-                    accountChargeEvaluatorSelectivePayload = {
-                        chargeEvaluator: recurringChargeRuleSetEntity.ChargeEvaluator
+                    recurringChargeRuleSetSettingsSelectivePayload = {
+                        accountRecurringChargeRuleSetSettings: recurringChargeRuleSetEntity.Settings
                     };
                 }
-                VRUIUtilsService.callDirectiveLoad(accountChargeEvaluatorSelectiveAPI, accountChargeEvaluatorSelectivePayload, accountChargeEvaluatorSelectiveLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(recurringChargeRuleSetSettingsSelectiveAPI, recurringChargeRuleSetSettingsSelectivePayload, recurringChargeRuleSetSettingsSelectiveLoadDeferred);
             });
 
-            return accountChargeEvaluatorSelectiveLoadDeferred.promise;
+            return recurringChargeRuleSetSettingsSelectiveLoadDeferred.promise;
         }
 
         function insert() {
@@ -137,7 +106,8 @@
         function buildRecurringChargeRuleSetObjectFromScope() {
 
             return {
-                Name: $scope.scopeModel.name
+                Name: $scope.scopeModel.name,
+                AccountRecurringChargeRuleSetId: recurringChargeRuleSetEntity != undefined ? recurringChargeRuleSetEntity.AccountRecurringChargeRuleSetId : UtilsService.guid()
             };
         }
     }

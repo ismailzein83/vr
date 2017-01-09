@@ -15,5 +15,12 @@ namespace Retail.BusinessEntity.Business
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<AccountRecurringChargeEvaluatorConfig>(AccountRecurringChargeEvaluatorConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<AccountRecurringChargeRuleSetSettingsConfig> GetAccountRecurringChargeRuleSetSettingsExtensionConfigs()  
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<AccountRecurringChargeRuleSetSettingsConfig>(AccountRecurringChargeRuleSetSettingsConfig.EXTENSION_TYPE); 
+        }
     }
 }
+ 

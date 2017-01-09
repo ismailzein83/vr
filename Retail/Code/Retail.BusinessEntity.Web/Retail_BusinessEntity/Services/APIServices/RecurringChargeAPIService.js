@@ -13,8 +13,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountRecurringChargeEvaluatorExtensionConfigs'));
         }
 
+        function GetAccountRecurringChargeRuleSetSettingsExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountRecurringChargeRuleSetSettingsExtensionConfigs'));
+        }
+
+
         return ({
-            GetAccountRecurringChargeEvaluatorExtensionConfigs: GetAccountRecurringChargeEvaluatorExtensionConfigs
+            GetAccountRecurringChargeEvaluatorExtensionConfigs: GetAccountRecurringChargeEvaluatorExtensionConfigs,
+            GetAccountRecurringChargeRuleSetSettingsExtensionConfigs: GetAccountRecurringChargeRuleSetSettingsExtensionConfigs
         });
     }
 

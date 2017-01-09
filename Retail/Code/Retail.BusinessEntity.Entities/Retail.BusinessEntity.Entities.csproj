@@ -213,6 +213,7 @@
     <Compile Include="POS\POSSetting.cs" />
     <Compile Include="POS\SourcePOS.cs" />
     <Compile Include="RecurringCharge\AccountRecurringChargeEvaluatorConfig.cs" />
+    <Compile Include="RecurringCharge\AccountRecurringChargeRuleSetSettingsConfig.cs" />
     <Compile Include="RecurringCharge\RecurringChargeDefinition.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />
     <Compile Include="RecurringCharge\AccountRecurringChargeRule.cs" />
