@@ -365,7 +365,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if(carrierProfile.Settings.InvoiceSettingId.HasValue)
             {
-               return configManager.GetInvoiceSettingsbyGuid(carrierProfile.Settings.InvoiceSettingId.Value)
+                return configManager.GetInvoiceSettingsbyGuid(carrierProfile.Settings.InvoiceSettingId.Value);
             }
             return configManager.GetDefaultCustomerInvoiceSettings();
         }
