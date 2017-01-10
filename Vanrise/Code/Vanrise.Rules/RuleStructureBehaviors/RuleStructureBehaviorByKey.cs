@@ -18,7 +18,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
             {
                 IEnumerable<T> keys;
                 GetKeysFromRule(rule, out keys);
-                if (keys != null && keys.Count() > 0)
+                if (keys != null)
                 {
                     foreach (var key in keys)
                     {
