@@ -58,15 +58,20 @@ namespace NP.IVSwitch.Business
         public InsertOperationOutput<EndPointDetail> AddEndPoint(EndPointToAdd endPointItem)
         {
             InsertOperationOutput<EndPointDetail> insertOperationOutput = new InsertOperationOutput<EndPointDetail>
+             {
+                 Result = InsertOperationResult.Failed,
+                 InsertedObject = null
+             };
+            if (endPointItem.Entity.EndPointType == UserType.ACL)
             {
-                Result = InsertOperationResult.Failed,
-                InsertedObject = null
-            };
-            if (!IpAddressHelper.ValidateIpOnSubnet(endPointItem.Entity.Host, endPointItem.Entity.Subnet))
-            {
-                insertOperationOutput.ShowExactMessage = true;
-                insertOperationOutput.Message = "IPAddress and its mask do not share the same family.";
-                return insertOperationOutput;
+                var hosts = GetCachedEndPoint().Values.Where(h => !string.IsNullOrEmpty(h.Host)).ToDictionary(v => v.EndPointId, v => v.Host);
+                string message = "";
+                if (IpAddressHelper.IsInSameSubnet(hosts, endPointItem.Entity.Host, out message))
+                {
+                    insertOperationOutput.ShowExactMessage = true;
+                    insertOperationOutput.Message = message;
+                    return insertOperationOutput;
+                }
             }
 
             int endPointId;
@@ -160,7 +165,17 @@ namespace NP.IVSwitch.Business
                 Result = UpdateOperationResult.Failed,
                 UpdatedObject = null
             };
-
+            if (endPointItem.Entity.EndPointType == UserType.ACL)
+            {
+                var hosts = GetCachedEndPoint().Values.Where(h => !string.IsNullOrEmpty(h.Host)).ToDictionary(v => v.EndPointId, v => v.Host);
+                string message;
+                if (IpAddressHelper.IsInSameSubnet(hosts, endPointItem.Entity.Host, out message))
+                {
+                    updateOperationOutput.ShowExactMessage = true;
+                    updateOperationOutput.Message = message;
+                    return updateOperationOutput;
+                }
+            }
             IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
             Helper.SetSwitchConfig(dataManager);
 

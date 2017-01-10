@@ -104,29 +104,26 @@ namespace NP.IVSwitch.Data.Postgres
 
             if (recordsEffected1 <= 0) return false;
 
-            String cmdText = @"UPDATE access_list
-	                             SET  description=@description , 
-                                   log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
-                                   channels_limit=@channels_limit, max_call_dura=@max_call_dura,rtp_mode=@rtp_mode,domain_id=@domain_id,
-                                   host=@host,tech_prefix=@tech_prefix 
-                                   WHERE  user_id = @user_id AND NOT EXISTS(SELECT 1 FROM  access_list WHERE (user_id != @user_id and
-                                    (domain_id=@domain_id and host=@host and tech_prefix=@tech_prefix )))";
-            int recordsEffected = ExecuteNonQueryText(cmdText, cmd =>
-            {
-                cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
-                cmd.Parameters.AddWithValue("@description", endPoint.Description);
-                cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
-                cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
-                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
-                cmd.Parameters.AddWithValue("@state_id", (int)endPoint.CurrentState);
-                cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
-                cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
-                cmd.Parameters.AddWithValue("@rtp_mode", (int)endPoint.RtpMode);
-                cmd.Parameters.AddWithValue("@domain_id", endPoint.DomainId);
-                cmd.Parameters.AddWithValue("@host", System.Net.IPAddress.Parse(endPoint.Host));
-                cmd.Parameters.AddWithValue("@tech_prefix", endPoint.TechPrefix ?? ".");
-            }
-                );
+            string cmdText = string.Format(@"UPDATE access_list
+	                             SET  description='{0}' , 
+                                   log_alias='{1}',codec_profile_id={2},trans_rule_id={3},state_id={4},
+                                   channels_limit={5}, max_call_dura={6},rtp_mode={7},domain_id={8},
+                                   host='{9}',tech_prefix='{10}' 
+                                   WHERE  user_id = {11} AND NOT EXISTS(SELECT 1 FROM  access_list WHERE (user_id != @user_id and
+                                    (domain_id={8} and host='{9}' and tech_prefix='{10}' )))"
+                , endPoint.Description
+                , endPoint.LogAlias
+                , endPoint.CodecProfileId
+                , endPoint.TransRuleId
+                , (int)endPoint.CurrentState
+                , endPoint.ChannelsLimit
+                , endPoint.MaxCallDuration
+                , (int)endPoint.RtpMode
+                , endPoint.DomainId
+                , endPoint.Host
+                , endPoint.TechPrefix ?? "."
+                , endPoint.EndPointId);
+            int recordsEffected = ExecuteNonQueryText(cmdText, null);
             return (recordsEffected > 0);
         }
 
@@ -242,9 +239,6 @@ namespace NP.IVSwitch.Data.Postgres
         }
         private bool InsertAcl(int endPointId, EndPoint endPoint, int groupId, AccessList accessList)
         {
-            string host = endPoint.Subnet != null
-                ? string.Format("{0}/{1}", endPoint.Host, endPoint.Subnet)
-                : endPoint.Host;
             string queries =
                 string.Format(@"
                                 INSERT INTO access_list(
@@ -253,7 +247,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 , tariff_id, route_table_id
                                 , codec_profile_id, group_id, max_call_dura, rtp_mode)
 	                            VALUES ('{0}', {1}, '{2}', {3}, {4}, '{5}',{6}, {7}, {8}, '{9}', {10}, {11}, {12}, {13}, {14}, {15});"
-                    , host, (int)endPoint.DomainId, endPoint.TechPrefix ?? ".", endPointId, endPoint.AccountId,
+                    , endPoint.Host, (int)endPoint.DomainId, endPoint.TechPrefix ?? ".", endPointId, endPoint.AccountId,
                     endPoint.Description, endPoint.TransRuleId
                     , (int)endPoint.CurrentState, endPoint.ChannelsLimit, endPoint.LogAlias, accessList.TariffId,
                     accessList.RouteTableId, endPoint.CodecProfileId, groupId, endPoint.MaxCallDuration
@@ -386,30 +380,28 @@ namespace NP.IVSwitch.Data.Postgres
         #region mappers
         private EndPoint EndPointMapper(IDataReader reader)
         {
+            int hostOrdinal = reader.GetOrdinal("host");
             EndPoint endPoint = new EndPoint
             {
-                EndPointId = (int) reader["user_id"],
-                AccountId = (int) reader["account_id"],
+                EndPointId = (int)reader["user_id"],
+                AccountId = (int)reader["account_id"],
                 Description = reader["description"] as string,
                 LogAlias = reader["log_alias"] as string,
-                CodecProfileId = (int) reader["codec_profile_id"],
-                TransRuleId = (int) reader["trans_rule_id"],
-                CurrentState = (State) GetReaderValue<Int16>(reader, "state_id"),
+                CodecProfileId = (int)reader["codec_profile_id"],
+                TransRuleId = (int)reader["trans_rule_id"],
+                CurrentState = (State)GetReaderValue<Int16>(reader, "state_id"),
                 ChannelsLimit = GetReaderValue<int>(reader, "channels_limit"),
-                MaxCallDuration = (int) reader["max_call_dura"],
-                RtpMode = (RtpMode) (int) reader["rtp_mode"],
-                DomainId = (Int16) reader["domain_id"],
+                MaxCallDuration = (int)reader["max_call_dura"],
+                RtpMode = (RtpMode)(int)reader["rtp_mode"],
+                DomainId = (Int16)reader["domain_id"],
                 SipLogin = reader["sip_login"] as string,
                 SipPassword = reader["sip_password"] as string,
                 TechPrefix = reader["tech_prefix"] as string
             };
-            string host = reader["host"] as string;
-
-            System.Net.IPAddress Host = GetReaderValue<System.Net.IPAddress>(reader, "host");
-            endPoint.Host = (Host == null) ? null : Host.ToString();
-
+            NpgsqlDataReader npgsqlreader = (NpgsqlDataReader)reader;
+            string hostObj = npgsqlreader.GetProviderSpecificValue(hostOrdinal).ToString();
+            endPoint.Host = hostObj;
             endPoint.EndPointType = endPoint.Host == null ? UserType.SIP : UserType.ACL;
-
             return endPoint;
         }
         private EndPointToUpdate EndPointToUpdateMapper(IDataReader reader)

@@ -184,25 +184,23 @@
             function loadStaticData() {
 
                 $scope.scopeModel.states = UtilsService.getArrayEnum(NP_IVSwitch_StateEnum);
-
                 $scope.scopeModel.rtpmodes = UtilsService.getArrayEnum(NP_IVSwitch_RtpModeEnum);
-
                 $scope.scopeModel.endpointtypes = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
 
-
                 if (endPointEntity == undefined) {
-
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[0];
                     $scope.scopeModel.selectedrtpmode = $scope.scopeModel.rtpmodes[1];
-
                     return;
                 }
-                $scope.scopeModel.host = endPointEntity.Host;
-                $scope.scopeModel.subnet = endPointEntity.Subnet;
+                var splitChars = '/';
+                if (endPointEntity.Host.indexOf(splitChars) >= 0) {
+                    var dtlStr = endPointEntity.Host.split(splitChars);
+                    $scope.scopeModel.host = dtlStr[0];
+                    $scope.scopeModel.subnet = dtlStr[1];
+                } else $scope.scopeModel.host = endPointEntity.Host;
                 $scope.scopeModel.description = endPointEntity.Description;
                 $scope.scopeModel.logalias = endPointEntity.LogAlias;
                 $scope.scopeModel.channelslimit = endPointEntity.ChannelsLimit;
-                $scope.scopeModel.host = endPointEntity.Host;
                 $scope.scopeModel.codecprofileid = endPointEntity.CodecProfileId;
                 $scope.scopeModel.translationruleid = endPointEntity.TranslationRuleId;
                 $scope.scopeModel.channelslimit = endPointEntity.ChannelsLimit;
@@ -212,7 +210,6 @@
                 $scope.scopeModel.siplogin = endPointEntity.SipLogin;
                 $scope.scopeModel.sippassword = endPointEntity.SipPassword;
                 $scope.scopeModel.endpointtype = endPointEntity.EndPointType;
-
 
                 if (endPointEntity.CurrentState != undefined)
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
@@ -337,8 +334,7 @@
                  MaxCallDuration: $scope.scopeModel.maxcallduration,
                  RtpMode: $scope.scopeModel.rtpmode,
                  DomainId: $scope.scopeModel.domaineid,
-                 Subnet: $scope.scopeModel.subnet,
-                 Host: $scope.scopeModel.host,
+                 Host: $scope.scopeModel.subnet != undefined ? $scope.scopeModel.host + "/" + $scope.scopeModel.subnet : $scope.scopeModel.host,
                  TechPrefix: $scope.scopeModel.techprefix,
                  SipLogin: $scope.scopeModel.siplogin,
                  SipPassword: $scope.scopeModel.sippassword,
