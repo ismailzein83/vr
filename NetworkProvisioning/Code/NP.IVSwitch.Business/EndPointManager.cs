@@ -47,6 +47,14 @@ namespace NP.IVSwitch.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allEndPoints.ToBigResult(input, filterExpression, EndPointDetailMapper));
         }
 
+        public List<EndPointInfo> GetAclList(int carrierId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            EndPointCarrierAccountExtension endPointsExtendedSettings =
+                carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(carrierId);
+            if (endPointsExtendedSettings == null) return null;
+            return endPointsExtendedSettings.AclEndPointInfo;
+        }
         public InsertOperationOutput<EndPointDetail> AddEndPoint(EndPointToAdd endPointItem)
         {
             InsertOperationOutput<EndPointDetail> insertOperationOutput = new InsertOperationOutput<EndPointDetail>
@@ -54,6 +62,12 @@ namespace NP.IVSwitch.Business
                 Result = InsertOperationResult.Failed,
                 InsertedObject = null
             };
+            if (!IpAddressHelper.ValidateIpOnSubnet(endPointItem.Entity.Host, endPointItem.Entity.Subnet))
+            {
+                insertOperationOutput.ShowExactMessage = true;
+                insertOperationOutput.Message = "IPAddress and its mask do not share the same family.";
+                return insertOperationOutput;
+            }
 
             int endPointId;
             if (Insert(endPointItem, out endPointId))

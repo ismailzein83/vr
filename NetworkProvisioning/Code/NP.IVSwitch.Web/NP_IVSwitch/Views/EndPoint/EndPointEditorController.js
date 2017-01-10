@@ -197,7 +197,8 @@
 
                     return;
                 }
-
+                $scope.scopeModel.host = endPointEntity.Host;
+                $scope.scopeModel.subnet = endPointEntity.Subnet;
                 $scope.scopeModel.description = endPointEntity.Description;
                 $scope.scopeModel.logalias = endPointEntity.LogAlias;
                 $scope.scopeModel.channelslimit = endPointEntity.ChannelsLimit;
@@ -336,6 +337,7 @@
                  MaxCallDuration: $scope.scopeModel.maxcallduration,
                  RtpMode: $scope.scopeModel.rtpmode,
                  DomainId: $scope.scopeModel.domaineid,
+                 Subnet: $scope.scopeModel.subnet,
                  Host: $scope.scopeModel.host,
                  TechPrefix: $scope.scopeModel.techprefix,
                  SipLogin: $scope.scopeModel.siplogin,

@@ -13,5 +13,6 @@ namespace NP.IVSwitch.Data
         bool Update(Route route);
         int? Insert(Route route);
         bool UpdateVendorUSer(Route route);
+        DateTime GetSwitchDateTime();
     }
 }

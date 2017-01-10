@@ -176,6 +176,7 @@
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-selector.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\TranslationRuleGridTemplate.html" />
     <Content Include="NP_IVSwitch\ModuleInitialization.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\CustomerRouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\DomainAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />

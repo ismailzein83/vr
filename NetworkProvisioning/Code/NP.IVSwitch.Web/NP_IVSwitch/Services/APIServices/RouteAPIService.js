@@ -24,9 +24,9 @@
         }
 
         function UpdateRoute(RouteItem) {
-               return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'UpdateRoute'), RouteItem);
+            return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'UpdateRoute'), RouteItem);
         }
- 
+
 
         function HasAddRoutePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['AddRoute']));
@@ -36,6 +36,9 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['UpdateRoute']));
         }
 
+        function GetSwitchDateTime() {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetSwitchDateTime'));
+        }
 
         return ({
             GetFilteredRoutes: GetFilteredRoutes,
@@ -44,6 +47,7 @@
             UpdateRoute: UpdateRoute,
             HasAddRoutePermission: HasAddRoutePermission,
             HasEditRoutePermission: HasEditRoutePermission,
+            GetSwitchDateTime: GetSwitchDateTime
         });
     }
 

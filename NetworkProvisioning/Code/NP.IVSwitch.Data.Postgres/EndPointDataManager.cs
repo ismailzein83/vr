@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Npgsql;
@@ -35,8 +36,12 @@ namespace NP.IVSwitch.Data.Postgres
             return GetItemsText(cmdText, EndPointMapper, (cmd) =>
             {
             });
+        }
 
-
+        public int GetTableId(int userId)
+        {
+            string query = string.Format("select route_table_id FROM access_list where user_id={0}", userId);
+            return (int)ExecuteScalarText(query, null);
         }
 
         #region public functions
@@ -237,6 +242,9 @@ namespace NP.IVSwitch.Data.Postgres
         }
         private bool InsertAcl(int endPointId, EndPoint endPoint, int groupId, AccessList accessList)
         {
+            string host = endPoint.Subnet != null
+                ? string.Format("{0}/{1}", endPoint.Host, endPoint.Subnet)
+                : endPoint.Host;
             string queries =
                 string.Format(@"
                                 INSERT INTO access_list(
@@ -245,7 +253,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 , tariff_id, route_table_id
                                 , codec_profile_id, group_id, max_call_dura, rtp_mode)
 	                            VALUES ('{0}', {1}, '{2}', {3}, {4}, '{5}',{6}, {7}, {8}, '{9}', {10}, {11}, {12}, {13}, {14}, {15});"
-                    , endPoint.Host, (int)endPoint.DomainId, endPoint.TechPrefix ?? ".", endPointId, endPoint.AccountId,
+                    , host, (int)endPoint.DomainId, endPoint.TechPrefix ?? ".", endPointId, endPoint.AccountId,
                     endPoint.Description, endPoint.TransRuleId
                     , (int)endPoint.CurrentState, endPoint.ChannelsLimit, endPoint.LogAlias, accessList.TariffId,
                     accessList.RouteTableId, endPoint.CodecProfileId, groupId, endPoint.MaxCallDuration
@@ -378,25 +386,24 @@ namespace NP.IVSwitch.Data.Postgres
         #region mappers
         private EndPoint EndPointMapper(IDataReader reader)
         {
-
-
-            EndPoint endPoint = new EndPoint();
-
-            endPoint.EndPointId = (int)reader["user_id"];
-            endPoint.AccountId = (int)reader["account_id"];
-            endPoint.Description = reader["description"] as string;
-
-            endPoint.LogAlias = reader["log_alias"] as string;
-            endPoint.CodecProfileId = (int)reader["codec_profile_id"];
-            endPoint.TransRuleId = (int)reader["trans_rule_id"];
-            endPoint.CurrentState = (State)GetReaderValue<Int16>(reader, "state_id");
-            endPoint.ChannelsLimit = GetReaderValue<int>(reader, "channels_limit");
-            endPoint.MaxCallDuration = (int)reader["max_call_dura"];
-            endPoint.RtpMode = (RtpMode)(int)reader["rtp_mode"];
-            endPoint.DomainId = (Int16)reader["domain_id"];
-            endPoint.SipLogin = reader["sip_login"] as string;
-            endPoint.SipPassword = reader["sip_password"] as string;
-            endPoint.TechPrefix = reader["tech_prefix"] as string;
+            EndPoint endPoint = new EndPoint
+            {
+                EndPointId = (int) reader["user_id"],
+                AccountId = (int) reader["account_id"],
+                Description = reader["description"] as string,
+                LogAlias = reader["log_alias"] as string,
+                CodecProfileId = (int) reader["codec_profile_id"],
+                TransRuleId = (int) reader["trans_rule_id"],
+                CurrentState = (State) GetReaderValue<Int16>(reader, "state_id"),
+                ChannelsLimit = GetReaderValue<int>(reader, "channels_limit"),
+                MaxCallDuration = (int) reader["max_call_dura"],
+                RtpMode = (RtpMode) (int) reader["rtp_mode"],
+                DomainId = (Int16) reader["domain_id"],
+                SipLogin = reader["sip_login"] as string,
+                SipPassword = reader["sip_password"] as string,
+                TechPrefix = reader["tech_prefix"] as string
+            };
+            string host = reader["host"] as string;
 
             System.Net.IPAddress Host = GetReaderValue<System.Net.IPAddress>(reader, "host");
             endPoint.Host = (Host == null) ? null : Host.ToString();

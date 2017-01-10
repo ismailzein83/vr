@@ -236,6 +236,31 @@ namespace NP.IVSwitch.Business
             }
             return routes;
         }
+        public Dictionary<int, int> GetRouteAndSupplierIds()
+        {
+            Dictionary<int, int> mappeDictionary = new Dictionary<int, int>();
+            IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+            Helper.SetSwitchConfig(dataManager);
+            Dictionary<int, Route> routes = dataManager.GetRoutes().ToDictionary(x => x.RouteId, x => x);
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var suppliers = carrierAccountManager.GetAllSuppliers();
+
+            foreach (var supplierItem in suppliers)
+            {
+                RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(supplierItem);
+                if (extendedSettingsObject == null) continue;
+                foreach (var routeInfo in extendedSettingsObject.RouteInfo)
+                {
+                    Route tempRoute;
+                    if (routes.TryGetValue(routeInfo.RouteId, out tempRoute))
+                    {
+                        mappeDictionary[routeInfo.RouteId] = supplierItem.CarrierAccountId;
+                    }
+                }
+
+            }
+            return mappeDictionary;
+        }
         #endregion
 
         #region Mappers

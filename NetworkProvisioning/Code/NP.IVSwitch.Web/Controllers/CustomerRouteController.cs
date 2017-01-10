@@ -16,8 +16,8 @@ namespace NP.IVSwitch.Web.Controllers
         CustomerRouteManager _manager = new CustomerRouteManager();
 
         [HttpPost]
-        [Route("GetFilteredCustomerRoute")]
-        public object GetFilteredCustomerRoute(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
+        [Route("GetFilteredCustomerRoutes")]
+        public object GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredCustomerRoutes(input));
         }

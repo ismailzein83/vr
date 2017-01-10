@@ -22,6 +22,7 @@ namespace NP.IVSwitch.Entities
         public UserType EndPointType { get; set; }
 
         public String Host { get; set; }
+        public int? Subnet { get; set; }
         public Int16 DomainId { get; set; }
         public String TechPrefix { get; set; }
         public int AccountId { get; set; }

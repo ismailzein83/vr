@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace NP.IVSwitch.Entities
 {
     public class CustomerRouteDetail
     {
-        public CustomerRoute Entity { get; set; }
+        public ConvertedCustomerRoute Entity { get; set; }
+
+        public string Options
+        {
+            get { return string.Join(",", Entity.Options.Select(r => r.ToString())); }
+        }
     }
 }

@@ -106,7 +106,7 @@ namespace NP.IVSwitch.Business
 
         private bool UpdateRule(MappingRule rule)
         {
-            List<object> carrierList = new List<object> { _carrierId.ToString() };
+            List<object> carrierList = new List<object> { _criteriaCarrierId.ToString() };
             GenericRuleCriteriaFieldValues criteriaFieldValues;
             if (rule.Criteria.FieldsValues.TryGetValue("Carrier", out criteriaFieldValues))
             {

@@ -12,8 +12,8 @@ function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npI
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var switchGrid = new FirewallGrid($scope, ctrl, $attrs);
-            switchGrid.initializeController();
+            var firewallGrid = new FirewallGrid($scope, ctrl, $attrs);
+            firewallGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
