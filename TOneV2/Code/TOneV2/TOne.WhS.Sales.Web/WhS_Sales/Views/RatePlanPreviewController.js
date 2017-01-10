@@ -72,13 +72,11 @@
 			};
 
 			$scope.scopeModel.onNewCountryPreviewGridReady = function (api) {
-				console.log('onNewCountryPreviewGridReady');
 				newCountryGridAPI = api;
 				newCountryGridReadyDeferred.resolve();
 			};
 
 			$scope.scopeModel.onChangedCountryPreviewGridReady = function (api) {
-				console.log('onChangedCountryPreviewGridReady');
 				changedCountryGridAPI = api;
 				changedCountryGridReadyDeferred.resolve();
 			};
