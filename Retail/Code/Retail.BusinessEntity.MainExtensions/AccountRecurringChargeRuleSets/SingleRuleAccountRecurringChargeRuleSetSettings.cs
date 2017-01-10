@@ -13,9 +13,9 @@ namespace Retail.BusinessEntity.MainExtensions.AccountRecurringChargeRuleSets
 
         public Guid RecurringChargeDefinitionId { get; set; }
 
-        public AccountCondition Condition { get; set; }
-
         public AccountChargeEvaluator ChargeEvaluator { get; set; }
+
+        public AccountCondition Condition { get; set; }
 
         public override List<ApplicableRecurringCharge> GetApplicableCharges(IAccountRecurringChargeRuleSetContext context)
         {

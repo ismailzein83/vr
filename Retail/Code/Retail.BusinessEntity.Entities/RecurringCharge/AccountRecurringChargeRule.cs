@@ -12,10 +12,10 @@ namespace Retail.BusinessEntity.Entities
 
         public string Name { get; set; }
 
-        public AccountCondition Condition { get; set; }
-
         public Guid RecurringChargeDefinitionId { get; set; }
 
         public AccountChargeEvaluator ChargeEvaluator { get; set; }
+
+        public AccountCondition Condition { get; set; }
     }
 }

@@ -36,10 +36,42 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountRecurringChargeRuleSet/Templates/RecurringChargeRuleSetEditor.html', parameters, settings);
         }
 
+        function addAccountRecurringChargeRule(recurringChargeRuleNames, onRecurringChargeRuleAdded) {
+
+            var parameters = {
+                recurringChargeRuleNames: recurringChargeRuleNames
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onRecurringChargeRuleAdded = onRecurringChargeRuleAdded
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountRecurringChargeRule/Templates/RecurringChargeRuleEditor.html', parameters, settings);
+        };
+        function editAccountRecurringChargeRule(recurringChargeRule, recurringChargeRuleNames, onRecurringChargeRuleUpdated) {
+
+            var parameters = {
+                recurringChargeRule: recurringChargeRule,
+                recurringChargeRuleNames: recurringChargeRuleNames
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onRecurringChargeRuleUpdated = onRecurringChargeRuleUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountRecurringChargeRule/Templates/RecurringChargeRuleEditor.html', parameters, settings);
+        }
+
 
         return {
             addAccountRecurringChargeRuleSet: addAccountRecurringChargeRuleSet,
-            editAccountRecurringChargeRuleSet: editAccountRecurringChargeRuleSet
+            editAccountRecurringChargeRuleSet: editAccountRecurringChargeRuleSet,
+            addAccountRecurringChargeRule: addAccountRecurringChargeRule,
+            editAccountRecurringChargeRule: editAccountRecurringChargeRule
         };
     }
 

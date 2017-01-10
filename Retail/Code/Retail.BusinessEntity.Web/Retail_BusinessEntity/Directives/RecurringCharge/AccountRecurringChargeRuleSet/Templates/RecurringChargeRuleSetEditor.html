@@ -4,7 +4,7 @@
 
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.name" label="Name" customvalidate="scopeModel.onValidateNames()"></vr-textbox>
+                    <vr-textbox value="scopeModel.name" label="Name" customvalidate="scopeModel.onValidateNames()" isrequired="true"></vr-textbox>
                 </vr-columns>
             </vr-row>
             <retail-be-recurringchargeruleset-settings on-ready="scopeModel.onRecurringChargeRuleSetSettingsReady"

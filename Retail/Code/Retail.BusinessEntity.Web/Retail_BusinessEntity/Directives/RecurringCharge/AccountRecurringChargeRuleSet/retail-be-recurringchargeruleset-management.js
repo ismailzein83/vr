@@ -72,7 +72,6 @@
                     }
 
                     //Loading Grid
-                    var recurringChargeRuleSetsByPriority = {};
                     if (recurringChargeRuleSets != undefined) {
                         for (var index = 0; index < recurringChargeRuleSets.length; index++) {
                             var currentRecurringChargeRuleSet = recurringChargeRuleSets[index];
@@ -109,7 +108,7 @@
             }
             function editRecurringChargeRuleSet(recurringChargeRuleSet) {
                 var onRecurringChargeRuleSetUpdated = function (updatedRecurringChargeRuleSet) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.recurringChargeRuleSets, updatedRecurringChargeRuleSet.Name, 'Entity.Name');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.recurringChargeRuleSets, recurringChargeRuleSet.Entity.Name, 'Entity.Name');
                     $scope.scopeModel.recurringChargeRuleSets[index] = { Entity: updatedRecurringChargeRuleSet };
                 };
 

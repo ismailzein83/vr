@@ -37,10 +37,12 @@
             };
 
             $scope.scopeModel.onValidateNames = function () {
+                if (recurringChargeRuleSetNames == undefined)
+                    return null;
 
                 if (recurringChargeRuleSetEntity != undefined && recurringChargeRuleSetEntity.Name == $scope.scopeModel.name)
                     return null;
-
+               
                 for (var i = 0; i < recurringChargeRuleSetNames.length; i++) {
                     var currentName = recurringChargeRuleSetNames[i];
                     if ($scope.scopeModel.name.toLowerCase() == currentName.toLowerCase()) {
