@@ -13,6 +13,7 @@ namespace Vanrise.Entities
     }
     public class CompanySetting
     {
+        public Guid CompanySettingId { get; set; }
         public string CompanyName { get; set; }
         public string ProfileName { get; set; }
         public long CompanyLogo { get; set; }

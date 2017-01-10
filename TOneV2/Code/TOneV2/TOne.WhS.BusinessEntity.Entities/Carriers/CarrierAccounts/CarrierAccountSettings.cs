@@ -27,6 +27,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Mask { get; set; }
 
         public int NominalCapacity { get; set; }
+        public Guid? InvoiceSettingId { get; set; }
+        public Guid? CompanySettingId { get; set; }
         public CarrierAccountPriceListSettings PriceListSettings { get; set; }
     }
     public class CarrierAccountPriceListSettings

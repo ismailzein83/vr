@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\CompanySettingsController.cs" />
     <Compile Include="Controllers\MasterLogController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\UserActionAuditController.cs" />
@@ -192,6 +193,7 @@
     <Content Include="Common\Directives\Filter\Text\vr-common-textfiltertype-selector.js" />
     <Content Include="Common\Directives\GridColumnWidth\Templates\GridColumnWidthEditorTemplate.html" />
     <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
+    <Content Include="Common\Directives\Settings\CompanySettings\vr-common-company-setting-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-companysettings-editor.js" />
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\Templates\StatusDefinitionBEEditor.html" />
@@ -301,6 +303,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
+    <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\MasterLogAPIService.js" />
     <Content Include="Common\Services\APIServices\StatusDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\UserActionAuditAPIService.js" />

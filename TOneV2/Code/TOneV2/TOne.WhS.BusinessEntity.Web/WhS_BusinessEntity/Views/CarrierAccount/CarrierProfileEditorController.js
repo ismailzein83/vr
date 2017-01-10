@@ -22,6 +22,9 @@
         var invoiceSettingsSelectorAPI;
         var invoiceSettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var companySettingsSelectorAPI;
+        var companySettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var documentsGridAPI;
         var documentsGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -58,6 +61,11 @@
                 phoneNumbers: [],
                 documents: [],
                 documentCategories: []
+            };
+
+            $scope.scopeModal.onCompanySettingSelectorReady = function (api) {
+                companySettingsSelectorAPI = api;
+                companySettingsSelectorReadyPromiseDeferred.resolve();
             };
 
             $scope.onCountryDirectiveReady = function (api) {
@@ -173,7 +181,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDocuments, loadInvoiceSettingSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDocuments, loadInvoiceSettingSelector, loadCompanySettingSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -216,6 +224,22 @@
             });
 
             return loadInvoiceSettingSelectorPromiseDeferred.promise;
+        }
+
+        function loadCompanySettingSelector() {
+            var loadCompanySettingSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            companySettingsSelectorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = {
+                    selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.CompanySettingId : undefined)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(companySettingsSelectorAPI, payload, loadCompanySettingSelectorPromiseDeferred);
+
+            });
+
+            return loadCompanySettingSelectorPromiseDeferred.promise;
         }
 
         function loadCountryCitySection() {
@@ -423,6 +447,7 @@
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     CityId: cityDirectiveAPI.getSelectedIds(),
                     InvoiceSettingId: invoiceSettingsSelectorAPI.getSelectedIds(),
+                    CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
                     Company: $scope.scopeModal.company,
                     Website: $scope.scopeModal.website,
                     RegistrationNumber: $scope.scopeModal.registrationNumber,

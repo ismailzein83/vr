@@ -18,6 +18,12 @@
         var currencySelectorAPI;
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceSettingsSelectorAPI;
+        var invoiceSettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var companySettingsSelectorAPI;
+        var companySettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var activationStatusSelectorAPI;
         var activationStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -59,6 +65,16 @@
             $scope.scopeModel.disableCarrierAccountType = isEditMode;
             $scope.scopeModel.disableSellingNumberPlan = isEditMode;
             $scope.scopeModel.showZoneServiceConfig = false;
+
+            $scope.scopeModel.onInvoiceSettingSelectorReady = function (api) {
+                invoiceSettingsSelectorAPI = api;
+                invoiceSettingsSelectorReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onCompanySettingSelectorReady = function (api) {
+                companySettingsSelectorAPI = api;
+                companySettingsSelectorReadyPromiseDeferred.resolve();
+            };
 
             $scope.scopeModel.onBPBusinessRuleSetSelectorReady = function (api) {
                 bpBusinessRuleSetDirectiveAPI = api;
@@ -241,7 +257,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector, loadBPBusinessRuleSetSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector, loadBPBusinessRuleSetSelector, loadInvoiceSettingSelector, loadCompanySettingSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -274,6 +290,41 @@
 
             return loadCarrierProfilePromiseDeferred.promise;
         }
+
+        function loadInvoiceSettingSelector() {
+            var loadInvoiceSettingSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            invoiceSettingsSelectorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = {
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.InvoiceSettingId : undefined)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(invoiceSettingsSelectorAPI, payload, loadInvoiceSettingSelectorPromiseDeferred);
+
+            });
+
+            return loadInvoiceSettingSelectorPromiseDeferred.promise;
+        }
+
+
+        function loadCompanySettingSelector() {
+            var loadCompanySettingSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            companySettingsSelectorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = {
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.CompanySettingId : undefined)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(companySettingsSelectorAPI, payload, loadCompanySettingSelectorPromiseDeferred);
+
+            });
+
+            return loadCompanySettingSelectorPromiseDeferred.promise;
+        }
+
+        
 
         function loadCurrencySelector() {
             var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -411,6 +462,8 @@
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     Mask: $scope.scopeModel.mask,
                     NominalCapacity: $scope.scopeModel.nominalCapacity,
+                    InvoiceSettingId: invoiceSettingsSelectorAPI.getSelectedIds(),
+                    CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
                     PriceListSettings: {
                         Email: $scope.scopeModel.automaticPriceListEmail,
                         FileMask: $scope.scopeModel.fileMask,

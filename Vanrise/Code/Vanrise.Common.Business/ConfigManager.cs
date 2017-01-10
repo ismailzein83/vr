@@ -68,6 +68,21 @@ namespace Vanrise.Common.Business
             return lstBankDetailsInfo;
         }
 
+
+        public IEnumerable<CompanySettingsInfo> GetCompanySettingsInfo()
+        {
+            IEnumerable<CompanySetting> companySettings = GetCompanySetting();
+            List<CompanySettingsInfo> lstCompanySettingsInfo = new List<CompanySettingsInfo>();
+            foreach (var company in companySettings)
+            {
+                CompanySettingsInfo companySettingsInfo = new CompanySettingsInfo();
+                companySettingsInfo = CompanySettingInfoMapper(company);
+                lstCompanySettingsInfo.Add(companySettingsInfo);
+            }
+
+            return lstCompanySettingsInfo;
+        }
+
         public IEnumerable<CompanySetting> GetCompanySetting()
         {
             SettingManager settingManager = new SettingManager();
@@ -100,6 +115,15 @@ namespace Vanrise.Common.Business
             {
                 BankDetailId = bankDetail.BankDetailId,
                 Bank = bankDetail.Bank,
+            };
+        }
+
+        private CompanySettingsInfo CompanySettingInfoMapper(CompanySetting company)
+        {
+            return new CompanySettingsInfo()
+            {
+                CompanySettingId = company.CompanySettingId,
+                CompanyName = company.CompanyName,
             };
         }
         #endregion

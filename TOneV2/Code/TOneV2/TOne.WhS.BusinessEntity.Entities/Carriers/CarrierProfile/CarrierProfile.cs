@@ -47,6 +47,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int CurrencyId { get; set; }
         public Guid? InvoiceSettingId { get; set; }
+        public Guid? CompanySettingId { get; set; }
         public List<CarrierContact> Contacts { get; set; }
         public VRTaxSetting TaxSetting { get; set; }
         public List<VRDocumentSetting> Documents { get; set; }
