@@ -50,24 +50,18 @@ app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VR_Invoice_Invo
 
                         var count = 0;
                         for (var i = 0; i < ctrl.data.length; i++) {
-                            var count2 = 0;
+
                             var item = ctrl.data[i].Entity;
                             if (item.MonthlyId == VR_Invoice_InvoiceMonthlyEnum.LastDay.value) {
-                                count = count + 1;
-                            } else {
-                                for (var j = 0; j < ctrl.data.length; j++) {
-                                    var item2 = ctrl.data[j].Entity;
-                                    if (item2.SpecificDay == item.SpecificDay) {
-                                        count2 = count2 + 1;
-                                    }
-                                }
-                                if (count2 > 1)
-                                    return "Same Day added";
+                                if (ctrl.data.length != i +1)
+                                    return "Wrong position to Last Day";
+                            }
+                            if (i + 1 < ctrl.data.length) {
+                                var nextItem = ctrl.data[i + 1].Entity;
+                                if (parseInt(item.SpecificDay) >= parseInt(nextItem.SpecificDay))
+                                    return "Wrong position to specific day: " + nextItem.SpecificDay;
                             }
                         }
-
-                        if (count > 1)
-                            return "Same Day added";
                         return null;
                     }
                     return "You Should add at least one day.";

@@ -19,7 +19,7 @@
     <vr-columns width="fullrow">
 
         <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.data" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+            <vr-datagrid datasource="ctrl.data" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px" enabledraggablerow="true"
                          on-ready="onGridReady" hidegridmenu ondeleterow="ctrl.removeItem">
                 <vr-datagridcolumn headertext="'Days of the month'" field="'Entity.MonthlyType'" widthfactor="10" disablesorting></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Specific Day'" field="'Entity.SpecificDay'" widthfactor="10" disablesorting></vr-datagridcolumn>
