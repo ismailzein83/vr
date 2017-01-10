@@ -15,6 +15,7 @@ namespace TOne.WhS.Sales.Entities
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
 		public int CountryId { get; set; }
+		public bool IsCountryEnded { get; set; }
         public DateTime? SoldOn { get; set; }
         public ZoneRateGroup ZoneRateGroup { get; set; }
         public RateToChange NormalRateToChange { get; set; }

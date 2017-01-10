@@ -82,6 +82,10 @@ namespace TOne.WhS.Sales.Business
 			var zoneItems = new List<ZoneItem>();
 			Changes draft = _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft);
 
+			var changedCountryIds = new List<int>();
+			if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
+				changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+
 			int? sellingProductId = GetSellingProductId(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, false);
 			if (sellingProductId == null)
 				throw new Exception("Selling product does not exist");
@@ -125,6 +129,7 @@ namespace TOne.WhS.Sales.Business
 					rpManager.SetCustomerZoneRP(zoneItem, input.Filter.OwnerId, sellingProductId.Value, zoneDraft);
 				}
 
+				zoneItem.IsCountryEnded = changedCountryIds.Contains(zoneItem.CountryId);
 				zoneItems.Add(zoneItem);
 			}
 
@@ -141,7 +146,7 @@ namespace TOne.WhS.Sales.Business
 
 			return zoneItems;
 		}
-
+		
 		#region Zone Base Rate Methods
 
 		private void AddZoneBaseRates(BaseRatesByZone baseRatesByZone, ZoneItem zoneItem)
