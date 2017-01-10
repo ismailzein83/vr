@@ -11,7 +11,8 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -54,8 +55,6 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-
-                    console.log(payload);
 
                     var promises = [];
                     var accountRecurringChargeRuleSetSettings;

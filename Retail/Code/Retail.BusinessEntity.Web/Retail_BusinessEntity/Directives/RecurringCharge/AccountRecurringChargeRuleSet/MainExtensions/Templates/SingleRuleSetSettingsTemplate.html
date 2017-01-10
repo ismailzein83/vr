@@ -1,11 +1,21 @@
 ﻿
 
-<!--<vr-row removeline>-->
-    <!--<vr-columns width="1/2row">
-        <vr-textbox value="scopeModel.creditLimit" label="Credit Limit" type="number" isrequired></vr-textbox>
-    </vr-columns>-->
+<vr-row>
     <retail-be-recurringchargedefinition-selector on-ready="scopeModel.onRecurringChargeDefinitionSelectorReady"
                                                   selectedvalues="scopeModel.recurringChargeDefinitionSelectedValues"
-                                                  isrequired="true" normal-col-num="6" customlabel="Type">
+                                                  isrequired="true" normal-col-num="6" customlabel="Recurring Charge">
     </retail-be-recurringchargedefinition-selector>
-<!--</vr-row>-->
+</vr-row>
+
+<retail-be-accountchargeevaluator on-ready="scopeModel.onAccountChargeEvaluatorSelectiveReady"
+                                  normal-col-num="6" isrequired="true">
+</retail-be-accountchargeevaluator>
+
+<retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
+                                      normal-col-num="6">
+</retail-be-accountcondition-selective>
+
+
+
+
+

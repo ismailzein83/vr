@@ -30,9 +30,6 @@
         function RecurringChargeRuleSetManagementCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            //var productDefinitionId;
-            //var packageNameByIds;
-
             var gridAPI;
 
             function initializeController() {
@@ -49,12 +46,12 @@
                         $scope.scopeModel.recurringChargeRuleSets.push({ Entity: addedRecurringChargeRuleSet });
                     };
 
-                    Retail_BE_RecurringChargeService.addAccountRecurringChargeRuleSet(onRecurringChargeRuleSetAdded);
+                    Retail_BE_RecurringChargeService.addAccountRecurringChargeRuleSet(getRecurringChargeRuleSetNames(), onRecurringChargeRuleSetAdded);
                 };
                 $scope.scopeModel.onDeleteRecurringChargeRuleSet = function (deletedRecurringChargeRuleSet) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.recurringChargeRuleSets, deletedRecurringChargeRuleSet.Entity.PackageName, 'Entity.PackageName');
+                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.recurringChargeRuleSets, deletedRecurringChargeRuleSet.Entity.Name, 'Entity.Name');
                             $scope.scopeModel.recurringChargeRuleSets.splice(index, 1);
                         }
                     });
@@ -71,8 +68,6 @@
                     var recurringChargeRuleSets;
 
                     if (payload != undefined) {
-                        //productDefinitionId = payload.productDefinitionId;
-                        //packageNameByIds = payload.packageNameByIds;
                         recurringChargeRuleSets = payload.recurringChargeRuleSets;
                     }
 
@@ -81,7 +76,6 @@
                     if (recurringChargeRuleSets != undefined) {
                         for (var index = 0; index < recurringChargeRuleSets.length; index++) {
                             var currentRecurringChargeRuleSet = recurringChargeRuleSets[index];
-                            //currentRecurringChargeRuleSet = extendRecurringChargeRuleSetObj(currentRecurringChargeRuleSet);
                             $scope.scopeModel.recurringChargeRuleSets.push({ Entity: currentRecurringChargeRuleSet });
                         }
                     }
@@ -115,34 +109,23 @@
             }
             function editRecurringChargeRuleSet(recurringChargeRuleSet) {
                 var onRecurringChargeRuleSetUpdated = function (updatedRecurringChargeRuleSet) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.recurringChargeRuleSets, updatedRecurringChargeRuleSet.PackageName, 'Entity.PackageName');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.recurringChargeRuleSets, updatedRecurringChargeRuleSet.Name, 'Entity.Name');
                     $scope.scopeModel.recurringChargeRuleSets[index] = { Entity: updatedRecurringChargeRuleSet };
                 };
 
-                console.log(recurringChargeRuleSet);
-
-                Retail_BE_RecurringChargeService.editAccountRecurringChargeRuleSet(recurringChargeRuleSet.Entity, onRecurringChargeRuleSetUpdated);
+                Retail_BE_RecurringChargeService.editAccountRecurringChargeRuleSet(recurringChargeRuleSet.Entity, getRecurringChargeRuleSetNames(), onRecurringChargeRuleSetUpdated);
             }
 
-            //function extendRecurringChargeRuleSetObj(recurringChargeRuleSet) {
-            //    if (recurringChargeRuleSet == undefined)
-            //        return;
+            function getRecurringChargeRuleSetNames() {
+                if ($scope.scopeModel.recurringChargeRuleSets == undefined)
+                    return;
 
-            //    recurringChargeRuleSet.PackageName = packageNameByIds[recurringChargeRuleSet.PackageId];
-            //    return recurringChargeRuleSet;
-            //}
-            //function getExcludedPackageIds() {
-            //    var recurringChargeRuleSets = $scope.scopeModel.recurringChargeRuleSets;
-            //    if (recurringChargeRuleSets.length == 0)
-            //        return;
-
-            //    var excludedPackageIds = [];
-            //    for (var i = 0; i < recurringChargeRuleSets.length; i++) {
-            //        var currentRecurringChargeRuleSet = recurringChargeRuleSets[i].Entity;
-            //        excludedPackageIds.push(currentRecurringChargeRuleSet.PackageId);
-            //    }
-            //    return excludedPackageIds;
-            //}
+                var names = [];
+                for (var index = 0; index < $scope.scopeModel.recurringChargeRuleSets.length; index++) {
+                    names.push($scope.scopeModel.recurringChargeRuleSets[index].Entity.Name)
+                }
+                return names;
+            }
         }
     }
 

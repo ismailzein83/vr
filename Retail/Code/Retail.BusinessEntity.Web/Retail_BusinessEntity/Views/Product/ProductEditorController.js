@@ -291,6 +291,7 @@
                 Name: $scope.scopeModel.name,
                 Settings: {
                     ProductDefinitionId: productDefinitionSelectorAPI.getSelectedIds(),
+                    RecurringChargeRuleSets: recurringChargeRuleSetsDirectiveAPI.getData(),
                     Packages: packageItemsDirectiveAPI.getData(),
                     ExtendedSettings: productExtendedSettingsDirectiveAPI.getData()
                 }

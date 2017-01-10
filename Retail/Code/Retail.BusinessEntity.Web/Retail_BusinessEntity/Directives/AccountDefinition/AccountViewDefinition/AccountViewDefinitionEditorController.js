@@ -12,8 +12,10 @@
        
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         var accountConditionSelectiveAPI;
         var accountConditionSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -28,6 +30,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onAccountViewDefinitionSettingsReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyDeferred.resolve();
@@ -36,6 +39,7 @@
                 accountConditionSelectiveAPI = api;
                 accountConditionSelectiveReadyDeferred.resolve();
             };
+
             $scope.scopeModel.save = function () {
                 if (isEditMode)
                     return update();

@@ -1,0 +1,18 @@
+﻿
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="scopeModel.onSelectorReady"
+                   datasource="scopeModel.templateConfigs"
+                   selectedvalues="scopeModel.selectedTemplateConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   isrequired="ctrl.isrequired"
+                   label="Charge Evaluator">
+        </vr-select>
+    </vr-columns>
+    <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"
+                         on-ready="scopeModel.onDirectiveReady" customvalidate="ctrl.customvalidate" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired">
+    </vr-directivewrapper>
+</vr-row>
+
+

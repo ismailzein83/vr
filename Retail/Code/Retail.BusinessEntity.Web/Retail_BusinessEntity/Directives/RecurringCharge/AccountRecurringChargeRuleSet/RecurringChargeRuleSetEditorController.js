@@ -9,8 +9,7 @@
         var isEditMode;
 
         var recurringChargeRuleSetEntity;
-        var productDefinitionId;
-        var excludedPackageIds;
+        var recurringChargeRuleSetNames;
 
         var recurringChargeRuleSetSettingsSelectiveAPI;
         var recurringChargeRuleSetSettingsSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -24,6 +23,7 @@
 
             if (parameters != undefined) {
                 recurringChargeRuleSetEntity = parameters.recurringChargeRuleSet;
+                recurringChargeRuleSetNames = parameters.recurringChargeRuleSetNames;
             }
 
             isEditMode = (recurringChargeRuleSetEntity != undefined);
@@ -34,6 +34,20 @@
             $scope.scopeModel.onRecurringChargeRuleSetSettingsReady = function (api) {
                 recurringChargeRuleSetSettingsSelectiveAPI = api;
                 recurringChargeRuleSetSettingsSelectiveReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onValidateNames = function () {
+
+                if (recurringChargeRuleSetEntity != undefined && recurringChargeRuleSetEntity.Name == $scope.scopeModel.name)
+                    return null;
+
+                for (var i = 0; i < recurringChargeRuleSetNames.length; i++) {
+                    var currentName = recurringChargeRuleSetNames[i];
+                    if ($scope.scopeModel.name.toLowerCase() == currentName.toLowerCase()) {
+                        return 'Same Rule Name Exists';
+                    }
+                }
+                return null;
             };
 
             $scope.scopeModel.save = function () {

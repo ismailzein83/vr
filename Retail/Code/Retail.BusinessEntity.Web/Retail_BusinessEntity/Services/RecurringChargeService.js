@@ -6,9 +6,10 @@
 
     function RecurringChargeService(VRModalService) {
 
-        function addAccountRecurringChargeRuleSet(onRecurringChargeRuleSetAdded) {
+        function addAccountRecurringChargeRuleSet(recurringChargeRuleSetNames, onRecurringChargeRuleSetAdded) {
 
             var parameters = {
+                recurringChargeRuleSetNames: recurringChargeRuleSetNames
             };
 
             var settings = {};
@@ -19,10 +20,11 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountRecurringChargeRuleSet/Templates/RecurringChargeRuleSetEditor.html', parameters, settings);
         };
-        function editAccountRecurringChargeRuleSet(recurringChargeRuleSet, onRecurringChargeRuleSetUpdated) {
+        function editAccountRecurringChargeRuleSet(recurringChargeRuleSet, recurringChargeRuleSetNames, onRecurringChargeRuleSetUpdated) {
 
             var parameters = {
-                recurringChargeRuleSet: recurringChargeRuleSet
+                recurringChargeRuleSet: recurringChargeRuleSet,
+                recurringChargeRuleSetNames: recurringChargeRuleSetNames
             };
 
             var settings = {};

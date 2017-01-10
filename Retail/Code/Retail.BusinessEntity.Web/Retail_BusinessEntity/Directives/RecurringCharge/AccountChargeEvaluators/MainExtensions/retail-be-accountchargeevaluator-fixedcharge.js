@@ -24,7 +24,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/MainExtensions/AccountChargeEvaluators/Templates/FixedChargeAccountChargeEvaluatorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountChargeEvaluators/MainExtensions/Templates/FixedChargeAccountChargeEvaluatorTemplate.html'
         };
 
         function FixedChargeCtor($scope, ctrl) {

@@ -440,8 +440,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\retail-be-productdefinition-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionExtendedSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\AccountChargeEvaluators\retail-be-accountchargeevaluator-fixedcharge.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\AccountChargeEvaluators\Templates\FixedChargeAccountChargeEvaluatorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountChargeEvaluators\MainExtensions\retail-be-accountchargeevaluator-fixedcharge.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountChargeEvaluators\MainExtensions\Templates\FixedChargeAccountChargeEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\retail-be-productextendedsettings-prepaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\Templates\PostPaidSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\retail-be-productextendedsettings-postpaid.js" />
@@ -453,11 +453,11 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRuleSet\MainExtensions\Templates\SingleRuleSetSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRuleSet\RecurringChargeRuleSetEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-product-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-productpackageitem-accountchargeevaluator.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountChargeEvaluators\retail-be-accountchargeevaluator.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-product-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\retail-be-productpackageitem-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRuleSet\retail-be-recurringchargeruleset-management.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\AccountChargeEvaluatorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountChargeEvaluators\Templates\AccountChargeEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductPackageItemEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\Templates\ProductPackageItemManagementTemplate.html" />
@@ -534,7 +534,7 @@
     <Content Include="Retail_BusinessEntity\Services\PricingPackageSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\PopService.js" />
     <Content Include="Retail_BusinessEntity\Services\ProductService.js" />
-    <Content Include="Retail_BusinessEntity\Services\RecurringCharge.js" />
+    <Content Include="Retail_BusinessEntity\Services\RecurringChargeService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusChargingSetService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\SwitchAPIService.js" />

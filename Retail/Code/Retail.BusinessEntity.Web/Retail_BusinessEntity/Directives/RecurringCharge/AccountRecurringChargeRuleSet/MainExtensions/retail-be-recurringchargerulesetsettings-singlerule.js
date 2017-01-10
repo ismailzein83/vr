@@ -33,12 +33,26 @@
             var recurringChargeDefinitionSelectorAPI;
             var recurringChargeDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var accountChargeEvaluatorSelectiveAPI;
+            var accountChargeEvaluatorSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var accountConditionSelectiveAPI;
+            var accountConditionSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onRecurringChargeDefinitionSelectorReady = function (api) {
                     recurringChargeDefinitionSelectorAPI = api;
                     recurringChargeDefinitionSelectorReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onAccountChargeEvaluatorSelectiveReady = function (api) {
+                    accountChargeEvaluatorSelectiveAPI = api;
+                    accountChargeEvaluatorSelectiveReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onAccountConditionSelectiveReady = function (api) {
+                    accountConditionSelectiveAPI = api;
+                    accountConditionSelectiveReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -49,8 +63,6 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    console.log(payload);
-
                     var accountRecurringChargeRuleSetSettings;
 
                     if (payload != undefined) {
@@ -60,6 +72,14 @@
                     //Loading RecurringChargeDefinition Selector
                     var recurringChargeDefinitionSelectorLoadPromise = getRecurringChargeDefinitionSelectorLoadPromise();
                     promises.push(recurringChargeDefinitionSelectorLoadPromise);
+
+                    //Loading AccountChargeEvaluator Selective
+                    var accountChargeEvaluatorSelectiveLoadPromise = getAccountChargeEvaluatorSelectiveLoadPromise();
+                    promises.push(accountChargeEvaluatorSelectiveLoadPromise);
+
+                    //Loading AccountCondition Selective
+                    var accountConditionSelectiveLoadPromise = getAccountConditionSelectiveLoadPromise();
+                    promises.push(accountConditionSelectiveLoadPromise);
 
 
                     function getRecurringChargeDefinitionSelectorLoadPromise() {
@@ -78,6 +98,38 @@
 
                         return recurringChargeDefinitionSelectorLoadDeferred.promise;
                     }
+                    function getAccountChargeEvaluatorSelectiveLoadPromise() {
+                        var accountChargeEvaluatorSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        accountChargeEvaluatorSelectiveReadyDeferred.promise.then(function () {
+
+                            var accountChargeEvaluatorSelectivePayload;
+                            if (accountRecurringChargeRuleSetSettings != undefined) {
+                                accountChargeEvaluatorSelectivePayload = {
+                                    chargeEvaluator: accountRecurringChargeRuleSetSettings.ChargeEvaluator
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(accountChargeEvaluatorSelectiveAPI, accountChargeEvaluatorSelectivePayload, accountChargeEvaluatorSelectiveLoadDeferred);
+                        });
+
+                        return accountChargeEvaluatorSelectiveLoadDeferred.promise;
+                    }
+                    function getAccountConditionSelectiveLoadPromise() {
+                        var accountConditionSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        accountConditionSelectiveReadyDeferred.promise.then(function () {
+
+                            var accountConditionSelectivePayload;
+                            if (accountRecurringChargeRuleSetSettings != undefined) {
+                                accountConditionSelectivePayload = {
+                                    beFilter: accountRecurringChargeRuleSetSettings.Condition
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
+                        });
+
+                        return accountConditionSelectiveLoadDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -86,7 +138,9 @@
 
                     var obj = {
                         $type: "Retail.BusinessEntity.MainExtensions.AccountRecurringChargeRuleSets.SingleRuleAccountRecurringChargeRuleSetSettings, Retail.BusinessEntity.MainExtensions",
-                        RecurringChargeDefinitionId: recurringChargeDefinitionSelectorAPI.getSelectedIds()
+                        RecurringChargeDefinitionId: recurringChargeDefinitionSelectorAPI.getSelectedIds(),
+                        ChargeEvaluator: accountChargeEvaluatorSelectiveAPI.getData(),
+                        Condition: accountConditionSelectiveAPI.getData()
                     };
                     return obj;
                 };

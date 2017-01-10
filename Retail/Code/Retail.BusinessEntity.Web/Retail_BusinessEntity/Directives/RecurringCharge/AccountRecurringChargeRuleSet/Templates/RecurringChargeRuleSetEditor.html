@@ -4,10 +4,12 @@
 
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                    <vr-textbox value="scopeModel.name" label="Name" customvalidate="scopeModel.onValidateNames()"></vr-textbox>
                 </vr-columns>
-                <retail-be-recurringchargeruleset-settings on-ready="scopeModel.onRecurringChargeRuleSetSettingsReady" normal-col-num="6"></retail-be-recurringchargeruleset-settings>
             </vr-row>
+            <retail-be-recurringchargeruleset-settings on-ready="scopeModel.onRecurringChargeRuleSetSettingsReady"
+                                                       normal-col-num="6" isrequired="true">
+            </retail-be-recurringchargeruleset-settings>
 
         </vr-form>
     </vr-modalbody>

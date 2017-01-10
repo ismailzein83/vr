@@ -11,7 +11,8 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -20,7 +21,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/AccountChargeEvaluatorTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountChargeEvaluators/Templates/AccountChargeEvaluatorTemplate.html"
         };
 
         function AccountChargeEvaluatorCtor($scope, ctrl, $attrs) {
@@ -121,6 +122,6 @@
         }
     }
 
-    app.directive('retailBeProductpackageitemAccountchargeevaluator', AccountChargeEvaluatorDirective);
+    app.directive('retailBeAccountchargeevaluator', AccountChargeEvaluatorDirective);
 
 })(app);
