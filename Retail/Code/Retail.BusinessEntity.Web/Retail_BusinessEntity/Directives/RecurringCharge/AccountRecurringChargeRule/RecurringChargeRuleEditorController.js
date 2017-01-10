@@ -170,6 +170,7 @@
 
             return {
                 Name: $scope.scopeModel.name,
+                RecurringChargeRuleId: recurringChargeRuleEntity != undefined ? recurringChargeRuleEntity.RecurringChargeRuleId : UtilsService.guid(),
                 RecurringChargeDefinitionId: recurringChargeDefinitionSelectorAPI.getSelectedIds(),
                 ChargeEvaluator: accountChargeEvaluatorSelectiveAPI.getData(),
                 Condition: accountConditionSelectiveAPI.getData()
