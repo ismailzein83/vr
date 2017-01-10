@@ -367,7 +367,9 @@ namespace Vanrise.Data.SQL
                 throw new ArgumentNullException("bulkInsertInfo.FieldSeparator");
 
             string sqlPassword;
-            string baseBCPArgs = GetBaseBCPArgs(bulkInsertInfo, "in " + dataFilePath, out sqlPassword);
+
+            //string baseBCPArgs = GetBaseBCPArgs(bulkInsertInfo, "in " + dataFilePath, out sqlPassword);
+            string baseBCPArgs = GetBaseBCPArgs(bulkInsertInfo, string.Format("in \"{0}\"", dataFilePath), out sqlPassword);
 
             string bcpFormatArgs = GetBCPFormatArgs(bulkInsertInfo);
 
