@@ -215,6 +215,8 @@
     <Compile Include="RecurringCharge\AccountRecurringChargeEvaluatorConfig.cs" />
     <Compile Include="RecurringCharge\AccountRecurringChargeRuleSetSettingsConfig.cs" />
     <Compile Include="RecurringCharge\RecurringChargeDefinition.cs" />
+    <Compile Include="RecurringCharge\RecurringChargeDefinitionInfo.cs" />
+    <Compile Include="RecurringCharge\RecurringChargeDefinitionInfoFilter.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodConfig.cs" />
     <Compile Include="RecurringCharge\AccountRecurringChargeRule.cs" />
     <Compile Include="RecurringCharge\AccountRecurringChargeRuleSet.cs" />

@@ -119,6 +119,8 @@
                     $scope.scopeModel.recurringChargeRuleSets[index] = { Entity: updatedRecurringChargeRuleSet };
                 };
 
+                console.log(recurringChargeRuleSet);
+
                 Retail_BE_RecurringChargeService.editAccountRecurringChargeRuleSet(recurringChargeRuleSet.Entity, onRecurringChargeRuleSetUpdated);
             }
 

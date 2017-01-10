@@ -1,14 +1,11 @@
 ﻿
 
 <!--<vr-row removeline>-->
-    <vr-columns width="1/2row">
+    <!--<vr-columns width="1/2row">
         <vr-textbox value="scopeModel.creditLimit" label="Credit Limit" type="number" isrequired></vr-textbox>
-    </vr-columns>
-    <!--<vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady"
-                                 selectedvalues="scopeModel.currencySelectedValues"
-                                 isrequired="true"
-                                 normal-col-num="6">
-    </vr-common-currency-selector>-->
+    </vr-columns>-->
+    <retail-be-recurringchargedefinition-selector on-ready="scopeModel.onRecurringChargeDefinitionSelectorReady"
+                                                  selectedvalues="scopeModel.recurringChargeDefinitionSelectedValues"
+                                                  isrequired="true" normal-col-num="6" customlabel="Type">
+    </retail-be-recurringchargedefinition-selector>
 <!--</vr-row>-->
-
-

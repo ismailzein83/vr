@@ -107,7 +107,8 @@
 
             return {
                 Name: $scope.scopeModel.name,
-                AccountRecurringChargeRuleSetId: recurringChargeRuleSetEntity != undefined ? recurringChargeRuleSetEntity.AccountRecurringChargeRuleSetId : UtilsService.guid()
+                AccountRecurringChargeRuleSetId: recurringChargeRuleSetEntity != undefined ? recurringChargeRuleSetEntity.AccountRecurringChargeRuleSetId : UtilsService.guid(),
+                Settings: recurringChargeRuleSetSettingsSelectiveAPI.getData()
             };
         }
     }

@@ -168,6 +168,7 @@
     <Compile Include="Controllers\PopController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />
+    <Compile Include="Controllers\RecurringChargeDefinitionController.cs" />
     <Compile Include="Controllers\RevenueComparisonController.cs" />
     <Compile Include="Controllers\StatusChargingSetController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
@@ -181,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
+    <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
@@ -463,6 +465,7 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRuleSet\Templates\RecurringChargeRuleSetEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRuleSet\Templates\RecurringChargeRuleSetManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRuleSet\Templates\RecurringChargeRuleSetSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\retail-be-recurringchargedefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
@@ -507,6 +510,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />

@@ -30,16 +30,16 @@
         function SingleRuleCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            //var currencySelectorAPI;
-            //var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var recurringChargeDefinitionSelectorAPI;
+            var recurringChargeDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
-                //$scope.scopeModel.onCurrencySelectorReady = function (api) {
-                //    currencySelectorAPI = api;
-                //    currencySelectorReadyDeferred.resolve();
-                //};
+                $scope.scopeModel.onRecurringChargeDefinitionSelectorReady = function (api) {
+                    recurringChargeDefinitionSelectorAPI = api;
+                    recurringChargeDefinitionSelectorReadyDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -47,41 +47,47 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
-                    //var currencyId;
+                    console.log(payload);
 
-                    //if (payload != undefined && payload.extendedSettings != undefined) {
-                    //    $scope.scopeModel.creditLimit = payload.extendedSettings.CreditLimit;
-                    //    currencyId = payload.extendedSettings.CurrencyId;
-                    //}
+                    var accountRecurringChargeRuleSetSettings;
 
-                    ////Loading Currency Selector
-                    //var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    if (payload != undefined) {
+                        accountRecurringChargeRuleSetSettings = payload.accountRecurringChargeRuleSetSettings;
+                    }
 
-                    //currencySelectorReadyDeferred.promise.then(function () {
+                    //Loading RecurringChargeDefinition Selector
+                    var recurringChargeDefinitionSelectorLoadPromise = getRecurringChargeDefinitionSelectorLoadPromise();
+                    promises.push(recurringChargeDefinitionSelectorLoadPromise);
 
-                    //    var currencySelectorPayload = {};
-                    //    if (currencyId) {
-                    //        currencySelectorPayload.selectedIds = currencyId;
-                    //    }
-                    //    else {
-                    //        currencySelectorPayload.selectSystemCurrency = true;
-                    //    }
 
-                    //    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadDeferred);
-                    //});
+                    function getRecurringChargeDefinitionSelectorLoadPromise() {
+                        var recurringChargeDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    //return currencySelectorLoadDeferred.promise;
+                        recurringChargeDefinitionSelectorReadyDeferred.promise.then(function () {
+
+                            var recurringChargeDefinitionSelectorPayload;
+                            if (accountRecurringChargeRuleSetSettings != undefined) {
+                                recurringChargeDefinitionSelectorPayload = {
+                                    selectedIds: accountRecurringChargeRuleSetSettings.RecurringChargeDefinitionId
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(recurringChargeDefinitionSelectorAPI, recurringChargeDefinitionSelectorPayload, recurringChargeDefinitionSelectorLoadDeferred);
+                        });
+
+                        return recurringChargeDefinitionSelectorLoadDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
 
                     var obj = {
-                        $type: "Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid.PostPaidSettings, Retail.BusinessEntity.MainExtensions",
-                        CreditLimit: $scope.scopeModel.creditLimit,
-                        CurrencyId: currencySelectorAPI.getSelectedIds()
+                        $type: "Retail.BusinessEntity.MainExtensions.AccountRecurringChargeRuleSets.SingleRuleAccountRecurringChargeRuleSetSettings, Retail.BusinessEntity.MainExtensions",
+                        RecurringChargeDefinitionId: recurringChargeDefinitionSelectorAPI.getSelectedIds()
                     };
-
                     return obj;
                 };
 
