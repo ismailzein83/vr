@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
 
         public override IEnumerable<long> GetZoneIds(ISaleZoneGroupContext context)
         {
-            return this.ZoneIds;
+            return this.ZoneIds != null ? this.ZoneIds : new List<long>();
         }
 
         public override string GetDescription(ISaleZoneGroupContext context)

@@ -20,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan
                 if (saleZonesofSellingNumberPlan != null && saleZonesofSellingNumberPlan.Count() > 0)
                     zoneIds.AddRange(saleZonesofSellingNumberPlan.Select(itm => itm.SaleZoneId));
             }
-            return zoneIds.Count == 0 ? null : zoneIds;
+            return zoneIds;
         }
 
         public override string GetDescription(ISaleZoneGroupContext context)

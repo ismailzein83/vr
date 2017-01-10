@@ -12,11 +12,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups
     {
         public override Guid ConfigId { get { return new Guid("967c9c1f-0a9f-41ca-8a19-3a70338fe853"); } }
 
-        public List<int> CustomerIds { get; set; } 
+        public List<int> CustomerIds { get; set; }
 
         public override IEnumerable<int> GetCustomerIds(ICustomerGroupContext context)
         {
-            return this.CustomerIds;
+            return this.CustomerIds != null ? this.CustomerIds : new List<int>();
         }
 
         public override string GetDescription(ICustomerGroupContext context)

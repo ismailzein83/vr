@@ -19,14 +19,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
             SaleZoneManager manager = new SaleZoneManager();
             IEnumerable<SaleZone> saleZonesofSellingNumberPlan = manager.GetSaleZonesBySellingNumberPlan(base.SellingNumberPlanId);
             
-            IEnumerable<long> allExceptZoneIds = null;
+            List<long> allExceptZoneIds = new List<long>();
 
             if (saleZonesofSellingNumberPlan != null)
             {
                 IEnumerable<SaleZone> allExceptSaleZoneList = saleZonesofSellingNumberPlan.FindAllRecords(x => this.ZoneIds == null || !this.ZoneIds.Contains(x.SaleZoneId));
                 if(allExceptSaleZoneList != null)
                 {
-                    allExceptZoneIds = allExceptSaleZoneList.Select(x => x.SaleZoneId);
+                    allExceptZoneIds = allExceptSaleZoneList.Select(x => x.SaleZoneId).ToList();
                 }
             }
 
