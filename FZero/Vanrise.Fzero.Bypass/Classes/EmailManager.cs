@@ -58,9 +58,39 @@ namespace Vanrise.Fzero.Bypass
             }
         }
 
+        public static void SendReporttoMobileOperatorNoBlock(int Total, string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
+        {
+            int ID = (int)Enums.EmailTemplates.ReporttoMobileOperatorNoBLock;
+            EmailTemplate template = EmailTemplate.Load(ID);
+            if (template.IsActive)
+            {
+                Email email = new Email() { EmailTemplateID = ID };
+                email.DestinationEmail = toEmail;
+                email.Subject = template.Subject.Replace("%ReportID%", ReportID).Replace("%Total%", Total.ToString());
+                email.CC = CC;
+                email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
+                Email.SendMailWithAttachement(email, AttachedPath, profile_name);
+            }
+        }
+
         public static void SendReporttoMobileSyrianOperator(int Total, string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
         {
             int ID = (int)Enums.EmailTemplates.ReporttoMobileSyrianOperator;
+            EmailTemplate template = EmailTemplate.Load(ID);
+            if (template.IsActive)
+            {
+                Email email = new Email() { EmailTemplateID = ID };
+                email.DestinationEmail = toEmail;
+                email.Subject = template.Subject.Replace("%ReportID%", ReportID).Replace("%Total%", Total.ToString());
+                email.CC = CC;
+                email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
+                Email.SendMailWithAttachement(email, AttachedPath, profile_name);
+            }
+        }
+
+        public static void SendReporttoMobileSyrianOperatorNoBlock(int Total, string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
+        {
+            int ID = (int)Enums.EmailTemplates.ReporttoMobileSyrianOperatorNoBlock;
             EmailTemplate template = EmailTemplate.Load(ID);
             if (template.IsActive)
             {

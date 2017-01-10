@@ -310,6 +310,11 @@
         <LocalReport ReportPath="Reports\rptToOperator.rdlc">
         </LocalReport>
     </rsweb:ReportViewer>
+    
+        <rsweb:ReportViewer Visible="false" ID="rvToSecurity" runat="server" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="100%">
+        <LocalReport ReportPath="Reports\rptToOperatorIraqNationalSec.rdlc">
+        </LocalReport>
+    </rsweb:ReportViewer>
 
 
 </asp:Content>

@@ -44,7 +44,9 @@ namespace Vanrise.Fzero.Bypass
             SyrianWeeklyReport = 8,
             RepeatedReporttoMobileOperator = 9,
             RepeatedReporttoMobileSyrianOperator = 10,
-            AutoBlockReport = 11
+            AutoBlockReport = 11,
+            ReporttoMobileOperatorNoBLock = 12,
+            ReporttoMobileSyrianOperatorNoBlock = 13
         }
 
         public enum Clients : int

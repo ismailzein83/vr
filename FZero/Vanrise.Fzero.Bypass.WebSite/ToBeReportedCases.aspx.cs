@@ -264,10 +264,13 @@ public partial class ToBeReportedCases : BasePage
                     ShowError("Specify the cases to be reported");
                     return;
                 }
+                MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator);
+
 
                 Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
-                report.ApplicationUserID = CurrentUser.ApplicationUserID;
+                Vanrise.Fzero.Bypass.Report reportSecurity = new Vanrise.Fzero.Bypass.Report();
 
+                report.ApplicationUserID = CurrentUser.ApplicationUserID;
                 report.SentDateTime = DateTime.Now;
                 report.RecommendedAction = txtRecomnededAction.Text.Trim();
 
@@ -294,16 +297,20 @@ public partial class ToBeReportedCases : BasePage
                 if (ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.Suspect)
                 {
                     report.RecommendedActionID = (int)Enums.RecommendedAction.Investigate;
+                    reportSecurity.RecommendedActionID = (int)Enums.RecommendedAction.Investigate;
                 }
                 else if (ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.Fraud)
                 {
                     report.RecommendedActionID = (int)Enums.RecommendedAction.Block;
 
+                    reportSecurity.RecommendedActionID = (int)Enums.RecommendedAction.Block;
                 }
 
 
                 GeneratedCall.SendReport(ListIds, Vanrise.Fzero.Bypass.Report.Save(report).ID);
+
                 ReportParameter[] parameters = new ReportParameter[3];
+
                 parameters[0] = new ReportParameter("ReportID", report.ReportID);
                 parameters[1] = new ReportParameter("RecommendedAction", txtRecomnededAction.Text);
 
@@ -314,7 +321,6 @@ public partial class ToBeReportedCases : BasePage
                 ReportDataSource rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourceDataSet1);
 
-                MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator);
 
                 ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, (mobileOperator.User.GMT - SysParameter.Global_GMT)));
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
@@ -352,7 +358,7 @@ public partial class ToBeReportedCases : BasePage
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
                 string filenameExcel = ExportReportToExcel(report.ReportID + ".xls");
-
+                
 
 
 
@@ -368,11 +374,17 @@ public partial class ToBeReportedCases : BasePage
                 {
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        if (mobileOperator.AutoReportSecurity)
+                            EmailManager.SendReporttoMobileSyrianOperatorNoBlock(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        else
+                            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
-                        EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        if (mobileOperator.AutoReportSecurity)
+                            EmailManager.SendReporttoMobileOperatorNoBlock(ListIds.Count, filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        else
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
                     }
 
@@ -381,13 +393,72 @@ public partial class ToBeReportedCases : BasePage
                 {
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        if (mobileOperator.AutoReportSecurity)
+                            EmailManager.SendReporttoMobileSyrianOperatorNoBlock(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        else 
+                            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
-                        EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
-
+                        if (mobileOperator.AutoReportSecurity)
+                            EmailManager.SendReporttoMobileOperatorNoBlock(ListIds.Count, filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        else 
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
+                }
+
+
+
+                if (mobileOperator.AutoReportSecurity)
+                {
+                    reportSecurity.ApplicationUserID = CurrentUser.ApplicationUserID;
+                    reportSecurity.SentDateTime = DateTime.Now;
+                    reportSecurity.RecommendedAction = txtRecomnededAction.Text.Trim();
+                    string ReportSecID;
+
+                    string ReportSecIDBeforeCounter = "FZ" + ddlSearchMobileOperator.SelectedItem.Text.Substring(0, 1) + "S" + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
+
+                    Vanrise.Fzero.Bypass.Report LastReportSec = Vanrise.Fzero.Bypass.Report.Load(ReportSecIDBeforeCounter);
+                    if (LastReportSec == null)
+                    {
+                        ReportSecID = ReportSecIDBeforeCounter + "0001";
+                    }
+                    else
+                    {
+                        ReportSecID = ReportSecIDBeforeCounter + (LastReportSec.ReportID.Replace("- Repeated Numbers", "").Substring(10).ToInt() + 1).ToString("D4");
+                    }
+
+                    reportSecurity.ReportID = ReportSecID;
+                    if (ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.Suspect)
+                    {
+                        reportSecurity.RecommendedActionID = (int)Enums.RecommendedAction.Investigate;
+                    }
+                    else if (ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.Fraud)
+                    {
+                        reportSecurity.RecommendedActionID = (int)Enums.RecommendedAction.Block;
+                    }
+
+                    GeneratedCall.SendReportSecurity(ListIds, Vanrise.Fzero.Bypass.Report.Save(reportSecurity).ID);
+                    ReportParameter[] parametersSec = new ReportParameter[3];
+                    parametersSec[0] = new ReportParameter("ReportID", reportSecurity.ReportID);
+                    parametersSec[1] = new ReportParameter("RecommendedAction", txtRecomnededAction.Text);
+
+                    SignatureDataset = new ReportDataSource("SignatureDataset", (ApplicationUser.LoadbyUserId(CurrentUser.User.ID)).User.Signature);
+                    rvToSecurity.LocalReport.DataSources.Add(SignatureDataset);
+
+                    rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
+                    rvToSecurity.LocalReport.DataSources.Add(rptDataSourceDataSet1);
+
+                    rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, (mobileOperator.User.GMT - SysParameter.Global_GMT)));
+                    rvToSecurity.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
+
+                    parametersSec[2] = new ReportParameter("HideSignature", "false");
+                    rvToSecurity.LocalReport.SetParameters(parametersSec);
+                    rvToSecurity.LocalReport.Refresh();
+                    string filenamePDFSec = ExportReportToPDFSec(reportSecurity.ReportID + ".pdf");
+
+                    EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFSec, mobileOperator.AutoReportSecurityEmail, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + reportSecurity.ReportID,
+                        ConfigurationManager.AppSettings["EmailCCNatSec"], reportSecurity.ReportID, "FMS_Profile");
 
                 }
 
@@ -432,6 +503,27 @@ public partial class ToBeReportedCases : BasePage
         string encoding;
         string filenameExtension;
         byte[] bytes = rvToOperator.LocalReport.Render(
+           "PDF", null, out mimeType, out encoding, out filenameExtension,
+            out streamids, out warnings);
+
+        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
+        using (var fs = new FileStream(filename, FileMode.Create))
+        {
+            fs.Write(bytes, 0, bytes.Length);
+            fs.Close();
+        }
+
+        return filename;
+    }
+
+    private string ExportReportToPDFSec(string reportName)
+    {
+        Warning[] warnings;
+        string[] streamids;
+        string mimeType;
+        string encoding;
+        string filenameExtension;
+        byte[] bytes = rvToSecurity.LocalReport.Render(
            "PDF", null, out mimeType, out encoding, out filenameExtension,
             out streamids, out warnings);
 
