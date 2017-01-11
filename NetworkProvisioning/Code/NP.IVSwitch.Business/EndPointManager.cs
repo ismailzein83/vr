@@ -65,7 +65,7 @@ namespace NP.IVSwitch.Business
             if (endPointItem.Entity.EndPointType == UserType.ACL)
             {
                 var hosts = GetCachedEndPoint().Values.Where(h => !string.IsNullOrEmpty(h.Host)).ToDictionary(v => v.EndPointId, v => v.Host);
-                string message = "";
+                string message;
                 if (IpAddressHelper.IsInSameSubnet(hosts, endPointItem.Entity.Host, out message))
                 {
                     insertOperationOutput.ShowExactMessage = true;
@@ -73,7 +73,6 @@ namespace NP.IVSwitch.Business
                     return insertOperationOutput;
                 }
             }
-
             int endPointId;
             if (Insert(endPointItem, out endPointId))
             {
@@ -167,7 +166,11 @@ namespace NP.IVSwitch.Business
             };
             if (endPointItem.Entity.EndPointType == UserType.ACL)
             {
-                var hosts = GetCachedEndPoint().Values.Where(h => !string.IsNullOrEmpty(h.Host)).ToDictionary(v => v.EndPointId, v => v.Host);
+                var hosts =
+                    GetCachedEndPoint()
+                        .Values.Where(
+                            h => !string.IsNullOrEmpty(h.Host) && h.EndPointId != endPointItem.Entity.EndPointId)
+                        .ToDictionary(v => v.EndPointId, v => v.Host);
                 string message;
                 if (IpAddressHelper.IsInSameSubnet(hosts, endPointItem.Entity.Host, out message))
                 {

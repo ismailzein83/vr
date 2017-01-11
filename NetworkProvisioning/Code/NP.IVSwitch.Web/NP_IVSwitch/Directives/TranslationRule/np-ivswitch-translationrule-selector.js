@@ -13,7 +13,6 @@ app.directive('npIvswitchTranslationruleSelector', ['NP_IVSwitch_TranslationRule
                 onselectitem: '=',
                 ondeselectitem: '=',
                 isrequired: '=',
-                hideremoveicon: '@',
                 normalColNum: '@',
                 customvalidate: '='
             },
@@ -101,11 +100,13 @@ app.directive('npIvswitchTranslationruleSelector', ['NP_IVSwitch_TranslationRule
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
-
+            var hideRemoveIcons = '';
+            if (attrs.hideremoveicon != undefined)
+                hideRemoveIcons = 'hideremoveicon';
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
                    '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="TranslationRuleId" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideRemoveIcons + ' customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
                    '</vr-columns>';
         }

@@ -6,86 +6,13 @@ namespace NP.IVSwitch.Business
 {
     public class IpAddressHelper
     {
-        private static List<int> _classASubnetTable = new List<int>
-        {
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31
-        };
-
-        private static List<int> _classBSubnetTable = new List<int>
-        {
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31
-        };
-
-        private static List<int> _classCSubnetTable = new List<int>
-        {
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31
-        };
-
-        public static bool ValidateIpOnSubnet(string ipAddress, int? subnet)
-        {
-            if (!subnet.HasValue) return true;
-            string[] classPrats = ipAddress.Split('.');
-            int firstOctet;
-            if (int.TryParse(classPrats[0], out firstOctet))
-            {
-                if (firstOctet >= 0 && firstOctet <= 126) //Class A
-                    if (_classASubnetTable.Contains(subnet.Value)) return true;
-                if (firstOctet >= 128 && firstOctet <= 191) // Class B
-                    if (_classBSubnetTable.Contains(subnet.Value)) return true;
-                if (firstOctet >= 192 && firstOctet <= 223) // Class C
-                    if (_classCSubnetTable.Contains(subnet.Value)) return true;
-            }
-            return false;
-        }
-
         public static bool IsInSameSubnet(Dictionary<int, string> hosts, string originalHost, out string message)
         {
             int originalSubnet;
             message = "";
             string[] originalParts = originalHost.Split('/');
-            if (originalHost.Length == 1) return false;
+            if (hosts.Count == 0) return false;
+            if (originalParts.Length == 1) return false;
             int.TryParse(originalParts[1], out originalSubnet);
             foreach (var toComparepHost in hosts)
             {
@@ -96,11 +23,8 @@ namespace NP.IVSwitch.Business
                 int toCompareSubnet;
                 int.TryParse(hostParts[1], out toCompareSubnet);
                 var toCompareClassCMask = SubnetMask.CreateByNetBitLength(toCompareSubnet);
-                // var originalClassMask = SubnetMask.CreateByNetBitLength(originalSubnet);
-
                 var toCompareIp = IPAddress.Parse(hostParts[0]);
                 var originalIp = IPAddress.Parse(originalParts[0]);
-
                 return toCompareIp.IsInSameSubnet(originalIp, toCompareClassCMask);
             }
             return true;
@@ -112,7 +36,7 @@ namespace NP.IVSwitch.Business
         public static readonly IPAddress ClassB = IPAddress.Parse("255.255.0.0");
         public static readonly IPAddress ClassC = IPAddress.Parse("255.255.255.0");
 
-        public static IPAddress CreateByHostBitLength(int hostpartLength)
+        private static IPAddress CreateByHostBitLength(int hostpartLength)
         {
             int hostPartLength = hostpartLength;
             int netPartLength = 32 - hostPartLength;
@@ -138,13 +62,11 @@ namespace NP.IVSwitch.Business
             }
             return new IPAddress(binaryMask);
         }
-
         public static IPAddress CreateByNetBitLength(int netpartLength)
         {
             int hostPartLength = 32 - netpartLength;
             return CreateByHostBitLength(hostPartLength);
         }
-
         public static IPAddress CreateByHostNumber(int numberOfHosts)
         {
             int maxNumber = numberOfHosts + 1;
