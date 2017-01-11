@@ -10,6 +10,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Caching;
+using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -451,8 +452,20 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Settings
         public CompanySetting GetCompanySetting(int carrierAccountId)
         {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new NullReferenceException(string.Format("carrierAccount carrierAccountId: {0}", carrierAccountId));
+            if (carrierAccount.CarrierAccountSettings == null)
+                throw new NullReferenceException(string.Format("carrierAccount.CarrierAccountSettings carrierAccountId: {0}", carrierAccountId));
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
-            return configManager.GetDefaultCompanySetting();
+            if (carrierAccount.CarrierAccountSettings.CompanySettingId.HasValue)
+            {
+                return configManager.GetCompanySettingById(carrierAccount.CarrierAccountSettings.CompanySettingId.Value);
+            }
+            else
+            {
+                return new CarrierProfileManager().GetCompanySetting(carrierAccount.CarrierProfileId);
+            }
         }
 
         public IEnumerable<Guid> GetBankDetails(int carrierAccountId)
@@ -466,6 +479,13 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerInvoiceSettings == null)
                 throw new NullReferenceException("customerInvoiceSettings");
             return customerInvoiceSettings.DefaultEmailId;
+        }
+        public BillingPeriod GetBillingPeriod(int carrierAccountId)
+        {
+            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
+            if (customerInvoiceSettings == null)
+                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
+            return customerInvoiceSettings.BillingPeriod;
         }
         public int GetDuePeriod(int carrierAccountId)
         {
@@ -713,8 +733,19 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private CustomerInvoiceSettings GetCustomerInvoiceSettings(int carrierAccountId)
         {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new NullReferenceException(string.Format("carrierAccount carrierAccountId: {0}", carrierAccountId));
+            if(carrierAccount.CarrierAccountSettings == null)
+                throw new NullReferenceException(string.Format("carrierAccount.CarrierAccountSettings carrierAccountId: {0}", carrierAccountId));
             ConfigManager configManager = new ConfigManager();
-            return configManager.GetDefaultCustomerInvoiceSettings();
+            if(carrierAccount.CarrierAccountSettings.InvoiceSettingId.HasValue)
+            {
+                return configManager.GetInvoiceSettingsbyGuid(carrierAccount.CarrierAccountSettings.InvoiceSettingId.Value);
+            }else
+            {
+               return new CarrierProfileManager().GetCustomerInvoiceSettings(carrierAccount.CarrierProfileId);
+            }
         }
         #endregion
 

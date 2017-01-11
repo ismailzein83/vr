@@ -185,7 +185,12 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Settings
         public CompanySetting GetCompanySetting(int carrierProfileId)
         {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            if (carrierProfile.Settings.CompanySettingId.HasValue)
+            {
+                return configManager.GetCompanySettingById(carrierProfile.Settings.CompanySettingId.Value);
+            }
             return configManager.GetDefaultCompanySetting();
         }
         public Guid GetDefaultInvoiceEmailId(int carrierProfileId)
@@ -252,6 +257,17 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerInvoiceSettings == null)
                 throw new NullReferenceException(string.Format("customerInvoiceSettings"));
             return customerInvoiceSettings.DuePeriod;
+        }
+        public CustomerInvoiceSettings GetCustomerInvoiceSettings(int carrierProfileId)
+        {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            ConfigManager configManager = new ConfigManager();
+
+            if (carrierProfile.Settings.InvoiceSettingId.HasValue)
+            {
+                return configManager.GetInvoiceSettingsbyGuid(carrierProfile.Settings.InvoiceSettingId.Value);
+            }
+            return configManager.GetDefaultCustomerInvoiceSettings();
         }
         #endregion
 
@@ -358,17 +374,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
       
-        private CustomerInvoiceSettings GetCustomerInvoiceSettings(int carrierProfileId)
-        {
-            var carrierProfile = GetCarrierProfile(carrierProfileId);
-            ConfigManager configManager = new ConfigManager();
-
-            if(carrierProfile.Settings.InvoiceSettingId.HasValue)
-            {
-                return configManager.GetInvoiceSettingsbyGuid(carrierProfile.Settings.InvoiceSettingId.Value);
-            }
-            return configManager.GetDefaultCustomerInvoiceSettings();
-        }
+       
         #endregion
 
         #region  Mappers

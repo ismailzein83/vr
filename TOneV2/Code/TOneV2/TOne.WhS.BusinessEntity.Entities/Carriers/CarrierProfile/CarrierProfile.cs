@@ -17,6 +17,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CarrierProfileSettings Settings { get; set; }
 
         public string SourceId { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 
     public class CarrierProfileSettings

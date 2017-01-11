@@ -26,14 +26,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
             string partnerType = partner[0];
             int parterId = Convert.ToInt32(partner[1]);
             int currencyId = -1;
-           CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            IEnumerable<VRTaxItemDetail> taxItemDetails = null;
             CarrierProfile carrierProfile = null;
+            
             if (partnerType.Equals("Profile"))
             {
                 dimentionName = "CustomerProfile";
                 carrierProfile = carrierProfileManager.GetCarrierProfile(parterId);
                 currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(parterId);
+                taxItemDetails = carrierProfileManager.GetTaxItemDetails(parterId);
             }
             else if (partnerType.Equals("Account"))
             {
@@ -42,6 +44,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(parterId);
                 var carrierAccount  = carrierAccountManager.GetCarrierAccount(parterId);
                 carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
+                taxItemDetails = carrierProfileManager.GetTaxItemDetails(carrierAccount.CarrierProfileId);
             }
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.GeneratedToDate,currencyId);
@@ -50,22 +53,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 throw new InvoiceGeneratorException("No data available between the selected period.");
             }
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId);
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
+
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
             #region BuildCustomerInvoiceDetails
             CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partner[0],context.FromDate,context.ToDate);
             if (customerInvoiceDetails != null)
             {
                 customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
-                if (carrierProfile.Settings.TaxSetting != null)
+                if (taxItemDetails != null)
                 {
-                    if (carrierProfile.Settings.TaxSetting.Items != null)
+                    foreach (var tax in taxItemDetails)
                     {
-                        foreach (var tax in carrierProfile.Settings.TaxSetting.Items)
-                        {
-                            customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
-                        }
+                        customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
-                    customerInvoiceDetails.TotalAmount += (customerInvoiceDetails.SaleAmount * Convert.ToDecimal(carrierProfile.Settings.TaxSetting.VAT)) / 100;
                 }
             }
            
@@ -110,7 +110,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             customerInvoiceDetails.SaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.SaleCurrencyId);
             return customerInvoiceDetails;
         }
-        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic)
+
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
             if (itemSetNamesDic != null)
@@ -147,6 +148,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     }
                     generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
 
+                }
+                if (taxItemDetails != null)
+                {
+                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                    generatedInvoiceItemSet.SetName = "Taxes";
+                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                    foreach (var item in taxItemDetails)
+                    {
+                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                        {
+                            Details = item,
+                            Name = " "
+                        });
+                    }
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                 }
             }
             return generatedInvoiceItemSets;
