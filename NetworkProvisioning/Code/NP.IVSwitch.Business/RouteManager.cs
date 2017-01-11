@@ -58,20 +58,30 @@ namespace NP.IVSwitch.Business
                 InsertedObject = null
             };
             int routeId;
-            if (Insert(routeItem, out routeId))
+            string mssg;
+            if (Insert(routeItem, out routeId, out mssg))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = RouteDetailMapper(this.GetRoute(routeId));
+                insertOperationOutput.InsertedObject = RouteDetailMapper(GetRoute(routeId));
             }
             else
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            {
+                if (!string.IsNullOrEmpty(mssg))
+                {
+                    insertOperationOutput.Result = InsertOperationResult.Failed;
+                    insertOperationOutput.ShowExactMessage = true;
+                    insertOperationOutput.Message = mssg;
+                }
+                else insertOperationOutput.Result = InsertOperationResult.SameExists;
+            }
             return insertOperationOutput;
         }
 
-        private bool Insert(RouteToAdd routeItem, out int routeId)
+        private bool Insert(RouteToAdd routeItem, out int routeId, out string mssg)
         {
             routeId = 0;
+            mssg = "";
             AccountManager accountManager = new AccountManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             string carrierName = carrierAccountManager.GetCarrierAccountName(routeItem.CarrierAccountId);
@@ -85,9 +95,7 @@ namespace NP.IVSwitch.Business
             AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
             int accountId;
             if (accountExtended != null && accountExtended.VendorAccountId.HasValue)
-            {
                 accountId = accountExtended.VendorAccountId.Value;
-            }
             else
             {
                 Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, false);
@@ -102,21 +110,27 @@ namespace NP.IVSwitch.Business
             }
             routeItem.Entity.AccountId = accountId;
 
+            RouteCarrierAccountExtension routesExtendedSettings =
+                carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(
+                    routeItem.CarrierAccountId) ??
+                new RouteCarrierAccountExtension();
+
+            List<RouteInfo> routeInfoList = new List<RouteInfo>();
+            if (routesExtendedSettings.RouteInfo != null)
+                routeInfoList = routesExtendedSettings.RouteInfo;
+
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
             Helper.SetSwitchConfig(dataManager);
+            if (IsPercentageAboveLimit(routeItem.Entity.Percentage, routeInfoList))
+            {
+                mssg = "Sum of route percentage is above limit";
+                return false;
+            }
             int? tempRouteId = dataManager.Insert(routeItem.Entity);
             if (tempRouteId.HasValue)
             {
                 accountManager.UpdateChannelLimit(routeItem.Entity.AccountId);
                 routeId = tempRouteId.Value;
-                RouteCarrierAccountExtension routesExtendedSettings =
-                    carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(
-                        routeItem.CarrierAccountId) ??
-                    (RouteCarrierAccountExtension)new RouteCarrierAccountExtension();
-
-                List<RouteInfo> routeInfoList = new List<RouteInfo>();
-                if (routesExtendedSettings.RouteInfo != null)
-                    routeInfoList = routesExtendedSettings.RouteInfo;
                 RouteInfo routeInfo = new RouteInfo
                 {
                     RouteId = routeId,
@@ -124,7 +138,6 @@ namespace NP.IVSwitch.Business
                 };
                 routeInfoList.Add(routeInfo);
                 routesExtendedSettings.RouteInfo = routeInfoList;
-
                 carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId,
                     routesExtendedSettings);
                 GenerateRule(routeItem.CarrierAccountId, routeId, carrierName);
@@ -141,19 +154,25 @@ namespace NP.IVSwitch.Business
             };
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            RouteCarrierAccountExtension routesExtendedSettings =
+                   carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(routeItem.CarrierAccountId) ??
+                   new RouteCarrierAccountExtension();
+
+            List<RouteInfo> routeInfoList = new List<RouteInfo>();
+            if (routesExtendedSettings.RouteInfo != null)
+                routeInfoList = routesExtendedSettings.RouteInfo;
+
+            if (IsPercentageAboveLimit(routeItem.Entity.Percentage, routeInfoList.Where(r => r.RouteId != routeItem.Entity.RouteId).ToList()))
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = "Sum of route percentage is above limit";
+                return updateOperationOutput;
+            }
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
             Helper.SetSwitchConfig(dataManager);
-
             if (dataManager.Update(routeItem.Entity))
             {
-                RouteCarrierAccountExtension routesExtendedSettings =
-                    carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(routeItem.CarrierAccountId) ??
-                    new RouteCarrierAccountExtension();
-
-                List<RouteInfo> routeInfoList = new List<RouteInfo>();
-                if (routesExtendedSettings.RouteInfo != null)
-                    routeInfoList = routesExtendedSettings.RouteInfo;
-
                 Dictionary<int, RouteInfo> routeInfoDic = routeInfoList.ToDictionary(k => k.RouteId, v => v);
 
                 RouteInfo routeInfo;
@@ -201,6 +220,12 @@ namespace NP.IVSwitch.Business
         #endregion
 
         #region Private Methods
+
+        private bool IsPercentageAboveLimit(int percentage, List<RouteInfo> routeInfos)
+        {
+            int percentageSum = routeInfos.Sum(r => r.Percentage);
+            return percentageSum + percentage > 100;
+        }
         private void GenerateRule(int carrierId, int routeId, string carrierName)
         {
             MappingRuleHelper mappingRuleHelper = new MappingRuleHelper(carrierId, routeId, 2, carrierName);
