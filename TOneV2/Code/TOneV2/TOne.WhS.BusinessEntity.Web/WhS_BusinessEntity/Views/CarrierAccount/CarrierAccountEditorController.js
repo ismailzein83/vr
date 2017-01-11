@@ -73,10 +73,10 @@
                 invoiceSettingsSelectorReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.showInvoiceSetting = function () {
-                var viewInvoiceSetting = true;
+                $scope.scopeModel.viewInvoiceSettings = true;
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
                     if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Supplier.value) {
-                        viewInvoiceSetting = false;
+                        $scope.scopeModel.viewInvoiceSettings = false;
                     }
                 }
                 carrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
@@ -87,14 +87,12 @@
                         .then(function (carrier) {
                             carrierAccountEntity = carrier;
                             if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.CustomerInvoiceByProfile != undefined) {
-                                if (carrierProfileEntity.Settings.CustomerInvoiceByProfile == false) {
-                                    viewInvoiceSetting = false;
+                                if (carrierProfileEntity.Settings.CustomerInvoiceByProfile == true) {
+                                    $scope.scopeModel.viewInvoiceSettings = false;
                                 }
                             }
                         });
                 }
-                $scope.scopeModel.viewInvoiceSettings = viewInvoiceSetting;
-                return viewInvoiceSetting;
             }
 
             function getCarrierProfile() {
