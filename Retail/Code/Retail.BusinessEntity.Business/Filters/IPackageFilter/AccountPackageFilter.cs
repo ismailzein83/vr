@@ -22,13 +22,12 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("accountPayment for accountId {0}", this.AssignedToAccountId));
             IEnumerable<int> packageIds = new ProductManager().GetProductPackageIds(accountPayment.ProductId);
 
-            IEnumerable<int> packageIdsAssignedToAccount = new AccountPackageManager().GetPackageIdsAssignedToAccount(this.AssignedToAccountId);
-
             if (!packageIds.Contains(context.Package.PackageId))
                 return false;
 
-            if (packageIdsAssignedToAccount != null && packageIdsAssignedToAccount.Contains(context.Package.PackageId))
-                return false;
+            //IEnumerable<int> packageIdsAssignedToAccount = new AccountPackageManager().GetPackageIdsAssignedToAccount(this.AssignedToAccountId);
+            //if (packageIdsAssignedToAccount != null && packageIdsAssignedToAccount.Contains(context.Package.PackageId))
+            //    return false;
 
             return true;
         }

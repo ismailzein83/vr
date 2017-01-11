@@ -46,9 +46,9 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetProductsInfo")]
-        public IEnumerable<ProductInfo> GetProductsInfo(string filter = null)
+        public IEnumerable<ProductInfo> GetProductsInfo(string serializedFilter = null)
         {
-            ProductInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<ProductInfoFilter>(filter) : null;
+            ProductInfoFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<ProductInfoFilter>(serializedFilter) : null;
             return _manager.GetProductsInfo(deserializedFilter);
         }
     }

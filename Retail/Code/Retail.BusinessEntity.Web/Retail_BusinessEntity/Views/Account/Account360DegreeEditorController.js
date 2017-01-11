@@ -2,9 +2,9 @@
 
     'use strict';
 
-    Account360DegreeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountAPIService', 'Retail_BE_AccountBEDefinitionAPIService'];
+    Account360DegreeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountBEDefinitionAPIService'];
 
-    function Account360DegreeEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService, Retail_BE_AccountBEDefinitionAPIService) {
+    function Account360DegreeEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountBEAPIService, Retail_BE_AccountBEDefinitionAPIService) {
 
         var accountBEDefinitionId;
         var accountId;
@@ -39,7 +39,7 @@
         }
 
         function getAccount() {
-            return Retail_BE_AccountAPIService.GetAccount(accountId).then(function (response) {
+            return Retail_BE_AccountBEAPIService.GetAccount(accountBEDefinitionId, accountId).then(function (response) {
                 accountEntity = response;
             });
         }

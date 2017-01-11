@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ProductInfoFilter
+    public interface IProductFilter
     {
-        public List<IProductFilter> Filters { get; set; }
+        bool IsMatched(IProductFilterContext context);
+    }
+
+    public interface IProductFilterContext
+    {
+        Product Product { get; }
     }
 }

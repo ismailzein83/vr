@@ -1,16 +1,7 @@
 ﻿
 
-<vr-tab header="'Settings'">
+<vr-columns width="1/2row">
+    <vr-textbox value="scopeModel.creditLimit" label="Credit Limit" type="number" maxvalue="0" isrequired></vr-textbox>
+</vr-columns>
 
-    <vr-row removeline>
-        <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.creditLimit" label="Credit Limit" type="number" isrequired></vr-textbox>
-        </vr-columns>
-        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" 
-                                     selectedvalues="scopeModel.currencySelectedValues" 
-                                     isrequired="true" 
-                                     normal-col-num="6">
-        </vr-common-currency-selector>
-    </vr-row>
 
-</vr-tab>

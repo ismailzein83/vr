@@ -53,9 +53,11 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                 api.load = function (payload) {
                     var promises = [];
 
+                    var accountBEDefinitionId;
                     var partSettings;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         partSettings = payload.partSettings;
                     }
 
@@ -77,8 +79,18 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
 
                     //Loading Product Selector
                     var productSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    currencySelectorReadyPromiseDeferred.promise.then(function () {
-                        var productSelectorPayload = partSettings != undefined ? { selectedIds: partSettings.ProductId } : undefined;
+                    productSelectorReadyPromiseDeferred.promise.then(function () {
+                        var productSelectorPayload = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.BusinessEntity.Business.AccountProductFilter, Retail.BusinessEntity.Business",
+                                    AccountBEDefinitionId: accountBEDefinitionId
+                                }]
+                            }
+                        };
+                        if (partSettings != undefined) {
+                            productSelectorPayload.selectedIds = partSettings.ProductId;
+                        }
                         VRUIUtilsService.callDirectiveLoad(productSelectorAPI, productSelectorPayload, productSelectorLoadPromiseDeferred);
                     });
                     promises.push(productSelectorLoadPromiseDeferred.promise);

@@ -289,6 +289,7 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                         requiredPartsDirectivePayload.context = {};
                         requiredPartsDirectivePayload.context.getPartDefinitionRuntimeEditor = getPartDefinitionRuntimeEditor;
                         requiredPartsDirectivePayload.partDefinitions = requiredPartDefinitions;
+                        requiredPartsDirectivePayload.accountBEDefinitionId = accountBEDefinitionId;
 
                         if (accountEntity != undefined && accountEntity.Settings != null)
                             requiredPartsDirectivePayload.parts = accountEntity.Settings.Parts;

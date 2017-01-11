@@ -8,6 +8,13 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
+                        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady"
+                                                     selectedvalues="scopeModel.currencySelectedValues"
+                                                     isrequired="true"
+                                                     normal-col-num="6">
+                        </vr-common-currency-selector>
+                    </vr-row>
+                    <vr-row>
                         <span vr-disabled="scopeModel.isProductDefinitionSelectorDisabled">
                             <retail-be-productdefinition-selector on-ready="scopeModel.onProductDefinitionsSelectorReady"
                                                                   onselectionchanged="scopeModel.onProductDefinitionsSelectionChanged"
@@ -16,20 +23,19 @@
                                                                   normal-col-num="6" isrequired="true" hideremoveicon>
                             </retail-be-productdefinition-selector>
                         </span>
-
+                        <vr-directivewrapper ng-if="scopeModel.selectedProductDefinition != undefined"
+                                             directive="scopeModel.selectedProductDefinition.RuntimeEditor"
+                                             on-ready="scopeModel.onProductExtendedSettingsDirectiveReady"
+                                             vr-loader="scopeModel.isProductExtendedSettingsDirectiveLoading">
+                        </vr-directivewrapper>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Recurring Charge Rules'">
                     <retail-be-recurringchargeruleset-management on-ready="scopeModel.onRecurringChargeRuleSetsDirectiveReady"></retail-be-recurringchargeruleset-management>
                 </vr-tab>
-                <vr-tab header="'Packages'" ng-if="scopeModel.selectedProductDefinition != undefined" vr-loader="scopeModel.isPackagesTabLoading">
+                <vr-tab header="'Packages'" ng-show="scopeModel.showPackagesTab" vr-loader="scopeModel.isPackagesTabLoading">
                     <retail-be-productpackageitem-management on-ready="scopeModel.onPackageItemsDirectiveReady"></retail-be-productpackageitem-management>
                 </vr-tab>
-                <vr-directivewrapper ng-if="scopeModel.selectedProductDefinition != undefined"
-                                     directive="scopeModel.selectedProductDefinition.RuntimeEditor"
-                                     on-ready="scopeModel.onProductExtendedSettingsDirectiveReady"
-                                     vr-loader="scopeModel.isProductExtendedSettingsDirectiveLoading">
-                </vr-directivewrapper>
             </vr-tabs>
 
         </vr-form>

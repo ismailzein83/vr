@@ -38,11 +38,13 @@ app.directive('retailBeAccountParts', ['Retail_BE_AccountPartDefinitionAPIServic
                 var context;
                 var partDefinitions;
                 var parts;
+                var accountBEDefinitionId;
 
                 if (payload != undefined) {
                     context = payload.context;
                     partDefinitions = payload.partDefinitions;
                     parts = payload.parts;
+                    accountBEDefinitionId = payload.accountBEDefinitionId;
                 }
 
                 if (partDefinitions == undefined)
@@ -86,6 +88,7 @@ app.directive('retailBeAccountParts', ['Retail_BE_AccountPartDefinitionAPIServic
                     };
                     part.directiveReadyDeferred.promise.then(function () {
                         var directivePayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
                             partDefinition: partDefinition,
                             partSettings: (parts != undefined && parts[partDefinition.AccountPartDefinitionId] != undefined) ?
                                 parts[partDefinition.AccountPartDefinitionId].Settings : undefined

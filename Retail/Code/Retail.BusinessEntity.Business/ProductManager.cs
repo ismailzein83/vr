@@ -109,15 +109,16 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<ProductInfo> GetProductsInfo(ProductInfoFilter filter)
         {
             Func<Product, bool> filterExpression = null;
-            //if (filter != null)
-            //{
-            //    filterExpression = (item) =>
-            //    {
-            //        if (filter.EntityType == null || item.EntityType == filter.EntityType)
-            //            return true;
-            //        return false;
-            //    };
-            //}
+            if (filter != null)
+            {
+                filterExpression = (product) =>
+                {
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(product, filter.Filters))
+                        return false;
+
+                    return true;
+                };
+            }
 
             return this.GetCachedProducts().MapRecords(ProductInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
@@ -159,7 +160,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, Product> GetCachedProducts()
+        private Dictionary<int, Product> GetCachedProducts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetProducts",
                () =>
@@ -167,6 +168,17 @@ namespace Retail.BusinessEntity.Business
                    IProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IProductDataManager>();
                    return dataManager.GetProducts().ToDictionary(x => x.ProductId, x => x);
                });
+        }
+
+        private bool CheckIfFilterIsMatch(Product product, List<IProductFilter> filters)
+        {
+            ProductFilterContext context = new ProductFilterContext { Product = product };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
 
         #endregion

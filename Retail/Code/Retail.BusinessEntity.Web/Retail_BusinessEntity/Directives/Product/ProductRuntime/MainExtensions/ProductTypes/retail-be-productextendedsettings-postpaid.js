@@ -30,16 +30,8 @@
         function PostpaidSettingsCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var currencySelectorAPI;
-            var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
             function initializeController() {
                 $scope.scopeModel = {};
-
-                $scope.scopeModel.onCurrencySelectorReady = function (api) {
-                    currencySelectorAPI = api;
-                    currencySelectorReadyDeferred.resolve();
-                };
 
                 defineAPI();
             }
@@ -54,32 +46,13 @@
                         $scope.scopeModel.creditLimit = payload.extendedSettings.CreditLimit;
                         currencyId = payload.extendedSettings.CurrencyId;
                     }
-
-                    //Loading Currency Selector
-                    var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                    currencySelectorReadyDeferred.promise.then(function () {
-
-                        var currencySelectorPayload = {};
-                        if (currencyId) {
-                            currencySelectorPayload.selectedIds = currencyId;
-                        }
-                        else {
-                            currencySelectorPayload.selectSystemCurrency = true;
-                        }
-
-                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadDeferred);
-                    });
-
-                    return currencySelectorLoadDeferred.promise;
                 };
 
                 api.getData = function () {
 
                     var obj = {
                         $type: "Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid.PostPaidSettings, Retail.BusinessEntity.MainExtensions",
-                        CreditLimit: $scope.scopeModel.creditLimit,
-                        CurrencyId: currencySelectorAPI.getSelectedIds()
+                        CreditLimit: $scope.scopeModel.creditLimit
                     };
 
                     return obj;

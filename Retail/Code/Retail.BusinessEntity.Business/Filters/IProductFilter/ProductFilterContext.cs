@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid
+namespace Retail.BusinessEntity.Business
 {
-    public class PostPaidSettings : ProductExtendedSettings
+    public class ProductFilterContext : IProductFilterContext
     {
-        public Decimal CreditLimit { get; set; }
+        public Product Product { get; set; }
     }
 }

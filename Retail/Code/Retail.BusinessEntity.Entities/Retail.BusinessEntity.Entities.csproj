@@ -85,6 +85,7 @@
     <Compile Include="DID\DIDQuery.cs" />
     <Compile Include="DID\DIDSettings.cs" />
     <Compile Include="Package\IPackageFilter.cs" />
+    <Compile Include="Product\IProductFilter.cs" />
     <Compile Include="Product\Product.cs" />
     <Compile Include="Product\ProductDetail.cs" />
     <Compile Include="Product\ProductEditorRuntime.cs" />

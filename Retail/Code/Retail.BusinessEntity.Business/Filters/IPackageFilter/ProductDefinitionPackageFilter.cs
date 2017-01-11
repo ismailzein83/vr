@@ -15,10 +15,10 @@ namespace Retail.BusinessEntity.Business
         {
             if (context != null && context.Package != null && context.Package.Settings != null)
             {
-                Guid packageDefinitionBEDefinitonId = new PackageDefinitionManager().GetPackageDefinitionAccountBEDefId(context.Package.Settings.PackageDefinitionId);
-                Guid productDefinitionBEDefinitonId = new ProductDefinitionManager().GetProductDefinitionAccountBEDefId(this.ProductDefinitionId);
-                
-                if (packageDefinitionBEDefinitonId != productDefinitionBEDefinitonId)
+                Guid packageDefinitionAccountBEDefId = new PackageDefinitionManager().GetPackageDefinitionAccountBEDefId(context.Package.Settings.PackageDefinitionId);
+                Guid productDefinitionAccountBEDefId = new ProductDefinitionManager().GetProductDefinitionAccountBEDefId(this.ProductDefinitionId);
+
+                if (packageDefinitionAccountBEDefId != productDefinitionAccountBEDefId)
                     return false;
             }
             return true;

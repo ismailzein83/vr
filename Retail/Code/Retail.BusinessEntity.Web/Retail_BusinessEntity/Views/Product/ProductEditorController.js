@@ -13,6 +13,9 @@
         var productEditorRuntime
         var productDefinitionId;
 
+        var currencySelectorAPI;
+        var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var productDefinitionSelectorAPI;
         var productDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var productDefinitionSelectionChangedDeferred;
@@ -44,6 +47,10 @@
             $scope.scopeModel.productExtendedSettingsTemplateConfigs = [];
             $scope.scopeModel.isProductDefinitionSelectorDisabled = false;
 
+            $scope.scopeModel.onCurrencySelectorReady = function (api) {
+                currencySelectorAPI = api;
+                currencySelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.onProductDefinitionsSelectorReady = function (api) {
                 productDefinitionSelectorAPI = api;
                 productDefinitionSelectorReadyDeferred.resolve();
@@ -64,7 +71,8 @@
             $scope.scopeModel.onProductDefinitionsSelectionChanged = function (selectedItem) {
 
                 if (selectedItem != undefined) {
-                    $scope.scopeModel.isProductDefinitionSelectorDisabled = true;
+                    $scope.scopeModel.isProductDefinitionSelectorDisabled = isEditMode ? true : false;
+                    $scope.scopeModel.showPackagesTab = true;
                     productDefinitionId = selectedItem.ProductDefinitionId;
 
                     if (productDefinitionSelectionChangedDeferred != undefined) {
@@ -87,7 +95,9 @@
                         });
 
                         return packageItemsDirectiveLoadDeferred.promise.then(function () {
-                            $scope.scopeModel.isPackagesTabLoading = false;
+                            setTimeout(function () {
+                                $scope.scopeModel.isPackagesTabLoading = false;
+                            });
                         });
                     }
                     function loadProductExtendedSettingsDirectiveWrapper() {
@@ -155,7 +165,7 @@
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductDefinitionsSelector, loadRecurringChargeRuleSetsDirective,
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector, loadProductDefinitionsSelector, loadRecurringChargeRuleSetsDirective,
                         loadPackageItemsDirective, loadProductExtendedSettingsDirectiveWrapper])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -173,6 +183,24 @@
                 return;
 
             $scope.scopeModel.name = productEntity.Name;
+        }
+        function loadCurrencySelector() {
+            var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            currencySelectorReadyDeferred.promise.then(function () {
+
+                var currencySelectorPayload = {};
+                if (productEntity != undefined && productEntity.PricingCurrencyId != undefined) {
+                    currencySelectorPayload.selectedIds = productEntity.PricingCurrencyId;
+                }
+                else {
+                    currencySelectorPayload.selectSystemCurrency = true;
+                }
+
+                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadDeferred);
+            });
+
+            return currencySelectorLoadDeferred.promise;
         }
         function loadProductDefinitionsSelector() {
             if (productEntity != undefined)
@@ -208,10 +236,17 @@
             return recurringChargeRuleSetsDirectiveLoadDeferred.promise;
         }
         function loadPackageItemsDirective() {
+            $scope.scopeModel.showPackagesTab = false;
+
             if (!isEditMode)
                 return;
 
-            $scope.scopeModel.isPackagesTabLoading = true;
+            var promises = [];
+
+            //if (isEditMode)
+            //    promises.push(productDefinitionSelectionChangedDeferred.promise);
+
+            //promises.push(packageItemsDirectiveReadyDeferred.promise);
 
             var packageItemsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -225,9 +260,7 @@
                 VRUIUtilsService.callDirectiveLoad(packageItemsDirectiveAPI, packageItemsPayload, packageItemsDirectiveLoadDeferred);
             });
 
-            return packageItemsDirectiveLoadDeferred.promise.then(function () {
-                $scope.scopeModel.isPackagesTabLoading = false;
-            });
+            return packageItemsDirectiveLoadDeferred.promise;
         }
         function loadProductExtendedSettingsDirectiveWrapper() {
             if (!isEditMode)
@@ -291,6 +324,7 @@
                 Name: $scope.scopeModel.name,
                 Settings: {
                     ProductDefinitionId: productDefinitionSelectorAPI.getSelectedIds(),
+                    PricingCurrencyId: currencySelectorAPI.getSelectedIds(),
                     RecurringChargeRuleSets: recurringChargeRuleSetsDirectiveAPI.getData(),
                     Packages: packageItemsDirectiveAPI.getData(),
                     ExtendedSettings: productExtendedSettingsDirectiveAPI.getData()

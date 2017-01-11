@@ -153,6 +153,8 @@
     <Compile Include="Filters\IPackageFilter\AccountPackageFilter.cs" />
     <Compile Include="Filters\IPackageFilter\PackageFilterContext.cs" />
     <Compile Include="Filters\IPackageFilter\ProductDefinitionPackageFilter.cs" />
+    <Compile Include="Filters\IProductFilter\AccountProductFilter.cs" />
+    <Compile Include="Filters\IProductFilter\ProductFilterContext.cs" />
     <Compile Include="Filters\PackageDefinitionServiceTypeFilter.cs" />
     <Compile Include="PackageDefinitionManager.cs" />
     <Compile Include="DIDManager.cs" />
