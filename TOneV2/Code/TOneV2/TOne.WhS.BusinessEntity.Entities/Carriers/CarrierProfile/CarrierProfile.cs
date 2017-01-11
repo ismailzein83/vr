@@ -38,7 +38,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Website { get; set; }
 
         public string Address { get; set; }
-        public int DuePeriod { get; set; }
 
         public string PostalCode { get; set; }
 

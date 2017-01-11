@@ -81,7 +81,6 @@ namespace TOne.WhS.DBSync.Business
             settings.Company = sourceItem.CompanyName;
             settings.RegistrationNumber = sourceItem.RegistrationNumber;
             settings.Website = sourceItem.Website;
-            settings.DuePeriod = (int)sourceItem.DuePeriod;
 
             if (currency != null)
                 settings.CurrencyId = currency.CurrencyId;
