@@ -27,4 +27,9 @@ namespace Vanrise.GenericData.Entities
 
         IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart);
     }
+
+    public interface IRemoteRecordDataManager
+    {
+        Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input);
+    }
 }

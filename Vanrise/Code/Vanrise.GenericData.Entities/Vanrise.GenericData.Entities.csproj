@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BEParentChildRelation\BEParentChildRelation.cs" />
+    <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition.cs" />
+    <Compile Include="BEParentChildRelation\BEParentChildRelationDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionDetail.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionFilter.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionInfo.cs" />
@@ -79,6 +82,7 @@
     <Compile Include="DataRecords\DataRecordColumn.cs" />
     <Compile Include="DataRecords\DataRecordDetailBigResult.cs" />
     <Compile Include="DataRecords\DataRecordSearchPageSettings.cs" />
+    <Compile Include="DataStorage\IGetRemoteRecordStorageDataManagerContext.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
     <Compile Include="RecordFilter\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />
