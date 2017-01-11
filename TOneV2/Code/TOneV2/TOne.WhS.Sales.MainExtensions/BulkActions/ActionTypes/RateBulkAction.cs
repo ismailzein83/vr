@@ -17,5 +17,15 @@ namespace TOne.WhS.Sales.MainExtensions
         {
             return true;
         }
+
+        public override void ApplyBulkActionToZoneItem(ZoneItem zoneItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ApplyBulkActionToZoneDraft(ZoneChanges zoneDraft, Func<IApplyBulkActionToZoneDraftContext, Dictionary<long, ZoneItem>> getZoneItems)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

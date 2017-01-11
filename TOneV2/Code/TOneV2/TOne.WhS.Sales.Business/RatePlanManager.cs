@@ -389,6 +389,139 @@ namespace TOne.WhS.Sales.Business
 			return true;
 		}
 
-		#endregion
-	}
+        #endregion
+
+        #region Bulk Action Analysis Region
+
+        public IEnumerable<ZoneItem> GetZoneItems(IBuildZoneItemsContext context)
+        {
+            #region Get Zones in this section
+
+            //Should be same as previous Get Zone Items
+            IEnumerable<SaleZone> salesZones = null;
+
+            #endregion
+
+            #region Filteration and Paging
+
+            IEnumerable<long> applicableZoneIds = context.Filter.BulkActionFilter.GetApplicableZoneIds();
+
+            Func<SaleZone, bool> filterFunc = (saleZone) =>
+            {
+                //if (!SaleZoneFilter(saleZone, input.Filter.CountryIds, input.Filter.ZoneNameFilterType, input.Filter.ZoneNameFilter))
+                //    return false;
+                
+                //if (char.ToLower(saleZone.Name.ElementAt(0)) != char.ToLower(input.Filter.ZoneLetter))
+                //    return false;
+
+                if (!applicableZoneIds.Contains(saleZone.SaleZoneId))
+                    return false;
+
+                return true;
+            };
+
+            //Then do the paging accordingly
+            ////////////////////
+
+            #endregion
+
+
+            #region Building Zone Items
+
+            foreach (SaleZone saleZone in salesZones)
+            {
+                var zoneItem = new ZoneItem()
+                {
+                    ZoneId = saleZone.SaleZoneId,
+                    ZoneName = saleZone.Name,
+                    CountryId = saleZone.CountryId,
+                    ZoneBED = saleZone.BED,
+                    ZoneEED = saleZone.EED
+                };
+
+                if (context.BulkAction != null)
+                {
+                    context.BulkAction.ApplyBulkActionToZoneItem(zoneItem);
+                }
+
+                //Build zone items same as previous but with checking on each zone item property if the value is not null then do not process it
+                /////////////////////////
+            }
+
+            #endregion
+
+            return null;
+        }
+
+        #endregion
+
+    }
+
+    //TODO: put this in Entities
+    public interface IBuildZoneItemsContext
+    {
+        ZoneItemsFilter Filter { get; }
+
+        SalePriceListOwnerType OwnerType { get; }
+
+        int OwnerId { get; }
+
+        int CurrencyId { get; }
+
+        int RoutingDatabaseId { get; }
+
+        Guid PolicyConfigId { get; }
+
+        int NumberOfOptions { get; }
+
+        List<CostCalculationMethod> CostCalculationMethods { get; }
+
+        Guid? CostCalculationMethodConfigId { get; }
+
+        IEnumerable<int> CountryIds { get; }
+
+        BulkActionType BulkAction { get; }
+    }
+
+    public class BuildZoneItemContext : IBuildZoneItemsContext
+    {
+
+        public ZoneItemsFilter Filter { get; set; }
+
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public int CurrencyId { get; set; }
+
+        public int RoutingDatabaseId { get; set; }
+
+        public Guid PolicyConfigId { get; set; }
+
+        public int NumberOfOptions { get; set; }
+
+        public List<CostCalculationMethod> CostCalculationMethods { get; set; }
+
+        public Guid? CostCalculationMethodConfigId { get; set; }
+
+        public IEnumerable<int> CountryIds { get; set; }
+
+        public BulkActionType BulkAction { get; set; }
+    }
+
+    public class ZoneItemsFilter
+    {
+        public string ZoneNameFilter { get; set; }
+        
+        public Vanrise.Entities.TextFilterType? ZoneNameFilterType { get; set; }
+
+        public BulkActionZoneFilter BulkActionFilter { get; set; }
+
+        public char ZoneLetter { get; set; }
+
+        public int FromRow { get; set; }
+
+        public int ToRow { get; set; }
+    }
+
 }

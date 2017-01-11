@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public abstract class ApplicableZoneType
+    public abstract class BulkActionZoneFilter
     {
-        protected IEnumerable<long> SelectedZoneIds { get; set; }
+        public BulkActionType Action { get; set; }
 
         public abstract IEnumerable<long> GetApplicableZoneIds();
     }

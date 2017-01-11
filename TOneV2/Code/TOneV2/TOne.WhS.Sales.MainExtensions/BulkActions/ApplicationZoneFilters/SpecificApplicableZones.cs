@@ -7,11 +7,13 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
-    public class SpecificApplicableZones : ApplicableZoneType
+    public class SpecificApplicableZones : BulkActionZoneFilter
     {
+        protected IEnumerable<long> SelectedZoneIds { get; set; }
+
         public override IEnumerable<long> GetApplicableZoneIds()
         {
-            return base.SelectedZoneIds;
+            return this.SelectedZoneIds;
         }
     }
 }
