@@ -155,6 +155,7 @@
     <Compile Include="Filters\IPackageFilter\ProductDefinitionPackageFilter.cs" />
     <Compile Include="Filters\PackageDefinitionServiceTypeFilter.cs" />
     <Compile Include="PackageDefinitionManager.cs" />
+    <Compile Include="DIDManager.cs" />
     <Compile Include="PackageServiceUsageChargingPolicyContext.cs" />
     <Compile Include="OperatorDeclaredInfoManager.cs" />
     <Compile Include="AccountTypeManager.cs" />

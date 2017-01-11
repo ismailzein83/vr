@@ -165,6 +165,7 @@
     <Compile Include="Controllers\ActionDefinitionController.cs" />
     <Compile Include="Controllers\ChargingPolicyController.cs" />
     <Compile Include="Controllers\CreditClassController.cs" />
+    <Compile Include="Controllers\DIDController.cs" />
     <Compile Include="Controllers\PopController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />

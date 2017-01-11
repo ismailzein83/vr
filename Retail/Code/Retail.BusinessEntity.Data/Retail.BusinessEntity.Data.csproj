@@ -62,6 +62,7 @@
     <Compile Include="ICreditClassDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IDistributorDataManager.cs" />
+    <Compile Include="IDIDDataManager.cs" />
     <Compile Include="IPopDataManager.cs" />
     <Compile Include="IPOSDataManager.cs" />
     <Compile Include="IProductDataManager.cs" />
