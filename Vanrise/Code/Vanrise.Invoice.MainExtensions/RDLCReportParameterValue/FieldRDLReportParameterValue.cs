@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
@@ -23,8 +24,9 @@ namespace Vanrise.Invoice.MainExtensions
                 case Entities.InvoiceField.Partner: return context.Invoice.PartnerId;
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate;
-                case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null) : null; 
+                case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null) : null;//Utilities.GetPropValue(this.FieldName,context.Invoice.Details) : null; 
                 //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Invoice.Details) 
+                   //  
             }
             return null;
         }

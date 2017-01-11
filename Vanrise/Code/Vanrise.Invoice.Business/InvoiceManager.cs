@@ -298,8 +298,8 @@ namespace Vanrise.Invoice.Business
             invoiceDetail.Items = new List<InvoiceDetailObject>();
             foreach (var field in dataRecordType.Fields)
             {
-                var fieldValue = Vanrise.Common.Utilities.GetPropValue(field.Name, invoiceDetail.Entity.Details);
-                    //invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
+                var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
+                    //Vanrise.Common.Utilities.GetPropValue(field.Name, invoiceDetail.Entity.Details);
                     //Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
              
                 if (fieldValue != null)

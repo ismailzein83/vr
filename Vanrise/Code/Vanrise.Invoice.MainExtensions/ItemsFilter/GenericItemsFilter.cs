@@ -15,8 +15,10 @@ namespace Vanrise.Invoice.MainExtensions
         public string ComparedFieldName { get; set; }
         public override IEnumerable<dynamic> GetFilteredItems(IItemsFilterContext context)
         {
-            var fieldValue = context.ParentItem.GetType().GetProperty(FieldName).GetValue(context.ParentItem, null);// Utilities.GetPropValueReader(FieldName).GetPropertyValue(context.ParentItem);
-            return context.Items.Where(x => x.GetType().GetProperty(ComparedFieldName).GetValue(x, null) == fieldValue);
+            var fieldValue = context.ParentItem.GetType().GetProperty(FieldName).GetValue(context.ParentItem, null); //Utilities.GetPropValue(FieldName, context.ParentItem);
+                
+                //// Utilities.GetPropValueReader(FieldName).GetPropertyValue(context.ParentItem);Utilities.GetPropValue(ComparedFieldName,x)
+            return context.Items.Where(x => x.GetType().GetProperty(ComparedFieldName).GetValue(x, null) == fieldValue);//
         }
     }
 }

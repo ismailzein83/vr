@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 
@@ -14,7 +15,8 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart
         public string FieldName { get; set; }
         public override string GetPartText(IInvoiceItemConcatenatedPartContext context)
         {
-            return context.InvoiceItemDetails != null ? Convert.ToString(context.InvoiceItemDetails.GetType().GetProperty(this.FieldName).GetValue(context.InvoiceItemDetails, null)) : null;
+            return context.InvoiceItemDetails != null ? Convert.ToString(context.InvoiceItemDetails.GetType().GetProperty(this.FieldName).GetValue(context.InvoiceItemDetails, null) )  : null;
+            //Utilities.GetPropValue(this.FieldName,context.InvoiceItemDetails) 
             //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.InvoiceItemDetails)
         }
     }
