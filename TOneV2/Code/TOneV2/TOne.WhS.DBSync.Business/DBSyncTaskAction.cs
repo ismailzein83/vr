@@ -20,6 +20,7 @@ namespace TOne.WhS.DBSync.Business
             MigrationContext context = new MigrationContext();
             try
             {
+                //Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(task.OwnerId);
                 context.WriteInformation("Database Sync Task Action Started");
                 DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
                 MigrationManager migrationManager;
