@@ -1974,7 +1974,7 @@
                               <Value>=Parameters!Customer.Value</Value>
                             </Parameter>
                             <Parameter Name="DueDate">
-                              <Value>=</Value>
+                              <Value>=Parameters!InvoiceDueDate.Value</Value>
                             </Parameter>
                           </Parameters>
                           <Top>0.15625in</Top>
