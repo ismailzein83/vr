@@ -498,6 +498,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
     <Content Include="Retail_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Services\AccountActionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountBEDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountBEService.js" />
@@ -511,6 +513,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountConditionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\DIDAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductDefinitionAPIService.js" />
@@ -538,6 +541,7 @@
     <Content Include="Retail_BusinessEntity\Services\CreditClassService.js" />
     <Content Include="Retail_BusinessEntity\Services\PricingPackageSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\PopService.js" />
+    <Content Include="Retail_BusinessEntity\Services\DIDService.js" />
     <Content Include="Retail_BusinessEntity\Services\ProductService.js" />
     <Content Include="Retail_BusinessEntity\Services\RecurringChargeService.js" />
     <Content Include="Retail_BusinessEntity\Services\StatusChargingSetService.js" />
@@ -613,6 +617,10 @@
     <Content Include="Retail_BusinessEntity\Views\Pop\PopEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Pop\PopManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Pop\PopManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\DID\DIDEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\DID\DIDEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\DID\DIDManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\DID\DIDManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Product\ProductEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Product\ProductEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Product\ProductManagement.html" />

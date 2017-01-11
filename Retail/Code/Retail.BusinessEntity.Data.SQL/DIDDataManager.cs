@@ -29,7 +29,7 @@ namespace  Retail.BusinessEntity.Data.SQL
             string serializedSettings = dID.Settings != null ? Serializer.Serialize(dID.Settings) : null;
 
             int recordsEffected = ExecuteNonQuerySP("Retail_BE.sp_DID_Insert", out dIDId, dID.Number, serializedSettings);
-            insertedId = (int)dIDId;
+            insertedId = (recordsEffected > 0) ? (int)dIDId : -1;
             return (recordsEffected > 0);
         }
         public bool Update(DID dID)

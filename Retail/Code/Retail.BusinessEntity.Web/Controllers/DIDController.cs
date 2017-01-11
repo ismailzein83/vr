@@ -24,10 +24,10 @@ namespace Retail.BusinessEntity.Web.Controllers
         
         [HttpGet]
         [Route("GetDID")]
-        public DID GetDID(int DIDId)
+        public DID GetDID(int dIDId)
         {
             DIDManager manager = new DIDManager();
-            return manager.GetDID(DIDId);
+            return manager.GetDID(dIDId);
         }
 
         [HttpGet]
