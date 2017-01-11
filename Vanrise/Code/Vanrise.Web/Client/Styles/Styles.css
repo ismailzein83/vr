@@ -1667,7 +1667,7 @@ border-radius: 0px 4px 4px 4px;
     display: inline-block;
 }
 
-.with-choices {
+.withChoices {
     top: 17px !important;
 }
 
@@ -1675,7 +1675,7 @@ border-radius: 0px 4px 4px 4px;
     opacity: 0.9;
 }
 
-.toggle-dd {
+.toggledd {
     opacity: 0.5;
 }
 

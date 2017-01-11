@@ -6,7 +6,7 @@
     <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" style="display: flex" ng-class="ctrl.ngClassLevel">
         <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-flex'}">
         </div>
-        <div ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="ctrl.updateItems.length > 0?'with-choices':''" ng-class="ctrl.showgmenu==true?'toggle-dd':''" ng-click="ctrl.toggelGridMenu($event)">
+        <div ng-show="!ctrl.hideGridMenu" class="vr-grid-menu-box hand-cursor out-div" ng-class="{withChoices : ctrl.updateItems.length > 0 , toggledd : ctrl.showgmenu==true }" ng-click="ctrl.toggelGridMenu($event)">
             <span class="vr-grid-menu-h-circle hand-cursor" ng-class="ctrl.ngClassLevel"></span>
             <span class="glyphicon glyphicon-wrench vr-grid-menu-h-dote hand-cursor"></span>
         </div>

@@ -48,8 +48,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 ctrl.showgmenu = false;
                 ctrl.toggelGridMenu = function (e, bool) {
-                    if (bool != undefined)
-                        ctrl.showgmenu = bool;
+                    if (bool != undefined){                       
+                        $scope.$apply(function () {
+                            ctrl.showgmenu = bool;
+                        })
+                    }
+                       
                     else {
                         if (ctrl.showgmenu == false) {
                             setTimeout(function () {
