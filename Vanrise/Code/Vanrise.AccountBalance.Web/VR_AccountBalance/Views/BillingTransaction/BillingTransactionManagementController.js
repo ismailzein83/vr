@@ -2,14 +2,19 @@
 
     "use strict";
 
-    billingTransactionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_BillingTransactionService', 'VR_AccountBalance_BillingTransactionAPIService'];
+    billingTransactionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_BillingTransactionService', 'VR_AccountBalance_BillingTransactionAPIService', 'VRValidationService'];
 
-    function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionAPIService) {
+    function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionAPIService, VRValidationService) {
         var gridAPI;
-        var accountTypeId;
+        var viewId;
 
-        var filterDirectiveAPI;
-        var filterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+    
+        var accountTypeAPI;
+        var accountTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var accountDirectiveAPI;
+        var accountDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         var transactionTypeDirectiveAPI;
         var transactionTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -23,41 +28,59 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != null) {
-                accountTypeId = parameters.accountTypeId;
+                viewId = parameters.viewId;
             }
         }
         
         function defineScope() {
+            $scope.scopeModel = {};
             var today = new Date();
             today.setMonth(today.getMonth() - 1);
             today.setHours(0, 0, 0, 0);
-            $scope.fromTime = today;
-            $scope.onGridReady = function (api) {
+            $scope.scopeModel.fromTime = today;
+
+            $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
+                accountTypeAPI = api;
+                accountTypeReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onAccountTypeSelectorSelectionChange = function () {
+                if (accountTypeAPI.getSelectedIds() != undefined) {
+                    $scope.scopeModel.gridloadded = false;
+                    loadAllControls().then(function () {
+                        $scope.scopeModel.gridloadded = true;
+                    });
+                }
+            };
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
             };
-            $scope.searchClicked = function (api) {
+            $scope.scopeModel.onAccountDirectiveReady = function (api) {
+                accountDirectiveAPI = api;
+                accountDirectiveReadyDeferred.resolve();
+            };
+            $scope.scopeModel.searchClicked = function (api) {
                 var payload = {
                     query: getFilterObject()
                 }
                 return gridAPI.loadGrid(payload);
             };
-            $scope.addClicked = function (api) {
+            $scope.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.fromTime, $scope.scopeModel.toTime);
+            };
+            $scope.scopeModel.addClicked = function (api) {
                 var onBillingTransactionAdded = function (transactionObj) {
                     if (gridAPI != undefined) {
                         gridAPI.onBillingTransactionAdded(transactionObj);
                     }
                 };
-                VR_AccountBalance_BillingTransactionService.addBillingTransaction(undefined, accountTypeId, onBillingTransactionAdded);
+                VR_AccountBalance_BillingTransactionService.addBillingTransaction(undefined, accountTypeAPI.getSelectedIds(), onBillingTransactionAdded);
             };
-            $scope.onFilterDirectiveReady = function (api) {
-                filterDirectiveAPI = api;
-                filterDirectiveReadyDeferred.resolve();
-            };
-            $scope.onBillingTransactionTypeReady = function (api) {
+           
+            $scope.scopeModel.onBillingTransactionTypeReady = function (api) {
                 transactionTypeDirectiveAPI = api;
                 transactionTypeDirectiveReadyDeferred.resolve();
             };
-            $scope.hasAddBillingTransactionPermission = function () {
+            $scope.scopeModel.hasAddBillingTransactionPermission = function () {
                 return VR_AccountBalance_BillingTransactionAPIService.HasAddBillingTransactionPermission();
             };
 
@@ -66,27 +89,53 @@
 
 
         function load() {
-            $scope.isLoading = true;
-            VR_AccountBalance_AccountTypeAPIService.GetAccountSelector(accountTypeId).then(function (response) {
-                $scope.filterEditor = response;
-                loadAllControls();
+            $scope.scopeModel.isLoading = true;
+            loadAccountType().then(function () {
+                $scope.scopeModel.isLoading = false;
             });
         }
 
-        function loadAllControls() {           
-            return UtilsService.waitMultipleAsyncOperations([loadFilterDirective,loadTransactionTypeSelector]).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
+
+        function loadAccountType() {
+            var loadAccountTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountTypeReadyDeferred.promise.then(function () {
+                var payLoad;
+                payLoad = {
+                    filter: {
+                        Filters: [{
+                            $type: "Vanrise.AccountBalance.Business.AccountTypeViewFilter, Vanrise.AccountBalance.Business",
+                            ViewId: viewId
+                        }]
+                    },
+                    selectfirstitem: true
+                }
+                VRUIUtilsService.callDirectiveLoad(accountTypeAPI, payLoad, loadAccountTypeSelectorPromiseDeferred);
+            });
+            return loadAccountTypeSelectorPromiseDeferred.promise.then(function () {
+                $scope.scopeModel.isLoading = false;
+                $scope.scopeModel.hideAccountType = accountTypeAPI.hasSingleItem();
             });
         }
-        function loadFilterDirective() {
-            var loadFilterPromiseDeferred = UtilsService.createPromiseDeferred();
-            filterDirectiveReadyDeferred.promise.then(function () {               
-                VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, undefined, loadFilterPromiseDeferred);
-            });
-            return loadFilterPromiseDeferred.promise;
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadAccountDirective, loadTransactionTypeSelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.scopeModel.isLoading = false;
+              });
         }
+        function loadAccountDirective() {
+            var loadAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountDirectiveReadyDeferred.promise.then(function () {
+                var payload = {
+                    accountTypeId: accountTypeAPI.getSelectedIds()
+                };
+                VRUIUtilsService.callDirectiveLoad(accountDirectiveAPI, payload, loadAccountPromiseDeferred);
+            });
+            return loadAccountPromiseDeferred.promise;
+        }       
         function loadTransactionTypeSelector() {
             var loadTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
             transactionTypeDirectiveReadyDeferred.promise.then(function () {
@@ -96,11 +145,11 @@
         }
         function getFilterObject() {
             return {
-                FromTime: $scope.fromTime,
-                ToTime: $scope.toTime,
-                AccountTypeId: accountTypeId,
+                FromTime: $scope.scopeModel.fromTime,
+                ToTime: $scope.scopeModel.toTime,
+                AccountTypeId: accountTypeAPI.getSelectedIds(),
                 TransactionTypeIds: transactionTypeDirectiveAPI.getSelectedIds(),
-                AccountsIds:(filterDirectiveAPI!=undefined)? filterDirectiveAPI.getData().selectedIds : null
+                AccountsIds: (accountDirectiveAPI != undefined) ? accountDirectiveAPI.getData().selectedIds : null
             };
         }
     }

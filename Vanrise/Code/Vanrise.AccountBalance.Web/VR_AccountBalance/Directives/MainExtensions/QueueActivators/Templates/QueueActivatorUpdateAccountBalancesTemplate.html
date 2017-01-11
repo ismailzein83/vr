@@ -1,11 +1,9 @@
 ﻿
 <div>
-    <vr-columns width="1/3row" vr-loader="scopeModel.isAccountTypeSelectorLoading">
-        <vr-accountbalance-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
-                                                selectedvalues="scopeModel.selectedAccountType"
-                                                isrequired="true">
-        </vr-accountbalance-accounttype-selector>
-    </vr-columns>
+    <vr-accountbalance-accounttype-selector normal-col-num="4" on-ready="scopeModel.onAccountTypeSelectorReady"
+                                            selectedvalues="scopeModel.selectedAccountType"
+                                            isrequired="true">
+    </vr-accountbalance-accounttype-selector>
 
     <vr-columns width="fullrow">
         <vr-row>

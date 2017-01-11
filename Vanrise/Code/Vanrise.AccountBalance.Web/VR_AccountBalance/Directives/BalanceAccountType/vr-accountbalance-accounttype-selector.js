@@ -43,26 +43,32 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
                 label = "Balance Account Types";
                 multipleselection = "ismultipleselection";
             }
-
-            return '<vr-select on-ready="ctrl.onSelectorReady"'
-                   + '  selectedvalues="ctrl.selectedvalues"'
-                   + '  onselectionchanged="ctrl.onselectionchanged"'
-                   + '  datasource="ctrl.datasource"'
-                   + '  datavaluefield="Id"'
-                   + '  datatextfield="Name"'
-                   + '  ' + multipleselection
-                   + '  isrequired="ctrl.isrequired"'
-                   + '  label="' + label + '"'
-                   + ' entityName="' + label + '"'
-                   + '  >'
-                   + '</vr-select>';
+            if (attrs.customlabel != undefined)
+                label = attrs.customlabel;
+            var hideremoveicon;
+            if (attrs.hideremoveicon!=undefined)
+                hideremoveicon = "hideremoveicon";
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                       + ' <vr-select on-ready="ctrl.onSelectorReady"'
+                       + '  selectedvalues="ctrl.selectedvalues"'
+                       + '  onselectionchanged="ctrl.onselectionchanged"'
+                       + '  datasource="ctrl.datasource"'
+                       + '  datavaluefield="Id"'
+                       + '  datatextfield="Name"'
+                       + '  ' + multipleselection
+                       + '  ' + hideremoveicon
+                       + '  isrequired="ctrl.isrequired"'
+                       + '  label="' + label + '"'
+                       + ' entityName="' + label + '"'
+                       + '  >'
+                       + '</vr-select>'
+              + '</vr-columns>';
         }
 
         function BalanceAccountTypeSelectorCtor(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
 
-            var filter;
             var selectorAPI;
 
             function initializeController() {
@@ -75,11 +81,6 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
                     }
                 };
 
-
-                ctrl.search = function (nameFilter) {
-                    return VR_AccountBalance_BalanceAccountTypeAPIService.GetBalanceAccountTypeInfos(nameFilter);
-                };
-
             }
 
             function defineAPI() {
@@ -90,13 +91,15 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
 
                     var selectedIds;
                     var filter;
+                    var selectfirstitem;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        selectfirstitem = payload.selectfirstitem != undefined && payload.selectfirstitem == true;
                     }
 
-                    return VR_AccountBalance_BalanceAccountTypeAPIService.GetBalanceAccountTypeInfos(undefined).then(function (response) {
+                    return VR_AccountBalance_BalanceAccountTypeAPIService.GetBalanceAccountTypeInfos(filter).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
@@ -104,6 +107,11 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
                             }
+                            else if (selectfirstitem==true) {
+                                var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].Id] : ctrl.datasource[0].Id;
+                                VRUIUtilsService.setSelectedValues(defaultValue, 'Id', attrs, ctrl);
+                            }
+
                         }
                     });
                 };
@@ -112,6 +120,9 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
                     return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
                 };
 
+                api.hasSingleItem = function () {
+                    return ctrl.datasource.length == 1;
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
 

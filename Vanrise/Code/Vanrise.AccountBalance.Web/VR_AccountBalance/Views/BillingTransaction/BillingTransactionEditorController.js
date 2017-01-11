@@ -13,8 +13,8 @@
         var transactionTypeDirectiveAPI;
         var transactionTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var filterDirectiveAPI;
-        var filterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountDirectiveAPI;
+        var accountDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         loadParameters();
@@ -29,11 +29,11 @@
                 accountTypeId = parameters.accountTypeId;
 
             }
-            $scope.showFilter = accountId == undefined;
 
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.showAccountSelector = accountId == undefined;
             $scope.scopeModel.date = new Date();
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
@@ -44,9 +44,9 @@
                 transactionTypeDirectiveReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onFilterDirectiveReady = function (api) {
-                filterDirectiveAPI = api;
-                filterDirectiveReadyDeferred.resolve();
+            $scope.scopeModel.onAccountDirectiveReady = function (api) {
+                accountDirectiveAPI = api;
+                accountDirectiveReadyDeferred.resolve();
             }
             $scope.scopeModel.save = function () {
                 return  insertBillingTransaction();
@@ -58,14 +58,24 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            if (accountTypeId != undefined) {
-                VR_AccountBalance_AccountTypeAPIService.GetAccountSelector(accountTypeId).then(function (response) {
-                    $scope.filterEditor = response;
+            if (accountId == undefined) {
+                loadAccountDirective().then(function (response) {
                     loadAllControls();
                 });
             }
             else
                 loadAllControls();
+        }
+
+        function loadAccountDirective() {
+            var loadAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountDirectiveReadyDeferred.promise.then(function () {
+                var payload = {
+                    accountTypeId: accountTypeId
+                };
+                VRUIUtilsService.callDirectiveLoad(accountDirectiveAPI, payload, loadAccountPromiseDeferred);
+            });
+            return loadAccountPromiseDeferred.promise;
         }
 
         function loadAllControls() {
@@ -135,7 +145,7 @@
 
         function buildBuillingTransactionObjFromScope() {
             var obj = {
-                AccountId: accountId != undefined ? accountId : filterDirectiveAPI.getData().selectedIds,
+                AccountId: accountId != undefined ? accountId : accountDirectiveAPI.getData().selectedIds,
                 Amount: $scope.scopeModel.amount,
                 AccountTypeId:accountTypeId,
                 CurrencyId: currencySelectorAPI.getSelectedIds(),

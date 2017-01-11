@@ -15,7 +15,7 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_AccountBalance/Directives/BillingTransaction/Templates/BillingTranactionGridTemplate.html'
+            templateUrl: '/Client/Modules/VR_AccountBalance/Directives/BillingTransaction/Templates/BillingTransactionGridTemplate.html'
         };
 
         function BillingTransactionGrid($scope, ctrl, $attrs) {

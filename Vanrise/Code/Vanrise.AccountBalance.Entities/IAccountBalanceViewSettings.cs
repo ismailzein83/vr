@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-   public class BalanceAccountTypeInfo
+    public interface IAccountBalanceViewSettings
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Editor { get; set; }
+        List<Guid> GetAccountTypeIds();
     }
 }

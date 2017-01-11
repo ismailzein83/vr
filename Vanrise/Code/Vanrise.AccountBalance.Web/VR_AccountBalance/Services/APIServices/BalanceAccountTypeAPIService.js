@@ -7,7 +7,7 @@
     function BalanceAccountTypeAPIService(BaseAPIService, UtilsService, VR_AccountBalance_ModuleConfig, SecurityService) {
         var controllerName = 'BalanceAccountType';
         function GetBalanceAccountTypeInfos(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetBalanceAccountTypeInfos"));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetBalanceAccountTypeInfos"), { filter: filter });
         }
         function GetAccountBalanceExtendedSettingsConfigs()
         {

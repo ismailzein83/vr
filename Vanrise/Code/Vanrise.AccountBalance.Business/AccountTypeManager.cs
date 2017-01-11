@@ -22,6 +22,8 @@ namespace Vanrise.AccountBalance
                 throw new NullReferenceException("accountTypeSettings.ExtendedSettings");
             return accountTypeSettings.ExtendedSettings.AccountSelector;
         }
+
+        
         public IEnumerable<AccountTypeExtendedSettingsConfig> GetAccountBalanceExtendedSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
@@ -34,9 +36,31 @@ namespace Vanrise.AccountBalance
                 throw new NullReferenceException("accountTypeSettings.ExtendedSettings");
             return accountTypeSettings.ExtendedSettings.GetAccountManager();
         }
-        public IEnumerable<BalanceAccountTypeInfo> GetAccountTypeInfo()
+
+
+
+        public IEnumerable<BalanceAccountTypeInfo> GetAccountTypeInfo(AccountTypeInfoFilter filter)
         {
-            return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings>().MapRecords(AccountTypeInfoMapper);
+            Func<AccountType, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = (item) => CheckIfFilterIsMatch(item, filter.Filters);
+            }
+
+            return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings, AccountType>().MapRecords(AccountTypeInfoMapper, filterExpression);
+        }
+
+
+
+        public bool CheckIfFilterIsMatch(AccountType accountType, List<IAccountTypeInfoFilter> filters)
+        {
+            AccountTypeInfoFilterContext context = new AccountTypeInfoFilterContext { AccountType = accountType };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
         public Guid GetUsageTransactionTypeId(Guid accountTypeId)
         {
@@ -53,26 +77,23 @@ namespace Vanrise.AccountBalance
             var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
             return accountTypeSettings.AccountUsagePeriodSettings;
         }
-        private BalanceAccountTypeInfo AccountTypeInfoMapper(VRComponentType<AccountTypeSettings> componentType)
-        {
-            return new BalanceAccountTypeInfo
-            {
-                Id = componentType.VRComponentTypeId,
-                Name = componentType.Name
-            };
-        }
-
-        AccountTypeSettings GetAccountTypeSettings(Guid accountTypeId)
+        public AccountTypeSettings GetAccountTypeSettings(Guid accountTypeId)
         {
             return _vrComponentTypeManager.GetComponentTypeSettings<AccountTypeSettings>(accountTypeId);
         }
-        BalanceAccountTypeInfo AccountTypeInfoMapper(AccountType accountType)
+        private BalanceAccountTypeInfo AccountTypeInfoMapper(AccountType accountType)
         {
+            string editor = null;
+            if (accountType != null && accountType.Settings != null && accountType.Settings.ExtendedSettings != null)
+                editor = accountType.Settings.ExtendedSettings.AccountSelector;
             return new BalanceAccountTypeInfo
             {
                 Id = accountType.VRComponentTypeId,
-                Name = accountType.Name
+                Name = accountType.Name,
+                Editor = editor
             };
         }
+
+      
     }
 }

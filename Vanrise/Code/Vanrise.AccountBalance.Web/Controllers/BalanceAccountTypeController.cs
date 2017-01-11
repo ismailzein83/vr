@@ -14,10 +14,11 @@ namespace Vanrise.AccountBalance.Web.Controllers
     {
         [HttpGet]
         [Route("GetBalanceAccountTypeInfos")]
-        public object GetBalanceAccountTypeInfos()
+        public object GetBalanceAccountTypeInfos(string filter = null)
         {
+            AccountTypeInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<AccountTypeInfoFilter>(filter) : null;
             AccountTypeManager manager = new AccountTypeManager();
-            return manager.GetAccountTypeInfo();
+            return manager.GetAccountTypeInfo(deserializedFilter);
         }
         [HttpGet]
         [Route("GetAccountBalanceExtendedSettingsConfigs")]

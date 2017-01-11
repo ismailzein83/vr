@@ -7,10 +7,8 @@
                         <vr-columns width="1/2row">
                             <vr-textbox label="Amount" value="scopeModel.amount" isrequired="true" type="number"></vr-textbox>
                         </vr-columns>
-                        <vr-directivewrapper ng-if="showFilter" directive="filterEditor" on-ready="scopeModel.onFilterDirectiveReady" isrequired="true" normal-col-num="6"></vr-directivewrapper>
-                        
+                        <vr-accountbalance-account-selector  on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="6" ng-if="scopeModel.showAccountSelector" isrequired="true"></vr-accountbalance-account-selector>
                         <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" normal-col-num="6"></vr-common-currency-selector>
-                        
                         <vr-columns width="1/2row">
                             <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady" isrequired="true" hideremoveicon></vr-accountbalance-billingtransactiontype-selector>
                         </vr-columns>

@@ -19,7 +19,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_AccountBalance/Directives/BillingTransaction/Templates/BillingTranactionSearch.html"
+        templateUrl: "/Client/Modules/VR_AccountBalance/Directives/BillingTransaction/Templates/BillingTransactionSearch.html"
 
     };
 

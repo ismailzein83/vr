@@ -59,8 +59,10 @@
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountType.cs" />
     <Compile Include="Account\AccountTypeExtendedSettingsConfig.cs" />
+    <Compile Include="Account\AccountTypeInfoFilter.cs" />
     <Compile Include="Account\AccountTypeInfo.cs" />
     <Compile Include="Account\AccountTypeSettings.cs" />
+    <Compile Include="Account\IAccountTypeInfoFilter.cs" />
     <Compile Include="AlertRuleActionExecution\AlertRuleActionExecution.cs" />
     <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdAction.cs" />
     <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdActionBatch.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="BillingTransaction\BillingTransactionQuery.cs" />
     <Compile Include="Config\AccountBalanceConfig.cs" />
     <Compile Include="BalancePeriod\BalancePeriodSettings.cs" />
+    <Compile Include="IAccountBalanceViewSettings.cs" />
     <Compile Include="LiveBalance\AccountBalanceBatch.cs" />
     <Compile Include="LiveBalance\AccountBalanceAlertRule.cs" />
     <Compile Include="LiveBalance\AccountBalanceForAlertRule.cs" />

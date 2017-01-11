@@ -47,6 +47,7 @@
     <Compile Include="AccountBalanceUpdateHandler.cs" />
     <Compile Include="AccountStatementManager.cs" />
     <Compile Include="AccountTypeManager.cs" />
+    <Compile Include="AccountTypeViewFilter.cs" />
     <Compile Include="AccountUsageManager.cs" />
     <Compile Include="BalanceAlertManager.cs" />
     <Compile Include="BillingTransactionTypeManager.cs" />
@@ -106,6 +107,14 @@
     <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
       <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
       <Name>Vanrise.Rules</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
+      <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
+      <Name>Vanrise.Security.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,9 +9,12 @@
         function GetAccountSelector(accountTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetAccountSelector"), { accountTypeId: accountTypeId });
         }
-
+        function GetAccountTypeSettings(accountTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetAccountTypeSettings"), { accountTypeId: accountTypeId });
+        }
         return {
-            GetAccountSelector: GetAccountSelector
+            GetAccountSelector: GetAccountSelector,
+            GetAccountTypeSettings: GetAccountTypeSettings
         };
     }
 

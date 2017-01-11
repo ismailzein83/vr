@@ -1,35 +1,37 @@
-﻿<vr-panel ng-controller="VR_AccountBalance_AccountBalancesManagementController" vr-loader="isLoading">
+﻿<vr-panel ng-controller="VR_AccountBalance_AccountBalancesManagementController" vr-loader="scopeModel.isLoading">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
-            <vr-row removeline> 
-                <vr-directivewrapper directive="filterEditor" on-ready="onFilterDirectiveReady" normal-col-num="2" ismultipleselection="true"></vr-directivewrapper>
-                <vr-columns colnum="1">
+            <vr-row removeline>
+                <vr-accountbalance-accounttype-selector ng-hide="scopeModel.hideAccountType" normal-col-num="2" on-ready="scopeModel.onAccountTypeSelectorReady" selectedvalues="scopeModel.accountType"
+                                                        onselectionchanged="scopeModel.onAccountTypeSelectorSelectionChange" customlabel="Account Type"
+                                                        isrequired="true" hideremoveicon></vr-accountbalance-accounttype-selector>
+                <vr-accountbalance-account-selector on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" ismultipleselection></vr-accountbalance-account-selector>
+                <vr-columns colnum="1" ng-show="scopeModel.accountType">
                     <vr-select hidefilterbox="true" label="Balance" datatextfield="text" datavaluefield="value"
-                               datasource="signs" selectedvalues="sign" onselectionchanged="onSignSelectionChanged"></vr-select>
+                               datasource="scopeModel.signs" selectedvalues="scopeModel.sign" onselectionchanged="scopeModel.onSignSelectionChanged"></vr-select>
                 </vr-columns>
-                <vr-columns colnum="1" withemptyline>
-                    <vr-textbox type="number" isrequired="sign!=undefined" value="balance"></vr-textbox>
+                <vr-columns colnum="1" withemptyline ng-show="scopeModel.accountType">
+                    <vr-textbox type="number" isrequired="scopeModel.sign!=undefined" value="scopeModel.balance"></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="1">
+                <vr-columns colnum="1" ng-show="scopeModel.accountType">
                     <vr-select hideremoveicon="true" label="Balance Order By" datatextfield="description" datavaluefield="value"
-                               datasource="orderByOptions" selectedvalues="orderBy" isrequired="true"></vr-select>
+                               datasource="scopeModel.orderByOptions" selectedvalues="scopeModel.orderBy" isrequired="true"></vr-select>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-numeric  label="Top" isrequired="true" value="top" minvalue="1"></vr-numeric>
+                <vr-columns width="normal" ng-show="scopeModel.accountType">
+                    <vr-numeric label="Top" isrequired="true" value="scopeModel.top" minvalue="1"></vr-numeric>
                 </vr-columns>
-              
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                <div transclude-to="buttons" ng-show="scopeModel.accountType">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-accountbalance-accountbalances-grid on-ready="onGridReady"></vr-accountbalance-accountbalances-grid>
+                <vr-accountbalance-accountbalances-grid ng-if="scopeModel.gridloadded" on-ready="scopeModel.onGridReady"></vr-accountbalance-accountbalances-grid>
             </vr-columns>
         </vr-row>
     </vr-form>
