@@ -9,11 +9,11 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business.BusinessRules
 {
-	public class SellingProductNormalRateDoesNotExistCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
+	public class CustomerZoneRateHasInvalidEEDCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
 	{
 		public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
 		{
-			return (target is DataByZone);
+			return target is DataByZone;
 		}
 
 		public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
@@ -33,12 +33,18 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 			}
 
 			SaleEntityZoneRate sellingProductRate = ratePlanContext.FutureRateLocator.GetSellingProductZoneRate(sellingProductId.Value, zoneData.ZoneId);
+			
+			if (sellingProductRate == null || sellingProductRate.Rate == null)
+			{
+				// SellingProductNormalRateDoesNotExistCondition handles this case
+				return true;
+			}
 
 			if (zoneData.NormalRateToClose != null)
 			{
-				if (sellingProductRate == null || sellingProductRate.Rate == null)
+				if (zoneData.NormalRateToClose.CloseEffectiveDate < sellingProductRate.Rate.BED)
 				{
-					context.Message = string.Format("Selling product does not have a normal rate for zone '{0}'", zoneData.ZoneName);
+					context.Message = string.Format("Normal rate of zone '{0}' is closed on a date '{1}' that's different from the BED '{2}' of its inherited normal rate", zoneData.ZoneName, UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToClose.CloseEffectiveDate), UtilitiesManager.GetDateTimeAsString(sellingProductRate.Rate.BED));
 					return false;
 				}
 			}

@@ -44,6 +44,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			ratePlanContext.OwnerSellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
 			ratePlanContext.EffectiveDate = effectiveDate;
 			ratePlanContext.RateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
+			ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);
 		}
 
 		#region Private Methods
@@ -68,6 +69,25 @@ namespace TOne.WhS.Sales.BP.Activities
 			}
 
 			return sellingNumberPlanId.Value;
+		}
+
+		private SaleEntityZoneRateLocator GetFutureRateLocator(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveDate)
+		{
+			if (ownerType == SalePriceListOwnerType.SellingProduct)
+				return null;
+
+			int? sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(ownerId, effectiveDate, false);
+			if (!sellingProductId.HasValue)
+				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product on '{1}'", ownerId, UtilitiesManager.GetDateTimeAsString(effectiveDate)));
+
+			var dataByCustomer = new List<RoutingCustomerInfoDetails>();
+			dataByCustomer.Add(new RoutingCustomerInfoDetails()
+			{
+				CustomerId = ownerId,
+				SellingProductId = sellingProductId.Value
+			});
+
+			return new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, null, true));
 		}
 
 		#endregion
