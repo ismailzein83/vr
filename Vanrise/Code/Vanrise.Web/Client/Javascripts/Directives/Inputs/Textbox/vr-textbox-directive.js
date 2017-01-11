@@ -141,7 +141,7 @@
                                 var charArray = String(newValue).split("");
                                 if (charArray.length > ctrl.maxlength)
                                     ctrl.value = oldValue;
-
+                                    return;
                             }
 
                             if (iAttrs.onvaluechanged != undefined) {
