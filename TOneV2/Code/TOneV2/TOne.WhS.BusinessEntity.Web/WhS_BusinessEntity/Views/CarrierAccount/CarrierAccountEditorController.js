@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -44,7 +44,9 @@
         var isEditMode;
         var carrierAccountId;
         var carrierProfileId;
+        var carrierProfileId;
         var carrierAccountEntity;
+        var carrierProfileEntity;
 
         loadParameters();
         defineScope();
@@ -70,6 +72,38 @@
                 invoiceSettingsSelectorAPI = api;
                 invoiceSettingsSelectorReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.showInvoiceSetting = function () {
+                var viewInvoiceSetting = true;
+                if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
+                    if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Supplier.value) {
+                        viewInvoiceSetting = false;
+                    }
+                }
+                carrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
+                
+                if (carrierProfileId != undefined) {
+
+                    getCarrierProfile()
+                        .then(function (carrier) {
+                            carrierAccountEntity = carrier;
+                            if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.CustomerInvoiceByProfile != undefined) {
+                                if (carrierProfileEntity.Settings.CustomerInvoiceByProfile == false) {
+                                    viewInvoiceSetting = false;
+                                }
+                            }
+                        });
+                }
+                $scope.scopeModel.viewInvoiceSettings = viewInvoiceSetting;
+                return viewInvoiceSetting;
+            }
+
+            function getCarrierProfile() {
+                return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId)
+                    .then(function (carrierAccount) {
+                        carrierProfileEntity = carrierAccount;
+                    });
+            }
+
 
             $scope.scopeModel.onCompanySettingSelectorReady = function (api) {
                 companySettingsSelectorAPI = api;
@@ -170,8 +204,11 @@
                 currencySelectorAPI = api;
                 currencySelectorReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.onCarrierProfileSelectionChanged = function () {
+                $scope.scopeModel.showInvoiceSetting();
+            }
             $scope.scopeModel.onCarrierTypeSelectionChanged = function () {
+                $scope.scopeModel.showInvoiceSetting();
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
 
                     if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Customer.value || $scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
