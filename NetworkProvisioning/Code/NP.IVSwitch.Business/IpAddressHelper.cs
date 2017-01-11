@@ -11,7 +11,6 @@ namespace NP.IVSwitch.Business
             int originalSubnet;
             message = "";
             string[] originalParts = originalHost.Split('/');
-            if (hosts.Count == 0) return false;
             if (originalParts.Length == 1) return false;
             int.TryParse(originalParts[1], out originalSubnet);
             foreach (var toComparepHost in hosts)
@@ -27,7 +26,7 @@ namespace NP.IVSwitch.Business
                 var originalIp = IPAddress.Parse(originalParts[0]);
                 return toCompareIp.IsInSameSubnet(originalIp, toCompareClassCMask);
             }
-            return true;
+            return false;
         }
     }
     public static class SubnetMask
