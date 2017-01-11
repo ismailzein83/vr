@@ -299,20 +299,21 @@
                 {
                     validateResult = false;
                 },
-                //reloadBillingPeriod:function()
-                //{
-                //    var partnerObject = partnerSelectorAPI.getData();
-                //    if (partnerObject != undefined && partnerObject.selectedIds != undefined)
-                //    {
-                //        VR_Invoice_InvoiceAPIService.GetBillingInterval(invoiceTypeId, partnerObject.selectedIds).then(function (response) {
-                //            if(response)
-                //            {
-                //                $scope.scopeModel.fromDate = response.FromDate;
-                //                $scope.scopeModel.toDate = response.ToDate;
-                //            }
-                //        });
-                //    }
-                //}
+                reloadBillingPeriod:function()
+                {
+                    if (!$scope.scopeModel.isEditMode)
+                    {
+                        var partnerObject = partnerSelectorAPI.getData();
+                        if (partnerObject != undefined && partnerObject.selectedIds != undefined) {
+                            VR_Invoice_InvoiceAPIService.GetBillingInterval(invoiceTypeId, partnerObject.selectedIds, $scope.scopeModel.issueDate).then(function (response) {
+                                if (response) {
+                                    $scope.scopeModel.fromDate = response.FromDate;
+                                    $scope.scopeModel.toDate = response.ToDate;
+                                }
+                            });
+                        }
+                    }
+                }
             };
             return context;
         }

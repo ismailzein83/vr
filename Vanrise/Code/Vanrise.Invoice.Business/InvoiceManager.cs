@@ -197,7 +197,7 @@ namespace Vanrise.Invoice.Business
         }
 
 
-        public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId)
+        public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId,DateTime issueDate)
         {
             BillingInterval billingInterval = new Entities.BillingInterval();
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
@@ -210,25 +210,41 @@ namespace Vanrise.Invoice.Business
             var billingPeriodInfo = new BillingPeriodInfoManager().GetBillingPeriodInfoById(partnerId, invoiceTypeId);
             if(billingPeriodInfo != null)
             {
-                billingInterval.FromDate = billingPeriodInfo.NextPeriodStart;
-                billingInterval.ToDate = billingperiod.GetPeriod(billingPeriodInfo.NextPeriodStart);
+                BillingPeriodContext billingPeriodContext = new Context.BillingPeriodContext
+                {
+                    IssueDate = issueDate,
+                    PreviousPeriodEndDate = billingPeriodInfo.NextPeriodStart
+                };
+                var billingInertval =  billingperiod.GetPeriod(billingPeriodContext);
+                billingInterval.FromDate = billingInertval.FromDate;
+                billingInterval.ToDate = billingInertval.ToDate;
             }
             else
             {
-                InitialPeriodInfoContext initialPeriodInfoContext = new Context.InitialPeriodInfoContext
+                BillingPeriodContext billingPeriodContext = new Context.BillingPeriodContext
                 {
-                  PartnerId = partnerId
+                    IssueDate = issueDate,
                 };
-                invoiceType.Settings.ExtendedSettings.GetInitialPeriodInfo(initialPeriodInfoContext);
-                StartDateCalculationMethodContext startDateCalculationMethodContext = new StartDateCalculationMethodContext
+                billingInterval = billingperiod.GetPeriod(billingPeriodContext);
+
+                if(invoiceType.Settings.StartDateCalculationMethod != null)
                 {
-                    InitialStartDate = initialPeriodInfoContext.InitialStartDate,
-                    BillingPeriod = billingperiod,
-                    PartnerCreatedDate = initialPeriodInfoContext.PartnerCreationDate
-                };
-                invoiceType.Settings.StartDateCalculationMethod.CalculateDate(startDateCalculationMethodContext);
-                billingInterval.FromDate = startDateCalculationMethodContext.FromDate;
-                billingInterval.ToDate = startDateCalculationMethodContext.ToDate;
+                    InitialPeriodInfoContext initialPeriodInfoContext = new Context.InitialPeriodInfoContext
+                    {
+                        PartnerId = partnerId
+                    };
+                    invoiceType.Settings.ExtendedSettings.GetInitialPeriodInfo(initialPeriodInfoContext);
+                    StartDateCalculationMethodContext startDateCalculationMethodContext = new StartDateCalculationMethodContext
+                    {
+                        //InitialStartDate = initialPeriodInfoContext.InitialStartDate,
+                        PartnerCreatedDate = initialPeriodInfoContext.PartnerCreationDate,
+                    };
+                    invoiceType.Settings.StartDateCalculationMethod.CalculateDate(startDateCalculationMethodContext);
+                    if (startDateCalculationMethodContext.StartDate > billingInterval.FromDate && startDateCalculationMethodContext.StartDate < billingInterval.ToDate)
+                        billingInterval.FromDate = startDateCalculationMethodContext.StartDate;
+                }
+              
+               
             }
             return billingInterval;
         }
@@ -282,7 +298,8 @@ namespace Vanrise.Invoice.Business
             invoiceDetail.Items = new List<InvoiceDetailObject>();
             foreach (var field in dataRecordType.Fields)
             {
-                var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
+                var fieldValue = Vanrise.Common.Utilities.GetPropValue(field.Name, invoiceDetail.Entity.Details);
+                    //invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
                     //Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
              
                 if (fieldValue != null)

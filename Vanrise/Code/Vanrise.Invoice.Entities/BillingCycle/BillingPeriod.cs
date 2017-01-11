@@ -9,6 +9,11 @@ namespace Vanrise.Invoice.Entities
     public abstract class BillingPeriod
     {
         public abstract Guid ConfigId { get; }
-        public abstract DateTime GetPeriod(DateTime fromDate);
+        public abstract BillingInterval GetPeriod(IBillingPeriodContext context);
+    }
+    public interface IBillingPeriodContext
+    {
+        DateTime? PreviousPeriodEndDate { get; set; }
+        DateTime IssueDate { get;}
     }
 }

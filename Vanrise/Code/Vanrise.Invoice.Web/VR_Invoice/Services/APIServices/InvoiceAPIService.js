@@ -50,12 +50,13 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
-        //function GetBillingInterval(invoiceTypeId, partnerId) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetBillingInterval'), {
-        //        invoiceTypeId: invoiceTypeId,
-        //        partnerId: partnerId
-        //    });
-        //}
+        function GetBillingInterval(invoiceTypeId, partnerId, issueDate) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetBillingInterval'), {
+                invoiceTypeId: invoiceTypeId,
+                partnerId: partnerId,
+                issueDate: issueDate
+            });
+        }
 
         return ({
             GetInvoice: GetInvoice,
@@ -67,7 +68,7 @@
             SetInvoiceLocked: SetInvoiceLocked,
             ReGenerateInvoice: ReGenerateInvoice,
             UpdateInvoiceNote: UpdateInvoiceNote,
-            //GetBillingInterval: GetBillingInterval
+            GetBillingInterval: GetBillingInterval
         });
     }
 

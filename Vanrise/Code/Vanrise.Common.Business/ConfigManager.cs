@@ -92,6 +92,18 @@ namespace Vanrise.Common.Business
                 throw new NullReferenceException("companySettings.Settings NullReferenceException");
             return settings;
         }
+        public CompanySetting GetCompanySettingById(Guid companySettingId)
+        {
+            IEnumerable<CompanySetting> settings = GetCompanySetting();
+
+            foreach (var setting in settings)
+            {
+                if (setting.CompanySettingId == companySettingId)
+                    return setting;
+            }
+            return GetDefaultCompanySetting();
+        }
+
         public CompanySetting GetDefaultCompanySetting()
         {
 

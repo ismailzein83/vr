@@ -11,9 +11,9 @@ namespace Vanrise.Invoice.MainExtensions
     {
         public override Guid ConfigId { get { return new Guid("E0EDEB7A-FE1D-4207-A1E6-0AE2A42ED452"); } }
 
-        public override DateTime GetPeriod(DateTime fromDate)
+        public override BillingInterval GetPeriod(IBillingPeriodContext context)
         {
-            return fromDate.AddDays(DateTime.DaysInMonth(fromDate.Year, fromDate.Month) / 2);
+            throw new NotImplementedException();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
@@ -13,15 +14,13 @@ namespace Vanrise.Invoice.MainExtensions
 
         public override void CalculateDate(IStartDateCalculationMethodContext context)
         {
-            DateTime fromDate = context.InitialStartDate;
-            DateTime toDate = context.BillingPeriod.GetPeriod(fromDate);
-            while ((context.PartnerCreatedDate >= fromDate  && context.PartnerCreatedDate <= toDate))
-            {
-                fromDate = toDate.AddDays(1);
-                toDate = context.BillingPeriod.GetPeriod(fromDate);
-            }
-            context.FromDate = fromDate;
-            context.ToDate = toDate;
+            //if(context.InitialStartDate > context.PartnerCreatedDate)
+            //    context.StartDate = context.InitialStartDate;
+            //else if(context.PartnerCreatedDate >= context.InitialStartDate )
+            //{
+                 
+            //}
+            context.StartDate = context.PartnerCreatedDate;
         }
     }
 }

@@ -9,10 +9,8 @@ namespace Vanrise.Invoice.Business
 {
     public class StartDateCalculationMethodContext : IStartDateCalculationMethodContext
     {
-        public BillingPeriod BillingPeriod { get; set; }
         public DateTime InitialStartDate { get; set; }
         public DateTime PartnerCreatedDate { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
+        public DateTime StartDate { get; set; }
     }
 }
