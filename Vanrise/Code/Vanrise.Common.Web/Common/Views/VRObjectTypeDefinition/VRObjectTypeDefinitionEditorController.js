@@ -181,7 +181,6 @@
             var context = {
                 getObjectType: function () { return objectTypeSelectiveAPI.getData(); }
             };
-
             return context;
         }
         function buildObjectTypeContext() {

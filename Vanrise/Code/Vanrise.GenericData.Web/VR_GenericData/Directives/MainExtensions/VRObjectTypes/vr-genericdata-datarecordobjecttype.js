@@ -34,9 +34,8 @@
                     defineAPI();
                 };
 
-                $scope.scopeModel.onDataRecordObjectTypeSelectionChanged = function () {
-                    var selectIds = selectorAPI.getSelectedIds();
-                    if (selectIds != undefined) {
+                $scope.scopeModel.onDataRecordObjectTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem != undefined) {
                         context.canDefineProperties(true);
                     }
                 };
@@ -72,7 +71,7 @@
                     return data;
                 };
 
-                if (ctrl.onReady != undefined && typeof(ctrl.onReady) == 'function') {
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
             }

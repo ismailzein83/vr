@@ -1,5 +1,5 @@
 ﻿
-<vr-columns width="1/2row">    
+<vr-columns width="1/2row">
     <vr-select on-ready="scopeModel.onObjectTypeSelectorReady"
                onselectionchanged="scopeModel.onObjectTypeSelectionChanged"
                datasource="scopeModel.templateConfigs"
@@ -9,8 +9,8 @@
                isrequired="ctrl.isrequired"
                label="Object Type"
                hideremoveicon>
-    </vr-select>    
+    </vr-select>
 </vr-columns>
-    <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"
-                         on-ready="scopeModel.onDirectiveReady" isrequired="true" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">
-    </vr-directivewrapper>
+<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"
+                     on-ready="scopeModel.onDirectiveReady" isrequired="true" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">
+</vr-directivewrapper>
