@@ -123,7 +123,10 @@
         }
 
         function getTamplate(attrs) {
-
+            var hideremoveicon = '';
+            if (attrs.hideremoveicon != undefined) {
+                hideremoveicon = 'hideremoveicon';
+            }
             var template =
                 '<vr-row>'
                     + '<vr-columns colnum="{{ctrl.normalColNum}}">'
@@ -132,10 +135,10 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Billing Period"'
+                            + 'label="Billing Period" '
+                            + ' ' + hideremoveicon +' >'
 
-                            + ' isrequired="true"'
-                            + 'hideremoveicon>'
+                            
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
