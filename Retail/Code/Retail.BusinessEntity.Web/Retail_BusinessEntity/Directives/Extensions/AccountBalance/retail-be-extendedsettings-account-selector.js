@@ -33,9 +33,9 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
             var multipleselection;
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = 'ismultipleselection="true"';
-            }
-            return '<retail-be-account-selector isrequired="accountCtrl.isrequired" normal-col-num="{{accountCtrl.normalColNum}}" ' + multipleselection + ' on-ready="accountCtrl.onDirectiveReady" ></retail-be-account-selector>';
         }
+            return '<retail-be-account-selector isrequired="accountCtrl.isrequired" normal-col-num="{{accountCtrl.normalColNum}}" ' + multipleselection + ' on-ready="accountCtrl.onDirectiveReady" ></retail-be-account-selector>';
+       }
 
         function accountsCtor(ctrl, $scope, attrs) {
 
@@ -55,6 +55,7 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
 
                 api.load = function (payload) {
                     var selectedIds;
+                    var filter;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
@@ -66,11 +67,11 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
 
                     directiveReadyPromiseDeferred.promise.then(function () {
                         var selectorPayload = { filter: getAccountSelectorFilter() };
-                        if (selectedIds != undefined) {
-                            selectorPayload = {
-                                selectedIds: selectedIds
-                            };
-                        }
+                        if (selectedIds != undefined)
+                            selectorPayload.selectedIds = selectedIds;
+                        if (payload.AccountBEDefinitionId != undefined)
+                            selectorPayload.AccountBEDefinitionId = payload.AccountBEDefinitionId;
+
                         VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, selectorPayload, directiveLoadPromiseDeferred);
                     });
                     return UtilsService.waitMultiplePromises(promises);
