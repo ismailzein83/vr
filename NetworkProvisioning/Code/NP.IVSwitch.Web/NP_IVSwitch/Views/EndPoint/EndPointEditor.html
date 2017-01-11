@@ -12,7 +12,7 @@
                     </vr-columns>
 
                     <vr-columns width="1/2row">
-                        <vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired></vr-textbox>
+                        <vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired maxlength="20"></vr-textbox>
                     </vr-columns>
 
                     <np-ivswitch-codecprofile-selector on-ready="scopeModel.onSelectorCodecProfileReady" onselectionchanged="scopeModel.onSelectionCodecProfileChanged"
@@ -43,7 +43,7 @@
                         <vr-columns colnum="8">
                             <vr-textbox label="Host/Network Address" type="ip" value="scopeModel.host" ng-if="scopeModel.ShowACL" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns colnum="4"  >
+                        <vr-columns colnum="4">
                             <vr-textbox type="number" label="SubNet Mask" value="scopeModel.subnet" ng-if="scopeModel.ShowACL" minvalue="1" maxvalue="32">
                             </vr-textbox>
                         </vr-columns>
