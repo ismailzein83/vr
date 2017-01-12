@@ -54,7 +54,12 @@
                         }
                     }
                 };
-
+                $scope.scopeModel.validateDateTime =function()
+                {
+                    if ($scope.scopeModel.fromdate > new Date())
+                        return "The date should not be greater than date of today.";
+                    return null;
+                }
 
                 $scope.scopeModel.addFilter = function () {
                     var onFilterAdded = function (filter, expression) {
