@@ -24,12 +24,12 @@ namespace Retail.BusinessEntity.Data.SQL
         #region Public Methods
         public List<RecurringChargeDefinition> GetRecurringChargeDefinitions()
         {
-            return GetItemsSP("Retail_BE.sp_RecurringDefinition_GetAll", RecurringChargeDefinitionMapper);
+            return GetItemsSP("Retail_BE.sp_RecurringChargeDefinition_GetAll", RecurringChargeDefinitionMapper);
         }
 
         public bool AreRecurringChargeDefinitionUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("Retail_BE.RecurringDefinition", ref updateHandle);
+            return base.IsDataUpdated("Retail_BE.RecurringChargeDefinition", ref updateHandle);
         }
 
         public bool Insert(RecurringChargeDefinition recurringChargeDefinition)
