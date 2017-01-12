@@ -132,5 +132,15 @@ namespace Retail.Invoice.Business
                 rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
             rdlcReportParameters.Add(key.ToString(), new VRRdlcReportParameter { Value = value, IsVisible = isVisible });
         }
+
+        public override bool CheckInvoiceFollowBillingPeriod(ICheckInvoiceFollowBillingPeriodContext context)
+        {
+            return false;
+        }
+
+        public override string GetPartnerSerialNumberPattern(IPartnerSerialNumberPatternContext context)
+        {
+           return "CONT-#Year#-#YearSequence#";
+        }
     }
 }
