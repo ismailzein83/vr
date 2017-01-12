@@ -34,8 +34,6 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
         function rulestepCommonCtor(ctrl, $scope) {
             var ruleTypeName;
             var ruleTypeEntity;
-            var isSecondSelection = false;
-            var firstTimeload = true;
             var mainPayload;
 
             var ruleDefinitionDirectiveAPI;
@@ -50,6 +48,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
             var ruleIdDirectiveAPI;
             var ruleIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var selectedRulePromiseDeferred;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.ruleFieldsMappings = [];
@@ -74,124 +73,51 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     ruleIdDirectiveReadyPromiseDeferred.resolve();
                 };
 
-                $scope.onRuleSelectionChanged = function () {
-                    if ($scope.selectedRuleDefinition == undefined) {
-                        $scope.scopeModel.ruleFieldsMappings.length = 0;
-                        $scope.scopeModel.ruleObjectsMappings.length = 0;
-                    }
-                    else {
-                        if (isSecondSelection && firstTimeload) {
-                            $scope.onRuleSelectionItem($scope.selectedRuleDefinition);
-                        }
-                        isSecondSelection = true;
-                    }
-                };
-
-                $scope.onRuleSelectionItem = function (selectedItem) {
-
-                    $scope.isLoadingMappingData = true;
+                $scope.onRuleSelectionChanged = function (value) {
                     $scope.scopeModel.ruleFieldsMappings.length = 0;
                     $scope.scopeModel.ruleObjectsMappings.length = 0;
-                    loadRuleDefinition(selectedItem.GenericRuleDefinitionId).then(function (response) {
+                    if (value != undefined)
+                    {
+                        if (selectedRulePromiseDeferred != undefined) {
+                            selectedRulePromiseDeferred.resolve();
+                        } else {
+                            if (value != undefined) {
+                                $scope.isLoadingMappingData = true;
+                                loadRuleDefinition(value.GenericRuleDefinitionId).then(function (response) {
+                                    if (response.CriteriaDefinition.Fields) {
+                                        for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
+                                            var fuleField = response.CriteriaDefinition.Fields[i];
+                                            var fieldsFilterItem = {
+                                                RuleFields: fuleField,
+                                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                            };
+                                            addFilterItemToGrid(fieldsFilterItem, undefined);
+                                        }
+                                    }
+                                    if (response.Objects) {
+                                        var count = 0;
+                                        for (var prop in response.Objects) {
+                                            if (prop != '$type') {
+                                                var objectsFilterItem = {
+                                                    RuleObject: response.Objects[prop],
+                                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                                };
+                                                addFilterObjectsToGrid(objectsFilterItem, undefined);
+                                                count++;
+                                            }
 
-                        if (response.CriteriaDefinition.Fields) {
-                            for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
-                                var fuleField = response.CriteriaDefinition.Fields[i];
-                                var fieldsFilterItem = {
-                                    RuleFields: fuleField,
-                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                                };
-                                var fieldsPayload;
-                                if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined && mainPayload.ruleFieldsMappings.length > 0 && firstTimeload) {
-                                    var ruleFieldsMapping = UtilsService.getItemByVal(mainPayload.ruleFieldsMappings, fuleField.FieldName, "RuleCriteriaFieldName");
-                                    if (ruleFieldsMapping != undefined)
-                                        fieldsPayload = ruleFieldsMapping.Value;
-                                }
-                                addFilterItemToGrid(fieldsFilterItem, fieldsPayload);
+                                        }
+                                    }
+                                }).finally(function () {
+                                    $scope.isLoadingMappingData = false;
+                                });
                             }
                         }
-                        if (response.Objects) {
-                            var count = 0;
-                            for (var prop in response.Objects) {
-                                if (prop != '$type') {
-
-                                    var objectsFilterItem = {
-                                        RuleObject: response.Objects[prop],
-                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                                    };
-                                    var objectsPayload;
-                                    if (mainPayload != undefined && mainPayload.ruleObjectsMappings != undefined && mainPayload.ruleObjectsMappings.length > 0 && firstTimeload)
-                                        objectsPayload = mainPayload.ruleObjectsMappings[count].Value;
-                                    addFilterObjectsToGrid(objectsFilterItem, objectsPayload);
-                                    count++;
-                                }
-
-                            }
-                        }
-                    }).finally(function () {
-                        $scope.isLoadingMappingData = false;
-                        isSecondSelection = false;
-                        firstTimeload = false;
-                    });
-
+                    }
+                   
                 };
-
-                function addFilterItemToGrid(filterItem, payload) {
-
-                    var dataItem = {
-                        FieldName: filterItem.RuleFields.FieldName,
-                        Title: filterItem.RuleFields.Title
-                    };
-                    var dataItemPayload = {};
-
-                    if (mainPayload != undefined) {
-                        dataItemPayload.context = mainPayload.context;
-
-                    }
-                    if (payload != undefined)
-                        dataItemPayload.selectedRecords = payload;
-                    dataItem.onSourceMappingReady = function (api) {
-                        dataItem.directiveAPI = api;
-                        filterItem.readyPromiseDeferred.resolve();
-                    };
-
-                    filterItem.readyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
-                        });
-
-                    $scope.scopeModel.ruleFieldsMappings.push(dataItem);
-                }
-
-                function addFilterObjectsToGrid(filterItem, payload) {
-
-                    var dataItem = {
-                        ObjectName: filterItem.RuleObject.ObjectName,
-                        Title: filterItem.RuleObject.ObjectName
-                    };
-                    var dataItemPayload = {};
-
-                    if (mainPayload != undefined) {
-                        dataItemPayload.context = mainPayload.context;
-
-                    }
-                    if (payload != undefined)
-                        dataItemPayload.selectedRecords = payload;
-                    dataItem.onObjectSourceMappingReady = function (api) {
-                        dataItem.directiveAPI = api;
-                        filterItem.readyPromiseDeferred.resolve();
-                    };
-
-                    filterItem.readyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
-                        });
-
-                    $scope.scopeModel.ruleObjectsMappings.push(dataItem);
-                }
-
                 defineAPI();
             }
 
@@ -202,60 +128,129 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     mainPayload = payload;
                     if (payload != undefined) {
                         var promises = [];
-                        var loadRuleDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        ruleTypeName = payload.ruleTypeName;
-                        loadRuleType(payload.ruleTypeName).then(function () {
-                            ruleDefinitionDirectiveReadyPromiseDeferred.promise.then(function () {
-                                var payloadRuleDefinition = { filter: { RuleTypeId: ruleTypeEntity.ExtensionConfigurationId } };
-                                if (payload.ruleDefinitionId != undefined) {
-                                    payloadRuleDefinition.selectedIds = payload.ruleDefinitionId;
-                                }
-                                payloadRuleDefinition.showaddbutton = true;
-                                payloadRuleDefinition.specificTypeName = ruleTypeName;
-                                VRUIUtilsService.callDirectiveLoad(ruleDefinitionDirectiveAPI, payloadRuleDefinition, loadRuleDefinitionDirectivePromiseDeferred);
+
+                        if (payload.ruleDefinitionId != undefined)
+                            selectedRulePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        promises.push(loadRuleDefinitionDirective());
+
+                        promises.push(loadEffectiveTimeDirective());
+
+                        promises.push(loadIsEffectiveInFuture());
+
+                        promises.push(loadRuleIdDirective());
+                     
+
+                        if (payload.ruleFieldsMappings != undefined && payload.ruleFieldsMappings.length)
+                        {
+                            var promise = UtilsService.waitMultiplePromises([selectedRulePromiseDeferred.promise, ruleDefinitionDirectiveReadyPromiseDeferred.promise]).then(function () {
+                                selectedRulePromiseDeferred = undefined;
+                                loadRuleDefinition(payload.ruleDefinitionId).then(function (response) {
+                                    if (response.CriteriaDefinition.Fields) {
+                                        for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
+                                            var fuleField = response.CriteriaDefinition.Fields[i];
+                                            var fieldsFilterItem = {
+                                                RuleFields: fuleField,
+                                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                            };
+                                            var fieldsPayload;
+                                            if (payload != undefined && payload.ruleFieldsMappings != undefined && payload.ruleFieldsMappings.length > 0) {
+                                                var ruleFieldsMapping = UtilsService.getItemByVal(payload.ruleFieldsMappings, fuleField.FieldName, "RuleCriteriaFieldName");
+                                                if (ruleFieldsMapping != undefined)
+                                                    fieldsPayload = ruleFieldsMapping.Value;
+                                            }
+                                            addFilterItemToGrid(fieldsFilterItem, fieldsPayload);
+                                        }
+                                    }
+                                    if (response.Objects) {
+                                        var count = 0;
+                                        for (var prop in response.Objects) {
+                                            if (prop != '$type') {
+
+                                                var objectsFilterItem = {
+                                                    RuleObject: response.Objects[prop],
+                                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                                };
+                                                var objectsPayload;
+                                                if (payload != undefined && payload.ruleObjectsMappings != undefined && payload.ruleObjectsMappings.length > 0)
+                                                    objectsPayload = payload.ruleObjectsMappings[count].Value;
+                                                addFilterObjectsToGrid(objectsFilterItem, objectsPayload);
+                                                count++;
+                                            }
+                                        }
+                                    }
+                                });
                             });
-                        });
-                        promises.push(loadRuleDefinitionDirectivePromiseDeferred.promise);
+                            promises.push(promise);
 
-                        var loadEffectiveTimeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        effectiveTimeDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadEffectiveTime = {};
-                            if (payload.context != undefined)
-                                payloadEffectiveTime.context = payload.context;
-                            if (payload.effectiveTime != undefined)
-                                payloadEffectiveTime.selectedRecords = payload.effectiveTime;
-                            VRUIUtilsService.callDirectiveLoad(effectiveTimeDirectiveAPI, payloadEffectiveTime, loadEffectiveTimeDirectivePromiseDeferred);
-                        });
+                        }
 
-                        promises.push(loadEffectiveTimeDirectivePromiseDeferred.promise);
+                        function loadRuleDefinitionDirective() {
+                            var loadRuleDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            ruleTypeName = payload.ruleTypeName;
+                            loadRuleType(payload.ruleTypeName).then(function () {
+                                ruleDefinitionDirectiveReadyPromiseDeferred.promise.then(function () {
+                                    var payloadRuleDefinition = { filter: { RuleTypeId: ruleTypeEntity.ExtensionConfigurationId } };
+                                    if (payload.ruleDefinitionId != undefined) {
+                                        payloadRuleDefinition.selectedIds = payload.ruleDefinitionId;
+                                    }
+                                    payloadRuleDefinition.showaddbutton = true;
+                                    payloadRuleDefinition.specificTypeName = ruleTypeName;
+                                    VRUIUtilsService.callDirectiveLoad(ruleDefinitionDirectiveAPI, payloadRuleDefinition, loadRuleDefinitionDirectivePromiseDeferred);
+                                });
+                            });
+                            return loadRuleDefinitionDirectivePromiseDeferred.promise;
+                        }
 
+                        function loadEffectiveTimeDirective()
+                        {
+                            var loadEffectiveTimeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            effectiveTimeDirectiveReadyPromiseDeferred.promise.then(function () {
+                                var payloadEffectiveTime = {};
+                                if (payload.context != undefined)
+                                    payloadEffectiveTime.context = payload.context;
+                                if (payload.effectiveTime != undefined)
+                                    payloadEffectiveTime.selectedRecords = payload.effectiveTime;
+                                VRUIUtilsService.callDirectiveLoad(effectiveTimeDirectiveAPI, payloadEffectiveTime, loadEffectiveTimeDirectivePromiseDeferred);
+                            });
+                            return loadEffectiveTimeDirectivePromiseDeferred.promise;
+                        }
 
-                        var loadRuleIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        ruleIdDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadValue;
-                            if (payload != undefined) {
-                                payloadValue = {};
-                                if (payload != undefined && payload.context != undefined)
-                                    payloadValue.context = payload.context;
-                                payloadValue.selectedRecords = payload.ruleId;
-                            }
-                            VRUIUtilsService.callDirectiveLoad(ruleIdDirectiveAPI, payloadValue, loadRuleIdDirectivePromiseDeferred);
-                        });
-                        promises.push(loadRuleIdDirectivePromiseDeferred.promise);
+                        function loadIsEffectiveInFuture() {
+                            var loadIsEffectiveInFutureDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            isEffectiveInFutureDirectiveReadyPromiseDeferred.promise.then(function () {
+                                var payloadValue;
+                                if (payload != undefined) {
+                                    payloadValue = {};
+                                    if (payload != undefined && payload.context != undefined)
+                                        payloadValue.context = payload.context;
+                                    if (payload.isEffectiveInFuture != undefined)
+                                        payloadValue.selectedRecords = payload.isEffectiveInFuture;
+                                }
+                                VRUIUtilsService.callDirectiveLoad(isEffectiveInFutureDirectiveAPI, payloadValue, loadIsEffectiveInFutureDirectivePromiseDeferred);
+                            });
+                            return loadIsEffectiveInFutureDirectivePromiseDeferred.promise;
+                        }
 
-                        var loadIsEffectiveInFutureDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        isEffectiveInFutureDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadValue;
-                            if (payload != undefined) {
-                                payloadValue = {};
-                                if (payload != undefined && payload.context != undefined)
-                                    payloadValue.context = payload.context;
-                                if (payload.isEffectiveInFuture != undefined)
-                                    payloadValue.selectedRecords = payload.isEffectiveInFuture;
-                            }
-                            VRUIUtilsService.callDirectiveLoad(isEffectiveInFutureDirectiveAPI, payloadValue, loadIsEffectiveInFutureDirectivePromiseDeferred);
-                        });
-                        promises.push(loadIsEffectiveInFutureDirectivePromiseDeferred.promise);
+                        function loadRuleIdDirective()
+                        {
+                            var loadRuleIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            ruleIdDirectiveReadyPromiseDeferred.promise.then(function () {
+                                var payloadValue;
+                                if (payload != undefined) {
+                                    payloadValue = {};
+                                    if (payload != undefined && payload.context != undefined)
+                                        payloadValue.context = payload.context;
+                                    payloadValue.selectedRecords = payload.ruleId;
+                                }
+                                VRUIUtilsService.callDirectiveLoad(ruleIdDirectiveAPI, payloadValue, loadRuleIdDirectivePromiseDeferred);
+                            });
+                            return loadRuleIdDirectivePromiseDeferred.promise;
+                        }
+
+                     
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -312,6 +307,58 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
 
             function loadRuleDefinition(ruleDefinitionId) {
                 return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(ruleDefinitionId);
+            }
+            function addFilterObjectsToGrid(filterItem, payload) {
+
+                var dataItem = {
+                    ObjectName: filterItem.RuleObject.ObjectName,
+                    Title: filterItem.RuleObject.ObjectName
+                };
+                var dataItemPayload = {};
+
+                if (mainPayload != undefined) {
+                    dataItemPayload.context = mainPayload.context;
+
+                }
+                if (payload != undefined)
+                    dataItemPayload.selectedRecords = payload;
+                dataItem.onObjectSourceMappingReady = function (api) {
+                    dataItem.directiveAPI = api;
+                    filterItem.readyPromiseDeferred.resolve();
+                };
+
+                filterItem.readyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
+                    });
+
+                $scope.scopeModel.ruleObjectsMappings.push(dataItem);
+            }
+            function addFilterItemToGrid(filterItem, payload) {
+
+                var dataItem = {
+                    FieldName: filterItem.RuleFields.FieldName,
+                    Title: filterItem.RuleFields.Title
+                };
+                var dataItemPayload = {};
+
+                if (mainPayload != undefined) {
+                    dataItemPayload.context = mainPayload.context;
+
+                }
+                if (payload != undefined)
+                    dataItemPayload.selectedRecords = payload;
+                dataItem.onSourceMappingReady = function (api) {
+                    dataItem.directiveAPI = api;
+                    filterItem.readyPromiseDeferred.resolve();
+                };
+
+                filterItem.readyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
+                    });
+
+                $scope.scopeModel.ruleFieldsMappings.push(dataItem);
             }
 
             this.initializeController = initializeController;
