@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -161,43 +162,9 @@ namespace TOne.WhS.Sales.Business
 			}
 			return changedOtherRates.Count > 0 ? changedOtherRates : null;
         }
-
-        #region Bulk Action Analysis Region
-
-        public void ApplyBulkAction(SalePriceListOwnerType ownerType, int ownerId, BulkActionType actionType, BulkActionZoneFilter actionFilter)
-        {
-            //Get the list of applicable zone ids
-            IEnumerable<long> applicableZoneIds = actionFilter.GetApplicableZoneIds();
-
-            //Get the changes of only applicaple zones from draft
-            IEnumerable<ZoneChanges> existingZoneDrafts = null;
-
-            Dictionary<long, ZoneItem> zoneItems = null;
-
-            foreach (ZoneChanges zoneChange in existingZoneDrafts)
-            {
-                Func<IApplyBulkActionToZoneDraftContext, Dictionary<long, ZoneItem>> getZoneItems = (context) =>
-                    {
-                        if (zoneItems != null)
-                            return zoneItems;
-
-                        zoneItems = new Dictionary<long, ZoneItem>();
-
-                        //Build zone items only for applicable zones, try to make it a method and reuse it in get zone items method
-                        /////////////////////////
-
-                        return zoneItems;
-                    };
-
-                actionType.ApplyBulkActionToZoneDraft(zoneChange, getZoneItems);
-            }
-
-            //Save the new draft to database
-            /////////////////
-        }
-
-        #endregion
     }
+
+    
 
 	public class SaveCountryChangesInput
 	{

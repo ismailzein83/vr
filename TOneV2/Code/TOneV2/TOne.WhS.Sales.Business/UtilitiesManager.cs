@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Sales.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -58,6 +60,22 @@ namespace TOne.WhS.Sales.Business
 		{
 			return dateTime.ToShortDateString();
 		}
+
+        public static bool IsActionApplicableToZone(BulkActionType bulkAction, long zoneId, Changes draftData)
+        {
+            ZoneChanges zoneDraft = null;
+
+            if (draftData.ZoneChanges != null)
+                zoneDraft = draftData.ZoneChanges.FindRecord(x => x.ZoneId == zoneId);
+
+            ActionApplicableToZoneContext actionApplicableToZoneContext = new ActionApplicableToZoneContext()
+                {
+                    ZoneId = zoneId,
+                    ZoneDraft = zoneDraft
+                };
+
+            return bulkAction.IsApplicableToZone(actionApplicableToZoneContext);
+        }
 
         #region Private Methods
         private static DateTime? GetFirstDate(IEnumerable<DateTime?> dates, out int count)

@@ -29,10 +29,14 @@ namespace TOne.WhS.BusinessEntity.Entities
     public interface ISaleZoneFilterContext
     {
         SaleZone SaleZone { get; }
+
+        object CustomData { get; set; }
     }
 
     public class SaleZoneFilterContext : ISaleZoneFilterContext
     {
         public SaleZone SaleZone { get; set; }
+
+        public object CustomData { get; set; }
     }
 }

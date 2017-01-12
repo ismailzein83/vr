@@ -11,7 +11,7 @@ namespace TOne.WhS.Sales.MainExtensions
     {
         protected IEnumerable<long> SelectedZoneIds { get; set; }
 
-        public override IEnumerable<long> GetApplicableZoneIds()
+        public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
         {
             return this.SelectedZoneIds;
         }

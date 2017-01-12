@@ -61,8 +61,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkActions\ApplyActionToDraftInput.cs" />
     <Compile Include="BulkActions\BulkActionZoneFilter.cs" />
     <Compile Include="BulkActions\BulkActionType.cs" />
+    <Compile Include="BulkActions\GetZoneItemsInput.cs" />
     <Compile Include="CostCalculation\CostCalculationMethod.cs" />
     <Compile Include="CostCalculation\CostCalculationMethodSetting.cs" />
     <Compile Include="CostCalculation\ICostCalculationMethodContext.cs" />

@@ -393,18 +393,32 @@ namespace TOne.WhS.Sales.Business
 
         #region Bulk Action Analysis Region
 
-        public IEnumerable<ZoneItem> GetZoneItems(IBuildZoneItemsContext context)
+        public IEnumerable<ZoneItem> GetZoneItems(GetZoneItemsInput input)
         {
-            #region Get Zones in this section
+            #region Get Zone Data
 
             //Should be same as previous Get Zone Items
-            IEnumerable<SaleZone> salesZones = null;
+            IEnumerable<SaleZone> saleZones = null;
+            
+            Changes draftData = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
 
             #endregion
 
             #region Filteration and Paging
 
-            IEnumerable<long> applicableZoneIds = context.Filter.BulkActionFilter.GetApplicableZoneIds();
+            IEnumerable<long> applicableZoneIds = null;
+
+            if (input.BulkAction != null)
+            {
+                ApplicableZoneIdsContext applicableZoneContext = new ApplicableZoneIdsContext()
+                {
+                    SaleZoneIds = saleZones.Select(itm => itm.SaleZoneId),
+                    DraftData = draftData,
+                    BulkAction = input.BulkAction
+                };
+
+                applicableZoneIds = input.Filter.BulkActionFilter.GetApplicableZoneIds(applicableZoneContext);
+            }
 
             Func<SaleZone, bool> filterFunc = (saleZone) =>
             {
@@ -414,21 +428,110 @@ namespace TOne.WhS.Sales.Business
                 //if (char.ToLower(saleZone.Name.ElementAt(0)) != char.ToLower(input.Filter.ZoneLetter))
                 //    return false;
 
-                if (!applicableZoneIds.Contains(saleZone.SaleZoneId))
+                if (applicableZoneIds != null && !applicableZoneIds.Contains(saleZone.SaleZoneId))
                     return false;
 
                 return true;
             };
+
+            IEnumerable<SaleZone> filteredSaleZones = saleZones.FindAllRecords(filterFunc);
 
             //Then do the paging accordingly
             ////////////////////
 
             #endregion
 
+            return this.BuildZoneItems(input.OwnerType, input.OwnerId, filteredSaleZones, input.BulkAction, draftData, input.RoutingDatabaseId,
+                input.CurrencyId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods);
+        }
 
-            #region Building Zone Items
+        public void ApplyBulkActionToDraft(ApplyActionToDraftInput input)
+        {
+            #region Get Zone Data
 
-            foreach (SaleZone saleZone in salesZones)
+            IEnumerable<SaleZone> saleZones = null;
+
+            //TODO: We need to reorganize calling draft data between this manager and the other one
+            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            Changes draftData = ratePlanDataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
+
+            #endregion
+
+            #region Filteration
+
+            ApplicableZoneIdsContext applicableZoneIdsContext = new ApplicableZoneIdsContext()
+            {
+                SaleZoneIds = saleZones.Select(itm => itm.SaleZoneId),
+                DraftData = draftData
+            };
+
+            //Get the list of applicable zone ids
+            IEnumerable<long> applicableZoneIds = input.BulkActionFilter.GetApplicableZoneIds(applicableZoneIdsContext);
+
+            Func<SaleZone, bool> filterFunc = (saleZone) =>
+            {
+                if (applicableZoneIds != null && !applicableZoneIds.Contains(saleZone.SaleZoneId))
+                    return false;
+
+                return true;
+            };
+
+            IEnumerable<SaleZone> filteredSaleZones = saleZones.FindAllRecords(filterFunc);
+
+            #endregion
+
+            //TODO: Get the changes of only applicaple zones from draft
+            IEnumerable<ZoneChanges> existingZoneDrafts = draftData.ZoneChanges;
+
+            foreach (SaleZone zone in filteredSaleZones)
+            {
+                ZoneChanges zoneDraft = existingZoneDrafts.FindRecord(x => x.ZoneId == zone.SaleZoneId);
+                if (zoneDraft == null)
+                    zoneDraft = new ZoneChanges();
+
+                Func<IEnumerable<ZoneItem>> buildZoneItems = () =>
+                    {
+                        RatePlanManager ratePlanManager = new RatePlanManager();
+                        return ratePlanManager.BuildZoneItems(input.OwnerType, input.OwnerId, filteredSaleZones, input.BulkAction, draftData, input.RoutingDatabaseId,
+                            input.CurrencyId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods);
+                    };
+
+                ApplyBulkActionToZoneDraftContext applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems)
+                {
+                    ZoneDraft = zoneDraft
+                };
+
+                input.BulkAction.ApplyBulkActionToZoneDraft(applyBulkActionToDraftContext);
+            }
+
+            //Save the new draft to database
+            /////////////////
+        }
+
+        public IEnumerable<ZoneItem> BuildZoneItems(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<SaleZone> saleZones, 
+            BulkActionType bulkAction, Changes draft, int routingDatabaseId, int currencyId, Guid policyConfigId, int numberOfOptions, 
+            IEnumerable<CostCalculationMethod> costCalculationMethods)
+        {
+            var zoneItems = new List<ZoneItem>();
+
+            var changedCountryIds = new List<int>();
+			if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
+				changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+
+			int? sellingProductId = GetSellingProductId(ownerType, ownerId, DateTime.Now, false);
+			if (sellingProductId == null)
+				throw new Exception("Selling product does not exist");
+
+            // TODO: Add EffectiveOn to input.Filter
+            var effectiveOn = DateTime.Now.Date;
+
+            var rateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, effectiveOn, draft, currencyId);
+            var rpManager = new ZoneRPManager(ownerType, ownerId, effectiveOn, draft);
+
+            var baseRatesByZone = new BaseRatesByZone();
+            var saleRateManager = new SaleRateManager();
+
+            foreach (SaleZone saleZone in saleZones)
             {
                 var zoneItem = new ZoneItem()
                 {
@@ -439,89 +542,54 @@ namespace TOne.WhS.Sales.Business
                     ZoneEED = saleZone.EED
                 };
 
-                if (context.BulkAction != null)
+                if (bulkAction != null)
                 {
-                    context.BulkAction.ApplyBulkActionToZoneItem(zoneItem);
+                    ApplyBulkActionToZoneItemContext applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext()
+                    {
+                        ZoneItem = zoneItem
+                    };
+
+                    bulkAction.ApplyBulkActionToZoneItem(applyBulkActionToZoneItemContext);
                 }
 
-                //Build zone items same as previous but with checking on each zone item property if the value is not null then do not process it
-                /////////////////////////
+                zoneItem.IsFutureZone = (zoneItem.ZoneBED.Date > DateTime.Now.Date);
+
+                ZoneChanges zoneDraft = null;
+                if (draft != null && draft.ZoneChanges != null)
+                    zoneDraft = draft.ZoneChanges.FindRecord(x => x.ZoneId == saleZone.SaleZoneId);
+
+                rateManager.SetZoneRate(zoneItem);
+
+                // TODO: Refactor rateManager to handle products and customers separately
+                if (ownerType == SalePriceListOwnerType.SellingProduct)
+                {
+                    rpManager.SetSellingProductZoneRP(zoneItem, ownerId, zoneDraft);
+                }
+                else
+                {
+                    AddZoneBaseRates(baseRatesByZone, zoneItem); // Check if the customer zone has any inherited rate
+                    rpManager.SetCustomerZoneRP(zoneItem, ownerId, sellingProductId.Value, zoneDraft);
+                }
+
+                zoneItem.IsCountryEnded = changedCountryIds.Contains(zoneItem.CountryId);
+                zoneItems.Add(zoneItem);
             }
 
-            #endregion
+            if (ownerType == SalePriceListOwnerType.Customer)
+            {
+                IEnumerable<DraftNewCountry> draftNewCountries = (draft != null && draft.CountryChanges != null) ? draft.CountryChanges.NewCountries : null;
+                IEnumerable<CustomerCountry2> soldCountries = GetSoldCountries(ownerId, effectiveOn, false, draftNewCountries);
+                saleRateManager.ProcessBaseRatesByZone(ownerId, baseRatesByZone, soldCountries);
+            }
 
-            return null;
+            IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { RoutingProductId = x.EffectiveRoutingProductId, SaleZoneId = x.ZoneId });
+            //var routeOptionManager = new ZoneRouteOptionManager(ownerType, ownerId, routingDatabaseId, policyConfigId, numberOfOptions, rpZones, costCalculationMethods, input.Filter.CostCalculationMethodConfigId, input.Filter.RateCalculationMethod, currencyId);
+            //routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
+
+            return zoneItems;
         }
 
         #endregion
 
     }
-
-    //TODO: put this in Entities
-    public interface IBuildZoneItemsContext
-    {
-        ZoneItemsFilter Filter { get; }
-
-        SalePriceListOwnerType OwnerType { get; }
-
-        int OwnerId { get; }
-
-        int CurrencyId { get; }
-
-        int RoutingDatabaseId { get; }
-
-        Guid PolicyConfigId { get; }
-
-        int NumberOfOptions { get; }
-
-        List<CostCalculationMethod> CostCalculationMethods { get; }
-
-        Guid? CostCalculationMethodConfigId { get; }
-
-        IEnumerable<int> CountryIds { get; }
-
-        BulkActionType BulkAction { get; }
-    }
-
-    public class BuildZoneItemContext : IBuildZoneItemsContext
-    {
-
-        public ZoneItemsFilter Filter { get; set; }
-
-        public SalePriceListOwnerType OwnerType { get; set; }
-
-        public int OwnerId { get; set; }
-
-        public int CurrencyId { get; set; }
-
-        public int RoutingDatabaseId { get; set; }
-
-        public Guid PolicyConfigId { get; set; }
-
-        public int NumberOfOptions { get; set; }
-
-        public List<CostCalculationMethod> CostCalculationMethods { get; set; }
-
-        public Guid? CostCalculationMethodConfigId { get; set; }
-
-        public IEnumerable<int> CountryIds { get; set; }
-
-        public BulkActionType BulkAction { get; set; }
-    }
-
-    public class ZoneItemsFilter
-    {
-        public string ZoneNameFilter { get; set; }
-        
-        public Vanrise.Entities.TextFilterType? ZoneNameFilterType { get; set; }
-
-        public BulkActionZoneFilter BulkActionFilter { get; set; }
-
-        public char ZoneLetter { get; set; }
-
-        public int FromRow { get; set; }
-
-        public int ToRow { get; set; }
-    }
-
 }

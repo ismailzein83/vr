@@ -8,8 +8,15 @@ namespace TOne.WhS.Sales.Entities
 {
     public abstract class BulkActionZoneFilter
     {
-        public BulkActionType Action { get; set; }
+        public abstract IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context);
+    }
 
-        public abstract IEnumerable<long> GetApplicableZoneIds();
+    public interface IApplicableZoneIdsContext
+    {
+        IEnumerable<long> SaleZoneIds { get; }
+
+        Changes DraftData { get; }
+
+        BulkActionType BulkAction { get; }
     }
 }

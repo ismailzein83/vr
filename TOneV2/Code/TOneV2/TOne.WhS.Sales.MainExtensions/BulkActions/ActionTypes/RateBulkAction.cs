@@ -13,19 +13,21 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public RateCalculationMethod RateCalculationMethod { get; set; }
 
-        public override bool IsZoneApplicable(long zoneId)
-        {
-            return true;
-        }
-
-        public override void ApplyBulkActionToZoneItem(ZoneItem zoneItem)
+        public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override void ApplyBulkActionToZoneDraft(ZoneChanges zoneDraft, Func<IApplyBulkActionToZoneDraftContext, Dictionary<long, ZoneItem>> getZoneItems)
+        public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
         {
             throw new NotImplementedException();
         }
+
+        public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
+        {
+            ZoneItem zoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
+        }
+
+       
     }
 }

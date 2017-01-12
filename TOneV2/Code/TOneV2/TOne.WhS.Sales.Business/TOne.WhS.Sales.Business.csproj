@@ -79,6 +79,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkAction\ActionApplicableToZoneContext.cs" />
+    <Compile Include="BulkAction\ApplicableZoneIdsContext.cs" />
+    <Compile Include="BulkAction\ApplyBulkActionToZoneDraftContext.cs" />
+    <Compile Include="BulkAction\ApplyBulkActionToZoneItemContext.cs" />
     <Compile Include="BusinessRules\BusinessRuleUtilities.cs" />
     <Compile Include="BusinessRules\Conditions\Country\ChangedCountryEEDIsLessThanToday.cs" />
     <Compile Include="BusinessRules\Conditions\Country\NewCountryBEDIsLessThanRetroactiveDateCondition.cs" />

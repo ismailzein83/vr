@@ -3,27 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
     public class AllApplicableZones : BulkActionZoneFilter
     {
-        public override IEnumerable<long> GetApplicableZoneIds()
+        public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
         {
-            if (base.Action == null)
-                throw new MissingMemberException("Action");
+            if (context.SaleZoneIds == null)
+                throw new MissingMemberException("SaleZoneIds");
 
-            //Get All sale Zone ids that are shown in rate plan grid without any filters
-            //////////////////
-            IEnumerable<long> saleZoneIds = null;
-            
             List<long> applicableZoneIds = new List<long>();
 
-            foreach (long id in saleZoneIds)
+            foreach (long zoneId in context.SaleZoneIds)
             {
-                if (base.Action.IsZoneApplicable(id))
-                    applicableZoneIds.Add(id);
+                if (UtilitiesManager.IsActionApplicableToZone(context.BulkAction, zoneId, context.DraftData))
+                    applicableZoneIds.Add(zoneId);
             }
 
             return applicableZoneIds;
