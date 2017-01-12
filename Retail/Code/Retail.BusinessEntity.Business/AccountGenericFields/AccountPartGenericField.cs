@@ -9,12 +9,14 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountPartGenericField : AccountGenericField
     {
+        Guid _accountBEDefinitionId;
         AccountPartDefinition _partDefinition;
-        Entities.GenericFieldDefinition _field;
-        AccountManager _accountManager = new AccountManager();
+        GenericFieldDefinition _field;
+        AccountBEManager _accountBEManager = new AccountBEManager();
 
-        public AccountPartGenericField(AccountPartDefinition partDefinition, Entities.GenericFieldDefinition fieldDefinition)
+        public AccountPartGenericField(Guid accountBEDefinitionId, AccountPartDefinition partDefinition, GenericFieldDefinition fieldDefinition)
         {
+            _accountBEDefinitionId = accountBEDefinitionId;
             _partDefinition = partDefinition;
             _field = fieldDefinition;
             _name = String.Format("Part_{0}_{1}", _partDefinition.AccountPartDefinitionId.ToString().Replace("-", ""), _field.Name);
@@ -50,7 +52,7 @@ namespace Retail.BusinessEntity.Business
         public override dynamic GetValue(IAccountGenericFieldContext context)
         {
             AccountPart accountPart;
-            if (_accountManager.TryGetAccountPart(context.Account, _partDefinition.AccountPartDefinitionId, true, out accountPart))
+            if (_accountBEManager.TryGetAccountPart(_accountBEDefinitionId, context.Account, _partDefinition.AccountPartDefinitionId, true, out accountPart))
                 return accountPart.Settings.GetFieldValue(new AccountPartGetFieldValueContext(_field.Name, _partDefinition));
             else
                 return null;

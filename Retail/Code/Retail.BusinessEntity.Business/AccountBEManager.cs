@@ -354,6 +354,24 @@ namespace Retail.BusinessEntity.Business
             return updateExecutedAction;
         }
 
+        public bool TryGetAccountPart(Guid accountBEDefinitionId, Account account, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
+        {
+            if (account.Settings != null && account.Settings.Parts != null && account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart))
+                return true;
+            else if (getInherited && account.ParentAccountId.HasValue)
+            {
+                var parentAccount = GetAccount(accountBEDefinitionId, account.ParentAccountId.Value);
+                if (parentAccount == null)
+                    throw new NullReferenceException(String.Format("parentAccount '{0}'", account.ParentAccountId.Value));
+                return TryGetAccountPart(accountBEDefinitionId, parentAccount, partDefinitionId, getInherited, out accountPart);
+            }
+            else
+            {
+                accountPart = null;
+                return false;
+            }
+        }
+
         #endregion
 
         #region Private Classes

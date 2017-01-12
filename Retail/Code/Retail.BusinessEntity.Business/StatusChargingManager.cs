@@ -74,6 +74,7 @@ namespace Retail.BusinessEntity.Business
             Func<StatusChargingSet, bool> filterExpression = x => ((input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower())));
             return DataRetrievalManager.Instance.ProcessResult(input, chargingSets.ToBigResult(input, filterExpression, StatusChargingSetDetailMapper));
         }
+
         //public bool HasInitialCharging(EntityType entityType, long entityId, Guid statusDefinitionId, out Decimal initialCharge)
         //{
         //    StatusChargingSet chargingSet = GetChargingSet(entityType, entityId);
@@ -89,6 +90,7 @@ namespace Retail.BusinessEntity.Business
         //    initialCharge = 0;
         //    return false;
         //}
+        
         public IEnumerable<RecurringPeriodConfig> GetRecurringPeriodExtensionConfigs()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
@@ -149,16 +151,17 @@ namespace Retail.BusinessEntity.Business
         //    }
         //}
 
-        private StatusChargingSet GetAccountChargingSet(long accountId)
-        {
-            var account = (new AccountManager()).GetAccount(accountId);
-            if (account == null)
-                throw new NullReferenceException(String.Format("account '{0}'", accountId));
-            if (account.Settings.StatusChargingSetId.HasValue)
-                return GetChargingSet(account.Settings.StatusChargingSetId.Value);
-            else
-                return null;
-        }
+        //private StatusChargingSet GetAccountChargingSet(long accountId)
+        //{
+        //    var account = (new AccountManager()).GetAccount(accountId);
+        //    if (account == null)
+        //        throw new NullReferenceException(String.Format("account '{0}'", accountId));
+        //    if (account.Settings.StatusChargingSetId.HasValue)
+        //        return GetChargingSet(account.Settings.StatusChargingSetId.Value);
+        //    else
+        //        return null;
+        //}
+
         //private StatusChargingSet GetServiceChargingSet(long accountServiceId)
         //{
         //    var accountService = (new AccountServiceManager()).GetAccountService(accountServiceId);

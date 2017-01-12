@@ -25,30 +25,6 @@ namespace Retail.BusinessEntity.Business
             return cachedAccounts.GetRecord(accountId);
         }
 
-        public Account GetAccountBySourceId(string sourceId)
-        {
-            Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId();
-            return cachedAccounts.GetRecord(sourceId);
-        }
-
-        public bool TryGetAccountPart(Account account, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
-        {
-            if (account.Settings != null && account.Settings.Parts != null && account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart))
-                return true;
-            else if (getInherited && account.ParentAccountId.HasValue)
-            {
-                var parentAccount = GetAccount(account.ParentAccountId.Value);
-                if (parentAccount == null)
-                    throw new NullReferenceException(String.Format("parentAccount '{0}'", account.ParentAccountId.Value));
-                return TryGetAccountPart(parentAccount, partDefinitionId, getInherited, out accountPart);
-            }
-            else
-            {
-                accountPart = null;
-                return false;
-            }
-        }
-
         #endregion
 
         #region Private Classes

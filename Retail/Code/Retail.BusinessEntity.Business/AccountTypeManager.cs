@@ -179,7 +179,7 @@ namespace Retail.BusinessEntity.Business
                                 var partFieldDefinitions = partDefinition.Settings.GetFieldDefinitions();
                                 if (partFieldDefinitions != null)
                                 {
-                                    fields.AddRange(partFieldDefinitions.Select(partFieldDefinition => new AccountPartGenericField(partDefinition, partFieldDefinition)));
+                                    fields.AddRange(partFieldDefinitions.Select(partFieldDefinition => new AccountPartGenericField(accountBEDefinitionId.Value, partDefinition, partFieldDefinition)));
                                 }
                             }
                         }

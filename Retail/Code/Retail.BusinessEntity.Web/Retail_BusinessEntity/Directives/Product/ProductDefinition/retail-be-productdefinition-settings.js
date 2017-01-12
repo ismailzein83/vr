@@ -103,20 +103,16 @@ app.directive('retailBeProductdefinitionSettings', ['UtilsService', 'VRUIUtilsSe
 
                     return {
                         Name: $scope.scopeModel.name,
-                        Settings: GetAccountSettings()
+                        Settings: {
+                            $type: "Retail.BusinessEntity.Entities.ProductDefinitionSettings,  Retail.BusinessEntity.Entities",
+                            AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds(),
+                            ExtendedSettings: extendedSettingsAPI.getData()
+                        }
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
-
-            function GetAccountSettings() {
-                return {
-                    $type: "Retail.BusinessEntity.Entities.ProductDefinitionSettings,  Retail.BusinessEntity.Entities",
-                    AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds(),
-                    ExtendedSettings: extendedSettingsAPI.getData()
-                };
             }
         }
     }]);

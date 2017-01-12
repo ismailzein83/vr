@@ -8,7 +8,7 @@ using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.Data
 {
-    public interface ICreditClassDataManager: IDataManager
+    public interface ICreditClassDataManager : IDataManager
     {
         List<CreditClass> GetCreditClasses();
 

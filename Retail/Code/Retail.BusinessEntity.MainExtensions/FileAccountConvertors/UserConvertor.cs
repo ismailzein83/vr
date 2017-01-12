@@ -68,8 +68,7 @@ namespace Retail.BusinessEntity.MainExtensions.FileAccountConvertors
                         else
                         {
                             accountData.Account.TypeId = Guid.Parse("CEA8ABA9-CDAA-4755-B30D-3734EAE52E83");
-                            AccountManager accountManager = new AccountManager();
-                            var company = accountManager.GetAccountBySourceId(companyId);
+                            var company = new AccountBEManager().GetAccountBySourceId(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"), companyId);
                             if (company == null)
                                 throw new NullReferenceException("company");
                             accountData.Account.ParentAccountId = company.AccountId;

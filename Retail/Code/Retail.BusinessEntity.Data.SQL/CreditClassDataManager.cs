@@ -11,9 +11,8 @@ using Vanrise.Data.SQL;
 
 namespace Retail.BusinessEntity.Data.SQL
 {
-    public class CreditClassDataManager: BaseSQLDataManager, ICreditClassDataManager
+    public class CreditClassDataManager : BaseSQLDataManager, ICreditClassDataManager
     {
-
         #region ctor/Local Variables
         public CreditClassDataManager()
             : base(GetConnectionStringName("Retail_BE_DBConnStringKey", "RetailDBConnString"))
@@ -21,7 +20,6 @@ namespace Retail.BusinessEntity.Data.SQL
 
         }
         #endregion
-
 
         #region Public Methods
 
@@ -56,7 +54,6 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #endregion
 
-
         #region Mappers
 
         CreditClass CreditClassMapper(IDataReader reader)
@@ -71,6 +68,5 @@ namespace Retail.BusinessEntity.Data.SQL
         }
 
         #endregion
-
     }
 }
