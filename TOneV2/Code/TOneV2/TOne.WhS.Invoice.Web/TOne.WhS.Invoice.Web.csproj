@@ -188,6 +188,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Ringo\CustomerInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="Reports\Ringo\CustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="Reports\Ringo\InvoiceItemsReportByCurrency.rdlc" />
+    <EmbeddedResource Include="Reports\Ringo\InvoiceReportByCurrency.rdlc" />
+    <EmbeddedResource Include="Reports\Ringo\ProfileInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="Reports\Ringo\ProfileInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\InvoiceItemsReportByCurrency.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\InvoiceReportByCurrency.rdlc" />
