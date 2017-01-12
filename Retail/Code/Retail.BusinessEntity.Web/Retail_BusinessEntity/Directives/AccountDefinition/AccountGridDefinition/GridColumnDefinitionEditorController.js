@@ -82,7 +82,9 @@
 
             accountGenericFieldDefinitionSelectorReadyDeferred.promise.then(function () {
 
-                var accountGenericFieldDefinitionSelectorPayload;
+                var accountGenericFieldDefinitionSelectorPayload = {
+                    accountBEDefinitionId: "9A427357-CF55-4F33-99F7-745206DEE7CD"
+                };
                 if (columnDefinitionEntity != undefined) {
                     accountGenericFieldDefinitionSelectorPayload = {
                         genericFieldDefinition: {

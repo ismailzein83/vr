@@ -32,25 +32,26 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddAccountService")]
-        public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountService accountService)
+        public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountServiceToAdd accountServiceToAdd)
         {
             AccountServiceManager manager = new AccountServiceManager();
-            return manager.AddAccountService(accountService);
+            return manager.AddAccountService(accountServiceToAdd);
         }
      
         [HttpPost]
         [Route("UpdateAccountService")]
-        public UpdateOperationOutput<AccountServiceDetail> UpdateAccountService(AccountService accountService)
+        public UpdateOperationOutput<AccountServiceDetail> UpdateAccountService(AccountServiceToEdit accountServiceToEdit)
         {
             AccountServiceManager manager = new AccountServiceManager();
-            return manager.UpdateAccountService(accountService);
+            return manager.UpdateAccountService(accountServiceToEdit);
         }
+
         [HttpGet]
         [Route("GetAccountServiceDetail")]
-        public AccountServiceDetail GetAccountServiceDetail(long accountServiceId)
+        public AccountServiceDetail GetAccountServiceDetail(Guid accountBEDefinition, long accountServiceId)
         {
             AccountServiceManager manager = new AccountServiceManager();
-            return manager.GetAccountServiceDetail(accountServiceId);
+            return manager.GetAccountServiceDetail(accountBEDefinition, accountServiceId);
         }
     }
 }

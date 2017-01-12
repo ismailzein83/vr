@@ -31,9 +31,9 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddAccountPackage")]
-        public Vanrise.Entities.InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackage accountPackage)
+        public Vanrise.Entities.InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackageToAdd accountPackageToAdd)
         {
-            return _manager.AddAccountPackage(accountPackage);
+            return _manager.AddAccountPackage(accountPackageToAdd);
         }
     }
 }

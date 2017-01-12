@@ -143,19 +143,32 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public Dictionary<string, AccountGenericField> GetAccountGenericFields()
+        public Dictionary<string, AccountGenericField> GetAccountGenericFields(Guid accountBEDefinitionId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountGenericFields",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetAccountGenericFields_{0}", accountBEDefinitionId),
                 () =>
                 {
                     List<AccountGenericField> fields = new List<AccountGenericField>();
-                    FillAccountCommonGenericFields(fields);
+                    FillAccountCommonGenericFields(accountBEDefinitionId, fields);
+
+                    IEnumerable<AccountType> accountTypes = this.GetCachedAccountTypes().Values.Where(itm => itm.AccountBEDefinitionId == accountBEDefinitionId);
+
+                    List<Guid> accountPartDefinitionIds = new List<Guid>();
+                    foreach (var accountType in accountTypes)
+                    {
+                        if (accountType != null && accountType.Settings != null && accountType.Settings.PartDefinitionSettings != null)
+                            accountPartDefinitionIds.AddRange(accountType.Settings.PartDefinitionSettings.Select(itm => itm.PartDefinitionId));
+                    }
+                    HashSet<Guid> includedAccountPartDefinitionIds = accountPartDefinitionIds.ToHashSet();
 
                     var accountPartDefinitions = new AccountPartDefinitionManager().GetAccountPartDefinitions();
                     if (accountPartDefinitions != null)
                     {
                         foreach (var partDefinition in accountPartDefinitions)
                         {
+                            if (!includedAccountPartDefinitionIds.Contains(partDefinition.AccountPartDefinitionId))
+                                continue;
+
                             var partFieldDefinitions = partDefinition.Settings.GetFieldDefinitions();
                             if (partFieldDefinitions != null)
                             {
@@ -167,24 +180,24 @@ namespace Retail.BusinessEntity.Business
                 });
         }
 
-        public AccountGenericField GetAccountGenericField(string fieldName)
+        public AccountGenericField GetAccountGenericField(Guid accountBEDefinitionId, string fieldName)
         {
-            return GetAccountGenericFields().GetRecord(fieldName);
+            return GetAccountGenericFields(accountBEDefinitionId).GetRecord(fieldName);
         }
 
-        public IEnumerable<GenericFieldDefinitionInfo> GetGenericFieldDefinitionsInfo()
+        public IEnumerable<GenericFieldDefinitionInfo> GetGenericFieldDefinitionsInfo(Guid accountBEDefinitionId)
         {
-            Dictionary<string, AccountGenericField> accountGenericFields = GetAccountGenericFields();
+            Dictionary<string, AccountGenericField> accountGenericFields = GetAccountGenericFields(accountBEDefinitionId);
             if (accountGenericFields == null || accountGenericFields.Values.Count() == 0)
                 return null;
             return accountGenericFields.Values.Select(itm => new GenericFieldDefinitionInfo() { Name = itm.Name, Title = itm.Title, FieldType = itm.FieldType });
         }
 
-        private void FillAccountCommonGenericFields(List<AccountGenericField> fields)
+        private void FillAccountCommonGenericFields(Guid accountBEDefinitionId, List<AccountGenericField> fields)
         {
-            fields.Add(new AccountStatusGenericField());
             fields.Add(new AccountNameGenericField());
             fields.Add(new AccountTypeGenericField());
+            fields.Add(new AccountStatusGenericField(accountBEDefinitionId));
         }
 
         #endregion

@@ -94,7 +94,7 @@
 
                     function loadAccountFields() {
 
-                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo().then(function (response) {
+                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo("9A427357-CF55-4F33-99F7-745206DEE7CD").then(function (response) {
                             accountFields = response;
                         });
                     }

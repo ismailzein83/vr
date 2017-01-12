@@ -18,4 +18,9 @@ namespace Retail.BusinessEntity.Entities
 
         public DateTime? EED { get; set; }
     }
+
+    public class AccountPackageToAdd : AccountPackage
+    {
+        public Guid AccountBEDefinitionId { get; set; }
+    }
 }

@@ -44,9 +44,12 @@
                 api.load = function (payload) {
 
                     var promises = [];
+                    
+                    var accountBEDefinitionId;
                     var genericFieldDefinition;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         genericFieldDefinition = payload.genericFieldDefinition;
                     }
 
@@ -56,7 +59,7 @@
 
                     function getSelectorLoadPromise() {
 
-                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo().then(function (response) {
+                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo(accountBEDefinitionId).then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.genericFieldDefinitions.push(response[i]);

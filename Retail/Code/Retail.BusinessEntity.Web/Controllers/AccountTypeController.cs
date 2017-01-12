@@ -60,9 +60,9 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericFieldDefinitionsInfo")]
-        public IEnumerable<GenericFieldDefinitionInfo> GetGenericFieldDefinitionsInfo()
+        public IEnumerable<GenericFieldDefinitionInfo> GetGenericFieldDefinitionsInfo(Guid accountBEDefinitionId)
         {
-            return _manager.GetGenericFieldDefinitionsInfo();
+            return _manager.GetGenericFieldDefinitionsInfo(accountBEDefinitionId);
         }
     }
 }

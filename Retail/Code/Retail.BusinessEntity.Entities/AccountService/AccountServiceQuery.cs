@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-   public class AccountServiceQuery
+    public class AccountServiceQuery
     {
+        public Guid AccountBEDefinitionId { get; set; }
+
         public long? AccountId { get; set; }
     }
 }

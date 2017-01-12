@@ -36,7 +36,7 @@ namespace Retail.BusinessEntity.Entities
             get { return "retail-be-account-selector"; }
         }
 
-        public Guid StatusGroupId { get; set; }
+        public Guid StatusBEDefinitionId { get; set; }
 
         public AccountGridDefinition GridDefinition { get; set; }
 

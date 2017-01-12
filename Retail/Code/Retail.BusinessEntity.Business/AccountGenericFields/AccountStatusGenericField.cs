@@ -4,11 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Business;
 
 namespace Retail.BusinessEntity.Business
 {
     public class AccountStatusGenericField : AccountGenericField
     {
+        public Guid _statusBEDefinitionId;
+
+        public AccountStatusGenericField(Guid accountBEDefinitionId)
+        {
+            var accountBEDefinitionSettings = new AccountBEDefinitionManager().GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            _statusBEDefinitionId = accountBEDefinitionSettings.StatusBEDefinitionId;
+        }
+
         public override string Name
         {
             get
@@ -29,7 +38,7 @@ namespace Retail.BusinessEntity.Business
         {
             get
             {
-                return new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType { BusinessEntityDefinitionId = StatusDefinition.BUSINESSENTITY_DEFINITION_ID };
+                return new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType { BusinessEntityDefinitionId = _statusBEDefinitionId };
             }
         }
 

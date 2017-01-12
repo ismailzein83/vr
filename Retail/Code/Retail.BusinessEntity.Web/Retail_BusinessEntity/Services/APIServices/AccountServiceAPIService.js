@@ -17,12 +17,12 @@
             });
         }
 
-        function UpdateAccountService(accountServiceObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "UpdateAccountService"), accountServiceObject);
-        }
-
         function AddAccountService(accountServiceObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "AddAccountService"), accountServiceObject);
+        }
+
+        function UpdateAccountService(accountServiceObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "UpdateAccountService"), accountServiceObject);
         }
 
         function HasUpdateAccountServicePermission() {

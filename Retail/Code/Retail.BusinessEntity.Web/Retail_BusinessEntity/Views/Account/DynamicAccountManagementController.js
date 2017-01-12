@@ -162,7 +162,7 @@
 
         function loadAccountFields() {
 
-            return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo().then(function (response) {
+            return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo(accountBEDefinitionId).then(function (response) {
                 accountFields = response;
             });
         }

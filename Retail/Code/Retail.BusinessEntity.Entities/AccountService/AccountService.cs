@@ -12,11 +12,18 @@ namespace Retail.BusinessEntity.Entities
         public long AccountId { get; set; }
         public Guid StatusId { get; set; }
         public Guid ServiceTypeId { get; set; }
-
         public int? ServiceChargingPolicyId { get; set; }
-
         public AccountServiceSettings Settings { get; set; }
-
         public ExecutedActions ExecutedActions { get; set; }
+    }
+
+    public class AccountServiceToAdd : AccountService
+    {
+        public Guid AccountBEDefinitionId { get; set; }
+    }
+
+    public class AccountServiceToEdit : AccountService
+    {
+        public Guid AccountBEDefinitionId { get; set; }
     }
 }

@@ -18,10 +18,12 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
-            AccountGenericField accountGenericField = new AccountTypeManager().GetAccountGenericField(this.GenericFieldDefinition.Name);
+            RetailAccountObjectType retailAccountObjectType = context.ObjectType as RetailAccountObjectType;
+
+            AccountGenericField accountGenericField = new AccountTypeManager().GetAccountGenericField(retailAccountObjectType.AccountBEDefinitionId, this.GenericFieldDefinition.Name);
             if (accountGenericField == null)
                 throw new NullReferenceException(String.Format("accountGenericField '{0}'", this.GenericFieldDefinition.Name));
-            
+
             return accountGenericField.GetValue(new AccountGenericFieldContext(context.Object));
         }
     }

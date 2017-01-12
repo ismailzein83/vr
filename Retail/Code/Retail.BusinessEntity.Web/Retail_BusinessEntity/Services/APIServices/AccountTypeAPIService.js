@@ -35,8 +35,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccountType'), accountType);
         }
 
-        function GetGenericFieldDefinitionsInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetGenericFieldDefinitionsInfo'), {}, { useCache: true });
+        function GetGenericFieldDefinitionsInfo(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetGenericFieldDefinitionsInfo'),
+                    { accountBEDefinitionId: accountBEDefinitionId }, { useCache: true });
         }
 
         function HasViewAccountTypesPermission() {

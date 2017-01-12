@@ -10,10 +10,13 @@
             editAccountService: editAccountService,
         });
 
-        function addAccountService(onAccountServiceAdded, accountId) {
+        function addAccountService(accountBEDefinitionId, accountId, onAccountServiceAdded) {
+
             var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId
             };
+
             var settings = {
             };
             
@@ -25,17 +28,20 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountService/AccountServiceEditor.html', parameters, settings);
         }
 
-        function editAccountService(accountServiceId, onAccountServiceUpdated) {
-            var modalSettings = {
-            };
+        function editAccountService(accountServiceId, accountBEDefinitionId, onAccountServiceUpdated) {
 
             var parameters = {
                 accountServiceId: accountServiceId,
+                accountBEDefinitionId: accountBEDefinitionId
+            };
+
+            var modalSettings = {
             };
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onAccountServiceUpdated = onAccountServiceUpdated;
             };
+
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountService/AccountServiceEditor.html', parameters, modalSettings);
         }
 

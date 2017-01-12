@@ -185,6 +185,7 @@
         {
             var obj = {
                 AccountPackageId: accountPackageId,
+                AccountBEDefinitionId: accountBEDefinitionId,
                 AccountId: accountId,
                 PackageId: packageSelectorAPI.getSelectedIds(),
                 BED: $scope.scopeModel.bed,

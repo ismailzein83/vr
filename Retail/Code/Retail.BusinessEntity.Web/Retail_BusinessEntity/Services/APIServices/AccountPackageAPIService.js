@@ -18,8 +18,8 @@
             });
         }
 
-        function AddAccountPackage(accountPackage) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAccountPackage'), accountPackage);
+        function AddAccountPackage(accountPackageToAdd) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAccountPackage'), accountPackageToAdd);
         }
 
         function HasViewAccountPackagesPermission() {

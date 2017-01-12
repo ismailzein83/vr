@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -15,19 +16,20 @@ namespace Retail.BusinessEntity.Business
     {
         #region Fields
 
-        AccountManager _accountManager = new AccountManager();
-        //AccountTypeManager _accountTypeManager = new AccountTypeManager();
+        AccountBEManager _accountBEManager = new AccountBEManager();
         PackageManager _packageManager = new PackageManager();
 
         #endregion
 
         #region Public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<AccountPackageDetail> GetFilteredAccountPackages(Vanrise.Entities.DataRetrievalInput<AccountPackageQuery> input)
+        public IDataRetrievalResult<AccountPackageDetail> GetFilteredAccountPackages(DataRetrievalInput<AccountPackageQuery> input)
         {
             Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
             Func<AccountPackage, bool> filterExpression = (accountPackage) => (accountPackage.AccountId == input.Query.AssignedToAccountId);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedAccountPackages.ToBigResult(input, filterExpression, AccountPackageDetailMapper));
+            
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedAccountPackages.ToBigResult(input, filterExpression, 
+                    (accountPackage) => AccountPackageDetailMapper(input.Query.AccountBEDefinitionId, accountPackage)));
         }
 
         public AccountPackage GetAccountPackage(int accountPackageId)
@@ -71,7 +73,7 @@ namespace Retail.BusinessEntity.Business
             return null;
         }
 
-        public Vanrise.Entities.InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackage accountPackage)
+        public InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackageToAdd accountPackageToAdd)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountPackageDetail>();
 
@@ -81,12 +83,12 @@ namespace Retail.BusinessEntity.Business
             IAccountPackageDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageDataManager>();
             int accountPackageId = -1;
 
-            if (dataManager.Insert(accountPackage, out accountPackageId))
+            if (dataManager.Insert(accountPackageToAdd, out accountPackageId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                accountPackage.AccountPackageId = accountPackageId;
-                insertOperationOutput.InsertedObject = this.AccountPackageDetailMapper(accountPackage);
+                accountPackageToAdd.AccountPackageId = accountPackageId;
+                insertOperationOutput.InsertedObject = this.AccountPackageDetailMapper(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd);
             }
 
             return insertOperationOutput;
@@ -156,13 +158,13 @@ namespace Retail.BusinessEntity.Business
 
         #region Mappers
 
-        AccountPackageDetail AccountPackageDetailMapper(AccountPackage accountPackage)
+        AccountPackageDetail AccountPackageDetailMapper(Guid accountBEDefinitionId, AccountPackage accountPackage)
         {
 
             return new AccountPackageDetail()
             {
                 Entity = accountPackage,
-                AccountName = _accountManager.GetAccountName(accountPackage.AccountId),
+                AccountName = _accountBEManager.GetAccountName(accountBEDefinitionId, accountPackage.AccountId),
                 PackageName = _packageManager.GetPackageName(accountPackage.PackageId)
             };
         }

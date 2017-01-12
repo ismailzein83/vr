@@ -45,17 +45,18 @@
                 var api = {};
 
                 api.load = function (payload) {
-
                     var promises = [];
+
+                    var accountBEDefinitionId;
                     var genericFieldDefinition;
 
-                    if (payload != undefined && payload.objectPropertyEvaluator != undefined) {
-                        genericFieldDefinition = payload.objectPropertyEvaluator.GenericFieldDefinition;
+                    if (payload != undefined) {
+                        accountBEDefinitionId = payload.objectType != undefined ? payload.objectType.AccountBEDefinitionId : undefined;
+                        genericFieldDefinition = payload.objectPropertyEvaluator != undefined ? payload.objectPropertyEvaluator.GenericFieldDefinition : undefined;
                     }
 
                     var accountGenericFieldDefinitionSelectorLoadPromise = getAccountGenericFieldDefinitionSelectorLoadPromise();
                     promises.push(accountGenericFieldDefinitionSelectorLoadPromise);
-
 
                     function getAccountGenericFieldDefinitionSelectorLoadPromise() {
                         var accountGenericFieldDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -63,6 +64,9 @@
                         var accountGenericFieldDefinitionSelectorPayload = {
                             genericFieldDefinition: genericFieldDefinition
                         };
+                        if (accountBEDefinitionId != undefined) {
+                            accountGenericFieldDefinitionSelectorPayload.accountBEDefinitionId = accountBEDefinitionId;
+                        }
                         VRUIUtilsService.callDirectiveLoad(accountGenericFieldDefinitionSelectorAPI, accountGenericFieldDefinitionSelectorPayload, accountGenericFieldDefinitionSelectorLoadDeferred);
 
                         return accountGenericFieldDefinitionSelectorLoadDeferred.promise;

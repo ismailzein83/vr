@@ -38,7 +38,7 @@ namespace Retail.BusinessEntity.Business
                 if (input.Query.ParentAccountId.HasValue && (!account.ParentAccountId.HasValue || (account.ParentAccountId.HasValue && input.Query.ParentAccountId.Value != account.ParentAccountId.Value)))
                     return false;
 
-                if (!recordFilterManager.IsFilterGroupMatch(input.Query.FilterGroup, new AccountRecordFilterGenericFieldMatchContext(account)))
+                if (!recordFilterManager.IsFilterGroupMatch(input.Query.FilterGroup, new AccountRecordFilterGenericFieldMatchContext(input.Query.AccountBEDefinitionId, account)))
                     return false;
 
                 return true;
@@ -234,7 +234,8 @@ namespace Retail.BusinessEntity.Business
 
         public bool IsAccountMatchWithFilterGroup(Account account, RecordFilterGroup filterGroup)
         {
-            return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(account));
+            AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
+            return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(accountType.AccountBEDefinitionId, account));
         }
 
         public bool HasAccountPayment(Guid accountBEDefinitionId, long accountId, bool getInherited, out IAccountPayment accountPayment)
@@ -370,16 +371,19 @@ namespace Retail.BusinessEntity.Business
 
         private class AccountRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
         {
+
+            Guid _accountBEDefinitionId;
             Account _account;
             AccountTypeManager _accountTypeManager = new AccountTypeManager();
-            public AccountRecordFilterGenericFieldMatchContext(Account account)
+            public AccountRecordFilterGenericFieldMatchContext(Guid accountBEDefinitionId, Account account)
             {
-                _account = account;
+                this._accountBEDefinitionId = accountBEDefinitionId;
+                this._account = account;
             }
 
             public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
             {
-                var accountGenericField = _accountTypeManager.GetAccountGenericField(fieldName);
+                var accountGenericField = _accountTypeManager.GetAccountGenericField(_accountBEDefinitionId, fieldName);
                 if (accountGenericField == null)
                     throw new NullReferenceException(String.Format("accountGenericField '{0}'", fieldName));
                 fieldType = accountGenericField.FieldType;
@@ -595,7 +599,7 @@ namespace Retail.BusinessEntity.Business
 
             //Dynamic Part
             Dictionary<string, AccountFieldValue> fieldValues = new Dictionary<string, AccountFieldValue>();
-            Dictionary<string, AccountGenericField> accountGenericFields = accountTypeManager.GetAccountGenericFields();
+            Dictionary<string, AccountGenericField> accountGenericFields = accountTypeManager.GetAccountGenericFields(accountBEDefinitionId);
 
             foreach (var field in accountGenericFields.Values)
             {

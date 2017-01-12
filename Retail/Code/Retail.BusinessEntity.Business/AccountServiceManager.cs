@@ -22,14 +22,15 @@ namespace Retail.BusinessEntity.Business
 
         #region Public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<AccountServiceDetail> GetFilteredAccountServices(Vanrise.Entities.DataRetrievalInput<AccountServiceQuery> input)
+        public IDataRetrievalResult<AccountServiceDetail> GetFilteredAccountServices(Vanrise.Entities.DataRetrievalInput<AccountServiceQuery> input)
         {
             var allAccountServices = GetCachedAccountServices();
 
             Func<AccountService, bool> filterExpression = (prod) =>
                  (input.Query.AccountId == null || prod.AccountId == input.Query.AccountId);
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountServices.ToBigResult(input, filterExpression, AccountServiceDetailMapper));
+            return DataRetrievalManager.Instance.ProcessResult(input, allAccountServices.ToBigResult(input, filterExpression,
+                       (accountService) => AccountServiceDetailMapper(input.Query.AccountBEDefinitionId, accountService)));
         }
 
         public AccountService GetAccountService(long AccountServiceId)
@@ -45,10 +46,10 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
-        public AccountServiceDetail GetAccountServiceDetail(long accountServiceId)
+        public AccountServiceDetail GetAccountServiceDetail(Guid accountBEDefinition, long accountServiceId)
         {
             var accountService = GetAccountService(accountServiceId);
-            return accountService != null ? AccountServiceDetailMapper(accountService) : null;
+            return accountService != null ? AccountServiceDetailMapper(accountBEDefinition, accountService) : null;
         }
         public int GetAccountServicesCount(long accountId)
         {
@@ -58,7 +59,7 @@ namespace Retail.BusinessEntity.Business
             else
                 return 0;
         }
-        
+
         public bool UpdateStatus(long accountServiceId, Guid statusId)
         {
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
@@ -72,65 +73,64 @@ namespace Retail.BusinessEntity.Business
         public bool UpdateExecutedActions(long accountServiceId, ExecutedActions executedActions)
         {
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
-            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountServiceId,executedActions);
+            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountServiceId, executedActions);
             if (updateExecutedAction)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             return updateExecutedAction;
         }
-        public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountService accountService)
+        public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountServiceToAdd accountServiceToAdd)
         {
             InsertOperationOutput<AccountServiceDetail> insertOperationOutput = new InsertOperationOutput<AccountServiceDetail>();
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.Result =InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             long AccountServiceId = -1;
 
             var serviceTypeManager = new ServiceTypeManager();
-            var serviceType = serviceTypeManager.GetServiceType(accountService.ServiceTypeId);
+            var serviceType = serviceTypeManager.GetServiceType(accountServiceToAdd.ServiceTypeId);
             if (serviceType == null)
                 throw new NullReferenceException("ServiceType is null");
             if (serviceType.Settings == null)
                 throw new NullReferenceException("ServiceType settings is null");
 
-            accountService.StatusId = serviceType.Settings.InitialStatusId;
+            accountServiceToAdd.StatusId = serviceType.Settings.InitialStatusId;
 
-            bool insertActionSucc = AddAccountService(accountService,out AccountServiceId);
+            bool insertActionSucc = AddAccountService(accountServiceToAdd, out AccountServiceId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                accountService.AccountServiceId = AccountServiceId;
-                insertOperationOutput.InsertedObject = AccountServiceDetailMapper(accountService);
+                insertOperationOutput.Result =InsertOperationResult.Succeeded;
+                accountServiceToAdd.AccountServiceId = AccountServiceId;
+                insertOperationOutput.InsertedObject = AccountServiceDetailMapper(accountServiceToAdd.AccountBEDefinitionId, accountServiceToAdd);
             }
             else
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                insertOperationOutput.Result =InsertOperationResult.SameExists;
             return insertOperationOutput;
         }
-
         public bool AddAccountService(AccountService accountService, out long accountServiceId)
         {
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
             return dataManager.Insert(accountService, out accountServiceId);
         }
 
-        public UpdateOperationOutput<AccountServiceDetail> UpdateAccountService(AccountService accountService)
+        public UpdateOperationOutput<AccountServiceDetail> UpdateAccountService(AccountServiceToEdit accountServiceToEdit)
         {
             IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
-            bool updateActionSucc = UpdateAccountServiceEntity(accountService);
+            bool updateActionSucc = UpdateAccountServiceEntity(accountServiceToEdit);
             UpdateOperationOutput<AccountServiceDetail> updateOperationOutput = new UpdateOperationOutput<AccountServiceDetail>();
 
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.Result =UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = AccountServiceDetailMapper(this.GetAccountService(accountService.AccountServiceId));
+                updateOperationOutput.Result =UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = AccountServiceDetailMapper(accountServiceToEdit.AccountBEDefinitionId, this.GetAccountService(accountServiceToEdit.AccountServiceId));
             }
             else
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                updateOperationOutput.Result =UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
         public bool UpdateAccountServiceEntity(AccountService accountService)
@@ -172,7 +172,7 @@ namespace Retail.BusinessEntity.Business
               () =>
               {
                   Dictionary<long, AccountInfo> accountInfos = new Dictionary<long, AccountInfo>();
-                  foreach(var accountService in GetCachedAccountServices().Values)
+                  foreach (var accountService in GetCachedAccountServices().Values)
                   {
                       accountInfos.GetOrCreateItem(accountService.AccountId).AccountServices.Add(accountService);
                   }
@@ -185,28 +185,28 @@ namespace Retail.BusinessEntity.Business
 
         #region  Mappers
 
-        private AccountServiceDetail AccountServiceDetailMapper(AccountService accountService)
+        private AccountServiceDetail AccountServiceDetailMapper(Guid accountBEDefinitionId, AccountService accountService)
         {
-            AccountManager accountManager = new AccountManager();
+            AccountBEManager accountBEManager = new AccountBEManager();
             ServiceTypeManager serviceTypeManager = new Business.ServiceTypeManager();
             ChargingPolicyManager chargingPolicyManager = new ChargingPolicyManager();
             StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
-        
+
             ActionDefinitionManager manager = new ActionDefinitionManager();
             IEnumerable<ActionDefinitionInfo> actionDefinitions = manager.GetActionDefinitionInfoByEntityType(EntityType.AccountService, accountService.StatusId, accountService.ServiceTypeId);
-             var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(accountService.StatusId);
+            var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(accountService.StatusId);
 
 
-             return new AccountServiceDetail()
-            {
-                Entity = accountService,
-                AccountName = accountManager.GetAccountName(accountService.AccountId),
-                ServiceChargingPolicyName = accountService.ServiceChargingPolicyId.HasValue?chargingPolicyManager.GetChargingPolicyName(accountService.ServiceChargingPolicyId.Value):null,
-                ServiceTypeTitle = serviceTypeManager.GetServiceTypeName(accountService.ServiceTypeId),
-                ActionDefinitions = actionDefinitions,
-                StatusDesciption =statusDesciption,
-                Style = GetStatuStyle(accountService.StatusId),
-            };
+            return new AccountServiceDetail()
+           {
+               Entity = accountService,
+               AccountName = accountBEManager.GetAccountName(accountBEDefinitionId, accountService.AccountId),
+               ServiceChargingPolicyName = accountService.ServiceChargingPolicyId.HasValue ? chargingPolicyManager.GetChargingPolicyName(accountService.ServiceChargingPolicyId.Value) : null,
+               ServiceTypeTitle = serviceTypeManager.GetServiceTypeName(accountService.ServiceTypeId),
+               ActionDefinitions = actionDefinitions,
+               StatusDesciption = statusDesciption,
+               Style = GetStatuStyle(accountService.StatusId),
+           };
         }
         private StyleFormatingSettings GetStatuStyle(Guid statusID)
         {

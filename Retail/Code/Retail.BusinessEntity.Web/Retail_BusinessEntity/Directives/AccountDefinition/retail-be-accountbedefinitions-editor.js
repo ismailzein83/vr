@@ -24,8 +24,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
         function AccountBeDefinitionsSettingsEditorCtor(ctrl, $scope, $attrs) {
 
-            var statusDefinitionSelectorAPI;
-            var statusDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
+            var statusBEDefinitionSelectorAPI;
+            var statusBEDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
 
             var accountGridDefinitionDirectiveAPI;
             var accountGridDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
@@ -39,8 +39,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
-                    statusDefinitionSelectorAPI = api;
-                    statusDefinitionSelectorDeferred.resolve();
+                    statusBEDefinitionSelectorAPI = api;
+                    statusBEDefinitionSelectorDeferred.resolve();
                 };
                 $scope.scopeModel.onAccountGridDefinitionReady = function (api) {
                     accountGridDefinitionDirectiveAPI = api;
@@ -54,7 +54,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     accountActionDefinitionDirectiveAPI = api;
                     accountActionDefinitionDirectiveDeferred.resolve();
                 }
-                UtilsService.waitMultiplePromises([accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise, statusDefinitionSelectorDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise, statusBEDefinitionSelectorDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -67,12 +67,13 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountGridDefinition;
                     var accountViewDefinitions;
                     var accountActionDefinitions;
-                    var statusGroupId;
+                    var statusBEDefinitionId;
+
                     if (payload != undefined && payload.businessEntityDefinitionSettings != undefined) {
                         accountGridDefinition = payload.businessEntityDefinitionSettings.GridDefinition;
                         accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
                         accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
-                        statusGroupId = payload.businessEntityDefinitionSettings.StatusGroupId;
+                        statusBEDefinitionId = payload.businessEntityDefinitionSettings.StatusBEDefinitionId;
                     }
 
                     //Loading AccountGridDefinition Directive
@@ -88,8 +89,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     promises.push(accountActionDefinitionLoadPromise);
 
                     //Loading Status Definition Directive
-                    var statusDefinitionSelectorLoadPromise = loadStatusDefinitionSelectorLoadPromise();
-                    promises.push(statusDefinitionSelectorLoadPromise);
+                    var statusBEDefinitionSelectorLoadPromise = loadStatusDefinitionSelectorLoadPromise();
+                    promises.push(statusBEDefinitionSelectorLoadPromise);
+
 
                     function getAccountGridDefinitionLoadPromise() {
                         var accountGridDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
@@ -122,19 +124,21 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         return accountActionDefitnionLoadDeferred.promise;
                     }
                     function loadStatusDefinitionSelectorLoadPromise() {
-                        var statusDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
-                        statusDefinitionSelectorDeferred.promise.then(function () {
+                        var statusBEDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        statusBEDefinitionSelectorDeferred.promise.then(function () {
                             var accountActionDefinitionPayload = {
                                 filter: {
                                     Filters: [{
                                         $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business"
                                     }]
                                 },
-                                selectedIds: statusGroupId
+                                selectedIds: statusBEDefinitionId
                             };
-                            VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, accountActionDefinitionPayload, statusDefinitionLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(statusBEDefinitionSelectorAPI, accountActionDefinitionPayload, statusBEDefinitionLoadDeferred);
                         });
-                        return statusDefinitionLoadDeferred.promise;
+
+                        return statusBEDefinitionLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -145,7 +149,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         GridDefinition: accountGridDefinitionDirectiveAPI.getData(),
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
-                        StatusGroupId: statusDefinitionSelectorAPI.getSelectedIds()
+                        StatusBEDefinitionId: statusBEDefinitionSelectorAPI.getSelectedIds()
                     };
 
                     return obj;

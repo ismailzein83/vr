@@ -48,7 +48,7 @@
                         gridAPI.onAccountServiceAdded(addedService);
                     };
 
-                    Retail_BE_AccountServiceService.addAccountService(onAccountServiceAdded, parentAccountId);
+                    Retail_BE_AccountServiceService.addAccountService(accountBEDefinitionId, parentAccountId, onAccountServiceAdded);
                 };
             }
             function defineAPI() {

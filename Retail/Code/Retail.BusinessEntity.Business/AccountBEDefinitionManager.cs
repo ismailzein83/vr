@@ -15,6 +15,18 @@ namespace Retail.BusinessEntity.Business
     {
         #region Public Methods 
 
+        public AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
+        {
+            var businessEntityDefinition = this.GetAccountBusinessEntityDefinition(accountBEDefinitionId);
+
+            if (businessEntityDefinition == null)
+                throw new NullReferenceException(string.Format("businessEntityDefinition Id : {0}", accountBEDefinitionId));
+
+            if (businessEntityDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("businessEntityDefinition.Settings Id : {0}", accountBEDefinitionId));
+
+            return businessEntityDefinition.Settings as AccountBEDefinitionSettings;
+        }
         public AccountActionDefinitionSettings GetAccountActionDefinitionSettings(Guid accountBEDefinitionId, Guid actionDefinitionId)
         {
             var accountActionDefinition = GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
@@ -62,7 +74,7 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException("accountGridDefinition.ColumnDefinitions");
 
             AccountTypeManager accountTypeManager = new AccountTypeManager();
-            IEnumerable<GenericFieldDefinitionInfo> genericFieldDefinitionInfos = accountTypeManager.GetGenericFieldDefinitionsInfo();
+            IEnumerable<GenericFieldDefinitionInfo> genericFieldDefinitionInfos = accountTypeManager.GetGenericFieldDefinitionsInfo(accountBEDefinitionId);
             if (genericFieldDefinitionInfos == null)
                 throw new NullReferenceException("genericFieldDefinitionInfos");
 
@@ -155,18 +167,6 @@ namespace Retail.BusinessEntity.Business
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
             return businessEntityDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
         }
-        private AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
-        {
-            var businessEntityDefinition = this.GetAccountBusinessEntityDefinition(accountBEDefinitionId);
-
-            if (businessEntityDefinition == null)
-                throw new NullReferenceException(string.Format("businessEntityDefinition Id : {0}", accountBEDefinitionId));
-
-            if (businessEntityDefinition.Settings == null)
-                throw new NullReferenceException(string.Format("businessEntityDefinition.Settings Id : {0}", accountBEDefinitionId));
-
-            return businessEntityDefinition.Settings as AccountBEDefinitionSettings;
-        }
 
         private bool IsColumnAvailable(Guid accountBEDefinitionId, long? parentAccountId, AccountGridColumnDefinition gridColumnDefinition)
         {
@@ -201,7 +201,5 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
-
-      
     }
 }
