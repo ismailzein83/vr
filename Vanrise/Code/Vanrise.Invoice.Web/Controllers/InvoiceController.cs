@@ -27,6 +27,13 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetInvoice(invoiceId);
         }
+        [HttpGet]
+        [Route("CheckGeneratedInvoicePeriodGaP")]
+        public DateTime? CheckGeneratedInvoicePeriodGaP(DateTime fromDate, Guid invoiceTypeId, string partnerId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.CheckGeneratedInvoicePeriodGaP(fromDate, invoiceTypeId, partnerId);
+        }
         [HttpPost]
         [Route("GenerateInvoice")]
         public object GenerateInvoice(GenerateInvoiceInput createInvoiceInput)

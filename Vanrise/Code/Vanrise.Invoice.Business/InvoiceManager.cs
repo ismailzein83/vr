@@ -90,6 +90,14 @@ namespace Vanrise.Invoice.Business
             }
             return updateOperationOutput;
         }
+        public DateTime? CheckGeneratedInvoicePeriodGaP(DateTime fromDate, Guid invoiceTypeId, string partnerId)
+        {
+            BillingPeriodInfoManager billingPeriodInfoManager = new BillingPeriodInfoManager();
+            var billingPeriodInfo = billingPeriodInfoManager.GetBillingPeriodInfoById(partnerId, invoiceTypeId);
+            if (billingPeriodInfo == null)
+                return null;
+            return (billingPeriodInfo.NextPeriodStart < fromDate) ? billingPeriodInfo.NextPeriodStart : default(DateTime?);
+        }
         public InsertOperationOutput<InvoiceDetail> GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<InvoiceDetail>();
@@ -112,15 +120,14 @@ namespace Vanrise.Invoice.Business
 
                 var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails);
 
-                var serialNumber = invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern;
-                InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
+                var serialNumber = new PartnerManager().GetPartnerSerialNumberPattern(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId);                 InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
                 {
                     Invoice = invoice,
                     InvoiceTypeId = createInvoiceInput.InvoiceTypeId
                 };
                 foreach (var part in invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberParts)
                 {
-                    if (invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern != null && invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                    if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", part.VariableName)))
                     {
                         serialNumber = serialNumber.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberContext));
                     }

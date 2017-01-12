@@ -51,7 +51,7 @@
                     return regenerateInvoice();
                 }
                 else {
-                    return generateInvoice();
+                    return tryGenerateInvoice();
                 }
             };
             $scope.scopeModel.close = function () {
@@ -69,10 +69,30 @@
                 validateResult = false;
                 return null;
             };
-            function generateInvoice() {
-                $scope.scopeModel.isLoading = true;
-
+            function tryGenerateInvoice() {
                 var incvoiceObject = buildInvoiceObjFromScope();
+                $scope.scopeModel.isLoading = true;
+                VR_Invoice_InvoiceAPIService.CheckGeneratedInvoicePeriodGaP(incvoiceObject.FromDate, incvoiceObject.InvoiceTypeId, incvoiceObject.PartnerId).then(function (response) {
+                    if(response == undefined)
+                    {
+                        generateInvoice(incvoiceObject);
+                    }else
+                    {
+                        $scope.scopeModel.isLoading = false;
+                        var date = UtilsService.createDateFromString(response);
+                        VRNotificationService.showConfirmation("Period skipped , invoice must be generated from  date " + UtilsService.getShortDate(date)+ " of next invoice, are you sure you want to continue ?").then(function (response) {
+                            if (response)
+                            {
+                                generateInvoice(incvoiceObject);
+                            }
+                        });
+                    }
+                }).catch(function(error){
+                    $scope.scopeModel.isLoading = false;
+                }).finally(function(){
+                });
+            }
+            function generateInvoice(incvoiceObject) {
                 return VR_Invoice_InvoiceAPIService.GenerateInvoice(incvoiceObject)
                .then(function (response) {
                    if (VRNotificationService.notifyOnItemAdded("Invoice", response)) {
@@ -87,7 +107,6 @@
                    $scope.scopeModel.isLoading = false;
                });
             }
-
             function regenerateInvoice() {
                 $scope.scopeModel.isLoading = true;
 
@@ -108,6 +127,7 @@
             }
 
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
             if ($scope.scopeModel.isEditMode) {

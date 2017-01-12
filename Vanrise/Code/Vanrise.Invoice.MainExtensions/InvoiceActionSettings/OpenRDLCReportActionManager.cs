@@ -56,8 +56,8 @@ namespace Vanrise.Invoice.MainExtensions
                     SetDataSources(reportViewer.LocalReport.DataSources, openRDLCReportAction.MainReportDataSources, true, null);
                     invoiceReportParameters = GetParameters(reportViewer.LocalReport.GetParameters(), openRDLCReportAction.MainReportParameters);
                 }
-                reportViewer.LocalReport.SetParameters(invoiceReportParameters.ToArray());
                 reportViewer.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(SubreportProcessingEventHandler);
+                reportViewer.LocalReport.SetParameters(invoiceReportParameters.ToArray());
 
 
             }

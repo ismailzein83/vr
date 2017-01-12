@@ -57,7 +57,13 @@
                 issueDate: issueDate
             });
         }
-
+        function CheckGeneratedInvoicePeriodGaP(fromDate, invoiceTypeId, partnerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "CheckGeneratedInvoicePeriodGaP"), {
+                fromDate: fromDate,
+                invoiceTypeId: invoiceTypeId,
+                partnerId: partnerId
+            });
+        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -68,7 +74,8 @@
             SetInvoiceLocked: SetInvoiceLocked,
             ReGenerateInvoice: ReGenerateInvoice,
             UpdateInvoiceNote: UpdateInvoiceNote,
-            GetBillingInterval: GetBillingInterval
+            GetBillingInterval: GetBillingInterval,
+            CheckGeneratedInvoicePeriodGaP: CheckGeneratedInvoicePeriodGaP
         });
     }
 

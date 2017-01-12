@@ -61,7 +61,7 @@ namespace Vanrise.Invoice.MainExtensions
                         return date.AddDays(-1);
                 }else if(item.MonthlyType == MonthlyType.LastDay)
                 {
-                    var date = new DateTime(firstDate.Year, firstDate.Month, fromDate.GetLastDayOfMonth().Day);
+                    var date = new DateTime(firstDate.Year, firstDate.Month, firstDate.GetLastDayOfMonth().Day);
                     if (date > fromDate)
                     return fromDate.GetLastDayOfMonth().AddDays(-1);
                 }

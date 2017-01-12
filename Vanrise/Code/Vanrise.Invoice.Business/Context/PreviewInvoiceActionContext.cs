@@ -41,7 +41,7 @@ namespace Vanrise.Invoice.Business
             this.GeneratedInvoice = context.Invoice;
 
 
-            var serialNumber = invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern;
+            var serialNumber = new PartnerManager().GetPartnerSerialNumberPattern(this.InvoiceTypeId, this.PartnerId);
 
             this._Invoice = new Entities.Invoice
             {
@@ -62,7 +62,7 @@ namespace Vanrise.Invoice.Business
             };
             foreach (var part in invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberParts)
             {
-                if (invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern != null && invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", part.VariableName)))
                 {
                     serialNumber = serialNumber.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberContext));
                 }
