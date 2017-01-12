@@ -52,8 +52,8 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                                 DataRetrievalResultType: 0,
                                 IsSortDescending: false,
                                 ResultKey: null,
-                                SortByColumnName: ctrl.sortField,
-                                Query: query
+                                SortByColumnName: "Time",
+                                Query: query,
                             };
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
