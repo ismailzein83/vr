@@ -10,6 +10,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int CustomerId { get; set; }
 
+        public int SellingNumberPlanId { get; set; }
+
         public override int CarrierInfoId { get { return CustomerId; } }
 
         public override string Title { get { return "Customer"; } }

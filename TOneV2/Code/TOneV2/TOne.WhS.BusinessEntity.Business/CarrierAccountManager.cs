@@ -767,7 +767,7 @@ namespace TOne.WhS.BusinessEntity.Business
             RoutingCustomerInfo routingCustomerInfo = new RoutingCustomerInfo();
 
             routingCustomerInfo.CustomerId = carrierAccount.CarrierAccountId;
-
+            routingCustomerInfo.SellingNumberPlanId = carrierAccount.SellingNumberPlanId.Value;
             return routingCustomerInfo;
         }
 
