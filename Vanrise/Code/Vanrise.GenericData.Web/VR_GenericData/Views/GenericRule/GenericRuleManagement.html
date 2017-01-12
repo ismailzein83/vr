@@ -11,7 +11,7 @@
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
-                <vr-columns width="normal">
+                <vr-columns width="normal" ng-hide="hideGenericRuleDefinition">
                     <vr-genericdata-genericruledefinition-selector on-ready="onGenericRuleDefinitionSelectorDirectiveReady" selectedvalues="scopeModel.ruleDefinition"
                                                                    onselectionchanged="onGenericRuleDefinitionSelectorSelectionChange" customlabel="Rule Type"
                                                                    isrequired="true" normal-col-num="2" hideremoveicon showtitle>

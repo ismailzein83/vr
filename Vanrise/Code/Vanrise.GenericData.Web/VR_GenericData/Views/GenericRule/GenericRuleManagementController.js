@@ -124,12 +124,15 @@
                             $type: "Vanrise.GenericData.Business.GenericRuleDefinitionViewFilter, Vanrise.GenericData.Business",
                             ViewId: viewId
                         }]
-                    }
+                    },
+                    selectfirstitem: true
                 };
                 VRUIUtilsService.callDirectiveLoad(genericRuleDefinitionAPI, payLoad, loadGenericRuleDefinitionSelectorPromiseDeferred);
             });
             return loadGenericRuleDefinitionSelectorPromiseDeferred.promise.then(function () {
                 $scope.isLoading = false;
+                $scope.hideGenericRuleDefinition = genericRuleDefinitionAPI.hasSingleItem();
+
             });
         }
 

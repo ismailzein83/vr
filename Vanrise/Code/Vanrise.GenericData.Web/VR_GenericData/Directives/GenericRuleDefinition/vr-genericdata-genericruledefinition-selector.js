@@ -64,6 +64,7 @@
                 api.load = function (payload) {
                     var filter;
                     var selectedIds;
+                    var selectfirstitem;
 
                     if (payload != undefined) {
                         if (payload.showaddbutton)
@@ -71,6 +72,7 @@
                         specificTypeName = payload.specificTypeName;
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
+                        selectfirstitem = payload.selectfirstitem != undefined && payload.selectfirstitem == true;
                     }
 
                     return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
@@ -85,13 +87,20 @@
                         if (selectedIds) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'GenericRuleDefinitionId', attrs, ctrl);
                         }
+                        else if(selectfirstitem)
+                        {
+                            var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].GenericRuleDefinitionId] : ctrl.datasource[0].GenericRuleDefinitionId;
+                            VRUIUtilsService.setSelectedValues(defaultValue, 'GenericRuleDefinitionId', attrs, ctrl);
+                        }
                     });
                 };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('GenericRuleDefinitionId', attrs, ctrl);
                 };
-
+                api.hasSingleItem = function () {
+                    return ctrl.datasource.length == 1;
+                };
                 api.getDatasource = function () {
                     return ctrl.datasource;
                 };
