@@ -265,6 +265,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("customerInvoiceSettings"));
             return customerInvoiceSettings.SerialNumberPattern;
         }
+        public bool CheckInvoiceFollowBillingPeriod(int carrierProfileId)
+        {
+            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
+            if (customerInvoiceSettings == null)
+                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
+            return customerInvoiceSettings.IsFollow;
+        }
         public CustomerInvoiceSettings GetCustomerInvoiceSettings(int carrierProfileId)
         {
             var carrierProfile = GetCarrierProfile(carrierProfileId);

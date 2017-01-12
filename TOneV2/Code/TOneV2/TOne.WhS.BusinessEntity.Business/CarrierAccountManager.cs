@@ -467,7 +467,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new CarrierProfileManager().GetCompanySetting(carrierAccount.CarrierProfileId);
             }
         }
-
+        public bool CheckInvoiceFollowBillingPeriod(int carrierAccountId)
+        {
+            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
+            if (customerInvoiceSettings == null)
+                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
+            return customerInvoiceSettings.IsFollow;
+        }
         public IEnumerable<Guid> GetBankDetails(int carrierAccountId)
         {
             var companySettings = GetCompanySetting(carrierAccountId);

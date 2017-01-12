@@ -169,6 +169,23 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return 0;
         }
+        public override bool CheckInvoiceFollowBillingPeriod(ICheckInvoiceFollowBillingPeriodContext context)
+        {
+            string[] partnerId = context.PartnerId.Split('_');
+
+            if (partnerId[0].Equals("Profile"))
+            {
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+
+                return carrierProfileManager.CheckInvoiceFollowBillingPeriod(Convert.ToInt32(partnerId[1]));
+            }
+            else if (partnerId[0].Equals("Account"))
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                return carrierAccountManager.CheckInvoiceFollowBillingPeriod(Convert.ToInt32(partnerId[1]));
+            }
+            return false;
+        }
         private void AddRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, RDLCParameter key, string value, bool isVisible)
         {
             if (rdlcReportParameters == null)
@@ -191,6 +208,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return null;
         }
+
     }
       
 }
