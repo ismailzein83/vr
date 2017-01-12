@@ -9,9 +9,9 @@
 
         var controllerName = "RecurringChargeDefinition";
 
-        function GetRecurringChargeDefinitionsInfo(filter) {
+        function GetRecurringChargeDefinitionsInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetRecurringChargeDefinitionsInfo"), {
-                filter: filter
+                serializedFilter: serializedFilter
             });
         }
 

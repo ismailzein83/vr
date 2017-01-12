@@ -60,6 +60,7 @@ namespace Retail.BusinessEntity.Business
             {
                 Name = productDefinition.Name,
                 ProductDefinitionId = productDefinition.VRComponentTypeId,
+                AccountBEDefinitionId = productDefinition.Settings.AccountBEDefinitionId,
                 RuntimeEditor = productDefinition.Settings.ExtendedSettings.RuntimeEditor
             };
         }

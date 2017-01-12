@@ -27,6 +27,8 @@
         function AccountRecurringChargeRuleSetSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
+
             var selectorAPI;
 
             var directiveAPI;
@@ -47,7 +49,10 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var directivePayload = {
+                        accountBEDefinitionId: accountBEDefinitionId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
             function defineAPI() {
@@ -60,6 +65,7 @@
                     var accountRecurringChargeRuleSetSettings;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountRecurringChargeRuleSetSettings = payload.accountRecurringChargeRuleSetSettings;
                     }
 
@@ -92,7 +98,10 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { accountRecurringChargeRuleSetSettings: accountRecurringChargeRuleSetSettings };
+                            var directivePayload = {
+                                accountBEDefinitionId: accountBEDefinitionId,
+                                accountRecurringChargeRuleSetSettings: accountRecurringChargeRuleSetSettings
+                            };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 

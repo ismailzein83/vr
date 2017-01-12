@@ -10,6 +10,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid ProductDefinitionId { get; set; }
         public string Name { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
         public string RuntimeEditor { get; set; }
     }
 }

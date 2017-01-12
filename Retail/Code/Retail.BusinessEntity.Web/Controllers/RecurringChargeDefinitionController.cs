@@ -17,9 +17,9 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetRecurringChargeDefinitionsInfo")]
-        public IEnumerable<RecurringChargeDefinitionInfo> GetRecurringChargeDefinitionsInfo(string filter = null)
+        public IEnumerable<RecurringChargeDefinitionInfo> GetRecurringChargeDefinitionsInfo(string serializedFilter = null)
         {
-            RecurringChargeDefinitionInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<RecurringChargeDefinitionInfoFilter>(filter) : null;
+            RecurringChargeDefinitionInfoFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<RecurringChargeDefinitionInfoFilter>(serializedFilter) : null;
             return _manager.GetRecurringChargeDefinitionsInfo(deserializedFilter);
         }
     }

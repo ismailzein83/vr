@@ -26,13 +26,14 @@
         function FilterGroupAccountConditionCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
             var accountFields;
 
             var recordFilterDirectiveAPI;
             var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                $scope.scopeModel = {};
+                $scope.scopeModel = {}; 
 
                 $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
                     recordFilterDirectiveAPI = api;
@@ -50,6 +51,7 @@
                     var accountConditionFilterGroup;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountConditionFilterGroup = payload.accountCondition;
                     }
 
@@ -76,7 +78,7 @@
                     }
                     function loadAccountFields() {
 
-                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo().then(function (response) {
+                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo(accountBEDefinitionId).then(function (response) {
                             accountFields = response;
                         });
                     }

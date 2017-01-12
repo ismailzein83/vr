@@ -30,6 +30,8 @@
         function ApplyFirstCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
+
             var recurringChargeRulesDirectiveAPI;
             var recurringChargeRulesDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -52,6 +54,7 @@
                     var accountRecurringChargeRuleSetSettings;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountRecurringChargeRuleSetSettings = payload.accountRecurringChargeRuleSetSettings;
                     }
 
@@ -64,11 +67,11 @@
 
                         recurringChargeRulesDirectiveReadyDeferred.promise.then(function () {
 
-                            var recurringChargeRulesDirectivePayload;
+                            var recurringChargeRulesDirectivePayload = {
+                                accountBEDefinitionId: accountBEDefinitionId
+                            };
                             if (accountRecurringChargeRuleSetSettings != undefined) {
-                                recurringChargeRulesDirectivePayload = {
-                                    chargeRules: accountRecurringChargeRuleSetSettings.ChargeRules
-                                };
+                                recurringChargeRulesDirectivePayload.chargeRules = accountRecurringChargeRuleSetSettings.ChargeRules;
                             }
                             VRUIUtilsService.callDirectiveLoad(recurringChargeRulesDirectiveAPI, recurringChargeRulesDirectivePayload, recurringChargeRulesDirectiveLoadDeferred);
                         });

@@ -6,7 +6,11 @@
 
     function AccountBEDefinitionService(VRModalService) {
 
-        function addGridColumnDefinition(onColumnDefinitionAdded) {
+        function addGridColumnDefinition(accountBEDefinitionId, onColumnDefinitionAdded) {
+
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId
+            };
 
             var modalSettings = {};
 
@@ -14,12 +18,13 @@
                 modalScope.onColumnDefinitionAdded = onColumnDefinitionAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/GridColumnDefinitionEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/GridColumnDefinitionEditor.html', parameters, modalSettings);
         };
-        function editGridColumnDefinition(columnDefinition, onColumnDefinitionUpdated) {
+        function editGridColumnDefinition(columnDefinition, accountBEDefinitionId, onColumnDefinitionUpdated) {
 
             var parameters = {
-                columnDefinition: columnDefinition
+                columnDefinition: columnDefinition,
+                accountBEDefinitionId: accountBEDefinitionId
             };
 
             var modalSettings = {};
@@ -31,7 +36,11 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/GridColumnDefinitionEditor.html', parameters, modalSettings);
         }
 
-        function addAccountViewDefinition(onAccountViewDefinitionAdded) {
+        function addAccountViewDefinition(accountBEDefinitionId, onAccountViewDefinitionAdded) {
+
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId
+            };
 
             var modalSettings = {};
 
@@ -39,13 +48,14 @@
                 modalScope.onAccountViewDefinitionAdded = onAccountViewDefinitionAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/Templates/AccountViewDefinitionEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/Templates/AccountViewDefinitionEditor.html', parameters, modalSettings);
 
         }
-        function editAccountViewDefinition(accountViewDefinitionEntity, onAccountViewDefinitionUpdated) {
+        function editAccountViewDefinition(accountViewDefinitionEntity, accountBEDefinitionId, onAccountViewDefinitionUpdated) {
 
             var parameters = {
-                accountViewDefinitionEntity: accountViewDefinitionEntity
+                accountViewDefinitionEntity: accountViewDefinitionEntity,
+                accountBEDefinitionId: accountBEDefinitionId
             };
 
             var modalSettings = {};
@@ -57,7 +67,11 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/Templates/AccountViewDefinitionEditor.html', parameters, modalSettings);
         }
 
-        function addAccountActionDefinition(onAccountActionDefinitionAdded) {
+        function addAccountActionDefinition(accountBEDefinitionId, onAccountActionDefinitionAdded) {
+
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId
+            };
 
             var modalSettings = {};
 
@@ -65,13 +79,14 @@
                 modalScope.onAccountActionDefinitionAdded = onAccountActionDefinitionAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/Templates/AccountActionDefinitionEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/Templates/AccountActionDefinitionEditor.html', parameters, modalSettings);
 
         }
-        function editAccountActionDefinition(accountActionDefinitionEntity, onAccountActionDefinitionUpdated) {
+        function editAccountActionDefinition(accountActionDefinitionEntity, accountBEDefinitionId, onAccountActionDefinitionUpdated) {
 
             var parameters = {
-                accountActionDefinitionEntity: accountActionDefinitionEntity
+                accountActionDefinitionEntity: accountActionDefinitionEntity,
+                accountBEDefinitionId: accountBEDefinitionId
             };
 
             var modalSettings = {};

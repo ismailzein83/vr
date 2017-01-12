@@ -12,7 +12,6 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var ctor = new AccountGridDefinitionManagementCtor($scope, ctrl);
                 ctor.initializeController();
             },
@@ -31,6 +30,7 @@
         function AccountGridDefinitionManagementCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
             var accountFields;
 
             var gridAPI;
@@ -50,7 +50,7 @@
                         $scope.scopeModel.columnDefinitions.push({ Entity: addedColumnDefinition });
                     };
 
-                    Retail_BE_AccountBEDefinitionService.addGridColumnDefinition(onColumnDefinitionAdded);
+                    Retail_BE_AccountBEDefinitionService.addGridColumnDefinition(accountBEDefinitionId, onColumnDefinitionAdded);
                 };
                 $scope.scopeModel.onDeleteColumnDefinition = function (columnDefinition) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -72,6 +72,7 @@
                     var accountGridDefinition;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountGridDefinition = payload.accountGridDefinition;
                     }
 
@@ -93,8 +94,7 @@
                     });
 
                     function loadAccountFields() {
-
-                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo("9A427357-CF55-4F33-99F7-745206DEE7CD").then(function (response) {
+                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo(accountBEDefinitionId).then(function (response) {
                             accountFields = response;
                         });
                     }
@@ -136,7 +136,7 @@
                     $scope.scopeModel.columnDefinitions[index] = { Entity: updatedColumnDefinition };
                 };
 
-                Retail_BE_AccountBEDefinitionService.editGridColumnDefinition(columnDefinition.Entity, onColumnDefinitionUpdated);
+                Retail_BE_AccountBEDefinitionService.editGridColumnDefinition(columnDefinition.Entity, accountBEDefinitionId, onColumnDefinitionUpdated);
             }
 
             function extendColumnDefinitionObj(columnDefinition) {

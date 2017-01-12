@@ -30,6 +30,8 @@
         function RecurringChargeRuleManagementCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
+
             var gridAPI;
 
             function initializeController() {
@@ -46,7 +48,7 @@
                         $scope.scopeModel.recurringChargeRules.push({ Entity: addedRecurringChargeRule });
                     };
 
-                    Retail_BE_RecurringChargeService.addAccountRecurringChargeRule(getRecurringChargeRuleNames(), onRecurringChargeRuleAdded);
+                    Retail_BE_RecurringChargeService.addAccountRecurringChargeRule(accountBEDefinitionId, getRecurringChargeRuleNames(), onRecurringChargeRuleAdded);
                 };
                 $scope.scopeModel.onDeleteRecurringChargeRule = function (deletedRecurringChargeRule) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -68,6 +70,7 @@
                     var recurringChargeRules;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         recurringChargeRules = payload.chargeRules;
                     }
 
@@ -112,7 +115,7 @@
                     $scope.scopeModel.recurringChargeRules[index] = { Entity: updatedRecurringChargeRule };
                 };
 
-                Retail_BE_RecurringChargeService.editAccountRecurringChargeRule(recurringChargeRule.Entity, getRecurringChargeRuleNames(), onRecurringChargeRuleUpdated);
+                Retail_BE_RecurringChargeService.editAccountRecurringChargeRule(recurringChargeRule.Entity, accountBEDefinitionId, getRecurringChargeRuleNames(), onRecurringChargeRuleUpdated);
             }
 
             function getRecurringChargeRuleNames() {

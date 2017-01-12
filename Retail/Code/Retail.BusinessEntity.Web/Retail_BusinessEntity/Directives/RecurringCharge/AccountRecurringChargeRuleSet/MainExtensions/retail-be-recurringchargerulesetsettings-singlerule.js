@@ -30,6 +30,8 @@
         function SingleRuleCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
+
             var recurringChargeDefinitionSelectorAPI;
             var recurringChargeDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -66,6 +68,7 @@
                     var accountRecurringChargeRuleSetSettings;
 
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountRecurringChargeRuleSetSettings = payload.accountRecurringChargeRuleSetSettings;
                     }
 
@@ -119,11 +122,11 @@
 
                         accountConditionSelectiveReadyDeferred.promise.then(function () {
 
-                            var accountConditionSelectivePayload;
+                            var accountConditionSelectivePayload = {
+                                accountBEDefinitionId: accountBEDefinitionId
+                            };
                             if (accountRecurringChargeRuleSetSettings != undefined) {
-                                accountConditionSelectivePayload = {
-                                    beFilter: accountRecurringChargeRuleSetSettings.Condition
-                                };
+                                accountConditionSelectivePayload.beFilter = accountRecurringChargeRuleSetSettings.Condition;
                             }
                             VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
                         });

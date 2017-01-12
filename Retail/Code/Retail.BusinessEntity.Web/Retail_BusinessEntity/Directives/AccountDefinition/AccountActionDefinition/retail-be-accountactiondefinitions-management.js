@@ -6,13 +6,11 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
         var directiveDefinitionObject = {
 
             restrict: "E",
-            scope:
-            {
-                onReady: "=",
+            scope: {
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var ctor = new AccountActionDefinition($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
@@ -26,10 +24,12 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
         };
 
         function AccountActionDefinition($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
+
+            var accountBEDefinitionId;
 
             var gridAPI;
-            this.initializeController = initializeController;
-            var context;
+
             function initializeController() {
                 ctrl.datasource = [];
 
@@ -37,19 +37,33 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
                     var onAccountActionDefinitionAdded = function (accountActionDefinition) {
                         ctrl.datasource.push({ Entity: accountActionDefinition });
                     };
-                    Retail_BE_AccountBEDefinitionService.addAccountActionDefinition(onAccountActionDefinitionAdded, getContext());
+                    Retail_BE_AccountBEDefinitionService.addAccountActionDefinition(accountBEDefinitionId, onAccountActionDefinitionAdded);
                 };
 
                 ctrl.removeAccountActionDefinition = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
+
                 defineMenuActions();
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
+
+                api.load = function (payload) {
+
+                    if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
+
+                        if (payload.accountActionDefinitions != undefined) {
+                            for (var i = 0; i < payload.accountActionDefinitions.length; i++) {
+                                var accountActionDefinition = payload.accountActionDefinitions[i];
+                                ctrl.datasource.push({ Entity: accountActionDefinition });
+                            }
+                        }
+                    }
+                };
 
                 api.getData = function () {
                     var accountActionDefinitions;
@@ -61,18 +75,6 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
                         }
                     }
                     return accountActionDefinitions;
-                };
-
-                api.load = function (payload) {
-                    if (payload != undefined) {
-                        context = payload.context;
-                        if (payload.accountActionDefinitions != undefined) {
-                            for (var i = 0; i < payload.accountActionDefinitions.length; i++) {
-                                var accountActionDefinition = payload.accountActionDefinitions[i];
-                                ctrl.datasource.push({ Entity: accountActionDefinition });
-                            }
-                        }
-                    }
                 };
 
                 if (ctrl.onReady != null)
@@ -90,16 +92,13 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
                     return defaultMenuActions;
                 };
             }
-
             function editAccountActionDefinition(accountActionDefinitionObj) {
                 var onAccountActionDefinitionUpdated = function (accountActionDefinition) {
                     var index = ctrl.datasource.indexOf(accountActionDefinitionObj);
                     ctrl.datasource[index] = { Entity: accountActionDefinition };
                 };
-                Retail_BE_AccountBEDefinitionService.editAccountActionDefinition(accountActionDefinitionObj.Entity, onAccountActionDefinitionUpdated, getContext());
-            }
-            function getContext() {
-                return context;
+
+                Retail_BE_AccountBEDefinitionService.editAccountActionDefinition(accountActionDefinitionObj.Entity, accountBEDefinitionId, onAccountActionDefinitionUpdated);
             }
         }
 

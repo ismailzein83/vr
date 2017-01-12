@@ -6,9 +6,10 @@
 
     function RecurringChargeService(VRModalService) {
 
-        function addAccountRecurringChargeRuleSet(recurringChargeRuleSetNames, onRecurringChargeRuleSetAdded) {
+        function addAccountRecurringChargeRuleSet(accountBEDefinitionId, recurringChargeRuleSetNames, onRecurringChargeRuleSetAdded) {
 
             var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
                 recurringChargeRuleSetNames: recurringChargeRuleSetNames
             };
 
@@ -20,10 +21,11 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountRecurringChargeRuleSet/Templates/RecurringChargeRuleSetEditor.html', parameters, settings);
         };
-        function editAccountRecurringChargeRuleSet(recurringChargeRuleSet, recurringChargeRuleSetNames, onRecurringChargeRuleSetUpdated) {
+        function editAccountRecurringChargeRuleSet(recurringChargeRuleSet, accountBEDefinitionId, recurringChargeRuleSetNames, onRecurringChargeRuleSetUpdated) {
 
             var parameters = {
                 recurringChargeRuleSet: recurringChargeRuleSet,
+                accountBEDefinitionId: accountBEDefinitionId,
                 recurringChargeRuleSetNames: recurringChargeRuleSetNames
             };
 
@@ -36,9 +38,10 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountRecurringChargeRuleSet/Templates/RecurringChargeRuleSetEditor.html', parameters, settings);
         }
 
-        function addAccountRecurringChargeRule(recurringChargeRuleNames, onRecurringChargeRuleAdded) {
+        function addAccountRecurringChargeRule(accountBEDefinitionId, recurringChargeRuleNames, onRecurringChargeRuleAdded) {
 
             var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
                 recurringChargeRuleNames: recurringChargeRuleNames
             };
 
@@ -50,10 +53,11 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/RecurringCharge/AccountRecurringChargeRule/Templates/RecurringChargeRuleEditor.html', parameters, settings);
         };
-        function editAccountRecurringChargeRule(recurringChargeRule, recurringChargeRuleNames, onRecurringChargeRuleUpdated) {
+        function editAccountRecurringChargeRule(recurringChargeRule, accountBEDefinitionId, recurringChargeRuleNames, onRecurringChargeRuleUpdated) {
 
             var parameters = {
                 recurringChargeRule: recurringChargeRule,
+                accountBEDefinitionId: accountBEDefinitionId,
                 recurringChargeRuleNames: recurringChargeRuleNames
             };
 

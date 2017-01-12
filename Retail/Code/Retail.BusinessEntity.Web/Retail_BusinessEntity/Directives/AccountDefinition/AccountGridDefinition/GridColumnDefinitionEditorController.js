@@ -8,6 +8,7 @@
 
         var isEditMode;
 
+        var accountBEDefinitionId;
         var columnDefinitionEntity;
 
         var accountGenericFieldDefinitionSelectorAPI;
@@ -24,6 +25,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
                 columnDefinitionEntity = parameters.columnDefinition;
             }
             isEditMode = (columnDefinitionEntity != undefined);
@@ -83,15 +85,12 @@
             accountGenericFieldDefinitionSelectorReadyDeferred.promise.then(function () {
 
                 var accountGenericFieldDefinitionSelectorPayload = {
-                    accountBEDefinitionId: "9A427357-CF55-4F33-99F7-745206DEE7CD"
+                    accountBEDefinitionId: accountBEDefinitionId
                 };
                 if (columnDefinitionEntity != undefined) {
-                    accountGenericFieldDefinitionSelectorPayload = {
-                        genericFieldDefinition: {
-                            Name: columnDefinitionEntity.FieldName
-                        }
-                    };
-                }
+                    accountGenericFieldDefinitionSelectorPayload.genericFieldDefinition = { Name: columnDefinitionEntity.FieldName };
+                };
+
                 VRUIUtilsService.callDirectiveLoad(accountGenericFieldDefinitionSelectorAPI, accountGenericFieldDefinitionSelectorPayload, accountGenericFieldDefinitionSelectorLoadDeferred);
             });
 
@@ -102,11 +101,11 @@
 
             accountConditionSelectiveReadyDeferred.promise.then(function () {
 
-                var accountConditionSelectivePayload;
+                var accountConditionSelectivePayload = {
+                    accountBEDefinitionId: accountBEDefinitionId
+                };
                 if (columnDefinitionEntity != undefined) {
-                    accountConditionSelectivePayload = {
-                        beFilter: columnDefinitionEntity.SubAccountsAvailabilityCondition
-                    };
+                    accountConditionSelectivePayload.beFilter = columnDefinitionEntity.SubAccountsAvailabilityCondition;
                 }
                 VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
             });

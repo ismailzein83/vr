@@ -7,8 +7,8 @@
     function RecurringChargeRuleController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
-
         var recurringChargeRuleEntity;
+        var accountBEDefinitionId;
         var recurringChargeRuleNames;
 
         var recurringChargeDefinitionSelectorAPI;
@@ -29,6 +29,7 @@
 
             if (parameters != undefined) {
                 recurringChargeRuleEntity = parameters.recurringChargeRule;
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
                 recurringChargeRuleNames = parameters.recurringChargeRuleNames;
             }
 
@@ -137,11 +138,11 @@
 
             accountConditionSelectiveReadyDeferred.promise.then(function () {
 
-                var accountConditionSelectivePayload;
+                var accountConditionSelectivePayload = {
+                    accountBEDefinitionId: accountBEDefinitionId
+                };
                 if (recurringChargeRuleEntity != undefined) {
-                    accountConditionSelectivePayload = {
-                        beFilter: recurringChargeRuleEntity.Condition
-                    };
+                    accountConditionSelectivePayload.beFilter = recurringChargeRuleEntity.Condition;
                 }
                 VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
             });

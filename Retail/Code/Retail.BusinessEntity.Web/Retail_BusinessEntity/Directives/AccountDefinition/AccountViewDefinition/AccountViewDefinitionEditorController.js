@@ -8,8 +8,9 @@
 
         var isEditMode;
 
+        var accountBEDefinitionId;
         var accountViewDefinitionEntity;
-       
+
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -24,6 +25,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountViewDefinitionEntity = parameters.accountViewDefinitionEntity;
             }
             isEditMode = (accountViewDefinitionEntity != undefined);
@@ -88,17 +90,18 @@
 
                 accountConditionSelectiveReadyDeferred.promise.then(function () {
 
-                    var accountConditionSelectivePayload;
+                    var accountConditionSelectivePayload = {
+                        accountBEDefinitionId: accountBEDefinitionId
+                    };
                     if (accountViewDefinitionEntity != undefined) {
-                        accountConditionSelectivePayload = {
-                            beFilter: accountViewDefinitionEntity.AvailabilityCondition
-                        };
-                    }
+                        accountConditionSelectivePayload.beFilter = accountViewDefinitionEntity.AvailabilityCondition
+                    };
                     VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
                 });
 
                 return accountConditionSelectiveLoadDeferred.promise;
             }
+
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective, loadAccountConditionSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -125,9 +128,9 @@
 
         function buildAccountViewDefinitionObjectFromScope() {
             return {
-                AccountViewDefinitionId:accountViewDefinitionEntity != undefined?accountViewDefinitionEntity.AccountViewDefinitionId:UtilsService.guid(),
+                AccountViewDefinitionId: accountViewDefinitionEntity != undefined ? accountViewDefinitionEntity.AccountViewDefinitionId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
-                DrillDownSectionName:$scope.scopeModel.drillDownSectionName,
+                DrillDownSectionName: $scope.scopeModel.drillDownSectionName,
                 Account360DegreeSectionName: $scope.scopeModel.account360DegreeSectionName,
                 Settings: settingsDirectiveAPI.getData(),
                 AvailabilityCondition: accountConditionSelectiveAPI.getData()

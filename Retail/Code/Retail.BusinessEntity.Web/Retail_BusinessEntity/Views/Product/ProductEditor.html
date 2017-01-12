@@ -30,7 +30,7 @@
                         </vr-directivewrapper>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Recurring Charge Rules'">
+                <vr-tab header="'Recurring Charge Rules'" ng-show="scopeModel.showRecurringChargeRulesTab" vr-loader="scopeModel.isRecurringChargeRulesTabLoading">
                     <retail-be-recurringchargeruleset-management on-ready="scopeModel.onRecurringChargeRuleSetsDirectiveReady"></retail-be-recurringchargeruleset-management>
                 </vr-tab>
                 <vr-tab header="'Packages'" ng-show="scopeModel.showPackagesTab" vr-loader="scopeModel.isPackagesTabLoading">

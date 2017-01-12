@@ -7,6 +7,7 @@
     function RecurringChargeRuleSetController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
+        var accountBEDefinitionId;
 
         var recurringChargeRuleSetEntity;
         var recurringChargeRuleSetNames;
@@ -23,6 +24,7 @@
 
             if (parameters != undefined) {
                 recurringChargeRuleSetEntity = parameters.recurringChargeRuleSet;
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
                 recurringChargeRuleSetNames = parameters.recurringChargeRuleSetNames;
             }
 
@@ -90,11 +92,11 @@
 
             recurringChargeRuleSetSettingsSelectiveReadyDeferred.promise.then(function () {
 
-                var recurringChargeRuleSetSettingsSelectivePayload;
+                var recurringChargeRuleSetSettingsSelectivePayload = {
+                    accountBEDefinitionId: accountBEDefinitionId
+                };
                 if (recurringChargeRuleSetEntity != undefined) {
-                    recurringChargeRuleSetSettingsSelectivePayload = {
-                        accountRecurringChargeRuleSetSettings: recurringChargeRuleSetEntity.Settings
-                    };
+                    recurringChargeRuleSetSettingsSelectivePayload.accountRecurringChargeRuleSetSettings = recurringChargeRuleSetEntity.Settings;
                 }
                 VRUIUtilsService.callDirectiveLoad(recurringChargeRuleSetSettingsSelectiveAPI, recurringChargeRuleSetSettingsSelectivePayload, recurringChargeRuleSetSettingsSelectiveLoadDeferred);
             });
