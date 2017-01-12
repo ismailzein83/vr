@@ -5,54 +5,39 @@
     BulkActionWizardController.$inject = ["$scope"];
 
     function BulkActionWizardController($scope) {
-        var settings;
+
+        var wizardSteps = [];
 
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
-            //var parameters = VRNavigationService.getParameters($scope);
+            var parameters = VRNavigationService.getParameters($scope);
 
-            //if (parameters) {
-            //    settings = parameters.settings;
-            //}
+            if (parameters) {
+                
+            }
         }
 
         function defineScope() {
-            //$scope.title = "Edit Rate Plan Settings";
-            //$scope.tabItems = [{
-            //    title: "Cost Columns",
-            //    directive: "vr-whs-sales-costcolumns",
-            //    loadDirective: function (api) {
-            //        return api.load(settings);
-            //    }
-            //}];
+            //Make title dynamic and change according to step
+            $scope.title = "Bulk Action";
 
-            //$scope.saveSettings = function () {
+            $scope.wizardContext = {};
 
-            //    var settings;
-            //    var costCalculationMethods;
+            wizardContext.getStep = function (stepName) {
 
-            //    var directiveAPI = $scope.tabItems[0].directiveAPI;
-            //    if (directiveAPI != undefined)
-            //        costCalculationMethods = directiveAPI.getData();
+            };
 
-            //    if (costCalculationMethods != undefined) {
-            //        settings = {
-            //            costCalculationMethods: costCalculationMethods
-            //        };
-            //    }
+            $scope.moveToNextStep = function () {
 
-            //    if ($scope.onSettingsUpdated != null && typeof $scope.onSettingsUpdated == "function")
-            //        $scope.onSettingsUpdated(settings);
+                
+            };
 
-            //    $scope.modalContext.closeModal();
-            //};
-
-            //$scope.close = function () {
-            //    $scope.modalContext.closeModal();
-            //};
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
+            };
         }
 
         function load() {
