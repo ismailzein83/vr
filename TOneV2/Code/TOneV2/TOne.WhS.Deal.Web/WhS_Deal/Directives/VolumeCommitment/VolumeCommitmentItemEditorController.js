@@ -9,6 +9,10 @@
         var volumeCommitmentItemEntity;
         var context;
         var isEditMode;
+
+        var countryDirectiveApi;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var countrySelectedPromiseDeferred;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var zoneDirectiveAPI;
         var zoneLoaded;
@@ -65,6 +69,30 @@
                 zoneDirectiveAPI = api;
                 zoneReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.onCountryDirectiveReady = function (api) {
+                countryDirectiveApi = api;
+                countryReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onCountrySelectionChanged = function () {
+                var country = countryDirectiveApi.getSelectedIds();
+                if (country != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingSelector = value };
+                    var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
+                    if (payload != undefined) {
+                        if (payload.filter !=undefined)
+                            payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
+                        else
+                            payload.filter = {
+                                CountryIds: [countryDirectiveApi.getSelectedIds()]
+                            }
+                    }
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
+
+                }
+                else if (zoneDirectiveAPI != undefined)
+                    $scope.scopeModel.selectedZones.length = 0;
+            };
+
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateVolumeCommitmentItem() : addVolumeCommitmentItem();
             };
@@ -85,7 +113,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadZoneSection]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountryZoneSection]).then(function () {
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -110,28 +138,56 @@
                 return names.join(",");
             };
 
+            currentContext.getCountryId = function () {
+                return countryDirectiveApi.getSelectedIds();
+            };
+
 
 
             return currentContext;
         }
 
-        function loadZoneSection() {
 
-            var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
-            var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
-            zoneReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
-                loadZonePromiseDeferred.promise.then(function () {
-                    if (volumeCommitmentItemEntity != undefined)
-                        bulidTiersData(volumeCommitmentItemEntity.Tiers);
-                    zoneLoaded = true;
-                });
+
+        function loadCountryZoneSection() {
+            var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var promises = [];
+            promises.push(loadCountryPromiseDeferred.promise);
+
+            var payload;
+
+            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryId != undefined) {
+                payload = {};
+                payload.selectedIds = volumeCommitmentItemEntity != undefined ? volumeCommitmentItemEntity.CountryId : undefined;
+                countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+            }
+
+            countryReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
             });
-            return loadZonePromiseDeferred.promise;
 
 
+
+            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryId != undefined) {
+                var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                promises.push(loadZonePromiseDeferred.promise);
+
+                UtilsService.waitMultiplePromises([zoneReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
+                     var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
+                     VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
+                     loadZonePromiseDeferred.promise.then(function () {
+                         if (volumeCommitmentItemEntity != undefined)
+                             bulidTiersData(volumeCommitmentItemEntity.Tiers);
+                         zoneLoaded = true;
+                     });
+                    countrySelectedPromiseDeferred = undefined;
+                });
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
         }
-
 
         function setTitle() {
             if (isEditMode && volumeCommitmentItemEntity != undefined)
@@ -163,6 +219,7 @@
             return {
                 Name: $scope.scopeModel.name,
                 ZoneIds: zoneDirectiveAPI.getSelectedIds(),
+                CountryId:countryDirectiveApi.getSelectedIds(),
                 Tiers: tiers
             };
         }

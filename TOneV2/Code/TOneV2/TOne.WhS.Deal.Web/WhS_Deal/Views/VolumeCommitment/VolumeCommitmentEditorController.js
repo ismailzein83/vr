@@ -245,7 +245,8 @@
                                 if (item != undefined) {
                                     payload.selectedIds = item.ZoneIds;
                                     payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds)
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds),
+                                        CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
                                     };
                                 }
                                 else
@@ -261,7 +262,8 @@
                                 if (item != undefined) {
                                     payload.selectedIds = item.ZoneIds;
                                     payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds)
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds),
+                                        CountryIds: (item.CountryId!=undefined)?[item.CountryId]:undefined
                                     };
                                 }
                                 else

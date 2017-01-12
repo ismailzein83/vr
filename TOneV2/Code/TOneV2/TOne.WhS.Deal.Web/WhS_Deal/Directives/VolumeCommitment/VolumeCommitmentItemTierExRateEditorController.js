@@ -79,7 +79,8 @@
                 var excZoneIds = exRateEntity != undefined ? exRateEntity.ZoneIds : undefined;
                 payload.filter = {
                     AvailableZoneIds: context.getSelectedZonesIds(),
-                    ExcludedZoneIds: context.getExceptionsZoneIds(excZoneIds)
+                    ExcludedZoneIds: context.getExceptionsZoneIds(excZoneIds),
+                    CountryIds: [context.getCountryId()]
                 };
                 VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
             });

@@ -62,7 +62,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
                    + '  isrequired="ctrl.isSaleZoneRequired()"'
-                   + '  vr-disabled="ctrl.isdisabled"'
                    + '  onselectitem="ctrl.onselectitem"'
                    + '  ondeselectitem="ctrl.ondeselectitem"'
                    + '  label="' + label + '"'

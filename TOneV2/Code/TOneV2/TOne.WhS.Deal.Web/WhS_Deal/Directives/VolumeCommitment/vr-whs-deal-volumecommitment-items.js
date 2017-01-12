@@ -71,6 +71,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                             volumeCommitmentItems.push({
                                 Name: currentItem.Entity.Name,
                                 ZoneIds: currentItem.Entity.ZoneIds,
+                                CountryId: currentItem.Entity.CountryId,
                                 Tiers: currentItem.Entity.Tiers,
                             });
                         }

@@ -10,6 +10,8 @@ namespace TOne.WhS.Deal.Entities
     {
         public string Name { get; set; }
 
+        public int CountryId { get; set; }
+
         public List<long> ZoneIds { get; set; }
 
         public List<VolCommitmentDealItemTier> Tiers { get; set; }
