@@ -112,7 +112,12 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.RetroactiveDayOffset;
         }
-        public int GetPurchaseAreaRetroactiveDayOffset()
+		public int GetPurchaseAreaEffectiveDateDayOffset()
+		{
+			PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+			return purchaseAreaSettings.EffectiveDateDayOffset;
+		}
+		public int GetPurchaseAreaRetroactiveDayOffset()
         {
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
             return purchaseAreaSettings.RetroactiveDayOffset;

@@ -28,6 +28,7 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
 			api.load = function (payload) {
 				if (payload != undefined && payload.data != undefined) {
+					ctrl.effectiveDateDayOffset = payload.data.EffectiveDateDayOffset;
 					ctrl.retroactiveDayOffset = payload.data.RetroactiveDayOffset;
 				}
 			};
@@ -35,6 +36,7 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 			api.getData = function () {
 				return {
 					$type: "TOne.WhS.BusinessEntity.Entities.PurchaseAreaSettingsData, TOne.WhS.BusinessEntity.Entities",
+					EffectiveDateDayOffset: ctrl.effectiveDateDayOffset,
 					RetroactiveDayOffset: ctrl.retroactiveDayOffset
 				};
 			};
