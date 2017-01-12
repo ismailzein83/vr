@@ -6,6 +6,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetBetweenPeriod]
 AS
 BEGIN
 	SET NOCOUNT ON;
+	declare  @From_local Datetime = @From
+	declare  @Till_local Datetime = @Till
 
 	SELECT  sr.[ID]
 		  ,sr.RateTypeID
@@ -17,5 +19,5 @@ BEGIN
 		  ,sr.change
 		  ,sr.CurrencyID
 	  FROM [TOneWhS_BE].SaleRate sr 
-	  Where (sr.EED is null and sr.BED<@Till) or(sr.EED>@From and sr.EED<@Till)
+	  Where (sr.BED <=@Till_local and (sr.EED is null or sr.EED > @From_local ))
 END
