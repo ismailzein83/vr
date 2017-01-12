@@ -12,23 +12,19 @@
 
         var settingDirectiveAPI;
         var settingReadyPromiseDeferred;
-        var menuItems;
-        var treeAPI;
-        var treeReadyDeferred = UtilsService.createPromiseDeferred();
-        var viewEntity;
+
         loadParameters();
         defineScope();
-
         load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
             if (parameters != undefined && parameters != null) {
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
             }
             isEditMode = (businessEntityDefinitionId != undefined);
         }
-
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -40,7 +36,7 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, settingDirectiveAPI, undefined, setLoader, settingReadyPromiseDeferred);
             };
             $scope.scopeModel.bEDefinitionSettingConfigs = [];
-           
+
             $scope.scopeModel.SaveGenericBEEditor = function () {
                 if (isEditMode) {
                     return update();
@@ -62,7 +58,6 @@
             };
 
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
             getBEDefinitionSettingConfigs().then(function () {
@@ -81,7 +76,7 @@
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoading = false;
             });
-            
+
 
             function loadAllControls() {
 
@@ -107,6 +102,7 @@
                         settingReadyPromiseDeferred.promise
                             .then(function () {
                                 var directivePayload = {
+                                    businessEntityDefinitionId: businessEntityDefinitionId,
                                     businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
                                 };
                                 VRUIUtilsService.callDirectiveLoad(settingDirectiveAPI, directivePayload, loadSettingDirectivePromiseDeferred);
@@ -133,7 +129,7 @@
         }
 
         function getBEDefinitionSettingConfigs() {
-          return  VR_GenericData_BusinessEntityDefinitionAPIService.GetBEDefinitionSettingConfigs().then(function (response) {
+            return VR_GenericData_BusinessEntityDefinitionAPIService.GetBEDefinitionSettingConfigs().then(function (response) {
                 if (response) {
                     $scope.scopeModel.bEDefinitionSettingConfigs = response;
                 }
@@ -146,7 +142,7 @@
                 settings.ConfigId = $scope.scopeModel.selectedSetingsTypeConfig.ExtensionConfigurationId;
             }
             var bEdefinition = {
-                BusinessEntityDefinitionId :businessEntityDefinitionId,
+                BusinessEntityDefinitionId: businessEntityDefinitionId,
                 Name: $scope.scopeModel.businessEntityName,
                 Title: $scope.scopeModel.businessEntityTitle,
                 Settings: settings
@@ -170,7 +166,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function update() {
             $scope.scopeModel.isLoading = true;
             var genericBEDefinition = buildGenericBEDefinitionFromScope();
@@ -188,7 +183,6 @@
                 $scope.isLoading = false;
             });
         }
-
     }
 
     appControllers.controller('VR_GenericData_GenericBEEditorDefintionController', GenericBEEditorDefintionController);
