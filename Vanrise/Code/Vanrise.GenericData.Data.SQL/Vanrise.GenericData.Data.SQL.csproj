@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BELookupRuleDefinitionDataManager.cs" />
+    <Compile Include="BEParentChildRelationDataManager.cs" />
     <Compile Include="BusinessEntityDefinitionDataManager.cs" />
     <Compile Include="DataRecordFieldChoiceDataManager.cs" />
     <Compile Include="RecordFilterSQLBuilder.cs" />

@@ -48,8 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BEParentChildRelation\BEParentChildRelation.cs" />
-    <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition.cs" />
-    <Compile Include="BEParentChildRelation\BEParentChildRelationDefinitionSettings.cs" />
+    <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinition.cs" />
+    <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinitionSettings.cs" />
+    <Compile Include="BEParentChildRelation\BEParentChildRelationDetail.cs" />
+    <Compile Include="BEParentChildRelation\BEParentChildRelationQuery.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionDetail.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionFilter.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionInfo.cs" />

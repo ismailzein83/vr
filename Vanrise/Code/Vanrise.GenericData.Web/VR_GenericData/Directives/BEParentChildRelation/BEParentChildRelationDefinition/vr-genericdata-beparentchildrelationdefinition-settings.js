@@ -26,7 +26,6 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
             var childBEDefinitionSelectorAPI;
             var childBEDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -63,8 +62,8 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                     promises.push(parentBEDefinitionSelectorLoadPromise);
 
                     //Loading ChildBEDefinition selector
-                    var childBEDefinitionSelectorLoadPromise = getParentBEDefinitionSelectorLoadPromise();
-                    promises.push(parentBEDefinitionSelectorLoadPromise);
+                    var childBEDefinitionSelectorLoadPromise = getChildBEDefinitionSelectorLoadPromise();
+                    promises.push(childBEDefinitionSelectorLoadPromise);
 
 
                     function getParentBEDefinitionSelectorLoadPromise() {
@@ -111,19 +110,16 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
 
                     return {
                         Name: $scope.scopeModel.name,
-                        Settings: GetAccountSettings()
+                        Settings: {
+                            $type: "Vanrise.GenericData.Entities.BEParentChildRelationDefinitionSettings, Vanrise.GenericData.Entities",
+                            ParentBEDefinitionId: parentBEDefinitionSelectorAPI.getSelectedIds(),
+                            ChildBEDefinitionId: childBEDefinitionSelectorAPI.getSelectedIds()
+                        }
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
-
-            function GetAccountSettings() {
-                return {
-                    $type: "Vanrise.GenericData.Entities.BEParentChildRelationDefinitionSettings, Vanrise.GenericData.Entities",
-                    ParentBEDefinitionId: parentBEDefinitionSelectorAPI.getSelectedIds()
-                };
             }
         }
     }]);

@@ -128,6 +128,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BELookupRuleDefinitionController.cs" />
+    <Compile Include="Controllers\BEParentChildRelationController.cs" />
     <Compile Include="Controllers\DataRecordFieldChoiceController.cs" />
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\DataRecordStorageLogController.cs" />
@@ -199,6 +200,8 @@
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\Templates\BEParentChildRelationDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\vr-genericdata-beparentchildrelationdefinition-settings.js" />
+    <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\Templates\BEParentChildRelationGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\vr-genericdata-beparentchildrelation-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityViewEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-editor.js" />
@@ -430,6 +433,7 @@
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Services\APIServices\BELookupRuleDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldAPIService.js" />
@@ -451,6 +455,7 @@
     <Content Include="VR_GenericData\Services\APIServices\RecordFilterAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\SummaryTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\BELookupRuleDefinitionService.js" />
+    <Content Include="VR_GenericData\Services\BEParentChildRelationService.js" />
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordSourceService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldChoiceService.js" />
@@ -476,6 +481,10 @@
     <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionManagementController.js" />
     <Content Include="VR_GenericData\Views\BELookupRuleDefinition\BELookupRuleDefinitionManagement.html" />
+    <Content Include="VR_GenericData\Views\BEParentChildRelation\BEParentChildRelationEditor.html" />
+    <Content Include="VR_GenericData\Views\BEParentChildRelation\BEParentChildRelationEditorController.js" />
+    <Content Include="VR_GenericData\Views\BEParentChildRelation\BEParentChildRelationManagement.html" />
+    <Content Include="VR_GenericData\Views\BEParentChildRelation\BEParentChildRelationManagementController.js" />
     <Content Include="VR_GenericData\Views\DataRecordFieldChoice\DataRecordFieldChoiceEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordFieldChoice\DataRecordFieldChoiceEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordFieldChoice\DataRecordFieldChoiceManagement.html" />

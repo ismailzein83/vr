@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="GenericDataDataManagerFactory.cs" />
     <Compile Include="IBELookupRuleDefinitionDataManager.cs" />
+    <Compile Include="IBEParentChildRelationDataManager.cs" />
     <Compile Include="IBusinessEntityDefinitionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IDataRecordFieldChoiceDataManager.cs" />

@@ -1,0 +1,11 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.dataSource"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             menuactions="scopeModel.menuActions"
+             pagingtype="'PagingOnScroll'"
+             idfield="Entity.BEParentChildRelationId">
+
+    <vr-datagridcolumn headertext="'Relation Definition Id'" field="'Entity.RelationDefinitionId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Parent BE Id'" field="'Entity.ParentBEId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Child BE Id'" field="'Entity.ChildBEId'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

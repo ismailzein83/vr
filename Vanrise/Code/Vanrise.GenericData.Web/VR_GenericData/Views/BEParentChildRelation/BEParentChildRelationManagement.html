@@ -1,0 +1,19 @@
+﻿<vr-panel ng-controller="VR_GenericData_BEParentChildRelationController" vr-loader="isLoading">
+    <vr-form name="formFilter">
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddPermission"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-genericdata-beparentchildrelation-grid on-ready="scopeModel.onGridReady"></vr-genericdata-beparentchildrelation-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
