@@ -93,6 +93,7 @@
                 });
             }
             function generateInvoice(incvoiceObject) {
+                $scope.scopeModel.isLoading = true;
                 return VR_Invoice_InvoiceAPIService.GenerateInvoice(incvoiceObject)
                .then(function (response) {
                    if (VRNotificationService.notifyOnItemAdded("Invoice", response)) {
