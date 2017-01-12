@@ -128,8 +128,17 @@ namespace TOne.WhS.BusinessEntity.Business
 			SetDataByCustomer(context.CustomerIds, context.EffectiveDate, out dataByCustomerList, out dataByCustomerDictionary);
 
 			var customerCountryManager = new CustomerCountryManager();
-			var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomerList, context.EffectiveDate, true));
+			var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomerList, context.EffectiveDate, true));
 			var saleRateManager = new SaleRateManager();
+
+			SaleEntityZoneRateLocator rateLocator = null;
+			if (context.EndedCountryIds != null && context.EndedCountryIds.Count() > 0)
+			{
+				if (!context.CountriesEndedOn.HasValue)
+					throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Countries '{0}' are ended on a date that was not found", string.Join(",", context.EndedCountryIds)));
+				DateTime countriesEndedOn = context.CountriesEndedOn.Value.AddSeconds(-5);
+				rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomerList, countriesEndedOn, false));
+			}
 
 			foreach (int customerId in context.CustomerIds)
 			{
@@ -156,7 +165,7 @@ namespace TOne.WhS.BusinessEntity.Business
 					IEnumerable<SalePLZoneChange> countryZoneChanges = zoneChangesByCountryId.GetRecord(soldCountry.CountryId);
 					IEnumerable<ExistingSaleZone> plCountryZoneWrappers = GetPLCountryZoneWrappers(customerId, countryZoneWrappers, countryZoneChanges, isCustomerAToZ, context.ChangeType);
 
-					AddCustomerCountryZoneNotifications(customerZoneNotifications, plCountryZoneWrappers, customerId, sellingProductId, rateLocator, baseRatesByZone, soldCountry.CountryId);
+					AddCustomerCountryZoneNotifications(customerZoneNotifications, plCountryZoneWrappers, customerId, sellingProductId, futureRateLocator, baseRatesByZone, soldCountry.CountryId, context.EndedCountryIds, context.CountriesEndedOn, rateLocator);
 				}
 
 				if (customerZoneNotifications.Count > 0)
@@ -235,14 +244,21 @@ namespace TOne.WhS.BusinessEntity.Business
 			return salePriceListsByCustomer;
 		}
 
-		private void AddCustomerCountryZoneNotifications(List<SalePLZoneNotification> zoneNotifications, IEnumerable<ExistingSaleZone> zonesWrappers, int customerId, int sellingProductId, SaleEntityZoneRateLocator rateLocator, BaseRatesByZone baseRatesByZone, int countryId)
+		private void AddCustomerCountryZoneNotifications(List<SalePLZoneNotification> zoneNotifications, IEnumerable<ExistingSaleZone> zonesWrappers, int customerId, int sellingProductId, SaleEntityZoneRateLocator futureRateLocator, BaseRatesByZone baseRatesByZone, int countryId, IEnumerable<int> endedCountryIds, DateTime? countriesEndedOn, SaleEntityZoneRateLocator rateLocator)
 		{
 			if (zonesWrappers == null)
 				return;
 
 			foreach (ExistingSaleZone zoneWrapper in zonesWrappers)
 			{
-				SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneWrapper.ZoneId);
+				SaleEntityZoneRate zoneRate;
+				
+				bool isZoneCountryEnded = IsZoneCountryEnded(countryId, endedCountryIds);
+
+				if (isZoneCountryEnded)
+					zoneRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneWrapper.ZoneId);
+				else
+					zoneRate = futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneWrapper.ZoneId);
 
 				if (zoneRate == null || zoneRate.Rate == null)
 					continue;
@@ -257,8 +273,20 @@ namespace TOne.WhS.BusinessEntity.Business
 				zoneNotification.Codes.AddRange(zoneWrapper.Codes.MapRecords(SalePLCodeNotificationMapper));
 
 				zoneNotifications.Add(zoneNotification);
-				baseRatesByZone.AddZoneBaseRate(zoneNotification.ZoneId, zoneNotification, countryId, null, zoneRate.Rate.BED, zoneRate.Rate.EED);
+				if (zoneRate.Source == SalePriceListOwnerType.SellingProduct)
+				{
+					baseRatesByZone.AddZoneBaseRate(zoneNotification.ZoneId, zoneNotification, countryId, null, zoneRate.Rate.BED, zoneRate.Rate.EED);
+					if (isZoneCountryEnded)
+						zoneNotification.Rate.EED = countriesEndedOn;
+				}
 			}
+		}
+
+		private bool IsZoneCountryEnded(int countryId, IEnumerable<int> endedCountryIds)
+		{
+			if (endedCountryIds == null)
+				return false;
+			return endedCountryIds.Contains(countryId);
 		}
 
 		private void SavePriceListFile(CarrierAccount customer, SalePriceListType customerSalePriceListType, List<SalePLZoneNotification> customerZonesNotifications, Dictionary<int, SalePriceList> salePriceListsByCustomer, long processInstanceId)

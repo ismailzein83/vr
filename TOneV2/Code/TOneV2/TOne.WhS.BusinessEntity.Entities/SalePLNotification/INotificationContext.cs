@@ -6,18 +6,22 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public interface ISalePricelistFileContext
-    {
-        int SellingNumberPlanId { get; }
+	public interface ISalePricelistFileContext
+	{
+		int SellingNumberPlanId { get; }
 
-        long ProcessInstanceId { get; set; }
-        
-        IEnumerable<int> CustomerIds { get; }
+		long ProcessInstanceId { get; set; }
 
-        IEnumerable<SalePLZoneChange> ZoneChanges { get; }
+		IEnumerable<int> CustomerIds { get; }
 
-        DateTime EffectiveDate { get; }
+		IEnumerable<SalePLZoneChange> ZoneChanges { get; }
 
-        SalePLChangeType ChangeType { get; }
-    }
+		DateTime EffectiveDate { get; }
+
+		SalePLChangeType ChangeType { get; }
+
+		IEnumerable<int> EndedCountryIds { get; }
+
+		DateTime? CountriesEndedOn { get; }
+	}
 }

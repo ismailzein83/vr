@@ -20,5 +20,9 @@ namespace TOne.WhS.CodePreparation.Business
         public DateTime EffectiveDate { get; set; }
 
         public SalePLChangeType ChangeType { get; set; }
+
+		public IEnumerable<int> EndedCountryIds { get; set; }
+
+		public DateTime? CountriesEndedOn { get; set; }
     }
 }

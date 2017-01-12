@@ -21,7 +21,7 @@ namespace TOne.WhS.Sales.BP.Activities
 		public InArgument<IEnumerable<SalePLZoneChange>> SalePLZoneChanges { get; set; }
 
 		[RequiredArgument]
-		public InArgument<IEnumerable<ChangedCustomerCountry>> ChangedCustomerCountries { get; set; }
+		public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
 
 		#endregion
 
@@ -36,15 +36,19 @@ namespace TOne.WhS.Sales.BP.Activities
 		{
 			IRatePlanContext ratePlanContext = context.GetRatePlanContext();
 			IEnumerable<SalePLZoneChange> zoneChanges = SalePLZoneChanges.Get(context);
-			IEnumerable<ChangedCustomerCountry> changedCountries = ChangedCustomerCountries.Get(context);
+			IEnumerable<CustomerCountryToChange> countriesToChange = CustomerCountriesToChange.Get(context);
 
 			IEnumerable<int> customerIdsWithPriceList;
 			SalePLChangeType plChangeType;
+			IEnumerable<int> endedCountryIds = null;
+			DateTime? countriesEndedOn = null;
 
-			if (changedCountries != null && changedCountries.Count() > 0)
+			if (countriesToChange != null && countriesToChange.Count() > 0)
 			{
 				customerIdsWithPriceList = new List<int>() { ratePlanContext.OwnerId };
 				plChangeType = SalePLChangeType.CountryAndRate;
+				endedCountryIds = countriesToChange.MapRecords(x => x.CountryId);
+				countriesEndedOn = countriesToChange.First().CloseEffectiveDate;
 			}
 			else
 			{
@@ -59,7 +63,9 @@ namespace TOne.WhS.Sales.BP.Activities
 				CustomerIds = customerIdsWithPriceList,
 				ZoneChanges = zoneChanges,
 				EffectiveDate = ratePlanContext.EffectiveDate,
-				ChangeType = plChangeType
+				ChangeType = plChangeType,
+				EndedCountryIds = endedCountryIds,
+				CountriesEndedOn = countriesEndedOn
 			};
 
 			var salePricelistManager = new SalePriceListManager();
