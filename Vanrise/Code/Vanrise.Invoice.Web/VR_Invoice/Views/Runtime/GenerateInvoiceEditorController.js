@@ -348,7 +348,6 @@
                                     $scope.scopeModel.fromDate = undefined;
                                     $scope.scopeModel.toDate = undefined;
                                 }
-                                $scope.scopeModel.isLoading = false;
                             }).catch(function (error) {
                                 $scope.scopeModel.isLoading = false;
                             });;
