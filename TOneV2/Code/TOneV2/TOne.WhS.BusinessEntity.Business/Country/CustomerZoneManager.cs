@@ -178,6 +178,17 @@ namespace TOne.WhS.BusinessEntity.Business
 			return customerCountries.MapRecords(x => x.CountryId).Distinct();
 		}
 
+		public IEnumerable<int> GetCountryIdsEffectiveAfterByCustomer(int customerId, DateTime effectiveOn)
+		{
+			IEnumerable<CustomerCountry2> countries = GetCustomerCountries(customerId);
+			if (countries != null)
+			{
+				IEnumerable<CustomerCountry2> countriesEffectiveAfter = countries.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveOn));
+				return countriesEffectiveAfter.MapRecords(x => x.CountryId).Distinct();
+			}
+			return null;
+		}
+
 		public bool IsCountrySoldToCustomer(int customerId, int countryId, DateTime effectiveOn)
 		{
 			IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);

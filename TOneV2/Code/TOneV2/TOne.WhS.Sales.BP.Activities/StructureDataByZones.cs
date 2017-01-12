@@ -200,7 +200,7 @@ namespace TOne.WhS.Sales.BP.Activities
 		private IEnumerable<RatePlanCountry> GetSoldCountries(int customerId, DateTime effectiveOn, bool isEffectiveInFuture, IEnumerable<CustomerCountryToAdd> countriesToAdd)
 		{
 			var customerCountryManager = new CustomerCountryManager();
-			IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountries(customerId, effectiveOn, isEffectiveInFuture);
+			IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveOn);
 
 			IEnumerable<RatePlanCountry> draftCountries = null;
 			if (countriesToAdd != null)
