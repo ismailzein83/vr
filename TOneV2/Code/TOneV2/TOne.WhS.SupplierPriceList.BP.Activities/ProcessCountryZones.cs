@@ -14,6 +14,8 @@ using Vanrise.Entities;
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
+    #region Public Classes
+
     public class ProcessCountryZonesInput
     {
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
@@ -30,8 +32,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
     }
 
+    #endregion
+    
     public sealed class ProcessCountryZones : BaseAsyncActivity<ProcessCountryZonesInput, ProcessCountryZonesOutput>
     {
+
+        #region Input Arguments
+
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
 
@@ -41,9 +48,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
+        #endregion
+
+        #region Output Arguments
 
         [RequiredArgument]
         public OutArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
+
+        #endregion
 
         protected override ProcessCountryZonesOutput DoWorkWithResult(ProcessCountryZonesInput inputArgument, AsyncActivityHandle handle)
         {

@@ -55,7 +55,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             get { return new TimeSpan(7, 0, 0,0); }
         }
 
-        public void SetToTureProcessHasChangesWithLock()
+        public void SetToTrueProcessHasChangesWithLock()
         {
             if(!_processHasChanges)
             {

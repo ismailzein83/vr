@@ -131,7 +131,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 || (processCountryCodesContext.NewZones != null && processCountryCodesContext.NewZones.Count() > 0)
                 || (processCountryCodesContext.ChangedZones != null && processCountryCodesContext.ChangedZones.Count() > 0))
             {
-                splContext.SetToTureProcessHasChangesWithLock();
+                splContext.SetToTrueProcessHasChangesWithLock();
             }
 
             return new ProcessCountryCodesOutput()

@@ -11,6 +11,8 @@ using TOne.WhS.SupplierPriceList.Entities;
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
+    #region Public Classes 
+
     public class ProcessCountryRatesInput
     {
         public IEnumerable<ImportedZone> ImportedZones { get; set; }
@@ -37,8 +39,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
     }
 
+    #endregion
+
     public sealed class ProcessCountryRates : BaseAsyncActivity<ProcessCountryRatesInput, ProcessCountryRatesOutput>
     {
+        #region Input Arguments
+
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
@@ -60,11 +66,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
+        #endregion
+
+        #region Output Arguments
+
         [RequiredArgument]
         public OutArgument<IEnumerable<NewRate>> NewRates { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
+
+        #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
@@ -96,7 +108,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 || (processCountryRateContext.ChangedRates != null && processCountryRateContext.ChangedRates.Count() > 0))
             {
                 IImportSPLContext splContext = handle.CustomData[ImportSPLContext.CustomDataKey] as IImportSPLContext;
-                splContext.SetToTureProcessHasChangesWithLock();
+                splContext.SetToTrueProcessHasChangesWithLock();
             }
 
             return new ProcessCountryRatesOutput()

@@ -12,7 +12,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
         bool ProcessHasChanges { get; }
 
-        void SetToTureProcessHasChangesWithLock();
+        void SetToTrueProcessHasChangesWithLock();
 
     }
 }

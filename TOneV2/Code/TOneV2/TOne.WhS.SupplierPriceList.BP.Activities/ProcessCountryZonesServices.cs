@@ -11,6 +11,8 @@ using TOne.WhS.SupplierPriceList.Entities;
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
+    #region Public Classes 
+
     public class ProcessCountryZonesServicesInput
     {
         public IEnumerable<ImportedZone> ImportedZones { get; set; }
@@ -41,8 +43,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
     }
 
+    #endregion
+
     public sealed class ProcessCountryZonesServices : BaseAsyncActivity<ProcessCountryZonesServicesInput, ProcessCountryZonesServicesOutput>
     {
+
+        #region Input Arguments
+
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
@@ -70,12 +77,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<bool> IncludeServices { get; set; }
 
+        #endregion
+
+        #region Output Arguments
+
         [RequiredArgument]
         public OutArgument<IEnumerable<NewZoneService>> NewZonesServices { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedZoneService>> ChangedZonesServices { get; set; }
 
+        #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
@@ -113,7 +125,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 || (processCountryZonesServicesContext.ChangedZonesServices != null && processCountryZonesServicesContext.ChangedZonesServices.Count() > 0))
             {
                 IImportSPLContext splContext = handle.CustomData[ImportSPLContext.CustomDataKey] as IImportSPLContext;
-                splContext.SetToTureProcessHasChangesWithLock();
+                splContext.SetToTrueProcessHasChangesWithLock();
             }
 
             return new ProcessCountryZonesServicesOutput()
