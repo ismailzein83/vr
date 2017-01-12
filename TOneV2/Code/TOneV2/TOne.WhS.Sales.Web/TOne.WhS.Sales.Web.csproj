@@ -166,9 +166,9 @@
     <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-bulkaction-actiontype-selective.js" />
     <Content Include="WhS_Sales\Directives\Country\Templates\SoldCountryGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Country\vr-whs-sales-soldcountry-grid.js" />
-    <Content Include="WhS_Sales\Directives\Extensions\BulkActions\ActionTypes\vr-whs-sales-bulkaction-actiontype-rule.js" />
-    <Content Include="WhS_Sales\Directives\Extensions\BulkActions\ActionZoneFilters\vr-whs-sales-bulkaction-actionzonefilter-all.js" />
-    <Content Include="WhS_Sales\Directives\Extensions\BulkActions\ActionZoneFilters\vr-whs-sales-bulkaction-actionzonefilter-specific.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-actiontype-rule.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-actionzonefilter-all.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-actionzonefilter-specific.js" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\FixedRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginPercentageRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginRateCalculationTemplate.html" />
