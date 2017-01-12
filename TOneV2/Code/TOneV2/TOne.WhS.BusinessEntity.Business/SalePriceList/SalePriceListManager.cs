@@ -142,7 +142,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			foreach (int customerId in context.CustomerIds)
 			{
-				IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountries(customerId, context.EffectiveDate, false);
+				IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, context.EffectiveDate);
 
 				if (soldCountries == null || soldCountries.Count() == 0)
 					continue;

@@ -93,7 +93,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
 			foreach (int customerId in customerIds)
 			{
-				IEnumerable<int> soldCountryIds = customerCountryManager.GetCustomerCountryIds(customerId, DateTime.Today, false);
+				IEnumerable<int> soldCountryIds = customerCountryManager.GetCountryIdsEffectiveAfterByCustomer(customerId, DateTime.Today);
 
 				if (soldCountryIds != null && soldCountryIds.Any(soldCountryId => countryIds.Contains(soldCountryId)))
 					customerIdsWithPriceList.Add(customerId);
