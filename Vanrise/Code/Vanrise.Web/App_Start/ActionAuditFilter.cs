@@ -14,10 +14,18 @@ namespace Vanrise.Web.App_Start
     {
         public override void OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext actionExecutedContext)
         {
-            string url = actionExecutedContext.Request.RequestUri.AbsolutePath.ToString();
-            var uri = actionExecutedContext.Request.RequestUri;
-            string host = uri.GetLeftPart(UriPartial.Authority);
-            new UserActionAuditManager().AddUserActionAudit(url, host);
+            try
+            {
+                string url = actionExecutedContext.Request.RequestUri.AbsolutePath.ToString();
+                var uri = actionExecutedContext.Request.RequestUri;
+                string host = uri.GetLeftPart(UriPartial.Authority);
+                new UserActionAuditManager().AddUserActionAudit(url, host);
+            }
+            catch(Exception ex)
+            {
+                Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
+                throw;
+            }
         }
         
     }

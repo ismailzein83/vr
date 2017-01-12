@@ -13,11 +13,19 @@ namespace Vanrise.Web.App_Start
     {
         public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
-            var systemAction = new SystemActionManager().GetSystemAction(GetSystemActionName(actionContext));
-
-            if (systemAction != null && systemAction.RequiredPermissions != null && !SecurityContext.Current.HasPermissionToActions(systemAction.Name))
+            try
             {
-                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Forbidden, "you are not authorized to perform this request");
+                var systemAction = new SystemActionManager().GetSystemAction(GetSystemActionName(actionContext));
+
+                if (systemAction != null && systemAction.RequiredPermissions != null && !SecurityContext.Current.HasPermissionToActions(systemAction.Name))
+                {
+                    actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Forbidden, "you are not authorized to perform this request");
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
+                throw;
             }
 
             base.OnAuthorization(actionContext);

@@ -14,7 +14,15 @@ namespace Vanrise.Web
 
         public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
-            LicenseCheker();
+            try
+            {
+                LicenseCheker();
+            }
+            catch (Exception ex)
+            {
+                Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
+                throw;
+            }
             base.OnAuthorization(actionContext);
         }
 

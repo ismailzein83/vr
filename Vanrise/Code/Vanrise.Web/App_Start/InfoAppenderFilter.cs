@@ -15,8 +15,15 @@ namespace Vanrise.Web.App_Start
     {
         public override void OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext actionExecutedContext)
         {
-            actionExecutedContext.Response.Headers.Add("ServerDate", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture));
-
+            try
+            {
+                actionExecutedContext.Response.Headers.Add("ServerDate", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture));
+            }
+            catch (Exception ex)
+            {
+                Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
+                throw;
+            }
         }
         
     }
