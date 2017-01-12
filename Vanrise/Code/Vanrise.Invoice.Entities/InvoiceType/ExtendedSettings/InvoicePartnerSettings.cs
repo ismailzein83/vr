@@ -15,6 +15,8 @@ namespace Vanrise.Invoice.Entities
         public abstract dynamic GetActualPartnerId(IActualPartnerContext context);
         public abstract int GetPartnerDuePeriod(IPartnerDuePeriodContext context);
         public abstract string GetPartnerSerialNumberPattern(IPartnerSerialNumberPatternContext context);
+        public abstract bool CheckInvoiceFollowBillingPeriod(ICheckInvoiceFollowBillingPeriodContext context);
+
     }
     public interface IBasePartnerManagerContext
     {
@@ -35,6 +37,9 @@ namespace Vanrise.Invoice.Entities
     {
     }
     public interface IPartnerSerialNumberPatternContext : IBasePartnerManagerContext
+    {
+    }
+    public interface ICheckInvoiceFollowBillingPeriodContext : IBasePartnerManagerContext
     {
     }
 }

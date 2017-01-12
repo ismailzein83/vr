@@ -203,10 +203,12 @@ namespace Vanrise.Invoice.Business
             return InvoiceDetailMapper(invoice,invoiceType);
         }
 
-
+        public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
+        {
+            return new PartnerManager().CheckInvoiceFollowBillingPeriod(invoiceTypeId, partnerId);
+        }
         public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId,DateTime issueDate)
         {
-            BillingInterval billingInterval = new Entities.BillingInterval();
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
             ExtendedSettingsBillingPeriodContext extendedSettingsBillingPeriodContext = new ExtendedSettingsBillingPeriodContext
@@ -214,6 +216,10 @@ namespace Vanrise.Invoice.Business
                 PartnerId = partnerId
             };
             var billingperiod = invoiceType.Settings.ExtendedSettings.GetBillingPeriod(extendedSettingsBillingPeriodContext);
+            if (billingperiod == null)
+                return null;
+            BillingInterval billingInterval = new Entities.BillingInterval();
+
             var billingPeriodInfo = new BillingPeriodInfoManager().GetBillingPeriodInfoById(partnerId, invoiceTypeId);
             if(billingPeriodInfo != null)
             {

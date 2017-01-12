@@ -12,12 +12,12 @@
                     <span vr-disabled="scopeModel.isEditMode">
                         <vr-columns width="1/3row">
 
-                            <vr-datetimepicker type="date" label="From" value="scopeModel.fromDate" isrequired="true" customvalidate="scopeModel.validateFromDate()"></vr-datetimepicker>
+                            <vr-datetimepicker type="date" label="From" value="scopeModel.fromDate" isrequired="true" customvalidate="scopeModel.validateFromDate()" vr-disabled="scopeModel.isDateDisabled"></vr-datetimepicker>
                         </vr-columns>
                     </span>
                     <span vr-disabled="scopeModel.isEditMode">
                         <vr-columns width="1/3row">
-                            <vr-datetimepicker type="date" label="To" value="scopeModel.toDate" isrequired="true" customvalidate="scopeModel.validateToDate()"></vr-datetimepicker>
+                            <vr-datetimepicker type="date" label="To" value="scopeModel.toDate" isrequired="true" customvalidate="scopeModel.validateToDate()" vr-disabled="scopeModel.isDateDisabled"></vr-datetimepicker>
                         </vr-columns>
                     </span>
                 </vr-row>

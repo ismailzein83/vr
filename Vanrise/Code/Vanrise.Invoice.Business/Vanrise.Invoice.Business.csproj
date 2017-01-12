@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BillingPeriodInfoManager.cs" />
     <Compile Include="Context\BillingPeriodContext.cs" />
+    <Compile Include="Context\CheckInvoiceFollowBillingPeriodContext.cs" />
     <Compile Include="Context\ExtendedSettingsBillingPeriodContext.cs" />
     <Compile Include="Context\GetMeasureValueContext.cs" />
     <Compile Include="Context\GroupingInvoiceItemQueryContext.cs" />

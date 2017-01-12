@@ -64,6 +64,12 @@
                 partnerId: partnerId
             });
         }
+        function CheckInvoiceFollowBillingPeriod(invoiceTypeId, partnerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "CheckInvoiceFollowBillingPeriod"), {
+                invoiceTypeId: invoiceTypeId,
+                partnerId: partnerId
+            });
+        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -75,7 +81,8 @@
             ReGenerateInvoice: ReGenerateInvoice,
             UpdateInvoiceNote: UpdateInvoiceNote,
             GetBillingInterval: GetBillingInterval,
-            CheckGeneratedInvoicePeriodGaP: CheckGeneratedInvoicePeriodGaP
+            CheckGeneratedInvoicePeriodGaP: CheckGeneratedInvoicePeriodGaP,
+            CheckInvoiceFollowBillingPeriod: CheckInvoiceFollowBillingPeriod
         });
     }
 

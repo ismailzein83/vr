@@ -326,13 +326,34 @@
                     {
                         var partnerObject = partnerSelectorAPI.getData();
                         if (partnerObject != undefined && partnerObject.selectedIds != undefined) {
+                            $scope.scopeModel.isLoading = true;
                             VR_Invoice_InvoiceAPIService.GetBillingInterval(invoiceTypeId, partnerObject.selectedIds, $scope.scopeModel.issueDate).then(function (response) {
+                                $scope.scopeModel.isLoading = false;
                                 if (response) {
+                                    $scope.scopeModel.isLoading = true;
+                                    VR_Invoice_InvoiceAPIService.CheckInvoiceFollowBillingPeriod(invoiceTypeId, partnerObject.selectedIds).then(function (response) {
+                                        if (response) {
+                                            $scope.scopeModel.isDateDisabled = true;
+                                        }else
+                                        {
+                                            $scope.scopeModel.isDateDisabled = false;
+                                        }
+                                        $scope.scopeModel.isLoading = false;
+                                    }).catch(function (error) {
+                                        $scope.scopeModel.isLoading = false;
+                                    });
                                     $scope.scopeModel.fromDate = response.FromDate;
                                     $scope.scopeModel.toDate = response.ToDate;
+                                } else {
+                                    $scope.scopeModel.fromDate = undefined;
+                                    $scope.scopeModel.toDate = undefined;
                                 }
-                            });
+                                $scope.scopeModel.isLoading = false;
+                            }).catch(function (error) {
+                                $scope.scopeModel.isLoading = false;
+                            });;
                         }
+                          
                     }
                 }
             };

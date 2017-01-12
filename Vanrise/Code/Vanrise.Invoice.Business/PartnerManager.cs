@@ -69,5 +69,16 @@ namespace Vanrise.Invoice.Business
                 throw new NullReferenceException("partnerSettings");
             return partnerSettings.GetPartnerSerialNumberPattern(context);
         }
+        public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
+        {
+            var partnerSettings = GetPartnerSettings(invoiceTypeId);
+            CheckInvoiceFollowBillingPeriodContext context = new CheckInvoiceFollowBillingPeriodContext
+            {
+                PartnerId = partnerId,
+            };
+            if (partnerSettings == null)
+                throw new NullReferenceException("partnerSettings");
+            return partnerSettings.CheckInvoiceFollowBillingPeriod(context);
+        }
     }
 }
