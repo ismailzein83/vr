@@ -9,12 +9,11 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierZone_GetBySupplierId]
 	@When DateTime
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
+	Declare @SupplierId_local INT = @SupplierId
+	Declare @When_local DateTime = @When
 
 	SELECT  sz.[ID],sz.[Name],sz.CountryID,sz.SupplierID,sz.BED,sz.EED,sz.SourceID 
 	FROM	[TOneWhS_BE].SupplierZone sz WITH(NOLOCK) 
-	Where	sz.SupplierID=@SupplierId
-			and ((sz.BED <= @when ) and (sz.EED is null or sz.EED > @when))
+	Where	sz.SupplierID = @SupplierId_local
+			and ((sz.BED <= @When_local ) and (sz.EED is null or sz.EED > @When_local))
 END

@@ -14,7 +14,8 @@ BEGIN
 		ca.CarrierAccountSettings,
 		ca.sourceid,
 		ca.IsDeleted,
-		ca.ExtendedSettings
+		ca.ExtendedSettings,
+		ca.CreatedTime
 	FROM TOneWhS_BE.CarrierAccount ca
 	SET NOCOUNT OFF
 END
