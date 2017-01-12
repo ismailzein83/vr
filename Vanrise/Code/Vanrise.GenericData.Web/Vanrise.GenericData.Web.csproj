@@ -197,6 +197,8 @@
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\Templates\BELookupRuleDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-selector.js" />
+    <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\Templates\BEParentChildRelationDefinitionSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\vr-genericdata-beparentchildrelationdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityViewEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-editor.js" />
