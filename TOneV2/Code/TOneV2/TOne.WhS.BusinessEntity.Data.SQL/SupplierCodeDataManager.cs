@@ -32,22 +32,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierCode_GetByEffective]", SupplierCodeMapper, from, to);
         }
-        public List<SupplierCode> GetActiveSupplierCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes, IEnumerable<RoutingSupplierInfo> supplierInfo)
-        {
-            DataTable dtActiveSuppliers = CarrierAccountDataManager.BuildRoutingSupplierInfoTable(supplierInfo);
-            return GetItemsSPCmd("TOneWhS_BE.sp_SupplierCode_GetActiveCodeByPrefix", SupplierCodeMapper, (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@ActiveSuppliersInfo", SqlDbType.Structured);
-                dtPrm.Value = dtActiveSuppliers;
-                cmd.Parameters.Add(dtPrm);
-
-                cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
-                cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
-                cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
-                cmd.Parameters.Add(new SqlParameter("@GetChildCodes", getChildCodes));
-                cmd.Parameters.Add(new SqlParameter("@GetParentCodes", getParentCodes));
-            });
-        }
         
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
@@ -61,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetSpecificCodePrefixes", CodePrefixMapper, prefixLength, _codePrefixes, effectiveOn, isFuture);    
         }
-        
+
 
         public IEnumerable<SupplierCode> GetFilteredSupplierCodes(SupplierCodeQuery query)
         {
