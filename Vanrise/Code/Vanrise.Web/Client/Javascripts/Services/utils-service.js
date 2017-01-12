@@ -801,7 +801,7 @@
 
         function createDateFromString(value) {
             var date = new Date(value);
-            var userTimezoneOffset = new Date().getTimezoneOffset() * 60000;
+            var userTimezoneOffset = date.getTimezoneOffset() * 60000;
             return new Date(date.getTime() + userTimezoneOffset);
         }
 
