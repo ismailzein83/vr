@@ -7,12 +7,11 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Web.Base;
 
-
 namespace Retail.BusinessEntity.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "CreditClass")]
     [JSONWithTypeAttribute]
-    public class CreditClassController: BaseAPIController
+    public class CreditClassController : BaseAPIController
     {
         CreditClassManager _manager = new CreditClassManager();
 

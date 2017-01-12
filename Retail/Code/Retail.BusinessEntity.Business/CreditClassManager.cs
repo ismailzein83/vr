@@ -9,7 +9,6 @@ using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Data;
 using Vanrise.GenericData.Entities;
 
-
 namespace Retail.BusinessEntity.Business
 {
     public class CreditClassManager : IBusinessEntityManager
@@ -92,7 +91,6 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -108,7 +106,6 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-
         #region Private Methods
 
         Dictionary<int, CreditClass> GetCachedCreditClasses()
@@ -122,7 +119,6 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
-
 
         #region Mappers
 
@@ -188,6 +184,5 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
-
     }
 }
