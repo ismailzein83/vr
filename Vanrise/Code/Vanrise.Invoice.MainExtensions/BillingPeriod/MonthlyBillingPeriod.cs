@@ -63,7 +63,7 @@ namespace Vanrise.Invoice.MainExtensions
                 {
                     var date = new DateTime(firstDate.Year, firstDate.Month, firstDate.GetLastDayOfMonth().Day);
                     if (date > fromDate)
-                    return fromDate.GetLastDayOfMonth().AddDays(-1);
+                        return date.GetLastDayOfMonth().AddDays(-1);
                 }
             }
             return GetNextPeriodDate(fromDate, monthlyPeriods, firstDate.AddMonths(1));
