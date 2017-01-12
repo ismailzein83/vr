@@ -494,6 +494,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("customerInvoiceSettings"));
             return customerInvoiceSettings.DuePeriod;
         }
+        public string GetInvoiceSerialNumberPattern(int carrierAccountId)
+        {
+            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
+            if (customerInvoiceSettings == null)
+                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
+            return customerInvoiceSettings.SerialNumberPattern;
+        }
         #endregion
 
         #endregion
