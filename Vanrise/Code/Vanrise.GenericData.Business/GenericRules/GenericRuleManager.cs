@@ -15,6 +15,12 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericRuleManager<T> : Vanrise.Rules.RuleManager<T, GenericRuleDetail>, IGenericRuleManager where T : GenericRule
     {
+        static GenericRuleManager()
+        {
+            GenericRuleManager<T> instance = new GenericRuleManager<T>();
+            instance.AddRuleCachingExpirationChecker(new GenericRuleCachingExpirationChecker());
+        }
+
         #region Public Methods
 
         public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
@@ -376,5 +382,15 @@ namespace Vanrise.GenericData.Business
         public VRObjectType ObjectType { get; set; }
 
         public VRObjectPropertyEvaluator PropertyEvaluator { get; set; }
+    }
+
+    public class GenericRuleCachingExpirationChecker : RuleCachingExpirationChecker
+    {
+        DateTime? _genericRuleDefinitionCacheLastCheck;
+
+        public override bool IsRuleDependenciesCacheExpired()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<GenericRuleDefinitionManager.CacheManager>().IsCacheExpired(ref _genericRuleDefinitionCacheLastCheck);
+        }
     }
 }

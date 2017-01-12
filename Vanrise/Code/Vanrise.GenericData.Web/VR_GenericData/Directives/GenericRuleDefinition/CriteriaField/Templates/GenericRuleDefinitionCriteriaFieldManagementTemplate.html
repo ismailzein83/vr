@@ -7,26 +7,29 @@
     <vr-row>
         <vr-columns width="2/3row">
             <!--<vr-validator validate="ctrl.onValidateCriteriaFields()">-->
-                <vr-datagrid on-ready="ctrl.onGridReady"
-                             datasource="ctrl.criteriaFields"
-                             menuactions="ctrl.menuActions"
-                             ondeleterow="ctrl.onDeleteCriteriaField"
-                             enabledraggablerow="true"
-                             hidegridmenu>
-                    <vr-datagridcolumn headertext="'Field Name'" type="'Text'" field="'FieldName'" widthfactor="5" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Title'" type="'Text'" field="'Title'" widthfactor="5" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Field Type'" type="'Text'" field="'FieldTypeDescription'" widthfactor="4" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rule Structure Behavior'" type="'Text'" field="'RuleStructureBehaviorTypeDescription'" widthfactor="6" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Show In Basic Search'" type="'Text'" field="'ShowInBasicSearch'" widthfactor="6" disablesorting>
-                        <vr-icon icontype="dataItem.ShowInBasicSearch"></vr-icon>
-                    </vr-datagridcolumn>
-                </vr-datagrid>
+            <vr-datagrid on-ready="ctrl.onGridReady"
+                         datasource="ctrl.criteriaFields"
+                         menuactions="ctrl.menuActions"
+                         ondeleterow="ctrl.onDeleteCriteriaField"
+                         enabledraggablerow="true"
+                         hidegridmenu>
+                <vr-datagridcolumn headertext="'Field Name'" type="'Text'" field="'FieldName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Title'" type="'Text'" field="'Title'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Field Type'" type="'Text'" field="'FieldTypeDescription'" widthfactor="4" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Rule Structure Behavior'" type="'Text'" field="'RuleStructureBehaviorTypeDescription'" widthfactor="6" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Show In Basic Search'" type="'Text'" field="'ShowInBasicSearch'" widthfactor="6" disablesorting>
+                    <vr-icon icontype="dataItem.ShowInBasicSearch"></vr-icon>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Ignore Case'" type="'Text'" field="'IgnoreCase'" widthfactor="6" disablesorting>
+                    <vr-icon icontype="dataItem.IgnoreCase"></vr-icon>
+                </vr-datagridcolumn>
+            </vr-datagrid>
             <!--</vr-validator>-->
         </vr-columns>
         <vr-columns width="1/3row">
             <vr-datagrid datasource="ctrl.priorities"
-                            enabledraggablerow="true"
-                            hidegridmenu>
+                         enabledraggablerow="true"
+                         hidegridmenu>
                 <vr-datagridcolumn headertext="'Field Priority'" type="'Text'" field="'FieldName'" disablesorting></vr-datagridcolumn>
             </vr-datagrid>
         </vr-columns>

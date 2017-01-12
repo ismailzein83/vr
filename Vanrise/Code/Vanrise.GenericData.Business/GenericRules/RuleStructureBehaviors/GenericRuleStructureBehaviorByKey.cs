@@ -11,6 +11,7 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
     public class GenericRuleStructureBehaviorByKey : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<Object>, IGenericRuleStructureBehavior
     {
         public GenericRuleDefinitionCriteriaField GenericRuleDefinitionCriteriaField { get; set; }
+        public bool ShouldIgnoreCase { get; set; }
 
         protected override void GetKeysFromRule(IVRRule rule, out IEnumerable<object> keys)
         {
@@ -20,6 +21,9 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
             if (genericRule == null)
                 throw new Exception(String.Format("rule is not of type IGenericRule. it is of type '{0}'", rule.GetType()));
             keys = GenericRuleManager<GenericRule>.GetCriteriaFieldValues(genericRule, this.GenericRuleDefinitionCriteriaField);
+
+            if (keys != null && ShouldIgnoreCase)
+                keys = keys.Select(itm => (itm as string).ToLower());
         }
 
         protected override bool TryGetKeyFromTarget(object target, out object key)
@@ -29,14 +33,20 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
             GenericRuleTarget genericRuleTarget = target as GenericRuleTarget;
             if (genericRuleTarget == null)
                 throw new Exception(String.Format("target is not of type GenericRuleTarget. it is of type '{0}'", target.GetType()));
-            return GenericRuleManager<GenericRule>.TryGetTargetFieldValue(genericRuleTarget, this.GenericRuleDefinitionCriteriaField.FieldName, out key);
+            var isFieldFound = GenericRuleManager<GenericRule>.TryGetTargetFieldValue(genericRuleTarget, this.GenericRuleDefinitionCriteriaField.FieldName, out key);
+
+            if (key != null && ShouldIgnoreCase)
+                key = (key as string).ToLower();
+
+            return isFieldFound;
         }
 
         public override BaseRuleStructureBehavior CreateNewBehaviorObject()
         {
             return new GenericRuleStructureBehaviorByKey
             {
-                GenericRuleDefinitionCriteriaField = this.GenericRuleDefinitionCriteriaField
+                GenericRuleDefinitionCriteriaField = this.GenericRuleDefinitionCriteriaField,
+                ShouldIgnoreCase = GenericRuleDefinitionCriteriaField.IgnoreCase && GenericRuleDefinitionCriteriaField.FieldType.GetNonNullableRuntimeType() == typeof(string)
             };
         }
     }

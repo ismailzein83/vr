@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
     public class GenericRuleStructureBehaviorByPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByPrefix, IGenericRuleStructureBehavior
     {
         public GenericRuleDefinitionCriteriaField GenericRuleDefinitionCriteriaField { get; set; }
-
+        public bool ShouldIgnoreCase { get; set; }
         protected override void GetPrefixesFromRule(IVRRule rule, out System.Collections.Generic.IEnumerable<string> prefixes)
         {
             if (rule == null)
@@ -21,7 +21,12 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
                 throw new Exception(String.Format("rule is not of type IGenericRule. it is of type '{0}'", rule.GetType()));
             IEnumerable<Object> fieldValues = GenericRuleManager<GenericRule>.GetCriteriaFieldValues(genericRule, this.GenericRuleDefinitionCriteriaField);
             if (fieldValues != null)
-                prefixes = fieldValues.Select(itm => itm as string);
+            {
+                if (ShouldIgnoreCase)
+                    prefixes = fieldValues.Select(itm => (itm as string).ToLower());
+                else
+                    prefixes = fieldValues.Select(itm => itm as string);
+            }
             else
                 prefixes = null;
         }
@@ -37,6 +42,10 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
             if (GenericRuleManager<GenericRule>.TryGetTargetFieldValue(genericRuleTarget, this.GenericRuleDefinitionCriteriaField.FieldName, out fieldValue))
             {
                 value = fieldValue as string;
+
+                if (ShouldIgnoreCase)
+                    value = value.ToLower();
+             
                 return true;
             }
             else
@@ -50,7 +59,8 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
         {
             return new GenericRuleStructureBehaviorByPrefix
             {
-                GenericRuleDefinitionCriteriaField = this.GenericRuleDefinitionCriteriaField
+                GenericRuleDefinitionCriteriaField = this.GenericRuleDefinitionCriteriaField,
+                ShouldIgnoreCase = GenericRuleDefinitionCriteriaField.IgnoreCase
             };
         }
     }

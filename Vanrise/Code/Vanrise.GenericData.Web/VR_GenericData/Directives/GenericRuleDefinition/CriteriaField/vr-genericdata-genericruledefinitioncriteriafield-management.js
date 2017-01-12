@@ -116,7 +116,7 @@
 
                 api.getData = function () {
                     var data = null;
-                    
+
                     if (ctrl.criteriaFields.length > 0) {
                         var fields = [];
                         for (var i = 0; i < ctrl.criteriaFields.length; i++) {
@@ -140,6 +140,7 @@
                             RuleStructureBehaviorType: dataItem.RuleStructureBehaviorType,
                             Priority: priority,
                             ShowInBasicSearch: dataItem.ShowInBasicSearch,
+                            IgnoreCase: dataItem.IgnoreCase,
                             ValueObjectName: dataItem.ValueObjectName,
                             ValuePropertyName: dataItem.ValuePropertyName,
                             ValueEvaluator: dataItem.ValueEvaluator

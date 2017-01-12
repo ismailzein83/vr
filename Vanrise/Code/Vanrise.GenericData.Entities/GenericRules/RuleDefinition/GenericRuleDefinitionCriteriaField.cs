@@ -23,6 +23,8 @@ namespace Vanrise.GenericData.Entities
 
         public bool ShowInBasicSearch { get; set; }
 
+        public bool IgnoreCase { get; set; }
+
         public string ValueObjectName { get; set; }
 
         public string ValuePropertyName { get; set; }

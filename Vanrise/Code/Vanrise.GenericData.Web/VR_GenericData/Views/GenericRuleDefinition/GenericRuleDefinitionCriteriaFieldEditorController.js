@@ -112,6 +112,7 @@
                 $scope.scopeModel.fieldName = criteriaFieldEntity.FieldName;
                 $scope.scopeModel.fieldTitle = criteriaFieldEntity.Title;
                 $scope.scopeModel.showInBasicSearch = criteriaFieldEntity.ShowInBasicSearch;
+                $scope.scopeModel.ignoreCase = criteriaFieldEntity.IgnoreCase;
 
                 $scope.scopeModel.selectedBehaviorType = UtilsService.getItemByVal($scope.scopeModel.behaviorTypes, criteriaFieldEntity.RuleStructureBehaviorType, 'value');
 
@@ -193,6 +194,7 @@
                 FieldType: dataRecordFieldTypeSelectiveAPI.getData(),
                 RuleStructureBehaviorType: $scope.scopeModel.selectedBehaviorType.value,
                 ShowInBasicSearch: $scope.scopeModel.showInBasicSearch,
+                IgnoreCase: $scope.scopeModel.ignoreCase,
                 ValueObjectName: valueObjectName,
                 ValuePropertyName: valuePropertyName
             };
