@@ -333,8 +333,12 @@ namespace TOne.WhS.Analytics.Business
 
                 do
                 {
-                    if (i == 1)
+                    if (i == 1){
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Previous Period %" });
+                        var period = result.TimePeriods[i];
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = period.PeriodDescription, Width = 40 });
+                    }
+                        
                     else
                     {
                         var period = result.TimePeriods[i];
@@ -354,8 +358,11 @@ namespace TOne.WhS.Analytics.Business
                     int j = 0;
                     do
                     {
-                        if (j == 1)
+                        if (j == 1){
                             row.Cells.Add(new ExportExcelCell() { Value = record.PreviousPeriodPercentage });
+                            var value = record.TimePeriodValues[j];
+                            row.Cells.Add(new ExportExcelCell() { Value = value });
+                        }
                         else
                         {
                             var value = record.TimePeriodValues[j];
