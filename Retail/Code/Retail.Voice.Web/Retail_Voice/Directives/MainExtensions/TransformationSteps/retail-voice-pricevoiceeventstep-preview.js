@@ -104,7 +104,10 @@ app.directive('retailVoicePricevoiceeventstepPreview', ['UtilsService', 'VRUIUti
                 return null;
             }
             function fillInputFieldsArray(data, array) {
-
+                array.push({
+                    FieldName: "AccountBEDefinitionId",
+                    Value: data.AccountBEDefinitionId
+                });
                 array.push({
                     FieldName: "AccountId",
                     Value: data.AccountId

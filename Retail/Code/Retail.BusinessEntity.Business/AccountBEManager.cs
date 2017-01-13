@@ -342,7 +342,18 @@ namespace Retail.BusinessEntity.Business
             }
             return updateStatus;
         }
+        public long? GetFinancialAccountId(Guid accountBEDefinitionId, long? accountId)
+        {
+            if (!accountId.HasValue)
+                return null;
 
+            IAccountPayment accountPayment;
+            if (HasAccountPayment(accountBEDefinitionId,accountId.Value, false, out accountPayment))
+                return accountId;
+
+            var account = GetAccount(accountBEDefinitionId,accountId.Value);
+            return GetFinancialAccountId(accountBEDefinitionId,account.ParentAccountId);
+        }
         public bool UpdateExecutedActions(Guid accountBEDefinitionId, long accountId, ExecutedActions executedActions)
         {
             IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();

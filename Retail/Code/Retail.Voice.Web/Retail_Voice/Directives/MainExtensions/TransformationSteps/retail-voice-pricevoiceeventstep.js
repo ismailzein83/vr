@@ -34,6 +34,9 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
             var stepPayload;
 
             //Input Fields
+            var accountBEDefinitionIdDirectiveReadyAPI;
+            var accountBEDefinitionIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var accountIdDirectiveReadyAPI;
             var accountIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -78,6 +81,10 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                 $scope.scopeModel = {};
 
                 //Input Fields
+                $scope.scopeModel.onAccountBEDefinitionIdReady = function (api) {
+                    accountBEDefinitionIdDirectiveReadyAPI = api;
+                    accountBEDefinitionIdDirectiveReadyPromiseDeferred.resolve();
+                };
                 $scope.scopeModel.onAccountIdReady = function (api) {
                     accountIdDirectiveReadyAPI = api;
                     accountIdDirectiveReadyPromiseDeferred.resolve();
@@ -144,6 +151,10 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                     stepPayload = payload;
 
                     //Input
+                    //Loading AccountBEDefinitionId Directive
+                    var accountBEDefinitionIdDirectiveLoadPromiseDeferred = getAccountBEDefinitionIdDirectiveLoadPromiseDeferred();
+                    promises.push(accountBEDefinitionIdDirectiveLoadPromiseDeferred.promise);
+
                     //Loading AccountId Directive
                     var accountIdDirectiveLoadPromiseDeferred = getAccountIdDirectiveLoadPromiseDeferred();
                     promises.push(accountIdDirectiveLoadPromiseDeferred.promise);
@@ -197,7 +208,20 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                     var voiceEventPricedPartsDirectivePromiseDeferred = getVoiceEventPricedPartsDirectivePromiseDeferred();
                     promises.push(voiceEventPricedPartsDirectivePromiseDeferred.promise);
 
-                    
+                    function getAccountBEDefinitionIdDirectiveLoadPromiseDeferred() {
+                        var accountBEDefinitionIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        accountBEDefinitionIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var accountBEDefinitionIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                accountBEDefinitionIdPayload.selectedRecords = payload.stepDetails.AccountBEDefinitionId;
+
+                            VRUIUtilsService.callDirectiveLoad(accountBEDefinitionIdDirectiveReadyAPI, accountBEDefinitionIdPayload, accountBEDefinitionIdDirectiveLoadPromiseDeferred);
+                        });
+
+                        return accountBEDefinitionIdDirectiveLoadPromiseDeferred;
+                    }
                     function getAccountIdDirectiveLoadPromiseDeferred() {
                         var accountIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -388,6 +412,7 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                 api.getData = function () {
                     return {
                         $type: "Retail.Voice.MainExtensions.TransformationSteps.PriceVoiceEventStep, Retail.Voice.MainExtensions",
+                        AccountBEDefinitionId:accountBEDefinitionIdDirectiveReadyAPI.getData(),
                         AccountId: accountIdDirectiveReadyAPI.getData(),
                         ServiceTypeId: serviceTypeIdDirectiveReadyAPI.getData(),
                         RawCDR: rawCDRDirectiveReadyAPI.getData(),

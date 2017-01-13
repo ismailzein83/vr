@@ -27,7 +27,7 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
         public string RateTypeId { get; set; }
         public string CurrencyId { get; set; }
         public string VoiceEventPricedParts { get; set; }
-
+        public string AccountBEDefinitionID { get; set; }
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
@@ -35,8 +35,8 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Retail.Voice.Business.VoiceChargingManager();", voiceChargingManagerVariableName);
 
             var voiceEventPriceVariableName = context.GenerateUniqueMemberName("voiceEventPrice");
-            context.AddCodeToCurrentInstanceExecutionBlock("Retail.Voice.Entities.VoiceEventPrice {0} = {1}.PriceVoiceEvent({2},{3},{4},{5},{6},{7});", voiceEventPriceVariableName,
-                voiceChargingManagerVariableName, this.AccountId, this.ServiceTypeId, this.RawCDR, this.MappedCDR, this.Duration, this.EventTime);
+            context.AddCodeToCurrentInstanceExecutionBlock("Retail.Voice.Entities.VoiceEventPrice {0} = {1}.PriceVoiceEvent({2},{3},{4},{5},{6},{7},{8});", voiceEventPriceVariableName,
+                voiceChargingManagerVariableName,this.AccountBEDefinitionID, this.AccountId, this.ServiceTypeId, this.RawCDR, this.MappedCDR, this.Duration, this.EventTime);
 
             if (this.PackageId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.PackageId;", this.PackageId, voiceEventPriceVariableName);
