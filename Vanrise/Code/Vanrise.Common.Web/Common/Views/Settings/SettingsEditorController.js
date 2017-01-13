@@ -91,7 +91,7 @@
         }
 
         function setTitle() {
-            $scope.title = UtilsService.buildTitleForUpdateEditor(settingEntity.Name, "Setting");
+            $scope.title = UtilsService.buildTitleForUpdateEditor(settingEntity.Name, "Setting", $scope);
         }
 
         function loadStaticData() {

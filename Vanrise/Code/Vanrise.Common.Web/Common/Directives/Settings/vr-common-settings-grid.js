@@ -73,6 +73,22 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
                             return VRCommon_SettingsAPIService.HasUpdateSettingsPermission();
                         }
                     }
+                },{
+                    name: "View",
+                    clicked: viewSettings,
+                    haspermission: function (dataItem) {
+                        if (dataItem.Entity.IsTechnical == true) {
+                            return VRCommon_SettingsAPIService.HasUpdateTechnicalSettingsPermission().then(function (response) {
+                                return !response;
+                            });
+
+                        }
+                        else {
+                            return VRCommon_SettingsAPIService.HasUpdateSettingsPermission().then(function (response) {
+                                return !response;
+                            });
+                        }
+                    }
                 }];
             };
         };
@@ -82,6 +98,9 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
                 gridAPI.itemUpdated(settingsObj);
             };
             VRCommon_SettingsService.editSettings(settings.Entity.SettingId, onSettingsUpdated);
+        }
+        function viewSettings(settings) {           
+            VRCommon_SettingsService.viewSettings(settings.Entity.SettingId);
         }
     }
 
