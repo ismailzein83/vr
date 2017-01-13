@@ -156,12 +156,12 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.scopeModel.hasSaveProductPermission = function () {
-                if ($scope.scopeModel.isEditMode)
-                    return Retail_BE_ProductAPIService.HasUpdateProductPermission();
-                else
-                    return Retail_BE_ProductAPIService.HasAddProductPermission();
-            };
+            //$scope.scopeModel.hasSaveProductPermission = function () {
+            //    if ($scope.scopeModel.isEditMode)
+            //        return Retail_BE_ProductAPIService.HasUpdateProductPermission();
+            //    else
+            //        return Retail_BE_ProductAPIService.HasAddProductPermission();
+            //};
         }
         function load() {
             $scope.scopeModel.isLoading = true;
