@@ -170,6 +170,8 @@
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-rate.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-all.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-specific.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\WeightedAvgCostCalculation.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-weightedavgcostcalculation.js" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\FixedRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginPercentageRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginRateCalculationTemplate.html" />
