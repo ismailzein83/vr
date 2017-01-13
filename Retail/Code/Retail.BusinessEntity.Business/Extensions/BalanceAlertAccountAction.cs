@@ -10,7 +10,7 @@ using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business.Extensions
 {
-    public class BalanceAlertAccountAction : VRAction
+    public class BalanceAlertAccountAction : BaseAccountBalanceAlertVRAction
     {
         public override Guid ConfigId { get { return new Guid("a8e093f4-f9c3-420b-99b7-32eea2c1df78"); } }
 
@@ -23,10 +23,8 @@ namespace Retail.BusinessEntity.Business.Extensions
             VRBalanceAlertEventPayload balanceAlertEventPayload = context.EventPayload as VRBalanceAlertEventPayload;
             balanceAlertEventPayload.ThrowIfNull("balanceAlertEventPayload", "");
 
-            long accountId = 0;
-            long.TryParse(balanceAlertEventPayload.EntityId, out accountId);
-            Account account = new AccountManager().GetAccount(accountId);
-            account.ThrowIfNull("account", accountId);
+            Account account = GetAccount(balanceAlertEventPayload);
+            account.ThrowIfNull("account", balanceAlertEventPayload.EntityId);
 
             var actionDefinition = GetActionDefinition();
 

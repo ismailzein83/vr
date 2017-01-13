@@ -10,7 +10,7 @@ using Vanrise.Security.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountActions
 {
-    public class SendEmailAction : VRAction
+    public class SendEmailAction : BaseAccountBalanceAlertVRAction
     {
         public Guid MailMessageTemplateId { get; set; }
         public override Guid ConfigId
@@ -23,17 +23,15 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
             VRBalanceAlertEventPayload eventPayload = context.EventPayload as VRBalanceAlertEventPayload;
             eventPayload.ThrowIfNull("eventPayload", "");
 
+
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
 
             UserManager userManager = new UserManager();
             User user = userManager.GetUserbyId(context.UserID);
             user.ThrowIfNull("user", context.UserID);
 
-            AccountManager accountManager = new AccountManager();
-            long accountId = 0;
-            long.TryParse(eventPayload.EntityId, out accountId);
-            Account account = accountManager.GetAccount(accountId);
-            account.ThrowIfNull("account", accountId);
+            Account account = GetAccount(eventPayload);
+            account.ThrowIfNull("account", eventPayload.EntityId);
 
             objects.Add("User", user);
             objects.Add("Subscriber", account);

@@ -89,7 +89,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
                 {
                     if (voiceVolumeItem.EventCondition != null)
                     {
-                        var conditionContext = new AccountBillingEventConditionContext(context.AccountId)
+                        var conditionContext = new AccountBillingEventConditionContext(context.AccountBEDefinitionId, context.AccountId)
                         {
                             BillingEvent = context.MappedCDR
                         };
@@ -177,9 +177,11 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
     public class AccountBillingEventConditionContext : IAccountBillingEventConditionContext
     {
+        Guid _accountBEDefinitionId;
         long _accountId;
-        public AccountBillingEventConditionContext(long accountId)
+        public AccountBillingEventConditionContext(Guid accountBEDefinitionId, long accountId)
         {
+            _accountBEDefinitionId = accountBEDefinitionId;
             _accountId = accountId;
         }
 
@@ -189,7 +191,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             get
             {
                 if (_account == null)
-                    _account = new AccountManager().GetAccount(_accountId);
+                    _account = new AccountBEManager().GetAccount(_accountBEDefinitionId, _accountId);
                 return _account;
             }
         }

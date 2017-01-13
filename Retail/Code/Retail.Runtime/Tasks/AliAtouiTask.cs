@@ -27,7 +27,6 @@ namespace Retail.Runtime.Tasks
             //retailAccountPropertyEvaluatorTask.RetailAccountPropertyEvaluator_Main();
             #endregion
 
-            AccountManager accountManager = new AccountManager();
             //accountManager.GetAccountGridColumnAttributes();
             //accountManager.GetAccountViewRuntimeEditors();
         }

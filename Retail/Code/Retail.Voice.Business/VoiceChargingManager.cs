@@ -14,14 +14,13 @@ namespace Retail.Voice.Business
     {
         #region Variables/Ctor
 
-        AccountManager _accountManager = new AccountManager();
         AccountPackageManager _accountPackageManager = new AccountPackageManager();
 
         #endregion
 
         #region Public Methods
 
-        public VoiceEventPrice PriceVoiceEvent(long accountId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration, DateTime eventTime)
+        public VoiceEventPrice PriceVoiceEvent(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration, DateTime eventTime)
         {
             VoiceEventPrice voiceEventPrice = new VoiceEventPrice();
             voiceEventPrice.VoiceEventPricedParts = new List<VoiceEventPricedPart>();
@@ -33,6 +32,7 @@ namespace Retail.Voice.Business
             {
                 var context = new VoiceUsageChargerContext
                 {
+                    AccountBEDefinitionId = accountBEDefinitionId,
                     AccountId = accountId,
                     ServiceTypeId = serviceTypeId,
                     RawCDR = rawCDR,
@@ -231,6 +231,7 @@ namespace Retail.Voice.Business
 
     public class VoiceUsageChargerContext : IVoiceUsageChargerContext
     {
+        public Guid AccountBEDefinitionId { get; set; }
         public long AccountId
         {
             get;

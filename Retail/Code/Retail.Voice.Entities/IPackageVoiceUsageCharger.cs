@@ -20,6 +20,8 @@ namespace Retail.Voice.Entities
 
     public interface IVoiceUsageChargerContext
     {
+        Guid AccountBEDefinitionId { get; }
+
         long AccountId { get; }
 
         Guid ServiceTypeId { get; }

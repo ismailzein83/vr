@@ -107,6 +107,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
     </Reference>
@@ -124,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceManager.cs" />
+    <Compile Include="Extensions\BaseAccountBalanceAlertVRAction.cs" />
     <Compile Include="Filters\IAccountFilter\AccountBalanceEnabledAccountFilter.cs" />
     <Compile Include="AccountBEManager.cs" />
     <Compile Include="AccountConditionManager.cs" />
