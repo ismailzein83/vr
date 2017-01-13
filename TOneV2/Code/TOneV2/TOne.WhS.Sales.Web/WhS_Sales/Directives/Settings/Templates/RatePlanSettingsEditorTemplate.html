@@ -12,4 +12,13 @@
             </vr-columns>
         </vr-row>
     </vr-tab>
+
+    <vr-tab header ="'Cost Columns'">
+        <span vr-loader="scopeModel.isLoadingCostCalculationsMethods">
+            <vr-whs-sales-costcolumns on-ready="scopeModel.onCostColumnsGridReady"
+                                      isrequired>
+            </vr-whs-sales-costcolumns>
+        </span>
+
+    </vr-tab>
 </vr-tabs>

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesRateplanSettingsEditor', [function () {
+app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
 
     return {
         restrict: 'E',
@@ -18,22 +18,35 @@ app.directive('vrWhsSalesRateplanSettingsEditor', [function () {
     };
 
     function RatePlanSettings(ctrl, $scope) {
-
+        var costColumnsDirectiveAPI;
         this.initializeController = initializeController;
 
         function initializeController() {
+           
             $scope.scopeModel = {};
-            defineAPI();
+
+            $scope.scopeModel.onCostColumnsGridReady = function (api) {
+                costColumnsDirectiveAPI = api;
+                defineAPI();
+            }
+
+          
         }
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
+                var costCalculationsMethodsPayload = {};
+
                 if (payload != undefined && payload.data != null) {
                 	$scope.scopeModel.newRateDayOffset = payload.data.NewRateDayOffset;
                 	$scope.scopeModel.increasedRateDayOffset = payload.data.IncreasedRateDayOffset;
-                    $scope.scopeModel.decreasedRateDayOffset = payload.data.DecreasedRateDayOffset;
+                	$scope.scopeModel.decreasedRateDayOffset = payload.data.DecreasedRateDayOffset;
+                	costCalculationsMethodsPayload.costCalculationMethods = payload.data.CostCalculationsMethods;
                 }
+
+                var setLoader = function (value) { $scope.scopeModel.isLoadingCostCalculationsMethods = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, costColumnsDirectiveAPI, costCalculationsMethodsPayload, setLoader);
             };
 
             api.getData = function () {
@@ -41,7 +54,8 @@ app.directive('vrWhsSalesRateplanSettingsEditor', [function () {
                     $type: "TOne.WhS.Sales.Entities.RatePlanSettingsData, TOne.WhS.Sales.Entities",
                     NewRateDayOffset: $scope.scopeModel.newRateDayOffset,
                     IncreasedRateDayOffset: $scope.scopeModel.increasedRateDayOffset,
-                    DecreasedRateDayOffset: $scope.scopeModel.decreasedRateDayOffset
+                    DecreasedRateDayOffset: $scope.scopeModel.decreasedRateDayOffset,
+                    CostCalculationsMethods: costColumnsDirectiveAPI.getData()
                 };
             };
 

@@ -4,8 +4,7 @@
 
     RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', "UtilsService", "VRUIUtilsService", "VRNotificationService"];
 
-    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, VRNotificationService)
-    {
+    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
         var ownerTypeSelectorAPI;
         var ownerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -47,8 +46,7 @@
         defineScope();
         load();
 
-        function defineScope()
-        {
+        function defineScope() {
             /* These vars are reversed with every onOwnerTypeChanged. Therefore, the selling product selector will show when the event first occurs */
             $scope.showSellingProductSelector = false;
             $scope.showCarrierAccountSelector = true;
@@ -58,8 +56,7 @@
                 ownerTypeSelectorAPI = api;
                 ownerTypeSelectorReadyDeferred.resolve();
             };
-            $scope.onOwnerTypeChanged = function (item)
-            {
+            $scope.onOwnerTypeChanged = function (item) {
                 resetRatePlan();
                 draftCurrencyId = undefined;
 
@@ -83,8 +80,7 @@
                 sellingProductSelectorAPI = api;
                 sellingProductSelectorReadyDeferred.resolve();
             };
-            $scope.onSellingProductChanged = function ()
-            {
+            $scope.onSellingProductChanged = function () {
                 resetRatePlan();
             };
 
@@ -92,15 +88,13 @@
                 carrierAccountSelectorAPI = api;
                 carrierAccountSelectorReadyDeferred.resolve();
             };
-            $scope.onCarrierAccountChanged = function ()
-            {
+            $scope.onCarrierAccountChanged = function () {
                 resetRatePlan();
                 draftCurrencyId = undefined;
 
                 var selectedId = carrierAccountSelectorAPI.getSelectedIds();
 
-                if (selectedId != undefined)
-                {
+                if (selectedId != undefined) {
                     $scope.isLoadingFilterSection = true;
                     onCustomerChanged(selectedId).finally(function () {
                         $scope.isLoadingFilterSection = false;
@@ -115,8 +109,7 @@
                 databaseSelectorReadyDeferred.resolve();
             };
 
-            $scope.onRoutingDatabaseChanged = function ()
-            {
+            $scope.onRoutingDatabaseChanged = function () {
                 resetRatePlan();
                 draftCurrencyId = undefined;
 
@@ -131,7 +124,7 @@
                     },
                     selectDefaultPolicy: true
                 };
-                
+
                 var setLoader = function (value) {
                     $scope.isLoadingFilterSection = value;
                 };
@@ -147,8 +140,7 @@
                 currencySelectorReadyDeferred.resolve();
             };
 
-            $scope.onCurrencyChanged = function ()
-            {
+            $scope.onCurrencyChanged = function () {
                 if (draftCurrencyId == undefined)
                     return;
 
@@ -160,8 +152,7 @@
                     return;
 
                 VRNotificationService.showConfirmation('Changing the currency will reset all new rates. Are you sure you want to proceed?').then(function (isConfirmed) {
-                    if (isConfirmed)
-                    {
+                    if (isConfirmed) {
                         var promises = [];
 
                         var saveChangesPromise = saveDraft(false);
@@ -200,13 +191,12 @@
             $scope.defaultItemTabs = [{
                 title: "Default Routing Product",
                 directive: "vr-whs-sales-routingproduct-default",
-                loadDirective: function (api)
-                {
-                	var defaultPayload = {};
-                	defaultPayload.defaultItem = defaultItem;
-                	defaultPayload.context = {};
-                	defaultPayload.context.saveDraft = saveDraft;
-                	return api.load(defaultPayload);
+                loadDirective: function (api) {
+                    var defaultPayload = {};
+                    defaultPayload.defaultItem = defaultItem;
+                    defaultPayload.context = {};
+                    defaultPayload.context.saveDraft = saveDraft;
+                    return api.load(defaultPayload);
                 }
             }];
 
@@ -227,31 +217,26 @@
                 return loadRatePlan();
             };
             $scope.sellNewCountries = function () {
-            	var customerId = $scope.selectedCustomer.CarrierAccountId;
-            	var onCountryChangesUpdated = function (updatedCountryChanges)
-            	{
-            		countryChanges = updatedCountryChanges;
+                var customerId = $scope.selectedCustomer.CarrierAccountId;
+                var onCountryChangesUpdated = function (updatedCountryChanges) {
+                    countryChanges = updatedCountryChanges;
 
-            		saveDraft(false).then(function () {
-            			if (databaseSelectorAPI.getSelectedIds() != null && policySelectorAPI.getSelectedIds() != null)
-            				loadRatePlan();
-            		}).catch(function (error) {
-            			VRNotificationService.notifyException(error, $scope);
-            		});
-            	};
-            	WhS_Sales_RatePlanService.sellNewCountries(customerId, countryChanges, saleAreaSettingsData, ratePlanSettingsData, onCountryChangesUpdated);
+                    saveDraft(false).then(function () {
+                        if (databaseSelectorAPI.getSelectedIds() != null && policySelectorAPI.getSelectedIds() != null)
+                            loadRatePlan();
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
+                };
+                WhS_Sales_RatePlanService.sellNewCountries(customerId, countryChanges, saleAreaSettingsData, ratePlanSettingsData, onCountryChangesUpdated);
             };
-            $scope.editSettings = function ()
-            {
-                var onSettingsUpdated = function (updatedSettings)
-                {
+            $scope.editSettings = function () {
+                var onSettingsUpdated = function (updatedSettings) {
                     if (updatedSettings == undefined)
                         settings = undefined;
-                    else
-                    {
+                    else {
                         settings = {};
-                        if (updatedSettings.costCalculationMethods != undefined)
-                        {
+                        if (updatedSettings.costCalculationMethods != undefined) {
                             settings.costCalculationMethods = [];
                             for (var i = 0; i < updatedSettings.costCalculationMethods.length; i++) {
                                 settings.costCalculationMethods.push(updatedSettings.costCalculationMethods[i]);
@@ -284,10 +269,8 @@
                 };
                 WhS_Sales_RatePlanService.editSettings(settings, onSettingsUpdated);
             };
-            $scope.editPricingSettings = function ()
-            {
-                var onPricingSettingsUpdated = function (updatedPricingSettings)
-                {
+            $scope.editPricingSettings = function () {
+                var onPricingSettingsUpdated = function (updatedPricingSettings) {
                     pricingSettings = updatedPricingSettings;
 
                     $scope.showApplyButton = true;
@@ -313,8 +296,7 @@
                 };
                 WhS_Sales_RatePlanService.editPricingSettings(settings, pricingSettings, onPricingSettingsUpdated);
             };
-            $scope.applyCalculatedRates = function ()
-            {
+            $scope.applyCalculatedRates = function () {
                 var promises = [];
 
                 var confirmPromise = VRNotificationService.showConfirmation("Are you sure you want to apply the calculated rates?");
@@ -329,10 +311,8 @@
                 var calculatedRates;
 
                 confirmPromise.then(function (confirmed) {
-                    if (confirmed)
-                    {
-                        saveDraft(false).then(function ()
-                        {
+                    if (confirmed) {
+                        saveDraft(false).then(function () {
                             saveChangesDeferred.resolve();
                             var tryApplyInput = getTryApplyCalculatedRatesInput();
                             WhS_Sales_RatePlanAPIService.TryApplyCalculatedRates(tryApplyInput).then(function (response) {
@@ -345,8 +325,7 @@
                             saveChangesDeferred.reject(error);
                         });
 
-                        UtilsService.waitMultiplePromises([saveChangesDeferred.promise, applyDeferred.promise]).then(function ()
-                        {
+                        UtilsService.waitMultiplePromises([saveChangesDeferred.promise, applyDeferred.promise]).then(function () {
                             if (calculatedRates == undefined || calculatedRates == null)
                                 onRatesApplied();
                             else {
@@ -429,7 +408,7 @@
                 confirmPromise.then(function (confirmed) {
                     if (confirmed) {
                         return WhS_Sales_RatePlanAPIService.DeleteDraft(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId()).then(function (response) {
-                        	if (response) {
+                            if (response) {
                                 deleteDeferred.resolve();
                                 VRNotificationService.showSuccess("Draft deleted");
                                 $scope.showCancelButton = false;
@@ -530,8 +509,7 @@
                 systemCurrencyId = response;
             });
         }
-        function loadCountrySelector()
-        {
+        function loadCountrySelector() {
             var countrySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             countrySelectorReadyDeferred.promise.then(function () {
@@ -542,7 +520,7 @@
         }
         function loadTextFilter() {
             var textFilterLoadDeferred = UtilsService.createPromiseDeferred();
-            
+
             textFilterReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(textFilterAPI, undefined, textFilterLoadDeferred);
             });
@@ -550,8 +528,7 @@
             return textFilterLoadDeferred.promise;
         }
 
-        function loadRatePlan()
-        {
+        function loadRatePlan() {
             $scope.isLoadingRatePlan = true;
             var promises = [];
 
@@ -574,8 +551,7 @@
             var checkIfDraftExistsPromise = checkIfDraftExists();
             promises.push(checkIfDraftExistsPromise);
 
-            UtilsService.waitMultiplePromises([zoneLettersGetPromise, getDraftCurrencyIdPromise]).then(function ()
-            {
+            UtilsService.waitMultiplePromises([zoneLettersGetPromise, getDraftCurrencyIdPromise]).then(function () {
                 if ($scope.zoneLetters.length > 0) {
                     $scope.showSaveButton = true;
                     $scope.showSettingsButton = true;
@@ -680,7 +656,7 @@
                 RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
                 PolicyConfigId: policySelectorAPI.getSelectedIds(),
                 NumberOfOptions: $scope.numberOfOptions,
-                CostCalculationMethods: settings != undefined ? settings.costCalculationMethods : null,
+                CostCalculationMethods: getCostCalculationMethods(),
                 Settings: ratePlanSettingsData,
                 SaleAreaSettings: saleAreaSettingsData,
                 CurrencyId: getCurrencyId(),
@@ -705,10 +681,25 @@
 
             return gridQuery;
         }
-        function getDraftCurrencyId()
-        {
-            if (ownerTypeSelectorAPI.getSelectedIds() == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value)
-            {
+
+        function getCostCalculationMethods() {
+            var cosCalculationMethods = [];
+
+            if (ratePlanSettingsData != undefined && ratePlanSettingsData.CostCalculationsMethods != undefined) {
+                for (var i = 0; i < ratePlanSettingsData.CostCalculationsMethods.length ; i++)
+                    cosCalculationMethods.push(ratePlanSettingsData.CostCalculationsMethods[i]);
+            }
+
+            if (settings != undefined && settings.costCalculationMethods != undefined) {
+                for (var i = 0; i < settings.costCalculationMethods.length ; i++)
+                    cosCalculationMethods.push(settings.costCalculationMethods[i]);
+            }
+
+            return cosCalculationMethods;
+        }
+
+        function getDraftCurrencyId() {
+            if (ownerTypeSelectorAPI.getSelectedIds() == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                 return WhS_Sales_RatePlanAPIService.GetDraftCurrencyId(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, getOwnerId()).then(function (response) {
                     if (response != null) {
                         draftCurrencyId = response;
@@ -724,9 +715,8 @@
                 return deferred.promise;
             }
         }
-        
-        function saveDraft(shouldLoadGrid)
-        {
+
+        function saveDraft(shouldLoadGrid) {
             var promises = [];
 
             var saveDraftDeferred = UtilsService.createPromiseDeferred();
@@ -739,8 +729,7 @@
 
             if (newDraft == undefined)
                 saveDraftDeferred.resolve();
-            else
-            {
+            else {
                 var parameters = {
                     OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                     OwnerId: getOwnerId(),
@@ -757,8 +746,7 @@
             saveDraftDeferred.promise.then(function () {
                 if (!shouldLoadGrid)
                     loadGridDeferred.resolve();
-                else
-                {
+                else {
                     loadGrid().then(function () {
                         loadGridDeferred.resolve();
                     }).catch(function (error) {
@@ -769,15 +757,13 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-        function getNewDraft()
-        {
+        function getNewDraft() {
             var newDraft;
 
             var defaultDraft = getDefaultDraft();
             var zoneDrafts = gridAPI.getZoneDrafts();
 
-            if (defaultDraft != undefined || zoneDrafts != undefined || countryChanges != undefined)
-            {
+            if (defaultDraft != undefined || zoneDrafts != undefined || countryChanges != undefined) {
                 newDraft = {
                     CurrencyId: getCurrencyId(),
                     DefaultChanges: defaultDraft,
@@ -787,21 +773,20 @@
             }
             return newDraft;
         }
-        function getDefaultDraft()
-        {
-        	if (defaultItem == undefined || !defaultItem.IsDirty)
-        		return null;
+        function getDefaultDraft() {
+            if (defaultItem == undefined || !defaultItem.IsDirty)
+                return null;
 
-        	var defaultDraft = {};
-        	for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
-        		var defaultTab = $scope.defaultItemTabs[i];
-        		if (defaultTab.directiveAPI != undefined)
-        			defaultTab.directiveAPI.applyChanges(defaultDraft);
-        	}
-        	defaultDraft.NewService = defaultItem.NewService;
-        	defaultDraft.ClosedService = defaultItem.ClosedService;
-        	defaultDraft.ResetService = defaultItem.ResetService;
-        	return defaultDraft;
+            var defaultDraft = {};
+            for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
+                var defaultTab = $scope.defaultItemTabs[i];
+                if (defaultTab.directiveAPI != undefined)
+                    defaultTab.directiveAPI.applyChanges(defaultDraft);
+            }
+            defaultDraft.NewService = defaultItem.NewService;
+            defaultDraft.ClosedService = defaultItem.ClosedService;
+            defaultDraft.ResetService = defaultItem.ResetService;
+            return defaultDraft;
         }
 
         function onCustomerChanged(customerId) {
@@ -827,34 +812,34 @@
                         getCustomerCurrencyIdDeferred.reject(error);
                     });
                     getCountryChanges().then(function () {
-						getCountryChangesDeferred.resolve();
+                        getCountryChangesDeferred.resolve();
                     }).catch(function (error) {
-                    	getCountryChangesDeferred.reject(error, $scope);
+                        getCountryChangesDeferred.reject(error, $scope);
                     });
                 }
                 else {
-                	getCustomerCurrencyIdDeferred.resolve();
-                	getCountryChangesDeferred.resolve();
+                    getCustomerCurrencyIdDeferred.resolve();
+                    getCountryChangesDeferred.resolve();
                     VRNotificationService.showInformation($scope.selectedCustomer.Name + " is not assigned to a selling product");
                     $scope.selectedCustomer = undefined;
                 }
             });
 
             function validateCustomer() {
-            	return WhS_Sales_RatePlanAPIService.ValidateCustomer(customerId, new Date()).then(function (response) {
+                return WhS_Sales_RatePlanAPIService.ValidateCustomer(customerId, new Date()).then(function (response) {
                     isCustomerValid = response;
                 });
             }
             function getCustomerCurrencyId() {
-            	return WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(customerId).then(function (response) {
+                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(customerId).then(function (response) {
                     defaultCustomerCurrencyId = response;
                     currencySelectorAPI.selectedCurrency(response);
                 });
             }
             function getCountryChanges() {
-            	return WhS_Sales_RatePlanAPIService.GetCountryChanges(customerId).then(function (response) {
-            		countryChanges = response;
-            	});
+                return WhS_Sales_RatePlanAPIService.GetCountryChanges(customerId).then(function (response) {
+                    countryChanges = response;
+                });
             }
 
             return UtilsService.waitMultiplePromises(promises);
@@ -865,8 +850,7 @@
             showRatePlan(false);
             showActionBarButtons(false);
         }
-        function resetZoneLetters()
-        {
+        function resetZoneLetters() {
             $scope.zoneLetters.length = 0;
             $scope.connector.selectedZoneLetterIndex = 0;
         }
@@ -875,8 +859,7 @@
             $scope.showDefaultItem = show;
             $scope.showGrid = show;
         }
-        function showActionBarButtons(show)
-        {
+        function showActionBarButtons(show) {
             $scope.showSaveButton = show;
             $scope.showSettingsButton = show;
             $scope.showPricingButton = show;
@@ -897,8 +880,7 @@
                 clicked: applyDraft
             }];
         }
-        function applyDraft()
-        {
+        function applyDraft() {
             var promises = [];
 
             var saveChangesPromise = saveDraft(false);
@@ -907,8 +889,7 @@
             var createProcessDeferred = UtilsService.createPromiseDeferred();
             promises.push(createProcessDeferred.promise);
 
-            saveChangesPromise.then(function ()
-            {
+            saveChangesPromise.then(function () {
                 var inputArguments = {
                     $type: 'TOne.WhS.Sales.BP.Arguments.RatePlanInput, TOne.WhS.Sales.BP.Arguments',
                     OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
@@ -926,8 +907,8 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
 
                         var processTrackingContext = {
-                        	onClose: function () {
-                        		countryChanges = undefined;
+                            onClose: function () {
+                                countryChanges = undefined;
                                 loadRatePlan();
                             }
                         };

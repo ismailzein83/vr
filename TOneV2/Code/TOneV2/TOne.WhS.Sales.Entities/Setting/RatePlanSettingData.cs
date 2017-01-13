@@ -14,5 +14,8 @@ namespace TOne.WhS.Sales.Entities
 		public int IncreasedRateDayOffset { get; set; }
 
 		public int DecreasedRateDayOffset { get; set; }
+
+        public IEnumerable<CostCalculationMethod> CostCalculationsMethods { get; set; }
+
 	}
 }
