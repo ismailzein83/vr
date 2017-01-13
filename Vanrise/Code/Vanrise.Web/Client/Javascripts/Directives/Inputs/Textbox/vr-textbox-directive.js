@@ -114,10 +114,10 @@
                                 //    ctrl.value = oldValue;
                                 //if (iAttrs.allowndecimal == undefined && decimalArray.length > 1)
                                 //    ctrl.value = oldValue;
-                                if (decimalArray.length > 1 && ctrl.decimalprecision == 0)
-                                    ctrl.value = oldValue;
-                                if (negativeArray.length > 1 && ctrl.minvalue >= 0)
-                                    ctrl.value = oldValue;
+                                //if (decimalArray.length > 1 && ctrl.decimalprecision == 0)
+                                //    ctrl.value = oldValue;
+                                //if (negativeArray.length > 1 && ctrl.minvalue >= 0)
+                                //    ctrl.value = oldValue;
                                 if (decimalArray.length > 2)
                                     ctrl.value = oldValue;
                                 if (negativeArray.length > 2)
