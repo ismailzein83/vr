@@ -83,6 +83,7 @@
     <Compile Include="DataRetrieval\ConvertResultToExcelDataContext.cs" />
     <Compile Include="DataRetrieval\ExcelManager.cs" />
     <Compile Include="PasswordGenerator.cs" />
+    <Compile Include="PathResolver.cs" />
     <Compile Include="ServiceClientFactory.cs" />
     <Compile Include="ServiceHostManager.cs" />
     <Compile Include="VRClock.cs" />
