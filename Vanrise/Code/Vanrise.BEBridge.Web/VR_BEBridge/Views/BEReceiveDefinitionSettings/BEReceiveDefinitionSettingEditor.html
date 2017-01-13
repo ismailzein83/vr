@@ -1,10 +1,12 @@
-﻿<div vr-modalcontent ng-controller="VR_BEBridge_BEReceiveDefinitionSettingsEditorController" width="'40%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="VR_BEBridge_BEReceiveDefinitionSettingsEditorController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formBeReceiveDefinitionSettingsEditor">
             <vr-tabs>
-                <vr-tab header="'Settings'">
-                    <vr-bebridge-targetbesynchronizer-definition on-ready="scopeModel.onTargetSynchronizerDirectiveReady" normal-col-num="6"></vr-bebridge-targetbesynchronizer-definition>
-                    <vr-bebridge-targetbeconvertor-definition on-ready="scopeModel.onTargetConvertorDirectiveReady" normal-col-num="6"></vr-bebridge-targetbeconvertor-definition>
+                <vr-tab header="'Convertor'">
+                    <vr-bebridge-targetbeconvertor-definition on-ready="scopeModel.onTargetConvertorDirectiveReady" normal-col-num="3"></vr-bebridge-targetbeconvertor-definition>
+                </vr-tab>
+                <vr-tab header="'Synchronizer'">
+                    <vr-bebridge-targetbesynchronizer-definition on-ready="scopeModel.onTargetSynchronizerDirectiveReady" normal-col-num="3"></vr-bebridge-targetbesynchronizer-definition>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

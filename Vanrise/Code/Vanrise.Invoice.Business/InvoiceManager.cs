@@ -262,6 +262,12 @@ namespace Vanrise.Invoice.Business
             return billingInterval;
         }
 
+        public void LoadInvoicesAfterImportedId(Guid invoiceTypeId, long lastImportedId, Action<Entities.Invoice> onInvoiceReady)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            dataManager.LoadInvoicesAfterImportedId(invoiceTypeId, lastImportedId, onInvoiceReady);
+        }
+
         #endregion
 
         #region Mappers

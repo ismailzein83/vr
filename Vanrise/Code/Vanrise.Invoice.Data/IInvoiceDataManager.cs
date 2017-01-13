@@ -8,7 +8,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Data
 {
-    public interface IInvoiceDataManager:IDataManager
+    public interface IInvoiceDataManager : IDataManager
     {
         IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
         int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate);
@@ -18,5 +18,6 @@ namespace Vanrise.Invoice.Data
         bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
         bool SetInvoiceLocked(long invoiceId, DateTime? lockedDate);
         bool UpdateInvoiceNote(long invoiceId, string invoiceNote);
+        void LoadInvoicesAfterImportedId(Guid invoiceTypeId, long lastImportedId, Action<Entities.Invoice> onInvoiceReady);
     }
 }

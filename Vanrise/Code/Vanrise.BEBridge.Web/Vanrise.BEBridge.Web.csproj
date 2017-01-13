@@ -170,6 +170,8 @@
     <Content Include="VR_BEBridge\Directives\BERecieveDefinitionSetting\Templates\BeRecieveDefinitionGridSettingTemplate.html" />
     <Content Include="VR_BEBridge\Directives\BERecieveDefinitionSetting\vr-bebridge-bedefinition-settings-grid.js" />
     <Content Include="VR_BEBridge\Directives\MainExtensions\TargetBEConvertor\vr-bebridge-targetbeconvertor-definition.js" />
+    <Content Include="VR_BEBridge\Directives\MainExtensions\TargetBESynchronizer\Templates\DatabaseTargetSynchronizer.html" />
+    <Content Include="VR_BEBridge\Directives\MainExtensions\TargetBESynchronizer\vr-bebridge-synchronizer-database.js" />
     <Content Include="VR_BEBridge\Directives\MainExtensions\TargetBESynchronizer\vr-bebridge-targetbesynchronizer-definition.js" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\Templates\BEBridgeProcessManualTemplate.html" />
     <Content Include="VR_BEBridge\Directives\ProcessInput\Normal\vr-bebridge-process-manual.js" />

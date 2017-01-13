@@ -28,11 +28,11 @@
         function setTitle() {
             if (isEditMode) {
                 var receiveDefinitionName = (receveiveDEfinitionEntity != undefined) ? receveiveDEfinitionEntity.Name : null;
-                $scope.title = UtilsService.buildTitleForUpdateEditor(receiveDefinitionName, 'ReceiveDefinition');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(receiveDefinitionName, 'BE Bridge Definition');
 
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor('ReceiveDefinition');
+                $scope.title = UtilsService.buildTitleForAddEditor('BE Bridge Definition');
             }
         }
         function loadAllControls() {
@@ -95,7 +95,7 @@
         function update() {
             $scope.scopeModel.isLoading = true;
             return beRecieveDefinitionApiService.UpdateReceiveDefinition(buildStatusChargingSetObjFromScope()).then(function (response) {
-                if (vrNotificationService.notifyOnItemUpdated('ReceiveDefinition', response, 'Name')) {
+                if (vrNotificationService.notifyOnItemUpdated('BEBridgeDefinition', response, 'Name')) {
                     if ($scope.onReceiveDefinitionUpdated != undefined) {
                         $scope.onReceiveDefinitionUpdated(response.UpdatedObject);
                     }
@@ -110,7 +110,7 @@
         function insert() {
             $scope.scopeModel.isLoading = true;
             return beRecieveDefinitionApiService.AddReceiveDefinition(buildStatusChargingSetObjFromScope()).then(function (response) {
-                if (vrNotificationService.notifyOnItemAdded('ReceiveDefinition', response, 'Name')) {
+                if (vrNotificationService.notifyOnItemAdded('BEBridgeDefinition', response, 'Name')) {
                     if ($scope.onReceiveDefinitionAdded != undefined) {
                         $scope.onReceiveDefinitionAdded(response.InsertedObject);
                     }

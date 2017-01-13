@@ -14,7 +14,7 @@ app.directive('vrInvoiceReaderDirective', ['VRUIUtilsService', 'UtilsService',
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_Invoice/Directives/Extensions/InvoiceReader/Templates/InvoiceSourceReaderTemplate.html'
+            templateUrl: '/Client/Modules/VR_Invoice/Directives/Extensions/Invoice/Templates/InvoiceSourceReaderTemplate.html'
         };
 
         function invoiceSourceReader($scope, ctrl, $attrs) {

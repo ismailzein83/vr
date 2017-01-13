@@ -57,8 +57,8 @@ namespace Vanrise.BEBridge.BP.Activities
 
                         foreach (ITargetBE targetBe in targetBEs)
                         {
-                            ITargetBE existingBE;
-                            if (!existingTargetBEsBySourceId.TryGetValue(targetBe.SourceBEId, out existingBE))
+                            ITargetBE existingBE = null;
+                            if (targetBe.SourceBEId != null && !existingTargetBEsBySourceId.TryGetValue(targetBe.SourceBEId, out existingBE))
                             {
                                 TargetBETryGetExistingContext tryGetExistingContext = new TargetBETryGetExistingContext
                                 {
@@ -93,7 +93,8 @@ namespace Vanrise.BEBridge.BP.Activities
                             {
                                 targetsToInsert.Add(targetBe);
                                 totalInsertTargets++;
-                                existingTargetBEsBySourceId.Add(targetBe.SourceBEId, targetBe);
+                                if (targetBe.SourceBEId != null)
+                                    existingTargetBEsBySourceId.Add(targetBe.SourceBEId, targetBe);
                             }
                         }
                         if (totalInsertTargets > 0)

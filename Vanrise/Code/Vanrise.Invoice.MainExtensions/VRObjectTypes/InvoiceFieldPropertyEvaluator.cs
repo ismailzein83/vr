@@ -29,15 +29,18 @@ namespace Vanrise.Invoice.MainExtensions
 
             switch (this.InvoiceField)
             {
+                case Entities.InvoiceField.InvoiceId:
+                    return invoice.InvoiceId;
                 case InvoiceField.Partner:
-                    InvoiceTypeManager invoiceTypeManager= new InvoiceTypeManager();
+                    InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                     var invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
                     var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
-                    PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext{
+                    PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext
+                    {
                         PartnerId = invoice.PartnerId
                     };
                     return partnerSettings.GetPartnerName(partnerNameManagerContext);
-                            
+
                 case InvoiceField.DueDate:
                     return invoice.DueDate;
                 case InvoiceField.CreatedTime:
@@ -57,7 +60,7 @@ namespace Vanrise.Invoice.MainExtensions
                     return invoice.SerialNumber;
                 case InvoiceField.CustomField:
                     return invoice.Details.GetType().GetProperty(this.FieldName).GetValue(invoice.Details, null);//Utilities.GetPropValue(this.FieldName, invoice.Details);
-                    //    //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
+                //    //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
                 case InvoiceField.Paid:
                     return invoice.PaidDate;
                 default: return null;
