@@ -65,9 +65,7 @@
                 if (UtilsService.isContextReadOnly(modalScope) === true) {
                   
                     setTimeout(function () {
-                        $('.modal-header').eq($('.modal-dialog').length - 1).css({
-                            backgroundColor: "#969696"
-                        });
+                        $('.modal-header').eq($('.modal-dialog').length - 1).addClass('vr-modal-readonly');
                         $('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly', 'true');
                     }, 100);
                    

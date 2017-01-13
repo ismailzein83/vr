@@ -162,6 +162,9 @@
     background-color: #6b7892 !important;
     color: #FFF;
 }
+.vr-modal-readonly {    
+    background-color: #969696 !important;
+}
 .action-bar {
     background-color: #37b0e6;   
 }
