@@ -492,7 +492,7 @@ namespace TOne.WhS.Sales.Business
                 Func<IEnumerable<ZoneItem>> buildZoneItems = () =>
                     {
                         RatePlanManager ratePlanManager = new RatePlanManager();
-                        return ratePlanManager.BuildZoneItems(input.OwnerType, input.OwnerId, filteredSaleZones, input.BulkAction, draftData, input.RoutingDatabaseId,
+                        return ratePlanManager.BuildZoneItems(input.OwnerType, input.OwnerId, filteredSaleZones, null, draftData, input.RoutingDatabaseId,
                             input.CurrencyId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods);
                     };
 

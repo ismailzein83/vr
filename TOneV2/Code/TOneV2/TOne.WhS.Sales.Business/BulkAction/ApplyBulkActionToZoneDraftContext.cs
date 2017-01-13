@@ -40,10 +40,12 @@ namespace TOne.WhS.Sales.Business
                 //Structure them in the local dic
             }
 
-            if (!this._zoneItemsByZoneId.ContainsKey(zoneId))
+            ZoneItem zoneItem = null;
+
+            if (!this._zoneItemsByZoneId.TryGetValue(zoneId, out zoneItem))
                 throw new DataIntegrityValidationException(string.Format("Missing sale zone with Id {0}", zoneId));
 
-            return this._zoneItemsByZoneId[zoneId];
+            return zoneItem;
         }
     }
 }
