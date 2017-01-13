@@ -17,7 +17,7 @@ namespace Vanrise.BEBridge.Business
         public string ConnectionString { get; set; }
         public VRExpression Query { get; set; }
         public VRObjectVariableCollection Objects { get; set; }
-
+      
         #region Public Methods
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
@@ -31,7 +31,7 @@ namespace Vanrise.BEBridge.Business
             {
                 InvoiceTargetBE targetBe = targetInvoice as InvoiceTargetBE;
                 VRObjectExpressionEvaluator evaluator = new VRObjectExpressionEvaluator(Objects, targetBe.TargetObjects);
-                VRObjectExpressionEvaluatorManager evaluatorManager = new VRObjectExpressionEvaluatorManager();
+                VRRazorEvaluator evaluatorManager = new VRRazorEvaluator();
                 queryBuilder.AppendLine(evaluatorManager.EvaluateExpression(Query, evaluator));
             }
             using (SqlConnection connection = new SqlConnection(ConnectionString))
