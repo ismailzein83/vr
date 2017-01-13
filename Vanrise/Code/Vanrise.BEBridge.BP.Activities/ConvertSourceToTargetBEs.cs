@@ -15,6 +15,7 @@ namespace Vanrise.BEBridge.BP.Activities
         public TargetBEConvertor TargetConverter { get; set; }
         public TargetBESynchronizer TargetBeSynchronizer { get; set; }
         public BaseQueue<BatchProcessingContext> BatchProcessingContextQueue { get; set; }
+        public TargetBESynchronizerInitializeContext SynchronizerInitializeContext { get; set; }
         public BaseQueue<BatchProcessingContext> OutputQueue { get; set; }
 
     }
@@ -27,13 +28,15 @@ namespace Vanrise.BEBridge.BP.Activities
         [RequiredArgument]
         public InArgument<BaseQueue<BatchProcessingContext>> BatchProcessingContextQueue { get; set; }
         [RequiredArgument]
+        public InArgument<TargetBESynchronizerInitializeContext> SynchronizerInitializeContext { get; set; }
+        [RequiredArgument]
         public OutArgument<BaseQueue<BatchProcessingContext>> OutputQueue { get; set; }
 
         protected override void DoWork(ConvertSourceToTargetBEsInput inputArgument,
             AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            var synchronizerInitializeDataContext = new TargetBESynchronizerInitializeContext();
-            inputArgument.TargetBeSynchronizer.Initialize(synchronizerInitializeDataContext);
+            //var synchronizerInitializeDataContext = new TargetBESynchronizerInitializeContext();
+            //inputArgument.TargetBeSynchronizer.Initialize(synchronizerInitializeDataContext);
             Dictionary<Object, ITargetBE> existingTargetBEsBySourceId = new Dictionary<object, ITargetBE>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -62,7 +65,7 @@ namespace Vanrise.BEBridge.BP.Activities
                             {
                                 TargetBETryGetExistingContext tryGetExistingContext = new TargetBETryGetExistingContext
                                 {
-                                    InitializationData = synchronizerInitializeDataContext.InitializationData,
+                                    InitializationData = inputArgument.SynchronizerInitializeContext.InitializationData,
                                     SourceBEId = targetBe.SourceBEId
                                 };
                                 if (inputArgument.TargetBeSynchronizer.TryGetExistingBE(tryGetExistingContext))
@@ -117,6 +120,7 @@ namespace Vanrise.BEBridge.BP.Activities
                 TargetConverter = this.TargetConverter.Get(context),
                 TargetBeSynchronizer = this.TargetBeSynchronizer.Get(context),
                 BatchProcessingContextQueue = this.BatchProcessingContextQueue.Get(context),
+                SynchronizerInitializeContext = this.SynchronizerInitializeContext.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
@@ -146,14 +150,7 @@ namespace Vanrise.BEBridge.BP.Activities
             }
         }
 
-        private class TargetBESynchronizerInitializeContext : ITargetBESynchronizerInitializeContext
-        {
-            public object InitializationData
-            {
-                get;
-                set;
-            }
-        }
+
 
 
         private class TargetBETryGetExistingContext : ITargetBESynchronizerTryGetExistingBEContext

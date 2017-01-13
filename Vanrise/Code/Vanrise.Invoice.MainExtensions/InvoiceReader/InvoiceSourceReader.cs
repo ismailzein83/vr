@@ -23,8 +23,8 @@ namespace Vanrise.Invoice.MainExtensions.InvoiceReader
             invoiceManager.LoadInvoicesAfterImportedId(Setting.InvoiceTypeId, state.LastImportedInvoiceId, (invoice) =>
             {
                 invoices.Add(invoice);
-                state.LastImportedInvoiceId++;
-                if (invoices.Count > Setting.BatchSize)
+                state.LastImportedInvoiceId = invoice.InvoiceId;
+                if (invoices.Count >= Setting.BatchSize)
                 {
                     InvoiceSourceBatch batch = new InvoiceSourceBatch
                     {
@@ -35,7 +35,7 @@ namespace Vanrise.Invoice.MainExtensions.InvoiceReader
                 }
             });
 
-            if (invoices.Count > Setting.BatchSize)
+            if (invoices.Count > 0)
             {
                 InvoiceSourceBatch batch = new InvoiceSourceBatch
                 {

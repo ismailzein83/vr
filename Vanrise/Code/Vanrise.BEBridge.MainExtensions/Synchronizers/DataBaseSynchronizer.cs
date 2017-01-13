@@ -1,38 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Data.SqlClient;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BEBridge.Entities;
-using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-using System.IO;
-using System.Data.SqlClient;
+using Vanrise.Entities;
 
-namespace Vanrise.BEBridge.Business
+namespace Vanrise.BEBridge.MainExtensions.Synchronizers
 {
     public class DatabaseSynchronizer : TargetBESynchronizer
     {
         public string ConnectionString { get; set; }
-        public VRExpression Query { get; set; }
+        public VRExpression InsertQueryTemplate { get; set; }
         public VRObjectVariableCollection Objects { get; set; }
-      
+        static VRRazorEvaluator s_evaluator;
         #region Public Methods
+        public override void Initialize(ITargetBESynchronizerInitializeContext context)
+        {
+            s_evaluator = new VRRazorEvaluator();
+            context.InitializationData = s_evaluator.CompileExpression(this.InsertQueryTemplate);
+        }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
             return false;
         }
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
+            VRRazorCompilationOutput output = context.InitializationData as VRRazorCompilationOutput;
             context.TargetBE.ThrowIfNull("context.TargetBE", "");
             StringBuilder queryBuilder = new StringBuilder();
             foreach (var targetInvoice in context.TargetBE)
             {
                 InvoiceTargetBE targetBe = targetInvoice as InvoiceTargetBE;
-                VRObjectExpressionEvaluator evaluator = new VRObjectExpressionEvaluator(Objects, targetBe.TargetObjects);
-                VRRazorEvaluator evaluatorManager = new VRRazorEvaluator();
-                queryBuilder.AppendLine(evaluatorManager.EvaluateExpression(Query, evaluator));
+                queryBuilder.AppendLine(s_evaluator.EvaluateExpression(output.CompiledExpressionKey, Objects, targetBe.TargetObjects));
             }
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -53,5 +52,4 @@ namespace Vanrise.BEBridge.Business
         #endregion
 
     }
-
 }

@@ -54,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BEReceiveDefinitionManager.cs" />
-    <Compile Include="Synchronizers\DataBaseSynchronizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

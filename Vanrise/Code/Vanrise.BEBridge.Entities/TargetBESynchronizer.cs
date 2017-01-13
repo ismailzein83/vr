@@ -40,6 +40,7 @@ namespace Vanrise.BEBridge.Entities
     public interface ITargetBESynchronizerInsertBEsContext
     {
         List<ITargetBE> TargetBE { get; }
+        Object InitializationData { get; }
     }
 
     public interface ITargetBESynchronizerUpdateBEsContext

@@ -12,12 +12,15 @@ namespace Vanrise.BEBridge.BP.Activities
     public class UpdateTargetBEsInput
     {
         public TargetBESynchronizer TargetBESynchronizer { get; set; }
+        public TargetBESynchronizerInitializeContext SynchronizerInitializeContext { get; set; }
         public BaseQueue<BatchProcessingContext> BatchProcessingContextQueue { get; set; }
     }
     public sealed class SaveTargetBEs : DependentAsyncActivity<UpdateTargetBEsInput>
     {
         [RequiredArgument]
         public InArgument<TargetBESynchronizer> TargetBESynchronizer { get; set; }
+        [RequiredArgument]
+        public InArgument<TargetBESynchronizerInitializeContext> SynchronizerInitializeContext { get; set; }
         [RequiredArgument]
         public InArgument<BaseQueue<BatchProcessingContext>> BatchProcessingContextQueue { get; set; }
         protected override void DoWork(UpdateTargetBEsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
@@ -29,11 +32,12 @@ namespace Vanrise.BEBridge.BP.Activities
                 {
                     hasItem = inputArgument.BatchProcessingContextQueue.TryDequeue((batchProcessingContext) =>
                     {
-                        TargetSynchronizerInsertContext insertContext = new TargetSynchronizerInsertContext();
+                        TargetSynchronizerInsertContext insertContext = new TargetSynchronizerInsertContext { InitializationData = inputArgument.SynchronizerInitializeContext.InitializationData };
                         TargetSynchronizerUpdateContext updateContext = new TargetSynchronizerUpdateContext();
                         batchProcessingContext.SaveTargetBEs((targetsToInsert) =>
                         {
                             insertContext.TargetBE = targetsToInsert;
+
                             inputArgument.TargetBESynchronizer.InsertBEs(insertContext);
                             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} {1} Inserted.", insertContext.TargetBE.Count, inputArgument.TargetBESynchronizer.Name);
                         }, (targetsToUpdate) =>
@@ -52,7 +56,8 @@ namespace Vanrise.BEBridge.BP.Activities
             return new UpdateTargetBEsInput
             {
                 TargetBESynchronizer = this.TargetBESynchronizer.Get(context),
-                BatchProcessingContextQueue = this.BatchProcessingContextQueue.Get(context)
+                BatchProcessingContextQueue = this.BatchProcessingContextQueue.Get(context),
+                SynchronizerInitializeContext = this.SynchronizerInitializeContext.Get(context)
             };
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
@@ -67,6 +72,13 @@ namespace Vanrise.BEBridge.BP.Activities
         private class TargetSynchronizerInsertContext : ITargetBESynchronizerInsertBEsContext
         {
             public List<ITargetBE> TargetBE
+            {
+                get;
+                set;
+            }
+
+
+            public object InitializationData
             {
                 get;
                 set;
