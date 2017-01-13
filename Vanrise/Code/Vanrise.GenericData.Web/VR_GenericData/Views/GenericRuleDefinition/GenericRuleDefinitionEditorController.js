@@ -22,7 +22,7 @@
 
         var criteriaDirectiveAPI;
         var criteriaDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-        
+
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -143,7 +143,7 @@
                 }
                 $scope.scopeModel.name = genericRuleDefinitionEntity.Name;
                 $scope.scopeModel.title = genericRuleDefinitionEntity.Title;
-            }          
+            }
             function loadObjectDirective() {
                 var objectDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -152,14 +152,8 @@
 
                     if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
 
-                        var objects = [];
-                        for (var key in genericRuleDefinitionEntity.Objects) {
-                            if (key != "$type")
-                                objects.push(genericRuleDefinitionEntity.Objects[key]);
-                        }
-
                         objectDirectivePayload = {
-                            objects: objects
+                            objects: genericRuleDefinitionEntity.Objects
                         };
                     }
 
@@ -180,7 +174,7 @@
 
                     VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriaDirectivePayload, criteriaDirectiveLoadDeferred);
                 });
-                
+
                 return criteriaDirectiveLoadDeferred.promise;
             }
             function loadSettingsDirective() {
@@ -251,22 +245,22 @@
         }
 
         function insert() {
-           $scope.isLoading = true;
+            $scope.isLoading = true;
 
-          return VR_GenericData_GenericRuleDefinitionAPIService.AddGenericRuleDefinition(buildGenericRuleDefinitionObjectFromScope())
-           .then(function (response) {
-               if (VRNotificationService.notifyOnItemAdded('Generic Rule Definition', response, 'Name')) {
-                   if ($scope.onGenericRuleDefinitionAdded != undefined && typeof ($scope.onGenericRuleDefinitionAdded) == 'function') {
-                       $scope.onGenericRuleDefinitionAdded(response.InsertedObject);
-                   }
-                   $scope.modalContext.closeModal();
-               }
-           }).catch(function (error) {
-               VRNotificationService.notifyException(error, $scope);
-           }).finally(function () {
-               $scope.isLoading = false;
+            return VR_GenericData_GenericRuleDefinitionAPIService.AddGenericRuleDefinition(buildGenericRuleDefinitionObjectFromScope())
+             .then(function (response) {
+                 if (VRNotificationService.notifyOnItemAdded('Generic Rule Definition', response, 'Name')) {
+                     if ($scope.onGenericRuleDefinitionAdded != undefined && typeof ($scope.onGenericRuleDefinitionAdded) == 'function') {
+                         $scope.onGenericRuleDefinitionAdded(response.InsertedObject);
+                     }
+                     $scope.modalContext.closeModal();
+                 }
+             }).catch(function (error) {
+                 VRNotificationService.notifyException(error, $scope);
+             }).finally(function () {
+                 $scope.isLoading = false;
 
-           });
+             });
         }
 
         function update() {
@@ -304,7 +298,7 @@
                 Objects: objectDirectiveAPI.getData(),
                 Security: {
                     ViewRequiredPermission: viewPermissionAPI.getData(),
-                    AddRequiredPermission:  addPermissionAPI.getData(),
+                    AddRequiredPermission: addPermissionAPI.getData(),
                     EditRequiredPermission: editPermissionAPI.getData()
                 }
             };

@@ -99,16 +99,8 @@
                 var objectDirectivePayload;
 
                 if (mailMessageTypeEntity != undefined && mailMessageTypeEntity.Settings != undefined && mailMessageTypeEntity.Settings.Objects != undefined) {
-
-                    var settings = mailMessageTypeEntity.Settings;
-                    var objects = [];
-                    for (var key in settings.Objects) {
-                        if (key != "$type")
-                            objects.push(settings.Objects[key]);
-                    }
-
                     objectDirectivePayload = {
-                        objects: objects
+                        objects: mailMessageTypeEntity.Settings.Objects
                     };
                 }
 

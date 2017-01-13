@@ -2,13 +2,14 @@
 
     'use strict';
 
-    VRObjectVariableManagementDirective.$inject = ['VRCommon_VRObjectVariableService', 'VRCommon_VRObjectTypeDefinitionAPIService', 'UtilsService', 'VRNotificationService'];
+    VRObjectVariableManagementDirective.$inject = ['VRCommon_VRObjectVariableService', 'VRCommon_VRObjectTypeDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function VRObjectVariableManagementDirective(VRCommon_VRObjectVariableService, VRCommon_VRObjectTypeDefinitionAPIService, UtilsService, VRNotificationService) {
+    function VRObjectVariableManagementDirective(VRCommon_VRObjectVariableService, VRCommon_VRObjectTypeDefinitionAPIService, UtilsService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
                 onReady: '=',
+                enableadd: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -33,19 +34,23 @@
             var gridAPI;
             var objectTypeConfigs;
             var VRObjectTypeDefinitionsInfo; // used to map VRObjectTypeId to VRObjectTypeName for the grid ObjectType column 
+            var drillDownManager;
 
             function initializeController() {
                 ctrl.objectVariables = [];
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
+                    drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, [], true);
                     defineAPI();
                 };
 
                 ctrl.onAddObjectVariable = function () {
                     var onObjectVariableAdded = function (addedObjectVariable) {
-                        extendObjectVariableObject(addedObjectVariable);
+
                         ctrl.objectVariables.push(addedObjectVariable);
+                        drillDownManager.setDrillDownExtensionObject(addedObjectVariable);
+                        extendObjectVariableObject(addedObjectVariable);
                     };
                     VRCommon_VRObjectVariableService.addVRObjectVariable(ctrl.objectVariables, onObjectVariableAdded);
                 };
@@ -67,10 +72,13 @@
                     return loadVRObjectTypeDefinitionsInfo().then(function () {
                         var objectVariable;
                         if (payload != undefined && payload.objects != undefined) {
-                            for (var i = 0; i < payload.objects.length; i++) {
-                                objectVariable = payload.objects[i];
-                                extendObjectVariableObject(objectVariable);
-                                ctrl.objectVariables.push(objectVariable);
+                            for (var key in payload.objects) {
+                                if (key != "$type") {
+                                    objectVariable = payload.objects[key];
+                                    ctrl.objectVariables.push(objectVariable);
+                                    drillDownManager.setDrillDownExtensionObject(objectVariable);
+                                    extendObjectVariableObject(objectVariable);
+                                }
                             }
                         }
                     });
@@ -81,7 +89,7 @@
                         return VRCommon_VRObjectTypeDefinitionAPIService.GetVRObjectTypeDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                             VRObjectTypeDefinitionsInfo = [];
                             if (response != null) {
-                                for (var i = 0; i < response.length; i++) 
+                                for (var i = 0; i < response.length; i++)
                                     VRObjectTypeDefinitionsInfo.push(response[i]);
                             }
                         });
@@ -116,6 +124,31 @@
                 }
             }
 
+            function buildDrillDownTabs() {
+                var drillDownTabs = [];
+
+                drillDownTabs.push(buildObjectTypePropertiesTab());
+
+                function buildObjectTypePropertiesTab() {
+                    var objectTypePropertiesTab = {};
+
+                    objectTypePropertiesTab.title = 'Properties';
+                    objectTypePropertiesTab.directive = 'vr-common-objecttypeproperty-grid';
+
+                    objectTypePropertiesTab.loadDirective = function (objectTypePropertyGridAPI, objectType) {
+                        objectType.objectTypePropertyGridAPI = objectTypePropertyGridAPI;
+                        var objectTypePropertyGridPayload = {
+                            objectVariable: objectType
+                        };
+                        return objectType.objectTypePropertyGridAPI.load(objectTypePropertyGridPayload);
+                    };
+
+                    return objectTypePropertiesTab;
+                }
+
+                return drillDownTabs;
+            }
+
             function defineMenuActions() {
                 ctrl.menuActions = [{
                     name: 'Edit',
@@ -128,6 +161,7 @@
                     var index = UtilsService.getItemIndexByVal(ctrl.objectVariables, objectVariable.ObjectName, 'ObjectName');
                     extendObjectVariableObject(updatedObjectVariable);
                     ctrl.objectVariables[index] = updatedObjectVariable;
+                    drillDownManager.setDrillDownExtensionObject(updatedObjectVariable);
                 };
                 VRCommon_VRObjectVariableService.editVRObjectVariable(objectVariable, ctrl.objectVariables, onObjectVariableUpdated);
             }
@@ -147,7 +181,6 @@
         }
 
     }
-    
 
     app.directive('vrCommonObjectvariableManagement', VRObjectVariableManagementDirective);
 

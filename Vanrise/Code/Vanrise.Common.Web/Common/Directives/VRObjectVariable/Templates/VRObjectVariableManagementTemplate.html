@@ -1,5 +1,5 @@
 ﻿<div>
-    <vr-row removeline>
+    <vr-row removeline ng-if="ctrl.enableadd">
         <vr-columns width="fullrow" simplecol>
             <vr-button type="Add" data-onclick="ctrl.onAddObjectVariable" standalone></vr-button>
         </vr-columns>
@@ -14,6 +14,9 @@
                          hidegridmenu>
                 <vr-datagridcolumn headertext="'Object Name'" type="'Text'" field="'ObjectName'" widthfactor="5" disablesorting></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Object Type'" type="'Text'" field="'ObjectTypeName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridexpandablerow>
+                    <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+                </vr-datagridexpandablerow>
             </vr-datagrid>
         </vr-columns>
     </vr-row>
