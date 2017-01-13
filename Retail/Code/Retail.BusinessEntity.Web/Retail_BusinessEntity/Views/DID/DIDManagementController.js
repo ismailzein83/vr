@@ -37,7 +37,7 @@
 
         function buildGridQuery() {
             return {
-                Number: $scope.scopeModel.Number
+                Number: $scope.scopeModel.number
             };
         }
     }
