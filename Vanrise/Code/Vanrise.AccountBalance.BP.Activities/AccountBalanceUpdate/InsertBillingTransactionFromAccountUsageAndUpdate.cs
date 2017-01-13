@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Data;
 using Vanrise.BusinessProcess;
 namespace Vanrise.AccountBalance.BP.Activities

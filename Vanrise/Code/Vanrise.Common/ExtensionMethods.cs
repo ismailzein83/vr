@@ -402,6 +402,17 @@ namespace Vanrise.Common
                 throw new NullReferenceException(string.Format("{0} '{1}'", objectName, id));
         }
 
+
+
+        public static T CastWithValidate<T>(this Object obj, string objectName, object id = null) where T : class
+        {
+            obj.ThrowIfNull(objectName, id);
+            T castedObject = obj as T;
+            if (castedObject == null)
+                throw new Exception(String.Format("{0} '{1}' is not of type {2}. it is of type {3}", objectName, id, typeof(T), obj.GetType()));
+            return castedObject;
+        }
+
         #endregion
     }
 }

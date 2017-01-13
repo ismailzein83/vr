@@ -25,7 +25,7 @@ namespace Vanrise.AccountBalance.BP.Activities
         {
             Guid accountTypeId = AccountTypeId.Get(context);
             context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Load Next Balance Closing Date.");
-            AccountTypeManager accountTypeManager = new AccountBalance.AccountTypeManager();
+            AccountTypeManager accountTypeManager = new AccountTypeManager();
             IClosingPeriodDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IClosingPeriodDataManager>();
             var lastClosingPeriod = dataManager.GetLastClosingPeriod(accountTypeId);
 

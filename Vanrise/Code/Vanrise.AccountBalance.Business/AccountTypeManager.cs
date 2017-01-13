@@ -8,7 +8,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
-namespace Vanrise.AccountBalance
+namespace Vanrise.AccountBalance.Business
 {
     public class AccountTypeManager
     {
