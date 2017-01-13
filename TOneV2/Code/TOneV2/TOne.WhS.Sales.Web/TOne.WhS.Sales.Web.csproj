@@ -162,6 +162,7 @@
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\vr-whs-sales-bulkaction-step-filter.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\vr-whs-sales-bulkaction-step-action.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\vr-whs-sales-bulkaction-step-preview.js" />
+    <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionTypeSelectiveTemplate.html" />
     <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-bulkaction-zonefilter-selective.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-bulkaction-type-selective.js" />
     <Content Include="WhS_Sales\Directives\Country\Templates\SoldCountryGridTemplate.html" />
