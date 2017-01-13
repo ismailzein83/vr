@@ -7,18 +7,12 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
-	public class RateBulkAction : BulkActionType
+	public class EEDBulkActionType : BulkActionType
 	{
 		public override Guid ConfigId
 		{
-			get { return new Guid("A893F3C6-D4BF-4C60-BA7D-2A773791D7BD"); }
+			get { return new Guid("736034AB-115F-464B-919D-052EBFDEDD5C"); }
 		}
-
-		public Guid? RateCalculationCostColumnConfigId { get; set; }
-
-		public RateCalculationMethod RateCalculationMethod { get; set; }
-
-		public bool OverrideDraftNewRate { get; set; }
 
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{
@@ -32,7 +26,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
 		public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
 		{
-			ZoneItem zoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
+			throw new NotImplementedException();
 		}
 	}
 }

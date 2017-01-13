@@ -43,7 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkActions\ActionTypes\BEDBulkActionType.cs" />
+    <Compile Include="BulkActions\ActionTypes\EEDBulkActionType.cs" />
     <Compile Include="BulkActions\ActionTypes\RateBulkAction.cs" />
+    <Compile Include="BulkActions\ActionTypes\RoutingProductBulkActionType.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\AllApplicableZones.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\SpecificApplicableZones.cs" />
     <Compile Include="CostCalculation\AvgCostCalculation.cs" />
