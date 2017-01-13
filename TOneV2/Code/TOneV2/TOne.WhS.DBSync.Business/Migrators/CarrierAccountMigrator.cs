@@ -136,8 +136,6 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceItem.AccountType == SourceAccountType.Client || sourceItem.AccountType == SourceAccountType.Exchange)
                     carrierAccountCustomerSettings.IsAToZ = sourceItem.IsAToZ;
 
-                carrierAccountSettings.Mask = sourceItem.CarrierMask;
-               
                 if (sourceItem.NominalCapacityInE1s.HasValue)
                     carrierAccountSettings.NominalCapacity = sourceItem.NominalCapacityInE1s.Value;
 

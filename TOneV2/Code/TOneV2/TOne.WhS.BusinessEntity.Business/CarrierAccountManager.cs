@@ -589,8 +589,8 @@ namespace TOne.WhS.BusinessEntity.Business
             if (caSettings == null)
                 throw new MissingArgumentValidationException("CarrierAccount.CarrierAccountSettings");
 
-            if (String.IsNullOrWhiteSpace(caSettings.Mask))
-                throw new MissingArgumentValidationException("CarrierAccount.CarrierAccountSettings.Mask");
+            //if (String.IsNullOrWhiteSpace(caSettings.Mask))
+            //    throw new MissingArgumentValidationException("CarrierAccount.CarrierAccountSettings.Mask");
 
             var currencyManager = new CurrencyManager();
             Currency currency = currencyManager.GetCurrency(caSettings.CurrencyId);
