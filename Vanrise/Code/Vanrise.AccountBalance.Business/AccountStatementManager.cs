@@ -144,16 +144,14 @@ namespace Vanrise.AccountBalance.Business
                 IAccountUsageDataManager accountUsageDataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
                 var pendingAccountUsages = accountUsageDataManager.GetPendingAccountUsages(accountTypeId, accountId);
                 AccountStatementItem accountStatementItem = new AccountStatementItem();
-                var trasactionId = accountTypeManager.GetUsageTransactionTypeId(accountTypeId);
-                var transactionType = billingTransactionTypeManager.GetBillingTransactionType(trasactionId); 
                 accountStatementItem.Description = "Live usage";
-                bool isCredit = transactionType.IsCredit;
                 if(pendingAccountUsages ==null ||pendingAccountUsages.Count() == 0)
                     return null;
                 foreach(var pendingAccountUsage in pendingAccountUsages)
                 {
+                    var transactionType = billingTransactionTypeManager.GetBillingTransactionType(pendingAccountUsage.TransactionTypeId); 
                     var amount = pendingAccountUsage.CurrencyId != currencyId ? currencyExchangeRateManager.ConvertValueToCurrency(pendingAccountUsage.UsageBalance, pendingAccountUsage.CurrencyId, currencyId, pendingAccountUsage.PeriodEnd) : pendingAccountUsage.UsageBalance;
-                    if(isCredit)
+                    if (transactionType.IsCredit)
                     {
                         if (!accountStatementItem.Credit.HasValue)
                             accountStatementItem.Credit = 0;

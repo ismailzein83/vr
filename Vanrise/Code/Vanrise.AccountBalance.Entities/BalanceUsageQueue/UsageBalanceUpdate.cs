@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Entities
     {
         static UsageBalanceUpdate()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(UsageBalanceUpdate), "AccountId", "Value", "CurrencyId", "EffectiveOn");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(UsageBalanceUpdate),  "AccountId", "Value", "CurrencyId", "EffectiveOn");
         }
         public long AccountId { get; set; }
         public DateTime EffectiveOn { get; set; }

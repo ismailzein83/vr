@@ -66,7 +66,7 @@ namespace Vanrise.AccountBalance.BP.Activities
         {
             if(balanceUsageQueue.UsageDetails != null && balanceUsageQueue.UsageDetails.UsageBalanceUpdates != null)
             {
-                acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, balanceUsageQueue.UsageDetails.UsageBalanceUpdates);
+                acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, balanceUsageQueue.UsageDetails.TransactionTypeId,balanceUsageQueue.UsageDetails.UsageBalanceUpdates);
             }
         }
     }

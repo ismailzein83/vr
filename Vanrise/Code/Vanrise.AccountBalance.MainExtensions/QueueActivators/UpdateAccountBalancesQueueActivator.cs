@@ -17,7 +17,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
         public string EffectiveOn { get; set; }
         public string Amount { get; set; }
         public string CurrencyId { get; set; }
-
+        public Guid TransactionTypeId { get; set; }
 
         public override void ProcessItem(Queueing.Entities.IQueueActivatorExecutionContext context)
         {
@@ -30,7 +30,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
             BalanceUsageDetail balanceUsageDetail = new BalanceUsageDetail();
             balanceUsageDetail.UsageBalanceUpdates = new List<UsageBalanceUpdate>();
-
+            balanceUsageDetail.TransactionTypeId = this.TransactionTypeId;
             foreach (var record in batchRecords)
             {
                 decimal? amount = Vanrise.Common.Utilities.GetPropValueReader(this.Amount).GetPropertyValue(record);

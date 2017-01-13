@@ -4,7 +4,12 @@
                                             selectedvalues="scopeModel.selectedAccountType"
                                             isrequired="true">
     </vr-accountbalance-accounttype-selector>
-
+    <vr-columns width="1/3row">
+        <vr-accountbalance-billingtransactiontype-selector  on-ready="scopeModel.onBillingTransactionTypeSelectorReady"
+                                                           selectedvalues="scopeModel.selectedBillingTransactionType"
+                                                           isrequired="true">
+        </vr-accountbalance-billingtransactiontype-selector>
+    </vr-columns>
     <vr-columns width="fullrow">
         <vr-row>
             <vr-columns width="fullrow" vr-loader="scopeModel.isGridLoading">

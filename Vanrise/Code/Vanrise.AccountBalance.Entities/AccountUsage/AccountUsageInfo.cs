@@ -10,5 +10,6 @@ namespace Vanrise.AccountBalance.Entities
     {
         public long AccountUsageId { get; set; }
         public long AccountId { get; set; }
+        public Guid TransactionTypeId { get; set; }
     }
 }

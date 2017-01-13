@@ -36,6 +36,9 @@
             var accountTypeSelectorAPI;
             var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var billingTransactionTypeSelectorAPI;
+            var billingTransactionTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var gridAPI;
 
             function initializeController() {
@@ -44,6 +47,10 @@
                 $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
                     accountTypeSelectorAPI = api;
                     accountTypeSelectorReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onBillingTransactionTypeSelectorReady = function (api) {
+                    billingTransactionTypeSelectorAPI = api;
+                    billingTransactionTypeSelectorReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.ongridReady = function (api) {
@@ -59,6 +66,7 @@
                     var promises = [];
 
                     var accountTypeId;
+                    var transactionTypeId
                     var accountId;
                     var effectiveOn;
                     var amount;
@@ -69,6 +77,7 @@
                         dataRecordTypeId = payload.DataRecordTypeId;
 
                         if (payload.QueueActivator != undefined) {
+                            transactionTypeId = payload.QueueActivator.TransactionTypeId;
                             accountTypeId = payload.QueueActivator.AccountTypeId;
                             accountId = payload.QueueActivator.AccountId;
                             effectiveOn = payload.QueueActivator.EffectiveOn;
@@ -79,6 +88,9 @@
 
                     var accountTypeSelectorLoadPromise = getAccountTypeSelectorLoadPromise();
                     promises.push(accountTypeSelectorLoadPromise);
+
+                    var billingTransactionTypeSelectorLoadPromise = getBillingTransactionTypeSelectorLoadPromise();
+                    promises.push(billingTransactionTypeSelectorLoadPromise);
 
                     var gridLoadPromise = getGridLoadPromise();
                     promises.push(gridLoadPromise);
@@ -105,6 +117,23 @@
                             $scope.scopeModel.isAccountTypeSelectorLoading = false;
                         });;
                     }
+
+                    function getBillingTransactionTypeSelectorLoadPromise() {
+                        var billingTransactionTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        billingTransactionTypeSelectorReadyDeferred.promise.then(function () {
+                            var billingTransactionTypeSelectorPayload;
+                            if (transactionTypeId != undefined) {
+                                billingTransactionTypeSelectorPayload = {
+                                    selectedIds: transactionTypeId
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(billingTransactionTypeSelectorAPI, billingTransactionTypeSelectorPayload, billingTransactionTypeLoadDeferred);
+                        });
+
+                        return billingTransactionTypeLoadDeferred.promise;
+                    }
+
                     function getGridLoadPromise() {
                         var promises = [];
 
@@ -168,7 +197,8 @@
                         AccountId: accountId,
                         EffectiveOn: effeciveOn,
                         Amount: amount,
-                        CurrencyId: currencyId
+                        CurrencyId: currencyId,
+                        TransactionTypeId: $scope.scopeModel.selectedBillingTransactionType.Id
                     };
                 };
 

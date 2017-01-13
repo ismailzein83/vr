@@ -58,7 +58,7 @@ namespace Vanrise.AccountBalance.BP.Activities
                 var billingTransactionBatch = new BillingTransactionBatch() { BillingTransactions = list };
                 inputArgument.OutputQueue.Enqueue(billingTransactionBatch);
             }
-            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading New Billing Transactions.");
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading {0} New Billing Transactions.",list.Count()));
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {

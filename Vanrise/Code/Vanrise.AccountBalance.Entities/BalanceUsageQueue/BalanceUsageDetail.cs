@@ -11,8 +11,9 @@ namespace Vanrise.AccountBalance.Entities
         static BalanceUsageDetail()
         {
             new Entities.UsageBalanceUpdate();
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BalanceUsageDetail), "UsageBalanceUpdates");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BalanceUsageDetail),"TransactionTypeId", "UsageBalanceUpdates");
         }
         public List<UsageBalanceUpdate> UsageBalanceUpdates { get; set; }
+        public Guid TransactionTypeId { get; set; }
     }
 }

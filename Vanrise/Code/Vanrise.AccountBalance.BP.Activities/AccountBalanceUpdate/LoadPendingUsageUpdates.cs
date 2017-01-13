@@ -40,7 +40,7 @@ namespace Vanrise.AccountBalance.BP.Activities
             dataManager.LoadUsageBalanceUpdate(inputArgument.AccountTypeId, (balanceUsageQueue) =>
             {
                 inputArgument.OutputQueue.Enqueue(balanceUsageQueue);
-                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "New Billing Transactions loaded.");
+                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("{0} New Pending Usage loaded.", balanceUsageQueue.UsageDetails.UsageBalanceUpdates.Count()));
             });
 
         }

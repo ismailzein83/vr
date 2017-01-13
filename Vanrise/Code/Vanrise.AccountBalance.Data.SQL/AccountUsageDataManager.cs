@@ -28,9 +28,9 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByPeriod]", AccountUsageInfoMapper, accountTypeId, periodStart);
         }
-        public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, long accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance,string billingTransactionNote)
+        public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, Guid transactionTypeId, long accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance, string billingTransactionNote)
         {
-            return GetItemSP("[VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]", AccountUsageInfoMapper, accountTypeId, accountId, periodStart, periodEnd, currencyId, usageBalance, billingTransactionNote);
+            return GetItemSP("[VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]", AccountUsageInfoMapper, accountTypeId,transactionTypeId, accountId, periodStart, periodEnd, currencyId, usageBalance, billingTransactionNote);
         }
         public bool UpdateAccountUsageFromBalanceUsageQueue(IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate)
         {
@@ -77,6 +77,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             {
                 AccountUsageId = GetReaderValue<long>(reader, "ID"),
                 AccountId = (long)reader["AccountId"],
+                TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeId"),
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeId"),
                 BillingTransactionId = GetReaderValue<long?>(reader, "BillingTransactionId"),
                 ShouldRecreateTransaction = GetReaderValue<Boolean>(reader, "ShouldRecreateTransaction"),
@@ -93,6 +94,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             {
                 AccountId = (long)reader["AccountId"],
                 AccountUsageId = GetReaderValue<long>(reader, "ID"),
+                TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeId"),
             };
         }
         #endregion
