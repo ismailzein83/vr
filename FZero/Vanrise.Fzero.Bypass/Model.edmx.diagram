@@ -15,7 +15,6 @@
         <EntityTypeShape EntityType="Model.Email" Width="1.5" PointX="7.5" PointY="40.75" />
         <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="5.25" PointY="41.25" />
         <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="2.75" PointY="5.75" />
-        <EntityTypeShape EntityType="Model.GeneratedCall" Width="1.5" PointX="7.5" PointY="23.5" />
         <EntityTypeShape EntityType="Model.GMT" Width="1.5" PointX="5.75" PointY="3.75" />
         <EntityTypeShape EntityType="Model.Import" Width="1.5" PointX="7.5" PointY="37.625" />
         <EntityTypeShape EntityType="Model.ImportType" Width="1.5" PointX="5.25" PointY="45" />
@@ -48,7 +47,6 @@
         <EntityTypeShape EntityType="Model.ValueType" Width="1.5" PointX="3" PointY="31.875" />
         <EntityTypeShape EntityType="Model.WebsiteMenu" Width="1.5" PointX="10.25" PointY="8.125" />
         <EntityTypeShape EntityType="Model.View_Origination" Width="1.5" PointX="2.75" PointY="11.75" />
-        <EntityTypeShape EntityType="Model.ViewGeneratedCall" Width="1.875" PointX="12.75" PointY="3.75" />
         <EntityTypeShape EntityType="Model.ViewSummary" Width="1.5" PointX="4.75" PointY="11.75" />
         <EntityTypeShape EntityType="Model.vwAllCase" Width="1.5" PointX="14.75" PointY="0.75" />
         <EntityTypeShape EntityType="Model.vwCLI" Width="1.5" PointX="0.75" PointY="14.75" />
@@ -69,7 +67,6 @@
         <AssociationConnector Association="Model.FK_EmailCCs_MobileOperators" />
         <AssociationConnector Association="Model.FK_Emails_EmailTemplates" />
         <AssociationConnector Association="Model.FK_EmailTemplates_Users" />
-        <AssociationConnector Association="Model.FK_GeneratedCalls_MobileOperators" />
         <AssociationConnector Association="Model.FK_Imports_ImportTypes" />
         <AssociationConnector Association="Model.FK_RecievedCalls_Imports" />
         <AssociationConnector Association="Model.FK_LoggedActions_Users" />
@@ -97,6 +94,9 @@
         <AssociationConnector Association="Model.FK_EmailCCs_Clients" />
         <AssociationConnector Association="Model.FK_RecievedCalls_Clients" />
         <AssociationConnector Association="Model.FK_Users_Clients" />
+        <EntityTypeShape EntityType="Model.GeneratedCall" Width="1.5" PointX="7.5" PointY="23.375" />
+        <AssociationConnector Association="Model.FK_GeneratedCalls_MobileOperators" />
+        <EntityTypeShape EntityType="Model.ViewGeneratedCall" Width="1.5" PointX="12.375" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

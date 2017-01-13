@@ -63,5 +63,6 @@ namespace Vanrise.Fzero.Bypass
         public string Carrier { get; set; }
         public Nullable<bool> ReportedBeforeSecurity { get; set; }
         public Nullable<int> ReportingStatusSecurityID { get; set; }
+        public Nullable<int> ReportSecID { get; set; }
     }
 }

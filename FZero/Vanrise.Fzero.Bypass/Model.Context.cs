@@ -38,7 +38,6 @@ namespace Vanrise.Fzero.Bypass
         public DbSet<Email> Emails { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<EmailToken> EmailTokens { get; set; }
-        public DbSet<GeneratedCall> GeneratedCalls { get; set; }
         public DbSet<GMT> GMTs { get; set; }
         public DbSet<Import> Imports { get; set; }
         public DbSet<ImportType> ImportTypes { get; set; }
@@ -71,7 +70,6 @@ namespace Vanrise.Fzero.Bypass
         public DbSet<ValueType> ValueTypes { get; set; }
         public DbSet<WebsiteMenu> WebsiteMenus { get; set; }
         public DbSet<View_Origination> View_Origination { get; set; }
-        public DbSet<ViewGeneratedCall> ViewGeneratedCalls { get; set; }
         public DbSet<ViewSummary> ViewSummaries { get; set; }
         public DbSet<vwAllCase> vwAllCases { get; set; }
         public DbSet<vwCLI> vwCLIs { get; set; }
@@ -79,6 +77,8 @@ namespace Vanrise.Fzero.Bypass
         public DbSet<vwFraudCase> vwFraudCases { get; set; }
         public DbSet<vwRepeatedCase> vwRepeatedCases { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<GeneratedCall> GeneratedCalls { get; set; }
+        public DbSet<ViewGeneratedCall> ViewGeneratedCalls { get; set; }
     
         public virtual int delete_asp_Write_String_To_File(string @string, string path, string filename)
         {

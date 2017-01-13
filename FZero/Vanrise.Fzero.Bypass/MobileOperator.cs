@@ -17,9 +17,9 @@ namespace Vanrise.Fzero.Bypass
         public MobileOperator()
         {
             this.EmailCCs = new HashSet<EmailCC>();
-            this.GeneratedCalls = new HashSet<GeneratedCall>();
             this.RecievedCalls = new HashSet<RecievedCall>();
             this.RelatedNumberMappings = new HashSet<RelatedNumberMapping>();
+            this.GeneratedCalls = new HashSet<GeneratedCall>();
         }
     
         public int ID { get; set; }
@@ -33,9 +33,9 @@ namespace Vanrise.Fzero.Bypass
         public string AutoReportSecurityEmail { get; set; }
     
         public virtual ICollection<EmailCC> EmailCCs { get; set; }
-        public virtual ICollection<GeneratedCall> GeneratedCalls { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<RecievedCall> RecievedCalls { get; set; }
         public virtual ICollection<RelatedNumberMapping> RelatedNumberMappings { get; set; }
+        public virtual ICollection<GeneratedCall> GeneratedCalls { get; set; }
     }
 }

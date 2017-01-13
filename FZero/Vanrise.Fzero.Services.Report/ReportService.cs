@@ -410,8 +410,8 @@ namespace Vanrise.Fzero.Services.Report
 
                 }
 
-
-                GeneratedCall.SendReportSecurity(ListIds, Vanrise.Fzero.Bypass.Report.Save(report).ID);
+                Vanrise.Fzero.Bypass.Report ReportSaved = Vanrise.Fzero.Bypass.Report.Save(report);
+                GeneratedCall.SendReportSecurity(ListIds, ReportSaved.ID);
                 ReportParameter[] parameters = new ReportParameter[3];
                 parameters[0] = new ReportParameter("ReportID", report.ReportID);
 
@@ -440,7 +440,7 @@ namespace Vanrise.Fzero.Services.Report
                 ReportDataSource rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourceDataSet1);
 
-                ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
+                ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedSecCalls(ReportSaved.ID, DifferenceInGMT));
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
                 parameters[2] = new ReportParameter("HideSignature", "true");

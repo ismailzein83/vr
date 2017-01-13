@@ -438,7 +438,8 @@ public partial class ToBeReportedCases : BasePage
                         reportSecurity.RecommendedActionID = (int)Enums.RecommendedAction.Block;
                     }
 
-                    GeneratedCall.SendReportSecurity(ListIds, Vanrise.Fzero.Bypass.Report.Save(reportSecurity).ID);
+                    Vanrise.Fzero.Bypass.Report ReportSaved = Vanrise.Fzero.Bypass.Report.Save(report);
+                    GeneratedCall.SendReportSecurity(ListIds, ReportSaved.ID);
                     ReportParameter[] parametersSec = new ReportParameter[3];
                     parametersSec[0] = new ReportParameter("ReportID", reportSecurity.ReportID);
                     parametersSec[1] = new ReportParameter("RecommendedAction", txtRecomnededAction.Text);
@@ -449,7 +450,7 @@ public partial class ToBeReportedCases : BasePage
                     rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
                     rvToSecurity.LocalReport.DataSources.Add(rptDataSourceDataSet1);
 
-                    rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, (mobileOperator.User.GMT - SysParameter.Global_GMT)));
+                    rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedSecCalls(ReportSaved.ID, (mobileOperator.User.GMT - SysParameter.Global_GMT)));
                     rvToSecurity.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
                     parametersSec[2] = new ReportParameter("HideSignature", "false");
