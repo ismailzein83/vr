@@ -218,6 +218,8 @@
     <Compile Include="POS\SourcePOS.cs" />
     <Compile Include="RecurringCharge\AccountRecurringChargeEvaluatorConfig.cs" />
     <Compile Include="RecurringCharge\AccountRecurringChargeRuleSetSettingsConfig.cs" />
+    <Compile Include="RecurringCharge\RecurringChargeDefinitionQuery.cs" />
+    <Compile Include="RecurringCharge\RecurringChargeDefinitionDetail.cs" />
     <Compile Include="RecurringCharge\RecurringChargeDefinition.cs" />
     <Compile Include="RecurringCharge\RecurringChargeDefinitionInfo.cs" />
     <Compile Include="RecurringCharge\RecurringChargeDefinitionInfoFilter.cs" />

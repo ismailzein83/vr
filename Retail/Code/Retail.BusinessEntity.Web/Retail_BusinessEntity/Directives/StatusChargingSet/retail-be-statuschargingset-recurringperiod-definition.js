@@ -59,7 +59,7 @@
                     var recurringPeriodSettings;
 
                     if (payload != undefined) {
-                        recurringPeriodSettings = payload.RecurringPeriodSettings;
+                        recurringPeriodSettings = payload.data;
                     }
                     var loadChargingSetPeriodDefinitionExtensionConfigsPromise = loadChargingSetPeriodDefinitionExtensionConfigs();
                     promises.push(loadChargingSetPeriodDefinitionExtensionConfigsPromise);
@@ -77,8 +77,7 @@
                                 }
                                 if (recurringPeriodSettings != undefined)
                                     $scope.selectedExtensionConfig = utilsService.getItemByVal($scope.extensionConfigs, recurringPeriodSettings.ConfigId, 'ExtensionConfigurationId');
-                                else if ($scope.extensionConfigs.length > 0)
-                                    $scope.selectedExtensionConfig = $scope.extensionConfigs[0];
+                             
                             }
                         });
                     }
@@ -114,10 +113,10 @@
                 label = "label='Recurring Periods'";
             }
 
-            return '<vr-row><vr-columns colnum="{{periodDefinitionCtrl.normalColNum * 2}}">'
+            return '<vr-columns colnum="{{periodDefinitionCtrl.normalColNum}}">'
                     + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="periodDefinitionCtrl.isrequired" hideremoveicon></vr-select>'
-                + '</vr-columns></vr-row>'
-                + '<vr-row><vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{periodDefinitionCtrl.normalColNum}}" isrequired="periodDefinitionCtrl.isrequired" customvalidate="periodDefinitionCtrl.customvalidate"></vr-directivewrapper></vr-row>';
+                + '</vr-columns>'
+                + '<vr-directivewrapper normal-col-num="{{periodDefinitionCtrl.normalColNum}}" ng-if="selectedExtensionConfig.Editor" directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady"  isrequired="periodDefinitionCtrl.isrequired" customvalidate="periodDefinitionCtrl.customvalidate"></vr-directivewrapper>';
         }
     }
 

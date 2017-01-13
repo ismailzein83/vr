@@ -1,11 +1,12 @@
 ﻿'use strict';
 
-app.directive('retailBeRecurringperiodMonthly', ['VRNotificationService',
+app.directive('retailBeRecurringperiodsettingsMonthly', ['VRNotificationService',
     function (vrNotificationService) {
         return {
             restrict: 'E',
             scope: {
                 onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -27,7 +28,6 @@ app.directive('retailBeRecurringperiodMonthly', ['VRNotificationService',
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
-                    $scope.scopeModel.DayOfMonth = 1;
                     if (payload != undefined) {
                         $scope.scopeModel.DayOfMonth = payload.DayOfMonth;
                     }

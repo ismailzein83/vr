@@ -34,12 +34,17 @@ namespace Retail.BusinessEntity.Data.SQL
 
         public bool Insert(RecurringChargeDefinition recurringChargeDefinition)
         {
-            throw new NotImplementedException();
+            string serializedSettings = recurringChargeDefinition.Settings != null ? Vanrise.Common.Serializer.Serialize(recurringChargeDefinition.Settings) : null;
+            int recordesEffected = ExecuteNonQuerySP("Retail_BE.sp_RecurringChargeDefinition_Insert", recurringChargeDefinition.RecurringChargeDefinitionId, recurringChargeDefinition.Name, serializedSettings);
+            return (recordesEffected > 0);
         }
 
         public bool Update(RecurringChargeDefinition recurringChargeDefinition)
         {
-            throw new NotImplementedException();
+            string serializedSettings = recurringChargeDefinition.Settings != null ? Serializer.Serialize(recurringChargeDefinition.Settings) : null;
+
+            int recordsEffected = ExecuteNonQuerySP("Retail_BE.sp_RecurringChargeDefinition_Update", recurringChargeDefinition.RecurringChargeDefinitionId, recurringChargeDefinition.Name, serializedSettings);
+            return (recordsEffected > 0);
         }
 
         #endregion

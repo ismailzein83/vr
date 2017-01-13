@@ -1,12 +1,13 @@
 ﻿'use strict';
 
-app.directive('retailBeRecurringperiodWeekly', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService',
+app.directive('retailBeRecurringperiodsettingsWeekly', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService',
     function (vrNotificationService, utilsService, vruiUtilsService) {
 
         return {
             restrict: 'E',
             scope: {
                 onReady: '=',
+                normalColNum:'@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -35,7 +36,6 @@ app.directive('retailBeRecurringperiodWeekly', ['VRNotificationService', 'UtilsS
 
                 var api = {};
                 api.load = function (payload) {
-                    dayOfWeekEntity = 0;
                     if (payload != undefined) {
                         dayOfWeekEntity = payload.DayOfWeek;
                     }

@@ -183,7 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
-    <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\Templates\" />
+    <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
@@ -277,6 +277,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\DynamicAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\Templates\CRMAccountConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\retail-be-crmaccount-convertor-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\retail-be-recurringchargedefinition-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\Templates\RecurringChargeDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-account-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-accountbalance.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\Templates\AccountBalanceTemplate.html" />
@@ -313,8 +315,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Convertors\Templates\UserConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\retail-be-pricingpackagesettings-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\Templates\PricingPackageSettingsManagementTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-monthly.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiod-weekly.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiodsettings-monthly.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiodsettings-weekly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\MonthlyPeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\Templates\WeeklyPeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountActions\Templates\EmailActionTemplate.html" />
@@ -470,7 +472,7 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRule\retail-be-recurringchargerule-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRule\Templates\RecurringChargeRuleEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRule\Templates\RecurringChargeRuleManagementTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\retail-be-recurringchargedefinition-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\retail-be-recurringchargedefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
@@ -520,6 +522,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\RecurringChargeDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountTypeService.js" />
@@ -571,6 +574,10 @@
     <Content Include="Retail_BusinessEntity\Views\Account\DynamicAccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\DynamicAccountManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\DynamicAccountManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\RecurringChargeDefinition\RecurringChargeDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\RecurringChargeDefinition\RecurringChargeDefinitionEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\RecurringChargeDefinition\RecurringChargeDefinitionManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\RecurringChargeDefinition\RecurringChargeDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\InvoiceSettings\InvoiceSettingEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\InvoiceSettings\Templates\InvoiceSettingEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\OperatorDeclaredInfo\OperatorDeclaredInfoItemEditor.html" />
