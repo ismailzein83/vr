@@ -1,1 +1,32 @@
 ﻿
+<vr-section title="Static Objects">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-datagrid datasource="scopeModel.staticObjects" norowhighlightonclick="true"
+                         hidegridmenu>
+                <vr-datagridcolumn headertext="'Object Name'" field="'ObjectName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Info Type'" field="'InfoType'" widthfactor="10" disablesorting></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</vr-section>
+<vr-section title="Partner Info Objects">
+    <vr-row>
+        <vr-columns width="normal">
+            <vr-button type="Add" data-onclick="scopeModel.addPartnerinfo" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-datagrid datasource="scopeModel.partnerInfoObjects" norowhighlightonclick="true"
+                         on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removePartnerInfo" hidegridmenu>
+                <vr-datagridcolumn headertext="'Object Name'">
+                    <vr-textbox value="dataItem.ObjectName" label="Object Name" isrequired></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Info Type'">
+                    <vr-textbox value="dataItem.InfoType" label="Info Type" isrequired></vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</vr-section>

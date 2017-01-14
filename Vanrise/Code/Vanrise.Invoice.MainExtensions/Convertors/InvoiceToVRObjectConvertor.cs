@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BEBridge.Entities;
+using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions.Convertors
 {
     public class InvoiceToVRObjectConvertor : TargetBEConvertor
     {
+        public List<InvoicePartnerInfoObject> PartnerInfoObjects { get; set; }
         public override string Name
         {
             get
@@ -26,6 +28,12 @@ namespace Vanrise.Invoice.MainExtensions.Convertors
             {
                 InvoiceTargetBE targetBe = new InvoiceTargetBE();
                 targetBe.TargetObjects.Add("Invoice", invoice);
+                foreach (var infoObject in PartnerInfoObjects)
+                {
+                    PartnerManager partnerManager = new PartnerManager();
+                    dynamic partner = partnerManager.GetPartnerInfo(invoice.InvoiceTypeId, invoice.PartnerId, infoObject.InfoType);
+                    targetBe.TargetObjects.Add(infoObject.ObjectName, partner);
+                }
                 targetBEs.Add(targetBe);
             }
             context.TargetBEs = targetBEs;
@@ -35,5 +43,11 @@ namespace Vanrise.Invoice.MainExtensions.Convertors
         {
 
         }
+    }
+
+    public class InvoicePartnerInfoObject
+    {
+        public string ObjectName { get; set; }
+        public string InfoType { get; set; }
     }
 }
