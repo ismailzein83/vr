@@ -26,7 +26,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (string.IsNullOrEmpty(importedCode.Code))
                 {
-                    context.Message = string.Format("Zone {0} has a missing code", zone.ZoneName);
+                    context.Message = string.Format("Can not add Zone {0} because it has a missing code", zone.ZoneName);
                     return false;
                 }
             }

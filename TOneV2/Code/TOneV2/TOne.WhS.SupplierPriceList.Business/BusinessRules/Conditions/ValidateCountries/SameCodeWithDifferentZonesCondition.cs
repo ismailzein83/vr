@@ -28,7 +28,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (country.ImportedCodes.Where(x => x.Code == importedCode.Code && !x.ZoneName.Equals(importedCode.ZoneName, StringComparison.InvariantCultureIgnoreCase)).Count() > 0)
                 {
                     CountryManager manager = new CountryManager();
-                    context.Message = string.Format("Country {0} has the code {1} in different zones", manager.GetCountryName(country.CountryId), importedCode.Code);
+                    context.Message = string.Format("Can not add Code {0} because Country {1} has this code in different zones", importedCode.Code, manager.GetCountryName(country.CountryId));
                     return false;
                 }
 

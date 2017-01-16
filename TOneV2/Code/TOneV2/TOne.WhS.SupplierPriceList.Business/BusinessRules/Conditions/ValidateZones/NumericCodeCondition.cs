@@ -22,7 +22,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             var result = Vanrise.Common.Utilities.IsNumeric(importedCode.Code, 0);
 
             if(result == false)
-                context.Message = string.Format("Code {0} must be a positive number", importedCode.Code);
+                context.Message = string.Format("Can not add Code {0} because it is not a positive number", importedCode.Code);
 
             return result;
         }

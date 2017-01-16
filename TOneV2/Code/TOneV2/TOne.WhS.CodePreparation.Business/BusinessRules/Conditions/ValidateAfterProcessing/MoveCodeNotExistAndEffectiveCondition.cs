@@ -24,7 +24,7 @@ namespace TOne.WhS.CodePreparation.Business
                          && item.ParentZone.ZoneEntity.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase)));
 
             if (result == false)
-               context.Message = string.Format("Code {0} does not exist in zone {1} and can not be moved", codeToMove.Code, codeToMove.OldZoneName);
+               context.Message = string.Format("Can not move Code {0} because this code does not exist in zone {1}", codeToMove.Code, codeToMove.OldZoneName);
 
             return result;
         }

@@ -29,7 +29,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             if (distinctImportedNormalRates.Count() > 1)
             {
-                context.Message = string.Format("Zone {0} has different rates", zone.ZoneName);
+                context.Message = string.Format("Can not add Zone {0} because it has different rates", zone.ZoneName);
                 return false;
             }
 
@@ -41,7 +41,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
                 if (distinctImportedOtherRates.Count() > 1)
                 {
-                    context.Message = string.Format("Zone {0} has different rates", zone.ZoneName);
+                    context.Message = string.Format("Can not add Zone {0} because it has different rates", zone.ZoneName);
                     return false;
                 }
             }

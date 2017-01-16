@@ -27,7 +27,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 if (zone.ImportedCodes.Where(x => x.Code == importedCode.Code).Count() > 1)
                 {
-                    context.Message = string.Format("Zone {0} has the code {1} multiple times", zone.ZoneName, importedCode.Code);
+                    context.Message = string.Format("Can not add Code {0} because Zone {1} contains this Code multiple times", importedCode.Code, zone.ZoneName);
                     return false;
                 }
             }

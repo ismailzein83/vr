@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (zoneToProcess.CodesToAdd.FindAllRecords(item => item.Code == codeToAdd.Code).Count() > 1)
                 {
-                    context.Message = string.Format("Zone {0} has a duplicate code {1}", zoneToProcess.ZoneName, codeToAdd.Code);
+                    context.Message = string.Format("Can not add Code {0} because Zone {1} contains this Code multiple times.", codeToAdd.Code, zoneToProcess.ZoneName);
                     return false;
                 }
             }
@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (zoneToProcess.CodesToClose.FindAllRecords(item => item.Code == codeToClose.Code).Count() > 1)
                 {
-                    context.Message = string.Format("Zone {0} has a duplicate code {1}", zoneToProcess.ZoneName, codeToClose.Code);
+                    context.Message = string.Format("Can not close Code {0} because Zone {1} contains this Code multiple times.", codeToClose.Code, zoneToProcess.ZoneName);
                     return false;
                 }
             }
@@ -43,7 +43,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (codeToMove.ZoneName.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    context.Message = string.Format("Zone {0} has a duplicate code {1}", zoneToProcess.ZoneName, codeToMove.Code);
+                    context.Message = string.Format("Can not move Code {0} because Zone {1} contains this Code multiple times.", codeToMove.Code, zoneToProcess.ZoneName);
                     return false;
                 }
             }

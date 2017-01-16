@@ -23,7 +23,7 @@ namespace TOne.WhS.CodePreparation.Business
             var result = !(codeToAdd.ChangedExistingCodes != null && codeToAdd.ChangedExistingCodes.Count() > 0);
 
             if(result ==  false)
-                context.Message = string.Format("Code {0} already exists", codeToAdd.Code);
+                context.Message = string.Format("Can not add Code {0} because it is already exists", codeToAdd.Code);
 
             return result;
         }

@@ -22,7 +22,7 @@ namespace TOne.WhS.CodePreparation.Business
             var result = newZone.hasChanges;
 
             if(result == false)
-                context.Message = string.Format("Zone {0} has no codes, creation of zone has been canceled", newZone.Name);
+                context.Message = string.Format("Creation of Zone {0} has been canceled because it does not contains codes", newZone.Name);
 
             return newZone.hasChanges;
         }

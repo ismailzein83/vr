@@ -23,7 +23,7 @@ namespace TOne.WhS.CodePreparation.Business
             var result = !string.IsNullOrEmpty(importedData.Code);
             
             if (result == false)
-                context.Message = string.Format("Zone {0} has a missing code", importedData.ZoneName);
+                context.Message = string.Format("Can not add Zone {0} because it has a missing code", importedData.ZoneName);
 
             return result;
         }

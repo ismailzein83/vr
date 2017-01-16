@@ -22,7 +22,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             var result =  code.CodeGroup != null;
 
             if(result == false)
-                context.Message = string.Format("Code {0} not assigned to a code group", code.Code);
+                context.Message = string.Format("Can not add Code {0} because it is not assigned to a code group", code.Code);
 
             return result;
         }

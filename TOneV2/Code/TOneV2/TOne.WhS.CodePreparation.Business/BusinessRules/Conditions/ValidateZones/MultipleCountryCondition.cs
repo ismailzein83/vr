@@ -21,58 +21,46 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ZoneToProcess zone = context.Target as ZoneToProcess;
             bool result = true;
-            bool resultOfCodeToAdd = true;
-            bool resultOfCodeToMove = true;
-            bool resultOfCodeToClose = true;
+            bool resultOfCodesToAdd = true;
+            bool resultOfCodesToMove = true;
+            bool resultOfCodesToClose = true;
 
             int? firstCodeToAddCountryId = null;
             int? firstCodeToMoveCountryId = null;
             int? firstCodeToCloseCountryId = null;
 
-
-            if (zone.CodesToAdd != null)
+            var firstCodeToAdd = zone.CodesToAdd.FirstOrDefault();
+            if (firstCodeToAdd != null)
             {
-                var firstCode = zone.CodesToAdd.FirstOrDefault();
-                if (firstCode != null)
-                {
-                    firstCodeToAddCountryId = firstCode.CodeGroup.CountryId;
-                    Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
-                    resultOfCodeToAdd = !zone.CodesToAdd.Any(pred);
-                }
+                firstCodeToAddCountryId = firstCodeToAdd.CodeGroup.CountryId;
+                Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
+                resultOfCodesToAdd = !zone.CodesToAdd.Any(pred);
             }
 
-
-            if (zone.CodesToMove != null)
+            var firstCodeToMove = zone.CodesToMove.FirstOrDefault();
+            if (firstCodeToMove != null)
             {
-                var firstCode = zone.CodesToMove.FirstOrDefault();
-                if (firstCode != null)
-                {
-                    firstCodeToMoveCountryId = firstCode.CodeGroup.CountryId;
-                    Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
-                    resultOfCodeToMove = !zone.CodesToMove.Any(pred);
-                }
+                firstCodeToMoveCountryId = firstCodeToMove.CodeGroup.CountryId;
+                Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
+                resultOfCodesToMove = !zone.CodesToMove.Any(pred);
             }
 
-            if (zone.CodesToClose != null)
+            var firstCodeToClose = zone.CodesToClose.FirstOrDefault();
+            if (firstCodeToClose != null)
             {
-                var firstCode = zone.CodesToClose.FirstOrDefault();
-                if (firstCode != null)
-                {
-                    firstCodeToCloseCountryId = firstCode.CodeGroup.CountryId;
-                    Func<CodeToClose, bool> pred = new Func<CodeToClose, bool>((code) => code.CodeGroup.CountryId != firstCodeToCloseCountryId.Value);
-                    resultOfCodeToClose = !zone.CodesToClose.Any(pred);
-                }
+                firstCodeToCloseCountryId = firstCodeToClose.CodeGroup.CountryId;
+                Func<CodeToClose, bool> pred = new Func<CodeToClose, bool>((code) => code.CodeGroup.CountryId != firstCodeToCloseCountryId.Value);
+                resultOfCodesToClose = !zone.CodesToClose.Any(pred);
             }
 
-
-            if (firstCodeToAddCountryId != null && firstCodeToMoveCountryId != null && firstCodeToCloseCountryId != null)
+            if (firstCodeToAddCountryId.HasValue && firstCodeToMoveCountryId.HasValue && firstCodeToCloseCountryId.HasValue)
                 result = (firstCodeToAddCountryId == firstCodeToCloseCountryId) && (firstCodeToAddCountryId == firstCodeToMoveCountryId);
-          
-            bool finalResult = resultOfCodeToAdd && resultOfCodeToMove && resultOfCodeToClose && result;
-            
+
+            bool finalResult = resultOfCodesToAdd && resultOfCodesToMove && resultOfCodesToClose && result;
+
             if (finalResult == false)
                 context.Message = string.Format("Zone {0} has multiple codes that belong to different countries", zone.ZoneName);
-           
+
             return finalResult;
         }
 

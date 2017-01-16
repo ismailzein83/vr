@@ -89,7 +89,7 @@ namespace TOne.WhS.CodePreparation.Business
             foreach (ExistingZone existingZone in matchedZones)
             {
                 IEnumerable<ExistingRate> normalExistingRates = existingZone.ExistingRates.FindAllRecords(itm => !itm.RateEntity.RateTypeId.HasValue);
-                if(normalExistingRates != null)
+                if (normalExistingRates != null && normalExistingRates.Count() > 0)
                 {
                     ExistingRate lastNormalExistingRate = normalExistingRates.OrderBy(itm => itm.BED).Last();
                     SalePriceList salePriceList = salePriceListManager.GetPriceList(lastNormalExistingRate.RateEntity.PriceListId);

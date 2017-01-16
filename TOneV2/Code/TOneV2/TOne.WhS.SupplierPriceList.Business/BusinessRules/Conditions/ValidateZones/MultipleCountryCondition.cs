@@ -31,7 +31,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (importedCode.CodeGroup != null && firstCodeCountryId.HasValue && importedCode.CodeGroup.CountryId != firstCodeCountryId.Value)
                     {
-                        context.Message = string.Format("Zone {0} has the codes {1}, {2} belongs to different countries", zone.ZoneName, firstCode.Code, importedCode.Code);
+                        context.Message = string.Format("Can not add Zone {0} because it has the codes {1}, {2} belongs to different countries", zone.ZoneName, firstCode.Code, importedCode.Code);
                         return false;
                     }
                 }

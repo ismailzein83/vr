@@ -24,7 +24,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             var result = !(zone.ImportedNormalRates.Count == 0);
 
             if(result == false)
-                context.Message = string.Format("Zone {0} has a missing rate", zone.ZoneName);
+                context.Message = string.Format("Can not add Zone {0} because it has a missing rate", zone.ZoneName);
 
             return result;
         }
