@@ -124,7 +124,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 SaleZoneId = record.SaleZoneId,
                 RoutingProductId = record.RoutingProductId,
                 SaleRate = record.EffectiveRateValue,
-                EffectiveOn = EffectiveDate.Value,
+                EffectiveOn = EffectiveDate,
                 IsEffectiveInFuture = IsFuture.Value
             };
             RouteRule matchRule = GetRouteRule(routeRuleTarget);

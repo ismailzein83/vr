@@ -29,17 +29,17 @@ namespace TOne.WhS.Routing.Entities
 
             if (routeRuleTarget.IsEffectiveInFuture)
             {
-                if (routeRuleTarget.IsEffectiveInFuture)
-                {
-                    ISaleZoneManager saleZoneManager = BEManagerFactory.GetManager<ISaleZoneManager>();
-                    SaleZone saleZone = saleZoneManager.GetSaleZone(routeRuleTarget.SaleZoneId);
+                ISaleZoneManager saleZoneManager = BEManagerFactory.GetManager<ISaleZoneManager>();
+                SaleZone saleZone = saleZoneManager.GetSaleZone(routeRuleTarget.SaleZoneId);
 
-                    if (this.EndEffectiveTime.HasValue && this.EndEffectiveTime.Value < saleZone.BED)
-                        return true;
+                if (saleZone == null)
+                    throw new NullReferenceException(string.Format("saleZone. routeRuleTarget.SaleZoneId: {0}", routeRuleTarget.SaleZoneId));
 
-                    if (saleZone.EED.HasValue && this.BeginEffectiveTime > saleZone.EED.Value)
-                        return true;
-                }
+                if (this.EndEffectiveTime.HasValue && this.EndEffectiveTime.Value < saleZone.BED)
+                    return true;
+
+                if (saleZone.EED.HasValue && this.BeginEffectiveTime > saleZone.EED.Value)
+                    return true;
             }
             return base.IsAnyCriteriaExcluded(target);
         }

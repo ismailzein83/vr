@@ -32,6 +32,10 @@ namespace TOne.WhS.Routing.Entities
                 ISupplierZoneManager supplierZoneManager = BEManagerFactory.GetManager<ISupplierZoneManager>();
                 SupplierZone supplierZone = supplierZoneManager.GetSupplierZone(routeOptionRuleTarget.SupplierZoneId);
 
+                if (supplierZone == null)
+                    throw new NullReferenceException(string.Format("supplierZone. routeOptionRuleTarget.SupplierZoneId: {0}", routeOptionRuleTarget.SupplierZoneId));
+
+
                 if (this.EndEffectiveTime.HasValue && this.EndEffectiveTime.Value < supplierZone.BED)
                     return true;
 
@@ -40,6 +44,9 @@ namespace TOne.WhS.Routing.Entities
 
                 ISaleZoneManager saleZoneManager = BEManagerFactory.GetManager<ISaleZoneManager>();
                 SaleZone saleZone = saleZoneManager.GetSaleZone(routeOptionRuleTarget.RouteTarget.SaleZoneId);
+
+                if (saleZone == null)
+                    throw new NullReferenceException(string.Format("saleZone. routeOptionRuleTarget.RouteTarget.SaleZoneId: {0}", routeOptionRuleTarget.RouteTarget.SaleZoneId));
 
                 if (this.EndEffectiveTime.HasValue && this.EndEffectiveTime.Value < saleZone.BED)
                     return true;
