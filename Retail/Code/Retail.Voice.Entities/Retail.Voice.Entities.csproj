@@ -55,6 +55,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountIdentification\AccountIdentificationTemplate.cs" />
+    <Compile Include="InternationalIdentification\InternationalIdentificationTemplate.cs" />
     <Compile Include="IPackageVoiceUsageCharger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoiceChargingPolicyEvaluatorConfig.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="VoiceEventPrice.cs" />
     <Compile Include="VoiceServiceType.cs" />
     <Compile Include="VoiceChargingPolicyEvaluator.cs" />
+    <Compile Include="VoiceTechnicalSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
