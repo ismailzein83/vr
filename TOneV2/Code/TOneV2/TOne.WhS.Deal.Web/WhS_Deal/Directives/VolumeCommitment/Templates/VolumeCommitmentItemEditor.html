@@ -14,10 +14,11 @@
                             <vr-directivewrapper directive="scopeModel.zoneSelector" selectedvalues="scopeModel.selectedZones" onblurdropdown="scopeModel.onZoneSelectorSelection" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
                         </span>
                     </vr-row>
+                </vr-tab>
+                <vr-tab header="'Tiers'">
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-button type="Add" data-onclick="scopeModel.addTier" standalone vr-disabled="scopeModel.disabelTierAdd() || scopeModel.selectedZones.length == 0"></vr-button>
-
                             <vr-validator validate="scopeModel.isValid()">
                                 <vr-datagrid datasource="scopeModel.tiers" norowhighlightonclick="true" menuactions="scopeModel.tierGridMenuActions" maxheight="300px"
                                              on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeTier" hidegridmenu>
@@ -25,10 +26,9 @@
                                     <vr-datagridcolumn headertext="'From'" field="'FromVol'" type="'Number'" disablesorting></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'To'" field="'UpToVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Rate'" field="'DefaultRate'" type="'Number'" disablesorting numberprecision="'LongPrecision'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Retro Active Volume'" field="'RetroActiveVolume'" type="'Number'" disablesorting ></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Retro Active Volume'" field="'RetroActiveVolume'" type="'Number'" disablesorting></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Retro Active From'" field="'RetroActiveFromTier'" disablesorting></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Has Execption'"  disablesorting><span ng-show="{{dataItem.HasException}}"><vr-icon icontype="dataItem.HasException"></vr-icon></span> </vr-datagridcolumn>
-
+                                    <vr-datagridcolumn headertext="'Has Execption'" disablesorting><span ng-show="{{dataItem.HasException}}"><vr-icon icontype="dataItem.HasException"></vr-icon></span> </vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>
                         </vr-columns>
