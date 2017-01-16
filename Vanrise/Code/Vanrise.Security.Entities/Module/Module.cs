@@ -13,6 +13,7 @@ namespace Vanrise.Security.Entities
         public string Name { get; set; }
         
         public string Url { get; set; }
+        public Guid? DefaultViewId { get; set; }
 
         public Guid? ParentId { get; set; }
 

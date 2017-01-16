@@ -2,62 +2,67 @@
 
     'use strict';
 
-    ModuleEditorController.$inject = ['$scope', 'VR_Sec_ModuleAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService','VR_Sec_MenuAPIService'];
+    ModuleEditorController.$inject = ['$scope', 'VR_Sec_ModuleAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VR_Sec_MenuAPIService', 'VRUIUtilsService'];
 
-    function ModuleEditorController($scope, VR_Sec_ModuleAPIService, VRNotificationService, VRNavigationService, UtilsService, VR_Sec_MenuAPIService) {
-        $scope.scopeModal = {};
-        $scope.scopeModal.isEditMode;
+    function ModuleEditorController($scope, VR_Sec_ModuleAPIService, VRNotificationService, VRNavigationService, UtilsService, VR_Sec_MenuAPIService, VRUIUtilsService) {
+
+        var viewSelectorAPI;
+        var viewSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var isEditMode;
         var moduleId;
         var moduleEntity;
         var parentId;
-        var menuItems = [];
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined && parameters != null)
             {
                 parentId = parameters.parentId;
                 moduleId = parameters.moduleId;
             }
-                
-
-            $scope.scopeModal.isEditMode = (moduleId != undefined);
+            isEditMode = (moduleId != undefined);
         }
 
         function defineScope() {
-            $scope.scopeModal.save = function () {
-                if ($scope.scopeModal.isEditMode)
+            $scope.scopeModel = {};
+            $scope.scopeModel.save = function () {
+                if (isEditMode)
                     return updateModule();
                 else
                     return insertModule();
             };
 
             $scope.hasSaveModulePermission = function () {
-                if ($scope.scopeModal.isEditMode)
+                if (isEditMode)
                     return VR_Sec_ModuleAPIService.HasUpdateModulePermission();
                 else
                     return VR_Sec_ModuleAPIService.HasAddModulePermission();
             };
-            $scope.scopeModal.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.onViewSelectorReady = function (api) {
+                viewSelectorAPI = api;
+                viewSelectorReadyDeferred.resolve();
+            };
+
         }
         
         function load() {
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
-            if ($scope.scopeModal.isEditMode) {
+            if (isEditMode) {
                 getModule().then(function () {
                     loadAllControls().finally(function () {
                       //  moduleEntity = undefined;
                     });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.scopeModal.isLoading = false;
+                    $scope.scopeModel.isLoading = false;
                 });
             }
             else {
@@ -72,17 +77,17 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData ,loadViewSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.scopeModal.isLoading = false;
+                  $scope.scopeModel.isLoading = false;
               });
         }
        
         function setTitle() {
-            if ($scope.scopeModal.isEditMode && moduleEntity != undefined)
+            if (isEditMode && moduleEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(moduleEntity.Name, 'Module');
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Module');
@@ -93,22 +98,32 @@
             if (moduleEntity == undefined)
                 return;
 
-            $scope.scopeModal.name = moduleEntity.Name;
-            $scope.scopeModal.isDynamic = moduleEntity.AllowDynamic;
+            $scope.scopeModel.name = moduleEntity.Name;
         }
+        function loadViewSelector() {
+            var loadViewSelectorPromise = UtilsService.createPromiseDeferred();
+            viewSelectorReadyDeferred.promise.then(function () {
+                var payload = {
+                    selectedIds: moduleEntity!=undefined ? moduleEntity.DefaultViewId : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(viewSelectorAPI, payload, loadViewSelectorPromise);
+            });
+            return loadViewSelectorPromise.promise;
 
+        }
         function buildModuleObjFromScope() {
             var moduleObject = {
                 ModuleId: moduleId,
-                Name: $scope.scopeModal.name,
-                AllowDynamic: $scope.scopeModal.isDynamic,
+                Name: $scope.scopeModel.name,
+                AllowDynamic: moduleEntity.isDynamic,
+                DefaultViewId : viewSelectorAPI.getSelectedIds(),
                 ParentId: moduleEntity != undefined ? moduleEntity.ParentId : parentId
             };
             return moduleObject;
         }
 
         function insertModule() {
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             var moduleObject = buildModuleObjFromScope();
 
@@ -122,13 +137,13 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.scopeModal.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
 
         }
 
         function updateModule() {
-            $scope.scopeModal.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             var moduleObject = buildModuleObjFromScope();
 
@@ -141,7 +156,7 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.scopeModal.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
 

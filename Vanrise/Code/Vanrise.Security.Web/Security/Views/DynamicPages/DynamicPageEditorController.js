@@ -443,7 +443,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             Title: $scope.scopeModal.pageName,
             Type: viewEntity !=undefined?viewEntity.Type:undefined,
             Url: "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview",
-            ModuleId: $scope.scopeModal.selectedMenuNode.Id,
+            ModuleId:$scope.scopeModal.selectedMenuNode!=undefined ? $scope.scopeModal.selectedMenuNode.Id : undefined,
             Audience: Audiences,
             ViewContent: ViewContent
         };

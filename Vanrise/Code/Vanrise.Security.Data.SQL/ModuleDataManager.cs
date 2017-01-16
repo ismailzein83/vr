@@ -36,14 +36,14 @@ namespace Vanrise.Security.Data.SQL
         public bool AddModule(Entities.Module moduleObject)
         {
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert",moduleObject.ModuleId, moduleObject.Name,moduleObject.ParentId, moduleObject.AllowDynamic);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert",moduleObject.ModuleId, moduleObject.Name,moduleObject.ParentId,moduleObject.DefaultViewId, moduleObject.AllowDynamic);
 
             return (recordesEffected > 0);
         }
 
         public bool UpdateModule(Entities.Module moduleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name,moduleObject.ParentId, moduleObject.AllowDynamic);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name,moduleObject.ParentId,moduleObject.DefaultViewId, moduleObject.AllowDynamic);
             return (recordesEffected > 0);
         }
         #endregion
@@ -56,6 +56,7 @@ namespace Vanrise.Security.Data.SQL
                 ModuleId =GetReaderValue<Guid>(reader,"Id"),
                 Name = reader["Name"] as string,
                 Url = reader["Url"] as string,
+                DefaultViewId = GetReaderValue<Guid?>(reader, "DefaultViewId"),
                 ParentId = GetReaderValue<Guid?>(reader, "ParentId"),
                 Icon = reader["Icon"] as string,
                 AllowDynamic = true,// GetReaderValue<Boolean>(reader, "AllowDynamic"),

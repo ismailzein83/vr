@@ -23,22 +23,6 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             BaseAPIService.setLoginURL(loginURL);
         }
     };
-    $scope.obj = {};
-    $scope.obj.testValue = "";
-    $scope.obj.testValidate = function () {
-        if ($scope.obj.testval == undefined && $scope.obj.testval2 == undefined)
-            return "req val";
-        return null;
-    };
-    var testApi;
-    $scope.onReadTest = function (api) {
-        testApi = api;
-    };
-    
-    $scope.getTestApiData = function () {
-        console.log(testApi.getData());
-    };
-
     $rootScope.onValidationMessageShown = function (e) {      
         var self = angular.element(e.currentTarget);
         var selfHeight = $(self).height();
@@ -170,7 +154,13 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         }
         else {
             $scope.menuItemsCurrent = item;
+            if (item.DefaultURL != null) {
+               // console.log(item.Title)
+                $scope.currentPage = {Title : item.Title};
+                window.location.href = item.DefaultURL;
+            }
         }
+
     };
     $scope.menusubItemsCurrent = null;
     $scope.setIndexSub = function (o) {
@@ -179,6 +169,10 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         }
         else {
             $scope.menusubItemsCurrent = o;
+            if (o.DefaultURL != null) {
+                $scope.currentPage = { Title: o.Title };
+                window.location.href = o.DefaultURL;
+            }
         }
     };
     $scope.parent = null;
@@ -243,12 +237,19 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         if (currentURL == undefined || allMenuItems.length == 0)
             return;
         var matchMenuItem = UtilsService.getItemByVal(allMenuItems, currentURL, "Location");
+        var matchModule = UtilsService.getItemByVal(allMenuItems, currentURL, "DefaultURL");
         if (selectedMenuItem != undefined)
             setMenuItemSelectedFlag(selectedMenuItem, false);
+        if (matchModule != null) {
+            selectedMenuItem = matchModule;
+            setMenuItemSelectedFlag(selectedMenuItem, true);
+            $scope.currentPage.Title = matchModule.Title;
+        }
         if (matchMenuItem != null) {
             selectedMenuItem = matchMenuItem;
             setMenuItemSelectedFlag(selectedMenuItem, true);
         }
+        
     }
    
     $scope.currentPage = null;
@@ -270,8 +271,6 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             $scope.menusubItemsCurrent = menuItem;
             
         }
-            
-        
     }
    
     var pathArray = location.href.split('/');

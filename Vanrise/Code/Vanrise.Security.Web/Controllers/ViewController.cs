@@ -40,6 +40,14 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetViewsInfo")]
+        public IEnumerable<ViewInfo> GetViewsInfo()
+        {
+            return _manager.GetViewsInfo();
+        }
+
+
+        [HttpGet]
         [Route("DeleteView")]
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteView(Guid viewId)
         {

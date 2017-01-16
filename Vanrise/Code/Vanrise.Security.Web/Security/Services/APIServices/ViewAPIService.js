@@ -9,6 +9,7 @@
 
         return ({
             GetView: GetView,
+            GetViewsInfo: GetViewsInfo,
             GetFilteredDynamicPages: GetFilteredDynamicPages,
             AddView: AddView,
             UpdateView: UpdateView,
@@ -25,6 +26,9 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetView'), {
                 ViewId: ViewId
             });
+        }
+        function GetViewsInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetViewsInfo'));
         }
         function GetFilteredViews(input)
         {

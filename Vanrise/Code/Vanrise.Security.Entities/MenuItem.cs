@@ -16,6 +16,7 @@ namespace Vanrise.Security.Entities
 
         public string Location { get; set; }
 
+        public string DefaultURL { get; set; }
         public List<MenuItem> Childs { get; set; }
 
         public string Icon { get; set; }

@@ -158,7 +158,7 @@
                 ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
                 Name: $scope.scopeModel.reportName,
                 Title: $scope.scopeModel.reportTitle,
-                ModuleId: $scope.scopeModel.selectedMenuItem.Id,
+                ModuleId:$scope.scopeModel.selectedMenuItem != undefined ?  $scope.scopeModel.selectedMenuItem.Id : undefined,
                 Settings: settingsDirectiveAPI.getData(),
                 Type: viewType != undefined ? viewType.ExtensionConfigurationId: undefined,
             };

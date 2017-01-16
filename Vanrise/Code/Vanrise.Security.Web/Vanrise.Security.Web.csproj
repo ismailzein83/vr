@@ -149,6 +149,7 @@
     <Content Include="Security\Directives\Tenant\vr-sec-tenant-grid.js" />
     <Content Include="Security\Directives\Tenant\vr-sec-tenant-selector.js" />
     <Content Include="Security\Directives\View\Templates\ViewGridTemplate.html" />
+    <Content Include="Security\Directives\View\vr-sec-view-selector.js" />
     <Content Include="Security\Directives\View\vr-sec-view-grid.js" />
     <Content Include="Security\Directives\OrgChart\Templates\OrgChartGrid.html" />
     <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-selector.js" />

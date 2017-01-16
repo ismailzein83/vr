@@ -107,6 +107,7 @@
     <Compile Include="View\ViewContentItem.cs" />
     <Compile Include="View\ViewContent.cs" />
     <Compile Include="View\ViewDetail.cs" />
+    <Compile Include="View\ViewInfo.cs" />
     <Compile Include="View\ViewQuery.cs" />
     <Compile Include="View\ViewSettings.cs" />
     <Compile Include="View\ViewToAdd.cs" />

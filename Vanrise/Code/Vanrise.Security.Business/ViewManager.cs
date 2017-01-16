@@ -89,7 +89,10 @@ namespace Vanrise.Security.Business
             var allViews = GetCachedViews();
             return allViews.GetRecord(viewId);
         }
-
+        public IEnumerable<ViewInfo> GetViewsInfo()
+        {
+            return GetCachedViews().MapRecords(ViewInfoMapper);
+        }
         public List<View> GetViews()
         {
             return GetCachedViews().Values.ToList();
@@ -244,11 +247,20 @@ namespace Vanrise.Security.Business
             ViewDetail viewDetail = new ViewDetail();
 
             viewDetail.Entity = view;
-            viewDetail.ModuleName = _moduleManager.GetModuleName(view.ModuleId);
+            if (view.ModuleId.HasValue)
+                viewDetail.ModuleName = _moduleManager.GetModuleName(view.ModuleId.Value);
             return viewDetail;
         }
+        private ViewInfo ViewInfoMapper(View view)
+        {
+            return new ViewInfo() { 
+                ViewId = view.ViewId,
+                Name = view.Name
+            };
 
+        }
         #endregion
-      
+
+
     }
 }                               

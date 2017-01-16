@@ -20,7 +20,6 @@
                         </vr-columns>
                         <vr-columns width="2/3row">
                             <vr-section title="Menu Location">
-                                <vr-validator validate="scopeModel.validateMenuLocation()">
                                     <vr-treeview on-ready="scopeModel.onTreeReady"
                                                  datavaluefield="Id"
                                                  datatextfield="Name"
@@ -28,7 +27,6 @@
                                                  selecteditem="scopeModel.selectedMenuItem"
                                                  wholerow>
                                     </vr-treeview>
-                                </vr-validator>
                             </vr-section>
                         </vr-columns>
                     </vr-row>

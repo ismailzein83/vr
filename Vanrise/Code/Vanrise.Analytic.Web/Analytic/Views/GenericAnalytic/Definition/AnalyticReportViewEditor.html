@@ -16,28 +16,26 @@
                                 </vr-columns>
                             </vr-row>
                             <vr-row>
-                               <vr-analytic-analyticreport-config-selector on-ready="scopeModel.onReportTypeSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReportType" onselectionchanged="scopeModel.onReportTypeSelectionChanged" normal-col-num="12"></vr-analytic-analyticreport-config-selector>
+                                <vr-analytic-analyticreport-config-selector on-ready="scopeModel.onReportTypeSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReportType" onselectionchanged="scopeModel.onReportTypeSelectionChanged" normal-col-num="12"></vr-analytic-analyticreport-config-selector>
                             </vr-row>
                             <vr-row ng-if="scopeModel.selectedReportType !=undefined">
                                 <vr-analytic-analyticreport-selector on-ready="scopeModel.onReportSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReport" normal-col-num="12"></vr-analytic-analyticreport-selector>
                             </vr-row>
-                            
+
                         </vr-columns>
                         <vr-columns width="2/3row">
                             <vr-section title="Menu Location">
-                                <vr-validator validate="scopeModel.validateMenuLocation()">
-                                    <vr-treeview on-ready="scopeModel.onTreeReady"
-                                                 datavaluefield="Id"
-                                                 datatextfield="Name"
-                                                 datachildrenfield="Childs"
-                                                 selecteditem="scopeModel.selectedMenuItem"
-                                                 wholerow>
-                                    </vr-treeview>
-                                </vr-validator>
+                                <vr-treeview on-ready="scopeModel.onTreeReady"
+                                             datavaluefield="Id"
+                                             datatextfield="Name"
+                                             datachildrenfield="Childs"
+                                             selecteditem="scopeModel.selectedMenuItem"
+                                             wholerow>
+                                </vr-treeview>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
-                    
+
                 </vr-tab>
             </vr-tabs>
         </vr-form>

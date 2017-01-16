@@ -26,15 +26,13 @@
 
                             <vr-columns width="1/3row">
                                 <vr-section title="Menu Location">
-                                    <vr-validator validate="scopeModal.validateMenu()">
-                                        <vr-treeview datatextfield="Name"
-                                                     datavaluefield="Id"
-                                                     datachildrenfield="Childs"
-                                                     on-ready="scopeModal.menuReady"
-                                                     selecteditem="scopeModal.selectedMenuNode"
-                                                     wholerow>
-                                        </vr-treeview>
-                                    </vr-validator>
+                                    <vr-treeview datatextfield="Name"
+                                                 datavaluefield="Id"
+                                                 datachildrenfield="Childs"
+                                                 on-ready="scopeModal.menuReady"
+                                                 selecteditem="scopeModal.selectedMenuNode"
+                                                 wholerow>
+                                    </vr-treeview>
                                 </vr-section>
                             </vr-columns>
                             <vr-columns width="1/3row">

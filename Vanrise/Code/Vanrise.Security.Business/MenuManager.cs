@@ -107,7 +107,7 @@ namespace Vanrise.Security.Business
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, bool withEmptyChilds)
         {
             MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Location = module.Url, Icon = module.Icon, Rank = module.Rank, MenuType = MenuType.Module};
-
+            AddDefaultViewUrl(module.DefaultViewId, menu);
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
 
             List<View> childViews = views.FindAll(x => x.ModuleId == module.ModuleId);
@@ -174,7 +174,7 @@ namespace Vanrise.Security.Business
 
 
             MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name,  Location = module.Url, Icon = module.Icon, AllowDynamic = module.AllowDynamic };
-
+            AddDefaultViewUrl(module.DefaultViewId, menu);   
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
 
             if (subModules.Count > 0)
@@ -187,6 +187,19 @@ namespace Vanrise.Security.Business
             }
 
             return menu;
+        }
+        private void AddDefaultViewUrl(Guid? defaultViewId, MenuItem menu)
+        {
+            if (defaultViewId.HasValue)
+            {
+                View defaultView = new ViewManager().GetView(defaultViewId.Value);
+                menu.Title = defaultView.Title;
+                if (defaultView.Settings != null)
+                    menu.DefaultURL = defaultView.Settings.GetURL(defaultView);
+                else
+                    menu.DefaultURL = defaultView.Url;
+
+            }
         }
 
         #endregion
