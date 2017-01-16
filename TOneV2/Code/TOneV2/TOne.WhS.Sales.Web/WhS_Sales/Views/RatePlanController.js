@@ -431,6 +431,9 @@
 
                 return UtilsService.waitMultiplePromises(promises);
             };
+            $scope.openBulkActionWizard = function () {
+            	WhS_Sales_RatePlanService.openBulkActionWizard();
+            };
 
             defineSaveButtonMenuActions();
         }

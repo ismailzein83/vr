@@ -87,9 +87,12 @@
                     <vr-button type="Load" validationcontext="SearchGroup" data-onclick="load"></vr-button>
                     <vr-button type="ManageSellingCountries" validationcontext="SellGroup" data-onclick="sellNewCountries" ng-show="showCarrierAccountSelector"></vr-button>
                     <vr-button type="Save" menuactions="saveButtonMenuActions" ng-show="showSaveButton"></vr-button>
-                    <vr-button type="Settings" data-onclick="editSettings" ng-show="showSettingsButton"></vr-button>
+                    
+					<vr-button type="BulkActions" data-onclick="openBulkActionWizard" ng-show="showSettingsButton"></vr-button>
+					<vr-button type="Settings" data-onclick="editSettings" ng-show="showSettingsButton"></vr-button>
                     <vr-button type="Pricing" data-onclick="editPricingSettings" ng-show="showPricingButton"></vr-button>
-                    <vr-button type="Apply" data-onclick="applyCalculatedRates" ng-show="showApplyButton"></vr-button>
+					
+					<vr-button type="Apply" data-onclick="applyCalculatedRates" ng-show="showApplyButton"></vr-button>
                     <vr-button type="CancelChanges" data-onclick="deleteDraft" ng-show="showCancelButton"></vr-button>
                 </div>
             </vr-actionbar>
