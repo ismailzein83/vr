@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [sec].[sp_Module_Update] 
 	@ID uniqueidentifier,
 	@Name Nvarchar(255),
-	@ParentId uniqueidentifier,
+	@ParentId uniqueidentifier,	
+	@DefaultViewId uniqueidentifier,
 	@AllowDynamic bit
 AS
 BEGIN
@@ -10,6 +11,7 @@ BEGIN
 		UPDATE sec.[Module]
 		SET Name = @Name,
 			ParentId = @ParentId,
+			[DefaultViewId] = @DefaultViewId,
 			[AllowDynamic] = @AllowDynamic
 		WHERE ID = @ID
 	end

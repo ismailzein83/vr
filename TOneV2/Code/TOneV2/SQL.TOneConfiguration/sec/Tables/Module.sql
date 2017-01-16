@@ -2,6 +2,7 @@
     [ID]           UNIQUEIDENTIFIER NOT NULL,
     [Name]         NVARCHAR (255)   NOT NULL,
     [Url]          NVARCHAR (255)   NULL,
+	[DefaultViewId]           UNIQUEIDENTIFIER NULL,
     [ParentId]     UNIQUEIDENTIFIER NULL,
     [Icon]         NVARCHAR (50)    NULL,
     [Rank]         INT              NULL,
