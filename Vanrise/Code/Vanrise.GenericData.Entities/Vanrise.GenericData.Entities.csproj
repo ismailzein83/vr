@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="BEParentChildRelation\BEParentChildRelation.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinition.cs" />
+    <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinitionFilter.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinitionInfo.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinitionSettings.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelationDetail.cs" />

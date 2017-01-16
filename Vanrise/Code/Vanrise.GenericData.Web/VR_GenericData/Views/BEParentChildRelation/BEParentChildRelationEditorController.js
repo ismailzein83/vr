@@ -29,7 +29,6 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                beParentChildRelationId = parameters.beParentChildRelationId;
                 beParentChildRelationDefinitionId = parameters.beParentChildRelationDefinitionId;
                 parentId = parameters.parentId;
                 childId = parameters.childId;
@@ -137,8 +136,8 @@
                 var parentBESelectorPayload = {
                     businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ParentBEDefinitionId
                 };
-                if (beParentChildRelationEntity != undefined) {
-                    parentBESelectorPayload.selectedIds = beParentChildRelationEntity.ParentBEId;
+                if (parentId != undefined) {
+                    parentBESelectorPayload.selectedIds = parentId;
                 }
                 VRUIUtilsService.callDirectiveLoad(parentBESelectorAPI, parentBESelectorPayload, parentBESelectorLoadDeferred);
             });
@@ -153,8 +152,8 @@
                 var childBESelectorPayload = {
                     businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ChildBEDefinitionId
                 };
-                if (beParentChildRelationEntity != undefined) {
-                    childBESelectorPayload.selectedIds = beParentChildRelationEntity.ChildBEId;
+                if (childId != undefined) {
+                    childBESelectorPayload.selectedIds = childId;
                 }
                 VRUIUtilsService.callDirectiveLoad(childBESelectorAPI, childBESelectorPayload, childBESelectorLoadDeferred);
             });

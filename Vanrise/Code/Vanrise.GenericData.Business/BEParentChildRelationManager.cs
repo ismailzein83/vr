@@ -17,7 +17,25 @@ namespace Vanrise.GenericData.Business
         public IDataRetrievalResult<BEParentChildRelationDetail> GetFilteredBEParentChildRelations(DataRetrievalInput<BEParentChildRelationQuery> input)
         {
             var allBEParentChildRelation = this.GetCachedBEParentChildRelations();
-            Func<BEParentChildRelation, bool> filterExpression = null; //(x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            Func<BEParentChildRelation, bool> filterExpression = null;
+            if (input.Query != null)
+            {
+                filterExpression = (beParentChildRelation) =>
+                 {
+                     if (input.Query.RelationDefinitionId != null && input.Query.RelationDefinitionId != beParentChildRelation.RelationDefinitionId)
+                         return false;
+
+                     if (input.Query.ParentBEId != null && input.Query.ParentBEId != beParentChildRelation.ParentBEId)
+                         return false;
+
+                     if (input.Query.ChildBEId != null && input.Query.ChildBEId != beParentChildRelation.ChildBEId)
+                         return false;
+
+                     return true;
+                 };
+            }
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allBEParentChildRelation.ToBigResult(input, filterExpression, BEParentChildRelationDetailMapper));
         }
 

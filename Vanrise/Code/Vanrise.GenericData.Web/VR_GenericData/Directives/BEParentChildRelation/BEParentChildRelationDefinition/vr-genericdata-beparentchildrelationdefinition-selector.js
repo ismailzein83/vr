@@ -88,10 +88,10 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSelector', ['UtilsSer
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Product Definition";
+            var label = "Parent-Child Relation Definition";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Product Definitions";
+                label = "Parent-Child Relation Definitions";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)

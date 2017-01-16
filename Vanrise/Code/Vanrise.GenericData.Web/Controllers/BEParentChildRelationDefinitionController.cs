@@ -18,7 +18,8 @@ namespace Vanrise.GenericData.Web.Controllers
         public IEnumerable<BEParentChildRelationDefinitionInfo> GetBEParentChildRelationDefinitionsInfo(string serializedFilter = null)
         {
             BEParentChildRelationDefinitionManager manager = new BEParentChildRelationDefinitionManager();
-            return manager.GetBEParentChildRelationDefinitionsInfo();
+            BEParentChildRelationDefinitionFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<BEParentChildRelationDefinitionFilter>(serializedFilter) : null;
+            return manager.GetBEParentChildRelationDefinitionsInfo(filter);
         }
 
         [HttpGet]

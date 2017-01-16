@@ -23,7 +23,7 @@
         function BEParentChildRelationGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var beParentChildRelationDefinitionId = "271a98fb-0704-4519-ae0d-01969b9ac0e0";
+            var beParentChildRelationDefinitionId;
 
             var gridAPI;
 
@@ -40,8 +40,6 @@
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_BEParentChildRelationAPIService.GetFilteredBEParentChildRelations(dataRetrievalInput).then(function (response) {
-
-
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,12 +49,16 @@
             function defineAPI() {
                 var api = {};
 
-                api.load = function (query) {
+                api.load = function (payload) {
+
+                    if (payload != undefined) {
+                        beParentChildRelationDefinitionId = payload.RelationDefinitionId;
+                    }
 
                     var loadGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     getGridColumnNames().then(function () {
-                        gridAPI.retrieveData(query).then(function () {
+                        gridAPI.retrieveData(buildGridQuery(payload)).then(function () {
                             loadGridPromiseDeferred.resolve();
                         }).catch(function () {
                             loadGridPromiseDeferred.reject();
@@ -79,6 +81,10 @@
                     $scope.scopeModel.ParentBENameHeaderText = response[0];
                     $scope.scopeModel.ChildBENameHeaderText = response[1];
                 });
+            }
+
+            function buildGridQuery(payload) {
+                return payload;
             }
         }
     }

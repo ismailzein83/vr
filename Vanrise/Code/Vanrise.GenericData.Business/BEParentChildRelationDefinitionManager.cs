@@ -25,10 +25,25 @@ namespace Vanrise.GenericData.Business
             return packageDefinitions.FindRecord(x => x.VRComponentTypeId == beParentChildRelationDefinitionId);
         }
 
-        public IEnumerable<BEParentChildRelationDefinitionInfo> GetBEParentChildRelationDefinitionsInfo()
+        public IEnumerable<BEParentChildRelationDefinitionInfo> GetBEParentChildRelationDefinitionsInfo(BEParentChildRelationDefinitionFilter filter)
         {
+            Func<BEParentChildRelationDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = (beParentChildRelationDefinition) =>
+                    {
+                        if (filter.ParentBEDefinitionId != Guid.Empty && filter.ParentBEDefinitionId != beParentChildRelationDefinition.Settings.ParentBEDefinitionId)
+                            return false;
+
+                        if (filter.ChildBEDefinitionId != Guid.Empty && filter.ChildBEDefinitionId != beParentChildRelationDefinition.Settings.ChildBEDefinitionId)
+                            return false;
+
+                        return true;
+                    };
+            }
+
             var beParentChildRelationDefinitions = GetBEParentChildRelationDefinitions();
-            return beParentChildRelationDefinitions.MapRecords(BEParentChildRelationDefinitionInfoMapper);
+            return beParentChildRelationDefinitions.MapRecords(BEParentChildRelationDefinitionInfoMapper, filterExpression);
         }
 
         public IEnumerable<string> GetBEParentChildRelationGridColumnNames(Guid beParentChildRelationDefinitionId)
