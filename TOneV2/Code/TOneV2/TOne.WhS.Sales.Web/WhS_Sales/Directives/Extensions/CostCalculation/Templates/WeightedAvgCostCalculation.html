@@ -6,14 +6,14 @@
     <vr-columns width="1/4row">
         <vr-textbox label="Last" value="periodValue" isrequired="true"></vr-textbox>
     </vr-columns>
-    <vr-columns width="1/4row">
+    <vr-columns width="1/4row" >
         <vr-select on-ready="onPeriodTypeSelectorReady"
                    datatextfield="description"
+                   label=" "
                    datavaluefield="value"
                    isrequired="true"
                    datasource="periodTypes"
-                   selectedvalues="periodTypeSelectedValue"
-                   entityname='"Period Types"'>
+                   selectedvalues="periodTypeSelectedValue">
         </vr-select>
     </vr-columns>
 </vr-row>

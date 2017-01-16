@@ -38,7 +38,7 @@
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var settings;
+        var settings = {};
         var pricingSettings;
         var ratePlanSettingsData;
         var saleAreaSettingsData;
@@ -500,6 +500,10 @@
         function loadRatePlanSettingsData() {
             return WhS_Sales_RatePlanAPIService.GetRatePlanSettingsData().then(function (response) {
                 ratePlanSettingsData = response;
+                settings.costCalculationMethods = [];
+                for (var i = 0; i < response.CostCalculationsMethods.length; i++) {
+                    settings.costCalculationMethods.push(response.CostCalculationsMethods[i]);
+                }
             });
         }
         function loadSaleAreaSettingsData() {
@@ -687,11 +691,6 @@
 
         function getCostCalculationMethods() {
             var cosCalculationMethods = [];
-
-            if (ratePlanSettingsData != undefined && ratePlanSettingsData.CostCalculationsMethods != undefined) {
-                for (var i = 0; i < ratePlanSettingsData.CostCalculationsMethods.length ; i++)
-                    cosCalculationMethods.push(ratePlanSettingsData.CostCalculationsMethods[i]);
-            }
 
             if (settings != undefined && settings.costCalculationMethods != undefined) {
                 for (var i = 0; i < settings.costCalculationMethods.length ; i++)

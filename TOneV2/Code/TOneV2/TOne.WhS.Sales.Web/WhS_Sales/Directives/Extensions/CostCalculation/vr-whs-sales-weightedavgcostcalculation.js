@@ -19,13 +19,14 @@ app.directive("vrWhsSalesWeightedavgcostcalculation", ['WhS_Sales_PeriodTypesEnu
 
     function AvgCostCalculation(ctrl, $scope) {
         this.initializeController = initializeController;
+        var periodTypesReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
             ctrl.title;
-            $scope.periodTypeSelectedValue = [];
-
+            
             $scope.onPeriodTypeSelectorReady = function (api) {
                 $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum)
+                periodTypesReadyPromiseDeferred.resolve();
                 defineAPI();
                 }
         }
@@ -37,10 +38,9 @@ app.directive("vrWhsSalesWeightedavgcostcalculation", ['WhS_Sales_PeriodTypesEnu
                 if (payload != undefined) {
                     $scope.title = payload.Title;
                     $scope.periodValue = payload.PeriodValue;
-
-                    var selectedValue = UtilsService.getItemByVal($scope.periodTypes, payload.PeriodType, "value");
-                    if (selectedValue != null)
-                        $scope.periodTypeSelectedValue.push(selectedValue);
+                    periodTypesReadyPromiseDeferred.promise.then(function () {
+                        $scope.periodTypeSelectedValue = UtilsService.getItemByVal($scope.periodTypes, payload.PeriodType, "value");
+                    });
                 }
             };
 
