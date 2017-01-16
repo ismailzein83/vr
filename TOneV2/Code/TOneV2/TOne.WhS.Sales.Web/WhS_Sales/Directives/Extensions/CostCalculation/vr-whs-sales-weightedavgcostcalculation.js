@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesWeightedavgcostcalculation", [function () {
+app.directive("vrWhsSalesWeightedavgcostcalculation", ['WhS_Sales_PeriodTypesEnum', 'UtilsService', function (WhS_Sales_PeriodTypesEnum, UtilsService) {
 
     return {
         restrict: "E",
@@ -22,7 +22,12 @@ app.directive("vrWhsSalesWeightedavgcostcalculation", [function () {
 
         function initializeController() {
             ctrl.title;
-            defineAPI();
+            $scope.periodTypeSelectedValue = [];
+
+            $scope.onPeriodTypeSelectorReady = function (api) {
+                $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum)
+                defineAPI();
+                }
         }
 
         function defineAPI() {
@@ -31,7 +36,11 @@ app.directive("vrWhsSalesWeightedavgcostcalculation", [function () {
             api.load = function (payload) {
                 if (payload != undefined) {
                     $scope.title = payload.Title;
-                    $scope.days = payload.Days
+                    $scope.periodValue = payload.PeriodValue;
+
+                    var selectedValue = UtilsService.getItemByVal($scope.periodTypes, payload.PeriodType, "value");
+                    if (selectedValue != null)
+                        $scope.periodTypeSelectedValue.push(selectedValue);
                 }
             };
 
@@ -39,7 +48,8 @@ app.directive("vrWhsSalesWeightedavgcostcalculation", [function () {
                 return {
                     $type: "TOne.WhS.Sales.MainExtensions.CostCalculation.WeightedAvgCostCalculation, TOne.WhS.Sales.MainExtensions",
                     Title: $scope.title,
-                    Days: $scope.days
+                    PeriodValue: $scope.periodValue,
+                    PeriodType: $scope.periodTypeSelectedValue.value
                 };
             };
 

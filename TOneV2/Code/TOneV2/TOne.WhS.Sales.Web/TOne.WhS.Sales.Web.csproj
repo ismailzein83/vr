@@ -157,6 +157,7 @@
   <ItemGroup>
     <Content Include="WhS_Sales\Constants\CustomerSelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Sales\Constants\PeriodTypes.js" />
     <Content Include="WhS_Sales\Constants\RatePlanStatusEnum.js" />
     <Content Include="WhS_Sales\Constants\SalePriceListOwnerTypeEnum.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\vr-whs-sales-bulkaction-step-filter.js" />

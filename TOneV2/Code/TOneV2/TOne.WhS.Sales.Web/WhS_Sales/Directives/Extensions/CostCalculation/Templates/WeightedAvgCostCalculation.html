@@ -1,9 +1,19 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/4row">
-        <vr-textbox label="title" value="title" isrequired="true"></vr-textbox>
+        <vr-textbox label="Title" value="title" isrequired="true"></vr-textbox>
     </vr-columns>
 
     <vr-columns width="1/4row">
-        <vr-textbox label="Days" value="days" isrequired="true"></vr-textbox>
+        <vr-textbox label="Last" value="periodValue" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-select on-ready="onPeriodTypeSelectorReady"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   isrequired="true"
+                   datasource="periodTypes"
+                   selectedvalues="periodTypeSelectedValue"
+                   entityname='"Period Types"'>
+        </vr-select>
     </vr-columns>
 </vr-row>

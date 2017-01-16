@@ -14,15 +14,30 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
     public class WeightedAvgCostCalculation : CostCalculationMethod
     {
         public override Guid ConfigId { get { return new Guid("D71F6102-29B3-4781-8167-5C08282CCB5B"); } }
-        public int Days { get; set; }
+        public double PeriodValue { get; set; }
+        public PeriodTypes PeriodType { get; set; }
+        
         public override void CalculateCost(ICostCalculationMethodContext context)
         {
             List<string> listMeasures = new List<string> { "DurationInMinutes" };
             List<string> listDimensions = new List<string> { "Supplier" };
             string dimensionName = "Supplier";
-
-            int numberOfDays = this.Days;
-            DateTime fromDate = DateTime.Today.AddDays(-numberOfDays);
+            
+            DateTime fromDate = DateTime.MinValue;
+           
+            switch (this.PeriodType)
+            {
+                case PeriodTypes.Days:
+                    fromDate = DateTime.Today.AddDays(-this.PeriodValue);
+                    break;
+                case PeriodTypes.Hours:
+                    fromDate = DateTime.Today.AddHours(-this.PeriodValue);
+                    break;
+                case PeriodTypes.Minutes:
+                    fromDate = DateTime.Today.AddMinutes(-this.PeriodValue);
+                    break;
+            }
+            
             DateTime toDate = DateTime.Today;
 
             Dictionary<int, decimal> ratesBySuppliers = new Dictionary<int, decimal>();
@@ -39,22 +54,18 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                     ratesBySuppliers.Add(option.Entity.SupplierId, option.ConvertedSupplierRate);
 
                 var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, option.Entity.SupplierId, fromDate, toDate);
-                if (analyticResult == null && analyticResult.Data == null)
+                if (analyticResult == null || analyticResult.Data == null)
                     continue;
 
                 foreach (var analyticRecord in analyticResult.Data)
                 {
-                    DimensionValue supplierId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                    int supplierIdValue = Convert.ToInt16(supplierId.Value ?? 0.0);
-                    if (ratesBySuppliers.ContainsKey(supplierIdValue))
-                    {
-                        MeasureValue durationInMinutes = GetMeasureValue(analyticRecord, "DurationInMinutes");
-                        decimal durationInMinutesValue = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                        if (durationInMinutesValue == 0)
-                            continue;
-                        suppliersByDuration.Add(supplierIdValue, durationInMinutesValue);
-                        sumOfDuration += durationInMinutesValue;
-                    }
+                    MeasureValue durationInMinutes = GetMeasureValue(analyticRecord, "DurationInMinutes");
+                    decimal durationInMinutesValue = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
+                    if (durationInMinutesValue == 0)
+                        continue;
+                    
+                    suppliersByDuration.Add(option.Entity.SupplierId, durationInMinutesValue);
+                    sumOfDuration += durationInMinutesValue;
                 }
             }
 
@@ -66,12 +77,12 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             }
 
             decimal cost = 0;
-            foreach (KeyValuePair<int, decimal> item in ratesBySuppliers)
+            foreach (KeyValuePair<int, decimal> item in suppliersByDuration)
             {
-                decimal supplierDurationPercentage;
-                if (suppliersByDurationPercentage.TryGetValue(item.Key, out supplierDurationPercentage))
-                    cost += (supplierDurationPercentage * item.Value) / 100;
+                decimal supplierRate = ratesBySuppliers[item.Key];
+                cost += (supplierRate * item.Value) / 100;
             }
+
             if (cost != 0)
                 context.Cost = cost;
         }
