@@ -1,0 +1,12 @@
+﻿<div>
+    <vr-row removeline>
+        <vr-columns width="fullrow" simplecol>
+            <vr-button type="Add" data-onclick="scopeModel.onSubAccountAdded" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row vr-loader="scopeModel.isGridLoading">
+        <vr-columns width="fullrow" simplecol>
+            <vr-genericdata-beparentchildrelation-grid on-ready="scopeModel.onGridReady"></vr-genericdata-beparentchildrelation-grid>
+        </vr-columns>
+    </vr-row>
+</div>

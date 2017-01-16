@@ -52,7 +52,6 @@
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
             }
-
             function defineAPI() {
                 var api = {};
                 var accountViewDefinitionSettings;
@@ -73,6 +72,7 @@
 
                     var getAccountViewDefinitionSettingsTemplateConfigsPromise = getAccountViewDefinitionSettingsTemplateConfigs();
                     promises.push(getAccountViewDefinitionSettingsTemplateConfigsPromise);
+
 
                     function getAccountViewDefinitionSettingsTemplateConfigs() {
                         return Retail_BE_AccountBEDefinitionAPIService.GetAccountViewDefinitionSettingsConfigs().then(function (response) {
@@ -124,11 +124,13 @@
 
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
+
             var label = "label='Type'";
             if (attrs.hidelabel != undefined) {
                 label = "";
                 withemptyline = '';
             }
+
             var template =
                 '<vr-row>'
                     + '<vr-columns colnum="{{ctrl.normalColNum}}">'
@@ -144,8 +146,8 @@
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
-            return template;
 
+            return template;
         }
     }
 

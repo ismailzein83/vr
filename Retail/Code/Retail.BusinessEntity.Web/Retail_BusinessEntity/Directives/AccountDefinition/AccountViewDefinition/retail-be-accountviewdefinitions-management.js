@@ -98,7 +98,7 @@ app.directive("retailBeAccountviewdefinitionsManagement", ["UtilsService", "VRNo
                     var index = ctrl.datasource.indexOf(accountViewDefinitionObj);
                     ctrl.datasource[index] = { Entity: accountViewDefinition };
                 };
-                Retail_BE_AccountBEDefinitionService.editAccountViewDefinition(accountViewDefinitionObj.Entity, accountBEDefinitionId, onAccountViewDefinitionUpdated, getContext());
+                Retail_BE_AccountBEDefinitionService.editAccountViewDefinition(accountViewDefinitionObj.Entity, accountBEDefinitionId, onAccountViewDefinitionUpdated);
             }
         }
 

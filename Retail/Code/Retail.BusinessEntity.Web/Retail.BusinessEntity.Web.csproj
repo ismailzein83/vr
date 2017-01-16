@@ -223,6 +223,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\retail-be-accountactiondefinitionsettings-open360degreeaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\Templates\Open360DegreeAccountActionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-actions.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-childberelation.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-financialtransactions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-identificationrules.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-packages.js" />
@@ -230,6 +231,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-subaccounts.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-accountinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\ActionsViewSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\ChildBERelationViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\FinancialTransactionsViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\IdentificationRulesViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\PackagesViewSettingsTemplate.html" />
@@ -258,6 +260,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountpackages-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountservices-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-actions-view.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-childberelations-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-financialtransactions-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-subaccounts-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountIdentificationRulesViewTemplate.html" />
@@ -265,6 +268,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountServicesViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountInfoViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\ActionsViewTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\ChildBERelationsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\FinancialTransactionsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\SubAccountsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-editor.js" />
