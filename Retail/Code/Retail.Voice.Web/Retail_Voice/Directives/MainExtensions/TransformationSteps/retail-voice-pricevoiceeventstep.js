@@ -215,7 +215,7 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
 
                             var accountBEDefinitionIdPayload = { context: payload.context };
                             if (payload.stepDetails != undefined)
-                                accountBEDefinitionIdPayload.selectedRecords = payload.stepDetails.AccountBEDefinitionId;
+                                accountBEDefinitionIdPayload.selectedRecords = payload.stepDetails.AccountBEDefinitionID;
 
                             VRUIUtilsService.callDirectiveLoad(accountBEDefinitionIdDirectiveReadyAPI, accountBEDefinitionIdPayload, accountBEDefinitionIdDirectiveLoadPromiseDeferred);
                         });
