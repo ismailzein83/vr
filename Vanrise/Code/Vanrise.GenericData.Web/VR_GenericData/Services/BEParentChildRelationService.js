@@ -6,19 +6,28 @@
 
     function BEParentChildRelationService(VRModalService, VRNotificationService) {
 
-        function addBEParentChildRelation(onBEParentChildRelationAdded) {
+        function addBEParentChildRelation(beParentChildRelationDefinitionId, parentId, childId, onBEParentChildRelationAdded) {
+            var parameters = {
+                beParentChildRelationDefinitionId: beParentChildRelationDefinitionId,
+                parentId: parentId,
+                childId: childId
+            };
+
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onBEParentChildRelationAdded = onBEParentChildRelationAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/BEParentChildRelation/BEParentChildRelationEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/BEParentChildRelation/BEParentChildRelationEditor.html', parameters, settings);
         }
 
-        function editBEParentChildRelation(beParentChildRelationId, onBEParentChildRelationUpdated) {
+        function editBEParentChildRelation(beParentChildRelationId, beParentChildRelationDefinitionId, parentId, childId, onBEParentChildRelationUpdated) {
             var parameters = {
-                beParentChildRelationId: beParentChildRelationId
+                beParentChildRelationId: beParentChildRelationId,
+                beParentChildRelationDefinitionId: beParentChildRelationDefinitionId,
+                parentId: parentId,
+                childId: childId
             };
 
             var settings = {};

@@ -6,6 +6,8 @@
 
     function BEParentChildRelationController($scope, VR_GenericData_BEParentChildRelationService, VR_GenericData_BEParentChildRelationAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
+        var beParentChildRelationDefinitionId = "271a98fb-0704-4519-ae0d-01969b9ac0e0";
+
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -25,7 +27,7 @@
                     gridAPI.onBEParentChildRelationAdded(addedBEParentChildRelation);
                 };
 
-                VR_GenericData_BEParentChildRelationService.addBEParentChildRelation(onBEParentChildRelationAdded);
+                VR_GenericData_BEParentChildRelationService.addBEParentChildRelation(beParentChildRelationDefinitionId, undefined, undefined, onBEParentChildRelationAdded);
             };
             $scope.scopeModel.search = function () {
                 return loadGrid();

@@ -1,9 +1,38 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<div vr-modalcontent ng-controller="VR_GenericData_BEParentChildRelationEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form name="formProductEditor">
 
-</body>
-</html>
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <span vr-disabled="scopeModel.isParentBESelectorDisabled">
+                            <vr-genericdata-businessentity-selector on-ready="scopeModel.onParentBESelectorReady" selectedvalues="scopeModel.selectedParentBE"
+                                                                    customlabel="Parent" normal-col-num="6" isrequired="true" hideremoveicon>
+                            </vr-genericdata-businessentity-selector>
+                        </span>
+                        <span vr-disabled="scopeModel.isChildBESelectorDisabled">
+                            <vr-genericdata-businessentity-selector on-ready="scopeModel.onChildBESelectorReady" selectedvalues="scopeModel.selectedChildBE"
+                                                                    customlabel="Child" normal-col-num="6" isrequired="true" hideremoveicon>
+                            </vr-genericdata-businessentity-selector>
+                        </span>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker type="date" value="scopeModel.beginEffectiveDate" label="Effective On" customvalidate="validateEffectiveDate()" isrequired></vr-datetimepicker>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formProductEditor" haspermission="hasSaveProductPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+

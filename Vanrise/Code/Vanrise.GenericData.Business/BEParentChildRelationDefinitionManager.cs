@@ -19,38 +19,50 @@ namespace Vanrise.GenericData.Business
             return vrComponentTypeManager.GetComponentTypes<BEParentChildRelationDefinitionSettings, BEParentChildRelationDefinition>();
         }
 
-        public BEParentChildRelationDefinition GetPackageDefinitionById(Guid beParentChildRelationDefinitionId)
+        public BEParentChildRelationDefinition GetBEParentChildRelationDefinition(Guid beParentChildRelationDefinitionId)
         {
             var packageDefinitions = GetBEParentChildRelationDefinitions();
             return packageDefinitions.FindRecord(x => x.VRComponentTypeId == beParentChildRelationDefinitionId);
         }
 
-        //public IEnumerable<BEParentChildRelationDefinitionInfo> GetBEParentChildRelationDefinitionsInfo()
-        //{
-        //    var packageDefinitions = GetBEParentChildRelationDefinitions();
-        //    return packageDefinitions.MapRecords(BEParentChildRelationDefinitionInfoMapper);
-        //}
+        public IEnumerable<BEParentChildRelationDefinitionInfo> GetBEParentChildRelationDefinitionsInfo()
+        {
+            var beParentChildRelationDefinitions = GetBEParentChildRelationDefinitions();
+            return beParentChildRelationDefinitions.MapRecords(BEParentChildRelationDefinitionInfoMapper);
+        }
 
-        //public IEnumerable<BEParentChildRelationDefinitionConfig> GetBEParentChildRelationDefinitionExtendedSettingsConfigs()
-        //{
-        //    var templateConfigManager = new ExtensionConfigurationManager();
-        //    return templateConfigManager.GetExtensionConfigurations<BEParentChildRelationDefinitionConfig>(BEParentChildRelationDefinitionConfig.EXTENSION_TYPE);
-        //}
+        public IEnumerable<string> GetBEParentChildRelationGridColumnNames(Guid beParentChildRelationDefinitionId)
+        {
+            List<string> beParentChildRelationGridColumnNames = new List<string>();
+            BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+
+            BEParentChildRelationDefinition beParentChildRelationDefinition = this.GetBEParentChildRelationDefinition(beParentChildRelationDefinitionId);
+            if (beParentChildRelationDefinition == null)
+                throw new NullReferenceException(string.Format("beParentChildRelationDefinition {0}", beParentChildRelationDefinitionId));
+
+            if (beParentChildRelationDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("beParentChildRelationDefinition.Settings {0}", beParentChildRelationDefinitionId));
+
+            beParentChildRelationGridColumnNames.Add(businessEntityDefinitionManager.GetBusinessEntityDefinitionName(beParentChildRelationDefinition.Settings.ParentBEDefinitionId));
+            beParentChildRelationGridColumnNames.Add(businessEntityDefinitionManager.GetBusinessEntityDefinitionName(beParentChildRelationDefinition.Settings.ChildBEDefinitionId));
+
+            return beParentChildRelationGridColumnNames;
+        }
 
         #endregion
 
         #region Mapper
 
-        //public BEParentChildRelationDefinitionInfo BEParentChildRelationDefinitionInfoMapper(BEParentChildRelationDefinition beParentChildRelationDefinition)
-        //{
-        //    return new BEParentChildRelationDefinitionInfo
-        //    {
-        //        Name = beParentChildRelationDefinition.Name,
-        //        BEParentChildRelationDefinitionId = beParentChildRelationDefinition.VRComponentTypeId,
-        //        AccountBEDefinitionId = beParentChildRelationDefinition.Settings.AccountBEDefinitionId,
-        //        RuntimeEditor = beParentChildRelationDefinition.Settings.ExtendedSettings.RuntimeEditor
-        //    };
-        //}
+        public BEParentChildRelationDefinitionInfo BEParentChildRelationDefinitionInfoMapper(BEParentChildRelationDefinition beParentChildRelationDefinition)
+        {
+            return new BEParentChildRelationDefinitionInfo
+            {
+                Name = beParentChildRelationDefinition.Name,
+                BEParentChildRelationDefinitionId = beParentChildRelationDefinition.VRComponentTypeId,
+                ParentBEDefinitionId = beParentChildRelationDefinition.Settings.ParentBEDefinitionId,
+                ChildBEDefinitionId = beParentChildRelationDefinition.Settings.ChildBEDefinitionId
+            };
+        }
 
         #endregion
     }

@@ -31,12 +31,12 @@ namespace Vanrise.GenericData.Data.SQL
             return base.IsDataUpdated("[genericdata].[BEParentChildRelation]", ref updateHandle);
         }
 
-        public bool Insert(BEParentChildRelation BEParentChildRelationItem, out long insertedId)
+        public bool Insert(BEParentChildRelation beParentChildRelationItem, out long insertedId)
         {
             object beParentChildRelationID;
 
-            int affectedRecords = ExecuteNonQuerySP("[genericdata].[sp_BEParentChildRelation_Insert]", out beParentChildRelationID, BEParentChildRelationItem.RelationDefinitionId, BEParentChildRelationItem.ParentBEId,
-                BEParentChildRelationItem.ChildBEId, BEParentChildRelationItem.BED, BEParentChildRelationItem.EED);
+            int affectedRecords = ExecuteNonQuerySP("[genericdata].[sp_BEParentChildRelation_Insert]", out beParentChildRelationID, beParentChildRelationItem.RelationDefinitionId, beParentChildRelationItem.ParentBEId,
+                beParentChildRelationItem.ChildBEId, beParentChildRelationItem.BED, beParentChildRelationItem.EED);
 
             insertedId = (affectedRecords > 0) ? (int)beParentChildRelationID : -1;
             return (affectedRecords > 0);
@@ -57,12 +57,12 @@ namespace Vanrise.GenericData.Data.SQL
         {
             BEParentChildRelation beParentChildRelation = new BEParentChildRelation
             {
-                BEParentChildRelationId = (int)reader["ID"],
+                BEParentChildRelationId = (long)reader["ID"],
                 RelationDefinitionId = (Guid)reader["RelationDefinitionId"],
-                ParentBEId = reader["Name"] as string,
-                ChildBEId = reader["Name"] as string,
-                BED = (DateTime)reader["BED"],
-                EED = (DateTime)reader["EED"],
+                ParentBEId = reader["ParentBEId"] as string,
+                ChildBEId = reader["ChildBEId"] as string,
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED")
             };
             return beParentChildRelation;
         }

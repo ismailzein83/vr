@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
     public class BusinessEntityManager
     {
+        #region Public Methods
+
         public List<dynamic> GetAllEntities(Guid businessEntityDefinitionId)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
@@ -22,12 +25,13 @@ namespace Vanrise.GenericData.Business
             return GetEntity(businessEntityDefinitionId, entityId, beManager);
         }
 
-        private dynamic MapEntityToInfo(Guid businessEntityDefinitionId, string infoType, dynamic entity)
+        public string GetEntityDescription(Guid businessEntityDefinitionId, dynamic entityId)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
-            return MapEntityToInfo(businessEntityDefinitionId, infoType, entity, beManager);
+            var beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
+            return beManager.GetEntityDescription(new BusinessEntityDescriptionContext { EntityDefinition = beDefinition, EntityId = entityId });
         }
-
+         
         public dynamic GetEntityInfo(Guid businessEntityDefinitionId, string infoType, dynamic entityId)
         {
             var beManager = GetBEManager(businessEntityDefinitionId);
@@ -58,7 +62,15 @@ namespace Vanrise.GenericData.Business
             return childEntitiesIds.Distinct().ToList();            
         }
 
+        #endregion
+
         #region Private Methods
+
+        private dynamic MapEntityToInfo(Guid businessEntityDefinitionId, string infoType, dynamic entity)
+        {
+            var beManager = GetBEManager(businessEntityDefinitionId);
+            return MapEntityToInfo(businessEntityDefinitionId, infoType, entity, beManager);
+        }
 
         private Entities.IBusinessEntityManager GetBEManager(Guid businessEntityDefinitionId)
         {

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BEParentChildRelationGridDirective.$inject = ['VR_GenericData_BEParentChildRelationAPIService', 'VR_GenericData_BEParentChildRelationService', 'VRNotificationService'];
+    BEParentChildRelationGridDirective.$inject = ['VRNotificationService', 'UtilsService', 'VR_GenericData_BEParentChildRelationAPIService', 'VR_GenericData_BEParentChildRelationService', 'VR_GenericData_BEParentChildRelationDefinitionAPIService'];
 
-    function BEParentChildRelationGridDirective(VR_GenericData_BEParentChildRelationAPIService, VR_GenericData_BEParentChildRelationService, VRNotificationService) {
+    function BEParentChildRelationGridDirective(VRNotificationService, UtilsService, VR_GenericData_BEParentChildRelationAPIService, VR_GenericData_BEParentChildRelationService, VR_GenericData_BEParentChildRelationDefinitionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -23,10 +23,14 @@
         function BEParentChildRelationGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var beParentChildRelationDefinitionId = "271a98fb-0704-4519-ae0d-01969b9ac0e0";
+
             var gridAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.ParentBENameHeaderText = "";
+                $scope.scopeModel.ChildBENameHeaderText = "";
                 $scope.scopeModel.dataSource = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
@@ -36,19 +40,30 @@
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_BEParentChildRelationAPIService.GetFilteredBEParentChildRelations(dataRetrievalInput).then(function (response) {
+
+
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
-
-                defineMenuActions();
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (query) {
-                    return gridAPI.retrieveData(query);
+
+                    var loadGridPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    getGridColumnNames().then(function () {
+                        gridAPI.retrieveData(query).then(function () {
+                            loadGridPromiseDeferred.resolve();
+                        }).catch(function () {
+                            loadGridPromiseDeferred.reject();
+                        });
+                    });
+
+                    return loadGridPromiseDeferred.promise;
                 };
 
                 api.onBEParentChildRelationAdded = function (addedBEParentChildRelation) {
@@ -59,22 +74,11 @@
                     ctrl.onReady(api);
             }
 
-            function defineMenuActions() {
-                $scope.scopeModel.menuActions = [{
-                    name: 'Edit',
-                    clicked: editBEParentChildRelation,
-                    haspermission: hasEditPermission
-                }];
-                function editBEParentChildRelation(dataItem) {
-                    var onBEParentChildRelationUpdated = function (updatedBEParentChildRelation) {
-                        gridAPI.itemUpdated(updatedBEParentChildRelation);
-                    };
-
-                    VR_GenericData_BEParentChildRelationService.editBEParentChildRelation(dataItem.Entity.BEParentChildRelationId, onBEParentChildRelationUpdated);
-                }
-                function hasEditPermission() {
-                    return VR_GenericData_BEParentChildRelationAPIService.HasEditBEParentChildRelationPermission();
-                }
+            function getGridColumnNames() {
+                return VR_GenericData_BEParentChildRelationDefinitionAPIService.GetBEParentChildRelationGridColumnNames(beParentChildRelationDefinitionId).then(function (response) {
+                    $scope.scopeModel.ParentBENameHeaderText = response[0];
+                    $scope.scopeModel.ChildBENameHeaderText = response[1];
+                });
             }
         }
     }

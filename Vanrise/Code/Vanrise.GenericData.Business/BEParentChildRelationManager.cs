@@ -111,7 +111,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        Dictionary<long, BEParentChildRelation> GetCachedBEParentChildRelations()
+        private Dictionary<long, BEParentChildRelation> GetCachedBEParentChildRelations()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBEParentChildRelationes",
                () =>
@@ -121,15 +121,40 @@ namespace Vanrise.GenericData.Business
                });
         }
 
+        private IBusinessEntityManager GetBusinessEntityManager(Guid businessEntityDefinitionId)
+        {
+            var beDefinitionManager = new BusinessEntityDefinitionManager();
+            var beManagerInstance = beDefinitionManager.GetBusinessEntityManager(businessEntityDefinitionId);
+            if (beManagerInstance == null)
+                throw new NullReferenceException(String.Format("beManagerInstance. BusinessEntityDefinitionId '{0}'", businessEntityDefinitionId));
+
+            return beManagerInstance;
+        }
+
+        private BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId)
+        {
+            var beDefinitionManager = new BusinessEntityDefinitionManager();
+            var beDefinition = beDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
+            if (beDefinition == null)
+                throw new NullReferenceException(String.Format("beDefinition of BusinessEntityDefinitionId '{0}'", businessEntityDefinitionId));
+
+            return beDefinition;
+        }
+
         #endregion
 
         #region Mappers
 
         public BEParentChildRelationDetail BEParentChildRelationDetailMapper(BEParentChildRelation beParentChildRelation)
         {
+            BEParentChildRelationDefinition beParentChildRelationDefinition = new BEParentChildRelationDefinitionManager().GetBEParentChildRelationDefinition(beParentChildRelation.RelationDefinitionId);
+            BusinessEntityManager businessEntityManager = new BusinessEntityManager();
+
             BEParentChildRelationDetail beParentChildRelationDetail = new BEParentChildRelationDetail()
             {
-                Entity = beParentChildRelation
+                Entity = beParentChildRelation,
+                ParentBEName = businessEntityManager.GetEntityDescription(beParentChildRelationDefinition.Settings.ParentBEDefinitionId, beParentChildRelation.ParentBEId),
+                ChildBEName = businessEntityManager.GetEntityDescription(beParentChildRelationDefinition.Settings.ChildBEDefinitionId, beParentChildRelation.ChildBEId),
             };
             return beParentChildRelationDetail;
         }
