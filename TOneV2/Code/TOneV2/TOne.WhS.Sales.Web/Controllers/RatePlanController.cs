@@ -80,6 +80,22 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.GetRateCalculationMethodTemplates();
         }
 
+		[HttpGet]
+		[Route("GetBulkActionTypeExtensionConfigs")]
+		public IEnumerable<BulkActionTypeSettings> GetBulkActionTypeExtensionConfigs()
+		{
+			var manager = new RatePlanExtensionConfigManager();
+			return manager.GetBulkActionTypeExtensionConfigs();
+		}
+
+		[HttpGet]
+		[Route("GetBulkActionZoneFilterTypeExtensionConfigs")]
+		public IEnumerable<BulkActionZoneFilterTypeSettings> GetBulkActionZoneFilterTypeExtensionConfigs()
+		{
+			var manager = new RatePlanExtensionConfigManager();
+			return manager.GetBulkActionZoneFilterTypeExtensionConfigs();
+		}
+
         [HttpPost]
         [Route("SaveChanges")]
         public void SaveChanges(SaveChangesInput input)

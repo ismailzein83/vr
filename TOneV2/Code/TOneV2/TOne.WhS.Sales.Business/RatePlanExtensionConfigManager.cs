@@ -21,5 +21,17 @@ namespace TOne.WhS.Sales.Business
             var extensionConfigManager = new ExtensionConfigurationManager();
             return extensionConfigManager.GetExtensionConfigurations<RateCalculationMethodSetting>(RateCalculationMethodSetting.EXTENSION_TYPE).OrderBy(x => x.Title);
         }
+
+		public IEnumerable<BulkActionTypeSettings> GetBulkActionTypeExtensionConfigs()
+		{
+			var extensionConfigManager = new ExtensionConfigurationManager();
+			return extensionConfigManager.GetExtensionConfigurations<BulkActionTypeSettings>(BulkActionTypeSettings.EXTENSION_TYPE).OrderBy(x => x.Title);
+		}
+
+		public IEnumerable<BulkActionZoneFilterTypeSettings> GetBulkActionZoneFilterTypeExtensionConfigs()
+		{
+			var extensionConfigManager = new ExtensionConfigurationManager();
+			return extensionConfigManager.GetExtensionConfigurations<BulkActionZoneFilterTypeSettings>(BulkActionZoneFilterTypeSettings.EXTENSION_TYPE).OrderBy(x => x.Title);
+		}
     }
 }
