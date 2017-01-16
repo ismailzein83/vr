@@ -281,6 +281,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\DynamicAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\Templates\CRMAccountConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\retail-be-crmaccount-convertor-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\retail-be-recurringchargedefinition-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\Templates\RecurringChargeDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-account-selector.js" />

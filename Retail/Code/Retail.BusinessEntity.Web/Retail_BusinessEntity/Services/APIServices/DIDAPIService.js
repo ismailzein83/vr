@@ -36,8 +36,10 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateDID']));
         }
 
-        function GetDIDsInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetDIDsInfo"));
+        function GetDIDsInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetDIDsInfo"), {
+                serializedFilter: serializedFilter
+            });
         }
 
         return ({

@@ -68,12 +68,13 @@
                 drillDownTab.loadDirective = function (accountViewGridAPI, account) {
                     account.accountViewGridAPI = accountViewGridAPI;
 
-                    return account.accountViewGridAPI.load(buildAccountViewQuery());
+                    return account.accountViewGridAPI.load(buildAccountViewPayload());
                 };
 
-                function buildAccountViewQuery() {
+                function buildAccountViewPayload() {
 
                     var payload = {
+                        accountViewDefinition: accountViewDefinition,
                         accountBEDefinitionId: accountBEDefinitionId,
                         parentAccountId: account.Entity.AccountId
                     };

@@ -27,13 +27,6 @@ namespace Retail.BusinessEntity.Business
 
             return businessEntityDefinition.Settings as AccountBEDefinitionSettings;
         }
-        public AccountActionDefinitionSettings GetAccountActionDefinitionSettings(Guid accountBEDefinitionId, Guid actionDefinitionId)
-        {
-            var accountActionDefinition = GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
-            if(accountActionDefinition == null )
-                throw new NullReferenceException(string.Format("accountActionDefinition of accountBEDefinitionId {0} nad actionDefinitionId {1}",accountBEDefinitionId,actionDefinitionId));
-            return accountActionDefinition.ActionDefinitionSettings;
-        }
         public AccountGridDefinition GetAccountGridDefinition(Guid accountBEDefinitionId)
         {
             AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
@@ -63,6 +56,13 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("accountActionDefinitions for BusinessEntityDefinition Id : {0}", accountBEDefinitionId));
 
             return accountActionDefinitions;
+        }
+        public AccountActionDefinitionSettings GetAccountActionDefinitionSettings(Guid accountBEDefinitionId, Guid actionDefinitionId)
+        {
+            var accountActionDefinition = GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
+            if (accountActionDefinition == null)
+                throw new NullReferenceException(string.Format("accountActionDefinition of accountBEDefinitionId {0} nad actionDefinitionId {1}", accountBEDefinitionId, actionDefinitionId));
+            return accountActionDefinition.ActionDefinitionSettings;
         }
 
         public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(Guid accountBEDefinitionId, long? parentAccountId)

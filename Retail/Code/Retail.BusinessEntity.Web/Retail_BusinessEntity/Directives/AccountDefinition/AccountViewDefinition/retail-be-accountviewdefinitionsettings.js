@@ -28,6 +28,8 @@
         function AccountViewDefinitionSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var accountBEDefinitionId;
+
             var selectorAPI;
 
             var directiveAPI;
@@ -49,19 +51,25 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var directivePayload = {
+                        accountBEDefinitionId: accountBEDefinitionId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
             function defineAPI() {
                 var api = {};
-                var accountViewDefinitionSettings;
+
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
                     var promises = [];
 
+                    var accountViewDefinitionSettings;
+
                     if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountViewDefinitionSettings = payload.accountViewDefinitionSettings;
                     }
 
@@ -94,7 +102,10 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { accountViewDefinitionSettings: accountViewDefinitionSettings };
+                            var directivePayload = {
+                                accountBEDefinitionId: accountBEDefinitionId,
+                                accountViewDefinitionSettings: accountViewDefinitionSettings
+                            };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 

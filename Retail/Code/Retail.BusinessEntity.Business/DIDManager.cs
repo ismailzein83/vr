@@ -6,16 +6,18 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Retail.BusinessEntity.Data;
 using Retail.BusinessEntity.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class DIDManager 
+    public class DIDManager : IBusinessEntityManager
     {
         #region ctor/Local Variables
 
         #endregion
 
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<DIDDetail> GetFilteredDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
         {
             var allDIDs = GetCachedDIDs();
@@ -23,14 +25,22 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDIDs.ToBigResult(input, filterExpression, DIDDetailMapper));
         }
 
-        public DID GetDID(int dIDId)
+        public DID GetDID(int didId)
         {
             var DIDs = GetCachedDIDs();
-            return DIDs.GetRecord(dIDId);
+            return DIDs.GetRecord(didId);
         }
-      
-        
-        
+
+        public string GetDIDNumber(int didId)
+        {
+            var DIDs = GetCachedDIDs();
+            DID did = DIDs.GetRecord(didId);
+            if (did == null)
+                throw new NullReferenceException(string.Format("DID ID {0}", didId));
+
+            return did.Number;
+        }
+
         public InsertOperationOutput<DIDDetail> AddDID(DID dID)
         {
             InsertOperationOutput<DIDDetail> insertOperationOutput = new InsertOperationOutput<DIDDetail>();
@@ -56,6 +66,7 @@ namespace Retail.BusinessEntity.Business
 
             return insertOperationOutput;
         }
+
         public UpdateOperationOutput<DIDDetail> UpdateDID(DID dID)
         {
             IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
@@ -80,15 +91,13 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-       
-        
-        public IEnumerable<DIDInfo> GetDIDsInfo()
+        public IEnumerable<DIDInfo> GetDIDsInfo(DIDFilter didFilter)
         {
             var DIDs = GetCachedDIDs();
             return DIDs.MapRecords(DIDInfoMapper);
         }
 
-  
+
         #endregion
 
         #region Private Methods
@@ -103,8 +112,6 @@ namespace Retail.BusinessEntity.Business
                    return DIDs.ToDictionary(x => x.DIDId, x => x);
                });
         }
-
-       
 
         #endregion
 
@@ -143,6 +150,43 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-       
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetCachedDIDs().Select(itm => itm as dynamic).ToList();
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetDID(context.EntityId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetDIDNumber(Int32.Parse(context.EntityId.ToString()));
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

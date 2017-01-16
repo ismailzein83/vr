@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ChildBERelationsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountBEService'];
+    ChildBERelationsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'VR_GenericData_BEParentChildRelationService'];
 
-    function ChildBERelationsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountBEService) {
+    function ChildBERelationsViewDirective(UtilsService, VRNotificationService, VR_GenericData_BEParentChildRelationService) {
         return {
             restrict: 'E',
             scope: {
@@ -30,6 +30,7 @@
         function ChildBERelationsViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var accountViewDefinition;
             var accountBEDefinitionId;
             var parentAccountId;
 
@@ -43,12 +44,12 @@
                     defineAPI();
                 };
 
-                $scope.scopeModel.onSubAccountAdded = function () {
-                    var onSubAccountAdded = function (addedSubcAccount) {
-                        gridAPI.onAccountAdded(addedSubcAccount);
+                $scope.scopeModel.onChildBERelationAdded = function () {
+                    var onChildBERelationAdded = function (addedChildBERelation) {
+                        gridAPI.onBEParentChildRelationAdded(addedChildBERelation);
                     };
 
-                    Retail_BE_AccountBEService.addAccount(accountBEDefinitionId, parentAccountId, onSubAccountAdded);
+                    VR_GenericData_BEParentChildRelationService.addBEParentChildRelation(accountViewDefinition.Settings.BEParentChildRelationDefinitionId, parentAccountId, undefined, onChildBERelationAdded);
                 };
             }
             function defineAPI() {
@@ -59,14 +60,12 @@
                     $scope.scopeModel.isGridLoading = true;
 
                     if (payload != undefined) {
+                        accountViewDefinition = payload.accountViewDefinition;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
                     }
 
                     return gridAPI.load(buildGridPayload(payload)).then(function () {
-
-                        console.log(payload);
-
                         $scope.scopeModel.isGridLoading = false;
                     });
                 };
@@ -77,7 +76,12 @@
             }
 
             function buildGridPayload(loadPayload) {
-                return loadPayload;
+
+                var payload = {
+                    RelationDefinitionId: accountViewDefinition.Settings.BEParentChildRelationDefinitionId,
+                    ParentBEId: parentAccountId
+                };
+                return payload;
             }
         }
     }

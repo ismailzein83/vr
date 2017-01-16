@@ -76,10 +76,11 @@
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
-                    var settingsDirectivePayload;
-                    if (accountViewDefinitionEntity != undefined) {
-                        settingsDirectivePayload = { accountViewDefinitionSettings: accountViewDefinitionEntity.Settings };
-                    }
+
+                    var settingsDirectivePayload = {
+                        accountBEDefinitionId: accountBEDefinitionId,
+                        accountViewDefinitionSettings: accountViewDefinitionEntity != undefined ? accountViewDefinitionEntity.Settings : undefined
+                    };
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
                 });
 

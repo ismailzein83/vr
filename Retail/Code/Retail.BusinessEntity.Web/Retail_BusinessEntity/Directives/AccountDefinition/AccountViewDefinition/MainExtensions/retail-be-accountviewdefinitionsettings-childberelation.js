@@ -43,10 +43,12 @@ app.directive("retailBeAccountviewdefinitionsettingsChildberelation", ["UtilsSer
                 api.load = function (payload) {
                     var promises = [];
 
+                    var accountBEDefinitionId;
                     var beParentChildRelationDefinitionId;
 
-                    if (payload != undefined && payload.accountViewDefinitionSettings != undefined) {
-                        beParentChildRelationDefinitionId = payload.accountViewDefinitionSettings.BEParentChildRelationDefinitionId;
+                    if (payload != undefined) {
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
+                        beParentChildRelationDefinitionId = payload.accountViewDefinitionSettings != undefined ? payload.accountViewDefinitionSettings.BEParentChildRelationDefinitionId : undefined;
                     }
 
                     //Loading BEParentChildRelationDefinition selector
@@ -59,12 +61,12 @@ app.directive("retailBeAccountviewdefinitionsettingsChildberelation", ["UtilsSer
 
                         beParentChildRelationDefinitionSelectorPromiseDeferred.promise.then(function () {
 
-                            var selectorPayload;
-                            if (payload != undefined) {
-                                selectorPayload = {
-                                    selectedIds: beParentChildRelationDefinitionId
-                                };
-                            }
+                            var selectorPayload = {
+                                filter: {
+                                    ParentBEDefinitionId: accountBEDefinitionId 
+                                },
+                                selectedIds: beParentChildRelationDefinitionId
+                            };
                             VRUIUtilsService.callDirectiveLoad(beParentChildRelationDefinitionSelectorAPI, selectorPayload, beParentChildRelationDefinitionSelectorLoadDeferred);
                         });
 

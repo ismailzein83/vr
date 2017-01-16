@@ -30,13 +30,6 @@ namespace Retail.BusinessEntity.Web.Controllers
             return manager.GetDID(dIDId);
         }
 
-        [HttpGet]
-        [Route("GetDIDsInfo")]
-        public IEnumerable<DIDInfo> GetDIDsInfo()
-        {
-            DIDManager manager = new DIDManager();
-            return manager.GetDIDsInfo();
-        }
         [HttpPost]
         [Route("AddDID")]
         public Vanrise.Entities.InsertOperationOutput<DIDDetail> AddDID(DID DID)
@@ -53,6 +46,14 @@ namespace Retail.BusinessEntity.Web.Controllers
             DIDManager manager = new DIDManager();
             return manager.UpdateDID(DID);
         }
-       
+
+        [HttpGet]
+        [Route("GetDIDsInfo")]
+        public IEnumerable<DIDInfo> GetDIDsInfo(string serializedFilter = null)
+        {
+            DIDManager manager = new DIDManager();
+            DIDFilter didFilter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<DIDFilter>(serializedFilter) : null;
+            return manager.GetDIDsInfo(didFilter);
+        }
     }
 }
