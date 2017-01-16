@@ -476,8 +476,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     ctrl.menuTop = evnt.clientY;// evnt.offsetY == undefined ? evnt.originalEvent.layerY : evnt.offsetY;
 
                 };
-
+                ctrl.isDraggableColumns = attrs.disabeldraggabelcolumns == undefined;
                 ctrl.headerSortableListener = {
+                    handle: '.dragcol',
                     onSort: function (event) {
                         buildRowHtml();
                     }
