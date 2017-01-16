@@ -10,6 +10,8 @@ namespace TOne.WhS.Sales.MainExtensions
 {
     public class AllApplicableZones : BulkActionZoneFilter
     {
+		public override Guid ConfigId { get { return new Guid("BDC22FEB-14E1-4F0D-8C3E-EF54A5A36312"); } }
+
         public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
         {
             if (context.SaleZoneIds == null)
