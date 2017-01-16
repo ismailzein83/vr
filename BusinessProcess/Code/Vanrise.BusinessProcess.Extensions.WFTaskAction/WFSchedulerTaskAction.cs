@@ -22,18 +22,44 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
             BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments;
             inputArguments.UserId = task.OwnerId;
 
-            bpInstanceManager.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
+            var createProcessOutput = bpInstanceManager.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = inputArguments
             });
 
             Console.WriteLine("WFSchedulerTaskAction finished...");
 
-            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
+            if (createProcessOutput.Result == CreateProcessResult.Succeeded)
             {
-                Result = ExecuteOutputResult.Completed
-            };
-            return output;
+                return new SchedulerTaskExecuteOutput()
+                {
+                    Result = ExecuteOutputResult.WaitingEvent,
+                    ExecutionInfo = new WFSchedulerTaskActionExecInfo {  BPInstanceId = createProcessOutput.ProcessInstanceId} 
+                };
+            }
+            else
+            {
+                return new SchedulerTaskExecuteOutput
+                {
+                    Result = ExecuteOutputResult.Completed
+                };
+            }
+        }
+
+        public override SchedulerTaskCheckProgressOutput CheckProgress(ISchedulerTaskCheckProgressContext context, int ownerId)
+        {
+            WFSchedulerTaskActionExecInfo execInfo = context.ExecutionInfo as WFSchedulerTaskActionExecInfo;
+            BPInstanceManager bpInstanceManager = new BPInstanceManager();
+            var processInstance = bpInstanceManager.GetBPInstance(execInfo.BPInstanceId);
+            if (processInstance != null && !BPInstanceStatusAttribute.GetAttribute(processInstance.Status).IsClosed)
+                return new SchedulerTaskCheckProgressOutput { Result = ExecuteOutputResult.WaitingEvent };
+            else
+                return new SchedulerTaskCheckProgressOutput { Result = ExecuteOutputResult.Completed };
+        }
+
+        private class WFSchedulerTaskActionExecInfo
+        {
+            public long BPInstanceId { get; set; }
         }
     }
 }
