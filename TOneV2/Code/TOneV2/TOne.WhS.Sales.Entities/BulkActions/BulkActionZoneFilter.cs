@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public abstract class BulkActionZoneFilter
-    {
-        public abstract IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context);
-    }
+	public abstract class BulkActionZoneFilter
+	{
+		public abstract Guid ConfigId { get; }
 
-    public interface IApplicableZoneIdsContext
-    {
-        IEnumerable<long> SaleZoneIds { get; }
+		public abstract IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context);
+	}
 
-        Changes DraftData { get; }
+	public interface IApplicableZoneIdsContext
+	{
+		IEnumerable<long> SaleZoneIds { get; }
 
-        BulkActionType BulkAction { get; }
-    }
+		Changes DraftData { get; }
+
+		BulkActionType BulkAction { get; }
+	}
 }
