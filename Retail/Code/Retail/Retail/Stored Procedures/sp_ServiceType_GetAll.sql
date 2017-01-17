@@ -6,6 +6,6 @@
 CREATE PROCEDURE [Retail].[sp_ServiceType_GetAll]
 AS
 BEGIN
-	SELECT ID, Name, Title, Settings
+	SELECT ID, Name, Title, Settings,AccountBEDefinitionId
 	FROM Retail.ServiceType  with(nolock)
 END

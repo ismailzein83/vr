@@ -14,9 +14,10 @@
     [timestamp]                   ROWVERSION       NULL,
     [CreatedTime]                 DATETIME         CONSTRAINT [DF_LiveBalance_CreatedTime] DEFAULT (getdate()) NULL,
     [ActiveAlertsInfo]            NVARCHAR (MAX)   NULL,
-    [OldCurrentBalance]           DECIMAL (20, 6)  NULL,
     CONSTRAINT [PK_LiveBalance_1] PRIMARY KEY CLUSTERED ([AccountTypeID] ASC, [AccountID] ASC)
 );
+
+
 
 
 

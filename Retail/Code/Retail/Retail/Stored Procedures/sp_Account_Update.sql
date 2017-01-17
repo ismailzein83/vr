@@ -8,7 +8,7 @@ CREATE PROCEDURE [Retail].[sp_Account_Update]
 	@Name NVARCHAR(255),
 	@TypeID uniqueidentifier,
 	@Settings NVARCHAR(MAX),
-	@ParentID INT,
+	@ParentID BIGINT,
 	@SourceID nvarchar(255)
 AS
 BEGIN

@@ -3,10 +3,10 @@
 AS
 BEGIN
 
-	UPDATE [VR_AccountBalance].AccountUsage
+	UPDATE au
 	SET 
-	[VR_AccountBalance].AccountUsage.UsageBalance += bt.UpdateValue
-	FROM [VR_AccountBalance].AccountUsage 
-	inner join @BalanceTable as bt ON  AccountUsage.ID = bt.ID
-
+	UsageBalance += bt.UpdateValue,
+	ShouldRecreateTransaction = 1
+	FROM [VR_AccountBalance].AccountUsage au
+	inner join @BalanceTable as bt ON  au.ID = bt.ID
 END

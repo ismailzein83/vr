@@ -5,6 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]
 	@AccountTypeID uniqueidentifier,
+	@TransactionTypeID uniqueidentifier,
 	@AccountID bigint,
 	@PeriodStart datetime,
 	@PeriodEnd datetime,
@@ -16,12 +17,12 @@ BEGIN
 
 	Declare @ID bigint;
 
-	Select @ID = ID from [VR_AccountBalance].AccountUsage WHERE AccountID = @AccountID AND AccountTypeID = @AccountTypeID AND PeriodStart =@PeriodStart
+	Select @ID = ID from [VR_AccountBalance].AccountUsage WHERE AccountID = @AccountID AND AccountTypeID = @AccountTypeID AND TransactionTypeID = @TransactionTypeID  AND  PeriodStart =@PeriodStart
 	IF(@ID IS NULL)
 	BEGIN
-		INSERT INTO [VR_AccountBalance].AccountUsage (AccountTypeID,AccountID ,CurrencyId, PeriodStart, PeriodEnd, UsageBalance,BillingTransactionNote)
-		VALUES (@AccountTypeID, @AccountID,@CurrencyId, @PeriodStart, @PeriodEnd, @UsageBalance,@BillingTransactionNote)	
+		INSERT INTO [VR_AccountBalance].AccountUsage (AccountTypeID,TransactionTypeID,AccountID ,CurrencyId, PeriodStart, PeriodEnd, UsageBalance,BillingTransactionNote)
+		VALUES (@AccountTypeID,@TransactionTypeID, @AccountID,@CurrencyId, @PeriodStart, @PeriodEnd, @UsageBalance,@BillingTransactionNote)	
 		Set @ID = SCOPE_IDENTITY()
 	END
-	SELECT @ID as ID, @AccountID as AccountID
+	SELECT @ID as ID, @AccountID as AccountID,@TransactionTypeID as TransactionTypeID
 END

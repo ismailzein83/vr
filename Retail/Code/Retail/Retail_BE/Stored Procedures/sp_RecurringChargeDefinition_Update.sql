@@ -3,16 +3,20 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_ServiceType_Update]
+CREATE PROCEDURE [Retail_BE].[sp_RecurringChargeDefinition_Update]
 	@ID uniqueidentifier,
-	@Title NVARCHAR(255),
-	@AccountBEDefinitionId Uniqueidentifier,
+	@Name NVARCHAR(255),
 	@Settings NVARCHAR(MAX)
 AS
 BEGIN
+	IF NOT EXISTS
+	(
+		SELECT 1 FROM Retail_BE.RecurringChargeDefinition
+		WHERE ID != @ID AND Name = @Name
+	)
 	BEGIN
-		UPDATE Retail.ServiceType
-		SET Title = @Title, Settings = @Settings,AccountBEDefinitionId=@AccountBEDefinitionId
+		UPDATE Retail_BE.RecurringChargeDefinition
+		SET Name = @Name,Settings = @Settings
 		WHERE ID = @ID
 	END
 END

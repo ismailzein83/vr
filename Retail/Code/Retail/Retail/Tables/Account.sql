@@ -4,7 +4,7 @@
     [OldTypeID]           INT              NULL,
     [TypeID]              UNIQUEIDENTIFIER NOT NULL,
     [Settings]            NVARCHAR (MAX)   NULL,
-    [ParentID]            INT              NULL,
+    [ParentID]            BIGINT           NULL,
     [StatusID]            UNIQUEIDENTIFIER NULL,
     [SourceID]            NVARCHAR (255)   NULL,
     [ExecutedActionsData] NVARCHAR (MAX)   NULL,
@@ -12,6 +12,8 @@
     [timestamp]           ROWVERSION       NULL,
     CONSTRAINT [PK_Account] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
