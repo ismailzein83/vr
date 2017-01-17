@@ -12,8 +12,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetFilteredBEParentChildRelations'), input);
         }
 
-        function GetBEParentChildRelation(beParentChildRelationId) {
+        function GetBEParentChildRelation(beParentChildRelationDefinitionId, beParentChildRelationId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetBEParentChildRelation'), {
+                beParentChildRelationDefinitionId: beParentChildRelationDefinitionId,
                 beParentChildRelationId: beParentChildRelationId
             });
         }

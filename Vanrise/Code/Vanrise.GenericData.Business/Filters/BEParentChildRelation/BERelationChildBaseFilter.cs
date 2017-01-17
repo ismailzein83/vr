@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.Business
 {
@@ -14,9 +15,9 @@ namespace Vanrise.GenericData.Business
         public bool IsChildExcluded(object childId)
         {
             IEnumerable<BEParentChildRelation> beParentChildRelations = new BEParentChildRelationManager().GetBEParentChildRelationsByDefinitionId(this.ParentChildRelationDefinition);
-            IEnumerable<string> assignedChildrens = beParentChildRelations.Select(itm => (itm.ChildBEId.ToLower()));
+            string childIdAsString = childId.ToString();
 
-            if (assignedChildrens != null && assignedChildrens.Contains(childId.ToString().ToLower()))
+            if (beParentChildRelations.FindRecord(itm => string.Compare(itm.ChildBEId, childIdAsString, true) == 0) != null)
                 return false;
 
             return true;

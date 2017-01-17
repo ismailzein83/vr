@@ -104,7 +104,7 @@
             });
         }
         function getBEParentChildRelation() {
-            return VR_GenericData_BEParentChildRelationAPIService.GetBEParentChildRelation(beParentChildRelationId).then(function (response) {
+            return VR_GenericData_BEParentChildRelationAPIService.GetBEParentChildRelation(beParentChildRelationDefinitionId, beParentChildRelationId).then(function (response) {
                 beParentChildRelationEntity = response;
             });
         }

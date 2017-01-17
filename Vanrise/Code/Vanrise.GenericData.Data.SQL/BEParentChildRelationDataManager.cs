@@ -26,9 +26,9 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("[genericdata].[sp_BEParentChildRelation_GetAll]", BEParentChildRelationMapper);
         }
 
-        public bool AreBEParentChildRelationUpdated(ref object updateHandle)
+        public bool AreBEParentChildRelationUpdated(Guid beParentChildRelationDefinitionId, ref object updateHandle)
         {
-            return base.IsDataUpdated("[genericdata].[BEParentChildRelation]", ref updateHandle);
+            return base.IsDataUpdated("[genericdata].[BEParentChildRelation]", "RelationDefinitionId", beParentChildRelationDefinitionId, ref updateHandle);
         }
 
         public bool Insert(BEParentChildRelation beParentChildRelationItem, out long insertedId)

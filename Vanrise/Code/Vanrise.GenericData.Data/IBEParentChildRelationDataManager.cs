@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Data
     {
         List<BEParentChildRelation> GetBEParentChildRelationes();
 
-        bool AreBEParentChildRelationUpdated(ref object updateHandle);
+        bool AreBEParentChildRelationUpdated(Guid beParentChildRelationDefinitionId, ref object updateHandle);
 
         bool Insert(BEParentChildRelation BEParentChildRelationItem, out long insertedId);
 

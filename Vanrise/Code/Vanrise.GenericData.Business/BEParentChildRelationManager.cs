@@ -7,6 +7,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using System.Collections.Concurrent;
 
 namespace Vanrise.GenericData.Business
 {
@@ -16,7 +17,7 @@ namespace Vanrise.GenericData.Business
 
         public IDataRetrievalResult<BEParentChildRelationDetail> GetFilteredBEParentChildRelations(DataRetrievalInput<BEParentChildRelationQuery> input)
         {
-            var allBEParentChildRelation = this.GetCachedBEParentChildRelations();
+            var allBEParentChildRelation = this.GetCachedBEParentChildRelations(input.Query.RelationDefinitionId);
 
             Func<BEParentChildRelation, bool> filterExpression = null;
             if (input.Query != null)
@@ -39,16 +40,16 @@ namespace Vanrise.GenericData.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allBEParentChildRelation.ToBigResult(input, filterExpression, BEParentChildRelationDetailMapper));
         }
 
-        public BEParentChildRelation GetBEParentChildRelation(long beParentChildRelationId)
+        public BEParentChildRelation GetBEParentChildRelation(Guid beParentChildRelationDefinitionId, long beParentChildRelationId)
         {
-            Dictionary<long, BEParentChildRelation> cachedBEParentChildRelation = this.GetCachedBEParentChildRelations();
+            Dictionary<long, BEParentChildRelation> cachedBEParentChildRelation = this.GetCachedBEParentChildRelations(beParentChildRelationDefinitionId);
             return cachedBEParentChildRelation.GetRecord(beParentChildRelationId);
         }
 
         public IEnumerable<BEParentChildRelation> GetBEParentChildRelationsByDefinitionId(Guid beParentChildRelationDefinitionId)
         {
-            Dictionary<long, BEParentChildRelation> cachedBEParentChildRelation = this.GetCachedBEParentChildRelations();
-            return cachedBEParentChildRelation.Values.Where(itm => itm.RelationDefinitionId == beParentChildRelationDefinitionId);
+            Dictionary<long, BEParentChildRelation> cachedBEParentChildRelations = this.GetCachedBEParentChildRelations(beParentChildRelationDefinitionId);
+            return cachedBEParentChildRelations.FindAllRecords(itm => itm.RelationDefinitionId == beParentChildRelationDefinitionId);
         }
 
         public InsertOperationOutput<BEParentChildRelationDetail> AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
@@ -63,7 +64,7 @@ namespace Vanrise.GenericData.Business
 
             if (_dataManager.Insert(beParentChildRelationItem, out beParentChildRelationId))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(beParentChildRelationItem.RelationDefinitionId);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 beParentChildRelationItem.BEParentChildRelationId = beParentChildRelationId;
                 insertOperationOutput.InsertedObject = BEParentChildRelationDetailMapper(beParentChildRelationItem);
@@ -87,9 +88,9 @@ namespace Vanrise.GenericData.Business
 
             if (_dataManager.Update(beParentChildRelationItem))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(beParentChildRelationItem.RelationDefinitionId);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = BEParentChildRelationDetailMapper(this.GetBEParentChildRelation(beParentChildRelationItem.BEParentChildRelationId));
+                updateOperationOutput.UpdatedObject = BEParentChildRelationDetailMapper(this.GetBEParentChildRelation(beParentChildRelationItem.RelationDefinitionId, beParentChildRelationItem.BEParentChildRelationId));
             }
             else
             {
@@ -99,35 +100,72 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        //public IEnumerable<BEParentChildRelationInfo> GetBEParentChildRelationsInfo(BEParentChildRelationFilter filter)
-        //{
-        //    Func<BEParentChildRelation, bool> filterExpression = null;
-
-        //    return this.GetCachedBEParentChildRelationes().MapRecords(BEParentChildRelationInfoMapper, filterExpression).OrderBy(x => x.Name);
-        //}
-
         public BEParentChildRelation GetParent(Guid beParentChildRelationDefinitionId, string childId, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByChildId = this.GetCachedBEParentChildRelationsByChildId(beParentChildRelationDefinitionId);
+            List<BEParentChildRelation> beParentChildRelations = beParentChildRelationsByChildId.GetRecord(childId);
+
+            if (beParentChildRelations == null)
+                return null;
+
+            Func<BEParentChildRelation, bool> predicate = (itm) =>
+            {
+                if (itm.BED > effectiveOn)
+                    return false;
+
+                if (itm.EED.HasValue && itm.EED.Value <= effectiveOn)
+                    return false;
+
+                return true;
+            };
+
+            return beParentChildRelations.FindRecord(predicate);
         }
 
         public List<BEParentChildRelation> GetChildren(Guid beParentChildRelationDefinitionId, string parentId, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByParentId = this.GetCachedBEParentChildRelationsByParentId(beParentChildRelationDefinitionId);
+            List<BEParentChildRelation> beParentChildRelations = beParentChildRelationsByParentId.GetRecord(parentId);
+
+            if (beParentChildRelations == null)
+                return null;
+
+            Func<BEParentChildRelation, bool> predicate = (itm) =>
+            {
+                if (itm.BED > effectiveOn)
+                    return false;
+
+                if (itm.EED.HasValue && itm.EED.Value <= effectiveOn)
+                    return false;
+
+                return true;
+            };
+
+            var relatedChildren = beParentChildRelations.FindAllRecords(predicate);
+            if (relatedChildren == null)
+                return null;
+
+            return relatedChildren.ToList();
         }
 
         #endregion
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
-            object _updateHandle;
+            ConcurrentDictionary<Guid, Object> _updateHandlesByRelationDefinitionId = new ConcurrentDictionary<Guid, Object>();
 
-            protected override bool ShouldSetCacheExpired(object parameter)
+            protected override bool ShouldSetCacheExpired(Guid beParentChildRelationDefinitionId)
             {
-                return _dataManager.AreBEParentChildRelationUpdated(ref _updateHandle);
+                object _updateHandle;
+
+                _updateHandlesByRelationDefinitionId.TryGetValue(beParentChildRelationDefinitionId, out _updateHandle);
+                bool isCacheExpired = _dataManager.AreBEParentChildRelationUpdated(beParentChildRelationDefinitionId, ref _updateHandle);
+                _updateHandlesByRelationDefinitionId.AddOrUpdate(beParentChildRelationDefinitionId, _updateHandle, (key, existingHandle) => _updateHandle);
+
+                return isCacheExpired;
             }
         }
 
@@ -135,9 +173,14 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        private Dictionary<long, BEParentChildRelation> GetCachedBEParentChildRelations()
+        private struct GetCachedBEParentChildRelationsCacheName
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBEParentChildRelationes",
+            public Guid BEParentChildRelationDefinitionId { get; set; }
+        }
+        private Dictionary<long, BEParentChildRelation> GetCachedBEParentChildRelations(Guid beParentChildRelationDefinitionId)
+        {
+            var cacheName = new GetCachedBEParentChildRelationsCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beParentChildRelationDefinitionId,
                () =>
                {
                    IBEParentChildRelationDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
@@ -145,24 +188,42 @@ namespace Vanrise.GenericData.Business
                });
         }
 
-        private IBusinessEntityManager GetBusinessEntityManager(Guid businessEntityDefinitionId)
+        private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByParentId(Guid beParentChildRelationDefinitionId)
         {
-            var beDefinitionManager = new BusinessEntityDefinitionManager();
-            var beManagerInstance = beDefinitionManager.GetBusinessEntityManager(businessEntityDefinitionId);
-            if (beManagerInstance == null)
-                throw new NullReferenceException(String.Format("beManagerInstance. BusinessEntityDefinitionId '{0}'", businessEntityDefinitionId));
+            var cacheName = new GetCachedBEParentChildRelationsCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beParentChildRelationDefinitionId,
+                () =>
+                {
+                    Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByParentId = new Dictionary<string, List<BEParentChildRelation>>();
+                    List<BEParentChildRelation> beParentChildRelations;
 
-            return beManagerInstance;
+                    var allBEParentChildRelations = this.GetCachedBEParentChildRelations(beParentChildRelationDefinitionId);
+                    foreach (var itm in allBEParentChildRelations.Values)
+                    {
+                        beParentChildRelations = beParentChildRelationsByParentId.GetOrCreateItem(itm.ParentBEId);
+                        beParentChildRelations.Add(itm);
+                    }
+                    return beParentChildRelationsByParentId;
+                });
         }
 
-        private BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId)
+        private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByChildId(Guid beParentChildRelationDefinitionId)
         {
-            var beDefinitionManager = new BusinessEntityDefinitionManager();
-            var beDefinition = beDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
-            if (beDefinition == null)
-                throw new NullReferenceException(String.Format("beDefinition of BusinessEntityDefinitionId '{0}'", businessEntityDefinitionId));
+            var cacheName = new GetCachedBEParentChildRelationsCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beParentChildRelationDefinitionId,
+                () =>
+                {
+                    Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByChildId = new Dictionary<string, List<BEParentChildRelation>>();
+                    List<BEParentChildRelation> beParentChildRelations;
 
-            return beDefinition;
+                    var allBEParentChildRelations = this.GetCachedBEParentChildRelations(beParentChildRelationDefinitionId);
+                    foreach (var itm in allBEParentChildRelations.Values)
+                    {
+                        beParentChildRelations = beParentChildRelationsByChildId.GetOrCreateItem(itm.ChildBEId);
+                        beParentChildRelations.Add(itm);
+                    }
+                    return beParentChildRelationsByChildId;
+                });
         }
 
         #endregion
@@ -182,16 +243,6 @@ namespace Vanrise.GenericData.Business
             };
             return beParentChildRelationDetail;
         }
-
-        //public BEParentChildRelationInfo BEParentChildRelationInfoMapper(BEParentChildRelation beParentChildRelation)
-        //{
-        //    BEParentChildRelationInfo beParentChildRelationInfo = new BEParentChildRelationInfo()
-        //    {
-        //        BEParentChildRelationId = beParentChildRelation.BEParentChildRelationId,
-        //        Name = beParentChildRelation.Name
-        //    };
-        //    return beParentChildRelationInfo;
-        //}
 
         #endregion
     }

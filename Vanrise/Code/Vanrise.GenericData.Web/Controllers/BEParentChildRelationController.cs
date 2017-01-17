@@ -24,9 +24,9 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetBEParentChildRelation")]
-        public BEParentChildRelation GetBEParentChildRelation(int beParentChildRelationId)
+        public BEParentChildRelation GetBEParentChildRelation(Guid beParentChildRelationDefinitionId, int beParentChildRelationId)
         {
-            return _manager.GetBEParentChildRelation(beParentChildRelationId);
+            return _manager.GetBEParentChildRelation(beParentChildRelationDefinitionId, beParentChildRelationId);
         }
 
         [HttpPost]
