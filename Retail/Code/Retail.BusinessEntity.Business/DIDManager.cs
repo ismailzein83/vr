@@ -41,6 +41,16 @@ namespace Retail.BusinessEntity.Business
             return did.Number;
         }
 
+        public DID GetDIDByNumber(string number)
+        {
+            var dids = GetCachedDIDsGroupByNumber();
+
+            if (dids == null)
+                return null;
+
+            return dids.GetRecord(number);
+        }
+
         public InsertOperationOutput<DIDDetail> AddDID(DID did)
         {
             InsertOperationOutput<DIDDetail> insertOperationOutput = new InsertOperationOutput<DIDDetail>();
@@ -111,6 +121,16 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Methods
+
+        private Dictionary<string, DID> GetCachedDIDsGroupByNumber()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDIDsGroupByNumber",
+               () =>
+               {
+                   var dids = GetCachedDIDs();
+                   return dids.ToDictionary(itm => itm.Value.Number, itm => itm.Value);
+               });
+        }
 
         private Dictionary<int, DID> GetCachedDIDs()
         {
