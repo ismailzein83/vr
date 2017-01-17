@@ -1,0 +1,10 @@
+﻿<?xml version="1.0"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=301879
+  -->
+<configuration>
+  <appSettings>
+    <add key="Web_ExtendedModulesNames" value="NP_IVSwitch"/>    <!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
+  </appSettings>
+</configuration>

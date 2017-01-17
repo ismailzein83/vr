@@ -513,6 +513,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
+    <Content Include="Web.config.CloudXPoint.exclude" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
