@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,21 +12,24 @@ namespace Retail.BusinessEntity.Business
     {
         #region public methods
 
+        public DIDTechnicalSettings GetDIDTechnicalSettings()
+        {
+            DIDTechnicalSettings didTechnicalSettings = new SettingManager().GetSetting<DIDTechnicalSettings>(DIDTechnicalSettings.SETTING_TYPE);
+            if (didTechnicalSettings == null)
+                throw new NullReferenceException("didTechnicalSettings");
 
-        #endregion
+            return didTechnicalSettings;
+        }
 
-        #region private methods
+        public Guid GetAccountDIDRelationDefinitionId()
+        {
+            DIDTechnicalSettings DIDTechnicalSettings = this.GetDIDTechnicalSettings();
+            Guid accountDIDRelationDefinitionId = DIDTechnicalSettings.AccountDIDRelationDefinitionId;
+            if (accountDIDRelationDefinitionId == null)
+                throw new NullReferenceException("didTechnicalSettings.AccountDIDRelationDefinitionId");
 
-        //private DID GetRouteSettingData()
-        //{
-        //    SettingManager settingManager = new SettingManager();
-        //    RouteSettingsData routeSettingsData = settingManager.GetSetting<RouteSettingsData>(Constants.RouteSettings);
-
-        //    if (routeSettingsData == null)
-        //        throw new NullReferenceException("routeSettingsData");
-
-        //    return routeSettingsData;
-        //}
+            return accountDIDRelationDefinitionId;
+        }
 
         #endregion
     }

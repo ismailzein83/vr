@@ -4,8 +4,14 @@
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
              idfield="Entity.DIDId">
+
     <vr-datagridcolumn headertext="'Id'" field="'Entity.DIDId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Number'" field="'Entity.Number'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'International'" field="'Entity.Settings.IsInternational'"><span ng-show="{{dataItem.Entity.Settings.IsInternational}}"><vr-icon icontype="dataItem.Entity.Settings.IsInternational"></vr-icon></span> </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'International'" field="'Entity.Settings.IsInternational'">
+        <span ng-show="{{dataItem.Entity.Settings.IsInternational}}">
+            <vr-icon icontype="dataItem.Entity.Settings.IsInternational"></vr-icon>
+        </span> 
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Account'" field="'AccountName'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Number Of Channels'" type="'Number'" field="'Entity.Settings.NumberOfChannels'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
 </vr-datagrid>

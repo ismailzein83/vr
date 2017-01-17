@@ -11,14 +11,15 @@ using Vanrise.Web.Base;
 namespace Retail.BusinessEntity.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "DID")]
+    [JSONWithTypeAttribute]
     public class DIDController : BaseAPIController
     {
-
+        DIDManager manager = new DIDManager();
+        
         [HttpPost]
         [Route("GetFilteredDIDs")]
         public object GetFilteredDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
         {
-            DIDManager manager = new DIDManager();
             return GetWebResponse(input, manager.GetFilteredDIDs(input));
         }
         
@@ -26,7 +27,6 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetDID")]
         public DID GetDID(int dIDId)
         {
-            DIDManager manager = new DIDManager();
             return manager.GetDID(dIDId);
         }
 
@@ -34,8 +34,6 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("AddDID")]
         public Vanrise.Entities.InsertOperationOutput<DIDDetail> AddDID(DID DID)
         {
-
-            DIDManager manager = new DIDManager();
             return manager.AddDID(DID);
         }
 
@@ -43,7 +41,6 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("UpdateDID")]
         public Vanrise.Entities.UpdateOperationOutput<DIDDetail> UpdateDID(DID DID)
         {
-            DIDManager manager = new DIDManager();
             return manager.UpdateDID(DID);
         }
 
@@ -51,7 +48,6 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetDIDsInfo")]
         public IEnumerable<DIDInfo> GetDIDsInfo(string serializedFilter = null)
         {
-            DIDManager manager = new DIDManager();
             DIDFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<DIDFilter>(serializedFilter) : null;
             return manager.GetDIDsInfo(filter);
         }

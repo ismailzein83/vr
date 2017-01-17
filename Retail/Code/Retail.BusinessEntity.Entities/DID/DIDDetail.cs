@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class DIDDetail
     {
         public DID Entity { get; set; }
+
+        public string AccountName { get; set; }
     }
 }

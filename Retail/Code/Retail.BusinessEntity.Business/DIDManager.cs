@@ -7,12 +7,20 @@ using Vanrise.Entities;
 using Retail.BusinessEntity.Data;
 using Retail.BusinessEntity.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Business;
 
 namespace Retail.BusinessEntity.Business
 {
     public class DIDManager : IBusinessEntityManager
     {
         #region ctor/Local Variables
+
+        Guid _accountDIDRelationDefinitionId;
+
+        public DIDManager()
+        {
+            _accountDIDRelationDefinitionId = new ConfigManager().GetAccountDIDRelationDefinitionId();
+        }
 
         #endregion
 
@@ -175,8 +183,13 @@ namespace Retail.BusinessEntity.Business
 
         private DIDDetail DIDDetailMapper(DID did)
         {
+            BEParentChildRelation beParentChildRelation = new BEParentChildRelationManager().GetParent(_accountDIDRelationDefinitionId, did.DIDId.ToString(), DateTime.Now);
+            BEParentChildRelationDefinition beParentChildRelationDefinition = new BEParentChildRelationDefinitionManager().GetBEParentChildRelationDefinition(_accountDIDRelationDefinitionId);
+            string accountName = new BusinessEntityManager().GetEntityDescription(beParentChildRelationDefinition.Settings.ParentBEDefinitionId, long.Parse(beParentChildRelation.ParentBEId));
+
             DIDDetail didDetail = new DIDDetail();
             didDetail.Entity = did;
+            didDetail.AccountName = accountName;
             return didDetail;
         }
 
