@@ -133,6 +133,10 @@
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagementController.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.RingoExtensions\Retail.Ringo.MainExtensions.csproj">
+      <Project>{79ee241b-c553-470e-a091-03fbbccd971f}</Project>
+      <Name>Retail.Ringo.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Ringo.Business\Retail.Ringo.Business.csproj">
       <Project>{c6098267-9bb4-4f28-8a80-70132fb0bc82}</Project>
       <Name>Retail.Ringo.Business</Name>
