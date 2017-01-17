@@ -52,8 +52,8 @@ namespace Retail.BusinessEntity.Web.Controllers
         public IEnumerable<DIDInfo> GetDIDsInfo(string serializedFilter = null)
         {
             DIDManager manager = new DIDManager();
-            DIDFilter didFilter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<DIDFilter>(serializedFilter) : null;
-            return manager.GetDIDsInfo(didFilter);
+            DIDFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<DIDFilter>(serializedFilter) : null;
+            return manager.GetDIDsInfo(filter);
         }
     }
 }

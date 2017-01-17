@@ -34,9 +34,9 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
-            $scope.scopeModel.isAccountBEDefinitionSelected = false;
             $scope.scopeModel.isGridLoadded = false;
+            $scope.scopeModel.isAccountBEDefinitionSelected = false;
+            $scope.scopeModel.showBusinessEntityDefinitionSelector = false;
 
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 businessEntityDefinitionSelectorAPI = api;
@@ -61,6 +61,7 @@
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (selectedBusinessEntityDefinition) {
 
                 if (selectedBusinessEntityDefinition != undefined) {
+                    $scope.scopeModel.isLoading = true;
                     $scope.scopeModel.isGridLoadded = false;
                     $scope.scopeModel.isAccountBEDefinitionSelected = true;
 
@@ -108,17 +109,21 @@
                             $type: "Retail.BusinessEntity.Business.AccountBEDefinitionViewFilter, Retail.BusinessEntity.Business",
                             ViewId: viewId
                         }]
-                    }
+                    },
+                    selectFirstItem: true
                 };
-
                 VRUIUtilsService.callDirectiveLoad(businessEntityDefinitionSelectorAPI, payload, businessEntityDefinitionSelectorLoadDeferred);
             });
 
-            return businessEntityDefinitionSelectorLoadDeferred.promise.catch(function (error) {
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        }).finally(function () {
-                            $scope.scopeModel.isLoading = false;
-                        });
+            return businessEntityDefinitionSelectorLoadDeferred.promise.then(function () {
+                setTimeout(function () {
+                    $scope.scopeModel.showBusinessEntityDefinitionSelector = !businessEntityDefinitionSelectorAPI.hasSingleItem();
+                });
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
         function loadAllControls() {
@@ -134,7 +139,7 @@
             accountTypeSelectorReadyDeferred.promise.then(function () {
                 var payload = {
                     filter: {
-                        AccountBEDefinitionId: accountBEDefinitionId, 
+                        AccountBEDefinitionId: accountBEDefinitionId,
                         RootAccountTypeOnly: true
                     }
                 };

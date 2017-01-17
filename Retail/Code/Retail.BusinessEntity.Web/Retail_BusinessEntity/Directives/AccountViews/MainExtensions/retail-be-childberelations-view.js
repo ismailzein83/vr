@@ -49,7 +49,7 @@
                         gridAPI.onBEParentChildRelationAdded(addedChildBERelation);
                     };
 
-                    VR_GenericData_BEParentChildRelationService.addBEParentChildRelation(accountViewDefinition.Settings.BEParentChildRelationDefinitionId, parentAccountId, undefined, onChildBERelationAdded);
+                    VR_GenericData_BEParentChildRelationService.addBEParentChildRelation(onChildBERelationAdded, accountViewDefinition.Settings.BEParentChildRelationDefinitionId, parentAccountId);
                 };
             }
             function defineAPI() {

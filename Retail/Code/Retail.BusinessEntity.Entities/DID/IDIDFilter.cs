@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class DIDFilter
+    public interface IDIDFilter
     {
-        public List<IDIDFilter> Filters { get; set; }
+        bool IsMatched(IDIDFilterContext context);
+    }
+
+    public interface IDIDFilterContext
+    {
+        DID DID { get; }
     }
 }

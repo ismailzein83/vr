@@ -132,8 +132,6 @@ namespace Retail.BusinessEntity.Business
 
         public IEnumerable<PackageInfo> GetPackagesInfo(PackageFilter filter)
         {
-            var packages = GetCachedPackages();
-
             Func<Package, bool> filterExpression = null;
             if (filter != null)
             {
@@ -149,7 +147,7 @@ namespace Retail.BusinessEntity.Business
                 };
             }
 
-            return packages.MapRecords(PackageInfoMapper, filterExpression);
+            return GetCachedPackages().MapRecords(PackageInfoMapper, filterExpression);
         }
 
         public IEnumerable<ServicePackageItemConfig> GetServicePackageItemConfigs()

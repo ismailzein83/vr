@@ -10,7 +10,7 @@
                 </vr-columns>
             </vr-row>
             <vr-row removeline>
-                <vr-columns width="normal">
+                <vr-columns width="normal" ng-show="scopeModel.showBusinessEntityDefinitionSelector">
                     <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
                                                                       onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"
                                                                       customlabel="Account Definition" hideremoveicon>

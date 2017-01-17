@@ -41,23 +41,23 @@ namespace Retail.BusinessEntity.Business
             return did.Number;
         }
 
-        public InsertOperationOutput<DIDDetail> AddDID(DID dID)
+        public InsertOperationOutput<DIDDetail> AddDID(DID did)
         {
             InsertOperationOutput<DIDDetail> insertOperationOutput = new InsertOperationOutput<DIDDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int dIDId = -1;
+            int didId = -1;
 
             IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
-            bool insertActionSucc = dataManager.Insert(dID, out dIDId);
+            bool insertActionSucc = dataManager.Insert(did, out didId);
 
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                dID.DIDId = dIDId;
-                insertOperationOutput.InsertedObject = DIDDetailMapper(dID);
+                did.DIDId = didId;
+                insertOperationOutput.InsertedObject = DIDDetailMapper(did);
             }
             else
             {
@@ -67,11 +67,11 @@ namespace Retail.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public UpdateOperationOutput<DIDDetail> UpdateDID(DID dID)
+        public UpdateOperationOutput<DIDDetail> UpdateDID(DID did)
         {
             IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
 
-            bool updateActionSucc = dataManager.Update(dID);
+            bool updateActionSucc = dataManager.Update(did);
             UpdateOperationOutput<DIDDetail> updateOperationOutput = new UpdateOperationOutput<DIDDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -81,7 +81,7 @@ namespace Retail.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = DIDDetailMapper(dID);
+                updateOperationOutput.UpdatedObject = DIDDetailMapper(did);
             }
             else
             {
@@ -91,12 +91,22 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<DIDInfo> GetDIDsInfo(DIDFilter didFilter)
+        public IEnumerable<DIDInfo> GetDIDsInfo(DIDFilter filter)
         {
-            var DIDs = GetCachedDIDs();
-            return DIDs.MapRecords(DIDInfoMapper);
-        }
+            Func<DID, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = (did) =>
+                {
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(did, filter.Filters))
+                        return false;
 
+                    return true;
+                };
+            }
+
+            return GetCachedDIDs().MapRecords(DIDInfoMapper, filterExpression);
+        }
 
         #endregion
 
@@ -111,6 +121,17 @@ namespace Retail.BusinessEntity.Business
                    IEnumerable<DID> DIDs = dataManager.GetAllDIDs();
                    return DIDs.ToDictionary(x => x.DIDId, x => x);
                });
+        }
+
+        private bool CheckIfFilterIsMatch(DID did, List<IDIDFilter> filters)
+        {
+            DIDFilterContext context = new DIDFilterContext { DID = did };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
 
         #endregion
@@ -132,20 +153,20 @@ namespace Retail.BusinessEntity.Business
 
         #region  Mappers
 
-        private DIDInfo DIDInfoMapper(DID dID)
+        private DIDDetail DIDDetailMapper(DID did)
+        {
+            DIDDetail didDetail = new DIDDetail();
+            didDetail.Entity = did;
+            return didDetail;
+        }
+
+        private DIDInfo DIDInfoMapper(DID did)
         {
             return new DIDInfo()
             {
-                DIDId = dID.DIDId,
-                Number = dID.Number,
+                DIDId = did.DIDId,
+                Number = did.Number,
             };
-        }
-
-        private DIDDetail DIDDetailMapper(DID dID)
-        {
-            DIDDetail dIDDetail = new DIDDetail();
-            dIDDetail.Entity = dID;
-            return dIDDetail;
         }
 
         #endregion

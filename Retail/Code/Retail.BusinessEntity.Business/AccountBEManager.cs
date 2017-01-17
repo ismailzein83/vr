@@ -11,6 +11,7 @@ using Vanrise.GenericData.Business;
 using Retail.BusinessEntity.Data;
 using Vanrise.Caching;
 using Vanrise.Common.Business;
+using System.Collections.Concurrent;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -390,11 +391,18 @@ namespace Retail.BusinessEntity.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IAccountBEDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-            object _updateHandle;
+            ConcurrentDictionary<Guid, Object> _updateHandlesByBEDefinitionId = new ConcurrentDictionary<Guid, Object>();
+
 
             protected override bool ShouldSetCacheExpired(Guid accountBEDefinitionId)
             {
-                return _dataManager.AreAccountsUpdated(accountBEDefinitionId, ref _updateHandle);
+                object _updateHandle;
+
+                _updateHandlesByBEDefinitionId.TryGetValue(accountBEDefinitionId, out _updateHandle);
+                bool isCacheExpired = _dataManager.AreAccountsUpdated(accountBEDefinitionId, ref _updateHandle);
+                _updateHandlesByBEDefinitionId.AddOrUpdate(accountBEDefinitionId, _updateHandle, (key, existingHandle) => _updateHandle);
+
+                return isCacheExpired;
             }
         }
 

@@ -85,6 +85,7 @@
     <Compile Include="DID\DIDInfo.cs" />
     <Compile Include="DID\DIDQuery.cs" />
     <Compile Include="DID\DIDSettings.cs" />
+    <Compile Include="DID\IDIDFilter.cs" />
     <Compile Include="Package\IPackageFilter.cs" />
     <Compile Include="Product\IProductFilter.cs" />
     <Compile Include="Product\Product.cs" />
@@ -103,7 +104,8 @@
     <Compile Include="Product\Definition\ProductDefinitionInfo.cs" />
     <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />
     <Compile Include="IAccountBEDefinitionManager.cs" />
-    <Compile Include="InvoiceSettings.cs" />
+    <Compile Include="Settings\DIDTechnicalSettings.cs" />
+    <Compile Include="Settings\InvoiceSettings.cs" />
     <Compile Include="Package\Definition\PackageDefinition.cs" />
     <Compile Include="Package\Definition\PackageDefinitionConfig.cs" />
     <Compile Include="Package\Definition\PackageDefinitionExtendedSettings.cs" />
