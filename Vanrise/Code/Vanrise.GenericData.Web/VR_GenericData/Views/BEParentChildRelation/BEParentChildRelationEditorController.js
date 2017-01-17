@@ -14,6 +14,7 @@
         var beParentChildRelationDefinitionEntity;
         var parentId;
         var childId;
+        var childFilter;
 
         var parentBESelectorAPI;
         var parentBESelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -134,11 +135,9 @@
             parentBESelectorReadyDeferred.promise.then(function () {
 
                 var parentBESelectorPayload = {
-                    businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ParentBEDefinitionId
+                    businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ParentBEDefinitionId,
+                    selectedIds: parentId
                 };
-                if (parentId != undefined) {
-                    parentBESelectorPayload.selectedIds = parentId;
-                }
                 VRUIUtilsService.callDirectiveLoad(parentBESelectorAPI, parentBESelectorPayload, parentBESelectorLoadDeferred);
             });
 
@@ -150,11 +149,15 @@
             childBESelectorReadyDeferred.promise.then(function () {
 
                 var childBESelectorPayload = {
-                    businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ChildBEDefinitionId
+                    filter: {
+                        Filters: [{
+                            $type: beParentChildRelationDefinitionEntity.Settings.ChildFilterFQTN,
+                            ParentChildRelationDefinition: beParentChildRelationDefinitionId
+                        }]
+                    },
+                    businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ChildBEDefinitionId,
+                    selectedIds: childId
                 };
-                if (childId != undefined) {
-                    childBESelectorPayload.selectedIds = childId;
-                }
                 VRUIUtilsService.callDirectiveLoad(childBESelectorAPI, childBESelectorPayload, childBESelectorLoadDeferred);
             });
 

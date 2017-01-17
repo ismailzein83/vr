@@ -73,6 +73,7 @@
     <Compile Include="BusinessEntity\ExtensibleBEManager.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\Runtime\GenericUIRuntimeManager.cs" />
+    <Compile Include="Filters\BEParentChildRelation\BERelationChildBaseFilter.cs" />
     <Compile Include="GenericRules\GenericRuleDefinitionViewFilter.cs" />
     <Compile Include="GenericRules\GenericRuleDefinitionFilterContext.cs" />
     <Compile Include="GenericRules\GenericRuleDefinitionManager.cs" />

@@ -6,7 +6,7 @@
 
     function BEParentChildRelationService(VRModalService, VRNotificationService) {
 
-        function addBEParentChildRelation(beParentChildRelationDefinitionId, parentId, childId, onBEParentChildRelationAdded) {
+        function addBEParentChildRelation(onBEParentChildRelationAdded, beParentChildRelationDefinitionId, parentId, childId) {
             var parameters = {
                 beParentChildRelationDefinitionId: beParentChildRelationDefinitionId,
                 parentId: parentId,

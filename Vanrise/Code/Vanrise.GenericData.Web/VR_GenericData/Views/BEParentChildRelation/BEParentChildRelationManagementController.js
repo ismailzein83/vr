@@ -27,7 +27,7 @@
                     gridAPI.onBEParentChildRelationAdded(addedBEParentChildRelation);
                 };
 
-                VR_GenericData_BEParentChildRelationService.addBEParentChildRelation(beParentChildRelationDefinitionId, undefined, undefined, onBEParentChildRelationAdded);
+                VR_GenericData_BEParentChildRelationService.addBEParentChildRelation(onBEParentChildRelationAdded, beParentChildRelationDefinitionId);
             };
             $scope.scopeModel.search = function () {
                 return loadGrid();

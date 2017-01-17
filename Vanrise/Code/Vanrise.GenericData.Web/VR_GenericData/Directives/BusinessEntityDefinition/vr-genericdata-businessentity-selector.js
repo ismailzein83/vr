@@ -29,6 +29,7 @@
 
             var businessEntityDefinitionId;
             var businessEntityDefinitionEntity;
+            var filter;
 
             var directiveAPI;
             var directiveReadyDeferred;
@@ -42,7 +43,8 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var directivePayload = {
-                        businessEntityDefinitionId: businessEntityDefinitionId
+                        businessEntityDefinitionId: businessEntityDefinitionId,
+                        filter: filter
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
@@ -56,7 +58,6 @@
 
                     var promises = [];
                     var selectedIds;
-                    var filter;
 
                     if (payload != undefined) {
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;

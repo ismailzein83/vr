@@ -16,5 +16,7 @@ namespace Vanrise.GenericData.Entities
         public Guid ParentBEDefinitionId { get; set; }
 
         public Guid ChildBEDefinitionId { get; set; }
+
+        public string ChildFilterFQTN { get; set; }
     }
 }

@@ -45,6 +45,12 @@ namespace Vanrise.GenericData.Business
             return cachedBEParentChildRelation.GetRecord(beParentChildRelationId);
         }
 
+        public IEnumerable<BEParentChildRelation> GetBEParentChildRelationsByDefinitionId(Guid beParentChildRelationDefinitionId)
+        {
+            Dictionary<long, BEParentChildRelation> cachedBEParentChildRelation = this.GetCachedBEParentChildRelations();
+            return cachedBEParentChildRelation.Values.Where(itm => itm.RelationDefinitionId == beParentChildRelationDefinitionId);
+        }
+
         public InsertOperationOutput<BEParentChildRelationDetail> AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
             var insertOperationOutput = new InsertOperationOutput<BEParentChildRelationDetail>();

@@ -58,12 +58,15 @@
                 var api = {};
 
                 api.load = function (payload) {
+
                     var filter;
                     var selectedIds;
+                    var selectFirstItem;
 
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
+                        selectFirstItem = payload.selectFirstItem != undefined && payload.selectFirstItem == true;
                     }
 
                     return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
@@ -75,14 +78,23 @@
                             }
                         }
 
-                        if (selectedIds) {
+                        if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'BusinessEntityDefinitionId', attrs, ctrl);
                         }
+                        else if (selectFirstItem == true) {
+                            var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].Id] : ctrl.datasource[0].Id;
+                            VRUIUtilsService.setSelectedValues(defaultValue, 'Id', attrs, ctrl);
+                        }
+
                     });
                 };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('BusinessEntityDefinitionId', attrs, ctrl);
+                };
+
+                api.hasSingleItem = function () {
+                    return ctrl.datasource.length == 1;
                 };
 
                 return api;

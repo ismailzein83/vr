@@ -57,6 +57,8 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                         }
                     }
 
+                    $scope.scopeModel.childFilterFQTN = beParentChildRelationDefinitionSettings.ChildFilterFQTN;
+
                     //Loading ParentBEDefinition selector
                     var parentBEDefinitionSelectorLoadPromise = getParentBEDefinitionSelectorLoadPromise();
                     promises.push(parentBEDefinitionSelectorLoadPromise);
@@ -113,7 +115,8 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                         Settings: {
                             $type: "Vanrise.GenericData.Entities.BEParentChildRelationDefinitionSettings, Vanrise.GenericData.Entities",
                             ParentBEDefinitionId: parentBEDefinitionSelectorAPI.getSelectedIds(),
-                            ChildBEDefinitionId: childBEDefinitionSelectorAPI.getSelectedIds()
+                            ChildBEDefinitionId: childBEDefinitionSelectorAPI.getSelectedIds(),
+                            ChildFilterFQTN: $scope.scopeModel.childFilterFQTN
                         }
                     };
                 };
