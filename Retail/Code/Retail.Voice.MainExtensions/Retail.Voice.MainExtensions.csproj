@@ -76,6 +76,7 @@
     <Compile Include="AccountIdentification\DIDAccountIdentification.cs" />
     <Compile Include="InternationalIndentification\DIDInternationalIdentification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransformationSteps\VoiceInternationalIdentificationStep.cs" />
     <Compile Include="TransformationSteps\VoiceAccountIdentificationStep.cs" />
     <Compile Include="TransformationSteps\PriceVoiceEventStep.cs" />
     <Compile Include="VoiceChargingPolicyEvaluators\DataTransformationPolicyEvaluator.cs" />

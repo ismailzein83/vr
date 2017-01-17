@@ -55,7 +55,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountIdentification\AccountIdentificationContext.cs" />
     <Compile Include="AccountIdentification\AccountIdentificationTemplate.cs" />
+    <Compile Include="AccountIdentification\IAccountIdentificationContext.cs" />
+    <Compile Include="InternationalIdentification\IInternationalIdentificationContext.cs" />
+    <Compile Include="InternationalIdentification\InternationalIdentificationContext.cs" />
     <Compile Include="InternationalIdentification\InternationalIdentificationTemplate.cs" />
     <Compile Include="IPackageVoiceUsageCharger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

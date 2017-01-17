@@ -9,8 +9,11 @@ namespace Retail.Voice.MainExtensions
 
         public override void Execute(IAccountIdentificationContext context)
         {
-            context.CallingAccountId = 1;
-            context.CalledAccountId = 2;
+            if (!string.IsNullOrEmpty(context.CallingNumber))
+                context.CallingAccountId = 381586;
+
+            //if (!string.IsNullOrEmpty(context.CalledNumber))
+            //    context.CalledAccountId = 381587;
         }
     }
 }

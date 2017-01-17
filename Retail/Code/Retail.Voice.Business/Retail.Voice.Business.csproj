@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountIdentificationManager.cs" />
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="InternationalIdentificationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoiceChargingManager.cs" />
     <Compile Include="ChargingPolicyVoiceUsageCharger.cs" />

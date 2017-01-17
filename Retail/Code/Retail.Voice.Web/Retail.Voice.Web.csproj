@@ -134,26 +134,50 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VoiceAccountIdentificationController.cs" />
+    <Compile Include="Controllers\VoiceInternationalIdentificationController.cs" />
     <Compile Include="Controllers\VoiceChargingPolicyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Voice\Constant\ModuleConfig.js" />
     <Content Include="Retail_Voice\Constant\ChargingPolicyRuleDefinitionTypesEnum.js" />
+    <Content Include="Retail_Voice\Directives\AccountIdentification\retail-voice-accountidentification-selector.js" />
+    <Content Include="Retail_Voice\Directives\AccountIdentification\retail-voice-accountidentification-template.js" />
+    <Content Include="Retail_Voice\Directives\AccountIdentification\Templates\VoiceAccountIdentificationTemplate.html" />
+    <Content Include="Retail_Voice\Directives\InternationalIdentification\retail-voice-internationalidentification-template.js" />
+    <Content Include="Retail_Voice\Directives\InternationalIdentification\retail-voice-internationalidentification-selector.js" />
+    <Content Include="Retail_Voice\Directives\InternationalIdentification\Templates\VoiceInternationalIdentificationTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\AccountIdentification\retail-voice-didaccountidentification.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\AccountIdentification\Templates\DIDAccountIdentification.html" />
     <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\retail-voice-chargingpolicy-settings.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\retail-voice-chargingpolicydefinition.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\Templates\VoiceChargingPolicyDefinitionTemplate.html" />
     <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\Templates\VoiceChargingPolicySettingsTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\InternationalIdentification\retail-voice-didinternationalidentification.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\InternationalIdentification\Templates\DIDInternationalIdentification.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\InternationalIdentification\retail-voice-internationalidentificationstep-preview.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\InternationalIdentification\retail-voice-internationalidentificationstep.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\InternationalIdentification\Templates\InternationalIdentificationStepPreviewTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\InternationalIdentification\Templates\InternationalIdentificationStepTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\AccountIdentification\retail-voice-accountidentificationstep-preview.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\AccountIdentification\retail-voice-accountidentificationstep.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\AccountIdentification\Templates\AccountIdentificationStepPreviewTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\AccountIdentification\Templates\AccountIdentificationStepTemplate.html" />
     <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\retail-voice-pricevoiceeventstep-preview.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\retail-voice-pricevoiceeventstep.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\Templates\PriceVoiceEventStepPreviewTemplate.html" />
     <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\Templates\PriceVoiceEventStepTemplate.html" />
     <Content Include="Retail_Voice\Directives\MainExtensions\VoiceChargingPolicyEvaluators\retail-voice-standardpolicyevaluator.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\VoiceChargingPolicyEvaluators\Templates\StandardPolicyEvaluatorTemplate.html" />
+    <Content Include="Retail_Voice\Directives\Settings\retail-voice-technicalsettings-editor.js" />
+    <Content Include="Retail_Voice\Directives\Settings\Templates\VoiceTechnicalSettings.html" />
     <Content Include="Retail_Voice\Directives\VoiceChargingPolicyEvaluator\retail-voice-voicechargingpolicyevaluator.js" />
     <Content Include="Retail_Voice\Directives\VoiceChargingPolicyEvaluator\Templates\VoiceChargingPolicyEvaluatorTemplate.html" />
     <Content Include="Retail_Voice\Directives\VoiceServiceType\retail-voice-voiceservicetype.js" />
     <Content Include="Retail_Voice\Directives\VoiceServiceType\Templates\VoiceServiceTypeTemplate.html" />
+    <Content Include="Retail_Voice\Services\APIServices\AccountIdentificationAPIService.js" />
+    <Content Include="Retail_Voice\Services\APIServices\InternationalIdentificationAPIService.js" />
     <Content Include="Retail_Voice\Services\APIServices\VoiceChargingPolicyAPIService.js" />
   </ItemGroup>
   <ItemGroup>

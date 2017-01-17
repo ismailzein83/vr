@@ -9,7 +9,7 @@ namespace Retail.Voice.MainExtensions
 
         public override void Execute(IInternationalIdentificationContext context)
         {
-            throw new NotImplementedException();
+            context.IsInternational = true;
         }
     }
 }

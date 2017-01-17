@@ -1,0 +1,10 @@
+﻿<vr-row>
+    <vr-columns colnum="{{ctrl.normalColNum}}">
+        <retail-voice-accountidentification-selector on-ready="scopeModel.onAccountIdentificationSelectorReady" selectedvalues="scopeModel.selectedAccountIdentification"
+                                                     isrequired="true" hideremoveicon>
+        </retail-voice-accountidentification-selector>
+    </vr-columns>
+    <vr-directivewrapper ng-if="scopeModel.selectedAccountIdentification != undefined" directive="scopeModel.selectedAccountIdentification.Editor"
+                         on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" vr-loader="scopeModel.isDirectiveLoading">
+    </vr-directivewrapper>
+</vr-row>
