@@ -181,7 +181,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance);
         }
-        public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate)
+        public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
             var options = new TransactionOptions
             {
@@ -193,7 +193,7 @@ namespace Vanrise.AccountBalance.Data.SQL
 
                 UpdateLiveBalancetoUpdate(liveBalnacesToUpdate);
                 AccountUsageDataManager accountUsageDataManager = new SQL.AccountUsageDataManager();
-                accountUsageDataManager.UpdateAccountUsageFromBalanceUsageQueue(accountsUsageToUpdate);
+                accountUsageDataManager.UpdateAccountUsageFromBalanceUsageQueue(accountsUsageToUpdate, correctionProcessId);
                 BalanceUsageQueueDataManager dataManager = new BalanceUsageQueueDataManager();
                 dataManager.DeleteBalanceUsageQueue(balanceUsageQueueId);
                 scope.Complete();

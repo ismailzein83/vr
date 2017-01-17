@@ -65,8 +65,10 @@
     <Compile Include="AccountBalanceUpdate\LoadAccountBalanceUpdateHandler.cs" />
     <Compile Include="AccountBalanceUpdate\CreateBalanceClosingPeriod.cs" />
     <Compile Include="AccountBalanceUpdate\GetNextBalanceClosingDate.cs" />
+    <Compile Include="AccountBalanceUpdate\LoadCorrectUsageBalance.cs" />
     <Compile Include="AccountBalanceUpdate\LoadNewBillingTransactions.cs" />
     <Compile Include="AccountBalanceUpdate\LoadUpdatesUsageBalance.cs" />
+    <Compile Include="AccountBalanceUpdate\ProcessCorrectUsageBalance.cs" />
     <Compile Include="AccountBalanceUpdate\ProcessNewBillingTransactions.cs" />
     <Compile Include="AccountBalanceUpdate\ProcessUpdatesUsageBalance.cs" />
     <Compile Include="AccountBalanceUpdate\InsertBillingTransactionFromAccountUsageAndUpdate.cs" />

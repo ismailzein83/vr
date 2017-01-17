@@ -34,13 +34,14 @@ namespace Vanrise.AccountBalance.BP.Activities
 
         protected override void DoWork(LoadUpdatesUsageBalanceInput inputArgument, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading Pending Usage Updates ...");
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading Updates Usage Balance ...");
 
             UsageBalanceManager UsageBalanceManager = new UsageBalanceManager();
             UsageBalanceManager.LoadUpdatesUsageBalance(inputArgument.AccountTypeId, (balanceUsageQueue) =>
             {
                 inputArgument.OutputQueue.Enqueue(balanceUsageQueue);
-                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("{0} New Pending Usage loaded.", balanceUsageQueue.UsageDetails.UpdateUsageBalanceItems.Count()));
+                if (balanceUsageQueue.UsageDetails.UpdateUsageBalanceItems.Count() > 0)
+                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("{0} New Updates Usage Balance loaded.", balanceUsageQueue.UsageDetails.UpdateUsageBalanceItems.Count()));
             });
 
         }

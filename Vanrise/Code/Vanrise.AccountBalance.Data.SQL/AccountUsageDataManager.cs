@@ -32,7 +32,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemSP("[VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]", AccountUsageInfoMapper, accountTypeId,transactionTypeId, accountId, periodStart, periodEnd, currencyId, usageBalance, billingTransactionNote);
         }
-        public bool UpdateAccountUsageFromBalanceUsageQueue(IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate)
+        public bool UpdateAccountUsageFromBalanceUsageQueue(IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
                 DataTable accountUsageToUpdate = GetAccountUsageTable();
                 foreach (var item in accountsUsageToUpdate)
@@ -49,12 +49,24 @@ namespace Vanrise.AccountBalance.Data.SQL
                                var dtPrm = new System.Data.SqlClient.SqlParameter("@BalanceTable", SqlDbType.Structured);
                                dtPrm.Value = accountUsageToUpdate;
                                cmd.Parameters.Add(dtPrm);
+                               var dtPrm1 = new System.Data.SqlClient.SqlParameter("@CorrectionProcessID", SqlDbType.UniqueIdentifier);
+                               dtPrm1.Value = correctionProcessId;
+                               cmd.Parameters.Add(dtPrm1);
                            });
             return true;
         }
         public IEnumerable<AccountUsage> GetPendingAccountUsages(Guid accountTypeId, long accountId)
         {
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetAccountPendingUsage]", AccountUsageMapper, accountTypeId, accountId);
+        }
+        public IEnumerable<AccountUsage> GetAccountUsageForSpecificPeriodByAccountIds(Guid accountTypeId, Guid transactionTypeId, DateTime datePeriod, List<long> accountIds)
+        {
+            string accountIdsString = null;
+            if (accountIds != null)
+            {
+                accountIdsString = string.Join<long>(",", accountIds);
+            }
+            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAccountIds]", AccountUsageMapper, accountTypeId, transactionTypeId, datePeriod, accountIdsString);
         }
         #endregion
 
@@ -99,9 +111,5 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
         #endregion
 
-
-
-
-       
     }
 }

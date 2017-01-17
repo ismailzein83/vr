@@ -26,7 +26,7 @@ namespace Retail.Runtime.Tasks
         public void Execute()
         {
 
-           // UpdateUsageBalance();
+            UpdateUsageBalance();
             //var str = GetSerialisedSettings();
 
             var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
@@ -55,7 +55,45 @@ namespace Retail.Runtime.Tasks
             Console.ReadKey();
 
         }
+        private static void UpdateUsageBalance()
+        {
+            UsageBalanceManager manager = new UsageBalanceManager();
+            CorrectUsageBalanceItem ub1 = new CorrectUsageBalanceItem
+            {
+                Value = 200,
+                AccountId = 384594,
+                CurrencyId = 1
+            };
+            CorrectUsageBalanceItem ub2 = new CorrectUsageBalanceItem
+            {
+                Value = 500,
+                AccountId = 393486,
+                CurrencyId = 1
+            };
+            manager.CorrectUsageBalance(new Guid("20B0C83E-6F53-49C7-B52F-828A19E6DC2A"), new CorrectUsageBalancePayload
+            {
+                CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem> { ub1, ub2 },
+                TransactionTypeId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E"),
+                PeriodDate = DateTime.Today.AddDays(-2),
+                CorrectionProcessId = Guid.NewGuid(),
+            });
 
+            CorrectUsageBalanceItem ub3 = new CorrectUsageBalanceItem
+            {
+                Value = 6980,
+                AccountId = 382591,
+                CurrencyId = 1
+            };
+
+            manager.CorrectUsageBalance(new Guid("20B0C83E-6F53-49C7-B52F-828A19E6DC2A"), new CorrectUsageBalancePayload
+            {
+                CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem> { ub3 },
+                TransactionTypeId = new Guid("F178D94D-D622-4EBF-A1BA-2A4AF1067D6B"),
+                PeriodDate = DateTime.Today.AddDays(-2),
+                CorrectionProcessId = Guid.NewGuid(),
+                IsLastBatch = true
+            });
+        }
         //private static void UpdateUsageBalance()
         //{
         //    UsageBalanceManager manager = new UsageBalanceManager();
