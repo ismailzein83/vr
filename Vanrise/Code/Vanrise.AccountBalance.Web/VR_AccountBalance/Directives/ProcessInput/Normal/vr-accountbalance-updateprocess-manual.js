@@ -47,7 +47,8 @@ app.directive("vrAccountbalanceUpdateprocessManual", ['UtilsService', 'VRUIUtils
                 return {
                     InputArguments: {
                         $type: "Vanrise.AccountBalance.BP.Arguments.AccountBalanceUpdateProcessInput, Vanrise.AccountBalance.BP.Arguments",
-                        AccountTypeId: accountTypeSelectorAPI.getSelectedIds()
+                        AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
+                        UsageCacheDays: $scope.usageCacheDays
                     }
                 };
             };

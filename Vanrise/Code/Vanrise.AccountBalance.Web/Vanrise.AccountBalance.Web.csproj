@@ -178,11 +178,11 @@
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-vieweditor.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-search.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\Templates\VRAccountTypeSettings.html" />
-    <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\vr-accountbalance-accounttype-settings.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTransactionGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-grid.js" />
     <Content Include="VR_AccountBalance\Directives\LiveBalance\Templates\LiveBalanceTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\LiveBalance\vr-livebalance-currentaccountbalance.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\vr-accountbalance-accounttype-settings.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\Templates\BalanceAlertRuleSettingsTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\BalanceAlertRule\vr-accountbalance-accountbalancerule-settings.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\QueueActivators\Templates\QueueActivatorUpdateAccountBalancesTemplate.html" />

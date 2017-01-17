@@ -15,6 +15,9 @@ namespace Vanrise.AccountBalance.BP.Activities
 
         #region Arguments
         [RequiredArgument]
+        public InArgument<int> UsageCacheDays { get; set; }
+
+        [RequiredArgument]
         public InArgument<Guid> AccountTypeId { get; set; }
 
         [RequiredArgument]
@@ -24,7 +27,7 @@ namespace Vanrise.AccountBalance.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            Handler.Set(context, AccountBalanceUpdateHandler.GetHandlerByAccountTypeId(AccountTypeId.Get(context)));
+            Handler.Set(context, AccountBalanceUpdateHandler.GetHandlerByAccountTypeId(AccountTypeId.Get(context), UsageCacheDays.Get(context)));
         }
     }
 }

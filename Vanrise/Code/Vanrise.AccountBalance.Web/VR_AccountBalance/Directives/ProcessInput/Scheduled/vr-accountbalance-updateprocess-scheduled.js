@@ -46,13 +46,17 @@ app.directive("vrAccountbalanceUpdateprocessScheduled", ['UtilsService', 'VRUIUt
             api.getData = function () {
                 return {
                     $type: "Vanrise.AccountBalance.BP.Arguments.AccountBalanceUpdateProcessInput, Vanrise.AccountBalance.BP.Arguments",
-                    AccountTypeId: accountTypeSelectorAPI.getSelectedIds()
+                    AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
+                    UsageCacheDays: $scope.usageCacheDays
                 };
             };
 
             api.load = function (payload) {
                 var promises = [];
                 promises.push(loadAccountTypeSelector(payload));
+                if (payload != undefined && payload.data != undefined) {
+                    $scope.usageCacheDays = payload.data.UsageCacheDays;
+                }
                 return UtilsService.waitMultiplePromises(promises);
             };
 

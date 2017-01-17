@@ -62,11 +62,6 @@ namespace Vanrise.AccountBalance.Business
             }
             return true;
         }
-        public Guid GetUsageTransactionTypeId(Guid accountTypeId)
-        {
-            var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
-            return accountTypeSettings.UsageTransactionTypeId;
-        }
         public BalancePeriodSettings GetBalancePeriodSettings(Guid accountTypeId)
         {
             var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
@@ -76,6 +71,11 @@ namespace Vanrise.AccountBalance.Business
         {
             var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
             return accountTypeSettings.AccountUsagePeriodSettings;
+        }
+        public TimeSpan GetTimeOffset(Guid accountTypeId)
+        {
+            var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            return accountTypeSettings.TimeOffset;
         }
         public AccountTypeSettings GetAccountTypeSettings(Guid accountTypeId)
         {

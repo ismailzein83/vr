@@ -14,11 +14,11 @@ namespace Vanrise.AccountBalance.Entities
         }
 
         public Guid AccountBusinessEntityDefinitionId { get; set; }
-        public Guid UsageTransactionTypeId { get; set; }
         public Guid AlertMailMessageTypeId { get; set; }
         public BalancePeriodSettings BalancePeriodSettings { get; set; }
         public AccountUsagePeriodSettings AccountUsagePeriodSettings { get; set; }
         public AccountTypeExtendedSettings ExtendedSettings { get; set; }
+        public TimeSpan TimeOffset { get; set; }
     }
     public abstract class AccountTypeExtendedSettings
     {

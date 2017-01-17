@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Data
     public interface IAccountUsageDataManager:IDataManager
     {
         IEnumerable<AccountUsage> GetPendingAccountUsages(Guid accountTypeId, long accountId);
-        IEnumerable<AccountUsageInfo> GetAccountsUsageInfoByPeriod(Guid accountTypeId, DateTime periodStart);
+        IEnumerable<AccountUsageInfo> GetAccountsUsageInfoByPeriod(Guid accountTypeId, DateTime periodStart, Guid transactionTypeId);
         AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, Guid transactionTypeId,long accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance, string billingTransactionNote);
 
     }

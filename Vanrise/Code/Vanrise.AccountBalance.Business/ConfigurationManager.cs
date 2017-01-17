@@ -10,42 +10,5 @@ namespace Vanrise.AccountBalance.Business
 {
     public class ConfigurationManager
     {
-        public Guid GetAccountBEDefinitionId()
-        {
-            AccountBalanceConfig config = GetAccountBalanceConfig();
-            if (config == null)
-                throw new NullReferenceException("config");
-            return config.AccountBusinessEntityDefinitionId;
-        }
-
-        private AccountBalanceConfig GetAccountBalanceConfig()
-        {
-            var settingManager = new SettingManager();
-            return settingManager.GetSetting<AccountBalanceConfig>(AccountBalanceConfig.AccountBalanceConfigType);
-        }
-
-        public Guid GetBalanceAlertRuleDefinitionId()
-        {
-            AccountBalanceConfig config = GetAccountBalanceConfig();
-            if (config == null)
-                throw new NullReferenceException("config");
-            return config.BalanceAlertRuleDefinitionId; 
-        }
-
-        public Guid GetUsageTransactionTypeId()
-        {
-            AccountBalanceConfig config = GetAccountBalanceConfig();
-            if (config == null)
-                throw new NullReferenceException("config");
-            return config.UsageTransactionTypeId; 
-        }
-        public BalancePeriodSettings GetBalancePeriod()
-        {
-            AccountBalanceConfig config = GetAccountBalanceConfig();
-            if (config == null)
-                throw new NullReferenceException("config");
-            return config.BalancePeriod; 
-        }
-
     }
 }

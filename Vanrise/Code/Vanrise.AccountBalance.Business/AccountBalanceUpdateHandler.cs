@@ -17,7 +17,7 @@ namespace Vanrise.AccountBalance.Business
         static ConcurrentDictionary<Guid, AccountBalanceUpdateHandler> _handlersByAccountTypeId = new ConcurrentDictionary<Guid, AccountBalanceUpdateHandler>();
 
         Dictionary<long, LiveBalanceAccountInfo> AccountsInfo;
-        Dictionary<DateTime, Dictionary<AccountTransaction, AccountUsageInfo>> AccountsUsageByPeriod;
+        static Dictionary<DateTime, Dictionary<AccountTransaction, AccountUsageInfo>> AccountsUsageByPeriod;
         CurrencyExchangeRateManager currencyExchangeRateManager;
         AccountManager manager;
         ILiveBalanceDataManager liveBalanceDataManager;
@@ -25,7 +25,6 @@ namespace Vanrise.AccountBalance.Business
         Guid _accountTypeId;
         AccountUsagePeriodSettings _accountUsagePeriodSettings;
         BillingTransactionTypeManager billingTransactionTypeManager;
-
         #endregion
 
         #region ctor
@@ -49,9 +48,11 @@ namespace Vanrise.AccountBalance.Business
         /// </summary>
         /// <param name="accountTypeId">Account Type Id</param>
         /// <returns>New instance if AccountTypeId is not exist in dictionary, else return instance of passed AccountTypeId</returns>
-        public static AccountBalanceUpdateHandler GetHandlerByAccountTypeId(Guid accountTypeId)
+        public static AccountBalanceUpdateHandler GetHandlerByAccountTypeId(Guid accountTypeId, int usageCacheDays)
         {
             AccountBalanceUpdateHandler handler;
+            var cachePerdiodDate = DateTime.Today.AddDays(-usageCacheDays);
+            DeleteItemsFromDictionaryBeforePeriod(cachePerdiodDate);
             if (!_handlersByAccountTypeId.TryGetValue(accountTypeId, out handler))
             {
                 handler = new AccountBalanceUpdateHandler(accountTypeId);
@@ -59,7 +60,23 @@ namespace Vanrise.AccountBalance.Business
             }
             return handler;
         }
-
+        private static void DeleteItemsFromDictionaryBeforePeriod(DateTime period)
+        { 
+            if (AccountsUsageByPeriod != null)
+            {
+                
+                var listOfKeys = AccountsUsageByPeriod.Keys.ToList();
+                foreach (var key in listOfKeys)
+                {
+                    {
+                        if (key < period)
+                        {
+                            AccountsUsageByPeriod.Remove(key);
+                        }
+                    }
+                }
+            }
+        }
         public void AddAndUpdateLiveBalanceFromBillingTransction(List<BillingTransaction> billingTransactions)
         {           
             
@@ -154,7 +171,7 @@ namespace Vanrise.AccountBalance.Business
         {
             var accountsUsageByPeriod = AccountsUsageByPeriod.GetOrCreateItem(periodStart, () =>
             {
-                IEnumerable<AccountUsageInfo> accountsUsageInfo = accountUsageDataManager.GetAccountsUsageInfoByPeriod(_accountTypeId, periodStart);
+                IEnumerable<AccountUsageInfo> accountsUsageInfo = accountUsageDataManager.GetAccountsUsageInfoByPeriod(_accountTypeId, periodStart, transactionTypeId);
                 return accountsUsageInfo.ToDictionary(x => new AccountTransaction { AccountId = x.AccountId ,TransactionTypeId = x.TransactionTypeId }, x => x);
             });
 

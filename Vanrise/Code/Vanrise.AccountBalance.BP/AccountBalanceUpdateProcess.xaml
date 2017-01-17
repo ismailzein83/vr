@@ -77,6 +77,11 @@
           <mca:CSharpReference x:TypeArguments="vab:AccountBalanceUpdateHandler">accountBalanceUpdateHandler</mca:CSharpReference>
         </OutArgument>
       </vaba1:LoadAccountBalanceUpdateHandler.Handler>
+      <vaba1:LoadAccountBalanceUpdateHandler.UsageCacheDays>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.UsageCacheDays</mca:CSharpValue>
+        </InArgument>
+      </vaba1:LoadAccountBalanceUpdateHandler.UsageCacheDays>
     </vaba1:LoadAccountBalanceUpdateHandler>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
@@ -160,7 +165,7 @@
         </InArgument>
       </vaba1:InsertBillingTransactionFromAccountUsageAndUpdate.AccountTypeId>
     </vaba1:InsertBillingTransactionFromAccountUsageAndUpdate>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwYPgOkAQ4CAQFFBVAtAgFdUQV3EAIBMHgFmwEQAgEJnAEFogE/AgECTQtNgwECAWRIC0haAgFeVQdlKgIBR2YHdi0CATF5B4kBJwIBHYoBB5oBKgIBCp8BC58BWgIBA1gNWFwCAVZiDWJ+AgFPXQ1dlQECAUhzDXN2AgFAbg1ulQECATlpDWl9AgEyfA18XAIBKoYBDYYBgAECASSBAQ2BAYwBAgEelwENlwF4AgEXkgENkgGMAQIBEY0BDY0BfQIBCw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwZPgOpAQ4CAQFFBVUtAgFdVgV8EAIBMH0FoAEQAgEJoQEFpwE/AgECTQtNgwECAWpIC0haAgFkUgtSXAIBXloHaioCAUdrB3stAgExfgeOAScCAR2PAQefASoCAQqkAQukAVoCAQNdDV1cAgFWZw1nfgIBT2INYpUBAgFIeA14dgIBQHMNc5UBAgE5bg1ufQIBMoEBDYEBXAIBKosBDYsBgAECASSGAQ2GAYwBAgEenAENnAF4AgEXlwENlwGMAQIBEZIBDZIBfQIBCw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

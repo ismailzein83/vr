@@ -27,7 +27,7 @@ namespace Vanrise.AccountBalance.BP.Activities
 
             IClosingPeriodDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IClosingPeriodDataManager>();
             ConfigurationManager configurationManager = new ConfigurationManager();
-            dataManager.CreateClosingPeriod(BalanceClosingPeriod.Get(context), AccountTypeId.Get(context), configurationManager.GetUsageTransactionTypeId());
+           // dataManager.CreateClosingPeriod(BalanceClosingPeriod.Get(context), AccountTypeId.Get(context), configurationManager.GetUsageTransactionTypeId());
         }
     }
 }

@@ -21,9 +21,9 @@ namespace Vanrise.AccountBalance.BP.Activities
         {
             var accountTypeId = this.AccountTypeId.Get(context);
             context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Insert Billing Transactions From AccountUsage");
-            Guid usageTransactionTypeId = new AccountTypeManager().GetUsageTransactionTypeId(accountTypeId);
+            var timeOffset = new AccountTypeManager().GetTimeOffset(accountTypeId);
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
-            dataManager.InsertBillingTransactionFromAccountUsageAndUpdate(this.AccountTypeId.Get(context), usageTransactionTypeId);
+            dataManager.InsertBillingTransactionFromAccountUsageAndUpdate(this.AccountTypeId.Get(context), timeOffset);
         }
     }
 }
