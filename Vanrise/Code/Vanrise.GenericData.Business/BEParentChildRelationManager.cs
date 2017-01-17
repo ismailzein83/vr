@@ -188,9 +188,13 @@ namespace Vanrise.GenericData.Business
                });
         }
 
+        private struct GetCachedBEParentChildRelationsByParentIdCacheName
+        {
+            public Guid BEParentChildRelationDefinitionId { get; set; }
+        }
         private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByParentId(Guid beParentChildRelationDefinitionId)
         {
-            var cacheName = new GetCachedBEParentChildRelationsCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
+            var cacheName = new GetCachedBEParentChildRelationsByParentIdCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beParentChildRelationDefinitionId,
                 () =>
                 {
@@ -207,9 +211,13 @@ namespace Vanrise.GenericData.Business
                 });
         }
 
+        private struct GetCachedBEParentChildRelationsByChildIdCacheName
+        {
+            public Guid BEParentChildRelationDefinitionId { get; set; }
+        }
         private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByChildId(Guid beParentChildRelationDefinitionId)
         {
-            var cacheName = new GetCachedBEParentChildRelationsCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
+            var cacheName = new GetCachedBEParentChildRelationsByChildIdCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beParentChildRelationDefinitionId,
                 () =>
                 {
