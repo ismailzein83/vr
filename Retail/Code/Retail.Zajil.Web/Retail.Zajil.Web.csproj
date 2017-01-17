@@ -103,13 +103,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Zajil\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Definition\retail-zajil-accounttype-part-definition-orderdetails.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Definition\Templates\AccountTypePartOrderDetailDefinitionTemplate.html" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Runtime\retail-zajil-accounttype-part-runtime-orderdetails.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Runtime\Templates\AccountTypePartOrderDetailsRuntimeTemplate.html" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\retail-zajil-account-convertor-editor.js" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Templates\AccountConvertorEditor.html" />
+    <Content Include="Retail_Zajil\Services\OrderDetailService.js" />
+    <Content Include="Retail_Zajil\Views\OrderDetail\OrderDetailEditor.html" />
+    <Content Include="Retail_Zajil\Views\OrderDetail\OrderDetailEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Retail_Zajil\Services\APIServices\" />
-    <Folder Include="Retail_Zajil\Views\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.Zajil.Business\Retail.Zajil.Business.csproj">
