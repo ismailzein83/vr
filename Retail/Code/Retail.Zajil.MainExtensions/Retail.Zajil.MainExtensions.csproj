@@ -59,6 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountConvertor.cs" />
+    <Compile Include="AccountPartOrderDetail.cs" />
+    <Compile Include="AccountPartOrderDetailDefinition.cs" />
+    <Compile Include="OrderDetailItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
