@@ -801,6 +801,8 @@
     <None Include="Web.config.Release.exclude">
       <DependentUpon>Web.config.exclude</DependentUpon>
     </None>
+    <Content Include="Web.config.Zajil.exclude" />
+    <Content Include="Web.config.Ringo.exclude" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
