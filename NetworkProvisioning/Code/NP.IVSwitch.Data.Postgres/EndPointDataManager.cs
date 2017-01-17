@@ -401,7 +401,7 @@ namespace NP.IVSwitch.Data.Postgres
             NpgsqlDataReader npgsqlreader = (NpgsqlDataReader)reader;
             string hostObj = npgsqlreader.GetProviderSpecificValue(hostOrdinal).ToString();
             endPoint.Host = hostObj;
-            endPoint.EndPointType = endPoint.Host == null ? UserType.SIP : UserType.ACL;
+            endPoint.EndPointType = string.IsNullOrEmpty(endPoint.Host) ? UserType.SIP : UserType.ACL;
             return endPoint;
         }
         private EndPointToUpdate EndPointToUpdateMapper(IDataReader reader)
