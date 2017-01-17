@@ -339,6 +339,16 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Skip",
                     class: "glyphicon glyphicon-step-forward"
                 };
+        	case "BulkActions":
+        		return {
+        			text: "Bulk Actions",
+        			class: "glyphicon glyphicon-tasks"
+        		};
+        	case "Evaluate":
+        		return {
+        			text: "Evaluate",
+        			class: "glyphicon glyphicon-play"
+        		};
         }
     }
 }]);
