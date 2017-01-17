@@ -9,7 +9,7 @@ namespace Vanrise.AccountBalance.Data
 {
     public interface IBalanceUsageQueueDataManager : IDataManager
     {
-        void LoadUsageBalanceUpdate(Guid accountTypeId, Action<BalanceUsageQueue> onUsageBalanceUpdateReady);
-        bool UpdateUsageBalance(Guid accountTypeId, BalanceUsageDetail balanceUsageDetail);
+        void LoadUsageBalance<T>(Guid accountTypeId,BalanceUsageQueueType balanceUsageQueueType, Action<BalanceUsageQueue<T>> onUsageBalanceUpdateReady);
+        bool UpdateUsageBalance<T>(Guid accountTypeId, BalanceUsageQueueType balanceUsageQueueType , T updateUsageBalancePayload);
     }
 }

@@ -97,7 +97,7 @@ namespace Vanrise.AccountBalance.Business
                 UpdateLiveBalanceFromBillingTransaction(liveBalnacesToUpdate.Values, billingTransactionIds);
             }
         }
-        public void AddAndUpdateLiveBalanceFromBalanceUsageQueue(long balanceUsageQueueId,Guid transactionTypeId, IEnumerable<UsageBalanceUpdate> usageBalanceUpdates)
+        public void AddAndUpdateLiveBalanceFromBalanceUsageQueue(long balanceUsageQueueId, Guid transactionTypeId, IEnumerable<UpdateUsageBalanceItem> usageBalanceUpdates)
         {
 
             Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate = new Dictionary<long, LiveBalanceToUpdate>();

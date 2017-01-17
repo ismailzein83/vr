@@ -62,8 +62,7 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadBillingTransactionsStatus" />
-      <Variable x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)" Name="outputQueuePendingUsageUpdates" />
-      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadingPendingUsageUpdateStatus" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadUpdatesUsageBalanceStatus" />
       <Variable x:TypeArguments="vab:AccountBalanceUpdateHandler" Name="accountBalanceUpdateHandler" />
     </Sequence.Variables>
     <vaba1:LoadAccountBalanceUpdateHandler sap2010:WorkflowViewState.IdRef="LoadAccountBalanceUpdateHandler_1">
@@ -122,41 +121,45 @@
         </vaba1:ProcessNewBillingTransactions.PreviousActivityStatus>
       </vaba1:ProcessNewBillingTransactions>
     </Parallel>
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
-      <vaba1:LoadPendingUsageUpdates sap2010:WorkflowViewState.IdRef="LoadPendingUsageUpdates_1">
-        <vaba1:LoadPendingUsageUpdates.AccountTypeId>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_4">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue(vae:UpdateUsageBalancePayload))" Name="updatesUsageBalanceQueue" />
+        <Variable x:TypeArguments="x:String" Name="variable1" />
+      </Parallel.Variables>
+      <vaba1:LoadUpdatesUsageBalance sap2010:WorkflowViewState.IdRef="LoadUpdatesUsageBalance_1">
+        <vaba1:LoadUpdatesUsageBalance.AccountTypeId>
           <InArgument x:TypeArguments="s:Guid">
             <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountTypeId</mca:CSharpValue>
           </InArgument>
-        </vaba1:LoadPendingUsageUpdates.AccountTypeId>
-        <vaba1:LoadPendingUsageUpdates.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">outputQueuePendingUsageUpdates</mca:CSharpReference>
+        </vaba1:LoadUpdatesUsageBalance.AccountTypeId>
+        <vaba1:LoadUpdatesUsageBalance.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue(vae:UpdateUsageBalancePayload))">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue(vae:UpdateUsageBalancePayload))">updatesUsageBalanceQueue</mca:CSharpReference>
           </InOutArgument>
-        </vaba1:LoadPendingUsageUpdates.OutputQueue>
-        <vaba1:LoadPendingUsageUpdates.Status>
+        </vaba1:LoadUpdatesUsageBalance.OutputQueue>
+        <vaba1:LoadUpdatesUsageBalance.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadingPendingUsageUpdateStatus</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadUpdatesUsageBalanceStatus</mca:CSharpReference>
           </OutArgument>
-        </vaba1:LoadPendingUsageUpdates.Status>
-      </vaba1:LoadPendingUsageUpdates>
-      <vaba1:ProcessPendingUsageUpdates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessPendingUsageUpdates_1">
-        <vaba1:ProcessPendingUsageUpdates.AcountBalanceUpdateHandler>
+        </vaba1:LoadUpdatesUsageBalance.Status>
+      </vaba1:LoadUpdatesUsageBalance>
+      <vaba1:ProcessUpdatesUsageBalance Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessUpdatesUsageBalance_1">
+        <vaba1:ProcessUpdatesUsageBalance.AcountBalanceUpdateHandler>
           <InArgument x:TypeArguments="vab:AccountBalanceUpdateHandler">
             <mca:CSharpValue x:TypeArguments="vab:AccountBalanceUpdateHandler">accountBalanceUpdateHandler</mca:CSharpValue>
           </InArgument>
-        </vaba1:ProcessPendingUsageUpdates.AcountBalanceUpdateHandler>
-        <vaba1:ProcessPendingUsageUpdates.InputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue)">outputQueuePendingUsageUpdates</mca:CSharpReference>
+        </vaba1:ProcessUpdatesUsageBalance.AcountBalanceUpdateHandler>
+        <vaba1:ProcessUpdatesUsageBalance.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue(vae:UpdateUsageBalancePayload))">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue(vae:UpdateUsageBalancePayload))">updatesUsageBalanceQueue</mca:CSharpReference>
           </InOutArgument>
-        </vaba1:ProcessPendingUsageUpdates.InputQueue>
-        <vaba1:ProcessPendingUsageUpdates.PreviousActivityStatus>
+        </vaba1:ProcessUpdatesUsageBalance.InputQueue>
+        <vaba1:ProcessUpdatesUsageBalance.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadingPendingUsageUpdateStatus</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadUpdatesUsageBalanceStatus</mca:CSharpValue>
           </InArgument>
-        </vaba1:ProcessPendingUsageUpdates.PreviousActivityStatus>
-      </vaba1:ProcessPendingUsageUpdates>
+        </vaba1:ProcessUpdatesUsageBalance.PreviousActivityStatus>
+      </vaba1:ProcessUpdatesUsageBalance>
     </Parallel>
     <vaba1:InsertBillingTransactionFromAccountUsageAndUpdate sap2010:WorkflowViewState.IdRef="InsertBillingTransactionFromAccountUsageAndUpdate_1">
       <vaba1:InsertBillingTransactionFromAccountUsageAndUpdate.AccountTypeId>
@@ -165,7 +168,7 @@
         </InArgument>
       </vaba1:InsertBillingTransactionFromAccountUsageAndUpdate.AccountTypeId>
     </vaba1:InsertBillingTransactionFromAccountUsageAndUpdate>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwZPgOpAQ4CAQFFBVUtAgFdVgV8EAIBMH0FoAEQAgEJoQEFpwE/AgECTQtNgwECAWpIC0haAgFkUgtSXAIBXloHaioCAUdrB3stAgExfgeOAScCAR2PAQefASoCAQqkAQukAVoCAQNdDV1cAgFWZw1nfgIBT2INYpUBAgFIeA14dgIBQHMNc5UBAgE5bg1ufQIBMoEBDYEBXAIBKosBDYsBgAECASSGAQ2GAYwBAgEenAENnAF4AgEXlwENlwGMAQIBEZIBDZIBfQIBCw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwZPgOsAQ4CAQFEBVQtAgFcVQV7EAIBNXwFowEQAgEIpAEFqgE/AgECTAtMgwECAWdHC0daAgFiUQtRXAIBXVkHaSoCAUlqB3otAgE2gQEHkQEnAgEfkgEHogEqAgEJpwELpwFaAgEDXA1cXAIBVmYNZn4CAVBhDWGVAQIBSncNd3YCAUNyDXKVAQIBPW0NbX0CATeEAQ2EAVwCAS6OAQ2OAX4CASeJAQ2JAaUBAgEgnwENnwF2AgEYmgENmgGlAQIBEZUBDZUBfQIBCg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -173,9 +176,9 @@
       <sap2010:ViewStateData Id="LoadNewBillingTransactions_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessNewBillingTransactions_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="LoadPendingUsageUpdates_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ProcessPendingUsageUpdates_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="LoadUpdatesUsageBalance_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ProcessUpdatesUsageBalance_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="554,86" />
       <sap2010:ViewStateData Id="InsertBillingTransactionFromAccountUsageAndUpdate_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,460">
         <sap:WorkflowViewStateService.ViewState>

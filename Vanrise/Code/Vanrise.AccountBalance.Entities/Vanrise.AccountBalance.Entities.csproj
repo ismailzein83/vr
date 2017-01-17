@@ -67,8 +67,9 @@
     <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdAction.cs" />
     <Compile Include="AlertRuleThresholdAction\AlertRuleThresholdActionBatch.cs" />
     <Compile Include="BalanceClosingPeriod\BalanceClosingPeriod.cs" />
-    <Compile Include="BalanceUsageQueue\BalanceUsageDetail.cs" />
+    <Compile Include="BalanceUsageQueue\UpdateUsageBalancePayload.cs" />
     <Compile Include="BalanceUsageQueue\BalanceUsageQueue.cs" />
+    <Compile Include="BalanceUsageQueue\CorrectUsageBalancePayload.cs" />
     <Compile Include="BillingTransactionType\BillingTransactionType.cs" />
     <Compile Include="BillingTransactionType\BillingTransactionTypeInfo.cs" />
     <Compile Include="BillingTransactionType\BillingTransactionTypeInfoFilter.cs" />
@@ -90,7 +91,6 @@
     <Compile Include="LiveBalance\CurrentAccountBalance.cs" />
     <Compile Include="LiveBalance\LiveBalanceDetail.cs" />
     <Compile Include="Config\BalanceAlertConfig.cs" />
-    <Compile Include="BalanceUsageQueue\UsageBalanceUpdate.cs" />
     <Compile Include="BillingTransaction\BillingTransaction.cs" />
     <Compile Include="LiveBalance\LiveBalance.cs" />
     <Compile Include="LiveBalance\LiveBalanceAccountInfo.cs" />

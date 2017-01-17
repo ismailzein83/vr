@@ -15,27 +15,27 @@ namespace Vanrise.AccountBalance.BP.Activities
   
     #region Argument Classes
 
-    public class ProcessPendingUsageUpdatesInput
+    public class ProcessUpdatesUsageBalanceInput
     {
-        public BaseQueue<BalanceUsageQueue> InputQueue { get; set; }
+        public BaseQueue<BalanceUsageQueue<UpdateUsageBalancePayload>> InputQueue { get; set; }
         public AccountBalanceUpdateHandler AcountBalanceUpdateHandler { get; set; }
     }
 
     #endregion
-    
-    public sealed class ProcessPendingUsageUpdates : DependentAsyncActivity<ProcessPendingUsageUpdatesInput>
+
+    public sealed class ProcessUpdatesUsageBalance : DependentAsyncActivity<ProcessUpdatesUsageBalanceInput>
     {
   
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<BalanceUsageQueue>> InputQueue { get; set; }
+        public InOutArgument<BaseQueue<BalanceUsageQueue<UpdateUsageBalancePayload>>> InputQueue { get; set; }
         [RequiredArgument]
         public InArgument<AccountBalanceUpdateHandler> AcountBalanceUpdateHandler { get; set; }
       
         #endregion
-      
-        protected override void DoWork(ProcessPendingUsageUpdatesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+
+        protected override void DoWork(ProcessUpdatesUsageBalanceInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             var counter = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -54,19 +54,19 @@ namespace Vanrise.AccountBalance.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Pending Usage Queues Processed", counter);
 
         }
-        protected override ProcessPendingUsageUpdatesInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override ProcessUpdatesUsageBalanceInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new ProcessPendingUsageUpdatesInput()
+            return new ProcessUpdatesUsageBalanceInput()
             {
                 InputQueue = this.InputQueue.Get(context),
                 AcountBalanceUpdateHandler = this.AcountBalanceUpdateHandler.Get(context),
             };
         }
-        private void ProcessPendingUsageUpdatesMethod(BalanceUsageQueue balanceUsageQueue, AccountBalanceUpdateHandler acountBalanceUpdateHandler)
+        private void ProcessPendingUsageUpdatesMethod(BalanceUsageQueue<UpdateUsageBalancePayload> balanceUsageQueue, AccountBalanceUpdateHandler acountBalanceUpdateHandler)
         {
-            if(balanceUsageQueue.UsageDetails != null && balanceUsageQueue.UsageDetails.UsageBalanceUpdates != null)
+            if(balanceUsageQueue.UsageDetails != null && balanceUsageQueue.UsageDetails.UpdateUsageBalanceItems != null)
             {
-                acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, balanceUsageQueue.UsageDetails.TransactionTypeId,balanceUsageQueue.UsageDetails.UsageBalanceUpdates);
+                acountBalanceUpdateHandler.AddAndUpdateLiveBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, balanceUsageQueue.UsageDetails.TransactionTypeId,balanceUsageQueue.UsageDetails.UpdateUsageBalanceItems);
             }
         }
     }

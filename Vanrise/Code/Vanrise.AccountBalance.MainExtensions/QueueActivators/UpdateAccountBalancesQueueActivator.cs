@@ -28,8 +28,8 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
-            BalanceUsageDetail balanceUsageDetail = new BalanceUsageDetail();
-            balanceUsageDetail.UsageBalanceUpdates = new List<UsageBalanceUpdate>();
+            UpdateUsageBalancePayload balanceUsageDetail = new UpdateUsageBalancePayload();
+            balanceUsageDetail.UpdateUsageBalanceItems = new List<UpdateUsageBalanceItem>();
             balanceUsageDetail.TransactionTypeId = this.TransactionTypeId;
             foreach (var record in batchRecords)
             {
@@ -37,17 +37,17 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
                 if (amount.HasValue && amount.Value > 0)
                 {
-                    UsageBalanceUpdate usageBalanceUpdate = new UsageBalanceUpdate();
+                    UpdateUsageBalanceItem usageBalanceUpdate = new UpdateUsageBalanceItem();
                     usageBalanceUpdate.Value = amount.Value;
                     usageBalanceUpdate.AccountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record);
                     usageBalanceUpdate.EffectiveOn = Vanrise.Common.Utilities.GetPropValueReader(this.EffectiveOn).GetPropertyValue(record);
                     usageBalanceUpdate.CurrencyId = Vanrise.Common.Utilities.GetPropValueReader(this.CurrencyId).GetPropertyValue(record);
 
-                    balanceUsageDetail.UsageBalanceUpdates.Add(usageBalanceUpdate);
+                    balanceUsageDetail.UpdateUsageBalanceItems.Add(usageBalanceUpdate);
                 }
             }
 
-            if (balanceUsageDetail.UsageBalanceUpdates.Count > 0)
+            if (balanceUsageDetail.UpdateUsageBalanceItems.Count > 0)
             {
                 UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
                 usageBalanceManager.UpdateUsageBalance(this.AccountTypeId, balanceUsageDetail);
