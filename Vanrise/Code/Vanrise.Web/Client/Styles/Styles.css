@@ -686,7 +686,9 @@ add padding .left-addon input {
 .modal-dialog .action-bar {
     border-radius: 0px !important;
 }
-
+.modal-dialog vr-form .action-bar {
+    border-radius: 15px !important;
+}
 .leavecolor {
     background-color: transparent !important;
 }
