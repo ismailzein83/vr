@@ -156,7 +156,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 
         var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
-       + ' <div col-index="renderIndex">'
+       + ' <div col-index="renderIndex" style="width:100%">'
          + '   <div class="vr-datagrid-celltext" style="overflow: hidden;"  ng-class="::colDef.textAlignmentClass" title="{{colDef.description}}" >'
            + '    <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
             + '   <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
