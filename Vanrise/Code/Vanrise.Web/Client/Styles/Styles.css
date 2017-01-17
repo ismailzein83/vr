@@ -1860,14 +1860,14 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 }
 
 .vr-datagrid-cell, .vr-datagrid-header-cell {
-    /*display:inline-block;*/
+    display: inline-flex;
     white-space: nowrap;
     text-overflow: ellipsis;
-    /*overflow: hidden;*/
-    padding: 3px 0px 0px 5px;
-    /*line-height: 1;*/
+    overflow: hidden;
+    padding: 3px 0px 0px 4px;
     position: relative;
     width: 100%;
+    min-height:24px;
 }
 
 .vr-datagrid-celltext {
