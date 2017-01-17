@@ -35,7 +35,7 @@ as (select * from (values
 ('VRCommon/Settings/UpdateSetting','VRCommon_Settings:Edit'),
 ('VRCommon/Settings/GetSetting',null),
 ('VRCommon/Settings/GetDistinctSettingCategories',null),
-('VRCommon/Settings/GetFilteredTechnicalSettings','VRCommon_Settings_Technical:  View'),('VRCommon/Settings/UpdateTechnicalSetting','VRCommon_Settings_Technical:  Edit'),('VRCommon/Settings/GetTechnicalSetting','VRCommon_Settings_Technical:  Edit'),
+('VRCommon/Settings/GetFilteredTechnicalSettings','VRCommon_Settings_Technical:  View'),('VRCommon/Settings/UpdateTechnicalSetting','VRCommon_Settings_Technical:  Edit'),('VRCommon/Settings/GetTechnicalSetting', null),
 
 ('VRCommon/RateType/GetFilteredRateTypes','VRCommon_RateType: View'),
 
