@@ -476,6 +476,8 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSequence_GetNext.sql" />
     <Build Include="genericdata\Tables\BEParentChildRelation.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
