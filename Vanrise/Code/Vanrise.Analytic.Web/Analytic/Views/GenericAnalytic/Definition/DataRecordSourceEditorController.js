@@ -78,7 +78,11 @@
                 };
                 dataItem.onGridWidthFactorSelectorReady = function (api) {
                     dataItem.gridWidthFactorAPI = api;
-                    var dataItemPayload = { selectedIds: VRCommon_GridWidthFactorEnum.Normal.value };
+                    var dataItemPayload = {
+                        data: {
+                            Width: VRCommon_GridWidthFactorEnum.Normal.value
+                        }
+                    };
                     var setLoader = function (value) { $scope.isLoadingDirective = value };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.gridWidthFactorAPI, dataItemPayload, setLoader);
                 };
@@ -229,7 +233,7 @@
             var columns = [];
             for (var x = 0; x < $scope.selectedFieldsGrid.length; x++) {
                 var currentItem = $scope.selectedFieldsGrid[x];
-                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, Width: currentItem.gridWidthFactorAPI.getSelectedIds() });
+                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, ColumnSettings: currentItem.gridWidthFactorAPI.getData() });
             }
 
             var details = [];
@@ -272,7 +276,11 @@
 
         function addGridColumnAPI(gridField, payload)
         {
-            var dataItemPayload = { selectedIds: VRCommon_GridWidthFactorEnum.Normal.value };
+            var dataItemPayload = {
+                data: {
+                    Width: VRCommon_GridWidthFactorEnum.Normal.value
+                }
+            };
             var dataItem = {
                 FieldName: gridField.payload.Name,
                 FieldTitle: gridField.payload.Title,
@@ -280,7 +288,7 @@
             if (payload)
             {
                 dataItem.FieldTitle = payload.FieldTitle;
-                dataItemPayload.selectedIds = payload.Width;
+                dataItemPayload.data = payload.ColumnSettings;
             }
             dataItem.onGridWidthFactorSelectorReady = function (api) {
                 dataItem.gridWidthFactorAPI = api;

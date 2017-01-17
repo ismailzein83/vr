@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
@@ -46,7 +47,7 @@ namespace Vanrise.Analytic.Entities
 
         public string FieldTitle { get; set; }
 
-        public string Width { get; set; }
+        public GridColumnSettings ColumnSettings { get; set; }
     }
 
     public class DRSearchPageItemDetail

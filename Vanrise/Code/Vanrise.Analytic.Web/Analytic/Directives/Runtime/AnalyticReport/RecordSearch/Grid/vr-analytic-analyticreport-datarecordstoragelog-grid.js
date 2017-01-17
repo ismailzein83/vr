@@ -130,9 +130,16 @@
                                 break;
                             }
                         }
-                        var gridWidth = UtilsService.getItemByVal(gridWidths, column.Width, "value");
+
+                        var gridWidth;
+                        if (column.ColumnSettings != null)
+                            gridWidth = UtilsService.getItemByVal(gridWidths, column.ColumnSettings.Width, "value");
                         if (gridWidth != undefined)
                             column.Widthfactor = gridWidth.widthFactor;
+
+                        //var gridWidth = UtilsService.getItemByVal(gridWidths, column.Width, "value");
+                        //if (gridWidth != undefined)
+                        //    column.Widthfactor = gridWidth.widthFactor;
                         ctrl.columns.push(column);
                     });
 

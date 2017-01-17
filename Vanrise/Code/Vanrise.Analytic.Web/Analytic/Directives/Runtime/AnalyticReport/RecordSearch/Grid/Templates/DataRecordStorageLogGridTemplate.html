@@ -7,7 +7,7 @@
                  menuactions="ctrl.menuActions" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.sortDirection">
         <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" numberprecision="column.numberprecision" type="column.type"
                            field="column.Field"
-                           tag="column" columnindex="$index" widthfactor="column.Widthfactor"></vr-datagridcolumn>
+                           tag="column" columnindex="$index" widthfactor="column.Widthfactor" fixedwidth="column.ColumnSettings.FixedWidth"></vr-datagridcolumn>
         <vr-datagridexpandablerow ng-if="ctrl.showDetails > 0">
             <vr-columns ng-repeat="detail in dataItem.details" colnum="{{detail.colnum}}">
                 <vr-label>{{detail.FieldTitle}}:</vr-label>
