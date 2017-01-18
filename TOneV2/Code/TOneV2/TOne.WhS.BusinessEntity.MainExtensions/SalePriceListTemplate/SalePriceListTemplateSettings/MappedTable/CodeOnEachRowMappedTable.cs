@@ -23,7 +23,6 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             foreach (SalePLZoneNotification zone in context.Zones)
             {
                 foreach (var code in zone.Codes)
-                    if (!code.EED.HasValue)
                     {
                         IEnumerable<CodeOnEachRowMappedColumn> concreteMappedColumns = this.MappedColumns.Select(item => item as CodeOnEachRowMappedColumn);
                         SetRecordData(sheets, concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat);
