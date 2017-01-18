@@ -12,6 +12,14 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
 {
     public class BillingTransactionSynchronizer : TargetBESynchronizer
     {
+        public override string Name
+        {
+            get
+            {
+                return "Billing Transaction Synchronizer";
+            }
+        }
+        public Guid BalanceAccountTypeId { get; set; }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
             return false;
@@ -23,8 +31,9 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
             BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
             foreach (var targetBillingTransaction in context.TargetBE)
             {
-                SourceBillingTransaction billingTransaction = targetBillingTransaction as SourceBillingTransaction;
-                billingTransactionManager.AddBillingTransaction(billingTransaction.BillingTransaction);
+                SourceBillingTransaction sourceTransaction = targetBillingTransaction as SourceBillingTransaction;
+                sourceTransaction.BillingTransaction.AccountTypeId = this.BalanceAccountTypeId;
+                billingTransactionManager.AddBillingTransaction(sourceTransaction.BillingTransaction);
             }
         }
 
