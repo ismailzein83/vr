@@ -116,40 +116,18 @@ namespace Vanrise.AccountBalance.Business
         }
         public void CorrectBalanceFromBalanceUsageQueue(long balanceUsageQueueId, Guid transactionTypeId, IEnumerable<CorrectUsageBalanceItem> correctUsageBalanceItems, DateTime periodDate, Guid correctionProcessId, bool isLastBatch)
         {
-            var accountIds = correctUsageBalanceItems.Select(x => x.AccountId).ToList();
-            var accountUsages = GetAccountUsageForSpecificPeriodByAccountIds(_accountTypeId, transactionTypeId, periodDate, accountIds);
+            var transactionType = new BillingTransactionTypeManager().GetBillingTransactionType(transactionTypeId);
+          
             if (correctUsageBalanceItems != null)
             {
-                var transactionType = new BillingTransactionTypeManager().GetBillingTransactionType(transactionTypeId);
                 List<AccountUsageToUpdate> accountUsageToUpdates = new List<AccountUsageToUpdate>();
                 List<LiveBalanceToUpdate> liveBalanceToUpdates = new List<LiveBalanceToUpdate>();
+                var accountIds = correctUsageBalanceItems.Select(x => x.AccountId).ToList();
+                var accountUsages = GetAccountUsageForSpecificPeriodByAccountIds(_accountTypeId, transactionTypeId, periodDate, accountIds);
                 foreach (var correctUsageBalanceItem in correctUsageBalanceItems)
                 {
-                    var accountInfo = GetLiveBalanceInfo(correctUsageBalanceItem.AccountId);
-                    var amount = ConvertValueToCurrency(correctUsageBalanceItem.Value, correctUsageBalanceItem.CurrencyId, accountInfo.CurrencyId, periodDate);
-                    decimal differenceAmount = amount;
                     var accountUsage = accountUsages.FirstOrDefault(x => x.AccountId == correctUsageBalanceItem.AccountId);
-                    if (accountUsage != null)
-                    {
-                        differenceAmount = amount - accountUsage.UsageBalance;
-                        AddAccountUsageToUpdate(accountUsageToUpdates, accountUsage.AccountUsageId, differenceAmount);
-                    }
-                    else
-                    {
-                        AccountUsagePeriodEvaluationContext context = new AccountUsagePeriodEvaluationContext
-                        {
-                            UsageTime = periodDate
-                        };
-                        _accountUsagePeriodSettings.EvaluatePeriod(context);
-                        var accountUsageInfo = AddAccountUsageInfo(transactionTypeId, correctUsageBalanceItem.AccountId, context.PeriodStart, context.PeriodEnd, accountInfo.CurrencyId);
-                        AddAccountUsageToUpdate(accountUsageToUpdates, accountUsageInfo.AccountUsageId, differenceAmount);
-                    }
-
-                    liveBalanceToUpdates.Add(new LiveBalanceToUpdate
-                    {
-                        LiveBalanceId = accountInfo.LiveBalanceId,
-                        Value = transactionType != null && transactionType.IsCredit ? differenceAmount : -differenceAmount
-                    });
+                    CorrectLiveBalanceAndAccountUsage(liveBalanceToUpdates, accountUsageToUpdates, correctUsageBalanceItem.AccountId, transactionType, correctUsageBalanceItem.Value, correctUsageBalanceItem.CurrencyId, accountUsage, periodDate);
                 }
                 if (liveBalanceToUpdates.Count > 0 || accountUsageToUpdates.Count > 0)
                 {
@@ -158,9 +136,22 @@ namespace Vanrise.AccountBalance.Business
             }
             if (isLastBatch)
             {
-                CleanUsageErrorData(transactionTypeId, correctionProcessId, periodDate);
+                 var accountsUsageError = GetAccountUsageErrorData(transactionTypeId, correctionProcessId, periodDate);
+                 if (accountsUsageError != null)
+                 {
+                     List<AccountUsageToUpdate> accountUsageToUpdates = new List<AccountUsageToUpdate>();
+                     List<LiveBalanceToUpdate> liveBalanceToUpdates = new List<LiveBalanceToUpdate>();
+                     foreach (var item in accountsUsageError)
+                     {
+                         CorrectLiveBalanceAndAccountUsage(liveBalanceToUpdates, accountUsageToUpdates, item.AccountId, transactionType, 0, item.CurrencyId, item, periodDate);
+                     }
+                     if (liveBalanceToUpdates.Count > 0 || accountUsageToUpdates.Count > 0)
+                     {
+                         UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalanceToUpdates, accountUsageToUpdates, correctionProcessId);
+                     }
+                 }
+                
             }
-
         }
         #endregion
 
@@ -262,9 +253,36 @@ namespace Vanrise.AccountBalance.Business
         {
             return liveBalanceDataManager.UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalnacesToUpdate, accountsUsageToUpdate, correctionProcessId);
         }
-        private void CleanUsageErrorData(Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
+        private void CorrectLiveBalanceAndAccountUsage(List<LiveBalanceToUpdate> liveBalanceToUpdates, List<AccountUsageToUpdate> accountUsageToUpdates, long accountId, BillingTransactionType transactionType,decimal value,int currencyId, AccountUsage accountUsage, DateTime periodDate)
         {
-            new AccountUsageManager().CleanUsageErrorData(_accountTypeId, transactionTypeId, correctionProcessId, periodDate);
+            var accountInfo = GetLiveBalanceInfo(accountId);
+            var amount = ConvertValueToCurrency(value, currencyId, accountInfo.CurrencyId, periodDate);
+            decimal differenceAmount = amount;
+            if (accountUsage != null)
+            {
+                differenceAmount = amount - accountUsage.UsageBalance;
+                AddAccountUsageToUpdate(accountUsageToUpdates, accountUsage.AccountUsageId, differenceAmount);
+            }
+            else
+            {
+                AccountUsagePeriodEvaluationContext context = new AccountUsagePeriodEvaluationContext
+                {
+                    UsageTime = periodDate
+                };
+                _accountUsagePeriodSettings.EvaluatePeriod(context);
+                var accountUsageInfo = AddAccountUsageInfo(transactionType.BillingTransactionTypeId, accountId, context.PeriodStart, context.PeriodEnd, accountInfo.CurrencyId);
+                AddAccountUsageToUpdate(accountUsageToUpdates, accountUsageInfo.AccountUsageId, differenceAmount);
+            }
+            liveBalanceToUpdates.Add(new LiveBalanceToUpdate
+            {
+                LiveBalanceId = accountInfo.LiveBalanceId,
+                Value = transactionType != null && transactionType.IsCredit ? differenceAmount : -differenceAmount
+            });
+        }
+        private List<AccountUsage> GetAccountUsageErrorData(Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
+        {
+            AccountUsageManager manager = new AccountUsageManager();
+            return manager.GetAccountUsageErrorData(_accountTypeId, transactionTypeId,  correctionProcessId,  periodDate);
         }
         #endregion
        

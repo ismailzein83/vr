@@ -26,7 +26,7 @@ namespace Retail.Runtime.Tasks
         public void Execute()
         {
 
-          //  UpdateUsageBalance();
+            UpdateUsageBalance();
             //var str = GetSerialisedSettings();
 
             var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
@@ -64,23 +64,24 @@ namespace Retail.Runtime.Tasks
             //    AccountId = 381587,
             //    CurrencyId = 1
             //};
-            //CorrectUsageBalanceItem ub2 = new CorrectUsageBalanceItem
-            //{
-            //    Value = 21,
-            //    AccountId = 381587,
-            //    CurrencyId = 1
-            //};
+            ////CorrectUsageBalanceItem ub2 = new CorrectUsageBalanceItem
+            ////{
+            ////    Value = 21,
+            ////    AccountId = 381587,
+            ////    CurrencyId = 1
+            ////};
             //manager.CorrectUsageBalance(new Guid("20B0C83E-6F53-49C7-B52F-828A19E6DC2A"), new CorrectUsageBalancePayload
             //{
-            //    CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem> { ub1, ub2 },
-            //    TransactionTypeId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E"),
+            //    CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem> { ub1 },
+            //    TransactionTypeId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E),
             //    PeriodDate = DateTime.Parse("2016-11-21 00:00:00.000"),
             //    CorrectionProcessId = Guid.NewGuid(),
+            //    IsLastBatch = true
             //});
 
             CorrectUsageBalanceItem ub3 = new CorrectUsageBalanceItem
             {
-                Value = 0,
+                Value = 20,
                 AccountId = 381587,
                 CurrencyId = 1
             };
@@ -94,50 +95,50 @@ namespace Retail.Runtime.Tasks
                 IsLastBatch = true
             });
         }
-        //private static void UpdateUsageBalance()
-        //{
-        //    UsageBalanceManager manager = new UsageBalanceManager();
-        //    UsageBalanceUpdate ub1 = new UsageBalanceUpdate
-        //    {
-        //        Value = 200,
-        //        AccountId = 384594,
-        //        EffectiveOn = DateTime.Now,
-        //        CurrencyId = 1
-        //    };
-        //    UsageBalanceUpdate ub2 = new UsageBalanceUpdate
-        //    {
-        //        Value = 500,
-        //        AccountId = 393486,
-        //        EffectiveOn = DateTime.Now,
-        //        CurrencyId = 1
-        //    };
-        //    manager.UpdateUsageBalance(new Guid("20B0C83E-6F53-49C7-B52F-828A19E6DC2A"), new BalanceUsageDetail
-        //    {
-        //        UsageBalanceUpdates = new List<UsageBalanceUpdate> { ub1, ub2 },
-        //        TransactionTypeId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E")
-        //    });
+        private static void UpdateUsageBalance1()
+        {
+            UsageBalanceManager manager = new UsageBalanceManager();
+            UpdateUsageBalanceItem ub1 = new UpdateUsageBalanceItem
+            {
+                Value = 200,
+                AccountId = 381587,
+                EffectiveOn = DateTime.Parse("2016-11-21 00:00:00.000"),
+                CurrencyId = 1
+            };
+            UpdateUsageBalanceItem ub2 = new UpdateUsageBalanceItem
+            {
+                Value = 500,
+                AccountId = 393486,
+                EffectiveOn = DateTime.Parse("2016-11-21 00:00:00.000"),
+                CurrencyId = 1
+            };
+            manager.UpdateUsageBalance(new Guid("20B0C83E-6F53-49C7-B52F-828A19E6DC2A"), new UpdateUsageBalancePayload
+            {
+                UpdateUsageBalanceItems = new List<UpdateUsageBalanceItem> { ub1, ub2 },
+                TransactionTypeId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E")
+            });
 
-        //    UsageBalanceUpdate ub3 = new UsageBalanceUpdate
-        //    {
-        //        Value = 6980,
-        //        AccountId = 384577,
-        //        EffectiveOn = DateTime.Now,
-        //        CurrencyId = 1
-        //    };
-        //    //UsageBalanceUpdate ub4 = new UsageBalanceUpdate
-        //    //{
-        //    //    Value = 2560,
-        //    //    AccountId = 170,
-        //    //    EffectiveOn = DateTime.Now,
-        //    //    CurrencyId = 1
-        //    //};
+            UpdateUsageBalanceItem ub3 = new UpdateUsageBalanceItem
+            {
+                Value = 6980,
+                AccountId = 384577,
+                EffectiveOn = DateTime.Parse("2016-11-21 00:00:00.000"),
+                CurrencyId = 1
+            };
+            //UsageBalanceUpdate ub4 = new UsageBalanceUpdate
+            //{
+            //    Value = 2560,
+            //    AccountId = 170,
+            //    EffectiveOn = DateTime.Now,
+            //    CurrencyId = 1
+            //};
 
-        //    manager.UpdateUsageBalance(new Guid("20B0C83E-6F53-49C7-B52F-828A19E6DC2A"), new BalanceUsageDetail
-        //    {
-        //        UsageBalanceUpdates = new List<UsageBalanceUpdate> { ub3 },
-        //        TransactionTypeId = new Guid("F178D94D-D622-4EBF-A1BA-2A4AF1067D6B")
-        //    });
-        //}
+            manager.UpdateUsageBalance(new Guid("20B0C83E-6F53-49C7-B52F-828A19E6DC2A"), new UpdateUsageBalancePayload
+            {
+                UpdateUsageBalanceItems = new List<UpdateUsageBalanceItem> { ub3 },
+                TransactionTypeId = new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E")
+            });
+        }
 
         //private string GetSerialisedSettings()
         //{

@@ -14,5 +14,6 @@ namespace Vanrise.AccountBalance.Data
         AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, Guid transactionTypeId,long accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance, string billingTransactionNote);
         IEnumerable<AccountUsage> GetAccountUsageForSpecificPeriodByAccountIds(Guid accountTypeId, Guid transactionTypeId, DateTime datePeriod, List<long> accountIds);
         void CleanUsageErrorData(Guid accountTypeId, Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate);
+        List<AccountUsage> GetAccountUsageErrorData(Guid accountTypeId, Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate);
     }
 }
