@@ -54,19 +54,14 @@ namespace Vanrise.GenericData.QueueActivators
             var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(this.DataRecordStorageId);
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", this.DataRecordStorageId));
+            
             Queueing.MemoryQueue<Object> queuePreparedBatchesForDBApply = new Queueing.MemoryQueue<object>();
             AsyncActivityStatus prepareBatchForDBApplyStatus = new AsyncActivityStatus();
+
             StartPrepareBatchForDBApplyTask(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
-            
             DeleteFromDB(context, recordStorageDataManager);
             ApplyBatchesToDB(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
         }
-
-        private void DeleteFromDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager)
-        {
-            recordStorageDataManager.DeleteRecords(context.From, context.To);
-        }
-
         private static void StartPrepareBatchForDBApplyTask(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
         {
             Task prepareDataTask = new Task(() =>
@@ -102,7 +97,6 @@ namespace Vanrise.GenericData.QueueActivators
             });
             prepareDataTask.Start();
         }
-
         private void ApplyBatchesToDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
         {
             context.DoWhilePreviousRunning(prepareBatchForDBApplyStatus, () =>
@@ -116,6 +110,10 @@ namespace Vanrise.GenericData.QueueActivators
                            });
                        } while (!context.ShouldStop() && hasItem);
                    });
+        }
+        private void DeleteFromDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager)
+        {
+            recordStorageDataManager.DeleteRecords(context.From, context.To);
         }
 
         void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
@@ -132,7 +130,6 @@ namespace Vanrise.GenericData.QueueActivators
         {
             return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
         }
-
 
         public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
         {
