@@ -14,46 +14,43 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
     public class WeightedAvgCostCalculation : CostCalculationMethod
     {
         public override Guid ConfigId { get { return new Guid("D71F6102-29B3-4781-8167-5C08282CCB5B"); } }
-        public double PeriodValue { get; set; }
+        public decimal PeriodValue { get; set; }
         public PeriodTypes PeriodType { get; set; }
-        
+
         public override void CalculateCost(ICostCalculationMethodContext context)
         {
             List<string> listMeasures = new List<string> { "DurationInMinutes" };
-            List<string> listDimensions = new List<string> { "Supplier" };
-            string dimensionName = "Supplier";
-            
+            List<string> listDimensions = new List<string> { "Supplier", "SaleZone" };
+            string supplierDimensionFilterName = "Supplier";
+            string saleZoneDimensionFilterName = "SaleZone";
+
             DateTime fromDate = DateTime.MinValue;
-           
+
             switch (this.PeriodType)
             {
                 case PeriodTypes.Days:
-                    fromDate = DateTime.Today.AddDays(-this.PeriodValue);
+                    fromDate = DateTime.Today.AddDays(-(double)this.PeriodValue);
                     break;
                 case PeriodTypes.Hours:
-                    fromDate = DateTime.Today.AddHours(-this.PeriodValue);
+                    fromDate = DateTime.Today.AddHours(-(double)this.PeriodValue);
                     break;
                 case PeriodTypes.Minutes:
-                    fromDate = DateTime.Today.AddMinutes(-this.PeriodValue);
+                    fromDate = DateTime.Today.AddMinutes(-(double)this.PeriodValue);
                     break;
+                default:
+                    throw new DataIntegrityValidationException(string.Format("Period Type must be set"));
             }
-            
-            DateTime toDate = DateTime.Today;
 
-            Dictionary<int, decimal> ratesBySuppliers = new Dictionary<int, decimal>();
+            DateTime toDate = DateTime.Today;
 
             if (context.Route == null || context.Route.RouteOptionsDetails == null)
                 return;
 
             decimal sumOfDuration = 0;
-            Dictionary<int, decimal> suppliersByDuration = new Dictionary<int, decimal>();
-
+            decimal sumOfRatesMultipliedByDuration = 0;
             foreach (RPRouteOptionDetail option in context.Route.RouteOptionsDetails)
             {
-                if (!ratesBySuppliers.ContainsKey(option.Entity.SupplierId))
-                    ratesBySuppliers.Add(option.Entity.SupplierId, option.ConvertedSupplierRate);
-
-                var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, option.Entity.SupplierId, fromDate, toDate);
+                var analyticResult = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, option.Entity.SupplierId, saleZoneDimensionFilterName, context.Route.SaleZoneId, fromDate, toDate);
                 if (analyticResult == null || analyticResult.Data == null)
                     continue;
 
@@ -63,32 +60,19 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                     decimal durationInMinutesValue = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
                     if (durationInMinutesValue == 0)
                         continue;
-                    
-                    suppliersByDuration.Add(option.Entity.SupplierId, durationInMinutesValue);
+
+                    sumOfRatesMultipliedByDuration += durationInMinutesValue * option.ConvertedSupplierRate;
                     sumOfDuration += durationInMinutesValue;
                 }
             }
 
-            Dictionary<int, decimal> suppliersByDurationPercentage = new Dictionary<int, decimal>();
-            foreach (KeyValuePair<int, decimal> item in suppliersByDuration)
-            {
-                decimal supplierDurationPercentage = (item.Value * 100) / sumOfDuration;
-                suppliersByDurationPercentage.Add(item.Key, supplierDurationPercentage);
-            }
-
-            decimal cost = 0;
-            foreach (KeyValuePair<int, decimal> item in suppliersByDuration)
-            {
-                decimal supplierRate = ratesBySuppliers[item.Key];
-                cost += (supplierRate * item.Value) / 100;
-            }
-
-            if (cost != 0)
-                context.Cost = cost;
+            if (sumOfDuration != 0)
+                context.Cost = sumOfRatesMultipliedByDuration / sumOfDuration;
         }
 
 
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string firstDimensionFilterName, object firstDimensionFilterValue,
+            string secondDimensionFilterName, object secondDimensionFilterValue, DateTime fromDate, DateTime toDate)
         {
             AnalyticManager analyticManager = new AnalyticManager();
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -107,10 +91,18 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             };
             DimensionFilter dimensionFilter = new DimensionFilter()
             {
-                Dimension = dimensionFilterName,
-                FilterValues = new List<object> { dimensionFilterValue }
+                Dimension = firstDimensionFilterName,
+                FilterValues = new List<object> { firstDimensionFilterValue }
+           
+            };
+            DimensionFilter secondDimensionFilter = new DimensionFilter()
+            {
+                Dimension = secondDimensionFilterName,
+                FilterValues = new List<object> { secondDimensionFilterValue }
             };
             analyticQuery.Query.Filters.Add(dimensionFilter);
+            analyticQuery.Query.Filters.Add(secondDimensionFilter);
+
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
 
