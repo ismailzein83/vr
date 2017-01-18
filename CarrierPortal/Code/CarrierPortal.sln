@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{9AA83DCF-FB38-45AA-9944-B92CA1B13B94}"
 EndProject
@@ -41,11 +41,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.SupplierPriceList.TOneV1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.SupplierPricelist.MainExtensions", "CP.SupplierPricelist.MainExtensions\CP.SupplierPricelist.MainExtensions.csproj", "{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PartnerPortal.CustomerAccess", "PartnerPortal.CustomerAccess", "{062656B4-F251-4342-9853-7B2448326EB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.CustomerAccess.Web", "PartnerPortal.CustomerAccess.Web\PartnerPortal.CustomerAccess.Web.csproj", "{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 15
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = CarrierPortal.sln
@@ -99,6 +103,10 @@ Global
 		SccProjectTopLevelParentUniqueName13 = CarrierPortal.sln
 		SccProjectName13 = CP.SupplierPricelist.MainExtensions
 		SccLocalPath13 = CP.SupplierPricelist.MainExtensions
+		SccProjectUniqueName14 = PartnerPortal.CustomerAccess.Web\\PartnerPortal.CustomerAccess.Web.csproj
+		SccProjectTopLevelParentUniqueName14 = CarrierPortal.sln
+		SccProjectName14 = PartnerPortal.CustomerAccess.Web
+		SccLocalPath14 = PartnerPortal.CustomerAccess.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,24 +167,30 @@ Global
 		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{CB556A40-1CAB-4915-88E5-F5E04BA4F4EE} = {9AA83DCF-FB38-45AA-9944-B92CA1B13B94}
-		{73B89280-7691-435A-98E3-F5F84801BE36} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
-		{FEF565A8-7254-4428-8BD4-A72B6F761496} = {1B9F0944-5170-4C05-8834-D247C7CA18C1}
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {EE2A4347-9EB6-462A-BB25-36D47EFD502A}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {EE2A4347-9EB6-462A-BB25-36D47EFD502A}
 		{FE2CC43B-8AAA-4D6A-87F0-67E85A5DAEC9} = {EE2A4347-9EB6-462A-BB25-36D47EFD502A}
+		{73B89280-7691-435A-98E3-F5F84801BE36} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
+		{CB556A40-1CAB-4915-88E5-F5E04BA4F4EE} = {9AA83DCF-FB38-45AA-9944-B92CA1B13B94}
+		{FEF565A8-7254-4428-8BD4-A72B6F761496} = {1B9F0944-5170-4C05-8834-D247C7CA18C1}
 		{07C7EF2D-23B5-4EB1-BE56-BC5232CA7D72} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{20CF0936-036A-416C-A5CE-4B59024F8F45} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{45737C32-8ADD-4C04-AF8D-9A370077791E} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{168D3BEA-BDE1-47E2-8A35-ED3ED9E65547} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{862ACF40-050C-423F-BAE1-66CDD06E5EB0} = {73B89280-7691-435A-98E3-F5F84801BE36}
+		{197126C1-BC0D-4BD0-8016-811FC8DD41D5} = {48718904-3FAE-427C-8D91-693120859DDC}
 		{031E385D-9222-4E25-9C0E-3ECB12675667} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F} = {73B89280-7691-435A-98E3-F5F84801BE36}
-		{197126C1-BC0D-4BD0-8016-811FC8DD41D5} = {48718904-3FAE-427C-8D91-693120859DDC}
+		{062656B4-F251-4342-9853-7B2448326EB8} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
+		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9} = {062656B4-F251-4342-9853-7B2448326EB8}
 	EndGlobalSection
 EndGlobal
