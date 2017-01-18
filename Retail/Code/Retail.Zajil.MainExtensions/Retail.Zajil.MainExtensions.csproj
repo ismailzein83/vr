@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.AccountBalance.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BEBridge.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
     </Reference>
@@ -56,12 +60,16 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountConvertor.cs" />
     <Compile Include="AccountPartOrderDetail.cs" />
     <Compile Include="AccountPartOrderDetailDefinition.cs" />
     <Compile Include="OrderDetailItem.cs" />
+    <Compile Include="Convertors\PaymentConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

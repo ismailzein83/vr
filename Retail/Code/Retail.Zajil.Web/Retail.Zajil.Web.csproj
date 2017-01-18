@@ -109,6 +109,8 @@
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Runtime\Templates\AccountTypePartOrderDetailsRuntimeTemplate.html" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\retail-zajil-account-convertor-editor.js" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Templates\AccountConvertorEditor.html" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Payment\retail-zajil-payment-convertor-editor.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Payment\Templates\PaymentConvertorEditor.html" />
     <Content Include="Retail_Zajil\Services\OrderDetailService.js" />
     <Content Include="Retail_Zajil\Views\OrderDetail\OrderDetailEditor.html" />
     <Content Include="Retail_Zajil\Views\OrderDetail\OrderDetailEditorController.js" />
