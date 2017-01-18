@@ -679,6 +679,9 @@ add padding .left-addon input {
     padding: 5px 15px;
 }
 
+vr-section[contentbox] .panel-body {
+    padding: 5px 5px !important;
+}
 .modal-body .fieldset-vr .panel-body {
     padding: 5px 15px;
 }

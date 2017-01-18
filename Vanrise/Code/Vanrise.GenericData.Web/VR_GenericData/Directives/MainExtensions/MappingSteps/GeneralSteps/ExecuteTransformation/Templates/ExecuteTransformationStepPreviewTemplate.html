@@ -1,13 +1,11 @@
-﻿
-<vr-row removeline>
-    <vr-columns width="3/4row">
+﻿<vr-row removeline>
+    <vr-columns width="fullrow">
         <vr-list maxitemsperrow="1" ng-show="ctrl.recordsMapping.length > 0">
             <vr-listitem>
                 <vr-label>Mapping</vr-label>
                 <vr-list maxitemsperrow="1" ng-repeat="field in ctrl.recordsMapping">
                     <vr-listitem><vr-label>{{field.RecordName}} = {{field.Value}}</vr-label></vr-listitem>
                 </vr-list>
-
             </vr-listitem>
         </vr-list>
     </vr-columns>

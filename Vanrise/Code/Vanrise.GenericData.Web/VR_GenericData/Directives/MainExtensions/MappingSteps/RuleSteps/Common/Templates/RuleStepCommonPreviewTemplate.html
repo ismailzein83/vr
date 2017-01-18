@@ -1,5 +1,5 @@
 ﻿<vr-row removeline>
-    <vr-columns width="3/4row">
+    <vr-columns width="fullrow">
         <vr-list maxitemsperrow="1">
             <vr-listitem ng-show="ctrl.effectiveTime != undefined"><vr-label>Effective Time = {{ctrl.effectiveTime}}</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.isEffectiveInFuture != undefined"><vr-label>Is Effective In Future = {{ctrl.isEffectiveInFuture}}</vr-label></vr-listitem>
@@ -8,7 +8,7 @@
     </vr-columns>
 </vr-row>
 <vr-row removeline>
-    <vr-columns width="3/4row">
+    <vr-columns width="fullrow">
         <vr-list maxitemsperrow="1" ng-show="ctrl.ruleFieldsMappings.length > 0">
             <vr-listitem>
                 <vr-label>Mapping Fields</vr-label>
