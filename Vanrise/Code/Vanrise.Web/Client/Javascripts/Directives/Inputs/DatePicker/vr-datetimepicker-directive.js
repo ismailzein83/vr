@@ -161,7 +161,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         unspecifiedHour = 23;
                         unspecifiedMinute = 59;
                         unspecifiedSecond = 59;
-                        unspecifiedMillisecond = 999;
+                        unspecifiedMillisecond = 998;
                     }
                     if ($attrs.type == "time") {
                         $scope.ctrl.value = {
