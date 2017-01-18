@@ -21,5 +21,10 @@ namespace Vanrise.AccountBalance.Business
             IAccountUsageDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
             return dataManager.GetAccountUsageForSpecificPeriodByAccountIds(accountTypeId, transactionTypeId, datePeriod, accountIds);
         }
+        public void CleanUsageErrorData(Guid accountTypeId,Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
+        {
+            IAccountUsageDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
+            dataManager.CleanUsageErrorData(accountTypeId, transactionTypeId, correctionProcessId, periodDate);
+        }
     }
 }

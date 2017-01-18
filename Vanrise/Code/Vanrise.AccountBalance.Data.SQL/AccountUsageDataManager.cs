@@ -34,6 +34,8 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
         public bool UpdateAccountUsageFromBalanceUsageQueue(IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
+            if(accountsUsageToUpdate != null)
+            {
                 DataTable accountUsageToUpdate = GetAccountUsageTable();
                 foreach (var item in accountsUsageToUpdate)
                 {
@@ -53,6 +55,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                                dtPrm1.Value = correctionProcessId;
                                cmd.Parameters.Add(dtPrm1);
                            });
+            }
+              
             return true;
         }
         public IEnumerable<AccountUsage> GetPendingAccountUsages(Guid accountTypeId, long accountId)
@@ -67,6 +71,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                 accountIdsString = string.Join<long>(",", accountIds);
             }
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAccountIds]", AccountUsageMapper, accountTypeId, transactionTypeId, datePeriod, accountIdsString);
+        }
+
+        public void CleanUsageErrorData(Guid accountTypeId, Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
+        {
+            ExecuteNonQuerySP("[VR_AccountBalance].[sp_AccountUsage_CleanErrorData]", accountTypeId, transactionTypeId, correctionProcessId, periodDate);
         }
         #endregion
 
@@ -111,5 +120,8 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
         #endregion
 
+
+
+   
     }
 }
