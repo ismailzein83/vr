@@ -6,34 +6,33 @@
 
     function OrderDetailService(VRModalService, VRNotificationService) {
         return {      
-            editSection: editSection,
-            addSection: addSection
+            editOrderDetail: editOrderDetail,
+            addOrderDetail: addOrderDetail
         };
 
 
-        function addSection(onSectionAdded, exitingSections) {
+        function addOrderDetail(onOrderDetailAdded) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onSectionAdded = onSectionAdded;
+                modalScope.onOrderDetailAdded = onOrderDetailAdded;
             };
 
             var parameters = {
-                exitingSections: exitingSections
             };
 
             VRModalService.showModal('/Client/Modules/Retail_Zajil/Views/OrderDetail/OrderDetailEditor.html', parameters, modalSettings);
         }
 
-        function editSection(onSectionUpdated, sectionEntity) {
+        function editOrderDetail(onOrderDetailUpdated, orderDetailEntity) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onSectionUpdated = onSectionUpdated;
+                modalScope.onOrderDetailUpdated = onOrderDetailUpdated;
             };
 
             var parameters = {
-                sectionTitleValue: sectionEntity
+                orderDetailEntity: orderDetailEntity
             };
 
             VRModalService.showModal('/Client/Modules/Retail_Zajil/Views/OrderDetail/OrderDetailEditor.html', parameters, modalSettings);

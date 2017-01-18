@@ -9,7 +9,7 @@ namespace Retail.Zajil.MainExtensions
 {
     public class AccountPartOrderDetailDefinition : AccountPartDefinitionSettings
     {
-        public override Guid ConfigId { get { return new Guid("CB37B785-0F52-4D81-80DE-FC0061E54A79"); } }
+        public override Guid ConfigId { get { return new Guid("2241197C-B5B0-48E5-987A-B3C1949760CB"); } }
 
     }
 }
