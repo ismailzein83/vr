@@ -154,7 +154,9 @@
     <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\retail-voice-chargingpolicydefinition.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\Templates\VoiceChargingPolicyDefinitionTemplate.html" />
     <Content Include="Retail_Voice\Directives\MainExtensions\ChargingPolicyDefinition\Templates\VoiceChargingPolicySettingsTemplate.html" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\InternationalIdentification\retail-voice-ruleinternationalidentification.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\InternationalIdentification\retail-voice-didinternationalidentification.js" />
+    <Content Include="Retail_Voice\Directives\MainExtensions\InternationalIdentification\Templates\RuleInternationalIdentification.html" />
     <Content Include="Retail_Voice\Directives\MainExtensions\InternationalIdentification\Templates\DIDInternationalIdentification.html" />
     <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\InternationalIdentification\retail-voice-internationalidentificationstep-preview.js" />
     <Content Include="Retail_Voice\Directives\MainExtensions\TransformationSteps\InternationalIdentification\retail-voice-internationalidentificationstep.js" />

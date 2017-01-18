@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountIdentification\DIDAccountIdentification.cs" />
+    <Compile Include="InternationalIndentification\RuleInternationalIdentification.cs" />
     <Compile Include="InternationalIndentification\DIDInternationalIdentification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransformationSteps\VoiceInternationalIdentificationStep.cs" />

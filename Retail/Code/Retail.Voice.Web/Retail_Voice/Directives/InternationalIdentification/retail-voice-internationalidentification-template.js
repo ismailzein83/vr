@@ -15,7 +15,7 @@ function (UtilsService, VRUIUtilsService) {
             var ctor = new internationalIdentificationCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
-        controllerAs: 'ctrl',
+        controllerAs: 'internationalCtrl',
         bindToController: true,
         compile: function (element, attrs) {
 
@@ -52,7 +52,7 @@ function (UtilsService, VRUIUtilsService) {
         }
         function defineAPI() {
             var api = {};
-
+            
             api.load = function (payload) {
                 var promises = [];
 

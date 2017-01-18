@@ -1,10 +1,10 @@
 ﻿<vr-row>
-    <vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-columns colnum="{{internationalCtrl.normalColNum}}">
         <retail-voice-internationalidentification-selector on-ready="scopeModel.onInternationalIdentificationSelectorReady" selectedvalues="scopeModel.selectedInternationalIdentification"
                                                            isrequired="true" hideremoveicon>
         </retail-voice-internationalidentification-selector>
     </vr-columns>
     <vr-directivewrapper ng-if="scopeModel.selectedInternationalIdentification != undefined" directive="scopeModel.selectedInternationalIdentification.Editor"
-                         on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" vr-loader="scopeModel.isDirectiveLoading">
+                         on-ready="scopeModel.onDirectiveReady" vr-loader="scopeModel.isDirectiveLoading" normal-col-num="{{internationalCtrl.normalColNum}}">
     </vr-directivewrapper>
 </vr-row>

@@ -1,5 +1,7 @@
-﻿using Retail.Voice.Entities;
-using System;
+﻿using System;
+using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
+using Retail.Voice.Entities;
 
 namespace Retail.Voice.MainExtensions
 {
@@ -9,7 +11,7 @@ namespace Retail.Voice.MainExtensions
 
         public override void Execute(IInternationalIdentificationContext context)
         {
-            context.IsInternational = true;
+            throw new NotImplementedException();
         }
     }
 }
