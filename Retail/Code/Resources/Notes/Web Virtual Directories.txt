@@ -26,3 +26,4 @@ VR_Invoice				C:\TFS\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice
 Retail_Invoice			C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice
 Retail_Ringo			C:\TFS\Retail\Code\Retail.Ringo.Web\Retail_Ringo
 Retail_Zajil			C:\TFS\Retail\Code\Retail.Zajil.Web\Retail_Zajil
+Reprocess				C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess
