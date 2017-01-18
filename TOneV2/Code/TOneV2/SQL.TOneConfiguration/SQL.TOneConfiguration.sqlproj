@@ -478,6 +478,13 @@
     <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_GetAll.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_Update.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_Insert.sql" />
+    <Build Include="common\Tables\StatusDefinition.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetAfterImportedID.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_StatusDefinition_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_StatusDefinition_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_StatusDefinition_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
