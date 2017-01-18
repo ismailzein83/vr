@@ -31,6 +31,8 @@ app.directive('vrBebridgeSourcebereadersSqlDirective', ['VRNotificationService',
                         $scope.scopeModel.connectionString = payload.Setting.ConnectionString;
                         $scope.scopeModel.query = payload.Setting.Query;
                         $scope.scopeModel.timeoutInSec = payload.Setting.CommandTimeout;
+                        $scope.scopeModel.basedOnId = payload.Setting.BasedOnId;
+                        $scope.scopeModel.idField = payload.Setting.IdField;
                     }
                 };
                 api.getData = function () {
@@ -38,7 +40,9 @@ app.directive('vrBebridgeSourcebereadersSqlDirective', ['VRNotificationService',
                     {
                         ConnectionString: $scope.scopeModel.connectionString,
                         Query: $scope.scopeModel.query,
-                        CommandTimeout: $scope.scopeModel.timeoutInSec
+                        CommandTimeout: $scope.scopeModel.timeoutInSec,
+                        BasedOnId: $scope.scopeModel.basedOnId,
+                        IdField: $scope.scopeModel.idField
                     };
                     return {
                         $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.SqlSourceReader, Vanrise.BEBridge.MainExtensions",

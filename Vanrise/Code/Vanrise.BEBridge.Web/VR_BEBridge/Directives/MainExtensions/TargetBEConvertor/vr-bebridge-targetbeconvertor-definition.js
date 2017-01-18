@@ -76,8 +76,6 @@
                                 }
                                 if (settings != undefined)
                                     $scope.selectedExtensionConfig = utilsService.getItemByVal($scope.extensionConfigs, settings.ConfigId, 'ExtensionConfigurationId');
-                                else if ($scope.extensionConfigs.length > 0)
-                                    $scope.selectedExtensionConfig = $scope.extensionConfigs[0];
                             }
                         });
                     }
@@ -113,7 +111,7 @@
                 label = "label='Target Convertors'";
             }
 
-            return '<vr-row><vr-columns colnum="{{targetBeConvertorCtrl.normalColNum * 2}}">'
+            return '<vr-row><vr-columns colnum="{{targetBeConvertorCtrl.normalColNum}}">'
                     + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="targetBeConvertorCtrl.isrequired" hideremoveicon></vr-select>'
                 + '</vr-columns></vr-row>'
                 + '<vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{targetBeConvertorCtrl.normalColNum}}" isrequired="targetBeConvertorCtrl.isrequired" customvalidate="targetBeConvertorCtrl.customvalidate"></vr-directivewrapper>';

@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using Vanrise.BEBridge.Entities;
+using System.Linq;
+using System;
 
 namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 {
@@ -13,23 +15,30 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 
             if (state == null)
                 state = new SqlSourceReaderState();
-
             SqlSourceBatch sourceBatch = new SqlSourceBatch();
             using (SqlConnection connection = new SqlConnection(Setting.ConnectionString))
             {
                 var command = connection.CreateCommand();
                 command.CommandText = Setting.Query;
                 command.CommandTimeout = Setting.CommandTimeout;
+                if (Setting.BasedOnId)
+                    command.Parameters.Add(new SqlParameter { ParameterName = "LastImportedId", Value = state.LastImportedId });
 
                 DataTable table = new DataTable();
-
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {
                     adapter.Fill(table);
                 }
                 sourceBatch.Data = table;
+                if (Setting.BasedOnId)
+                {
+                    var maxIdValue = table.Compute(string.Format("max({0})", Setting.IdField), string.Empty);
+                    state.LastImportedId = maxIdValue == DBNull.Value ? state.LastImportedId : Convert.ToInt64(maxIdValue);
+                }
             }
+            context.ReaderState = state;
             context.OnSourceBEBatchRetrieved(sourceBatch, null);
+
         }
     }
 
@@ -38,10 +47,12 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
         public string ConnectionString { get; set; }
         public string Query { get; set; }
         public int CommandTimeout { get; set; }
+        public bool BasedOnId { get; set; }
+        public string IdField { get; set; }
     }
 
     public class SqlSourceReaderState
     {
-
+        public long LastImportedId { get; set; }
     }
 }

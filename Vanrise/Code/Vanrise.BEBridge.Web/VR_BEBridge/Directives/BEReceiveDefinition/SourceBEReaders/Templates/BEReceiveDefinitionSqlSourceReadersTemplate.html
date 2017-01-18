@@ -5,7 +5,13 @@
     <vr-columns width="fullrow">
         <vr-textarea value="scopeModel.query" rows="10" label="Query" isrequired />
     </vr-columns>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/3row">
         <vr-textbox value="scopeModel.timeoutInSec" label="Command Timeout (sec)" isrequired="true" decimalprecision="0" minvalue="1" />
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-switch value="scopeModel.basedOnId" label="Based on Id"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/3row" ng-if="scopeModel.basedOnId">
+        <vr-textbox value="scopeModel.idField" label="Id Field" isrequired="true" />
     </vr-columns>
 </vr-row>
