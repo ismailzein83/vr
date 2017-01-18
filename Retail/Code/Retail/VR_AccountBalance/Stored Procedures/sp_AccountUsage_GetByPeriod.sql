@@ -5,10 +5,11 @@
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[sp_AccountUsage_GetByPeriod]
 	@AccountTypeID uniqueidentifier,
-	@PeriodStart Datetime
+	@PeriodStart Datetime,
+	@TransactionTypeId uniqueidentifier
 AS
 BEGIN
 	SELECT ID, AccountID,TransactionTypeID
 	FROM VR_AccountBalance.AccountUsage with(nolock)
-	where AccountTypeID = @AccountTypeID AND PeriodStart = @PeriodStart
+	where AccountTypeID = @AccountTypeID AND PeriodStart = @PeriodStart AND TransactionTypeId= @TransactionTypeId
 END

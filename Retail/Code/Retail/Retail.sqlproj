@@ -313,5 +313,10 @@
     <Build Include="Retail_BE\Stored Procedures\sp_DID_Insert.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_DID_GetAll.sql" />
     <Build Include="Retail\Stored Procedures\sp_Account_GetByDefinition.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_GetByQueueType.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetForSpecificPeriodByAccountIds.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetErrorData.sql" />
+    <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScriptXML.sql" />
+    <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
   </ItemGroup>
 </Project>

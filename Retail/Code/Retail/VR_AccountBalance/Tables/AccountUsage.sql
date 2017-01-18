@@ -10,10 +10,13 @@
     [BillingTransactionNote]    NVARCHAR (1000)  NULL,
     [BillingTransactionID]      BIGINT           NULL,
     [ShouldRecreateTransaction] BIT              NULL,
+    [CorrectionProcessID]       UNIQUEIDENTIFIER NULL,
     [CreatedTime]               DATETIME         CONSTRAINT [DF_AccountUsage_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]                 ROWVERSION       NULL,
     CONSTRAINT [PK_AccountUsage] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
