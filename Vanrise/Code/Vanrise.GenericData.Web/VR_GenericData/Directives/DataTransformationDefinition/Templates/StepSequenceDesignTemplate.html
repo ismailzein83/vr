@@ -12,14 +12,14 @@
     <vr-columns width="fullrow">
         <vr-section collapsible title="Sequence" contentbox>
 
-            <vr-datalist maxitemsperrow="1" datasource="ctrl.childSteps" isitemdraggable onremoveitem="onRemoveStep">
+            <vr-datalist maxitemsperrow="1" datasource="ctrl.childSteps" isitemdraggable onremoveitem="onRemoveStep" collapsible>
                 <vr-row removeline>
                     <vr-columns width="fullrow">
                         <vr-label>{{dataItem.title}}</vr-label>
                     </vr-columns>
                 </vr-row>
                 <vr-row removeline>
-                  
+
                     <vr-columns colnum="12">
                         <div style="display:inline-block;width:15px;vertical-align:top">
                             <vr-check value="dataItem.isSelected" ng-click="viewScope.editStep(dataItem)"></vr-check>
