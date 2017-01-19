@@ -169,6 +169,9 @@
     <Compile Include="SellingRules\SellingRuleQuery.cs" />
     <Compile Include="SellingRules\SellingRuleSettings.cs" />
     <Compile Include="Setting\RatePlanSettingData.cs" />
+    <Compile Include="TQI\ITQIMethodContext.cs" />
+    <Compile Include="TQI\TQIMethod.cs" />
+    <Compile Include="TQI\TQIMethodConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">

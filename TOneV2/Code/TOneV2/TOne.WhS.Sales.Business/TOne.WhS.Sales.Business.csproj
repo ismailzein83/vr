@@ -138,6 +138,8 @@
     <Compile Include="SellingRules\MarginRule.cs" />
     <Compile Include="SellingRules\SellingRuleSettingsConfig.cs" />
     <Compile Include="SoldCountryManager.cs" />
+    <Compile Include="TQI\TQIManager.cs" />
+    <Compile Include="TQI\TQIMethodContext.cs" />
     <Compile Include="UtilitiesManager.cs" />
     <Compile Include="ZoneItem\ZoneRateManager.cs" />
     <Compile Include="ZoneItem\ZoneRouteOptionManager.cs" />

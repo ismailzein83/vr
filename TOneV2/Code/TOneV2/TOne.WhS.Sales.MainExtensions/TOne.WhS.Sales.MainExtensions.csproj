@@ -75,6 +75,9 @@
     <Compile Include="RateCalculation\FixedRateCalculationMethod.cs" />
     <Compile Include="RateCalculation\MarginPercentageRateCalculationMethod.cs" />
     <Compile Include="RateCalculation\MarginRateCalculationMethod.cs" />
+    <Compile Include="TQIMethods\FirstOptionTQIMethod.cs" />
+    <Compile Include="TQIMethods\SuggestedPercentagesTQIMethod.cs" />
+    <Compile Include="TQIMethods\WeightedAverageTQIMethod.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
