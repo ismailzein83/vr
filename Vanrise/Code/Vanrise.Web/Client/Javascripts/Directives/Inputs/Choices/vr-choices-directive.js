@@ -15,7 +15,7 @@ app.directive('vrChoices', [function () {
             var ctrl = this;
 
             var choiceCtrls = [];
-
+            ctrl.stopreadonly = $attrs.stopreadonly;
             ctrl.addChoiceCtrl = function (choiceCtrl) {
                 choiceCtrls.push(choiceCtrl);
                 setDefaultChoiceSeletion();

@@ -22,7 +22,9 @@ app.directive('vrChoice', ['UtilsService', function (UtilsService) {
             return {
                 pre: function ($scope, iElem, iAttrs, choicesCtrl) {
                     var ctrl = $scope.ctrl;
-                    ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
+                    ctrl.readOnly = false;
+                    if (choicesCtrl.stopreadonly == undefined)
+                        ctrl.readOnly = UtilsService.isContextReadOnly($scope) || iAttrs.readonly != undefined;
                     ctrl.selectionChanged = function () {
                         ctrl.isselected = ctrl.isSelected;
                     };
