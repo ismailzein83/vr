@@ -139,5 +139,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     break;
             }
         }
+
+        public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
+        {
+            var carriers = new InvoiceManager().GetInvoiceCarriers(new InvoiceCarrierFilter
+            {
+                GetCustomers = true
+            });
+            if (carriers == null)
+                return null;
+            return carriers.Select(x => x.InvoiceCarrierId);
+        }
     }
 }

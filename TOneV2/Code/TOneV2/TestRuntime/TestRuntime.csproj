@@ -468,6 +468,15 @@
     <Reference Include="Vanrise.Integration.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.BP">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.BP.Activities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.BP.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.BP.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>

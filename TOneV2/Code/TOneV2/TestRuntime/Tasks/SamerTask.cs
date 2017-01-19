@@ -23,21 +23,21 @@ namespace TestRuntime.Tasks
     {
         public void Execute()
         {
-            System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
+          //  System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
 
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+           // BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+           // QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+           // SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
 
-            var runtimeServices = new List<RuntimeService>();
-           // runtimeServices.Add(queueActivationService);
+           // var runtimeServices = new List<RuntimeService>();
+           //// runtimeServices.Add(queueActivationService);
 
-            runtimeServices.Add(bpService);
+           // runtimeServices.Add(bpService);
 
-           // runtimeServices.Add(schedulerService);
+           //// runtimeServices.Add(schedulerService);
 
-            RuntimeHost host = new RuntimeHost(runtimeServices);
-            host.Start();
+           // RuntimeHost host = new RuntimeHost(runtimeServices);
+           // host.Start();
 
             ////var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
             //var myflow = AllFlows.GetImportCDRFlow();
@@ -64,7 +64,27 @@ namespace TestRuntime.Tasks
             //var test = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig);
             //var test1 = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig1);
 
+            var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpService);
+            BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueActivationRuntimeService queueActivationRuntimeService = new QueueActivationRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
 
+            runtimeServices.Add(transactionLockRuntimeService);
+            runtimeServices.Add(queueActivationService);
+           // runtimeServices.Add(schedulerService);
+            runtimeServices.Add(dsRuntimeService);
+            runtimeServices.Add(queueActivationRuntimeService);
+            runtimeServices.Add(bpRegulatorService);
+            runtimeServices.Add(queueRegulatorService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
 
 
 
