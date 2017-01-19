@@ -12,15 +12,6 @@ namespace Retail.BusinessEntity.Business
     {
         #region public methods
 
-        public DIDTechnicalSettings GetDIDTechnicalSettings()
-        {
-            DIDTechnicalSettings didTechnicalSettings = new SettingManager().GetSetting<DIDTechnicalSettings>(DIDTechnicalSettings.SETTING_TYPE);
-            if (didTechnicalSettings == null)
-                throw new NullReferenceException("didTechnicalSettings");
-
-            return didTechnicalSettings;
-        }
-
         public Guid GetAccountDIDRelationDefinitionId()
         {
             DIDTechnicalSettings DIDTechnicalSettings = this.GetDIDTechnicalSettings();
@@ -32,5 +23,14 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+
+        private DIDTechnicalSettings GetDIDTechnicalSettings()
+        {
+            DIDTechnicalSettings didTechnicalSettings = new SettingManager().GetSetting<DIDTechnicalSettings>(DIDTechnicalSettings.SETTING_TYPE);
+            if (didTechnicalSettings == null)
+                throw new NullReferenceException("didTechnicalSettings");
+
+            return didTechnicalSettings;
+        }
     }
 }

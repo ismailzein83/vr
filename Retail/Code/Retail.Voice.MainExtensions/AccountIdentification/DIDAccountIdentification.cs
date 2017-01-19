@@ -13,7 +13,8 @@ namespace Retail.Voice.MainExtensions
 
         public override void Execute(IAccountIdentificationContext context)
         {
-            Guid accountDIDRelationDefinitionID = new Guid("AB66335B-7D26-4A4B-A7FA-FB4D2728B080");
+            ConfigManager beConfigManager = new ConfigManager();
+            Guid accountDIDRelationDefinitionID = beConfigManager.GetAccountDIDRelationDefinitionId();
             DIDManager didManager = new DIDManager();
 
             BEParentChildRelationManager beParentChildRelationManager = new BEParentChildRelationManager();
