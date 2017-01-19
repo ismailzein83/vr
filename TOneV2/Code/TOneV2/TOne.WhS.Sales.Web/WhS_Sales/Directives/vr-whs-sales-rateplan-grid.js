@@ -91,7 +91,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 			};
 
 			$scope.onTQIClicked = function (dataItem) {
-			    
+			    var onTQIEvaluated = function (evaluatedRate) {
+			    };
+
+			    WhS_Sales_RatePlanService.openTQIEditor(dataItem.RPRouteDetail, onTQIEvaluated);
 			};
 
 			$scope.onNewRateChanged = function (dataItem) {

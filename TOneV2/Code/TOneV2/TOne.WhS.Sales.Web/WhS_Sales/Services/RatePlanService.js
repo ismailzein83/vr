@@ -12,7 +12,8 @@
 			viewFutureRate: viewFutureRate,
 			viewInvalidRates: viewInvalidRates,
 			viewZoneInfo: viewZoneInfo,
-			openBulkActionWizard: openBulkActionWizard
+			openBulkActionWizard: openBulkActionWizard,
+			openTQIEditor: openTQIEditor
 		};
 
 		function sellNewCountries(customerId, countryChanges, saleAreaSettings, ratePlanSettings, onCountryChangesUpdated) {
@@ -59,6 +60,20 @@
 			};
 
 			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanPricingSettings.html", parameters, modalSettings);
+		}
+
+		function openTQIEditor(rpRouteDetail, onTQIEvaluated) {
+		    var parameters = {
+		        RPRouteDetail: rpRouteDetail
+		    };
+
+		    var settings = {};
+
+		    settings.onScopeReady = function (modalScope) {
+		        modalScope.onTQIEvaluated = onTQIEvaluated;
+		    };
+
+		    VRModalService.showModal("/Client/Modules/WhS_Sales/Views/TQI/TQIEditor.html", parameters, settings);
 		}
 
 		function viewFutureRate(zoneName, futureRate) {

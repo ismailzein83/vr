@@ -1,1 +1,30 @@
-﻿
+﻿<div vr-modalcontent ng-controller="WhS_Sales_TQIEditor">
+    <vr-modalbody>
+        <vr-form name="formTQIEditor">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-whs-sales-tqi-selective>
+
+                    </vr-whs-sales-tqi-selective>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    Information Section
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-whs-sales-tqi-grid>
+
+                    </vr-whs-sales-tqi-grid>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" formname="formTQIEditor" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.MainExtensions
         public decimal FirstOption { get; set; }
         public override void CalculateRate(ITQIMethodContext context)
         {
-            throw new NotImplementedException();
+            context.Rate = this.FirstOption;
         }
     }
 }
