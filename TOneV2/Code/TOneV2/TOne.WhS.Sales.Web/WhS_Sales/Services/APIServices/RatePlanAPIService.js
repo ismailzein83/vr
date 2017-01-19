@@ -49,8 +49,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRateCalculationMethodTemplates"));
         }
         
-        function GetBulkActionTypeExtensionConfigs() {
-        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetBulkActionTypeExtensionConfigs"));
+        function GetBulkActionTypeExtensionConfigs(ownerType) {
+        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetBulkActionTypeExtensionConfigs"), {
+        		ownerType: ownerType
+        	});
         }
 
         function GetBulkActionZoneFilterTypeExtensionConfigs() {

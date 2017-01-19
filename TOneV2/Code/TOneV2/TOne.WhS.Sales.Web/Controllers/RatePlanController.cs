@@ -82,10 +82,10 @@ namespace TOne.WhS.Sales.Web.Controllers
 
 		[HttpGet]
 		[Route("GetBulkActionTypeExtensionConfigs")]
-		public IEnumerable<BulkActionTypeSettings> GetBulkActionTypeExtensionConfigs()
+		public IEnumerable<BulkActionTypeSettings> GetBulkActionTypeExtensionConfigs(SalePriceListOwnerType ownerType)
 		{
 			var manager = new RatePlanExtensionConfigManager();
-			return manager.GetBulkActionTypeExtensionConfigs();
+			return manager.GetBulkActionTypeExtensionConfigs(ownerType);
 		}
 
 		[HttpGet]

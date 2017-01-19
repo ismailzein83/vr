@@ -82,7 +82,8 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
 				promises.push(loadBulkActionTypeExtensionCofigsPromise);
 
 				function loadBulkActionTypeExtensionCofigs() {
-					return WhS_Sales_RatePlanAPIService.GetBulkActionTypeExtensionConfigs().then(function (response) {
+					var ownerType = (bulkActionContext != undefined) ? bulkActionContext.ownerType : null;
+					return WhS_Sales_RatePlanAPIService.GetBulkActionTypeExtensionConfigs(ownerType).then(function (response) {
 						if (response != null) {
 							for (var i = 0; i < response.length; i++) {
 								$scope.scopeModel.extensionConfigs.push(response[i]);
