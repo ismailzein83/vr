@@ -73,10 +73,6 @@ namespace Vanrise.AccountBalance.Data.SQL
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAccountIds]", AccountUsageMapper, accountTypeId, transactionTypeId, datePeriod, accountIdsString);
         }
 
-        public void CleanUsageErrorData(Guid accountTypeId, Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
-        {
-            ExecuteNonQuerySP("[VR_AccountBalance].[sp_AccountUsage_CleanErrorData]", accountTypeId, transactionTypeId, correctionProcessId, periodDate);
-        }
 
         public List<AccountUsage> GetAccountUsageErrorData(Guid accountTypeId, Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
         {
