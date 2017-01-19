@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class ConfigManager
     {
-        #region public methods
+        #region Public Methods
 
         public Guid GetAccountDIDRelationDefinitionId()
         {
@@ -22,7 +22,19 @@ namespace Retail.BusinessEntity.Business
             return accountDIDRelationDefinitionId;
         }
 
+        public List<Guid> GetIncludedAccountTypeIds()
+        {
+            IncludedAccountTypes includedAccountTypes = this.GetIncludedAccountTypes();
+            List<Guid> includedAccountTypeIds = includedAccountTypes.AcountTypeIds;
+            if (includedAccountTypeIds == null)
+                throw new NullReferenceException("includedAccountTypeIds");
+
+            return includedAccountTypeIds;
+        }
+
         #endregion
+
+        #region Private Methods
 
         private DIDTechnicalSettings GetDIDTechnicalSettings()
         {
@@ -32,5 +44,26 @@ namespace Retail.BusinessEntity.Business
 
             return didTechnicalSettings;
         }
+
+        private RetailBETechnicalSettings GetRetailBETechnicalSettings()
+        {
+            RetailBETechnicalSettings retailBETechnicalSettings = new SettingManager().GetSetting<RetailBETechnicalSettings>(RetailBETechnicalSettings.SETTING_TYPE);
+            if (retailBETechnicalSettings == null)
+                throw new NullReferenceException("didTechnicalSettings");
+
+            return retailBETechnicalSettings;
+        }
+
+        private IncludedAccountTypes GetIncludedAccountTypes()
+        {
+            RetailBETechnicalSettings retailBETechnicalSettings = this.GetRetailBETechnicalSettings();
+            IncludedAccountTypes includedAccountTypes = retailBETechnicalSettings.IncludedAccountTypes;
+            if (includedAccountTypes == null)
+                throw new NullReferenceException("includedAccountTypes");
+
+            return includedAccountTypes;
+        }
+
+        #endregion
     }
 }

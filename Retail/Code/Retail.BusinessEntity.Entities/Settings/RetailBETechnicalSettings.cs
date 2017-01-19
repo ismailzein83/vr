@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Retail.BusinessEntity.Entities.Settings
+namespace Retail.BusinessEntity.Entities
 {
     public class RetailBETechnicalSettings : SettingData
     {
