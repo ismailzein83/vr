@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Web.Base;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Web.Controllers
 {
@@ -33,7 +34,8 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetAccountPartDefinitionsInfo")]
         public IEnumerable<AccountPartDefinitionInfo> GetAccountPartDefinitionsInfo(string filter = null)
         {
-            return _manager.GetAccountPartDefinitionsInfo();
+            AccountPartDefinitionFilter deserializedFilter = (filter != null) ? Serializer.Deserialize<AccountPartDefinitionFilter>(filter) : null;
+            return _manager.GetAccountPartDefinitionsInfo(deserializedFilter);
         }
 
         [HttpGet]

@@ -35,7 +35,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
                     BillingTransaction = new BillingTransaction
                     {
                         TransactionTypeId = TransactionTypeId,
-                        SourceId = row["PaymnetId"].ToString(),
+                        SourceId = row["PaymentId"].ToString(),
                         CurrencyId = currencyManager.GetSystemCurrency().CurrencyId,
                         AccountId = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row["AccountId"].ToString()).AccountId
                     }

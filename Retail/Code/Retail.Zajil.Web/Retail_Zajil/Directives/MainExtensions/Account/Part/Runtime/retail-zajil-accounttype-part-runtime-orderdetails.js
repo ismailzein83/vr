@@ -30,7 +30,7 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
         };
 
         this.initializeController = initializeController;
-       
+
         function initializeController() {
             defineMenuActions();
             defineAPI();
@@ -40,8 +40,8 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
             var api = {};
             var partSettings;
             api.load = function (payload) {
-                if (payload != undefined && payload.partSettings != undefined) {
-                    ctrl.orderdetails = payload.partSettings.OrderDetailItems;
+                if (payload.partDefinition != undefined && payload.partDefinition.Settings != undefined) {
+                    ctrl.orderdetails = payload.partDefinition.Settings.OrderDetailItems;
                 }
 
             };
@@ -66,7 +66,7 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
                 var index = ctrl.orderdetails.indexOf(orderDetailItem);
                 ctrl.orderdetails[index] = updatedOrderDetail;
             };
-            Retail_Zajil_OrderDetailService.editOrderDetail(onOrderDetailUpdated ,orderDetailItem);
+            Retail_Zajil_OrderDetailService.editOrderDetail(onOrderDetailUpdated, orderDetailItem);
         }
 
         function buildOrderDetailItemsList() {
@@ -88,7 +88,7 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
                     Achievement: ctrl.orderdetails[i].Achievement
                 });
             }
-               
+
             return tab;
         }
     }

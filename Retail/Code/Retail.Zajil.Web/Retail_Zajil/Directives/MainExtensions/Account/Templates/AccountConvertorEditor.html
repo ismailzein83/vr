@@ -1,1 +1,36 @@
-﻿
+﻿<vr-section title="Account Defintion">
+    <vr-columns width="1/3row">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountDefinitionSelectorReady"
+                                                          onselectionchanged="scopeModel.onAccountDefinitionSelectionChanged"
+                                                          customlabel="Account Definition"
+                                                          isrequired="true">
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+    <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                    normal-col-num="4"
+                                    customlabel="Account Type"
+                                    isrequired="true">
+    </retail-be-accounttype-selector>
+    <retail-be-statusdefinition-selector on-ready="scopeModel.onInitialStatusDefinitionSelectorReady"
+                                         customlabel="Initial Status"
+                                         normal-col-num="4"
+                                         isrequired="true">
+    </retail-be-statusdefinition-selector>
+</vr-section>
+<vr-section title="Account Parts">
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onCompanyProfileDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Company Profile Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onFinancialDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Financial Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onOrderDetailsDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Order Details Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+</vr-section>

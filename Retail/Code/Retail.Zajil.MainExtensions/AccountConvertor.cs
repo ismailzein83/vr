@@ -15,13 +15,31 @@ namespace Retail.Zajil.MainExtensions
 {
     public class AccountConvertor : TargetBEConvertor
     {
-        CurrencySettingData _currencySettingData;
+        #region Properties
+
+        public override string Name
+        {
+            get
+            {
+                return "Zajil Account Convertor";
+            }
+        }
+
+        Currency _mainCurrency;
+        public Guid AccountBEDefinitionId { get; set; }
+        public Guid AccountTypeId { get; set; }
+        public Guid InitialStatusId { get; set; }
+        public Guid FinancialPartDefinitionId { get; set; }
+        public Guid CompanyProfilePartDefinitionId { get; set; }
+        public Guid OrderDetailsPartDefinitionId { get; set; }
+
+        #endregion
+
         #region Public Methods
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
-            SettingManager settingManager = new SettingManager();
-            var _systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
-            _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;
+            CurrencyManager currencyManager = new CurrencyManager();
+            _mainCurrency = currencyManager.GetSystemCurrency();
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             Dictionary<string, ITargetBE> zajilAccounts = new Dictionary<string, ITargetBE>();
 
@@ -32,7 +50,7 @@ namespace Retail.Zajil.MainExtensions
                 var sourceId = row["CRM_Company_ID"].ToString();
                 if (zajilAccounts.TryGetValue(sourceId, out targetZajilAccount))
                 {
-                    ((targetZajilAccount as SourceAccountData).Account.Settings.Parts[AccountPartOrderDetail._ConfigId].Settings as AccountPartOrderDetail).OrderDetailItems.Add(GetOrderDetailItem(row));
+                    ((targetZajilAccount as SourceAccountData).Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings as AccountPartOrderDetail).OrderDetailItems.Add(GetOrderDetailItem(row));
                     continue;
                 }
                 string accountName = row["Company_Name"] as string;
@@ -43,9 +61,9 @@ namespace Retail.Zajil.MainExtensions
 
                 accountData.Account.Name = accountName;
                 accountData.Account.SourceId = sourceId;
-                accountData.Account.TypeId = new Guid("046078A0-3434-4934-8F4D-272608CFFEBF");
+                accountData.Account.TypeId = this.AccountTypeId;// new Guid("046078A0-3434-4934-8F4D-272608CFFEBF");
                 FillAccountSettings(accountData, row);
-                accountData.Account.StatusId = Guid.Parse("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B");
+                accountData.Account.StatusId = this.InitialStatusId;// Guid.Parse("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B");
                 zajilAccounts.Add(sourceId, accountData);
             }
             context.TargetBEs = zajilAccounts.Values.ToList();
@@ -63,6 +81,7 @@ namespace Retail.Zajil.MainExtensions
             finalBe.Account.TypeId = newBe.Account.TypeId;
             context.FinalBE = finalBe;
         }
+
         #endregion
 
         #region Private Methods
@@ -79,11 +98,36 @@ namespace Retail.Zajil.MainExtensions
         void FillOrderDetails(SourceAccountData accountData, DataRow row)
         {
 
-            accountData.Account.Settings.Parts.Add(AccountPartOrderDetail._ConfigId, new AccountPart
+            accountData.Account.Settings.Parts.Add(this.OrderDetailsPartDefinitionId, new AccountPart
             {
                 Settings = new AccountPartOrderDetail
                 {
                     OrderDetailItems = new List<OrderDetailItem> { GetOrderDetailItem(row) }
+                }
+            });
+        }
+        void FillFinancialInfo(SourceAccountData accountData, DataRow row)
+        {
+
+            accountData.Account.Settings.Parts.Add(this.FinancialPartDefinitionId, new AccountPart
+            {
+                Settings = new AccountPartFinancial
+                {
+                    CurrencyId = _mainCurrency.CurrencyId
+                }
+            });
+        }
+        void FillCompanyProfile(SourceAccountData accountData, DataRow row)
+        {
+
+            accountData.Account.Settings.Parts.Add(this.CompanyProfilePartDefinitionId, new AccountPart
+            {
+                Settings = new AccountPartCompanyProfile
+                {
+                    Contacts = GetContactsList(row),
+                    PhoneNumbers = new List<string> { row["PhoneNo"].ToString() },
+                    Faxes = new List<string> { row["FaxNo"].ToString() },
+                    Street = row["Address"].ToString()
                 }
             });
         }
@@ -112,31 +156,6 @@ namespace Retail.Zajil.MainExtensions
             decimal.TryParse(row[columnName].ToString(), out result);
             return result;
         }
-        void FillFinancialInfo(SourceAccountData accountData, DataRow row)
-        {
-
-            accountData.Account.Settings.Parts.Add(AccountPartFinancial._ConfigId, new AccountPart
-            {
-                Settings = new AccountPartFinancial
-                {
-                    CurrencyId = _currencySettingData.CurrencyId
-                }
-            });
-        }
-        void FillCompanyProfile(SourceAccountData accountData, DataRow row)
-        {
-
-            accountData.Account.Settings.Parts.Add(AccountPartCompanyProfile._ConfigId, new AccountPart
-            {
-                Settings = new AccountPartCompanyProfile
-                {
-                    Contacts = GetContactsList(row),
-                    PhoneNumbers = new List<string> { row["PhoneNo"].ToString() },
-                    Faxes = new List<string> { row["FaxNo"].ToString() },
-                    Street = row["Address"].ToString()
-                }
-            });
-        }
         List<AccountCompanyContact> GetContactsList(DataRow row)
         {
             List<AccountCompanyContact> contacts = new List<AccountCompanyContact>();
@@ -151,6 +170,7 @@ namespace Retail.Zajil.MainExtensions
 
             return contacts;
         }
+
         #endregion
     }
 }

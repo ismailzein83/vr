@@ -1,18 +1,77 @@
-﻿<vr-columns width="1/2row">
-    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAgentDefinitionSelectorReady"
-                                                      customlabel="Reseller Definition"
-                                                      isrequired="true">
-    </vr-genericdata-businessentitydefinition-selector>
-</vr-columns>
-<vr-columns width="1/2row">
-    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onPosDefinitionSelectorReady"
-                                                      customlabel="Point of Sale Definition"
-                                                      isrequired="true">
-    </vr-genericdata-businessentitydefinition-selector>
-</vr-columns>
-<vr-columns width="1/2row">
-    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onDistributorDefinitionSelectorReady"
-                                                      customlabel="Distributor Definition"
-                                                      isrequired="true">
-    </vr-genericdata-businessentitydefinition-selector>
-</vr-columns>
+﻿<vr-section title="Account Defintion">
+    <vr-columns width="1/3row">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountDefinitionSelectorReady"
+                                                          onselectionchanged="scopeModel.onAccountDefinitionSelectionChanged"
+                                                          customlabel="Account Definition"
+                                                          isrequired="true">
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+    <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                    normal-col-num="4"
+                                    customlabel="Account Type"
+                                    isrequired="true">
+    </retail-be-accounttype-selector>
+    <retail-be-statusdefinition-selector on-ready="scopeModel.onInitialStatusDefinitionSelectorReady"
+                                         customlabel="Initial Status"
+                                         normal-col-num="4"
+                                         isrequired="true">
+    </retail-be-statusdefinition-selector>
+</vr-section>
+<vr-section title="Dealers">
+    <vr-columns width="1/3row">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAgentDefinitionSelectorReady"
+                                                          customlabel="Reseller Definition"
+                                                          isrequired="true">
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onPosDefinitionSelectorReady"
+                                                          customlabel="Point of Sale Definition"
+                                                          isrequired="true">
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onDistributorDefinitionSelectorReady"
+                                                          customlabel="Distributor Definition"
+                                                          isrequired="true">
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+</vr-section>
+
+<vr-section title="Account Parts">
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onPersonalInfoDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Personal Info Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onResidentialInfoDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Residential Info Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onDealersDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Dealers Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onFinancialDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Finantial Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onActivationProfileDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Activation Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onOtherDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Other Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+</vr-section>

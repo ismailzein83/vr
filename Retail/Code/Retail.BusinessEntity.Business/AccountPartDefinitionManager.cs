@@ -30,9 +30,15 @@ namespace Retail.BusinessEntity.Business
             return this.GetCachedAccountPartDefinitions().GetRecord(accountPartDefinitionId);
         }
 
-        public IEnumerable<AccountPartDefinitionInfo> GetAccountPartDefinitionsInfo()
+        public IEnumerable<AccountPartDefinitionInfo> GetAccountPartDefinitionsInfo(AccountPartDefinitionFilter filter)
         {
-            return this.GetCachedAccountPartDefinitions().MapRecords(AccountPartDefinitionInfoMapper).OrderBy(x => x.Title);
+            Func<AccountPartDefinition, bool> filterExpression = null;
+
+            if (filter != null)
+            {
+                filterExpression = (item) => (filter.AccountPartDefinitionIds == null || filter.AccountPartDefinitionIds.Contains(item.Settings.ConfigId));
+            }
+            return this.GetCachedAccountPartDefinitions().MapRecords(AccountPartDefinitionInfoMapper, filterExpression).OrderBy(x => x.Title);
         }
 
         public IEnumerable<AccountPartDefinitionConfig> GetAccountPartDefinitionExtensionConfigs()
