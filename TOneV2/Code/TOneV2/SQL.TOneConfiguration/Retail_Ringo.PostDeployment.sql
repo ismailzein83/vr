@@ -282,6 +282,34 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
+--[runtime].[ScheduleTask]------------------------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([Id],[OldId],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[OldTriggerTypeId],[ActionTypeId],[OldActionTypeId],[TaskSettings],[OwnerId])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('4EEA9D99-95C3-486A-9508-051011C4E34E',-103,'Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B',1,'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-06-13T12:54:00"}',1),
+('89E96AC0-983A-476C-8356-0C6190754C4A',-101,'Data Source Task',1,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B',1,'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-06-13T12:54:00"}',1),
+('33E01D2A-FA00-4E23-8606-203CD1C4A7C0',-102,'Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B',1,'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":0,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-06-13T12:54:00"}',1),
+('C65CC8D9-C7F7-4164-956C-A2D8CFA77515',-104,'Data Source Task',1,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B',1,'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-06-13T12:54:00"}',1),
+('75E5E7B1-6523-4288-A207-ACCE0AEC941D',null,'Data Source Task',1,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B',null,'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',null,'{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-12-05T10:46:00"}',1),
+('FB4A7517-A244-4023-B49D-A95FB870EEEA',-107,'Ringo Event Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B',1,'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":0,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-06-13T12:54:00+03:00"}',1),
+('155BBB40-47F6-4AC8-A718-C0A6D5AF4D30',-106,'Ringo Pin Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B',1,'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":0,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-06-13T12:54:00+03:00"}',1),
+('85D890D0-66F1-4ACB-ADCE-F3581B80ADFC',-105,'Ringo Sms Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B',1,'B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":0,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"},"StartEffDate":"2016-06-13T12:54:00+03:00"}',1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[OldId],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[OldTriggerTypeId],[ActionTypeId],[OldActionTypeId],[TaskSettings],[OwnerId]))
+merge	[runtime].[ScheduleTask] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[OldId] = s.[OldId],[Name] = s.[Name],[IsEnabled] = s.[IsEnabled],[TaskType] = s.[TaskType],[TriggerTypeId] = s.[TriggerTypeId],[OldTriggerTypeId] = s.[OldTriggerTypeId],[ActionTypeId] = s.[ActionTypeId],[OldActionTypeId] = s.[OldActionTypeId],[TaskSettings] = s.[TaskSettings],[OwnerId] = s.[OwnerId]
+when not matched by target then
+	insert([Id],[OldId],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[OldTriggerTypeId],[ActionTypeId],[OldActionTypeId],[TaskSettings],[OwnerId])
+	values(s.[Id],s.[OldId],s.[Name],s.[IsEnabled],s.[TaskType],s.[TriggerTypeId],s.[OldTriggerTypeId],s.[ActionTypeId],s.[OldActionTypeId],s.[TaskSettings],s.[OwnerId]);
+----------------------------------------------------------------------------------------------------
+END
+
 --[integration].[DataSource]------------------------------------------------------------------------
 BEGIN
 set nocount on;
