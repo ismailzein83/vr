@@ -21,6 +21,24 @@ namespace Vanrise.Invoice.Entities
 
         public List<ItemGrouping> ItemGroupings { get; set; }
         public InvoiceTypeSecurity Security { get; set; }
+        public List<AutoGenerateInvoiceAction> AutoGenerateInvoiceActions { get; set; }
+
+    }
+
+
+    public class AutoGenerateInvoiceAction
+    {
+        public Guid AutoGenerateInvoiceActionId { get; set; }
+        public string Title { get; set; }
+        public AutoGenerateInvoiceActionSettings Settings { get; set; }
+    }
+    public abstract class AutoGenerateInvoiceActionSettings
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract void Execute(IAutoGenerateInvoiceActionSettingsContext contex);
+    }
+    public interface IAutoGenerateInvoiceActionSettingsContext
+    {
 
     }
 

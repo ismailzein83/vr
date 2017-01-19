@@ -15,6 +15,7 @@ namespace Vanrise.Invoice.Entities
         public abstract dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context);
         public abstract void GetInitialPeriodInfo(IInitialPeriodInfoContext context);
         public abstract BillingPeriod GetBillingPeriod(IExtendedSettingsBillingPeriodContext context);
+        public abstract IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context);
     }
    
     public abstract class InvoiceGenerator
@@ -49,5 +50,10 @@ namespace Vanrise.Invoice.Entities
     public interface IExtendedSettingsBillingPeriodContext
     {
         string PartnerId { get; }
+    }
+
+    public interface IExtendedSettingsPartnerIdsContext
+    {
+
     }
 }

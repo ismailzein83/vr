@@ -1,14 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3D178003-F8BB-4D06-ACDE-DDD1FE4C5B62}</ProjectGuid>
+    <ProductVersion>10.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9E36E9DC-F0C4-4D8E-B69C-5668544E4D0B}</ProjectGuid>
+    <ProjectTypeGuids>{32f31d43-81cc-4c15-9de6-3fc5453562b6};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Invoice.Data</RootNamespace>
-    <AssemblyName>Vanrise.Invoice.Data</AssemblyName>
+    <RootNamespace>Vanrise.Invoice.BP.Activities</RootNamespace>
+    <AssemblyName>Vanrise.Invoice.BP.Activities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -34,37 +36,39 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activities" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBillingPeriodInfoDataManager.cs" />
-    <Compile Include="IDataManager.cs" />
-    <Compile Include="IInvoiceDataManager.cs" />
-    <Compile Include="IInvoiceItemDataManager.cs" />
-    <Compile Include="IInvoiceSequenceDataManager.cs" />
-    <Compile Include="IInvoiceSettingDataManager.cs" />
-    <Compile Include="IInvoiceTypeDataManager.cs" />
-    <Compile Include="InvoiceDataManagerFactory.cs" />
+    <Compile Include="GeneratePartnersInvoices.cs" />
+    <Compile Include="LoadAllPartnerIds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
-      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
-      <Name>Vanrise.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
-      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
-      <Name>Vanrise.Entities</Name>
+    <ProjectReference Include="..\Vanrise.Invoice.Business\Vanrise.Invoice.Business.csproj">
+      <Project>{3fc94003-b550-4f8d-b31e-0d389dccc801}</Project>
+      <Name>Vanrise.Invoice.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Invoice.Entities\Vanrise.Invoice.Entities.csproj">
       <Project>{af8043ce-bc7c-445a-8c02-af023f5bdd68}</Project>
       <Name>Vanrise.Invoice.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Invoice.MainExtensions\Vanrise.Invoice.MainExtensions.csproj">
+      <Project>{68596558-5d2b-4459-aca6-0f4f98cb08f9}</Project>
+      <Name>Vanrise.Invoice.MainExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

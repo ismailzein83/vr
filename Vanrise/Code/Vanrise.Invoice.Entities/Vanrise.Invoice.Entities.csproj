@@ -63,6 +63,11 @@
     <Compile Include="InvoiceItem\GroupingInvoiceItemQuery.cs" />
     <Compile Include="InvoiceItem\IGroupingInvoiceItemQueryContext.cs" />
     <Compile Include="InvoiceReader\InvoiceSourceBatch.cs" />
+    <Compile Include="InvoiceSetting\InvoiceSetting.cs" />
+    <Compile Include="InvoiceSetting\InvoiceSettingDetail.cs" />
+    <Compile Include="InvoiceSetting\InvoiceSettingFilter.cs" />
+    <Compile Include="InvoiceSetting\InvoiceSettingInfo.cs" />
+    <Compile Include="InvoiceSetting\InvoiceSettingQuery.cs" />
     <Compile Include="InvoiceType\ConvertToGridColumnAttributeInput.cs" />
     <Compile Include="InvoiceType\IInvoiceActionContext.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceExtendedSettingsConfig.cs" />

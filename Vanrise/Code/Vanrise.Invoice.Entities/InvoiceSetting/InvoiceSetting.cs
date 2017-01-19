@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Vanrise.Invoice.Entities
+{
+    public class InvoiceSetting
+    {
+        public Guid InvoiceSettingId { get; set; }
+        public string Name { get; set; }
+        public Guid InvoiceTypeId { get; set; }
+        public InvoiceSettingDetails Details { get; set; }
+    }
+    public class InvoiceSettingDetails
+    {
+        public bool IsDefault { get; set; }
+        public bool EnableAutomaticInvoice { get; set; }
+        public AutomaticInvoiceSettings AutomaticInvoiceSettings { get; set; }
+    }
+    public class AutomaticInvoiceSettings
+    {
+
+    }
+}

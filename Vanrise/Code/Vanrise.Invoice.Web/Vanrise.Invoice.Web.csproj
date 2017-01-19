@@ -128,6 +128,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceItemController.cs" />
+    <Compile Include="Controllers\InvoiceSettingController.cs" />
     <Compile Include="Controllers\InvoiceTypeConfigsController.cs" />
     <Compile Include="Controllers\InvoiceTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -181,6 +182,10 @@
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceMonthlyTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\Templates\AutomaticInvoiceProcessManualTemplate.html" />
+    <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\vr-invoice-automaticinvoiceprocess-manual.js" />
+    <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Scheduled\Templates\AutomaticInvoiceProcessScheduledTemplate.html" />
+    <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Scheduled\vr-invoice-automaticinvoiceprocess-scheduled.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\BiWeeklyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\BiMonthlyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\MonthlyBillingPeriodTemplate.html" />
@@ -201,6 +206,10 @@
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-reader-directive.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoicefieldpropertyevaluator.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoiceobjecttype.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoicesetting-grid.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\Templates\AutomaticInvoiceActionsGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\vr-invoicetype-automaticinvoiceactions.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\Templates\FilterGroupConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-filtergroup.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\vr-invoicetype-invoicegeneratorfiltercondition.js" />
@@ -311,9 +320,11 @@
     <Content Include="VR_Invoice\Reports\InvoiceReport.aspx" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceItemAPISevice.js" />
+    <Content Include="VR_Invoice\Services\APIServices\InvoiceSettingAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeConfigsAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\ItemGroupingSectionAPIService.js" />
+    <Content Include="VR_Invoice\Services\AutomaticInvoiceActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGeneratorActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGridSettingService.js" />
@@ -322,6 +333,7 @@
     <Content Include="VR_Invoice\Services\InvoicePartnerSettingsService.js" />
     <Content Include="VR_Invoice\Services\InvoiceSerialNumberSettingsService.js" />
     <Content Include="VR_Invoice\Services\InvoiceService.js" />
+    <Content Include="VR_Invoice\Services\InvoiceSettingService.js" />
     <Content Include="VR_Invoice\Services\InvoiceSubSectionSettingsService.js" />
     <Content Include="VR_Invoice\Services\InvoiceTypeService.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceActions\InvoiceActionEditor.html" />
@@ -353,6 +365,10 @@
     <Content Include="VR_Invoice\Services\InvoiceEmailActionService.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceActions\InvoiceEmailAttachmentEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceActions\InvoiceEmailAttachmentEditorController.js" />
+    <Content Include="VR_Invoice\Views\InvoiceSettingEditor.html" />
+    <Content Include="VR_Invoice\Views\InvoiceSettingEditorController.js" />
+    <Content Include="VR_Invoice\Views\InvocieSettingManagement.html" />
+    <Content Include="VR_Invoice\Views\InvocieSettingManagementController.js" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditor.html" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceDataSourceEditor.html" />
@@ -381,6 +397,7 @@
     <Content Include="VR_Invoice\Views\Runtime\InvoiceNoteActionEditorController.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\" />
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\" />
     <Folder Include="VR_Invoice\Views\Definition\InvoicePartnerSettings\" />
   </ItemGroup>

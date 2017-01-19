@@ -47,6 +47,7 @@
     <Compile Include="Context\BillingPeriodContext.cs" />
     <Compile Include="Context\CheckInvoiceFollowBillingPeriodContext.cs" />
     <Compile Include="Context\ExtendedSettingsBillingPeriodContext.cs" />
+    <Compile Include="Context\ExtendedSettingsPartnerIdsContext.cs" />
     <Compile Include="Context\GetMeasureValueContext.cs" />
     <Compile Include="Context\GroupingInvoiceItemQueryContext.cs" />
     <Compile Include="Context\InitialPeriodInfoContext.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="InvoiceItemManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoiceSequenceManager.cs" />
+    <Compile Include="InvoiceSettingManager.cs" />
     <Compile Include="InvoiceTypeConfigsManager.cs" />
     <Compile Include="InvoiceTypeManager.cs" />
     <Compile Include="InvoiceTypeGroupingItemPropValueReaderCompilationStep.cs" />

@@ -9,7 +9,6 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceSerialNumberSettings
     {
         public List<SerialNumberPart> SerialNumberParts { get; set; }
-        public string SerialNumberPattern { get; set; }
     }
     public class SerialNumberPart
     {

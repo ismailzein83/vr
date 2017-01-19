@@ -27,9 +27,6 @@
         var concatenatedPartsAPI;
         var concatenatedPartsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var serialNumberPatternAPI;
-        var serialNumberPatternReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var invoiceActionsAPI;
         var invoiceActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -91,10 +88,6 @@
                 concatenatedPartsReadyPromiseDeferred.resolve();
             };
 
-            $scope.scopeModel.onSerialNumberPatternReady = function (api) {
-                serialNumberPatternAPI = api;
-                serialNumberPatternReadyPromiseDeferred.resolve();
-            };
             $scope.scopeModel.onStartCalculationMethodDirectiveReady = function (api) {
                 startCalculationMethodAPI = api;
                 startCalculationMethodPromiseDeferred.resolve();
@@ -166,7 +159,6 @@
                         },
                         InvoiceSerialNumberSettings: {
                             SerialNumberParts: concatenatedPartsAPI.getData(),
-                            SerialNumberPattern: serialNumberPatternAPI.getData(),
                         },
                         SubSections: subSectionsAPI.getData(),
                         Security: {
@@ -314,17 +306,6 @@
                     return concatenatedPartsDeferredLoadPromiseDeferred.promise;
                 }
 
-                function loadSerialNumberPattern() {
-                    var serialNumberPatternDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    serialNumberPatternReadyPromiseDeferred.promise.then(function () {
-                        var serialNumberPatternDirectivePayload = { context: getContext() };
-                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceSerialNumberSettings != undefined)
-                            serialNumberPatternDirectivePayload.serialNumberPattern = invoiceTypeEntity.Settings.InvoiceSerialNumberSettings.SerialNumberPattern;
-                        VRUIUtilsService.callDirectiveLoad(serialNumberPatternAPI, serialNumberPatternDirectivePayload, serialNumberPatternDeferredLoadPromiseDeferred);
-                    });
-                    return serialNumberPatternDeferredLoadPromiseDeferred.promise;
-                }
-
                 function loadInvoiceActionsGrid() {
                     var invoiceActionsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceActionsReadyPromiseDeferred.promise.then(function () {
@@ -410,7 +391,7 @@
                     });
                     return startCalculationMethodLoadPromiseDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadSerialNumberPattern, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective])
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
