@@ -17,7 +17,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         }
 
-        public override IEnumerable<NewZoneRateEntity> GetRates(IEnumerable<Entities.Processing.CodeToAdd> codes, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType)
+        public override IEnumerable<NewZoneRateEntity> GetRates(IEnumerable<Entities.Processing.CodeToAdd> codes, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, ExistingRatesByZoneName existingRatesByZoneName)
         {
             if (zonesByType[SaleZoneTypeEnum.Fixed].Count() == 0)
                 return null;
@@ -27,7 +27,7 @@ namespace TOne.WhS.CodePreparation.Business
             if (matchedZones.Count() == 0)
                 matchedZones.AddRange(zonesByType[SaleZoneTypeEnum.Fixed]);
 
-            return base.GetHighestRatesFromZoneMatchesSaleEntities(matchedZones);
+            return base.GetHighestRatesFromZoneMatchesSaleEntities(matchedZones, existingRatesByZoneName);
         }
     }
 }

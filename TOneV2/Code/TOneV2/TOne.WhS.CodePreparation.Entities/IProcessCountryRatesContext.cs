@@ -17,5 +17,7 @@ namespace TOne.WhS.CodePreparation.Entities
         DateTime EffectiveDate { get; set; }
         int SellingNumberPlanId { get; set; }
         IEnumerable<NotImportedZone> NotImportedZones { get; }
+        ExistingRatesByZoneName EffectiveExistingRatesByZoneName { get; set; }
+
     }
 }

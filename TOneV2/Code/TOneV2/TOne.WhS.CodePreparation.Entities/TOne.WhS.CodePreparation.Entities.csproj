@@ -60,6 +60,7 @@
     <Compile Include="AddedCode.cs" />
     <Compile Include="ExistingRate.cs" />
     <Compile Include="ExistingRateGroup.cs" />
+    <Compile Include="ExistingRatesByZoneName.cs" />
     <Compile Include="ExistingZoneRoutingProducts.cs" />
     <Compile Include="ExistingRateGroupByZoneName.cs" />
     <Compile Include="ExistingZoneServices.cs" />

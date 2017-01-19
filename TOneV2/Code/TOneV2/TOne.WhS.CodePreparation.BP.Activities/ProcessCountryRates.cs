@@ -21,6 +21,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
         public int SellingNumberPlanId { get; set; }
         public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
+        public ExistingRatesByZoneName EffectiveExistingRatesByZoneName { get; set; }
     }
 
     public class ProcessCountryRatesOutput
@@ -52,8 +53,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<int> SellingNumberPlanId { get; set; }
 
         [RequiredArgument]
-
         public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
+
+        [RequiredArgument]
+        public InArgument<ExistingRatesByZoneName> EffectiveExistingRatesByZoneName { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
@@ -77,7 +80,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 EffectiveDate = inputArgument.EffectiveDate,
                 SalePriceListsByOwner = inputArgument.SalePriceListsByOwner,
                 SellingNumberPlanId = inputArgument.SellingNumberPlanId,
-                NotImportedZones = inputArgument.NotImportedZones
+                NotImportedZones = inputArgument.NotImportedZones,
+                EffectiveExistingRatesByZoneName = inputArgument.EffectiveExistingRatesByZoneName
             };
 
             PriceListRateManager plCodeManager = new PriceListRateManager();
@@ -101,7 +105,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 EffectiveDate = this.EffectiveDate.Get(context),
                 SalePriceListsByOwner = this.SalePriceListsByOwner.Get(context),
                 SellingNumberPlanId = this.SellingNumberPlanId.Get(context),
-                NotImportedZones = this.NotImportedZones.Get(context)
+                NotImportedZones = this.NotImportedZones.Get(context),
+                EffectiveExistingRatesByZoneName = this.EffectiveExistingRatesByZoneName.Get(context)
             };
         }
 

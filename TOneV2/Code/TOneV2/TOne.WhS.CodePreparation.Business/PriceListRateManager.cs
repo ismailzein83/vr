@@ -16,22 +16,22 @@ namespace TOne.WhS.CodePreparation.Business
     {
         public void ProcessCountryRates(IProcessCountryRatesContext context, SalePriceListsByOwner salePriceListsByOwner)
         {
-            ProcessCountryRates(context.ZonesToProcess, context.ExistingZones, context.ExistingRates, salePriceListsByOwner, context.NotImportedZones, context.EffectiveDate, context.SellingNumberPlanId);
+            ProcessCountryRates(context.ZonesToProcess, context.ExistingZones, context.ExistingRates, salePriceListsByOwner, context.NotImportedZones, context.EffectiveExistingRatesByZoneName, context.EffectiveDate, context.SellingNumberPlanId);
             context.NewRates = context.ZonesToProcess.SelectMany(item => item.RatesToAdd).SelectMany(itm => itm.AddedRates);
             context.ChangedRates = context.ExistingRates.Where(itm => itm.ChangedRate != null).Select(itm => itm.ChangedRate);
         }
 
         private void ProcessCountryRates(IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingRate> existingRates,
-            SalePriceListsByOwner salePriceListsByOwner, IEnumerable<NotImportedZone> notImportedZones, DateTime effectiveDate, int sellingNumberPlanId)
+            SalePriceListsByOwner salePriceListsByOwner, IEnumerable<NotImportedZone> notImportedZones, ExistingRatesByZoneName effectiveExistingRatesByZoneName, DateTime effectiveDate, int sellingNumberPlanId)
         {
             ExistingRateGroupByZoneName existingRateGroupByZoneName = StructureExistingRatesByZoneName(existingRates);
             ProcessNotImportedData(notImportedZones, existingZones, existingRateGroupByZoneName);
-            ProcessImportedData(zonesToProcess, existingZones, existingRateGroupByZoneName, salePriceListsByOwner, effectiveDate, sellingNumberPlanId);
+            ProcessImportedData(zonesToProcess, existingZones, existingRateGroupByZoneName, salePriceListsByOwner,effectiveExistingRatesByZoneName, effectiveDate, sellingNumberPlanId);
            
         }
 
         private void ProcessImportedData(IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones, 
-            ExistingRateGroupByZoneName existingRateGroupByZoneName, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate, int sellingNumberPlanId)
+            ExistingRateGroupByZoneName existingRateGroupByZoneName, SalePriceListsByOwner salePriceListsByOwner, ExistingRatesByZoneName effectiveExistingRatesByZoneName, DateTime effectiveDate, int sellingNumberPlanId)
         {
             //If no existing zones exist, no need to perform the whole process
             if (existingZones.Count() == 0)
@@ -46,9 +46,9 @@ namespace TOne.WhS.CodePreparation.Business
             foreach (ZoneToProcess zoneToProcess in zonesToProcess)
             {
                 existingRateGroupByZoneName.TryGetValue(zoneToProcess.ZoneName, out existingRateGroup);
-
+               
                 if (zoneToProcess.ChangeType == ZoneChangeType.New)
-                    CreateRatesForNewZones(zoneToProcess, sellingNumberPlanId, saleAreaSettingsData, zonesByType, effectiveDate, salePriceListsByOwner);
+                    CreateRatesForNewZones(zoneToProcess, sellingNumberPlanId, saleAreaSettingsData, zonesByType, effectiveExistingRatesByZoneName, effectiveDate, salePriceListsByOwner);
                 else if (zoneToProcess.ChangeType == ZoneChangeType.Renamed)
                 {
                     existingRateGroupByZoneName.TryGetValue(zoneToProcess.RecentZoneName, out existingRateGroup);
@@ -212,7 +212,7 @@ namespace TOne.WhS.CodePreparation.Business
         }
 
         private void CreateRatesForNewZones(ZoneToProcess zoneToProcess, int sellingNumberPlanId, SaleAreaSettingsData saleAreaSettingsData,
-            Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
+            Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, ExistingRatesByZoneName effectiveExistingRates, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
         {
                 SaleZoneTypeEnum saleZoneType = this.GetSaleZoneType(zoneToProcess.ZoneName, saleAreaSettingsData);
                 NewZoneRateLocator locator;
@@ -221,7 +221,7 @@ namespace TOne.WhS.CodePreparation.Business
                 else
                     locator = new MobileZoneRateLocator(sellingNumberPlanId);
 
-                IEnumerable<NewZoneRateEntity> rates = locator.GetRates(zoneToProcess.CodesToAdd, zonesByType);
+                IEnumerable<NewZoneRateEntity> rates = locator.GetRates(zoneToProcess.CodesToAdd, zonesByType, effectiveExistingRates);
                 
                 //in some case locators return null indicating that this new zone must not have new rates assigned
                 if (rates == null)

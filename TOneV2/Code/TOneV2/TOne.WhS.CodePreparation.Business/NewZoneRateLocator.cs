@@ -32,7 +32,7 @@ namespace TOne.WhS.CodePreparation.Business
             this.DefaultCurrencyId = currencyManager.GetSystemCurrency().CurrencyId;
         }
 
-        public abstract IEnumerable<NewZoneRateEntity> GetRates(IEnumerable<CodeToAdd> codes, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType);
+        public abstract IEnumerable<NewZoneRateEntity> GetRates(IEnumerable<CodeToAdd> codes, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, ExistingRatesByZoneName effectiveExistingRatesByZoneName);
 
         protected List<ExistingZone> GetMatchedExistingZones(IEnumerable<CodeToAdd> codes, IEnumerable<ExistingZone> existingZones)
         {
@@ -81,19 +81,24 @@ namespace TOne.WhS.CodePreparation.Business
             return currencyId;
         }
 
-        protected List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<ExistingZone> matchedZones)
+        protected List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<ExistingZone> matchedZones, ExistingRatesByZoneName existingRatesByZoneName)
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
             ExistingRatesByOwner existingRatesByOwner = new ExistingRatesByOwner();
-
+            List<ExistingRate> effectiveExistingRates;
             foreach (ExistingZone existingZone in matchedZones)
             {
-                IEnumerable<ExistingRate> normalExistingRates = existingZone.ExistingRates.FindAllRecords(itm => !itm.RateEntity.RateTypeId.HasValue);
-                if (normalExistingRates != null && normalExistingRates.Count() > 0)
+                if (existingRatesByZoneName.TryGetValue(existingZone.Name, out effectiveExistingRates))
                 {
-                    ExistingRate lastNormalExistingRate = normalExistingRates.OrderBy(itm => itm.BED).Last();
-                    SalePriceList salePriceList = salePriceListManager.GetPriceList(lastNormalExistingRate.RateEntity.PriceListId);
-                    existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, lastNormalExistingRate);
+                    foreach (ExistingRate existingRate in effectiveExistingRates)
+                    {
+                        //Comparison will only occur with normal rates
+                        if (existingRate.RateEntity.RateTypeId != null)
+                            continue;
+
+                        SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
+                        existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, existingRate);
+                    }
                 }
             }
 
