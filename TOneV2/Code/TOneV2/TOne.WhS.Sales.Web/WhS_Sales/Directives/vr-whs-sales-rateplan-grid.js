@@ -90,6 +90,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 				WhS_Sales_RatePlanService.viewFutureRate(dataItem.ZoneName, dataItem.FutureNormalRate);
 			};
 
+			$scope.onTQIClicked = function (dataItem) {
+			    
+			};
+
 			$scope.onNewRateChanged = function (dataItem) {
 				dataItem.IsDirty = true;
 				WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem);
