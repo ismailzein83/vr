@@ -229,7 +229,9 @@ as (select * from (values
 
 ('0B0572AC-ABFB-4267-8F51-D2480851D14A',5401,'BusinessProcess_BP_Account_Action','Account Action'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',null,0,'["View", "StartInstance", "ScheduleTask"]'),
 ('FDB996F9-9157-4778-897E-3F2DED954297',5402,'BusinessProcess_BP_Source_BE_Sync','Source BE Sync'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',null,0,'["View", "StartInstance", "ScheduleTask"]'),
-('08FB93FA-0719-4385-AD9E-0513E3966B26',5701,'BusinessProcess_BP_Account_Balance','Account Balance'		,'692D0589-D764-4DF5-857B-52A98D89FFD6',1801,0,'["View", "StartInstance", "ScheduleTask"]')
+('08FB93FA-0719-4385-AD9E-0513E3966B26',5701,'BusinessProcess_BP_Account_Balance','Account Balance'		,'692D0589-D764-4DF5-857B-52A98D89FFD6',1801,0,'["View", "StartInstance", "ScheduleTask"]'),
+
+('E4186240-7525-4B39-9B4D-48CCDE5F2590',null,'Retail_Pricing_Rule','Pricing'							,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',null,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
