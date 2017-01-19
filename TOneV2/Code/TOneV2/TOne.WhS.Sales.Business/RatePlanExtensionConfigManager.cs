@@ -41,5 +41,11 @@ namespace TOne.WhS.Sales.Business
 			var extensionConfigManager = new ExtensionConfigurationManager();
 			return extensionConfigManager.GetExtensionConfigurations<BulkActionZoneFilterTypeSettings>(BulkActionZoneFilterTypeSettings.EXTENSION_TYPE).OrderBy(x => x.Title);
 		}
+
+        public IEnumerable<TQIMethodConfig> GetTQIMethods()
+        {
+            var extensionConfigManager = new ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<TQIMethodConfig>(TQIMethodConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
+        }
     }
 }

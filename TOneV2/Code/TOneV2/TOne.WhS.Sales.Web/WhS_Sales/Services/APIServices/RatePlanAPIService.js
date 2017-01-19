@@ -41,6 +41,10 @@
         	});
         }
 
+        function GetTQIMethods() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetTQIMethods"));
+        }
+
         function GetCostCalculationMethodTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCostCalculationMethodTemplates"));
         }
@@ -147,7 +151,8 @@
             DeleteChangedRates: DeleteChangedRates,
             GetCustomerDefaultInheritedService: GetCustomerDefaultInheritedService,
             GetZoneInheritedService: GetZoneInheritedService,
-            GetFilteredSoldCountries: GetFilteredSoldCountries
+            GetFilteredSoldCountries: GetFilteredSoldCountries,
+            GetTQIMethods: GetTQIMethods
         };
 
     }

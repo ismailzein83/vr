@@ -65,6 +65,14 @@ namespace TOne.WhS.Sales.Web.Controllers
 		}
 
         [HttpGet]
+        [Route("GetTQIMethods")]
+        public IEnumerable<TQIMethodConfig> GetTQIMethods()
+        {
+            var manager = new RatePlanExtensionConfigManager();
+            return manager.GetTQIMethods();
+        }
+
+        [HttpGet]
         [Route("GetCostCalculationMethodTemplates")]
         public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()
         {
