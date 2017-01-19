@@ -62,5 +62,10 @@ namespace Retail.Invoice.Business
         {
             return new RetailSubscriberPartnerSettings(this.AcountBEDefinitionId);
         }
+
+        public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
