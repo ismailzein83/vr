@@ -17,7 +17,7 @@ namespace Vanrise.AccountBalance.Business
         }
         public Guid InitializeUpdateUsageBalance()
         {
-            return new Guid();
+            return Guid.NewGuid();
         }
         public void CorrectUsageBalance(Guid accountTypeId, CorrectUsageBalancePayload correctUsageBalancePayload)
         {
