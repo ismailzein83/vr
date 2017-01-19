@@ -2,7 +2,7 @@
 	<div style="min-height: 42px;">
 		<vr-row ng-show="showZoneLetters">
 			<vr-columns width="fullrow" ng-if="showZoneLetters">
-				<vr-choices selectedindex="scopeModel.selectedZoneLetterIndex" onselectionchanged="onZoneLetterSelectionChanged()">
+				<vr-choices selectedindex="scopeModel.selectedZoneLetterIndex" onselectionchanged="onZoneLetterSelectionChanged()" stopreadonly>
 					<vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
 				</vr-choices>
 			</vr-columns>
