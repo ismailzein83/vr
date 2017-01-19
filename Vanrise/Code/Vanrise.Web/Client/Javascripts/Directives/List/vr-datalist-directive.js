@@ -61,7 +61,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
             var contentWidth = 0;
             if (attrs.isitemdraggable != undefined) {
                 draggableIconTemplate = '<div ng-if="!ctrl.readOnly" style="width: 14px; display:inline-block;height:25px">'
-                                            + '<i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 10px); left: -6px"></i>'
+                                            + '<i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: 5px;left: 3px;position: absolute;"></i>'
                                         + '</div>';
                 contentWidth += 14;
             }
