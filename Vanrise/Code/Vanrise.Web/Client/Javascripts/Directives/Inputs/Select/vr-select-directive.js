@@ -65,17 +65,17 @@
                     controller.limitcharactercount = 2;
 
                 controller.boundDataSource = [];
+                $scope.effectiveDataSource = [];
                 var itemsToAddToSource;
-                $scope.$watch('isDropDownOpened', function (newValue, oldValue) {
-                    controller.isLoading = true;
-                    $scope.effectiveDataSource = getdatasource();
-                    refreshBoundDataSource();
+                
+                $scope.$watchCollection('ctrl.datasource', function (newValue, oldValue) {
+                    fillEffectiveDataSourceFromItems(getdatasource());
                 });
 
-                $scope.$watchCollection('effectiveDataSource', function (newValue, oldValue) {
-                    refreshBoundDataSource();
+                $scope.$watchCollection('ctrl.data', function (newValue, oldValue) {
+                    fillEffectiveDataSourceFromItems(getdatasource());
                 });
-               
+
                 controller.hideAddButton = false;
                 if (controller.haspermission != undefined && typeof (controller.haspermission) == 'function') {
                     controller.haspermission().then(function (isAllowed) {
@@ -92,64 +92,32 @@
                     });
                 }
 
-                function refreshBoundDataSource() {
-                    if (!$scope.isDropDownOpened)
+                controller.searchLocal = function () {
+                    var filteredItems = [];
+                    var allDataItems = getdatasource(); 
+                    for (var i = 0; i < allDataItems.length; i++) {
+                        var propValue = allDataItems[i][controller.datatextfield]; 
+                        if (propValue != undefined && propValue.toLowerCase().indexOf(controller.filtername.toLowerCase()) >= 0)
+                            filteredItems.push(allDataItems[i]);
+                    }
+                    fillEffectiveDataSourceFromItems(filteredItems);
+                };
+
+                var isAddingPage = false;
+                function addPageToBoundDataSource() {
+                    if (isAddingPage)
                         return;
-                    controller.boundDataSource.length = 0;
-
-                    if ($scope.effectiveDataSource != undefined) {
-                        itemsToAddToSource = [];
-                        for (var i = 0; i < $scope.effectiveDataSource.length; i++)
-                            itemsToAddToSource.push($scope.effectiveDataSource[i]);
-                        addBatchItemsToSource();
-                    }
-                }
-
-                function addBatchItemsToSource() {
-                    var numberOfItems = 20;
-                    for (var i = 0; i < numberOfItems; i++) {
-                        if (itemsToAddToSource.length > 0) {
-                            controller.boundDataSource.push(itemsToAddToSource[0]);
-                            itemsToAddToSource.splice(0, 1);
-                        }
-                    }
-
-                    if (itemsToAddToSource.length > 0) {
-                        setTimeout(function () {
-                            addBatchItemsToSource();
-                            $scope.$apply(function () {
-
-                            });
+                    isAddingPage = true;
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            var addedItems = 0;
+                            for (var i = controller.boundDataSource.length; i < $scope.effectiveDataSource.length && addedItems < 20; i++) {
+                                controller.boundDataSource.push($scope.effectiveDataSource[i]);
+                                addedItems++;
+                            }
+                            isAddingPage = false;
                         });
-                    }
-                    else {
-                        controller.isLoading = false;
-                        setTimeout(function () {
-
-                        if (!controller.isMultiple()) {
-                            if (controller.selectedvalues !=undefined) {
-                                 var index = controller.getObjectValue(controller.selectedvalues);
-                                 $('#' + index).find('a').first().addClass('mark-select-selected');
-                                 $('.vr-select-height').first().stop().animate({
-                                     scrollTop: parseInt($('#' + index).attr("dataindex")) * 25
-                                 }, 1);
-                                 $('.mark-select').mouseover(function() {
-                                     $('.mark-select').removeClass('mark-select-selected');
-                                });
-                            }
-                        }
-                        else {
-                            if (controller.selectedvalues.length > 0) {
-                                var index = controller.getObjectValue(controller.selectedvalues[controller.selectedvalues.length - 1]);
-                                if ($('#' + index).offset()!=undefined)
-                                    $('.vr-select-container').first().stop().animate({
-                                        scrollTop:  parseInt($('#' + index).attr("dataindex")) * 25 - 25
-                                    }, 1);
-                            }
-                        }
-                       
-                      }, 1);
-                }
+                    });
                 }
 
                 //Configuration
@@ -207,10 +175,6 @@
                     return !(controller.hidefilterbox === "" || controller.hidefilterbox);
                 }
 
-
-
-
-
                 function adjustTooltipPosition(e) {
                     setTimeout(function () {
                         var self = angular.element(e.currentTarget);
@@ -229,9 +193,17 @@
 
                 function setdatasource(datasource) {
                     if (isRemoteLoad()) controller.data = datasource;
-                    else controller.datasource = datasource;
-                    $scope.effectiveDataSource = getdatasource();
-                    refreshBoundDataSource();
+                    else controller.datasource = datasource;                    
+                }
+
+                function fillEffectiveDataSourceFromItems(items)
+                {
+                    $scope.effectiveDataSource.length = 0;
+                    controller.boundDataSource.length = 0;
+                    for (var i = 0; i < items.length; i++) {
+                        $scope.effectiveDataSource.push(items[i]);
+                    }
+                    addPageToBoundDataSource();
                 }
 
                 function muteAction(e) {
@@ -403,7 +375,21 @@
 
                         vrSelectSharedObject.onOpenDropDown($attrs.id);
 
-                        setTimeout(function () { $('#filterInput').focus(); }, 1);
+                        setTimeout(function () {
+                            $('#filterInput').focus();
+                            var lastScrollTop;
+                            $element.find("#divDataSourceContainer").scroll(function () {
+                                
+                                var scrollTop = $(this).scrollTop();
+                                var scrollPercentage = 100 * scrollTop / ($element.find('#divDataSourceBody').height() - $(this).height());
+
+                                if (scrollTop > lastScrollTop) {
+                                    if (scrollPercentage > 80)
+                                        addPageToBoundDataSource();
+                                }
+                                lastScrollTop = scrollTop;
+                            });
+                        }, 1);
                         var selfHeight = $(this).height();
                         var selfOffset = $(this).offset();
                         var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
@@ -448,6 +434,8 @@
                         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
 
                     });
+
+                    
                 }, 100);
                 setTimeout(function () {
                     // if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
@@ -504,6 +492,8 @@
                 $scope.$on('start-drag', function (event, args) {
                     fixDropdownPosition();
                 });
+
+               
             },
             controllerAs: 'ctrl',
             bindToController: true,
