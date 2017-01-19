@@ -76,7 +76,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
         public bool InsertBillingTransactionFromAccountUsageAndUpdate(Guid accountTypeId,TimeSpan timeOffset)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_InsertFromAccountUsageAndUpdate]", accountTypeId, timeOffset) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_InsertFromAccountUsageAndUpdate]", accountTypeId, timeOffset.TotalSeconds) > 0);
         }
         #endregion
 
