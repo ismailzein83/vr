@@ -40,10 +40,10 @@ namespace TOne.WhS.Sales.Business
                 return;
             foreach (ZoneItem zoneItem in zoneItems)
             {
-                var route = _routes.FindRecord(x => x.SaleZoneId == zoneItem.ZoneId);
+				RPRouteDetail route = _routes.FindRecord(x => x.SaleZoneId == zoneItem.ZoneId);
+				zoneItem.RPRouteDetail = route;
                 if (route != null)
                 {
-                    zoneItem.RouteOptions = route.RouteOptionsDetails;
                     SetCosts(zoneItem, route);
                 }
                 else if (_costCalculationMethods != null)

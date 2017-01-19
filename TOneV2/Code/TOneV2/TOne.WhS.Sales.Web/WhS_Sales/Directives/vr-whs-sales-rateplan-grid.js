@@ -123,29 +123,31 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 				else if (dataItem.CurrentRate != null)
 					rate = dataItem.CurrentRate;
 
+				var routeOptions = getRouteOptions(dataItem.RPRouteDetail);
+				
 				if (rate == undefined) {
-					setColorOfRouteOptions(dataItem.RouteOptions, null);
+					setColorOfRouteOptions(routeOptions, null);
 					rowStyle = { CssClass: 'bg-success' };
 				}
 				else { // Validate the rate
-					if (dataItem.RouteOptions != null) {
+					if (routeOptions != null) {
 						var array = []; // Stores the indexes of route options having a greater rate than the rate to validate
 
-						for (var i = 0; i < dataItem.RouteOptions.length; i++) {
-							if (dataItem.RouteOptions[i].ConvertedSupplierRate > rate)
+						for (var i = 0; i < routeOptions.length; i++) {
+							if (routeOptions[i].ConvertedSupplierRate > rate)
 								array.push(i);
 						}
 
-						if (array.length == dataItem.RouteOptions.length) {
-							setColorOfRouteOptions(dataItem.RouteOptions, null);
+						if (array.length == routeOptions.length) {
+							setColorOfRouteOptions(routeOptions, null);
 							rowStyle = { CssClass: "bg-danger" };
 						}
 						else if (array.length > 0) {
-							for (var i = 0; i < dataItem.RouteOptions.length; i++)
-								dataItem.RouteOptions[i].Color = (UtilsService.contains(array, i)) ? 'orange' : null;
+							for (var i = 0; i < routeOptions.length; i++)
+								routeOptions[i].Color = (UtilsService.contains(array, i)) ? 'orange' : null;
 						}
 						else {
-							setColorOfRouteOptions(dataItem.RouteOptions, null);
+							setColorOfRouteOptions(routeOptions, null);
 						}
 					}
 				}
@@ -432,9 +434,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 						gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
 						gridZoneItem.CalculatedRate = response.CalculatedRate;
 
-						gridZoneItem.RouteOptions = response.RouteOptions;
-
-						UtilsService.convertToPromiseIfUndefined(gridZoneItem.RouteOptionsAPI.load(response.RouteOptions)).then(function () {
+						gridZoneItem.RPRouteDetail = response.RPRouteDetail;
+						var routeOptions = getRouteOptions(response.RPRouteDetail);
+						UtilsService.convertToPromiseIfUndefined(gridZoneItem.RouteOptionsAPI.load(routeOptions)).then(function () {
 							loadRouteOptionsDeferred.resolve();
 						}).catch(function (error) {
 							loadRouteOptionsDeferred.reject(error);
@@ -578,9 +580,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 				RoutingDatabaseId: gridQuery.RoutingDatabaseId,
 				RoutingProductId: dataItem.EffectiveRoutingProductId,
 				SaleZoneId: dataItem.ZoneId,
-				RouteOptions: dataItem.RouteOptions,
+				RouteOptions: getRouteOptions(dataItem.RPRouteDetail),
 				CurrencyId: gridQuery.CurrencyId
 			};
+		}
+		function getRouteOptions(rpRouteDetail) {
+			return (rpRouteDetail != undefined) ? rpRouteDetail.RouteOptionsDetails : null;
 		}
 
 		function applyChanges(zoneChanges, zoneItem) {
