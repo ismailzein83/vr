@@ -11,6 +11,9 @@ using Vanrise.Common;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Reprocess.Entities;
+using Vanrise.Common.Business;
+using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 {
@@ -69,8 +72,13 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
         public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
-            Dictionary<DateTime, Dictionary<long, List<UpdateUsageBalanceItem>>> accountUsageBalanceItemsByBatchStart = new Dictionary<DateTime, Dictionary<long, List<UpdateUsageBalanceItem>>>();
-            Dictionary<long, List<UpdateUsageBalanceItem>> accountUpdateUsageBalanceItems;
+            Dictionary<DateTime, Dictionary<long, CorrectUsageBalanceItem>> accountCorrectUsageBalanceItemsByBatchStart = new Dictionary<DateTime, Dictionary<long, CorrectUsageBalanceItem>>();
+            Dictionary<long, CorrectUsageBalanceItem> correctUsageBalanceItems;
+            CorrectUsageBalanceItem correctUsageBalanceItem;
+
+            var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+            var configManager = new Vanrise.Common.Business.ConfigManager();
+            int systemCurrencyId = configManager.GetSystemCurrencyId();
 
             context.DoWhilePreviousRunning(() =>
             {
@@ -86,19 +94,29 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
                         foreach (var record in genericDataRecordBatch.Records)
                         {
                             decimal? amount = Vanrise.Common.Utilities.GetPropValueReader(this.Amount).GetPropertyValue(record);
-                            DateTime effectiveOn = Vanrise.Common.Utilities.GetPropValueReader(this.EffectiveOn).GetPropertyValue(record);
 
                             if (amount.HasValue && amount.Value > 0)
                             {
-                                UpdateUsageBalanceItem usageBalanceUpdate = new UpdateUsageBalanceItem();
-                                usageBalanceUpdate.Value = amount.Value;
-                                usageBalanceUpdate.AccountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record);
-                                usageBalanceUpdate.EffectiveOn = effectiveOn.Date;
-                                usageBalanceUpdate.CurrencyId = Vanrise.Common.Utilities.GetPropValueReader(this.CurrencyId).GetPropertyValue(record);
+                                long accountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record);
+                                DateTime effectiveOn = Vanrise.Common.Utilities.GetPropValueReader(this.EffectiveOn).GetPropertyValue(record);
+                                int currencyId = Vanrise.Common.Utilities.GetPropValueReader(this.CurrencyId).GetPropertyValue(record);
+                                decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(amount.Value, currencyId, systemCurrencyId, effectiveOn);
 
-                                accountUpdateUsageBalanceItems = accountUsageBalanceItemsByBatchStart.GetOrCreateItem(usageBalanceUpdate.EffectiveOn);
-                                List<UpdateUsageBalanceItem> updateUsageBalanceItems = accountUpdateUsageBalanceItems.GetOrCreateItem(usageBalanceUpdate.AccountId);
-                                updateUsageBalanceItems.Add(usageBalanceUpdate);
+                                correctUsageBalanceItems = accountCorrectUsageBalanceItemsByBatchStart.GetOrCreateItem(effectiveOn.Date);
+                                if (!correctUsageBalanceItems.TryGetValue(accountId, out correctUsageBalanceItem))
+                                {
+                                    correctUsageBalanceItem = new CorrectUsageBalanceItem()
+                                    {
+                                        Value = convertedAmount,
+                                        AccountId = accountId,
+                                        CurrencyId = systemCurrencyId
+                                    };
+                                    correctUsageBalanceItems.Add(accountId, correctUsageBalanceItem);
+                                }
+                                else
+                                {
+                                    correctUsageBalanceItem.Value += convertedAmount;
+                                }
                             }
                         }
                     });
@@ -109,18 +127,16 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
             object dbApplyStream = null;
 
             //Store UsageBalance Batches for finalization step
-            foreach (var accountUsageBalanceBatchEntry in accountUsageBalanceItemsByBatchStart)
+            foreach (var accountUsageBalanceBatchEntry in accountCorrectUsageBalanceItemsByBatchStart)
             {
-                var accountUsageBalanceItems = accountUsageBalanceBatchEntry.Value;
-
-                byte[] serializedBatch = ProtoBufSerializer.Serialize(accountUsageBalanceItems);
+                byte[] serializedBatch = ProtoBufSerializer.Serialize(accountUsageBalanceBatchEntry.Value);
 
                 StagingSummaryRecord obj = new StagingSummaryRecord()
                 {
                     ProcessInstanceId = context.ProcessInstanceId,
-                    Data = serializedBatch,
+                    StageName = context.CurrentStageName,
                     BatchStart = accountUsageBalanceBatchEntry.Key,
-                    StageName = context.CurrentStageName
+                    Data = serializedBatch
                 };
 
                 if (dbApplyStream == null)
@@ -137,8 +153,135 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
         public void FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
+            StageBatchRecord stageBatchRecord = context.BatchRecord as StageBatchRecord;
+            if (stageBatchRecord == null)
+                throw new Exception(String.Format("context.BatchRecord should be of type 'StageBatchRecord' and not of type '{0}'", context.BatchRecord.GetType()));
 
+            Queueing.MemoryQueue<Dictionary<long, CorrectUsageBalanceItem>> queueLoadedBatches = new Queueing.MemoryQueue<Dictionary<long, CorrectUsageBalanceItem>>();
+            AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
+            Task loadDataTask = new Task(() =>
+            {
+                StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus, stageBatchRecord);
+            });
+            loadDataTask.Start();
+
+            Dictionary<long, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems = new Dictionary<long, CorrectUsageBalanceItem>();
+            PrepareUsageBalanceItems(context.WriteTrackingMessage, context.DoWhilePreviousRunning, queueLoadedBatches, loadBatchStatus, context.CurrentStageName, preparedCorrectUsageBalanceItems);
+            InsertUsageBalanceItems(context.WriteTrackingMessage, context.CurrentStageName, stageBatchRecord.BatchStart, this.AccountTypeId, this.TransactionTypeId, preparedCorrectUsageBalanceItems);
         }
+
+        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<Dictionary<long, CorrectUsageBalanceItem>> queueLoadedBatches,
+            AsyncActivityStatus loadBatchStatus, StageBatchRecord stageBatchRecord)
+        {
+            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+            try
+            {
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Loading Batches for Stage {0}", context.CurrentStageName));
+                dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart, (stagingSummaryRecord) =>
+                {
+                    Dictionary<long, CorrectUsageBalanceItem> accountUsageBalance = ProtoBufSerializer.Deserialize<Dictionary<long, CorrectUsageBalanceItem>>(stagingSummaryRecord.Data);
+                    queueLoadedBatches.Enqueue(accountUsageBalance);
+                });
+            }
+            finally
+            {
+                dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart);
+                loadBatchStatus.IsComplete = true;
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
+            }
+        }
+
+        private static void PrepareUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
+            Queueing.MemoryQueue<Dictionary<long, CorrectUsageBalanceItem>> queueLoadedBatches, AsyncActivityStatus loadBatchStatus,
+            string currentStageName, Dictionary<long, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems)
+        {
+            CorrectUsageBalanceItem correctUsageBalanceItem;
+
+            try
+            {
+                writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Preparing Batches for Stage {0}", currentStageName));
+                doWhilePreviousRunning(loadBatchStatus, () =>
+                {
+                    bool hasItem = false;
+                    do
+                    {
+                        hasItem = queueLoadedBatches.TryDequeue((item) =>
+                        {
+                            Dictionary<long, CorrectUsageBalanceItem> accountUsageBalanceItems = item as Dictionary<long, CorrectUsageBalanceItem>;
+                            if (accountUsageBalanceItems == null)
+                                throw new Exception(String.Format("item should be of type 'Dictionary<long, CorrectUsageBalanceItem>' and not of type '{0}'", item.GetType()));
+
+                            foreach (var accountUsageBalanceItem in accountUsageBalanceItems)
+                            {
+                                if (!preparedCorrectUsageBalanceItems.TryGetValue(accountUsageBalanceItem.Key, out correctUsageBalanceItem))
+                                {
+                                    preparedCorrectUsageBalanceItems.Add(accountUsageBalanceItem.Key, new CorrectUsageBalanceItem()
+                                            {
+                                                Value = accountUsageBalanceItem.Value.Value,
+                                                AccountId = accountUsageBalanceItem.Value.AccountId,
+                                                CurrencyId = accountUsageBalanceItem.Value.CurrencyId
+                                            });
+                                }
+                                else
+                                {
+                                    correctUsageBalanceItem.Value += accountUsageBalanceItem.Value.Value;
+                                }
+                            }
+                        });
+                    } while (!loadBatchStatus.IsComplete || hasItem);
+                });
+            }
+            finally
+            {
+                writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Preparing Batches for Stage {0}", currentStageName));
+            }
+        }
+
+        private static void InsertUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, string currentStageName, DateTime batchStart, Guid accountTypeId, 
+            Guid transactionTypeId, Dictionary<long, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems)
+        {
+            writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
+
+            UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
+            Guid correctionProcessId = usageBalanceManager.InitializeUpdateUsageBalance();
+
+            int counter = 1;
+            decimal maxCount = 10000;
+            int numberOfBatches = (int)(Math.Ceiling(preparedCorrectUsageBalanceItems.Values.Count / maxCount));
+
+            CorrectUsageBalancePayload correctUsageBalancePayload = new CorrectUsageBalancePayload()
+            {
+                CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem>(),
+                PeriodDate = batchStart,
+                CorrectionProcessId = correctionProcessId,
+                IsLastBatch = counter == numberOfBatches,
+                TransactionTypeId = transactionTypeId
+            };
+
+            foreach (var itm in preparedCorrectUsageBalanceItems.Values)
+            {
+                correctUsageBalancePayload.CorrectUsageBalanceItems.Add(itm);
+                if (correctUsageBalancePayload.CorrectUsageBalanceItems.Count == maxCount)
+                {
+                    usageBalanceManager.CorrectUsageBalance(accountTypeId, correctUsageBalancePayload);
+                    counter++;
+                    correctUsageBalancePayload = new CorrectUsageBalancePayload()
+                    {
+                        CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem>(),
+                        PeriodDate = batchStart,
+                        CorrectionProcessId = correctionProcessId,
+                        IsLastBatch = counter == numberOfBatches,
+                        TransactionTypeId = transactionTypeId
+                    };
+                }
+            }
+
+            if (correctUsageBalancePayload.CorrectUsageBalanceItems.Count > 0)
+                usageBalanceManager.CorrectUsageBalance(accountTypeId, correctUsageBalancePayload);
+
+            writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Inserting Batches for Stage {0}", currentStageName));
+        }
+
 
         public List<string> GetOutputStages(List<string> stageNames)
         {
@@ -170,5 +313,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
             return stageBatchRecords;
         }
+
+        public static UpdateUsageBalanceItem usageBalanceItem { get; set; }
     }
 }
