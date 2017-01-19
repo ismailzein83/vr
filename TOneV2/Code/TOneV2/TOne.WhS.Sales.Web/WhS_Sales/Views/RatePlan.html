@@ -90,7 +90,6 @@
                     
 					<vr-button type="BulkActions" data-onclick="openBulkActionWizard" ng-show="showSettingsButton"></vr-button>
 					<vr-button type="Settings" data-onclick="editSettings" ng-show="showSettingsButton"></vr-button>
-                    <vr-button type="Pricing" data-onclick="editPricingSettings" ng-show="showPricingButton"></vr-button>
 					
 					<vr-button type="Apply" data-onclick="applyCalculatedRates" ng-show="showApplyButton"></vr-button>
                     <vr-button type="CancelChanges" data-onclick="deleteDraft" ng-show="showCancelButton"></vr-button>
@@ -104,18 +103,6 @@
                     <vr-directivetabs tabitems="defaultItemTabs"></vr-directivetabs>
                 </vr-columns>
             </vr-row>
-
-            <div style="min-height: 42px;">
-                <vr-row vr-loader="isLoadingZoneLetters" ng-show="showZoneLetters">
-                    <vr-columns width="fullrow" ng-if="showZoneLetters">
-                        <vr-choices selectedindex="connector.selectedZoneLetterIndex"
-                                    onselectionchanged="onZoneLetterSelectionChanged()">
-                            <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
-                        </vr-choices>
-                    </vr-columns>
-                </vr-row>
-            </div>
-
             <div ng-show="showGrid">
                 <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
             </div>

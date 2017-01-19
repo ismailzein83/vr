@@ -65,6 +65,8 @@ namespace TOne.WhS.Sales.Business
 		{
 			if (zoneDraft == null)
 				return;
+			if (zoneItem.NewRoutingProduct != null)
+				return;
 			zoneItem.NewRoutingProduct = zoneDraft.NewRoutingProduct;
 			zoneItem.ResetRoutingProduct = zoneDraft.RoutingProductChange;
 		}
@@ -78,6 +80,8 @@ namespace TOne.WhS.Sales.Business
 
 		private void SetCustomerEffectiveZoneRP(ZoneItem zoneItem, int customerId, int sellingProductId)
 		{
+			if (zoneItem.EffectiveRoutingProductId.HasValue)
+				return;
 			SaleEntityZoneRoutingProduct ratePlanRP = _ratePlanRPLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneItem.ZoneId);
 			if (ratePlanRP != null)
 				SetEffectiveRPProperties(zoneItem, ratePlanRP);

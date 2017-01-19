@@ -162,7 +162,12 @@ namespace TOne.WhS.Sales.Business
 
 		private void SetZoneRateChanges(ZoneItem zoneItem)
 		{
-			zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+			if (zoneItem.NewRates != null && zoneItem.NewRates.Any(x => !x.RateTypeId.HasValue)) // If a new normal rate has been set
+				zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId && x.RateTypeId.HasValue);
+			else
+				zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+
+			//zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
 			zoneItem.ClosedRates = _rateChanges.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
 
 			DraftRateToClose rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?

@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpPost]
         [Route("GetZoneItems")]
-        public IEnumerable<ZoneItem> GetZoneItems(ZoneItemsInput input)
+        public IEnumerable<ZoneItem> GetZoneItems(GetZoneItemsInput input)
         {
             var manager = new RatePlanManager();
             return manager.GetZoneItems(input);
@@ -119,6 +119,14 @@ namespace TOne.WhS.Sales.Web.Controllers
             var manager = new RatePlanPricingManager();
             manager.ApplyCalculatedRates(input);
         }
+
+		[HttpPost]
+		[Route("ApplyBulkActionToDraft")]
+		public void ApplyBulkActionToDraft(ApplyActionToDraftInput input)
+		{
+			var manager = new RatePlanManager();
+			manager.ApplyBulkActionToDraft(input);
+		}
 
         [HttpGet]
         [Route("CheckIfDraftExists")]

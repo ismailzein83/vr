@@ -9,26 +9,25 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class ApplicableSaleZoneFilter : ISaleZoneFilter
-    {
-        public BulkActionType ActionType { get; set; }
+	public class ApplicableSaleZoneFilter : ISaleZoneFilter
+	{
+		public BulkActionType ActionType { get; set; }
 
-        public SalePriceListOwnerType OwnerType { get; set; }
+		public SalePriceListOwnerType OwnerType { get; set; }
 
-        public int OwnerId { get; set; }
+		public int OwnerId { get; set; }
 
-        public bool IsExcluded(ISaleZoneFilterContext context)
-        {
-            if (context.SaleZone == null)
-                throw new ArgumentNullException("SaleZone");
+		public bool IsExcluded(ISaleZoneFilterContext context)
+		{
+			if (context.SaleZone == null)
+				throw new ArgumentNullException("SaleZone");
 
-            if(context.CustomData != null)
-            {
-                var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-                context.CustomData = (object)ratePlanDataManager.GetChanges(this.OwnerType, this.OwnerId, RatePlanStatus.Draft);
-            }
+			if (context.CustomData == null)
+			{
+				context.CustomData = (object)new RatePlanDraftManager().GetDraft(this.OwnerType, this.OwnerId);
+			}
 
-            return UtilitiesManager.IsActionApplicableToZone(this.ActionType, context.SaleZone.SaleZoneId, context.CustomData as Changes);
-        }
-    }
+			return !UtilitiesManager.IsActionApplicableToZone(this.ActionType, context.SaleZone.SaleZoneId, context.CustomData as Changes);
+		}
+	}
 }

@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int SellingProductId { get; set; }
 
         public string Name { get; set; }
+
+		public int SellingNumberPlanId { get; set; }
     }
 }

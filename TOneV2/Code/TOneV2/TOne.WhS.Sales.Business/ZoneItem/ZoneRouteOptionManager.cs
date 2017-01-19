@@ -52,7 +52,7 @@ namespace TOne.WhS.Sales.Business
                     foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
                         zoneItem.Costs.Add(null);
                 }
-                SetCalculatedRate(zoneItem);
+                //SetCalculatedRate(zoneItem);
             }
         }
 

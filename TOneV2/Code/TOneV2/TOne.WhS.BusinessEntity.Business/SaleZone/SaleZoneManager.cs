@@ -205,6 +205,17 @@ namespace TOne.WhS.BusinessEntity.Business
 				if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Count() > 0 && filter.ExcludedZoneIds.Contains(zone.SaleZoneId))
 					return false;
 
+				if (filter.Filters != null)
+				{
+					var saleZoneFilterContext = new SaleZoneFilterContext()
+					{
+						SaleZone = zone,
+						CustomData = null
+					};
+					if (filter.Filters.Any(x => x.IsExcluded(saleZoneFilterContext)))
+						return false;
+				}
+
 				return true;
 			};
 

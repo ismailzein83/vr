@@ -48,6 +48,14 @@
         function GetRateCalculationMethodTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRateCalculationMethodTemplates"));
         }
+        
+        function GetBulkActionTypeExtensionConfigs() {
+        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetBulkActionTypeExtensionConfigs"));
+        }
+
+        function GetBulkActionZoneFilterTypeExtensionConfigs() {
+        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetBulkActionZoneFilterTypeExtensionConfigs"));
+        }
 
         function SaveChanges(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "SaveChanges"), input);
@@ -59,6 +67,10 @@
 
         function ApplyCalculatedRates(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ApplyCalculatedRates"), input);
+        }
+        
+        function ApplyBulkActionToDraft(input) {
+        	return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ApplyBulkActionToDraft"), input);
         }
 
         function CheckIfDraftExists(ownerType, ownerId) {
@@ -119,9 +131,12 @@
             GetCountryChanges: GetCountryChanges,
             GetCostCalculationMethodTemplates: GetCostCalculationMethodTemplates,
             GetRateCalculationMethodTemplates: GetRateCalculationMethodTemplates,
+            GetBulkActionTypeExtensionConfigs: GetBulkActionTypeExtensionConfigs,
+            GetBulkActionZoneFilterTypeExtensionConfigs: GetBulkActionZoneFilterTypeExtensionConfigs,
             SaveChanges: SaveChanges,
             TryApplyCalculatedRates: TryApplyCalculatedRates,
             ApplyCalculatedRates: ApplyCalculatedRates,
+            ApplyBulkActionToDraft: ApplyBulkActionToDraft,
             CheckIfDraftExists: CheckIfDraftExists,
             DeleteDraft: DeleteDraft,
             GetRatePlanSettingsData: GetRatePlanSettingsData,

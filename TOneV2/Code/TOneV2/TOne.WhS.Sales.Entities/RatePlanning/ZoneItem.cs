@@ -80,7 +80,7 @@ namespace TOne.WhS.Sales.Entities
 		public bool? IsCurrentRoutingProductEditable { get; set; }
 		public DraftNewSaleZoneRoutingProduct NewRoutingProduct { get; set; }
 		public DraftChangedSaleZoneRoutingProduct ResetRoutingProduct { get; set; }
-		public int EffectiveRoutingProductId { get; set; }
+		public int? EffectiveRoutingProductId { get; set; }
 		public string EffectiveRoutingProductName { get; set; }
 		#endregion
 

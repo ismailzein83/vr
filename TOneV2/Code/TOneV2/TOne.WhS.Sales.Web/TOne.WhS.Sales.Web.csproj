@@ -160,6 +160,10 @@
     <Content Include="WhS_Sales\Constants\PeriodTypes.js" />
     <Content Include="WhS_Sales\Constants\RatePlanStatusEnum.js" />
     <Content Include="WhS_Sales\Constants\SalePriceListOwnerTypeEnum.js" />
+    <Content Include="WhS_Sales\Directives\BulkAction\Steps\Templates\ActionBulkActionStepTemplate.html" />
+    <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionTypeSelectiveTemplate.html" />
+    <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionZoneFilterSelectiveTemplate.html" />
+    <Content Include="WhS_Sales\Directives\BulkAction\Steps\Templates\FilterBulkActionStepTemplate.html" />
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\vr-whs-sales-bulkaction-step-filter.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\vr-whs-sales-bulkaction-step-action.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\vr-whs-sales-bulkaction-step-preview.js" />
@@ -167,7 +171,9 @@
     <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-bulkaction-type-selective.js" />
     <Content Include="WhS_Sales\Directives\Country\Templates\SoldCountryGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Country\vr-whs-sales-soldcountry-grid.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-bed.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-rate.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-routingproduct.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-all.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-specific.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\WeightedAvgCostCalculation.html" />

@@ -41,11 +41,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TOne.WhS.BusinessEntity.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\TOne.WhS.BusinessEntity.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Analytic.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -41,10 +41,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                         continue;
                     otherRateTypeNames.Add(otherRateTypeName);
                 }
-
-                string rateTypeNames = string.Join(", ", otherRateTypeNames.ToArray());
-                context.Message = string.Format("Other Rate Types '{0}' of Selling Product Zone '{1}' are closed", rateTypeNames, zoneData.ZoneName);
-                return false;
+				if (otherRateTypeNames.Count > 0)
+				{
+					string rateTypeNames = string.Join(", ", otherRateTypeNames.ToArray());
+					context.Message = string.Format("Other Rate Types '{0}' of Selling Product Zone '{1}' are closed", rateTypeNames, zoneData.ZoneName);
+					return false;
+				}
             }
 
             if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.EED.HasValue)
@@ -67,9 +69,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                         otherRateTypeNames.Add(otherRateTypeName);
                     }
                 }
-                string rateTypeNames = string.Join(", ", otherRateTypeNames.ToArray());
-                context.Message = string.Format("New Other Rates '{0}' of Selling Product Zone '{1}' have EEDs", rateTypeNames, zoneData.ZoneName);
-                return false;
+				if (otherRateTypeNames.Count > 0)
+				{
+					string rateTypeNames = string.Join(", ", otherRateTypeNames.ToArray());
+					context.Message = string.Format("New Other Rates '{0}' of Selling Product Zone '{1}' have EEDs", rateTypeNames, zoneData.ZoneName);
+					return false;
+				}
             }
 
             return true;

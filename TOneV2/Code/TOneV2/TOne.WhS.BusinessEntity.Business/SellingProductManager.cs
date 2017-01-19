@@ -245,6 +245,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SellingProductId = sellingProduct.SellingProductId,
                 Name = sellingProduct.Name,
+				SellingNumberPlanId = sellingProduct.SellingNumberPlanId
             };
         }
         #endregion
