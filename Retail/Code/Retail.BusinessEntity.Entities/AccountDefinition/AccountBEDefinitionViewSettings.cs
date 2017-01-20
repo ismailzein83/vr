@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountBEDefinitionViewSettings : Vanrise.Security.Entities.ViewSettings
     {
-        public List<AccountBEDefinitionViewSetting> AccountBEDefinitionSettings { get; set; }
+        public List<AccountBEDefinitionViewSetting> Settings { get; set; }
 
         public override string GetURL(Vanrise.Security.Entities.View view)
         {

@@ -22,7 +22,7 @@ namespace Retail.BusinessEntity.Business
                 var accountBEDefinitionViewSettings = viewManager.GetView(this.ViewId).Settings as AccountBEDefinitionViewSettings;
                 BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
 
-                if (!accountBEDefinitionViewSettings.AccountBEDefinitionSettings.Any(x => x.BusinessEntityId == context.entityDefinition.BusinessEntityDefinitionId))
+                if (!accountBEDefinitionViewSettings.Settings.Any(x => x.BusinessEntityId == context.entityDefinition.BusinessEntityDefinitionId))
                     return false;
             }
             return true;

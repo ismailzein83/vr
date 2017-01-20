@@ -43,6 +43,12 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                 api.load = function (payload) {
                     var promises = [];
 
+                    var accountBEDefinitionViewSettings;
+
+                    if (payload != undefined) {
+                        accountBEDefinitionViewSettings = payload.Settings;
+                    }
+
                     //Loading BusinessEntityDefinition Selector
                     var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
                     promises.push(businessEntityDefinitionSelectorLoadPromise);
@@ -52,26 +58,25 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         beDefinitionSelectorPromiseDeferred.promise.then(function () {
+
                             var selectorPayload = {
                                 filter: {
                                     Filters: [{
                                         $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
                                     }]
-                                }
+                                },
+                                selectedIds: buildBESelectorIdsObj(accountBEDefinitionViewSettings)
                             };
-                            if (payload != undefined) {
-                                selectorPayload.selectedIds = buildBESelectorIdsObj(payload.AccountBEDefinitionSettings);
-                            }
                             VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
                         });
 
-                        function buildBESelectorIdsObj(accountBEDefinitionSettings)
+                        function buildBESelectorIdsObj(accountBEDefinitionViewSettings)
                         {
                             var _seletedIds = [];
 
-                            if (accountBEDefinitionSettings != undefined) {
-                                for (var index = 0; index < accountBEDefinitionSettings.length; index++) {
-                                    var currentBEDefinitionSetting = accountBEDefinitionSettings[index];
+                            if (accountBEDefinitionViewSettings != undefined) {
+                                for (var index = 0; index < accountBEDefinitionViewSettings.length; index++) {
+                                    var currentBEDefinitionSetting = accountBEDefinitionViewSettings[index];
                                     _seletedIds.push(currentBEDefinitionSetting.BusinessEntityId)
                                 }
                             }
@@ -88,10 +93,10 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
 
                     var obj = {
                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewSettings, Retail.BusinessEntity.Entities",
-                        AccountBEDefinitionSettings: buildAccountBEDefinitionSettingsObj()
+                        Settings: buildAccountBEDefinitionViewSettingsObj()
                     };
 
-                    function buildAccountBEDefinitionSettingsObj() {
+                    function buildAccountBEDefinitionViewSettingsObj() {
                         var accountBEDefinitionSettings = [];
 
                         var accountBEDefinitionIds = beDefinitionSelectorApi.getSelectedIds()
