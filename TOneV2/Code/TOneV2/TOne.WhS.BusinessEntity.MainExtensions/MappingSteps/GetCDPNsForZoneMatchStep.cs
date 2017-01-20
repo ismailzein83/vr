@@ -30,7 +30,6 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.MappingSteps
                 this.SwitchId, this.CDPNNormalized, this.CDPNIn, this.CDPNOut);
 
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleZoneCDPN;", this.SaleZoneCDPN, switchCDPNsForZoneMatchVariableName);
-
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SupplierZoneCDPN;", this.SupplierZoneCDPN, switchCDPNsForZoneMatchVariableName);
         }
     }
