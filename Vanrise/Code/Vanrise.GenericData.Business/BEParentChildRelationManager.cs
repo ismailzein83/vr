@@ -150,6 +150,56 @@ namespace Vanrise.GenericData.Business
 
         #endregion
 
+        #region Private Methods
+
+        private Dictionary<long, BEParentChildRelation> GetCachedBEParentChildRelations(Guid beParentChildRelationDefinitionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBEParentChildRelations", beParentChildRelationDefinitionId,
+               () =>
+               {
+                   IBEParentChildRelationDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
+                   return dataManager.GetBEParentChildRelationes().ToDictionary(x => x.BEParentChildRelationId, x => x);
+               });
+        }
+
+        private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByParentId(Guid beParentChildRelationDefinitionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBEParentChildRelationsByParentId", beParentChildRelationDefinitionId,
+                () =>
+                {
+                    Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByParentId = new Dictionary<string, List<BEParentChildRelation>>();
+                    List<BEParentChildRelation> beParentChildRelations;
+
+                    var allBEParentChildRelations = this.GetCachedBEParentChildRelations(beParentChildRelationDefinitionId);
+                    foreach (var itm in allBEParentChildRelations.Values)
+                    {
+                        beParentChildRelations = beParentChildRelationsByParentId.GetOrCreateItem(itm.ParentBEId);
+                        beParentChildRelations.Add(itm);
+                    }
+                    return beParentChildRelationsByParentId;
+                });
+        }
+
+        private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByChildId(Guid beParentChildRelationDefinitionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBEParentChildRelationsByChildId", beParentChildRelationDefinitionId,
+                () =>
+                {
+                    Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByChildId = new Dictionary<string, List<BEParentChildRelation>>();
+                    List<BEParentChildRelation> beParentChildRelations;
+
+                    var allBEParentChildRelations = this.GetCachedBEParentChildRelations(beParentChildRelationDefinitionId);
+                    foreach (var itm in allBEParentChildRelations.Values)
+                    {
+                        beParentChildRelations = beParentChildRelationsByChildId.GetOrCreateItem(itm.ChildBEId);
+                        beParentChildRelations.Add(itm);
+                    }
+                    return beParentChildRelationsByChildId;
+                });
+        }
+
+        #endregion
+
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
@@ -167,71 +217,6 @@ namespace Vanrise.GenericData.Business
 
                 return isCacheExpired;
             }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private struct GetCachedBEParentChildRelationsCacheName
-        {
-            public Guid BEParentChildRelationDefinitionId { get; set; }
-        }
-        private Dictionary<long, BEParentChildRelation> GetCachedBEParentChildRelations(Guid beParentChildRelationDefinitionId)
-        {
-            var cacheName = new GetCachedBEParentChildRelationsCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beParentChildRelationDefinitionId,
-               () =>
-               {
-                   IBEParentChildRelationDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
-                   return dataManager.GetBEParentChildRelationes().ToDictionary(x => x.BEParentChildRelationId, x => x);
-               });
-        }
-
-        private struct GetCachedBEParentChildRelationsByParentIdCacheName
-        {
-            public Guid BEParentChildRelationDefinitionId { get; set; }
-        }
-        private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByParentId(Guid beParentChildRelationDefinitionId)
-        {
-            var cacheName = new GetCachedBEParentChildRelationsByParentIdCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beParentChildRelationDefinitionId,
-                () =>
-                {
-                    Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByParentId = new Dictionary<string, List<BEParentChildRelation>>();
-                    List<BEParentChildRelation> beParentChildRelations;
-
-                    var allBEParentChildRelations = this.GetCachedBEParentChildRelations(beParentChildRelationDefinitionId);
-                    foreach (var itm in allBEParentChildRelations.Values)
-                    {
-                        beParentChildRelations = beParentChildRelationsByParentId.GetOrCreateItem(itm.ParentBEId);
-                        beParentChildRelations.Add(itm);
-                    }
-                    return beParentChildRelationsByParentId;
-                });
-        }
-
-        private struct GetCachedBEParentChildRelationsByChildIdCacheName
-        {
-            public Guid BEParentChildRelationDefinitionId { get; set; }
-        }
-        private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByChildId(Guid beParentChildRelationDefinitionId)
-        {
-            var cacheName = new GetCachedBEParentChildRelationsByChildIdCacheName { BEParentChildRelationDefinitionId = beParentChildRelationDefinitionId };
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, beParentChildRelationDefinitionId,
-                () =>
-                {
-                    Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByChildId = new Dictionary<string, List<BEParentChildRelation>>();
-                    List<BEParentChildRelation> beParentChildRelations;
-
-                    var allBEParentChildRelations = this.GetCachedBEParentChildRelations(beParentChildRelationDefinitionId);
-                    foreach (var itm in allBEParentChildRelations.Values)
-                    {
-                        beParentChildRelations = beParentChildRelationsByChildId.GetOrCreateItem(itm.ChildBEId);
-                        beParentChildRelations.Add(itm);
-                    }
-                    return beParentChildRelationsByChildId;
-                });
         }
 
         #endregion
