@@ -61,6 +61,9 @@ app.directive("retailBeTechnicalsettings", ["UtilsService", "VRNotificationServi
                         accountTypeSelectorPromiseDeferred.promise.then(function () {
 
                             var selectorPayload = {
+                                filter: {
+                                    IncludeHiddenAccountTypes: true
+                                },
                                 selectedIds: includedAccountTypes != undefined ? includedAccountTypes.AcountTypeIds : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, selectorPayload, accountTypeSelectorLoadDeferred);

@@ -29,7 +29,7 @@ namespace Retail.BusinessEntity.Business
 
         public AccountType GetAccountType(Guid accountTypeId)
         {
-            return this.GetCachedAccountTypes().GetRecord(accountTypeId);
+            return this.GetCachedAccountTypesWithHidden().GetRecord(accountTypeId);
         }
 
         public string GetAccountTypeName(Guid accountTypeId)
@@ -41,15 +41,21 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<AccountTypeInfo> GetAccountTypesInfo(AccountTypeFilter filter)
         {
             Func<AccountType, bool> filterExpression = null;
+
+            Dictionary<Guid, AccountType> cachedAccountTypes = this.GetCachedAccountTypes(); 
+
             if (filter != null)
             {
-                //List<Guid> includedAccountTypeIds = new ConfigManager().GetIncludedAccountTypeIds();
+                if (filter.IncludeHiddenAccountTypes)
+                {
+                    cachedAccountTypes = this.GetCachedAccountTypesWithHidden();
+                }
+                else
+                {
+                    //List<Guid> includedAccountTypeIds = new ConfigManager().GetIncludedAccountTypeIds();
 
-                filterExpression = (accountType) =>
+                    filterExpression = (accountType) =>
                     {
-                        //if (filter.IncludeHiddenAccountTypes)
-                        //    return true;
-
                         //if (!includedAccountTypeIds.Contains(accountType.AccountTypeId))
                         //    return false;
 
@@ -72,9 +78,10 @@ namespace Retail.BusinessEntity.Business
 
                         return true;
                     };
+                }
             }
 
-            return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
+            return cachedAccountTypes.MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
         }
 
         public IEnumerable<Guid> GetSupportedParentAccountTypeIds(Guid accountBEDefinitionId, long parentAccountId)
@@ -218,7 +225,7 @@ namespace Retail.BusinessEntity.Business
 
         public bool CanHaveSubAccounts(Account account)
         {
-            if (account != null) 
+            if (account != null)
             {
                 foreach (var itm in this.GetCachedAccountTypes())
                 {
@@ -258,29 +265,28 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-        #region Private Classes
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IAccountTypeDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountTypeDataManager>();
-            object _updateHandle;
-            DateTime? _accountPartDefinitionCacheLastCheck;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreAccountTypesUpdated(ref _updateHandle)
-                    |
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountPartDefinitionManager.CacheManager>().IsCacheExpired(ref _accountPartDefinitionCacheLastCheck);
-            }
-        }
-
-        #endregion
-
         #region Private Methods
 
         Dictionary<Guid, AccountType> GetCachedAccountTypes()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountTypes", () =>
+            {
+                List<AccountType> includedAccountTypes = new List<AccountType>();
+                List<Guid> includedAccountTypeIds = new ConfigManager().GetIncludedAccountTypeIds();
+                IEnumerable<AccountType> allaccountTypes = this.GetCachedAccountTypesWithHidden().Values;
+                
+                foreach (var itm in allaccountTypes)
+                {
+                    if (includedAccountTypeIds.Contains(itm.AccountTypeId))
+                        includedAccountTypes.Add(itm);
+                }
+                return includedAccountTypes.ToDictionary(kvp => kvp.AccountTypeId, kvp => kvp);
+            });
+        }
+
+        Dictionary<Guid, AccountType> GetCachedAccountTypesWithHidden()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountTypesWithHidden", () =>
             {
                 IAccountTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountTypeDataManager>();
                 IEnumerable<AccountType> accountTypes = dataManager.GetAccountTypes();
@@ -296,6 +302,26 @@ namespace Retail.BusinessEntity.Business
             if (accountBEDefinitionId.HasValue)
             {
                 fields.Add(new AccountStatusGenericField(accountBEDefinitionId.Value));
+            }
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IAccountTypeDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountTypeDataManager>();
+            object _updateHandle;
+
+            DateTime? _accountPartDefinitionCacheLastCheck;
+            DateTime? _settingsCacheLastCheck;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreAccountTypesUpdated(ref _updateHandle)
+                        |   Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountPartDefinitionManager.CacheManager>().IsCacheExpired(ref _accountPartDefinitionCacheLastCheck)
+                            |   Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingsCacheLastCheck);
             }
         }
 

@@ -388,78 +388,11 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-        #region Private Classes
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
-        {
-            IAccountBEDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-            ConcurrentDictionary<Guid, Object> _updateHandlesByBEDefinitionId = new ConcurrentDictionary<Guid, Object>();
-
-
-            protected override bool ShouldSetCacheExpired(Guid accountBEDefinitionId)
-            {
-                object _updateHandle;
-
-                _updateHandlesByBEDefinitionId.TryGetValue(accountBEDefinitionId, out _updateHandle);
-                bool isCacheExpired = _dataManager.AreAccountsUpdated(accountBEDefinitionId, ref _updateHandle);
-                _updateHandlesByBEDefinitionId.AddOrUpdate(accountBEDefinitionId, _updateHandle, (key, existingHandle) => _updateHandle);
-
-                return isCacheExpired;
-            }
-        }
-
-        private class AccountRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
-        {
-
-            Guid _accountBEDefinitionId;
-            Account _account;
-            AccountTypeManager _accountTypeManager = new AccountTypeManager();
-            public AccountRecordFilterGenericFieldMatchContext(Guid accountBEDefinitionId, Account account)
-            {
-                this._accountBEDefinitionId = accountBEDefinitionId;
-                this._account = account;
-            }
-
-            public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
-            {
-                var accountGenericField = _accountTypeManager.GetAccountGenericField(_accountBEDefinitionId, fieldName);
-                if (accountGenericField == null)
-                    throw new NullReferenceException(String.Format("accountGenericField '{0}'", fieldName));
-                fieldType = accountGenericField.FieldType;
-                return accountGenericField.GetValue(new AccountGenericFieldContext(_account));
-            }
-        }
-
-        private class AccountTreeNode
-        {
-            public Account Account { get; set; }
-
-            public AccountTreeNode ParentNode { get; set; }
-
-            List<AccountTreeNode> _childNodes = new List<AccountTreeNode>();
-            public List<AccountTreeNode> ChildNodes
-            {
-                get
-                {
-                    return _childNodes;
-                }
-            }
-
-            public int TotalSubAccountsCount { get; set; }
-        }
-
-        #endregion
-
         #region Private Methods
 
-        private struct GetCachedAccountsCacheName
-        {
-            public Guid AccountBEDefinitionId { get; set; }
-        }
         public Dictionary<long, Account> GetCachedAccounts(Guid accountBEDefinitionId)
         {
-            var cacheName = new GetCachedAccountsCacheName { AccountBEDefinitionId = accountBEDefinitionId };
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, accountBEDefinitionId,
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccounts", accountBEDefinitionId,
                 () =>
                 {
                     IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
@@ -468,14 +401,9 @@ namespace Retail.BusinessEntity.Business
                 });
         }
 
-        private struct GetCachedAccountsBySourceIdCacheName
-        {
-            public Guid AccountBEDefinitionId { get; set; }
-        }
         public Dictionary<string, Account> GetCachedAccountsBySourceId(Guid accountBEDefinitionId)
         {
-            var cacheName = new GetCachedAccountsBySourceIdCacheName { AccountBEDefinitionId = accountBEDefinitionId };
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, accountBEDefinitionId,
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountsBySourceId", accountBEDefinitionId,
                 () =>
                 {
                     return GetCachedAccounts(accountBEDefinitionId).Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
@@ -535,6 +463,68 @@ namespace Retail.BusinessEntity.Business
                     return item;
             }
             throw new NullReferenceException("setting.SubscriberInvoiceSettings");
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
+        {
+            IAccountBEDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
+            ConcurrentDictionary<Guid, Object> _updateHandlesByBEDefinitionId = new ConcurrentDictionary<Guid, Object>();
+
+
+            protected override bool ShouldSetCacheExpired(Guid accountBEDefinitionId)
+            {
+                object _updateHandle;
+
+                _updateHandlesByBEDefinitionId.TryGetValue(accountBEDefinitionId, out _updateHandle);
+                bool isCacheExpired = _dataManager.AreAccountsUpdated(accountBEDefinitionId, ref _updateHandle);
+                _updateHandlesByBEDefinitionId.AddOrUpdate(accountBEDefinitionId, _updateHandle, (key, existingHandle) => _updateHandle);
+
+                return isCacheExpired;
+            }
+        }
+
+        private class AccountRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
+        {
+
+            Guid _accountBEDefinitionId;
+            Account _account;
+            AccountTypeManager _accountTypeManager = new AccountTypeManager();
+            public AccountRecordFilterGenericFieldMatchContext(Guid accountBEDefinitionId, Account account)
+            {
+                this._accountBEDefinitionId = accountBEDefinitionId;
+                this._account = account;
+            }
+
+            public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
+            {
+                var accountGenericField = _accountTypeManager.GetAccountGenericField(_accountBEDefinitionId, fieldName);
+                if (accountGenericField == null)
+                    throw new NullReferenceException(String.Format("accountGenericField '{0}'", fieldName));
+                fieldType = accountGenericField.FieldType;
+                return accountGenericField.GetValue(new AccountGenericFieldContext(_account));
+            }
+        }
+
+        private class AccountTreeNode
+        {
+            public Account Account { get; set; }
+
+            public AccountTreeNode ParentNode { get; set; }
+
+            List<AccountTreeNode> _childNodes = new List<AccountTreeNode>();
+            public List<AccountTreeNode> ChildNodes
+            {
+                get
+                {
+                    return _childNodes;
+                }
+            }
+
+            public int TotalSubAccountsCount { get; set; }
         }
 
         #endregion

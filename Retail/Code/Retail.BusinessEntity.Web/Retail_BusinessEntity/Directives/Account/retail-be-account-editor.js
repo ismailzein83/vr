@@ -42,7 +42,6 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
 
             var partDefinitionExtensionConfigs;
 
-
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -143,6 +142,7 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                         var accountTypeSelectorPayload = {
                             filter: {
                                 AccountBEDefinitionId: accountBEDefinitionId,
+                                RootAccountTypeOnly: parentAccountId == undefined ? true : false,
                                 ParentAccountId: parentAccountId
                             }
                         };
