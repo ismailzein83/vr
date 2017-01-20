@@ -75,11 +75,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base Classes\AsyncActivityStatus.cs" />
     <Compile Include="Base Classes\AsyncActivityHandle.cs" />
     <Compile Include="Base Classes\BaseAsyncActivity.cs" />
+    <Compile Include="Base Classes\BaseCodeActivity.cs" />
     <Compile Include="Base Classes\DependentAsyncActivity.cs" />
     <Compile Include="BPContext.cs" />
     <Compile Include="IBPContext.cs" />
