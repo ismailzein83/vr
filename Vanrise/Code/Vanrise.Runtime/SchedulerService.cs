@@ -78,53 +78,60 @@ namespace Vanrise.Runtime
                             }
                             else
                             {
-                                SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(schedulerTask.ActionInfo.FQTN));
-                                isHeavyTask = taskAction.IsHeavyTask;
-
-                                if (isHeavyTask)
+                                if (!schedulerTaskState.NextRunTime.HasValue)
                                 {
-                                    int retry = 0;
-                                    while (retry < s_TryExecuteHeavyTaskMaxRetryCount)
-                                    {
-                                        lock (s_lockObj)
-                                        {
-                                            if (s_nbOfExecutingHeavyTasks >= s_maxConcurrentExecutingHeavyTasks)
-                                                isExecutionPostponed = true;
-                                            else
-                                            {
-                                                isExecutionPostponed = false;
-                                                s_nbOfExecutingHeavyTasks++;
-                                                break;
-                                            }
-                                        }
-                                        retry++;
-                                        Thread.Sleep(s_TryExecuteHeavyTaskWaitTurnInterval);
-                                    }
-
-                                }
-
-                                if (!isExecutionPostponed)
-                                {
-                                    Dictionary<string, object> evaluatedExpressions = taskTrigger.EvaluateExpressions(schedulerTask, schedulerTaskState);
-
-                                    schedulerTaskState.Status = Entities.SchedulerTaskStatus.InProgress;
-                                    scheduleTaskStateManager.UpdateTaskState(schedulerTaskState);
-
-                                    SchedulerTaskExecuteOutput taskExecuteOutput = new SchedulerTaskExecuteOutput();
-                                    Console.WriteLine("Executing Task Id: {0}, Type: {1}", schedulerTaskState.TaskId, taskAction.GetType().Name);
-                                    schedulerTaskState.LastRunTime = DateTime.Now;
-                                    taskExecuteOutput = taskAction.Execute(schedulerTask, schedulerTask.TaskSettings.TaskActionArgument, evaluatedExpressions);
-                                    Console.WriteLine("Task Id: {0}, Type: {1} Executed", schedulerTaskState.TaskId, taskAction.GetType().Name);
-                                    if (taskExecuteOutput != null)
-                                        schedulerTaskState.ExecutionInfo = taskExecuteOutput.ExecutionInfo;
-                                    if (taskExecuteOutput == null || taskExecuteOutput.Result == ExecuteOutputResult.Completed)
-                                        schedulerTaskState.Status = SchedulerTaskStatus.Completed;
-                                    else
-                                        schedulerTaskState.Status = SchedulerTaskStatus.WaitingEvent;
                                     updateTaskState = true;
                                 }
                                 else
-                                    Console.WriteLine("Task Id: {0}, Type: {1} Postponed", schedulerTaskState.TaskId, taskAction.GetType().Name);
+                                {
+                                    SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(schedulerTask.ActionInfo.FQTN));
+                                    isHeavyTask = taskAction.IsHeavyTask;
+
+                                    if (isHeavyTask)
+                                    {
+                                        int retry = 0;
+                                        while (retry < s_TryExecuteHeavyTaskMaxRetryCount)
+                                        {
+                                            lock (s_lockObj)
+                                            {
+                                                if (s_nbOfExecutingHeavyTasks >= s_maxConcurrentExecutingHeavyTasks)
+                                                    isExecutionPostponed = true;
+                                                else
+                                                {
+                                                    isExecutionPostponed = false;
+                                                    s_nbOfExecutingHeavyTasks++;
+                                                    break;
+                                                }
+                                            }
+                                            retry++;
+                                            Thread.Sleep(s_TryExecuteHeavyTaskWaitTurnInterval);
+                                        }
+
+                                    }
+
+                                    if (!isExecutionPostponed)
+                                    {
+                                        Dictionary<string, object> evaluatedExpressions = taskTrigger.EvaluateExpressions(schedulerTask, schedulerTaskState);
+
+                                        schedulerTaskState.Status = Entities.SchedulerTaskStatus.InProgress;
+                                        scheduleTaskStateManager.UpdateTaskState(schedulerTaskState);
+
+                                        SchedulerTaskExecuteOutput taskExecuteOutput = new SchedulerTaskExecuteOutput();
+                                        Console.WriteLine("Executing Task Id: {0}, Type: {1}", schedulerTaskState.TaskId, taskAction.GetType().Name);
+                                        schedulerTaskState.LastRunTime = DateTime.Now;
+                                        taskExecuteOutput = taskAction.Execute(schedulerTask, schedulerTask.TaskSettings.TaskActionArgument, evaluatedExpressions);
+                                        Console.WriteLine("Task Id: {0}, Type: {1} Executed", schedulerTaskState.TaskId, taskAction.GetType().Name);
+                                        if (taskExecuteOutput != null)
+                                            schedulerTaskState.ExecutionInfo = taskExecuteOutput.ExecutionInfo;
+                                        if (taskExecuteOutput == null || taskExecuteOutput.Result == ExecuteOutputResult.Completed)
+                                            schedulerTaskState.Status = SchedulerTaskStatus.Completed;
+                                        else
+                                            schedulerTaskState.Status = SchedulerTaskStatus.WaitingEvent;
+                                        updateTaskState = true;
+                                    }
+                                    else
+                                        Console.WriteLine("Task Id: {0}, Type: {1} Postponed", schedulerTaskState.TaskId, taskAction.GetType().Name);
+                                }
                             }
                         }
                         catch (Exception ex)
