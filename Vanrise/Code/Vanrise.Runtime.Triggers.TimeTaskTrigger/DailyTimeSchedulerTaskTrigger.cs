@@ -17,18 +17,19 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 
             List<DateTime> listofScheduledDateTimes = new List<DateTime>();
             var now = DateTime.Now;
+            var nextruntime = taskState.NextRunTime.HasValue ? taskState.NextRunTime.Value : now;
 
             foreach (Time time in dailyTimeTaskTriggerArgument.ScheduledTimesToRun)
             {
                 TimeSpan scheduledTime = new TimeSpan(time.Hour, time.Minute, 0);
-                TimeSpan spanTillThen = scheduledTime - now.TimeOfDay;
+                TimeSpan spanTillThen = scheduledTime - nextruntime.TimeOfDay;
 
                 int daysTillThen = 0;
 
-                if (spanTillThen.Ticks < 0)
+                if (spanTillThen.Ticks <= 0)
                     daysTillThen += 1;
 
-                listofScheduledDateTimes.Add(now.AddDays(daysTillThen).Add(spanTillThen));
+                listofScheduledDateTimes.Add(nextruntime.AddDays(daysTillThen).Add(spanTillThen));
             }
 
             return listofScheduledDateTimes.OrderBy(x => x.Ticks).ToList().FirstOrDefault();
