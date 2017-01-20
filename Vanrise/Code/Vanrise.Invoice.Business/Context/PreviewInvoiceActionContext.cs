@@ -31,7 +31,7 @@ namespace Vanrise.Invoice.Business
                 FromDate = this.FromDate,
                 PartnerId = this.PartnerId,
                 ToDate = toDate,
-                GeneratedToDate = toDate.AddDays(1),
+                GeneratedToDate = toDate,
             };
             var invoiceGenerator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
             invoiceGenerator.GenerateInvoice(context);

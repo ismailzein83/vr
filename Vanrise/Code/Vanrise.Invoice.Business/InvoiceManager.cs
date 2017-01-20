@@ -423,7 +423,7 @@ namespace Vanrise.Invoice.Business
                 FromDate = fromDate,
                 PartnerId = partnerId,
                 ToDate = toDate,
-                GeneratedToDate = toDate.AddDays(1),
+                GeneratedToDate = toDate,
                 InvoiceTypeId = invoiceType.InvoiceTypeId,
 
             };
