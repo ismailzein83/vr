@@ -11,7 +11,7 @@ using Vanrise.Caching;
 using Vanrise.Security.Business;
 namespace Vanrise.Invoice.Business
 {
-    public class InvoiceSettingManager
+    public class InvoiceSettingManager : IInvoiceSettingManager
     {
         #region Public Methods
         public InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId)
@@ -86,7 +86,16 @@ namespace Vanrise.Invoice.Business
         {
             return GetCachedInvoiceSettings().FindAllRecords(x=>x.InvoiceTypeId == invoiceTypeId);
         }
-
+        public InvoiceSetting GetDefaultInvoiceSetting(Guid invoiceTypeId)
+        {
+            var invoiceSettings = GetInvoiceSettings(invoiceTypeId);
+            foreach(var item in invoiceSettings)
+            {
+                if (item.Details.IsDefault)
+                    return item;
+            }
+            throw new NullReferenceException(string.Format("No default setting available for invoicetypeid {0}", invoiceTypeId));
+        }
         #endregion
 
         #region Private Classes
@@ -134,5 +143,7 @@ namespace Vanrise.Invoice.Business
             };
         }
         #endregion
+
+        
     }
 }

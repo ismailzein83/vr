@@ -25,6 +25,6 @@ namespace Vanrise.Invoice.Business.Context
 
         public string InfoType { get; set; }
 
-        public InvoicePartnerSettings PartnerSettings { get; set; }
+        public InvoicePartnerDetails PartnerDetails { get; set; }
     }
 }

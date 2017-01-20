@@ -45,7 +45,8 @@
                     InvoiceTypeId:invoiceTypeId,
                     Name: $scope.scopeModel.name,
                     Details: {
-                        EnableAutomaticInvoice: $scope.scopeModel.enableAutomaticInvoice
+                        EnableAutomaticInvoice: $scope.scopeModel.enableAutomaticInvoice,
+                        IsDefault: $scope.scopeModel.isDefault
                     }
                 };
                 return obj;
@@ -118,7 +119,12 @@
                 function loadStaticData() {
                     if (invoiceSettingEntity != undefined) {
                         $scope.scopeModel.name = invoiceSettingEntity.Name;
-                        $scope.scopeModel.enableAutomaticInvoice = invoiceSettingEntity.Details != undefined ? invoiceSettingEntity.Details.EnableAutomaticInvoice : undefined;
+                        if (invoiceSettingEntity.Details != undefined)
+                        {
+                            $scope.scopeModel.enableAutomaticInvoice = invoiceSettingEntity.Details.EnableAutomaticInvoice;
+                            $scope.scopeModel.isDefault = invoiceSettingEntity.Details.IsDefault;
+                        }
+                       
                     }
                 }
 

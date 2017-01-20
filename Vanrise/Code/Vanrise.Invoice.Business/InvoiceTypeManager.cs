@@ -53,7 +53,7 @@ namespace Vanrise.Invoice.Business
                     Header = gridColumn.Header
                 });
             }
-            invoiceTypeRuntime.InvoicePartnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+            invoiceTypeRuntime.InvoicePartnerDetails = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
      
             return invoiceTypeRuntime;
         }
@@ -63,7 +63,7 @@ namespace Vanrise.Invoice.Business
             var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
             GeneratorInvoiceTypeRuntime generatorInvoiceTypeRuntime = new Entities.GeneratorInvoiceTypeRuntime();
             generatorInvoiceTypeRuntime.InvoiceType = invoiceType;
-            generatorInvoiceTypeRuntime.InvoicePartnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+            generatorInvoiceTypeRuntime.InvoicePartnerDetails = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
             return generatorInvoiceTypeRuntime;
         }
         public List<InvoiceGeneratorAction> GetInvoiceGeneratorActions(GenerateInvoiceInput generateInvoiceInput)

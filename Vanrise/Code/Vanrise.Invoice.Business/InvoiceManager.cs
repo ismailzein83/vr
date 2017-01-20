@@ -20,7 +20,10 @@ namespace Vanrise.Invoice.Business
     public class InvoiceManager
     {
 
-        #region Public Methods
+        static int _userId { get; set; }
+        public int userId { get{ return userId;} set { _userId = value; } }
+
+        #region Public Methods 
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
             InvoiceTypeManager manager = new InvoiceTypeManager();
@@ -285,7 +288,7 @@ namespace Vanrise.Invoice.Business
 
 
             string partnerName = null;
-            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
             if (partnerSettings != null)
             {
                 PartnerNameManagerContext context = new PartnerNameManagerContext
@@ -392,7 +395,7 @@ namespace Vanrise.Invoice.Business
         {
             Entities.Invoice invoice = new Entities.Invoice
             {
-                UserId = new SecurityContext().GetLoggedInUserId(),
+                UserId = _userId,
                 Details = invoiceDetails,
                 InvoiceTypeId = invoiceType.InvoiceTypeId,
                 FromDate = fromDate,
@@ -401,7 +404,7 @@ namespace Vanrise.Invoice.Business
                 IssueDate = issueDate,
             };
 
-            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
             PartnerManager partnerManager = new PartnerManager();
             var duePeriod = partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, partnerId);
             invoice.DueDate = issueDate.AddDays(duePeriod);
@@ -433,7 +436,7 @@ namespace Vanrise.Invoice.Business
 
         private static bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
         {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
+            int userId = _userId;
             SecurityManager secManager = new SecurityManager();
             if (!secManager.IsAllowed(requiredPermission, userId))
                 return false;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Business;
-
+using Vanrise.BusinessProcess;
 namespace Vanrise.Invoice.BP.Activities
 {
      public sealed class GeneratePartnersInvoices : CodeActivity
@@ -22,22 +22,28 @@ namespace Vanrise.Invoice.BP.Activities
             var invoiceTypeId = context.GetValue(this.InvoiceTypeId);
             var partnerIds = context.GetValue(this.PartnerIds);
             InvoiceManager invoiceManager = new InvoiceManager();
+            invoiceManager.userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
             var issueDate = DateTime.Now.AddYears(1);
             if(partnerIds != null)
             {
+                PartnerManager partnerManager = new PartnerManager();
                 foreach(var partnerId in partnerIds)
                 {
-                    var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
-                    if(billingPeriod != null)
+                    var partnerSetting = partnerManager.GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+                    if(partnerSetting.InvoiceSetting.Details.EnableAutomaticInvoice)
                     {
-                        invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
+                        var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
+                        if (billingPeriod != null)
                         {
-                            InvoiceTypeId = invoiceTypeId,
-                            IssueDate = issueDate,
-                            PartnerId = partnerId,
-                            FromDate = billingPeriod.FromDate,
-                            ToDate = billingPeriod.ToDate
-                        });
+                            invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
+                            {
+                                InvoiceTypeId = invoiceTypeId,
+                                IssueDate = issueDate,
+                                PartnerId = partnerId,
+                                FromDate = billingPeriod.FromDate,
+                                ToDate = billingPeriod.ToDate
+                            });
+                        }
                     }
                 }
             }

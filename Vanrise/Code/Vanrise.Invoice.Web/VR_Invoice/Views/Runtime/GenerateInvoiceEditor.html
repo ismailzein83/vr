@@ -3,7 +3,7 @@
         <vr-form name="formGenericInvoiceEditor">
             <vr-validator validate="scopeModel.validateForm()">
                 <vr-row removeline>
-                    <vr-directivewrapper vr-disabled="scopeModel.isEditMode" directive="scopeModel.invoiceTypeEntity.InvoicePartnerSettings.PartnerSelector" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
+                    <vr-directivewrapper vr-disabled="scopeModel.isEditMode" directive="scopeModel.invoiceTypeEntity.InvoicePartnerDetails.PartnerSelector" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
                     <vr-columns width="1/3row">
                         <vr-datetimepicker type="date" label="Issue Date" value="scopeModel.issueDate" isrequired="true"></vr-datetimepicker>
                     </vr-columns>

@@ -12,6 +12,7 @@ using Vanrise.Invoice.MainExtensions;
 using Vanrise.GenericData.Business;
 using Vanrise.Invoice.Business.Context;
 using System.IO;
+using System.Security;
 namespace Vanrise.Invoice.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Invoice")]
@@ -48,6 +49,7 @@ namespace Vanrise.Invoice.Web.Controllers
             if (!DoesUserHaveGenerateAccess(createInvoiceInput.InvoiceTypeId))
                 return GetUnauthorizedResponse();
             InvoiceManager manager = new InvoiceManager();
+            manager.userId =   new Vanrise.Security.Business.SecurityContext().GetLoggedInUserId();
             return manager.GenerateInvoice(createInvoiceInput);
         }
 
@@ -63,6 +65,8 @@ namespace Vanrise.Invoice.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<InvoiceDetail> ReGenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
             InvoiceManager manager = new InvoiceManager();
+            manager.userId = new Vanrise.Security.Business.SecurityContext().GetLoggedInUserId();
+
             return manager.ReGenerateInvoice(createInvoiceInput);
         }
         [HttpPost]

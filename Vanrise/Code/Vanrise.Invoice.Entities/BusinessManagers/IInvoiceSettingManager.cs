@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public class GeneratorInvoiceTypeRuntime
+    public interface IInvoiceSettingManager:IBusinessManager
     {
-        public InvoiceType InvoiceType { get; set; }
-        public InvoicePartnerDetails InvoicePartnerDetails { get; set; }
+        InvoiceSetting GetDefaultInvoiceSetting(Guid invoiceTypeId);
     }
 }

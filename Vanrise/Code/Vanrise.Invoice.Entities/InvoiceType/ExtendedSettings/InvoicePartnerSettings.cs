@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public abstract class InvoicePartnerSettings
+    public abstract class InvoicePartnerDetails
     {
         public virtual string PartnerSelector { get; set; }
         public virtual string PartnerFilterSelector { get; set; }
@@ -16,16 +16,25 @@ namespace Vanrise.Invoice.Entities
         public abstract int GetPartnerDuePeriod(IPartnerDuePeriodContext context);
         public abstract string GetPartnerSerialNumberPattern(IPartnerSerialNumberPatternContext context);
         public abstract bool CheckInvoiceFollowBillingPeriod(ICheckInvoiceFollowBillingPeriodContext context);
-
+        public virtual InvoicePartnerSettings GetInvoicePartnerSettings(IInvoicePartnerSettingsContext context)
+        {
+            IInvoiceSettingManager manager = BusinessManagerFactory.GetManager<IInvoiceSettingManager>();
+            var invoiceSetting = manager.GetDefaultInvoiceSetting(context.InvoiceTypeId);
+            return new InvoicePartnerSettings { InvoiceSetting = invoiceSetting };
+        }
     }
     public interface IBasePartnerManagerContext
     {
         string PartnerId { get; }
     }
+    public interface IInvoicePartnerSettingsContext : IBasePartnerManagerContext
+    {
+        Guid InvoiceTypeId { get;}
+    }
     public interface IPartnerManagerInfoContext : IBasePartnerManagerContext
     {
         string InfoType { get; }
-        InvoicePartnerSettings PartnerSettings { get; }
+        InvoicePartnerDetails PartnerDetails { get; }
     }
     public interface IPartnerNameManagerContext : IBasePartnerManagerContext
     {

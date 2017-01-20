@@ -10,23 +10,23 @@ namespace Vanrise.Invoice.Business
 {
     public class PartnerManager
     {
-        public InvoicePartnerSettings GetPartnerSettings(Guid invoiceTypeId)
+        public InvoicePartnerDetails GetPartnerDetails(Guid invoiceTypeId)
         {
             InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
             if (invoiceType.Settings == null || invoiceType.Settings.ExtendedSettings ==null)
-                throw new NullReferenceException("InvoicePartnerSettings");
-            return invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+                throw new NullReferenceException("InvoicePartnerDetails");
+            return invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
         }
         public dynamic GetPartnerInfo(Guid invoiceTypeId, string partnerId,string infoType)
         {
-            var partnerSettings = GetPartnerSettings(invoiceTypeId);
+            var partnerSettings = GetPartnerDetails(invoiceTypeId);
 
             PartnerManagerInfoContext context = new PartnerManagerInfoContext
             {
                 InfoType = infoType,
                 PartnerId = partnerId,
-                PartnerSettings = partnerSettings
+                PartnerDetails = partnerSettings
             };
             if (partnerSettings == null || partnerSettings.GetPartnerInfo(context) == null)
                 throw new NullReferenceException("PartnerManager");
@@ -35,7 +35,7 @@ namespace Vanrise.Invoice.Business
         public dynamic GetActualPartnerId(Guid invoiceTypeId, string partnerId)
         {
 
-            var partnerSettings = GetPartnerSettings(invoiceTypeId);
+            var partnerSettings = GetPartnerDetails(invoiceTypeId);
 
             ActualPartnerContext context = new ActualPartnerContext
             {
@@ -48,7 +48,7 @@ namespace Vanrise.Invoice.Business
         public int GetPartnerDuePeriod(Guid invoiceTypeId, string partnerId)
         {
 
-            var partnerSettings = GetPartnerSettings(invoiceTypeId);
+            var partnerSettings = GetPartnerDetails(invoiceTypeId);
 
             PartnerDuePeriodContext context = new PartnerDuePeriodContext
             {
@@ -60,7 +60,7 @@ namespace Vanrise.Invoice.Business
         }
         public string GetPartnerSerialNumberPattern(Guid invoiceTypeId, string partnerId)
         {
-            var partnerSettings = GetPartnerSettings(invoiceTypeId);
+            var partnerSettings = GetPartnerDetails(invoiceTypeId);
             PartnerSerialNumberPatternContext context = new PartnerSerialNumberPatternContext
             {
                 PartnerId = partnerId,
@@ -69,9 +69,21 @@ namespace Vanrise.Invoice.Business
                 throw new NullReferenceException("partnerSettings");
             return partnerSettings.GetPartnerSerialNumberPattern(context);
         }
+        public InvoicePartnerSettings GetInvoicePartnerSetting(Guid invoiceTypeId, string partnerId)
+        {
+            var partnerSettings = GetPartnerDetails(invoiceTypeId);
+            InvoicePartnerSettingsContext context = new InvoicePartnerSettingsContext
+            {
+                PartnerId = partnerId,
+                InvoiceTypeId = invoiceTypeId
+            };
+            if (partnerSettings == null)
+                throw new NullReferenceException("partnerSettings");
+            return partnerSettings.GetInvoicePartnerSettings(context);
+        }
         public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
         {
-            var partnerSettings = GetPartnerSettings(invoiceTypeId);
+            var partnerSettings = GetPartnerDetails(invoiceTypeId);
             CheckInvoiceFollowBillingPeriodContext context = new CheckInvoiceFollowBillingPeriodContext
             {
                 PartnerId = partnerId,

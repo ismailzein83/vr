@@ -34,12 +34,12 @@ namespace Vanrise.Invoice.MainExtensions
                 case InvoiceField.Partner:
                     InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                     var invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
-                    var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerSettings();
+                    var partnerDetails = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
                     PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext
                     {
                         PartnerId = invoice.PartnerId
                     };
-                    return partnerSettings.GetPartnerName(partnerNameManagerContext);
+                    return partnerDetails.GetPartnerName(partnerNameManagerContext);
 
                 case InvoiceField.DueDate:
                     return invoice.DueDate;

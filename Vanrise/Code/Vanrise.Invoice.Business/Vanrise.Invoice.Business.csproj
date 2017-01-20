@@ -53,6 +53,7 @@
     <Compile Include="Context\InitialPeriodInfoContext.cs" />
     <Compile Include="Context\InvoiceGenerationContext.cs" />
     <Compile Include="Context\InvoiceItemConcatenatedPartContext.cs" />
+    <Compile Include="Context\InvoicePartnerSettingsContext.cs" />
     <Compile Include="Context\InvoiceRDLCFileConverterContext.cs" />
     <Compile Include="Context\InvoiceSerialNumberConcatenatedPartContext.cs" />
     <Compile Include="Context\ItemGroupingFilterFieldMatchContext.cs" />
