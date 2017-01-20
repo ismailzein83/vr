@@ -124,6 +124,7 @@ as (select * from (values
 ('9848AF1F-0C8A-4236-B5CC-81D593B07B85','WhS_Sales_CostCalculationMethod_Margin','Margin','WhS_Sales_RateCalculationMethod'						,'{"Editor":"vr-whs-sales-marginratecalculation"}'),
 ('B1975F3C-528B-410C-ABDF-887DEC0D1B44','WhS_Sales_CostCalculationMethod_CustomPercentage','Custom Percentage','WhS_Sales_CostCalculationMethod','{"Editor":"vr-whs-sales-percentagecostcalculation"}'),
 ('98B8E899-4ED7-4BCB-B6EF-8AE94E382E62','WhS_Sales_CostCalculationMethod_Avarage','Average','WhS_Sales_CostCalculationMethod'					,'{"Editor":"vr-whs-sales-avgcostcalculation"}'),
+('D71F6102-29B3-4781-8167-5C08282CCB5B','WhS_Sales_CostCalculationMethod_WeightedAverage','Weighted Average','WhS_Sales_CostCalculationMethod'	,'{"Editor":"vr-whs-sales-weightedavgcostcalculation"}'),
 
 ('6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320','WhS_RouteSync_SwitchRouteSynchronizer_MVTSRadius','MVTS Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-mvtsradius-swsync"}'),
 ('64152327-5DB5-47AE-9569-23D38BCB18CC','WhS_RouteSync_SwitchRouteSynchronizer_IVSwitch','IVSwitch Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-ivswitch-swsync"}'),
