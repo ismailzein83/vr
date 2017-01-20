@@ -212,7 +212,11 @@
     <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\WebServiceRequestTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\retail-be-accountcondition-filtergroup.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\retail-be-accountcondition-financialaccount.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\retail-be-accountcondition-subaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\FilterGroupAccountConditionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\FinancialAccountConditionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\SubAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\retail-be-accountcondition-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\Templates\AccountConditionSelectiveTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-bpaccountaction-selective.js" />

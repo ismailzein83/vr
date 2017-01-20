@@ -8,10 +8,12 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountTypeFilter
     {
-        public Guid AccountBEDefinitionId { get; set; }
+        public Guid? AccountBEDefinitionId { get; set; }
 
         public long? ParentAccountId { get; set; }
 
         public bool RootAccountTypeOnly { get; set; }
+
+        public bool IncludeHiddenAccountTypes { get; set; }
     }
 }

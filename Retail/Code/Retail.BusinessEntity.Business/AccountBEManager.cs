@@ -311,21 +311,7 @@ namespace Retail.BusinessEntity.Business
             return retailSubscriberInvoiceSettings.DefaultEmailId;
         }
 
-        private SubscriberInvoiceSettings GetRetailDefaulSubscriberInvoiceSettings()
-        {
-            SettingManager settingManager = new SettingManager();
-            InvoiceSettings settings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
 
-            if (settings == null || settings.SubscriberInvoiceSettings == null)
-                throw new NullReferenceException("setting.SubscriberInvoiceSettings");
-
-            foreach (var item in settings.SubscriberInvoiceSettings)
-            {
-                if (item.IsDefault)
-                    return item;
-            }
-            throw new NullReferenceException("setting.SubscriberInvoiceSettings");
-        }
 
         public Account GetAccountBySourceId(Guid accountBEDefinitionId, string sourceId)
         {
@@ -382,6 +368,22 @@ namespace Retail.BusinessEntity.Business
                 accountPart = null;
                 return false;
             }
+        }
+
+        public bool IsFinancial(Account account)
+        {
+            IAccountPayment accountPayment;
+
+            if (account != null && account.Settings != null && account.Settings.Parts != null)
+            {
+                foreach (var part in account.Settings.Parts)
+                {
+                    accountPayment = part.Value.Settings as IAccountPayment;
+                    if (accountPayment != null)
+                        return true;
+                }
+            }
+            return false;
         }
 
         #endregion
@@ -519,7 +521,21 @@ namespace Retail.BusinessEntity.Business
                 });
         }
 
+        private SubscriberInvoiceSettings GetRetailDefaulSubscriberInvoiceSettings()
+        {
+            SettingManager settingManager = new SettingManager();
+            InvoiceSettings settings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
 
+            if (settings == null || settings.SubscriberInvoiceSettings == null)
+                throw new NullReferenceException("setting.SubscriberInvoiceSettings");
+
+            foreach (var item in settings.SubscriberInvoiceSettings)
+            {
+                if (item.IsDefault)
+                    return item;
+            }
+            throw new NullReferenceException("setting.SubscriberInvoiceSettings");
+        }
 
         #endregion
 

@@ -105,6 +105,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountChargeEvaluators\FixedChargeAccountRecurringChargeEvaluator.cs" />
+    <Compile Include="AccountConditions\FinancialAccountCondition.cs" />
+    <Compile Include="AccountConditions\SubAccountCondition.cs" />
     <Compile Include="AccountRecurringChargeRuleSets\ApplyFirstAccountRecurringChargeRuleSetSettings.cs" />
     <Compile Include="AccountRecurringChargeRuleSets\SingleRuleAccountRecurringChargeRuleSetSettings.cs" />
     <Compile Include="AccountViews\AccountIdentificationRules.cs" />

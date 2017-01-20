@@ -43,23 +43,28 @@ namespace Retail.BusinessEntity.Business
             Func<AccountType, bool> filterExpression = null;
             if (filter != null)
             {
+                //List<Guid> includedAccountTypeIds = new ConfigManager().GetIncludedAccountTypeIds();
+
                 filterExpression = (accountType) =>
                     {
-                        if (filter.AccountBEDefinitionId != accountType.AccountBEDefinitionId)
+                        //if (filter.IncludeHiddenAccountTypes)
+                        //    return true;
+
+                        //if (!includedAccountTypeIds.Contains(accountType.AccountTypeId))
+                        //    return false;
+
+                        if (filter.AccountBEDefinitionId.HasValue && filter.AccountBEDefinitionId.Value != accountType.AccountBEDefinitionId)
                             return false;
 
-                        if (filter.ParentAccountId.HasValue)
+                        if (filter.AccountBEDefinitionId.HasValue && filter.ParentAccountId.HasValue)
                         {
                             var accountBEManager = new AccountBEManager();
-                            Account parentAccount = accountBEManager.GetAccount(filter.AccountBEDefinitionId, filter.ParentAccountId.Value);
+                            Account parentAccount = accountBEManager.GetAccount(filter.AccountBEDefinitionId.Value, filter.ParentAccountId.Value);
                             if (parentAccount == null)
                                 throw new NullReferenceException("parentAccount");
+
                             if (accountType.Settings == null || accountType.Settings.SupportedParentAccountTypeIds == null || !accountType.Settings.SupportedParentAccountTypeIds.Contains(parentAccount.TypeId))
                                 return false;
-                        }
-                        else if (accountType.Settings == null || !accountType.Settings.CanBeRootAccount)
-                        {
-                            return false;
                         }
 
                         if (filter.RootAccountTypeOnly && (accountType.Settings == null || !accountType.Settings.CanBeRootAccount))
@@ -67,7 +72,6 @@ namespace Retail.BusinessEntity.Business
 
                         return true;
                     };
-
             }
 
             return this.GetCachedAccountTypes().MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
@@ -85,6 +89,17 @@ namespace Retail.BusinessEntity.Business
             if (parentAccountType.Settings == null)
                 throw new NullReferenceException("parentAccountType.Settings");
             return parentAccountType.Settings.SupportedParentAccountTypeIds;
+        }
+        public IEnumerable<Guid> GetSupportedParentAccountTypeIds(Guid accountTypeId)
+        {
+            AccountType accountType = this.GetAccountType(accountTypeId);
+            if (accountType == null)
+                throw new NullReferenceException(string.Format("accountType of Id: {0}", accountTypeId));
+
+            if (accountType.Settings == null)
+                throw new NullReferenceException(string.Format("accountType.Settings of accountTypeId: {0}", accountTypeId));
+
+            return accountType.Settings.SupportedParentAccountTypeIds;
         }
 
         public IEnumerable<AccountPartDefinitionConfig> GetAccountTypePartDefinitionExtensionConfigs()
@@ -201,15 +216,18 @@ namespace Retail.BusinessEntity.Business
             return accountGenericFields.Values.Select(itm => new GenericFieldDefinitionInfo() { Name = itm.Name, Title = itm.Title, FieldType = itm.FieldType });
         }
 
-        private void FillAccountCommonGenericFields(Guid? accountBEDefinitionId, List<AccountGenericField> fields)
+        public bool CanHaveSubAccounts(Account account)
         {
-            fields.Add(new AccountNameGenericField());
-            fields.Add(new AccountTypeGenericField());
-
-            if (accountBEDefinitionId.HasValue)
+            if (account != null) 
             {
-                fields.Add(new AccountStatusGenericField(accountBEDefinitionId.Value));
+                foreach (var itm in this.GetCachedAccountTypes())
+                {
+                    IEnumerable<Guid> supportedParentAccountTypeIds = this.GetSupportedParentAccountTypeIds(itm.Key);
+                    if (supportedParentAccountTypeIds != null && supportedParentAccountTypeIds.Contains(account.TypeId))
+                        return true;
+                }
             }
+            return false;
         }
 
         #endregion
@@ -268,6 +286,17 @@ namespace Retail.BusinessEntity.Business
                 IEnumerable<AccountType> accountTypes = dataManager.GetAccountTypes();
                 return accountTypes.ToDictionary(kvp => kvp.AccountTypeId, kvp => kvp);
             });
+        }
+
+        private void FillAccountCommonGenericFields(Guid? accountBEDefinitionId, List<AccountGenericField> fields)
+        {
+            fields.Add(new AccountNameGenericField());
+            fields.Add(new AccountTypeGenericField());
+
+            if (accountBEDefinitionId.HasValue)
+            {
+                fields.Add(new AccountStatusGenericField(accountBEDefinitionId.Value));
+            }
         }
 
         #endregion
