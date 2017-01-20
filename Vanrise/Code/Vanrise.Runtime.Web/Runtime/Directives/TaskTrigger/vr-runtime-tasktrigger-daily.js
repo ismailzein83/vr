@@ -32,6 +32,12 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
             $scope.selectedTimes = [];
             $scope.timeButtonIsDisabled = false;
 
+            $scope.validate = function () {
+                if ($scope.selectedTimes == undefined || $scope.selectedTimes.length == 0)
+                    return 'At least one value should be added';
+                return null;
+            };
+
             $scope.addTime = function () {
                 var timeIsValid = true;
 
@@ -46,8 +52,10 @@ function (UtilsService, VRUIUtilsService , TimeSchedulerTypeEnum) {
                     });
                 }
 
-                if (timeIsValid)
+                if (timeIsValid) {
                     $scope.selectedTimes.push($scope.selectedTime);
+                    $scope.selectedTime = undefined;
+                }
             };
 
             $scope.removeTime = function (timeToRemove) {

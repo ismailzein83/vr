@@ -1,10 +1,10 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-textbox value="interval" label="Runs Every" />
+        <vr-textbox value="interval" label="Runs Every" isrequired="true" />
     </vr-columns>
     <vr-columns width="1/2row">
         <vr-select datasource="intervalTypes" label="Period Type" selectedvalues="selectedIntervalType"
-                    datatextfield="name" datavaluefield="value">
+                    datatextfield="name" datavaluefield="value" isrequired="true">
         </vr-select>
     </vr-columns>
 </vr-row>

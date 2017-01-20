@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Runtime.Entities;
 using Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments;
 
@@ -12,26 +8,31 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
     {
         public override DateTime CalculateNextTimeToRun(SchedulerTask task, SchedulerTaskState taskState, BaseTaskTriggerArgument taskTriggerArgument)
         {
-            DateTime nextRunTime = DateTime.MinValue;
+            DateTime nextRunTime;
+            DateTime now = DateTime.Now;
 
-            if (taskState.NextRunTime == null)
+            if (!taskState.NextRunTime.HasValue)
             {
-                nextRunTime = DateTime.Now;
+                nextRunTime = now;
             }
             else
             {
                 IntervalTimeTaskTriggerArgument intervalTimeTaskTriggerArgument = (IntervalTimeTaskTriggerArgument)taskTriggerArgument;
+                nextRunTime = taskState.NextRunTime.Value;
 
                 switch (intervalTimeTaskTriggerArgument.IntervalType)
                 {
                     case IntervalType.Hour:
-                        nextRunTime = DateTime.Now.AddHours(intervalTimeTaskTriggerArgument.Interval);
+                        while (nextRunTime < now)
+                            nextRunTime = nextRunTime.AddHours(intervalTimeTaskTriggerArgument.Interval);
                         break;
                     case IntervalType.Minute:
-                        nextRunTime = DateTime.Now.AddMinutes(intervalTimeTaskTriggerArgument.Interval);
+                        while (nextRunTime < now)
+                            nextRunTime = nextRunTime.AddMinutes(intervalTimeTaskTriggerArgument.Interval);
                         break;
                     case IntervalType.Second:
-                        nextRunTime = DateTime.Now.AddSeconds(intervalTimeTaskTriggerArgument.Interval);
+                        while (nextRunTime < now)
+                            nextRunTime = nextRunTime.AddSeconds(intervalTimeTaskTriggerArgument.Interval);
                         break;
                 }
             }
