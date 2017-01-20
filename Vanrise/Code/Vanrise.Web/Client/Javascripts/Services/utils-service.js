@@ -836,6 +836,34 @@
         function isIntegerValue(value) {
             return !isNaN(parseFloat(value)) && isFinite(value) && Math.floor(value) === value;
         }
+
+        function addFloats(f1, f2) {
+            //Helper function to find the number of decimal places
+            function findDec(f1) {
+                var count;
+                function isInt(n) {
+                    return typeof n === 'number' &&
+                       parseFloat(n) == parseInt(n, 10) && !isNaN(n);
+                }
+                var a = Math.abs(f1);
+                f1 = a, count = 1;
+                while (!isInt(f1) && isFinite(f1)) {
+                    f1 = a * Math.pow(10, count++);
+                }
+                return count - 1;
+            }
+            //Determine the greatest number of decimal places
+            var pf1 = parseFloat(f1);
+            var pf2 = parseFloat(f2);
+            var dec1 = findDec(pf1);
+            var dec2 = findDec(pf2);
+            var fixed = dec1 > dec2 ? dec1 : dec2;
+
+            //do the math then do a toFixed, could do a toPrecision also
+            var n = (pf1 + pf2).toFixed(fixed);
+            return +n;
+        }
+
         return ({
             replaceAll: replaceAll,
             waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -894,7 +922,8 @@
             createDateFromString: createDateFromString,
             parseDateToString: parseDateToString,
             isNumericValue: isNumericValue,
-            isIntegerValue: isIntegerValue
+            isIntegerValue: isIntegerValue,
+            addFloats: addFloats
         });
     }
 
