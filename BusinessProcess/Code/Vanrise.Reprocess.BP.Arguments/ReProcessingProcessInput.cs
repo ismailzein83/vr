@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.BusinessProcess.Entities;
 using Vanrise.Reprocess.Entities;
 
 namespace Vanrise.Reprocess.BP.Arguments
@@ -21,6 +17,16 @@ namespace Vanrise.Reprocess.BP.Arguments
         public override string GetTitle()
         {
             return String.Format("Reprocess from {0} to {1}", FromTime, ToTime);
+        }
+
+        public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
+        {
+            if (evaluatedExpressions.ContainsKey("ScheduleTime") && evaluatedExpressions.ContainsKey("DaysBack") && evaluatedExpressions.ContainsKey("NumberOfDays"))
+            {
+                var effectiveDate = (DateTime)evaluatedExpressions["ScheduleTime"];
+                this.FromTime = effectiveDate.Date.AddDays(-1 * int.Parse(evaluatedExpressions["DaysBack"].ToString()));
+                this.ToTime = this.FromTime.AddDays(int.Parse(evaluatedExpressions["NumberOfDays"].ToString()));
+            }
         }
     }
 }

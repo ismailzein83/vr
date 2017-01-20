@@ -149,6 +149,8 @@
     <Content Include="Reprocess\Directives\ReprocessDefinition\Templates\ReprocessDefinitionGridTemplate.html" />
     <Content Include="Reprocess\Directives\ReprocessInput\reprocess-reprocessprocess.js" />
     <Content Include="Reprocess\Directives\ReprocessInput\Templates\ReprocessProcessTemplate.html" />
+    <Content Include="Reprocess\Directives\ScheduleTask\reprocess-reprocessprocesstask.js" />
+    <Content Include="Reprocess\Directives\ScheduleTask\Templates\ReprocessProcessTaskTemplate.html" />
     <Content Include="Reprocess\Services\APIServices\ReprocessDefinitionAPIService.js" />
     <Content Include="Reprocess\Services\ReprocessDefinitionService.js" />
     <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionEditor.html" />

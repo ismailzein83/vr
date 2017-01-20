@@ -1,0 +1,20 @@
+﻿<vr-row>
+    <vr-columns colnum="3">
+        <reprocess-reprocessdefinition-selector isrequired="true" on-ready="onReprocessDefinitionSelectorReady"></reprocess-reprocessdefinition-selector>
+    </vr-columns>
+    <vr-columns colnum="6" haschildcolumns>
+        <vr-validator validate="isValid()">
+            <vr-columns colnum="6">
+                <vr-textbox value="daysBack" type="number" label="Days Back" isrequired="true" minvalue="1"></vr-textbox>
+            </vr-columns>
+
+            <vr-columns colnum="6">
+                <vr-textbox value="numberOfDays" type="number" label="Number Of Days" isrequired="true" minvalue="1"></vr-textbox>
+            </vr-columns>
+        </vr-validator>
+    </vr-columns>
+    <vr-columns colnum="3">
+        <vr-select label="Chunk Time" datatextfield="description" datavaluefield="value" isrequired="true"
+                   datasource="chunkTimes" selectedvalues="selectedChunkTime"></vr-select>
+    </vr-columns>
+</vr-row>
