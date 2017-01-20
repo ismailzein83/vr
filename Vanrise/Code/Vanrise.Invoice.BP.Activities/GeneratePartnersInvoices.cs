@@ -8,7 +8,7 @@ using Vanrise.Invoice.Business;
 using Vanrise.BusinessProcess;
 namespace Vanrise.Invoice.BP.Activities
 {
-     public sealed class GeneratePartnersInvoices : CodeActivity
+     public sealed class GeneratePartnersInvoices : BaseCodeActivity
     {
         #region Arguments
         [RequiredArgument]
@@ -16,13 +16,11 @@ namespace Vanrise.Invoice.BP.Activities
         [RequiredArgument]
         public InArgument<string> PartnerId { get; set; }
         #endregion
-
-        protected override void Execute(CodeActivityContext context)
+        protected override void VRExecute(IBaseCodeActivityContext context)
         {
-            var invoiceTypeId = context.GetValue(this.InvoiceTypeId);
-            var partnerId = context.GetValue(this.PartnerId);
+            var invoiceTypeId = context.ActivityContext.GetValue(this.InvoiceTypeId);
+            var partnerId = context.ActivityContext.GetValue(this.PartnerId);
             InvoiceManager invoiceManager = new InvoiceManager();
-            invoiceManager.userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
             var issueDate = DateTime.Now.AddYears(1);
             if (partnerId != null)
             {

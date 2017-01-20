@@ -1,6 +1,5 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Invoice.BP.AutomaticInvoiceProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
- xmlns:local="clr-namespace:Vanrise.Invoice.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -44,8 +43,8 @@
       <AssemblyReference>Vanrise.Invoice.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -65,7 +64,7 @@
         </OutArgument>
       </viba1:LoadAllPartnerIds.PartnerIds>
     </viba1:LoadAllPartnerIds>
-    <ParallelForEach x:TypeArguments="x:String" DisplayName="ParallelForEach&lt;String&gt;">
+    <ParallelForEach x:TypeArguments="x:String" DisplayName="ParallelForEach&lt;String&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
       <ParallelForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">partnerIds</mca:CSharpValue>
@@ -75,37 +74,44 @@
         <ActivityAction.Argument>
           <DelegateInArgument x:TypeArguments="x:String" Name="partnerId" />
         </ActivityAction.Argument>
-        <local:GenerateInvoiceProcess>
-          <local:GenerateInvoiceProcess.InvoiceTypeId>
-            <InArgument x:TypeArguments="s:Guid">
-              <mca:CSharpValue x:TypeArguments="s:Guid">Input.InvoiceTypeId</mca:CSharpValue>
-            </InArgument>
-          </local:GenerateInvoiceProcess.InvoiceTypeId>
-          <local:GenerateInvoiceProcess.PartnerId>
-            <InArgument x:TypeArguments="x:String">
-              <mca:CSharpValue x:TypeArguments="x:String">partnerId</mca:CSharpValue>
-            </InArgument>
-          </local:GenerateInvoiceProcess.PartnerId>
-          <sap2010:WorkflowViewState.IdRef>GenerateInvoiceProcess_1</sap2010:WorkflowViewState.IdRef>
-        </local:GenerateInvoiceProcess>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <viba1:GeneratePartnersInvoices sap2010:WorkflowViewState.IdRef="GeneratePartnersInvoices_1">
+            <viba1:GeneratePartnersInvoices.InvoiceTypeId>
+              <InArgument x:TypeArguments="s:Guid">
+                <mca:CSharpValue x:TypeArguments="s:Guid">Input.InvoiceTypeId</mca:CSharpValue>
+              </InArgument>
+            </viba1:GeneratePartnersInvoices.InvoiceTypeId>
+            <viba1:GeneratePartnersInvoices.PartnerId>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">partnerId</mca:CSharpValue>
+              </InArgument>
+            </viba1:GeneratePartnersInvoices.PartnerId>
+          </viba1:GeneratePartnersInvoices>
+        </Sequence>
       </ActivityAction>
-      <sap2010:WorkflowViewState.IdRef>ParallelForEach`1_2</sap2010:WorkflowViewState.IdRef>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sCTQDXw4CAQE4BUMfAgEPRAVdFwIBAjsLO1oCARNAC0BsAgEQRwtHZAIBDE4JWigCAQNRD1FeAgEIVg9WVgIBBA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sCjMDXg4CAQE3BUIfAgEQQwVcFwIBAjoLOloCARQ/Cz9sAgERRgtGZAIBDU0JWhQCAQNOC1ksAgEEURFRYAIBCVYRVlgCAQU=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="LoadAllPartnerIds_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="GenerateInvoiceProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="287,210" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,396">
+      <sap2010:ViewStateData Id="GeneratePartnersInvoices_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.AutomaticInvoiceProcess_1" sap:VirtualizedContainerService.HintSize="349,476" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="287,296" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,482">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.AutomaticInvoiceProcess_1" sap:VirtualizedContainerService.HintSize="349,562" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

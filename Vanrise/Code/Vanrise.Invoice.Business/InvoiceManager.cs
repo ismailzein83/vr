@@ -19,10 +19,6 @@ namespace Vanrise.Invoice.Business
 {
     public class InvoiceManager
     {
-
-        static int _userId { get; set; }
-        public int userId { get{ return userId;} set { _userId = value; } }
-
         #region Public Methods 
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
@@ -395,7 +391,7 @@ namespace Vanrise.Invoice.Business
         {
             Entities.Invoice invoice = new Entities.Invoice
             {
-                UserId = _userId,
+                UserId =  new Vanrise.Security.Business.SecurityContext().GetLoggedInUserId(),
                 Details = invoiceDetails,
                 InvoiceTypeId = invoiceType.InvoiceTypeId,
                 FromDate = fromDate,
@@ -436,7 +432,7 @@ namespace Vanrise.Invoice.Business
 
         private static bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
         {
-            int userId = _userId;
+            int userId = new Vanrise.Security.Business.SecurityContext().GetLoggedInUserId();
             SecurityManager secManager = new SecurityManager();
             if (!secManager.IsAllowed(requiredPermission, userId))
                 return false;

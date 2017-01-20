@@ -77,12 +77,6 @@
       <Name>Vanrise.Invoice.BP.Arguments</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <XamlAppDef Include="SubProcesses\GenerateInvoiceProcess.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </XamlAppDef>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
