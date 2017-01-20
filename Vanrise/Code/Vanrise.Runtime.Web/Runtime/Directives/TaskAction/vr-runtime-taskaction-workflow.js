@@ -105,7 +105,8 @@ function (UtilsService, VRUIUtilsService) {
                         var payloadDirective;
                         if (data != undefined) {
                             payloadDirective = {
-                                data: (data != undefined && data.ProcessInputArguments) ? data.ProcessInputArguments : null
+                                data: data.ProcessInputArguments,
+                                rawExpressions: data.RawExpressions
                                 //selectedDateOption: (data != undefined && data.RawExpressions != null) ? 0 : 1
                             };
 
