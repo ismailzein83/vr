@@ -28,6 +28,8 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 
 		var selectorAPI;
 
+		var applicableSaleZoneFilter;
+
 		function initializeController() {
 			$scope.scopeModel = {};
 
@@ -48,27 +50,27 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 
 			api.load = function (payload) {
 
-				var ownerType;
-				var ownerId;
 				var zoneFilter;
 
 				if (payload != undefined) {
-					ownerType = payload.ownerType;
-					ownerId = payload.ownerId;
 					zoneFilter = payload.zoneFilter;
 					bulkActionContext = payload.bulkActionContext;
 				}
+
+				if (bulkActionContext != undefined)
+					extendBulkActionContext();
 
 				return loadSaleZoneSelector();
 
 				function loadSaleZoneSelector() {
 					var saleZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-					var selectorPayload = {
-						filter: {
-							Filters: [getApplicableSaleZoneFilter()]
-						}
-					};
+					applicableSaleZoneFilter = getApplicableSaleZoneFilter();
+
+					var selectorPayload = {};
+					selectorPayload.filter = {};
+					selectorPayload.filter.Filters = [];
+					selectorPayload.filter.Filters.push(applicableSaleZoneFilter);
 
 					if (bulkActionContext != undefined) {
 						selectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
@@ -107,6 +109,27 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 			if (ctrl.onReady != null) {
 				ctrl.onReady(api);
 			}
+		}
+
+		function extendBulkActionContext() {
+			if (bulkActionContext == undefined)
+				return;
+
+			bulkActionContext.onBulkActionChanged = function () {
+				var bulkAction;
+				if (bulkActionContext.getSelectedBulkAction != undefined)
+					bulkAction = bulkActionContext.getSelectedBulkAction();
+				
+				applicableSaleZoneFilter.ActionType = bulkAction;
+				var selectorPayload = {
+					sellingNumberPlanId: bulkActionContext.ownerSellingNumberPlanId,
+					filter: {
+						Filters: []
+					}
+				};
+				selectorPayload.filter.Filters.push(applicableSaleZoneFilter);
+				return selectorAPI.load(selectorPayload);
+			};
 		}
 	}
 

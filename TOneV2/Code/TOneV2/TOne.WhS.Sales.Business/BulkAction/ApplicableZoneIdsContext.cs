@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business
@@ -14,5 +16,5 @@ namespace TOne.WhS.Sales.Business
         public Changes DraftData { get; set; }
 
         public BulkActionType BulkAction { get; set; }
-    }
+	}
 }

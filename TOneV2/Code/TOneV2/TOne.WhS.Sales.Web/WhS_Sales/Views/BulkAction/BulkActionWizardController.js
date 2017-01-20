@@ -162,6 +162,8 @@
 			bulkActionContext.requireEvaluation = function () {
 				$scope.scopeModel.isApplyButtonDisabled = true;
 			};
+			if (gridQuery != undefined)
+				bulkActionContext.costCalculationMethods = gridQuery.CostCalculationMethods;
 		}
 	}
 

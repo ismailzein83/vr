@@ -93,7 +93,8 @@ namespace TOne.WhS.Sales.Business
 			// TODO: Add EffectiveOn to input.Filter
 			var effectiveOn = DateTime.Now.Date;
 
-			var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId);
+			var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+			var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId, rateLocator);
 			var rpManager = new ZoneRPManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft);
 
 			var baseRatesByZone = new BaseRatesByZone();
@@ -236,7 +237,8 @@ namespace TOne.WhS.Sales.Business
 			int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, effectiveOn, false);
 			Changes draft = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
 
-			ZoneRateManager rateSetter = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId);
+			var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+			ZoneRateManager rateSetter = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId, rateLocator);
 			rateSetter.SetZoneRate(zoneItem);
 
 			if (sellingProductId == null)
@@ -409,6 +411,7 @@ namespace TOne.WhS.Sales.Business
 				return null;
 
 			Changes draft = new RatePlanDraftManager().GetDraft(input.OwnerType, input.OwnerId);
+			var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
 
 			// Filter and page the sale zones
 			IEnumerable<long> applicableZoneIds = null;
@@ -418,7 +421,7 @@ namespace TOne.WhS.Sales.Business
 				if (input.Filter == null || input.Filter.BulkActionFilter == null)
 					throw new Vanrise.Entities.MissingArgumentValidationException("input.Filter.BulkActionFilter");
 
-				ApplicableZoneIdsContext applicableZoneContext = new ApplicableZoneIdsContext()
+				IApplicableZoneIdsContext applicableZoneContext = new ApplicableZoneIdsContext()
 				{
 					SaleZoneIds = saleZones.MapRecords(x => x.SaleZoneId),
 					DraftData = draft,
@@ -444,7 +447,7 @@ namespace TOne.WhS.Sales.Business
 			if (pagedSaleZones == null || pagedSaleZones.Count() == 0)
 				return null;
 
-			return BuildZoneItems(pagedSaleZones, input.OwnerType, input.OwnerId, input.CurrencyId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.BulkAction, draft, input.EffectiveOn);
+			return BuildZoneItems(pagedSaleZones, input.OwnerType, input.OwnerId, input.CurrencyId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, input.BulkAction, draft, input.EffectiveOn, rateLocator);
 		}
 
 		public void ApplyBulkActionToDraft(ApplyActionToDraftInput input)
@@ -480,7 +483,8 @@ namespace TOne.WhS.Sales.Business
 
 			Func<IEnumerable<ZoneItem>> buildZoneItems = () =>
 			{
-				return BuildZoneItems(filteredSaleZones, input.OwnerType, input.OwnerId, input.CurrencyId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, null, draft, input.EffectiveOn);
+				var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
+				return BuildZoneItems(filteredSaleZones, input.OwnerType, input.OwnerId, input.CurrencyId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, null, draft, input.EffectiveOn, rateLocator);
 			};
 			var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems);
 
@@ -508,19 +512,26 @@ namespace TOne.WhS.Sales.Business
 			ratePlanDraftManager.SaveDraft(input.OwnerType, input.OwnerId, newDraft);
 		}
 
-		public IEnumerable<ZoneItem> BuildZoneItems(IEnumerable<SaleZone> saleZones, SalePriceListOwnerType ownerType, int ownerId, int currencyId, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, BulkActionType bulkAction, Changes draft, DateTime effectiveOn)
+		public IEnumerable<ZoneItem> BuildZoneItems(IEnumerable<SaleZone> saleZones, SalePriceListOwnerType ownerType, int ownerId, int currencyId, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, List<CostCalculationMethod> costCalculationMethods, BulkActionType bulkAction, Changes draft, DateTime effectiveOn, SaleEntityZoneRateLocator rateLocator)
 		{
 			var zoneItems = new List<ZoneItem>();
 
+			var zoneDraftsByZone = new Dictionary<long, ZoneChanges>();
 			var changedCountryIds = new List<int>();
-			if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
-				changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+
+			if (draft != null)
+			{
+				zoneDraftsByZone = SturctureZoneDraftsByZone(draft.ZoneChanges);
+
+				if (draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
+					changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+			}
 
 			int? sellingProductId = GetSellingProductId(ownerType, ownerId, DateTime.Now, false);
 			if (sellingProductId == null)
 				throw new Exception("Selling product does not exist");
 
-			var rateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, effectiveOn, draft, currencyId);
+			var rateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, effectiveOn, draft, currencyId, rateLocator);
 			var rpManager = new ZoneRPManager(ownerType, ownerId, effectiveOn, draft);
 
 			var baseRatesByZone = new BaseRatesByZone();
@@ -537,20 +548,19 @@ namespace TOne.WhS.Sales.Business
 					ZoneEED = saleZone.EED
 				};
 
+				ZoneChanges zoneDraft = zoneDraftsByZone.GetRecord(saleZone.SaleZoneId);
+
 				if (bulkAction != null)
 				{
 					var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext()
 					{
-						ZoneItem = zoneItem
+						ZoneItem = zoneItem,
+						ZoneDraft = zoneDraft
 					};
 					bulkAction.ApplyBulkActionToZoneItem(applyBulkActionToZoneItemContext);
 				}
 
 				zoneItem.IsFutureZone = (zoneItem.ZoneBED.Date > DateTime.Now.Date);
-
-				ZoneChanges zoneDraft = null;
-				if (draft != null && draft.ZoneChanges != null)
-					zoneDraft = draft.ZoneChanges.FindRecord(x => x.ZoneId == saleZone.SaleZoneId);
 
 				rateManager.SetZoneRate(zoneItem);
 
@@ -581,6 +591,20 @@ namespace TOne.WhS.Sales.Business
 			routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
 
 			return zoneItems;
+		}
+
+		private Dictionary<long, ZoneChanges> SturctureZoneDraftsByZone(IEnumerable<ZoneChanges> zoneDrafts)
+		{
+			var zoneDraftsByZone = new Dictionary<long, ZoneChanges>();
+			if (zoneDrafts != null)
+			{
+				foreach (ZoneChanges zoneDraft in zoneDrafts)
+				{
+					if (!zoneDraftsByZone.ContainsKey(zoneDraft.ZoneId))
+						zoneDraftsByZone.Add(zoneDraft.ZoneId, zoneDraft);
+				}
+			}
+			return zoneDraftsByZone;
 		}
 
 		#endregion

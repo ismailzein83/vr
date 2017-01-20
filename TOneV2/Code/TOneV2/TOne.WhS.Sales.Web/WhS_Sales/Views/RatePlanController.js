@@ -629,10 +629,10 @@
 			};
 
 			if (shouldSetFilter === true) {
-				query.Filter = {
-					CountryIds: countrySelectorAPI.getSelectedIds(),
-					BulkActionFilter: null
-				};
+
+				query.Filter = {};
+				query.Filter.CountryIds = countrySelectorAPI.getSelectedIds();
+				query.Filter.BulkActionFilter = null;
 
 				var textFilterData = textFilterAPI.getData();
 				if (textFilterData != undefined) {

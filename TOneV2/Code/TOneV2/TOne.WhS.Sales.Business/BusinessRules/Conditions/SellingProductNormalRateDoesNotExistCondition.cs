@@ -25,17 +25,17 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
 			var zoneData = context.Target as DataByZone;
 
-			var customerSellingProductManager = new CustomerSellingProductManager();
-			int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(ratePlanContext.OwnerId, ratePlanContext.EffectiveDate, false);
-			if (!sellingProductId.HasValue)
-			{
-				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product on '{1}'", ratePlanContext.OwnerId, UtilitiesManager.GetDateTimeAsString(ratePlanContext.EffectiveDate)));
-			}
-
-			SaleEntityZoneRate sellingProductRate = ratePlanContext.FutureRateLocator.GetSellingProductZoneRate(sellingProductId.Value, zoneData.ZoneId);
-
 			if (zoneData.NormalRateToClose != null)
 			{
+				var customerSellingProductManager = new CustomerSellingProductManager();
+				int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(ratePlanContext.OwnerId, ratePlanContext.EffectiveDate, false);
+				if (!sellingProductId.HasValue)
+				{
+					throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product on '{1}'", ratePlanContext.OwnerId, UtilitiesManager.GetDateTimeAsString(ratePlanContext.EffectiveDate)));
+				}
+
+				SaleEntityZoneRate sellingProductRate = ratePlanContext.FutureRateLocator.GetSellingProductZoneRate(sellingProductId.Value, zoneData.ZoneId);
+
 				if (sellingProductRate == null || sellingProductRate.Rate == null)
 				{
 					context.Message = string.Format("Selling product does not have a normal rate for zone '{0}'", zoneData.ZoneName);

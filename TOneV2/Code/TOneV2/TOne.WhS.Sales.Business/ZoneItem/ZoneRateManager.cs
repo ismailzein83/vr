@@ -38,7 +38,7 @@ namespace TOne.WhS.Sales.Business
 
 		#region Public Methods
 
-		public ZoneRateManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId)
+		public ZoneRateManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId, SaleEntityZoneRateLocator rateLocator)
 		{
 			_ownerType = ownerType;
 			_ownerId = ownerId;
@@ -53,7 +53,7 @@ namespace TOne.WhS.Sales.Business
 
 			_targetCurrencyId = targetCurrencyId;
 
-			_rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(_effectiveOn));
+			_rateLocator = rateLocator;
 			_futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
 			_currencyExchangeRateManager = new CurrencyExchangeRateManager();
 			_saleRateManager = new SaleRateManager();
@@ -167,7 +167,6 @@ namespace TOne.WhS.Sales.Business
 			else
 				zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
 
-			//zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
 			zoneItem.ClosedRates = _rateChanges.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
 
 			DraftRateToClose rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?

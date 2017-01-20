@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Entities;
@@ -95,7 +96,8 @@ namespace TOne.WhS.Sales.Business
 			Changes draft = draftManager.GetDraft(input.OwnerType, input.OwnerId);
 			IEnumerable<ZoneChanges> zoneDrafts = draft != null ? draft.ZoneChanges : null;
 
-			var zoneRateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId.Value, input.EffectiveOn, draft, input.CurrencyId);
+			var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
+			var zoneRateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId.Value, input.EffectiveOn, draft, input.CurrencyId, rateLocator);
 			var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, draft);
 
 			foreach (SaleZone zone in saleZones)

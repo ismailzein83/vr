@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.MainExtensions
@@ -13,6 +14,8 @@ namespace TOne.WhS.Sales.MainExtensions
 		{
 			get { return new Guid("736034AB-115F-464B-919D-052EBFDEDD5C"); }
 		}
+
+		public DateTime EED { get; set; }
 
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{

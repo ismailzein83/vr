@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
@@ -27,6 +28,8 @@ namespace TOne.WhS.Sales.Entities
 	public interface IApplyBulkActionToZoneItemContext
 	{
 		ZoneItem ZoneItem { get; }
+
+		ZoneChanges ZoneDraft { get; set; }
 	}
 
 	public interface IApplyBulkActionToZoneDraftContext

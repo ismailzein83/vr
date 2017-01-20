@@ -1,0 +1,43 @@
+﻿<div vr-loader="scopeModel.isLoading">
+	<vr-row removeline>
+		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
+			<vr-select on-ready="scopeModel.onCostCalculationMethodSelectorReady"
+					   label="Cost Calculation Method"
+					   datasource="scopeModel.costCalculationMethods"
+					   selectedvalues="scopeModel.selectedCostCalculationMethod"
+					   onselectitem="scopeModel.requireEvaluation"
+					   datavaluefield="ConfigId"
+					   datatextfield="Title"
+					   isrequired="scopeModel.isCostCalculationMethodRequired()"
+					   hideremoveicon="rateBulkActionTypeCtrl.isrequired">
+			</vr-select>
+		</vr-columns>
+	</vr-row>
+	<vr-row removeline>
+		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
+			<vr-select on-ready="scopeModel.onRateCalculationMethodSelectorReady"
+					   label="Rate Calculation Method"
+					   datasource="scopeModel.rateCalculationMethods"
+					   selectedvalues="scopeModel.selectedRateCalculationMethod"
+					   onselectitem="scopeModel.requireEvaluation"
+					   datavaluefield="ExtensionConfigurationId"
+					   datatextfield="Title"
+					   isrequired="rateBulkActionTypeCtrl.isrequired"
+					   hideremoveicon="rateBulkActionTypeCtrl.isrequired">
+			</vr-select>
+		</vr-columns>
+		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}" vr-loader="scopeModel.isLoadingDirective">
+			<vr-directivewrapper directive="scopeModel.selectedRateCalculationMethod.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
+		</vr-columns>
+	</vr-row>
+	<vr-row removeline>
+		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
+			<vr-datetimepicker type="date" label="BED" value="scopeModel.beginEffectiveDate" onvaluechanged="scopeModel.requireEvaluation" isrequired="rateBulkActionTypeCtrl.isrequired"></vr-datetimepicker>
+		</vr-columns>
+	</vr-row>
+	<vr-row removeline>
+		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
+			<vr-switch label="Overwrite" value="scopeModel.overwrite" onvaluechanged="scopeModel.requireEvaluation" isrequired="ctrl.isrequired"></vr-switch>
+		</vr-columns>
+	</vr-row>
+</div>

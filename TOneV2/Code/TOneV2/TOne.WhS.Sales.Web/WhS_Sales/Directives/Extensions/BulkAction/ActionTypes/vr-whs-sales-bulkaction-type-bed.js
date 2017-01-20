@@ -31,8 +31,12 @@ app.directive('vrWhsSalesBulkactionTypeBed', ['UtilsService', 'VRUIUtilsService'
 			$scope.scopeModel = {};
 
 			$scope.scopeModel.onBEDChanged = function () {
-				if (bulkActionContext != undefined && bulkActionContext.requireEvaluation != undefined)
-					bulkActionContext.requireEvaluation();
+				if (bulkActionContext != undefined) {
+					if (bulkActionContext.onBulkActionChanged != undefined)
+						bulkActionContext.onBulkActionChanged();
+					if (bulkActionContext.requireEvaluation != undefined)
+						bulkActionContext.requireEvaluation();
+				}
 			};
 
 			defineAPI();
@@ -44,12 +48,10 @@ app.directive('vrWhsSalesBulkactionTypeBed', ['UtilsService', 'VRUIUtilsService'
 
 			api.load = function (payload) {
 
-				var beginEffectiveDate;
-
 				if (payload != undefined) {
 					bulkActionContext = payload.bulkActionContext;
 					if (payload.bulkAction != undefined)
-						beginEffectiveDate = payload.bulkAction.BED;
+						$scope.scopeModel.beginEffectiveDate = payload.bulkAction.BED;
 				}
 			};
 

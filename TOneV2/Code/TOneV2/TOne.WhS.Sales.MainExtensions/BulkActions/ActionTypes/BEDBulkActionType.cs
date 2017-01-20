@@ -19,18 +19,25 @@ namespace TOne.WhS.Sales.MainExtensions
 
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{
-			// The bulk action is applicable to the zone if a new normal rate exists
+			// Check if a new normal rate exists
 			return (context.ZoneDraft != null && context.ZoneDraft.NewRates != null && context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue));
 		}
 
 		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
 		{
-			throw new NotImplementedException();
+			DraftRateToChange newNormalRate = GetZoneNewNormalRate(context.ZoneDraft);
+			newNormalRate.BED = BED;
 		}
 
 		public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
 		{
-			throw new NotImplementedException();
+			DraftRateToChange newNormalRate = GetZoneNewNormalRate(context.ZoneDraft);
+			newNormalRate.BED = BED;
+		}
+
+		private DraftRateToChange GetZoneNewNormalRate(ZoneChanges zoneDraft)
+		{
+			return zoneDraft.NewRates.FindRecord(x => !x.RateTypeId.HasValue);
 		}
 	}
 }
