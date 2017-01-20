@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
@@ -30,6 +31,8 @@ namespace TOne.WhS.Sales.Entities
 		ZoneItem ZoneItem { get; }
 
 		ZoneChanges ZoneDraft { get; set; }
+
+		RPRouteDetail GetRPRouteDetail(long zoneId);
 	}
 
 	public interface IApplyBulkActionToZoneDraftContext
@@ -37,5 +40,7 @@ namespace TOne.WhS.Sales.Entities
 		ZoneChanges ZoneDraft { get; }
 
 		ZoneItem GetZoneItem(long zoneId);
+
+		int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
 	}
 }

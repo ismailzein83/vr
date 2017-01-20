@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
@@ -28,7 +29,8 @@ namespace TOne.WhS.Sales.MainExtensions
 		{
 			if (OverwriteDraftNewNormalRate)
 				return true;
-			return (context.ZoneDraft.NewRates == null || !context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue)); // The zone is applicable if no new normal rate exists
+			// The zone is applicable if no new normal rate exists
+			return (context.ZoneDraft == null || context.ZoneDraft.NewRates == null || !context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue));
 		}
 
 		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
@@ -48,24 +50,75 @@ namespace TOne.WhS.Sales.MainExtensions
 				BED = BED
 			};
 
-			var costCalculationContext = new CostCalculationMethodContext() { Route = null };
-			CostCalculationMethod.CalculateCost(costCalculationContext);
+			decimal? cost = null;
+
+			if (CostCalculationMethod != null)
+			{
+				RPRouteDetail rpRouteDetail = context.GetRPRouteDetail(context.ZoneItem.ZoneId);
+				if (rpRouteDetail != null)
+				{
+					var costCalculationContext = new CostCalculationMethodContext() { Route = rpRouteDetail };
+					CostCalculationMethod.CalculateCost(costCalculationContext);
+				}
+			}
 
 			var rateCalculationContext = new RateCalculationMethodContext()
 			{
-				Cost = 1.5m //Cost = costCalculationContext.Cost
+				Cost = cost
 			};
 			RateCalculationMethod.CalculateRate(rateCalculationContext);
 
 			if (rateCalculationContext.Rate.HasValue)
+			{
 				newNormalRate.Rate = rateCalculationContext.Rate.Value;
-
-			newRates.Add(newNormalRate);
+				newRates.Add(newNormalRate);
+				context.ZoneItem.NewRates = newRates;
+			}
 		}
 
 		public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
 		{
 			ZoneItem zoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
+
+			decimal? cost = null;
+			int? costCalculationMethodIndex = null;
+
+			if (CostCalculationMethod != null)
+				costCalculationMethodIndex = context.GetCostCalculationMethodIndex(CostCalculationMethod.ConfigId);
+
+			if (costCalculationMethodIndex.HasValue)
+			{
+				if (zoneItem.Costs != null)
+					cost = zoneItem.Costs.ElementAt(costCalculationMethodIndex.Value);
+			}
+
+			var rateCalculationContext = new RateCalculationMethodContext()
+			{
+				Cost = cost
+			};
+			RateCalculationMethod.CalculateRate(rateCalculationContext);
+
+			if (rateCalculationContext.Rate.HasValue)
+			{
+				var newRates = new List<DraftRateToChange>();
+
+				if (context.ZoneDraft != null && context.ZoneDraft.NewRates != null)
+				{
+					IEnumerable<DraftRateToChange> newOtherRates = context.ZoneDraft.NewRates.FindAllRecords(x => x.RateTypeId.HasValue);
+					newRates.AddRange(newOtherRates);
+				}
+
+				var newNormalRate = new DraftRateToChange()
+				{
+					ZoneId = zoneItem.ZoneId,
+					RateTypeId = null,
+					Rate = rateCalculationContext.Rate.Value,
+					BED = BED
+				};
+				
+				newRates.Add(newNormalRate);
+				context.ZoneDraft.NewRates = newRates;
+			}
 		}
 	}
 }

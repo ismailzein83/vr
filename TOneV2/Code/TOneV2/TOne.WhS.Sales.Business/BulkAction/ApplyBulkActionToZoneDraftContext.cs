@@ -14,9 +14,12 @@ namespace TOne.WhS.Sales.Business
 
         private Func<IEnumerable<ZoneItem>> _buildZoneItems;
 
-        public ApplyBulkActionToZoneDraftContext(Func<IEnumerable<ZoneItem>> buildZoneItems)
+		private IEnumerable<CostCalculationMethod> _costCalculationMethods;
+
+		public ApplyBulkActionToZoneDraftContext(Func<IEnumerable<ZoneItem>> buildZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods)
         {
             this._buildZoneItems = buildZoneItems;
+			this._costCalculationMethods = costCalculationMethods;
         }
 
         public ZoneChanges ZoneDraft { get; set; }
@@ -40,6 +43,19 @@ namespace TOne.WhS.Sales.Business
                 throw new DataIntegrityValidationException(string.Format("Missing sale zone with Id {0}", zoneId));
             return zoneItem;
         }
+
+		public int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId)
+		{
+			if (_costCalculationMethods != null)
+			{
+				for (int i = 0; i < _costCalculationMethods.Count(); i++)
+				{
+					if (_costCalculationMethods.ElementAt(i).ConfigId.Equals(costCalculationMethodConfigId))
+						return i;
+				}
+			}
+			return null;
+		}
 
 		private void StructureZoneItemsByZoneId(IEnumerable<ZoneItem> zoneItems)
 		{

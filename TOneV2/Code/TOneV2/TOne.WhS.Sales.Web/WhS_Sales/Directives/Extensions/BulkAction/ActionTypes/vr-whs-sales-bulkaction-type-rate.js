@@ -145,10 +145,10 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 
 			api.getData = function () {
 				return {
-					$type: 'TOne.WhS.Sales.MainExtensions.RateBulkActionType, TOne.WhS.Sales.MainExtensions',
+					$type: 'TOne.WhS.Sales.MainExtensions.RateBulkAction, TOne.WhS.Sales.MainExtensions',
 					CostCalculationMethod: $scope.scopeModel.selectedCostCalculationMethod,
-					RateCalculationMethod: $scope.scopeModel.selectedRateCalculationMethod,
-					BED: $scope.scopeModel.beginEffectiveDate,
+					RateCalculationMethod: directiveAPI.getData(),
+					BED: UtilsService.getDateFromDateTime($scope.scopeModel.beginEffectiveDate),
 					OverwriteDraftNewNormalRate: $scope.scopeModel.overwrite
 				};
 			};

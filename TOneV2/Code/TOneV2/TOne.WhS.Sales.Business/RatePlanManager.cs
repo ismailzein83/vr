@@ -141,9 +141,9 @@ namespace TOne.WhS.Sales.Business
 				saleRateManager.ProcessBaseRatesByZone(input.Filter.OwnerId, baseRatesByZone, soldCountries);
 			}
 
-			IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { RoutingProductId = x.EffectiveRoutingProductId.Value, SaleZoneId = x.ZoneId }, x => x.EffectiveRoutingProductId.HasValue);
-			var routeOptionManager = new ZoneRouteOptionManager(input.Filter.OwnerType, input.Filter.OwnerId, input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.CostCalculationMethodConfigId, input.Filter.RateCalculationMethod, input.CurrencyId);
-			routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
+			//IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { RoutingProductId = x.EffectiveRoutingProductId.Value, SaleZoneId = x.ZoneId }, x => x.EffectiveRoutingProductId.HasValue);
+			//var routeOptionManager = new ZoneRouteOptionManager(input.Filter.OwnerType, input.Filter.OwnerId, input.Filter.RoutingDatabaseId, input.Filter.PolicyConfigId, input.Filter.NumberOfOptions, rpZones, input.Filter.CostCalculationMethods, input.Filter.CostCalculationMethodConfigId, input.Filter.RateCalculationMethod, input.CurrencyId);
+			//routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
 
 			return zoneItems;
 		}
@@ -268,7 +268,9 @@ namespace TOne.WhS.Sales.Business
 					SaleZoneId = zoneItem.ZoneId
 				});
 			}
-			var routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod, input.CurrencyId);
+
+			IEnumerable<RPRouteDetail> rpRouteDetails = new RPRouteManager().GetRPRoutes(input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones);
+			var routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpRouteDetails, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod, input.CurrencyId);
 			routeOptionManager.SetZoneRouteOptionProperties(new List<ZoneItem>() { zoneItem });
 
 			return zoneItem;
@@ -476,7 +478,7 @@ namespace TOne.WhS.Sales.Business
 			};
 
 			IEnumerable<SaleZone> filteredSaleZones = saleZones.FindAllRecords(filterFunc);
-			
+
 			IEnumerable<ZoneChanges> existingZoneDrafts = new List<ZoneChanges>();
 			if (draft != null && draft.ZoneChanges != null)
 				existingZoneDrafts = draft.ZoneChanges.FindAllRecords(x => applicableZoneIds.Contains(x.ZoneId));
@@ -486,7 +488,7 @@ namespace TOne.WhS.Sales.Business
 				var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
 				return BuildZoneItems(filteredSaleZones, input.OwnerType, input.OwnerId, input.CurrencyId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, null, draft, input.EffectiveOn, rateLocator);
 			};
-			var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems);
+			var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods);
 
 			var newDraft = new Changes();
 			newDraft.CurrencyId = input.CurrencyId;
@@ -531,6 +533,49 @@ namespace TOne.WhS.Sales.Business
 			if (sellingProductId == null)
 				throw new Exception("Selling product does not exist");
 
+			Dictionary<long, RPRouteDetail> rpRouteDetailsByZone = null;
+			var ratePlanRPLocator = new SaleEntityZoneRoutingProductLocator(new RatePlanRPReadWithCache(ownerType, ownerId, effectiveOn, draft));
+
+			Func<Dictionary<long, RPRouteDetail>> getRPRouteDetails = () =>
+			{
+				if (rpRouteDetailsByZone == null)
+				{
+					rpRouteDetailsByZone = new Dictionary<long, RPRouteDetail>();
+					var rpZones = new List<RPZone>();
+
+					foreach (SaleZone saleZone in saleZones)
+					{
+						SaleEntityZoneRoutingProduct effectiveRP;
+
+						if (ownerType == SalePriceListOwnerType.SellingProduct)
+							effectiveRP = ratePlanRPLocator.GetSellingProductZoneRoutingProduct(ownerId, saleZone.SaleZoneId);
+						else
+							effectiveRP = ratePlanRPLocator.GetCustomerZoneRoutingProduct(ownerId, sellingProductId.Value, saleZone.SaleZoneId);
+
+						if (effectiveRP != null)
+							rpZones.Add(new RPZone() { RoutingProductId = effectiveRP.RoutingProductId, SaleZoneId = saleZone.SaleZoneId });
+					}
+
+					if (rpZones.Count > 0)
+					{
+						int? customerId = null;
+						if (ownerType == SalePriceListOwnerType.Customer)
+							customerId = ownerId;
+
+						var rpRouteManager = new RPRouteManager();
+						IEnumerable<RPRouteDetail> rpRouteDetails = rpRouteManager.GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId, customerId);
+
+						foreach (RPRouteDetail rpRouteDetail in rpRouteDetails)
+						{
+							if (rpRouteDetailsByZone.ContainsKey(rpRouteDetail.SaleZoneId))
+								rpRouteDetailsByZone.Add(rpRouteDetail.SaleZoneId, rpRouteDetail);
+						}
+					}
+				}
+
+				return rpRouteDetailsByZone;
+			};
+
 			var rateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, effectiveOn, draft, currencyId, rateLocator);
 			var rpManager = new ZoneRPManager(ownerType, ownerId, effectiveOn, draft);
 
@@ -552,7 +597,7 @@ namespace TOne.WhS.Sales.Business
 
 				if (bulkAction != null)
 				{
-					var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext()
+					var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext(getRPRouteDetails)
 					{
 						ZoneItem = zoneItem,
 						ZoneDraft = zoneDraft
@@ -586,8 +631,10 @@ namespace TOne.WhS.Sales.Business
 				saleRateManager.ProcessBaseRatesByZone(ownerId, baseRatesByZone, soldCountries);
 			}
 
-			IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { RoutingProductId = x.EffectiveRoutingProductId.Value, SaleZoneId = x.ZoneId }, x => x.EffectiveRoutingProductId.HasValue);
-			var routeOptionManager = new ZoneRouteOptionManager(ownerType, ownerId, routingDatabaseId, policyConfigId, numberOfOptions, rpZones, costCalculationMethods, null, null, currencyId);
+			if (rpRouteDetailsByZone == null)
+				rpRouteDetailsByZone = getRPRouteDetails();
+
+			var routeOptionManager = new ZoneRouteOptionManager(ownerType, ownerId, routingDatabaseId, policyConfigId, numberOfOptions, rpRouteDetailsByZone.Values, costCalculationMethods, null, null, currencyId);
 			routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
 
 			return zoneItems;

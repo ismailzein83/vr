@@ -57,8 +57,11 @@
 			};
 
 			$scope.scopeModel.evaluate = function () {
+
 				$scope.scopeModel.showPreview = true;
 				$scope.scopeModel.isApplyButtonDisabled = false;
+
+				var loadGridDeferred = UtilsService.createPromiseDeferred();
 
 				gridReadyDeferred.promise.then(function () {
 
@@ -73,8 +76,14 @@
 					if (filterStepData != undefined)
 						gridQuery.Filter.BulkActionFilter = filterStepData.zoneFilter;
 
-					return gridAPI.load(gridQuery);
+					gridAPI.load(gridQuery).then(function () {
+						loadGridDeferred.resolve();
+					}).catch(function (error) {
+						loadGridDeferred.reject(error);
+					});
 				});
+
+				return loadGridDeferred.promise;
 			};
 
 			$scope.scopeModel.apply = function () {
