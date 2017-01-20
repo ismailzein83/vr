@@ -150,7 +150,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 CustomerCDPN = customerCDPN,
                 SupplierCDPN = supplierCDPN,
-                OutputCDPN = outputCDPN,
+                OutputCDPN = outputCDPN
             };
         }
 
@@ -183,11 +183,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = new Dictionary<SwitchCDPN, CDPNIdentification>();
                     if (switchCDRMappingConfiguration != null)
                     {
-                        mappingResults.Add(SwitchCDPN.CDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.GeneralIdentification, configManager.GetGeneralCDPNIndentification()));
-                        mappingResults.Add(SwitchCDPN.CustomerCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.CustomerIdentification, configManager.GetCustomerCDPNIndentification()));
-                        mappingResults.Add(SwitchCDPN.SupplierCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SupplierIdentification, configManager.GetSupplierCDPNIndentification()));
-                        mappingResults.Add(SwitchCDPN.SaleZoneCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SaleZoneIdentification, configManager.GetSaleZoneCDPNIndentification()));
-                        mappingResults.Add(SwitchCDPN.SupplierZoneCDPN, _GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SupplierZoneIdentification, configManager.GetSupplierZoneCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.CDPN, GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.GeneralIdentification, configManager.GetGeneralCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.CustomerCDPN, GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.CustomerIdentification, configManager.GetCustomerCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SupplierCDPN, GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SupplierIdentification, configManager.GetSupplierCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SaleZoneCDPN, GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SaleZoneIdentification, configManager.GetSaleZoneCDPNIndentification()));
+                        mappingResults.Add(SwitchCDPN.SupplierZoneCDPN, GetCorrespondingCDPNIdentification(switchCDRMappingConfiguration.SupplierZoneIdentification, configManager.GetSupplierZoneCDPNIndentification()));
                     }
                     else
                     {
@@ -254,7 +254,7 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
-        private CDPNIdentification _GetCorrespondingCDPNIdentification(CDPNIdentification? switchCDPNIdentification, CDPNIdentification defaultCDPNIdentification)
+        private CDPNIdentification GetCorrespondingCDPNIdentification(CDPNIdentification? switchCDPNIdentification, CDPNIdentification defaultCDPNIdentification)
         {
             if (switchCDPNIdentification != null && switchCDPNIdentification.HasValue)
                 return switchCDPNIdentification.Value;
