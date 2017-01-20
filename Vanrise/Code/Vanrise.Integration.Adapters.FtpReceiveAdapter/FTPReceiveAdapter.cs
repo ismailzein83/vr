@@ -4,6 +4,7 @@ using System.IO;
 using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
@@ -39,7 +40,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 base.LogInformation("{0} files are ready to be imported", currentItems.Count);
                 if (currentItems.Count > 0)
                 {
-                    foreach (var fileObj in currentItems)
+                    DateTime maxFileModifiedTime = ftpAdapterState.LastRetrievedFileTime;
+                    foreach (var fileObj in currentItems.OrderBy(c => c.Modified))
                     {
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
@@ -48,9 +50,11 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                             String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
                             CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath);
                             AfterImport(ftp, fileObj, filePath, ftpAdapterArgument);
-                            ftpAdapterState = GetAdapterState(context, ftpAdapterArgument, fileObj.Modified);
+                            maxFileModifiedTime = fileObj.Modified;
+
                         }
                     }
+                    ftpAdapterState = GetAdapterState(context, ftpAdapterArgument, maxFileModifiedTime);
                 }
                 CloseConnection(ftp);
             }

@@ -38,7 +38,7 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                     if (currentItems.Count > 0)
                     {
                         DateTime maxFileModifiedTime = state.LastRetrievedFileTime;
-                        foreach (var fileObj in currentItems)
+                        foreach (var fileObj in currentItems.OrderBy(c => c.Modified))
                         {
 
                             if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
