@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService) {
 	return {
 		restrict: "E",
 		scope: {
@@ -38,8 +38,7 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['UtilsService', 'VRUIUt
 			};
 
 			$scope.scopeModel.onRoutingProductSelected = function (selectedRoutingProduct) {
-				if (bulkActionContext != undefined && bulkActionContext.requireEvaluation != undefined)
-					bulkActionContext.requireEvaluation();
+				WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
 			};
 		}
 
@@ -60,9 +59,13 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['UtilsService', 'VRUIUt
 				function loadRoutingProductSelector() {
 					var routingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 					var routingProductSelectorPayload = {
-						filter: null,
+						filter: {},
 						selectedIds: routingProductId
 					};
+					if (bulkActionContext != undefined) {
+						routingProductSelectorPayload.filter.AssignableToOwnerType = bulkActionContext.ownerType;
+						routingProductSelectorPayload.filter.AssignableToOwnerId = bulkActionContext.ownerId;
+					}
 					VRUIUtilsService.callDirectiveLoad(routingProductSelectorAPI, routingProductSelectorPayload, routingProductSelectorLoadDeferred);
 					return routingProductSelectorLoadDeferred.promise;
 				}

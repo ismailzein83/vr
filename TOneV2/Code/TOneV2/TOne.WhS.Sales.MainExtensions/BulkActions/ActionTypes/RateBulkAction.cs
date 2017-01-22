@@ -51,15 +51,18 @@ namespace TOne.WhS.Sales.MainExtensions
 			};
 
 			decimal? cost = null;
+			int? costCalculationMethodIndex = null;
 
 			if (CostCalculationMethod != null)
+				costCalculationMethodIndex = context.GetCostCalculationMethodIndex(CostCalculationMethod.ConfigId);
+
+			if (costCalculationMethodIndex.HasValue)
 			{
-				RPRouteDetail rpRouteDetail = context.GetRPRouteDetail(context.ZoneItem.ZoneId);
-				if (rpRouteDetail != null)
-				{
-					var costCalculationContext = new CostCalculationMethodContext() { Route = rpRouteDetail };
-					CostCalculationMethod.CalculateCost(costCalculationContext);
-				}
+				ZoneItem zoneItem = context.GetContextZoneItem(context.ZoneItem.ZoneId);
+				if (zoneItem == null)
+					throw new Vanrise.Entities.DataIntegrityValidationException("zoneItem");
+				if (zoneItem.Costs != null)
+					cost = zoneItem.Costs.ElementAt(costCalculationMethodIndex.Value);
 			}
 
 			var rateCalculationContext = new RateCalculationMethodContext()
@@ -70,7 +73,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
 			if (rateCalculationContext.Rate.HasValue)
 			{
-				newNormalRate.Rate = rateCalculationContext.Rate.Value;
+				newNormalRate.Rate = GetRoundedRate(rateCalculationContext.Rate.Value);
 				newRates.Add(newNormalRate);
 				context.ZoneItem.NewRates = newRates;
 			}
@@ -112,13 +115,18 @@ namespace TOne.WhS.Sales.MainExtensions
 				{
 					ZoneId = zoneItem.ZoneId,
 					RateTypeId = null,
-					Rate = rateCalculationContext.Rate.Value,
+					Rate = GetRoundedRate(rateCalculationContext.Rate.Value),
 					BED = BED
 				};
-				
+
 				newRates.Add(newNormalRate);
 				context.ZoneDraft.NewRates = newRates;
 			}
+		}
+
+		private decimal GetRoundedRate(decimal rate)
+		{
+			return decimal.Round(rate, 4);
 		}
 	}
 }

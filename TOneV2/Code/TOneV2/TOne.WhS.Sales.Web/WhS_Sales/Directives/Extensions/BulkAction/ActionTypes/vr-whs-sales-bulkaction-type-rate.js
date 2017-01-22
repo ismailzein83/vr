@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_RatePlanAPIService, WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService) {
 	return {
 		restrict: "E",
 		scope: {
@@ -55,16 +55,17 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 
 			$scope.scopeModel.onDirectiveReady = function (api) {
 				directiveAPI = api;
-				var directivePayload = undefined;
+				var directivePayload = {
+					bulkActionContext: bulkActionContext
+				};
 				var setLoader = function (value) {
 					$scope.scopeModel.isLoadingDirective = value;
 				};
 				VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
 			};
 
-			$scope.scopeModel.requireEvaluation = function () {
-				if (bulkActionContext != undefined && bulkActionContext.requireEvaluation != undefined)
-					bulkActionContext.requireEvaluation();
+			$scope.scopeModel.onBulkActionChanged = function () {
+				WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
 			};
 
 			UtilsService.waitMultiplePromises([costCalculationMethodSelectorReadyDeferred.promise, rateCalculationMethodSelectorReadyDeferred.promise]).then(function () {
@@ -132,7 +133,10 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 					var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 					directiveReadyDeferred.promise.then(function () {
 						directiveReadyDeferred = undefined;
-						var directivePayload = rateCalculationMethod;
+						var directivePayload = {
+							rateCalculationMethod: rateCalculationMethod,
+							bulkActionContext: bulkActionContext
+						};
 						VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
 					});
 					return directiveLoadDeferred.promise;
@@ -147,7 +151,7 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 				return {
 					$type: 'TOne.WhS.Sales.MainExtensions.RateBulkAction, TOne.WhS.Sales.MainExtensions',
 					CostCalculationMethod: $scope.scopeModel.selectedCostCalculationMethod,
-					RateCalculationMethod: directiveAPI.getData(),
+					RateCalculationMethod: (directiveAPI != undefined) ? directiveAPI.getData() : null,
 					BED: UtilsService.getDateFromDateTime($scope.scopeModel.beginEffectiveDate),
 					OverwriteDraftNewNormalRate: $scope.scopeModel.overwrite
 				};

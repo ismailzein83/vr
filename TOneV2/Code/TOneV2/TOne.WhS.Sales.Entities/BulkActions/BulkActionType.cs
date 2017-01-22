@@ -32,7 +32,9 @@ namespace TOne.WhS.Sales.Entities
 
 		ZoneChanges ZoneDraft { get; set; }
 
-		RPRouteDetail GetRPRouteDetail(long zoneId);
+		ZoneItem GetContextZoneItem(long zoneId);
+
+		int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
 	}
 
 	public interface IApplyBulkActionToZoneDraftContext

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeEed', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionTypeEed', ['WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService) {
 	return {
 		restrict: "E",
 		scope: {
@@ -31,8 +31,7 @@ app.directive('vrWhsSalesBulkactionTypeEed', ['UtilsService', 'VRUIUtilsService'
 			$scope.scopeModel = {};
 
 			$scope.scopeModel.onEEDChanged = function () {
-				if (bulkActionContext != undefined && bulkActionContext.requireEvaluation != undefined)
-					bulkActionContext.requireEvaluation();
+				WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
 			};
 
 			defineAPI();

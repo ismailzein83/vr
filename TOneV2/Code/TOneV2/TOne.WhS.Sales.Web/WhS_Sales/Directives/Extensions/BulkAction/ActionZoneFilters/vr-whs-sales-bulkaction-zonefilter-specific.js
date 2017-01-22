@@ -57,8 +57,7 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 					bulkActionContext = payload.bulkActionContext;
 				}
 
-				if (bulkActionContext != undefined)
-					extendBulkActionContext();
+				extendBulkActionContext();
 
 				return loadSaleZoneSelector();
 
@@ -114,12 +113,11 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 		function extendBulkActionContext() {
 			if (bulkActionContext == undefined)
 				return;
-
 			bulkActionContext.onBulkActionChanged = function () {
 				var bulkAction;
 				if (bulkActionContext.getSelectedBulkAction != undefined)
 					bulkAction = bulkActionContext.getSelectedBulkAction();
-				
+
 				applicableSaleZoneFilter.ActionType = bulkAction;
 				var selectorPayload = {
 					sellingNumberPlanId: bulkActionContext.ownerSellingNumberPlanId,

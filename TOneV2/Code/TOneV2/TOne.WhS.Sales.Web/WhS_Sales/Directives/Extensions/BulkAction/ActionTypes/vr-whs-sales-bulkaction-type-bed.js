@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeBed', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionTypeBed', ['WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService) {
 	return {
 		restrict: "E",
 		scope: {
@@ -31,12 +31,7 @@ app.directive('vrWhsSalesBulkactionTypeBed', ['UtilsService', 'VRUIUtilsService'
 			$scope.scopeModel = {};
 
 			$scope.scopeModel.onBEDChanged = function () {
-				if (bulkActionContext != undefined) {
-					if (bulkActionContext.onBulkActionChanged != undefined)
-						bulkActionContext.onBulkActionChanged();
-					if (bulkActionContext.requireEvaluation != undefined)
-						bulkActionContext.requireEvaluation();
-				}
+				WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
 			};
 
 			defineAPI();

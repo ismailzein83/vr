@@ -1,6 +1,6 @@
 ﻿<vr-row>
 	<vr-columns colnum="{{selectiveCtrl.normalColNum}}">
-		<vr-select label="Zone Filter Type"
+		<vr-select label="Apply To"
 				   on-ready="scopeModel.onSelectorReady"
 				   datasource="scopeModel.extensionConfigs"
 				   selectedvalues="scopeModel.selectedExtensionConfig"
@@ -13,10 +13,12 @@
 	</vr-columns>
 </vr-row>
 <span vr-loader="scopeModel.isLoadingDirective">
-	<vr-directivewrapper ng-if="scopeModel.selectedExtensionConfig != undefined"
-						 directive="scopeModel.selectedExtensionConfig.Editor"
-						 on-ready="scopeModel.onDirectiveReady"
-						 normal-col-num="{{selectiveCtrl.normalColNum}}"
-						 isrequired="selectiveCtrl.isrequired">
-	</vr-directivewrapper>
+	<vr-row removeline>
+		<vr-directivewrapper ng-if="scopeModel.selectedExtensionConfig != undefined"
+							 directive="scopeModel.selectedExtensionConfig.Editor"
+							 on-ready="scopeModel.onDirectiveReady"
+							 normal-col-num="{{selectiveCtrl.normalColNum}}"
+							 isrequired="selectiveCtrl.isrequired">
+		</vr-directivewrapper>
+	</vr-row>
 </span>

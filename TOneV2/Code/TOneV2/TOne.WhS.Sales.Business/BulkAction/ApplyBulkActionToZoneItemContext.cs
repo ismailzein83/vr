@@ -13,21 +13,37 @@ namespace TOne.WhS.Sales.Business
 {
 	public class ApplyBulkActionToZoneItemContext : IApplyBulkActionToZoneItemContext
 	{
-		private Func<Dictionary<long, RPRouteDetail>> _getRPRouteDetails;
+		private Func<Dictionary<long, ZoneItem>> _getContextZoneItems;
 
-		public ApplyBulkActionToZoneItemContext(Func<Dictionary<long, RPRouteDetail>> getRPRouteDetails)
+		private IEnumerable<CostCalculationMethod> _costCalculationMethods;
+
+		public ApplyBulkActionToZoneItemContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods)
 		{
-			this._getRPRouteDetails = getRPRouteDetails;
+			_getContextZoneItems = getContextZoneItems;
+			_costCalculationMethods = costCalculationMethods;
 		}
 
 		public ZoneItem ZoneItem { get; set; }
 
 		public ZoneChanges ZoneDraft { get; set; }
 
-		public RPRouteDetail GetRPRouteDetail(long zoneId)
+		public ZoneItem GetContextZoneItem(long zoneId)
 		{
-			Dictionary<long, RPRouteDetail> rpRouteDetailsByZone = this._getRPRouteDetails();
-			return (rpRouteDetailsByZone != null) ? rpRouteDetailsByZone.GetRecord(zoneId) : null;
+			Dictionary<long, ZoneItem> zoneItemsByZone = _getContextZoneItems();
+			return (zoneItemsByZone != null) ? zoneItemsByZone.GetRecord(zoneId) : null;
+		}
+
+		public int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId)
+		{
+			if (_costCalculationMethods != null)
+			{
+				for (int i = 0; i < _costCalculationMethods.Count(); i++)
+				{
+					if (_costCalculationMethods.ElementAt(i).ConfigId.Equals(costCalculationMethodConfigId))
+						return i;
+				}
+			}
+			return null;
 		}
 	}
 }

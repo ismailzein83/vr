@@ -1,11 +1,12 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesFixedratecalculation", [function () {
+app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsService', function (WhS_Sales_BulkActionUtilsService) {
 
     return {
         restrict: "E",
         scope: {
-            onReady: "="
+        	onReady: "=",
+        	isrequired: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -18,20 +19,34 @@ app.directive("vrWhsSalesFixedratecalculation", [function () {
     };
 
     function FixedRateCalculation(ctrl, $scope) {
-        this.initializeController = initializeController;
+        
+    	this.initializeController = initializeController;
 
-        ctrl.fixedRate;
+    	var bulkActionContext;
 
         function initializeController() {
-            defineAPI();
+
+        	ctrl.onFixedRateChanged = function () {
+        		WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
+        	};
+
+        	defineAPI();
         }
 
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
+
+            	var rateCalculationMethod;
+
                 if (payload != undefined) {
-                    ctrl.fixedRate = payload.FixedRate;
+                	rateCalculationMethod = payload.rateCalculationMethod;
+                	bulkActionContext = payload.bulkActionContext;
+                }
+
+                if (rateCalculationMethod != undefined) {
+                	ctrl.fixedRate = rateCalculationMethod.FixedRate;
                 }
             };
 

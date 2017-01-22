@@ -239,6 +239,7 @@
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanPreviewAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\SellingRuleAPIService.js" />
+    <Content Include="WhS_Sales\Services\BulkActionUtilsService.js" />
     <Content Include="WhS_Sales\Services\RatePlanUtilsService.js" />
     <Content Include="WhS_Sales\Services\RatePlanService.js" />
     <Content Include="WhS_Sales\Services\SellingRuleService.js" />

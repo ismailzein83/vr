@@ -276,13 +276,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 					{
 						OwnerType: gridQuery.OwnerType,
 						OwnerId: gridQuery.OwnerId,
-						EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+						EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+						BulkAction: gridQuery.BulkAction
 					};
 
 					if (gridQuery.Filter != null) {
 						getZoneLettersInput.CountryIds = gridQuery.Filter.CountryIds;
 						getZoneLettersInput.ZoneNameFilterType = gridQuery.Filter.TextFilterType;
 						getZoneLettersInput.ZoneNameFilter = gridQuery.Filter.Text;
+						getZoneLettersInput.BulkActionFilter = gridQuery.Filter.BulkActionFilter;
 					}
 
 					return WhS_Sales_RatePlanAPIService.GetZoneLetters(getZoneLettersInput).then(function (response) {

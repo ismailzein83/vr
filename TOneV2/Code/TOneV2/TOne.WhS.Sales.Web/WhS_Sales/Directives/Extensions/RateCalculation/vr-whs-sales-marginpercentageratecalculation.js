@@ -1,11 +1,12 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesMarginpercentageratecalculation", [function () {
+app.directive("vrWhsSalesMarginpercentageratecalculation", ['WhS_Sales_BulkActionUtilsService', function (WhS_Sales_BulkActionUtilsService) {
 
     return {
         restrict: "E",
         scope: {
-            onReady: "="
+        	onReady: "=",
+			isrequired: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -18,21 +19,35 @@ app.directive("vrWhsSalesMarginpercentageratecalculation", [function () {
     };
 
     function MarginPercentageRateCalculation(ctrl, $scope) {
-        this.initializeController = initializeController;
 
-        ctrl.marginPercentage;
+    	this.initializeController = initializeController;
+
+    	var bulkActionContext;
 
         function initializeController() {
-            defineAPI();
+
+        	ctrl.onMarginPercentageChanged = function () {
+        		WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
+        	};
+
+        	defineAPI();
         }
 
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
-                if (payload != undefined) {
-                    ctrl.marginPercentage = payload.MarginPercentage;
-                }
+
+            	var rateCalculationMethod;
+
+            	if (payload != undefined) {
+            		rateCalculationMethod = payload.rateCalculationMethod;
+            		bulkActionContext = payload.bulkActionContext;
+            	}
+
+            	if (rateCalculationMethod != undefined) {
+            		ctrl.marginPercentage = rateCalculationMethod.MarginPercentage;
+            	}
             };
 
             api.getData = function () {
