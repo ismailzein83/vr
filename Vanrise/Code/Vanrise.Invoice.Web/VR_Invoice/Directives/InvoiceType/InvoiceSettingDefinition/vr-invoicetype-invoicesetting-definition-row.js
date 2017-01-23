@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrInvoicetypeInvoicesettingDefinitionRow', ['UtilsService', 'VRUIUtilsService','VR_Invoice_InvoiceTypeService',
-    function (UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeService) {
+app.directive('vrInvoicetypeInvoicesettingDefinitionRow', ['UtilsService', 'VRUIUtilsService','VR_Invoice_InvoiceTypeService','VR_Invoice_InvoiceTypeConfigsAPIService',
+    function (UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeService, VR_Invoice_InvoiceTypeConfigsAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -34,6 +34,7 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionRow', ['UtilsService', 'VRUI
         function RowCtor(ctrl, $scope) {
             var gridAPI;
             var context;
+            var invoiceSettingPartsConfigs;
             function initializeController() {
                 ctrl.parts = [];
                 $scope.onGridReady = function (api) {
@@ -55,25 +56,29 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionRow', ['UtilsService', 'VRUI
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        context = payload.context;
-                        if (payload.parts != undefined)
-                        {
-                            ctrl.parts.length = 0;
-                            for (var i = 0; i < payload.parts.length; i++) {
-                                var part = payload.parts[i];
-                                ctrl.parts.push({ Entity: part });
+                   return getInvoiceSettingPartsConfigs().then(function () {
+                        if (payload != undefined) {
+                            context = payload.context;
+                            if (payload.parts != undefined) {
+                                ctrl.parts.length = 0;
+                                for (var i = 0; i < payload.parts.length; i++) {
+                                    var part = payload.parts[i];
+                                    var partConfig = UtilsService.getItemByVal(invoiceSettingPartsConfigs,part.PartConfigId,"ExtensionConfigurationId");
+                                    ctrl.parts.push({ Entity: part, partName: partConfig!=undefined?partConfig.Title:undefined });
+                                }
                             }
+
                         }
-                        
-                    }
+                    })
+                    
                 };
 
                 api.applyChanges = function (changes) {
                     if (changes != undefined) {
                         if (ctrl.parts == undefined)
                             ctrl.parts = [];
-                        ctrl.parts.push({ Entity: changes });
+                        var partConfig = UtilsService.getItemByVal(invoiceSettingPartsConfigs, changes.PartConfigId, "ExtensionConfigurationId");
+                        ctrl.parts.push({ Entity: changes, partName: partConfig != undefined ? partConfig.Title : undefined });
                     }
                 };
 
@@ -105,7 +110,12 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionRow', ['UtilsService', 'VRUI
                 };
                 VR_Invoice_InvoiceTypeService.editInvoiceSettingPart(onPartUpdated, dataItem.Entity);
             }
-
+            function getInvoiceSettingPartsConfigs()
+            {
+               return VR_Invoice_InvoiceTypeConfigsAPIService.GetInvoiceSettingPartsConfigs().then(function (response) {
+                   invoiceSettingPartsConfigs = response;
+                });
+            }
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

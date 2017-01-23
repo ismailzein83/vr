@@ -132,7 +132,6 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionSection', ['UtilsService', '
                     clicked: addPart,
                 }];
             }
-
             function addPart(dataItem){
                 var onRowAdded = function (part) {
                     dataItem.Entity.rowAPI.applyChanges(part);
