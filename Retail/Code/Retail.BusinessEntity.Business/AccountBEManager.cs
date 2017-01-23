@@ -243,7 +243,10 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(String.Format("account '{0}'", accountId));
 
             if (account.Settings == null)
-                throw new NullReferenceException(String.Format("account.Settings '{0}'", accountId));
+            {
+                accountPayment = null; 
+                return false;
+            }
 
             if (account.Settings.Parts != null)
             {
@@ -269,7 +272,10 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(String.Format("account '{0}'", accountId));
 
             if (account.Settings == null)
-                throw new NullReferenceException(String.Format("account.Settings '{0}'", accountId));
+            {
+                accountProfile = null;
+                return false;
+            }
 
             if (account.Settings.Parts != null)
             {
@@ -548,7 +554,7 @@ namespace Retail.BusinessEntity.Business
             if (account == null)
                 throw new NullReferenceException("account");
             if (account.Settings == null)
-                throw new NullReferenceException("account.Settings");
+                return false;
 
             if (account.Settings.Parts == null)
                 return false;
