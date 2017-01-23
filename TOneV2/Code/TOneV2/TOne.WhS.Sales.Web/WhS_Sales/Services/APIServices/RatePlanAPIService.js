@@ -40,11 +40,7 @@
         		customerId: customerId
         	});
         }
-
-        function GetTQIMethods() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetTQIMethods"));
-        }
-
+       
         function GetCostCalculationMethodTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCostCalculationMethodTemplates"));
         }
@@ -128,6 +124,18 @@
         	return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredSoldCountries"), input);
         }
 
+        function GetTQIMethods() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetTQIMethods"));
+        }
+
+        function GetTQIEvaluatedRate(evaluatedRateInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetTQIEvaluatedRate"), evaluatedRateInput);
+        }
+
+        function GetTQISuppliersInfo(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetTQISuppliersInfo"), input);
+        }
+
         return {
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
@@ -152,7 +160,9 @@
             GetCustomerDefaultInheritedService: GetCustomerDefaultInheritedService,
             GetZoneInheritedService: GetZoneInheritedService,
             GetFilteredSoldCountries: GetFilteredSoldCountries,
-            GetTQIMethods: GetTQIMethods
+            GetTQIMethods: GetTQIMethods,
+            GetTQIEvaluatedRate: GetTQIEvaluatedRate,
+            GetTQISuppliersInfo: GetTQISuppliersInfo
         };
 
     }

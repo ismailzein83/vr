@@ -625,7 +625,8 @@
 				NumberOfOptions: $scope.numberOfOptions,
 				CostCalculationMethods: getCostCalculationMethods(),
 				BulkAction: null,
-				EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+				EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+				OwnerName: getOwnerName()
 			};
 
 			if (shouldSetFilter === true) {
@@ -887,6 +888,18 @@
 
 			return ownerId;
 		}
+
+		function getOwnerName() {
+		    var ownerName = null;
+
+		    if ($scope.showSellingProductSelector)
+		        ownerName = $scope.selectedSellingProduct.Name;
+		    else if ($scope.showCarrierAccountSelector)
+		        ownerName = $scope.selectedCustomer.Name;
+
+		    return ownerName;
+		}
+
 		function getOwnerSellingNumberPlanId() {
 			var ownerType = ownerTypeSelectorAPI.getSelectedIds();
 			if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {

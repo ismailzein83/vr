@@ -62,9 +62,9 @@
 			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanPricingSettings.html", parameters, modalSettings);
 		}
 
-		function openTQIEditor(rpRouteDetail, onTQIEvaluated) {
+		function openTQIEditor(context, onTQIEvaluated) {
 		    var parameters = {
-		        RPRouteDetail: rpRouteDetail
+		        context: context
 		    };
 
 		    var settings = {};

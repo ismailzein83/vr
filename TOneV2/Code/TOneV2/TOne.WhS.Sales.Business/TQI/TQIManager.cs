@@ -3,10 +3,147 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.Routing.Entities;
+using TOne.WhS.Sales.Entities;
+using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
+using Vanrise.Entities;
+using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
     public class TQIManager
     {
+        private CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+
+        private Dictionary<int, decimal> _ratesBySupplier = new Dictionary<int, decimal>();
+        public TQIEvaluatedRate Evaluate(TQIMethod tqiMethod, RPRouteDetail rpRouteDetail)
+        {
+            var context = new TQIMethodContext() { Route = rpRouteDetail };
+            tqiMethod.CalculateRate(context);
+            return new TQIEvaluatedRate() { EvaluatedRate = context.Rate };
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<TQISuppplierInfo> GetTQISuppliersInfo(Vanrise.Entities.DataRetrievalInput<TQISupplierInfoQuery> input)
+        {
+            if (input.Query.RPRouteDetail == null)
+                return null;
+
+            StructureRatesBySupplier(input.Query.RPRouteDetail);
+            AnalyticManager analyticManager = new AnalyticManager();
+            List<string> listMeasures = new List<string> { "DurationInMinutes", "ACD", "ASR", "NER" };
+            List<string> listDimensions = new List<string> { "Supplier", "SaleZone" };
+            string supplierDimensionFilterName = "Supplier";
+            string saleZoneDimensionFilterName = "SaleZone";
+            DateTime fromDate = DateTime.Today.AddDays(-1000);
+            DateTime toDate = DateTime.Today;
+            IEnumerable<int> supplierIds = input.Query.RPRouteDetail.RouteOptionsDetails.Select(item => item.Entity.SupplierId);
+
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, supplierIds, saleZoneDimensionFilterName, input.Query.RPRouteDetail.SaleZoneId, fromDate, toDate);
+            if (analyticResult == null || analyticResult.Data == null)
+                return null;
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, analyticResult.Data.ToBigResult(input, null, TQISupplierInfoMapper));
+        }
+
+        private void StructureRatesBySupplier(RPRouteDetail rpRouteDetail)
+        {
+            if (rpRouteDetail != null && rpRouteDetail.RouteOptionsDetails != null)
+            {
+                foreach (RPRouteOptionDetail route in rpRouteDetail.RouteOptionsDetails)
+                {
+                    if (!_ratesBySupplier.ContainsKey(route.Entity.SupplierId))
+                        _ratesBySupplier.Add(route.Entity.SupplierId, route.ConvertedSupplierRate);
+                }
+            }
+        }
+
+
+        #region Private Methods
+
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string firstDimensionFilterName, object firstDimensionFilterValue,
+        string secondDimensionFilterName, object secondDimensionFilterValue, DateTime fromDate, DateTime toDate)
+        {
+            AnalyticManager analyticManager = new AnalyticManager();
+            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            {
+                Query = new AnalyticQuery()
+                {
+                    DimensionFields = listDimensions,
+                    MeasureFields = listMeasures,
+                    TableId = 4,
+                    FromTime = fromDate,
+                    ToTime = toDate,
+                    ParentDimensions = new List<string>(),
+                    Filters = new List<DimensionFilter>()
+                },
+                SortByColumnName = "DimensionValues[0].Name"
+            };
+
+            List<object> firstDimensionFilterValues = new List<object>();
+            foreach (int supplierId in firstDimensionFilterValue as IEnumerable<int>)
+            {
+                firstDimensionFilterValues.Add(supplierId);
+            }
+            DimensionFilter dimensionFilter = new DimensionFilter()
+            {
+                Dimension = firstDimensionFilterName,
+                FilterValues = firstDimensionFilterValues
+
+            };
+
+            DimensionFilter secondDimensionFilter = new DimensionFilter()
+            {
+                Dimension = secondDimensionFilterName,
+                FilterValues = new List<object> { secondDimensionFilterValue }
+            };
+            analyticQuery.Query.Filters.Add(dimensionFilter);
+            analyticQuery.Query.Filters.Add(secondDimensionFilter);
+
+            return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+        }
+
+        private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
+        {
+            MeasureValue measureValue;
+            analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
+            return measureValue;
+        }
+
+
+        TQISuppplierInfo TQISupplierInfoMapper(AnalyticRecord analyticRecord)
+        {
+            DimensionValue supplierDimension = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+            int supplierId = Convert.ToInt16(supplierDimension.Value);
+
+            MeasureValue durationInMinutesMeasure = GetMeasureValue(analyticRecord, "DurationInMinutes");
+            decimal durationInMinutes = Convert.ToDecimal(durationInMinutesMeasure.Value ?? 0.0);
+
+            MeasureValue acdMeasure = GetMeasureValue(analyticRecord, "ACD");
+            decimal acd = Convert.ToDecimal(acdMeasure.Value ?? 0.0);
+
+            MeasureValue asrMeasure = GetMeasureValue(analyticRecord, "ASR");
+            decimal asr = Convert.ToDecimal(asrMeasure.Value ?? 0.0);
+
+            MeasureValue nerMeasure = GetMeasureValue(analyticRecord, "NER");
+            decimal ner = Convert.ToDecimal(nerMeasure.Value ?? 0.0);
+
+            decimal supplierRate = _ratesBySupplier[supplierId];
+
+            return new TQISuppplierInfo()
+            {
+                SupplierName = _carrierAccountManager.GetCarrierAccountName(supplierId),
+                ACD = acd,
+                ASR = asr,
+                NER = ner,
+                TQI = acd * asr,
+                Duration = durationInMinutes,
+                Rate = supplierRate
+            };
+        }
+
+        #endregion
     }
 }

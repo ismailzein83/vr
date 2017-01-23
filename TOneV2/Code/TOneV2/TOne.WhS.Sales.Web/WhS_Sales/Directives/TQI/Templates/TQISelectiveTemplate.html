@@ -1,1 +1,17 @@
 ﻿
+<vr-columns width="1/2row">
+    <vr-select on-ready="selectiveCtrl.onTQIMethodsSelectorReady"
+               label="TQI Method"
+               entityname="TQI Method"
+               datasource="selectiveCtrl.tqiMethods"
+               selectedvalues="selectiveCtrl.selectedTQIMethod"
+               datavaluefield="ExtensionConfigurationId"
+               datatextfield="Title"
+               hideremoveicon>
+    </vr-select>
+</vr-columns>
+<vr-columns width="fullrow" vr-loader="selectiveCtrl.isLoadingDirective" haschildcolumns>
+    <vr-directivewrapper ng-if="selectiveCtrl.selectedTQIMethod != undefined" directive="selectiveCtrl.selectedTQIMethod.Editor"
+                         on-ready="selectiveCtrl.onDirectiveReady">
+    </vr-directivewrapper>
+</vr-columns>

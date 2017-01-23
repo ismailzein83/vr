@@ -36,6 +36,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 		var increasedRateDayOffset = 0;
 		var decreasedRateDayOffset = 0;
 
+		var ownerName;
+
 		function initializeController() {
 
 			$scope.scopeModel = {};
@@ -94,7 +96,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 			    var onTQIEvaluated = function (evaluatedRate) {
 			    };
 
-			    WhS_Sales_RatePlanService.openTQIEditor(dataItem.RPRouteDetail, onTQIEvaluated);
+			    var context = {
+			        zoneItem: dataItem,
+			        ownerName: ownerName
+			    };
+
+			    WhS_Sales_RatePlanService.openTQIEditor(context, onTQIEvaluated);
 			};
 
 			$scope.onNewRateChanged = function (dataItem) {
@@ -204,6 +211,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 				gridQuery = query;
 
 				if (query != undefined) {
+				    ownerName = query.OwnerName;
 					setCostCalculationMethods(query.CostCalculationMethods, query.RateCalculationMethod);
 					setDayOffsets(query.Settings);
 				}

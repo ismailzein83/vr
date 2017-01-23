@@ -1,1 +1,18 @@
-﻿
+﻿<vr-datagrid on-ready="onGridReady"
+             datasource="analyticsData"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             defaultsortbyfieldname="'SupplierName'">
+    <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'" widthfactor="100" disablesorting="true"></vr-datagridcolumn>
+    <!--<vr-datagridcolumn headertext="'Zone'" type="'Text'" field="'ZoneName'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>-->
+    <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+    <!--<vr-datagridcolumn headertext="'Services'" field="'ZoneServices'" widthfactor="50">
+        <vr-whs-be-services-viewer on-ready="dataItem.onServiceReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>-->
+    <vr-datagridcolumn headertext="'NER'" field="'NER'"  widthfactor="50" disablesorting="true" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ASR'" field="'ASR'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ACD'" field="'ACD'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Duration'" field="'Duration'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'TQI'" field="'TQI'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+
+</vr-datagrid>

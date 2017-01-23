@@ -42,6 +42,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>

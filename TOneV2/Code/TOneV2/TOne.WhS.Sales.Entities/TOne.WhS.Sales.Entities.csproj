@@ -174,7 +174,9 @@
     <Compile Include="TQI\TQIEvaluatedRate.cs" />
     <Compile Include="TQI\TQIMethod.cs" />
     <Compile Include="TQI\TQIMethodConfig.cs" />
+    <Compile Include="TQI\TQISupplierInfoQuery.cs" />
     <Compile Include="TQI\TQISupplierPercentage.cs" />
+    <Compile Include="TQI\TQISuppplierInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">

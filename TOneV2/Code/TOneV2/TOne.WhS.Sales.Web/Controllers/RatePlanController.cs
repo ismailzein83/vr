@@ -72,6 +72,22 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.GetTQIMethods();
         }
 
+        [HttpPost]
+        [Route("GetTQIEvaluatedRate")]
+        public TQIEvaluatedRate GetTQIEvaluatedRate(TQIEvaluatedRateInput evaluatedRateInput)
+        {
+            TQIManager tqiManager = new TQIManager();
+            return tqiManager.Evaluate(evaluatedRateInput.TQIMethod, evaluatedRateInput.RPRouteDetail);
+        }
+
+        [HttpPost]
+        [Route("GetTQISuppliersInfo")]
+        public object GetTQISuppliersInfo(Vanrise.Entities.DataRetrievalInput<TQISupplierInfoQuery> input)
+        {
+            TQIManager tqiManager = new TQIManager();
+            return GetWebResponse(input, tqiManager.GetTQISuppliersInfo(input));
+        }
+
         [HttpGet]
         [Route("GetCostCalculationMethodTemplates")]
         public IEnumerable<CostCalculationMethodSetting> GetCostCalculationMethodTemplates()

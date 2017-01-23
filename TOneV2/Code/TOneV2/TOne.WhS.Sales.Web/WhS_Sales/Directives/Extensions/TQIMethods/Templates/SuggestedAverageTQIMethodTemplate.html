@@ -1,1 +1,13 @@
-﻿
+﻿<vr-columns width="fullrow">
+    <vr-datagrid on-ready="onGridReady"
+                 datasource="suggestedPercentages"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 defaultsortbyfieldname="'SupplierName'">
+        <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rate'" field="'ConvertedSupplierRate'" type="'Text'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'%'" widthfactor="20" disablesorting="true">
+            <vr-textbox typeof="number" value="dataItem.marginPercentage"> </vr-textbox>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>
