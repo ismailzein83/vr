@@ -6,6 +6,7 @@
 
     function invoiceTypeEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_GenericData_DataRecordTypeAPIService) {
         var isEditMode;
+
         var invoiceTypeId;
         var invoiceTypeEntity;
 
@@ -48,7 +49,11 @@
         var itemGroupingsDirectiveAPI;
         var itemGroupingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceSettingDefinitionDirectiveAPI;
+        var invoiceSettingDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var dataRecordTypeEntity;
+
         defineScope();
         loadParameters();
         load();
@@ -68,10 +73,12 @@
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
             };
+
             $scope.scopeModel.onItemGroupingsDirectiveReady = function (api) {
                 itemGroupingsDirectiveAPI = api;
                 itemGroupingsReadyPromiseDeferred.resolve();
             };
+
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
                 $scope.scopeModel.isLoading = true;
                 var dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
@@ -83,6 +90,12 @@
                 }
             };
 
+            $scope.scopeModel.onInvoiceSettingDefinitionReady = function (api)
+            {
+                invoiceSettingDefinitionDirectiveAPI = api;
+                invoiceSettingDefinitionReadyPromiseDeferred.resolve();
+            }
+
             $scope.scopeModel.onConcatenatedPartsReady = function (api) {
                 concatenatedPartsAPI = api;
                 concatenatedPartsReadyPromiseDeferred.resolve();
@@ -92,6 +105,7 @@
                 startCalculationMethodAPI = api;
                 startCalculationMethodPromiseDeferred.resolve();
             };
+
             $scope.scopeModel.onSubSectionsReady = function (api) {
                 subSectionsAPI = api;
                 subSectionsSectionReadyPromiseDeferred.resolve();
@@ -116,10 +130,12 @@
                 invoiceActionsAPI = api;
                 invoiceActionsReadyPromiseDeferred.resolve();
             };
+
             $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
                 viewPermissionAPI = api;
                 viewPermissionReadyDeferred.resolve();
             };
+
             $scope.scopeModel.onGenerateRequiredPermissionReady = function (api) {
                 generatePermissionAPI = api;
                 generatePermissionReadyDeferred.resolve();
@@ -140,10 +156,10 @@
                 invoiceExtendedSettingsReadyPromiseDeferred.resolve();
             };
 
-
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+
             function buildInvoiceTypeObjFromScope() {
                 var obj = {
                     InvoiceTypeId: invoiceTypeId,
@@ -166,12 +182,13 @@
                             GenerateRequiredPermission: generatePermissionAPI.getData()
                         },
                         ItemGroupings: itemGroupingsDirectiveAPI.getData(),
-                        StartDateCalculationMethod:startCalculationMethodAPI.getData()
-
+                        StartDateCalculationMethod:startCalculationMethodAPI.getData(),
+                        InvoiceSettingPartUISections:invoiceSettingDefinitionDirectiveAPI.getData()
                     }
                 };
                 return obj;
             }
+
             function insertInvoiceType() {
 
                 var invoiceTypeObject = buildInvoiceTypeObjFromScope();
@@ -188,6 +205,7 @@
                 });
 
             }
+
             function updateInvoiceType() {
                 var invoiceTypeObject = buildInvoiceTypeObjFromScope();
                 VR_Invoice_InvoiceTypeAPIService.UpdateInvoiceType(invoiceTypeObject)
@@ -356,6 +374,7 @@
 
                     return viewPermissionLoadDeferred.promise;
                 }
+
                 function loadGenerateRequiredPermission() {
                     var generatePermissionLoadDeferred = UtilsService.createPromiseDeferred();
                     generatePermissionReadyDeferred.promise.then(function () {
@@ -391,7 +410,18 @@
                     });
                     return startCalculationMethodLoadPromiseDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective])
+
+                function loadInvoiceSettingDefinitionDirective() {
+                    var invoiceSettingDefinitionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    invoiceSettingDefinitionReadyPromiseDeferred.promise.then(function () {
+                        var invoiceSettingDefinitionPayload = invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined ? { invoiceSettingPartUISections: invoiceTypeEntity.Settings.InvoiceSettingPartUISections } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(invoiceSettingDefinitionDirectiveAPI, invoiceSettingDefinitionPayload, invoiceSettingDefinitionLoadPromiseDeferred);
+                    });
+                    return invoiceSettingDefinitionLoadPromiseDeferred.promise;
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -414,12 +444,15 @@
                     }
                     return fields;
                 },
+
                 getParts: function () {
                     return concatenatedPartsAPI.getData();
                 },
+
                 getExtensionType: function () {
                     return "VR_InvoiceType_SerialNumberParts";
                 },
+
                 getInvoiceActionsInfo: function () {
                     var invoiceActionsInfo = [];
                     var actions = invoiceActionsAPI.getData();
@@ -434,7 +467,8 @@
                     }
                     return invoiceActionsInfo;
                 },
-                getItemGroupingsInfo:function()
+
+                getItemGroupingsInfo: function ()
                 {
                     var itemGroupingsInfo = [];
                     var itemGroupings = itemGroupingsDirectiveAPI.getData();
@@ -451,6 +485,7 @@
                     }
                     return itemGroupingsInfo;
                 },
+
                 getGroupingDimensions: function (itemGroupingId)
                 {
                     var groupingDimensions = [];
@@ -462,6 +497,7 @@
                     }
                     return groupingDimensions;
                 },
+
                 getGroupingMeasures: function (itemGroupingId)
                 {
                     var groupingMeasures = [];

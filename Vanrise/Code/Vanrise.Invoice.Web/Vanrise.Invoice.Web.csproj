@@ -214,6 +214,20 @@
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-reader-directive.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoicefieldpropertyevaluator.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoiceobjecttype.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\SerialNumberPatternInvoiceSettingPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\BillingPeriodInvoiceSettingPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\AutomaticInvoiceSettingPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\DuePeriodPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-serialnumberpatterninvoicesettingpart.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-billingperiodinvoicesettingpart.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-automaticinvoicesettingpart.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-dueperiodpart.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingEditorTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingSectionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesetting-runtime-editor.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesetting-runtime-row.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesetting-runtime-section.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoicesetting-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\Templates\AutomaticInvoiceActionsGridTemplate.html" />
@@ -269,6 +283,14 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\ItemsFilter\vr-invoicetype-datasource-itemsfilter-generic.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\Templates\InvocieDataSourceManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\vr-invoicetype-datasource-itemsfilter.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\InvoiceSettingDefinitionPartEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\Templates\DefinitionEditorTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\Templates\DefinitionRowTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\Templates\DefinitionSectionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\Templates\InvoiceSettingDefinitionPartEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-editor.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-row.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-section.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\Templates\RDLCReportParameterManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\Templates\RDLCSubReportsManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\vr-invoicetype-gridactionsettings-openrdlcreport-parameters.js" />
@@ -354,6 +376,8 @@
     <Content Include="VR_Invoice\Views\Definition\InvoiceItemGrouping\DimensionItemGroupingEditorController.js" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceItemGrouping\ItemGroupingEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceItemGrouping\ItemGroupingEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\InvoiceSettingDefinitionSectionEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\Templates\InvoiceSettingDefinitionSectionEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceSubSectionSettings\ItemGroupingSubSectionEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceSubSectionSettings\InvoiceItemSubSectionEditor.html" />
     <Content Include="VR_Invoice\Views\Definition\InvoiceSubSectionSettings\ItemGroupingSubSectionEditorController.js" />
@@ -406,8 +430,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\" />
+    <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\MainExtensions\Templates\" />
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\" />
     <Folder Include="VR_Invoice\Views\Definition\InvoicePartnerSettings\" />
+    <Folder Include="VR_Invoice\Views\Definition\InvoiceSettingDefinition\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="JSLintNet.json" />

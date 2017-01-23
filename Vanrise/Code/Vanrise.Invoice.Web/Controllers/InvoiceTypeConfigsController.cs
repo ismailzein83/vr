@@ -75,6 +75,11 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetStartDateCalculationMethodConfigs();
         }
-        
+        [HttpGet]
+        [Route("GetInvoiceSettingPartsConfigs")]
+        public IEnumerable<InvoiceSettingPartConfig> GetInvoiceSettingPartsConfigs()
+        {
+            return _manager.GetInvoiceSettingPartsConfigs();
+        }
     }
 }

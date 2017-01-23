@@ -16,11 +16,10 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceSettingDetails
     {
         public bool IsDefault { get; set; }
-        public bool EnableAutomaticInvoice { get; set; }
-        public AutomaticInvoiceSettings AutomaticInvoiceSettings { get; set; }
+        public Dictionary<Guid, InvoiceSettingPart> InvoiceSettingParts { get; set; }
     }
-    public class AutomaticInvoiceSettings
+    public abstract class InvoiceSettingPart
     {
-
+        public abstract  Guid ConfigId { get;}
     }
 }

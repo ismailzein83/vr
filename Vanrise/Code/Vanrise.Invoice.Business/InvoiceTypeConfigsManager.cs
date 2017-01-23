@@ -47,7 +47,6 @@ namespace Vanrise.Invoice.Business
             return extensionConfiguration.GetExtensionConfigurations<InvoiceGeneratorFilterConditionConfig>(InvoiceGeneratorFilterConditionConfig.EXTENSION_TYPE);
         }
 
-
         public IEnumerable<InvoiceExtendedSettingsConfig> GetInvoiceExtendedSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
@@ -62,6 +61,12 @@ namespace Vanrise.Invoice.Business
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<StartDateCalculationMethodConfig>(StartDateCalculationMethodConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<InvoiceSettingPartConfig> GetInvoiceSettingPartsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<InvoiceSettingPartConfig>(InvoiceSettingPartConfig.EXTENSION_TYPE);
         }
     }
 }

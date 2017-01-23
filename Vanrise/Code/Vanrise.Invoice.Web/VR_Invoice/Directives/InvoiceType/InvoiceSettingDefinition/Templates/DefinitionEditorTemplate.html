@@ -1,0 +1,17 @@
+﻿
+<vr-columns width="1/3row">
+    <vr-button type="Add" data-onclick="ctrl.addSection" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-validator validate="ctrl.validateEditor()">
+        <vr-datagrid datasource="ctrl.sections" norowhighlightonclick="true" menuactions="gridSectionsMenuActions"
+                     on-ready="onGridReady" enabledraggablerow="true" hidegridmenu>
+            <vr-datagridcolumn headertext="'Section Title'" field="'sectionTitle'" widthfactor="5" disablesorting isfielddynamic="true"></vr-datagridcolumn>
+            <vr-datagridexpandablerow>
+                <vr-invoicetype-invoicesetting-definition-section on-ready="dataItem.onRowsDirectiveReady"></vr-invoicetype-invoicesetting-definition-section>
+            </vr-datagridexpandablerow>
+        </vr-datagrid>
+    </vr-validator>
+
+</vr-columns>
+

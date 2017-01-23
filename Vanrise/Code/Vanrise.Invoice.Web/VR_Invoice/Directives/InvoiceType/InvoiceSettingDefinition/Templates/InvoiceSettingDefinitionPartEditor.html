@@ -1,0 +1,33 @@
+﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceSettingDefinitionPartEditorController" vr-loader="scopeModel.isLoading" width="'40%'">
+    <vr-modalbody maxheight="'500px'">
+        <vr-form validationcontext="invoiceSettingDefinitionRowEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-select datasource="scopeModel.templateConfigs"
+                                       selectedvalues="scopeModel.selectedTemplateConfig"
+                                       datavaluefield="ExtensionConfigurationId"
+                                       datatextfield="Title"
+                                       label="Invoice Setting Part"
+                                       isrequired="true"
+                                       hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-invoice-invoicesetting-runtime-editor on-ready="scopeModel.onRuntimeEditorReady"></vr-invoice-invoicesetting-runtime-editor>
+
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="invoiceSettingDefinitionRowEditorGroup" data-onclick="scopeModel.SaveRow"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

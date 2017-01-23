@@ -2,15 +2,16 @@
 
     "use strict";
 
-    invoiceSettingEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceSettingAPIService'];
+    invoiceSettingEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService','VR_Invoice_InvoiceSettingAPIService','VR_Invoice_InvoiceTypeConfigsAPIService'];
 
-    function invoiceSettingEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceSettingAPIService) {
+    function invoiceSettingEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceSettingAPIService, VR_Invoice_InvoiceTypeConfigsAPIService) {
         var isEditMode;
         var invoiceSettingId;
         var invoiceSettingEntity;
-
         var invoiceTypeId;
-
+        var invoiceTypeEntity;
+        var runtimeEditorAPI;
+        var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         loadParameters();
         load();
@@ -25,7 +26,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.sections = [];
             $scope.scopeModel.saveInvoiceSetting = function () {
                 $scope.scopeModel.isLoading = true;
                 if (isEditMode) {
@@ -35,7 +36,10 @@
                     return insertInvoiceSetting();
                 }
             };
-
+            $scope.scopeModel.onRuntimeEditorReady = function (api) {
+                runtimeEditorAPI = api;
+                runtimeEditorReadyDeferred.resolve();
+            };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -45,8 +49,8 @@
                     InvoiceTypeId:invoiceTypeId,
                     Name: $scope.scopeModel.name,
                     Details: {
-                        EnableAutomaticInvoice: $scope.scopeModel.enableAutomaticInvoice,
-                        IsDefault: $scope.scopeModel.isDefault
+                        IsDefault: $scope.scopeModel.isDefault,
+                        InvoiceSettingParts: runtimeEditorAPI.getData()
                     }
                 };
                 return obj;
@@ -84,21 +88,22 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-
-            if (isEditMode) {
-                getInvoiceSetting().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            invoiceSettingEntity = undefined;
-                        });
-                }).catch(function () {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.scopeModel.isLoading = false;
-                });
-            }
-            else {
-                loadAllControls();
-            }
+            getInvoiceType().then(function () {
+                if (isEditMode) {
+                    getInvoiceSetting().then(function () {
+                        loadAllControls()
+                            .finally(function () {
+                                invoiceSettingEntity = undefined;
+                            });
+                    }).catch(function () {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.scopeModel.isLoading = false;
+                    });
+                }
+                else {
+                    loadAllControls();
+                }
+            });
 
             function getInvoiceSetting() {
                 return VR_Invoice_InvoiceSettingAPIService.GetInvoiceSetting(invoiceSettingId).then(function (response) {
@@ -106,7 +111,13 @@
 
                 });
             }
-
+            function getInvoiceType()
+            {
+                return VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
+                    invoiceTypeEntity = response;
+                });
+            }
+       
             function loadAllControls() {
 
                 function setTitle() {
@@ -128,7 +139,24 @@
                     }
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+                function loadRuntimeEditor() {
+                    if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceSettingPartUISections != undefined)
+                    {
+                        var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
+                        runtimeEditorReadyDeferred.promise.then(function () {
+                            var runtimeEditorPayload = {
+                                sections: invoiceTypeEntity.Settings.InvoiceSettingPartUISections,
+                                selectedValues: (isEditMode) ? invoiceSettingEntity.Details.InvoiceSettingParts : undefined,
+                                invoiceTypeId: invoiceTypeId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
+                        });
+
+                        return runtimeEditorLoadDeferred.promise;
+                    }
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRuntimeEditor])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

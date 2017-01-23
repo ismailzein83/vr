@@ -1,0 +1,7 @@
+﻿<vr-datagrid datasource="ctrl.rows" norowhighlightonclick="true" menuactions="gridRowsMenuActions" ondeleterow="ctrl.removeRow"
+             on-ready="onGridReady" enabledraggablerow="true" hidegridmenu>
+    <vr-datagridcolumn headertext="'Number Of Parts'" field="'Entity.numberOfParts'" widthfactor="5" disablesorting isfielddynamic="true"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-invoicetype-invoicesetting-definition-row on-ready="dataItem.Entity.onRowDirectiveReady"></vr-invoicetype-invoicesetting-definition-row>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

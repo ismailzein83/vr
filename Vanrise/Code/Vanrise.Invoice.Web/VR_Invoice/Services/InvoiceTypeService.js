@@ -55,7 +55,6 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/ItemGroupingSubSectionEditor.html', parameters, settings);
         }
 
-
         function addInvoiceItemSubSection(onInvoiceItemSubSectionAdded, context) {
             var settings = {
 
@@ -168,6 +167,66 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCSubReportEditor.html', parameters, settings);
         }
 
+
+
+
+
+        function addInvoiceSettingSection(onSectionAdded, exitingSections) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onSectionAdded = onSectionAdded;
+            };
+
+            var parameters = {
+                exitingSections: exitingSections
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSettingDefinition/Templates/InvoiceSettingDefinitionSectionEditor.html', parameters, modalSettings);
+        }
+
+        function editInvoiceSettingSection(onSectionUpdated, exitingSections, sectionEntity) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onSectionUpdated = onSectionUpdated;
+            };
+
+            var parameters = {
+                sectionTitleValue: sectionEntity,
+                exitingSections: exitingSections
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSettingDefinition/Templates/InvoiceSettingDefinitionSectionEditor.html', parameters, modalSettings);
+        }
+
+        function addInvoiceSettingPart(onRowAdded) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onRowAdded = onRowAdded;
+            };
+
+            var parameters = {
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSettingDefinition/Templates/InvoiceSettingDefinitionPartEditor.html', parameters, modalSettings);
+        }
+
+        function editInvoiceSettingPart(onRowUpdated, rowEntity) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onRowUpdated = onRowUpdated;
+            };
+
+            var parameters = {
+                rowEntity: rowEntity
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSettingDefinition/Templates/InvoiceSettingDefinitionPartEditor.html', parameters, modalSettings);
+        }
+
         return ({
             addInvoiceType: addInvoiceType,
             editInvoiceType: editInvoiceType,
@@ -180,6 +239,11 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             addInvoiceItemSubSection: addInvoiceItemSubSection,
             editInvoiceItemSubSection: editInvoiceItemSubSection,
             editGroupItemSubSection: editGroupItemSubSection,
-            addGroupItemSubSection: addGroupItemSubSection
+            addGroupItemSubSection: addGroupItemSubSection,
+
+            addInvoiceSettingSection: addInvoiceSettingSection,
+            editInvoiceSettingSection:editInvoiceSettingSection,
+            addInvoiceSettingPart: addInvoiceSettingPart,
+            editInvoiceSettingPart: editInvoiceSettingPart
         });
     }]);

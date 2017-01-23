@@ -18,13 +18,26 @@ namespace Vanrise.Invoice.Entities
         public InvoiceGridSettings InvoiceGridSettings { get; set; }
         public InvoiceSerialNumberSettings InvoiceSerialNumberSettings { get; set; }
         public List<InvoiceSubSection> SubSections { get; set; }
-
         public List<ItemGrouping> ItemGroupings { get; set; }
         public InvoiceTypeSecurity Security { get; set; }
         public List<AutoGenerateInvoiceAction> AutoGenerateInvoiceActions { get; set; }
-
+        public List<InvoiceSettingPartUISection> InvoiceSettingPartUISections { get; set; }
     }
 
+    public class InvoiceSettingPartUISection
+    {
+        public string SectionTitle { get; set; }
+        public List<InvoiceSettingPartUIRow> Rows { get; set; }
+    }
+    public class InvoiceSettingPartUIRow
+    {
+        public List<InvoiceSettingPartDefinition> Parts { get; set; }
+    }
+    public class InvoiceSettingPartDefinition
+    {
+        public Guid PartConfigId { get; set; }
+        public Object PartDefinitionSetting { get; set; }
+    }
 
     public class AutoGenerateInvoiceAction
     {

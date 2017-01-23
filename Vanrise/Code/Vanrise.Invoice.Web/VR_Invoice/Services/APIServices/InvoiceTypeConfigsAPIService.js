@@ -39,6 +39,10 @@
         {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetStartDateCalculationMethodConfigs"));
         }
+        function GetInvoiceSettingPartsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceSettingPartsConfigs"));
+        }
+
         return ({
             GetInvoiceActionSettingsConfigs: GetInvoiceActionSettingsConfigs,
             GetRDLCDataSourceSettingsConfigs: GetRDLCDataSourceSettingsConfigs,
@@ -49,7 +53,8 @@
             GetInvoiceExtendedSettingsConfigs: GetInvoiceExtendedSettingsConfigs,
             GetInvoiceGeneratorFilterConditionConfigs: GetInvoiceGeneratorFilterConditionConfigs,
             GetBillingPeriodTemplateConfigs: GetBillingPeriodTemplateConfigs,
-            GetStartDateCalculationMethodConfigs: GetStartDateCalculationMethodConfigs
+            GetStartDateCalculationMethodConfigs: GetStartDateCalculationMethodConfigs,
+            GetInvoiceSettingPartsConfigs: GetInvoiceSettingPartsConfigs
         });
     }
 

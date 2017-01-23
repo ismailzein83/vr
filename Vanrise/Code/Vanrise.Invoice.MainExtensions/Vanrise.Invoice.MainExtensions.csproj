@@ -80,6 +80,10 @@
     <Compile Include="InvoiceActionSettings\EmailAction\SendEmailAction.cs" />
     <Compile Include="InvoiceActionSettings\SetInvoicePaidAction.cs" />
     <Compile Include="InvoiceReader\InvoiceSourceReader.cs" />
+    <Compile Include="InvoiceSettingParts\AutomaticInvoiceSettingPart.cs" />
+    <Compile Include="InvoiceSettingParts\BillingPeriodInvoiceSettingPart.cs" />
+    <Compile Include="InvoiceSettingParts\SerialNumberPatternInvoiceSettingPart.cs" />
+    <Compile Include="InvoiceSettingParts\DuePeriodInvoiceSettingPart.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionController.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSection.cs" />
     <Compile Include="InvoiceUISubSectionSettings\InvoiceItemSubSection.cs" />

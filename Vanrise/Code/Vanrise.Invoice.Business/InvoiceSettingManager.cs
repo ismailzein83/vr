@@ -96,6 +96,17 @@ namespace Vanrise.Invoice.Business
             }
             throw new NullReferenceException(string.Format("No default setting available for invoicetypeid {0}", invoiceTypeId));
         }
+
+        public T GetInvoiceSettingDetailByType<T>(Guid invoiceSettingId) where T : InvoiceSettingPart
+        {
+            var invoiceSetting = GetInvoiceSetting(invoiceSettingId);
+            var configClass = Activator.CreateInstance(typeof(T)) as InvoiceSettingPart;
+            InvoiceSettingPart invoiceSettingPart;
+            if (invoiceSetting.Details.InvoiceSettingParts.TryGetValue(configClass.ConfigId, out invoiceSettingPart))
+             return  invoiceSettingPart as T;
+            throw new NullReferenceException("invoiceSettingPart");
+        }
+
         #endregion
 
         #region Private Classes

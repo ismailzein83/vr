@@ -67,6 +67,7 @@
     <Compile Include="InvoiceSetting\InvoiceSettingDetail.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingFilter.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingInfo.cs" />
+    <Compile Include="InvoiceSetting\InvoiceSettingPartConfig.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingQuery.cs" />
     <Compile Include="BusinessManagers\IInvoiceSettingManager.cs" />
     <Compile Include="InvoiceType\ConvertToGridColumnAttributeInput.cs" />
@@ -78,7 +79,6 @@
     <Compile Include="InvoiceType\InvoiceActions\InvoiceAction.cs" />
     <Compile Include="InvoiceType\InvoiceDataSource.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridFilterConditionConfig.cs" />
-    <Compile Include="InvoiceType\Configs\InvoiceGeneratorConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridActionSettingsConfig.cs" />
     <Compile Include="InvoiceType\InvoiceFileConverter.cs" />
     <Compile Include="InvoiceType\InvoicePartnerSettings.cs" />
