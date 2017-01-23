@@ -12,7 +12,7 @@ Post-Deployment Script Template
 --[sec].[Module]---------------------------801 to 900---------------------------------------------------------
 begin
 set nocount on;
-set identity_insert [sec].[Module] on;
+--set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
-set identity_insert [sec].[Module] off;
+--set identity_insert [sec].[Module] off;
 --------------------------------------------------------------------------------------------------------------
 end
 
@@ -37,14 +37,14 @@ end
 begin
 
 set nocount on;
-set identity_insert [sec].[View] on;
+--set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('ade187cf-146c-45db-882a-2c943d38dd70','Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement','50624672-cd25-44fd-8580-0e3ac8e34c71','CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,0,15),
-('e2ed2857-dea3-42fe-8041-b2b06eb1e20e','Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
-('ea38345e-2354-4e67-9fac-d5612fae62c3','Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11),
-('a33a27e2-16e9-4475-b75c-e4e1320ce31f','Pricelists History','Pricelists History','#/view/CP_SupplierPricelist/Views/SupplierPriceList/PriceLists','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/PriceList/GetFilteredPriceLists',null,null,null,0,12)
+('ade187cf-146c-45db-882a-2c943d38dd70','Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement','50624672-cd25-44fd-8580-0e3ac8e34c71','CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
+('e2ed2857-dea3-42fe-8041-b2b06eb1e20e','Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/PriceList/GetUpdated',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
+('ea38345e-2354-4e67-9fac-d5612fae62c3','Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',11),
+('a33a27e2-16e9-4475-b75c-e4e1320ce31f','Pricelists History','Pricelists History','#/view/CP_SupplierPricelist/Views/SupplierPriceList/PriceLists','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/PriceList/GetFilteredPriceLists',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',12)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -56,20 +56,21 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
-set identity_insert [sec].[View] off;
+--set identity_insert [sec].[View] off;
 --------------------------------------------------------------------------------------------------------------
 
 end
 
 
+
 --[sec].[BusinessEntityModule]-------------801 to 900---------------------------------------------------------
 begin
 set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
+--set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(801,'Business Process Module',1,0)
+('AE487324-A151-478C-B171-67C79E9BA2DA','Business Process Module','5A9E78AE-229E-41B9-9DBF-492997B42B61',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -81,7 +82,7 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance])
 	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
-set identity_insert [sec].[BusinessEntityModule] off;
+--set identity_insert [sec].[BusinessEntityModule] off;
 --------------------------------------------------------------------------------------------------------------
 
 end
@@ -91,13 +92,13 @@ end
 begin
 
 set nocount on;
-set identity_insert [sec].[BusinessEntity] on;
+--set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(2101,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
-(2102,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
-(2103,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Upload Pricelist","Search"]')
+('F9AB8A79-7863-44B2-95CD-6587C3939FA1','CP_SupPriceList_Customer','Customer','5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View", "Add","Edit", "Assign/Unassign User"]'),
+('0F757375-F0CC-4011-96FF-7F4A8341AC8D','CP_SupPriceList_SupplierMapping','Supplier Mapping','5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View", "Add/Edit"]'),
+('2796A68C-4A6B-44B2-B2CE-9FBFC2072E24','CP_SupPriceList_PriceList','PriceList','5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View", "Upload Pricelist","Search"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -109,7 +110,7 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-set identity_insert [sec].[BusinessEntity] off;
+--set identity_insert [sec].[BusinessEntity] off;
 --------------------------------------------------------------------------------------------------------------
 
 end
@@ -156,11 +157,11 @@ end
 --[common].[Setting]---------------------------801 to 900-------------------------------------------
 begin
 set nocount on;
-set identity_insert [common].[Setting] on;
+--set identity_insert [common].[Setting] on;
 ;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(801,'Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Carrier Portal","VersionNumber":"version 0.9"}}',1)
+('20129BC9-BFAC-4D78-9E7F-F0EC2BDAB2CA','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Carrier Portal","VersionNumber":"version 0.9"}}',1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
@@ -172,7 +173,7 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
-set identity_insert [common].[Setting] off;
+--set identity_insert [common].[Setting] off;
 
 ----------------------------------------------------------------------------------------------------
 
