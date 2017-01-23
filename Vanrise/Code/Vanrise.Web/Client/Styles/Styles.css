@@ -2551,7 +2551,9 @@ vr-switch[type="inline"] > div {
 .hide-expande {
     visibility: hidden;
 }
-
+vr-columns[style] > div[class^="col"]{
+    width:100% !important;
+}
 /*start of vr-tabs*/
 vr-tab vr-row[tabcontent="true"] > .row {
     margin: 0px !important;
