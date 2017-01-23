@@ -66,7 +66,6 @@
 
                 controller.boundDataSource = [];
                 $scope.effectiveDataSource = [];
-                var itemsToAddToSource;
                 
                 $scope.$watchCollection('ctrl.datasource', function (newValue, oldValue) {
                     fillEffectiveDataSourceFromItems(getdatasource());
@@ -104,6 +103,7 @@
                 };
 
                 var isAddingPage = false;
+                var found=false;
                 function addPageToBoundDataSource() {
                     if (isAddingPage)
                         return;
@@ -114,10 +114,50 @@
                             for (var i = controller.boundDataSource.length; i < $scope.effectiveDataSource.length && addedItems < 20; i++) {
                                 controller.boundDataSource.push($scope.effectiveDataSource[i]);
                                 addedItems++;
-                            }
+                            }                           
                             isAddingPage = false;
+                            if(controller.isDropDownOpened())
+                                markSelectedDataItem();
                         });
                     });
+                }
+
+                function markSelectedDataItem() {
+                    if (found == true)
+                        return;
+                    var allDataItems = getdatasource();
+                    if (!controller.isMultiple()) {
+                        if (controller.selectedvalues != undefined) {
+                            var index = controller.getObjectValue(controller.selectedvalues);
+                            var item = utilsService.getItemByVal(allDataItems, index, controller.datavaluefield);
+                            if ($('#' + index).offset() != undefined) {
+                                found = true;
+                                $('#' + index).find('a').first().addClass('mark-select-selected');
+                                $('#divDataSourceContainer').first().stop().animate({
+                                    scrollTop: parseInt($('#' + index).attr("dataindex")) * 25
+                                }, 1);
+                                $('.mark-select').mouseover(function () {
+                                    $('.mark-select').removeClass('mark-select-selected');
+                                });
+                            }
+                            else if (allDataItems.length < 300 && item != null && $('#' + index).offset() == undefined)
+                                addPageToBoundDataSource();
+                        }
+                    }
+                    else {
+                        if (controller.selectedvalues.length > 0) {                        
+                            var index = controller.getObjectValue(controller.selectedvalues[controller.selectedvalues.length - 1]);
+                            var item = utilsService.getItemByVal(allDataItems, index, controller.datavaluefield);
+                            if ($('#' + index).offset() != undefined) {
+                                found = true;
+                                $('#divDataSourceContainer').first().stop().animate({
+                                    scrollTop: (parseInt($('#' + index).attr("dataindex")) * 24) 
+                                }, 1);
+                            }
+                            else if (allDataItems.length < 300 &&  item != null && $('#' + index).offset() == undefined)
+                                addPageToBoundDataSource();
+                        }
+                    }
                 }
 
                 //Configuration
@@ -388,7 +428,9 @@
                                         addPageToBoundDataSource();
                                 }
                                 lastScrollTop = scrollTop;
+                               
                             });
+                            markSelectedDataItem();
                         }, 1);
                         var selfHeight = $(this).height();
                         var selfOffset = $(this).offset();
@@ -432,7 +474,7 @@
                         }
                         vrSelectSharedObject.onCloseDropDown($attrs.id);
                         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-
+                        found =  false;
                     });
 
                     
