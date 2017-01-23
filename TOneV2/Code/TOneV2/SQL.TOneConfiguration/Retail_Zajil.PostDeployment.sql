@@ -76,3 +76,24 @@ when not matched by target then
        values(s.[ID],s.[OldID],s.[Name],s.[Details]);
 ----------------------------------------------------------------------------------------------------
 END
+
+--[common].[Setting]---------------------------201 to 300-------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('682C68EF-5687-47F1-957C-0150A6132F7E',null,'Business Entity Technical','Retail_BE_TechnicalSettings','Business Entities','{"Editor":"retail-be-technicalsettings"}','{"$type":"Retail.BusinessEntity.Entities.RetailBETechnicalSettings, Retail.BusinessEntity.Entities","IncludedAccountTypes":{"$type":"Retail.BusinessEntity.Entities.IncludedAccountTypes, Retail.BusinessEntity.Entities","AcountTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["a26d4be8-d753-450d-8816-d19ab18f90f5","ed09fef6-c333-400b-8f92-14ff9f8ced7b","046078a0-3434-4934-8f4d-272608cffebf","cea8aba9-cdaa-4755-b30d-3734eae52e83","fa621626-8927-4ba6-ad5f-80a0a8fa6f06","5ff96aee-cdf0-4415-a643-6b275f47e791"]}}}',1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[OldID] = s.[OldID],[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[OldID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+----------------------------------------------------------------------------------------------------
+END

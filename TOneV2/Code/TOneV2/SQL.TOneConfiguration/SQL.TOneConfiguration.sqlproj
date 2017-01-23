@@ -522,6 +522,7 @@
     <None Include="INSOFT.PostDeployment.sql" />
     <None Include="User_Guides.PostDeployment.sql" />
     <None Include="Retail_Zajil.PostDeployment.sql" />
+    <None Include="Retail_Centrex.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
