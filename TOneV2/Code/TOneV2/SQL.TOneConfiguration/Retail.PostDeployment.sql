@@ -78,8 +78,8 @@ as (select * from (values
 ('D65AC3F8-3E92-4B48-AE0B-1F25C588916D','RuleInternationalIdentification','Rule International Identification','Retail_Voice_InternationalIdentification','{"Editor":"retail-voice-ruleinternationalidentification"}'),
 ('82B558C6-CEF2-4318-8819-A8495097E770','VR_GenericData_BEParentChildRelationDefinition','Parent-Child Relation Definition','VR_Common_VRComponentType','{"Editor":"vr-genericdata-beparentchildrelationdefinition-settings"}'),
 
-('385AB73F-D18D-4A1B-8552-FC4E6AC487DE','SubAccountCondition','Sub Account Condition','Retail_BE_AccountConditionConfig','{"Editor":"retail-be-accountcondition-subaccount"}'),
-('EE17B999-5473-467F-A9BF-623EEF6CD409','FinancialAccountCondition','Financial Account Condition','Retail_BE_AccountConditionConfig','{"Editor":"retail-be-accountcondition-financialaccount"}')
+('385AB73F-D18D-4A1B-8552-FC4E6AC487DE','SubAccountCondition','Can Have Sub Accounts','Retail_BE_AccountConditionConfig','{"Editor":"retail-be-accountcondition-subaccount"}'),
+('EE17B999-5473-467F-A9BF-623EEF6CD409','FinancialAccountCondition','Is Financial','Retail_BE_AccountConditionConfig','{"Editor":"retail-be-accountcondition-financialaccount"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
