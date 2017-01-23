@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountTypeAPIService'];
+    AccountManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountTypeAPIService', 'VR_Sec_ViewAPIService'];
 
-    function AccountManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountTypeAPIService) {
+    function AccountManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountTypeAPIService, VR_Sec_ViewAPIService) {
 
         var viewId;
         var accountBEDefinitionId;
@@ -95,9 +95,19 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            return loadBusinessEntityDefinitionSelector();
+            loadBEDefinitionSelectorLabel().then(function () {
+                loadBusinessEntityDefinitionSelector();
+            });
         }
 
+        function loadBEDefinitionSelectorLabel() {
+
+            return VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {              
+                if (response != undefined && response.Settings != undefined) {
+                    $scope.scopeModel.BEDefinitionSelectorLabel = response.Settings.AccountDefinitionSelectorLabel;
+                }
+            });
+        }
         function loadBusinessEntityDefinitionSelector() {
             var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 

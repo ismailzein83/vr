@@ -11,10 +11,10 @@
             </vr-row>
             <vr-row removeline>
                 <vr-columns width="normal" ng-show="scopeModel.showBusinessEntityDefinitionSelector">
-                    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
-                                                                      onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"
-                                                                      customlabel="Account Definition" hideremoveicon>
-                    </vr-genericdata-businessentitydefinition-selector>
+                    <vr-directivewrapper ng-if="scopeModel.BEDefinitionSelectorLabel != undefined" directive="'vr-genericdata-businessentitydefinition-selector'"
+                                         on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady" onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"
+                                         customlabel="{{scopeModel.BEDefinitionSelectorLabel}}" hideremoveicon>
+                    </vr-directivewrapper>
                 </vr-columns>
                 <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
                     <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>

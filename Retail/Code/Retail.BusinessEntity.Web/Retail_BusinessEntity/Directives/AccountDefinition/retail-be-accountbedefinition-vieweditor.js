@@ -44,10 +44,14 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                     var promises = [];
 
                     var accountBEDefinitionViewSettings;
+                    var accountDefinitionSelectorLabel;
 
                     if (payload != undefined) {
                         accountBEDefinitionViewSettings = payload.Settings;
+                        accountDefinitionSelectorLabel = payload.AccountDefinitionSelectorLabel;
                     }
+
+                    $scope.scopeModel.accountDefinitionSelectorLabel = accountDefinitionSelectorLabel;
 
                     //Loading BusinessEntityDefinition Selector
                     var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
@@ -93,7 +97,8 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
 
                     var obj = {
                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionViewSettings, Retail.BusinessEntity.Entities",
-                        Settings: buildAccountBEDefinitionViewSettingsObj()
+                        Settings: buildAccountBEDefinitionViewSettingsObj(),
+                        AccountDefinitionSelectorLabel: $scope.scopeModel.accountDefinitionSelectorLabel
                     };
 
                     function buildAccountBEDefinitionViewSettingsObj() {

@@ -10,6 +10,8 @@ namespace Retail.BusinessEntity.Entities
     {
         public List<AccountBEDefinitionViewSetting> Settings { get; set; }
 
+        public string AccountDefinitionSelectorLabel { get; set; }
+
         public override string GetURL(Vanrise.Security.Entities.View view)
         {
             return String.Format("#/viewwithparams/Retail_BusinessEntity/Views/Account/DynamicAccountManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
