@@ -13,8 +13,7 @@ namespace CarrierPortal.Web
             bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/CP_SupplierPricelist", "*.js", true));
+                "~/Client/Modules/Runtime", "*.js", true));
         }
     }
 }
