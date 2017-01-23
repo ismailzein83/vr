@@ -9,6 +9,12 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountTypeGenericField : AccountGenericField
     {
+        Guid _accountBEDefinitionId;
+        public AccountTypeGenericField(Guid accountBEDefinitionId)
+        {
+            _accountBEDefinitionId = accountBEDefinitionId;
+        }
+
         public override string Name
         {
             get
@@ -29,7 +35,11 @@ namespace Retail.BusinessEntity.Business
         {
             get
             {
-                return new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType { BusinessEntityDefinitionId = AccountType.BUSINESSENTITY_DEFINITION_ID };
+                return new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType()
+                {
+                    BusinessEntityDefinitionId = AccountType.BUSINESSENTITY_DEFINITION_ID,
+                    SelectorFilter = new AccountAccountTypeFilter() { AccountBEDefinitionId = _accountBEDefinitionId }
+                };
             }
         }
 

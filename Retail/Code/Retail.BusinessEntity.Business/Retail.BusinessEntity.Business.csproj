@@ -154,6 +154,8 @@
     <Compile Include="Extensions\SubscriberAccountBalanceManager.cs" />
     <Compile Include="Extensions\SubscriberAccountBalanceSetting.cs" />
     <Compile Include="Filters\IAccountFilter\AccountConditionAccountFilter.cs" />
+    <Compile Include="Filters\IAccountTypeFilter\AccountAccountTypeFilter.cs" />
+    <Compile Include="Filters\IAccountTypeFilter\AccountTypeFilterContext.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionFilter.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionViewFilter.cs" />
     <Compile Include="Filters\IDIDFilter\AccountDIDFilter.cs" />

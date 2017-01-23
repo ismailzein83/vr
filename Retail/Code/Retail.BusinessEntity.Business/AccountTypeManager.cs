@@ -52,12 +52,10 @@ namespace Retail.BusinessEntity.Business
                 }
                 else
                 {
-                    //List<Guid> includedAccountTypeIds = new ConfigManager().GetIncludedAccountTypeIds();
-
                     filterExpression = (accountType) =>
                     {
-                        //if (!includedAccountTypeIds.Contains(accountType.AccountTypeId))
-                        //    return false;
+                        if (filter.Filters != null && !CheckIfFilterIsMatch(accountType, filter.Filters))
+                            return false;
 
                         if (filter.AccountBEDefinitionId.HasValue && filter.AccountBEDefinitionId.Value != accountType.AccountBEDefinitionId)
                             return false;
@@ -296,12 +294,23 @@ namespace Retail.BusinessEntity.Business
         private void FillAccountCommonGenericFields(Guid? accountBEDefinitionId, List<AccountGenericField> fields)
         {
             fields.Add(new AccountNameGenericField());
-            fields.Add(new AccountTypeGenericField());
 
             if (accountBEDefinitionId.HasValue)
             {
+                fields.Add(new AccountTypeGenericField(accountBEDefinitionId.Value));
                 fields.Add(new AccountStatusGenericField(accountBEDefinitionId.Value));
             }
+        }
+
+        private bool CheckIfFilterIsMatch(AccountType accountType, List<IAccountTypeFilter> filters)
+        {
+            AccountTypeFilterContext context = new AccountTypeFilterContext { AccountType = accountType };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
 
         #endregion
