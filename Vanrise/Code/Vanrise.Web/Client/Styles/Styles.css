@@ -2485,7 +2485,7 @@ vr-label[ellipsis] .vr-control-label {
     top: 22px !important;
 }
 .vr-hint-input{
-    top : 0px;
+    top : -7px;
     color:#337AB7
 }
 .vr-numeric .vr-numeric-control .unit {
