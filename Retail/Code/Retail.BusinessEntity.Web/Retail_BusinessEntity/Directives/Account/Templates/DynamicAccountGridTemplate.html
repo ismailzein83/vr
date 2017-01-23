@@ -7,7 +7,7 @@
              menuactions="scopeModel.menuActions"
              idfield="Entity.AccountId"
              defaultsortbyfieldname="'Entity.AccountId'">
-
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountId'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
 
     <vr-datagridexpandablerow>

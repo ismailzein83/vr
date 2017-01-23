@@ -24,7 +24,6 @@
   <connectionStrings>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Retail_Configuration;User ID=sa;Password= "/>
     <add name="RetailDBConnString" connectionString="Server=localhost;Database=Retail_Configuration;User ID=sa;Password= "/>
-    <add name="VR_AccountBalance_TransactionDBConnString" connectionString="Server=localhost;Database=Retail_Configuration;User ID=sa;Password= " />
     <add name="RetailCDRDBConnString" connectionString="Server=localhost;Database=Retail_EDR;User ID=sa;Password= "/>
     <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password= " />
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password= " />
@@ -55,7 +54,7 @@
     <add key="ExposedConnectionStringNames" value="RetailCDRDBConnString"/>
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="TOneWhS_BE_DBConnStringKey" value="RetailDBConnString"/>
-    <add key="VR_AccountBalance_TransactionDBConnStringKey" value="VR_AccountBalance_TransactionDBConnString"/>
+    <add key="VR_AccountBalance_TransactionDBConnStringKey" value="RetailDBConnString"/>
     
     <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
