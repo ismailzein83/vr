@@ -22,6 +22,19 @@ app.directive("vrWhsSalesTqimethodSuggestedpercentages", [function () {
 
         $scope.suggestedPercentages = [];
 
+        $scope.validateSuggestedPercentages = function () {
+            if ($scope.suggestedPercentages == undefined)
+                return false;
+
+            var totalSuggestedPercentages = 0;
+            for (var i = 0; i < $scope.suggestedPercentages.length; i++)
+                totalSuggestedPercentages += parseFloat($scope.suggestedPercentages[i].marginPercentage);
+
+            if (totalSuggestedPercentages != 100)
+                return "The sum of suggested percentages must be equal to 100";
+            return null;
+        }
+
         function initializeController() {
             defineAPI();
         }

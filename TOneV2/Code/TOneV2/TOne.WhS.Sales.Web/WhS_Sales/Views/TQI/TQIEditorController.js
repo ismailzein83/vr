@@ -49,6 +49,10 @@
                 $scope.modalContext.closeModal();
             };
 
+            $scope.disableSaveBtn = function () {
+                return $scope.calculatedRate == undefined;
+            }
+
             $scope.onMarginTypesSelectorReady = function (api) {
                 var marginTypes = UtilsService.getArrayEnum(WhS_Sales_MarginTypesEnum);
 

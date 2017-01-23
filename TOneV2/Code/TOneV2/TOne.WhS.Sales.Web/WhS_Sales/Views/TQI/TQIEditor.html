@@ -115,8 +115,8 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Evaluate" formname="formTQIEditor" data-onclick="evaluate"></vr-button>
-                <vr-button type="Save" formname="formRatePlanSettings" data-onclick="save"></vr-button>
-                <vr-button type="Close" formname="formTQIEditor" data-onclick="close"></vr-button>
+                <vr-button type="Save" formname="formTQIEditor" vr-disabled="disableSaveBtn()" data-onclick="save"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
     </div>
