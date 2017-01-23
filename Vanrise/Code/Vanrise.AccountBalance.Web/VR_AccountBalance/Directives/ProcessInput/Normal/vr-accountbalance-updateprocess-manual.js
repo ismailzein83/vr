@@ -31,7 +31,7 @@ app.directive("vrAccountbalanceUpdateprocessManual", ['UtilsService', 'VRUIUtils
         var accountTypeSelectorAPIReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
-
+            $scope.usageCacheDays = 1;
             $scope.accountTypeSelectorReady = function (api) {
                 accountTypeSelectorAPI = api;
                 accountTypeSelectorAPIReadyDeferred.resolve();
