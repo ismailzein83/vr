@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountActionService',
+app.directive('retailBeAccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountActionService',
     function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_BE_AccountActionService) {
         return {
             restrict: 'E',
@@ -14,7 +14,7 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Account/Templates/DynamicAccountGridTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Account/Templates/AccountGridTemplate.html'
         };
 
         function AccountGrid($scope, ctrl, $attrs) {

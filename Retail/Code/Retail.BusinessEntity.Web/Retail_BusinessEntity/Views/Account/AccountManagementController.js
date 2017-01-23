@@ -211,6 +211,6 @@
         }
     }
 
-    appControllers.controller('Retail_BE_DynamicAccountManagementController', AccountManagementController);
+    appControllers.controller('Retail_BE_AccountManagementController', AccountManagementController);
 
 })(appControllers);

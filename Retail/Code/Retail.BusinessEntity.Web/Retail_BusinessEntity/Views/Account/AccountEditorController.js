@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DynamicAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountPartDefinitionAPIService'];
+    AccountEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountTypeAPIService', 'Retail_BE_AccountPartDefinitionAPIService'];
 
-    function DynamicAccountEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountBEAPIService, Retail_BE_AccountTypeAPIService, Retail_BE_AccountPartDefinitionAPIService) {
+    function AccountEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountBEAPIService, Retail_BE_AccountTypeAPIService, Retail_BE_AccountPartDefinitionAPIService) {
 
         var isEditMode;
         var accountBEDefinitionId;
@@ -143,6 +143,6 @@
         }
     }
 
-    appControllers.controller('Retail_BE_DynamicAccountEditorController', DynamicAccountEditorController);
+    appControllers.controller('Retail_BE_AccountEditorController', AccountEditorController);
 
 })(appControllers);

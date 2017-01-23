@@ -19,7 +19,7 @@
                 modalScope.onAccountAdded = onAccountAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/DynamicAccountEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
 
         function editAccount(accountBEDefinitionId, accountId, parentAccountId, onAccountUpdated) {
@@ -36,7 +36,7 @@
                 modalScope.onAccountUpdated = onAccountUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/DynamicAccountEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
 
         function defineAccountViewTabs(accountBEDefinitionId, account, gridAPI, accountViewDefinitions) {
