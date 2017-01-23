@@ -127,7 +127,7 @@ GO
 delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','DCF8CA21-852C-41B9-9101-6990E545509D')
 --delete views for WhS_BusinessEntity
 delete from [sec].[View] where [Id] in ('EDB49F55-E9E7-4779-9C77-44E89571A792','893CDCE3-209D-4F45-838B-7D732BF14562','4DC9F2F1-2D59-4402-899F-AFD8C6EB113A', '4BDF2F4E-4CFB-487F-84F4-B5B7E74B8DC5')
-
+Delete from [sec].[View] where [Id]='00B7C78E-1486-4D71-B4C9-26A8C0C3725F'--'Accounts'
 --[sec].[View]--------------------------------------------------------------------------------------
 BEGIN
 
@@ -138,7 +138,7 @@ as (select * from (values
 ('CFDD9C24-3E37-47A2-BD48-B91D24490BA0','Event Log','Event Log',null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":"3BBEA684-B106-473C-92D8-EACEFB45E0B3","TypeId":13}','82FF3B8A-0C39-4376-9602-B84A240FBF82',202,3,1),
 
 ('8015EF99-D504-420D-A1D3-1CF577BF3D03','Invoices','Invoices Management',null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,null,null,'{"$type":"Vanrise.Invoice.Entities.InvoiceViewSettings, Vanrise.Invoice.Entities","InvoiceTypeId":"384c819d-6e21-4e9a-9f08-11c7b81ad329","TypeId":0}','5A8308B0-BA99-4002-939B-6D76A1DF1FA7',null,2,null),
-('00B7C78E-1486-4D71-B4C9-26A8C0C3725F','Accounts','Accounts','#/view/Retail_BusinessEntity/Views/Account/AccountManagement','AD9EEB65-70A3-4F57-B261-79F40D541E23','Retail_BE/Account/GetFilteredAccounts',null,null,null,'8DAA013C-3C9B-4E72-8A72-BD68608350B2',0,2,null),
+--('00B7C78E-1486-4D71-B4C9-26A8C0C3725F','Accounts','Accounts','#/view/Retail_BusinessEntity/Views/Account/AccountManagement','AD9EEB65-70A3-4F57-B261-79F40D541E23','Retail_BE/Account/GetFilteredAccounts',null,null,null,'8DAA013C-3C9B-4E72-8A72-BD68608350B2',0,2,null),
 ('9F5B379C-1576-4078-9999-3218B329FEAC','Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement','66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/Package/GetFilteredPackages',null,null,null,'8DAA013C-3C9B-4E72-8A72-BD68608350B2',0,3,null),
 ('01A5D0EA-5343-4017-93C5-3629CD989D86','Traffic Monitor','Traffic Monitor',null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":"ae5ca94d-088d-4e1d-9705-bc90ab5b316f","TypeId":0}','82FF3B8A-0C39-4376-9602-B84A240FBF82',null,4,null),
 ('951C5A77-F51B-4533-9823-3C99F4906880','Credit Classes','Credit Classes','#/view/Retail_BusinessEntity/Views/CreditClass/CreditClassManagement','6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Retail_BE/CreditClass/GetFilteredCreditClasses',null,null,null,'8DAA013C-3C9B-4E72-8A72-BD68608350B2',0,6,null),
