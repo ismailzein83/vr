@@ -40,7 +40,7 @@ namespace TOne.WhS.BusinessEntity.Entities
                     {
                         foreach (var zoneId in routingProductZoneService.ZoneIds)
                         {
-                            if (!_zoneServicesDict.TryGetValue(saleZoneId, out temp))
+                            if (!_zoneServicesDict.TryGetValue(zoneId, out temp))
                                 _zoneServicesDict.Add(zoneId, routingProductZoneService.ServiceIds);
                         }
                     }
