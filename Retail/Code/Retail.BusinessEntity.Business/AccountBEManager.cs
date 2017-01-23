@@ -83,7 +83,7 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
             long accountId;
 
-            if (TryAddAccount(accountToInsert, out accountId))
+            if (TryAddAccount(accountToInsert, out accountId, false))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -97,9 +97,9 @@ namespace Retail.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        internal bool TryAddAccount(AccountToInsert accountToInsert, out long accountId)
+        internal bool TryAddAccount(AccountToInsert accountToInsert, out long accountId, bool donotValidateParent)
         {
-            ValidateAccountToAdd(accountToInsert);
+            ValidateAccountToAdd(accountToInsert, donotValidateParent);
 
             if (accountToInsert.StatusId == Guid.Empty)
             {
@@ -140,12 +140,9 @@ namespace Retail.BusinessEntity.Business
         }
         internal bool TryUpdateAccount(AccountToEdit accountToEdit)
         {
-            long? parentId;
-            ValidateAccountToEdit(accountToEdit, out parentId);
-
+            ValidateAccountToEdit(accountToEdit);
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-
-            return dataManager.Update(accountToEdit, parentId);
+            return dataManager.Update(accountToEdit);
         }
 
         public string GetAccountName(Guid accountBEDefinitionId, long accountId)
@@ -335,11 +332,11 @@ namespace Retail.BusinessEntity.Business
                 return null;
 
             IAccountPayment accountPayment;
-            if (HasAccountPayment(accountBEDefinitionId,accountId.Value, false, out accountPayment))
+            if (HasAccountPayment(accountBEDefinitionId, accountId.Value, false, out accountPayment))
                 return accountId;
 
-            var account = GetAccount(accountBEDefinitionId,accountId.Value);
-            return GetFinancialAccountId(accountBEDefinitionId,account.ParentAccountId);
+            var account = GetAccount(accountBEDefinitionId, accountId.Value);
+            return GetFinancialAccountId(accountBEDefinitionId, account.ParentAccountId);
         }
         public bool UpdateExecutedActions(Guid accountBEDefinitionId, long accountId, ExecutedActions executedActions)
         {
@@ -569,32 +566,23 @@ namespace Retail.BusinessEntity.Business
 
         #region Validation Methods
 
-        private void ValidateAccountToAdd(AccountToInsert accountToInsert)
+        private void ValidateAccountToAdd(AccountToInsert accountToInsert, bool donotValidateParent)
         {
-            ValidateAccount(accountToInsert.AccountBEDefinitionId, accountToInsert.TypeId, accountToInsert.AccountId, accountToInsert.Name, accountToInsert.ParentAccountId);
+            ValidateAccount(accountToInsert.AccountBEDefinitionId, accountToInsert.TypeId, accountToInsert.AccountId, accountToInsert.Name, accountToInsert.ParentAccountId, donotValidateParent);
         }
 
-        private void ValidateAccountToEdit(AccountToEdit accountToEdit, out long? parentAccountId)
+        private void ValidateAccountToEdit(AccountToEdit accountToEdit)
         {
             Account accountEntity = this.GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
 
             if (accountEntity == null)
                 throw new DataIntegrityValidationException(String.Format("Account '{0}' does not exist", accountToEdit.AccountId));
 
-            parentAccountId = accountEntity.ParentAccountId;
-            ValidateAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.TypeId, accountToEdit.AccountId, accountToEdit.Name, accountEntity.ParentAccountId);
+            ValidateAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.TypeId, accountToEdit.AccountId, accountToEdit.Name, null, false);
 
-            if (parentAccountId.HasValue)
-            {
-                IEnumerable<long> subAccountIds = this.GetSubAccountIds(accountToEdit.AccountBEDefinitionId, parentAccountId.Value);
-                if (subAccountIds == null || subAccountIds.Count() == 0)
-                    throw new DataIntegrityValidationException(String.Format("ParentAccount '{0}' does not have any sub accounts", parentAccountId));
-                if (!subAccountIds.Contains(accountToEdit.AccountId))
-                    throw new DataIntegrityValidationException(String.Format("Account '{0}' is not a sub account of Account '{1}'", accountToEdit.AccountId, parentAccountId));
-            }
         }
 
-        private void ValidateAccount(Guid accountBEDefinitionId, Guid accountTypeId, long accountId, string name, long? parentAccountId)
+        private void ValidateAccount(Guid accountBEDefinitionId, Guid accountTypeId, long accountId, string name, long? parentAccountId, bool donotValidateParent)
         {
             var accountType = new AccountTypeManager().GetAccountType(accountTypeId);
             if (accountType.AccountBEDefinitionId != accountBEDefinitionId)
@@ -604,18 +592,12 @@ namespace Retail.BusinessEntity.Business
             if (String.IsNullOrWhiteSpace(name))
                 throw new MissingArgumentValidationException("Account.Name");
 
-            if (parentAccountId.HasValue)
+            if (!donotValidateParent && parentAccountId.HasValue)
             {
                 Account parentAccount = this.GetAccount(accountBEDefinitionId, parentAccountId.Value);
                 if (parentAccount == null)
                     throw new DataIntegrityValidationException(String.Format("ParentAccount '{0}' does not exist", parentAccountId));
             }
-        }
-
-        private IEnumerable<long> GetSubAccountIds(Guid accountBEDefinitionId, long parentAccountId)
-        {
-            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(accountBEDefinitionId);
-            return cachedAccounts.MapRecords(itm => itm.Value.AccountId, itm => itm.Value.ParentAccountId.HasValue && itm.Value.ParentAccountId == parentAccountId);
         }
 
         #endregion
