@@ -63,8 +63,7 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 						selectedIds: routingProductId
 					};
 					if (bulkActionContext != undefined) {
-						//routingProductSelectorPayload.filter.AssignableToOwnerType = bulkActionContext.ownerType;
-						//routingProductSelectorPayload.filter.AssignableToOwnerId = bulkActionContext.ownerId;
+						routingProductSelectorPayload.filter.SellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
 					}
 					VRUIUtilsService.callDirectiveLoad(routingProductSelectorAPI, routingProductSelectorPayload, routingProductSelectorLoadDeferred);
 					return routingProductSelectorLoadDeferred.promise;
