@@ -412,7 +412,7 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                 api.getData = function () {
                     return {
                         $type: "Retail.Voice.MainExtensions.TransformationSteps.PriceVoiceEventStep, Retail.Voice.MainExtensions",
-                        AccountBEDefinitionId:accountBEDefinitionIdDirectiveReadyAPI.getData(),
+                        AccountBEDefinitionID:accountBEDefinitionIdDirectiveReadyAPI.getData(),
                         AccountId: accountIdDirectiveReadyAPI.getData(),
                         ServiceTypeId: serviceTypeIdDirectiveReadyAPI.getData(),
                         RawCDR: rawCDRDirectiveReadyAPI.getData(),
