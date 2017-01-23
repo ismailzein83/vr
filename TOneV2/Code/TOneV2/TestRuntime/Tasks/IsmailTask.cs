@@ -83,8 +83,8 @@ namespace TestRuntime
             //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
 
 
-            //Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(bigDataService);
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bigDataService);
             //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             //runtimeServices.Add(queueRegulatorService);
             //runtimeServices.Add(queueActivationService);
