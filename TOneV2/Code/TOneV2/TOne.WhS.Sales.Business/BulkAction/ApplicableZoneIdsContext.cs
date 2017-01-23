@@ -9,12 +9,16 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class ApplicableZoneIdsContext : IApplicableZoneIdsContext
-    {
-        public IEnumerable<long> SaleZoneIds { get; set; }
+	public class ApplicableZoneIdsContext : IApplicableZoneIdsContext
+	{
+		public SalePriceListOwnerType OwnerType { get; set; }
 
-        public Changes DraftData { get; set; }
+		public int OwnerId { get; set; }
 
-        public BulkActionType BulkAction { get; set; }
+		public IEnumerable<long> SaleZoneIds { get; set; }
+
+		public Changes DraftData { get; set; }
+
+		public BulkActionType BulkAction { get; set; }
 	}
 }

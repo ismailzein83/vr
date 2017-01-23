@@ -21,9 +21,17 @@ namespace TOne.WhS.Sales.Entities
 
 	public interface IActionApplicableToZoneContext
 	{
+		SalePriceListOwnerType OwnerType { get; }
+
+		int OwnerId { get; }
+
 		long ZoneId { get; }
 
 		ZoneChanges ZoneDraft { get; }
+
+		SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId);
+
+		SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId);
 	}
 
 	public interface IApplyBulkActionToZoneItemContext

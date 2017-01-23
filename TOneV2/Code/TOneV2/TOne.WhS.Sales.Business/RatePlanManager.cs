@@ -51,8 +51,10 @@ namespace TOne.WhS.Sales.Business
 				Changes draft = new RatePlanDraftManager().GetDraft(input.OwnerType, input.OwnerId);
 				IEnumerable<long> saleZoneIds = saleZones.MapRecords(x => x.SaleZoneId);
 
-				ApplicableZoneIdsContext applicableZoneIdsContext = new ApplicableZoneIdsContext()
+				var applicableZoneIdsContext = new ApplicableZoneIdsContext()
 				{
+					OwnerType = input.OwnerType,
+					OwnerId = input.OwnerId,
 					BulkAction = input.BulkAction,
 					DraftData = draft,
 					SaleZoneIds = saleZoneIds
@@ -446,8 +448,10 @@ namespace TOne.WhS.Sales.Business
 				if (input.Filter == null || input.Filter.BulkActionFilter == null)
 					throw new Vanrise.Entities.MissingArgumentValidationException("input.Filter.BulkActionFilter");
 
-				IApplicableZoneIdsContext applicableZoneContext = new ApplicableZoneIdsContext()
+				var applicableZoneContext = new ApplicableZoneIdsContext()
 				{
+					OwnerType = input.OwnerType,
+					OwnerId = input.OwnerId,
 					SaleZoneIds = saleZones.MapRecords(x => x.SaleZoneId),
 					DraftData = draft,
 					BulkAction = input.BulkAction
@@ -486,6 +490,8 @@ namespace TOne.WhS.Sales.Business
 			// Filter the sale zones by applicable zones
 			var applicableZoneIdsContext = new ApplicableZoneIdsContext()
 			{
+				OwnerType = input.OwnerType,
+				OwnerId = input.OwnerId,
 				SaleZoneIds = saleZones.MapRecords(x => x.SaleZoneId),
 				DraftData = draft,
 				BulkAction = input.BulkAction

@@ -21,7 +21,7 @@ namespace TOne.WhS.Sales.Business
 		private DateTime _effectiveOn;
 
 		private IEnumerable<DraftRateToChange> _newRates;
-		private IEnumerable<DraftRateToClose> _rateChanges;
+		private IEnumerable<DraftRateToClose> _closedRates;
 
 		private int _targetCurrencyId;
 
@@ -48,7 +48,7 @@ namespace TOne.WhS.Sales.Business
 			if (changes != null && changes.ZoneChanges != null)
 			{
 				_newRates = changes.ZoneChanges.Where(x => x.NewRates != null).SelectMany(x => x.NewRates);
-				_rateChanges = changes.ZoneChanges.Where(x => x.ClosedRates != null).SelectMany(x => x.ClosedRates);
+				_closedRates = changes.ZoneChanges.Where(x => x.ClosedRates != null).SelectMany(x => x.ClosedRates);
 			}
 
 			_targetCurrencyId = targetCurrencyId;
@@ -182,11 +182,30 @@ namespace TOne.WhS.Sales.Business
 				zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
 			}
 
-			zoneItem.ClosedRates = _rateChanges.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+			DraftRateToClose closedNormalRate = null;
+			if (zoneItem.ClosedRates != null)
+				closedNormalRate = zoneItem.ClosedRates.FindRecord(x => !x.RateTypeId.HasValue);
 
-			DraftRateToClose rateChange = _rateChanges.FindRecord(itm => itm.RateId == zoneItem.CurrentRateId); // What if currentRateId = null?
-			if (rateChange != null)
-				zoneItem.CurrentRateNewEED = rateChange.EED;
+			if (closedNormalRate != null)
+			{
+				var closedRates = new List<DraftRateToClose>();
+				closedRates.Add(closedNormalRate);
+
+				IEnumerable<DraftRateToClose> draftClosedOtherRates = _closedRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId && x.RateTypeId.HasValue);
+				if (draftClosedOtherRates != null)
+					closedRates.AddRange(draftClosedOtherRates);
+
+				zoneItem.ClosedRates = closedRates;
+				zoneItem.CurrentRateNewEED = closedNormalRate.EED;
+			}
+			else
+			{
+				zoneItem.ClosedRates = _closedRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+
+				DraftRateToClose closedRate = zoneItem.ClosedRates.FindRecord(x => !x.RateTypeId.HasValue);
+				if (closedRate != null)
+					zoneItem.CurrentRateNewEED = closedRate.EED;
+			}
 		}
 
 		private void SetZoneRateTypes(ZoneItem zoneItem)

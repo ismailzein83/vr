@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
@@ -24,10 +25,46 @@ namespace TOne.WhS.Sales.Business
 
 			if (context.CustomData == null)
 			{
-				context.CustomData = (object)new RatePlanDraftManager().GetDraft(this.OwnerType, this.OwnerId);
+				context.CustomData = (object)new CustomData(this.OwnerType, this.OwnerId);
 			}
 
-			return !UtilitiesManager.IsActionApplicableToZone(this.ActionType, context.SaleZone.SaleZoneId, context.CustomData as Changes);
+			CustomData customData = context.CustomData as CustomData;
+
+			var IsActionApplicableToZoneInput = new UtilitiesManager.IsActionApplicableToZoneInput()
+			{
+				OwnerType = OwnerType,
+				OwnerId = OwnerId,
+				ZoneId = context.SaleZone.SaleZoneId,
+				BulkAction = ActionType,
+				Draft = customData.Draft,
+				GetSellingProductZoneRate = customData.GetSellingProductZoneRate,
+				GetCustomerZoneRate = customData.GetCustomerZoneRate
+			};
+
+			return !UtilitiesManager.IsActionApplicableToZone(IsActionApplicableToZoneInput);
+		}
+
+		private class CustomData
+		{
+			private SaleEntityZoneRateLocator _futureRateLocator;
+
+			public Changes Draft { get; set; }
+
+			public CustomData(SalePriceListOwnerType ownerType, int ownerId)
+			{
+				_futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
+				Draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
+			}
+
+			public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId)
+			{
+				return _futureRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId);
+			}
+
+			public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId)
+			{
+				return _futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+			}
 		}
 	}
 }

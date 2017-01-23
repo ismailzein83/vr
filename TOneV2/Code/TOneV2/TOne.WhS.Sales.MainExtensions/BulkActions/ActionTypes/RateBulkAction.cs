@@ -23,14 +23,9 @@ namespace TOne.WhS.Sales.MainExtensions
 
 		public DateTime BED { get; set; }
 
-		public bool OverwriteDraftNewNormalRate { get; set; }
-
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{
-			if (OverwriteDraftNewNormalRate)
-				return true;
-			// The zone is applicable if no new normal rate exists
-			return (context.ZoneDraft == null || context.ZoneDraft.NewRates == null || !context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue));
+			return true;
 		}
 
 		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)

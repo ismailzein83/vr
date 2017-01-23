@@ -16,6 +16,10 @@ namespace TOne.WhS.Sales.Entities
 
 	public interface IApplicableZoneIdsContext
 	{
+		SalePriceListOwnerType OwnerType { get; }
+
+		int OwnerId { get; }
+
 		IEnumerable<long> SaleZoneIds { get; }
 
 		Changes DraftData { get; }

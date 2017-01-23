@@ -62,20 +62,22 @@ namespace TOne.WhS.Sales.Business
 			return dateTime.ToShortDateString();
 		}
 
-		public static bool IsActionApplicableToZone(BulkActionType bulkAction, long zoneId, Changes draftData)
+		public static bool IsActionApplicableToZone(IsActionApplicableToZoneInput context)
 		{
 			ZoneChanges zoneDraft = null;
 
-			if (draftData != null && draftData.ZoneChanges != null)
-				zoneDraft = draftData.ZoneChanges.FindRecord(x => x.ZoneId == zoneId);
+			if (context.Draft != null && context.Draft.ZoneChanges != null)
+				zoneDraft = context.Draft.ZoneChanges.FindRecord(x => x.ZoneId == context.ZoneId);
 
-			var actionApplicableToZoneContext = new ActionApplicableToZoneContext()
+			var actionApplicableToZoneContext = new ActionApplicableToZoneContext(context.GetSellingProductZoneRate, context.GetCustomerZoneRate)
 			{
-				ZoneId = zoneId,
+				OwnerType = context.OwnerType,
+				OwnerId = context.OwnerId,
+				ZoneId = context.ZoneId,
 				ZoneDraft = zoneDraft
 			};
 
-			return bulkAction.IsApplicableToZone(actionApplicableToZoneContext);
+			return context.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
 		}
 
 		#region Private Methods
@@ -90,6 +92,27 @@ namespace TOne.WhS.Sales.Business
 
 			return dates.ElementAt(0);
 		}
+		#endregion
+
+		#region Public Classes
+
+		public class IsActionApplicableToZoneInput
+		{
+			public SalePriceListOwnerType OwnerType { get; set; }
+
+			public int OwnerId { get; set; }
+
+			public long ZoneId { get; set; }
+
+			public BulkActionType BulkAction { get; set; }
+
+			public Changes Draft { get; set; }
+
+			public Func<int, long, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
+
+			public Func<int, int, long, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
+		}
+
 		#endregion
 	}
 }

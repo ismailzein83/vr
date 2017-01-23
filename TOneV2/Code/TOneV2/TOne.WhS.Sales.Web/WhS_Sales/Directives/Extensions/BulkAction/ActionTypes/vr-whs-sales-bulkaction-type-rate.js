@@ -95,7 +95,6 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 						costCalculationMethod = payload.bulkAction.CostCalculationMethod;
 						rateCalculationMethod = payload.bulkAction.RateCalculationMethod;
 						$scope.scopeModel.beginEffectiveDate = payload.bulkAction.BED;
-						$scope.scopeModel.overwrite = payload.bulkAction.OverwriteDraftNewNormalRate;
 					}
 
 					if (bulkActionContext.costCalculationMethods != undefined) {
@@ -152,8 +151,7 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 					$type: 'TOne.WhS.Sales.MainExtensions.RateBulkAction, TOne.WhS.Sales.MainExtensions',
 					CostCalculationMethod: $scope.scopeModel.selectedCostCalculationMethod,
 					RateCalculationMethod: (directiveAPI != undefined) ? directiveAPI.getData() : null,
-					BED: UtilsService.getDateFromDateTime($scope.scopeModel.beginEffectiveDate),
-					OverwriteDraftNewNormalRate: $scope.scopeModel.overwrite
+					BED: ($scope.scopeModel.beginEffectiveDate != undefined) ? UtilsService.getDateFromDateTime($scope.scopeModel.beginEffectiveDate) : null
 				};
 			};
 
