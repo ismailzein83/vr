@@ -6,9 +6,9 @@
 
     function AccountManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountTypeAPIService) {
 
-        var accountFields;
         var viewId;
         var accountBEDefinitionId;
+        var accountFields;
 
         var businessEntityDefinitionSelectorAPI;
         var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -34,7 +34,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.isGridLoadded = false;
+            $scope.scopeModel.isGridLoaded = false;
             $scope.scopeModel.isAccountBEDefinitionSelected = false;
             $scope.scopeModel.showBusinessEntityDefinitionSelector = false;
 
@@ -62,13 +62,13 @@
 
                 if (selectedBusinessEntityDefinition != undefined) {
                     $scope.scopeModel.isLoading = true;
-                    $scope.scopeModel.isGridLoadded = false;
+                    $scope.scopeModel.isGridLoaded = false;
                     $scope.scopeModel.isAccountBEDefinitionSelected = true;
 
                     accountBEDefinitionId = selectedBusinessEntityDefinition.BusinessEntityDefinitionId;
 
                     loadAllControls().then(function () {
-                        $scope.scopeModel.isGridLoadded = true;
+                        $scope.scopeModel.isGridLoaded = true;
                     })
                 }
             };

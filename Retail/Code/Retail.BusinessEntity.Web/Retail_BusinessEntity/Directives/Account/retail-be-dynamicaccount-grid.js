@@ -65,8 +65,6 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                     }
                     return menuActions;
                 };
-
-                //defineMenuActions();
             }
             function defineAPI() {
                 var api = {};
@@ -114,21 +112,19 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                     });
 
                     function getAccountGridColumnsLoadPromise() {
-
                         var accountGridColumnAttributesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         Retail_BE_AccountBEDefinitionAPIService.GetAccountGridColumnAttributes(accountBEDefinitionId, parentAccountId).then(function (response) {
-
                             var accountGridColumnAttributes = response;
 
                             if (accountGridColumnAttributes != undefined) {
                                 for (var index = 0; index < accountGridColumnAttributes.length; index++) {
                                     var accountGridColumnAttribute = accountGridColumnAttributes[index];
                                     var column = {
-                                        Field: accountGridColumnAttribute.Attribute.Field,
                                         HeaderText: accountGridColumnAttribute.Attribute.HeaderText,
+                                        Field: accountGridColumnAttribute.Attribute.Field,
                                         Type: accountGridColumnAttribute.Attribute.Type
-                                    }
+                                    };
                                     gridColumnFieldNames.push(accountGridColumnAttribute.Name);
                                     $scope.scopeModel.columns.push(column);
                                 }
@@ -142,14 +138,11 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                         return accountGridColumnAttributesLoadPromiseDeferred.promise;
                     }
                     function getAccountViewDefinitionsLoadPromise() {
-
                         var accountViewDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         Retail_BE_AccountBEDefinitionAPIService.GetAccountViewDefinitions(accountBEDefinitionId).then(function (response) {
-
                             accountViewDefinitions = response;
                             accountViewDefinitionsLoadPromiseDeferred.resolve();
-
                         }).catch(function (error) {
                             accountViewRuntimeEditorsLoadPromiseDeferred.reject(error);
                         });
@@ -157,14 +150,11 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                         return accountViewDefinitionsLoadPromiseDeferred.promise;
                     }
                     function getAccountActionDefinitionsLoadPromise() {
-
                         var accountActionDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         Retail_BE_AccountBEDefinitionAPIService.GetAccountActionDefinitions(accountBEDefinitionId).then(function (response) {
-
                             accountActionDefinitions = response;
                             accountActionDefinitionsLoadPromiseDeferred.resolve();
-
                         }).catch(function (error) {
                             accountViewRuntimeEditorsLoadPromiseDeferred.reject(error);
                         });
@@ -193,31 +183,5 @@ app.directive('retailBeDynamicaccountGrid', ['VRNotificationService', 'UtilsServ
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            function defineMenuActions() {
-                $scope.scopeModel.menuActions.push({
-                    name: 'Edit',
-                    clicked: editAccount,
-                    haspermission: hasEditAccountPermission
-                }, {
-                    name: 'Open Account 360 Degree',
-                    clicked: openAccount360DegreeEditor,
-                });
-            }
-            function editAccount(account) {
-                var onAccountUpdated = function (updatedAccount) {
-                    Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, updatedAccount, gridAPI, accountViewDefinitions);
-                    Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, updatedAccount, gridAPI, accountViewDefinitions, accountActionDefinitions);
-                    gridAPI.itemUpdated(updatedAccount);
-                };
-
-                Retail_BE_AccountBEService.editAccount(accountBEDefinitionId, account.Entity.AccountId, account.Entity.ParentAccountId, onAccountUpdated);
-            }
-            function openAccount360DegreeEditor(account) {
-                Retail_BE_AccountBEService.openAccount360DegreeEditor(accountBEDefinitionId, account.Entity.AccountId);
-            }
-            //function hasEditAccountPermission() {
-            //    return Retail_BE_AccountBEAPIService.HasUpdateAccountPermission();
-            //}
         }
     }]);

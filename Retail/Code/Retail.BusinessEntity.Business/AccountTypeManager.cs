@@ -188,14 +188,13 @@ namespace Retail.BusinessEntity.Business
                             if (accountType != null && accountType.Settings != null && accountType.Settings.PartDefinitionSettings != null)
                                 accountPartDefinitionIds.AddRange(accountType.Settings.PartDefinitionSettings.Select(itm => itm.PartDefinitionId));
                         }
-                        HashSet<Guid> includedAccountPartDefinitionIds = accountPartDefinitionIds.ToHashSet();
 
                         var accountPartDefinitions = new AccountPartDefinitionManager().GetAccountPartDefinitions();
                         if (accountPartDefinitions != null)
                         {
                             foreach (var partDefinition in accountPartDefinitions)
                             {
-                                if (!includedAccountPartDefinitionIds.Contains(partDefinition.AccountPartDefinitionId))
+                                if (!accountPartDefinitionIds.Contains(partDefinition.AccountPartDefinitionId))
                                     continue;
 
                                 var partFieldDefinitions = partDefinition.Settings.GetFieldDefinitions();

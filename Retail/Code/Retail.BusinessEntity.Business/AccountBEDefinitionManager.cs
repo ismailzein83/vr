@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.Business
 
         public AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
         {
-            var businessEntityDefinition = this.GetAccountBusinessEntityDefinition(accountBEDefinitionId);
+            var businessEntityDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(accountBEDefinitionId);
 
             if (businessEntityDefinition == null)
                 throw new NullReferenceException(string.Format("businessEntityDefinition Id : {0}", accountBEDefinitionId));
@@ -161,12 +161,6 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Methods
-
-        private BusinessEntityDefinition GetAccountBusinessEntityDefinition(Guid accountBEDefinitionId)
-        {
-            BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
-            return businessEntityDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
-        }
 
         private bool IsColumnAvailable(Guid accountBEDefinitionId, long? parentAccountId, AccountGridColumnDefinition gridColumnDefinition)
         {

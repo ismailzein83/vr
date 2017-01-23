@@ -9,7 +9,7 @@
         var accountBEDefinitionId;
         var accountId;
         var accountEntity;
-        var accountViewsDefinitions;
+        var accountViewDefinitions;
 
         loadParameters();
         defineScope();
@@ -45,7 +45,7 @@
         }
         function getAccountViewsDefinitions() {
             return Retail_BE_AccountBEDefinitionAPIService.GetAccountViewDefinitionsByAccountId(accountBEDefinitionId, accountId).then(function (response) {
-                accountViewsDefinitions = response;
+                accountViewDefinitions = response;
             });
         }
 
@@ -65,24 +65,25 @@
         }
         function loadAccountViews() {
 
-            if (accountViewsDefinitions != undefined) {
-                for (var i = 0; i < accountViewsDefinitions.length ; i++) {
-                    var accountViewDefinition = accountViewsDefinitions[i];
+            if (accountViewDefinitions != undefined) {
+                for (var i = 0; i < accountViewDefinitions.length ; i++) {
+                    var accountViewDefinition = accountViewDefinitions[i];
                     AddAccountView(accountViewDefinition);
                 }
             }
 
-            function AddAccountView(viewDefinition) {
-                if (viewDefinition.Account360DegreeSectionName != undefined) {
+            function AddAccountView(accountViewDefinition) {
+                if (accountViewDefinition.Account360DegreeSectionName != undefined) {
                     var view = {
-                        header: viewDefinition.Account360DegreeSectionName,
-                        runtimeEditor: viewDefinition.Settings.RuntimeEditor,
+                        header: accountViewDefinition.Account360DegreeSectionName,
+                        runtimeEditor: accountViewDefinition.Settings.RuntimeEditor,
                         onDirectiveReady: function (api) {
                             view.directiveAPI = api;
                             var setLoader = function (value) {
                                 view.isLoadingDirective = value;
                             };
                             var payloadDirective = {
+                                accountViewDefinition: accountViewDefinition,
                                 accountBEDefinitionId: accountBEDefinitionId,
                                 parentAccountId: accountId
                             };
