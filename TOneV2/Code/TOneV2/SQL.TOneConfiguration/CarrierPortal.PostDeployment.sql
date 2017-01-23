@@ -32,7 +32,9 @@ when not matched by target then
 --------------------------------------------------------------------------------------------------------------
 end
 
-
+GO--delete useless views from ClearVoice product such 'My Scheduler Service' since it is replace with 'Schedule Test Calls', 'Style Definitions', 'Organizational Charts','Countries'
+delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','66DE2441-8A96-41E7-94EA-9F8AF38A3515','DCF8CA21-852C-41B9-9101-6990E545509D','25994374-CB99-475B-8047-3CDB7474A083','9F691B87-4936-4C4C-A757-4B3E12F7E1D9', 'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9', '0F111ADC-B7F6-46A4-81BC-72FFDEB305EB', '4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712','604B2CB5-B839-4E51-8D13-3C1C84D05DEE')
+GO
 --[sec].[View]-----------------------------8001 to 9000-------------------------------------------------------
 begin
 
@@ -154,6 +156,9 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
+GO--delete useless [Setting] from ClearVoice product such 'System Currency', etc...
+delete from [common].[Setting] where [Id] in ('1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE')
+GO
 --[common].[Setting]---------------------------801 to 900-------------------------------------------
 begin
 set nocount on;
@@ -204,3 +209,5 @@ when not matched by source then
 	delete;
 ----------------------------------------------------------------------------------------------------
 end
+
+Delete from [runtime].[SchedulerTaskActionType] where Id in ('0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9','7A35F562-319B-47B3-8258-EC1A704A82EB') --Exchange Rate, workflow
