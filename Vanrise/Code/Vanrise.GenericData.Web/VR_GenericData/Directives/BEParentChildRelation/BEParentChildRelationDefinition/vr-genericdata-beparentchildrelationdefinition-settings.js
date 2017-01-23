@@ -73,14 +73,8 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
 
                         parentBEDefinitionSelectorReadyDeferred.promise.then(function () {
                             var payload = {
-                                //filter: {
-                                //    Filters: [{
-                                //        $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business",
-                                //    }]
-                                //},
                                 selectedIds: beParentChildRelationDefinitionSettings != undefined ? beParentChildRelationDefinitionSettings.ParentBEDefinitionId : undefined
                             };
-
                             VRUIUtilsService.callDirectiveLoad(parentBEDefinitionSelectorAPI, payload, parentBEDefinitionSelectorLoadDeferred);
                         });
 
@@ -91,14 +85,8 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
 
                         childBEDefinitionSelectorReadyDeferred.promise.then(function () {
                             var payload = {
-                                //filter: {
-                                //    Filters: [{
-                                //        $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business",
-                                //    }]
-                                //},
                                 selectedIds: beParentChildRelationDefinitionSettings != undefined ? beParentChildRelationDefinitionSettings.ChildBEDefinitionId : undefined
                             };
-
                             VRUIUtilsService.callDirectiveLoad(childBEDefinitionSelectorAPI, payload, childBEDefinitionSelectorLoadDeferred);
                         });
 
