@@ -30,6 +30,9 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             var accountDefinitionSelectorApi;
             var accountDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var currencySelectorAPI;
+            var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onBillingTransactionTypeReady = function (api) {
@@ -42,6 +45,10 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 accountDefinitionSelectorPromiseDeferred.resolve();
             };
 
+            $scope.scopeModel.onCurrencySelectorReady = function (api) {
+                currencySelectorAPI = api;
+                currencySelectorReadyDeferred.resolve();
+            };
             function initializeController() {
                 defineAPI();
             }
@@ -51,6 +58,12 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
                 api.load = function (payload) {
 
+                    if (payload != undefined) {
+                        $scope.scopeModel.amountColumn = payload.AmountColumn;
+                        $scope.scopeModel.timeColumn = payload.TimeColumn;
+                        $scope.scopeModel.accountColumn = payload.SourceAccountIdColumn;
+                    }
+
                     var promises = [];
 
                     var loadTransactionTypePromise = getBillingTransactionTypeSelectorPromise();
@@ -58,6 +71,8 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
                     var loadAccountDefinitionTypePromise = getAccountDefinitionSelectorLoadPromise();
                     promises.push(loadAccountDefinitionTypePromise);
+
+                    promises.push(loadCurrencySelector());
 
                     function getAccountDefinitionSelectorLoadPromise() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -78,7 +93,7 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         });
 
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
-                    }
+                    };
 
                     function getBillingTransactionTypeSelectorPromise() {
                         var billingTransactionTypeLoadDeferred = UtilsService.createPromiseDeferred();
@@ -92,7 +107,22 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                             VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, selectorPayload, billingTransactionTypeLoadDeferred);
                         });
                         return billingTransactionTypeLoadDeferred.promise;
-                    }
+                    };
+
+                    function loadCurrencySelector() {
+                        var currencyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var selectorPayload;
+                        if (payload != undefined) {
+                            selectorPayload = {
+                                selectedIds: payload.CurrencyId
+                            }
+                        }
+                        currencySelectorReadyDeferred.promise
+                            .then(function () {
+                                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, selectorPayload, currencyLoadPromiseDeferred);
+                            });
+                        return currencyLoadPromiseDeferred.promise;
+                    };
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -102,7 +132,11 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         $type: "Retail.Zajil.MainExtensions.Convertors.PaymentConvertor, Retail.Zajil.MainExtensions",
                         Name: "Zajil Payment Convertor",
                         TransactionTypeId: transactionTypeDirectiveAPI.getSelectedIds(),
-                        AccountBEDefinitionId: accountDefinitionSelectorApi.getSelectedIds()
+                        AccountBEDefinitionId: accountDefinitionSelectorApi.getSelectedIds(),
+                        CurrencyId: currencySelectorAPI.getSelectedIds(),
+                        AmountColumn: $scope.scopeModel.amountColumn,
+                        TimeColumn: $scope.scopeModel.timeColumn,
+                        SourceAccountIdColumn: $scope.scopeModel.accountColumn
                     };
                     return data;
                 };
@@ -110,7 +144,7 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            
+
         }
 
         return directiveDefinitionObject;

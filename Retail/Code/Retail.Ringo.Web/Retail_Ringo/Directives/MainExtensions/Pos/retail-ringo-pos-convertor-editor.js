@@ -18,7 +18,7 @@ app.directive('retailRingoPosConvertorEditor', ['UtilsService', 'VRUIUtilsServic
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Pos/Templates/PosConvertorEditor.html"
+            templateUrl: "/Client/Modules/Retail_Ringo/Directives/MainExtensions/Pos/Templates/PosConvertorEditor.html"
         };
 
         function retailBePosConvertorEditorCtor(ctrl, $scope, $attrs) {

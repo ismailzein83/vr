@@ -28,6 +28,7 @@ namespace Retail.Zajil.MainExtensions
         Currency _mainCurrency;
         public Guid AccountBEDefinitionId { get; set; }
         public Guid AccountTypeId { get; set; }
+        public Guid SiteAccountTypeId { get; set; }
         public Guid InitialStatusId { get; set; }
         public Guid FinancialPartDefinitionId { get; set; }
         public Guid CompanyProfilePartDefinitionId { get; set; }
@@ -61,9 +62,19 @@ namespace Retail.Zajil.MainExtensions
 
                 accountData.Account.Name = accountName;
                 accountData.Account.SourceId = sourceId;
-                accountData.Account.TypeId = this.AccountTypeId;// new Guid("046078A0-3434-4934-8F4D-272608CFFEBF");
+                accountData.Account.TypeId = this.AccountTypeId;
                 FillAccountSettings(accountData, row);
-                accountData.Account.StatusId = this.InitialStatusId;// Guid.Parse("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B");
+                accountData.Account.StatusId = this.InitialStatusId;
+                accountData.ChildrenAccounts = new List<SourceAccountData>()
+                {
+                    new SourceAccountData{
+                     Account = new Account{
+                      TypeId = this.SiteAccountTypeId,
+                       Name = "Site 1",
+                        StatusId = this.InitialStatusId
+                     }
+                    }
+                };
                 zajilAccounts.Add(sourceId, accountData);
             }
             context.TargetBEs = zajilAccounts.Values.ToList();
@@ -113,7 +124,8 @@ namespace Retail.Zajil.MainExtensions
             {
                 Settings = new AccountPartFinancial
                 {
-                    CurrencyId = _mainCurrency.CurrencyId
+                    CurrencyId = _mainCurrency.CurrencyId,
+                    ProductId = 5
                 }
             });
         }

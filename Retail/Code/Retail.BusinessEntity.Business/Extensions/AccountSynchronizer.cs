@@ -32,21 +32,14 @@ namespace Retail.BusinessEntity.Business
         {
             if (context.TargetBE == null)
                 throw new NullReferenceException("context.TargetBE");
-            AccountBEManager accountManager = new AccountBEManager();
+
             foreach (var targetAccount in context.TargetBE)
             {
                 SourceAccountData accountData = targetAccount as SourceAccountData;
-                long accountId;
-                accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId);
-                if (accountId > 0 && accountData.IdentificationRulesToInsert != null)
-                    foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
-                    {
-                        mappingRule.Settings.Value = accountId;
-                        var manager = GetRuleManager(mappingRule.DefinitionId);
-                        manager.TryAddGenericRule(mappingRule);
-                    }
+                AddAccount(accountData, null);
             }
         }
+
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
             Dictionary<string, Account> existingAccounts = context.InitializationData as Dictionary<string, Account>;
@@ -89,6 +82,32 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Methods
+
+        void AddAccount(SourceAccountData accountData, long? parentAccountId)
+        {
+            AccountBEManager accountManager = new AccountBEManager();
+            long accountId;
+            accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId, true);
+            if (accountId > 0)
+            {
+                if (accountData.IdentificationRulesToInsert != null)
+                    foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
+                    {
+                        mappingRule.Settings.Value = accountId;
+                        var manager = GetRuleManager(mappingRule.DefinitionId);
+                        manager.TryAddGenericRule(mappingRule);
+                    }
+                if (accountData.ChildrenAccounts != null && accountData.ChildrenAccounts.Count > 0)
+                {
+                    foreach (var childAccount in accountData.ChildrenAccounts)
+                    {
+                        childAccount.Account.ParentAccountId = accountId;
+                        AddAccount(childAccount, accountId);
+                    }
+                }
+            }
+        }
+
         AccountToInsert GetAccountToInsert(Account account)
         {
             return new AccountToInsert

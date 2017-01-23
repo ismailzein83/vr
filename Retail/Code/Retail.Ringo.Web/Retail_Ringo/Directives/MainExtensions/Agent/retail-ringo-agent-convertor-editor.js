@@ -18,7 +18,7 @@ app.directive('retailRingoAgentConvertorEditor', ['UtilsService', 'VRUIUtilsServ
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Agent/Templates/AgentConvertorEditor.html"
+            templateUrl: "/Client/Modules/Retail_Ringo/Directives/MainExtensions/Agent/Templates/AgentConvertorEditor.html"
         };
 
         function retailBeAgentConvertorEditorCtor(ctrl, $scope, $attrs) {

@@ -18,7 +18,7 @@ app.directive('retailRingoDistributorConvertorEditor', ['UtilsService', 'VRUIUti
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Distributor/Templates/DistributorConvertorEditor.html"
+            templateUrl: "/Client/Modules/Retail_Ringo/Directives/MainExtensions/Distributor/Templates/DistributorConvertorEditor.html"
         };
 
         function retailBeDistributorConvertorEditorCtor(ctrl, $scope, $attrs) {

@@ -40,8 +40,8 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
             var api = {};
             var partSettings;
             api.load = function (payload) {
-                if (payload.partDefinition != undefined && payload.partDefinition.Settings != undefined) {
-                    ctrl.orderdetails = payload.partDefinition.Settings.OrderDetailItems;
+                if (payload != undefined && payload.partSettings != undefined) {
+                    ctrl.orderdetails = payload.partSettings.OrderDetailItems;
                 }
 
             };

@@ -1,7 +1,8 @@
 ﻿<vr-section title="Account Defintion">
-    <vr-columns width="1/3row">
+    <vr-columns width="1/3row" vr-loader="scopeModel.isAccountTypeSelectorLoading">
         <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountDefinitionSelectorReady"
                                                           onselectionchanged="scopeModel.onAccountDefinitionSelectionChanged"
+                                                          selectedvalues="scopeModel.selectedAccountDefinition"
                                                           customlabel="Account Definition"
                                                           isrequired="true">
         </vr-genericdata-businessentitydefinition-selector>
@@ -9,7 +10,12 @@
     <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
                                     normal-col-num="4"
                                     customlabel="Account Type"
-                                    isrequired="true">
+                                    isrequired="true" vr-loader="scopeModel.isAccountTypeSelectorLoading">
+    </retail-be-accounttype-selector>
+    <retail-be-accounttype-selector on-ready="scopeModel.onSiteAccountTypeSelectorReady"
+                                    normal-col-num="4"
+                                    customlabel="Site Account Type"
+                                    isrequired="true" vr-loader="scopeModel.isAccountTypeSelectorLoading">
     </retail-be-accounttype-selector>
     <retail-be-statusdefinition-selector on-ready="scopeModel.onInitialStatusDefinitionSelectorReady"
                                          customlabel="Initial Status"

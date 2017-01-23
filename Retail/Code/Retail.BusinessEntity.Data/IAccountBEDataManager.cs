@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Data
 
         bool Insert(AccountToInsert accountToInsert, out long insertedId);
 
-        bool Update(AccountToEdit accountToEdit, long? parentId);
+        bool Update(AccountToEdit accountToEdit);
 
         bool AreAccountsUpdated(Guid accountBEDefinitionId, ref object updateHandle);
     }

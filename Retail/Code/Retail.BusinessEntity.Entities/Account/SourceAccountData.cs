@@ -11,6 +11,7 @@ namespace Retail.BusinessEntity.Entities
     public class SourceAccountData : ITargetBE
     {
         public Account Account { get; set; }
+        public List<SourceAccountData> ChildrenAccounts { get; set; }
         public object SourceBEId
         {
             get { return this.Account.SourceId; }

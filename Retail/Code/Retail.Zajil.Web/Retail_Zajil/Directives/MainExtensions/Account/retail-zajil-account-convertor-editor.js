@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsService', 'Retail_BE_EntityTypeEnum',
-    function (UtilsService, VRUIUtilsService, Retail_BE_EntityTypeEnum) {
+app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsService', 'Retail_BE_EntityTypeEnum', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, Retail_BE_EntityTypeEnum, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -25,6 +25,8 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             this.initializeController = initializeController;
 
             var accountBEDefinitionId;
+            var accountTypeId;
+            var siteAccountTypeId;
 
             var accountDefinitionSelectorApi;
             var accountDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -35,6 +37,9 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
             var accountTypeSelectorAPI;
             var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var siteAccountTypeSelectorAPI;
+            var siteAccountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var companyProfileDefinitionSelectorAPI;
             var companyProfileDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -62,6 +67,11 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 accountTypeSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onSiteAccountTypeSelectorReady = function (api) {
+                siteAccountTypeSelectorAPI = api;
+                siteAccountTypeSelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onCompanyProfileDefinitionSelectorReady = function (api) {
                 companyProfileDefinitionSelectorAPI = api;
                 companyProfileDefinitionSelectorReadyDeferred.resolve();
@@ -78,21 +88,45 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             };
 
             $scope.scopeModel.onAccountDefinitionSelectionChanged = function (selectedItem) {
+                if (selectedItem != undefined && businessEntityDefinitionSelectionChangedDeferred == undefined) {
+                    businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                    businessEntityDefinitionSelectionChangedDeferred.resolve();
 
-                if (selectedItem != undefined) {
-                    accountBEDefinitionId = selectedItem.BusinessEntityDefinitionId;
+                    $scope.scopeModel.isAccountTypeSelectorLoading = true;
+                    var promises = [];
+                    //var payload = {
+                    //    filter: {
+                    //        AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
+                    //    }
+                    //};
+                    var siteAccountTypeSelectorPayload = {
+                        filter: {
+                            AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
+                        },
+                        selectedIds: siteAccountTypeId
+                    };
 
                     var accountTypeSelectorPayload = {
                         filter: {
-                            AccountBEDefinitionId: accountBEDefinitionId
-                        }
+                            AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
+                        },
+                        selectedIds: accountTypeId
                     };
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isAccountTypeSelectorLoading = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, accountTypeSelectorPayload, setLoader, businessEntityDefinitionSelectionChangedDeferred);
+                    promises.push(loadAccountTypeSelector(accountTypeSelectorPayload));
+                    promises.push(loadSiteAccountTypeSelector(siteAccountTypeSelectorPayload));
+
+                    UtilsService.waitMultiplePromises(promises).then(function () {
+                        businessEntityDefinitionSelectionChangedDeferred = undefined;
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.scopeModel.isAccountTypeSelectorLoading = false;
+                    });
+                } else if (businessEntityDefinitionSelectionChangedDeferred != undefined) {
+                    businessEntityDefinitionSelectionChangedDeferred.resolve();
                 }
             };
+
 
             function initializeController() {
                 defineAPI();
@@ -103,15 +137,42 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
                 api.load = function (payload) {
                     var promises = [];
+                    var accountTypeSelectorPayload;
+                    var siteAccountTypeSelectorPayload
 
-                    promises.push(getAccountDefinitionSelectorLoad());
+
+                    promises.push(loadAccountDefinitionSelectorLoad());
                     promises.push(loadStatusDefinitionSelector());
-                    promises.push(loadAccountTypeSelector());
+
+                    if (payload != undefined) {
+                        accountTypeId = payload.AccountTypeId;
+                        siteAccountTypeId = payload.SiteAccountTypeId;
+
+                        accountBEDefinitionId = payload.AccountBEDefinitionId;
+                        console.log(accountBEDefinitionId);
+                        var siteAccountTypeSelectorPayload = {
+                            filter: {
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            },
+                            selectedIds: payload.SiteAccountTypeId
+                        };
+
+                        var accountTypeSelectorPayload = {
+                            filter: {
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            },
+                            selectedIds: payload.AccountTypeId
+                        };
+                        businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadAccountTypeSelector(accountTypeSelectorPayload));
+                        promises.push(loadSiteAccountTypeSelector(siteAccountTypeSelectorPayload));
+                    }
+
                     promises.push(loadCompanyProfileDefinitionSelector());
                     promises.push(loadFinancialDefinitionSelector());
                     promises.push(loadOrderDetailsDefinitionSelector());
 
-                    function getAccountDefinitionSelectorLoad() {
+                    function loadAccountDefinitionSelectorLoad() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         accountDefinitionSelectorPromiseDeferred.promise.then(function () {
@@ -186,30 +247,9 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         return orderDetailsSelectorLoadDeferred.promise;
                     };
 
-                    function loadAccountTypeSelector() {
-
-                        if (businessEntityDefinitionSelectionChangedDeferred == undefined)
-                            businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-
-                        var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        UtilsService.waitMultiplePromises([accountTypeSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
-                            businessEntityDefinitionSelectionChangedDeferred = undefined;
-
-                            var accountTypeSelectorPayload = {
-                                filter: {
-                                    AccountBEDefinitionId: accountBEDefinitionId
-                                },
-                                selectedIds: payload != undefined ? payload.AccountTypeId : undefined
-                            };
-
-                            VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
-                        });
-
-                        return accountTypeSelectorLoadDeferred.promise;
-                    };
-
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        businessEntityDefinitionSelectionChangedDeferred = undefined;
+                    });
                 };
 
                 api.getData = function () {
@@ -219,6 +259,7 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         AccountBEDefinitionId: accountDefinitionSelectorApi.getSelectedIds(),
                         InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds(),
                         AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
+                        SiteAccountTypeId: siteAccountTypeSelectorAPI.getSelectedIds(),
                         CompanyProfilePartDefinitionId: companyProfileDefinitionSelectorAPI.getSelectedIds(),
                         FinancialPartDefinitionId: financialDefinitionSelectorAPI.getSelectedIds(),
                         OrderDetailsPartDefinitionId: orderDetailsDefinitionSelectorAPI.getSelectedIds()
@@ -228,6 +269,30 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function loadSiteAccountTypeSelector(accountTypeSelectorPayload) {
+                console.log(accountTypeSelectorPayload);
+
+                var siteAccountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                UtilsService.waitMultiplePromises([siteAccountTypeSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
+
+                    VRUIUtilsService.callDirectiveLoad(siteAccountTypeSelectorAPI, accountTypeSelectorPayload, siteAccountTypeSelectorLoadDeferred);
+                });
+
+                return siteAccountTypeSelectorLoadDeferred.promise;
+            }
+
+            function loadAccountTypeSelector(accountTypeSelectorPayload) {
+                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                UtilsService.waitMultiplePromises([accountTypeSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
+
+                    VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
+                });
+
+                return accountTypeSelectorLoadDeferred.promise;
             }
 
             function getAccountPartDefinitionIds(id) {

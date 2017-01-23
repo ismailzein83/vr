@@ -44,18 +44,18 @@ namespace Retail.BusinessEntity.Data.SQL
             return false;
         }
 
-        public bool Update(AccountToEdit accountToEdit, long? parentId)
+        public bool Update(AccountToEdit accountToEdit)
         {
             string serializedSettings = accountToEdit.Settings != null ? Vanrise.Common.Serializer.Serialize(accountToEdit.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", accountToEdit.AccountId, accountToEdit.Name, accountToEdit.TypeId, serializedSettings, parentId, accountToEdit.SourceId);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", accountToEdit.AccountId, accountToEdit.Name, accountToEdit.TypeId, serializedSettings, accountToEdit.SourceId);
             return (affectedRecords > 0);
         }
 
         public bool AreAccountsUpdated(Guid accountBEDefinitionId, ref object updateHandle)
         {
             string query = String.Format("SELECT MAX(a.timestamp) " +
-                                         "FROM [Retail].[Account] a with(nolock) " + 
-                                         "Join [Retail_BE].[AccountType] t with(nolock) " + 
+                                         "FROM [Retail].[Account] a with(nolock) " +
+                                         "Join [Retail_BE].[AccountType] t with(nolock) " +
                                          "on a.[TypeID] = t.[ID] " +
                                          "where t.[AccountBEDefinitionID] = '{0}'", accountBEDefinitionId);
 
@@ -73,10 +73,10 @@ namespace Retail.BusinessEntity.Data.SQL
             {
                 AccountId = (long)reader["ID"],
                 Name = reader["Name"] as string,
-                TypeId = GetReaderValue<Guid>(reader,"TypeID"),
+                TypeId = GetReaderValue<Guid>(reader, "TypeID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountSettings>(reader["Settings"] as string),
                 ParentAccountId = GetReaderValue<long?>(reader, "ParentID"),
-                ExecutedActions = reader["ExecutedActionsData"] as string != null?Vanrise.Common.Serializer.Deserialize<ExecutedActions>(reader["ExecutedActionsData"] as string) :null,
+                ExecutedActions = reader["ExecutedActionsData"] as string != null ? Vanrise.Common.Serializer.Deserialize<ExecutedActions>(reader["ExecutedActionsData"] as string) : null,
                 StatusId = GetReaderValue<Guid>(reader, "StatusID"),
                 SourceId = reader["SourceID"] as string
             };

@@ -22,12 +22,16 @@ namespace Retail.Zajil.MainExtensions.Convertors
         }
         public Guid TransactionTypeId { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
+        public string SourceAccountIdColumn { get; set; }
+        public string AmountColumn { get; set; }
+        public string TimeColumn { get; set; }
+        public int CurrencyId { get; set; }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
+            List<ITargetBE> transactionTargetBEs = new List<ITargetBE>();
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
-                CurrencyManager currencyManager = new CurrencyManager();
                 AccountBEManager accountBeManager = new AccountBEManager();
 
                 SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
@@ -36,11 +40,15 @@ namespace Retail.Zajil.MainExtensions.Convertors
                     {
                         TransactionTypeId = TransactionTypeId,
                         SourceId = row["PaymentId"].ToString(),
-                        CurrencyId = currencyManager.GetSystemCurrency().CurrencyId,
-                        AccountId = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row["AccountId"].ToString()).AccountId
+                        CurrencyId = this.CurrencyId,
+                        AccountId = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row[this.SourceAccountIdColumn].ToString()).AccountId,
+                        TransactionTime = (DateTime)row[this.TimeColumn],
+                        Amount = (decimal)row[this.AmountColumn]
                     }
                 };
+                transactionTargetBEs.Add(sourceTransaction);
             }
+            context.TargetBEs = transactionTargetBEs;
         }
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
