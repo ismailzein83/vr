@@ -15,7 +15,5 @@ namespace Retail.BusinessEntity.Entities
         public bool RootAccountTypeOnly { get; set; }
 
         public bool IncludeHiddenAccountTypes { get; set; }
-
-        public List<IAccountTypeFilter> Filters { get; set; }
     }
 }

@@ -126,16 +126,8 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<int> GetProductPackageIds(int productId)
         {
             Product product = new ProductManager().GetProduct(productId);
-            if (product == null)
-                throw new NullReferenceException(string.Format("product Id: {0}", productId));
 
-            if (product.Settings == null)
-                throw new NullReferenceException(string.Format("product.Settings of productId: {0}", productId));
-
-            if (product.Settings.Packages == null)
-                throw new NullReferenceException(string.Format("product.Settings.Packages of productId: {0}", productId));
-
-            if (product.Settings.Packages.Count == 0)
+            if (product == null || product.Settings == null || product.Settings.Packages == null || product.Settings.Packages.Count == 0)
                 return null;
 
             return product.Settings.Packages.Values.Select(itm => itm.PackageId);

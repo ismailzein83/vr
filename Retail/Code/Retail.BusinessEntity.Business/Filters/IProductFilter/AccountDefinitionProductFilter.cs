@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountProductFilter : IProductFilter
+    public class AccountDefinitionProductFilter : IProductFilter
     {
         public Guid AccountBEDefinitionId { get; set; }
 

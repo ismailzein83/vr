@@ -67,10 +67,8 @@ app.directive('retailBeAccounttypeSelector', ['Retail_BE_AccountTypeAPIService',
                 if (beFilter != undefined) {
                     if (filter == undefined)
                         filter = {};
-                    if (filter.Filters == undefined)
-                        filter.Filters = [];
 
-                    filter.Filters.push(beFilter);
+                    filter.AccountBEDefinitionId = beFilter.AccountBEDefinitionId;
                 }
 
                 return Retail_BE_AccountTypeAPIService.GetAccountTypesInfo(UtilsService.serializetoJson(filter)).then(function (response) {

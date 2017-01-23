@@ -54,9 +54,6 @@ namespace Retail.BusinessEntity.Business
                 {
                     filterExpression = (accountType) =>
                     {
-                        if (filter.Filters != null && !CheckIfFilterIsMatch(accountType, filter.Filters))
-                            return false;
-
                         if (filter.AccountBEDefinitionId.HasValue && filter.AccountBEDefinitionId.Value != accountType.AccountBEDefinitionId)
                             return false;
 
@@ -300,17 +297,6 @@ namespace Retail.BusinessEntity.Business
                 fields.Add(new AccountTypeGenericField(accountBEDefinitionId.Value));
                 fields.Add(new AccountStatusGenericField(accountBEDefinitionId.Value));
             }
-        }
-
-        private bool CheckIfFilterIsMatch(AccountType accountType, List<IAccountTypeFilter> filters)
-        {
-            AccountTypeFilterContext context = new AccountTypeFilterContext { AccountType = accountType };
-            foreach (var filter in filters)
-            {
-                if (!filter.IsMatched(context))
-                    return false;
-            }
-            return true;
         }
 
         #endregion

@@ -79,7 +79,7 @@
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionFilter.cs" />
-    <Compile Include="AccountType\IAccountTypeFilter.cs" />
+    <Compile Include="AccountType\AccountTypeBESelectorFilter.cs" />
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="DID\DID.cs" />
     <Compile Include="DID\DIDDetail.cs" />

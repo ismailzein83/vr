@@ -83,7 +83,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                         var productSelectorPayload = {
                             filter: {
                                 Filters: [{
-                                    $type: "Retail.BusinessEntity.Business.AccountProductFilter, Retail.BusinessEntity.Business",
+                                    $type: "Retail.BusinessEntity.Business.AccountDefinitionProductFilter, Retail.BusinessEntity.Business",
                                     AccountBEDefinitionId: accountBEDefinitionId
                                 }]
                             }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountPackageFilter : IPackageFilter
+    public class AccountDefinitionPackageFilter : IPackageFilter
     {
         public Guid AccountBEDefinitionId { get; set; }
         public long AssignedToAccountId { get; set; }
@@ -22,7 +22,7 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("accountPayment for accountId {0}", this.AssignedToAccountId));
             IEnumerable<int> packageIds = new ProductManager().GetProductPackageIds(accountPayment.ProductId);
 
-            if (!packageIds.Contains(context.Package.PackageId))
+            if (packageIds == null || !packageIds.Contains(context.Package.PackageId))
                 return false;
 
             //IEnumerable<int> packageIdsAssignedToAccount = new AccountPackageManager().GetPackageIdsAssignedToAccount(this.AssignedToAccountId);

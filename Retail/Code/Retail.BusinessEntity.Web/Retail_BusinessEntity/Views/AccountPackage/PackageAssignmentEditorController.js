@@ -120,7 +120,7 @@
                 var packageSelectorPayload = {
                     filter: {
                         Filters: [{
-                            $type: "Retail.BusinessEntity.Business.AccountPackageFilter, Retail.BusinessEntity.Business",
+                            $type: "Retail.BusinessEntity.Business.AccountDefinitionPackageFilter, Retail.BusinessEntity.Business",
                             AccountBEDefinitionId: accountBEDefinitionId,
                             AssignedToAccountId: accountId
                         }]
