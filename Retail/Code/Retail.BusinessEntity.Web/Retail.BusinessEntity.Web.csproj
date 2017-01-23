@@ -155,7 +155,6 @@
     <Compile Include="Controllers\AccountConditionController.cs" />
     <Compile Include="Controllers\AccountBEDefinitionController.cs" />
     <Compile Include="Controllers\AccountIdentificationController.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
     <Compile Include="Controllers\AccountPartDefinitionController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
@@ -342,10 +341,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-part-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\AccountTypeGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\AccountTypePartDefinitionSettingsSelectiveTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-parts.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountPartsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\ProvisionerDefinition\retail-be-provisioner-definitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\ActionDefinition\retail-be-actiondefinition-grid.js" />
@@ -521,7 +518,6 @@
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
-    <Content Include="Retail_BusinessEntity\Services\AccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountServiceService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBalanceTypeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEAPIService.js" />
@@ -542,7 +538,6 @@
     <Content Include="Retail_BusinessEntity\Services\ActionDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\ActionRuntimeService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountIdentificationAPIService.js" />
-    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPartDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountServiceAPIService.js" />
@@ -603,10 +598,6 @@
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountType\AccountTypeManagementController.js" />
-    <Content Include="Retail_BusinessEntity\Views\Account\AccountEditor.html" />
-    <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />
-    <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountIdentificationAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountIdentificationAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Action\Definition\ActionDefinitionEditor.html" />

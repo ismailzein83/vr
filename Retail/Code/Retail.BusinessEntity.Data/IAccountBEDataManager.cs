@@ -16,5 +16,9 @@ namespace Retail.BusinessEntity.Data
         bool Update(AccountToEdit accountToEdit);
 
         bool AreAccountsUpdated(Guid accountBEDefinitionId, ref object updateHandle);
+
+        bool UpdateStatus(long accountId, Guid statusId);
+
+        bool UpdateExecutedActions(long accountId, ExecutedActions executedAction);
     }
 }

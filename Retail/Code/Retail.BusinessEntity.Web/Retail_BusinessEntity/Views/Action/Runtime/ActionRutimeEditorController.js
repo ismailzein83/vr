@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ActionRuntimeEditorController.$inject = ['$scope', 'Retail_BE_ActionDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountAPIService','BusinessProcess_BPInstanceAPIService','BusinessProcess_BPInstanceService','WhS_BP_CreateProcessResultEnum'];
+    ActionRuntimeEditorController.$inject = ['$scope', 'Retail_BE_ActionDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_BPInstanceAPIService','BusinessProcess_BPInstanceService','WhS_BP_CreateProcessResultEnum'];
 
-    function ActionRuntimeEditorController($scope, Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountAPIService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum) {
+    function ActionRuntimeEditorController($scope, Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum) {
 
         var accountActionDefinition;
         var accountBEDefinitionId;

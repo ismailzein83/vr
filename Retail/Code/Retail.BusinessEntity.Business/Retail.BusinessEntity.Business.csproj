@@ -141,7 +141,6 @@
     <Compile Include="AccountGenericFields\AccountPartGenericField.cs" />
     <Compile Include="AccountGenericFields\AccountStatusGenericField.cs" />
     <Compile Include="AccountIdentificationManager.cs" />
-    <Compile Include="AccountManager.cs" />
     <Compile Include="AccountPartDefinitionManager.cs" />
     <Compile Include="AccountGenericFields\AccountPartGetFieldValueContext.cs" />
     <Compile Include="AccountServiceGenericFields\AccountServiceAccountGenericField.cs" />

@@ -61,6 +61,19 @@ namespace Retail.BusinessEntity.Data.SQL
 
             var newReceivedDataInfo = ExecuteScalarText(query, null);
             return base.IsDataUpdated(ref updateHandle, newReceivedDataInfo);
+        
+        }
+
+        public bool UpdateStatus(long accountId, Guid statusId)
+        {
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_UpdateStatusID", accountId, statusId);
+            return (affectedRecords > 0);
+        }
+
+        public bool UpdateExecutedActions(long accountId, ExecutedActions executedAction)
+        {
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_UpdateExecutedActions", accountId, Vanrise.Common.Serializer.Serialize(executedAction));
+            return (affectedRecords > 0);
         }
 
         #endregion

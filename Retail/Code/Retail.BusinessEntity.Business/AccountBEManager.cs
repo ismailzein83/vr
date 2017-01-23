@@ -328,7 +328,7 @@ namespace Retail.BusinessEntity.Business
         }
 
 
-
+         
         public Account GetAccountBySourceId(Guid accountBEDefinitionId, string sourceId)
         {
             Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId(accountBEDefinitionId);
@@ -337,7 +337,7 @@ namespace Retail.BusinessEntity.Business
 
         public bool UpdateStatus(Guid accountBEDefinitionId, long accountId, Guid statusId)
         {
-            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+            IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
             bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
             if (updateStatus)
             {
@@ -359,7 +359,7 @@ namespace Retail.BusinessEntity.Business
         }
         public bool UpdateExecutedActions(Guid accountBEDefinitionId, long accountId, ExecutedActions executedActions)
         {
-            IAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountDataManager>();
+            IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
             bool updateExecutedAction = dataManager.UpdateExecutedActions(accountId, executedActions);
             if (updateExecutedAction)
             {
