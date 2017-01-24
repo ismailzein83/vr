@@ -485,6 +485,11 @@
     <Build Include="common\Stored Procedures\sp_StatusDefinition_Update.sql" />
     <Build Include="common\Stored Procedures\sp_StatusDefinition_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_StatusDefinition_GetAll.sql" />
+    <Build Include="VR_Invoice\Tables\InvoiceSetting.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSetting_Update.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSetting_SetDefault.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSetting_Insert.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSetting_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
