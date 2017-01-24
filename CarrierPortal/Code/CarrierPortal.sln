@@ -47,9 +47,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.CustomerAcces
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.CustomerAccess.Entities", "PartnerPortal.CustomerAccess.Entities\PartnerPortal.CustomerAccess.Entities.csproj", "{3F63F33B-1977-4593-8D79-F5BFBF84CB19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.CustomerAccess.Business", "PartnerPortal.CustomerAccess.Business\PartnerPortal.CustomerAccess.Business.csproj", "{C4AC9650-72A5-4470-A2D4-2D22C504BF0F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -113,6 +115,10 @@ Global
 		SccProjectTopLevelParentUniqueName15 = CarrierPortal.sln
 		SccProjectName15 = PartnerPortal.CustomerAccess.Entities
 		SccLocalPath15 = PartnerPortal.CustomerAccess.Entities
+		SccProjectUniqueName16 = PartnerPortal.CustomerAccess.Business\\PartnerPortal.CustomerAccess.Business.csproj
+		SccProjectTopLevelParentUniqueName16 = CarrierPortal.sln
+		SccProjectName16 = PartnerPortal.CustomerAccess.Business
+		SccLocalPath16 = PartnerPortal.CustomerAccess.Business
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +187,10 @@ Global
 		{3F63F33B-1977-4593-8D79-F5BFBF84CB19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F63F33B-1977-4593-8D79-F5BFBF84CB19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F63F33B-1977-4593-8D79-F5BFBF84CB19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4AC9650-72A5-4470-A2D4-2D22C504BF0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4AC9650-72A5-4470-A2D4-2D22C504BF0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4AC9650-72A5-4470-A2D4-2D22C504BF0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4AC9650-72A5-4470-A2D4-2D22C504BF0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -203,5 +213,6 @@ Global
 		{062656B4-F251-4342-9853-7B2448326EB8} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
 		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9} = {062656B4-F251-4342-9853-7B2448326EB8}
 		{3F63F33B-1977-4593-8D79-F5BFBF84CB19} = {062656B4-F251-4342-9853-7B2448326EB8}
+		{C4AC9650-72A5-4470-A2D4-2D22C504BF0F} = {062656B4-F251-4342-9853-7B2448326EB8}
 	EndGlobalSection
 EndGlobal

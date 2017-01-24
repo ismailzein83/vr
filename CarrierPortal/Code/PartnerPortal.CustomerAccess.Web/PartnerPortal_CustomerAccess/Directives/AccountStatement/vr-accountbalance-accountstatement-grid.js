@@ -19,21 +19,20 @@ app.directive('partnerportalCustomerAccessAccountstatementGrid', ['PartnerPortal
 
         function AccountStatementGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
             var gridAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.acountStatements = [];
                 $scope.scopeModel.menuActions = [];
-
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, gridContext) {
-                    return VR_AccountBalance_AccountStatementAPIService.GetFilteredAccountStatments(dataRetrievalInput).then(function (response) {
+                    return PartnerPortal_CustomerAccess_AccountStatementAPIService.GetFilteredAccountStatments(dataRetrievalInput).then(function (response) {
                         if (response) {
                             if (gridContext != undefined && gridContext.eventType == DataGridRetrieveDataEventType.ExternalTrigger) {
                                 ctrl.currency = response.Currency;
