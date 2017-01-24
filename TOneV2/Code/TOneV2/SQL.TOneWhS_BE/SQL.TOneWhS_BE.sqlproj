@@ -152,7 +152,6 @@
     <Build Include="TOneWhS_BE\Tables\CustomerSellingProduct.sql" />
     <Build Include="TOneWhS_Sales\Tables\RatePlan.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZone_GetAll.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetBySupplier.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingProduct_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingProduct_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingProduct_GetAll.sql" />
@@ -212,7 +211,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierPriceList_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierPriceList_Get.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetDistinctCodePrefixes.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetActiveCodeByPrefix.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingNumberPlan_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingNumberPlan_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZoneIDManager_ReserveIDRange.sql" />
