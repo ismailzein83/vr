@@ -38,7 +38,7 @@ namespace TOne.WhS.Sales.Business
 			{
 				RPRouteDetail route = _routes.FindRecord(x => x.SaleZoneId == zoneItem.ZoneId);
 				zoneItem.RPRouteDetail = route;
-				if (route != null)
+				if (route != null && route.RouteOptionsDetails != null)
 				{
 					SetCosts(zoneItem, route);
 				}
