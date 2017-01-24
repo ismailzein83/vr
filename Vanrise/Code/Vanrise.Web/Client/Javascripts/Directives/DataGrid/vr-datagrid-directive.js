@@ -516,10 +516,14 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 };
 
                 ctrl.getCellValue = function (dataItem, colDef) {
+                    if (colDef == undefined)
+                        return;
                     return eval('dataItem.' + colDef.field);
                 };
 
                 ctrl.getCellTooltip = function (dataItem, colDef) {
+                    if (colDef == undefined)
+                        return;
                     if (colDef.tooltipField != undefined)
                         return eval('dataItem.' + colDef.tooltipField);
                     else if (colDef.field != undefined)
@@ -527,6 +531,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 };
 
                 ctrl.getCellClass = function (dataItem, colDef) {
+                    if (colDef == undefined)
+                        return;
                     if (colDef.getcolor != undefined) {
                         var color = colDef.getcolor(dataItem, colDef);
                         if (typeof color === 'string' || color instanceof String) {
