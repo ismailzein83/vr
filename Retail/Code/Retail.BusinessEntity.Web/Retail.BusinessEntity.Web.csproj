@@ -286,8 +286,13 @@
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\Templates\CRMAccountConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\retail-be-crmaccount-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ProductFamily\ProductFamilyPackageItemEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\retail-be-productfamily-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ProductFamily\retail-be-productfamily-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ProductFamily\retail-be-productfamilypackageitem-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\Templates\ProductFamilyGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ProductFamily\Templates\ProductFamilyPackageItemEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ProductFamily\Templates\ProductFamilyPackageItemManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\retail-be-recurringchargedefinition-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\Templates\RecurringChargeDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-account-selector.js" />

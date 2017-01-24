@@ -12,14 +12,14 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredProductFamilies'), input);
         }
 
-        function GetProductFamily(productFamilyId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetProductFamily'), {
+        function GetProductFamilyEditorRuntime(productFamilyId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetProductFamilyEditorRuntime'), {
                 productFamilyId: productFamilyId
             });
         }
 
-        function AddProductFamily(statusDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddProductFamily'), statusDefinitionItem);
+        function AddProductFamily(product) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddProductFamily'), product);
         }
 
         function HasAddProductFamilyPermission() {
@@ -27,8 +27,8 @@
 
         }
 
-        function UpdateProductFamily(statusDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateProductFamily'), statusDefinitionItem);
+        function UpdateProductFamily(product) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateProductFamily'), product);
         }
 
         function HasUpdateProductFamilyPermission() {
@@ -43,7 +43,7 @@
 
         return ({
             GetFilteredProductFamilies: GetFilteredProductFamilies,
-            GetProductFamily: GetProductFamily,
+            GetProductFamilyEditorRuntime: GetProductFamilyEditorRuntime,
             AddProductFamily: AddProductFamily,
             HasAddProductFamilyPermission: HasAddProductFamilyPermission,
             UpdateProductFamily: UpdateProductFamily,

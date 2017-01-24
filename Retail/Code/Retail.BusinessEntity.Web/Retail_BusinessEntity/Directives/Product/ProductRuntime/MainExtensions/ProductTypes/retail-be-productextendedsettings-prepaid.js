@@ -45,7 +45,7 @@
                 api.getData = function () {
 
                     var obj = {
-                        $type: "Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid.PrePaidSettings, Retail.BusinessEntity.MainExtensions"
+                        $type: "Retail.BusinessEntity.MainExtensions.ProductTypes.PrePaid.PrePaidSettings, Retail.BusinessEntity.MainExtensions"
                     };
 
                     return obj;

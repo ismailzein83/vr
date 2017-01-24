@@ -91,6 +91,7 @@
     <Compile Include="Package\IPackageFilter.cs" />
     <Compile Include="ProductFamily\ProductFamily.cs" />
     <Compile Include="ProductFamily\ProductFamilyDetail.cs" />
+    <Compile Include="ProductFamily\ProductFamilyEditorRuntime.cs" />
     <Compile Include="ProductFamily\ProductFamilyFilter.cs" />
     <Compile Include="ProductFamily\ProductFamilyInfo.cs" />
     <Compile Include="ProductFamily\ProductFamilyPackageItem.cs" />

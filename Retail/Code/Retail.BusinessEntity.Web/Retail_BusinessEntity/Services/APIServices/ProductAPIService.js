@@ -18,8 +18,8 @@
             });
         }
 
-        function AddProduct(statusDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddProduct'), statusDefinitionItem);
+        function AddProduct(product) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddProduct'), product);
         }
 
         function HasAddProductPermission() {
@@ -27,8 +27,8 @@
 
         }
 
-        function UpdateProduct(statusDefinitionItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateProduct'), statusDefinitionItem);
+        function UpdateProduct(product) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateProduct'), product);
         }
 
         function HasUpdateProductPermission() {

@@ -19,16 +19,25 @@ namespace Retail.BusinessEntity.Business
             return vrComponentTypeManager.GetComponentTypes<ProductDefinitionSettings, ProductDefinition>();
         }
 
-        public ProductDefinition GetPackageDefinitionById(Guid productDefinitionId)
+        public ProductDefinition GetProductDefinition(Guid productDefinitionId)
         {
-            var packageDefinitions = GetProductDefinitions();
-            return packageDefinitions.FindRecord(x => x.VRComponentTypeId == productDefinitionId);
+            var productDefinitions = GetProductDefinitions();
+            return productDefinitions.FindRecord(x => x.VRComponentTypeId == productDefinitionId);
+        }
+        public ProductDefinitionSettings GetProductDefinitionSettings(Guid productDefinitionId)
+        {
+            var productDefinition = GetProductDefinition(productDefinitionId);
+
+            if (productDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("productDefinition.Settings of productDefinitionId {0}", productDefinitionId));
+
+            return productDefinition.Settings;
         }
 
         public IEnumerable<ProductDefinitionInfo> GetProductDefinitionsInfo()
         {
-            var packageDefinitions = GetProductDefinitions();
-            return packageDefinitions.MapRecords(ProductDefinitionInfoMapper);
+            var productDefinitions = GetProductDefinitions();
+            return productDefinitions.MapRecords(ProductDefinitionInfoMapper);
         }
 
         public IEnumerable<ProductDefinitionConfig> GetProductDefinitionExtendedSettingsConfigs()
@@ -40,12 +49,12 @@ namespace Retail.BusinessEntity.Business
         public Guid GetProductDefinitionAccountBEDefId(Guid productDefinitionId)
         {
             ProductDefinitionManager productDefinitionManager = new ProductDefinitionManager();
-            ProductDefinition productDefinition = productDefinitionManager.GetPackageDefinitionById(productDefinitionId);
+            ProductDefinition productDefinition = productDefinitionManager.GetProductDefinition(productDefinitionId);
             if (productDefinition == null)
-                throw new NullReferenceException(string.Format("productDefinition of packageDefinitionId: {0}", productDefinitionId));
+                throw new NullReferenceException(string.Format("productDefinition of productDefinitionId: {0}", productDefinitionId));
 
             if (productDefinition.Settings == null)
-                throw new NullReferenceException(string.Format("productDefinition.Settings of packageDefinitionId: {0}", productDefinitionId));
+                throw new NullReferenceException(string.Format("productDefinition.Settings of productDefinitionId: {0}", productDefinitionId));
 
             return productDefinition.Settings.AccountBEDefinitionId;
         }
@@ -59,9 +68,7 @@ namespace Retail.BusinessEntity.Business
             return new ProductDefinitionInfo
             {
                 Name = productDefinition.Name,
-                ProductDefinitionId = productDefinition.VRComponentTypeId,
-                AccountBEDefinitionId = productDefinition.Settings.AccountBEDefinitionId,
-                RuntimeEditor = productDefinition.Settings.ExtendedSettings.RuntimeEditor
+                ProductDefinitionId = productDefinition.VRComponentTypeId
             };
         }
 

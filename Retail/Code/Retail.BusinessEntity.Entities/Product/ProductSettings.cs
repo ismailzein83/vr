@@ -8,7 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class ProductSettings
     {
-        public Guid ProductDefinitionId { get; set; }
+        public int ProductFamilyId { get; set; }
 
         public int PricingCurrencyId { get; set; }
 

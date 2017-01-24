@@ -23,24 +23,24 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetProductFamily")]
-        public ProductFamily GetProductFamily(int productFamilyId)
+        [Route("GetProductFamilyEditorRuntime")]
+        public ProductFamilyEditorRuntime GetProductFamilyEditorRuntime(int productFamilyId)
         {
-            return _manager.GetProductFamily(productFamilyId);
+            return _manager.GetProductFamilyEditorRuntime(productFamilyId);
         }
 
         [HttpPost]
         [Route("AddProductFamily")]
-        public Vanrise.Entities.InsertOperationOutput<ProductFamilyDetail> AddProductFamily(ProductFamily productFamilyItem)
+        public Vanrise.Entities.InsertOperationOutput<ProductFamilyDetail> AddProductFamily(ProductFamily productFamily)
         {
-            return _manager.AddProductFamily(productFamilyItem);
+            return _manager.AddProductFamily(productFamily);
         }
 
         [HttpPost]
         [Route("UpdateProductFamily")]
-        public Vanrise.Entities.UpdateOperationOutput<ProductFamilyDetail> UpdateProductFamily(ProductFamily productFamilyItem)
+        public Vanrise.Entities.UpdateOperationOutput<ProductFamilyDetail> UpdateProductFamily(ProductFamily productFamily)
         {
-            return _manager.UpdateProductFamily(productFamilyItem);
+            return _manager.UpdateProductFamily(productFamily);
         }
 
         [HttpGet]

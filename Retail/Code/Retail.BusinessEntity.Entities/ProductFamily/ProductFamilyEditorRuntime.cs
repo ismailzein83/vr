@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ProductDefinitionInfo
+    public class ProductFamilyEditorRuntime
     {
-        public Guid ProductDefinitionId { get; set; }
+        public ProductFamily Entity { get; set; }
 
-        public string Name { get; set; }
+        public Dictionary<int, string> PackageNameByIds { get; set; }
     }
 }

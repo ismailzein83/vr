@@ -11,14 +11,14 @@
         var productFamilyId;
         var productFamilyEntity;
         var productFamilyEditorRuntime;
-        var productDefinitionInfoEntity;
+        var productDefinitionInfo;
 
         var productDefinitionSelectorAPI;
         var productDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var productDefinitionSelectionChangedDeferred;
 
-        //var packageItemsDirectiveAPI;
-        //var packageItemsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var productFamilyPackageItemsDirectiveAPI;
+        var productFamilyPackageItemsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         loadParameters();
@@ -39,16 +39,15 @@
             $scope.scopeModel.isProductDefinitionSelectorDisabled = false;
             $scope.scopeModel.showPackagesTab = false;
 
-
             $scope.scopeModel.onProductDefinitionsSelectorReady = function (api) {
                 productDefinitionSelectorAPI = api;
                 productDefinitionSelectorReadyDeferred.resolve();
             };
 
-            //$scope.scopeModel.onPackageItemsDirectiveReady = function (api) {
-            //    packageItemsDirectiveAPI = api;
-            //    packageItemsDirectiveReadyDeferred.resolve();
-            //};
+            $scope.scopeModel.onProductFamilyPackageItemsDirectiveReady = function (api) {
+                productFamilyPackageItemsDirectiveAPI = api;
+                productFamilyPackageItemsDirectiveReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.onProductDefinitionsSelectionChanged = function (selectedItem) {
 
@@ -57,64 +56,28 @@
                     $scope.scopeModel.showRecurringChargeRulesTab = true;
                     $scope.scopeModel.showPackagesTab = true;
 
-                    productDefinitionInfoEntity = selectedItem;
+                    productDefinitionInfo = selectedItem;
 
                     if (productDefinitionSelectionChangedDeferred != undefined) {
                         productDefinitionSelectionChangedDeferred.resolve();
                     }
                     else {
-                        //loadProductFamilyExtendedSettingsDirectiveWrapper();
-                        //loadRecurringChargeRuleSetsDirective();
-                        //loadPackageItemsDirective();
+                        loadProductFamilyPackageItemsDirective();
                     }
 
-                    function loadProductFamilyExtendedSettingsDirectiveWrapper() {
-
-                        $scope.scopeModel.isProductFamilyExtendedSettingsDirectiveLoading = true;
-
-                        var productFamilyExtendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        productFamilyExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
-                            var productFamilyExtendedSettingsDirectivePayload;
-                            VRUIUtilsService.callDirectiveLoad(productFamilyExtendedSettingsDirectiveAPI, productFamilyExtendedSettingsDirectivePayload, productFamilyExtendedSettingsDirectiveLoadDeferred);
-                        });
-
-                        return productFamilyExtendedSettingsDirectiveLoadDeferred.promise.then(function () {
-                            $scope.scopeModel.isProductFamilyExtendedSettingsDirectiveLoading = false;
-                        });
-                    }
-                    function loadRecurringChargeRuleSetsDirective() {
-                        $scope.scopeModel.isRecurringChargeRulesTabLoading = true;
-
-                        var recurringChargeRuleSetsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        recurringChargeRuleSetsDirectiveReadyDeferred.promise.then(function () {
-
-                            var recurringChargeRuleSetsPayload = {
-                                accountBEDefinitionId: productDefinitionInfoEntity.AccountBEDefinitionId
-                            };
-                            VRUIUtilsService.callDirectiveLoad(recurringChargeRuleSetsDirectiveAPI, recurringChargeRuleSetsPayload, recurringChargeRuleSetsDirectiveLoadDeferred);
-                        });
-
-                        return recurringChargeRuleSetsDirectiveLoadDeferred.promise.then(function () {
-                            setTimeout(function () {
-                                $scope.scopeModel.isRecurringChargeRulesTabLoading = false;
-                            });
-                        });
-                    }
-                    function loadPackageItemsDirective() {
+                    function loadProductFamilyPackageItemsDirective() {
                         $scope.scopeModel.isPackagesTabLoading = true;
 
-                        var packageItemsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                        var productFamilyPackageItemsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        packageItemsDirectiveReadyDeferred.promise.then(function () {
-                            var packageItemsPayload = {
-                                productDefinitionId: productDefinitionInfoEntity.ProductDefinitionId
+                        productFamilyPackageItemsDirectiveReadyDeferred.promise.then(function () {
+                            var productFamilyPackageItemsPayload = {
+                                productDefinitionId: productDefinitionInfo.ProductDefinitionId
                             };
-                            VRUIUtilsService.callDirectiveLoad(packageItemsDirectiveAPI, packageItemsPayload, packageItemsDirectiveLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(productFamilyPackageItemsDirectiveAPI, productFamilyPackageItemsPayload, productFamilyPackageItemsDirectiveLoadDeferred);
                         });
 
-                        return packageItemsDirectiveLoadDeferred.promise.then(function () {
+                        return productFamilyPackageItemsDirectiveLoadDeferred.promise.then(function () {
                             setTimeout(function () {
                                 $scope.scopeModel.isPackagesTabLoading = false;
                             });
@@ -162,14 +125,15 @@
         }
 
         function getProductFamily() {
-            return Retail_BE_ProductFamilyAPIService.GetProductFamily(productFamilyId).then(function (response) {
-                productFamilyEntity = response;
+            return Retail_BE_ProductFamilyAPIService.GetProductFamilyEditorRuntime(productFamilyId).then(function (response) {
+                productFamilyEditorRuntime = response;
+                productFamilyEntity = response.Entity;
             });
         }
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductDefinitionsSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductDefinitionsSelector, loadProductFamilyPackageItemsDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -204,26 +168,26 @@
 
             return productDefinitionSelectorLoadDeferred.promise;
         }
-        //function loadPackageItemsDirective() {
-        //    if (!isEditMode)
-        //        return;
+        function loadProductFamilyPackageItemsDirective() {
+            if (!isEditMode)
+                return;
 
-        //    var packageItemsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            var productFamilyPackageItemsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-        //    UtilsService.waitMultiplePromises([packageItemsDirectiveReadyDeferred.promise, productDefinitionSelectionChangedDeferred.promise]).then(function () {
+            UtilsService.waitMultiplePromises([productFamilyPackageItemsDirectiveReadyDeferred.promise, productDefinitionSelectionChangedDeferred.promise]).then(function () {
 
-        //        var packageItemsPayload = {
-        //            productDefinitionId: productDefinitionInfoEntity.ProductDefinitionId
-        //        };
-        //        if (productFamilyEntity != undefined && productFamilyEntity.Settings != undefined) {
-        //            packageItemsPayload.packageNameByIds = productFamilyEditorRuntime.PackageNameByIds;
-        //            packageItemsPayload.packages = productFamilyEntity.Settings.Packages;
-        //        }
-        //        VRUIUtilsService.callDirectiveLoad(packageItemsDirectiveAPI, packageItemsPayload, packageItemsDirectiveLoadDeferred);
-        //    });
+                var productFamilyPackageItemsPayload = {
+                    productDefinitionId: productDefinitionInfo.ProductDefinitionId
+                };
+                if (productFamilyEntity != undefined && productFamilyEntity.Settings != undefined) {
+                    productFamilyPackageItemsPayload.packages = productFamilyEntity.Settings.Packages;
+                    productFamilyPackageItemsPayload.packageNameByIds = productFamilyEditorRuntime.PackageNameByIds;
+                }
+                VRUIUtilsService.callDirectiveLoad(productFamilyPackageItemsDirectiveAPI, productFamilyPackageItemsPayload, productFamilyPackageItemsDirectiveLoadDeferred);
+            });
 
-        //    return packageItemsDirectiveLoadDeferred.promise;
-        //}
+            return productFamilyPackageItemsDirectiveLoadDeferred.promise;
+        }
 
 
         function insertProductFamily() {
@@ -266,7 +230,7 @@
                 Name: $scope.scopeModel.name,
                 Settings: {
                     ProductDefinitionId: productDefinitionSelectorAPI.getSelectedIds(),
-                    //Packages: packageItemsDirectiveAPI.getData()
+                    Packages: productFamilyPackageItemsDirectiveAPI.getData()
                 }
             };
             return obj;

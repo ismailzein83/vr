@@ -31,21 +31,21 @@ namespace Retail.BusinessEntity.Data.SQL
             return base.IsDataUpdated("Retail_BE.Product", ref updateHandle);
         }
 
-        public bool Insert(Product productItem, out int insertedId)
+        public bool Insert(Product product, out int insertedId)
         {
             object productID;
-            string serializedSettings = productItem.Settings != null ? Vanrise.Common.Serializer.Serialize(productItem.Settings) : null;
+            string serializedSettings = product.Settings != null ? Vanrise.Common.Serializer.Serialize(product.Settings) : null;
 
-            int affectedRecords = ExecuteNonQuerySP("[Retail_BE].[sp_Product_Insert]", out productID, productItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("[Retail_BE].[sp_Product_Insert]", out productID, product.Name, serializedSettings);
 
             insertedId = (affectedRecords > 0) ? (int)productID : -1;
             return (affectedRecords > 0);
         }
 
-        public bool Update(Product productItem)
+        public bool Update(Product product)
         {
-            string serializedSettings = productItem.Settings != null ? Vanrise.Common.Serializer.Serialize(productItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_Product_Update", productItem.ProductId, productItem.Name, serializedSettings);
+            string serializedSettings = product.Settings != null ? Vanrise.Common.Serializer.Serialize(product.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_Product_Update", product.ProductId, product.Name, serializedSettings);
             return (affectedRecords > 0);
         }
 

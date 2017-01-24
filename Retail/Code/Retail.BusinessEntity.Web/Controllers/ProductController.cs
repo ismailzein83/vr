@@ -32,16 +32,16 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddProduct")]
-        public Vanrise.Entities.InsertOperationOutput<ProductDetail> AddProduct(Product productItem)
+        public Vanrise.Entities.InsertOperationOutput<ProductDetail> AddProduct(Product product)
         {
-            return _manager.AddProduct(productItem);
+            return _manager.AddProduct(product);
         }
 
         [HttpPost]
         [Route("UpdateProduct")]
-        public Vanrise.Entities.UpdateOperationOutput<ProductDetail> UpdateProduct(Product productItem)
+        public Vanrise.Entities.UpdateOperationOutput<ProductDetail> UpdateProduct(Product product)
         {
-            return _manager.UpdateProduct(productItem);
+            return _manager.UpdateProduct(product);
         }
 
         [HttpGet]

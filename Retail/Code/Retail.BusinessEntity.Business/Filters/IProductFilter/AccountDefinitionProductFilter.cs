@@ -13,15 +13,15 @@ namespace Retail.BusinessEntity.Business
 
         public bool IsMatched(IProductFilterContext context)
         {
-            Guid productDefinitionAccountBEDefId;
+            //Guid productDefinitionAccountBEDefId;
 
-            if (context != null && context.Product != null && context.Product.Settings != null)
-            {
-                productDefinitionAccountBEDefId = new ProductDefinitionManager().GetProductDefinitionAccountBEDefId(context.Product.Settings.ProductDefinitionId);
+            //if (context != null && context.Product != null && context.Product.Settings != null)
+            //{
+            //    productDefinitionAccountBEDefId = new ProductDefinitionManager().GetProductDefinitionAccountBEDefId(context.Product.Settings.ProductDefinitionId);
 
-                if (this.AccountBEDefinitionId != productDefinitionAccountBEDefId)
-                    return false;
-            }
+            //    if (this.AccountBEDefinitionId != productDefinitionAccountBEDefId)
+            //        return false;
+            //}
 
             return true;
         }

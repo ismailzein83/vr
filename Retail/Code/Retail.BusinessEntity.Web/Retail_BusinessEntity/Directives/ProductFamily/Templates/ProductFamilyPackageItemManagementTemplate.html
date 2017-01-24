@@ -1,0 +1,15 @@
+﻿
+
+<vr-button type="Add" data-onclick="scopeModel.onAddProductFamilyPackageItem" standalone></vr-button>
+
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.productFamilyPackageItems"
+             menuactions="scopeModel.menuActions"
+             ondeleterow="scopeModel.onDeleteProductFamilyPackageItem"
+             enabledraggablerow="true"
+             hidegridmenu>
+
+    <vr-datagridcolumn field="'Entity.PackageName'" headertext="'Package Name'" type="'Text'" widthfactor="1" disablesorting></vr-datagridcolumn>
+</vr-datagrid>
+
+

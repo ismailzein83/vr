@@ -34,6 +34,30 @@ namespace Retail.BusinessEntity.Business
             return cachedProductFamilies.GetRecord(productFamilyId);
         }
 
+        public ProductFamilyEditorRuntime GetProductFamilyEditorRuntime(int productFamilyId)
+        {
+            var packageNameByIds = new Dictionary<int, string>();
+            var productFamily = GetProductFamily(productFamilyId);
+
+            PackageManager packageManager = new PackageManager();
+
+            string packageName;
+            if (productFamily != null && productFamily.Settings != null && productFamily.Settings.Packages != null)
+            {
+                foreach (var packageItem in productFamily.Settings.Packages.Values)
+                {
+                    if (!packageNameByIds.TryGetValue(packageItem.PackageId, out packageName))
+                        packageNameByIds.Add(packageItem.PackageId, packageManager.GetPackageName(packageItem.PackageId));
+                }
+            }
+
+            ProductFamilyEditorRuntime editorRuntime = new ProductFamilyEditorRuntime();  
+            editorRuntime.PackageNameByIds = packageNameByIds;
+            editorRuntime.Entity = productFamily;
+
+            return editorRuntime;
+        }
+
         public Vanrise.Entities.InsertOperationOutput<ProductFamilyDetail> AddProductFamily(ProductFamily productFamily)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<ProductFamilyDetail>();
@@ -151,10 +175,14 @@ namespace Retail.BusinessEntity.Business
 
         public ProductFamilyInfo ProductFamilyInfoMapper(ProductFamily productFamily)
         {
+            ProductDefinitionSettings productDefinitionSettings = new ProductDefinitionManager().GetProductDefinitionSettings(productFamily.Settings.ProductDefinitionId);
+
             ProductFamilyInfo productFamilyInfo = new ProductFamilyInfo()
             {
                 ProductFamilyId = productFamily.ProductFamilyId,
-                Name = productFamily.Name
+                Name = productFamily.Name,
+                AccountBEDefinitionId = productDefinitionSettings.AccountBEDefinitionId,
+                ExtendedSettingsRuntimeEditor = productDefinitionSettings.ExtendedSettings != null ? productDefinitionSettings.ExtendedSettings.RuntimeEditor : null
             };
             return productFamilyInfo;
         }
