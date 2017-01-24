@@ -185,7 +185,7 @@ when not matched by target then
 end
 
 
---common.ExtensionConfiguration---------------------------------------------------------------------
+--[common].[ExtensionConfiguration]---------------------------------------------------------------------
 begin
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
@@ -204,9 +204,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[Title],[ConfigType],[Settings])
-	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 end
 
