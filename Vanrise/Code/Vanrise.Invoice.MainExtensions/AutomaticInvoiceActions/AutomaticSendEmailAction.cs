@@ -24,5 +24,7 @@ namespace Vanrise.Invoice.MainExtensions.AutoGenerateInvoiceActions
         public Guid EmailActionAttachmentSetId { get; set; }
         public string Name { get; set; }
         public List<EmailActionAttachment> EmailAttachments { get; set; }
+        public PartnerInvoiceFilterCondition FilterCondition { get; set; }
+
     }
 }

@@ -11,6 +11,10 @@
         var emailAttachmentSetEntity;
         var isEditMode;
         var context;
+        var invoiceFilterConditionAPI;
+        var invoiceFilterConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         defineScope();
         loadParameters();
         load();
@@ -29,7 +33,10 @@
                 sendEmailAttachmentsAPI = api;
                 sendEmailAttachmentsReadyDeferred.resolve();
             };
-
+            $scope.scopeModel.onInvoiceFilterConditionReady = function (api) {
+                invoiceFilterConditionAPI = api;
+                invoiceFilterConditionReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -84,8 +91,18 @@
                     $scope.scopeModel.name = emailAttachmentSetEntity.Name;
                 }
             }
-
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEmailAttachmentSetTypeDirective])
+            function loadInvoiceFilterConditionDirective() {
+                var invoiceFilterConditionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                invoiceFilterConditionReadyPromiseDeferred.promise.then(function () {
+                    var invoiceFilterConditionPayload = { context: getContext() };
+                    if (emailAttachmentSetEntity != undefined) {
+                        invoiceFilterConditionPayload.invoiceFilterConditionEntity = emailAttachmentSetEntity.FilterCondition;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(invoiceFilterConditionAPI, invoiceFilterConditionPayload, invoiceFilterConditionLoadPromiseDeferred);
+                });
+                return invoiceFilterConditionLoadPromiseDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEmailAttachmentSetTypeDirective, loadInvoiceFilterConditionDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -98,7 +115,9 @@
             var obj = {
                 EmailActionAttachmentSetId:emailAttachmentSetEntity!=undefined?emailAttachmentSetEntity.EmailActionAttachmentSetId:UtilsService.guid(),
                 Name: $scope.scopeModel.name,
-                EmailAttachments: sendEmailAttachmentsAPI.getData()
+                EmailAttachments: sendEmailAttachmentsAPI.getData(),
+                FilterCondition: invoiceFilterConditionAPI.getData()
+
             };
             return obj;
         }

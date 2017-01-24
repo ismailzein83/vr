@@ -12,6 +12,13 @@
                 <vr-tab header="'Settings'">
                     <vr-invoicetype-automaticinvoiceaction-sendemail-emailattachments on-ready="scopeModel.onSendEmailAttachmentsReady" normal-col-num="4" isrequired="true"></vr-invoicetype-automaticinvoiceaction-sendemail-emailattachments>
                 </vr-tab>
+                <vr-tab header="'Condition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-invoicetype-invoicegeneratorfiltercondition on-ready="scopeModel.onInvoiceFilterConditionReady" isrequired="false"></vr-invoicetype-invoicegeneratorfiltercondition>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
             </vr-tabs>
 
         </vr-form>
