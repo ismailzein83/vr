@@ -179,6 +179,7 @@
     <Compile Include="Extensions\ChargingPolicyRuleDefinitionFilter.cs" />
     <Compile Include="PopManager.cs" />
     <Compile Include="ProductDefinitionManager.cs" />
+    <Compile Include="ProductFamilyManager.cs" />
     <Compile Include="ProductManager.cs" />
     <Compile Include="RecurringChargeDefinitionManager.cs" />
     <Compile Include="RecurringChargeManager.cs" />
