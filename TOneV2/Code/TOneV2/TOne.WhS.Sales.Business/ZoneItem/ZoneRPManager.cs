@@ -73,6 +73,8 @@ namespace TOne.WhS.Sales.Business
 
 		private void SetSellingProductEffectiveZoneRP(ZoneItem zoneItem, int sellingProductId)
 		{
+            if (zoneItem.EffectiveRoutingProductId.HasValue)
+                return;
 			SaleEntityZoneRoutingProduct ratePlanRP = _ratePlanRPLocator.GetSellingProductZoneRoutingProduct(sellingProductId, zoneItem.ZoneId);
 			if (ratePlanRP != null)
 				SetEffectiveRPProperties(zoneItem, ratePlanRP);
