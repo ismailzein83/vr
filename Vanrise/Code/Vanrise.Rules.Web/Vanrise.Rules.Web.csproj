@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_Rules\Constants\ModuleConfig.js" />
+    <Content Include="VR_Rules\Constants\FirstPeriodRateTypeEnum.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRuleFixedExtraChargeTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRulePercentageExtraChargeTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\vr-rules-pricingrulesettings-extracharge-fixed.js" />

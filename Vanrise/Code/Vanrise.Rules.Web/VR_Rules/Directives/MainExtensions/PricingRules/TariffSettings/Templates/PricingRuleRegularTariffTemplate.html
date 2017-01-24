@@ -3,15 +3,19 @@
         <vr-textbox value="ctrl.callFee" type="number" label="Call Fee" isrequired minvalue="0"></vr-textbox>
     </vr-columns>
     <vr-columns colnum="4">
-        <vr-textbox value="ctrl.firstPeriod" type="number" label="First Period" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
-    </vr-columns>
-    <vr-columns colnum="4">
-        <vr-textbox value="ctrl.firstPeriodRate" type="number" label="First Period Rate" isrequired minvalue="0"></vr-textbox>
-    </vr-columns>
-    <vr-columns colnum="4">
         <vr-textbox value="ctrl.fractionUnit" type="number" label="Fraction Unit" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
     </vr-columns>
     <vr-columns colnum="4">
         <vr-textbox value="ctrl.pricingUnit" type="number" label="Pricing Unit" isrequired minvalue="1" decimalprecision="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="4">
+        <vr-textbox value="ctrl.firstPeriod" type="number" label="First Period" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="4">
+        <vr-select datatextfield="description" datavaluefield="value" hideremoveicon
+                   label="First Period Type" datasource="datasource" selectedvalues="ctrl.selectedFirstPeriodType" isrequired></vr-select>
+    </vr-columns>
+    <vr-columns colnum="4" ng-if="ctrl.selectedFirstPeriodType.showFirstPeriodRate">
+        <vr-textbox value="ctrl.firstPeriodRate" type="number" label="First Period Rate" isrequired minvalue="0"></vr-textbox>
     </vr-columns>
 </vr-row>

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Business;
 
 namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 {
+    public enum FirstPeriodRateType { FixedRate = 0, EffectiveRate = 1 }
     public class RegularTariffSettings : PricingRuleTariffSettings
     {
         public override Guid ConfigId { get { return new Guid("35acc9c2-0675-4347-ba3e-a81025c1be12"); } }
@@ -14,7 +12,9 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
         public int FirstPeriod { get; set; }
 
-        public Decimal FirstPeriodRate { get; set; }
+        public FirstPeriodRateType FirstPeriodRateType { get; set; }
+
+        public Decimal? FirstPeriodRate { get; set; }
 
         public int FractionUnit { get; set; }
 
@@ -28,6 +28,23 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             if (PricingUnit <= 0)
                 throw new ArgumentException(string.Format("Invalid PricingUnit: {0}", PricingUnit));
 
+
+            decimal firstPeriodRateToUse;
+            switch (FirstPeriodRateType)
+            {
+                case Tariff.FirstPeriodRateType.EffectiveRate:
+                    firstPeriodRateToUse = context.Rate;
+                    break;
+
+                case Tariff.FirstPeriodRateType.FixedRate:
+                    if (!FirstPeriodRate.HasValue)
+                        throw new NullReferenceException("FirstPeriodRate");
+
+                    firstPeriodRateToUse = FirstPeriodRate.Value;
+                    break;
+                default: throw new NotSupportedException(string.Format("FirstPeriodRateType has invalid value: {0}", FirstPeriodRateType));
+            }
+
             DateTime currencyEffectiveOn = context.TargetTime.HasValue ? context.TargetTime.Value : DateTime.Now;
 
             CurrencyExchangeRateManager currencyExchangeManager = new CurrencyExchangeRateManager();
@@ -36,12 +53,12 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
             if (context.DestinationCurrencyId.HasValue)
             {
-                convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(FirstPeriodRate, context.SourceCurrencyId, context.DestinationCurrencyId.Value, currencyEffectiveOn);
+                convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(firstPeriodRateToUse, context.SourceCurrencyId, context.DestinationCurrencyId.Value, currencyEffectiveOn);
                 convertedCallFee = currencyExchangeManager.ConvertValueToCurrency(CallFee, context.SourceCurrencyId, context.DestinationCurrencyId.Value, currencyEffectiveOn);
             }
             else
             {
-                convertedFirstPeriodRate = FirstPeriodRate;
+                convertedFirstPeriodRate = firstPeriodRateToUse;
                 convertedCallFee = CallFee;
             }
 
@@ -51,13 +68,13 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             Decimal? accountedDuration = context.DurationInSeconds;
             if (FirstPeriod > 0)
             {
-                Decimal firstPeriodRate = (convertedFirstPeriodRate > 0) ? (Decimal)convertedFirstPeriodRate : context.Rate;
+                //Decimal firstPeriodRate = (convertedFirstPeriodRate > 0) ? (Decimal)convertedFirstPeriodRate : context.Rate;
 
                 if (accountedDuration.HasValue)
                 {
                     accountedDuration -= (Decimal)FirstPeriod;
                     accountedDuration = Math.Max(0, accountedDuration.Value);
-                    totalAmount = firstPeriodRate;
+                    totalAmount = convertedFirstPeriodRate;
                 }
             }
 
