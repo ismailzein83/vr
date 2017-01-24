@@ -526,6 +526,12 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
     <Content Include="Web.config.CloudXPoint.exclude" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -612,6 +618,7 @@
     <Content Include="Reports\Analytics\ZoneProfit.aspx" />
     <Content Include="Reports\ReportChart.aspx" />
     <Content Include="Reports\ReportPage.aspx" />
+    <Content Include="Web.config" />
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
     </None>
