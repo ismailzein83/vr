@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 
@@ -26,9 +27,23 @@ namespace TOne.WhS.Sales.MainExtensions
 			if (context.OwnerType == SalePriceListOwnerType.SellingProduct)
 				throw new Vanrise.Entities.DataIntegrityValidationException("The EED BulkAction cannot be applied to a SellingProduct Zone");
 
+			if (context.SaleZone.BED > EED || context.SaleZone.EED.HasValue)
+				return false;
+
+			if (context.ZoneDraft == null || context.ZoneDraft.NewRates == null || !context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue))
+				return false;
+
+			DateTime effectiveOn = DateTime.Today;
+			Dictionary<int, DateTime> datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, effectiveOn, false);
+			
+			DateTime soldOn;
+			if (!datesByCountry.TryGetValue(context.SaleZone.CountryId, out soldOn))
+				return false;
+			if (soldOn > EED)
+				return false;
+
 			if (!_sellingProductId.HasValue)
 			{
-				DateTime effectiveOn = DateTime.Today;
 				_sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(context.OwnerId, effectiveOn, false);
 				if (!_sellingProductId.HasValue)
 				{
