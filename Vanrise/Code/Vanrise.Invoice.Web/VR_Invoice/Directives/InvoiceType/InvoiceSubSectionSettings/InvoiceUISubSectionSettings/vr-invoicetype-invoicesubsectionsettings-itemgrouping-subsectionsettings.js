@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/Templates/ItemGroupingSubSectionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/InvoiceUISubSectionSettings/Templates/ItemGroupingSubSectionSettingsTemplate.html"
 
         };
 

@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/Templates/InvoiceSubSectionGridColumnsManagement.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/Templates/InvoiceSubSectionGridColumnsManagement.html"
 
         };
 

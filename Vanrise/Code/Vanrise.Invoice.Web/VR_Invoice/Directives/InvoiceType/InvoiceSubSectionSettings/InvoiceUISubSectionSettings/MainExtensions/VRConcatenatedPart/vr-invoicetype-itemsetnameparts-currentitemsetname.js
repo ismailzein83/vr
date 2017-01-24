@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeItemsetnamepartsInvoiceitemfield", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeItemsetnamepartsCurrentitemsetname", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeItemsetnamepartsInvoiceitemfield", ["UtilsService", 
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new InvoiceItemFieldValueConcatenatedPart($scope, ctrl, $attrs);
+                var ctor = new CurrentItemSetNameConcatenatedPart($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeItemsetnamepartsInvoiceitemfield", ["UtilsService", 
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/MainExtensions/VRConcatenatedPart/Templates/InvoiceItemFieldValueConcatenatedPartTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/InvoiceUISubSectionSettings/MainExtensions/VRConcatenatedPart/Templates/CurrentItemSetNameConcatenatedPartTemplate.html"
 
         };
 
-        function InvoiceItemFieldValueConcatenatedPart($scope, ctrl, $attrs) {
+        function CurrentItemSetNameConcatenatedPart($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -38,7 +38,6 @@ app.directive("vrInvoicetypeItemsetnamepartsInvoiceitemfield", ["UtilsService", 
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.concatenatedPartSettings) {
-                        $scope.scopeModel.fieldName = payload.concatenatedPartSettings.FieldName;
                     }
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
@@ -46,8 +45,7 @@ app.directive("vrInvoicetypeItemsetnamepartsInvoiceitemfield", ["UtilsService", 
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.InvoiceItemFieldValueConcatenatedPart ,Vanrise.Invoice.MainExtensions",
-                        FieldName: $scope.scopeModel.fieldName,
+                        $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.CurrentItemSetNameConcatenatedPart ,Vanrise.Invoice.MainExtensions",
                     };
                 };
 

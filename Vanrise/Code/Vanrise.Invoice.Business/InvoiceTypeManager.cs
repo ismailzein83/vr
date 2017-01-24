@@ -70,7 +70,7 @@ namespace Vanrise.Invoice.Business
         {
             var invoiceTypes = GetCachedInvoiceTypes();
             var invoiceType = invoiceTypes.GetRecord(generateInvoiceInput.InvoiceTypeId);
-            InvoiceGeneratorActionFilterConditionContext context = new InvoiceGeneratorActionFilterConditionContext
+            PartnerInvoiceFilterConditionContext context = new PartnerInvoiceFilterConditionContext
             {
                 InvoiceType = invoiceType,
                 generateInvoiceInput = generateInvoiceInput

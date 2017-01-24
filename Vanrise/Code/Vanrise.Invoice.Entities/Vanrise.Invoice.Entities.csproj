@@ -89,6 +89,7 @@
     <Compile Include="InvoiceType\InvoiceGridSettings\InvoiceGridSettings.cs" />
     <Compile Include="InvoiceType\InvoiceSerialNumberSettings\InvoiceSerialNumberSettings.cs" />
     <Compile Include="InvoiceType\ItemGroupingSectionQuery.cs" />
+    <Compile Include="InvoiceType\PartnerInvoiceFilterCondition.cs" />
     <Compile Include="InvoiceType\SendEmailActionInput.cs" />
     <Compile Include="InvoiceType\SubSections\InvoiceSubSection.cs" />
     <Compile Include="InvoiceType\ExtendedSettings\InvoiceTypeExtendedSettings.cs" />

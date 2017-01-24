@@ -12,7 +12,7 @@ app.service('VR_Invoice_InvoiceSubSectionSettingsService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/SubSectionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/Templates/SubSectionEditor.html', parameters, settings);
         }
 
         function editSubSection(subSectionEntity, onSubSectionUpdated, context) {
@@ -27,7 +27,7 @@ app.service('VR_Invoice_InvoiceSubSectionSettingsService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/SubSectionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/Templates/SubSectionEditor.html', parameters, settings);
         }
 
         function addSubSectionGridColumn(onSubSectionGridColumnAdded, gridColumns) {
@@ -40,7 +40,7 @@ app.service('VR_Invoice_InvoiceSubSectionSettingsService', ['VRModalService',
             var parameters = {
                 gridColumns: gridColumns
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/SubSectionGridColumnEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/Templates/SubSectionGridColumnEditor.html', parameters, settings);
         }
 
         function editSubSectionGridColumn(gridColumnEntity, onSubSectionGridColumnUpdated, gridColumns) {
@@ -55,7 +55,7 @@ app.service('VR_Invoice_InvoiceSubSectionSettingsService', ['VRModalService',
                 gridColumns: gridColumns
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSubSectionSettings/SubSectionGridColumnEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/Templates/SubSectionGridColumnEditor.html', parameters, settings);
         }
 
 

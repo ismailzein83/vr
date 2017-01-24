@@ -8,14 +8,14 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    public class InvoiceGeneratorActionFilterGroupCondition : InvoiceGeneratorActionFilterCondition
+    public class InvoiceGeneratorActionFilterGroupCondition : PartnerInvoiceFilterCondition
     {
         public override Guid ConfigId
         {
             get { return new Guid("A72E2AAA-E837-47BD-8BF4-C41EA07893EA"); }
         }
         public Vanrise.GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
-        public override bool IsFilterMatch(IInvoiceGeneratorActionFilterConditionContext context)
+        public override bool IsFilterMatch(IPartnerInvoiceFilterConditionContext context)
         {
             return true;
             //RecordFilterManager recordFilterManager = new RecordFilterManager();

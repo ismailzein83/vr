@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsections", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceTypeService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceTypeService) {
+app.directive("vrInvoicetypeSubsections", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSubSectionSettingsService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSubSectionSettingsService) {
 
         var directiveDefinitionObject = {
 
@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsections", [
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/Templates/ItemGroupingSubSectionsManagement.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/Templates/SubSectionsManagement.html"
 
         };
 
@@ -39,12 +39,12 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsections", [
                     return "You Should add at least one sub section.";
                 };
 
-                $scope.addSubSection = function () {
+                ctrl.addSubSection = function () {
                     var onSubSectionAdded = function (subSection) {
                         ctrl.datasource.push({ Entity: subSection });
                     };
 
-                    VR_Invoice_InvoiceTypeService.addGroupItemSubSection(onSubSectionAdded, getContext());
+                    VR_Invoice_InvoiceSubSectionSettingsService.addSubSection(onSubSectionAdded, getContext());
                 };
 
                 ctrl.removeSubSection = function (dataItem) {
@@ -104,16 +104,11 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsections", [
                     ctrl.datasource[index] = { Entity: subSection };
                 };
 
-                VR_Invoice_InvoiceTypeService.editGroupItemSubSection(subSectionObj.Entity, onSubSectionUpdated, getContext());
+                VR_Invoice_InvoiceSubSectionSettingsService.editSubSection(subSectionObj.Entity, onSubSectionUpdated, getContext());
             }
             function getContext()
             {
-                var currentContext = context;
-                if (currentContext == undefined)
-                {
-                    currentContext = {};
-                }
-                return currentContext;
+                return context;
             }
         }
 

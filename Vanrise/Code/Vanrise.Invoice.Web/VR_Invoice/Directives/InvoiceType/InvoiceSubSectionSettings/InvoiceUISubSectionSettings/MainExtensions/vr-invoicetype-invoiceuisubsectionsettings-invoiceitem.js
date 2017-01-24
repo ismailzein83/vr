@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -21,21 +21,19 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/SubSectionSettings/InvoiceUISubSectionSettings/Templates/InvoiceItemSubSectionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSubSectionSettings/InvoiceUISubSectionSettings/MainExtensions/Templates/InvoiceItemSubSectionTemplate.html"
 
         };
 
         function InvoiceItemSubSection($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var invoiceSubSectionSettingsEntity;
+            var context;
             var subSectionGridColumnsAPI;
             var subSectionGridColumnsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var invoiceItemSubSectionGridColumnsAPI;
             var invoiceItemSubSectionGridColumnsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var concatenatedPartsAPI;
-            var concatenatedPartsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -43,10 +41,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
                     subSectionGridColumnsAPI = api;
                     subSectionGridColumnsReadyPromiseDeferred.resolve();
                 };
-                $scope.scopeModel.onConcatenatedPartsReady = function (api) {
-                    concatenatedPartsAPI = api;
-                    concatenatedPartsReadyPromiseDeferred.resolve();
-                };
+
                 $scope.scopeModel.onInvoiceItemSubSectionGridColumnsReady = function (api) {
                     invoiceItemSubSectionGridColumnsAPI = api;
                     invoiceItemSubSectionGridColumnsReadyPromiseDeferred.resolve();
@@ -60,32 +55,22 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        invoiceSubSectionSettingsEntity = payload.invoiceSubSectionSettingsEntity;
+                        context = payload.context;
+                        if (invoiceSubSectionSettingsEntity != undefined)
+                            $scope.scopeModel.itemSetName = invoiceSubSectionSettingsEntity.ItemSetName;
                     }
                     var promises = [];
-
-                    var concatenatedPartsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    concatenatedPartsReadyPromiseDeferred.promise.then(function () {
-                        var concatenatedPartsDirectivePayload = { context: getContext() };
-                        if (payload != undefined) {
-                            concatenatedPartsDirectivePayload.concatenatedParts = payload.ItemSetNameParts;
-                        }
-
-
-                        VRUIUtilsService.callDirectiveLoad(concatenatedPartsAPI, concatenatedPartsDirectivePayload, concatenatedPartsDeferredLoadPromiseDeferred);
-                    });
-                    promises.push(concatenatedPartsDeferredLoadPromiseDeferred.promise);
-
-
                     var subSectionGridColumnsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     subSectionGridColumnsReadyPromiseDeferred.promise.then(function () {
-                        var gridColumnsDirectivePayload = payload != undefined ? { gridColumns: payload.GridColumns } : undefined;
+                        var gridColumnsDirectivePayload = invoiceSubSectionSettingsEntity != undefined ? { gridColumns: invoiceSubSectionSettingsEntity.GridColumns } : undefined;
                         VRUIUtilsService.callDirectiveLoad(subSectionGridColumnsAPI, gridColumnsDirectivePayload, subSectionGridColumnsDeferredLoadPromiseDeferred);
                     });
                     promises.push(subSectionGridColumnsDeferredLoadPromiseDeferred.promise);
 
                     var invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceItemSubSectionGridColumnsReadyPromiseDeferred.promise.then(function () {
-                        var invoiceItemDirectivePayload = payload != undefined ? { subSections: payload.SubSections } : undefined;
+                        var invoiceItemDirectivePayload = invoiceSubSectionSettingsEntity != undefined ? { subSections: invoiceSubSectionSettingsEntity.SubSections } : undefined;
                         VRUIUtilsService.callDirectiveLoad(invoiceItemSubSectionGridColumnsAPI, invoiceItemDirectivePayload, invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred);
                     });
                     promises.push(invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred.promise);
@@ -95,7 +80,8 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
 
                 api.getData = function () {
                     return {
-                        ItemSetNameParts: concatenatedPartsAPI.getData(),
+                        $type: "Vanrise.Invoice.Business.InvoiceItemSubSection ,Vanrise.Invoice.Business",
+                        ItemSetName: $scope.scopeModel.itemSetName,
                         GridColumns: subSectionGridColumnsAPI.getData(),
                         SubSections: invoiceItemSubSectionGridColumnsAPI.getData()
                     };
@@ -103,16 +89,6 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitemSubsectionsett
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
-            function getContext()
-            {
-                var context = {
-                    getExtensionType:function()
-                    {
-                        return "VR_InvoiceType_ItemSetNameParts";
-                    }
-                };
-                return context;
             }
         }
 
