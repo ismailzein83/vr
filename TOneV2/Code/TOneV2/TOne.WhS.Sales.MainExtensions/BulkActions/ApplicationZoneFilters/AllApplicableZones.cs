@@ -16,8 +16,8 @@ namespace TOne.WhS.Sales.MainExtensions
 
 		public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
 		{
-			if (context.SaleZoneIds == null)
-				throw new MissingMemberException("SaleZoneIds");
+			if (context.SaleZones == null || context.SaleZones.Count() == 0)
+				throw new MissingMemberException("SaleZones");
 
 			var futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
 
@@ -33,13 +33,13 @@ namespace TOne.WhS.Sales.MainExtensions
 
 			List<long> applicableZoneIds = new List<long>();
 
-			foreach (long zoneId in context.SaleZoneIds)
+			foreach (SaleZone saleZone in context.SaleZones)
 			{
-				var isActionApplicableToZoneInput = new TOne.WhS.Sales.Business.UtilitiesManager.IsActionApplicableToZoneInput()
+				var isActionApplicableToZoneInput = new IsActionApplicableToZoneInput()
 				{
 					OwnerType = context.OwnerType,
 					OwnerId = context.OwnerId,
-					ZoneId = zoneId,
+					SaleZone = saleZone,
 					BulkAction = context.BulkAction,
 					Draft = context.DraftData,
 					GetSellingProductZoneRate = getSellingProductZoneRate,
@@ -47,7 +47,7 @@ namespace TOne.WhS.Sales.MainExtensions
 				};
 
 				if (UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
-					applicableZoneIds.Add(zoneId);
+					applicableZoneIds.Add(saleZone.SaleZoneId);
 			}
 
 			return applicableZoneIds;

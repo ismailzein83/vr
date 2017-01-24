@@ -23,6 +23,15 @@ namespace TOne.WhS.Sales.MainExtensions
 
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{
+			if (context.OwnerType == SalePriceListOwnerType.SellingProduct)
+				throw new Vanrise.Entities.DataIntegrityValidationException("The EED BulkAction cannot be applied to a SellingProduct Zone");
+
+			SaleEntityZoneRate customerZoneRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId);
+			if (customerZoneRate == null || customerZoneRate.Rate == null)
+				return false;
+			else if (customerZoneRate.Rate.BED > EED)
+				return false;
+
 			if (!_sellingProductId.HasValue)
 			{
 				DateTime effectiveOn = DateTime.Today;
@@ -34,12 +43,10 @@ namespace TOne.WhS.Sales.MainExtensions
 				}
 			}
 
-			SaleEntityZoneRate customerZoneRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.ZoneId);
-			if (customerZoneRate == null || customerZoneRate.Rate == null)
-				return false;
-
-			SaleEntityZoneRate sellingProductZoneRate = context.GetSellingProductZoneRate(_sellingProductId.Value, context.ZoneId);
+			SaleEntityZoneRate sellingProductZoneRate = context.GetSellingProductZoneRate(_sellingProductId.Value, context.SaleZone.SaleZoneId);
 			if (sellingProductZoneRate == null || sellingProductZoneRate.Rate == null)
+				return false;
+			else if (sellingProductZoneRate.Rate.BED > EED)
 				return false;
 
 			return true;

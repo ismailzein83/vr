@@ -30,11 +30,11 @@ namespace TOne.WhS.Sales.Business
 
 			CustomData customData = context.CustomData as CustomData;
 
-			var IsActionApplicableToZoneInput = new UtilitiesManager.IsActionApplicableToZoneInput()
+			var IsActionApplicableToZoneInput = new IsActionApplicableToZoneInput()
 			{
 				OwnerType = OwnerType,
 				OwnerId = OwnerId,
-				ZoneId = context.SaleZone.SaleZoneId,
+				SaleZone = context.SaleZone,
 				BulkAction = ActionType,
 				Draft = customData.Draft,
 				GetSellingProductZoneRate = customData.GetSellingProductZoneRate,

@@ -20,7 +20,7 @@ namespace TOne.WhS.Sales.Entities
 
 		int OwnerId { get; }
 
-		IEnumerable<long> SaleZoneIds { get; }
+		IEnumerable<SaleZone> SaleZones { get; }
 
 		Changes DraftData { get; }
 

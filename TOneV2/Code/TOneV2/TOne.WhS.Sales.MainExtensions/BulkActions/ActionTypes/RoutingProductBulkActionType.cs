@@ -26,7 +26,7 @@ namespace TOne.WhS.Sales.MainExtensions
 		{
 			if (!_rpZoneRelationType.HasValue)
 				SetRoutingProductFields();
-			return (_rpZoneRelationType.Value == RoutingProductZoneRelationType.SpecificZones) ? _rpZoneIds.Contains(context.ZoneId) : true;
+			return (_rpZoneRelationType.Value == RoutingProductZoneRelationType.SpecificZones) ? _rpZoneIds.Contains(context.SaleZone.SaleZoneId) : true;
 		}
 
 		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)

@@ -49,13 +49,23 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 				var promises = [];
 				$scope.isLoading = true;
 
-				var saveDraftPromise = gridQuery.context.saveDraft();
-				promises.push(saveDraftPromise);
+				var saveDraftDeferred = UtilsService.createPromiseDeferred();
+				promises.push(saveDraftDeferred.promise);
+
+				if (gridQuery.BulkAction != undefined)
+					saveDraftDeferred.resolve();
+				else {
+					gridQuery.context.saveDraft().then(function () {
+						saveDraftDeferred.resolve();
+					}).catch(function (error) {
+						saveDraftDeferred.reject(error);
+					});
+				}
 
 				var loadZoneItemsDeferred = UtilsService.createPromiseDeferred();
 				promises.push(loadZoneItemsDeferred.promise);
 
-				saveDraftPromise.then(function () {
+				saveDraftDeferred.promise.then(function () {
 					gridAPI.clearDataAndContinuePaging();
 					loadZoneItems().then(function () {
 						loadZoneItemsDeferred.resolve();
@@ -205,6 +215,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 		}
 
 		function defineAPI() {
+
 			var api = {};
 
 			api.load = function (query) {
@@ -227,6 +238,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 				loadZoneLettersPromise.then(function () {
 					if ($scope.zoneLetters.length > 0) {
+						$scope.showDirective = true;
 						gridQuery.context.onZoneLettersLoaded();
 						gridAPI.clearDataAndContinuePaging();
 						loadZoneItems().then(function () {
@@ -236,15 +248,22 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 						});
 					} else {
 						loadZoneItemsDeferred.resolve();
-						gridQuery.context.showRatePlan(false);
+						$scope.showDirective = false;
 
-						if (gridQuery.context.isFilterApplied())
-							VRNotificationService.showInformation('No effective zones match the filter');
+						if (gridQuery.BulkAction != undefined) {
+							VRNotificationService.showInformation('No applicable zones exist');
+						}
 						else {
-							if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
-								VRNotificationService.showInformation('No effective zones exist for this selling product');
-							else
-								VRNotificationService.showInformation("No countries are sold to this customer or no effective zones exist for its assigned selling product");
+							gridQuery.context.showRatePlan(false);
+
+							if (gridQuery.context.isFilterApplied())
+								VRNotificationService.showInformation('No effective zones match the filter');
+							else {
+								if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
+									VRNotificationService.showInformation('No effective zones exist for this selling product');
+								else
+									VRNotificationService.showInformation("No countries are sold to this customer or no effective zones exist for its assigned selling product");
+							}
 						}
 					}
 				});
@@ -290,8 +309,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 					if (gridQuery.Filter != null) {
 						getZoneLettersInput.CountryIds = gridQuery.Filter.CountryIds;
-						getZoneLettersInput.ZoneNameFilterType = gridQuery.Filter.TextFilterType;
-						getZoneLettersInput.ZoneNameFilter = gridQuery.Filter.Text;
+						getZoneLettersInput.ZoneNameFilterType = gridQuery.Filter.ZoneNameFilterType;
+						getZoneLettersInput.ZoneNameFilter = gridQuery.Filter.ZoneNameFilter;
 						getZoneLettersInput.BulkActionFilter = gridQuery.Filter.BulkActionFilter;
 					}
 

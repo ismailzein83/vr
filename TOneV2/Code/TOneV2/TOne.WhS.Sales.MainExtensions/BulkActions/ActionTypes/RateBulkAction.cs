@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
@@ -12,6 +14,8 @@ namespace TOne.WhS.Sales.MainExtensions
 {
 	public class RateBulkAction : BulkActionType
 	{
+		private Dictionary<int, DateTime> _datesByCountry;
+
 		public override Guid ConfigId
 		{
 			get { return new Guid("A893F3C6-D4BF-4C60-BA7D-2A773791D7BD"); }
@@ -25,6 +29,20 @@ namespace TOne.WhS.Sales.MainExtensions
 
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{
+			if (context.SaleZone.BED > BED)
+				return false;
+
+			if (context.OwnerType == SalePriceListOwnerType.Customer)
+			{
+				if (_datesByCountry == null)
+				{
+					_datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, DateTime.Today, false);
+				}
+
+				if (!UtilitiesManager.IsCustomerZoneCountryApplicable(context.SaleZone.CountryId, BED, _datesByCountry))
+					return false;
+			}
+
 			return true;
 		}
 

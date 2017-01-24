@@ -25,7 +25,7 @@ namespace TOne.WhS.Sales.Entities
 
 		int OwnerId { get; }
 
-		long ZoneId { get; }
+		SaleZone SaleZone { get; }
 
 		ZoneChanges ZoneDraft { get; }
 

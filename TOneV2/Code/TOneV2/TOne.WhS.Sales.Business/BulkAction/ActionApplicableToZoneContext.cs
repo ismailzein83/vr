@@ -25,7 +25,7 @@ namespace TOne.WhS.Sales.Business
 
 		public int OwnerId { get; set; }
 
-		public long ZoneId { get; set; }
+		public SaleZone SaleZone { get; set; }
 
 		public ZoneChanges ZoneDraft { get; set; }
 

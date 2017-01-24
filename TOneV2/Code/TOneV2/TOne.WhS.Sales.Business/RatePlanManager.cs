@@ -57,7 +57,7 @@ namespace TOne.WhS.Sales.Business
 					OwnerId = input.OwnerId,
 					BulkAction = input.BulkAction,
 					DraftData = draft,
-					SaleZoneIds = saleZoneIds
+					SaleZones = saleZones
 				};
 
 				applicableZoneIds = input.BulkActionFilter.GetApplicableZoneIds(applicableZoneIdsContext);
@@ -452,7 +452,7 @@ namespace TOne.WhS.Sales.Business
 				{
 					OwnerType = input.OwnerType,
 					OwnerId = input.OwnerId,
-					SaleZoneIds = saleZones.MapRecords(x => x.SaleZoneId),
+					SaleZones = saleZones,
 					DraftData = draft,
 					BulkAction = input.BulkAction
 				};
@@ -492,7 +492,7 @@ namespace TOne.WhS.Sales.Business
 			{
 				OwnerType = input.OwnerType,
 				OwnerId = input.OwnerId,
-				SaleZoneIds = saleZones.MapRecords(x => x.SaleZoneId),
+				SaleZones = saleZones,
 				DraftData = draft,
 				BulkAction = input.BulkAction
 			};

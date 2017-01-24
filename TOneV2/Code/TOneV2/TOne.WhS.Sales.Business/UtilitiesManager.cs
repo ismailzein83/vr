@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
@@ -67,17 +68,55 @@ namespace TOne.WhS.Sales.Business
 			ZoneChanges zoneDraft = null;
 
 			if (context.Draft != null && context.Draft.ZoneChanges != null)
-				zoneDraft = context.Draft.ZoneChanges.FindRecord(x => x.ZoneId == context.ZoneId);
+				zoneDraft = context.Draft.ZoneChanges.FindRecord(x => x.ZoneId == context.SaleZone.SaleZoneId);
 
 			var actionApplicableToZoneContext = new ActionApplicableToZoneContext(context.GetSellingProductZoneRate, context.GetCustomerZoneRate)
 			{
 				OwnerType = context.OwnerType,
 				OwnerId = context.OwnerId,
-				ZoneId = context.ZoneId,
+				SaleZone = context.SaleZone,
 				ZoneDraft = zoneDraft
 			};
 
 			return context.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
+		}
+
+		public static Dictionary<int, DateTime> GetDatesByCountry(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
+		{
+			var datesByCountry = new Dictionary<int, DateTime>();
+
+			IEnumerable<CustomerCountry2> customerCountries = new CustomerCountryManager().GetCustomerCountries(customerId, effectiveOn, false);
+			if (customerCountries != null)
+			{
+				foreach (CustomerCountry2 customerCountry in customerCountries)
+					if (!datesByCountry.ContainsKey(customerCountry.CountryId))
+						datesByCountry.Add(customerCountry.CountryId, customerCountry.BED);
+			}
+
+			Changes draft = new RatePlanDraftManager().GetDraft(SalePriceListOwnerType.Customer, customerId);
+			if (draft != null && draft.CountryChanges != null && draft.CountryChanges.NewCountries != null)
+			{
+				foreach (DraftNewCountry newCountry in draft.CountryChanges.NewCountries)
+				{
+					if (!datesByCountry.ContainsKey(newCountry.CountryId))
+						datesByCountry.Add(newCountry.CountryId, newCountry.BED);
+				}
+			}
+
+			return datesByCountry;
+		}
+
+		public static bool IsCustomerZoneCountryApplicable(int countryId, DateTime rateBED, Dictionary<int, DateTime> datesByCountry)
+		{
+			DateTime soldOn;
+			
+			if (!datesByCountry.TryGetValue(countryId, out soldOn))
+				return false;
+
+			if (soldOn > rateBED)
+				return false;
+			
+			return true;
 		}
 
 		#region Private Methods
@@ -93,26 +132,22 @@ namespace TOne.WhS.Sales.Business
 			return dates.ElementAt(0);
 		}
 		#endregion
+	}
 
-		#region Public Classes
+	public class IsActionApplicableToZoneInput
+	{
+		public SalePriceListOwnerType OwnerType { get; set; }
 
-		public class IsActionApplicableToZoneInput
-		{
-			public SalePriceListOwnerType OwnerType { get; set; }
+		public int OwnerId { get; set; }
 
-			public int OwnerId { get; set; }
+		public SaleZone SaleZone { get; set; }
 
-			public long ZoneId { get; set; }
+		public BulkActionType BulkAction { get; set; }
 
-			public BulkActionType BulkAction { get; set; }
+		public Changes Draft { get; set; }
 
-			public Changes Draft { get; set; }
+		public Func<int, long, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
 
-			public Func<int, long, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
-
-			public Func<int, int, long, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
-		}
-
-		#endregion
+		public Func<int, int, long, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
 	}
 }
