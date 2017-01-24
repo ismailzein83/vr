@@ -13,7 +13,7 @@ app.service('VR_Invoice_InvoiceGridSettingService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGridSettings/MainGridColumnsEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGridSettings/Templates/MainGridColumnsEditor.html', parameters, settings);
         }
 
         function editGridColumn(columnEntity, onGridColumnUpdated, context) {
@@ -28,7 +28,7 @@ app.service('VR_Invoice_InvoiceGridSettingService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGridSettings/MainGridColumnsEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGridSettings/Templates/MainGridColumnsEditor.html', parameters, settings);
         }
 
         function addGridAction(onGridActionAdded, context) {
@@ -41,7 +41,7 @@ app.service('VR_Invoice_InvoiceGridSettingService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGridSettings/InvoiceGridActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGridSettings/Templates/InvoiceGridActionEditor.html', parameters, settings);
         }
 
         function editGridAction(actionEntity, onGridActionUpdated, context) {
@@ -56,7 +56,7 @@ app.service('VR_Invoice_InvoiceGridSettingService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGridSettings/InvoiceGridActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGridSettings/Templates/InvoiceGridActionEditor.html', parameters, settings);
         }
 
         return ({

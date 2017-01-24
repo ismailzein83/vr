@@ -12,7 +12,7 @@ app.service('VR_Invoice_InvoiceGeneratorActionService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGeneratorAction/InvoiceGeneratorActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/GeneratorSettings/Templates/InvoiceGeneratorActionEditor.html', parameters, settings);
         }
 
         function editInvoiceGeneratorAction(invoiceGeneratorActionEntity, onInvoiceGeneratorActionUpdated, context) {
@@ -27,7 +27,7 @@ app.service('VR_Invoice_InvoiceGeneratorActionService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceGeneratorAction/InvoiceGeneratorActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/GeneratorSettings/Templates/InvoiceGeneratorActionEditor.html', parameters, settings);
         }
 
         return ({

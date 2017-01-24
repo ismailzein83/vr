@@ -12,7 +12,7 @@ app.service('VR_Invoice_InvoiceSerialNumberSettingsService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSerialNumberSettings/SerialNumberPartEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSerialNumberSettings/Templates/SerialNumberPartEditor.html', parameters, settings);
         }
 
         function editSerialNumberPart(serialNumberPartEntity, onSerialNumberPartUpdated, context) {
@@ -27,7 +27,7 @@ app.service('VR_Invoice_InvoiceSerialNumberSettingsService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSerialNumberSettings/SerialNumberPartEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSerialNumberSettings/Templates/SerialNumberPartEditor.html', parameters, settings);
         }
 
         return ({

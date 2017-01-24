@@ -64,7 +64,7 @@ app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificati
                     var parameter = {
                     context: getContext()
                     };
-                    VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceSerialNumberSettings/SerialNumberPatternHelper.html', parameter, modalSettings);
+                    VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSerialNumberSettings/Templates/SerialNumberPatternHelper.html', parameter, modalSettings);
                 };
             defineAPI();
         }

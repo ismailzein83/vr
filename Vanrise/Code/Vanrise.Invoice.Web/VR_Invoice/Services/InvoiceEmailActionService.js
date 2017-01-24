@@ -12,7 +12,7 @@ app.service('VR_Invoice_InvoiceEmailActionService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceActions/InvoiceEmailAttachmentEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceActions/Templates/InvoiceEmailAttachmentEditor.html', parameters, settings);
         }
         function editEmailAttachment(emailAttachmentEntity,onEmailAttachmentUpdated, context) {
             var settings = {
@@ -26,7 +26,7 @@ app.service('VR_Invoice_InvoiceEmailActionService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceActions/InvoiceEmailAttachmentEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceActions/Templates/InvoiceEmailAttachmentEditor.html', parameters, settings);
         }
 
         return ({

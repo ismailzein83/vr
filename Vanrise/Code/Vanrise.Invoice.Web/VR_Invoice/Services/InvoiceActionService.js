@@ -181,7 +181,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceActions/InvoiceActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceActions/Templates/InvoiceActionEditor.html', parameters, settings);
         }
         function editInvoiceAction(invoiceActionEntity, onInvoiceActionUpdated, context) {
             var settings = {
@@ -195,7 +195,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceActions/InvoiceActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceActions/Templates/InvoiceActionEditor.html', parameters, settings);
         }
 
         function reGenerateInvoice(onGenerateInvoice, invoiceTypeId, invoiceId) {
