@@ -1,9 +1,10 @@
-﻿using PartnerPortal.CustomerAccess.Entities;
+﻿using PartnerPortal.CustomerAccess.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.AccountBalance.Entities;
 using Vanrise.Web.Base;
 
 namespace PartnerPortal.CustomerAccess.Web.Controllers
@@ -16,7 +17,8 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
         [Route("GetFilteredAccountStatments")]
         public object GetFilteredAccountStatments(Vanrise.Entities.DataRetrievalInput<AccountStatementQuery> input)
         {
-            return null;
+            AccountStatementManager manager = new AccountStatementManager();
+            return GetWebResponse(input, manager.GetFilteredAccountStatments(input));
         }
     }
 }
