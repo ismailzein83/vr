@@ -45,9 +45,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PartnerPortal.CustomerAcces
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.CustomerAccess.Web", "PartnerPortal.CustomerAccess.Web\PartnerPortal.CustomerAccess.Web.csproj", "{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.CustomerAccess.Entities", "PartnerPortal.CustomerAccess.Entities\PartnerPortal.CustomerAccess.Entities.csproj", "{3F63F33B-1977-4593-8D79-F5BFBF84CB19}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -107,6 +109,10 @@ Global
 		SccProjectTopLevelParentUniqueName14 = CarrierPortal.sln
 		SccProjectName14 = PartnerPortal.CustomerAccess.Web
 		SccLocalPath14 = PartnerPortal.CustomerAccess.Web
+		SccProjectUniqueName15 = PartnerPortal.CustomerAccess.Entities\\PartnerPortal.CustomerAccess.Entities.csproj
+		SccProjectTopLevelParentUniqueName15 = CarrierPortal.sln
+		SccProjectName15 = PartnerPortal.CustomerAccess.Entities
+		SccLocalPath15 = PartnerPortal.CustomerAccess.Entities
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +177,10 @@ Global
 		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F63F33B-1977-4593-8D79-F5BFBF84CB19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F63F33B-1977-4593-8D79-F5BFBF84CB19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F63F33B-1977-4593-8D79-F5BFBF84CB19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F63F33B-1977-4593-8D79-F5BFBF84CB19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,5 +202,6 @@ Global
 		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{062656B4-F251-4342-9853-7B2448326EB8} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
 		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9} = {062656B4-F251-4342-9853-7B2448326EB8}
+		{3F63F33B-1977-4593-8D79-F5BFBF84CB19} = {062656B4-F251-4342-9853-7B2448326EB8}
 	EndGlobalSection
 EndGlobal
