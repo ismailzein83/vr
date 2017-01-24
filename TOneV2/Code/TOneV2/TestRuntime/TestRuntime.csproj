@@ -971,6 +971,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="app.config.exclude">
       <SubType>Designer</SubType>
     </None>
