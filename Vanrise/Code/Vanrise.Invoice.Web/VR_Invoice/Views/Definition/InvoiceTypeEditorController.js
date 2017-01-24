@@ -190,7 +190,8 @@
                         },
                         ItemGroupings: itemGroupingsDirectiveAPI.getData(),
                         StartDateCalculationMethod:startCalculationMethodAPI.getData(),
-                        InvoiceSettingPartUISections:invoiceSettingDefinitionDirectiveAPI.getData()
+                        InvoiceSettingPartUISections: invoiceSettingDefinitionDirectiveAPI.getData(),
+                        AutomaticInvoiceActions: automaticInvoiceActionsAPI.getData()
                     }
                 };
                 return obj;
@@ -537,6 +538,26 @@
                         }
                     }
                     return groupingMeasures;
+                },
+
+                getActionsInfoByActionTypeName: function (actionTypeName)
+                {
+                    var actionsInfo =[];
+                    var invoiceActions = invoiceActionsAPI.getData();
+                    if(invoiceActions != undefined)
+                    {
+                        for (var i = 0; i < invoiceActions.length; i++) {
+                            var action = invoiceActions[i];
+                            if (action.Settings.ActionTypeName == actionTypeName)
+                            {
+                                actionsInfo.push({
+                                    Title: action.Title,
+                                    InvoiceActionId: action.InvoiceActionId
+                                });
+                            }
+                        }
+                    }
+                    return actionsInfo;
                 }
             };
             return context;

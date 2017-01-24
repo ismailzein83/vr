@@ -98,6 +98,7 @@
 
         function buildEmailAttachmentObjFromScope() {
             var obj = {
+                EmailActionAttachmentId: emailAttachmentEntity!=undefined?emailAttachmentEntity.EmailActionAttachmentId: UtilsService.guid(),
                 Title: $scope.scopeModel.attachmentTitle,
                 InvoiceFileConverter: sendEmailAttachmentTypeAPI.getData()
             };

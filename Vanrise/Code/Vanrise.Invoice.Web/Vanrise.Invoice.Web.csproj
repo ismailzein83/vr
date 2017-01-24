@@ -231,6 +231,12 @@
     <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoicesetting-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\AutomaticInvoiceActionEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\EmailActionAttachmentSetEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\AutomaticSendEmailActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\EmailActionAttachmentSetEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\EmailAttachmentsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-automaticinvoiceaction-sendemail-emailattachments.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-automaticinvoiceaction-sendemail.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\Templates\AutomaticInvoiceActionEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\Templates\AutomaticInvoiceActionsGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\vr-invoicetype-automaticinvoiceactions.js" />
@@ -432,7 +438,6 @@
     <Content Include="VR_Invoice\Views\Runtime\InvoiceNoteActionEditorController.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\" />
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\MainExtensions\Templates\" />
   </ItemGroup>
   <ItemGroup>

@@ -38,13 +38,14 @@ app.directive("vrInvoiceactionsSendemailAttachmenttypeRdlfileconverter", ["Utils
                 var api = {};
 
                 api.load = function (payload) {
+               
                     var invoiceFileConverter;
                     if (payload != undefined) {
                         invoiceFileConverter = payload.invoiceFileConverter;
                         context = payload.context;
                         if (context != undefined)
                         {
-                            $scope.scopeModel.rdlcInvoiceActions = context.getRDLCActionsInfo();
+                            $scope.scopeModel.rdlcInvoiceActions = context.getActionsInfoByActionTypeName("OpenRDLCReportAction");
                             if(invoiceFileConverter != undefined)
                             {
                                 $scope.scopeModel.selectedInvoiceAction = UtilsService.getItemByVal($scope.scopeModel.rdlcInvoiceActions, invoiceFileConverter.InvoiceActionId, "InvoiceActionId");

@@ -68,9 +68,9 @@ app.directive("vrInvoicetypeAutomaticinvoiceactions", ["UtilsService", "VRNotifi
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.invoiceActions != undefined) {
-                            for (var i = 0; i < payload.invoiceActions.length; i++) {
-                                var gridAction = payload.invoiceActions[i];
+                        if (payload.automaticInvoiceActions != undefined) {
+                            for (var i = 0; i < payload.automaticInvoiceActions.length; i++) {
+                                var gridAction = payload.automaticInvoiceActions[i];
                                 ctrl.datasource.push({ Entity: gridAction });
                             }
                         }
@@ -104,21 +104,6 @@ app.directive("vrInvoicetypeAutomaticinvoiceactions", ["UtilsService", "VRNotifi
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
-                currentContext.getRDLCActionsInfo = function () {
-                    var actionsInfo = [];
-                    if (ctrl.datasource.length > 0) {
-
-
-                        for (var i = 0; i < ctrl.datasource.length; i++) {
-                            var action = ctrl.datasource[i];
-                            actionsInfo.push({
-                                Title: action.Entity.Title,
-                                AutomaticInvoiceActionId: action.Entity.AutomaticInvoiceActionId
-                            });
-                        }
-                    }
-                    return actionsInfo;
-                };
                 return currentContext;
             }
         }
