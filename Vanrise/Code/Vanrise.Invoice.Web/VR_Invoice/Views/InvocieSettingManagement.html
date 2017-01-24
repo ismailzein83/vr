@@ -2,7 +2,7 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
-                <vr-invoicetype-selector on-ready="onInvoiceTypeSelectorReady" normal-col-num="2" isrequired="true"></vr-invoicetype-selector>
+                <vr-invoicetype-selector on-ready="onInvoiceTypeSelectorReady" normal-col-num="2" isrequired="true" onselectionchanged="onInvoiceTypeSelectionChanged"></vr-invoicetype-selector>
             </vr-row>
         </div>
         <vr-row removeline>

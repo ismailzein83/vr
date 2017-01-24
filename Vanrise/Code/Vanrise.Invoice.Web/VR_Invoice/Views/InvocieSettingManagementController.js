@@ -34,6 +34,12 @@
             $scope.hasAddInvoiceSettingPermission = function () {
                 return VR_Invoice_InvoiceSettingAPIService.HasAddInvoiceSettingPermission();
             };
+            $scope.onInvoiceTypeSelectionChanged = function () {
+                if( invoiceTypeSelectorAPI.getSelectedIds() != undefined)
+                {
+                    gridAPI.loadGrid(getFilterObject());
+                }
+            };
             $scope.addInvoiceSetting = addInvoiceSetting;
         }
         function load() {
