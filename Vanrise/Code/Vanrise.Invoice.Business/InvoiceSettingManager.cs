@@ -32,17 +32,20 @@ namespace Vanrise.Invoice.Business
         public Vanrise.Entities.InsertOperationOutput<InvoiceSettingDetail> AddInvoiceSetting(InvoiceSetting invoiceSetting)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<InvoiceSettingDetail>();
-
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-
+            var invoicesettings = GetInvoiceSettings(invoiceSetting.InvoiceTypeId);
+            if (invoicesettings == null || invoicesettings.Count() == 0)
+            {
+                invoiceSetting.IsDefault = true;
+            }
             IInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceSettingDataManager>();
             invoiceSetting.InvoiceSettingId = Guid.NewGuid();
             if (dataManager.InsertInvoiceSetting(invoiceSetting))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = InvoiceSettingDetailMapper(invoiceSetting);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.InsertedObject = InvoiceSettingDetailMapper(invoiceSetting);
             }
             else
             {
@@ -63,8 +66,8 @@ namespace Vanrise.Invoice.Business
             if (dataManager.UpdateInvoiceSetting(invoiceSetting))
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = InvoiceSettingDetailMapper(invoiceSetting);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.UpdatedObject = InvoiceSettingDetailMapper(invoiceSetting);
             }
             else
             {
@@ -91,12 +94,33 @@ namespace Vanrise.Invoice.Business
             var invoiceSettings = GetInvoiceSettings(invoiceTypeId);
             foreach(var item in invoiceSettings)
             {
-                if (item.Details.IsDefault)
+                if (item.IsDefault)
                     return item;
             }
             throw new NullReferenceException(string.Format("No default setting available for invoicetypeid {0}", invoiceTypeId));
         }
+        public Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail> SetInvoiceSettingDefault(Guid invoiceSettingId)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail>();
 
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            IInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceSettingDataManager>();
+
+            if (dataManager.SetInvoiceSettingDefault(invoiceSettingId))
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.UpdatedObject = InvoiceSettingDetailMapper(GetInvoiceSetting(invoiceSettingId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+
+        }
         public T GetInvoiceSettingDetailByType<T>(Guid invoiceSettingId) where T : InvoiceSettingPart
         {
             var invoiceSetting = GetInvoiceSetting(invoiceSettingId);

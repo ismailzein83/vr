@@ -30,7 +30,11 @@
         function GetInvoiceSettingsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceSettingsInfo"), { filter: filter });
         }
-
+        function SetInvoiceSettingDefault(invoiceSettingId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "SetInvoiceSettingDefault"), {
+                invoiceSettingId: invoiceSettingId
+            });
+        }
         return ({
             GetInvoiceSetting: GetInvoiceSetting,
             GetFilteredInvoiceSettings: GetFilteredInvoiceSettings,
@@ -39,6 +43,7 @@
             UpdateInvoiceSetting: UpdateInvoiceSetting,
             HasUpdateInvoiceSettingPermission: HasUpdateInvoiceSettingPermission,
             GetInvoiceSettingsInfo: GetInvoiceSettingsInfo,
+            SetInvoiceSettingDefault: SetInvoiceSettingDefault
         });
     }
 

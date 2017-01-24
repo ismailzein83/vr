@@ -46,10 +46,10 @@
             function buildInvoiceSettingObjFromScope() {
                 var obj = {
                     InvoiceSettingId: invoiceSettingId,
-                    InvoiceTypeId:invoiceTypeId,
+                    InvoiceTypeId: invoiceTypeId,
+                    IsDefault: invoiceSettingEntity != undefined ? invoiceSettingEntity.IsDefault : undefined,
                     Name: $scope.scopeModel.name,
                     Details: {
-                        IsDefault: $scope.scopeModel.isDefault,
                         InvoiceSettingParts: runtimeEditorAPI.getData()
                     }
                 };
@@ -93,7 +93,6 @@
                     getInvoiceSetting().then(function () {
                         loadAllControls()
                             .finally(function () {
-                                invoiceSettingEntity = undefined;
                             });
                     }).catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

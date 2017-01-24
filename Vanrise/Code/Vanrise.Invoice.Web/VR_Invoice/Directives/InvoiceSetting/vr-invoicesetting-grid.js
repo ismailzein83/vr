@@ -28,6 +28,7 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
         function InvoiceSettingGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var gridAPI;
+            var gridQuery;
             function initializeController() {
 
                 $scope.datastore = [];
@@ -41,7 +42,8 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
                     function getDirectiveAPI() {
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
-                            return gridAPI.retrieveData(query);
+                            gridQuery = query;
+                            return gridAPI.retrieveData(gridQuery);
                         };
                         return directiveAPI;
                     }
@@ -63,11 +65,27 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
             }
 
             function defineMenuActions() {
-                $scope.gridMenuActions.push({
+                var defaultMenuAction = [{
                     name: "Edit",
                     clicked: editInvoiceSetting,
                     haspermission: hasUpdateInvoiceSettingPermission
-                });
+                }];
+                var menuAction = [{
+                    name: "Edit",
+                    clicked: editInvoiceSetting,
+                    haspermission: hasUpdateInvoiceSettingPermission
+                }, {
+                    name: "Set Default",
+                    clicked: setInvoiceSettingDefault,
+                }];
+
+                $scope.gridMenuActions = function (dataItem) {
+                    if (dataItem.Entity.IsDefault) {
+                        return defaultMenuAction;
+                    } else {
+                        return menuAction;
+                    }
+                };
             }
             function hasUpdateInvoiceSettingPermission() {
                 return VR_Invoice_InvoiceSettingAPIService.HasUpdateInvoiceSettingPermission();
@@ -77,6 +95,15 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
                     gridAPI.itemUpdated(invoiceSetting);
                 };
                 VR_Invoice_InvoiceSettingService.editInvoiceSetting(onInvoiceSettingUpdated, dataItem.Entity.InvoiceSettingId, dataItem.Entity.InvoiceTypeId)
+            }
+            function setInvoiceSettingDefault(dataItem) {
+                VRNotificationService.showConfirmation().then(function (response) {
+                    if (response) {
+                        return VR_Invoice_InvoiceSettingAPIService.SetInvoiceSettingDefault(dataItem.Entity.InvoiceSettingId).then(function (response) {
+                            return gridAPI.retrieveData(gridQuery);
+                        });
+                    }
+                });
             }
         }
 

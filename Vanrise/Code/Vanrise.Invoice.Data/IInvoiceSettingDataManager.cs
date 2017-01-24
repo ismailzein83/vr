@@ -13,5 +13,6 @@ namespace Vanrise.Invoice.Data
         bool AreInvoiceSettingsUpdated(ref object updateHandle);
         bool InsertInvoiceSetting(InvoiceSetting invoiceSetting);
         bool UpdateInvoiceSetting(InvoiceSetting invoiceSetting);
+        bool SetInvoiceSettingDefault(Guid invoiceSettingId);
     }
 }

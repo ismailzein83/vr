@@ -27,14 +27,13 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return base.IsDataUpdated("VR_Invoice.InvoiceSetting", ref updateHandle);
         }
-
         public bool InsertInvoiceSetting(InvoiceSetting invoiceSetting)
         {
             string serializedObj = null;
             if (invoiceSetting.Details != null)
                 serializedObj = Vanrise.Common.Serializer.Serialize(invoiceSetting.Details);
 
-            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceSetting_Insert", invoiceSetting.InvoiceSettingId, invoiceSetting.Name, invoiceSetting.InvoiceTypeId, serializedObj);
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceSetting_Insert", invoiceSetting.InvoiceSettingId, invoiceSetting.Name, invoiceSetting.InvoiceTypeId,invoiceSetting.IsDefault, serializedObj);
             return (affectedRows > -1);
         }
         public bool UpdateInvoiceSetting(InvoiceSetting invoiceSetting)
@@ -43,8 +42,13 @@ namespace Vanrise.Invoice.Data.SQL
             if (invoiceSetting.Details != null)
                 serializedObj = Vanrise.Common.Serializer.Serialize(invoiceSetting.Details);
 
-            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceSetting_Update", invoiceSetting.InvoiceSettingId, invoiceSetting.Name,invoiceSetting.InvoiceTypeId, serializedObj);
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceSetting_Update", invoiceSetting.InvoiceSettingId, invoiceSetting.Name, invoiceSetting.InvoiceTypeId, invoiceSetting.IsDefault, serializedObj);
             return (affectedRows > -1 );
+        }
+        public bool SetInvoiceSettingDefault(Guid invoiceSettingId)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceSetting_SetDefault", invoiceSettingId);
+            return (affectedRows > -1);
         }
 
         #endregion
@@ -57,11 +61,11 @@ namespace Vanrise.Invoice.Data.SQL
                 InvoiceSettingId = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 InvoiceTypeId = GetReaderValue<Guid>(reader, "InvoiceTypeId"),
-                Details = Vanrise.Common.Serializer.Deserialize<InvoiceSettingDetails>(reader["Details"] as string)
+                Details = Vanrise.Common.Serializer.Deserialize<InvoiceSettingDetails>(reader["Details"] as string),
+                IsDefault = GetReaderValue<Boolean>(reader, "IsDefault"),
             };
             return invoiceSetting;
         }
         #endregion
-
     }
 }

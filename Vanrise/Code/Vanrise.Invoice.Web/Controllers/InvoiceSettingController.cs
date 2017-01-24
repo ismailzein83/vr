@@ -42,6 +42,13 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.UpdateInvoiceSetting(invoiceSetting);
         }
+
+        [HttpGet]
+        [Route("SetInvoiceSettingDefault")]
+        public Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail> SetInvoiceSettingDefault(Guid invoiceSettingId)
+        {
+            return _manager.SetInvoiceSettingDefault(invoiceSettingId);
+        }
        
         [HttpGet]
         [Route("GetInvoiceSettingsInfo")]

@@ -11,11 +11,11 @@ namespace Vanrise.Invoice.Entities
         public Guid InvoiceSettingId { get; set; }
         public string Name { get; set; }
         public Guid InvoiceTypeId { get; set; }
+        public bool IsDefault { get; set; }
         public InvoiceSettingDetails Details { get; set; }
     }
     public class InvoiceSettingDetails
     {
-        public bool IsDefault { get; set; }
         public Dictionary<Guid, InvoiceSettingPart> InvoiceSettingParts { get; set; }
     }
     public abstract class InvoiceSettingPart
