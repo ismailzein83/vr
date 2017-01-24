@@ -2,9 +2,9 @@
 
     "use strict";
 
-    productEditorController.$inject = ['$scope', 'Retail_BE_ProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    ProductEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_BE_ProductAPIService'];
 
-    function productEditorController($scope, Retail_BE_ProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function ProductEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_ProductAPIService) {
 
         var isEditMode;
 
@@ -357,6 +357,6 @@
         }
     }
 
-    appControllers.controller('Retail_BE_ProductEditorController', productEditorController);
+    appControllers.controller('Retail_BE_ProductEditorController', ProductEditorController);
 
 })(appControllers);

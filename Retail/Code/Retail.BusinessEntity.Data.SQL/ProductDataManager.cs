@@ -51,7 +51,6 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #endregion
 
-
         #region Mappers
 
         Product ProductMapper(IDataReader reader)

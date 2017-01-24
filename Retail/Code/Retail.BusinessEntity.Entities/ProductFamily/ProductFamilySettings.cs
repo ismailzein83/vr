@@ -10,6 +10,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid ProductDefinitionId { get; set; }
 
-        public Dictionary<int, ProductPackageItem> Packages { get; set; }
+        public Dictionary<int, ProductFamilyPackageItem> Packages { get; set; }
     }
 }

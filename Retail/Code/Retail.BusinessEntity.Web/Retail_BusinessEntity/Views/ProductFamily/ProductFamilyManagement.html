@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Retail_BE_ProductManagementController">
+﻿<vr-panel ng-controller="Retail_BE_ProductFamilyManagementController">
     <vr-form name="formFilter">
 
         <div ng-hide="filterSectionCollapsed">
@@ -13,14 +13,14 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="style">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddProductPermission"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddProductFamilyPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
 
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <retail-be-product-grid on-ready="scopeModel.onGridReady"></retail-be-product-grid>
+                <retail-be-productfamily-grid on-ready="scopeModel.onGridReady"></retail-be-productfamily-grid>
             </vr-columns>
         </vr-row>
 

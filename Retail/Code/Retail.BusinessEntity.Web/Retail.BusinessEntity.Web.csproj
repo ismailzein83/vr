@@ -167,6 +167,7 @@
     <Compile Include="Controllers\DIDController.cs" />
     <Compile Include="Controllers\PopController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductFamilyController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />
     <Compile Include="Controllers\RecurringChargeDefinitionController.cs" />
     <Compile Include="Controllers\RevenueComparisonController.cs" />
@@ -285,6 +286,8 @@
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\Templates\CRMAccountConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\retail-be-crmaccount-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ProductFamily\retail-be-productfamily-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ProductFamily\Templates\ProductFamilyGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\retail-be-recurringchargedefinition-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\Templates\RecurringChargeDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountBalance\retail-be-extendedsettings-account-selector.js" />
@@ -528,9 +531,11 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\ProductFamilyAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\ProductFamilyService.js" />
     <Content Include="Retail_BusinessEntity\Services\RecurringChargeDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />
     <Content Include="Retail_BusinessEntity\Services\OperatorDeclaredInfoService.js" />
@@ -582,6 +587,10 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\RecurringChargeDefinition\RecurringChargeDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\RecurringChargeDefinition\RecurringChargeDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\RecurringChargeDefinition\RecurringChargeDefinitionManagement.html" />

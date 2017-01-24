@@ -93,6 +93,7 @@
     <Compile Include="ProductFamily\ProductFamilyDetail.cs" />
     <Compile Include="ProductFamily\ProductFamilyFilter.cs" />
     <Compile Include="ProductFamily\ProductFamilyInfo.cs" />
+    <Compile Include="ProductFamily\ProductFamilyPackageItem.cs" />
     <Compile Include="ProductFamily\ProductFamilyQuery.cs" />
     <Compile Include="ProductFamily\ProductFamilySettings.cs" />
     <Compile Include="Product\IProductFilter.cs" />

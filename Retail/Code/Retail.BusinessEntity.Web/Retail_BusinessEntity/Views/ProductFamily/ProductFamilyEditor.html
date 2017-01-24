@@ -1,0 +1,37 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_ProductFamilyEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form name="formProductFamilyEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <span vr-disabled="scopeModel.isProductDefinitionSelectorDisabled">
+                            <retail-be-productdefinition-selector on-ready="scopeModel.onProductDefinitionsSelectorReady"
+                                                                  onselectionchanged="scopeModel.onProductDefinitionsSelectionChanged"
+                                                                  selectedvalues="scopeModel.selectedProductDefinition"
+                                                                  customlabel="Type"
+                                                                  normal-col-num="6" isrequired="true" hideremoveicon>
+                            </retail-be-productdefinition-selector>
+                        </span>
+                    </vr-row>
+                </vr-tab>
+                <!--<vr-tab header="'Packages'" ng-show="scopeModel.showPackagesTab" vr-loader="scopeModel.isPackagesTabLoading">
+                    <retail-be-productpackageitem-management on-ready="scopeModel.onPackageItemsDirectiveReady"></retail-be-productpackageitem-management>
+                </vr-tab>-->
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formProductFamilyEditor" haspermission="hasSaveProductFamilyPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+

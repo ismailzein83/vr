@@ -13,8 +13,8 @@ namespace Retail.BusinessEntity.Data
 
         bool AreProductUpdated(ref object updateHandle);
 
-        bool Insert(Product statusDefinitionItem, out int insertedId);
+        bool Insert(Product product, out int insertedId);
 
-        bool Update(Product statusDefinitionItem);
+        bool Update(Product product);
     }
 }

@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="scopeModel.productFamily"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.ProductFamilyId">
+
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.ProductFamilyId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+</vr-datagrid>
