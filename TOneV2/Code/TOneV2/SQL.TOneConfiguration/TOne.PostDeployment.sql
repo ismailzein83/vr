@@ -126,6 +126,13 @@ as (select * from (values
 ('98B8E899-4ED7-4BCB-B6EF-8AE94E382E62','WhS_Sales_CostCalculationMethod_Avarage','Average','WhS_Sales_CostCalculationMethod'					,'{"Editor":"vr-whs-sales-avgcostcalculation"}'),
 ('D71F6102-29B3-4781-8167-5C08282CCB5B','WhS_Sales_CostCalculationMethod_WeightedAverage','Weighted Average','WhS_Sales_CostCalculationMethod'	,'{"Editor":"vr-whs-sales-weightedavgcostcalculation"}'),
 
+('736034AB-115F-464B-919D-052EBFDEDD5C','WhS_Sales_BulkActionType_EED','EED','WhS_Sales_BulkActionType'											,'{"Editor":"vr-whs-sales-bulkaction-type-eed","IsApplicableToSellingProduct":false,"IsApplicableToCustomer":true}'),
+('A893F3C6-D4BF-4C60-BA7D-2A773791D7BD','WhS_Sales_BulkActionType_Rate','Rate','WhS_Sales_BulkActionType'										,'{"Editor":"vr-whs-sales-bulkaction-type-rate","IsApplicableToSellingProduct":true,"IsApplicableToCustomer":true}'),
+('67D0BD5E-8B7A-407E-B03B-5FAE05F10A01','WhS_Sales_BulkActionType_RoutingProduct','Routing Product','WhS_Sales_BulkActionType'					,'{"Editor":"vr-whs-sales-bulkaction-type-routingproduct","IsApplicableToSellingProduct":true,"IsApplicableToCustomer":true}'),
+('61D047D6-DF3D-4D74-9C2C-7CEA2907C2B3','WhS_Sales_BulkActionZoneFilterType_Specific','Specific','WhS_Sales_BulkActionZoneFilterType'			,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-specific"}'),
+('310EAF9D-68B5-466A-9CC4-96121B03A5FD','WhS_Sales_BulkActionType_BED','BED','WhS_Sales_BulkActionType'											,'{"Editor":"vr-whs-sales-bulkaction-type-bed","IsApplicableToSellingProduct":true,"IsApplicableToCustomer":true}'),
+('BDC22FEB-14E1-4F0D-8C3E-EF54A5A36312','WhS_Sales_BulkActionZoneFilterType_All','All','WhS_Sales_BulkActionZoneFilterType'						,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-all"}'),
+
 ('6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320','WhS_RouteSync_SwitchRouteSynchronizer_MVTSRadius','MVTS Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-mvtsradius-swsync"}'),
 ('64152327-5DB5-47AE-9569-23D38BCB18CC','WhS_RouteSync_SwitchRouteSynchronizer_IVSwitch','IVSwitch Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-ivswitch-swsync"}'),
 ('366AB5D3-5083-420D-B5CE-5313DA025106','Whs_RouteSync_RadiusDataManager_SQL','MVTS SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'			,'{"Editor":"whs-routesync-mvtsradius-sqldatamanager"}'),
