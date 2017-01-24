@@ -1,59 +1,113 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_TQIEditor">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_TQIEditor" size="large">
     <vr-modalbody>
         <vr-form name="formTQIEditor">
 
             <vr-row removeline>
 
-                <vr-columns width="1/2row" haschildcolumns>
-                    <vr-section title="TQI Method">
-                        <vr-whs-sales-tqi-selective on-ready="onTQISelectiveReady"></vr-whs-sales-tqi-selective>
+                <vr-columns width="1/2row">
+                    <vr-section title="Info">
+                        <vr-columns width="fullrow">
+                            <vr-row removeline>
+                                <vr-columns width="fullrow">
+                                    <vr-row>
+                                        <vr-columns colnum="2" haschildcolumns>
+                                            <vr-label>Sale Entity:</vr-label>
+                                        </vr-columns>
+                                        <vr-columns colnum="4" haschildcolumns>
+                                            <vr-label isvalue>{{saleEntityName}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns colnum="2" haschildcolumns>
+                                            <vr-label>Sale Zone:</vr-label>
+                                        </vr-columns>
+                                        <vr-columns colnum="4" haschildcolumns>
+                                            <vr-label isvalue>{{zoneName}}</vr-label>
+                                        </vr-columns>
+                                    </vr-row>
+
+                                    <vr-row>
+                                        <vr-columns colnum="2" haschildcolumns>
+                                            <vr-label>Rate:</vr-label>
+                                        </vr-columns>
+                                        <vr-columns colnum="4" haschildcolumns>
+                                            <vr-label isvalue>{{rate}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns colnum="2" haschildcolumns>
+                                            <vr-label>BED:</vr-label>
+                                        </vr-columns>
+                                        <vr-columns colnum="4" haschildcolumns>
+                                            <vr-label isvalue>{{rateBED | date:'dd/MM/yyyy'}}</vr-label>
+                                        </vr-columns>
+                                    </vr-row>
+
+                                    <vr-row>
+                                        <vr-columns colnum="2" haschildcolumns>
+                                            <vr-label>Services:</vr-label>
+                                        </vr-columns>
+                                        <vr-columns colnum="4" haschildcolumns>
+                                            <vr-whs-be-services-viewer on-ready="onServiceReady"></vr-whs-be-services-viewer>
+                                        </vr-columns>
+                                        <vr-columns colnum="2" haschildcolumns>
+                                            <vr-label>New Rate:</vr-label>
+                                        </vr-columns>
+                                        <vr-columns colnum="4" haschildcolumns>
+                                            <vr-label isvalue>{{newRate}}</vr-label>
+                                        </vr-columns>
+                                    </vr-row>
+                                    <vr-row>
+                                        <vr-columns colnum="7" haschildcolumns>
+                                        </vr-columns>
+                                        <vr-columns colnum="2">
+                                            <vr-textbox label="Last" typeof="number" value="last"></vr-textbox>
+                                        </vr-columns>
+                                        <vr-columns colnum="2" withemptyline>
+                                            <vr-textbox typeof="number" value="last1"></vr-textbox>
+                                        </vr-columns>
+                                        <vr-columns colnum="1" haschildcolumns withemptyline>
+                                            <vr-button type="Search" standalone data-onclick="searchClicked"></vr-button>
+                                        </vr-columns>
+                                    </vr-row>
+                                    <vr-whs-sales-tqi-grid on-ready="onTQIGridReady"></vr-whs-sales-tqi-grid>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-columns>
                     </vr-section>
                 </vr-columns>
 
                 <vr-columns width="1/2row">
-                    <vr-section title="Sale Entity Information">
-                        <vr-row>
-                            <vr-columns colnum="2" haschildcolumns>
-                                <vr-label>Sale Entity:</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="4" haschildcolumns>
-                                <vr-label isvalue>{{saleEntityName}}</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="2" haschildcolumns>
-                                <vr-label>Sale Zone:</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="4" haschildcolumns>
-                                <vr-label isvalue>{{zoneName}}</vr-label>
-                            </vr-columns>
-                        </vr-row>
+                    <vr-section title="Action">
+                        <vr-whs-sales-tqi-selective on-ready="onTQISelectiveReady"></vr-whs-sales-tqi-selective>
+                        <vr-row removeline>
+                            <vr-columns width="fullrow">
+                                <vr-columns style="display:inline-block;width:calc(20% - 15px);position: relative;left:5px;" haschildcolumns>
+                                    <vr-textbox label="Sale Rate" typeof="number" value="evaluatedRate" vr-disabled="true"></vr-textbox>
+                                </vr-columns>
+                                <vr-columns style="display:inline-block;width:20px" haschildcolumns>
+                                    <div style="font-size: 26px;width:100%;text-align:center">+</div>
+                                </vr-columns>
+                                <vr-columns style="display:inline-block;width:calc(20% - 15px)" haschildcolumns>
+                                    <vr-select on-ready="onMarginTypesSelectorReady"
+                                               datasource="marginTypes"
+                                               selectedvalues="marginTypesSelectedValue"
+                                               datavaluefield="value"
+                                               datatextfield="description"
+                                               label="Margin Type"
+                                               onselectionchanged="calculateRate"
+                                               hideremoveicon>
+                                    </vr-select>
+                                </vr-columns>
+                                <vr-columns style="display:inline-block;width:calc(20% - 15px)" haschildcolumns>
+                                    <vr-textbox typeof="number" value="margin" onblurtextbox="calculateRate"></vr-textbox>
+                                </vr-columns>
 
-                        <vr-row>
-                            <vr-columns colnum="2" haschildcolumns>
-                                <vr-label>Rate:</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="4" haschildcolumns>
-                                <vr-label isvalue>{{rate}}</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="2" haschildcolumns>
-                                <vr-label>BED:</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="4" haschildcolumns>
-                                <vr-label isvalue>{{rateBED | date:'dd/MM/yyyy'}}</vr-label>
-                            </vr-columns>
-                        </vr-row>
-
-                        <vr-row>
-                            <vr-columns colnum="2" haschildcolumns>
-                                <vr-label>Services:</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="4" haschildcolumns>
-                                <vr-whs-be-services-viewer on-ready="onServiceReady"></vr-whs-be-services-viewer>
-                            </vr-columns>
-                            <vr-columns colnum="2" haschildcolumns>
-                                <vr-label>New Rate:</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="4" haschildcolumns>
-                                <vr-label isvalue>{{newRate}}</vr-label>
+                                <vr-columns style="display:inline-block;width:20px" haschildcolumns>
+                                    <div style="font-size: 26px;width:100%;text-align:center">=</div>
+                                </vr-columns>
+                                <vr-columns style="display:inline-block;width:calc(20% - 15px)" haschildcolumns>
+                                    <vr-textbox value="calculatedRate" vr-disabled="true" style="background-color:yellow"></vr-textbox>
+                                </vr-columns>
+                                <vr-columns style="display:inline-block;width:calc(20% - 15px)" ng-show="showMarginPercentage()" haschildcolumns>
+                                    <vr-textbox value="marginPercentage" vr-disabled="true"></vr-textbox>
+                                </vr-columns>
                             </vr-columns>
                         </vr-row>
                     </vr-section>
@@ -61,53 +115,6 @@
 
             </vr-row>
 
-            <vr-row removeline>
-                <vr-columns width="fullrow" haschildcolumns>
-                    <vr-section title="Rate">
-                        <vr-columns colnum="12" haschildcolumns>
-                            <vr-columns style="display:inline-block;width:calc(20% - 15px)" haschildcolumns>
-                                <vr-textbox label="Sale Rate" typeof="number" value="evaluatedRate" vr-disabled="true"></vr-textbox>
-                            </vr-columns>
-                            <vr-columns style="display:inline-block;width:20px" haschildcolumns>
-                                <div style="font-size: 26px;width:100%;text-align:center">+</div>
-                            </vr-columns>
-                            <vr-columns style="display:inline-block;width:calc(20% - 15px)" haschildcolumns>
-                                <vr-select on-ready="onMarginTypesSelectorReady"
-                                           datasource="marginTypes"
-                                           selectedvalues="marginTypesSelectedValue"
-                                           datavaluefield="value"
-                                           datatextfield="description"
-                                           label="Margin Type"
-                                           onselectionchanged="calculateRate"
-                                           hideremoveicon>
-                                </vr-select>
-                            </vr-columns>
-                            <vr-columns style="display:inline-block;width:calc(20% - 15px)" haschildcolumns>
-                                <vr-textbox typeof="number" value="margin"  onblurtextbox="calculateRate"></vr-textbox>
-                            </vr-columns>
-
-                            <vr-columns style="display:inline-block;width:20px" haschildcolumns>
-                                <div style="font-size: 26px;width:100%;text-align:center">=</div>
-                            </vr-columns>
-                            <vr-columns style="display:inline-block;width:calc(20% - 15px)" haschildcolumns>
-                                <vr-textbox value="calculatedRate" vr-disabled="true" style="background-color:yellow"></vr-textbox>
-                            </vr-columns>
-                            <vr-columns style="display:inline-block;width:calc(20% - 15px)" ng-show="showMarginPercentage()" haschildcolumns>
-                                <vr-textbox value="marginPercentage" vr-disabled="true"></vr-textbox>
-                            </vr-columns>
-                        </vr-columns>
-                    </vr-section>
-                </vr-columns>
-            </vr-row>
-            <vr-row removeline>
-                <vr-columns width="fullrow" haschildcolumns>
-                    <vr-section title="Suppliers TQI">
-                        <vr-whs-sales-tqi-grid on-ready="onTQIGridReady">
-
-                        </vr-whs-sales-tqi-grid>
-                    </vr-section>
-                </vr-columns>
-            </vr-row>
 
         </vr-form>
     </vr-modalbody>
