@@ -382,8 +382,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\Templates\InvoiceItemSubSectionEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\ItemGroupingSubSectionEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceItemSubSectionEditorController.js" />
-    <Content Include="VR_Invoice\Views\Definition\RDLCSubReportEditor.html" />
-    <Content Include="VR_Invoice\Views\Definition\RDLCSubReportEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\Templates\RDLCSubReportEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCSubReportEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\Templates\SerialNumberPartEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\SerialNumberPartEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSerialNumberSettings\Templates\SerialNumberPatternHelper.html" />
@@ -403,8 +403,8 @@
     <Content Include="VR_Invoice\Views\InvocieSettingManagementController.js" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditor.html" />
     <Content Include="VR_Invoice\Views\InvoiceViewEditorController.js" />
-    <Content Include="VR_Invoice\Views\Definition\InvoiceDataSourceEditor.html" />
-    <Content Include="VR_Invoice\Views\Definition\InvoiceDataSourceEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\Templates\InvoiceDataSourceEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\InvoiceDataSourceEditorController.js" />
     <Content Include="VR_Invoice\Views\Runtime\GenerateInvoiceEditor.html" />
     <Content Include="VR_Invoice\Views\Runtime\GenerateInvoiceEditorController.js" />
     <Content Include="VR_Invoice\Views\GenericInvoiceManagement.html" />
@@ -417,8 +417,8 @@
     <Content Include="VR_Invoice\Views\InvoiceTypeManagementController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\Templates\MainGridColumnsEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainGridColumnsEditorController.js" />
-    <Content Include="VR_Invoice\Views\Definition\RDLCParameterEditor.html" />
-    <Content Include="VR_Invoice\Views\Definition\RDLCParameterEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\Templates\RDLCParameterEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCParameterEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\Templates\SubSectionEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\SubSectionEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\Templates\SubSectionGridColumnEditor.html" />
@@ -431,12 +431,6 @@
   <ItemGroup>
     <Folder Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\" />
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\MainExtensions\Templates\" />
-    <Folder Include="VR_Invoice\Directives\InvoiceType\SubSectionSettings\" />
-    <Folder Include="VR_Invoice\Views\Definition\InvoiceActions\" />
-    <Folder Include="VR_Invoice\Views\Definition\InvoiceGeneratorAction\" />
-    <Folder Include="VR_Invoice\Views\Definition\InvoiceGridSettings\" />
-    <Folder Include="VR_Invoice\Views\Definition\InvoiceItemGrouping\" />
-    <Folder Include="VR_Invoice\Views\Definition\InvoiceSerialNumberSettings\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="JSLintNet.json" />

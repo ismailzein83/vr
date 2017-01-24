@@ -93,7 +93,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceDataSourceEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceDataSourceSettings/Templates/InvoiceDataSourceEditor.html', parameters, settings);
         }
 
         function editDataSource(dataSourceEntity, onDataSourceUpdated, context) {
@@ -108,7 +108,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/InvoiceDataSourceEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceDataSourceSettings/Templates/InvoiceDataSourceEditor.html', parameters, settings);
         }
 
         function addParameter(onParameterAdded, context) {
@@ -121,7 +121,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCParameterEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/Templates/RDLCParameterEditor.html', parameters, settings);
         }
 
         function editParameter(parameterEntity, onParameterUpdated, context) {
@@ -136,7 +136,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCParameterEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/Templates/RDLCParameterEditor.html', parameters, settings);
         }
 
         function addSubReport(onSubReportAdded, context) {
@@ -149,7 +149,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCSubReportEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/Templates/RDLCSubReportEditor.html', parameters, settings);
         }
 
         function editSubReport(subReportEntity, onSubReportUpdated, context) {
@@ -164,7 +164,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/RDLCSubReportEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/RDLCReport/Templates/RDLCSubReportEditor.html', parameters, settings);
         }
 
 
