@@ -59,20 +59,5 @@ namespace Vanrise.Security.Web.Controllers
             CloudAuthServerManager manager = new CloudAuthServerManager();
             return manager.HasAuthServer();
         }
-
-        public class CredentialsInput
-        {
-            public string Email { get; set; }
-
-            public string Password { get; set; }
-        }
-
-        public class ChangedPasswordObject
-        {
-            public string OldPassword { get; set;}
-
-            public string NewPassword {get; set;}
-        }
-
     }
 }

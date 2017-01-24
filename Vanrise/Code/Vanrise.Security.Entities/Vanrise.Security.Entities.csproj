@@ -55,6 +55,7 @@
     <Compile Include="BusinessEntity\BusinessEntityNode.cs" />
     <Compile Include="BusinessEntity\BusinessEntityModule.cs" />
     <Compile Include="BusinessEntity\BusinessEntityQuery.cs" />
+    <Compile Include="ChangedPasswordObject.cs" />
     <Compile Include="Cloud\CloudApplicationIdentification.cs" />
     <Compile Include="Cloud\CloudApplicationTenant.cs" />
     <Compile Include="Cloud\CloudApplicationUser.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Cloud\ICloudService.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContextFactory.cs" />
+    <Compile Include="CredentialsInput.cs" />
     <Compile Include="Group\GroupFilter.cs" />
     <Compile Include="Group\GroupInfo.cs" />
     <Compile Include="Group\GroupQuery.cs" />
