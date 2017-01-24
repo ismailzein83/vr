@@ -81,5 +81,13 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetInvoiceSettingPartsConfigs();
         }
+        [HttpGet]
+        [Route("GetAutomaticInvoiceActionSettingsConfigs")]
+        public IEnumerable<AutomaticInvoiceSettingsConfig> GetAutomaticInvoiceActionSettingsConfigs()
+        {
+            return _manager.GetAutomaticInvoiceActionSettingsConfigs();
+        }
+
+        
     }
 }

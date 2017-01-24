@@ -52,6 +52,9 @@
         var invoiceSettingDefinitionDirectiveAPI;
         var invoiceSettingDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var automaticInvoiceActionsAPI;
+        var automaticInvoiceActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var dataRecordTypeEntity;
 
         defineScope();
@@ -156,6 +159,10 @@
                 invoiceExtendedSettingsReadyPromiseDeferred.resolve();
             };
 
+            $scope.scopeModel.onAutomaticInvoiceActionsReady = function (api) {
+                automaticInvoiceActionsAPI = api;
+                automaticInvoiceActionsReadyPromiseDeferred.resolve();
+            };
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -401,6 +408,17 @@
                     return itemGroupingsLoadPromiseDeferred.promise;
                 }
 
+                function loadAutomaticInvoiceActionsGrid() {
+                    var automaticInvoiceActionsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    automaticInvoiceActionsReadyPromiseDeferred.promise.then(function () {
+                        var automaticInvoiceActionsPayload = { context: getContext() };
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined)
+                            automaticInvoiceActionsPayload.automaticInvoiceActions = invoiceTypeEntity.Settings.AutomaticInvoiceActions;
+                        VRUIUtilsService.callDirectiveLoad(automaticInvoiceActionsAPI, automaticInvoiceActionsPayload, automaticInvoiceActionsDeferredLoadPromiseDeferred);
+                    });
+                    return automaticInvoiceActionsDeferredLoadPromiseDeferred.promise;
+                }
+
                 function loadStartCalculationMethod() {
                     var startCalculationMethodLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -421,7 +439,7 @@
                     return invoiceSettingDefinitionLoadPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective])
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

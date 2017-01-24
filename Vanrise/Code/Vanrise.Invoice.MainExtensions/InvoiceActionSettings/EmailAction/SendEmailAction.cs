@@ -16,9 +16,4 @@ namespace Vanrise.Invoice.MainExtensions
         }
         public List<EmailActionAttachment> EmailAttachments { get; set; }
     }
-    public class EmailActionAttachment
-    {
-        public string Title { get; set; }
-        public InvoiceFileConverter InvoiceFileConverter { get; set; }
-    }
 }

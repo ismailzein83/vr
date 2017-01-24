@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeAutomaticinvoiceactions", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceActionService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceActionService) {
+app.directive("vrInvoicetypeAutomaticinvoiceactions", ["UtilsService", "VRNotificationService", "VR_Invoice_AutomaticInvoiceActionService",
+    function (UtilsService, VRNotificationService, VR_Invoice_AutomaticInvoiceActionService) {
 
         var directiveDefinitionObject = {
 
@@ -39,7 +39,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactions", ["UtilsService", "VRNotifi
                         ctrl.datasource.push({ Entity: gridAction });
                     };
 
-                    VR_Invoice_InvoiceActionService.addAutomaticInvoiceAction(onAutomaticInvoiceActionAdded, getContext());
+                    VR_Invoice_AutomaticInvoiceActionService.addAutomaticInvoiceAction(onAutomaticInvoiceActionAdded, getContext());
                 };
 
                 ctrl.removeAction = function (dataItem) {
@@ -98,7 +98,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactions", ["UtilsService", "VRNotifi
                     var index = ctrl.datasource.indexOf(actionObj);
                     ctrl.datasource[index] = { Entity: action };
                 };
-                VR_Invoice_InvoiceActionService.editAutomaticInvoiceAction(actionObj.Entity, onAutomaticInvoiceActionUpdated, getContext());
+                VR_Invoice_AutomaticInvoiceActionService.editAutomaticInvoiceAction(actionObj.Entity, onAutomaticInvoiceActionUpdated, getContext());
             }
             function getContext() {
                 var currentContext = context;

@@ -20,7 +20,7 @@ namespace Vanrise.Invoice.Entities
         public List<InvoiceSubSection> SubSections { get; set; }
         public List<ItemGrouping> ItemGroupings { get; set; }
         public InvoiceTypeSecurity Security { get; set; }
-        public List<AutoGenerateInvoiceAction> AutoGenerateInvoiceActions { get; set; }
+        public List<AutomaticInvoiceAction> AutomaticInvoiceActions { get; set; }
         public List<InvoiceSettingPartUISection> InvoiceSettingPartUISections { get; set; }
     }
 
@@ -39,18 +39,18 @@ namespace Vanrise.Invoice.Entities
         public Object PartDefinitionSetting { get; set; }
     }
 
-    public class AutoGenerateInvoiceAction
+    public class AutomaticInvoiceAction
     {
-        public Guid AutoGenerateInvoiceActionId { get; set; }
+        public Guid AutomaticInvoiceActionId { get; set; }
         public string Title { get; set; }
-        public AutoGenerateInvoiceActionSettings Settings { get; set; }
+        public AutomaticInvoiceActionSettings Settings { get; set; }
     }
-    public abstract class AutoGenerateInvoiceActionSettings
+    public abstract class AutomaticInvoiceActionSettings
     {
         public abstract Guid ConfigId { get; }
-        public abstract void Execute(IAutoGenerateInvoiceActionSettingsContext contex);
+        public abstract void Execute(IAutomaticInvoiceActionSettingsContext contex);
     }
-    public interface IAutoGenerateInvoiceActionSettingsContext
+    public interface IAutomaticInvoiceActionSettingsContext
     {
 
     }

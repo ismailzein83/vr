@@ -12,7 +12,7 @@ app.service('VR_Invoice_AutomaticInvoiceActionService', ['VRModalService', 'Util
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/AutomaticInvoiceActions/AutomaticInvoiceActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/AutomaticInvoiceAction/Templates/AutomaticInvoiceActionEditor.html', parameters, settings);
         }
         function editAutomaticInvoiceAction(automaticInvoiceActionEntity, onAutomaticInvoiceActionUpdated, context) {
             var settings = {
@@ -26,7 +26,7 @@ app.service('VR_Invoice_AutomaticInvoiceActionService', ['VRModalService', 'Util
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Definition/AutomaticInvoiceActions/AutomaticInvoiceActionEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/AutomaticInvoiceAction/Templates/AutomaticInvoiceActionEditor.html', parameters, settings);
         }
 
         return ({

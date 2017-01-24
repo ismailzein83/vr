@@ -70,7 +70,9 @@
     <Compile Include="InvoiceSetting\InvoiceSettingPartConfig.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingQuery.cs" />
     <Compile Include="BusinessManagers\IInvoiceSettingManager.cs" />
+    <Compile Include="InvoiceType\Configs\AutomaticInvoiceSettingsConfig.cs" />
     <Compile Include="InvoiceType\ConvertToGridColumnAttributeInput.cs" />
+    <Compile Include="InvoiceType\EmailActionAttachment.cs" />
     <Compile Include="InvoiceType\IInvoiceActionContext.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceExtendedSettingsConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGeneratorFilterConditionConfig.cs" />

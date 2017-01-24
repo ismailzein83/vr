@@ -42,7 +42,9 @@
         function GetInvoiceSettingPartsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceSettingPartsConfigs"));
         }
-
+        function GetAutomaticInvoiceActionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetAutomaticInvoiceActionSettingsConfigs"));
+        }
         return ({
             GetInvoiceActionSettingsConfigs: GetInvoiceActionSettingsConfigs,
             GetRDLCDataSourceSettingsConfigs: GetRDLCDataSourceSettingsConfigs,
@@ -54,7 +56,8 @@
             GetInvoiceGeneratorFilterConditionConfigs: GetInvoiceGeneratorFilterConditionConfigs,
             GetBillingPeriodTemplateConfigs: GetBillingPeriodTemplateConfigs,
             GetStartDateCalculationMethodConfigs: GetStartDateCalculationMethodConfigs,
-            GetInvoiceSettingPartsConfigs: GetInvoiceSettingPartsConfigs
+            GetInvoiceSettingPartsConfigs: GetInvoiceSettingPartsConfigs,
+            GetAutomaticInvoiceActionSettingsConfigs: GetAutomaticInvoiceActionSettingsConfigs
         });
     }
 

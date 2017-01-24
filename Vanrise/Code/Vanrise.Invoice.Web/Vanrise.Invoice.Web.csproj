@@ -230,8 +230,11 @@
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesetting-runtime-section.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoicesetting-grid.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\AutomaticInvoiceActionEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\Templates\AutomaticInvoiceActionEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\Templates\AutomaticInvoiceActionsGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\vr-invoicetype-automaticinvoiceactions.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\vr-invoicetype-automaticinvoiceactionsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\Templates\FilterGroupConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-filtergroup.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\GeneratorSettings\MainExtensions\vr-invoicetype-invoicegeneratorfiltercondition.js" />
