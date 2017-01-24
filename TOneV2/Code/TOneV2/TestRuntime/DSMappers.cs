@@ -19,22 +19,17 @@ namespace TestRuntime
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
 
-            long startingId;
-            int batchSize = 50000;
+            int maximumBatchSize = 50000;
             var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDR");
-
-            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, batchSize, out startingId);
 
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
 
             IDataReader reader = importedData.Reader;
 
-            long currentCDRId = startingId;
             int rowCount = 0;
             while (reader.Read())
             {
                 dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
-                cdr.Id = currentCDRId;
                 cdr.SwitchId = 5;
                 cdr.IDonSwitch = Utils.GetReaderValue<long>(reader, "IDonSwitch");
                 cdr.Tag = reader["Tag"] as string;
@@ -66,12 +61,22 @@ namespace TestRuntime
                 cdrs.Add(cdr);
                 importedData.LastImportedId = reader["CDRID"];
 
-                currentCDRId++;
                 rowCount++;
-                if (rowCount == batchSize)
+                if (rowCount == maximumBatchSize)
                     break;
 
             }
+
+            long startingId;
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
+            long currentCDRId = startingId;
+
+            foreach (var cdr in cdrs)
+            {
+                cdr.Id = currentCDRId;
+                currentCDRId++;
+            }
+
             if (cdrs.Count > 0)
             {
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs");
@@ -85,7 +90,7 @@ namespace TestRuntime
             LogVerbose("Finished");
             return result;
         }
-       
+
 
         static int dataSourceId = 24;
         static DBReaderImportedData data = new DBReaderImportedData();
