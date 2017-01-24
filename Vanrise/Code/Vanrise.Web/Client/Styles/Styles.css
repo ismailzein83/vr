@@ -2229,6 +2229,12 @@ vr-switch[class*="divDisabled"] .switch {
     white-space: nowrap;
     margin-bottom:2px;
 }
+vr-label[postspace] .vr-control-label {
+    margin-right:10px;
+} 
+vr-label[prespace] .vr-control-label {
+    margin-left:10px;
+} 
 
 vr-label[breakline] .vr-control-label {   
     white-space: normal !important;
