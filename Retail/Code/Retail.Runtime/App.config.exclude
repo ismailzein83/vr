@@ -93,6 +93,8 @@
     <add key="NumberingPlanDBConnStringKey" value="RetailDBConnString"/>
     <add key="SummaryTransformationDBConnStringKey" value="TransactionDBConnString"/>
     <add key="InvoiceDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="RetailCDRDBConnStringKey" value="RetailCDRDBConnString"/>
+    <add key="Retail_Analytics_DBConnStringKey" value="RetailAnalyticsDBConnString"/>
   </appSettings>
 
   <vanriseLogging maxLogLevel="Information">
