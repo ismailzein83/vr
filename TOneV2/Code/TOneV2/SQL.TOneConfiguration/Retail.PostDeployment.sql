@@ -17,7 +17,6 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('2FBA38A1-B755-4089-A0BB-0258E598A7EE','Retail_BE_RetailAccount_Financial','Financial','Retail_BE_RetailAccountObjectType_PropertyEvaluator'																,'{"Editor":"retail_be_retailaccountobjecttype_financial"}'),
 ('1DD9CB13-CCBB-47EF-8514-6CCA50AEF298','VR_Common_VRObjectType_RetailAccount','Retail Account','VR_Common_ObjectType'																						,'{"Editor":"retail-be-retailaccount-objecttype", "PropertyEvaluatorExtensionType": "Retail_BE_RetailAccountObjectType_PropertyEvaluator"}'),
 
 ('CD147065-88F3-4337-A625-8578708C4A53','Account Synchronizer','Account Synchronizer','VR_BEBridge_BESynchronizer'																							,'{"Editor":"retail-be-account-synchronizer-editor"}'),
