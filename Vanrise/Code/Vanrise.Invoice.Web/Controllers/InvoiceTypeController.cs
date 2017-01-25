@@ -80,6 +80,11 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetInvoicePartnerSelector(invoiceTypeId);
         }
-        
+        [HttpGet]
+        [Route("GetInvoiceAction")]
+        public InvoiceAction GetInvoiceAction(Guid invoiceTypeId, Guid invoiceActionId)
+        {
+            return _manager.GetInvoiceAction(invoiceTypeId, invoiceActionId);
+        }
     }
 }

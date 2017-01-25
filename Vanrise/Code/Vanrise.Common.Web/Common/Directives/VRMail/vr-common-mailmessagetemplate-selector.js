@@ -43,7 +43,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
             this.initializeController = initializeController;
 
             var selectorAPI;
-
+            var selectFirstItem;
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -59,6 +59,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
                     var filter;
 
                     if (payload != undefined) {
+                        selectFirstItem = payload.selectFirstItem;
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                     }
@@ -72,6 +73,10 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
 
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'VRMailMessageTemplateId', attrs, ctrl);
+                            }else if(selectFirstItem)
+                            {
+                                var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].VRMailMessageTemplateId] : ctrl.datasource[0].VRMailMessageTemplateId;
+                                VRUIUtilsService.setSelectedValues(defaultValue, 'VRMailMessageTemplateId', attrs, ctrl);
                             }
                         }
                     });

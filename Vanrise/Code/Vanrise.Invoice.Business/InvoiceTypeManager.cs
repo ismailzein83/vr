@@ -203,7 +203,14 @@ namespace Vanrise.Invoice.Business
              }
              return null;
         }
-
+        public InvoiceAction GetInvoiceAction(Guid invoiceTypeId, Guid invoiceActionId)
+        {
+            var invoiceType = GetInvoiceType(invoiceTypeId);
+            var invoiceAction = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == invoiceActionId);
+            if (invoiceAction == null)
+                throw new NullReferenceException("invoiceAction");
+            return invoiceAction;
+        }
         #endregion
 
         #region Private Classes

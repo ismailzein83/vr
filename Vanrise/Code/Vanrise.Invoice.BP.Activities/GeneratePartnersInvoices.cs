@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Business;
 using Vanrise.BusinessProcess;
-using Vanrise.Invoice.MainExtensions.InvoiceSettingParts;
+using Vanrise.Invoice.Entities;
 namespace Vanrise.Invoice.BP.Activities
 {
      public sealed class GeneratePartnersInvoices : BaseCodeActivity

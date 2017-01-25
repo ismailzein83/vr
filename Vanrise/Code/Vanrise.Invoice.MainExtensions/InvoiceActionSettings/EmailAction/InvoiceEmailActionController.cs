@@ -23,10 +23,10 @@ namespace Vanrise.Invoice.MainExtensions
         }
         [HttpGet]
         [Route("GetEmailTemplate")]
-        public VRMailEvaluatedTemplate GetEmailTemplate(long invoiceId)
+        public VRMailEvaluatedTemplate GetEmailTemplate(long invoiceId, Guid invoiceActionId, Guid invoiceMailTemplateId)
         {
             InvoiceEmailActionManager manager = new InvoiceEmailActionManager();
-            return manager.GetEmailTemplate(invoiceId);
+            return manager.GetEmailTemplate(invoiceId, invoiceActionId, invoiceMailTemplateId);
         }
         [HttpGet]
         [Route("GetSendEmailAttachmentTypeConfigs")]

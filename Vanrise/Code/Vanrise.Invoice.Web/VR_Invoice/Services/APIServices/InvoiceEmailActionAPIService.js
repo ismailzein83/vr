@@ -11,9 +11,11 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "SendEmail"), input);
         }
 
-        function GetEmailTemplate(invoiceId) {
+        function GetEmailTemplate(invoiceId, invoiceActionId, invoiceMailTemplateId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetEmailTemplate'), {
                 invoiceId: invoiceId,
+                invoiceActionId: invoiceActionId,
+                invoiceMailTemplateId: invoiceMailTemplateId
             });
         }
         function GetSendEmailAttachmentTypeConfigs()

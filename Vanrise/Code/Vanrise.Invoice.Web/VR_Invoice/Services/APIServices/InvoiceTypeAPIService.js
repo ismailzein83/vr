@@ -51,6 +51,13 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
+        function GetInvoiceAction(invoiceTypeId, invoiceActionId)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceAction"), {
+                invoiceTypeId: invoiceTypeId,
+                invoiceActionId: invoiceActionId
+            });
+        }
         return ({
             GetInvoiceType: GetInvoiceType,
             GetFilteredInvoiceTypes: GetFilteredInvoiceTypes,
@@ -63,7 +70,8 @@
             GetInvoiceTypesInfo: GetInvoiceTypesInfo,
             GetGeneratorInvoiceTypeRuntime: GetGeneratorInvoiceTypeRuntime,
             GetInvoiceGeneratorActions: GetInvoiceGeneratorActions,
-            GetInvoicePartnerSelector: GetInvoicePartnerSelector
+            GetInvoicePartnerSelector: GetInvoicePartnerSelector,
+            GetInvoiceAction: GetInvoiceAction
         });
     }
 

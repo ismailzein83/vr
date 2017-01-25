@@ -132,7 +132,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                     var onInvoiceEmailSend = function (response) {
 
                     };
-                    openEmailTemplate(onInvoiceEmailSend, payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId);
+                    openEmailTemplate(onInvoiceEmailSend, payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId);
                     //VRNotificationService.showConfirmation().then(function (response) {
                     //    if (response) {
                     //        VR_Invoice_InvoiceAPIService.SendEmail(payload.invoice.Entity.InvoiceId).then(function (response) {
@@ -158,7 +158,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceNoteActionEditor.html', parameters, settings);
         }
-        function openEmailTemplate(onInvoiceEmailSend, invoiceId,invoiceActionId) {
+        function openEmailTemplate(onInvoiceEmailSend, invoiceId, invoiceActionId, invoiceTypeId) {
             var settings = {
 
             };
@@ -167,7 +167,8 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             };
             var parameters = {
                 invoiceId: invoiceId,
-                invoiceActionId: invoiceActionId
+                invoiceActionId: invoiceActionId,
+                invoiceTypeId: invoiceTypeId
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceEmailTemplate.html', parameters, settings);
         }
