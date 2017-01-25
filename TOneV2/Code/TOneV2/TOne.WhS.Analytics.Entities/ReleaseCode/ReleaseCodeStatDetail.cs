@@ -13,5 +13,6 @@ namespace TOne.WhS.Analytics.Entities
         public string SwitchName { get; set; }
         public string SupplierName { get; set; }
         public string ZoneName { get; set; }
+        public string ReleaseCodeDescription { get; set; }
     }
 }

@@ -9,12 +9,15 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class ReleaseCodeManager
+    public class SwitchReleaseCodeManager
     {
         static Guid s_businessEntityDefinitionId = new Guid("4652abe7-81f7-4129-a222-31933747018d");
         public string GetReleaseCodeDescription(string code)
         {
-            return GetRCDescriptionsByCodes().GetRecord(code);
+            string description = null;
+            if (code!=null)
+                description =  GetRCDescriptionsByCodes().GetRecord(code);
+            return description;
         }
 
         Dictionary<string, string> GetRCDescriptionsByCodes()
