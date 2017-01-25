@@ -1,9 +1,12 @@
-CREATE TABLE [reprocess].[StagingSummaryRecord] (
+﻿CREATE TABLE [reprocess].[StagingSummaryRecord] (
     [ProcessInstanceId] BIGINT         NOT NULL,
     [StageName]         NVARCHAR (255) NOT NULL,
     [BatchStart]        DATETIME       NOT NULL,
-    [Data]              VARCHAR (MAX)  NOT NULL
+    [Data]              VARCHAR (MAX)  NOT NULL,
+    [CreatedTime]       DATETIME       CONSTRAINT [DF_StagingSummaryRecord_CreatedTime] DEFAULT (getdate()) NOT NULL
 );
+
+
 
 
 
