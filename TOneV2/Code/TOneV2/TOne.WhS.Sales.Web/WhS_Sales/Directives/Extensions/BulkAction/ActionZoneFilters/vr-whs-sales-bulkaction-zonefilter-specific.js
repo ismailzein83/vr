@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOwnerTypeEnum', 'UtilsService', 'VRUIUtilsService', function (WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService) {
 	return {
 		restrict: "E",
 		scope: {
@@ -29,6 +29,7 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 		var selectorAPI;
 
 		var applicableSaleZoneFilter;
+		var saleZoneCountrySoldToCustomerFilter;
 
 		function initializeController() {
 			$scope.scopeModel = {};
@@ -73,6 +74,11 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 
 					if (bulkActionContext != undefined) {
 						selectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
+
+						if (bulkActionContext.ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+							saleZoneCountrySoldToCustomerFilter = getSaleZoneCountrySoldToCustomerFilter();
+							selectorPayload.filter.Filters.push(saleZoneCountrySoldToCustomerFilter);
+						}
 					}
 
 					if (zoneFilter != undefined) {
@@ -81,16 +87,24 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 					VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, saleZoneSelectorLoadDeferred);
 
 					function getApplicableSaleZoneFilter() {
-						var applicableSaleZoneFilter = {
+						var applicableZoneFilter = {
 							$type: 'TOne.WhS.Sales.Business.ApplicableSaleZoneFilter, TOne.WhS.Sales.Business'
 						};
 						if (bulkActionContext != undefined) {
-							applicableSaleZoneFilter.OwnerType = bulkActionContext.ownerType;
-							applicableSaleZoneFilter.OwnerId = bulkActionContext.ownerId;
+							applicableZoneFilter.OwnerType = bulkActionContext.ownerType;
+							applicableZoneFilter.OwnerId = bulkActionContext.ownerId;
 							if (bulkActionContext.getSelectedBulkAction != undefined)
-								applicableSaleZoneFilter.ActionType = bulkActionContext.getSelectedBulkAction();
+								applicableZoneFilter.ActionType = bulkActionContext.getSelectedBulkAction();
 						}
-						return applicableSaleZoneFilter;
+						return applicableZoneFilter;
+					}
+					function getSaleZoneCountrySoldToCustomerFilter() {
+						return {
+							$type: 'TOne.WhS.Sales.Business.SaleZoneCountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
+							CustomerId: bulkActionContext.ownerId,
+							EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+							IsEffectiveInFuture: false
+						};
 					}
 
 					return saleZoneSelectorLoadDeferred.promise;
@@ -126,6 +140,8 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
 					}
 				};
 				selectorPayload.filter.Filters.push(applicableSaleZoneFilter);
+				if (saleZoneCountrySoldToCustomerFilter != undefined)
+					selectorPayload.filter.Filters.push(saleZoneCountrySoldToCustomerFilter);
 				return selectorAPI.load(selectorPayload);
 			};
 		}
