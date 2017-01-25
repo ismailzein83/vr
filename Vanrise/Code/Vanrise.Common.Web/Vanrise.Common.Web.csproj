@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\UISettingsController.cs" />
     <Compile Include="Controllers\CompanySettingsController.cs" />
     <Compile Include="Controllers\MasterLogController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
@@ -310,6 +311,7 @@
     <Content Include="Common\Services\APIServices\StatusDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\UserActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
+    <Content Include="Common\Services\APIServices\UISettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTimeZoneAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />
