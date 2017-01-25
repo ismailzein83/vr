@@ -53,6 +53,7 @@
     <Compile Include="Context\InitialPeriodInfoContext.cs" />
     <Compile Include="Context\InvoiceGenerationContext.cs" />
     <Compile Include="Context\InvoiceItemConcatenatedPartContext.cs" />
+    <Compile Include="Context\InvoicePartnerFilterContext.cs" />
     <Compile Include="Context\InvoicePartnerSettingsContext.cs" />
     <Compile Include="Context\InvoiceRDLCFileConverterContext.cs" />
     <Compile Include="Context\InvoiceSerialNumberConcatenatedPartContext.cs" />
@@ -70,11 +71,13 @@
     <Compile Include="InvoiceItemGroupingManager.cs" />
     <Compile Include="InvoiceItemManager.cs" />
     <Compile Include="InvoiceManager.cs" />
+    <Compile Include="InvoicePartnerFilter\NotAssignedPartnerToInvoiceSettingFilter.cs" />
     <Compile Include="InvoiceSequenceManager.cs" />
     <Compile Include="InvoiceSettingManager.cs" />
     <Compile Include="InvoiceTypeConfigsManager.cs" />
     <Compile Include="InvoiceTypeManager.cs" />
     <Compile Include="InvoiceTypeGroupingItemPropValueReaderCompilationStep.cs" />
+    <Compile Include="PartnerInvoiceSettingManager.cs" />
     <Compile Include="PartnerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

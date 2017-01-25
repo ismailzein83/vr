@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public class InvoiceType
+    public class PartnerInvoiceSettingDetail
     {
-        public Guid InvoiceTypeId { get; set; }
-        public string Name { get; set; }
-        public InvoiceTypeSettings Settings { get; set; }
+        public PartnerInvoiceSetting Entity { get; set; }
+        public string PartnerName { get; set; }
     }
-
 }

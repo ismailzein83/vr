@@ -9,6 +9,6 @@ namespace Vanrise.Invoice.Entities
     public class GeneratorInvoiceTypeRuntime
     {
         public InvoiceType InvoiceType { get; set; }
-        public InvoicePartnerDetails InvoicePartnerDetails { get; set; }
+        public InvoicePartnerManager InvoicePartnerManager { get; set; }
     }
 }

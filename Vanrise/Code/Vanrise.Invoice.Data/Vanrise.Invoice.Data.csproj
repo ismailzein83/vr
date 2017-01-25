@@ -51,6 +51,7 @@
     <Compile Include="IInvoiceSettingDataManager.cs" />
     <Compile Include="IInvoiceTypeDataManager.cs" />
     <Compile Include="InvoiceDataManagerFactory.cs" />
+    <Compile Include="IPartnerInvoiceSettingDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

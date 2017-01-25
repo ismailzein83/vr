@@ -11,7 +11,7 @@ namespace Vanrise.Invoice.Entities
         public abstract Guid ConfigId { get; }
         public virtual string GenerationCustomSectionDirective { get; set; }
         public abstract InvoiceGenerator GetInvoiceGenerator();
-        public abstract InvoicePartnerDetails GetPartnerDetails();
+        public abstract InvoicePartnerManager GetPartnerManager();
         public abstract dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context);
         public abstract void GetInitialPeriodInfo(IInitialPeriodInfoContext context);
         public abstract BillingPeriod GetBillingPeriod(IExtendedSettingsBillingPeriodContext context);

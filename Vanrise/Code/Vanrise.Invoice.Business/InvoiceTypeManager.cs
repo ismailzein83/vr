@@ -53,7 +53,7 @@ namespace Vanrise.Invoice.Business
                     Header = gridColumn.Header
                 });
             }
-            invoiceTypeRuntime.InvoicePartnerDetails = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
+            invoiceTypeRuntime.InvoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
      
             return invoiceTypeRuntime;
         }
@@ -63,7 +63,7 @@ namespace Vanrise.Invoice.Business
             var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
             GeneratorInvoiceTypeRuntime generatorInvoiceTypeRuntime = new Entities.GeneratorInvoiceTypeRuntime();
             generatorInvoiceTypeRuntime.InvoiceType = invoiceType;
-            generatorInvoiceTypeRuntime.InvoicePartnerDetails = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
+            generatorInvoiceTypeRuntime.InvoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
             return generatorInvoiceTypeRuntime;
         }
         public List<InvoiceGeneratorAction> GetInvoiceGeneratorActions(GenerateInvoiceInput generateInvoiceInput)
@@ -190,6 +190,18 @@ namespace Vanrise.Invoice.Business
         public IEnumerable<InvoiceType> GetInvoiceTypes()
         {
             return GetCachedInvoiceTypes().Values;
+        }
+
+        public string GetInvoicePartnerSelector(Guid invoiceTypeId)
+        {
+            var invoiceType = GetInvoiceType(invoiceTypeId);
+             if(invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.ExtendedSettings != null)
+             {
+                 var invoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
+                 if (invoicePartnerManager != null)
+                     return invoicePartnerManager.PartnerSelector;
+             }
+             return null;
         }
 
         #endregion

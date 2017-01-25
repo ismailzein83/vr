@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public abstract class InvoicePartnerDetails
+    public abstract class InvoicePartnerManager
     {
         public virtual string PartnerSelector { get; set; }
         public virtual string PartnerFilterSelector { get; set; }
@@ -34,7 +34,7 @@ namespace Vanrise.Invoice.Entities
     public interface IPartnerManagerInfoContext : IBasePartnerManagerContext
     {
         string InfoType { get; }
-        InvoicePartnerDetails PartnerDetails { get; }
+        InvoicePartnerManager InvoicePartnerManager { get; }
     }
     public interface IPartnerNameManagerContext : IBasePartnerManagerContext
     {

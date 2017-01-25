@@ -131,6 +131,7 @@
     <Compile Include="Controllers\InvoiceSettingController.cs" />
     <Compile Include="Controllers\InvoiceTypeConfigsController.cs" />
     <Compile Include="Controllers\InvoiceTypeController.cs" />
+    <Compile Include="Controllers\PartnerInvoiceSettingController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VR_Invoice\Reports\InvoiceReport.aspx.cs">
       <DependentUpon>InvoiceReport.aspx</DependentUpon>
@@ -340,10 +341,12 @@
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoiceObjectTypeTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoicePropertyEvaluatorTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\GroupingSubSectionGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoicePartnerSelectorTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\SubSectionGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-grid.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-groupingsubsection-grid.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-invoicepartner-selector.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-subsection-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\OpenRDLCReportActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-openrdlcreport.js" />
@@ -355,6 +358,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\vr-invoicetype-datasourcesettings-rdlcitems.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\MainExtensions\vr-invoicetype-openrdlcreport-parametersettings-customfield.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\MainExtensions\vr-invoicetype-openrdlcreport-parametersettings-field.js" />
+    <Content Include="VR_Invoice\Directives\PartnerInvoiceSetting\Templates\PartnerInvoiceSettingGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\PartnerInvoiceSetting\vr-partnerinvoicesetting-grid.js" />
     <Content Include="VR_Invoice\ModuleInitialization.js" />
     <Content Include="VR_Invoice\Reports\InvoiceReport.aspx" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceAPIService.js" />
@@ -363,6 +368,7 @@
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeConfigsAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\ItemGroupingSectionAPIService.js" />
+    <Content Include="VR_Invoice\Services\APIServices\PartnerInvoiceSettingAPIService.js" />
     <Content Include="VR_Invoice\Services\AutomaticInvoiceActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGeneratorActionService.js" />
@@ -406,6 +412,7 @@
     <Content Include="VR_Invoice\Services\InvoiceEmailActionService.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\Templates\InvoiceEmailAttachmentEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\InvoiceEmailAttachmentEditorController.js" />
+    <Content Include="VR_Invoice\Services\PartnerInvoiceSettingService.js" />
     <Content Include="VR_Invoice\Views\InvoiceSettingEditor.html" />
     <Content Include="VR_Invoice\Views\InvoiceSettingEditorController.js" />
     <Content Include="VR_Invoice\Views\InvocieSettingManagement.html" />
@@ -436,6 +443,8 @@
     <Content Include="VR_Invoice\Views\Runtime\InvoiceEmailTemplateController.js" />
     <Content Include="VR_Invoice\Views\Runtime\InvoiceNoteActionEditor.html" />
     <Content Include="VR_Invoice\Views\Runtime\InvoiceNoteActionEditorController.js" />
+    <Content Include="VR_Invoice\Views\Runtime\PartnerInvoiceSettingEditor.html" />
+    <Content Include="VR_Invoice\Views\Runtime\PartnerInvoiceSettingEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\MainExtensions\Templates\" />

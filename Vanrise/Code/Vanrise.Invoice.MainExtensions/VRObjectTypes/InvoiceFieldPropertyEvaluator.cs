@@ -34,7 +34,7 @@ namespace Vanrise.Invoice.MainExtensions
                 case InvoiceField.Partner:
                     InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                     var invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
-                    var partnerDetails = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
+                    var partnerDetails = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
                     PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext
                     {
                         PartnerId = invoice.PartnerId

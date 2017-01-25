@@ -76,7 +76,13 @@ namespace Vanrise.Invoice.Business
 
             return updateOperationOutput;
         }
-       
+        public string GetInvoiceSettingName(Guid invoiceSettingId)
+        {
+            var invoiceSetting = GetInvoiceSetting(invoiceSettingId);
+            if (invoiceSetting != null)
+                return invoiceSetting.Name;
+            return null;
+        }
         public IEnumerable<InvoiceSettingInfo> GetInvoiceSettingsInfo(InvoiceSettingFilter filter)
         {
             var invoiceSettings = GetCachedInvoiceSettings();

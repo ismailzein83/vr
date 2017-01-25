@@ -10,13 +10,13 @@ namespace Vanrise.Invoice.Business
 {
     public class PartnerManager
     {
-        public InvoicePartnerDetails GetPartnerDetails(Guid invoiceTypeId)
+        public InvoicePartnerManager GetPartnerDetails(Guid invoiceTypeId)
         {
             InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
             if (invoiceType.Settings == null || invoiceType.Settings.ExtendedSettings ==null)
                 throw new NullReferenceException("InvoicePartnerDetails");
-            return invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
+            return invoiceType.Settings.ExtendedSettings.GetPartnerManager();
         }
         public dynamic GetPartnerInfo(Guid invoiceTypeId, string partnerId,string infoType)
         {
@@ -26,7 +26,7 @@ namespace Vanrise.Invoice.Business
             {
                 InfoType = infoType,
                 PartnerId = partnerId,
-                PartnerDetails = partnerSettings
+                InvoicePartnerManager = partnerSettings
             };
             if (partnerSettings == null || partnerSettings.GetPartnerInfo(context) == null)
                 throw new NullReferenceException("PartnerManager");

@@ -284,7 +284,7 @@ namespace Vanrise.Invoice.Business
 
 
             string partnerName = null;
-            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
+            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
             if (partnerSettings != null)
             {
                 PartnerNameManagerContext context = new PartnerNameManagerContext
@@ -400,7 +400,7 @@ namespace Vanrise.Invoice.Business
                 IssueDate = issueDate,
             };
 
-            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerDetails();
+            var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
             PartnerManager partnerManager = new PartnerManager();
             var duePeriod = partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, partnerId);
             invoice.DueDate = issueDate.AddDays(duePeriod);

@@ -11,7 +11,7 @@ namespace Vanrise.Invoice.Entities
     {
         public InvoiceType InvoiceType { get; set; }
         public List<InvoiceUIGridColumnRunTime> MainGridRuntimeColumns { get; set; }
-        public InvoicePartnerDetails InvoicePartnerDetails { get; set; }
+        public InvoicePartnerManager InvoicePartnerManager { get; set; }
     }
     public class InvoiceUIGridColumnRunTime
     {

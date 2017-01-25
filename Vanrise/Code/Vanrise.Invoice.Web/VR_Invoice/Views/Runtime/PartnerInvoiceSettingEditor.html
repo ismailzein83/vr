@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="VR_Invoice_PartnerInvoiceSettingEditorController" size="medium" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formPartnerInvoiceSettingEditor">
+            <vr-validator validate="scopeModel.validateForm()">
+                <vr-row removeline>
+                    <vr-invoice-invoicepartner-selector vr-disabled="scopeModel.isEditMode" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="4" isrequired="true"></vr-invoice-invoicepartner-selector>
+                </vr-row>
+                <vr-row>
+                </vr-row>
+            </vr-validator>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPartnerInvoiceSettingEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
