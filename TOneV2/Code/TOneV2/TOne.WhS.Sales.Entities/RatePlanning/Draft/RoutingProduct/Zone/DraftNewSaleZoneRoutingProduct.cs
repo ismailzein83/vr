@@ -15,5 +15,7 @@ namespace TOne.WhS.Sales.Entities
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+
+		public bool ApplyNewNormalRateBED { get; set; }
     }
 }

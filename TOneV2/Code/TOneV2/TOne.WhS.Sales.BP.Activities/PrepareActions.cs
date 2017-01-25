@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -272,30 +273,70 @@ namespace TOne.WhS.Sales.BP.Activities
 			}
 		}
 
-		private void SetZoneRoutingProductActions(ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd, ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose, ZoneChanges zoneChanges, ref DateTime minDate)
+		private void SetZoneRoutingProductActions(ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd, ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose, ZoneChanges zoneDraft, ref DateTime minDate)
 		{
-			if (zoneChanges.NewRoutingProduct != null)
+			if (zoneDraft.NewRoutingProduct != null)
 			{
-				saleZoneRoutingProductsToAdd.Add(new SaleZoneRoutingProductToAdd()
+				var zoneRPToAdd = new SaleZoneRoutingProductToAdd()
 				{
-					ZoneId = zoneChanges.NewRoutingProduct.ZoneId,
-					ZoneName = zoneChanges.ZoneName,
-					ZoneRoutingProductId = zoneChanges.NewRoutingProduct.ZoneRoutingProductId,
-					BED = zoneChanges.NewRoutingProduct.BED,
-					EED = zoneChanges.NewRoutingProduct.EED
-				});
-				minDate = Vanrise.Common.Utilities.Min(minDate, zoneChanges.NewRoutingProduct.BED);
+					ZoneId = zoneDraft.NewRoutingProduct.ZoneId,
+					ZoneName = zoneDraft.ZoneName,
+					ZoneRoutingProductId = zoneDraft.NewRoutingProduct.ZoneRoutingProductId,
+					EED = zoneDraft.NewRoutingProduct.EED
+				};
+
+				if (zoneDraft.NewRoutingProduct.ApplyNewNormalRateBED)
+				{
+					if (zoneDraft.NewRates == null)
+						throw new Vanrise.Entities.ValidationException("zoneDraft.NewRates");
+
+					DraftRateToChange newNormalRate = zoneDraft.NewRates.FindRecord(x => !x.RateTypeId.HasValue);
+					if (newNormalRate == null)
+						throw new Vanrise.Entities.ValidationException(string.Format("newNormalRate"));
+
+					zoneRPToAdd.BED = newNormalRate.BED;
+				}
+				else
+				{
+					zoneRPToAdd.BED = DateTime.Today;
+				}
+
+				saleZoneRoutingProductsToAdd.Add(zoneRPToAdd);
+				minDate = Vanrise.Common.Utilities.Min(minDate, zoneRPToAdd.BED);
 			}
-			else if (zoneChanges.RoutingProductChange != null)
+			else if (zoneDraft.RoutingProductChange != null)
 			{
-				saleZoneRoutingProductsToClose.Add(new SaleZoneRoutingProductToClose()
+				var zoneRPToClose = new SaleZoneRoutingProductToClose()
 				{
-					ZoneId = zoneChanges.RoutingProductChange.ZoneId,
-					ZoneName = zoneChanges.ZoneName,
-					CloseEffectiveDate = zoneChanges.RoutingProductChange.EED
-				});
-				minDate = Vanrise.Common.Utilities.Min(minDate, zoneChanges.RoutingProductChange.EED);
+					ZoneId = zoneDraft.RoutingProductChange.ZoneId,
+					ZoneName = zoneDraft.ZoneName,
+				};
+
+				if (zoneDraft.RoutingProductChange.ApplyNewNormalRateBED)
+				{
+					DateTime? newNormalRateBED = GetZoneNewNormalRateBED(zoneDraft);
+					if (!newNormalRateBED.HasValue)
+						throw new Vanrise.Entities.ValidationException("newNormalRateBED");
+					zoneRPToClose.CloseEffectiveDate = newNormalRateBED.Value;
+				}
+				else
+				{
+					zoneRPToClose.CloseEffectiveDate = DateTime.Today;
+				}
+
+				saleZoneRoutingProductsToClose.Add(zoneRPToClose);
+				minDate = Vanrise.Common.Utilities.Min(minDate, zoneRPToClose.CloseEffectiveDate);
 			}
+		}
+
+		private DateTime? GetZoneNewNormalRateBED(ZoneChanges zoneDraft)
+		{
+			if (zoneDraft == null || zoneDraft.NewRates == null)
+				return null;
+			DraftRateToChange newNormalRate = zoneDraft.NewRates.FindRecord(x => !x.RateTypeId.HasValue);
+			if (newNormalRate == null)
+				return null;
+			return newNormalRate.BED;
 		}
 
 		private void SetZoneServiceActions(ref List<SaleZoneServiceToAdd> saleZoneServicesToAdd, ref List<SaleZoneServiceToClose> saleZoneServicesToClose, ZoneChanges zoneDraft, ref DateTime minDate)
@@ -365,7 +406,7 @@ namespace TOne.WhS.Sales.BP.Activities
 						CountryId = changedCountryId,
 						CloseEffectiveDate = countryChanges.ChangedCountries.EED
 					});
-					
+
 				}
 			}
 		}

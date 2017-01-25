@@ -691,14 +691,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 						ZoneId: zoneItemChanges.ZoneId,
 						ZoneRoutingProductId: zoneItem.NewRoutingProductId,
 						BED: zoneItem.NewRoutingProductBED,
-						EED: zoneItem.NewRoutingProductEED
+						EED: zoneItem.NewRoutingProductEED,
+						ApplyNewNormalRateBED: zoneItem.FollowRateDate
 					};
 				}
 				else if (zoneItem.RoutingProductChangeEED != null) {
 					zoneItemChanges.RoutingProductChange = {
 						ZoneId: zoneItem.ZoneId,
 						ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
-						EED: zoneItem.RoutingProductChangeEED
+						EED: zoneItem.RoutingProductChangeEED,
+						ApplyNewNormalRateBED: zoneItem.FollowRateDate
 					};
 				}
 			}

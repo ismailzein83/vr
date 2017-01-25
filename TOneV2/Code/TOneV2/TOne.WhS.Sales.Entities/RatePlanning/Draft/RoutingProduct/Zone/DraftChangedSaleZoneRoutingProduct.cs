@@ -13,5 +13,7 @@ namespace TOne.WhS.Sales.Entities
         public int ZoneRoutingProductId { get; set; }
 
         public DateTime EED { get; set; }
+
+		public bool ApplyNewNormalRateBED { get; set; }
     }
 }

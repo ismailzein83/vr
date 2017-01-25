@@ -42,7 +42,6 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 			};
 
 			ctrl.onSelectionChanged = function () {
-				var selectedId = selectorAPI.getSelectedIds();
 
 				if (firstSelectionEventDeferred != undefined) {
 					firstSelectionEventDeferred = undefined;
@@ -56,6 +55,10 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 
 				zoneItem.IsDirty = true;
 				zoneItem.refreshZoneItem(zoneItem);
+			};
+
+			ctrl.isSwitchDisabled = function () {
+				return (zoneItem != undefined && zoneItem.NewRate == null);
 			};
 
 			UtilsService.waitMultiplePromises([currentServiceViewerReadyDeferred.promise, selectorReadyDeferred.promise]).then(function () {
@@ -76,6 +79,7 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 				if (payload != undefined) {
 
 					zoneItem = payload.zoneItem;
+
 					ctrl.isCountryEnded = zoneItem.IsCountryEnded;
 					ctrl.isZonePendingClosed = zoneItem.IsZonePendingClosed;
 
@@ -86,10 +90,12 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 					if (zoneItem.NewRoutingProduct != null) {
 						selectedRoutingProductId = zoneItem.NewRoutingProduct.ZoneRoutingProductId;
 						rpSelectedDeferred = UtilsService.createPromiseDeferred();
+						ctrl.followRateDate = zoneItem.NewRoutingProduct.ApplyNewNormalRateBED;
 					}
 					else if (zoneItem.ResetRoutingProduct != null) {
 						selectedRoutingProductId = -1;
 						rpSelectedDeferred = UtilsService.createPromiseDeferred();
+						ctrl.followRateDate = zoneItem.ResetRoutingProduct.ApplyNewNormalRateBED;
 					}
 				}
 
@@ -103,7 +109,7 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 			};
 
 			api.applyChanges = function () {
-			    setNewRoutingProduct();
+				setNewRoutingProduct();
 				setRoutingProductChange();
 			};
 
@@ -150,11 +156,13 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 				zoneItem.NewRoutingProductId = selectedId;
 				zoneItem.NewRoutingProductBED = UtilsService.getDateFromDateTime(new Date());
 				zoneItem.NewRoutingProductEED = null;
+				zoneItem.FollowRateDate = ctrl.followRateDate;
 			}
 			else {
 				zoneItem.NewRoutingProductId = null;
 				zoneItem.NewRoutingProductBED = null;
 				zoneItem.NewRoutingProductEED = null;
+				zoneItem.FollowRateDate = ctrl.followRateDate;
 			}
 		}
 		function setRoutingProductChange() {
