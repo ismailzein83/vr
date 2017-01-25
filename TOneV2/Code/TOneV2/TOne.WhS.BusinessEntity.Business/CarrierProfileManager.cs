@@ -193,13 +193,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return configManager.GetDefaultCompanySetting();
         }
-        public Guid GetDefaultInvoiceEmailId(int carrierProfileId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException("customerInvoiceSettings");
-            return customerInvoiceSettings.DefaultEmailId;
-        }
         public IEnumerable<VRTaxItemDetail> GetTaxItemDetails(int carrierProfileId)
         {
             List<VRTaxItemDetail> taxItemDetails = new List<VRTaxItemDetail>();
@@ -243,45 +236,6 @@ namespace TOne.WhS.BusinessEntity.Business
             if (setting.TaxesDefinition == null)
                 throw new NullReferenceException("setting.TaxesDefinition");
             return setting.TaxesDefinition.ItemDefinitions;
-        }
-        public BillingPeriod GetBillingPeriod(int carrierProfileId)
-        {
-           var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
-           if (customerInvoiceSettings == null)
-               throw new NullReferenceException(string.Format("customerInvoiceSettings"));
-           return customerInvoiceSettings.BillingPeriod;
-        }
-        public int GetDuePeriod(int carrierProfileId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
-            return customerInvoiceSettings.DuePeriod;
-        }
-        public string GetInvoiceSerialNumberPattern(int carrierProfileId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
-            return customerInvoiceSettings.SerialNumberPattern;
-        }
-        public bool CheckInvoiceFollowBillingPeriod(int carrierProfileId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierProfileId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
-            return customerInvoiceSettings.IsFollow;
-        }
-        public CustomerInvoiceSettings GetCustomerInvoiceSettings(int carrierProfileId)
-        {
-            var carrierProfile = GetCarrierProfile(carrierProfileId);
-            ConfigManager configManager = new ConfigManager();
-
-            if (carrierProfile.Settings.InvoiceSettingId.HasValue)
-            {
-                return configManager.GetInvoiceSettingsbyGuid(carrierProfile.Settings.InvoiceSettingId.Value);
-            }
-            return configManager.GetDefaultCustomerInvoiceSettings();
         }
         #endregion
 

@@ -36,33 +36,26 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 case "MailTemplate":
                     {
-
                         Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                        var invoiceDetails = context.Invoice.Details as CustomerInvoiceDetails;
                         objects.Add("CustomerInvoice", context.Invoice);
                         CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
                         CarrierProfile carrierProfile = null;
-                        Guid invoiceTemplateId = Guid.Empty;
                         switch (partner[0])
                         {
                             case "Account":
                                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                                 var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partner[1]));
                                 carrierProfile = carrierProfileManager.GetCarrierProfile(account.CarrierProfileId);
-                                invoiceTemplateId = carrierAccountManager.GetDefaultInvoiceEmailId(Convert.ToInt32(partner[1]));
                                 break;
                             case "Profile":
                                 carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partner[1]));
-                                invoiceTemplateId = carrierProfileManager.GetDefaultInvoiceEmailId(Convert.ToInt32(partner[1]));
                                 break;
                         }
                         if (carrierProfile != null)
                         {
                             objects.Add("Profile", carrierProfile);
                         }
-                        VRMailManager vrMailManager = new VRMailManager();
-                        VRMailEvaluatedTemplate template = vrMailManager.EvaluateMailTemplate(invoiceTemplateId, objects);
-                        return template;
+                        return objects;
                     }
                 case "Taxes":
                     {

@@ -18,9 +18,6 @@
         var currencySelectorAPI;
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var invoiceSettingsSelectorAPI;
-        var invoiceSettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var companySettingsSelectorAPI;
         var companySettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -68,10 +65,6 @@
             $scope.scopeModel.disableSellingNumberPlan = isEditMode;
             $scope.scopeModel.showZoneServiceConfig = false;
 
-            $scope.scopeModel.onInvoiceSettingSelectorReady = function (api) {
-                invoiceSettingsSelectorAPI = api;
-                invoiceSettingsSelectorReadyPromiseDeferred.resolve();
-            };
             $scope.scopeModel.showInvoiceSetting = function () {
                 $scope.scopeModel.viewInvoiceSettings = true;
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
@@ -292,7 +285,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector, loadBPBusinessRuleSetSelector, loadInvoiceSettingSelector, loadCompanySettingSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector, loadBPBusinessRuleSetSelector, loadCompanySettingSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -325,23 +318,6 @@
 
             return loadCarrierProfilePromiseDeferred.promise;
         }
-
-        function loadInvoiceSettingSelector() {
-            var loadInvoiceSettingSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            invoiceSettingsSelectorReadyPromiseDeferred.promise.then(function () {
-
-                var payload = {
-                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.InvoiceSettingId : undefined)
-                };
-
-                VRUIUtilsService.callDirectiveLoad(invoiceSettingsSelectorAPI, payload, loadInvoiceSettingSelectorPromiseDeferred);
-
-            });
-
-            return loadInvoiceSettingSelectorPromiseDeferred.promise;
-        }
-
 
         function loadCompanySettingSelector() {
             var loadCompanySettingSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -497,7 +473,6 @@
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     Mask: $scope.scopeModel.mask,
                     NominalCapacity: $scope.scopeModel.nominalCapacity,
-                    InvoiceSettingId: invoiceSettingsSelectorAPI.getSelectedIds(),
                     CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
                     PriceListSettings: {
                         Email: $scope.scopeModel.automaticPriceListEmail,

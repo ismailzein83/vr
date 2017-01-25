@@ -269,23 +269,21 @@ namespace TOne.WhS.BusinessEntity.Business
         public void UpdateCarrierAccountExtendedSetting<T>(int carrierAccountId, T extendedSettings) where T : class
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
-
-            Dictionary<string, Object> extendedSettingsDic = carrierAccount.ExtendedSettings as Dictionary<string, Object>;
-            if (extendedSettingsDic == null)
-                extendedSettingsDic = new Dictionary<string, Object>();
+            if (carrierAccount.ExtendedSettings == null)
+                carrierAccount.ExtendedSettings = new Dictionary<string, Object>();
             string extendedSettingName = typeof(T).FullName;
 
             Object exitingExtendedSettings;
-            if (extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings))
+            if (carrierAccount.ExtendedSettings.TryGetValue(extendedSettingName, out exitingExtendedSettings))
             {
-                extendedSettingsDic[extendedSettingName] = extendedSettings;
+                carrierAccount.ExtendedSettings[extendedSettingName] = extendedSettings;
             }
             else
             {
-                extendedSettingsDic.Add(extendedSettingName, extendedSettings);
+                carrierAccount.ExtendedSettings.Add(extendedSettingName, extendedSettings);
             }
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-            if (dataManager.UpdateExtendedSettings(carrierAccountId, extendedSettingsDic))
+            if (dataManager.UpdateExtendedSettings(carrierAccountId, carrierAccount.ExtendedSettings))
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 
 
@@ -433,12 +431,10 @@ namespace TOne.WhS.BusinessEntity.Business
         public T GetExtendedSettings<T>(CarrierAccount carrierAccount) where T : class
         {
             string extendedSettingName = typeof(T).FullName;
-            Dictionary<string, Object> extendedSettingsDic = carrierAccount.ExtendedSettings as Dictionary<string, Object>;
-
             Object exitingExtendedSettings;
-            if (extendedSettingsDic != null)
+            if (carrierAccount.ExtendedSettings != null)
             {
-                extendedSettingsDic.TryGetValue(extendedSettingName, out exitingExtendedSettings);
+                carrierAccount.ExtendedSettings.TryGetValue(extendedSettingName, out exitingExtendedSettings);
                 if (exitingExtendedSettings != null)
                     return exitingExtendedSettings as T;
                 else return default(T);
@@ -467,45 +463,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new CarrierProfileManager().GetCompanySetting(carrierAccount.CarrierProfileId);
             }
         }
-        public bool CheckInvoiceFollowBillingPeriod(int carrierAccountId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
-            return customerInvoiceSettings.IsFollow;
-        }
         public IEnumerable<Guid> GetBankDetails(int carrierAccountId)
         {
             var companySettings = GetCompanySetting(carrierAccountId);
             return companySettings.BankDetails;
-        }
-        public Guid GetDefaultInvoiceEmailId(int carrierAccountId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException("customerInvoiceSettings");
-            return customerInvoiceSettings.DefaultEmailId;
-        }
-        public BillingPeriod GetBillingPeriod(int carrierAccountId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
-            return customerInvoiceSettings.BillingPeriod;
-        }
-        public int GetDuePeriod(int carrierAccountId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
-            return customerInvoiceSettings.DuePeriod;
-        }
-        public string GetInvoiceSerialNumberPattern(int carrierAccountId)
-        {
-            var customerInvoiceSettings = GetCustomerInvoiceSettings(carrierAccountId);
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException(string.Format("customerInvoiceSettings"));
-            return customerInvoiceSettings.SerialNumberPattern;
         }
         #endregion
 
@@ -741,24 +702,6 @@ namespace TOne.WhS.BusinessEntity.Business
         private static string GetCarrierAccountName(string profileName, string nameSuffix)
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
-        }
-
-
-        private CustomerInvoiceSettings GetCustomerInvoiceSettings(int carrierAccountId)
-        {
-            var carrierAccount = GetCarrierAccount(carrierAccountId);
-            if (carrierAccount == null)
-                throw new NullReferenceException(string.Format("carrierAccount carrierAccountId: {0}", carrierAccountId));
-            if(carrierAccount.CarrierAccountSettings == null)
-                throw new NullReferenceException(string.Format("carrierAccount.CarrierAccountSettings carrierAccountId: {0}", carrierAccountId));
-            ConfigManager configManager = new ConfigManager();
-            if(carrierAccount.CarrierAccountSettings.InvoiceSettingId.HasValue)
-            {
-                return configManager.GetInvoiceSettingsbyGuid(carrierAccount.CarrierAccountSettings.InvoiceSettingId.Value);
-            }else
-            {
-               return new CarrierProfileManager().GetCustomerInvoiceSettings(carrierAccount.CarrierProfileId);
-            }
         }
         #endregion
 

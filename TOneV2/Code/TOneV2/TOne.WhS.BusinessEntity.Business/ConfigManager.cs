@@ -122,56 +122,6 @@ namespace TOne.WhS.BusinessEntity.Business
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
             return purchaseAreaSettings.RetroactiveDayOffset;
         }
-
-        public CustomerInvoiceSettings GetDefaultCustomerInvoiceSettings()
-        {
-            InvoiceSettings setting = GetInvoiceSettings();
-            if (setting.CustomerInvoiceSettings == null)
-                throw new NullReferenceException("setting.CustomerInvoiceSettings");
-            foreach (var customerInvoiceSettings in setting.CustomerInvoiceSettings)
-            {
-                if (customerInvoiceSettings.IsDefault)
-                    return customerInvoiceSettings;
-            }
-            throw new NullReferenceException("setting.CustomerInvoiceSettings");
-        }
-
-        public IEnumerable<CustomerInvoiceSettingInfo> GetCustomerInvoiceSettingInfo()
-        {
-            InvoiceSettings setting = GetInvoiceSettings();
-            List<CustomerInvoiceSettingInfo> lstCustomerInvoiceSettingInfo = new List<CustomerInvoiceSettingInfo>();
-             if (setting.CustomerInvoiceSettings == null)
-                throw new NullReferenceException("setting.CustomerInvoiceSettings");
-            foreach (var customerInvoiceSetting in setting.CustomerInvoiceSettings)
-            {
-                var customerInvoiceSettingInfo = CustomerInvoiceSettingInfoMapper(customerInvoiceSetting);
-                lstCustomerInvoiceSettingInfo.Add(customerInvoiceSettingInfo);
-            }
-           
-            return lstCustomerInvoiceSettingInfo;
-        }
-
-        public CustomerInvoiceSettings GetInvoiceSettingsbyGuid(Guid guid)
-        {
-            InvoiceSettings setting = GetInvoiceSettings();
-            if (setting.CustomerInvoiceSettings == null)
-                throw new NullReferenceException("setting.CustomerInvoiceSettings");
-            foreach (var customerInvoiceSettings in setting.CustomerInvoiceSettings)
-            {
-                if (customerInvoiceSettings.InvoiceSettingId == guid)
-                    return customerInvoiceSettings;
-            }
-            throw new NullReferenceException("setting.CustomerInvoiceSettings");
-        }
-
-        public Guid GetDefaultCustomerInvoiceTemplateMessageId()
-        {
-            CustomerInvoiceSettings customerInvoiceSettings = GetDefaultCustomerInvoiceSettings();
-            if (customerInvoiceSettings == null)
-                throw new NullReferenceException("defaultCustomerInvoice");
-            return customerInvoiceSettings.DefaultEmailId;
-        }
-
         public IEnumerable<VRDocumentItemDefinition> GetDocumentItemDefinitionsInfo()
         {
             BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
@@ -193,16 +143,6 @@ namespace TOne.WhS.BusinessEntity.Business
             if (cdrSettingData == null)
                 throw new NullReferenceException("CDRImportTechnicalSettingData");
             return cdrSettingData;
-        }
-        private InvoiceSettings GetInvoiceSettings()
-        {
-            SettingManager settingManager = new SettingManager();
-            InvoiceSettings invoiceSettings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
-
-            if (invoiceSettings == null)
-                throw new NullReferenceException("invoiceSettings");
-
-            return invoiceSettings;
         }
         private BusinessEntityTechnicalSettingsData GetBusinessEntitySettingData()
         {
@@ -259,20 +199,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetSettings<PurchaseAreaSettingsData>(Constants.PurchaseAreaSettings);
         }
 
-        #endregion
-
-
-
-        #region Mappers
-
-        private CustomerInvoiceSettingInfo CustomerInvoiceSettingInfoMapper(CustomerInvoiceSettings customerInvoiceSettings)
-        {
-            return new CustomerInvoiceSettingInfo()
-            {
-                InvoiceSettingId = customerInvoiceSettings.InvoiceSettingId,
-                Name = customerInvoiceSettings.Name,
-            };
-        }
         #endregion
     }
 }
