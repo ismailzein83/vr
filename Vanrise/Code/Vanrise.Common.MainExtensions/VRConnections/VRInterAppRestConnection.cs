@@ -30,7 +30,8 @@ namespace Vanrise.Common.MainExtensions.VRConnections
 
     public class VRInterAppRestConnectionFilter : IVRConnectionFilter
     {
-        public Guid ConfigId { get; set; }
+        public Guid ConfigId { get { return new Guid("5CD2AAC3-1C74-401F-8010-8B9B5FD9C011"); } }
+
         public bool IsMatched(VRConnection vrConnection)
         {
             if (vrConnection == null)

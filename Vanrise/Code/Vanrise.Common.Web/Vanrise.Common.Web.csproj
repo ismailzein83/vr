@@ -131,6 +131,7 @@
     <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\UserActionAuditController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
+    <Compile Include="Controllers\VRConnectionController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
     <Compile Include="Controllers\StyleDefinitionController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -211,6 +212,7 @@
     <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttypeconfig-selector.js" />
+    <Content Include="Common\Directives\VRConnection\vr-common-connection-selector.js" />
     <Content Include="Common\Directives\VRDocument\Templates\VRDocumentGridTemplate.html" />
     <Content Include="Common\Directives\VRDocument\vr-common-document-grid.js" />
     <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
@@ -307,6 +309,7 @@
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRConnectionAPIService.js" />
     <Content Include="Common\Services\APIServices\MasterLogAPIService.js" />
     <Content Include="Common\Services\APIServices\StatusDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\UserActionAuditAPIService.js" />
