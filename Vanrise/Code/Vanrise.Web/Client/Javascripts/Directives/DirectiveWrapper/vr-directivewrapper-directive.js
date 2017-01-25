@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrDirectivewrapper', ['$compile', function ($compile) {
+app.directive('vrDirectivewrapper', ['$compile', '$injector', function ($compile, $injector) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -17,6 +17,10 @@ app.directive('vrDirectivewrapper', ['$compile', function ($compile) {
                     var cloneScope = null;
                     $scope.$watch(iAttrs.directive, function () {
                         var directive = $scope.$eval(iAttrs.directive);
+                        if (directive != undefined) {
+                            if (!$injector.has(attrs.$normalize(directive) + 'Directive'))
+                                console.log('directive: ' + directive + ' not exists');
+                        }
                         var newElement = "";
                         if (directive != undefined && directive != "") {
                             newElement = '<' + directive;
