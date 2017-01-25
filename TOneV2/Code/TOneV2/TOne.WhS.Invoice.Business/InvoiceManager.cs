@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Invoice.Entities;
+using Vanrise.Invoice.Business.Context;
+using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.Invoice.Business
 {
@@ -34,9 +36,9 @@ namespace TOne.WhS.Invoice.Business
                     }
                 }
             }
-            return LoadInvoiceCarrier(getProfiles, getAccounts,filter.GetCustomers,filter.GetSuppliers);
+            return LoadInvoiceCarrier(getProfiles, getAccounts,filter.GetCustomers,filter.GetSuppliers,filter.Filters);
         }
-        public List<InvoiceCarrier> LoadInvoiceCarrier(bool getProfiles, bool getAccounts, bool getCustomers, bool getSuppliers)
+        public List<InvoiceCarrier> LoadInvoiceCarrier(bool getProfiles, bool getAccounts, bool getCustomers, bool getSuppliers,List<IInvoicePartnerFilter> filters)
         {
             List<InvoiceCarrier> invoiceCarriers = new List<InvoiceCarrier>();
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
@@ -47,13 +49,17 @@ namespace TOne.WhS.Invoice.Business
             {
                 if (carrierProfile.Settings.CustomerInvoiceByProfile)
                 {
-                    if(getProfiles)
+                    if (getProfiles)
                     {
-                    invoiceCarriers.Add(new InvoiceCarrier
-                    {
-                        InvoiceCarrierId = string.Format("Profile_{0}", carrierProfile.CarrierProfileId),
-                        Name = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId)
-                    });
+                        var invoiceCarrierId = string.Format("Profile_{0}", carrierProfile.CarrierProfileId);
+                        if (CheckIfPartnerMatched(filters, invoiceCarrierId))
+                        {
+                            invoiceCarriers.Add(new InvoiceCarrier
+                            {
+                                InvoiceCarrierId = invoiceCarrierId,
+                                Name = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId)
+                            });
+                        }
                     }
 
                 }
@@ -64,20 +70,38 @@ namespace TOne.WhS.Invoice.Business
                         var accounts = carrierAccountManager.GetCarriersByProfileId(carrierProfile.CarrierProfileId, getCustomers, getSuppliers);
                         if (accounts != null)
                         {
-
                             foreach (var account in accounts)
                             {
-                                invoiceCarriers.Add(new InvoiceCarrier
+                                var invoiceCarrierId = string.Format("Account_{0}", account.CarrierAccountId); 
+                                if (CheckIfPartnerMatched(filters, invoiceCarrierId))
                                 {
-                                    InvoiceCarrierId = string.Format("Account_{0}", account.CarrierAccountId),
-                                    Name = carrierAccountManager.GetCarrierAccountName(account.CarrierAccountId)
-                                });
+                                    invoiceCarriers.Add(new InvoiceCarrier
+                                    {
+                                        InvoiceCarrierId = invoiceCarrierId,
+                                        Name = carrierAccountManager.GetCarrierAccountName(account.CarrierAccountId)
+                                    });
+                                }
                             }
                         }
                     }
                 }
             }
             return invoiceCarriers;
+        }
+        bool CheckIfPartnerMatched(List<IInvoicePartnerFilter> filters,string partnerId)
+        {
+            if(filters != null)
+            {
+                InvoicePartnerFilterContext context = new InvoicePartnerFilterContext{
+                    PartnerId = partnerId
+                };
+                foreach(var filter in filters)
+                {
+                    if (!filter.IsMatched(context))
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }

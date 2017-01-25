@@ -71,6 +71,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
             var selectorApi;
             var context;
             var carrierTypeSelectedDeffered;
+            var filter;
             function initializeController() {
 
                 ctrl.selectedvalues = [];
@@ -99,7 +100,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     if (carrierTypeSelectedDeffered != undefined)
                         carrierTypeSelectedDeffered.resolve();
                     else
-                        loadCarrierAccounts(attrs, setLoader);
+                        loadCarrierAccounts(attrs, setLoader,null,filter);
                 };
                 ctrl.onselectionchanged = function (selectedCarrier) {
                     if (selectedCarrier != undefined && context != undefined && context.reloadBillingPeriod != undefined) {
@@ -120,7 +121,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     if(payload != undefined)
                     {
                         context = payload.context;
-
+                        filter = payload.filter;
                         var selectedIds = payload.selectedIds;
                         if(selectedIds!=undefined)
                         {
@@ -129,7 +130,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                             if (partnerPrefix != undefined) {
                                 ctrl.selectedCarrierTypes = UtilsService.getItemByVal(ctrl.carrierTypes, partnerPrefix, 'description');
                             }
-                            return loadCarrierAccounts(attrs, undefined, selectedIds).then(function () {
+                            return loadCarrierAccounts(attrs, undefined, selectedIds, filter).then(function () {
                                 carrierTypeSelectedDeffered = undefined;
                             })
                         }
@@ -154,12 +155,13 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                     ctrl.onReady(api);
             }
 
-            function loadCarrierAccounts(attrs, loaderFunc, selectedIds) {
+            function loadCarrierAccounts(attrs, loaderFunc, selectedIds,filter) {
                 if (loaderFunc != undefined)
                 {
                     loaderFunc(true);
                 }
-                var filter = {};
+                if (filter == undefined)
+                 filter = {};
                 if (ctrl.selectedCarrierTypes != undefined) {
                     filter.CarrierTypes = [];
                     if (ctrl.selectedCarrierTypes.length > 0) {

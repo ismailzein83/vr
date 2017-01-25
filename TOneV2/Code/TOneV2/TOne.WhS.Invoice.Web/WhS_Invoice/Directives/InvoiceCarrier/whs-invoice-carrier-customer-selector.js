@@ -52,9 +52,11 @@ app.directive('whsInvoiceCarrierCustomerSelector', ['UtilsService', 'VRUIUtilsSe
 
                 api.load = function (payload) {
                     var selectedIds;
+                    var filter;
                     if (payload != undefined)
                     {
                         context = payload.context;
+                        filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
                     var promises = [];
@@ -63,7 +65,7 @@ app.directive('whsInvoiceCarrierCustomerSelector', ['UtilsService', 'VRUIUtilsSe
                     promises.push(directiveLoadPromiseDeferred.promise);
 
                     directiveReadyPromiseDeferred.promise.then(function () {
-                        var selectorPayload = { context: getContext() };
+                        var selectorPayload = { context: getContext(), filter: filter };
                         if (selectedIds != undefined)
                         {
                             selectorPayload.selectedIds = selectedIds;
