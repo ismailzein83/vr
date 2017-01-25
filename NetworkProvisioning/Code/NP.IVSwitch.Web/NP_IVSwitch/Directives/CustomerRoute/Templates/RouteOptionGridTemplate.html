@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" maxheight="300px"
+             dataretrievalfunction="dataRetrievalFunction"
+             on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
+    <vr-datagridcolumn headertext="'Supplier'" widthfactor="5" disablesorting>
+        <vr-textbox value="Supplier" isrequired></vr-textbox>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Percentage'" widthfactor="15" disablesorting>
+        <vr-textbox value="Percentage" type="number" isrequired></vr-textbox>
+    </vr-datagridcolumn>
+</vr-datagrid>

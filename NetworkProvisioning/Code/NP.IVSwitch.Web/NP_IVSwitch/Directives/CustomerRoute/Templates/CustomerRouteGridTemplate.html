@@ -1,7 +1,8 @@
 ﻿<vr-datagrid on-ready="scopeModel.onGridReady"
              datasource="customerRoutes"
              dataretrievalfunction="dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'">
+             pagingtype="'PagingOnScroll'"
+             menuactions="menuActions">
     <vr-datagridcolumn headertext="'Destination'" field="'Entity.DestinationCode'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Options'" field="'Options'"></vr-datagridcolumn>
 </vr-datagrid>

@@ -21,6 +21,12 @@ namespace NP.IVSwitch.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredCustomerRoutes(input));
         }
+        [HttpPost]
+        [Route("GetFilteredCustomerRouteOptions")]
+        public object GetFilteredCustomerRouteOptions(Vanrise.Entities.DataRetrievalInput<CustomerRouteOptionQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredCustomerRouteOptions(input));
+        }
 
     }
 }

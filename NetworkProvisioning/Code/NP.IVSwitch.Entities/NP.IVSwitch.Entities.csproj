@@ -54,6 +54,7 @@
     <Compile Include="CodecProfile\CodecProfileFilter.cs" />
     <Compile Include="CodecProfile\CodecProfileInfo.cs" />
     <Compile Include="CodecProfile\CodecProfileQuery.cs" />
+    <Compile Include="CustomerRoute\CustomerRouteOptionQuery.cs" />
     <Compile Include="Domain\Domain.cs" />
     <Compile Include="Domain\DomainFilter.cs" />
     <Compile Include="Domain\DomainInfo.cs" />

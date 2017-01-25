@@ -9,6 +9,10 @@ namespace NP.IVSwitch.Data
 {
     public interface ICustomerRouteDataManager : IDataManager
     {
-        List<CustomerRoute> GetCustomerRoutes(List<EndPointInfo> acls, int top, string orderBy, string codePrefix);
+        List<CustomerRoute> GetCustomerRoutes(List<EndPointInfo> acls, string topQuery, string orderByQuery,
+            string destinationCondition);
+
+        List<CustomerRoute> GetCustomerRouteOptions(List<EndPointInfo> acls, string topQuery, string orderByQuery,
+            string destinationCondition);
     }
 }

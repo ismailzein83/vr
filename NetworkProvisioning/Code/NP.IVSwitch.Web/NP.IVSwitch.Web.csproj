@@ -157,6 +157,8 @@
     <Content Include="NP_IVSwitch\Constant\StateEnum.js" />
     <Content Include="NP_IVSwitch\Constant\TransportModeEnum.js" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\np-ivswitch-codecprofile-selector.js" />
+    <Content Include="NP_IVSwitch\Directives\CustomerRoute\np-ivswitch-routeoption-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\CustomerRoute\Templates\RouteOptionGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Domain\np-ivswitch-domain-selector.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpoint-grid.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpoint-selector.js" />
@@ -181,6 +183,7 @@
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\CustomerRouteService.js" />
     <Content Include="NP_IVSwitch\Services\EndPointService.js" />
     <Content Include="NP_IVSwitch\Services\FirewallService.js" />
     <Content Include="NP_IVSwitch\Services\RouteService.js" />
@@ -190,6 +193,8 @@
     <Content Include="NP_IVSwitch\Services\CodecDefService.js" />
     <Content Include="NP_IVSwitch\Services\CodecProfileService.js" />
     <Content Include="NP_IVSwitch\Services\TranslationRuleService.js" />
+    <Content Include="NP_IVSwitch\Views\CustomerRoute\CustomerRouteEditor.html" />
+    <Content Include="NP_IVSwitch\Views\CustomerRoute\CustomerRouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\EndPoint\EndPointEditor.html" />
     <Content Include="NP_IVSwitch\Views\EndPoint\EndPointEditorController.js" />
     <Content Include="NP_IVSwitch\Views\CodecDef\CodecDefEditor.html" />

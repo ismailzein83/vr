@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace NP.IVSwitch.Business
 {
     public class IpAddressHelper
     {
-        public static bool IsInSameSubnet(Dictionary<int, string> hosts, string originalHost, out string message)
+        public static bool IsInSameSubnet(Dictionary<int, Entities.EndPoint> endPoints, string originalHost, out string message)
         {
             int originalSubnet;
             message = "";
             string[] originalParts = originalHost.Split('/');
-            if (originalParts.Length == 1) return false;
-            int.TryParse(originalParts[1], out originalSubnet);
-            foreach (var toComparepHost in hosts)
+            if (originalParts.Length > 1)
+                int.TryParse(originalParts[1], out originalSubnet);
+            foreach (var toCompareEndPoint in endPoints)
             {
+                if (string.IsNullOrEmpty(toCompareEndPoint.Value.Host)) continue;
                 message = string.Format("Subnet address({0}) conflicts with an existing IP address for (act#{1})",
-                    originalHost, toComparepHost.Key);
-                string[] hostParts = toComparepHost.Value.Split('/');
+                    originalHost, toCompareEndPoint.Key);
+                var host = toCompareEndPoint.Value.Host;
+                string[] hostParts = host.Split('/');
                 if (hostParts.Length == 1) continue;
                 int toCompareSubnet;
                 int.TryParse(hostParts[1], out toCompareSubnet);
@@ -27,6 +30,19 @@ namespace NP.IVSwitch.Business
                 return toCompareIp.IsInSameSubnet(originalIp, toCompareClassCMask);
             }
             return false;
+        }
+
+        public static bool ValidateSameAccountHost(Dictionary<int, Entities.EndPoint> endPoints, Entities.EndPoint originalPoint, out string message)
+        {
+            foreach (var toComparEndPoint in endPoints.Values.Where(a => a.AccountId == originalPoint.AccountId && a.EndPointId != originalPoint.EndPointId))
+            {
+                message = string.Format("Subnet address({0}) conflicts with an existing IP address for (act#{1})",
+                    toComparEndPoint.Host, originalPoint.AccountId);
+                if (string.IsNullOrEmpty(toComparEndPoint.Host)) continue;
+                if (!toComparEndPoint.Host.Equals(originalPoint.Host)) continue;
+                if (originalPoint.TechPrefix.Equals(toComparEndPoint.TechPrefix)) return true;
+            }
+            return IsInSameSubnet(endPoints, originalPoint.Host, out message);
         }
     }
     public static class SubnetMask

@@ -109,7 +109,7 @@ namespace NP.IVSwitch.Data.Postgres
                                    log_alias='{1}',codec_profile_id={2},trans_rule_id={3},state_id={4},
                                    channels_limit={5}, max_call_dura={6},rtp_mode={7},domain_id={8},
                                    host='{9}',tech_prefix='{10}' 
-                                   WHERE  user_id = {11} AND NOT EXISTS(SELECT 1 FROM  access_list WHERE (user_id != @user_id and
+                                   WHERE  user_id = {11} AND NOT EXISTS(SELECT 1 FROM  access_list WHERE (user_id != {11} and
                                     (domain_id={8} and host='{9}' and tech_prefix='{10}' )))"
                 , endPoint.Description
                 , endPoint.LogAlias

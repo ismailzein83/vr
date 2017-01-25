@@ -1,0 +1,26 @@
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_CustomerRouteEditorController" vr-loader="scopeModal.isLoading" vr-modalcontent size="medium">
+    <vr-modalbody>
+        <vr-form>
+            <vr-tabs>
+                <vr-tab header="'Customer Routes'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <np-ivswitch-routeoption-grid on-ready="onGridReady">
+
+                            </np-ivswitch-routeoption-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

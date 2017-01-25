@@ -32,6 +32,7 @@
                 return loadPromiseDeffered.promise;
             }
         }
+
         function buildGridQuery() {
             return {
                 CustomerId: carrierAccountDirectiveApi.getSelectedIds(),

@@ -16,28 +16,37 @@ namespace NP.IVSwitch.Data.Postgres
         {
             return IvSwitchSync.RouteConnectionString;
         }
-        public List<CustomerRoute> GetCustomerRoutes(List<EndPointInfo> acls, int top, string orderBy, string codePrefix)
+
+        private string _routeOptionsQuery = @" select destination,route_id,flag_1,Preference
+                                                from {0} {3} {2}";
+        private string _customerRouteQuery = @"
+                            ;with TopDistinctCodes as (
+                            select distinct destination from {0}
+                            {3}
+                            {2}
+                            {1}
+                            )
+                            select {0}.destination,{0}.route_id,{0}.flag_1,{0}.Preference from TopDistinctCodes
+                            join {0} on {0}.destination = TopDistinctCodes.destination";
+
+        public List<CustomerRoute> GetCustomerRoutes(List<EndPointInfo> acls, string topQuery, string orderByQuery, string destinationCondition)
+        {
+            return ExecuteRoutes(acls, _customerRouteQuery, topQuery, orderByQuery, destinationCondition);
+        }
+        public List<CustomerRoute> GetCustomerRouteOptions(List<EndPointInfo> acls, string topQuery, string orderByQuery, string destinationCondition)
+        {
+            return ExecuteRoutes(acls, _routeOptionsQuery, topQuery, orderByQuery, destinationCondition);
+        }
+        private List<CustomerRoute> ExecuteRoutes(List<EndPointInfo> acls,string mainQuery, string topQuery, string orderByQuery, string destinationCondition)
         {
             EndPointDataManager endPointDataManager = new EndPointDataManager { IvSwitchSync = IvSwitchSync };
             int routeId = endPointDataManager.GetTableId(acls.First().EndPointId);
             string routeTableName = string.Format("rt{0}", routeId);
-            string destinationQuery = string.Empty;
-            if (!string.IsNullOrEmpty(codePrefix))
-            {
-                destinationQuery = string.Format("where destination like '{0}%'", codePrefix);
-            }
-            string query = string.Format(@"
-                            ;with TopDistinctCodes as (
-                            select distinct destination from {0}
-                            {3}
-                            order by destination {2}
-                            limit {1}
-                            )
-                            select {0}.destination,{0}.route_id,{0}.flag_1,{0}.Preference from TopDistinctCodes
-                            join {0} on {0}.destination = TopDistinctCodes.destination"
-                               , routeTableName, top, orderBy, destinationQuery);
+            string query = string.Format(mainQuery
+                , routeTableName, topQuery, orderByQuery, destinationCondition);
             return GetItemsText(query, CustomerRouteMapper, null);
         }
+
         #region mapper
 
         private CustomerRoute CustomerRouteMapper(IDataReader reader)

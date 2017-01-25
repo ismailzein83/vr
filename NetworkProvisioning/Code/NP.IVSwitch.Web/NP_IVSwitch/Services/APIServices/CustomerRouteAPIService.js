@@ -11,9 +11,13 @@
         function GetFilteredCustomerRoutes(input) {
             return baseApiService.post(utilsService.getServiceURL(npIvSwitchModuleConfig.moduleName, controllerName, 'GetFilteredCustomerRoutes'), input);
         }
+        function GetFilteredCustomerRouteOptions(input) {
+            return baseApiService.post(utilsService.getServiceURL(npIvSwitchModuleConfig.moduleName, controllerName, 'GetFilteredCustomerRouteOptions'), input);
+        }
 
         return ({
-            GetFilteredCustomerRoutes: GetFilteredCustomerRoutes
+            GetFilteredCustomerRoutes: GetFilteredCustomerRoutes,
+            GetFilteredCustomerRouteOptions: GetFilteredCustomerRouteOptions
 
         });
     }

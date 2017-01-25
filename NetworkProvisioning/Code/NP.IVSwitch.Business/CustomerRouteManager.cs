@@ -22,19 +22,42 @@ namespace NP.IVSwitch.Business
             return DataRetrievalManager.Instance.ProcessResult(input,
                 allCustomers.ToBigResult(input, null, CustomerRouteDetailMapper));
         }
+        public IDataRetrievalResult<CustomerRouteOption> GetFilteredCustomerRouteOptions(DataRetrievalInput<CustomerRouteOptionQuery> input)
+        {
+            EndPointManager endPointManager = new EndPointManager();
+            List<EndPointInfo> acls = endPointManager.GetAclList(input.Query.CustomerId);
+            if (acls == null) return null;
+            Dictionary<int, CustomerRouteOption> allCustomersOptions =
+                GetCustomerRouteOption(acls, input.Query.Code).ToDictionary(it => it.RouteId, it => it);
+
+            return DataRetrievalManager.Instance.ProcessResult(input, allCustomersOptions.ToBigResult(input, null));
+        }
 
         #region Private Functions
-
+        private List<CustomerRouteOption> GetCustomerRouteOption(List<EndPointInfo> acls, string code)
+        {
+            ICustomerRouteDataManager manager = IVSwitchDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+            Helper.SetSwitchConfig(manager);
+            string destinationQuery = string.Format("where destination = '{0}'", code);
+            string orderByQuery = "ORDER BY preference";
+            var customerRoutes = manager.GetCustomerRouteOptions(acls, string.Empty, orderByQuery, destinationQuery);
+            List<CustomerRouteOption> options =
+                customerRoutes.Select(GetConvertedOptions).Where(convertedOption => convertedOption != null).ToList();
+            return options;
+        }
         private Dictionary<string, ConvertedCustomerRoute> GetCustomerRoutes(List<EndPointInfo> acls, int top, string orderBy, string codePrefix)
         {
             ICustomerRouteDataManager manager = IVSwitchDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
             Helper.SetSwitchConfig(manager);
             Dictionary<string, ConvertedCustomerRoute> convertedRoutes = new Dictionary<string, ConvertedCustomerRoute>();
-            RouteManager routeManager = new RouteManager();
-            CarrierAccountManager accountManager = new CarrierAccountManager();
-            Dictionary<int, int> mappedSupplierRouteIds = routeManager.GetRouteAndSupplierIds();
 
-            var customerRoutes = manager.GetCustomerRoutes(acls, top, orderBy, codePrefix);
+            string destinationQuery = (!string.IsNullOrEmpty(codePrefix))
+                ? string.Format("where destination like '{0}%'", codePrefix)
+                : string.Empty;
+            string topQuery = string.Format("limit {0}", top);
+            string orderByQuery = string.Format(" order by destination {0} ", orderBy);
+            var customerRoutes = manager.GetCustomerRoutes(acls, topQuery, orderByQuery, destinationQuery);
+
             if (customerRoutes.Count == 0) return new Dictionary<string, ConvertedCustomerRoute>();
 
             var groupedRoutes =
@@ -50,24 +73,31 @@ namespace NP.IVSwitch.Business
                 };
                 foreach (var options in route.Iems)
                 {
-                    int supplierId;
-                    if (!mappedSupplierRouteIds.TryGetValue(options.RouteId, out supplierId)) continue;
-                    CustomerRouteOption customerRouteOption = new CustomerRouteOption
-                    {
-                        RouteId = options.RouteId,
-                        SupplierId = supplierId,
-                        Percentage = options.Percentage,
-                        Priority = options.Preference,
-                        SupplierName = accountManager.GetCarrierAccountName(supplierId)
-                    };
-                    convertedRoute.Options.Add(customerRouteOption);
+                    CustomerRouteOption customerRouteOption = GetConvertedOptions(options);
+                    if (customerRouteOption != null) convertedRoute.Options.Add(customerRouteOption);
                 }
                 if (!convertedRoutes.ContainsKey(convertedRoute.DestinationCode))
                     convertedRoutes[convertedRoute.DestinationCode] = convertedRoute;
             }
             return convertedRoutes;
         }
-
+        private CustomerRouteOption GetConvertedOptions(CustomerRoute route)
+        {
+            RouteManager routeManager = new RouteManager();
+            CarrierAccountManager accountManager = new CarrierAccountManager();
+            Dictionary<int, int> mappedSupplierRouteIds = routeManager.GetRouteAndSupplierIds();
+            int supplierId;
+            if (!mappedSupplierRouteIds.TryGetValue(route.RouteId, out supplierId)) return null;
+            return new CustomerRouteOption
+            {
+                RouteId = route.RouteId,
+                SupplierId = supplierId,
+                SupplierName = accountManager.GetCarrierAccountName(supplierId),
+                Percentage = route.Percentage,
+                Priority = route.Preference
+            };
+        }
+      
         #endregion
         #region Mapper
         private CustomerRouteDetail CustomerRouteDetailMapper(ConvertedCustomerRoute customerRoute)
@@ -77,6 +107,7 @@ namespace NP.IVSwitch.Business
                 Entity = customerRoute
             };
         }
+
         #endregion
     }
 }
