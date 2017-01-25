@@ -70,11 +70,13 @@
 
                     getDefinitionPromise.then(function (response) {
                         ctrl.criteriaFields.length = 0;
-                        for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
-                            var criteriaFieldDefinition = response.CriteriaDefinition.Fields[i];
-                            if (isCriteriaFieldVisible(criteriaFieldDefinition.FieldName)) {
-                                criteriaFieldDefinition.fieldValueIndex = i;
-                                ctrl.criteriaFields.push(criteriaFieldDefinition);
+                        if (response.CriteriaDefinition != undefined) {
+                            for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
+                                var criteriaFieldDefinition = response.CriteriaDefinition.Fields[i];
+                                if (isCriteriaFieldVisible(criteriaFieldDefinition.FieldName)) {
+                                    criteriaFieldDefinition.fieldValueIndex = i;
+                                    ctrl.criteriaFields.push(criteriaFieldDefinition);
+                                }
                             }
                         }
                         gridAPI.retrieveData(query).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
@@ -99,8 +101,8 @@
                 }
                 return true;
             }
-            
-           // function defineMenuActions() {
+
+            // function defineMenuActions() {
             $scope.gridMenuActions = function () {
                 return [{
                     name: 'Edit',
@@ -108,7 +110,7 @@
                     haspermission: hasEditGenericRulePermission
                 }];
             };
-          //  }
+            //  }
 
             function hasEditGenericRulePermission(genericRule) {
                 return VR_GenericData_GenericRuleAPIService.DoesUserHaveEditAccess(genericRule.Entity.DefinitionId);

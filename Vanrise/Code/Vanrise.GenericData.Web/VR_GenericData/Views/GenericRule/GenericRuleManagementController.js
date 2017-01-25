@@ -64,7 +64,7 @@
                     });
                 }
             };
-           
+
             $scope.search = function () {
                 var filter = getFilterObject();
                 return gridAPI.loadGrid(filter);
@@ -168,12 +168,14 @@
                 UtilsService.waitMultiplePromises([getRuleDefinitionPromise, getFieldTypeConfigsPromise]).then(function () {
                     var criteriaFilterPromises = [];
 
-                    for (var i = 0; i < ruleDefinition.CriteriaDefinition.Fields.length; i++) {
-                        var criteriaField = ruleDefinition.CriteriaDefinition.Fields[i];
-                        var filter = getFilter(criteriaField);
-                        if (filter != undefined) {
-                            criteriaFilterPromises.push(filter.directiveLoadDeferred.promise);
-                            $scope.scopeModel.filters.push(filter);
+                    if (ruleDefinition.CriteriaDefinition != undefined) {
+                        for (var i = 0; i < ruleDefinition.CriteriaDefinition.Fields.length; i++) {
+                            var criteriaField = ruleDefinition.CriteriaDefinition.Fields[i];
+                            var filter = getFilter(criteriaField);
+                            if (filter != undefined) {
+                                criteriaFilterPromises.push(filter.directiveLoadDeferred.promise);
+                                $scope.scopeModel.filters.push(filter);
+                            }
                         }
                     }
 
@@ -237,7 +239,7 @@
 
                     var getRuleTypesPromise = getRuleTypes();
                     settingsPromises.push(getRuleTypesPromise);
-                    return UtilsService.waitMultiplePromises(settingsPromises).then(function () {                        
+                    return UtilsService.waitMultiplePromises(settingsPromises).then(function () {
                         if ($scope.scopeModel.settingsFilterEditor != null) {
                             setTimeout(function () {
                                 var settingsFilterEditorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -249,7 +251,7 @@
                                     };
                                     VRUIUtilsService.callDirectiveLoad(settingsFilterDirectiveAPI, settingsFilterDirectivePayload, settingsFilterEditorLoadDeferred);
                                 });
-                            },1)
+                            }, 1)
                         }
                     });
                 }
