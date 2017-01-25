@@ -297,7 +297,7 @@ namespace Vanrise.GenericData.Business
             }
             return null;
         }
-        private Dictionary<long, GenericBusinessEntity> GetCachedGenericBusinessEntities(Guid businessDefinitionId)
+        public Dictionary<long, GenericBusinessEntity> GetCachedGenericBusinessEntities(Guid businessDefinitionId)
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetGenericBusinessEntities_{0}", businessDefinitionId), businessDefinitionId,
                () =>
