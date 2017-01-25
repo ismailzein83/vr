@@ -37,8 +37,26 @@ namespace TOne.WhS.Sales.Business
             List<string> listDimensions = new List<string> { "Supplier", "SaleZone" };
             string supplierDimensionFilterName = "Supplier";
             string saleZoneDimensionFilterName = "SaleZone";
-            DateTime fromDate = DateTime.Today.AddDays(-1000);
+
+            DateTime fromDate = DateTime.MinValue;
+
+            switch (input.Query.PeriodType)
+            {
+                case PeriodTypes.Days:
+                    fromDate = DateTime.Today.AddDays(-(double)input.Query.PeriodValue);
+                    break;
+                case PeriodTypes.Hours:
+                    fromDate = DateTime.Today.AddHours(-(double)input.Query.PeriodValue);
+                    break;
+                case PeriodTypes.Minutes:
+                    fromDate = DateTime.Today.AddMinutes(-(double)input.Query.PeriodValue);
+                    break;
+                default:
+                    throw new DataIntegrityValidationException(string.Format("Period Type must be set"));
+            }
+
             DateTime toDate = DateTime.Today;
+
             IEnumerable<int> supplierIds = input.Query.RPRouteDetail.RouteOptionsDetails.Select(item => item.Entity.SupplierId);
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, supplierIds, saleZoneDimensionFilterName, input.Query.RPRouteDetail.SaleZoneId, fromDate, toDate);

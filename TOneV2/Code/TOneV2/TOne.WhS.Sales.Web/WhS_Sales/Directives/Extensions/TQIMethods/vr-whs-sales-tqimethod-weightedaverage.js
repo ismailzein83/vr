@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesTqimethodWeightedaverage", ['WhS_Sales_PeriodTypesEnum', 'UtilsService', function (WhS_Sales_PeriodTypesEnum, UtilsService) {
+app.directive("vrWhsSalesTqimethodWeightedaverage", ['UtilsService', function (UtilsService) {
 
     return {
         restrict: "E",
@@ -19,15 +19,11 @@ app.directive("vrWhsSalesTqimethodWeightedaverage", ['WhS_Sales_PeriodTypesEnum'
 
     function WeightedAvgTQIMethod(ctrl, $scope) {
         this.initializeController = initializeController;
-        var periodTypesReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var context;
 
         function initializeController() {
 
-            $scope.onPeriodTypeSelectorReady = function (api) {
-                $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum)
-                periodTypesReadyPromiseDeferred.resolve();
                 defineAPI();
-            };
         }
 
         function defineAPI() {
@@ -35,19 +31,16 @@ app.directive("vrWhsSalesTqimethodWeightedaverage", ['WhS_Sales_PeriodTypesEnum'
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    $scope.periodValue = payload.PeriodValue;
-                    periodTypesReadyPromiseDeferred.promise.then(function () {
-                        $scope.periodTypeSelectedValue = UtilsService.getItemByVal($scope.periodTypes, payload.PeriodType, "value");
-                    });
+                    context = payload.context;
                 }
             };
 
             api.getData = function () {
+                var duration = context.getDuration();
                 return {
                     $type: "TOne.WhS.Sales.MainExtensions.WeightedAverageTQIMethod, TOne.WhS.Sales.MainExtensions",
-                    Title: $scope.title,
-                    PeriodValue: $scope.periodValue,
-                    PeriodType: $scope.periodTypeSelectedValue.value
+                    PeriodValue: duration.periodValue,
+                    PeriodType: duration.periodType
                 };
             };
 

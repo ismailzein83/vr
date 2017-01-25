@@ -23,6 +23,7 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveAPI;
         var rpRouteDetail;
+        var context;
        
         function initializeController() {
             selectiveCtrl.tqiMethods = [];
@@ -39,7 +40,8 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
                 };
 
                 var directivePayload = {
-                    rpRouteDetail: rpRouteDetail
+                    rpRouteDetail: rpRouteDetail,
+                    context: context
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, undefined);
@@ -55,6 +57,7 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
 
                 if (payload != undefined) {
                     rpRouteDetail = payload.rpRouteDetail;
+                    context = payload.context;
                 }
 
                 var loadTQIMethodsPromise = loadTQIMethods();

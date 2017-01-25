@@ -18,10 +18,36 @@ namespace TOne.WhS.Sales.MainExtensions
         public PeriodTypes PeriodType { get; set; }
         public override void CalculateRate(ITQIMethodContext context)
         {
+            if (context.Route == null || context.Route.RouteOptionsDetails == null)
+                return;
+
+            DurationByZone durationByZone = this.GetDurationByZone(context.Route.SaleZoneId);
+
+            decimal sumOfDuration = 0;
+            decimal sumOfRatesMultipliedByDuration = 0;
+            foreach (RPRouteOptionDetail option in context.Route.RouteOptionsDetails)
+            {
+                DurationBySupplier durationBySupplier = null;
+                if (durationByZone.TryGetValue(option.Entity.SaleZoneId, out durationBySupplier))
+                {
+                    decimal durationInMinutes = 0;
+                    if (durationBySupplier.TryGetValue(option.Entity.SupplierId, out durationInMinutes))
+                    {
+                        sumOfRatesMultipliedByDuration += durationInMinutes * option.ConvertedSupplierRate;
+                        sumOfDuration += durationInMinutes;
+                    }
+                }
+            }
+
+            if (sumOfDuration != 0)
+                context.Rate = sumOfRatesMultipliedByDuration / sumOfDuration;
+        }
+
+
+        private DurationByZone GetDurationByZone(long saleZoneId)
+        {
             List<string> listMeasures = new List<string> { "DurationInMinutes" };
             List<string> listDimensions = new List<string> { "Supplier", "SaleZone" };
-            string supplierDimensionFilterName = "Supplier";
-            string saleZoneDimensionFilterName = "SaleZone";
 
             DateTime fromDate = DateTime.MinValue;
 
@@ -42,35 +68,37 @@ namespace TOne.WhS.Sales.MainExtensions
 
             DateTime toDate = DateTime.Today;
 
-            if (context.Route == null || context.Route.RouteOptionsDetails == null)
-                return;
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, saleZoneId, fromDate, toDate);
 
-            decimal sumOfDuration = 0;
-            decimal sumOfRatesMultipliedByDuration = 0;
-            foreach (RPRouteOptionDetail option in context.Route.RouteOptionsDetails)
+            DurationByZone durationByZone = new DurationByZone();
+
+            foreach (var analyticRecord in analyticResult.Data)
             {
-                var analyticResult = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, option.Entity.SupplierId, saleZoneDimensionFilterName, context.Route.SaleZoneId, fromDate, toDate);
-                if (analyticResult == null || analyticResult.Data == null)
-                    continue;
+                DimensionValue supplierDimension = analyticRecord.DimensionValues.ElementAt(0);
+                DimensionValue zoneDimension = analyticRecord.DimensionValues.ElementAt(1);
 
-                foreach (var analyticRecord in analyticResult.Data)
+                long zoneId = (long)zoneDimension.Value;
+                int? supplierId = supplierDimension.Value != null ? (int?)supplierDimension.Value : null;
+
+                DurationBySupplier durationBySupplier = null;
+                if (!durationByZone.TryGetValue(zoneId, out durationBySupplier))
                 {
-                    MeasureValue durationInMinutes = GetMeasureValue(analyticRecord, "DurationInMinutes");
-                    decimal durationInMinutesValue = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-                    if (durationInMinutesValue == 0)
-                        continue;
-
-                    sumOfRatesMultipliedByDuration += durationInMinutesValue * option.ConvertedSupplierRate;
-                    sumOfDuration += durationInMinutesValue;
+                    durationBySupplier = new DurationBySupplier();
+                    durationByZone.Add(zoneId, durationBySupplier);
                 }
+
+                MeasureValue durationInMinutes = GetMeasureValue(analyticRecord, "DurationInMinutes");
+                decimal durationInMinutesValue = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
+
+                if (supplierId.HasValue)
+                    durationBySupplier.Add(supplierId.Value, durationInMinutesValue);
             }
 
-            if (sumOfDuration != 0)
-                context.Rate = sumOfRatesMultipliedByDuration / sumOfDuration;
+            return durationByZone;
         }
 
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string firstDimensionFilterName, object firstDimensionFilterValue,
-         string secondDimensionFilterName, object secondDimensionFilterValue, DateTime fromDate, DateTime toDate)
+
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, long saleZoneId, DateTime fromDate, DateTime toDate)
         {
             AnalyticManager analyticManager = new AnalyticManager();
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -87,20 +115,14 @@ namespace TOne.WhS.Sales.MainExtensions
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
+
             DimensionFilter dimensionFilter = new DimensionFilter()
             {
-                Dimension = firstDimensionFilterName,
-                FilterValues = new List<object> { firstDimensionFilterValue }
+                Dimension = "SaleZone",
+                FilterValues = new List<object>(){ saleZoneId }
+            };
 
-            };
-            DimensionFilter secondDimensionFilter = new DimensionFilter()
-            {
-                Dimension = secondDimensionFilterName,
-                FilterValues = new List<object> { secondDimensionFilterValue }
-            };
             analyticQuery.Query.Filters.Add(dimensionFilter);
-            analyticQuery.Query.Filters.Add(secondDimensionFilter);
-
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
 
@@ -109,6 +131,17 @@ namespace TOne.WhS.Sales.MainExtensions
             MeasureValue measureValue;
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
+        }
+
+
+        class DurationBySupplier : Dictionary<int, decimal>
+        {
+
+        }
+
+        class DurationByZone : Dictionary<long, DurationBySupplier>
+        {
+
         }
     }
 }

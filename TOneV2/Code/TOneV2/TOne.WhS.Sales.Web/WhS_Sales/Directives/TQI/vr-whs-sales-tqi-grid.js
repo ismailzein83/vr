@@ -61,6 +61,8 @@ app.directive('vrWhsSalesTqiGrid', ['WhS_Sales_RatePlanAPIService', 'UtilsServic
                 var query = {};
                 if (payload != undefined && payload.rpRouteDetail != undefined) {
                     query.RPRouteDetail = payload.rpRouteDetail;
+                    query.PeriodType = payload.periodType;
+                    query.PeriodValue = payload.periodValue;
                 }
                 return gridAPI.retrieveData(query);
             };

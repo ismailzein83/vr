@@ -10,5 +10,7 @@ namespace TOne.WhS.Sales.Entities
    public class TQISupplierInfoQuery
     {
         public RPRouteDetail RPRouteDetail { get; set; }
+        public decimal PeriodValue { get; set; }
+        public PeriodTypes PeriodType { get; set; }
     }
 }

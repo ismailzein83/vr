@@ -2,9 +2,9 @@
 
     'use strict';
 
-    TQIEditor.$inject = ['$scope', 'WhS_Sales_MarginTypesEnum', 'WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
+    TQIEditor.$inject = ['$scope', 'WhS_Sales_MarginTypesEnum', 'WhS_Sales_RatePlanAPIService', 'WhS_Sales_PeriodTypesEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function TQIEditor($scope, WhS_Sales_MarginTypesEnum, WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
+    function TQIEditor($scope, WhS_Sales_MarginTypesEnum, WhS_Sales_RatePlanAPIService, WhS_Sales_PeriodTypesEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
         var tqiSelectiveDirectiveAPI;
         var tqiSelectiveDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -85,9 +85,17 @@
                 }
             };
 
+            $scope.onPeriodTypeSelectorReady = function (api) {
+                $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum)
+            };
+
             $scope.onServiceReady = function (api) {
                 servicesDirectiveAPI = api;
                 servicesDirectiveReadyPromiseDeferred.resolve();
+            };
+
+            $scope.searchClicked = function () {
+               return loadTQIGrid();
             };
 
             $scope.save = function () {
@@ -102,7 +110,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTQISelectiveDirective, loadServicesDirective, loadTQIGrid]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTQISelectiveDirective, loadServicesDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
 
@@ -132,7 +140,8 @@
             tqiSelectiveDirectiveReadyPromiseDeferred.promise.then(function () {
 
                 var payload = {
-                    rpRouteDetail: rpRouteDetail
+                    rpRouteDetail: rpRouteDetail,
+                    context : getContext()
                 };
 
                 VRUIUtilsService.callDirectiveLoad(tqiSelectiveDirectiveAPI, payload, loadTQISelectiveDirectivePromiseDeferred);
@@ -162,7 +171,9 @@
             tqiGridAPIReadyPromiseDeferred.promise.then(function () {
 
                 var payload = {
-                    rpRouteDetail: rpRouteDetail
+                    rpRouteDetail: rpRouteDetail,
+                    periodType: $scope.periodTypeSelectedValue != undefined ? $scope.periodTypeSelectedValue.value : undefined,
+                    periodValue: $scope.periodValue,
                 };
 
                 VRUIUtilsService.callDirectiveLoad(tqiGridAPI, payload, loadTQIGridPromiseDeferred);
@@ -176,6 +187,20 @@
                 TQIMethod: tqiSelectiveDirectiveAPI.getData(),
                 RPRouteDetail: rpRouteDetail
             };
+        }
+
+
+        function getContext() {
+            var context = {
+                getDuration: function () {
+                    return {
+                        periodValue: $scope.periodValue,
+                        periodType: $scope.periodTypeSelectedValue.value
+                    };
+                }
+            };
+
+            return context;
         }
 
     }
