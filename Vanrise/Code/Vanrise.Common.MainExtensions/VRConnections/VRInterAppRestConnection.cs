@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using Vanrise.Entities;
+using Vanrise.Security.Entities;
+
+namespace Vanrise.Common.MainExtensions.VRConnections
+{
+    public class VRInterAppRestConnection : VRConnectionSettings
+    {
+        public override Guid ConfigId { get { return new Guid("5CD2AAC3-1C74-401F-8010-8B9B5FD9C011"); } }
+        
+        public string BaseURL { get; set; }
+
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+
+        public Q Post<T, Q>(string actionName, T request)
+        {
+            CredentialsInput credentialsInput = new CredentialsInput() { Email = this.Username, Password = this.Password };
+            var result = Vanrise.Common.VRWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(BaseURL,
+                 "/api/VR_Sec/Security/Authenticate", credentialsInput, null);
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add(result.AuthenticationObject.TokenName, result.AuthenticationObject.Token);
+
+            return Vanrise.Common.VRWebAPIClient.Post<T, Q>(BaseURL, actionName, request, headers);
+        }
+    }
+
+    public class VRInterAppRestConnectionFilter : IVRConnectionFilter
+    {
+        public Guid ConfigId { get; set; }
+        public bool IsMatched(VRConnection vrConnection)
+        {
+            if (vrConnection == null)
+                throw new NullReferenceException("connection");
+
+            if (vrConnection.Settings == null)
+                throw new NullReferenceException("vrConnection.Settings");
+
+            if (vrConnection.Settings.ConfigId != ConfigId)
+                return false;
+
+            return true;
+        }
+    }
+}

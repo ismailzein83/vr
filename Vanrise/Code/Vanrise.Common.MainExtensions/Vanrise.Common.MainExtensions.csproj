@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VRConnections\VRInterAppRestConnection.cs" />
     <Compile Include="ExchangeRateUpdateService\ExchangeRateAction.cs" />
     <Compile Include="ExchangeRateUpdateService\ExchangeRateActionActionArgument.cs" />
     <Compile Include="ExchangeRateUpdateService\XigniteCurrency.cs" />
@@ -96,6 +97,10 @@
     <ProjectReference Include="..\Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj">
       <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>
       <Name>Vanrise.Runtime.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

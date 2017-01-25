@@ -64,6 +64,8 @@
     <Compile Include="ComponentType\VRComponentTypeQuery.cs" />
     <Compile Include="ComponentType\VRComponentTypeSettings.cs" />
     <Compile Include="Country\CountryFilter.cs" />
+    <Compile Include="VRConnection\VRConnectionInfo.cs" />
+    <Compile Include="VRConnection\VRConnection.cs" />
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="DateTimeType.cs" />
     <Compile Include="GridColumnSettings.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="UserActionAudit\UserActionAuditDetail.cs" />
     <Compile Include="UserActionAudit\UserActionAuditQuery.cs" />
     <Compile Include="VRButtonType.cs" />
+    <Compile Include="VRConnection\VRConnectionFilter.cs" />
     <Compile Include="VRDocument\VRDocumentCategoryDefinition.cs" />
     <Compile Include="VRDocument\VRDocumentItemDefinition.cs" />
     <Compile Include="VRDocument\VRDocumentSetting.cs" />

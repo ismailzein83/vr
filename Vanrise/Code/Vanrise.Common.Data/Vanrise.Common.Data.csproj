@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IVRConnectionDataManager.cs" />
     <Compile Include="CommonDataManagerFactory.cs" />
     <Compile Include="IBigDataServiceDataManager.cs" />
     <Compile Include="IStatusDefinitionDataManager.cs" />

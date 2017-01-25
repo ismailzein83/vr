@@ -71,6 +71,7 @@
     <Compile Include="CityManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="VRConnectionManager.cs" />
     <Compile Include="DataGrouping\DataGroupingAnalysisInfoManager.cs" />
     <Compile Include="DataGrouping\Distribution\DataGroupingDistributor.cs" />
     <Compile Include="DataGrouping\Distribution\DataGroupingDistributorRuntimeService.cs" />
