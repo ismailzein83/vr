@@ -13,9 +13,10 @@
 		<vr-columns width="normal">
 			<vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedRP" onselectionchanged="ctrl.onSelectionChanged"></vr-whs-be-routingproduct-selector>
 		</vr-columns>
-
-		<vr-columns width="normal" ng-show="ctrl.selectedRP != undefined">
-			<vr-switch label="Follow Rate Date" value="ctrl.followRateDate" vr-disabled="ctrl.isSwitchDisabled()"></vr-switch>
+		<vr-columns width="normal" ng-if="ctrl.isSwitchVisible()">
+			<span ng-init="ctrl.followRateDate = true">
+				<vr-switch on-ready="ctrl.onSwitchReady" label="Follow Rate Date" value="ctrl.followRateDate"></vr-switch>
+			</span>
 		</vr-columns>
 	</span>
 </vr-row>

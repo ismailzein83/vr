@@ -57,8 +57,18 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 				zoneItem.refreshZoneItem(zoneItem);
 			};
 
-			ctrl.isSwitchDisabled = function () {
-				return (zoneItem != undefined && zoneItem.NewRate == null);
+			ctrl.onSwitchReady = function (api) {
+				console.log('onSwitchReady');
+			};
+
+			ctrl.isSwitchVisible = function () {
+				if (zoneItem != undefined && zoneItem.NewRate != null && selectorAPI.getSelectedIds() != undefined) {
+					return true;
+				}
+				else {
+					ctrl.followRateDate = false;
+					return false;
+				}
 			};
 
 			UtilsService.waitMultiplePromises([currentServiceViewerReadyDeferred.promise, selectorReadyDeferred.promise]).then(function () {
