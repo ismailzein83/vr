@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountDefinitionPackageFilter : IPackageFilter
+    public class AccountAssignmentPackageFilter : IPackageFilter
     {
+        static AccountBEManager _accountBEManager = new AccountBEManager();
+
         public Guid AccountBEDefinitionId { get; set; }
         public long AssignedToAccountId { get; set; }
 
         public bool IsMatched(IPackageFilterContext context)
         {
             IAccountPayment accountPayment;
-            AccountBEManager accountBEManager = new AccountBEManager();
 
-            accountBEManager.HasAccountPayment(this.AccountBEDefinitionId, this.AssignedToAccountId, true, out accountPayment);
+            _accountBEManager.HasAccountPayment(this.AccountBEDefinitionId, this.AssignedToAccountId, true, out accountPayment);
             if (accountPayment == null)
                 throw new NullReferenceException(string.Format("accountPayment for accountId {0}", this.AssignedToAccountId));
             IEnumerable<int> packageIds = new ProductManager().GetProductPackageIds(accountPayment.ProductId);

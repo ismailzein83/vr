@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class ProductQuery
     {
         public string Name { get; set; }
+
+        public int? ProductFamilyId { get; set; }
     }
 }

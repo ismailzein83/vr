@@ -11,6 +11,7 @@
         var productId;
         var productEntity;
         var productEditorRuntime
+        var productFamilyId;
         var productFamilyInfo;
 
         var currencySelectorAPI;
@@ -30,7 +31,6 @@
         //var packageItemsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
 
-
         loadParameters();
         defineScope();
         load();
@@ -38,8 +38,11 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
+            console.log(parameters);
+
             if (parameters != undefined) {
                 productId = parameters.productId;
+                productFamilyId = parameters.productFamilyId;
             }
 
             isEditMode = (productId != undefined);
@@ -76,7 +79,7 @@
             $scope.scopeModel.onProductFamilySelectionChanged = function (selectedItem) {
 
                 if (selectedItem != undefined) {
-                    $scope.scopeModel.isProductFamilySelectorDisabled = isEditMode ? true : false;
+                    $scope.scopeModel.isProductFamilySelectorDisabled = productFamilyId != undefined ? true : isEditMode ? true : false;
                     $scope.scopeModel.showRecurringChargeRulesTab = true;
                     $scope.scopeModel.showPackagesTab = true;
 
@@ -231,7 +234,7 @@
             return currencySelectorLoadDeferred.promise;
         }
         function loadProductFamilySelector() {
-            if (productEntity != undefined)
+            if (productEntity != undefined || productFamilyId != undefined)
                 productFamilySelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
             var productFamilySelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -239,6 +242,9 @@
             productFamilySelectorReadyDeferred.promise.then(function () {
 
                 var productFamilyPayload = {};
+                if (productFamilyId != undefined) {
+                    productFamilyPayload.selectedIds = productFamilyId;
+                }
                 if (productEntity != undefined && productEntity.Settings != undefined) {
                     productFamilyPayload.selectedIds = productEntity.Settings.ProductFamilyId;
                 }

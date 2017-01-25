@@ -6,7 +6,11 @@
 
     function ProductService(VRModalService) {
 
-        function addProduct(onProductAdded) {
+        function addProduct(onProductAdded, productFamilyId) {
+
+            var parameters = {
+                productFamilyId: productFamilyId
+            };
 
             var settings = {};
 
@@ -14,12 +18,13 @@
                 modalScope.onProductAdded = onProductAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Product/ProductEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Product/ProductEditor.html', parameters, settings);
         };
-        function editProduct(productId, onProductUpdated) {
+        function editProduct(productId, onProductUpdated, productFamilyId) {
 
             var parameters = {
-                productId: productId
+                productId: productId,
+                productFamilyId: productFamilyId
             };
 
             var settings = {};

@@ -16,10 +16,13 @@ namespace Retail.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<ProductDetail> GetFilteredProducts(Vanrise.Entities.DataRetrievalInput<ProductQuery> input)
         {
             var allProducts = GetCachedProducts();
-            Func<Product, bool> filterExpression =
-                (x) =>
+            Func<Product, bool> filterExpression = (product) =>
                 {
-                    if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    if (input.Query != null && input.Query.Name != null && !product.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                        return false;
+
+                    if (input.Query != null && input.Query.ProductFamilyId.HasValue && product.Settings != null 
+                        && input.Query.ProductFamilyId.Value != product.Settings.ProductFamilyId)
                         return false;
 
                     return true;
@@ -36,25 +39,28 @@ namespace Retail.BusinessEntity.Business
 
         public ProductEditorRuntime GetProductEditorRuntime(int productId)
         {
-            var packageNameByIds = new Dictionary<int,string>();
-            var product = GetProduct(productId);
+            //var packageNameByIds = new Dictionary<int,string>();
+            //var product = GetProduct(productId);
 
-            PackageManager packageManager = new PackageManager();
+            //PackageManager packageManager = new PackageManager();
 
-            string packageName;
-            if (product != null && product.Settings != null && product.Settings.Packages != null)
-            {
-                foreach (var packageItem in product.Settings.Packages.Values)
-                {
-                    if (!packageNameByIds.TryGetValue(packageItem.PackageId, out packageName))
-                        packageNameByIds.Add(packageItem.PackageId, packageManager.GetPackageName(packageItem.PackageId));
-                }
-            }
+            //string packageName;
+            //if (product != null && product.Settings != null && product.Settings.Packages != null)
+            //{
+            //    foreach (var packageItem in product.Settings.Packages.Values)
+            //    {
+            //        if (!packageNameByIds.TryGetValue(packageItem.PackageId, out packageName))
+            //            packageNameByIds.Add(packageItem.PackageId, packageManager.GetPackageName(packageItem.PackageId));
+            //    }
+            //}
+
+            //ProductEditorRuntime editorRuntime = new ProductEditorRuntime();
+            //editorRuntime.PackageNameByIds = packageNameByIds;
+            //editorRuntime.Entity = product;
 
             ProductEditorRuntime editorRuntime = new ProductEditorRuntime();
-            editorRuntime.PackageNameByIds = packageNameByIds;
-            editorRuntime.Entity = product;
-
+            editorRuntime.Entity = GetProduct(productId);
+ 
             return editorRuntime;
         }
 
@@ -126,11 +132,12 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<int> GetProductPackageIds(int productId)
         {
             Product product = new ProductManager().GetProduct(productId);
+            ProductFamily ProductFamily = new ProductFamilyManager().GetProductFamily(product.Settings.ProductFamilyId);
 
-            if (product == null || product.Settings == null || product.Settings.Packages == null || product.Settings.Packages.Count == 0)
+            if (ProductFamily == null || ProductFamily.Settings == null || ProductFamily.Settings.Packages == null || ProductFamily.Settings.Packages.Count == 0)
                 return null;
 
-            return product.Settings.Packages.Values.Select(itm => itm.PackageId);
+            return ProductFamily.Settings.Packages.Values.Select(itm => itm.PackageId);
         }
 
         #endregion

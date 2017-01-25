@@ -157,7 +157,7 @@
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\AccountBEDefinitionViewFilter.cs" />
     <Compile Include="Filters\IDIDFilter\AccountDIDFilter.cs" />
     <Compile Include="Filters\IDIDFilter\DIDFilterContext.cs" />
-    <Compile Include="Filters\IPackageFilter\AccountDefinitionPackageFilter.cs" />
+    <Compile Include="Filters\IPackageFilter\AccountAssignmentPackageFilter.cs" />
     <Compile Include="Filters\IPackageFilter\PackageFilterContext.cs" />
     <Compile Include="Filters\IPackageFilter\ProductDefinitionPackageFilter.cs" />
     <Compile Include="Filters\IProductFilter\AccountDefinitionProductFilter.cs" />

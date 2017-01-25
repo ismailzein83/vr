@@ -20,6 +20,8 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
         function ProductGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var productFamilyId;
+
             var gridAPI;
 
             function initializeController() {
@@ -46,8 +48,21 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
             function defineAPI() {
                 var api = {};
 
-                api.load = function (query) {
-                    return gridAPI.retrieveData(query);
+                api.load = function (payload) {
+
+                    if (payload != undefined) {
+                        productFamilyId = payload.productFamilyId;
+                    }
+
+                    function buildGridQuery(payload) {
+                        var query = {
+                            ProductFamilyId: productFamilyId
+                        };
+
+                        return query;
+                    }
+
+                    return gridAPI.retrieveData(buildGridQuery(payload));
                 };
 
                 api.onProductAdded = function (addedProduct) {
@@ -74,7 +89,7 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
                     gridAPI.itemUpdated(updatedProduct);
                 };
 
-                Retail_BE_ProductService.editProduct(productItem.Entity.ProductId, onProductUpdated);
+                Retail_BE_ProductService.editProduct(productItem.Entity.ProductId, onProductUpdated, productFamilyId);
             }
             //function hasEditProductPermission() {
             //    return Retail_BE_ProductAPIService.HasUpdateProductPermission()
