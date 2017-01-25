@@ -35,20 +35,21 @@ namespace TOne.WhS.Sales.Business
 			if (zoneItems == null)
 				return;
 
-            List<object> customObjects = new List<object>();
+			List<object> customObjects = new List<object>();
 
-            foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
-                customObjects.Add(null);
+			foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
+				customObjects.Add(null);
 
-            IEnumerable<long> zoneIds = zoneItems.Select(x => x.ZoneId);
+			IEnumerable<long> zoneIds = zoneItems.Select(x => x.ZoneId);
 
 			foreach (ZoneItem zoneItem in zoneItems)
 			{
 				RPRouteDetail route = _routes.FindRecord(x => x.SaleZoneId == zoneItem.ZoneId);
 				zoneItem.RPRouteDetail = route;
-				if (route != null && route.RouteOptionsDetails != null)
+				if (route != null && route.RouteOptionsDetails != null && route.RouteOptionsDetails.Count() > 0)
 				{
-                    SetCosts(zoneIds, zoneItem, route, customObjects);
+					SetCosts(zoneIds, zoneItem, route, customObjects);
+					SetZoneMarginProperties(zoneItem);
 				}
 				else if (_costCalculationMethods != null)
 				{
@@ -60,20 +61,31 @@ namespace TOne.WhS.Sales.Business
 			}
 		}
 
-        void SetCosts(IEnumerable<long> zoneIds, ZoneItem zoneItem, RPRouteDetail route, List<object> customObjects)
+		void SetCosts(IEnumerable<long> zoneIds, ZoneItem zoneItem, RPRouteDetail route, List<object> customObjects)
 		{
 			if (_costCalculationMethods == null)
 				return;
 
 			zoneItem.Costs = new List<decimal?>();
 
-            for (int i = 0; i < _costCalculationMethods.Count; i++)
-            {
-                var context = new CostCalculationMethodContext() { ZoneIds = zoneIds, Route = route, CustomObject = customObjects[i] };
-                _costCalculationMethods[i].CalculateCost(context);
-                customObjects[i] = context.CustomObject;
-                zoneItem.Costs.Add(context.Cost);
-            }
+			for (int i = 0; i < _costCalculationMethods.Count; i++)
+			{
+				var context = new CostCalculationMethodContext() { ZoneIds = zoneIds, Route = route, CustomObject = customObjects[i] };
+				_costCalculationMethods[i].CalculateCost(context);
+				customObjects[i] = context.CustomObject;
+				zoneItem.Costs.Add(context.Cost);
+			}
+		}
+
+		private void SetZoneMarginProperties(ZoneItem zoneItem)
+		{
+			if (zoneItem.CurrentRate.HasValue)
+			{
+				decimal? firstSupplierRate = zoneItem.RPRouteDetail.RouteOptionsDetails.ElementAt(0).ConvertedSupplierRate;
+				decimal margin = zoneItem.CurrentRate.Value - firstSupplierRate.Value;
+				zoneItem.Margin = margin;
+				zoneItem.MarginPercentage = (margin / firstSupplierRate.Value) * 100;
+			}
 		}
 
 		void SetCalculatedRate(ZoneItem zoneItem)

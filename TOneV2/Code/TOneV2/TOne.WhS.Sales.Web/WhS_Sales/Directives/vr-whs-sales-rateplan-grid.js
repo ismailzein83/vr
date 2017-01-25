@@ -458,12 +458,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 				saveChangesPromise.then(function () {
 					WhS_Sales_RatePlanAPIService.GetZoneItem(getZoneItemInput()).then(function (response) {
+
 						getZoneItemDeferred.resolve();
 
 						var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, response.ZoneId, "ZoneId");
 
 						gridZoneItem.EffectiveRoutingProductId = response.EffectiveRoutingProductId;
 						gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
+
+						gridZoneItem.Margin = response.Margin;
+						gridZoneItem.MarginPercentage = response.MarginPercentage;
 						gridZoneItem.CalculatedRate = response.CalculatedRate;
 
 						gridZoneItem.RPRouteDetail = response.RPRouteDetail;

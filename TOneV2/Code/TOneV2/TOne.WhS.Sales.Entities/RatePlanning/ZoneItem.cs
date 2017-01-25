@@ -103,6 +103,11 @@ namespace TOne.WhS.Sales.Entities
 		public IEnumerable<ZoneService> EffectiveServices { get; set; }
 		#endregion
 
+		#region Margin
+		public decimal? Margin { get; set; }
+		public decimal? MarginPercentage { get; set; }
+		#endregion
+
 		#region IBaseRates Implementation
 
 		public void SetNormalRateBED(DateTime beginEffectiveDate)
