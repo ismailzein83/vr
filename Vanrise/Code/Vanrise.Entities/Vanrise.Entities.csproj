@@ -64,6 +64,7 @@
     <Compile Include="ComponentType\VRComponentTypeQuery.cs" />
     <Compile Include="ComponentType\VRComponentTypeSettings.cs" />
     <Compile Include="Country\CountryFilter.cs" />
+    <Compile Include="UISettingData.cs" />
     <Compile Include="VRConnection\VRConnectionInfo.cs" />
     <Compile Include="VRConnection\VRConnection.cs" />
     <Compile Include="DateTimeRange.cs" />
