@@ -17,8 +17,10 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('EC99F6DB-2617-4AF4-8A20-AED83B404FCA','Invoice To VR Object Convertor','Invoice To VR Object Convertor','VR_BEBridge_BEConvertor','{"Editor":"vr-invoice-convertor-editor"}'),
-('2241197C-B5B0-48E5-987A-B3C1949760CB','Order Details','Order Details', 'Retail_BE_AccountPartDefinition', '{"DefinitionEditor":"retail-zajil-accounttype-part-definition-orderdetails", "RuntimeEditor":"retail-zajil-accounttype-part-runtime-orderdetails"}')
+('0897F25A-7BF4-4A4F-A97F-0EE33993633C','Zajil Payment Convertor','Zajil Payment Convertor','VR_BEBridge_BEConvertor'					,'{"Editor":"retail-zajil-payment-convertor-editor"}'),
+('26DC208A-7954-4258-A8E5-48497C02EF19','Zajil Account Convertor','Zajil Account Convertor','VR_BEBridge_BEConvertor'					,'{"Editor":"retail-zajil-account-convertor-editor"}'),
+
+('2241197C-B5B0-48E5-987A-B3C1949760CB','Order Details','Order Details', 'Retail_BE_AccountPartDefinition'								,'{"DefinitionEditor":"retail-zajil-accounttype-part-definition-orderdetails", "RuntimeEditor":"retail-zajil-accounttype-part-runtime-orderdetails"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

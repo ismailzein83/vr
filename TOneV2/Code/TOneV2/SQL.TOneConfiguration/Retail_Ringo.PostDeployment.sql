@@ -45,7 +45,6 @@ as (select * from (values
 ('26EF5E51-C9C9-4D87-97B8-4506F42892AC','Pos Convertor','Pos Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-ringo-pos-convertor-editor"}'),
 ('44EBA251-6032-4F0F-A254-4CCF0ED62DB2','Distributor Convertor','Distributor Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-ringo-distributor-convertor-editor"}'),
 ('D64C95FC-5E4B-46B7-95CD-77082F91B07F','Other Info','Other Info','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-ringo-accountpart-definition-otherinfo","RuntimeEditor":"retail-be-accounttype-part-runtime-otherinfo"}'),
-('CD147065-88F3-4337-A625-8578708C4A53','Account Synchronizer','Account Synchronizer','VR_BEBridge_BESynchronizer','{"Editor":"retail-ringo-account-synchronizer-editor"}'),
 ('077ECA6F-3CB8-42C3-95F4-9C563EB2BDCB','Agent Convertor','Agent Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-ringo-agent-convertor-editor"}'),
 ('80B1AFC2-3222-41D5-84B6-7004838BFBA9','Dealers','Dealers','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-ringo-accountpart-definition-entitiesinfo", "RuntimeEditor":"retail-be-accounttype-part-runtime-entitiesinfo"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
