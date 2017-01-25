@@ -140,13 +140,15 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             InvoiceSettings setting = GetInvoiceSettings();
             List<CustomerInvoiceSettingInfo> lstCustomerInvoiceSettingInfo = new List<CustomerInvoiceSettingInfo>();
-            foreach (var customerInvoiceSetting in setting.CustomerInvoiceSettings)
+            if (setting.CustomerInvoiceSettings != null)
             {
-                CustomerInvoiceSettingInfo customerInvoiceSettingInfo = new CustomerInvoiceSettingInfo();
-                customerInvoiceSettingInfo = CustomerInvoiceSettingInfoMapper(customerInvoiceSetting);
-                lstCustomerInvoiceSettingInfo.Add(customerInvoiceSettingInfo);
+                foreach (var customerInvoiceSetting in setting.CustomerInvoiceSettings)
+                {
+                    CustomerInvoiceSettingInfo customerInvoiceSettingInfo = new CustomerInvoiceSettingInfo();
+                    customerInvoiceSettingInfo = CustomerInvoiceSettingInfoMapper(customerInvoiceSetting);
+                    lstCustomerInvoiceSettingInfo.Add(customerInvoiceSettingInfo);
+                }
             }
-
             return lstCustomerInvoiceSettingInfo;
         }
 
