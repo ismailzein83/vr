@@ -52,6 +52,7 @@
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IInvoiceTypeManager.cs" />
+    <Compile Include="BusinessManagers\IPartnerInvoiceSettingManager.cs" />
     <Compile Include="DataSourceBankDetails.cs" />
     <Compile Include="GeneratedInvoice\GenerateInvoiceInput.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoice.cs" />
@@ -85,6 +86,10 @@
     <Compile Include="InvoiceType\Configs\InvoiceGridActionSettingsConfig.cs" />
     <Compile Include="InvoiceType\InvoiceFileConverter.cs" />
     <Compile Include="InvoiceType\InvoicePartnerSettings.cs" />
+    <Compile Include="InvoiceType\InvoiceSettingParts\AutomaticInvoiceSettingPart.cs" />
+    <Compile Include="InvoiceType\InvoiceSettingParts\BillingPeriodInvoiceSettingPart.cs" />
+    <Compile Include="InvoiceType\InvoiceSettingParts\DuePeriodInvoiceSettingPart.cs" />
+    <Compile Include="InvoiceType\InvoiceSettingParts\SerialNumberPatternInvoiceSettingPart.cs" />
     <Compile Include="InvoiceType\InvoiceSubSectionGridColumn.cs" />
     <Compile Include="InvoiceType\InvoiceTypeDetail.cs" />
     <Compile Include="InvoiceType\InvoiceGeneratorActions\InvoiceGeneratorAction.cs" />

@@ -11,7 +11,7 @@ using Vanrise.Common;
 using Vanrise.Invoice.Business.Context;
 namespace Vanrise.Invoice.Business
 {
-    public class PartnerInvoiceSettingManager
+    public class PartnerInvoiceSettingManager : IPartnerInvoiceSettingManager
     {
         #region Public Methods
         public PartnerInvoiceSetting GetPartnerInvoiceSetting(Guid partnerInvoiceSettingId)
@@ -76,7 +76,13 @@ namespace Vanrise.Invoice.Business
         {
             return GetCachedPartnerInvoiceSettings().Values;
         }
-
+        public PartnerInvoiceSetting GetPartnerInvoiceSettingByPartnerId(string partnerId)
+        {
+            var partnerInvoiceSettings = GetPartnerInvoiceSettings();
+            if (partnerInvoiceSettings == null)
+                return null;
+            return partnerInvoiceSettings.FirstOrDefault(x => x.PartnerId == partnerId);
+        }
         public bool CheckIfPartnerAssignedToInvoiceSetting(string partnerId)
         {
             var partnerInvoiceSettings = GetPartnerInvoiceSettings();

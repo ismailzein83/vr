@@ -8,6 +8,8 @@ namespace Vanrise.Invoice.Entities
 {
     public interface IInvoiceSettingManager:IBusinessManager
     {
+        InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId);
         InvoiceSetting GetDefaultInvoiceSetting(Guid invoiceTypeId);
+        T GetInvoiceSettingDetailByType<T>(Guid invoiceSettingId) where T : InvoiceSettingPart;
     }
 }

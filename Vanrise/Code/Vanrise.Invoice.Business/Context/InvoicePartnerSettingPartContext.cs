@@ -7,8 +7,11 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Business.Context
 {
-    public class ExtendedSettingsBillingPeriodContext : IExtendedSettingsBillingPeriodContext
+    public class InvoicePartnerSettingPartContext : IInvoicePartnerSettingPartContext
     {
+        public Guid InvoiceTypeId { get; set; }
+        public Guid InvoiceSettingId { get; set; }
         public string PartnerId { get; set; }
+      
     }
 }

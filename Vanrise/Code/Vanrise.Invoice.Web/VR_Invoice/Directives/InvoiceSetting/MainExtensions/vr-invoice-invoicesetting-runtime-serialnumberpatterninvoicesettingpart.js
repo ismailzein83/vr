@@ -69,7 +69,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeSerialnumberpatterninvoicesettingpa
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.InvoiceSettingParts.SerialNumberPatternInvoiceSettingPart,Vanrise.Invoice.MainExtensions",
+                        $type: "Vanrise.Invoice.Entities.SerialNumberPatternInvoiceSettingPart,Vanrise.Invoice.Entities",
                         SerialNumberPattern: serialNumberPatternAPI.getData()
                     };
                 };

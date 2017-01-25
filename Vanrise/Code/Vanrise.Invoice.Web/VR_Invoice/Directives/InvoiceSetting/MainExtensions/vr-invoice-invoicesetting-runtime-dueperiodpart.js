@@ -52,7 +52,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeDueperiodpart', ['UtilsService', 'V
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.InvoiceSettingParts.DuePeriodInvoiceSettingPart,Vanrise.Invoice.MainExtensions",
+                        $type: "Vanrise.Invoice.Entities.DuePeriodInvoiceSettingPart,Vanrise.Invoice.Entities",
                         DuePeriod: $scope.scopeModel.duePeriod
                     };
                 };

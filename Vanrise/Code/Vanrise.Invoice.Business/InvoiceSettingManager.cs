@@ -83,6 +83,7 @@ namespace Vanrise.Invoice.Business
                 return invoiceSetting.Name;
             return null;
         }
+     
         public IEnumerable<InvoiceSettingInfo> GetInvoiceSettingsInfo(InvoiceSettingFilter filter)
         {
             var invoiceSettings = GetCachedInvoiceSettings();

@@ -210,11 +210,7 @@ namespace Vanrise.Invoice.Business
         {
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
-            ExtendedSettingsBillingPeriodContext extendedSettingsBillingPeriodContext = new ExtendedSettingsBillingPeriodContext
-            {
-                PartnerId = partnerId
-            };
-            var billingperiod = invoiceType.Settings.ExtendedSettings.GetBillingPeriod(extendedSettingsBillingPeriodContext);
+            var billingperiod = new PartnerManager().GetPartnerBillingPeriod(invoiceTypeId, partnerId);
             if (billingperiod == null)
                 return null;
             BillingInterval billingInterval = new Entities.BillingInterval();

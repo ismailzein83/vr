@@ -69,7 +69,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeBillingperiodinvoicesettingpart', [
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.InvoiceSettingParts.BillingPeriodInvoiceSettingPart,Vanrise.Invoice.MainExtensions",
+                        $type: "Vanrise.Invoice.Entities.BillingPeriodInvoiceSettingPart,Vanrise.Invoice.Entities",
                         FollowBillingPeriod: $scope.scopeModel.followBillingPeriod,
                         BillingPeriod: billingPeriodAPI.getData(),
                     };

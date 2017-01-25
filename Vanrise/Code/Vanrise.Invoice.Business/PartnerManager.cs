@@ -47,32 +47,38 @@ namespace Vanrise.Invoice.Business
         }
         public int GetPartnerDuePeriod(Guid invoiceTypeId, string partnerId)
         {
-
-            var partnerSettings = GetPartnerDetails(invoiceTypeId);
-
-            PartnerDuePeriodContext context = new PartnerDuePeriodContext
+            var invoicePartnerManager = GetPartnerDetails(invoiceTypeId);
+            var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+            InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
             {
+                InvoiceTypeId = invoiceTypeId,
                 PartnerId = partnerId,
+                InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
             };
-            if (partnerSettings == null)
-                throw new NullReferenceException("PartnerManagerFQTN");
-            return partnerSettings.GetPartnerDuePeriod(context);
+            var duePeriod = invoicePartnerManager.GetInvoicePartnerSettingPart<DuePeriodInvoiceSettingPart>(invoicePartnerSettingPartContext);
+            if (duePeriod != null)
+                return duePeriod.DuePeriod;
+            return default(int);
         }
         public string GetPartnerSerialNumberPattern(Guid invoiceTypeId, string partnerId)
         {
-            var partnerSettings = GetPartnerDetails(invoiceTypeId);
-            PartnerSerialNumberPatternContext context = new PartnerSerialNumberPatternContext
+            var invoicePartnerManager = GetPartnerDetails(invoiceTypeId);
+            var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+            InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
             {
+                InvoiceTypeId = invoiceTypeId,
                 PartnerId = partnerId,
+                InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
             };
-            if (partnerSettings == null)
-                throw new NullReferenceException("partnerSettings");
-            return partnerSettings.GetPartnerSerialNumberPattern(context);
+            var serialNumberPartern = invoicePartnerManager.GetInvoicePartnerSettingPart<SerialNumberPatternInvoiceSettingPart>(invoicePartnerSettingPartContext);
+            if (serialNumberPartern != null)
+                return serialNumberPartern.SerialNumberPattern;
+            return null;
         }
         public InvoicePartnerSettings GetInvoicePartnerSetting(Guid invoiceTypeId, string partnerId)
         {
             var partnerSettings = GetPartnerDetails(invoiceTypeId);
-            InvoicePartnerSettingsContext context = new InvoicePartnerSettingsContext
+            Context.InvoicePartnerSettingsContext context = new Context.InvoicePartnerSettingsContext
             {
                 PartnerId = partnerId,
                 InvoiceTypeId = invoiceTypeId
@@ -83,14 +89,33 @@ namespace Vanrise.Invoice.Business
         }
         public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
         {
-            var partnerSettings = GetPartnerDetails(invoiceTypeId);
-            CheckInvoiceFollowBillingPeriodContext context = new CheckInvoiceFollowBillingPeriodContext
+            var invoicePartnerManager = GetPartnerDetails(invoiceTypeId);
+            var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+            InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
             {
+                InvoiceTypeId = invoiceTypeId,
                 PartnerId = partnerId,
+                InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
             };
-            if (partnerSettings == null)
-                throw new NullReferenceException("partnerSettings");
-            return partnerSettings.CheckInvoiceFollowBillingPeriod(context);
+            var billingPeriod = invoicePartnerManager.GetInvoicePartnerSettingPart<BillingPeriodInvoiceSettingPart>(invoicePartnerSettingPartContext);
+            if (billingPeriod != null)
+                return billingPeriod.FollowBillingPeriod;
+            return false;
+        }
+        public BillingPeriod GetPartnerBillingPeriod(Guid invoiceTypeId, string partnerId)
+        {
+            var invoicePartnerManager = GetPartnerDetails(invoiceTypeId);
+            var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+            InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
+            {
+                InvoiceTypeId = invoiceTypeId,
+                PartnerId = partnerId,
+                InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
+            };
+            var billingPeriod = invoicePartnerManager.GetInvoicePartnerSettingPart<BillingPeriodInvoiceSettingPart>(invoicePartnerSettingPartContext);
+            if (billingPeriod != null)
+                return billingPeriod.BillingPeriod;
+            return null;
         }
     }
 }

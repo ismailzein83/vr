@@ -52,7 +52,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoicesettingpart', ['Uti
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.InvoiceSettingParts.AutomaticInvoiceSettingPart,Vanrise.Invoice.MainExtensions",
+                        $type: "Vanrise.Invoice.Entities.AutomaticInvoiceSettingPart,Vanrise.Invoice.Entities",
                         IsEnabled: $scope.scopeModel.enableAutomaticInvoice
                     };
                 };

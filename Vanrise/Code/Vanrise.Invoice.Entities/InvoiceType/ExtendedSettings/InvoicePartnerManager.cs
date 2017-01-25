@@ -13,14 +13,32 @@ namespace Vanrise.Invoice.Entities
         public abstract string GetPartnerName(IPartnerNameManagerContext context);
         public abstract dynamic GetPartnerInfo(IPartnerManagerInfoContext context);
         public abstract dynamic GetActualPartnerId(IActualPartnerContext context);
-        public abstract int GetPartnerDuePeriod(IPartnerDuePeriodContext context);
-        public abstract string GetPartnerSerialNumberPattern(IPartnerSerialNumberPatternContext context);
-        public abstract bool CheckInvoiceFollowBillingPeriod(ICheckInvoiceFollowBillingPeriodContext context);
         public virtual InvoicePartnerSettings GetInvoicePartnerSettings(IInvoicePartnerSettingsContext context)
         {
+            IPartnerInvoiceSettingManager partnerInvoiceSettingManager = BusinessManagerFactory.GetManager<IPartnerInvoiceSettingManager>();
             IInvoiceSettingManager manager = BusinessManagerFactory.GetManager<IInvoiceSettingManager>();
-            var invoiceSetting = manager.GetDefaultInvoiceSetting(context.InvoiceTypeId);
+            var partnerInvoiceManager = partnerInvoiceSettingManager.GetPartnerInvoiceSettingByPartnerId(context.PartnerId);
+            InvoiceSetting invoiceSetting = null;
+            if (partnerInvoiceManager != null)
+            {
+                invoiceSetting = manager.GetInvoiceSetting(partnerInvoiceManager.InvoiceSettingID);
+            }
+            else
+            {
+                invoiceSetting = manager.GetDefaultInvoiceSetting(context.InvoiceTypeId);
+            }
             return new InvoicePartnerSettings { InvoiceSetting = invoiceSetting };
+        }
+        public virtual T GetInvoicePartnerSettingPart<T>(IInvoicePartnerSettingPartContext context) where T : InvoiceSettingPart
+        {
+            InvoicePartnerSettingsContext invoicePartnerSettingsContext = new InvoicePartnerSettingsContext
+            {
+                InvoiceTypeId = context.InvoiceTypeId,
+                PartnerId = context.PartnerId
+            };
+            var invoiceSetting = GetInvoicePartnerSettings(invoicePartnerSettingsContext);
+            IInvoiceSettingManager manager = BusinessManagerFactory.GetManager<IInvoiceSettingManager>();
+            return manager.GetInvoiceSettingDetailByType<T>(invoiceSetting.InvoiceSetting.InvoiceSettingId);
         }
     }
     public interface IBasePartnerManagerContext
@@ -31,6 +49,17 @@ namespace Vanrise.Invoice.Entities
     {
         Guid InvoiceTypeId { get;}
     }
+    public class InvoicePartnerSettingsContext:IInvoicePartnerSettingsContext
+    {
+        public string PartnerId { get; set; }
+        public Guid InvoiceTypeId { get; set; }
+    }
+    public interface IInvoicePartnerSettingPartContext : IBasePartnerManagerContext
+    {
+        Guid InvoiceTypeId { get; }
+        Guid InvoiceSettingId { get; set; }
+    }
+
     public interface IPartnerManagerInfoContext : IBasePartnerManagerContext
     {
         string InfoType { get; }
@@ -39,16 +68,8 @@ namespace Vanrise.Invoice.Entities
     public interface IPartnerNameManagerContext : IBasePartnerManagerContext
     {
     }
-    public interface IPartnerDuePeriodContext : IBasePartnerManagerContext
-    {
-    }
     public interface IActualPartnerContext : IBasePartnerManagerContext
     {
     }
-    public interface IPartnerSerialNumberPatternContext : IBasePartnerManagerContext
-    {
-    }
-    public interface ICheckInvoiceFollowBillingPeriodContext : IBasePartnerManagerContext
-    {
-    }
+
 }

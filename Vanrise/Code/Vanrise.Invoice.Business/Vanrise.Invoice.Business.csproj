@@ -45,8 +45,6 @@
   <ItemGroup>
     <Compile Include="BillingPeriodInfoManager.cs" />
     <Compile Include="Context\BillingPeriodContext.cs" />
-    <Compile Include="Context\CheckInvoiceFollowBillingPeriodContext.cs" />
-    <Compile Include="Context\ExtendedSettingsBillingPeriodContext.cs" />
     <Compile Include="Context\ExtendedSettingsPartnerIdsContext.cs" />
     <Compile Include="Context\GetMeasureValueContext.cs" />
     <Compile Include="Context\GroupingInvoiceItemQueryContext.cs" />
@@ -54,13 +52,13 @@
     <Compile Include="Context\InvoiceGenerationContext.cs" />
     <Compile Include="Context\InvoiceItemConcatenatedPartContext.cs" />
     <Compile Include="Context\InvoicePartnerFilterContext.cs" />
+    <Compile Include="Context\InvoicePartnerSettingPartContext.cs" />
     <Compile Include="Context\InvoicePartnerSettingsContext.cs" />
     <Compile Include="Context\InvoiceRDLCFileConverterContext.cs" />
     <Compile Include="Context\InvoiceSerialNumberConcatenatedPartContext.cs" />
     <Compile Include="Context\ItemGroupingFilterFieldMatchContext.cs" />
     <Compile Include="Context\ItemsFilterContext.cs" />
     <Compile Include="Context\PartnerManagerContext.cs" />
-    <Compile Include="Context\PartnerSerialNumberPatternContext.cs" />
     <Compile Include="Context\PhysicalInvoiceActionContext.cs" />
     <Compile Include="Context\PreviewInvoiceActionContext.cs" />
     <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />

@@ -11,10 +11,6 @@ namespace Vanrise.Invoice.Business.Context
     {
         public string PartnerId { get; set; }
     }
-    public class PartnerDuePeriodContext : IPartnerDuePeriodContext
-    {
-        public string PartnerId { get; set; }
-    }
     public class ActualPartnerContext : IActualPartnerContext
     {
         public string PartnerId { get; set; }
