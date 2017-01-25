@@ -27,7 +27,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         VatID = 11,
         CustomerVatID = 12
     }
-    public class CarrierPartnerSettings : InvoicePartnerDetails
+    public class CarrierPartnerSettings : InvoicePartnerManager
     {
         public override string PartnerFilterSelector
         {

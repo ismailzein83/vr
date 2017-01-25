@@ -25,7 +25,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return new CustomerInvoiceGenerator();
         }
 
-        public override InvoicePartnerDetails GetPartnerDetails()
+        public override InvoicePartnerManager GetPartnerManager()
         {
             return new CarrierPartnerSettings();
         }
