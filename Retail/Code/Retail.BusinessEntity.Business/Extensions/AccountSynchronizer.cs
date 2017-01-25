@@ -23,6 +23,8 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        public List<AccountSynchronizerInsertHandler> InsertHandlers { get; set; }
+
         #region Public Methods
         public override void Initialize(ITargetBESynchronizerInitializeContext context)
         {
@@ -82,12 +84,13 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Methods
-
+        static AccountBEManager s_accountManager = new AccountBEManager();
         void AddAccount(SourceAccountData accountData, long? parentAccountId)
-        {
-            AccountBEManager accountManager = new AccountBEManager();
+        {           
+            List<AccountSynchronizerInsertHandler> handlersToExecute = GetHandlersToExecute(accountData.Account);
+            ApplyHandlersPreInsert(accountData.Account, handlersToExecute);
             long accountId;
-            accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId, true);
+            s_accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId, true);
             if (accountId > 0)
             {
                 if (accountData.IdentificationRulesToInsert != null)
@@ -105,7 +108,60 @@ namespace Retail.BusinessEntity.Business
                         AddAccount(childAccount, accountId);
                     }
                 }
+                ApplyHandlersPostInsert(accountData.Account, handlersToExecute);
             }
+        }
+
+        private void ApplyHandlersPreInsert(Account account, List<AccountSynchronizerInsertHandler> handlersToExecute)
+        {
+            if (handlersToExecute != null)
+            {
+                foreach(var handler in handlersToExecute)
+                {
+                    var context = new AccountSynchronizerInsertHandlerPreInsertContext
+                    {
+                        AccountBEDefinitionId = this.AccountBEDefinitionId,
+                        Account = account
+                    };
+                    handler.Settings.OnPreInsert(context);
+                }
+            }
+        }
+
+        private void ApplyHandlersPostInsert(Account account, List<AccountSynchronizerInsertHandler> handlersToExecute)
+        {
+            if (handlersToExecute != null)
+            {
+                foreach (var handler in handlersToExecute)
+                {
+                    var context = new AccountSynchronizerInsertHandlerPostInsertContext
+                    {
+                        AccountBEDefinitionId = this.AccountBEDefinitionId,
+                        Account = account
+                    };
+                    handler.Settings.OnPostInsert(context);
+                }
+            }
+        }
+
+        private List<AccountSynchronizerInsertHandler> GetHandlersToExecute(Account account)
+        {
+            List<AccountSynchronizerInsertHandler> handlersToExecute = null;
+            if (this.InsertHandlers != null)
+            {
+                foreach (var handler in this.InsertHandlers)
+                {
+                    if (handler.AccountCondition != null)
+                    {
+                        if (!s_accountManager.EvaluateAccountCondition(account, handler.AccountCondition))
+                            continue;
+                    }
+                    if (handlersToExecute == null)
+                        handlersToExecute = new List<AccountSynchronizerInsertHandler>();
+                    handlersToExecute.Add(handler);
+                }
+            }
+            return handlersToExecute;
         }
 
         AccountToInsert GetAccountToInsert(Account account)
@@ -132,6 +188,41 @@ namespace Retail.BusinessEntity.Business
             Type managerType = Type.GetType(ruleTypeConfig.RuleManagerFQTN);
             return Activator.CreateInstance(managerType) as IGenericRuleManager;
         }
+        #endregion
+
+        #region Private Classes
+
+        private class AccountSynchronizerInsertHandlerPreInsertContext : IAccountSynchronizerInsertHandlerPreInsertContext
+        {
+            public Guid AccountBEDefinitionId
+            {
+                get;
+                set;
+            }
+
+            public Account Account
+            {
+                get;
+                set;
+            }
+        }
+
+        private class AccountSynchronizerInsertHandlerPostInsertContext : IAccountSynchronizerInsertHandlerPostInsertContext
+        {
+            public Guid AccountBEDefinitionId
+            {
+                get;
+                set;
+            }
+
+            public Account Account
+            {
+                get;
+                set;
+            }
+        }
+
+
         #endregion
     }
 }

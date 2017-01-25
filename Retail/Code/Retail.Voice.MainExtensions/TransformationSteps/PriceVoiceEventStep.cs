@@ -38,6 +38,8 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
             context.AddCodeToCurrentInstanceExecutionBlock("Retail.Voice.Entities.VoiceEventPrice {0} = {1}.PriceVoiceEvent({2},{3},{4},{5},{6},{7},{8});", voiceEventPriceVariableName,
                 voiceChargingManagerVariableName,this.AccountBEDefinitionID, this.AccountId, this.ServiceTypeId, this.RawCDR, this.MappedCDR, this.Duration, this.EventTime);
 
+            context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", voiceEventPriceVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{");
             if (this.PackageId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.PackageId;", this.PackageId, voiceEventPriceVariableName);
 
@@ -58,6 +60,8 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
 
             if (this.VoiceEventPricedParts != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.VoiceEventPricedParts;", this.VoiceEventPricedParts, voiceEventPriceVariableName);
+
+            context.AddCodeToCurrentInstanceExecutionBlock("}");
         }
     }
 }

@@ -81,6 +81,7 @@
     <Compile Include="AccountPartDefinition\AccountPartDefinitionFilter.cs" />
     <Compile Include="AccountType\AccountTypeBESelectorFilter.cs" />
     <Compile Include="Account\AccountFilter.cs" />
+    <Compile Include="Account\AccountSynchronizerInsertHandler.cs" />
     <Compile Include="DID\DID.cs" />
     <Compile Include="DID\DIDDetail.cs" />
     <Compile Include="DID\DIDFilter.cs" />

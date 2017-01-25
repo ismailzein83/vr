@@ -249,15 +249,37 @@ namespace Retail.BusinessEntity.Business
             return new Vanrise.GenericData.Business.RecordFilterManager().IsFilterGroupMatch(filterGroup, new AccountRecordFilterGenericFieldMatchContext(accountType.AccountBEDefinitionId, account));
         }
 
+        public bool EvaluateAccountCondition(Account account, AccountCondition accountCondition)
+        {
+            if (accountCondition == null)
+                return true;
+            AccountConditionEvaluationContext context = new AccountConditionEvaluationContext();
+            context.Account = account;
+            return accountCondition.Evaluate(context);
+        }
+
+        public bool EvaluateAccountCondition(Guid accountBEDefinitionId, long accountId, AccountCondition accountCondition)
+        {
+            if (accountCondition == null)
+                return true;
+            AccountConditionEvaluationContext context = new AccountConditionEvaluationContext(accountBEDefinitionId, accountId);
+            return accountCondition.Evaluate(context);
+        }
+
         public bool HasAccountPayment(Guid accountBEDefinitionId, long accountId, bool getInherited, out IAccountPayment accountPayment)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
             if (account == null)
                 throw new NullReferenceException(String.Format("account '{0}'", accountId));
 
+            return HasAccountPayment(accountBEDefinitionId, getInherited, account, out accountPayment);
+        }
+
+        public bool HasAccountPayment(Guid accountBEDefinitionId, bool getInherited, Account account, out IAccountPayment accountPayment)
+        {
             if (account.Settings == null)
             {
-                accountPayment = null; 
+                accountPayment = null;
                 return false;
             }
 
@@ -524,6 +546,8 @@ namespace Retail.BusinessEntity.Business
                 return accountGenericField.GetValue(new AccountGenericFieldContext(_account));
             }
         }
+
+        
 
         private class AccountTreeNode
         {

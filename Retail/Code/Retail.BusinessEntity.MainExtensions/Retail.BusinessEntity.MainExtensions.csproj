@@ -109,6 +109,7 @@
     <Compile Include="AccountConditions\SubAccountCondition.cs" />
     <Compile Include="AccountRecurringChargeRuleSets\ApplyFirstAccountRecurringChargeRuleSetSettings.cs" />
     <Compile Include="AccountRecurringChargeRuleSets\SingleRuleAccountRecurringChargeRuleSetSettings.cs" />
+    <Compile Include="AccountSynchronizerInsertHandlers\AssignProductAndPackagesAccountInsertHandler.cs" />
     <Compile Include="AccountViews\AccountIdentificationRules.cs" />
     <Compile Include="AccountViews\AccountInfo.cs" />
     <Compile Include="AccountViews\AccountPackages.cs" />

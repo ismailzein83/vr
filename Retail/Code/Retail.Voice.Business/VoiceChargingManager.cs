@@ -26,6 +26,8 @@ namespace Retail.Voice.Business
             voiceEventPrice.VoiceEventPricedParts = new List<VoiceEventPricedPart>();
 
             var voiceUsageChargers = GetVoiceUsageChargersByPriority(accountId, serviceTypeId, eventTime);
+            if (voiceUsageChargers == null || voiceUsageChargers.Count == 0)
+                return null;
             Decimal remainingDurationToPrice = duration;
             Dictionary<IPackageVoiceUsageCharger, Object> chargersChargingInfos = new Dictionary<IPackageVoiceUsageCharger, object>();
             foreach (var voiceUsageCharger in voiceUsageChargers)
@@ -59,9 +61,6 @@ namespace Retail.Voice.Business
             }
 
 
-
-            if (voiceUsageChargers == null || voiceUsageChargers.Count == 0)
-                throw new Exception(string.Format("No voiceUsageChargers is defined for accountID: {0} and serviceTypeId: {1}.", accountId, serviceTypeId));
 
             if (voiceEventPrice.VoiceEventPricedParts.Count > 1)
                 throw new NotSupportedException("Case of multipler VoiceEventPricedParts not supported yet.");
@@ -130,6 +129,9 @@ namespace Retail.Voice.Business
 
             //needs caching
             List<Package> accountPackagesByPriority = GetAccountPackagesByPriority(accountId, eventTime); //get account packages by priority
+
+            if (accountPackagesByPriority == null)
+                return null;
 
             List<VoiceUsageChargerWithParentPackage> voiceUsageChargersByPriority = new List<VoiceUsageChargerWithParentPackage>();
             foreach (var package in accountPackagesByPriority)
