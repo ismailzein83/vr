@@ -34,13 +34,21 @@ namespace TOne.WhS.Sales.Business
 		{
 			if (zoneItems == null)
 				return;
+
+            List<object> customObjects = new List<object>();
+
+            foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
+                customObjects.Add(null);
+
+            IEnumerable<long> zoneIds = zoneItems.Select(x => x.ZoneId);
+
 			foreach (ZoneItem zoneItem in zoneItems)
 			{
 				RPRouteDetail route = _routes.FindRecord(x => x.SaleZoneId == zoneItem.ZoneId);
 				zoneItem.RPRouteDetail = route;
 				if (route != null && route.RouteOptionsDetails != null)
 				{
-					SetCosts(zoneItem, route);
+                    SetCosts(zoneIds, zoneItem, route, customObjects);
 				}
 				else if (_costCalculationMethods != null)
 				{
@@ -52,19 +60,20 @@ namespace TOne.WhS.Sales.Business
 			}
 		}
 
-		void SetCosts(ZoneItem zoneItem, RPRouteDetail route)
+        void SetCosts(IEnumerable<long> zoneIds, ZoneItem zoneItem, RPRouteDetail route, List<object> customObjects)
 		{
 			if (_costCalculationMethods == null)
 				return;
 
 			zoneItem.Costs = new List<decimal?>();
 
-			foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
-			{
-				var context = new CostCalculationMethodContext() { Route = route };
-				costCalculationMethod.CalculateCost(context);
-				zoneItem.Costs.Add(context.Cost);
-			}
+            for (int i = 0; i < _costCalculationMethods.Count; i++)
+            {
+                var context = new CostCalculationMethodContext() { ZoneIds = zoneIds, Route = route, CustomObject = customObjects[i] };
+                _costCalculationMethods[i].CalculateCost(context);
+                customObjects[i] = context.CustomObject;
+                zoneItem.Costs.Add(context.Cost);
+            }
 		}
 
 		void SetCalculatedRate(ZoneItem zoneItem)

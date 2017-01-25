@@ -9,17 +9,12 @@ namespace TOne.WhS.Sales.Business
 {
     public class CostCalculationMethodContext : ICostCalculationMethodContext
     {
-        public Routing.Entities.RPRouteDetail Route
-        {
-            get;
-            set;
-        }
+        public IEnumerable<long> ZoneIds { get; set; }
 
-        public decimal Cost
-        {
+        public Routing.Entities.RPRouteDetail Route { get; set; }
 
-            get;
-            set;
-        }
+        public decimal Cost { get; set; }
+
+        public object CustomObject { get; set; }       
     }
 }

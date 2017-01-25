@@ -9,8 +9,12 @@ namespace TOne.WhS.Sales.Entities
 {
     public interface ICostCalculationMethodContext
     {
+        IEnumerable<long> ZoneIds { get; }
+
         RPRouteDetail Route { get; }
 
         Decimal Cost { set; }
+
+        object CustomObject { get; set; }
     }
 }
