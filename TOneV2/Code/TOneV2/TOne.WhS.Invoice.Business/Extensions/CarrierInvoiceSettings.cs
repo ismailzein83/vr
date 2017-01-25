@@ -24,12 +24,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             return new CustomerInvoiceGenerator();
         }
-
         public override InvoicePartnerManager GetPartnerManager()
         {
             return new CarrierPartnerSettings();
         }
-
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
             string[] partner = context.Invoice.PartnerId.Split('_');
@@ -104,23 +102,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return null;
         }
-
-        public override BillingPeriod GetBillingPeriod(IExtendedSettingsBillingPeriodContext context)
-        {
-            string[] partner = context.PartnerId.Split('_');
-            int partnerId = Convert.ToInt32(partner[1]);
-            switch (partner[0])
-            {
-                case "Account":
-                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                    return carrierAccountManager.GetBillingPeriod(Convert.ToInt32(partner[1]));
-                case "Profile":
-                    CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                    return carrierProfileManager.GetBillingPeriod(Convert.ToInt32(partner[1]));
-            }
-            return null;
-        }
-
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
             string[] partner = context.PartnerId.Split('_');
@@ -139,7 +120,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     break;
             }
         }
-
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
             var carriers = new InvoiceManager().GetInvoiceCarriers(new InvoiceCarrierFilter

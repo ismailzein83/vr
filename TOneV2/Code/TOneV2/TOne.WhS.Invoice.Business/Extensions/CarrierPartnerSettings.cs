@@ -152,63 +152,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return null;
         }
-        public override int GetPartnerDuePeriod(IPartnerDuePeriodContext context)
-        {
-            string[] partnerId = context.PartnerId.Split('_');
-
-            if (partnerId[0].Equals("Profile"))
-            {
-                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-
-                return carrierProfileManager.GetDuePeriod(Convert.ToInt32(partnerId[1]));
-            }
-            else if (partnerId[0].Equals("Account"))
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return carrierAccountManager.GetDuePeriod(Convert.ToInt32(partnerId[1]));
-            }
-            return 0;
-        }
-        public override bool CheckInvoiceFollowBillingPeriod(ICheckInvoiceFollowBillingPeriodContext context)
-        {
-            string[] partnerId = context.PartnerId.Split('_');
-
-            if (partnerId[0].Equals("Profile"))
-            {
-                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-
-                return carrierProfileManager.CheckInvoiceFollowBillingPeriod(Convert.ToInt32(partnerId[1]));
-            }
-            else if (partnerId[0].Equals("Account"))
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return carrierAccountManager.CheckInvoiceFollowBillingPeriod(Convert.ToInt32(partnerId[1]));
-            }
-            return false;
-        }
         private void AddRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, RDLCParameter key, string value, bool isVisible)
         {
             if (rdlcReportParameters == null)
                 rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
             rdlcReportParameters.Add(key.ToString(), new VRRdlcReportParameter { Value = value, IsVisible = isVisible });
         }
-        public override string GetPartnerSerialNumberPattern(IPartnerSerialNumberPatternContext context)
-        {
-            string[] partnerId = context.PartnerId.Split('_');
-
-            if (partnerId[0].Equals("Profile"))
-            {
-                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                return carrierProfileManager.GetInvoiceSerialNumberPattern(Convert.ToInt32(partnerId[1]));
-            }
-            else if (partnerId[0].Equals("Account"))
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return carrierAccountManager.GetInvoiceSerialNumberPattern(Convert.ToInt32(partnerId[1]));
-            }
-            return null;
-        }
-
     }
       
 }
