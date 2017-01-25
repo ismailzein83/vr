@@ -17,7 +17,8 @@ namespace Vanrise.Web.App_Start
         {
             try
             {
-                actionExecutedContext.Response.Headers.Add("ServerDate", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture));
+                if (actionExecutedContext.Response != null && actionExecutedContext.Response.Headers != null)
+                    actionExecutedContext.Response.Headers.Add("ServerDate", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff", CultureInfo.InvariantCulture));
             }
             catch (Exception ex)
             {
