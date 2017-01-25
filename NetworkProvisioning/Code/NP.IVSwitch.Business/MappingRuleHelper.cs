@@ -106,13 +106,15 @@ namespace NP.IVSwitch.Business
 
         private bool UpdateRule(MappingRule rule)
         {
-            List<object> carrierList = new List<object> { _criteriaCarrierId.ToString() };
+            List<object> carrierList = new List<object>();
             GenericRuleCriteriaFieldValues criteriaFieldValues;
             if (rule.Criteria.FieldsValues.TryGetValue("Carrier", out criteriaFieldValues))
             {
                 var value = criteriaFieldValues.GetValues();
                 carrierList.AddRange(value);
             }
+            if (carrierList.Contains(_criteriaCarrierId.ToString())) return true;
+            carrierList.Add(_criteriaCarrierId.ToString());
             rule.Criteria.FieldsValues["Carrier"] = new StaticValues
             {
                 Values = carrierList
