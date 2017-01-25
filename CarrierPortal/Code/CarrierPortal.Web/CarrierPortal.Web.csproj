@@ -269,6 +269,10 @@
       <Project>{3f63f33b-1977-4593-8d79-f5bfbf84cb19}</Project>
       <Name>PartnerPortal.CustomerAccess.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PartnerPortal.CustomerAccess.MainExtensions\PartnerPortal.CustomerAccess.MainExtensions.csproj">
+      <Project>{918841cc-444d-4c23-a4e5-c957ef071f4d}</Project>
+      <Name>PartnerPortal.CustomerAccess.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PartnerPortal.CustomerAccess.Web\PartnerPortal.CustomerAccess.Web.csproj">
       <Project>{dec75d5a-5e36-4c1c-a431-9456a9d4f4b9}</Project>
       <Name>PartnerPortal.CustomerAccess.Web</Name>
@@ -309,6 +313,7 @@
     <Content Include="Images\logoonheader.png" />
     <Content Include="Images\menu-icons\admin.png" />
     <Content Include="Images\menu-icons\Administration.png" />
+    <Content Include="Images\menu-icons\billing.png" />
     <Content Include="Images\menu-icons\Purchase Area.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

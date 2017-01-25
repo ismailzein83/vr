@@ -1,10 +1,7 @@
 ﻿using PartnerPortal.CustomerAccess.Business;
-using System;
+using PartnerPortal.CustomerAccess.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using Vanrise.AccountBalance.Entities;
 using Vanrise.Web.Base;
 
 namespace PartnerPortal.CustomerAccess.Web.Controllers
@@ -15,10 +12,18 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
     {
         [HttpPost]
         [Route("GetFilteredAccountStatments")]
-        public object GetFilteredAccountStatments(Vanrise.Entities.DataRetrievalInput<AccountStatementQuery> input)
+        public object GetFilteredAccountStatments(Vanrise.Entities.DataRetrievalInput<AccountStatementAppQuery> input)
         {
             AccountStatementManager manager = new AccountStatementManager();
             return GetWebResponse(input, manager.GetFilteredAccountStatments(input));
+        }
+
+        [HttpGet]
+        [Route("GetAccountStatementContextHandlerTemplates")]
+        public IEnumerable<AccountStatementContextHandlerTemplate> GetAccountStatementContextHandlerTemplates()
+        {
+            AccountStatementManager manager = new AccountStatementManager();
+            return manager.GetAccountStatementContextHandlerTemplates();
         }
     }
 }

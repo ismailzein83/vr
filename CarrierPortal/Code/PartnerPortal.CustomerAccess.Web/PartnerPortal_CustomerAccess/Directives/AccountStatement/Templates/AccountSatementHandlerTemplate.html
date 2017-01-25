@@ -1,0 +1,6 @@
+﻿<partnerportal-customeraccess-accountstatementhandler-selector on-ready="scopeModel.onAccountStatementHandlerSelectorReady" isrequired="true"
+                                                               selectedvalues="scopeModel.selectedAccountStatementHandler" hideremoveicon normal-col-num="{{ctrl.normalColNum}}">
+</partnerportal-customeraccess-accountstatementhandler-selector>
+<vr-directivewrapper ng-if="scopeModel.selectedAccountStatementHandler != undefined" directive="scopeModel.selectedAccountStatementHandler.Editor"
+                     on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" vr-loader="scopeModel.isDirectiveLoading">
+</vr-directivewrapper>

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('partnerportalCustomerAccessAccountstatementGrid', ['PartnerPortal_CustomerAccess_AccountStatementAPIService', 'VRNotificationService', 'DataGridRetrieveDataEventType',
+app.directive('partnerportalCustomeraccessAccountstatementGrid', ['PartnerPortal_CustomerAccess_AccountStatementAPIService', 'VRNotificationService', 'DataGridRetrieveDataEventType',
     function (PartnerPortal_CustomerAccess_AccountStatementAPIService, VRNotificationService, DataGridRetrieveDataEventType) {
         return {
             restrict: 'E',

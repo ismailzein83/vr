@@ -9,6 +9,14 @@
 
         var gridAPI;
         defineScope();
+        loadParameters();
+
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined && parameters != null) {
+                viewId = parameters.viewId;
+            }
+        };
 
         function defineScope() {
             $scope.scopeModel = {};
@@ -23,15 +31,16 @@
             $scope.scopeModel.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());
             };
-        }
+        };
 
 
         function getFilterObject() {
             var query = {
                 FromDate: $scope.scopeModel.fromDate,
+                ViewId: viewId
             };
             return query;
-        }
+        };
     }
 
     appControllers.controller('PartnerPortal_CustomerAccess_AccountStatementManagementController', accountStatementManagementController);
