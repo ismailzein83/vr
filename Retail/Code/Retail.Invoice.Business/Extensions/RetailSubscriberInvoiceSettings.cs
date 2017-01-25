@@ -58,7 +58,7 @@ namespace Retail.Invoice.Business
             return new RetailSubscriberInvoiceGenerator(this.AcountBEDefinitionId);
         }
 
-        public override InvoicePartnerDetails GetPartnerDetails()
+        public override InvoicePartnerManager GetPartnerManager()
         {
             return new RetailSubscriberPartnerSettings(this.AcountBEDefinitionId);
         }

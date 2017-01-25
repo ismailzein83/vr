@@ -25,7 +25,7 @@ namespace Retail.Invoice.Business
         Fax = 9,
     }
 
-    public class RetailSubscriberPartnerSettings : InvoicePartnerDetails
+    public class RetailSubscriberPartnerSettings : InvoicePartnerManager
     {
         Guid _acountBEDefinitionId;
 
