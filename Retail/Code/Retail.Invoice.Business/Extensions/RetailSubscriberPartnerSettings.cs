@@ -55,11 +55,11 @@ namespace Retail.Invoice.Business
             return Convert.ToInt32(context.PartnerId);
         }
 
-        public override int GetPartnerDuePeriod(IPartnerDuePeriodContext context)
-        {
-            AccountBEManager accountBEManager = new AccountBEManager();
-            return accountBEManager.GetAccountDuePeriod(Convert.ToInt32(context.PartnerId));
-        }
+        //public override int GetPartnerDuePeriod(IPartnerDuePeriodContext context)
+        //{
+        //    AccountBEManager accountBEManager = new AccountBEManager();
+        //    return accountBEManager.GetAccountDuePeriod(Convert.ToInt32(context.PartnerId));
+        //}
 
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
@@ -133,14 +133,9 @@ namespace Retail.Invoice.Business
             rdlcReportParameters.Add(key.ToString(), new VRRdlcReportParameter { Value = value, IsVisible = isVisible });
         }
 
-        public override bool CheckInvoiceFollowBillingPeriod(ICheckInvoiceFollowBillingPeriodContext context)
-        {
-            return false;
-        }
-
-        public override string GetPartnerSerialNumberPattern(IPartnerSerialNumberPatternContext context)
-        {
-           return "CONT-#Year#-#YearSequence#";
-        }
+        //public override string GetPartnerSerialNumberPattern(IPartnerSerialNumberPatternContext context)
+        //{
+        //   return "CONT-#Year#-#YearSequence#";
+        //}
     }
 }
