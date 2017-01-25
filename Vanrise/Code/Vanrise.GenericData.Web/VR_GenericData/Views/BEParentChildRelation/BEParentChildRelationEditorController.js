@@ -152,7 +152,7 @@
                     filter: {
                         Filters: [{
                             $type: beParentChildRelationDefinitionEntity.Settings.ChildFilterFQTN,
-                            ParentChildRelationDefinition: beParentChildRelationDefinitionId
+                            ParentChildRelationDefinitionId: beParentChildRelationDefinitionId
                         }]
                     },
                     businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ChildBEDefinitionId,

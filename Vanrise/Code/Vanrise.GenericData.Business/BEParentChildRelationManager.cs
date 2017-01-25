@@ -100,10 +100,14 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        public BEParentChildRelation GetParent(Guid beParentChildRelationDefinitionId, string childId, DateTime effectiveOn)
+        public List<BEParentChildRelation> GetParent(Guid beParentChildRelationDefinitionId, string childId)
         {
             Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByChildId = this.GetCachedBEParentChildRelationsByChildId(beParentChildRelationDefinitionId);
-            List<BEParentChildRelation> beParentChildRelations = beParentChildRelationsByChildId.GetRecord(childId);
+            return beParentChildRelationsByChildId.GetRecord(childId);
+        }
+        public BEParentChildRelation GetParent(Guid beParentChildRelationDefinitionId, string childId, DateTime effectiveOn)
+        {
+            List<BEParentChildRelation> beParentChildRelations = GetParent(beParentChildRelationDefinitionId, childId);
 
             if (beParentChildRelations == null)
                 return null;

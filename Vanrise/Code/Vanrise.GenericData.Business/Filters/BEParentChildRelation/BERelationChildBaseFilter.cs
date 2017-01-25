@@ -10,14 +10,15 @@ namespace Vanrise.GenericData.Business
 {
     public class BERelationChildBaseFilter
     {
-        public Guid ParentChildRelationDefinition { get; set; }
+        static BEParentChildRelationManager _beParentChildRelationManager = new BEParentChildRelationManager();
+        
+        public Guid ParentChildRelationDefinitionId { get; set; }
 
         public bool IsChildExcluded(object childId)
         {
-            IEnumerable<BEParentChildRelation> beParentChildRelations = new BEParentChildRelationManager().GetBEParentChildRelationsByDefinitionId(this.ParentChildRelationDefinition);
-            string childIdAsString = childId.ToString();
+            List<BEParentChildRelation> beParentChildRelations = _beParentChildRelationManager.GetParent(ParentChildRelationDefinitionId, childId.ToString());
 
-            if (beParentChildRelations.FindRecord(itm => string.Compare(itm.ChildBEId, childIdAsString, true) == 0) != null)
+            if (beParentChildRelations != null && beParentChildRelations.Count != 0)
                 return false;
 
             return true;
