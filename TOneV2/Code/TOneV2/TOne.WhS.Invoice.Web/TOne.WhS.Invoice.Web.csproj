@@ -200,6 +200,12 @@
     <EmbeddedResource Include="Reports\Ringo\InvoiceReportByCurrency.rdlc" />
     <EmbeddedResource Include="Reports\Ringo\ProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Reports\Ringo\ProfileInvoiceReport.rdlc" />
+    <EmbeddedResource Include="Reports\Zajil\CustomerInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="Reports\Zajil\CustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="Reports\Zajil\InvoiceItemsReportByCurrency.rdlc" />
+    <EmbeddedResource Include="Reports\Zajil\InvoiceReportByCurrency.rdlc" />
+    <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\InvoiceItemsReportByCurrency.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\InvoiceReportByCurrency.rdlc" />
