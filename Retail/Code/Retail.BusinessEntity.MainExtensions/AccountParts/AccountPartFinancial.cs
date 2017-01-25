@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
     {
         public static Guid _ConfigId = new Guid("82228BE2-E633-4EF8-B383-9894F28C8CB0");
         public override Guid ConfigId { get { return _ConfigId; } }
-        public int CreditClassId { get; set; }
+
         public int CurrencyId { get; set; }
         public int ProductId { get; set; }
 
@@ -20,8 +20,6 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
             switch (context.FieldName)
             {
                 case "Currency": return this.CurrencyId;
-
-                case "CreditClass": return this.CreditClassId;
 
                 default: return null;
             }

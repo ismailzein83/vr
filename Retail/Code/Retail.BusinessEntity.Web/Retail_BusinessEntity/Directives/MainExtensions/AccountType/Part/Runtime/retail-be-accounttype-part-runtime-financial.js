@@ -23,9 +23,6 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
             var currencySelectorAPI;
             var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var creditClassSelectorAPI;
-            var creditClassReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var productSelectorAPI;
             var productSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -35,10 +32,6 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                 $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                     currencySelectorAPI = api;
                     currencySelectorReadyPromiseDeferred.resolve();
-                };
-                $scope.scopeModel.onCreditClassDirectiveReady = function (api) {
-                    creditClassSelectorAPI = api;
-                    creditClassReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onProductDirectiveReady = function (api) {
                     productSelectorAPI = api;
@@ -69,14 +62,6 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                     });
                     promises.push(currencySelectorLoadPromiseDeferred.promise);
 
-                    //Loading CreditClass Selector
-                    var creditClassSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    creditClassReadyPromiseDeferred.promise.then(function () {
-                        var creditClassSelectorPayload = partSettings != undefined ? { selectedIds: partSettings.CreditClassId } : undefined;
-                        VRUIUtilsService.callDirectiveLoad(creditClassSelectorAPI, creditClassSelectorPayload, creditClassSelectorLoadPromiseDeferred);
-                    });
-                    promises.push(creditClassSelectorLoadPromiseDeferred.promise);
-
                     //Loading Product Selector
                     var productSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     productSelectorReadyPromiseDeferred.promise.then(function () {
@@ -102,7 +87,6 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                     return {
                         $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancial,Retail.BusinessEntity.MainExtensions',
                         CurrencyId: currencySelectorAPI.getSelectedIds(),
-                        CreditClassId: creditClassSelectorAPI.getSelectedIds(),
                         ProductId: productSelectorAPI.getSelectedIds()
                     };
                 };

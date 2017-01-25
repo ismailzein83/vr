@@ -21,12 +21,6 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                         Name = "Currency",
                         Title = "Currency",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType { BusinessEntityDefinitionId = Currency.BUSINESSENTITY_DEFINITION_ID }
-                    },
-                    new GenericFieldDefinition()
-                    {
-                        Name = "CreditClass",
-                        Title = "CreditClass",
-                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType { BusinessEntityDefinitionId = CreditClass.BUSINESSENTITY_DEFINITION_ID }
                     }
                 };
         }

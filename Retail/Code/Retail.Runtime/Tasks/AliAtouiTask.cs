@@ -87,7 +87,6 @@ namespace Retail.Runtime.Tasks
 
             //AccountPartFinancial
             AccountPartFinancial accountPartFinancial = new AccountPartFinancial();
-            accountPartFinancial.CreditClassId = 1022;
             accountPartFinancial.CurrencyId = 1025;
 
             //AccountPartResidentialProfile

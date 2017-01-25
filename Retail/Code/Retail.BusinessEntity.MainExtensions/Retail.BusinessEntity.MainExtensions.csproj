@@ -170,7 +170,6 @@
     <Compile Include="RadiusSQLProvisionerDefinitionSetting.cs" />
     <Compile Include="AccountActions\SendEmailAction.cs" />
     <Compile Include="AccountBalanceAlertRule\FixedBalanceAlertThreshold.cs" />
-    <Compile Include="VRObjectTypes\FinancialRetailAccountPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\RetailAccountPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\RetailAccountObjectType.cs" />
   </ItemGroup>

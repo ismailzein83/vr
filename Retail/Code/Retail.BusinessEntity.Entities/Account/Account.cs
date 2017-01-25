@@ -58,8 +58,6 @@ namespace Retail.BusinessEntity.Entities
     {
         int CurrencyId { get; }
 
-        int CreditClassId { get; }
-
         int ProductId { get; set; }
     }
 

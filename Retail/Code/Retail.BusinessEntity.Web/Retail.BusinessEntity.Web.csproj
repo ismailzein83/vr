@@ -409,8 +409,6 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\SwitchIntegrations\Templates\SwitchIntegrationTelesAPITemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TargetSynchronizer\retail-be-accountsynchronizer-directive.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TargetSynchronizer\Templates\AccountSynchronizerTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail-be-retailaccountobjecttype-financial.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\FinancialRetailAccountEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail-be-retailaccount-objecttype.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\RetailAccountObjectTypeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\retail-be-package-packageitem-volume.js" />
