@@ -139,18 +139,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PartnerPortal_CustomerAccess\Constant\ModuleConfig.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\partnerportal-customeraccess-accountstatementhandler-template.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\partnerportal-customeraccess-accountstatementhandler-selector.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\Templates\AccountSatementHandlerTemplate.html" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\Templates\AccountSatementViewEditor.html" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\Templates\AccountStatementGridTemplate.html" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\partnerportal-customeraccess-accountstatement-grid.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\partnerportal-customeraccess-accountstatement-vieweditor.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\MainExtensions\AccountStatement\partnerportal-customeraccess-retailaccountuser.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Directives\MainExtensions\AccountStatement\Templates\RetailAccountUser.html" />
-    <Content Include="PartnerPortal_CustomerAccess\Services\APIServices\AccountStatementAPIService.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Views\AccountStatement\AccountStatementManagement.html" />
-    <Content Include="PartnerPortal_CustomerAccess\Views\AccountStatement\AccountStatementManagementController.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\partnerportal-customeraccess-accountstatementhandler-template.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\partnerportal-customeraccess-accountstatementhandler-selector.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\Templates\AccountSatementHandlerTemplate.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\Templates\AccountSatementViewEditor.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\Templates\AccountStatementGridTemplate.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\partnerportal-customeraccess-accountstatement-grid.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\partnerportal-customeraccess-accountstatement-vieweditor.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\MainExtensions\partnerportal-customeraccess-retailaccountuser.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\MainExtensions\Templates\RetailAccountUser.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Services\AccountStatementAPIService.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagement.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagementController.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\Templates\" />
+    <Folder Include="PartnerPortal_CustomerAccess\Directives\MainExtensions\AccountStatement\Templates\" />
+    <Folder Include="PartnerPortal_CustomerAccess\Services\APIServices\" />
+    <Folder Include="PartnerPortal_CustomerAccess\Views\AccountStatement\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

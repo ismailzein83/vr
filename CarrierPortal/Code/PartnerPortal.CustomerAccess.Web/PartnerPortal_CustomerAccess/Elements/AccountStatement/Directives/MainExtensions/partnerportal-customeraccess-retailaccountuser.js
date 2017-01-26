@@ -19,7 +19,7 @@ function (UtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Directives/MainExtensions/AccountStatement/Templates/RetailAccountUser.html'
+        templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/AccountStatement/Directives/MainExtensions/Templates/RetailAccountUser.html'
     };
 
 

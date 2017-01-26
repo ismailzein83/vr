@@ -19,7 +19,7 @@ app.directive("partnerportalCustomeraccessAccountstatementVieweditor", ["UtilsSe
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/PartnerPortal_CustomerAccess/Directives/AccountStatement/Templates/AccountSatementViewEditor.html"
+            templateUrl: "/Client/Modules/PartnerPortal_CustomerAccess/Elements/AccountStatement/Directives/Templates/AccountSatementViewEditor.html"
         };
         function ViewEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;

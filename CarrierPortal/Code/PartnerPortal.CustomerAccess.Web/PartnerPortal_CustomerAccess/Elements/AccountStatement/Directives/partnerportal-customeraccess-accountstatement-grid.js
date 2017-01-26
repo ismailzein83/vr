@@ -14,7 +14,7 @@ app.directive('partnerportalCustomeraccessAccountstatementGrid', ['PartnerPortal
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Directives/AccountStatement/Templates/AccountStatementGridTemplate.html'
+            templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/AccountStatement/Directives/Templates/AccountStatementGridTemplate.html'
         };
 
         function AccountStatementGrid($scope, ctrl, $attrs) {

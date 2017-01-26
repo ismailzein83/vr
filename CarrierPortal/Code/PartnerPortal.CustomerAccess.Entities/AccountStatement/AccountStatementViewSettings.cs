@@ -9,7 +9,7 @@ namespace PartnerPortal.CustomerAccess.Entities
 
         public override string GetURL(View view)
         {
-            return String.Format("#/viewwithparams/PartnerPortal_CustomerAccess/Views/AccountStatement/AccountStatementManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
+            return String.Format("#/viewwithparams/PartnerPortal_CustomerAccess/Elements/AccountStatement/Views/AccountStatementManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
         }
     }
 

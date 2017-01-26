@@ -20,7 +20,7 @@ function (UtilsService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Directives/AccountStatement/Templates/AccountSatementHandlerTemplate.html'
+        templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/AccountStatement/Directives/Templates/AccountSatementHandlerTemplate.html'
     };
 
 
