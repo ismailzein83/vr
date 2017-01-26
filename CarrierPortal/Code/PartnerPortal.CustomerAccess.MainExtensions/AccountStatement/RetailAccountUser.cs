@@ -16,7 +16,7 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.AccountStatement
                 throw new Exception("retailAccountUserHandlerContext is not of type RetailAccountUserHandlerContext.");
 
             int userId = SecurityContext.Current.GetLoggedInUserId();
-            RetailAccountManager manager = new RetailAccountManager();
+            RetailAccountUserManager manager = new RetailAccountUserManager();
             retailAccountUserHandlerContext.Query.AccountId = manager.GetRetailAccountId(userId);
         }
     }

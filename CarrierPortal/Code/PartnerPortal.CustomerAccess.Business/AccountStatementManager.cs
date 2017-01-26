@@ -6,7 +6,6 @@ using Vanrise.Security.Entities;
 using PartnerPortal.CustomerAccess.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Security.Business;
-using Vanrise.Common.MainExtensions.VRConnections;
 
 namespace PartnerPortal.CustomerAccess.Business
 {
