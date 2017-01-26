@@ -99,7 +99,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     FractionUnit = 0,
                     CurrencyId = Context.CurrencyId
                 },
-                
+
                 DefinitionId = new Guid("5AEB0DAD-4BB8-44B4-ACBE-C8C917E88B58"),
                 Description = "Default Supplier Tariff Rule"
             };
@@ -172,7 +172,9 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 {
                     PricingUnit = 60,
                     FractionUnit = 0,
-                    CurrencyId = Context.CurrencyId
+                    CurrencyId = Context.CurrencyId,
+                    FirstPeriodRateType = Vanrise.Rules.Pricing.MainExtensions.Tariff.FirstPeriodRateType.FixedRate,
+                    FirstPeriodRate = 0
 
                 },
                 DefinitionId = new Guid("5AEB0DAD-4BB8-44B4-ACBE-C8C917E88B58"),
@@ -202,7 +204,9 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 {
                     PricingUnit = 60,
                     FractionUnit = 0,
-                    CurrencyId = Context.CurrencyId
+                    CurrencyId = Context.CurrencyId,
+                    FirstPeriodRateType = Vanrise.Rules.Pricing.MainExtensions.Tariff.FirstPeriodRateType.FixedRate,
+                    FirstPeriodRate = 0
                 },
                 DefinitionId = new Guid("F24CB510-0B65-48C8-A723-1F6EBFEEA9E8"),
                 Description = "Default Sale Tariff Rule"
