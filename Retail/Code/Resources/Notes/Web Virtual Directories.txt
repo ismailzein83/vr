@@ -13,14 +13,12 @@ Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
 VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
 VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
 Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
-WhS_BusinessEntity		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity
 Retail_SMS				C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS
 Retail_Data				C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 VR_AccountBalance		C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
 VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
 VR_BEBridge				C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
-WhS_Routing				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Routing.Web\WhS_Routing
 VR_NumberingPlan		C:\TFS\Vanrise\Code\Vanrise.NumberingPlan.Web\VR_NumberingPlan
 VR_Invoice				C:\TFS\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice
 Retail_Invoice			C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice

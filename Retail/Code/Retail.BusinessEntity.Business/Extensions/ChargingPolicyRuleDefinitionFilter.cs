@@ -14,6 +14,8 @@ namespace Retail.BusinessEntity.Business
         public bool IsMatched(IGenericRuleDefinitionFilterContext context)
         {
             ValidateInput(context);
+            if (context.RuleDefinition.CriteriaDefinition == null || context.RuleDefinition.CriteriaDefinition.Fields == null)
+                return false;
             BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
             var serviceTypeBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(ServiceType.BUSINESSENTITY_DEFINITION_NAME);
             var chargingPolicyBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(ChargingPolicy.BUSINESSENTITY_DEFINITION_NAME);
@@ -41,10 +43,6 @@ namespace Retail.BusinessEntity.Business
                 throw new ArgumentNullException("context");
             if (context.RuleDefinition == null)
                 throw new ArgumentNullException("context.RuleDefinition");
-            if (context.RuleDefinition.CriteriaDefinition == null)
-                throw new ArgumentNullException(String.Format("context.RuleDefinition.CriteriaDefinition. RuleDefinitionId '{0}'", context.RuleDefinition.GenericRuleDefinitionId));
-            if (context.RuleDefinition.CriteriaDefinition.Fields == null)
-                throw new ArgumentNullException(String.Format("context.RuleDefinition.CriteriaDefinition.Fields. RuleDefinitionId '{0}'", context.RuleDefinition.GenericRuleDefinitionId));
         }
     }
 }
