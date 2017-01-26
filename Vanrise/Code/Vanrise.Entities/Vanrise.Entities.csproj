@@ -66,6 +66,10 @@
     <Compile Include="Country\CountryFilter.cs" />
     <Compile Include="UISettingData.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibility.cs" />
+    <Compile Include="VRApplicationVisibility\VRApplicationVisibilityDetail.cs" />
+    <Compile Include="VRApplicationVisibility\VRApplicationVisibilityFilter.cs" />
+    <Compile Include="VRApplicationVisibility\VRApplicationVisibilityInfo.cs" />
+    <Compile Include="VRApplicationVisibility\VRApplicationVisibilityQuery.cs" />
     <Compile Include="VRConnection\VRConnectionInfo.cs" />
     <Compile Include="VRConnection\VRConnection.cs" />
     <Compile Include="DateTimeRange.cs" />

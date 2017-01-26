@@ -130,6 +130,7 @@
     <Compile Include="Controllers\MasterLogController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\UserActionAuditController.cs" />
+    <Compile Include="Controllers\VRApplicationVisibilityController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRConnectionController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
@@ -214,6 +215,10 @@
     <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditSearch.html" />
     <Content Include="Common\Directives\UserActionAudit\vr-common-useractionaudit-grid.js" />
     <Content Include="Common\Directives\UserActionAudit\vr-useractionaudit-search.js" />
+    <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisisbilityGridTemplate.html" />
+    <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisisbilitySettingsTemplate.html" />
+    <Content Include="Common\Directives\VRApplicationVisibility\vr-common-applicationvisibility-grid.js" />
+    <Content Include="Common\Directives\VRApplicationVisibility\vr-common-applicationvisibility-settings.js" />
     <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttypeconfig-selector.js" />
@@ -314,6 +319,7 @@
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRConnectionAPIService.js" />
     <Content Include="Common\Services\APIServices\MasterLogAPIService.js" />
     <Content Include="Common\Services\APIServices\StatusDefinitionAPIService.js" />
@@ -341,6 +347,7 @@
     <Content Include="Common\Services\BankDetailService.js" />
     <Content Include="Common\Services\StatusDefinitionService.js" />
     <Content Include="Common\Services\UserActionAuditService.js" />
+    <Content Include="Common\Services\VRApplicationVisibilityService.js" />
     <Content Include="Common\Services\VRComponentTypeService.js" />
     <Content Include="Common\Services\VRTimeZoneService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
@@ -430,6 +437,10 @@
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditor.html" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditorController.js" />
+    <Content Include="Common\Views\VRApplicationVisibility\VRApplicationVisibilityEditor.html" />
+    <Content Include="Common\Views\VRApplicationVisibility\VRApplicationVisibilityEditorController.js" />
+    <Content Include="Common\Views\VRApplicationVisibility\VRApplicationVisibilityManagement.html" />
+    <Content Include="Common\Views\VRApplicationVisibility\VRApplicationVisibilityManagementController.js" />
     <Content Include="Common\Views\VRComponentType\VRComponentTypeEditor.html" />
     <Content Include="Common\Views\VRComponentType\VRComponentTypeEditorController.js" />
     <Content Include="Common\Views\VRComponentType\VRComponentTypeManagement.html" />
