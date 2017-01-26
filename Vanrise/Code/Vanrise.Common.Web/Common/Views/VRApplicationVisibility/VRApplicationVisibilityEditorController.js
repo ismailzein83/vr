@@ -10,6 +10,7 @@
 
         var vrApplicationVisibilityId;
         var vrApplicationVisibilityEntity;
+        var vrApplicationVisibilityEditorRuntime;
 
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -65,8 +66,11 @@
         }
 
         function getVRApplicationVisibility() {
-            return VRCommon_VRApplicationVisibilityAPIService.GetVRApplicationVisibility(vrApplicationVisibilityId).then(function (response) {
-                vrApplicationVisibilityEntity = response;
+            return VRCommon_VRApplicationVisibilityAPIService.GetVRApplicationVisibilityEditorRuntime(vrApplicationVisibilityId).then(function (response) {
+                if (response != undefined) {
+                    vrApplicationVisibilityEditorRuntime = response;
+                    vrApplicationVisibilityEntity = response.Entity;
+                }
             });
         }
 
@@ -97,7 +101,10 @@
             settingsDirectiveReadyDeferred.promise.then(function () {
                 var settingsDirectivePayload;
                 if (vrApplicationVisibilityEntity != undefined) {
-                    settingsDirectivePayload = { Settings: vrApplicationVisibilityEntity.Settings };
+                    settingsDirectivePayload = {
+                        Settings: vrApplicationVisibilityEntity.Settings,
+                        ModulesVisibilityEditorRuntime: vrApplicationVisibilityEditorRuntime.ModulesVisibilityEditorRuntime
+                    };
                 }
                 VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
             });

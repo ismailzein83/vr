@@ -18,6 +18,21 @@ namespace Vanrise.Common.Business
             return cachedVRApplicationVisibilities.GetRecord(vrApplicationVisibilityId);
         }
 
+        public VRApplicationVisibilityEditorRuntime GetVRApplicationVisibilityEditorRuntime(Guid vrApplicationVisibilityId)
+        {
+            var editorRuntime = new VRApplicationVisibilityEditorRuntime();
+            editorRuntime.ModulesVisibilityEditorRuntime = new Dictionary<Guid, VRModuleVisibilityEditorRuntime>();
+
+            editorRuntime.Entity = GetVRApplicationVisibility(vrApplicationVisibilityId);
+            if (editorRuntime.Entity.Settings == null)
+                throw new NullReferenceException(string.Format("vrApplicationVisibility.Settings of vrApplicationVisibilityId {0}", vrApplicationVisibilityId));
+
+            foreach (var moduleVisibility in editorRuntime.Entity.Settings.ModulesVisibility)
+                editorRuntime.ModulesVisibilityEditorRuntime.Add(moduleVisibility.Key, moduleVisibility.Value.GetEditorRuntime());
+
+            return editorRuntime;
+        }
+
         public IDataRetrievalResult<VRApplicationVisibilityDetail> GetFilteredVRApplicationVisibilities(DataRetrievalInput<VRApplicationVisibilityQuery> input)
         {
             var allVRApplicationVisibilities = this.GetCachedVRApplicationVisibilities();

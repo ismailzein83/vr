@@ -35,11 +35,12 @@
             };
             VRModalService.showModal('/Client/Modules/Common/Directives/VRApplicationVisibility/Templates/VRModuleVisibilityEditor.html', null, settings);
         };
-        function editVRModuleVisibility(vrModuleVisibility, onVRModuleVisibilityUpdated) {
+        function editVRModuleVisibility(vrModuleVisibility, vrModuleVisibilityEditorRuntime, onVRModuleVisibilityUpdated) {
             var settings = {};
 
             var parameters = {
-                vrModuleVisibility: vrModuleVisibility
+                vrModuleVisibility: vrModuleVisibility,
+                vrModuleVisibilityEditorRuntime: vrModuleVisibilityEditorRuntime
             };
 
             settings.onScopeReady = function (modalScope) {

@@ -23,10 +23,10 @@ namespace Vanrise.Common.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetVRApplicationVisibility")]
-        public VRApplicationVisibility GetVRApplicationVisibility(Guid vrApplicationVisibilityId)
+        [Route("GetVRApplicationVisibilityEditorRuntime")]
+        public VRApplicationVisibilityEditorRuntime GetVRApplicationVisibilityEditorRuntime(Guid vrApplicationVisibilityId)
         {
-            return _manager.GetVRApplicationVisibility(vrApplicationVisibilityId);
+            return _manager.GetVRApplicationVisibilityEditorRuntime(vrApplicationVisibilityId);
         }
 
         [HttpPost]

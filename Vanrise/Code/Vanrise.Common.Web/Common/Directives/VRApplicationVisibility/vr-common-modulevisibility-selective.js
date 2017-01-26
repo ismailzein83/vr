@@ -57,11 +57,15 @@
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
+                    console.log(payload);
+
                     var promises = [];
                     var vrModuleVisibility;
+                    var vrModuleVisibilityEditorRuntime;
 
                     if (payload != undefined) {
                         vrModuleVisibility = payload.vrModuleVisibility;
+                        vrModuleVisibilityEditorRuntime: payload.vrModuleVisibilityEditorRuntime;
                     }
 
                     var getVRModuleVisibilityExtensionConfigsPromise = getVRModuleVisibilityExtensionConfigs();
@@ -94,7 +98,8 @@
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
-                                vrModuleVisibility: vrModuleVisibility
+                                vrModuleVisibility: vrModuleVisibility,
+                                vrModuleVisibilityEditorRuntime: vrModuleVisibilityEditorRuntime
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });

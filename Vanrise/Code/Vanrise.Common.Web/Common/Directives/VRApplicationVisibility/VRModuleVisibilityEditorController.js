@@ -9,6 +9,7 @@
         var isEditMode;
 
         var vrModuleVisibilityEntity;
+        var vrModuleVisibilityEditorRuntime;
 
         var vrModuleVisibilitySelectiveAPI;
         var vrModuleVisibilitySelectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -20,8 +21,11 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
+            console.log(parameters);
+
             if (parameters != undefined) {
                 vrModuleVisibilityEntity = parameters.vrModuleVisibility;
+                vrModuleVisibilityEditorRuntime = parameters.vrModuleVisibilityEditorRuntime;
             }
 
             isEditMode = (vrModuleVisibilityEntity != undefined);
@@ -73,7 +77,8 @@
                 var payload;
                 if (vrModuleVisibilityEntity != undefined) {
                     payload = {
-                        vrModuleVisibility: vrModuleVisibilityEntity
+                        vrModuleVisibility: vrModuleVisibilityEntity,
+                        vrModuleVisibilityEditorRuntime: vrModuleVisibilityEditorRuntime
                     };
                 }
                 VRUIUtilsService.callDirectiveLoad(vrModuleVisibilitySelectiveAPI, payload, vrModuleVisibilitySelectiveLoadDeferred);

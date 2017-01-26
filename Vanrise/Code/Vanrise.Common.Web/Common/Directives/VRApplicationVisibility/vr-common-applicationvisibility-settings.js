@@ -31,6 +31,7 @@
             this.initializeController = initializeController;
 
             var vrModuleVisibilityExtensionConfigs = [];
+            var modulesVisibilityEditorRuntime;
 
             var gridAPI;
             var context;
@@ -71,7 +72,11 @@
                     var modulesVisibility;
 
                     if (payload != undefined && payload.Settings != undefined) {
-                        modulesVisibility = payload.Settings.ModulesVisibility;
+                        modulesVisibilityEditorRuntime = payload.ModulesVisibilityEditorRuntime;
+
+                        if (payload.Settings != undefined) {
+                            modulesVisibility = payload.Settings.ModulesVisibility;
+                        }
                     }
 
                     var loadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -135,7 +140,7 @@
                     ctrl.vrModuleVisibilities[index] = { Entity: updatedVRModuleVisibility };
                 };
 
-                VRCommon_VRApplicationVisibilityService.editVRModuleVisibility(vrModuleVisibility.Entity, onVRModuleVisibilityUpdated);
+                VRCommon_VRApplicationVisibilityService.editVRModuleVisibility(vrModuleVisibility.Entity, modulesVisibilityEditorRuntime[vrModuleVisibility.Entity.ConfigId], onVRModuleVisibilityUpdated);
             }
 
             function extendVRModuleVisibility(extendModuleVisibility) {

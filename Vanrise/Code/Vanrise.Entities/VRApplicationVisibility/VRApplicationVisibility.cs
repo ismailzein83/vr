@@ -20,8 +20,11 @@ namespace Vanrise.Entities
         public Dictionary<Guid, VRModuleVisibility> ModulesVisibility { get; set; }
     }
 
-    public abstract class VRModuleVisibility
+    public class VRApplicationVisibilityEditorRuntime
     {
-        public abstract Guid ConfigId { get; }
+        public VRApplicationVisibility Entity { get; set; }
+
+        public Dictionary<Guid, VRModuleVisibilityEditorRuntime> ModulesVisibilityEditorRuntime { get; set; }
+
     }
 }
