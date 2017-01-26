@@ -78,5 +78,7 @@
     <Build Include="Retail_Analytics\User Defined Types\TrafficStats15MinType.sql" />
     <Build Include="Security\Retail_Analytics.sql" />
     <Build Include="Security\COMMON.sql" />
+    <Build Include="Retail_Analytics\Tables\BillingStatsDaily.sql" />
+    <Build Include="Retail_Analytics\User Defined Types\BillingStatsDailyType.sql" />
   </ItemGroup>
 </Project>
