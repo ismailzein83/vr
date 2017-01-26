@@ -40,6 +40,7 @@ namespace NP.IVSwitch.Business
 
         private bool TryGetMatchingMappingRule(out MappingRule matchedRule)
         {
+            var tempSiwtch = Helper.GetSwitch();
             matchedRule = new MappingRule();
             MappingRuleManager mappingRuleManager = new MappingRuleManager();
             var genericRules = mappingRuleManager.GetGenericRulesByDefinitionId(_definitionId);
@@ -52,7 +53,15 @@ namespace NP.IVSwitch.Business
                 if (mappingRule.Criteria.FieldsValues.TryGetValue("Type", out criteriaFieldValues))
                 {
                     var typeValue = criteriaFieldValues.GetValues();
-                    if (typeValue.Contains((long)_carrierType))
+                    if (!typeValue.Contains((long)_carrierType)) continue;
+
+                    GenericRuleCriteriaFieldValues switchCriteriaFieldValues;
+                    if (!mappingRule.Criteria.FieldsValues.TryGetValue("Switch", out switchCriteriaFieldValues))
+                        continue;
+                    var switchValue = switchCriteriaFieldValues.GetValues();
+                    var enumerable = switchValue as object[] ?? switchValue.ToArray();
+                    if (enumerable.Length != 1) continue;
+                    if ((long)enumerable[0] == tempSiwtch.SwitchId)
                     {
                         matchedRule = mappingRule;
                         return true;
