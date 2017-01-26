@@ -521,6 +521,10 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeRuleDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Switch\retail-be-switch-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Switch\retail-be-switch-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\retail-be-visibility-accountdefinitions.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\Templates\VisibilityAccountDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\Templates\VisibilityAccountDefinitionsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\VisibilityAccountDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\Templates\CountryZoneTemplate.html" />
@@ -587,6 +591,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\AccountActionDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\Templates\AccountViewDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\AccountViewDefinitionEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Services\VisibilityAccountDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionEditor.html" />

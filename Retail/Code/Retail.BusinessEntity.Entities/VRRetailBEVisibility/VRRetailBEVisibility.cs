@@ -11,15 +11,15 @@ namespace Retail.BusinessEntity.Entities
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("EB85EE78-78CE-437D-B13E-18DD15EABE54"); }
         }
 
-        public List<VRRetailBEVisibilityAccountDefinition> AccountDefinitions { get; set; }
+        public Dictionary<Guid, VRRetailBEVisibilityAccountDefinition> AccountDefinitions { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinition
     {
-        public Guid AccountDefinitionId { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
 
         public string Title { get; set; }
 
@@ -59,6 +59,7 @@ namespace Retail.BusinessEntity.Entities
 
         public string Title { get; set; }
     }
+
     public class VRRetailBEVisibilityAccountDefinitionAccountType
     {
         public Guid AccountTypeId { get; set; }
