@@ -23,16 +23,19 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
                 switch (intervalTimeTaskTriggerArgument.IntervalType)
                 {
                     case IntervalType.Hour:
-                        while (nextRunTime < now)
+                        do
                             nextRunTime = nextRunTime.AddHours(intervalTimeTaskTriggerArgument.Interval);
+                        while (intervalTimeTaskTriggerArgument.IgnoreSkippedIntervals && nextRunTime < now);
                         break;
                     case IntervalType.Minute:
-                        while (nextRunTime < now)
+                        do
                             nextRunTime = nextRunTime.AddMinutes(intervalTimeTaskTriggerArgument.Interval);
+                        while (intervalTimeTaskTriggerArgument.IgnoreSkippedIntervals && nextRunTime < now);
                         break;
                     case IntervalType.Second:
-                        while (nextRunTime < now)
+                        do
                             nextRunTime = nextRunTime.AddSeconds(intervalTimeTaskTriggerArgument.Interval);
+                        while (intervalTimeTaskTriggerArgument.IgnoreSkippedIntervals && nextRunTime < now);
                         break;
                 }
             }

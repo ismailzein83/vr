@@ -48,7 +48,15 @@ namespace Vanrise.Runtime
                     continue;
                 }
 
-                if (schedulerTask.IsEnabled && schedulerTask.TaskSettings.StartEffDate < DateTime.Now && (schedulerTask.TaskSettings.EndEffDate == null || schedulerTask.TaskSettings.EndEffDate > DateTime.Now) &&
+                if (!schedulerTask.IsEnabled)
+                {
+                    if (schedulerTaskState.Status == SchedulerTaskStatus.WaitingEvent && CheckIfScheduleTaskCompleted(schedulerTaskState, schedulerTask))
+                    {
+                        schedulerTaskState.NextRunTime = null;
+                        scheduleTaskStateManager.UpdateTaskState(schedulerTaskState);
+                    }
+                }
+                else if (schedulerTask.TaskSettings.StartEffDate < DateTime.Now && (schedulerTask.TaskSettings.EndEffDate == null || schedulerTask.TaskSettings.EndEffDate > DateTime.Now) &&
                     scheduleTaskStateManager.TryLockTask(schedulerTaskState.TaskId, currentRuntimeProcessId, runningRuntimeProcessesIds))
                 {
                     Task task = new Task(() =>
@@ -62,19 +70,7 @@ namespace Vanrise.Runtime
                         {
                             if (schedulerTaskState.Status == SchedulerTaskStatus.WaitingEvent)
                             {
-                                SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(schedulerTask.ActionInfo.FQTN));
-                                var checkProgressContext = new SchedulerTaskCheckProgressContext
-                                {
-                                    Task = schedulerTask,
-                                    ExecutionInfo = schedulerTaskState.ExecutionInfo
-                                };
-                                SchedulerTaskCheckProgressOutput output =
-                                    taskAction.CheckProgress(checkProgressContext, schedulerTask.OwnerId);
-                                if (output.Result == ExecuteOutputResult.Completed)
-                                {
-                                    schedulerTaskState.Status = SchedulerTaskStatus.Completed;
-                                    updateTaskState = true;
-                                }
+                                updateTaskState = CheckIfScheduleTaskCompleted(schedulerTaskState, schedulerTask);
                             }
                             else
                             {
@@ -146,6 +142,7 @@ namespace Vanrise.Runtime
                             {
                                 if (schedulerTaskState.Status != SchedulerTaskStatus.WaitingEvent)
                                     schedulerTaskState.NextRunTime = taskTrigger.CalculateNextTimeToRun(schedulerTask, schedulerTaskState, schedulerTask.TaskSettings.TaskTriggerArgument);
+
                                 scheduleTaskStateManager.UpdateTaskState(schedulerTaskState);
                             }
 
@@ -165,6 +162,25 @@ namespace Vanrise.Runtime
                     task.Start();
                 }
             }
+        }
+
+        private bool CheckIfScheduleTaskCompleted(Entities.SchedulerTaskState schedulerTaskState, SchedulerTask schedulerTask)
+        {
+            bool updateTaskState = false;
+            SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(schedulerTask.ActionInfo.FQTN));
+            var checkProgressContext = new SchedulerTaskCheckProgressContext
+            {
+                Task = schedulerTask,
+                ExecutionInfo = schedulerTaskState.ExecutionInfo
+            };
+            SchedulerTaskCheckProgressOutput output = taskAction.CheckProgress(checkProgressContext, schedulerTask.OwnerId);
+
+            if (output.Result == ExecuteOutputResult.Completed)
+            {
+                schedulerTaskState.Status = SchedulerTaskStatus.Completed;
+                updateTaskState = true;
+            }
+            return updateTaskState;
         }
 
         private List<SchedulerTaskState> GetDueTasks()

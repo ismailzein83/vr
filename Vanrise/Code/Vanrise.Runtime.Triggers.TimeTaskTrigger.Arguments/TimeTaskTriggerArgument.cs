@@ -10,5 +10,7 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments
     public class TimeTaskTriggerArgument : BaseTaskTriggerArgument
     {
         public string TimerTriggerTypeFQTN { get; set; }
+
+        public bool IgnoreSkippedIntervals { get; set; }
     }
 }

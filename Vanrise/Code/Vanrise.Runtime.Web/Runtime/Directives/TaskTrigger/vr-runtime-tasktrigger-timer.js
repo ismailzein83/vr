@@ -50,7 +50,9 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
             var api = {};
             
             api.getData = function () {
-                return timerTypeDirectiveAPI.getData();
+                var data = timerTypeDirectiveAPI.getData();
+                data.IgnoreSkippedIntervals = $scope.ignoreSkippedIntervals;
+                return data;
             };
 
             api.load = function (payload) {
@@ -58,6 +60,7 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
                 var promises = [];
                 if (payload != undefined && payload.data != undefined) {
                     data = payload.data;
+                    $scope.ignoreSkippedIntervals = data.IgnoreSkippedIntervals;
                     $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, data.TimerTriggerTypeFQTN, "FQTN");
                 }
                 else {

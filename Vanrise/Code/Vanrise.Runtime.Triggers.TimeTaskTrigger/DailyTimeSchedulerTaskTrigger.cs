@@ -17,7 +17,7 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 
             List<DateTime> listofScheduledDateTimes = new List<DateTime>();
             var now = DateTime.Now;
-            var nextruntime = taskState.NextRunTime.HasValue ? taskState.NextRunTime.Value : now;
+            var nextruntime = taskState.NextRunTime.HasValue && !dailyTimeTaskTriggerArgument.IgnoreSkippedIntervals ? taskState.NextRunTime.Value : now;
 
             foreach (Time time in dailyTimeTaskTriggerArgument.ScheduledTimesToRun)
             {
