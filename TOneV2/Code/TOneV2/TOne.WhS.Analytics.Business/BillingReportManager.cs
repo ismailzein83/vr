@@ -196,12 +196,14 @@ namespace TOne.WhS.Analytics.Business
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = listBusinessCaseStatus.Count();
+            double total = listBusinessCaseStatus.Sum(item => item.Amount.Value);
+            decimal totalDuration = listBusinessCaseStatus.Sum(item => item.Durations.Value);
             worksheet.Cells.SetColumnWidth(4, 20);
             worksheet.Cells.SetColumnWidth(5, 20);
             worksheet.Cells.SetColumnWidth(6, 20);
             worksheet.Cells.SetColumnWidth(7, 20);
 
-            if (lstCarrierProfileCount > 0)
+            if (lstCarrierProfileCount > 0 && totalDuration >0 && totalDuration > 0)
             {
                 string colName = GetExcelColumnName(2 + lstCarrierProfileCount);
 
