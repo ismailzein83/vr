@@ -4,9 +4,13 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_InsertFromAccountUsageAndUpdate] @AccountTypeID uniqueidentifier,
-@TimeOffset time
+@TimeOffset decimal
 AS
 BEGIN
+
+  DECLARE  @BeforeDate DATETIME
+  SET @BeforeDate =  DATEADD(SECOND, -@TimeOffset,GETDATE())
+
   DECLARE @AccountUsageId bigint,
           @AccountID bigint,
           @TransactionTypeID uniqueidentifier,
@@ -30,7 +34,7 @@ BEGIN
     BillingTransactionId
   FROM [VR_AccountBalance].AccountUsage
   WHERE AccountTypeID = @AccountTypeID
-  AND PeriodEnd < GETDATE() - @TimeOffset
+  AND PeriodEnd < @BeforeDate
   AND (BillingTransactionID IS NULL
   OR ISNULL(ShouldRecreateTransaction, 0) = 1)
 

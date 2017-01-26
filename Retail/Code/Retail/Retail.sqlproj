@@ -318,5 +318,9 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetErrorData.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScriptXML.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
+    <Build Include="Retail_BE\Tables\ProductFamily.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_Update.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_Insert.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_GetAll.sql" />
   </ItemGroup>
 </Project>
