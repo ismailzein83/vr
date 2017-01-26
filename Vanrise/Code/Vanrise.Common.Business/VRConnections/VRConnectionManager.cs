@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -60,7 +61,11 @@ namespace Vanrise.Common.Business
             };
             return vrConnections.FindAllRecords(predicate);
         }
-
+        public IEnumerable<VRConnectionConfig> GetVRConnectionConfigTypes()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<VRConnectionConfig>(VRConnectionConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<VRConnection> GetAllVRConnections()
         {
             return this.GetCachedVRConnections().MapRecords(x => x).OrderBy(x => x.Name);

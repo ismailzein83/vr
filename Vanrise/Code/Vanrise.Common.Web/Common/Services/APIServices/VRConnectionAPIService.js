@@ -12,9 +12,13 @@
                 filter: filter
             });
         };
+        function GetVRConnectionConfigTypes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRConnectionConfigTypes"));
+        };
 
         return ({
-            GetVRConnectionInfos: GetVRConnectionInfos
+            GetVRConnectionInfos: GetVRConnectionInfos,
+            GetVRConnectionConfigTypes: GetVRConnectionConfigTypes
         });
     }
 

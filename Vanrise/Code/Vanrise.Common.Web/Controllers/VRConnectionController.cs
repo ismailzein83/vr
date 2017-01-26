@@ -23,5 +23,12 @@ namespace Vanrise.Common.Web.Controllers
             VRConnectionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRConnectionFilter>(filter) : null;
             return _manager.GetVRConnectionInfos(deserializedFilter);
         }
+
+        [HttpGet]
+        [Route("GetVRConnectionConfigTypes")]
+        public IEnumerable<VRConnectionConfig> GetVRConnectionConfigTypes()
+        {
+            return _manager.GetVRConnectionConfigTypes();
+        }
     }
 }

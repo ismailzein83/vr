@@ -203,6 +203,8 @@
     <Content Include="Common\Directives\GeneralSettings\vr-common-pagesize-selector.js" />
     <Content Include="Common\Directives\GridColumnWidth\Templates\GridColumnWidthEditorTemplate.html" />
     <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\InterAppRestConnectionEditorTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-interapprestconnection-editor.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-company-setting-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-companysettings-editor.js" />
@@ -226,7 +228,10 @@
     <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttypeconfig-selector.js" />
+    <Content Include="Common\Directives\VRConnection\Templates\VRConnectionGridTemplate.html" />
+    <Content Include="Common\Directives\VRConnection\vr-common-connectiontypeconfig-selector.js" />
     <Content Include="Common\Directives\VRConnection\vr-common-connection-selector.js" />
+    <Content Include="Common\Directives\VRConnection\vr-common-interapprestconnection-editor.js" />
     <Content Include="Common\Directives\VRDocument\Templates\VRDocumentGridTemplate.html" />
     <Content Include="Common\Directives\VRDocument\vr-common-document-grid.js" />
     <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
@@ -449,6 +454,10 @@
     <Content Include="Common\Views\VRComponentType\VRComponentTypeEditorController.js" />
     <Content Include="Common\Views\VRComponentType\VRComponentTypeManagement.html" />
     <Content Include="Common\Views\VRComponentType\VRComponentTypeManagementController.js" />
+    <Content Include="Common\Views\VRConnection\VRConnectionEditor.html" />
+    <Content Include="Common\Views\VRConnection\VRConnectionEditorController.js" />
+    <Content Include="Common\Views\VRConnection\VRConnectionManagement.html" />
+    <Content Include="Common\Views\VRConnection\VRConnectionManagementController.js" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditor.html" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditorController.js" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneManagement.html" />
