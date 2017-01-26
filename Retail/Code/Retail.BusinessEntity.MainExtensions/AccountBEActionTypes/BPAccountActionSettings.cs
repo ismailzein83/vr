@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
 {
-    public class BPAccountActionSettings : AccountActionDefinitionSettings
+    public class BPAccountActionSettings : AccountActionDefinitionSettings, IAccountActionBackendExecutor
     {
         public override Guid ConfigId
         {
@@ -20,5 +20,15 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         }
                 
         public ActionBPDefinitionSettings BPDefinitionSettings { get; set; }
+
+        public bool TryConvertToBPArg(IAccountActionBackendExecutorConvertToBPArgContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Execute(IAccountActionBackendExecutorExecuteContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

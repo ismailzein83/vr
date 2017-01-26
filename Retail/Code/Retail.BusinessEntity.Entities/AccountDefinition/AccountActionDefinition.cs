@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -11,6 +12,8 @@ namespace Retail.BusinessEntity.Entities
         public Guid AccountActionDefinitionId { get; set; }
 
         public string Name { get; set; }
+
+        public bool NotVisibleInActionMenu { get; set; }
 
         public AccountCondition AvailabilityCondition { get; set; }
 
@@ -22,5 +25,26 @@ namespace Retail.BusinessEntity.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract string ClientActionName { get; }
+    }
+
+    public interface IAccountActionBackendExecutor
+    {
+        bool TryConvertToBPArg(IAccountActionBackendExecutorConvertToBPArgContext context);
+
+        void Execute(IAccountActionBackendExecutorExecuteContext context);
+    }
+
+    public interface IAccountActionBackendExecutorConvertToBPArgContext
+    {
+        Account Account { get; }
+
+        BaseProcessInputArgument BPInputArgument { set; }
+    }
+
+    public interface IAccountActionBackendExecutorExecuteContext
+    {
+        Account Account { get; }
+
+        BaseProcessInputArgument BPInputArgument { set; }
     }
 }
