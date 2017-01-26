@@ -2,15 +2,19 @@
 
     "use strict";
 
-    RPRouteOptionSupplierController.$inject = ["$scope", "WhS_Routing_RPRouteAPIService", "WhS_Routing_RouteOptionRuleService", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
+    RPRouteOptionSupplierController.$inject = ["$scope", "WhS_Routing_RPRouteAPIService", "WhS_Routing_RouteOptionRuleService", "WhS_BE_CarrierAccountAPIService", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function RPRouteOptionSupplierController($scope, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function RPRouteOptionSupplierController($scope, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteOptionRuleService, WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+
+        var rpRouteOptionGridAPI;
+        var rpRouteOptionGridReadyDeferred = UtilsService.createPromiseDeferred();
 
         var routingProductId;
         var saleZoneId;
         var supplierId;
         var routingDatabaseId;
         var currencyId;
+        var supplierName;
 
         loadParameters();
         defineScope();
@@ -32,61 +36,8 @@
             $scope.supplierZones = [];
 
             $scope.onGridReady = function (api) {
-                $scope.isLoading = true;
-
-                WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId).then(function (response) {
-                    if (response) {
-                        var _supplierZoneServiceViewerPromises = [];
-
-                        $scope.title = "Supplier: " + response.SupplierName;
-
-                        for (var i = 0; i < response.SupplierZones.length; i++) {
-                            var supplierZone = response.SupplierZones[i];
-                            $scope.supplierZones.push(supplierZone);
-                            extendSupplierZoneObject(supplierZone);
-                            _supplierZoneServiceViewerPromises.push(supplierZone.supplierZoneLoadDeferred.promise);
-                        }
-
-                        UtilsService.waitMultiplePromises(_supplierZoneServiceViewerPromises).then(function () {
-                            $scope.isLoading = false;
-                        }).catch(function (error) {
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        })
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
-            };
-
-            $scope.getMenuActions = function (dataItem) {
-                var menuActions = [];
-
-                if (dataItem.Entity.ExecutedRuleId) {
-                    menuActions.push({
-                        name: "Option Rule",
-                        clicked: openRouteOptionRuleEditor
-                    });
-                }
-
-                function openRouteOptionRuleEditor(dataItem) {
-                    WhS_Routing_RouteOptionRuleService.editRouteOptionRule(dataItem.Entity.ExecutedRuleId);
-                }
-
-                return menuActions;
-            };
-
-            $scope.getRowStyle = function (dataItem) {
-
-                var rowStyle;
-
-                if (dataItem.Entity.IsBlocked) {
-                    rowStyle = { CssClass: "bg-danger" };
-                }
-                else if (dataItem.Entity.ExecutedRuleId) {
-                    rowStyle = { CssClass: "bg-success" };
-                }
-
-                return rowStyle;
+                rpRouteOptionGridAPI = api;
+                rpRouteOptionGridReadyDeferred.resolve();
             };
 
             $scope.close = function () {
@@ -94,8 +45,58 @@
             };
         }
         function load() {
+            $scope.isLoading = true;
 
+            getSupplierName().then(function () {
+                loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoading = false;
+            });
         }
+
+
+        function getSupplierName() {
+            return WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(supplierId).then(function (response) {
+                if (response != null) {
+                    supplierName = response;
+                }
+            });
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadGrid]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
+
+
+        function setTitle() {
+            $scope.title = "Supplier: " + supplierName;
+        }
+
+
+        function loadGrid() {
+            var loadRpRouteOptionGridPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            rpRouteOptionGridReadyDeferred.promise.then(function () {
+
+                var payload = {
+                    routingProductId: routingProductId,
+                    saleZoneId: saleZoneId,
+                    supplierId: supplierId,
+                    routingDatabaseId: routingDatabaseId,
+                    currencyId: currencyId
+                };
+
+                VRUIUtilsService.callDirectiveLoad(rpRouteOptionGridAPI, payload, loadRpRouteOptionGridPromiseDeferred);
+            })
+
+            return loadRpRouteOptionGridPromiseDeferred.promise;
+        }
+
 
         function extendSupplierZoneObject(supplierZone) {
             supplierZone.supplierZoneLoadDeferred = UtilsService.createPromiseDeferred();

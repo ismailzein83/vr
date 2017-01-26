@@ -112,7 +112,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 			    var context = {
 			        zoneItem: dataItem,
-			        ownerName: ownerName
+			        ownerName: ownerName,
+			        routingDatabaseId: gridQuery.RoutingDatabaseId,
+			        currencyId: gridQuery.CurrencyId
 			    };
 
 			    WhS_Sales_RatePlanService.openTQIEditor(context, onTQIEvaluated);

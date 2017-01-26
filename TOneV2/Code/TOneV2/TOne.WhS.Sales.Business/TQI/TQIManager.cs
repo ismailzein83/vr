@@ -152,6 +152,7 @@ namespace TOne.WhS.Sales.Business
 
             return new TQISuppplierInfo()
             {
+                SupplierId = supplierId,
                 SupplierName = _carrierAccountManager.GetCarrierAccountName(supplierId),
                 ACD = acd,
                 ASR = asr,

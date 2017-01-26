@@ -9,6 +9,7 @@ namespace TOne.WhS.Sales.Entities
 {
     public class TQISuppplierInfo
     {
+        public int SupplierId { get; set; }
         public string SupplierName { get; set; }
         public string ZoneName { get; set; }
         public decimal Rate { get; set; }

@@ -14,6 +14,8 @@
         var rpRouteDetail;
         var ownerName;
         var zoneItem;
+        var routingDatabaseId;
+        var currencyId;
 
         var tqiGridAPI;
         var tqiGridAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -29,6 +31,8 @@
                 zoneItem = parameters.context.zoneItem;
                 rpRouteDetail = parameters.context.zoneItem.RPRouteDetail;
                 ownerName = parameters.context.ownerName;
+                routingDatabaseId = parameters.context.routingDatabaseId;
+                currencyId = parameters.context.currencyId;
             }
         }
 
@@ -126,12 +130,7 @@
             $scope.zoneName = zoneItem.ZoneName;
             $scope.rate = zoneItem.CurrentRate;
             $scope.rateBED = zoneItem.CurrentRateBED;
-            
-            if (zoneItem.NewRates != undefined) {
-                for (var i = 0; i < zoneItem.NewRates.length ; i++)
-                    if (zoneItem.NewRates[i].RateTypeId == null)
-                        $scope.newRate = zoneItem.NewRates[i].Rate
-            }
+            $scope.newRate = zoneItem.NewRate;
         }
 
         function loadTQISelectiveDirective() {
@@ -174,6 +173,10 @@
                     rpRouteDetail: rpRouteDetail,
                     periodType: $scope.periodTypeSelectedValue != undefined ? $scope.periodTypeSelectedValue.value : undefined,
                     periodValue: $scope.periodValue,
+                    currencyId: currencyId,
+                    routingDatabaseId: routingDatabaseId,
+                    routingProductId: zoneItem.EffectiveRoutingProductId,
+                    saleZoneId: zoneItem.ZoneId
                 };
 
                 VRUIUtilsService.callDirectiveLoad(tqiGridAPI, payload, loadTQIGridPromiseDeferred);
