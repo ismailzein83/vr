@@ -2,11 +2,11 @@
     <vr-row>
         <vr-sec-view-selector normal-col-num="6" on-ready="scopeModel.onViewSelectorReady" customlabel="Default View"></vr-sec-view-selector>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.normalPrecision" label="Normal Precision" type="number" minvalue="0" decimalprecision="0"></vr-textbox>
+            <vr-textbox value="scopeModel.normalPrecision" label="Normal Precision" type="number" minvalue="0" decimalprecision="0" isrequired="true"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.longPrecision" label="Long Precision" type="number" minvalue="0" decimalprecision="0"></vr-textbox>
+            <vr-textbox value="scopeModel.longPrecision" label="Long Precision" type="number" minvalue="0" decimalprecision="0" isrequired="true"></vr-textbox>
         </vr-columns>
-        <vr-common-pagesize-selector normal-col-num="6" on-ready="scopeModel.onPageSelectorReady" ></vr-common-pagesize-selector>
+        <vr-common-pagesize-selector normal-col-num="6" on-ready="scopeModel.onPageSelectorReady" isrequired="true" ></vr-common-pagesize-selector>
     </vr-row>
 </vr-tab>

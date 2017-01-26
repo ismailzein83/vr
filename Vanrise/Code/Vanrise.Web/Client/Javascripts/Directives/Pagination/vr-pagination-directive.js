@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrPagination', [function () {
+app.directive('vrPagination', ['UISettingsService', function (UISettingsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -12,7 +12,7 @@ app.directive('vrPagination', [function () {
             var pagerCtrl = this;
             pagerCtrl.topCounts = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100];
             if (pagerCtrl.pagersettings != undefined) {
-                pagerCtrl.pagersettings.itemsPerPage = pagerCtrl.topCounts[1];
+                pagerCtrl.pagersettings.itemsPerPage = parseInt(UISettingsService.getUIParameterValue('GridPageSize') ||  pagerCtrl.topCounts[1]);
                 pagerCtrl.pagersettings.getPageInfo = function () {
                     var fromRow = (pagerCtrl.pagersettings.currentPage - 1) * pagerCtrl.pagersettings.itemsPerPage + 1;
                     return {

@@ -37,9 +37,7 @@ namespace Vanrise.Common.Business
             SettingManager settingManager = new SettingManager();
             var generalSettings = settingManager.GetSetting<GeneralSettingData>(Constants.GeneralSettingType);
 
-            if (generalSettings == null)
-                throw new NullReferenceException("generalSettings");
-
+         
             return generalSettings;
         }
         public ProductInfo GetProductInfo()

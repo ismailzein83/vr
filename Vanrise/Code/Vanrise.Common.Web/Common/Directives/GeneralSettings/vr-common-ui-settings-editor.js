@@ -75,13 +75,13 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                
                 api.getData = function () {
                     return {
-                        DefaultViewId:viewSelectorAPI.getSelectedIds(),
+                        DefaultViewId: viewSelectorAPI.getSelectedIds(),
                         NormalPrecision: $scope.scopeModel.normalPrecision,
-                        LonPrecision: $scope.scopeModel.longPrecision,
+                        LongPrecision: $scope.scopeModel.longPrecision,
                         GridPageSize: pagesizeSelectorAPI.getSelectedIds()
                     };
                 };
-
+              
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

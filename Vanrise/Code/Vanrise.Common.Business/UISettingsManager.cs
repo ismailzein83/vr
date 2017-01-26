@@ -21,8 +21,8 @@ namespace Vanrise.Common.Business
 
             if (generalSettingData.UIData != null)
             {
-                uiSettings.Parameters =  new List<UIParameter>();
-                if(generalSettingData.UIData.DefaultViewId.HasValue)
+                uiSettings.Parameters = new List<UIParameter>();
+                if (generalSettingData.UIData.DefaultViewId.HasValue)
                 {
                     string defaultURL;
                     View defaultView = new ViewManager().GetView(generalSettingData.UIData.DefaultViewId.Value);
@@ -30,7 +30,8 @@ namespace Vanrise.Common.Business
                         defaultURL = defaultView.Settings.GetURL(defaultView);
                     else
                         defaultURL = defaultView.Url;
-                    uiSettings.Parameters.Add(new UIParameter(){
+                    uiSettings.Parameters.Add(new UIParameter()
+                    {
                         Name = "DefaultURL",
                         Value = defaultURL
                     });
@@ -38,7 +39,8 @@ namespace Vanrise.Common.Business
 
                 if (generalSettingData.UIData.NormalPrecision.HasValue)
                 {
-                    uiSettings.Parameters.Add(new UIParameter(){
+                    uiSettings.Parameters.Add(new UIParameter()
+                    {
                         Name = "NormalPrecision",
                         Value = generalSettingData.UIData.NormalPrecision.Value.ToString()
                     });
@@ -62,7 +64,7 @@ namespace Vanrise.Common.Business
                         Value = generalSettingData.UIData.GridPageSize.Value.ToString()
                     });
                 }
-                   
+
             }
 
             return uiSettings;

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    LoginController.$inject = ['$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService'];
+    LoginController.$inject = ['$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService'];
 
-    function LoginController($scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService) {
+    function LoginController($scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService) {
         defineScope();
         load();
 
@@ -43,12 +43,18 @@
         function authenticate(credentialsObject) {
             return VR_Sec_SecurityAPIService.Authenticate(credentialsObject).then(function (response) {
                 if (VRNotificationService.notifyOnUserAuthenticated(response, onValidationNeeded)) {
+
                     var userInfo = JSON.stringify(response.AuthenticationObject);
                     SecurityService.createAccessCookie(userInfo);
-                    if ($scope.redirectURL != undefined && $scope.redirectURL != '')
-                        window.location.href = $scope.redirectURL;
-                    else
-                        window.location.href = '/';
+                      UISettingsService.loadUISettings().then(function () {
+                          if ($scope.redirectURL != undefined && $scope.redirectURL != '' && $scope.redirectURL.indexOf('default') ==-1 &&  $scope.redirectURL.indexOf('#') >-1) {
+                                window.location.href = $scope.redirectURL;
+                            }
+                            else if (UISettingsService.getDefaultPageURl() != undefined)
+                                window.location.href = UISettingsService.getDefaultPageURl();
+                            else
+                                window.location.href = '/';
+                      });
                 }
             });
         }

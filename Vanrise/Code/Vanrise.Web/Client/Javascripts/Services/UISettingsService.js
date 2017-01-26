@@ -1,0 +1,51 @@
+﻿(function (app) {
+
+    "use strict";
+    UISettingsService.$inject = ['VRNotificationService', 'UtilsService', 'VRCommon_UISettingsAPIService'];
+
+    function UISettingsService(VRNotificationService, UtilsService, VRCommon_UISettingsAPIService) {
+
+        var uiSettings;
+      
+        function loadUISettings() {
+            return VRCommon_UISettingsAPIService.GetUIParameters().then(function (response) {
+                uiSettings = response;
+            });
+        }
+        function getDefaultPageURl() {
+            var url;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "DefaultURL", "Name");
+                
+                url = UtilsService.getBaseUrlPrefix() + param.Value;
+            }
+            return url;
+        }
+        function getNormalPrecision() {
+            var normalPrecision;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "NormalPrecision", "Name");
+                normalPrecision  = param.Value;
+            }
+            return normalPrecision;
+        }
+        function getUIParameterValue(name) {
+            var val;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, name, "Name");
+                val = param.Value;
+            }
+            return val;
+        }
+        return ({
+            loadUISettings: loadUISettings,
+            getDefaultPageURl: getDefaultPageURl,
+            getNormalPrecision: getNormalPrecision,
+            getUIParameterValue: getUIParameterValue
+        });
+    }
+
+    app.service('UISettingsService', UISettingsService);
+})(app);
+
+

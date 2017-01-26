@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsService','UISettingsService',
+    function (UtilsService, VRUIUtilsService, UISettingsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -55,7 +55,9 @@ app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         UIData: uiSettingsAPI.getData()
                     };
                 };
-
+                api.callBack = function () {
+                    UISettingsService.loadUISettings();
+                }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

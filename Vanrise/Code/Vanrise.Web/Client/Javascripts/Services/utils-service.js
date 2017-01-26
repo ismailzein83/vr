@@ -864,6 +864,14 @@
             return +n;
         }
 
+        function getBaseUrlPrefix() {
+            var pathArray = location.href.split('/');
+            var protocol = pathArray[0];
+            var host = pathArray[2];
+            var baseurl = protocol + '//' + host + '/';
+            return baseurl;
+        }
+
         return ({
             replaceAll: replaceAll,
             waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -923,7 +931,8 @@
             parseDateToString: parseDateToString,
             isNumericValue: isNumericValue,
             isIntegerValue: isIntegerValue,
-            addFloats: addFloats
+            addFloats: addFloats,
+            getBaseUrlPrefix: getBaseUrlPrefix
         });
     }
 
