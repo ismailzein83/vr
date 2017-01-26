@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
 	public class RoutingProductBulkActionType : BulkActionType
 	{
+		#region Fields
+		
 		private RoutingProductManager _routingProductManager = new RoutingProductManager();
 		private RoutingProductZoneRelationType? _rpZoneRelationType;
 		private IEnumerable<long> _rpZoneIds;
+
+		#endregion
 
 		public override Guid ConfigId
 		{
@@ -21,6 +26,8 @@ namespace TOne.WhS.Sales.MainExtensions
 		}
 
 		public int RoutingProductId { get; set; }
+
+		public bool ApplyNewNormalRateBED { get; set; }
 
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{
@@ -35,8 +42,16 @@ namespace TOne.WhS.Sales.MainExtensions
 			{
 				ZoneId = context.ZoneItem.ZoneId,
 				ZoneRoutingProductId = RoutingProductId,
-				BED = DateTime.Today
+				BED = DateTime.Today,
+				ApplyNewNormalRateBED = ApplyNewNormalRateBED
 			};
+
+			if (ApplyNewNormalRateBED)
+			{
+				DateTime? newNormalRateBED = GetZoneNewNormalRateBED(context.ZoneDraft);
+				if (newNormalRateBED.HasValue)
+					context.ZoneItem.NewRoutingProduct.BED = newNormalRateBED.Value;
+			}
 
 			context.ZoneItem.EffectiveRoutingProductId = RoutingProductId;
 			context.ZoneItem.EffectiveRoutingProductName = _routingProductManager.GetRoutingProductName(RoutingProductId);
@@ -50,9 +65,19 @@ namespace TOne.WhS.Sales.MainExtensions
 			{
 				ZoneId = context.ZoneDraft.ZoneId,
 				ZoneRoutingProductId = RoutingProductId,
-				BED = DateTime.Today
+				BED = DateTime.Today,
+				ApplyNewNormalRateBED = ApplyNewNormalRateBED
 			};
+
+			if (ApplyNewNormalRateBED)
+			{
+				DateTime? newNormalRateBED = GetZoneNewNormalRateBED(context.ZoneDraft);
+				if (newNormalRateBED.HasValue)
+					context.ZoneDraft.NewRoutingProduct.BED = newNormalRateBED.Value;
+			}
 		}
+
+		#region Private Methods
 
 		private void SetRoutingProductFields()
 		{
@@ -72,5 +97,18 @@ namespace TOne.WhS.Sales.MainExtensions
 				_rpZoneIds = rpZoneIds;
 			}
 		}
+
+		private DateTime? GetZoneNewNormalRateBED(ZoneChanges zoneDraft)
+		{
+			if (zoneDraft != null && zoneDraft.NewRates != null)
+			{
+				DraftRateToChange newNormalRate = zoneDraft.NewRates.FindRecord(x => !x.RateTypeId.HasValue);
+				if (newNormalRate != null)
+					return newNormalRate.BED;
+			}
+			return null;
+		}
+
+		#endregion
 	}
 }

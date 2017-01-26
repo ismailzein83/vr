@@ -30,6 +30,8 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 		var firstSelectionEventDeferred = UtilsService.createPromiseDeferred();
 		var rpSelectedDeferred;
 
+		var isLoaded;
+
 		function initializeController() {
 			ctrl.onCurrentServiceViewerReady = function (api) {
 				currentServiceViewerAPI = api;
@@ -57,11 +59,12 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 				zoneItem.refreshZoneItem(zoneItem);
 			};
 
-			ctrl.onSwitchReady = function (api) {
-				console.log('onSwitchReady');
-			};
-
 			ctrl.isSwitchVisible = function () {
+
+				if (!isLoaded) {
+					return false;
+				}
+					
 				if (zoneItem != undefined && zoneItem.NewRate != null && selectorAPI.getSelectedIds() != undefined) {
 					return true;
 				}
@@ -69,6 +72,11 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 					ctrl.followRateDate = false;
 					return false;
 				}
+			};
+
+			ctrl.initializeSwitchValue = function () {
+				if (ctrl.followRateDate == undefined)
+					ctrl.followRateDate = true;
 			};
 
 			UtilsService.waitMultiplePromises([currentServiceViewerReadyDeferred.promise, selectorReadyDeferred.promise]).then(function () {
@@ -80,6 +88,8 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 			var api = {};
 
 			api.load = function (payload) {
+
+				isLoaded = false;
 
 				var promises = [];
 				firstSelectionEventDeferred = UtilsService.createPromiseDeferred();
@@ -115,7 +125,9 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 				var loadSelectorPromise = loadSelector(selectedRoutingProductId);
 				promises.push(loadSelectorPromise);
 
-				return UtilsService.waitMultiplePromises(promises);
+				return UtilsService.waitMultiplePromises(promises).finally(function () {
+					isLoaded = true;
+				});
 			};
 
 			api.applyChanges = function () {

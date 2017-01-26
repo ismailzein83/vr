@@ -31,6 +31,7 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 		function initializeController() {
 
 			$scope.scopeModel = {};
+			$scope.scopeModel.followRateDate = true;
 
 			$scope.scopeModel.onSelectorReady = function (api) {
 				routingProductSelectorAPI = api;
@@ -52,8 +53,10 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 
 				if (payload != undefined) {
 					bulkActionContext = payload.bulkActionContext;
-					if (payload.bulkAction != undefined)
+					if (payload.bulkAction != undefined) {
 						routingProductId = payload.bulkAction.RoutingProductId;
+						$scope.scopeModel.followRateDate = payload.bulkAction.ApplyNewNormalRateBED;
+					}
 				}
 
 				function loadRoutingProductSelector() {
@@ -75,7 +78,8 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 			api.getData = function () {
 				return {
 					$type: 'TOne.WhS.Sales.MainExtensions.RoutingProductBulkActionType, TOne.WhS.Sales.MainExtensions',
-					RoutingProductId: routingProductSelectorAPI.getSelectedIds()
+					RoutingProductId: routingProductSelectorAPI.getSelectedIds(),
+					ApplyNewNormalRateBED: $scope.scopeModel.followRateDate
 				};
 			};
 
@@ -86,6 +90,15 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 	}
 
 	function getTemplate(attrs) {
-		return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-whs-be-routingproduct-selector on-ready="scopeModel.onSelectorReady" onselectitem="scopeModel.onRoutingProductSelected" isrequired="ctrl.isrequired" hideremoveicon="ctrl.isrequired"></vr-whs-be-routingproduct-selector></vr-columns>';
+		return '<vr-columns colnum="{{ctrl.normalColNum}}">\
+					<vr-whs-be-routingproduct-selector on-ready="scopeModel.onSelectorReady"\
+						onselectitem="scopeModel.onRoutingProductSelected"\
+						isrequired="ctrl.isrequired"\
+						hideremoveicon="ctrl.isrequired">\
+					</vr-whs-be-routingproduct-selector>\
+				</vr-columns>\
+				<vr-columns colnum="{{ctrl.normalColNum}}">\
+					<vr-switch label="Follow Rate Date" value="scopeModel.followRateDate" isrequired="ctrl.isrequired"></vr-switch>\
+				</vr-columns>';
 	}
 }]);
