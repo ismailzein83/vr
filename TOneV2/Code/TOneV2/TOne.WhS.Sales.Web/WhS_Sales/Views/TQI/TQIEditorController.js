@@ -122,7 +122,7 @@
         }
 
         function setTitle() {
-            $scope.title = 'TQI Methods';
+            $scope.title = 'TQI';
         }
 
         function loadStaticData() {
