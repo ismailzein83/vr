@@ -2144,10 +2144,14 @@ vr-switch[class*="divDisabled"] .switch {
     width: 40px;
 }
 
-    .vr-file-btn input[type="file"] {
-        width: 100%;
-        font-size: 15px;
-    }
+.vr-file-btn input[type="file"] {
+    width: 100%;
+    font-size: 15px;
+}
+
+vr-textbox[highlighted]  input[type="text"] {
+    background-color:#ffdf36;
+}
 
 .vr-file-remove {
     top: 2px;
