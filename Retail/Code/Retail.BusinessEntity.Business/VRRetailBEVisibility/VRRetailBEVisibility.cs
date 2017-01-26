@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Retail.BusinessEntity.Entities
+namespace Retail.BusinessEntity.Business
 {
     public class VRRetailBEVisibility : VRModuleVisibility
     {
@@ -15,6 +15,25 @@ namespace Retail.BusinessEntity.Entities
         }
 
         public Dictionary<Guid, VRRetailBEVisibilityAccountDefinition> AccountDefinitions { get; set; }
+
+        public override VRModuleVisibilityEditorRuntime GetEditorRuntime()
+        {
+            string accountBEDefinitionName;
+            var accountBEDefinitionNamesById = new Dictionary<Guid, string>();
+
+            var businessEntityDefinitionManager = new Vanrise.GenericData.Business.BusinessEntityDefinitionManager();
+
+            foreach (var accountBEDefinitionId in AccountDefinitions.Keys)
+            {
+                if (!accountBEDefinitionNamesById.TryGetValue(accountBEDefinitionId, out accountBEDefinitionName))
+                    accountBEDefinitionNamesById.Add(accountBEDefinitionId, businessEntityDefinitionManager.GetBusinessEntityDefinitionName(accountBEDefinitionId));
+            }
+
+            VRRetailBEVisibilityEditorRuntime retailBEVisibilityEditorRuntime = new VRRetailBEVisibilityEditorRuntime();
+            retailBEVisibilityEditorRuntime.AccountBEDefinitionNamesById = accountBEDefinitionNamesById;
+
+            return retailBEVisibilityEditorRuntime;
+        }
     }
 
     public class VRRetailBEVisibilityAccountDefinition

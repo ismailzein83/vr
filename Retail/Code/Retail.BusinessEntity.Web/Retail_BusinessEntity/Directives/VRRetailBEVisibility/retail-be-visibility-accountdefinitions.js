@@ -30,8 +30,7 @@
         function VisibilityAccountDefinitionsCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var accountBEDefinitionId;
-            var accountFields;
+            var accountDefinitionNamesById
 
             var gridAPI;
 
@@ -73,15 +72,22 @@
 
                     var accountDefinitions;
 
+
                     if (payload != undefined && payload.vrModuleVisibility != undefined) {
-                        accountDefinitions = payload.vrModuleVisibility.AccountDefinitions;
+
+                        if (payload.vrModuleVisibility != undefined) {
+                            accountDefinitions = payload.vrModuleVisibility.AccountDefinitions;
+                        }
+                        if (payload.vrModuleVisibilityEditorRuntime != undefined) {
+                            accountDefinitionNamesById = payload.vrModuleVisibilityEditorRuntime.AccountBEDefinitionNamesById;
+                        }
                     }
 
                     if (accountDefinitions != undefined) {
                         for (var index in accountDefinitions) {
                             if (index != "$type") {
                                 var visibilityAccountDefinition = accountDefinitions[index];
-                                //extendVRModuleVisibility(visibilityAccountDefinition);
+                                extendVisibilityAccountDefinition(visibilityAccountDefinition);
                                 $scope.scopeModel.visibilityAccountDefinitions.push({ Entity: visibilityAccountDefinition });
                             }
                         }
@@ -100,7 +106,7 @@
                     }
 
                     return {
-                        $type: "Retail.BusinessEntity.Entities.VRRetailBEVisibility, Retail.BusinessEntity.Entities",
+                        $type: "Retail.BusinessEntity.Business.VRRetailBEVisibility, Retail.BusinessEntity.Business",
                         AccountDefinitions: visibilityAccountDefinitions
                     };
                 };
@@ -126,18 +132,12 @@
                 Retail_BE_VisibilityAccountDefinitionService.editVisibilityAccountDefinition(visibilityAccountDefinition.Entity, onVisibilityAccountDefinitionUpdated);
             }
 
-            //function extendVisibilityAccountDefinitionObj(visibilityAccountDefinition) {
-            //    if (accountFields == undefined)
-            //        return;
+            function extendVisibilityAccountDefinition(visibilityAccountDefinition) {
+                if (accountDefinitionNamesById == undefined)
+                    return;
 
-            //    for (var index = 0; index < accountFields.length; index++) {
-            //        var currentAccountField = accountFields[index];
-            //        if (visibilityAccountDefinition.FieldName == currentAccountField.Name) {
-            //            visibilityAccountDefinition.FieldTitle = currentAccountField.Title;
-            //            return;
-            //        }
-            //    }
-            //}
+                visibilityAccountDefinition.AccountDefinitionName = accountDefinitionNamesById[visibilityAccountDefinition.AccountBEDefinitionId];
+            }
         }
     }
 

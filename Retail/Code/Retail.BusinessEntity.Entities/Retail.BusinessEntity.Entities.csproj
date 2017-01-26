@@ -291,7 +291,6 @@
     <Compile Include="Volume\Types\DurationVolumeSettings.cs" />
     <Compile Include="Volume\Types\DurationVolumeTypeConfig.cs" />
     <Compile Include="Volume\VolumeSettings.cs" />
-    <Compile Include="VRRetailBEVisibility\VRRetailBEVisibility.cs" />
     <Compile Include="Zone\ZoneFilter.cs" />
     <Compile Include="Zone\Zone.cs" />
   </ItemGroup>

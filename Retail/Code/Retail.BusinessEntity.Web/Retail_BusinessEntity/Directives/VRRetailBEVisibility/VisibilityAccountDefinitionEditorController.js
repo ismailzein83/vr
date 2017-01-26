@@ -13,6 +13,9 @@
         var accountBEDefinitionSelectorAPI;
         var accountBEDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
 
+        var visibilityGridColumnsDirectiveAPI;
+        var visibilityGridColumnsDirectiveDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -33,6 +36,10 @@
                 accountBEDefinitionSelectorAPI = api;
                 accountBEDefinitionSelectorDeferred.resolve();
             };
+            $scope.scopeModel.onVisibilityGridColumnsDirectiveReady = function (api) {
+                visibilityGridColumnsDirectiveAPI = api;
+                visibilityGridColumnsDirectiveDeferred.resolve();
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -50,7 +57,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelectorPromise]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelectorPromise, loadVisibilityGridColumnsDirectivePromise]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -83,6 +90,18 @@
             });
 
             return accountBEDefinitionLoadDeferred.promise;
+        }
+        function loadVisibilityGridColumnsDirectivePromise() {
+            var visibilityGridColumnsLoadDeferred = UtilsService.createPromiseDeferred();
+
+            visibilityGridColumnsDirectiveDeferred.promise.then(function () {
+                var visibilityGridColumnsDirectivePayload = {
+                    gridColumns: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.GridColumns : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(visibilityGridColumnsDirectiveAPI, visibilityGridColumnsDirectivePayload, visibilityGridColumnsLoadDeferred);
+            });
+
+            return visibilityGridColumnsLoadDeferred.promise;
         }
 
         function insert() {
