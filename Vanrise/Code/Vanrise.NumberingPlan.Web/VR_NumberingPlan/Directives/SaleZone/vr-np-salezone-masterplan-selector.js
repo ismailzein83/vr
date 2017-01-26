@@ -31,8 +31,8 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
                 multipleselection = "ismultipleselection";
             }
 
-            return '<vr-vr-np-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>'
-            + '</vr-vr-np-salezone-selector>';
+            return '<vr-np-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>'
+            + '</vr-np-salezone-selector>';
         }
 
 

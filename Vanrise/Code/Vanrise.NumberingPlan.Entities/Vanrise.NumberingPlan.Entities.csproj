@@ -104,7 +104,6 @@
     <Compile Include="SaleCode\SaleCodeDetail.cs" />
     <Compile Include="SaleZone.cs" />
     <Compile Include="SaleZoneDetail.cs" />
-    <Compile Include="SaleZoneFilterSettings.cs" />
     <Compile Include="SaleZoneGroupConfig.cs" />
     <Compile Include="SaleZoneInfo.cs" />
     <Compile Include="SaleZoneQuery.cs" />
@@ -117,6 +116,7 @@
     <Compile Include="SaleZone\RenamedZone.cs" />
     <Compile Include="SaleZone\RenamedZoneInput.cs" />
     <Compile Include="SaleZone\RenamedZoneOutput.cs" />
+    <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
     <Compile Include="SaleZone\ZoneItem.cs" />
     <Compile Include="SellingNumberPlan.cs" />
     <Compile Include="SellingNumberPlanDetail.cs" />

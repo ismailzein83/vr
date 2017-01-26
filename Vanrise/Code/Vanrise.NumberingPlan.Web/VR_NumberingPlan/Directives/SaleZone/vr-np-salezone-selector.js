@@ -48,8 +48,8 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
             }
 
             return '<span  ng-show="ctrl.isSellingNumberPlanVisible">'
-                   + ' <vr-vr-np-sellingnumberplan-selector  normal-col-num="{{ctrl.normalColNum}}"   on-ready="ctrl.onSellingNumberReady"'
-                   + ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-vr-np-sellingnumberplan-selector>'
+                   + ' <vr-np-sellingnumberplan-selector  normal-col-num="{{ctrl.normalColNum}}"   on-ready="ctrl.onSellingNumberReady"'
+                   + ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-np-sellingnumberplan-selector>'
                    + ' </span>'
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '  <vr-select on-ready="ctrl.onSelectorReady"'
@@ -176,8 +176,7 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                         if (selectedIds != undefined) {
                             var input = {
                                 SaleZoneIds: selectedIds,
-                                SellingNumberPlanId: payload.sellingNumberPlanId,
-                                SaleZoneFilterSettings: { RoutingProductId: (filter != undefined && filter.SaleZoneFilterSettings != undefined) ? filter.SaleZoneFilterSettings.RoutingProductId : undefined }
+                                SellingNumberPlanId: payload.sellingNumberPlanId
                             };
                             return GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input);
                         }

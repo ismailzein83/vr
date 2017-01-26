@@ -41,6 +41,25 @@ namespace Vanrise.NumberingPlan.Web.Controllers
             return manager.GetSellingNumberPlanIdBySaleZoneIds(saleZoneIds);
         }
 
+
+        [HttpGet]
+        [Route("GetSaleZonesInfo")]
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, string serializedFilter)
+        {
+            SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, filter);
+        }
+
+
+        [HttpPost]
+        [Route("GetSaleZonesInfoByIds")]
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZonesInfoByIds(input.SaleZoneIds);
+        }
+
         [HttpGet]
         [Route("GetSaleZoneGroupTemplates")]
         public IEnumerable<SaleZoneGroupConfig> GetSaleZoneGroupTemplates()
@@ -53,7 +72,5 @@ namespace Vanrise.NumberingPlan.Web.Controllers
     public class SaleZoneInput
     {
         public HashSet<long> SaleZoneIds { get; set; }
-
-        public SaleZoneFilterSettings SaleZoneFilterSettings { get; set; }
     }
 }

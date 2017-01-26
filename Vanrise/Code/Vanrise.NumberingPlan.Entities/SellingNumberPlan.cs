@@ -15,7 +15,8 @@ namespace Vanrise.NumberingPlan.Entities
 
     public class SellingNumberPlan : BaseSellingNumberPlan
     {
-        public const string BUSINESSENTITY_DEFINITION_NAME = "WHS_BE_SellingNumberPlan";
+        public const string BUSINESSENTITY_DEFINITION_NAME = "VR_NumberingPlan_SellingNumberPlan";
+        public static Guid BUSINESSENTITY_DEFINITION_ID = new Guid("2EC2FB2D-2343-40EB-B72A-9A90F99DF0C7");
     }
 
     public class SellingNumberPlanToEdit : BaseSellingNumberPlan

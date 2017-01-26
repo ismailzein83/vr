@@ -46,6 +46,72 @@ namespace Vanrise.NumberingPlan.Business
             return allSaleZones.FindAllRecords(x => x.SellingNumberPlanId == sellingNumberPlanId);
         }
 
+
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter)
+        {
+            string zoneName = nameFilter != null ? nameFilter.ToLower() : null;
+            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+
+            if (filter == null)
+            {
+                return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, x => zoneName == null || x.Name.ToLower() == zoneName).OrderBy(x => x.Name);
+            }
+
+            var now = DateTime.Now;
+
+            var customObjects = new List<object>();
+            if (filter.Filters != null)
+            {
+                foreach (ISaleZoneFilter saleZoneFilter in filter.Filters)
+                    customObjects.Add(null);
+            }
+
+            Func<SaleZone, bool> filterPredicate = (zone) =>
+            {
+                if (filter.GetEffectiveOnly && (zone.BED > now || (zone.EED.HasValue && zone.EED.Value < now)))
+                    return false;
+
+                if (zoneName != null && !zone.Name.ToLower().Contains(zoneName))
+                    return false;
+
+                if (filter.CountryIds != null && !filter.CountryIds.Contains(zone.CountryId))
+                    return false;
+
+                if (filter.AvailableZoneIds != null && filter.AvailableZoneIds.Count() > 0 && !filter.AvailableZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+
+                if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Count() > 0 && filter.ExcludedZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+
+                if (filter.Filters != null)
+                {
+                    for (int i = 0; i < filter.Filters.Count(); i++)
+                    {
+                        var saleZoneFilterContext = new SaleZoneFilterContext() { SaleZone = zone, CustomData = customObjects[i] };
+                        if (filter.Filters.ElementAt(i).IsExcluded(saleZoneFilterContext))
+                            return false;
+                        customObjects[i] = saleZoneFilterContext.CustomData;
+                    }
+                }
+
+                return true;
+            };
+
+            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, filterPredicate).OrderBy(x => x.Name);
+        }
+
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(HashSet<long> saleZoneIds)
+        {
+            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetCachedSaleZones().Values;
+            Func<SaleZone, bool> zoneFilter = (zone) =>
+            {
+                if (!saleZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+                return true;
+            };
+            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter).OrderBy(x => x.Name);
+        }
+
         public SaleZone GetSaleZone(long saleZoneId)
         {
             return GetCachedSaleZones().GetRecord(saleZoneId);
