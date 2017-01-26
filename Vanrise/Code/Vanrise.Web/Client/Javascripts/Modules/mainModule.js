@@ -2,8 +2,8 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope','$rootScope','VR_Sec_MenuAPIService','SecurityService','BaseAPIService','VR_Sec_PermissionAPIService','notify','$animate','$cookies','$timeout','MenuItemTypeEnum','UtilsService','VRModalService','VRNavigationService',
-function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService ,VRNavigationService) {
+.controller('mainCtrl', ['$scope','$rootScope','VR_Sec_MenuAPIService','SecurityService','BaseAPIService','VR_Sec_PermissionAPIService','notify','$animate','$cookies','$timeout','MenuItemTypeEnum','UtilsService','VRModalService','VRNavigationService','UISettingsService',
+function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService) {
     Waves.displayEffect();
     $rootScope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
@@ -193,7 +193,10 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         $('.date-section').removeClass('in');
         $('.time-section').addClass('in');
     };
-    var allMenuItems = [];   
+    var allMenuItems = [];
+    if (!UISettingsService.isUISettingsHasValue()) {
+        UISettingsService.loadUISettings();
+    }
     VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
 
         angular.forEach(response, function (value, key, itm) {

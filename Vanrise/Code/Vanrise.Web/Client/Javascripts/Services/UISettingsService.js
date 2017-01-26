@@ -8,10 +8,15 @@
         var uiSettings;
       
         function loadUISettings() {
+            uiSettings = undefined;
             return VRCommon_UISettingsAPIService.GetUIParameters().then(function (response) {
                 uiSettings = response;
             });
         }
+        function isUISettingsHasValue() {
+            return uiSettings != undefined;
+        }
+
         function getDefaultPageURl() {
             var url;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -41,7 +46,8 @@
             loadUISettings: loadUISettings,
             getDefaultPageURl: getDefaultPageURl,
             getNormalPrecision: getNormalPrecision,
-            getUIParameterValue: getUIParameterValue
+            getUIParameterValue: getUIParameterValue,
+            isUISettingsHasValue: isUISettingsHasValue
         });
     }
 
