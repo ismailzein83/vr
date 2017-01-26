@@ -23,5 +23,7 @@ namespace Vanrise.Security.Entities
         public string Description { get; set; }
 
         public DateTime? EnabledTill { get; set; }
+
+        public Dictionary<string, Object> ExtendedSettings { get; set; }
     }
 }

@@ -120,7 +120,8 @@ namespace Vanrise.Security.Data.SQL
                 LastLogin = GetReaderValue<DateTime?>(reader, "LastLogin"),
                 EnabledTill = GetReaderValue<DateTime?>(reader, "EnabledTill"),
                 Description = reader["Description"] as string,
-                TenantId = Convert.ToInt32(reader["TenantId"])
+                TenantId = Convert.ToInt32(reader["TenantId"]),
+                ExtendedSettings = reader["ExtendedSettings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<Dictionary<string, object>>(reader["ExtendedSettings"] as string) : null
             };
         }
 

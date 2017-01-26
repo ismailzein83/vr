@@ -38,6 +38,18 @@ namespace Vanrise.Security.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, UserDetailMapper));
         }
 
+        public T GetUserExtendedSettings<T>(int userId) where T : class
+        {
+            User user = GetUserbyId(userId);
+            string extendedSettingName = typeof(T).FullName;
+
+            Object exitingExtendedSettings;
+            if (user.ExtendedSettings != null && user.ExtendedSettings.TryGetValue(extendedSettingName, out exitingExtendedSettings))
+                return exitingExtendedSettings as T;
+
+            return null;
+        }
+
         public IEnumerable<User> GetUsers()
         {
             var users = GetUsersByTenant();
