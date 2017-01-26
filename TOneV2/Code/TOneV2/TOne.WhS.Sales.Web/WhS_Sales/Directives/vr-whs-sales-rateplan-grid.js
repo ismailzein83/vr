@@ -103,7 +103,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 			};
 
 			$scope.onTQIClicked = function (dataItem) {
-			    var onTQIEvaluated = function (evaluatedRate) {
+				var onTQIEvaluated = function (evaluatedRate) {
+					if (evaluatedRate != undefined) {
+						dataItem.NewRate = evaluatedRate;
+						$scope.onNewRateBlurred(dataItem);
+					}
 			    };
 
 			    var context = {

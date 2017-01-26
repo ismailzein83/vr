@@ -626,7 +626,9 @@
 				CostCalculationMethods: getCostCalculationMethods(),
 				BulkAction: null,
 				EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
-				OwnerName: getOwnerName()
+				OwnerName: getOwnerName(),
+				Settings: ratePlanSettingsData,
+				SaleAreaSettings: saleAreaSettingsData
 			};
 
 			if (shouldSetFilter === true) {
