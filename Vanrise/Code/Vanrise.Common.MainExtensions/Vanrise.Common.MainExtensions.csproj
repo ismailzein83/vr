@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="VRConnections\VRInterAppRestConnection.cs" />
     <Compile Include="ExchangeRateUpdateService\ExchangeRateAction.cs" />
     <Compile Include="ExchangeRateUpdateService\ExchangeRateActionActionArgument.cs" />
     <Compile Include="ExchangeRateUpdateService\XigniteCurrency.cs" />

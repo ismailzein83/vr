@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
 
-namespace Vanrise.Common.MainExtensions.VRConnections
+namespace Vanrise.Common.Business
 {
     public class VRInterAppRestConnection : VRConnectionSettings
     {
