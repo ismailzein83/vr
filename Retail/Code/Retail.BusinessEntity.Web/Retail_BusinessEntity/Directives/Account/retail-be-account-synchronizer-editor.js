@@ -23,14 +23,18 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
 
         function retailBeAccountSynchronizerEditorCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
+
+            var synchronizerEntity;
+
             var beDefinitionSelectorApi;
             var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            var businessEntityDefinitionSelectionChangedDeferred;
 
             var accountSynchronizerHandlersGridApi;
             var accountSynchronizerHandlersGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
             $scope.scopeModel = {};
-
+            $scope.scopeModel.selectedBEDefinition;
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 beDefinitionSelectorApi = api;
                 beDefinitionSelectorPromiseDeferred.resolve();
@@ -41,6 +45,24 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
                 accountSynchronizerHandlersGridPromiseDeferred.resolve();
             }
 
+            $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (selectedItem) {
+                if (selectedItem != undefined && businessEntityDefinitionSelectionChangedDeferred == undefined) {
+
+                    accountSynchronizerHandlersGridApi.clear();
+
+                    var selectorPayload = {
+                        AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
+                    };
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isAccountTypeSelectorLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountSynchronizerHandlersGridApi, selectorPayload, setLoader, businessEntityDefinitionSelectionChangedDeferred);
+                }
+                else if (businessEntityDefinitionSelectionChangedDeferred != undefined) {
+                    businessEntityDefinitionSelectionChangedDeferred.resolve();
+                }
+            };
+
             function initializeController() {
                 defineAPI();
             }
@@ -49,7 +71,7 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
 
                 api.load = function (payload) {
                     var promises = [];
-
+                    synchronizerEntity = payload;
                     var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
                     promises.push(businessEntityDefinitionSelectorLoadPromise);
 
@@ -67,8 +89,8 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
                                 }
                             };
 
-                            if (payload != undefined) {
-                                selectorPayload.selectedIds = payload.AccountBEDefinitionId;
+                            if (synchronizerEntity != undefined) {
+                                selectorPayload.selectedIds = synchronizerEntity.AccountBEDefinitionId;
                             }
                             VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
                         });
@@ -77,14 +99,20 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
                     }
 
                     function loadAccountSynchronizerGrid() {
+                        if (businessEntityDefinitionSelectionChangedDeferred == undefined)
+                            businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
                         var loadAccountSynchronizerGridDeferred = UtilsService.createPromiseDeferred();
 
-                        accountSynchronizerHandlersGridPromiseDeferred.promise.then(function () {
-                            var gridPayload;
-
-                            if (payload != undefined) {
-                                gridPayload.AccountBEDefinitionId = payload.AccountBEDefinitionId;
-                                gridPayload.AccountSynchronizerHandlers = payload.InsertHandlers;
+                        UtilsService.waitMultiplePromises([accountSynchronizerHandlersGridPromiseDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
+                            businessEntityDefinitionSelectionChangedDeferred = undefined;
+                            var gridPayload = {};
+                            gridPayload.AccountBEDefinitionId = $scope.scopeModel.selectedBEDefinition != undefined
+                                                                    ? $scope.scopeModel.selectedBEDefinition.BusinessEntityDefinitionId
+                                                                    : undefined;
+                            if (synchronizerEntity != undefined) {
+                                gridPayload.AccountBEDefinitionId = synchronizerEntity.AccountBEDefinitionId;
+                                gridPayload.AccountSynchronizerHandlers = synchronizerEntity.InsertHandlers;
                             }
                             VRUIUtilsService.callDirectiveLoad(accountSynchronizerHandlersGridApi, gridPayload, loadAccountSynchronizerGridDeferred);
                         });

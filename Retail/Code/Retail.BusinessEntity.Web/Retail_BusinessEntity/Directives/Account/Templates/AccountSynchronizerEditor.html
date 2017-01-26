@@ -1,9 +1,16 @@
 ﻿<vr-columns width="1/2row">
     <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
+                                                      selectedvalues="scopeModel.selectedBEDefinition"
+                                                      onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"
                                                       customlabel="Account Definition"
                                                       isrequired="true">
     </vr-genericdata-businessentitydefinition-selector>
 </vr-columns>
-<retail-be-accountsynchronizerhandler-grid on-ready="scopeModel.onAccountSynchronizerHandlerGridReady">
+<vr-columns width="fullrow" ng-show="scopeModel.selectedBEDefinition != undefined">
+    <vr-section title="Account Synchronizer Insert Handlers">
+        <retail-be-accountsynchronizerhandler-grid on-ready="scopeModel.onAccountSynchronizerHandlerGridReady">
 
-</retail-be-accountsynchronizerhandler-grid>
+        </retail-be-accountsynchronizerhandler-grid>
+
+    </vr-section>
+</vr-columns>

@@ -65,22 +65,10 @@ app.directive('retailBeAccountsynchronizerhandlerGrid', ['Retail_BE_AccountSynch
                     }
 
                     if (accountSynchronizerHandlers != undefined) {
-
-                        var entities = getAccountSynchronizerHandlersEntities();
-
                         for (var i = 0; i < accountSynchronizerHandlers.length; i++) {
-
-                            var index = UtilsService.getItemIndexByVal(entities, accountSynchronizerHandlers[i].Name, 'Name');
-                            if (index == -1)
-                                continue;
-
-                            var existingRecord = $scope.scopeModel.accountSynchronizerHandlers[index];
-                            if (existingRecord == undefined)
-                                continue;
-
-                            var updatedEntity = UtilsService.cloneObject(existingRecord.Entity);
-
-                            $scope.scopeModel.accountSynchronizerHandlers[index] = { Entity: updatedEntity };
+                            $scope.scopeModel.accountSynchronizerHandlers.push({
+                                Entity: accountSynchronizerHandlers[i]
+                            });
                         }
                     }
 
@@ -88,6 +76,10 @@ app.directive('retailBeAccountsynchronizerhandlerGrid', ['Retail_BE_AccountSynch
 
                 api.getData = function () {
                     return getAccountSynchronizerHandlersEntities();
+                };
+
+                api.clear = function () {
+                    $scope.scopeModel.accountSynchronizerHandlers.length = 0;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
@@ -111,14 +103,14 @@ app.directive('retailBeAccountsynchronizerhandlerGrid', ['Retail_BE_AccountSynch
                 Retail_BE_AccountSynchronizerHandlerService.addAccountSynchronizerHandler(accountBeDefinition, onAccountSynchronizerInsertHandlerAdded);
             }
 
-            function editAccountSynchronizerHandler(entity) {
+            function editAccountSynchronizerHandler(handlerEntity) {
 
                 var onAccountSynchronizerInsertHandlerUpdated = function (updatedHandler) {
                     var obj = { Entity: updatedHandler };
-                    $scope.scopeModel.accountSynchronizerHandlers[$scope.scopeModel.accountSynchronizerHandlers.indexOf(entity)] = obj;
+                    $scope.scopeModel.accountSynchronizerHandlers[$scope.scopeModel.accountSynchronizerHandlers.indexOf(handlerEntity)] = obj;
 
                 };
-                Retail_BE_AccountSynchronizerHandlerService.editAccountSynchronizerHandler(entity, accountBeDefinition, onAccountSynchronizerInsertHandlerUpdated);
+                Retail_BE_AccountSynchronizerHandlerService.editAccountSynchronizerHandler(handlerEntity.Entity, accountBeDefinition, onAccountSynchronizerInsertHandlerUpdated);
             }
 
             function getAccountSynchronizerHandlersEntities() {

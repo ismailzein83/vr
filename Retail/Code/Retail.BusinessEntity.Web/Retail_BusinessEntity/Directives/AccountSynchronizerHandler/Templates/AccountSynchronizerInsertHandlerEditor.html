@@ -2,14 +2,12 @@
     <vr-modalbody>
         <vr-form name="formAccountSynchronizerHandlerEditor">
             <vr-columns width="1/2row">
-                <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
             </vr-columns>
-            <vr-row>
-                <retail-be-accountsynchronizerhandler-settings on-ready="scopeModel.onAccountSynchronizerHandlerSettingsReady"
-                                                               normal-col-num="6" isrequired="true">
+            <retail-be-accountsynchronizerhandler-settings on-ready="scopeModel.onAccountSynchronizerHandlerSettingsReady"
+                                                           normal-col-num="6" isrequired="true">
 
-                </retail-be-accountsynchronizerhandler-settings>
-            </vr-row>
+            </retail-be-accountsynchronizerhandler-settings>
         </vr-form>
     </vr-modalbody>
     <div>

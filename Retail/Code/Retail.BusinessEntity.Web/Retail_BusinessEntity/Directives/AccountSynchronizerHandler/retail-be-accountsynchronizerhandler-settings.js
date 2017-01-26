@@ -15,16 +15,16 @@
                 isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var ctor = new AccountSynchronizerHandlerSettingsCtor($scope, ctrl, $attrs);
+                var accSyncCtrl = this;
+                var ctor = new AccountSynchronizerHandlerSettingsCtor($scope, accSyncCtrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "accSyncCtrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountSynchronizerHandler/Templates/AccountSynchronizerHandlerSettingsTemplate.html"
         };
 
-        function AccountSynchronizerHandlerSettingsCtor($scope, ctrl, $attrs) {
+        function AccountSynchronizerHandlerSettingsCtor($scope, accSyncCtrl, $attrs) {
             this.initializeController = initializeController;
 
             var accountBEDefinitionId;
@@ -66,7 +66,7 @@
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
-                        accountSynchronizerHandlerSettings = payload.accountSynchronizerHandlerSettings;
+                        accountSynchronizerHandlerSettings = payload.Settings;
                     }
 
                     var accountSynchronizerHandlerSettingsTemplateConfigsLoadPromise = getAccountSynchronizerHandlerSettingsTemplateConfigs();
@@ -100,7 +100,7 @@
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
                                 accountBEDefinitionId: accountBEDefinitionId,
-                                accountSynchronizerHandlerSettings: accountSynchronizerHandlerSettings
+                                Settings: accountSynchronizerHandlerSettings
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
@@ -124,8 +124,8 @@
                     return data;
                 };
 
-                if (ctrl.onReady != null) {
-                    ctrl.onReady(api);
+                if (accSyncCtrl.onReady != null) {
+                    accSyncCtrl.onReady(api);
                 }
             }
         }

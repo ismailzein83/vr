@@ -23,6 +23,7 @@ app.directive('retailBeAccountsynchronizerhandlerAssignproductandpackages', ['Ut
 
             var productSelectorAPI;
             var productSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var productSelectorSelectionChangedDeferred;
 
             var packageSelectorAPI;
             var packageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -39,6 +40,27 @@ app.directive('retailBeAccountsynchronizerhandlerAssignproductandpackages', ['Ut
                     packageSelectorAPI = api;
                     packageSelectorReadyDeferred.resolve();
                 };
+
+                $scope.scopeModel.onProductDirectiveSelectionChanged = function (selectedItem) {
+                    if (selectedItem != undefined) {
+                        var selectorPayload = {
+                            filter: {
+
+                                Filters: [{
+                                    $type: "Retail.BusinessEntity.Business.ProductPackageFilter, Retail.BusinessEntity.Business",
+                                    ProductId: selectedItem.ProductId
+                                }]
+                            }
+                        };
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isAccountTypeSelectorLoading = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, packageSelectorAPI, selectorPayload, setLoader, productSelectorSelectionChangedDeferred);
+
+                    }
+                }
+
+                defineAPI();
             }
 
             function defineAPI() {
@@ -53,6 +75,10 @@ app.directive('retailBeAccountsynchronizerhandlerAssignproductandpackages', ['Ut
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         handlerSettings = payload.Settings;
+                        if (handlerSettings != undefined) {
+                            $scope.scopeModel.assignementDate = handlerSettings.AssignementDate;
+                            $scope.scopeModel.assignementDaysOffsetFromToday = handlerSettings.AssignementDaysOffsetFromToday;
+                        }
                     }
 
                     var productSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -75,10 +101,16 @@ app.directive('retailBeAccountsynchronizerhandlerAssignproductandpackages', ['Ut
                     promises.push(loadPackageSelector());
 
                     function loadPackageSelector() {
+
+                        if (productSelectorSelectionChangedDeferred == undefined)
+                            productSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
+
+
                         var packageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        packageSelectorReadyDeferred.promise.then(function () {
-
+                        UtilsService.waitMultiplePromises([packageSelectorReadyDeferred.promise, productSelectorSelectionChangedDeferred.promise]).then(function () {
+                            productSelectorSelectionChangedDeferred = undefined;
                             var packageSelectorPayload;
                             if (handlerSettings != undefined) {
                                 packageSelectorPayload = {
@@ -91,6 +123,7 @@ app.directive('retailBeAccountsynchronizerhandlerAssignproductandpackages', ['Ut
                                     }
                                 };
                             }
+
                             if (handlerSettings != undefined) {
                                 packageSelectorPayload.selectedIds = handlerSettings.Packages;
                             }
