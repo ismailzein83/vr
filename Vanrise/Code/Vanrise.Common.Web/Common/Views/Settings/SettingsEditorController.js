@@ -119,8 +119,6 @@
                 if (VRNotificationService.notifyOnItemUpdated("Setting", response, "Name")) {
                     if ($scope.onSettingsUpdated != undefined)
                         $scope.onSettingsUpdated(response.UpdatedObject);
-                    if (settingsEditorAPI.callBack != undefined)
-                        settingsEditorAPI.callBack();
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
