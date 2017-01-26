@@ -19,7 +19,7 @@ namespace Vanrise.Common.Business
             ConfigManager configManager = new ConfigManager();
             GeneralSettingData generalSettingData = configManager.GetGeneralSetting();
 
-            if (generalSettingData.UIData != null)
+            if (generalSettingData!=null && generalSettingData.UIData != null)
             {
                 uiSettings.Parameters = new List<UIParameter>();
                 if (generalSettingData.UIData.DefaultViewId.HasValue)
