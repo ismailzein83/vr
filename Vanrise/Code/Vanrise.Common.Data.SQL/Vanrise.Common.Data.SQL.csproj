@@ -47,6 +47,7 @@
     <Compile Include="BigDataServiceDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
+    <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
     <Compile Include="UserActionAuditDataManager.cs" />
     <Compile Include="VRComponentTypeDataManager.cs" />
