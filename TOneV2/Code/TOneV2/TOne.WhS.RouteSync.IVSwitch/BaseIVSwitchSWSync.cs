@@ -204,7 +204,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 return new IVSwitchRoute
                 {
                     Description = "BLK",
-                    RouteId = preparedConfiguration.BlockRouteId
+                    RouteId = preparedConfiguration.BlockRouteId,
+                    WakeUpTime = preparedConfiguration._switchTime
                 };
             }
             return null;

@@ -15,6 +15,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         public BuiltInConfigBuilder(BuiltInIVSwitchSWSync sync)
         {
             MasterDataManager = new IVSwitchMasterDataManager(sync.MasterConnectionString);
+            BlockedMapping = sync.BlockedAccountMapping;
         }
         private Dictionary<int, AccessListTable> GetCustomersGroupedByUser()
         {
@@ -29,12 +30,16 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         public PreparedConfiguration Build()
         {
-            return new PreparedConfiguration
+            PreparedConfiguration prepredConfiguration = new PreparedConfiguration
             {
                 CustomerDefinitions = GetConfiguredCustomers(),
                 SupplierDefinitions = GetConfiguredSuppliers(),
                 _switchTime = MasterDataManager.GetSwitchDate()
             };
+            int id;
+            int.TryParse(BlockedMapping, out id);
+            prepredConfiguration.BlockRouteId = id;
+            return prepredConfiguration;
         }
 
         public Dictionary<string, CustomerDefinition> GetConfiguredCustomers()
