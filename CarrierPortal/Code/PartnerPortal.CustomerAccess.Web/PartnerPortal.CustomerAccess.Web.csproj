@@ -152,12 +152,7 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagement.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PartnerPortal_CustomerAccess\Directives\AccountStatement\Templates\" />
-    <Folder Include="PartnerPortal_CustomerAccess\Directives\MainExtensions\AccountStatement\Templates\" />
-    <Folder Include="PartnerPortal_CustomerAccess\Services\APIServices\" />
-    <Folder Include="PartnerPortal_CustomerAccess\Views\AccountStatement\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
