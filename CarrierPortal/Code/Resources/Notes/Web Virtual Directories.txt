@@ -3,7 +3,8 @@
 Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 
  - Add the following virtual directories under Client > Modules folder:
-Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
-CP_SupplierPricelist	C:\TFS\CarrierPortal\Code\CP.SupplierPricelist.Web\CP_SupplierPricelist
-Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+Common							C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+Security						C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+CP_SupplierPricelist			C:\TFS\CarrierPortal\Code\CP.SupplierPricelist.Web\CP_SupplierPricelist
+Runtime							C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+PartnerPortal_CustomerAccess	C:\TFS\CarrierPortal\Code\PartnerPortal.CustomerAccess.Web\PartnerPortal_CustomerAccess
