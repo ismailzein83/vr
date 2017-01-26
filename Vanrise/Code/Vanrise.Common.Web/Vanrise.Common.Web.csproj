@@ -195,6 +195,11 @@
     <Content Include="Common\Directives\Filter\Text\Templates\TextFilterTemplate.html" />
     <Content Include="Common\Directives\Filter\Text\vr-common-filter-text.js" />
     <Content Include="Common\Directives\Filter\Text\vr-common-textfiltertype-selector.js" />
+    <Content Include="Common\Directives\GeneralSettings\Templates\UITemplateSettings.html" />
+    <Content Include="Common\Directives\GeneralSettings\Templates\GeneralTemplateSettings.html" />
+    <Content Include="Common\Directives\GeneralSettings\vr-common-ui-settings-editor.js" />
+    <Content Include="Common\Directives\GeneralSettings\vr-common-general-settings-editor.js" />
+    <Content Include="Common\Directives\GeneralSettings\vr-common-pagesize-selector.js" />
     <Content Include="Common\Directives\GridColumnWidth\Templates\GridColumnWidthEditorTemplate.html" />
     <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-company-setting-selector.js" />
