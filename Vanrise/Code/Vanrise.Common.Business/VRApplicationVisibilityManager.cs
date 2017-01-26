@@ -73,18 +73,11 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
-        //public IEnumerable<StyleFormatingConfig> GetStyleFormatingExtensionConfigs()
-        //{
-        //    var templateConfigManager = new ExtensionConfigurationManager();
-        //    return templateConfigManager.GetExtensionConfigurations<StyleFormatingConfig>(StyleFormatingConfig.EXTENSION_TYPE);
-        //}
-
-        //public IEnumerable<VRApplicationVisibilityInfo> GetVRApplicationVisibilitiesInfo(VRApplicationVisibilityFilter filter)
-        //{
-        //    Func<VRApplicationVisibility, bool> filterExpression = null;
-
-        //    return this.GetCachedVRApplicationVisibilities().MapRecords(VRApplicationVisibilityInfoMapper, filterExpression).OrderBy(x => x.Name);
-        //}
+        public IEnumerable<VRModuleVisibilityConfig> GetVRModuleVisibilityExtensionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<VRModuleVisibilityConfig>(VRModuleVisibilityConfig.EXTENSION_TYPE);
+        }
 
         #endregion
 
@@ -127,16 +120,6 @@ namespace Vanrise.Common.Business
             };
             return vrApplicationVisibilityDetail;
         }
-
-        //public VRApplicationVisibilityInfo VRApplicationVisibilityInfoMapper(VRApplicationVisibility vrApplicationVisibility)
-        //{
-        //    VRApplicationVisibilityInfo vrApplicationVisibilityInfo = new VRApplicationVisibilityInfo()
-        //    {
-        //        VRApplicationVisibilityId = vrApplicationVisibility.VRApplicationVisibilityId,
-        //        Name = vrApplicationVisibility.Name
-        //    };
-        //    return vrApplicationVisibilityInfo;
-        //}
 
         #endregion
     }

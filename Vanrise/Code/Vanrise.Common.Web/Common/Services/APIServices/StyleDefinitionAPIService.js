@@ -1,7 +1,7 @@
-﻿
-(function (appControllers) {
+﻿(function (appControllers) {
 
     "use strict";
+
     StyleDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
     function StyleDefinitionAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {

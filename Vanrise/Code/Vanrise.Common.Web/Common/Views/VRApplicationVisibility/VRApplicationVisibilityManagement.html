@@ -1,9 +1,28 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-panel ng-controller="VRCommon_VRApplicationVisibilityManagementController">
+    <vr-form name="formFilter">
 
-</body>
-</html>
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox label="Name" value="name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="add" haspermission="hasAddVRApplicationVisibilityPermission"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-common-applicationvisibility-grid on-ready="onGridReady"></vr-common-applicationvisibility-grid>
+            </vr-columns>
+        </vr-row>
+
+    </vr-form>
+</vr-panel>

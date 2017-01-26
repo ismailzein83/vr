@@ -70,6 +70,7 @@
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityFilter.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityInfo.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityQuery.cs" />
+    <Compile Include="VRApplicationVisibility\VRModuleVisibilityConfig.cs" />
     <Compile Include="VRConnection\VRConnectionInfo.cs" />
     <Compile Include="VRConnection\VRConnection.cs" />
     <Compile Include="DateTimeRange.cs" />

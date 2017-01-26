@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_VRModuleVisibilityController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formVRApplicationVisibilitySettingEditor">
+
+            <vr-common-modulevisibility-selective on-ready="scopeModel.onVRModuleVisibilitySelectiveReady" 
+                                                  normal-col-num="6">
+            </vr-common-modulevisibility-selective>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formVRApplicationVisibilitySettingEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

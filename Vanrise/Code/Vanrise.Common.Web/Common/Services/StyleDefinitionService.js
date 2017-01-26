@@ -1,5 +1,4 @@
-﻿
-(function (appControllers) {
+﻿(function (appControllers) {
 
     "use strict";
 

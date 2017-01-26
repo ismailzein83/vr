@@ -215,10 +215,14 @@
     <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditSearch.html" />
     <Content Include="Common\Directives\UserActionAudit\vr-common-useractionaudit-grid.js" />
     <Content Include="Common\Directives\UserActionAudit\vr-useractionaudit-search.js" />
-    <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisisbilityGridTemplate.html" />
-    <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisisbilitySettingsTemplate.html" />
+    <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilityGridTemplate.html" />
+    <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRModuleVisibilityEditor.html" />
+    <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilitySettingsTemplate.html" />
+    <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRModuleVisibilitySelectiveTemplate.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\vr-common-applicationvisibility-grid.js" />
     <Content Include="Common\Directives\VRApplicationVisibility\vr-common-applicationvisibility-settings.js" />
+    <Content Include="Common\Directives\VRApplicationVisibility\vr-common-modulevisibility-selective.js" />
+    <Content Include="Common\Directives\VRApplicationVisibility\VRModuleVisibilityEditorController.js" />
     <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttypeconfig-selector.js" />

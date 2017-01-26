@@ -1,0 +1,12 @@
+﻿
+
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.vrApplicationVisibilities"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.VRApplicationVisibilityId">
+
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.VRApplicationVisibilityId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+</vr-datagrid>

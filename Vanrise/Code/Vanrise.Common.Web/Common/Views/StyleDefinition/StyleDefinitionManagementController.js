@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StyleDefinitionManagementController.$inject = ['$scope', 'VRCommon_StyleDefinitionService', 'VRCommon_StyleDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    StyleDefinitionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRCommon_StyleDefinitionService', 'VRCommon_StyleDefinitionAPIService'];
 
-    function StyleDefinitionManagementController($scope, VRCommon_StyleDefinitionService, VRCommon_StyleDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function StyleDefinitionManagementController($scope, UtilsService, VRUIUtilsService, VRCommon_StyleDefinitionService, VRCommon_StyleDefinitionAPIService) {
 
         var gridAPI;
 
