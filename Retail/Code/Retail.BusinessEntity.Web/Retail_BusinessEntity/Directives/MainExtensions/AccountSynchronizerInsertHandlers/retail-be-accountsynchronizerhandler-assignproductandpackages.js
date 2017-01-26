@@ -30,7 +30,7 @@ app.directive('retailBeAccountsynchronizerhandlerAssignproductandpackages', ['Ut
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.assignementDaysOffsetFromToday = 0;
                 $scope.scopeModel.onProductDirectiveReady = function (api) {
                     productSelectorAPI = api;
                     productSelectorReadyPromiseDeferred.resolve();

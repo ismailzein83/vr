@@ -86,13 +86,14 @@ namespace Retail.BusinessEntity.Business
         #region Private Methods
         static AccountBEManager s_accountManager = new AccountBEManager();
         void AddAccount(SourceAccountData accountData, long? parentAccountId)
-        {           
+        {
             List<AccountSynchronizerInsertHandler> handlersToExecute = GetHandlersToExecute(accountData.Account);
             ApplyHandlersPreInsert(accountData.Account, handlersToExecute);
             long accountId;
             s_accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId, true);
             if (accountId > 0)
             {
+                accountData.Account.AccountId = accountId;
                 if (accountData.IdentificationRulesToInsert != null)
                     foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
                     {
@@ -116,7 +117,7 @@ namespace Retail.BusinessEntity.Business
         {
             if (handlersToExecute != null)
             {
-                foreach(var handler in handlersToExecute)
+                foreach (var handler in handlersToExecute)
                 {
                     var context = new AccountSynchronizerInsertHandlerPreInsertContext
                     {
