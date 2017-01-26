@@ -10,6 +10,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountSynchronizerInsertHandlers
 {
     public class AssignProductAndPackagesAccountInsertHandler : AccountSynchronizerInsertHandlerSettings
     {
+        public override Guid ConfigId
+        {
+            get { return new Guid("F123F0C6-42CF-4B6F-B3EB-F1AD5E0E8931"); }
+        }
         public int ProductId { get; set; }
 
         public List<int> Packages { get; set; }
@@ -64,5 +68,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountSynchronizerInsertHandlers
                 }
             }
         }
+
+      
     }
 }

@@ -26,12 +26,20 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
             var beDefinitionSelectorApi;
             var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var accountSynchronizerHandlersGridApi;
+            var accountSynchronizerHandlersGridPromiseDeferred = UtilsService.createPromiseDeferred();
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 beDefinitionSelectorApi = api;
                 beDefinitionSelectorPromiseDeferred.resolve();
             };
+
+            $scope.scopeModel.onAccountSynchronizerHandlerGridReady = function (api) {
+                accountSynchronizerHandlersGridApi = api;
+                accountSynchronizerHandlersGridPromiseDeferred.resolve();
+            }
 
             function initializeController() {
                 defineAPI();
@@ -44,6 +52,8 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
 
                     var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
                     promises.push(businessEntityDefinitionSelectorLoadPromise);
+
+                    promises.push(loadAccountSynchronizerGrid());
 
                     function getBusinessEntityDefinitionSelectorLoadPromise() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -66,6 +76,22 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
                     }
 
+                    function loadAccountSynchronizerGrid() {
+                        var loadAccountSynchronizerGridDeferred = UtilsService.createPromiseDeferred();
+
+                        accountSynchronizerHandlersGridPromiseDeferred.promise.then(function () {
+                            var gridPayload;
+
+                            if (payload != undefined) {
+                                gridPayload.AccountBEDefinitionId = payload.AccountBEDefinitionId;
+                                gridPayload.AccountSynchronizerHandlers = payload.InsertHandlers;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(accountSynchronizerHandlersGridApi, gridPayload, loadAccountSynchronizerGridDeferred);
+                        });
+
+                        return loadAccountSynchronizerGridDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -73,7 +99,8 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
                     var data = {
                         $type: "Retail.BusinessEntity.Business.AccountSynchronizer, Retail.BusinessEntity.Business",
                         Name: "Account Synchronizer",
-                        AccountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds()
+                        AccountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
+                        InsertHandlers: accountSynchronizerHandlersGridApi.getData()
                     };
                     return data;
                 };

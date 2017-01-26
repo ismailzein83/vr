@@ -1,0 +1,14 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="scopeModel.addHandler" standalone="true"></vr-button>
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.accountSynchronizerHandlers"
+                     menuactions="scopeModel.menuActions"
+                     ondeleterow="scopeModel.removeAccountSynchronizerHandler"
+                     hidegridmenu="true"
+                     maxheight="300px"
+                     norowhighlightonclick="true">
+            <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

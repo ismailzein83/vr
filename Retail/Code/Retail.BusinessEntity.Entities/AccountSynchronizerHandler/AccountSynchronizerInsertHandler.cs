@@ -19,6 +19,7 @@ namespace Retail.BusinessEntity.Entities
 
     public abstract class AccountSynchronizerInsertHandlerSettings
     {
+        public abstract Guid ConfigId { get; }
         public virtual void OnPreInsert(IAccountSynchronizerInsertHandlerPreInsertContext context)
         {
 

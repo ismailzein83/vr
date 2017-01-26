@@ -1,0 +1,17 @@
+﻿<retail-be-product-selector on-ready="scopeModel.onProductDirectiveReady"
+                            normal-col-num="6"
+                            isrequired="true">
+</retail-be-product-selector>
+<retail-be-package-selector on-ready="scopeModel.onPackageSelectorReady"
+                            selectedvalues="scopeModel.selectedPackage"
+                            normal-col-num="6"
+                            isrequired="true"
+                            ismultipleselection="true">
+</retail-be-package-selector>
+
+<vr-columns width="1/2row">
+    <vr-textbox value="scopeModel.assignementDaysOffsetFromToday" label="Assignement Days Offset From Today" type="number" maxvalue="0"></vr-textbox>
+</vr-columns>
+<vr-columns width="1/2row">
+    <vr-datetimepicker label="Assignement Date" value="scopeModel.assignementDate" type="dateTime"></vr-datetimepicker>
+</vr-columns>

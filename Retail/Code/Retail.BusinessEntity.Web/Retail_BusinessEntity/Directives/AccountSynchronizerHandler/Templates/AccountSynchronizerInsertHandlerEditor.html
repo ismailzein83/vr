@@ -1,0 +1,23 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_AccountSynchronizerInsertHandlerEditoController" size="medium" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formAccountSynchronizerHandlerEditor">
+            <vr-columns width="1/2row">
+                <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+            </vr-columns>
+            <vr-row>
+                <retail-be-accountsynchronizerhandler-settings on-ready="scopeModel.onAccountSynchronizerHandlerSettingsReady"
+                                                               normal-col-num="6" isrequired="true">
+
+                </retail-be-accountsynchronizerhandler-settings>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formAccountSynchronizerHandlerEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
