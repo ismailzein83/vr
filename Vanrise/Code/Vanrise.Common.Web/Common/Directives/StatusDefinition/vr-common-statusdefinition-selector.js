@@ -54,13 +54,24 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                 var api = {};
 
                 api.load = function (payload) {
-
                     var selectedIds;
                     var filter;
-
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        var businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                        if(businessEntityDefinitionId != undefined)
+                        {
+                            if (filter == undefined)
+                                filter = {};
+                            if (filter.Filters == undefined)
+                                filter.Filters = [];
+                            filter.Filters.push({
+                                $type: "Vanrise.Common.Business.BEStatusDefinitionFilter ,Vanrise.Common.Business",
+                                BusinessEntityDefinitionId: businessEntityDefinitionId
+                            });
+                        }
+
                     }
 
                     return VR_Common_StatusDefinitionAPIService.GetStatusDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {

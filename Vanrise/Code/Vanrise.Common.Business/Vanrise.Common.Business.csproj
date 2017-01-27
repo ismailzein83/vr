@@ -71,6 +71,7 @@
     <Compile Include="CityManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="Filters\BEStatusDefinitionFilter.cs" />
     <Compile Include="StatusDefinitionFilterContext.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityManager.cs" />
     <Compile Include="VRConnections\VRConnectionManager.cs" />
