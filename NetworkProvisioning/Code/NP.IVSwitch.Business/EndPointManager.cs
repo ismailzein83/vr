@@ -294,7 +294,7 @@ namespace NP.IVSwitch.Business
                         GetEndPointWithCarrierId);
         }
 
-        Dictionary<int, int> GetEndPointWithCarrierId()
+        public Dictionary<int, int> GetEndPointWithCarrierId()
         {
             Dictionary<int, int> result = new Dictionary<int, int>();
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();

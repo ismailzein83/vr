@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace NP.IVSwitch.Business
 {
@@ -11,14 +12,15 @@ namespace NP.IVSwitch.Business
         {
             int originalSubnet;
             message = "";
+            EndPointManager manager = new EndPointManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var endpointWithIds = manager.GetEndPointWithCarrierId();
             string[] originalParts = originalHost.Split('/');
             if (originalParts.Length > 1)
                 int.TryParse(originalParts[1], out originalSubnet);
             foreach (var toCompareEndPoint in endPoints)
             {
                 if (string.IsNullOrEmpty(toCompareEndPoint.Value.Host)) continue;
-                message = string.Format("Subnet address({0}) conflicts with an existing IP address for (act#{1})",
-                    originalHost, toCompareEndPoint.Key);
                 var host = toCompareEndPoint.Value.Host;
                 string[] hostParts = host.Split('/');
                 int toCompareSubnet = 32;
@@ -27,7 +29,15 @@ namespace NP.IVSwitch.Business
                 var toCompareClassCMask = SubnetMask.CreateByNetBitLength(toCompareSubnet);
                 var toCompareIp = IPAddress.Parse(hostParts[0]);
                 var originalIp = IPAddress.Parse(originalParts[0]);
-                if (toCompareIp.IsInSameSubnet(originalIp, toCompareClassCMask)) return true;
+                if (toCompareIp.IsInSameSubnet(originalIp, toCompareClassCMask))
+                {
+                    int carrierId;
+                    if (!endpointWithIds.TryGetValue(toCompareEndPoint.Value.EndPointId, out carrierId)) continue;
+                    string carrierName = carrierAccountManager.GetCarrierAccountName(carrierId);
+                    message = string.Format("Subnet address({0}) conflicts with an existing IP address for ({1})",
+                        originalHost, carrierName);
+                    return true;
+                }
             }
             return false;
         }
@@ -37,13 +47,15 @@ namespace NP.IVSwitch.Business
             originalPoint.TechPrefix = string.IsNullOrEmpty(originalPoint.TechPrefix)
                 ? "."
                 : originalPoint.TechPrefix;
-            if (
-                endPoints.Values.Where(
-                    a => a.AccountId == originalPoint.AccountId && a.EndPointId != originalPoint.EndPointId)
-                    .Any(toComparEndPoint => !toComparEndPoint.TechPrefix.Equals(originalPoint.TechPrefix)))
+            foreach (var item in endPoints.Values.Where(
+                    a => a.AccountId == originalPoint.AccountId && a.EndPointId != originalPoint.EndPointId))
             {
-                message = "";
-                return false;
+                string[] hostparts = item.Host.Split('/');
+                if (hostparts[0].Equals(originalPoint.Host) && !item.TechPrefix.Equals(originalPoint.TechPrefix))
+                {
+                    message = "";
+                    return false;
+                }
             }
             return IsInSameSubnet(endPoints, originalPoint.Host, out message);
         }
