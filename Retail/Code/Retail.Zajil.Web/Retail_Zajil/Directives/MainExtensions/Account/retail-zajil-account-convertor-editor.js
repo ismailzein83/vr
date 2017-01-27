@@ -197,7 +197,14 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         statusDefinitionSelectorReadyDeferred.promise.then(function () {
                             var statusDefinitionSelectorPayload = {
-                                filter: { EntityType: Retail_BE_EntityTypeEnum.Account.value },
+                                //filter: { EntityType: Retail_BE_EntityTypeEnum.Account.value },
+                                filter: {
+                                    Filters: [{
+                                        $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business",
+                                        AccountBEDefinitionId: payload != undefined ? payload.AccountBEDefinitionId : undefined
+
+                                    }]
+                                },
                                 selectedIds: payload != undefined ? payload.InitialStatusId : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
