@@ -7,7 +7,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
-    public enum AnalyticQueryOrderType { ByAllDimensions = 1, ByAllMeasures = 2 }
+    public enum AnalyticQueryOrderType { ByAllDimensions = 1, ByAllMeasures = 2, AdvancedMeasureOrder = 3 }
     public class AnalyticQuery
     {
         public int TableId { get; set; }
@@ -29,5 +29,19 @@ namespace Vanrise.Analytic.Entities
         public AnalyticQueryOrderType? OrderType { get; set; }
 
         public List<MeasureStyleRule> MeasureStyleRules { get; set; }
+
+        public AnalyticQueryAdvancedMeasureOrderOptions AdvanceMeasureOrderOptions { get; set; }
+    }
+
+    public class AnalyticQueryAdvancedMeasureOrderOptions
+    {
+        public List<AnalyticQueryAdvancedMeasureOrderItem> MeasureOrders { get; set; }
+    }
+
+    public class AnalyticQueryAdvancedMeasureOrderItem
+    {
+        public string MeasureName { get; set; }
+
+        public OrderDirection OrderDirection { get; set; }
     }
 }
