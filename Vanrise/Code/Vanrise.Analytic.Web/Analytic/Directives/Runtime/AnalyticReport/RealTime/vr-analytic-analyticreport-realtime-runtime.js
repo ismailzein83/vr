@@ -29,8 +29,9 @@
             var dimensions = [];
             var measures = [];
             var settings;
-            var currentFromDate = "01/01/2015 00:00:00";
-            var currentToDate = "06/05/2015 00:00:00";
+            var currentFromDate = new Date();
+            currentFromDate.setHours(0, 0, 0, 0);
+            var currentToDate = new Date();
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.timeGroupingUnits = UtilsService.getArrayEnum(VR_Analytic_TimeGroupingUnitEnum);
