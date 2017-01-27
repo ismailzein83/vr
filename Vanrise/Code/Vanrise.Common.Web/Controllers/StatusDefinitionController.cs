@@ -47,7 +47,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetStatusDefinitionsInfo")]
         public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionsInfo(string filter = null)
         {
-            StatusDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<StatusDefinitionFilter>(filter) : null;
+            StatusDefinitionInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<StatusDefinitionInfoFilter>(filter) : null;
             return _manager.GetStatusDefinitionsInfo(deserializedFilter);
         }
     }

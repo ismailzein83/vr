@@ -64,6 +64,7 @@
     <Compile Include="ComponentType\VRComponentTypeQuery.cs" />
     <Compile Include="ComponentType\VRComponentTypeSettings.cs" />
     <Compile Include="Country\CountryFilter.cs" />
+    <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
     <Compile Include="UISettingData.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibility.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityDetail.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="SourceCountryReaderConfig.cs" />
     <Compile Include="StatusDefinition\StatusDefinition.cs" />
     <Compile Include="StatusDefinition\StatusDefinitionDetail.cs" />
-    <Compile Include="StatusDefinition\StatusDefinitionFilter.cs" />
+    <Compile Include="StatusDefinition\StatusDefinitionInfoFilter.cs" />
     <Compile Include="StatusDefinition\StatusDefinitionInfo.cs" />
     <Compile Include="StatusDefinition\StatusDefinitionQuery.cs" />
     <Compile Include="TextFilterType.cs" />

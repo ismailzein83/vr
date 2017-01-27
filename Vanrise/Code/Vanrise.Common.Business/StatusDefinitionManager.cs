@@ -86,7 +86,7 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
-        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionsInfo(StatusDefinitionFilter filter)
+        public IEnumerable<StatusDefinitionInfo> GetStatusDefinitionsInfo(StatusDefinitionInfoFilter filter)
         {
             Func<StatusDefinition, bool> filterExpression = null;
 
@@ -96,13 +96,19 @@ namespace Vanrise.Common.Business
                 {
                     if (filter.BusinessEntityDefinitionId.HasValue && filter.BusinessEntityDefinitionId.Value != x.BusinessEntityDefinitionId)
                         return false;
+                    if (filter.Filters != null)
+                    {
+                        var context = new StatusDefinitionFilterContext() { BusinessEntityDefinitionId = x.BusinessEntityDefinitionId };
+                        if (!filter.Filters.Any(y => y.IsMatched(context)))
+                            return false;
+                    }
                     return true;
                 };
             }
             return this.GetCachedStatusDefinitions().MapRecords(StatusDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
-        public IEnumerable<StatusDefinition> GetFilteredStatusDefinitions(StatusDefinitionFilter filter)
+        public IEnumerable<StatusDefinition> GetFilteredStatusDefinitions(StatusDefinitionInfoFilter filter)
         {
             Func<StatusDefinition, bool> filterExpression = null;
 
@@ -112,6 +118,12 @@ namespace Vanrise.Common.Business
                 {
                     if (filter.BusinessEntityDefinitionId.HasValue && filter.BusinessEntityDefinitionId.Value != x.BusinessEntityDefinitionId)
                         return false;
+                    if (filter.Filters != null)
+                    {
+                        var context = new StatusDefinitionFilterContext() { BusinessEntityDefinitionId = x.BusinessEntityDefinitionId };
+                        if (!filter.Filters.Any(y => y.IsMatched(context)))
+                            return false;
+                    }
                     return true;
                 };
             }

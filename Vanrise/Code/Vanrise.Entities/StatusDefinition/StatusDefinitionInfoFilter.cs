@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class StatusDefinitionFilter
+    public class StatusDefinitionInfoFilter
     {
         public Guid? BusinessEntityDefinitionId { get; set; }
+        public List<IStatusDefinitionFilter> Filters { get; set; }
     }
 }
