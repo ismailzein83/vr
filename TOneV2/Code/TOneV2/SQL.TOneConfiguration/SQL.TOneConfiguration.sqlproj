@@ -499,6 +499,10 @@
     <Build Include="common\Stored Procedures\sp_Connection_Update.sql" />
     <Build Include="common\Stored Procedures\sp_Connection_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_Connection_GetAll.sql" />
+    <Build Include="VR_Invoice\Tables\PartnerInvoiceSetting.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_Update.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_Insert.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
