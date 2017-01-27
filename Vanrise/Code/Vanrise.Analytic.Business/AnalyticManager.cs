@@ -469,6 +469,7 @@ namespace Vanrise.Analytic.Business
                     {
                         case AnalyticQueryOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(query, allRecords); break;
                         case AnalyticQueryOrderType.ByAllMeasures: orderedRecords = GetOrderedByAllMeasures(query, allRecords); break;
+                        case AnalyticQueryOrderType.AdvancedMeasureOrder: orderedRecords = GetOrderedByAllAdvancedMeasureOrder(query, allRecords); break;
                         default: orderedRecords = null; break;
                     }
                 }
@@ -531,6 +532,36 @@ namespace Vanrise.Analytic.Business
                     {
                         string measureName = orderByMeasures[i];
                         orderedRecords = orderedRecords.ThenByDescending(itm => itm.MeasureValues[measureName].Value);
+                    }
+                }
+                return orderedRecords;
+            }
+
+            private IEnumerable<AnalyticRecord> GetOrderedByAllAdvancedMeasureOrder(AnalyticQuery query, IEnumerable<AnalyticRecord> allRecords)
+            {
+                if (query.MeasureFields == null)
+                    throw new NullReferenceException("query.MeasureFields");
+                AnalyticQueryAdvancedMeasureOrderOptions advancedMeasureOrderOptions = query.AdvancedOrderOptions.CastWithValidate<AnalyticQueryAdvancedMeasureOrderOptions>("query.AdvancedOrderOptions");
+
+                if (advancedMeasureOrderOptions.MeasureOrders == null || advancedMeasureOrderOptions.MeasureOrders.Count == 0)
+                    throw new NullReferenceException("query.AdvanceMeasureOrderOptions.MeasureOrders");
+                var measureOrders = advancedMeasureOrderOptions.MeasureOrders;
+                var firstMeasureOrder = measureOrders[0];
+                if (!query.MeasureFields.Contains(firstMeasureOrder.MeasureName))
+                    throw new Exception(String.Format("Measure Order '{0}' is not available in the query measures", firstMeasureOrder.MeasureName));
+                IOrderedEnumerable<AnalyticRecord> orderedRecords = firstMeasureOrder.OrderDirection == OrderDirection.Ascending ?
+                    allRecords.OrderBy(record => record.MeasureValues[firstMeasureOrder.MeasureName].Value) :
+                    allRecords.OrderByDescending(record => record.MeasureValues[firstMeasureOrder.MeasureName].Value);
+                if (measureOrders.Count > 1)
+                {
+                    for (int i = 1; i < measureOrders.Count; i++)
+                    {
+                        var measureOrder = measureOrders[i];
+                        if (!query.MeasureFields.Contains(measureOrder.MeasureName))
+                            throw new Exception(String.Format("Measure Order '{0}' is not available in the query measures", measureOrder.MeasureName));
+                        orderedRecords = measureOrder.OrderDirection == OrderDirection.Ascending ?
+                            orderedRecords.ThenBy(record => record.MeasureValues[measureOrder.MeasureName].Value) :
+                            orderedRecords.ThenByDescending(record => record.MeasureValues[measureOrder.MeasureName].Value);
                     }
                 }
                 return orderedRecords;
