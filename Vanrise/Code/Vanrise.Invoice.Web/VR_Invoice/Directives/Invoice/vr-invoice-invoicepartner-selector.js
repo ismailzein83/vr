@@ -32,7 +32,7 @@
 
             var directiveAPI;
             var directiveReadyDeferred;
-
+            var invoiceTypeEntity;
             var partnerInvoiceFilters;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -43,7 +43,8 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var directivePayload = {
-                        filter: filter
+                        filter: filter,
+                        extendedSettings: invoiceTypeEntity.Settings.ExtendedSettings
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
@@ -79,7 +80,8 @@
 
                     var invoiceTypeSelectorPromise = getInvoiceTypeSelector(invoiceTypeId);
                     promises.push(invoiceTypeSelectorPromise);
-
+                    var invoiceTypePromise = getInvoiceType(invoiceTypeId);
+                    promises.push(invoiceTypePromise);
                     if (selectedIds != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
@@ -88,6 +90,11 @@
                     function getInvoiceTypeSelector(invoiceTypeId) {
                         return VR_Invoice_InvoiceTypeAPIService.GetInvoicePartnerSelector(invoiceTypeId).then(function (response) {
                             $scope.scopeModel.Editor = response;
+                        });
+                    }
+                    function getInvoiceType(invoiceTypeId) {
+                        return VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
+                            invoiceTypeEntity = response;
                         });
                     }
                     function loadDirective() {
@@ -99,6 +106,7 @@
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
                                 selectedIds: selectedIds,
+                                extendedSettings: invoiceTypeEntity.Settings.ExtendedSettings,
                                 filter: filter
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);

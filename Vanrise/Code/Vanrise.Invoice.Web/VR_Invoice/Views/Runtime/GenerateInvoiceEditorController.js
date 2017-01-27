@@ -171,7 +171,7 @@
             function loadPartnerSelectorDirective() {
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                 partnerSelectorReadyDeferred.promise.then(function () {
-                    var partnerSelectorPayload = { context: getContext() };
+                    var partnerSelectorPayload = { context: getContext(), extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings };
                     if (invoiceEntity != undefined) {
                         partnerSelectorPayload.selectedIds = invoiceEntity.PartnerId;
                     }
