@@ -292,12 +292,13 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             });
 
             angular.forEach(chartData, function (dataItem) {
-
+               
                 var xValue = eval('dataItem.' + xAxisDefinition.titlePath);
                 if (xAxisDefinition.isDateTime)
-                    xValue = dateFormat((new Date(xValue)), "dd-mmm-yy HH:mm:ss");
+                 xValue = dateFormat((UtilsService.createDateFromString(xValue)), "dd-mmm-yy HH:MM:ss"); 
+
                 else if (xAxisDefinition.isDate)
-                    xValue = dateFormat((new Date(xValue)), "dd-mmm-yy");// new Date(xValue);
+                    xValue = dateFormat((UtilsService.createDateFromString(xValue)), "dd-mmm-yy");// new Date(xValue);
                 if (xAxisDefinition.groupNamePath != 'undefined' && xAxisDefinition.groupNamePath != null) {
                     var groupName = eval('dataItem.' + xAxisDefinition.groupNamePath);
                     if (groupName == null) {
