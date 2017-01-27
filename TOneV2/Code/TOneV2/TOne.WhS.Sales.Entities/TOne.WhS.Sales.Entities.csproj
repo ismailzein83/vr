@@ -66,6 +66,7 @@
     <Compile Include="BulkActions\BulkActionZoneFilter.cs" />
     <Compile Include="BulkActions\BulkActionType.cs" />
     <Compile Include="BulkActions\BulkActionZoneFilterTypeSettings.cs" />
+    <Compile Include="BulkActions\Enums.cs" />
     <Compile Include="BulkActions\GetZoneItemsInput.cs" />
     <Compile Include="CostCalculation\CostCalculationMethod.cs" />
     <Compile Include="CostCalculation\CostCalculationMethodSetting.cs" />
