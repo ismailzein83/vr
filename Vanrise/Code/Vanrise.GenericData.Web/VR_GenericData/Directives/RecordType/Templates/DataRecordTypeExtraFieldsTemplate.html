@@ -1,0 +1,6 @@
+﻿<vr-genericdata-datarecordtypeextrafields-selector on-ready="scopeModel.onDataRecordTypeExtraFieldsSelectorReady" isrequired="true"
+                                                   selectedvalues="scopeModel.selectedDataRecordTypeExtraFields" hideremoveicon normal-col-num="{{extraFieldCtrl.normalColNum}}">
+</vr-genericdata-datarecordtypeextrafields-selector>
+<vr-directivewrapper ng-if="scopeModel.selectedDataRecordTypeExtraFields != undefined" directive="scopeModel.selectedDataRecordTypeExtraFields.Editor"
+                     on-ready="scopeModel.onDirectiveReady" normal-col-num="{{extraFieldCtrl.normalColNum}}" vr-loader="scopeModel.isDirectiveLoading">
+</vr-directivewrapper>

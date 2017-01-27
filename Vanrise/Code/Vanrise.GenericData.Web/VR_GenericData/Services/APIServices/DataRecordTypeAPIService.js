@@ -9,10 +9,11 @@
             GetDataRecordType: GetDataRecordType,
             GetFilteredDataRecordTypes: GetFilteredDataRecordTypes,
             AddDataRecordType: AddDataRecordType,
-            HasAddDataRecordType:HasAddDataRecordType,
+            HasAddDataRecordType: HasAddDataRecordType,
             UpdateDataRecordType: UpdateDataRecordType,
-            HasUpdateDataRecordType:HasUpdateDataRecordType,
-            GetDataRecordTypeInfo: GetDataRecordTypeInfo
+            HasUpdateDataRecordType: HasUpdateDataRecordType,
+            GetDataRecordTypeInfo: GetDataRecordTypeInfo,
+            GetDataRecordTypeExtraFieldsTemplates: GetDataRecordTypeExtraFieldsTemplates
         });
         function GetDataRecordTypeInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", "GetDataRecordTypeInfo"), { filter: filter });
@@ -35,6 +36,9 @@
         }
         function HasUpdateDataRecordType() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", ['UpdateDataRecordType']));
+        }
+        function GetDataRecordTypeExtraFieldsTemplates(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", "GetDataRecordTypeExtraFieldsTemplates"));
         }
     }
 

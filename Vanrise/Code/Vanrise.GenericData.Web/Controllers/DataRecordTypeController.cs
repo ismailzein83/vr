@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "DataRecordType")]
-    public class DataRecordTypeController:BaseAPIController
+    public class DataRecordTypeController : BaseAPIController
     {
         [HttpGet]
         [Route("GetDataRecordType")]
@@ -51,5 +51,14 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordTypeManager manager = new DataRecordTypeManager();
             return manager.GetDataRecordTypeInfo(filter);
         }
+
+        [HttpGet]
+        [Route("GetDataRecordTypeExtraFieldsTemplates")]
+        public IEnumerable<DataRecordTypeExtraFieldTemplate> GetDataRecordTypeExtraFieldsTemplates()
+        {
+            DataRecordTypeManager manager = new DataRecordTypeManager();
+            return manager.GetDataRecordTypeExtraFieldsTemplates();
+        }
+
     }
 }

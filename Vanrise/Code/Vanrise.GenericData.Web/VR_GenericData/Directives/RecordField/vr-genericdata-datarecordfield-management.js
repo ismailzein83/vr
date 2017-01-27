@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldService", "VR_GenericData_DataRecordFieldAPIService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldService, VR_GenericData_DataRecordFieldAPIService) {
+app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldService", "VR_GenericData_DataRecordFieldAPIService", 'VRUIUtilsService',
+    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldService, VR_GenericData_DataRecordFieldAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -28,6 +28,10 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
         function DataRecordFieldManagement($scope, ctrl, $attrs) {
 
             var gridAPI;
+
+            var dataRecordTypeExtraFieldsApi;
+            var dataRecordTypeExtraFieldsReadyDeferred;
+
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -35,9 +39,9 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                 ctrl.fieldTypeConfigs = [];
 
                 ctrl.isValid = function () {
-                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
+                    if (ctrl.hasExtraFields || (ctrl.datasource != undefined && ctrl.datasource.length > 0))
                         return null;
-                    return "You Should Select at least one filter type ";
+                    return "You Should Add at least one field";
                 };
 
                 ctrl.addDataRecordField = function () {
@@ -47,6 +51,14 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     };
 
                     VR_GenericData_DataRecordFieldService.addDataRecordField(onDataRecordFieldAdded, ctrl.datasource);
+                };
+
+                ctrl.onDataRecordTypeExtraFieldsReady = function (api) {
+                    dataRecordTypeExtraFieldsApi = api;
+                    var setLoader = function (value) {
+                        ctrl.isDirectiveLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeExtraFieldsApi, undefined, setLoader, dataRecordTypeExtraFieldsReadyDeferred);
                 };
 
                 defineMenuActions();
@@ -69,17 +81,36 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                                 Formula: currentItem.Formula
                             });
                         }
-
                     }
+
                     var obj = {
-                        Fields: fields
+                        Fields: fields,
+                        HasExtraFields: ctrl.hasExtraFields,
+                        ExtraFields: ctrl.hasExtraFields ? dataRecordTypeExtraFieldsApi.getData() : undefined
                     };
                     return obj;
                 };
 
                 api.load = function (payload) {
+                    var promises = [];
 
-                    return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
+                    if (payload != undefined) {
+                        ctrl.hasExtraFields = payload.HasExtraFields;
+                        if (payload.HasExtraFields) {
+                            dataRecordTypeExtraFieldsReadyDeferred = UtilsService.createPromiseDeferred();
+
+                            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                            dataRecordTypeExtraFieldsReadyDeferred.promise.then(function () {
+                                dataRecordTypeExtraFieldsReadyDeferred = undefined;
+                                var dataRecordTypeExtraFieldsPayload = payload.ExtraFields;
+                                VRUIUtilsService.callDirectiveLoad(dataRecordTypeExtraFieldsApi, dataRecordTypeExtraFieldsPayload, directiveLoadDeferred);
+                            });
+
+                            promises.push(directiveLoadDeferred.promise);
+                        }
+                    }
+                    var dataRecorddFieldTypePromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.fieldTypeConfigs.push(item);
                         });
@@ -93,6 +124,8 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                             }
                         }
                     });
+                    promises.push(dataRecorddFieldTypePromise);
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 if (ctrl.onReady != null)

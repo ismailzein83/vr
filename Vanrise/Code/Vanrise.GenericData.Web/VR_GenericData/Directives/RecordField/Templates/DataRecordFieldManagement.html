@@ -1,9 +1,22 @@
-﻿<vr-button type="Add" data-onclick="ctrl.addDataRecordField" standalone></vr-button>
+﻿<vr-section title="Extra Fields">
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-switch label="Extra Fields" value="ctrl.hasExtraFields" isrequired></vr-switch>
+        </vr-columns>
+        <span ng-if="ctrl.hasExtraFields">
+            <vr-genericdata-datarecordtypeextrafields-template on-ready="ctrl.onDataRecordTypeExtraFieldsReady" isrequired="true" normal-col-num="3" vr-loader="ctrl.isDirectiveLoading"></vr-genericdata-datarecordtypeextrafields-template>
+        </span>
+    </vr-row>
+</vr-section>
 
-<vr-validator validate="ctrl.isValid()">
-    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
-        <vr-datagridcolumn headertext="'Name'" field="'Name'" widthfactor="5" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Type Description'" field="'TypeDescription'" widthfactor="15" disablesorting></vr-datagridcolumn>
-    </vr-datagrid>
-</vr-validator>
+<vr-section title="Static Fields">
+    <vr-button type="Add" data-onclick="ctrl.addDataRecordField" standalone></vr-button>
+
+    <vr-validator validate="ctrl.isValid()">
+        <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                     on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
+            <vr-datagridcolumn headertext="'Name'" field="'Name'" widthfactor="5" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Type Description'" field="'TypeDescription'" widthfactor="15" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-section>

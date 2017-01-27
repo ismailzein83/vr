@@ -423,11 +423,14 @@
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-nonemptyfilter.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-emptyfilter.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-rulefilter.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeExtraFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-groupfilter.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypeextrafields-template.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypefields-formula.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypeextrafields-selector.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypefields-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />

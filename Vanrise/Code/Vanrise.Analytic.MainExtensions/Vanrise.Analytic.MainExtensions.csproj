@@ -49,6 +49,7 @@
     <Compile Include="DARecordAggregates\SumAggregate.cs" />
     <Compile Include="DataAnalysisAggregates\WhSFilters.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcDataRecordStorageFilter.cs" />
+    <Compile Include="DataAnalysis\RecordTypeExtraFields\DataAnalysisItemExtraFields.cs" />
     <Compile Include="StyleRuleConditions\CompareCondition.cs" />
     <Compile Include="StyleRuleConditions\RangeCondition.cs" />
     <Compile Include="History\Widgets\AnalyticPieChartWidget.cs" />

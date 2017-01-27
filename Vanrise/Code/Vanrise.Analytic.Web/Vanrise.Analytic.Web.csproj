@@ -237,6 +237,8 @@
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-distinctcountaggregate.js" />
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-countaggregate.js" />
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-sumaggregate.js" />
+    <Content Include="Analytic\Directives\MainExtensions\DataAnalysis\Templates\DataAnalysisExtraFields.html" />
+    <Content Include="Analytic\Directives\MainExtensions\DataAnalysis\vr-analytic-dataanalysisextrafields.js" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\LastPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\PreviousPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-previousperiodfilter.js" />

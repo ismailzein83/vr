@@ -1,0 +1,7 @@
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-analytic-dataanalysisdefinition-selector on-ready="scopeModel.onDataAnalysisDefinitionSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedDataAnalysisDefinition"
+                                                 onselectionchanged="scopeModel.onDataAnalysisDefinitionSelectionChanged"></vr-analytic-dataanalysisdefinition-selector>
+</vr-columns>
+<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined">
+    <vr-analytic-dataanalysisitemdefinition-selector on-ready="scopeModel.onDataAnalysisItemDefinitionSelectorReady" isrequired="true" vr-loader="scopeModel.isDirectiveLoading"></vr-analytic-dataanalysisitemdefinition-selector>
+</vr-columns>
