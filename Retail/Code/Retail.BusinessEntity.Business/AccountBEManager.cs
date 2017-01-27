@@ -713,11 +713,16 @@ namespace Retail.BusinessEntity.Business
 
         private StyleFormatingSettings GetStatuStyle(Guid statusID)
         {
-            StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
+            Vanrise.Common.Business.StatusDefinitionManager statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();
             StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
             var status = statusDefinitionManager.GetStatusDefinition(statusID);
-            var style = styleDefinitionManager.GetStyleDefinition(status.Settings.StyleDefinitionId);
-            return style.StyleDefinitionSettings.StyleFormatingSettings;
+            if (status != null)
+            {
+                var style = styleDefinitionManager.GetStyleDefinition(status.Settings.StyleDefinitionId);
+                return style.StyleDefinitionSettings.StyleFormatingSettings;
+            }
+            else
+                return null;
         }
 
         private AccountInfo AccountInfoMapper(Account account)
