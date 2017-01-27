@@ -139,7 +139,7 @@ namespace Vanrise.GenericData.Business
         public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
-            return beDefinition != null ? beDefinition.Title : null;
+            return beDefinition != null ? beDefinition.Name : null;
         }
         public Guid? GetBEDataRecordTypeIdIfGeneric(Guid businessEntityDefinitionId)
         {

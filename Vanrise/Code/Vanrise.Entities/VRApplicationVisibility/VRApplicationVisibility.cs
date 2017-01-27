@@ -25,6 +25,5 @@ namespace Vanrise.Entities
         public VRApplicationVisibility Entity { get; set; }
 
         public Dictionary<Guid, VRModuleVisibilityEditorRuntime> ModulesVisibilityEditorRuntime { get; set; }
-
     }
 }

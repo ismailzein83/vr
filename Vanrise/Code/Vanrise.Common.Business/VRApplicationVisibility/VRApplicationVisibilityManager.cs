@@ -12,6 +12,11 @@ namespace Vanrise.Common.Business
     {
         #region Public Methods
 
+        public T GetModuleVisibility<T>() where T : VRModuleVisibility
+        {
+            throw new NotImplementedException();
+        }
+
         public VRApplicationVisibility GetVRApplicationVisibility(Guid vrApplicationVisibilityId)
         {
             Dictionary<Guid, VRApplicationVisibility> cachedVRApplicationVisibilities = this.GetCachedVRApplicationVisibilities();
