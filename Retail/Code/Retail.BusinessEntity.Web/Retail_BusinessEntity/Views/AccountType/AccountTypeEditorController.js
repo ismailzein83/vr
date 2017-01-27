@@ -251,6 +251,8 @@
                 });
             }
             function loadStatusDefinitionSelector() {
+                if (!isEditMode)
+                    return;
                 var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 statusDefinitionSelectorReadyDeferred.promise.then(function () {
                     var statusDefinitionSelectorPayload = {
