@@ -195,6 +195,12 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
+        public IEnumerable<DataRecordTypeExtraFieldTemplate> GetDataRecordTypeExtraFieldsTemplates()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<DataRecordTypeExtraFieldTemplate>(DataRecordTypeExtraFieldTemplate.EXTENSION_TYPE);
+        }
+
         #endregion
 
         #region Private Methods
