@@ -39,6 +39,8 @@
         function defineScope() {
             $scope.marginTypes = [];
 
+            $scope.showMarginPercentage = false;
+
             $scope.onTQISelectiveReady = function (api) {
                 tqiSelectiveDirectiveAPI = api;
                 tqiSelectiveDirectiveReadyPromiseDeferred.resolve();
@@ -64,13 +66,6 @@
                     $scope.marginTypes.push(marginTypes[i]);
             };
 
-            $scope.showMarginPercentage = function () {
-                if ($scope.marginTypesSelectedValue != undefined && $scope.margin != undefined && $scope.evaluatedRate != undefined && $scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
-                    $scope.marginPercentage = (parseFloat($scope.margin) * 100 / parseFloat($scope.evaluatedRate)).toFixed(2) + "%";
-                    return true;
-                }
-                return false;
-            };
 
             $scope.evaluate = function () {
                 return WhS_Sales_RatePlanAPIService.GetTQIEvaluatedRate(buildTQIEvaluatedRateObjFromScope()).then(function (response) {
@@ -80,13 +75,9 @@
                 });
             };
 
+
             $scope.calculateRate = function () {
-                if ($scope.marginTypesSelectedValue && $scope.evaluatedRate != undefined && $scope.margin != undefined) {
-                    if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Fixed.value)
-                        $scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, $scope.margin);
-                    else if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Percentage.value)
-                        $scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, (Number($scope.margin) * $scope.evaluatedRate) / 100);
-                }
+                calculateRate();
             };
 
             $scope.onPeriodTypeSelectorReady = function (api) {
@@ -99,12 +90,17 @@
             };
 
             $scope.searchClicked = function () {
-               return loadTQIGrid();
+                return loadTQIGrid();
             };
 
             $scope.save = function () {
                 $scope.onTQIEvaluated($scope.calculatedRate);
                 $scope.modalContext.closeModal();
+            };
+
+
+            $scope.onTQIMethodSelectionChanged = function () {
+                clearData();
             };
         }
 
@@ -140,7 +136,7 @@
 
                 var payload = {
                     rpRouteDetail: rpRouteDetail,
-                    context : getContext()
+                    context: getContext()
                 };
 
                 VRUIUtilsService.callDirectiveLoad(tqiSelectiveDirectiveAPI, payload, loadTQISelectiveDirectivePromiseDeferred);
@@ -192,6 +188,32 @@
             };
         }
 
+
+        function calculateRate() {
+            if ($scope.marginTypesSelectedValue != undefined && $scope.evaluatedRate != undefined && $scope.margin != undefined) {
+                if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
+                    $scope.marginPercentage = (parseFloat($scope.margin) * 100 / parseFloat($scope.evaluatedRate)).toFixed(2) + "%";
+                    $scope.showMarginPercentage = true;
+                }
+                else {
+                    $scope.marginPercentage = undefined;
+                    $scope.showMarginPercentage = true;
+                }
+
+                if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Fixed.value)
+                    $scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, $scope.margin);
+                else if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Percentage.value)
+                    $scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, (Number($scope.margin) * $scope.evaluatedRate) / 100);
+            }
+        }
+
+        function clearData() {
+            $scope.evaluatedRate = undefined;
+            $scope.margin = undefined;
+            $scope.calculatedRate = undefined;
+            $scope.marginPercentage = undefined;
+            $scope.marginTypesSelectedValue = undefined;
+        }
 
         function getContext() {
             var context = {

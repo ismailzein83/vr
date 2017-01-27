@@ -6,7 +6,8 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            onselectionchanged:'='
         },
         controller: function ($scope, $element, $attrs) {
             var selectiveCtrl = this;
@@ -46,6 +47,8 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, undefined);
             }
+
+            
 
         }
 

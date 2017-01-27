@@ -59,7 +59,7 @@
                                             <vr-columns colnum="7" haschildcolumns>
                                             </vr-columns>
                                             <vr-columns colnum="2">
-                                                <vr-textbox label="Last" value="periodValue" typeof="number" isrequired="true"></vr-textbox>
+                                                <vr-textbox label="Last" value="periodValue" type="number" minvalue="0" isrequired="true"></vr-textbox>
                                             </vr-columns>
                                             <vr-columns colnum="2" withemptyline haschildcolumns>
                                                 <vr-select on-ready="onPeriodTypeSelectorReady"
@@ -88,7 +88,7 @@
 
                 <vr-columns width="1/2row">
                     <vr-section title="Calculate Rate">
-                        <vr-whs-sales-tqi-selective on-ready="onTQISelectiveReady"></vr-whs-sales-tqi-selective>
+                        <vr-whs-sales-tqi-selective on-ready="onTQISelectiveReady" onselectionchanged="onTQIMethodSelectionChanged"></vr-whs-sales-tqi-selective>
                         <vr-row>
                             <vr-columns width="fullrow">
                                 <vr-columns style="display:inline-block;width:calc(20% - 15px);" haschildcolumns>
@@ -116,7 +116,7 @@
                                 <vr-columns style="display:inline-block;width:calc(20% - 15px)" haschildcolumns>
                                     <vr-textbox label="Sale Rate" value="calculatedRate" vr-disabled="true" highlighted></vr-textbox>
                                 </vr-columns>
-                                <vr-columns style="display:inline-block;width:calc(20% - 15px)" ng-show="showMarginPercentage()" haschildcolumns>
+                                <vr-columns style="display:inline-block;width:calc(20% - 15px)" ng-show="showMarginPercentage" haschildcolumns>
                                     <vr-textbox value="marginPercentage" vr-disabled="true"></vr-textbox>
                                 </vr-columns>
                             </vr-columns>
@@ -133,7 +133,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Evaluate" formname="formTQIEditor" data-onclick="evaluate"></vr-button>
-                <vr-button type="Save" formname="formTQIEditor" vr-disabled="disableSaveBtn()" data-onclick="save"></vr-button>
+                <vr-button type="Apply" formname="formTQIEditor" vr-disabled="disableSaveBtn()" data-onclick="save"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

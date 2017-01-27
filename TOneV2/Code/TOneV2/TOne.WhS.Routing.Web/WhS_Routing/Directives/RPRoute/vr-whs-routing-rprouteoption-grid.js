@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService',
-function (WhS_Routing_RPRouteAPIService, UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService',
+function (WhS_Routing_RPRouteAPIService, WhS_Routing_RouteOptionRuleService, UtilsService, VRNotificationService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {

@@ -1,4 +1,4 @@
-﻿<vr-columns width="fullrow">
+﻿<vr-columns width="1/2row">
     <vr-validator validate="validateSuggestedPercentages()" normalheight>
         <vr-datagrid on-ready="onGridReady"
                      datasource="suggestedPercentages"
@@ -8,7 +8,7 @@
             <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Rate'" field="'ConvertedSupplierRate'" type="'Text'" widthfactor="50" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'%'" widthfactor="20" disablesorting="true">
-                <vr-textbox typeof="number" value="dataItem.marginPercentage"> </vr-textbox>
+                <vr-textbox type="number" minvalue="0" value="dataItem.marginPercentageValue"> </vr-textbox>
             </vr-datagridcolumn>
         </vr-datagrid>
     </vr-validator>

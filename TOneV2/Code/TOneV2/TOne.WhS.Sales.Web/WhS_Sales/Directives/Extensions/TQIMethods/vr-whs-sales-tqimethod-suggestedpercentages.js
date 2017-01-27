@@ -28,7 +28,7 @@ app.directive("vrWhsSalesTqimethodSuggestedpercentages", [function () {
 
             var totalSuggestedPercentages = 0;
             for (var i = 0; i < $scope.suggestedPercentages.length; i++)
-                totalSuggestedPercentages += parseFloat($scope.suggestedPercentages[i].marginPercentage);
+                totalSuggestedPercentages += parseFloat($scope.suggestedPercentages[i].marginPercentageValue);
 
             if (totalSuggestedPercentages != 100)
                 return "The sum of suggested percentages must be equal to 100";
@@ -45,7 +45,9 @@ app.directive("vrWhsSalesTqimethodSuggestedpercentages", [function () {
             api.load = function (payload) {
                 if (payload != undefined && payload.rpRouteDetail != undefined) {
                     for (var i = 0; i < payload.rpRouteDetail.RouteOptionsDetails.length; i++) {
-                        $scope.suggestedPercentages.push(payload.rpRouteDetail.RouteOptionsDetails[i]);
+                        var routeOption = payload.rpRouteDetail.RouteOptionsDetails[i];
+                        routeOption.marginPercentageValue = undefined;
+                        $scope.suggestedPercentages.push(routeOption);
                     }
                 }
             };
@@ -68,7 +70,7 @@ app.directive("vrWhsSalesTqimethodSuggestedpercentages", [function () {
                 for (var i = 0; i < $scope.suggestedPercentages.length; i++)
                 {
                     var suggestedPercentage = $scope.suggestedPercentages[i];
-                    suppliersPercentages.push({ SupplierName: suggestedPercentage.SupplierName, MarginPercentage: suggestedPercentage.marginPercentage });
+                    suppliersPercentages.push({ SupplierName: suggestedPercentage.SupplierName, MarginPercentage: suggestedPercentage.marginPercentageValue });
                 }
             }
 
