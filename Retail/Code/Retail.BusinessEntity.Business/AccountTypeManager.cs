@@ -42,38 +42,34 @@ namespace Retail.BusinessEntity.Business
         {
             Func<AccountType, bool> filterExpression = null;
 
-            Dictionary<Guid, AccountType> cachedAccountTypes = this.GetCachedAccountTypes(); 
+            Dictionary<Guid, AccountType> cachedAccountTypes = this.GetCachedAccountTypes();
 
             if (filter != null)
             {
                 if (filter.IncludeHiddenAccountTypes)
-                {
                     cachedAccountTypes = this.GetCachedAccountTypesWithHidden();
-                }
-                else
+
+                filterExpression = (accountType) =>
                 {
-                    filterExpression = (accountType) =>
+                    if (filter.AccountBEDefinitionId.HasValue && filter.AccountBEDefinitionId.Value != accountType.AccountBEDefinitionId)
+                        return false;
+
+                    if (filter.AccountBEDefinitionId.HasValue && filter.ParentAccountId.HasValue)
                     {
-                        if (filter.AccountBEDefinitionId.HasValue && filter.AccountBEDefinitionId.Value != accountType.AccountBEDefinitionId)
+                        var accountBEManager = new AccountBEManager();
+                        Account parentAccount = accountBEManager.GetAccount(filter.AccountBEDefinitionId.Value, filter.ParentAccountId.Value);
+                        if (parentAccount == null)
+                            throw new NullReferenceException("parentAccount");
+
+                        if (accountType.Settings == null || accountType.Settings.SupportedParentAccountTypeIds == null || !accountType.Settings.SupportedParentAccountTypeIds.Contains(parentAccount.TypeId))
                             return false;
+                    }
 
-                        if (filter.AccountBEDefinitionId.HasValue && filter.ParentAccountId.HasValue)
-                        {
-                            var accountBEManager = new AccountBEManager();
-                            Account parentAccount = accountBEManager.GetAccount(filter.AccountBEDefinitionId.Value, filter.ParentAccountId.Value);
-                            if (parentAccount == null)
-                                throw new NullReferenceException("parentAccount");
+                    if (filter.RootAccountTypeOnly && (accountType.Settings == null || !accountType.Settings.CanBeRootAccount))
+                        return false;
 
-                            if (accountType.Settings == null || accountType.Settings.SupportedParentAccountTypeIds == null || !accountType.Settings.SupportedParentAccountTypeIds.Contains(parentAccount.TypeId))
-                                return false;
-                        }
-
-                        if (filter.RootAccountTypeOnly && (accountType.Settings == null || !accountType.Settings.CanBeRootAccount))
-                            return false;
-
-                        return true;
-                    };
-                }
+                    return true;
+                };
             }
 
             return cachedAccountTypes.MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
@@ -268,7 +264,7 @@ namespace Retail.BusinessEntity.Business
                 List<AccountType> includedAccountTypes = new List<AccountType>();
                 List<Guid> includedAccountTypeIds = new ConfigManager().GetIncludedAccountTypeIds();
                 IEnumerable<AccountType> allaccountTypes = this.GetCachedAccountTypesWithHidden().Values;
-                
+
                 foreach (var itm in allaccountTypes)
                 {
                     if (includedAccountTypeIds.Contains(itm.AccountTypeId))
@@ -314,8 +310,8 @@ namespace Retail.BusinessEntity.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreAccountTypesUpdated(ref _updateHandle)
-                        |   Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountPartDefinitionManager.CacheManager>().IsCacheExpired(ref _accountPartDefinitionCacheLastCheck)
-                            |   Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingsCacheLastCheck);
+                        | Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountPartDefinitionManager.CacheManager>().IsCacheExpired(ref _accountPartDefinitionCacheLastCheck)
+                            | Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingsCacheLastCheck);
             }
         }
 

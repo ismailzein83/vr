@@ -521,11 +521,15 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeRuleDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Switch\retail-be-switch-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Switch\retail-be-switch-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionAccountTypes\retail-be-visibilityaccounttype-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionAccountTypes\Templates\VisibilityAccountTypeEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionAccountTypes\Templates\VisibilityAccountTypeManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionAccountTypes\VisibilityAccountTypeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionGridColumns\retail-be-visibility-gridcolumns.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionGridColumns\Templates\VisibilityAccountDefinitionGridColumnsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\retail-be-visibility-accountdefinitions.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\retail-be-visibilityaccountdefinitions-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\Templates\VisibilityAccountDefinitionEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\Templates\VisibilityAccountDefinitionsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\Templates\VisibilityAccountDefinitionsManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\VisibilityAccountDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-countryzone-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Zone\retail-be-zone-selector.js" />

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VisibilityAccountDefinitionsDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_VisibilityAccountDefinitionService', 'Retail_BE_AccountTypeAPIService'];
+    VisibilityAccountDefinitionsManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_VisibilityAccountDefinitionService', 'Retail_BE_AccountTypeAPIService'];
 
-    function VisibilityAccountDefinitionsDirective(UtilsService, VRNotificationService, Retail_BE_VisibilityAccountDefinitionService, Retail_BE_AccountTypeAPIService) {
+    function VisibilityAccountDefinitionsManagementDirective(UtilsService, VRNotificationService, Retail_BE_VisibilityAccountDefinitionService, Retail_BE_AccountTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -24,13 +24,13 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/Templates/VisibilityAccountDefinitionsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/Templates/VisibilityAccountDefinitionsManagementTemplate.html'
         };
 
         function VisibilityAccountDefinitionsCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var accountDefinitionNamesById
+            var retailBEVisibilityEditorRuntime;
 
             var gridAPI;
 
@@ -45,7 +45,6 @@
 
                 $scope.scopeModel.onAddVisibilityAccountDefinition = function () {
                     var onVisibilityAccountDefinitionAdded = function (addedVisibilityAccountDefinition) {
-                        //extendVisibilityAccountDefinitionObj(addedVisibilityAccountDefinition);
                         $scope.scopeModel.visibilityAccountDefinitions.push({ Entity: addedVisibilityAccountDefinition });
                     };
 
@@ -68,18 +67,17 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    console.log(payload);
-
                     var accountDefinitions;
+                    var accountDefinitionNamesById;
 
-
-                    if (payload != undefined && payload.vrModuleVisibility != undefined) {
+                    if (payload != undefined) {
+                        retailBEVisibilityEditorRuntime = payload.vrModuleVisibilityEditorRuntime;
 
                         if (payload.vrModuleVisibility != undefined) {
                             accountDefinitions = payload.vrModuleVisibility.AccountDefinitions;
                         }
-                        if (payload.vrModuleVisibilityEditorRuntime != undefined) {
-                            accountDefinitionNamesById = payload.vrModuleVisibilityEditorRuntime.AccountBEDefinitionNamesById;
+                        if (retailBEVisibilityEditorRuntime != undefined) {
+                            accountDefinitionNamesById = retailBEVisibilityEditorRuntime.AccountBEDefinitionNamesById;
                         }
                     }
 
@@ -91,6 +89,13 @@
                                 $scope.scopeModel.visibilityAccountDefinitions.push({ Entity: visibilityAccountDefinition });
                             }
                         }
+                    }
+
+                    function extendVisibilityAccountDefinition(visibilityAccountDefinition) {
+                        if (accountDefinitionNamesById == undefined || visibilityAccountDefinition.AccountBEDefinitionName != undefined)
+                            return;
+
+                        visibilityAccountDefinition.AccountBEDefinitionName = accountDefinitionNamesById[visibilityAccountDefinition.AccountBEDefinitionId];
                     }
                 };
 
@@ -119,28 +124,20 @@
             function defineMenuActions() {
                 $scope.scopeModel.menuActions = [{
                     name: 'Edit',
-                    clicked: editVisibilityAccountDefinitionDefinition
+                    clicked: editVisibilityAccountDefinition
                 }];
             }
-            function editVisibilityAccountDefinitionDefinition(visibilityAccountDefinition) {
+            function editVisibilityAccountDefinition(visibilityAccountDefinition) {
                 var onVisibilityAccountDefinitionUpdated = function (updatedVisibilityAccountDefinition) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.visibilityAccountDefinitions, visibilityAccountDefinition.Entity.Title, 'Entity.Title');
-                    //extendVisibilityAccountDefinitionObj(updatedVisibilityAccountDefinition);
                     $scope.scopeModel.visibilityAccountDefinitions[index] = { Entity: updatedVisibilityAccountDefinition };
                 };
 
-                Retail_BE_VisibilityAccountDefinitionService.editVisibilityAccountDefinition(visibilityAccountDefinition.Entity, onVisibilityAccountDefinitionUpdated);
-            }
-
-            function extendVisibilityAccountDefinition(visibilityAccountDefinition) {
-                if (accountDefinitionNamesById == undefined)
-                    return;
-
-                visibilityAccountDefinition.AccountDefinitionName = accountDefinitionNamesById[visibilityAccountDefinition.AccountBEDefinitionId];
+                Retail_BE_VisibilityAccountDefinitionService.editVisibilityAccountDefinition(visibilityAccountDefinition.Entity, retailBEVisibilityEditorRuntime, onVisibilityAccountDefinitionUpdated);
             }
         }
     }
 
-    app.directive('retailBeVisibilityAccountdefinitions', VisibilityAccountDefinitionsDirective);
+    app.directive('retailBeVisibilityaccountdefinitionsManagement', VisibilityAccountDefinitionsManagementDirective);
 
 })(app);

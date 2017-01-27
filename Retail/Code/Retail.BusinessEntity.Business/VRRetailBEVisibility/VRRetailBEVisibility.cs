@@ -18,19 +18,31 @@ namespace Retail.BusinessEntity.Business
 
         public override VRModuleVisibilityEditorRuntime GetEditorRuntime()
         {
-            string accountBEDefinitionName;
+            string temp;
             var accountBEDefinitionNamesById = new Dictionary<Guid, string>();
+            var accountTypeTitlesById = new Dictionary<Guid, string>();
 
             var businessEntityDefinitionManager = new Vanrise.GenericData.Business.BusinessEntityDefinitionManager();
+            var accountTypeManager = new AccountTypeManager();
 
-            foreach (var accountBEDefinitionId in AccountDefinitions.Keys)
+            foreach (var accountDefinitionsVisibility in AccountDefinitions)
             {
-                if (!accountBEDefinitionNamesById.TryGetValue(accountBEDefinitionId, out accountBEDefinitionName))
-                    accountBEDefinitionNamesById.Add(accountBEDefinitionId, businessEntityDefinitionManager.GetBusinessEntityDefinitionName(accountBEDefinitionId));
+                if (!accountBEDefinitionNamesById.TryGetValue(accountDefinitionsVisibility.Key, out temp))
+                    accountBEDefinitionNamesById.Add(accountDefinitionsVisibility.Key, businessEntityDefinitionManager.GetBusinessEntityDefinitionName(accountDefinitionsVisibility.Key));
+
+                if (accountDefinitionsVisibility.Value.AccountTypes != null)
+                {
+                    foreach (var accountType in accountDefinitionsVisibility.Value.AccountTypes)
+                    {
+                        if (!accountTypeTitlesById.TryGetValue(accountType.AccountTypeId, out temp))
+                            accountTypeTitlesById.Add(accountType.AccountTypeId, accountTypeManager.GetAccountTypeName(accountType.AccountTypeId));
+                    }
+                }
             }
 
             VRRetailBEVisibilityEditorRuntime retailBEVisibilityEditorRuntime = new VRRetailBEVisibilityEditorRuntime();
             retailBEVisibilityEditorRuntime.AccountBEDefinitionNamesById = accountBEDefinitionNamesById;
+            retailBEVisibilityEditorRuntime.AccountTypeTitlesById = accountTypeTitlesById;
 
             return retailBEVisibilityEditorRuntime;
         }

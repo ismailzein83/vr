@@ -1,0 +1,25 @@
+﻿
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-button type="Add" data-onclick="scopeModel.onAddAccountType" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.accountTypes"
+                     ondeleterow="scopeModel.onDeleteAccountType"
+                     menuactions="scopeModel.menuActions"
+                     enabledraggablerow="true"
+                     hidegridmenu>
+
+            <vr-datagridcolumn field="'Entity.AccountTypeTitle'" headertext="'Account Type'" type="'Text'" widthfactor="1" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn field="'Entity.Title'" headertext="'Title'" type="'Text'" widthfactor="1" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
+
+
+
+

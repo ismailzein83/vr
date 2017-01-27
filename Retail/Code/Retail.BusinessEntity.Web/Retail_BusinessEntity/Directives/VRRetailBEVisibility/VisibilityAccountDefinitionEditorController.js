@@ -9,12 +9,17 @@
         var isEditMode;
 
         var visibilityAccountDefinitionEntity;
+        var retailBEVisibilityEditorRuntime;
+        var accountTypeTitlesById;
+        var accountBEDefinitionId;
 
         var accountBEDefinitionSelectorAPI;
         var accountBEDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
+        var accountBEDefinitionSelectionChangedDeferred;
 
-        var visibilityGridColumnsDirectiveAPI;
-        var visibilityGridColumnsDirectiveDeferred = UtilsService.createPromiseDeferred();
+        var visibilityAccountTypeDirectiveAPI;
+        var visibilityAccountTypeDirectiveReady = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -25,6 +30,7 @@
 
             if (parameters != undefined) {
                 visibilityAccountDefinitionEntity = parameters.visibilityAccountDefinition;
+                retailBEVisibilityEditorRuntime = parameters.retailBEVisibilityEditorRuntime;
             }
 
             isEditMode = (visibilityAccountDefinitionEntity != undefined);
@@ -32,14 +38,39 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onAccountDefinitionSelectorReady = function (api) {
+            $scope.scopeModel.onAccountBEDefinitionSelectorReady = function (api) {
                 accountBEDefinitionSelectorAPI = api;
                 accountBEDefinitionSelectorDeferred.resolve();
             };
-            $scope.scopeModel.onVisibilityGridColumnsDirectiveReady = function (api) {
-                visibilityGridColumnsDirectiveAPI = api;
-                visibilityGridColumnsDirectiveDeferred.resolve();
+            $scope.scopeModel.onVisibilityAccountTypeDirectiveReady = function (api) {
+                visibilityAccountTypeDirectiveAPI = api;
+                visibilityAccountTypeDirectiveReady.resolve();
             };
+
+            $scope.scopeModel.onAccountBEDefinitionSelectionChanged = function (selectedAccountBEDefinition) {
+                if (selectedAccountBEDefinition != undefined) {
+
+                    accountBEDefinitionId = selectedAccountBEDefinition.BusinessEntityDefinitionId;
+
+                    if (accountBEDefinitionSelectionChangedDeferred != undefined) {
+                        accountBEDefinitionSelectionChangedDeferred.resolve();
+                    }
+                    else {
+                        loadVisibilityAccountTypeDirective();
+                    }
+
+                    function loadVisibilityAccountTypeDirective() {
+                        var visibilityAccountTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        var visibilityAccountTypeDirectivePayload = {
+                            accountBEDefinitionId: accountBEDefinitionId
+                        };
+                        VRUIUtilsService.callDirectiveLoad(visibilityAccountTypeDirectiveAPI, visibilityAccountTypeDirectivePayload, visibilityAccountTypeLoadDeferred);
+
+                        return visibilityAccountTypeLoadDeferred.promise;
+                    }
+                }
+            }
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -57,7 +88,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelectorPromise, loadVisibilityGridColumnsDirectivePromise]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelector, loadVisibilityAccountTypeDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -74,7 +105,11 @@
 
             $scope.scopeModel.title = visibilityAccountDefinitionEntity.Title;
         }
-        function loadAccountDefinitionSelectorPromise() {
+        function loadAccountDefinitionSelector() {
+            if (isEditMode) {
+                accountBEDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+            }
+
             var accountBEDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
 
             accountBEDefinitionSelectorDeferred.promise.then(function () {
@@ -91,17 +126,22 @@
 
             return accountBEDefinitionLoadDeferred.promise;
         }
-        function loadVisibilityGridColumnsDirectivePromise() {
-            var visibilityGridColumnsLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadVisibilityAccountTypeDirective() {
+            if (!isEditMode)
+                return;
 
-            visibilityGridColumnsDirectiveDeferred.promise.then(function () {
-                var visibilityGridColumnsDirectivePayload = {
-                    gridColumns: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.GridColumns : undefined
+            var visibilityAccountTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+            UtilsService.waitMultiplePromises([visibilityAccountTypeDirectiveReady.promise, accountBEDefinitionSelectionChangedDeferred.promise]).then(function () {
+                var visibilityAccountTypeDirectivePayload = {
+                    accountBEDefinitionId: accountBEDefinitionId,
+                    accountTypes: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.AccountTypes : undefined,
+                    accountTypeTitlesById: retailBEVisibilityEditorRuntime != undefined ? retailBEVisibilityEditorRuntime.AccountTypeTitlesById : undefined
                 };
-                VRUIUtilsService.callDirectiveLoad(visibilityGridColumnsDirectiveAPI, visibilityGridColumnsDirectivePayload, visibilityGridColumnsLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(visibilityAccountTypeDirectiveAPI, visibilityAccountTypeDirectivePayload, visibilityAccountTypeLoadDeferred);
             });
 
-            return visibilityGridColumnsLoadDeferred.promise;
+            return visibilityAccountTypeLoadDeferred.promise;
         }
 
         function insert() {
@@ -121,9 +161,13 @@
 
         function buildVisibilityAccountDefinitionFromScope() {
 
+            var selectedAccountBEDefinition = $scope.scopeModel.selectedAccountBEDefinition;
+
             return {
                 Title: $scope.scopeModel.title,
-                AccountBEDefinitionId: accountBEDefinitionSelectorAPI.getSelectedIds()
+                AccountBEDefinitionId: selectedAccountBEDefinition != undefined ? selectedAccountBEDefinition.BusinessEntityDefinitionId : undefined,
+                AccountBEDefinitionName: selectedAccountBEDefinition != undefined ? selectedAccountBEDefinition.Name : undefined,
+                AccountTypes: visibilityAccountTypeDirectiveAPI.getData()
             };
         }
     }

@@ -6,17 +6,19 @@
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.title" label="Title" type="text" isrequired="true"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountDefinitionSelectorReady"
+                            <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountBEDefinitionSelectorReady"
+                                                                              selectedvalues="scopeModel.selectedAccountBEDefinition"
+                                                                              onselectionchanged="scopeModel.onAccountBEDefinitionSelectionChanged"
                                                                               customlabel="Account Definition" normal-col-num="6" isrequired="true">
                             </vr-genericdata-businessentitydefinition-selector>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.title" label="Title" type="text"></vr-textbox>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Grid Columns'">
-                    <retail-be-visibility-gridcolumns on-ready="scopeModel.onVisibilityGridColumnsDirectiveReady"></retail-be-visibility-gridcolumns>
+                <vr-tab header="'Account Types'">
+                    <retail-be-visibilityaccounttype-management on-ready="scopeModel.onVisibilityAccountTypeDirectiveReady"></retail-be-visibilityaccounttype-management>
                 </vr-tab>
             </vr-tabs>
 
