@@ -33,11 +33,13 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <retail-be-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady"
-                                                             customlabel="Initial Status"
-                                                             normal-col-num="6"
-                                                             isrequired="true">
-                        </retail-be-statusdefinition-selector>
+                        <span vr-loader="scopeModel.isStatusDefinitionSelectorLoading">
+                            <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady"
+                                                                 customlabel="Initial Status"
+                                                                 normal-col-num="6"
+                                                                 isrequired="true">
+                            </vr-common-statusdefinition-selector>
+                        </span>
                     </vr-row>
                     <vr-row>
                         <retail-be-accountpartdefinition-selector on-ready="scopeModel.onPartDefinitionSelectorReady"

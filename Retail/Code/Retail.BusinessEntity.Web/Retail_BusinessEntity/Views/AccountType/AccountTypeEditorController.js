@@ -66,7 +66,21 @@
                 if (selectedItem != undefined) {
                     accountBEDefinitionId = selectedItem.BusinessEntityDefinitionId;
                     $scope.scopeModel.showSettings = true;
+                    var businessEntityDefinitionForAccountTypeDeferred;
+                    var businessEntityDefinitionForStatusDefinitionDeferred;
+                    if (businessEntityDefinitionSelectionChangedDeferred != undefined)
+                    {
+                        businessEntityDefinitionForAccountTypeDeferred = UtilsService.createPromiseDeferred();
+                        businessEntityDefinitionForStatusDefinitionDeferred = UtilsService.createPromiseDeferred();
 
+                        UtilsService.waitMultiplePromises([businessEntityDefinitionForAccountTypeDeferred.promise, businessEntityDefinitionForStatusDefinitionDeferred.promise]).then(function () {
+                            businessEntityDefinitionForAccountTypeDeferred = undefined;
+                            businessEntityDefinitionForStatusDefinitionDeferred = undefined;
+                            if (businessEntityDefinitionSelectionChangedDeferred != undefined)
+                                businessEntityDefinitionSelectionChangedDeferred.resolve();
+                        });
+
+                    }
                     var accountTypeSelectorPayload = {
                         filter: {
                             AccountBEDefinitionId: accountBEDefinitionId
@@ -75,7 +89,24 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isAccountTypeSelectorLoading = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, accountTypeSelectorPayload, setLoader, businessEntityDefinitionSelectionChangedDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, accountTypeSelectorPayload, setLoader, businessEntityDefinitionForAccountTypeDeferred);
+
+                    var statusDefinitionSelectorPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter,Retail.BusinessEntity.Business",
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            }]
+                        }
+                    };
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isStatusDefinitionSelectorLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, setLoader, businessEntityDefinitionForStatusDefinitionDeferred);
+
+
+                   
+                   
                 }
             }
 
@@ -223,7 +254,12 @@
                 var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 statusDefinitionSelectorReadyDeferred.promise.then(function () {
                     var statusDefinitionSelectorPayload = {
-                        filter: { EntityType: Retail_BE_EntityTypeEnum.Account.value },
+                        filter: {
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter,Retail.BusinessEntity.Business",
+                                AccountBEDefinitionId: accountTypeEntity != undefined ? accountTypeEntity.AccountBEDefinitionId : undefined
+                            }]
+                        },
                         selectedIds: accountTypeEntity != undefined && accountTypeEntity.Settings != undefined ? accountTypeEntity.Settings.InitialStatusId : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
