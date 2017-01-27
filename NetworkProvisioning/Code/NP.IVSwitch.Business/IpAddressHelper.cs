@@ -21,26 +21,29 @@ namespace NP.IVSwitch.Business
                     originalHost, toCompareEndPoint.Key);
                 var host = toCompareEndPoint.Value.Host;
                 string[] hostParts = host.Split('/');
-                if (hostParts.Length == 1) continue;
-                int toCompareSubnet;
-                int.TryParse(hostParts[1], out toCompareSubnet);
+                int toCompareSubnet = 32;
+                if (hostParts.Length > 1)
+                    int.TryParse(hostParts[1], out toCompareSubnet);
                 var toCompareClassCMask = SubnetMask.CreateByNetBitLength(toCompareSubnet);
                 var toCompareIp = IPAddress.Parse(hostParts[0]);
                 var originalIp = IPAddress.Parse(originalParts[0]);
-                return toCompareIp.IsInSameSubnet(originalIp, toCompareClassCMask);
+                if (toCompareIp.IsInSameSubnet(originalIp, toCompareClassCMask)) return true;
             }
             return false;
         }
 
         public static bool ValidateSameAccountHost(Dictionary<int, Entities.EndPoint> endPoints, Entities.EndPoint originalPoint, out string message)
         {
-            foreach (var toComparEndPoint in endPoints.Values.Where(a => a.AccountId == originalPoint.AccountId && a.EndPointId != originalPoint.EndPointId))
+            originalPoint.TechPrefix = string.IsNullOrEmpty(originalPoint.TechPrefix)
+                ? "."
+                : originalPoint.TechPrefix;
+            if (
+                endPoints.Values.Where(
+                    a => a.AccountId == originalPoint.AccountId && a.EndPointId != originalPoint.EndPointId)
+                    .Any(toComparEndPoint => !toComparEndPoint.TechPrefix.Equals(originalPoint.TechPrefix)))
             {
-                message = string.Format("Subnet address({0}) conflicts with an existing IP address for (act#{1})",
-                    toComparEndPoint.Host, originalPoint.AccountId);
-                if (string.IsNullOrEmpty(toComparEndPoint.Host)) continue;
-                if (!toComparEndPoint.Host.Equals(originalPoint.Host)) continue;
-                if (originalPoint.TechPrefix.Equals(toComparEndPoint.TechPrefix)) return true;
+                message = "";
+                return false;
             }
             return IsInSameSubnet(endPoints, originalPoint.Host, out message);
         }

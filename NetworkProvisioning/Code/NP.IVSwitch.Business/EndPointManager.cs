@@ -152,9 +152,6 @@ namespace NP.IVSwitch.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             List<EndPointInfo> userEndPointInfoList = new List<EndPointInfo>();
             List<EndPointInfo> aclEndPointInfoList = new List<EndPointInfo>();
-            endPointItem.Entity.TechPrefix = string.IsNullOrEmpty(endPointItem.Entity.TechPrefix)
-                ? "."
-                : endPointItem.Entity.TechPrefix;
             if (Validatingsubnet(accountExtended, endPointItem, profileId, out mssg))
             {
                 insertOperationOutput.ShowExactMessage = true;
