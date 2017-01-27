@@ -53,7 +53,7 @@
                 $scope.scopeModel.onDeleteVisibilityAccountDefinitions = function (visibilityAccountDefinition) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.visibilityAccountDefinitions, visibilityAccountDefinition.Entity.Title, 'Entity.Title');
+                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.visibilityAccountDefinitions, visibilityAccountDefinition.Entity.AccountBEDefinitionName, 'Entity.AccountBEDefinitionName');
                             $scope.scopeModel.visibilityAccountDefinitions.splice(index, 1);
                         }
                     });
@@ -129,7 +129,7 @@
             }
             function editVisibilityAccountDefinition(visibilityAccountDefinition) {
                 var onVisibilityAccountDefinitionUpdated = function (updatedVisibilityAccountDefinition) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.visibilityAccountDefinitions, visibilityAccountDefinition.Entity.Title, 'Entity.Title');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.visibilityAccountDefinitions, visibilityAccountDefinition.Entity.AccountBEDefinitionName, 'Entity.AccountBEDefinitionName');
                     $scope.scopeModel.visibilityAccountDefinitions[index] = { Entity: updatedVisibilityAccountDefinition };
                 };
 

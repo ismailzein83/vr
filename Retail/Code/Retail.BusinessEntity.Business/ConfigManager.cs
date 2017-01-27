@@ -32,6 +32,15 @@ namespace Retail.BusinessEntity.Business
             return includedAccountTypeIds;
         }
 
+        public Guid GetVRRetailVisibilityId()
+        {
+            RetailBETechnicalSettings retailBETechnicalSettings = GetRetailBETechnicalSettings();
+            if (retailBETechnicalSettings.VRRetailVisibilityId == null)
+                throw new NullReferenceException("retailBETechnicalSettings.VRRetailVisibilityId");
+
+            return retailBETechnicalSettings.VRRetailVisibilityId;
+        }
+
         #endregion
 
         #region Private Methods

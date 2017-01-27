@@ -9,9 +9,10 @@ namespace Retail.BusinessEntity.Business
 {
     public class VRRetailBEVisibility : VRModuleVisibility
     {
+        public static Guid s_configType = new Guid("EB85EE78-78CE-437D-B13E-18DD15EABE54");
         public override Guid ConfigId
         {
-            get { return new Guid("EB85EE78-78CE-437D-B13E-18DD15EABE54"); }
+            get { return s_configType; }
         }
 
         public Dictionary<Guid, VRRetailBEVisibilityAccountDefinition> AccountDefinitions { get; set; }

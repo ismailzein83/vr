@@ -28,12 +28,23 @@ app.directive("retailBeTechnicalsettings", ["UtilsService", "VRNotificationServi
             var accountTypeSelectorAPI;
             var accountTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var applicationVisibilitySelectorAPI;
+            var applicationVisibilityPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
                     accountTypeSelectorAPI = api;
                     accountTypeSelectorPromiseDeferred.resolve();
+                $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
+                    accountTypeSelectorAPI = api;
+                    accountTypeSelectorPromiseDeferred.resolve();
+                };
+                };
+                $scope.scopeModel.onApplicationVisibilitySelectorReady = function (api) {
+                    applicationVisibilitySelectorAPI = api;
+                    applicationVisibilityPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -45,14 +56,20 @@ app.directive("retailBeTechnicalsettings", ["UtilsService", "VRNotificationServi
                     var promises = [];
 
                     var includedAccountTypes;
+                    var vrRetailVisibilityId;
 
                     if (payload != undefined && payload.data != undefined) {
                         includedAccountTypes = payload.data.IncludedAccountTypes;
+                        vrRetailVisibilityId = payload.data.VRRetailVisibilityId;
                     }
 
                     //Loading AccountType selector
                     var accountTypeSelectorLoadPromise = getAccountTypeSelectorLoadPromise();
                     promises.push(accountTypeSelectorLoadPromise);
+
+                    //Loading AccountType selector
+                    var retailVisibilitySelectorLoadPromise = getRetailVisibilitySelectorLoadPromise();
+                    promises.push(retailVisibilitySelectorLoadPromise);
 
 
                     function getAccountTypeSelectorLoadPromise() {
@@ -71,6 +88,19 @@ app.directive("retailBeTechnicalsettings", ["UtilsService", "VRNotificationServi
 
                         return accountTypeSelectorLoadDeferred.promise;
                     }
+                    function getRetailVisibilitySelectorLoadPromise() {
+                        var retailVisibilitySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        applicationVisibilityPromiseDeferred.promise.then(function () {
+
+                            var selectorPayload = {
+                                selectedIds: vrRetailVisibilityId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(applicationVisibilitySelectorAPI, selectorPayload, retailVisibilitySelectorLoadDeferred);
+                        });
+
+                        return retailVisibilitySelectorLoadDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -81,7 +111,8 @@ app.directive("retailBeTechnicalsettings", ["UtilsService", "VRNotificationServi
                         $type: "Retail.BusinessEntity.Entities.RetailBETechnicalSettings, Retail.BusinessEntity.Entities",
                         IncludedAccountTypes: {
                             AcountTypeIds: accountTypeSelectorAPI.getSelectedIds()
-                        }
+                        },
+                        VRRetailVisibilityId: applicationVisibilitySelectorAPI.getSelectedIds()
                     };
                     return obj;
                 };

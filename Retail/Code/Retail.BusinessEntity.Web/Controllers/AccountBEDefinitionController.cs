@@ -17,17 +17,26 @@ namespace Retail.BusinessEntity.Web.Controllers
         AccountBEDefinitionManager _manager = new AccountBEDefinitionManager();
 
         [HttpGet]
+        [Route("GetAccountBEDefinitionSettings")]
+        public AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
+        {
+            return _manager.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+        }
+
+        [HttpGet]
         [Route("GetAccountViewDefinitionSettingsConfigs")]
         public IEnumerable<AccountViewDefinitionConfig> GetAccountViewDefinitionSettingsConfigs()
         {
             return _manager.GetAccountViewDefinitionSettingsConfigs();
         }
+
         [HttpGet]
         [Route("GetAccountActionDefinitionSettingsConfigs")]
         public IEnumerable<AccountActionDefinitionConfig> GetAccountActionDefinitionSettingsConfigs()
         {
             return _manager.GetAccountActionDefinitionSettingsConfigs();
         }
+
         [HttpGet]
         [Route("GetAccountGridColumnAttributes")]
         public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(Guid accountBEDefinitionId, long? parentAccountId = null)

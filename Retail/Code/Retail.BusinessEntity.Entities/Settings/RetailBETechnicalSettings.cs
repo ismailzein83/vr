@@ -12,6 +12,8 @@ namespace Retail.BusinessEntity.Entities
         public const string SETTING_TYPE = "Retail_BE_TechnicalSettings";
 
         public IncludedAccountTypes IncludedAccountTypes { get; set; }
+         
+        public Guid VRRetailVisibilityId { get; set; }
     }
 
     public class IncludedAccountTypes

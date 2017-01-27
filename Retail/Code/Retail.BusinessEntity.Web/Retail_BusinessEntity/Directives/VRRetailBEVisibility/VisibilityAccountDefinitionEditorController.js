@@ -2,16 +2,18 @@
 
     'use strict';
 
-    VisibilityAccountDefinitionController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    VisibilityAccountDefinitionController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_AccountBEDefinitionAPIService'];
 
-    function VisibilityAccountDefinitionController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function VisibilityAccountDefinitionController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_AccountBEDefinitionAPIService) {
 
         var isEditMode;
 
         var visibilityAccountDefinitionEntity;
         var retailBEVisibilityEditorRuntime;
         var accountTypeTitlesById;
+
         var accountBEDefinitionId;
+        var accountBEDefinitionSettings;
 
         var accountBEDefinitionSelectorAPI;
         var accountBEDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
@@ -19,6 +21,9 @@
 
         var visibilityAccountTypeDirectiveAPI;
         var visibilityAccountTypeDirectiveReady = UtilsService.createPromiseDeferred();
+
+        var visibilityGridColumnDirectiveAPI;
+        var visibilityGridColumnDirectiveReady = UtilsService.createPromiseDeferred();
 
 
         loadParameters();
@@ -46,29 +51,53 @@
                 visibilityAccountTypeDirectiveAPI = api;
                 visibilityAccountTypeDirectiveReady.resolve();
             };
+            $scope.scopeModel.onVisibilityGridColumnDirectiveReady = function (api) {
+                visibilityGridColumnDirectiveAPI = api;
+                visibilityGridColumnDirectiveReady.resolve();
+            };
 
             $scope.scopeModel.onAccountBEDefinitionSelectionChanged = function (selectedAccountBEDefinition) {
                 if (selectedAccountBEDefinition != undefined) {
 
                     accountBEDefinitionId = selectedAccountBEDefinition.BusinessEntityDefinitionId;
 
-                    if (accountBEDefinitionSelectionChangedDeferred != undefined) {
-                        accountBEDefinitionSelectionChangedDeferred.resolve();
-                    }
-                    else {
-                        loadVisibilityAccountTypeDirective();
-                    }
+                    Retail_BE_AccountBEDefinitionAPIService.GetAccountBEDefinitionSettings(accountBEDefinitionId).then(function (response) {
+                        accountBEDefinitionSettings = response;
 
-                    function loadVisibilityAccountTypeDirective() {
-                        var visibilityAccountTypeLoadDeferred = UtilsService.createPromiseDeferred();
+                        if (accountBEDefinitionSelectionChangedDeferred != undefined) {
+                            accountBEDefinitionSelectionChangedDeferred.resolve();
+                        }
+                        else {
+                            loadVisibilityAccountTypeDirective();
+                            loadVisibilityGridColumnDirective();
 
-                        var visibilityAccountTypeDirectivePayload = {
-                            accountBEDefinitionId: accountBEDefinitionId
-                        };
-                        VRUIUtilsService.callDirectiveLoad(visibilityAccountTypeDirectiveAPI, visibilityAccountTypeDirectivePayload, visibilityAccountTypeLoadDeferred);
+                            function loadVisibilityAccountTypeDirective() {
+                                var visibilityAccountTypeLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        return visibilityAccountTypeLoadDeferred.promise;
-                    }
+                                var visibilityAccountTypeDirectivePayload = {
+                                    accountBEDefinitionId: accountBEDefinitionId
+                                };
+                                VRUIUtilsService.callDirectiveLoad(visibilityAccountTypeDirectiveAPI, visibilityAccountTypeDirectivePayload, visibilityAccountTypeLoadDeferred);
+
+                                return visibilityAccountTypeLoadDeferred.promise;
+                            }
+                            function loadVisibilityGridColumnDirective() {
+                                var visibilityGridColumnLoadDeferred = UtilsService.createPromiseDeferred();
+
+                                var visibilityGridColumnDirectivePayload = {
+                                    columnDefinitions: (accountBEDefinitionSettings && accountBEDefinitionSettings.GridDefinition) ? accountBEDefinitionSettings.GridDefinition.ColumnDefinitions : undefined,
+                                };
+                                VRUIUtilsService.callDirectiveLoad(visibilityGridColumnDirectiveAPI, visibilityGridColumnDirectivePayload, visibilityGridColumnLoadDeferred);
+
+                                return visibilityGridColumnLoadDeferred.promise;
+                            }
+                        }
+
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
                 }
             }
 
@@ -88,7 +117,8 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelector, loadVisibilityAccountTypeDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelector, loadVisibilityAccountTypeDirective, loadVisibilityGridColumnDirective])
+                .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -143,6 +173,22 @@
 
             return visibilityAccountTypeLoadDeferred.promise;
         }
+        function loadVisibilityGridColumnDirective() {
+            if (!isEditMode)
+                return;
+
+            var visibilityGridColumnLoadDeferred = UtilsService.createPromiseDeferred();
+
+            UtilsService.waitMultiplePromises([visibilityGridColumnDirectiveReady.promise, accountBEDefinitionSelectionChangedDeferred.promise]).then(function () {
+                var visibilityGridColumnDirectivePayload = {
+                    columnDefinitions: (accountBEDefinitionSettings && accountBEDefinitionSettings.GridDefinition) ? accountBEDefinitionSettings.GridDefinition.ColumnDefinitions: undefined,
+                    gridColumns: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.GridColumns : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(visibilityGridColumnDirectiveAPI, visibilityGridColumnDirectivePayload, visibilityGridColumnLoadDeferred);
+            });
+
+            return visibilityGridColumnLoadDeferred.promise;
+        }
 
         function insert() {
             var visibilityAccountDefinitionObject = buildVisibilityAccountDefinitionFromScope();
@@ -167,7 +213,8 @@
                 Title: $scope.scopeModel.title,
                 AccountBEDefinitionId: selectedAccountBEDefinition != undefined ? selectedAccountBEDefinition.BusinessEntityDefinitionId : undefined,
                 AccountBEDefinitionName: selectedAccountBEDefinition != undefined ? selectedAccountBEDefinition.Name : undefined,
-                AccountTypes: visibilityAccountTypeDirectiveAPI.getData()
+                AccountTypes: visibilityAccountTypeDirectiveAPI.getData(),
+                GridColumns: visibilityGridColumnDirectiveAPI.getData()
             };
         }
     }

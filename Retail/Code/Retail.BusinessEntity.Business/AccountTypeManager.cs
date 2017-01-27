@@ -40,10 +40,9 @@ namespace Retail.BusinessEntity.Business
 
         public IEnumerable<AccountTypeInfo> GetAccountTypesInfo(AccountTypeFilter filter)
         {
+            Dictionary<Guid, AccountType> cachedAccountTypes = null;
+
             Func<AccountType, bool> filterExpression = null;
-
-            Dictionary<Guid, AccountType> cachedAccountTypes = this.GetCachedAccountTypes();
-
             if (filter != null)
             {
                 if (filter.IncludeHiddenAccountTypes)
@@ -71,6 +70,9 @@ namespace Retail.BusinessEntity.Business
                     return true;
                 };
             }
+
+            if (cachedAccountTypes == null)
+                cachedAccountTypes = this.GetCachedAccountTypes();
 
             return cachedAccountTypes.MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
         }
@@ -257,23 +259,6 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<Guid, AccountType> GetCachedAccountTypes()
-        {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountTypes", () =>
-            {
-                List<AccountType> includedAccountTypes = new List<AccountType>();
-                List<Guid> includedAccountTypeIds = new ConfigManager().GetIncludedAccountTypeIds();
-                IEnumerable<AccountType> allaccountTypes = this.GetCachedAccountTypesWithHidden().Values;
-
-                foreach (var itm in allaccountTypes)
-                {
-                    if (includedAccountTypeIds.Contains(itm.AccountTypeId))
-                        includedAccountTypes.Add(itm);
-                }
-                return includedAccountTypes.ToDictionary(kvp => kvp.AccountTypeId, kvp => kvp);
-            });
-        }
-
         Dictionary<Guid, AccountType> GetCachedAccountTypesWithHidden()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountTypesWithHidden", () =>
@@ -284,7 +269,55 @@ namespace Retail.BusinessEntity.Business
             });
         }
 
-        private void FillAccountCommonGenericFields(Guid? accountBEDefinitionId, List<AccountGenericField> fields)
+        Dictionary<Guid, AccountType> GetCachedAccountTypes()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountTypes", () =>
+            {
+                List<AccountType> includedAccountTypes = new List<AccountType>();
+                IEnumerable<AccountType> allaccountTypes = this.GetCachedAccountTypesWithHidden().Values;
+                VRRetailBEVisibility retailBEVisibility = new VRApplicationVisibilityManager().GetModuleVisibility<VRRetailBEVisibility>();
+
+                if (retailBEVisibility != null) 
+                {
+                    Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> visibleAccountTypes = GetVisibleAccountTypes(retailBEVisibility);
+
+                    VRRetailBEVisibilityAccountDefinitionAccountType accountType;
+                    foreach (var itm in allaccountTypes)
+                    {
+                        if (visibleAccountTypes.TryGetValue(itm.AccountTypeId, out accountType))
+                        {
+                            if (!string.IsNullOrEmpty(accountType.Title))
+                                itm.Title = accountType.Title;
+                            includedAccountTypes.Add(itm);
+                        }
+                    }
+                }
+                else
+                {
+                    includedAccountTypes = allaccountTypes.ToList();
+                }
+
+                return includedAccountTypes.ToDictionary(kvp => kvp.AccountTypeId, kvp => kvp);
+            });
+        }
+
+        Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> GetVisibleAccountTypes(VRRetailBEVisibility retailBEVisibility)
+        {
+            var visibleAccountTypes = new List<VRRetailBEVisibilityAccountDefinitionAccountType>();
+
+            if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
+            {
+                foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
+                {
+                    if (accountDefinition.AccountTypes != null && accountDefinition.AccountTypes.Count > 0)
+                        visibleAccountTypes.AddRange(accountDefinition.AccountTypes);
+                }
+            }
+            
+            return visibleAccountTypes.ToDictionary(itm => itm.AccountTypeId);
+        }
+
+        void FillAccountCommonGenericFields(Guid? accountBEDefinitionId, List<AccountGenericField> fields)
         {
             fields.Add(new AccountNameGenericField());
 
@@ -305,13 +338,12 @@ namespace Retail.BusinessEntity.Business
             object _updateHandle;
 
             DateTime? _accountPartDefinitionCacheLastCheck;
-            DateTime? _settingsCacheLastCheck;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreAccountTypesUpdated(ref _updateHandle)
-                        | Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountPartDefinitionManager.CacheManager>().IsCacheExpired(ref _accountPartDefinitionCacheLastCheck)
-                            | Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingsCacheLastCheck);
+                            |   
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountPartDefinitionManager.CacheManager>().IsCacheExpired(ref _accountPartDefinitionCacheLastCheck);
             }
         }
 

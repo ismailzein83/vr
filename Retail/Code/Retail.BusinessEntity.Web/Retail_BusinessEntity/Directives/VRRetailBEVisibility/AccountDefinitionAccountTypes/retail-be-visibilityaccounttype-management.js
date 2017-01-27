@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VisibilityAccountTypeManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_VisibilityAccountDefinitionService', 'Retail_BE_AccountTypeAPIService'];
+    VisibilityAccountTypeManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_VisibilityAccountDefinitionService'];
 
-    function VisibilityAccountTypeManagementDirective(UtilsService, VRNotificationService, Retail_BE_VisibilityAccountDefinitionService, Retail_BE_AccountTypeAPIService) {
+    function VisibilityAccountTypeManagementDirective(UtilsService, VRNotificationService, Retail_BE_VisibilityAccountDefinitionService) {
         return {
             restrict: 'E',
             scope: {
@@ -53,7 +53,7 @@
                 $scope.scopeModel.onDeleteAccountType = function (accountType) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.accountTypes, accountType.Entity.FieldName, 'Entity.FieldName');
+                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.accountTypes, accountType.Entity.AccountTypeTitle, 'Entity.AccountTypeTitle');
                             $scope.scopeModel.accountTypes.splice(index, 1);
                         }
                     });
@@ -121,7 +121,7 @@
             }
             function editAccountType(accountType) {
                 var onAccountTypeUpdated = function (updatedAccountType) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.accountTypes, accountType.Entity.Title, 'Entity.Title');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.accountTypes, accountType.Entity.AccountTypeTitle, 'Entity.AccountTypeTitle');
                     $scope.scopeModel.accountTypes[index] = { Entity: updatedAccountType };
                 };
 
