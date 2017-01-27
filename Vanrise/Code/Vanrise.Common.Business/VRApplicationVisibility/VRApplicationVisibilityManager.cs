@@ -14,9 +14,23 @@ namespace Vanrise.Common.Business
 
         public T GetModuleVisibility<T>() where T : VRModuleVisibility
         {
-            throw new NotImplementedException();
+            VRModuleVisibility vrModuleVisibility = null;
+
+            var vrApplicationVisibility = GetVRApplicationVisibility();
+            if (vrApplicationVisibility != null && vrApplicationVisibility.Settings != null && vrApplicationVisibility.Settings.ModulesVisibility != null)
+            {
+                VRModuleVisibility instance = Activator.CreateInstance(typeof(T)) as VRModuleVisibility;
+                vrApplicationVisibility.Settings.ModulesVisibility.TryGetValue(instance.ConfigId, out vrModuleVisibility);
+            }
+
+            return vrModuleVisibility as T;
         }
 
+        public VRApplicationVisibility GetVRApplicationVisibility()
+        {
+            Dictionary<Guid, VRApplicationVisibility> cachedVRApplicationVisibilities = this.GetCachedVRApplicationVisibilities();
+            return cachedVRApplicationVisibilities.FirstOrDefault(itm => itm.Value.IsCurrent.HasValue && itm.Value.IsCurrent.Value == true).Value;
+        }
         public VRApplicationVisibility GetVRApplicationVisibility(Guid vrApplicationVisibilityId)
         {
             Dictionary<Guid, VRApplicationVisibility> cachedVRApplicationVisibilities = this.GetCachedVRApplicationVisibilities();
@@ -26,14 +40,14 @@ namespace Vanrise.Common.Business
         public VRApplicationVisibilityEditorRuntime GetVRApplicationVisibilityEditorRuntime(Guid vrApplicationVisibilityId)
         {
             var editorRuntime = new VRApplicationVisibilityEditorRuntime();
-            editorRuntime.ModulesVisibilityEditorRuntime = new Dictionary<Guid, VRModuleVisibilityEditorRuntime>();
-
             editorRuntime.Entity = GetVRApplicationVisibility(vrApplicationVisibilityId);
-            if (editorRuntime.Entity.Settings == null)
-                throw new NullReferenceException(string.Format("vrApplicationVisibility.Settings of vrApplicationVisibilityId {0}", vrApplicationVisibilityId));
-
-            foreach (var moduleVisibility in editorRuntime.Entity.Settings.ModulesVisibility)
-                editorRuntime.ModulesVisibilityEditorRuntime.Add(moduleVisibility.Key, moduleVisibility.Value.GetEditorRuntime());
+            editorRuntime.ModulesVisibilityEditorRuntime = new Dictionary<Guid, VRModuleVisibilityEditorRuntime>();
+            
+            if (editorRuntime.Entity.Settings != null && editorRuntime.Entity.Settings.ModulesVisibility != null)
+            {
+                foreach (var moduleVisibility in editorRuntime.Entity.Settings.ModulesVisibility)
+                    editorRuntime.ModulesVisibilityEditorRuntime.Add(moduleVisibility.Key, moduleVisibility.Value.GetEditorRuntime());
+            }
 
             return editorRuntime;
         }
@@ -93,6 +107,20 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
+        public IEnumerable<VRApplicationVisibilityInfo> GetVRApplicationVisibiltiesInfo(VRApplicationVisibilityFilter filter)
+        {
+            Func<VRApplicationVisibility, bool> filterExpression = null;
+            if (filter != null)
+            {
+                //filterExpression = (vrApplicationVisibility) =>
+                //{
+                //    return true;
+                //};
+            }
+
+            return GetCachedVRApplicationVisibilities().MapRecords(VRApplicationVisibilityInfoMapper, filterExpression);
+        }
+
         public IEnumerable<VRModuleVisibilityConfig> GetVRModuleVisibilityExtensionConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
@@ -139,6 +167,15 @@ namespace Vanrise.Common.Business
                 Entity = vrApplicationVisibility
             };
             return vrApplicationVisibilityDetail;
+        }
+
+        private VRApplicationVisibilityInfo VRApplicationVisibilityInfoMapper(VRApplicationVisibility vrApplicationVisibilityInfo)
+        {
+            return new VRApplicationVisibilityInfo()
+            {
+                VRApplicationVisibilityId = vrApplicationVisibilityInfo.VRApplicationVisibilityId,
+                Name = vrApplicationVisibilityInfo.Name
+            };
         }
 
         #endregion

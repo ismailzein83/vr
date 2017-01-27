@@ -44,6 +44,14 @@ namespace Vanrise.Common.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetVRApplicationVisibiltiesInfo")]
+        public IEnumerable<VRApplicationVisibilityInfo> GetVRApplicationVisibiltiesInfo(string filter = null)
+        {
+            VRApplicationVisibilityFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRApplicationVisibilityFilter>(filter) : null;
+            return _manager.GetVRApplicationVisibiltiesInfo(deserializedFilter);
+        }
+
+        [HttpGet]
         [Route("GetVRModuleVisibilityExtensionConfigs")]
         public IEnumerable<VRModuleVisibilityConfig> GetVRModuleVisibilityExtensionConfigs()
         {

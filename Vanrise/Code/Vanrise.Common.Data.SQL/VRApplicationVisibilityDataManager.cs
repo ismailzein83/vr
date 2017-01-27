@@ -63,6 +63,7 @@ namespace Vanrise.Common.Data.SQL
             {
                 VRApplicationVisibilityId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
+                IsCurrent = GetReaderValue<bool?>(reader, "IsCurrent"),
                 Settings = Vanrise.Common.Serializer.Deserialize<VRApplicationVisibilitySettings>(reader["Settings"] as string)
             };
             return vrApplicationVisibility;

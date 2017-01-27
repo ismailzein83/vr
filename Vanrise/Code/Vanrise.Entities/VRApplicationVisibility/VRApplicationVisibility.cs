@@ -12,6 +12,8 @@ namespace Vanrise.Entities
 
         public string Name { get; set; }
 
+        public bool? IsCurrent { get; set; }
+
         public VRApplicationVisibilitySettings Settings { get; set; }
     }
 

@@ -222,6 +222,7 @@
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilitySettingsTemplate.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRModuleVisibilitySelectiveTemplate.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\vr-common-applicationvisibility-grid.js" />
+    <Content Include="Common\Directives\VRApplicationVisibility\vr-common-applicationvisibility-selector.js" />
     <Content Include="Common\Directives\VRApplicationVisibility\vr-common-applicationvisibility-settings.js" />
     <Content Include="Common\Directives\VRApplicationVisibility\vr-common-modulevisibility-selective.js" />
     <Content Include="Common\Directives\VRApplicationVisibility\VRModuleVisibilityEditorController.js" />

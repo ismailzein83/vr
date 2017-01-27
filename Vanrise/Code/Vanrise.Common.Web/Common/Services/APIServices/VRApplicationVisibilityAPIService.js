@@ -27,6 +27,12 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateVRApplicationVisibility'), vrApplicationVisibilityItem);
         }
 
+        function GetVRApplicationVisibiltiesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRApplicationVisibiltiesInfo"), {
+                filter: filter
+            });
+        }
+
         function GetVRModuleVisibilityExtensionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRModuleVisibilityExtensionConfigs"), {}, { useCache: true });
         }
@@ -51,6 +57,7 @@
             GetVRApplicationVisibilityEditorRuntime: GetVRApplicationVisibilityEditorRuntime,
             AddVRApplicationVisibility: AddVRApplicationVisibility,
             UpdateVRApplicationVisibility: UpdateVRApplicationVisibility,
+            GetVRApplicationVisibiltiesInfo: GetVRApplicationVisibiltiesInfo,
             GetVRModuleVisibilityExtensionConfigs: GetVRModuleVisibilityExtensionConfigs,
             GetVRApplicationVisibilitiesInfo: GetVRApplicationVisibilitiesInfo,
             HasAddVRApplicationVisibilityPermission: HasAddVRApplicationVisibilityPermission,

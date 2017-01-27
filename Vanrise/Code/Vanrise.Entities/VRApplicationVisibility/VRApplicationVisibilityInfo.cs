@@ -8,5 +8,8 @@ namespace Vanrise.Entities
 {
     public class VRApplicationVisibilityInfo
     {
+        public Guid VRApplicationVisibilityId { get; set; }
+
+        public string Name { get; set; }
     }
 }
