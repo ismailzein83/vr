@@ -23,7 +23,7 @@ namespace Vanrise.Invoice.BP.Activities
             var partnerId = context.ActivityContext.GetValue(this.PartnerId);
             InvoiceManager invoiceManager = new InvoiceManager();
             InvoiceSettingManager invoiceSettingManager = new Business.InvoiceSettingManager();
-            var issueDate = DateTime.Now.AddYears(1);
+            var issueDate = DateTime.Now;
             if (partnerId != null)
             {
                 PartnerManager partnerManager = new PartnerManager();
