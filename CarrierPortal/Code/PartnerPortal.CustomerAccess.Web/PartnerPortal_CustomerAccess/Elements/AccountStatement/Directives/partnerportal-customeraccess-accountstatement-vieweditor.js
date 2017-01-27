@@ -62,7 +62,7 @@ app.directive("partnerportalCustomeraccessAccountstatementVieweditor", ["UtilsSe
                             filter: { Filters: [] }
                         };
                         payloadSelector.filter.Filters.push({
-                            $type: "Vanrise.Common.MainExtensions.VRConnections.VRInterAppRestConnectionFilter, Vanrise.Common.MainExtensions"
+                            $type: "Vanrise.Common.Business.VRInterAppRestConnectionFilter, Vanrise.Common.Business"
                         });
                         if (payload != undefined && payload.AccountStatementViewData != undefined) {
                             payloadSelector.selectedIds = payload.AccountStatementViewData.VRConnectionId;
