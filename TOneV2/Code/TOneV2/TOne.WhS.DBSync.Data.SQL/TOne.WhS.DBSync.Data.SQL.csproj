@@ -111,9 +111,10 @@
     <Compile Include="DBSyncDataManager\SwitchDBSyncDataManager.cs" />
     <Compile Include="SourceDataManger\Rules\SourceMarketPriceDataManager.cs" />
     <Compile Include="SourceDataManger\Rules\SourceRouteBlockRuleDataManager.cs" />
+    <Compile Include="SourceDataManger\Rules\SourceSpecialRequestDataManager.cs" />
     <Compile Include="SourceDataManger\Rules\SourceTariffRuleDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierDocumentDataManager.cs" />
-    <Compile Include="SourceDataManger\SourceTodDataManager.cs" />
+    <Compile Include="SourceDataManger\Rules\SourceTodDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCommissionDataManager.cs" />
     <Compile Include="SourceDataManger\Rules\SourceRouteOverrideRuleDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCarrierAccountDataManager.cs" />

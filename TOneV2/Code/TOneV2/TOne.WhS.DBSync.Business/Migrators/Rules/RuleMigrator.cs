@@ -85,6 +85,9 @@ namespace TOne.WhS.DBSync.Business
                     case RuleEntitiesEnum.RouteOptionBlockFromOverride:
                         _rulesBaseMigrator = new RouteOptionBlockFromOverrideRuleMigrator(ruleContext);
                         break;
+                    case RuleEntitiesEnum.SpecialRequest:
+                        _rulesBaseMigrator = new SpecialRequestRuleMigrator(ruleContext);
+                        break;
                     default:
                         _rulesBaseMigrator = null;
                         break;

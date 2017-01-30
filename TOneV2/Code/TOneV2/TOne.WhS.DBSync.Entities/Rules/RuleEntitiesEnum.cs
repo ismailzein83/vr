@@ -16,6 +16,7 @@ namespace TOne.WhS.DBSync.Entities
         RouteBlock,
         Tod,
         SwitchRules,
-        RouteOptionBlockFromOverride
+        RouteOptionBlockFromOverride,
+        SpecialRequest
     }
 }

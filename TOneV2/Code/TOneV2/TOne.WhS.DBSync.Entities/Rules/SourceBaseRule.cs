@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Entities
 {
-    public class SourceBaseRule
+    public class SourceBaseRule : IDateEffectiveSettings
     {
         public string SourceId { get; set; }
 
-        public string Code { get; set; }
-
-        public DateTime BED { get; set; }
-
-        public DateTime? EED { get; set; }
+        public string Code { get; set; }        
 
         public string ExcludedCodes { get; set; }
 
@@ -23,5 +20,8 @@ namespace TOne.WhS.DBSync.Entities
 
         public string Reason { get; set; }
 
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
     }
 }
