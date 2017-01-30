@@ -259,15 +259,15 @@
 
                         var orderTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         promises.push(orderTypeSelectorLoadDeferred.promise);
-
+                   
                         orderTypeSelectorReadyDeferred.promise.then(function () {
-                            var orderTypeSelectorPayload = undefined;
+                            var orderTypeSelectorPayload = { tableIds: payload.tableIds };
                             if (payload.widgetEntity != undefined)
-                                orderTypeSelectorPayload = { selectedIds: payload.widgetEntity.OrderType };
+                                orderTypeSelectorPayload.orderTypeEntity = { OrderType: payload.widgetEntity.OrderType, AdvancedOrderOptions: payload.widgetEntity.AdvancedOrderOptions };
                             VRUIUtilsService.callDirectiveLoad(orderTypeSelectorAPI, orderTypeSelectorPayload, orderTypeSelectorLoadDeferred);
                         });
-                        promises.push(getAllMeasures());
 
+                        promises.push(getAllMeasures());
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -307,6 +307,7 @@
                             });
                         }
                     }
+                    var orderTypeEntity = orderTypeSelectorAPI.getData();
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticGridWidget, Vanrise.Analytic.MainExtensions ",
                         RootDimensionsFromSearchSection: $scope.scopeModel.rootDimensionsFromSearch,
@@ -314,8 +315,9 @@
                         Measures: measures,
                         MeasureStyleRules: measureStyleGridAPI != undefined ? measureStyleGridAPI.getData() : undefined,
                         WithSummary: $scope.scopeModel.withSummary,
-                        OrderType: orderTypeSelectorAPI.getSelectedIds(),
-                        ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined
+                        OrderType: orderTypeEntity != undefined?orderTypeEntity.OrderType:undefined,
+                        ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined,
+                        AdvancedOrderOptions: orderTypeEntity != undefined ? orderTypeEntity.AdvancedOrderOptions : undefined,
                     };
                     return data;
                 }

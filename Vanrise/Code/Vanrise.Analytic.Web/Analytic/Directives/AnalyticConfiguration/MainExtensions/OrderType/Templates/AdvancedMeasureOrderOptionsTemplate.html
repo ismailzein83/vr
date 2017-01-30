@@ -1,0 +1,16 @@
+﻿<vr-row>
+<vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedMeasures" onselectitem="scopeModel.onSelectMeasureItem" ondeselectitem="scopeModel.onDeselectMeasureItem" hideselectedvaluessection onselectionchanged="    scopeModel.onSelectionMeasureChanged"></vr-analytic-measure-selector>
+<vr-columns width="2/3row">
+    <vr-validator validate="scopeModel.isValidMeasures()">
+        <vr-datagrid datasource="scopeModel.measures" enabledraggablerow="true"
+                        on-ready="onGridReady" ondeleterow="    scopeModel.removeMeasure" hidegridmenu norowhighlightonclick="'true'">
+            <vr-datagridcolumn headertext="'Measure Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Order Direction'" widthfactor="4" disablesorting="true">
+                <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.orderDirectionList"
+                           selectedvalues="dataItem.SelectedOrderDirection" isrequired="true" hideremoveicon>
+                </vr-select>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-columns>
+</vr-row>

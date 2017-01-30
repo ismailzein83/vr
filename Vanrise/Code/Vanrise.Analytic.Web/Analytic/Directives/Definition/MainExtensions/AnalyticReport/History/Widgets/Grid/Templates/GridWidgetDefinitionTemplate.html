@@ -1,7 +1,5 @@
 ﻿<vr-row>
-    <vr-columns width="1/3row" haschildcolumns>
-        <vr-analytic-ordertype-selector on-ready="scopeModel.onOrderTypeSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedOrderType" hideselectedvaluessection></vr-analytic-ordertype-selector>
-    </vr-columns>
+  
     <vr-columns width="1/3row">
         <vr-switch label="Root Dimensions From Search" value="scopeModel.rootDimensionsFromSearch"></vr-switch>
     </vr-columns>
@@ -61,6 +59,11 @@
     <vr-tab header="'Grid Action'">
         <vr-row>
             <vr-analytic-analyticitemaction-editor on-ready="scopeModel.onAnalyticItemActionDirectiveReady"></vr-analytic-analyticitemaction-editor>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Order Type'">
+        <vr-row>
+            <vr-analytic-ordertype-selective on-ready="scopeModel.onOrderTypeSelectorReady" isrequired="true" normal-col-num="6"></vr-analytic-ordertype-selective>
         </vr-row>
     </vr-tab>
 </vr-tabs>

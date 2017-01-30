@@ -20,6 +20,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public List<MeasureStyleRule> MeasureStyleRules { get; set; }
         public List<Entities.AnalyticItemAction> ItemActions { get; set; }
         public AnalyticQueryOrderType OrderType { get; set; }
+        public Object AdvancedOrderOptions { get; set; }
         public bool WithSummary { get; set; }
 
         public override List<string> GetMeasureNames()

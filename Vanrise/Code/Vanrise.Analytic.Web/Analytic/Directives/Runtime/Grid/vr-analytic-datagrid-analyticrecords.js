@@ -156,7 +156,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 TableId: gridPayload.TableId,
                                 FromTime: fromTime,
                                 FilterGroup: gridPayload.FilterGroup,
-                                ToTime: toTime
+                                ToTime: toTime,
+                                AdvancedOrderOptions: gridPayload.AdvancedOrderOptions
                             };
                             loadGrid(payload);
                         }
@@ -287,7 +288,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 MeasureStyleRules: measureStyleRules,
                                 FilterGroup: ctrl.filterGroups,
                                 GridMenuActions: $scope.gridMenuActions,
-                                ItemActions: itemActions
+                                ItemActions: itemActions,
+                                AdvancedOrderOptions: queryFinalized.AdvancedOrderOptions
                             };
                             return dataItem.gridAPI.load(drillDownPayLoad);
                         };
@@ -324,7 +326,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else
                         ctrl.sortField = 'MeasureValues.' + ctrl.measures[0] + '.Value';
-
                     var queryFinalized = {
                         Filters: payLoad.DimensionFilters,
                         DimensionFields: UtilsService.getPropValuesFromArray(groupingDimensions, 'DimensionName'),
@@ -336,7 +337,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         ParentDimensions: UtilsService.getPropValuesFromArray(ctrl.parentDimensions, 'DimensionName'),
                         WithSummary: payLoad.Settings == undefined ? false : payLoad.Settings.WithSummary,
                         TableId: payLoad.TableId,
-                        MeasureStyleRules: measureStyleRules
+                        MeasureStyleRules: measureStyleRules,
+                        AdvancedOrderOptions: payLoad.Settings != undefined ? payLoad.Settings.AdvancedOrderOptions : payLoad.AdvancedOrderOptions,
                     };
                     return queryFinalized;
                 }

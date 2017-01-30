@@ -154,11 +154,10 @@
 
                     var orderTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     promises.push(orderTypeSelectorLoadDeferred.promise);
-
                     orderTypeSelectorReadyDeferred.promise.then(function () {
-                        var orderTypeSelectorPayload = undefined;
+                        var orderTypeSelectorPayload = { tableIds: payload.tableIds };
                         if (payload.widgetEntity != undefined)
-                            orderTypeSelectorPayload = { selectedIds: payload.widgetEntity.OrderType };
+                            orderTypeSelectorPayload.orderTypeEntity = { OrderType: payload.widgetEntity.OrderType, AdvancedOrderOptions: payload.widgetEntity.AdvancedOrderOptions };
                         VRUIUtilsService.callDirectiveLoad(orderTypeSelectorAPI, orderTypeSelectorPayload, orderTypeSelectorLoadDeferred);
                     });
 
@@ -174,14 +173,17 @@
                 api.getData = getData;
 
                 function getData() {
+                    var orderTypeEntity = orderTypeSelectorAPI.getData();
+
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticChartWidget, Vanrise.Analytic.MainExtensions ",
                         Measures: getMeasures(),
                         Dimensions: getDimensions(),
                         TopRecords: $scope.scopeModel.topRecords,
-                        OrderType: orderTypeSelectorAPI.getSelectedIds(),
+                        OrderType: orderTypeEntity != undefined ? orderTypeEntity.OrderType : undefined,
                         ChartType: $scope.scopeModel.selectedChartType.value,
-                        RootDimensionsFromSearch: $scope.scopeModel.rootDimensionsFromSearch
+                        RootDimensionsFromSearch: $scope.scopeModel.rootDimensionsFromSearch,
+                        AdvancedOrderOptions: orderTypeEntity != undefined ? orderTypeEntity.AdvancedOrderOptions : undefined,
                     };
                     return data;
                 }
