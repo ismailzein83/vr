@@ -240,8 +240,10 @@
                 {
                     $scope.effectiveDataSource.length = 0;
                     controller.boundDataSource.length = 0;
-                    for (var i = 0; i < items.length; i++) {
-                        $scope.effectiveDataSource.push(items[i]);
+                    if (items != undefined) {
+                        for (var i = 0; i < items.length; i++) {
+                            $scope.effectiveDataSource.push(items[i]);
+                        }
                     }
                     addPageToBoundDataSource();
                 }
