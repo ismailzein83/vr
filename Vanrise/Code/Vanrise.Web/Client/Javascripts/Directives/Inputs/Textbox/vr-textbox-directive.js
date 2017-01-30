@@ -59,7 +59,7 @@
                 };
 
                 $scope.ctrl.onBlurDirective = function (e) {
-                    if ($attrs.onblurtextbox != undefined) {
+                    if ($attrs.onblurtextbox != undefined && !ctrl.readOnly) {
                         var onblurtextboxMethod = $scope.$parent.$eval($attrs.onblurtextbox);
                         if (onblurtextboxMethod != undefined && onblurtextboxMethod != null && typeof (onblurtextboxMethod) == 'function') {
                             onblurtextboxMethod();
