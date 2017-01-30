@@ -10,8 +10,8 @@ namespace TOne.WhS.Routing.Business
         #region Properties/Ctor
 
         public override Guid ConfigId { get { return new Guid("31B3226E-A2B2-40D5-8C33-83C6601E8730"); } }
-        
-        public List<SpecialRequestOptionSettings> Options { get; set; }
+
+        public Dictionary<int, SpecialRequestOptionSettings> Options { get; set; }
 
         public override bool UseOrderedExecution
         {
