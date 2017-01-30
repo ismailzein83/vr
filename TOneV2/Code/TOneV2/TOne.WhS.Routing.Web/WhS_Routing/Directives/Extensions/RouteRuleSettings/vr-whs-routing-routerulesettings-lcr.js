@@ -73,17 +73,25 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
 
                     $scope.scopeModel.suppliers.push({
                         SupplierId: selectedItem.CarrierAccountId,
-                        Name: selectedItem.Name
+                        Name: selectedItem.Name,
+                        Position: selectedItem.Position,
+                        ForceOption: selectedItem.ForceOption,
+                        NumberOfTries: selectedItem.NumberOfTries,
+                        Percentage: selectedItem.Percentage
                     });
                 };
 
                 $scope.scopeModel.onDeselectSupplier = function (deselectedItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.suppliers, deselectedItem.SupplierId, 'CarrierAccountId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.suppliers, deselectedItem.SupplierId, 'SupplierId');
                     $scope.scopeModel.suppliers.splice(index, 1);
                 };
 
                 $scope.scopeModel.onDeleteRow = function (deletedItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedSuppliers, deletedItem.SupplierId, 'CarrierAccountId');
+
+                    //console.log(deletedItem);
+                    //console.log($scope.scopeModel.selectedSuppliers);
+
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedSuppliers, deletedItem.SupplierId, 'SupplierId');
                     $scope.scopeModel.selectedSuppliers.splice(index, 1);
                     $scope.scopeModel.onDeselectSupplier(deletedItem);
                 };
@@ -117,7 +125,7 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                             var currentOption = options[currentSupplier.CarrierAccountId];
 
                             $scope.scopeModel.suppliers.push({
-                                SupplierId: currentOption.SupplierId,
+                                SupplierId: currentSupplier.CarrierAccountId,
                                 Name: currentSupplier.Name,
                                 Position: currentOption.Position,
                                 ForceOption: currentOption.ForceOption,
