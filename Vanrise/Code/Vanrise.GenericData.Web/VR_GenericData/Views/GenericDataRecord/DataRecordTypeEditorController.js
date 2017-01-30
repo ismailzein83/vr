@@ -86,7 +86,7 @@
         };
 
         function getDataRecordType() {
-            return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (dataRecordType) {
+            return VR_GenericData_DataRecordTypeAPIService.GetDataRecordTypeToEdit(dataRecordTypeId).then(function (dataRecordType) {
                 dataRecordTypeEntity = dataRecordType;
             });
         };
@@ -101,8 +101,7 @@
 
             if (obj != undefined) {
                 dataRecordType.Fields = obj.Fields;
-                dataRecordType.HasExtraFields = obj.HasExtraFields;
-                dataRecordType.ExtraFields = obj.ExtraFields;
+                dataRecordType.ExtraFieldsEvaluator = obj.ExtraFieldsEvaluator;
             }
             return dataRecordType;
         };
@@ -112,7 +111,7 @@
 
             dataRecordFieldReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = (dataRecordTypeEntity != undefined) ? { Fields: dataRecordTypeEntity.Fields, HasExtraFields: dataRecordTypeEntity.HasExtraFields, ExtraFields: dataRecordTypeEntity.ExtraFields } : undefined;
+                    var directivePayload = (dataRecordTypeEntity != undefined) ? { Fields: dataRecordTypeEntity.Fields, ExtraFieldsEvaluator: dataRecordTypeEntity.ExtraFieldsEvaluator } : undefined;
 
                     VRUIUtilsService.callDirectiveLoad(dataRecordFieldAPI, directivePayload, loadDataRecordFieldPromiseDeferred);
                 });

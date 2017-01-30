@@ -14,6 +14,14 @@ namespace Vanrise.GenericData.Web.Controllers
     public class DataRecordTypeController : BaseAPIController
     {
         [HttpGet]
+        [Route("GetDataRecordTypeToEdit")]
+        public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
+        {
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            return dataRecordTypeManager.GetDataRecordTypeToEdit(dataRecordTypeId);
+        }
+
+        [HttpGet]
         [Route("GetDataRecordType")]
         public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {

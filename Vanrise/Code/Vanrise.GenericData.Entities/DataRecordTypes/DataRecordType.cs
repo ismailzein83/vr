@@ -18,9 +18,7 @@ namespace Vanrise.GenericData.Entities
 
         public DataRecordTypeSettings Settings { get; set; }
 
-        public bool HasExtraFields { get; set; }
-
-        public DataRecordTypeExtraField ExtraFields { get; set; }
+        public DataRecordTypeExtraField ExtraFieldsEvaluator { get; set; }
     }
 
     public abstract class DataRecordTypeExtraField

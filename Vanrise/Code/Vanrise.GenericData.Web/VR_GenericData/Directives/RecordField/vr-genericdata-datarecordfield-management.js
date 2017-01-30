@@ -86,7 +86,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     var obj = {
                         Fields: fields,
                         HasExtraFields: ctrl.hasExtraFields,
-                        ExtraFields: ctrl.hasExtraFields ? dataRecordTypeExtraFieldsApi.getData() : undefined
+                        ExtraFieldsEvaluator: ctrl.hasExtraFields ? dataRecordTypeExtraFieldsApi.getData() : undefined
                     };
                     return obj;
                 };
@@ -95,15 +95,15 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     var promises = [];
 
                     if (payload != undefined) {
-                        ctrl.hasExtraFields = payload.HasExtraFields;
-                        if (payload.HasExtraFields) {
+                        ctrl.hasExtraFields = payload.ExtraFieldsEvaluator != undefined;
+                        if (ctrl.hasExtraFields) {
                             dataRecordTypeExtraFieldsReadyDeferred = UtilsService.createPromiseDeferred();
 
                             var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                             dataRecordTypeExtraFieldsReadyDeferred.promise.then(function () {
                                 dataRecordTypeExtraFieldsReadyDeferred = undefined;
-                                var dataRecordTypeExtraFieldsPayload = payload.ExtraFields;
+                                var dataRecordTypeExtraFieldsPayload = payload.ExtraFieldsEvaluator;
                                 VRUIUtilsService.callDirectiveLoad(dataRecordTypeExtraFieldsApi, dataRecordTypeExtraFieldsPayload, directiveLoadDeferred);
                             });
 

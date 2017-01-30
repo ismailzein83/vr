@@ -22,6 +22,12 @@ namespace Vanrise.GenericData.Business
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataRecordTypeDetailMapper));
         }
+        public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
+        {
+            var dataRecordTypes = GetCachedDataRecordTypeDefinitions();
+            return dataRecordTypes.GetRecord(dataRecordTypeId);
+        }
+
         public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
@@ -51,8 +57,8 @@ namespace Vanrise.GenericData.Business
                    if (dataRecordType.Fields == null)
                        throw new NullReferenceException(String.Format("dataRecordType.Fields '{0}'", dataRecordTypeId));
                    return dataRecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
-               });          
-        }        
+               });
+        }
 
         public string GetDataRecordTypeName(Guid dataRecordTypeId)
         {
@@ -200,18 +206,49 @@ namespace Vanrise.GenericData.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<DataRecordTypeExtraFieldTemplate>(DataRecordTypeExtraFieldTemplate.EXTENSION_TYPE);
         }
-
         #endregion
 
         #region Private Methods
-        public Dictionary<Guid, DataRecordType> GetCachedDataRecordTypes()
+        public Dictionary<Guid, DataRecordType> GetCachedDataRecordTypeDefinitions()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordTypes",
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordTypeDefinitions",
                () =>
                {
                    IDataRecordTypeDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
                    IEnumerable<DataRecordType> dataRecordTypes = dataManager.GetDataRecordTypes();
                    return dataRecordTypes.ToDictionary(kvp => kvp.DataRecordTypeId, kvp => kvp);
+               });
+        }
+
+        public Dictionary<Guid, DataRecordType> GetCachedDataRecordTypes()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordTypes",
+               () =>
+               {  
+                   Dictionary<Guid, DataRecordType> dataRecordTypes = new Dictionary<Guid, DataRecordType>();
+                   var dataRecordTypeDefinitions = GetCachedDataRecordTypeDefinitions();
+                   StringBuilder strBuilder = new StringBuilder();
+                   foreach (var dataRecordTypeDefinition in dataRecordTypeDefinitions)
+                   {
+                       List<DataRecordField> dataRecordFields = new List<DataRecordField>();
+                       DataRecordType dataRecordType = Vanrise.Common.Serializer.Deserialize<DataRecordType>(Vanrise.Common.Serializer.Serialize(dataRecordTypeDefinition.Value));
+
+                       if (dataRecordType.Fields != null)
+                           dataRecordFields.AddRange(dataRecordType.Fields);
+
+                       if (dataRecordType.ExtraFieldsEvaluator != null)
+                       {
+                           var extraFields = dataRecordType.ExtraFieldsEvaluator.GetFields(null);
+                           if (extraFields != null)
+                               dataRecordFields.AddRange(extraFields);
+                       }
+                       if (dataRecordFields.Count == 0)
+                           throw new Exception(String.Format("dataRecordType '{0}' doesn't have any Field", dataRecordType.DataRecordTypeId));
+
+                       dataRecordType.Fields = dataRecordFields;
+                       dataRecordTypes.Add(dataRecordType.DataRecordTypeId, dataRecordType);
+                   }
+                   return dataRecordTypes;
                });
         }
 
@@ -322,14 +359,14 @@ namespace Vanrise.GenericData.Business
             HashSet<string> properties = new HashSet<string>();
             var manager = new DataRecordTypeManager();
             var allRecordTypes = manager.GetCachedDataRecordTypes();
-            if(allRecordTypes != null)
+            if (allRecordTypes != null)
             {
-                foreach(var recordType in allRecordTypes.Values)
+                foreach (var recordType in allRecordTypes.Values)
                 {
                     var fields = manager.GetDataRecordTypeFields(recordType.DataRecordTypeId);
                     if (fields != null)
                     {
-                        foreach(var fld in fields.Values)
+                        foreach (var fld in fields.Values)
                         {
                             properties.Add(fld.Name);
                         }

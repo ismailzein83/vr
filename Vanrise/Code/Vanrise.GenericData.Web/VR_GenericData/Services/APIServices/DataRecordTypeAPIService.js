@@ -4,9 +4,10 @@
 
     DataRecordTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'VR_GenericData_ModuleConfig'];
 
-    function DataRecordTypeAPIService(BaseAPIService, UtilsService, SecurityService , VR_GenericData_ModuleConfig) {
+    function DataRecordTypeAPIService(BaseAPIService, UtilsService, SecurityService, VR_GenericData_ModuleConfig) {
         return ({
             GetDataRecordType: GetDataRecordType,
+            GetDataRecordTypeToEdit: GetDataRecordTypeToEdit,
             GetFilteredDataRecordTypes: GetFilteredDataRecordTypes,
             AddDataRecordType: AddDataRecordType,
             HasAddDataRecordType: HasAddDataRecordType,
@@ -24,6 +25,9 @@
 
         function GetDataRecordType(dataRecordTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'GetDataRecordType'), { dataRecordTypeId: dataRecordTypeId });
+        }
+        function GetDataRecordTypeToEdit(dataRecordTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'GetDataRecordTypeToEdit'), { dataRecordTypeId: dataRecordTypeId });
         }
         function AddDataRecordType(dataRecordTypeObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'AddDataRecordType'), dataRecordTypeObject);
