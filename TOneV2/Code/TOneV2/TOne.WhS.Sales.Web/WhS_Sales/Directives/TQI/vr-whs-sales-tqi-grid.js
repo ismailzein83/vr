@@ -30,6 +30,9 @@ app.directive('vrWhsSalesTqiGrid', ['WhS_Sales_RatePlanAPIService', 'UtilsServic
         var currencyId;
         var routingProductId;
         var saleZoneId;
+        var rpRouteDetail;
+        var periodType;
+        var periodValue;
 
         function initializeController() {
 
@@ -42,23 +45,6 @@ app.directive('vrWhsSalesTqiGrid', ['WhS_Sales_RatePlanAPIService', 'UtilsServic
                 defineAPI();
             };
 
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_Sales_RatePlanAPIService.GetTQISuppliersInfo(dataRetrievalInput)
-                    .then(function (response) {
-                        if (response != null && response.Data) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                                $scope.analyticsData.push(response.Data[i]);
-                                mapNeededData(response.Data[i]);
-                                drillDownManager.setDrillDownExtensionObject(response.Data[i]);
-                            }
-                        }
-                        onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
-            };
-
         }
 
         function defineAPI() {
@@ -66,18 +52,22 @@ app.directive('vrWhsSalesTqiGrid', ['WhS_Sales_RatePlanAPIService', 'UtilsServic
             var api = {};
 
             api.load = function (payload) {
-
+                var promises = [];
                 var query = {};
                 if (payload != undefined && payload.rpRouteDetail != undefined) {
-                    query.RPRouteDetail = payload.rpRouteDetail;
-                    query.PeriodType = payload.periodType;
-                    query.PeriodValue = payload.periodValue;
+                    rpRouteDetail = payload.rpRouteDetail;
+                    periodType = payload.periodType;
+                    periodValue = payload.periodValue;
                     currencyId = payload.currencyId;
                     routingProductId = payload.routingProductId;
                     routingDatabaseId = payload.routingDatabaseId;
                     saleZoneId = payload.saleZoneId;
                 }
-                return gridAPI.retrieveData(query);
+
+                var loadTQIGridPromise = loadTQIGrid();
+                promises.push(loadTQIGridPromise);
+
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
@@ -101,6 +91,37 @@ app.directive('vrWhsSalesTqiGrid', ['WhS_Sales_RatePlanAPIService', 'UtilsServic
             dataItem.onServiceReady = function (api) {
                 dataItem.ServieApi = api;
                 dataItem.ServieApi.load({ selectedIds: dataItem.ZoneServices });
+            };
+        }
+
+        function loadTQIGrid() {
+            $scope.analyticsData.length = 0;
+            return WhS_Sales_RatePlanAPIService.GetTQISuppliersInfo(buildTQIGridInputObject())
+                   .then(function (response) {
+                       if (response != null) {
+                           for (var i = 0; i < response.SuppliersInfo.length; i++) {
+                               $scope.analyticsData.push(response.SuppliersInfo[i]);
+                               mapNeededData(response.SuppliersInfo[i]);
+                               drillDownManager.setDrillDownExtensionObject(response.SuppliersInfo[i]);
+                           }
+
+                           if (response.TotalDurationInMinutesSummary != null)
+                               gridAPI.setSummary({
+                                   TotalDurationInMinutesSummary: response.TotalDurationInMinutesSummary,
+                               });
+                       }
+                   })
+                   .catch(function (error) {
+                       VRNotificationService.notifyException(error, $scope);
+                   });
+        } 
+        
+
+        function buildTQIGridInputObject() {
+            return {
+                RPRouteDetail: rpRouteDetail,
+                PeriodType: periodType,
+                PeriodValue: periodValue
             };
         }
 

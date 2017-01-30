@@ -176,6 +176,7 @@
     <Compile Include="TQI\TQIMethod.cs" />
     <Compile Include="TQI\TQIMethodConfig.cs" />
     <Compile Include="TQI\TQISupplierInfoQuery.cs" />
+    <Compile Include="TQI\TQISupplierInfoWithSummary.cs" />
     <Compile Include="TQI\TQISupplierPercentage.cs" />
     <Compile Include="TQI\TQISuppplierInfo.cs" />
   </ItemGroup>

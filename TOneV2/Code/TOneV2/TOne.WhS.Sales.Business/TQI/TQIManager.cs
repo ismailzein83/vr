@@ -26,12 +26,12 @@ namespace TOne.WhS.Sales.Business
             return new TQIEvaluatedRate() { EvaluatedRate = context.Rate };
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<TQISuppplierInfo> GetTQISuppliersInfo(Vanrise.Entities.DataRetrievalInput<TQISupplierInfoQuery> input)
+        public TQISupplierInfoWithSummary GetTQISuppliersInfo(TQISupplierInfoQuery input)
         {
-            if (input.Query.RPRouteDetail == null)
+            if (input.RPRouteDetail == null)
                 return null;
 
-            StructureRatesBySupplier(input.Query.RPRouteDetail);
+            StructureRatesBySupplier(input.RPRouteDetail);
             AnalyticManager analyticManager = new AnalyticManager();
             List<string> listMeasures = new List<string> { "DurationInMinutes", "ACD", "ASR", "NER" };
             List<string> listDimensions = new List<string> { "Supplier", "SaleZone" };
@@ -40,16 +40,16 @@ namespace TOne.WhS.Sales.Business
 
             DateTime fromDate = DateTime.MinValue;
 
-            switch (input.Query.PeriodType)
+            switch (input.PeriodType)
             {
                 case PeriodTypes.Days:
-                    fromDate = DateTime.Today.AddDays(-(double)input.Query.PeriodValue);
+                    fromDate = DateTime.Today.AddDays(-(double)input.PeriodValue);
                     break;
                 case PeriodTypes.Hours:
-                    fromDate = DateTime.Today.AddHours(-(double)input.Query.PeriodValue);
+                    fromDate = DateTime.Today.AddHours(-(double)input.PeriodValue);
                     break;
                 case PeriodTypes.Minutes:
-                    fromDate = DateTime.Today.AddMinutes(-(double)input.Query.PeriodValue);
+                    fromDate = DateTime.Today.AddMinutes(-(double)input.PeriodValue);
                     break;
                 default:
                     throw new DataIntegrityValidationException(string.Format("Period Type must be set"));
@@ -57,13 +57,30 @@ namespace TOne.WhS.Sales.Business
 
             DateTime toDate = DateTime.Today;
 
-            IEnumerable<int> supplierIds = input.Query.RPRouteDetail.RouteOptionsDetails.Select(item => item.Entity.SupplierId);
+            IEnumerable<int> supplierIds = input.RPRouteDetail.RouteOptionsDetails.Select(item => item.Entity.SupplierId);
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, supplierIds, saleZoneDimensionFilterName, input.Query.RPRouteDetail.SaleZoneId, fromDate, toDate);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, supplierIds, saleZoneDimensionFilterName, input.RPRouteDetail.SaleZoneId, fromDate, toDate);
             if (analyticResult == null || analyticResult.Data == null)
                 return null;
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, analyticResult.Data.ToBigResult(input, null, TQISupplierInfoMapper));
+            IEnumerable<TQISuppplierInfo> suppliersInfo = analyticResult.Data.MapRecords(TQISupplierInfoMapper);
+
+            TQISupplierInfoWithSummary suppliersInfoWithSummary = new TQISupplierInfoWithSummary();
+            suppliersInfoWithSummary.SuppliersInfo = suppliersInfo;
+            suppliersInfoWithSummary.TotalDurationInMinutesSummary = GetSuppliersInfoSummary(analyticResult.Summary);
+
+            return suppliersInfoWithSummary;
+        }
+
+        private decimal? GetSuppliersInfoSummary(AnalyticRecord analyticRecord)
+        {
+            if (analyticRecord != null)
+            {
+                MeasureValue durationInMinutesMeasure = GetMeasureValue(analyticRecord, "DurationInMinutes");
+                return Convert.ToDecimal(durationInMinutesMeasure.Value);
+            }
+
+            return null;
         }
 
         private void StructureRatesBySupplier(RPRouteDetail rpRouteDetail)
@@ -95,7 +112,8 @@ namespace TOne.WhS.Sales.Business
                     FromTime = fromDate,
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
+                    Filters = new List<DimensionFilter>(),
+                    WithSummary = true
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };

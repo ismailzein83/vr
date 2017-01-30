@@ -82,10 +82,10 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpPost]
         [Route("GetTQISuppliersInfo")]
-        public object GetTQISuppliersInfo(Vanrise.Entities.DataRetrievalInput<TQISupplierInfoQuery> input)
+        public TQISupplierInfoWithSummary GetTQISuppliersInfo(TQISupplierInfoQuery input)
         {
             TQIManager tqiManager = new TQIManager();
-            return GetWebResponse(input, tqiManager.GetTQISuppliersInfo(input));
+            return tqiManager.GetTQISuppliersInfo(input);
         }
 
         [HttpGet]
