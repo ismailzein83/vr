@@ -46,11 +46,20 @@ namespace CDRComparison.MainExtensions
 			for (int rowIndex = this.FirstRowIndex; rowIndex < worksheet.Cells.Rows.Count; rowIndex++)
 			{
 				var cdr = new CDR();
+				int numberOfEmptyCells = 0;
+
 				foreach (ExcelFileFieldMapping fldMapping in this.FieldMappings)
 				{
 					Cell cell = worksheet.Cells[rowIndex, fldMapping.FieldIndex];
 					if (cell == null)
 						throw new NullReferenceException(String.Format("cell[{0}, {1}]", rowIndex, fldMapping.FieldIndex));
+
+					if (cell.Value == null || string.IsNullOrWhiteSpace(cell.Value.ToString()))
+					{
+						numberOfEmptyCells++;
+						continue;
+					}
+
 					object cellValue = cell.Value;
 					PropertyInfo prop;
 					if (cdrProperties.TryGetValue(fldMapping.FieldName, out prop))
@@ -58,6 +67,10 @@ namespace CDRComparison.MainExtensions
 					else
 						cdr.ExtraFields.Add(fldMapping.FieldName, cellValue);
 				}
+
+				if (numberOfEmptyCells == this.FieldMappings.Count)
+					continue;
+
 				cdrs.Add(cdr);
 				if (cdrs.Count == 100000)
 				{
@@ -159,6 +172,11 @@ namespace CDRComparison.MainExtensions
 				cdrProperties.Add(prop.Name, prop);
 			}
 			return cdrProperties;
+		}
+
+		private bool IsCDREmpty(CDR cdr)
+		{
+			return (cdr.OriginalCDPN == null && cdr.OriginalCGPN == null && cdr.CDPN == null && cdr.CGPN == null && cdr.Time == default(DateTime) && cdr.DurationInSec == 0 && cdr.IsPartnerCDR == false && cdr.ExtraFields == null);
 		}
 
 		#endregion
