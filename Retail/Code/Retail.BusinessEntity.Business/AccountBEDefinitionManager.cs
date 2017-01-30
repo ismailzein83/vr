@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountBEDefinitionManager : IAccountBEDefinitionManager
     {
-        #region Public Methods 
+        #region Public Methods
 
         public AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
         {
@@ -78,8 +78,15 @@ namespace Retail.BusinessEntity.Business
             if (genericFieldDefinitionInfos == null)
                 throw new NullReferenceException("genericFieldDefinitionInfos");
 
+            VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
+            VRRetailBEVisibility retailBEVisibility = retailBEVisibilityManager.GetRetailBEVisibility();
+            var visibleGridColumns = retailBEVisibilityManager.GetVisibleGridColumns(retailBEVisibility);
+
             foreach (AccountGridColumnDefinition itm in accountGridDefinition.ColumnDefinitions)
             {
+                if (!IsColumnVisible(retailBEVisibility, visibleGridColumns, itm))
+                    continue;
+
                 if (!IsColumnAvailable(accountBEDefinitionId, parentAccountId, itm))
                     continue;
 
@@ -181,18 +188,33 @@ namespace Retail.BusinessEntity.Business
 
             return true;
         }
+        private bool IsColumnVisible( VRRetailBEVisibility retailBEVisibility, Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> visibleGridColumns, AccountGridColumnDefinition accountGridColumnDefinition)
+        {
+            VRRetailBEVisibilityAccountDefinitionGridColumns gridColumn = null;
+            if (retailBEVisibility != null && !visibleGridColumns.TryGetValue(accountGridColumnDefinition.FieldName, out gridColumn))
+                return false;
+
+            if (gridColumn != null && !string.IsNullOrEmpty(gridColumn.Title))
+                accountGridColumnDefinition.Header = gridColumn.Title;
+
+            return true;
+        }
+
         private bool IsViewAvailable(AccountViewDefinition accountViewDefinition, Account account)
         {
             if (accountViewDefinition.AvailabilityCondition != null)
                 return accountViewDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
             return true;
         }
+
         private bool IsActionAvailable(AccountActionDefinition accountActionDefinition, Account account)
         {
             if (accountActionDefinition.AvailabilityCondition != null)
                 return accountActionDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
             return true;
         }
+
+
 
         #endregion
     }

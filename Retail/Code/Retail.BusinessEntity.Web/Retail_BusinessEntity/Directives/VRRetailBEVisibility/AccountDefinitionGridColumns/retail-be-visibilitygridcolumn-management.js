@@ -68,8 +68,6 @@
 
                     var gridColumns;
 
-                    console.log(payload);
-
                     if (payload != undefined) {
                         gridColumns = payload.gridColumns;
                         columnDefinitions = payload.columnDefinitions;

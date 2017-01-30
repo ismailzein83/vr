@@ -274,15 +274,16 @@ namespace Retail.BusinessEntity.Business
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountTypes", () =>
             {
                 List<AccountType> includedAccountTypes = new List<AccountType>();
-                IEnumerable<AccountType> allaccountTypes = this.GetCachedAccountTypesWithHidden().Values;
-                VRRetailBEVisibility retailBEVisibility = new VRApplicationVisibilityManager().GetModuleVisibility<VRRetailBEVisibility>();
+                IEnumerable<AccountType> allAccountTypes = this.GetCachedAccountTypesWithHidden().Values;
+                VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
+                VRRetailBEVisibility retailBEVisibility = retailBEVisibilityManager.GetRetailBEVisibility();
 
                 if (retailBEVisibility != null) 
                 {
-                    Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> visibleAccountTypes = GetVisibleAccountTypes(retailBEVisibility);
+                    Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> visibleAccountTypes = retailBEVisibilityManager.GetVisibleAccountTypes(retailBEVisibility);
 
                     VRRetailBEVisibilityAccountDefinitionAccountType accountType;
-                    foreach (var itm in allaccountTypes)
+                    foreach (var itm in allAccountTypes)
                     {
                         if (visibleAccountTypes.TryGetValue(itm.AccountTypeId, out accountType))
                         {
@@ -294,27 +295,11 @@ namespace Retail.BusinessEntity.Business
                 }
                 else
                 {
-                    includedAccountTypes = allaccountTypes.ToList();
+                    includedAccountTypes = allAccountTypes.ToList();
                 }
 
                 return includedAccountTypes.ToDictionary(kvp => kvp.AccountTypeId, kvp => kvp);
             });
-        }
-
-        Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> GetVisibleAccountTypes(VRRetailBEVisibility retailBEVisibility)
-        {
-            var visibleAccountTypes = new List<VRRetailBEVisibilityAccountDefinitionAccountType>();
-
-            if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
-            {
-                foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
-                {
-                    if (accountDefinition.AccountTypes != null && accountDefinition.AccountTypes.Count > 0)
-                        visibleAccountTypes.AddRange(accountDefinition.AccountTypes);
-                }
-            }
-            
-            return visibleAccountTypes.ToDictionary(itm => itm.AccountTypeId);
         }
 
         void FillAccountCommonGenericFields(Guid? accountBEDefinitionId, List<AccountGenericField> fields)

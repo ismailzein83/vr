@@ -78,16 +78,16 @@ namespace Retail.BusinessEntity.Business
         public string Title { get; set; }
     }
 
-    public class VRRetailBEVisibilityAccountDefinitionAction
+    public class VRRetailBEVisibilityAccountDefinitionView
     {
-        public Guid ActionId { get; set; }
+        public Guid ViewId { get; set; }
 
         public string Title { get; set; }
     }
 
-    public class VRRetailBEVisibilityAccountDefinitionView
+    public class VRRetailBEVisibilityAccountDefinitionAction
     {
-        public Guid ViewId { get; set; }
+        public Guid ActionId { get; set; }
 
         public string Title { get; set; }
     }

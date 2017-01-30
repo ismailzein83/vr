@@ -25,6 +25,9 @@
         var visibilityGridColumnDirectiveAPI;
         var visibilityGridColumnDirectiveReady = UtilsService.createPromiseDeferred();
 
+        var visibilityViewDirectiveAPI;
+        var visibilityViewDirectiveReady = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -54,6 +57,10 @@
             $scope.scopeModel.onVisibilityGridColumnDirectiveReady = function (api) {
                 visibilityGridColumnDirectiveAPI = api;
                 visibilityGridColumnDirectiveReady.resolve();
+            };
+            $scope.scopeModel.onVisibilityViewDirectiveReady = function (api) {
+                visibilityViewDirectiveAPI = api;
+                visibilityViewDirectiveReady.resolve();
             };
 
             $scope.scopeModel.onAccountBEDefinitionSelectionChanged = function (selectedAccountBEDefinition) {
@@ -117,7 +124,8 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelector, loadVisibilityAccountTypeDirective, loadVisibilityGridColumnDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelector, loadVisibilityAccountTypeDirective, loadVisibilityGridColumnDirective,
+                        loadVisibilityViewDirective])
                 .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -188,6 +196,22 @@
             });
 
             return visibilityGridColumnLoadDeferred.promise;
+        }
+        function loadVisibilityViewDirective() {
+            if (!isEditMode)
+                return;
+
+            var visibilityViewLoadDeferred = UtilsService.createPromiseDeferred();
+
+            UtilsService.waitMultiplePromises([visibilityViewDirectiveReady.promise, accountBEDefinitionSelectionChangedDeferred.promise]).then(function () {
+                var visibilityViewDirectivePayload = {
+                    viewDefinitions: accountBEDefinitionSettings != undefined ? accountBEDefinitionSettings.AccountViewDefinitions : undefined,
+                    views: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.Views : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(visibilityViewDirectiveAPI, visibilityViewDirectivePayload, visibilityViewLoadDeferred);
+            });
+
+            return visibilityViewLoadDeferred.promise;
         }
 
         function insert() {
