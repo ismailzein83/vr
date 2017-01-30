@@ -154,7 +154,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         }
         else {
             $scope.menuItemsCurrent = item;
-            if (item.DefaultURL != null && $scope.currentPage.Location != item.DefaultURL) {
+            if (item.DefaultURL != null && $scope.currentPage!=null && $scope.currentPage.Location != item.DefaultURL) {
                 $scope.currentPage = {Title : item.Title};
                 window.location.href = item.DefaultURL;
             }
@@ -168,7 +168,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         }
         else {
             $scope.menusubItemsCurrent = o;
-            if (o.DefaultURL != null && $scope.currentPage.Location != o.DefaultURL) {
+            if (o.DefaultURL != null && $scope.currentPage!=null && $scope.currentPage.Location != o.DefaultURL) {
                 $scope.currentPage = { Title: o.Title };
                 window.location.href = o.DefaultURL;
             }
