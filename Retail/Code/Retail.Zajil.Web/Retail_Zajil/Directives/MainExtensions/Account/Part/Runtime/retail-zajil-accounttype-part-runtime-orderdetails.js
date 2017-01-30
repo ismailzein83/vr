@@ -71,7 +71,7 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
 
         function buildOrderDetailItemsList() {
             var tab = [];
-            for (vari = 0; i < ctrl.orderdetails.length; i++) {
+            for (var i = 0; i < ctrl.orderdetails.length; i++) {
                 tab.push({
                     Charges: ctrl.orderdetails[i].Charges,
                     Payment: ctrl.orderdetails[i].payment,
