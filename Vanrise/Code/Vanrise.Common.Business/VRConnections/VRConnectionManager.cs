@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
-using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
