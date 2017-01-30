@@ -80,10 +80,8 @@ function (VRNotificationService, VRUIUtilsService, WhS_CP_CodePrepAPIService, Ut
                             var saleCode = $scope.salecodes[i];
 
                             if (saleCode.DraftStatus == WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.value || saleCode.DraftStatus == WhS_CP_CodeItemDraftStatusEnum.MovedFrom.value
-                                || saleCode.DraftStatus == WhS_CP_CodeItemDraftStatusEnum.MovedTo.value) {
-                                if (saleCode.EED == null)
+                                || saleCode.DraftStatus == WhS_CP_CodeItemDraftStatusEnum.MovedTo.value) 
                                     return false;
-                            }
                         }
                         return true;
                     };

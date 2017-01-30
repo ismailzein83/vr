@@ -342,8 +342,7 @@
                     if ($scope.currentNode.type == 'Zone') {
                     	return codesGridAPI.loadGrid(getCodesFilterObject()).then(function ()
                     	{
-                    		if (codesGridAPI.isZoneClosed())
-                    			$scope.showRenameZone = false;
+                    	    setZoneStateVisibility($scope.currentNode.DraftStatus, $scope.currentNode.status);
                     	});
                     }
                 }
