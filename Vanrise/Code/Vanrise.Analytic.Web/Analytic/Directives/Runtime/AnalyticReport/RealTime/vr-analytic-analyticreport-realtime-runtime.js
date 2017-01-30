@@ -31,7 +31,6 @@
             var settings;
             var currentFromDate = new Date();
             currentFromDate.setHours(0, 0, 0, 0);
-            var currentToDate = new Date();
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.timeGroupingUnits = UtilsService.getArrayEnum(VR_Analytic_TimeGroupingUnitEnum);
@@ -95,7 +94,6 @@
                         switch ($scope.scopeModel.selectedSinceTime.value) {
                             case VR_Analytic_SinceTimeEnum.Time.value:
                                 currentFromDate = $scope.scopeModel.fromdate;
-                                currentToDate = new Date();
                                 break;
                             case VR_Analytic_SinceTimeEnum.Last.value:
 
@@ -111,8 +109,6 @@
                                             break;
                                     }
                                 }
-
-                                currentToDate = new Date();
                                 break;
                         }
                     }
@@ -337,7 +333,7 @@
                     DimensionFilters: dimensionFilters,
                     TableId: widgetPayload.AnalyticTableId,
                     FromTime: currentFromDate,
-                    ToTime: currentToDate,
+                    ToTime: new Date(),
                     FilterGroup: filterObj,
                     TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit != undefined ? $scope.scopeModel.selectedTimeGroupingUnit.value : undefined
                 };

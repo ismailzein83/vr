@@ -89,6 +89,7 @@
     <Compile Include="InvoiceType\InvoiceSettingParts\AutomaticInvoiceSettingPart.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\BillingPeriodInvoiceSettingPart.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\DuePeriodInvoiceSettingPart.cs" />
+    <Compile Include="InvoiceType\InvoiceSettingParts\InitialSequenceValueSettingPart.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\SerialNumberPatternInvoiceSettingPart.cs" />
     <Compile Include="InvoiceType\InvoiceSubSectionGridColumn.cs" />
     <Compile Include="InvoiceType\InvoiceTypeDetail.cs" />

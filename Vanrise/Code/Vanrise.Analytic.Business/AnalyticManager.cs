@@ -14,7 +14,7 @@ using Vanrise.GenericData.MainExtensions.DataRecordFields;
 using Vanrise.Security.Business;
 
 namespace Vanrise.Analytic.Business
-{
+{ 
     public class AnalyticManager
     {
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
@@ -280,11 +280,38 @@ namespace Vanrise.Analytic.Business
                 }
             }
             List<AnalyticRecord> analyticRecords = new List<AnalyticRecord>();
+            HashSet<DateTime> timeForMissingData = null;
+            if (analyticTableQueryContext.Query.TimeGroupingUnit.HasValue)
+            {
+                timeForMissingData = new HashSet<DateTime>();
+                DateTime fromTime = GetStartDateTime(analyticTableQueryContext.Query.FromTime, analyticTableQueryContext.Query.TimeGroupingUnit.Value);
+                var toTime = analyticTableQueryContext.Query.ToTime.HasValue ? analyticTableQueryContext.Query.ToTime.Value : DateTime.Now;
+                timeForMissingData.Add(fromTime);
+                fromTime = GetNextDateTime(fromTime, analyticTableQueryContext.Query.TimeGroupingUnit.Value);
+                while (fromTime <= toTime)
+                {
+                    timeForMissingData.Add(fromTime);
+                   fromTime = GetNextDateTime(fromTime, analyticTableQueryContext.Query.TimeGroupingUnit.Value);
+                }
+            }
             foreach (var dbRecord in groupedRecordsByDimensionsKey.Values)
             {
                 AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecord, requestedDimensionNames, allDimensionNames, measureNames, measureStyleRulesDictionary);
+                if (analyticTableQueryContext.Query.TimeGroupingUnit.HasValue)
+                {
+                    timeForMissingData.Remove(analyticRecord.Time.Value);
+                }
                 analyticRecords.Add(analyticRecord);
             }
+            if (timeForMissingData != null)
+            {
+                foreach (var dateTime in timeForMissingData)
+                {
+                    AnalyticRecord analyticRecord = CreateAnalyticRecordFilledWithDefaultValues(analyticTableQueryContext, measureNames, measureStyleRulesDictionary, dateTime);
+                    analyticRecords.Add(analyticRecord);
+                }
+            }
+
             if (withSummary && summarySQLRecord != null)
                 summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summarySQLRecord, null, allDimensionNames, measureNames, null);
             else
@@ -292,6 +319,62 @@ namespace Vanrise.Analytic.Business
             return analyticRecords;
         }
 
+        private AnalyticRecord CreateAnalyticRecordFilledWithDefaultValues(IAnalyticTableQueryContext analyticTableQueryContext,List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,DateTime dateTime)
+        {
+            AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dateTime, MeasureValues = new MeasureValues() };
+            foreach (var measureName in measureNames)
+            {
+                var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
+                var measureRuntimeType = measureConfig.Config.FieldType.GetRuntimeType();
+                var measureValue = Utilities.GetTypeDefault(measureRuntimeType);
+                RecordFilterManager filterManager = new RecordFilterManager();
+                string styleCode = null;
+                if (measureStyleRulesDictionary != null)
+                {
+                    MeasureStyleRule measureStyleRule = null;
+                    if (measureStyleRulesDictionary.TryGetValue(measureName, out measureStyleRule))
+                    {
+                        foreach (var rule in measureStyleRule.Rules)
+                        {
+                            StyleRuleConditionContext context = new StyleRuleConditionContext { Value = measureValue };
+                            if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, measureValue, measureConfig.Config.FieldType))
+                            {
+                                styleCode = rule.StyleCode;
+                                break;
+                            }
+                        }
+                    }
+
+                }
+                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleCode = styleCode });
+            }
+            return analyticRecord;
+        }
+       
+        private DateTime GetNextDateTime(DateTime time, TimeGroupingUnit timeGroupingUnit)
+        {
+            switch (timeGroupingUnit)
+            {
+                case TimeGroupingUnit.Day:
+                    return time.AddDays(1);
+                case TimeGroupingUnit.Hour:
+                    return time.AddHours(1);
+                default :
+                    return time;
+            }
+        }
+        private DateTime GetStartDateTime(DateTime time, TimeGroupingUnit timeGroupingUnit)
+        {
+            switch (timeGroupingUnit)
+            {
+                case TimeGroupingUnit.Day:
+                    return time.Date;
+                case TimeGroupingUnit.Hour:
+                    return new DateTime(time.Year,time.Month,time.Day,time.Hour,0,0);
+                default:
+                    return time;
+            }
+        }
         private bool ApplyFilters(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup)
         {
             if (filterGroup != null)
