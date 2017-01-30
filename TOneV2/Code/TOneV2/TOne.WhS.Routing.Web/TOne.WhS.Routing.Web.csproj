@@ -197,6 +197,7 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\Templates\OptionPercentageOptimizationDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-optimization.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Templates\RouteRuleFixedDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Templates\RouteRuleLCRDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Templates\RouteRuleRegularDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-block.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-fixed.js" />

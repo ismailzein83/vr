@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RateOptionEnum', 'WhS_Routing_RateOptionTypeEnum',
     function (UtilsService, VRUIUtilsService, WhS_Routing_RateOptionEnum, WhS_Routing_RateOptionTypeEnum) {
 
@@ -94,7 +95,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     $scope.scopeModel.selectedSuppliers.splice(index, 1);
                     $scope.scopeModel.onDeselectSupplier(deletedItem);
                 };
-                
+
                 defineAPI();
             }
             function defineAPI() {
