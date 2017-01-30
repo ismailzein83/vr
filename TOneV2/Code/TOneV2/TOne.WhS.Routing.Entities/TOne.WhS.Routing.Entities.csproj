@@ -69,6 +69,7 @@
     <Compile Include="CodeZoneMatch\CodeSupplierZoneMatch.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="LCRRouteRule\LCRRouteOptionSettings.cs" />
     <Compile Include="ProcessRuleConfig.cs" />
     <Compile Include="RouteOptionRuleConfig.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleEditorRuntime.cs" />
