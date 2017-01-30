@@ -6,6 +6,9 @@
 
     function VRConnectionManagementController($scope, VRCommon_VRConnectionAPIService, VRCommon_VRConnectionService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
+        var connectionTypeAPI;
+        var connectionTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var gridAPI;
 
 
@@ -16,14 +19,14 @@
         function defineScope() {
 
             $scope.scopeModel = {};
-            $scope.scopeModel.selectedComponentType;
-
             $scope.scopeModel.search = function () {
                 loadGrid(buildGridQuery());
             };
 
-           
-           
+            $scope.scopeModel.onConnectionTypeConfigReady = function (api) {
+                connectionTypeAPI = api;
+                connectionTypeSelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.add = function () {
                 var onVRConnectionAdded = function (addedItem) {
                     gridAPI.onVRConnectionAdded(addedItem);
@@ -43,11 +46,11 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            //return UtilsService.waitMultipleAsyncOperations([loadVRConnectionsTypw]).catch(function (error) {
-            //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //}).finally(function () {
-            //    $scope.scopeModel.isLoading = false;
-            //});
+            return UtilsService.waitMultipleAsyncOperations([loadVRConnectionsConfigType]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
         function loadGrid() {
@@ -59,19 +62,19 @@
                 });
             }
         }
-        //function loadVRConnections() {
-        //    var loadComponentTypesPromiseDeferred = UtilsService.createPromiseDeferred();
-        //    componentTypeSelectorReadyDeferred.promise.then(function () {
-        //        var payloadDirective;
-        //        VRUIUtilsService.callDirectiveLoad(componentTypeSelectorAPI, payloadDirective, loadComponentTypesPromiseDeferred);
-        //    });
-        //    return loadComponentTypesPromiseDeferred.promise;
-        //}
+        function loadVRConnectionsConfigType() {
+            var loadComnnectionConfigTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            connectionTypeSelectorReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                VRUIUtilsService.callDirectiveLoad(connectionTypeAPI, payloadDirective, loadComnnectionConfigTypePromiseDeferred);
+            });
+            return loadComnnectionConfigTypePromiseDeferred.promise;
+        }
 
         function buildGridQuery() {
             return {
-                Name: $scope.scopeModel.name//,
-                //ExtensionConfigId: $scope.scopeModel.selectedComponentType == undefined ? undefined : $scope.scopeModel.selectedComponentType.ExtensionConfigurationId
+                Name: $scope.scopeModel.name,
+                ExtensionConfigIds: connectionTypeAPI.getSelectedIds()
             };
         }
     }

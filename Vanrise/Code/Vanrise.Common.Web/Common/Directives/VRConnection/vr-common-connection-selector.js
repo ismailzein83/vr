@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonConnectionSelector', ['VRCommon_ConnectionAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VRCommon_ConnectionAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonConnectionSelector', ['VRCommon_VRConnectionAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VRCommon_VRConnectionAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -79,7 +79,7 @@ app.directive('vrCommonConnectionSelector', ['VRCommon_ConnectionAPIService', 'U
                         filter = payload.filter;
                     }
 
-                    return VRCommon_ConnectionAPIService.GetVRConnectionInfos(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VRCommon_VRConnectionAPIService.GetVRConnectionInfos(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {

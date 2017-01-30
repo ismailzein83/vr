@@ -14,6 +14,9 @@
         var connectionTypeAPI;
         var connectionTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var connectionEditorAPI;
+        var connectionEditorAPIReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -33,6 +36,11 @@
                 connectionTypeAPI = api;
                 connectionTypeSelectorReadyDeferred.resolve();
             };
+            $scope.scopeModel.onConnectionEditorReady = function (api) {
+                connectionEditorAPI = api;
+                connectionEditorAPIReadyDeferred.resolve();
+            };
+            
             $scope.saveVRConnection = function () {
                 if (isEditMode) {
                     return updateVRConnection();
@@ -48,10 +56,20 @@
         }
 
         function load() {
-            
-        }
+            $scope.scopeModel.isLoading = true;
 
-      
+            if (isEditMode) {
+                getVRConnection().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
+            else {
+                loadAllControls();
+            }
+        }
 
         function getVRConnection() {
             return VRCommon_VRConnectionAPIService.GetVRConnection(vrConnectionId).then(function (entity) {
@@ -60,7 +78,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRConnectionEditor])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRConnectionType, loadVRConnectionEditor])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -69,10 +87,30 @@
               });
         }
 
-        function loadVRConnectionEditor() {
+        function loadVRConnectionType() {
             
+            var loadConnectionConfigTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            connectionTypeSelectorReadyDeferred.promise.then(function () {
+                var payloadDirective = {
+                    selectedIds: vrConnectionEntity && vrConnectionEntity.Settings && vrConnectionEntity.Settings.ConfigId || undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(connectionTypeAPI, payloadDirective, loadConnectionConfigTypePromiseDeferred);
+            });
+            return loadConnectionConfigTypePromiseDeferred.promise;
         }
 
+        function loadVRConnectionEditor() {
+            if (isEditMode) {
+                var loadConnectionEditorPromiseDeferred = UtilsService.createPromiseDeferred();
+                connectionEditorAPIReadyDeferred.promise.then(function () {
+                    var payloadDirective = {
+                        data: vrConnectionEntity && vrConnectionEntity.Settings || undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(connectionEditorAPI, payloadDirective, loadConnectionEditorPromiseDeferred);
+                });
+                return loadConnectionEditorPromiseDeferred.promise;
+            }
+        }
         function setTitle() {
             if (isEditMode) {
                 $scope.title = UtilsService.buildTitleForUpdateEditor(vrConnectionEntity.Name, "Connection");
@@ -84,13 +122,15 @@
 
         function loadStaticData() {
             if (vrConnectionEntity != undefined) {
-                $scope.name = vrConnectionEntity.Name;
+                $scope.scopeModel.name = vrConnectionEntity.Name;
             }
         }
 
         function buildVRConnectionObjFromScope() {
             return {
-
+                VRConnectionId: vrConnectionId,
+                Name: $scope.scopeModel.name,
+                Settings: connectionEditorAPI.getData()
             }
         }
 

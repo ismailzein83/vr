@@ -8,6 +8,26 @@ namespace Vanrise.Common.Business
 {
     public class VRConnectionManager
     {
+        ExtensionConfigurationManager _extensionManager ;
+
+        public VRConnectionManager()
+        {
+            _extensionManager = new ExtensionConfigurationManager();
+        }
+        public IDataRetrievalResult<VRConnectionDetail> GetFilteredVRConnections(DataRetrievalInput<VRConnectionQuery> input)
+        {
+            var allVRConnections = GetCachedVRConnections();
+            Func<VRConnection, bool> filterExpression = (x) =>
+            {
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.ExtensionConfigIds!=null &&  !input.Query.ExtensionConfigIds.Contains(x.Settings.ConfigId) )
+                    return false;
+                return true;
+            };
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRConnections.ToBigResult(input, filterExpression, VRConnectionDetailMapper));
+        }
+
         public VRConnection GetVRConnection(Guid vrConnectionId)
         {
             var vrConnections = GetCachedVRConnections();
@@ -62,12 +82,58 @@ namespace Vanrise.Common.Business
         }
         public IEnumerable<VRConnectionConfig> GetVRConnectionConfigTypes()
         {
-            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-            return manager.GetExtensionConfigurations<VRConnectionConfig>(VRConnectionConfig.EXTENSION_TYPE);
+            return _extensionManager.GetExtensionConfigurations<VRConnectionConfig>(VRConnectionConfig.EXTENSION_TYPE);
         }
         public IEnumerable<VRConnection> GetAllVRConnections()
         {
             return this.GetCachedVRConnections().MapRecords(x => x).OrderBy(x => x.Name);
+        }
+        public InsertOperationOutput<VRConnectionDetail> AddVRConnection(VRConnection componentType)
+        {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRConnectionDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            IVRConnectionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRConnectionDataManager>();
+
+            componentType.VRConnectionId = Guid.NewGuid();
+
+            if (dataManager.Insert(componentType))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = VRConnectionDetailMapper(componentType);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<VRConnectionDetail> UpdateVRConnection(VRConnection componentType)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRConnectionDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IVRConnectionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRConnectionDataManager>();
+
+            if (dataManager.Update(componentType))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = VRConnectionDetailMapper(this.GetVRConnection(componentType.VRConnectionId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
         }
 
 
@@ -100,6 +166,16 @@ namespace Vanrise.Common.Business
                 Name = vrConnection.Name,
                 VRConnectionId = vrConnection.VRConnectionId
             };
+        }
+
+        VRConnectionDetail VRConnectionDetailMapper(VRConnection connection)
+        {
+            VRConnectionDetail connectionDetail = new VRConnectionDetail()
+            {
+                Entity = connection
+            };
+            connectionDetail.TypeDescription = _extensionManager.GetExtensionConfiguration<VRConnectionConfig>(connection.Settings.ConfigId, VRConnectionConfig.EXTENSION_TYPE).Name;
+            return connectionDetail;
         }
     }
 }

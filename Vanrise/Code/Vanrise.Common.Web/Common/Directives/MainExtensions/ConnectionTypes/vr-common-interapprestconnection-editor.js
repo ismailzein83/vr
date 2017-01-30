@@ -11,7 +11,7 @@ app.directive('vrCommonInterapprestconnectionEditor', [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var editor = new InterAppRestConnectionEditor($scope, ctrl, $attrs);
-            accountTypeCompanyProfilePartDefinition.initializeController();
+            editor.initializeController();
         },
         controllerAs: 'interAppRestCtrl',
         bindToController: true,

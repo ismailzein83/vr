@@ -16,6 +16,34 @@ namespace Vanrise.Common.Web.Controllers
     {
         VRConnectionManager _manager = new VRConnectionManager();
 
+        [HttpPost]
+        [Route("GetFilteredVRConnections")]
+        public object GetFilteredVRConnections(Vanrise.Entities.DataRetrievalInput<VRConnectionQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredVRConnections(input));
+        }
+
+        [HttpGet]
+        [Route("GetVRConnection")]
+        public VRConnection GetVRConnection(Guid vrConnectionId)
+        {
+            return _manager.GetVRConnection(vrConnectionId);
+        }
+
+        [HttpPost]
+        [Route("AddVRConnection")]
+        public Vanrise.Entities.InsertOperationOutput<VRConnectionDetail> AddVRConnection(VRConnection vrConnectionItem)
+        {
+            return _manager.AddVRConnection(vrConnectionItem);
+        }
+
+        [HttpPost]
+        [Route("UpdateVRConnection")]
+        public Vanrise.Entities.UpdateOperationOutput<VRConnectionDetail> UpdateVRConnection(VRConnection vrConnectionItem)
+        {
+            return _manager.UpdateVRConnection(vrConnectionItem);
+        }
+
         [HttpGet]
         [Route("GetVRConnectionInfos")]
         public IEnumerable<VRConnectionInfo> GetVRConnectionInfos(string filter = null)
@@ -30,5 +58,7 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.GetVRConnectionConfigTypes();
         }
+
+
     }
 }

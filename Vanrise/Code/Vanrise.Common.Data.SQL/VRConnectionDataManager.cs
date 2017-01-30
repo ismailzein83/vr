@@ -23,12 +23,15 @@ namespace Vanrise.Common.Data.SQL
 
         public bool Update(VRConnection connection)
         {
-            return ExecuteNonQuerySP("common.sp_Connection_Update", connection.VRConnectionId, connection.Name, connection.Settings) > 0;
+            string serializedSettings = connection.Settings != null ? Vanrise.Common.Serializer.Serialize(connection.Settings) : null;
+
+            return ExecuteNonQuerySP("common.sp_Connection_Update", connection.VRConnectionId, connection.Name, serializedSettings) > 0;
         }
 
         public bool Insert(VRConnection connection)
         {
-            return ExecuteNonQuerySP("common.sp_Connection_Insert", connection.VRConnectionId, connection.Name, connection.Settings) > 0;
+            string serializedSettings = connection.Settings != null ? Vanrise.Common.Serializer.Serialize(connection.Settings) : null;
+            return ExecuteNonQuerySP("common.sp_Connection_Insert", connection.VRConnectionId, connection.Name, serializedSettings) > 0;
         }
 
 
