@@ -40,8 +40,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return (recordsAffected > 0);
         }
-        #endregion  
-      
+        #endregion
+
         #region Private Methods
         #endregion
 
@@ -62,11 +62,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
     }
 
-	public class CustomerCountryDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ICustomerCountryDataManager
-	{
-		#region Constructors
+    public class CustomerCountryDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ICustomerCountryDataManager
+    {
+        #region Constructors
 
-		public CustomerCountryDataManager()
+        public CustomerCountryDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
@@ -78,30 +78,72 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public IEnumerable<CustomerCountry2> GetAll()
         {
-			return base.GetItemsSP("TOneWhS_BE.sp_CustomerCountry_GetAll", CustomerCountryMapper);
+            return base.GetItemsSP("TOneWhS_BE.sp_CustomerCountry_GetAll", CustomerCountryMapper);
         }
 
-		public bool AreAllCustomerCountriesUpdated(ref object updateHandle)
+        public bool AreAllCustomerCountriesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.CustomerCountry", ref updateHandle);
         }
-        
-		#endregion  
-		
+
+        #endregion
+        #region StateBackup Methods
+        public string BackupSaleEntityCustomerCountryByOwner(long stateBackupId, string backupDatabase, int ownerId)
+        {
+            return String.Format(@"INSERT INTO {0}.[TOneWhS_BE_Bkup].[CustomerCountry] WITH (TABLOCK)
+                                               (ID
+                                               ,CustomerID
+                                               ,CountryID
+                                               ,BED
+                                               ,EED
+                                               ,StateBackupID)
+                                            SELECT cc.ID
+                                              ,cc.CustomerID
+                                              ,cc.CountryID
+                                              ,cc.BED
+                                              ,cc.EED
+                                              ,{1}
+                                          FROM [TOneWhS_BE].[CustomerCountry] cc  (NOLOCK) where CustomerID = {2}",
+                backupDatabase,
+                stateBackupId, ownerId);
+        }
+        public string GetDeleteCommandsByOwner(int ownerId)
+        {
+            return String.Format(@"DELETE FROM [TOneWhS_BE].[CustomerCountry]
+                                           Where CustomerID ={0} ", ownerId);
+        }
+        public string GetRestoreCommands(long stateBackupId, string backupDatabase)
+        {
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[CustomerCountry]
+                                               ([ID]
+                                               ,[CustomerID]
+                                               ,[CountryID]
+                                               ,[BED]
+                                               ,[EED])
+                                    SELECT [ID]
+                                          ,[CustomerID]
+                                          ,[CountryID]
+                                          ,[BED]
+                                          ,[EED]
+                                      FROM {0}.[TOneWhS_BE_Bkup].[CustomerCountry] WITH (NOLOCK) Where StateBackupID = {1} ",
+                backupDatabase, stateBackupId);
+        }
+        #endregion
+
         #region Mappers
 
-		private CustomerCountry2 CustomerCountryMapper(IDataReader reader)
+        private CustomerCountry2 CustomerCountryMapper(IDataReader reader)
         {
-			return new CustomerCountry2()
-			{
-				CustomerCountryId = (int)reader["ID"],
-				CustomerId = (int)reader["CustomerID"],
-				CountryId = (int)reader["CountryID"],
-				BED = (DateTime)reader["BED"],
-				EED = base.GetReaderValue<DateTime?>(reader, "EED")
-			};
+            return new CustomerCountry2()
+            {
+                CustomerCountryId = (int)reader["ID"],
+                CustomerId = (int)reader["CustomerID"],
+                CountryId = (int)reader["CountryID"],
+                BED = (DateTime)reader["BED"],
+                EED = base.GetReaderValue<DateTime?>(reader, "EED")
+            };
         }
 
         #endregion
-	}
+    }
 }
