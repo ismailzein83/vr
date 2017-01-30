@@ -12,7 +12,5 @@ namespace Retail.BusinessEntity.Entities
         public const string EXTENSION_TYPE = "Retail_BE_AccountActionDefinitionConfig";
 
         public string Editor { get; set; }
-
-        public string BackendExecutorSettingEditor { get; set; }
     }
 }

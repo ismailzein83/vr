@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
 {
-    public class BPAccountActionSettings : AccountActionDefinitionSettings, IAccountActionBackendExecutor
+    public class BPAccountActionSettings : AccountActionDefinitionSettings
     {
         public override Guid ConfigId
         {
@@ -18,17 +19,24 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         {
             get { return "BPAction"; }
         }
-                
+
         public ActionBPDefinitionSettings BPDefinitionSettings { get; set; }
+    }
 
-        public bool TryConvertToBPArg(IAccountActionBackendExecutorConvertToBPArgContext context)
-        {
-            throw new NotImplementedException();
-        }
+    public class BPAccountActionBackendExecutor : AccountActionBackendExecutor
+    {
+        public ActionBPSettings BPSettings { get; set; }
 
-        public void Execute(IAccountActionBackendExecutorExecuteContext context)
+        public override bool TryConvertToBPArg(IAccountActionBackendExecutorConvertToBPArgContext context)
         {
-            throw new NotImplementedException();
+            context.BPInputArgument = new ActionBPInputArgument
+            {
+                ActionDefinitionId = base.ActionDefinitionId,
+                AccountBEDefinitionId = context.AccountBEDefinitionId,
+                AccountId = context.AccountId,
+                ActionBPSettings = this.BPSettings
+            };
+            return true;
         }
     }
 }

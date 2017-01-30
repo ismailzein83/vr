@@ -305,6 +305,7 @@ namespace Retail.BusinessEntity.Business
         void FillAccountCommonGenericFields(Guid? accountBEDefinitionId, List<AccountGenericField> fields)
         {
             fields.Add(new AccountNameGenericField());
+            fields.Add(new AccountSourceIdGenericField());
 
             if (accountBEDefinitionId.HasValue)
             {

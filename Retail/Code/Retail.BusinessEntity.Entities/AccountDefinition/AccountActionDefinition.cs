@@ -13,7 +13,9 @@ namespace Retail.BusinessEntity.Entities
 
         public string Name { get; set; }
 
-        public bool NotVisibleInActionMenu { get; set; }
+        public bool VisibleInActionMenu { get; set; }
+
+        public bool VisibleInBalanceAlertRule { get; set; }
 
         public AccountCondition AvailabilityCondition { get; set; }
 
@@ -24,18 +26,44 @@ namespace Retail.BusinessEntity.Entities
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract string ClientActionName { get; }
+        public virtual string ClientActionName
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public virtual string BackendExecutorSettingEditor
+        {
+            get
+            {
+                return null;
+            }
+        }
     }
 
-    public interface IAccountActionBackendExecutor
+    public abstract class AccountActionBackendExecutor
     {
-        bool TryConvertToBPArg(IAccountActionBackendExecutorConvertToBPArgContext context);
+        public Guid ActionDefinitionId { get; set; }
 
-        void Execute(IAccountActionBackendExecutorExecuteContext context);
+        public virtual bool TryConvertToBPArg(IAccountActionBackendExecutorConvertToBPArgContext context)
+        {
+            return false;
+        }
+
+        public virtual void Execute(IAccountActionBackendExecutorExecuteContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface IAccountActionBackendExecutorConvertToBPArgContext
     {
+        Guid AccountBEDefinitionId { get; }
+
+        long AccountId { get; }
+
         Account Account { get; }
 
         BaseProcessInputArgument BPInputArgument { set; }
@@ -43,8 +71,10 @@ namespace Retail.BusinessEntity.Entities
 
     public interface IAccountActionBackendExecutorExecuteContext
     {
-        Account Account { get; }
+        Guid AccountBEDefinitionId { get; }
 
-        BaseProcessInputArgument BPInputArgument { set; }
+        long AccountId { get; }
+
+        Account Account { get; }
     }
 }
