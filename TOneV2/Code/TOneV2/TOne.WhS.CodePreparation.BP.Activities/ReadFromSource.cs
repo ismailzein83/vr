@@ -61,7 +61,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
 
             List<ImportedCode> importedCodes = new List<ImportedCode>();
-
+            int totalRowsCount = 0;
 
             while (count < rowsCount)
             {
@@ -85,11 +85,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 });
 
                 count++;
+                totalRowsCount++;
             }
 
 
             TimeSpan spent = DateTime.Now.Subtract(startReading);
-            context.WriteTrackingMessage(LogEntryType.Information, "Finished reading {0} records from the excel file. It took: {1}.", worksheet.Cells.Rows.Count - 1, spent);
+            context.WriteTrackingMessage(LogEntryType.Information, "Finished reading {0} records from the excel file. It took: {1}.", totalRowsCount, spent);
 
 
             MinimumDate.Set(context, minimumDate);
