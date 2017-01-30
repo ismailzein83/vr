@@ -33,12 +33,16 @@ namespace Vanrise.Common.Business
 			{
 				filterFunc = (country) =>
 				{
+					if (filter.ExcludedCountryIds != null && filter.ExcludedCountryIds.Contains(country.CountryId))
+						return false;
+
 					if (filter.Filters != null)
 					{
 						var context = new CountryFilterContext() { Country = country };
 						if (filter.Filters.Any(x => x.IsExcluded(context)))
 							return false;
 					}
+
 					return true;
 				};
 			}

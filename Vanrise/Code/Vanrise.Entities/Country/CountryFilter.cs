@@ -8,6 +8,8 @@ namespace Vanrise.Entities
 {
 	public class CountryFilter
 	{
+		public IEnumerable<int> ExcludedCountryIds { get; set; }
+
 		public IEnumerable<ICountryFilter> Filters { get; set; }
 	}
 

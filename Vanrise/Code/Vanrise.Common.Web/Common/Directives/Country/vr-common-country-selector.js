@@ -70,20 +70,30 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
             + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>';
     }
 
     function countryCtor(ctrl, $scope, attrs) {
 
+    	var selectorAPI;
+
         function initializeController() {
-            defineAPI();
+
+        	$scope.scopeModel = {};
+
+        	$scope.scopeModel.onSelectorReady = function (api) {
+        		selectorAPI = api;
+        		defineAPI();
+        	};
         }
 
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
+
+            	selectorAPI.clearDataSource();
 
             	var selectedIds;
             	var filter;
@@ -99,6 +109,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('CountryId', attrs, ctrl);
             };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
