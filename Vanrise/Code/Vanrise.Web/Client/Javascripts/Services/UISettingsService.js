@@ -21,8 +21,8 @@
             var url;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
                 var param = UtilsService.getItemByVal(uiSettings.Parameters, "DefaultURL", "Name");
-                
-                url = UtilsService.getBaseUrlPrefix() + param.Value;
+                if(param!=null )
+                    url = UtilsService.getBaseUrlPrefix() + param.Value;
             }
             return url;
         }
@@ -30,7 +30,8 @@
             var normalPrecision;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
                 var param = UtilsService.getItemByVal(uiSettings.Parameters, "NormalPrecision", "Name");
-                normalPrecision  = param.Value;
+                if (param != null)
+                    normalPrecision  = param.Value;
             }
             return normalPrecision;
         }
@@ -38,7 +39,8 @@
             var val;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
                 var param = UtilsService.getItemByVal(uiSettings.Parameters, name, "Name");
-                val = param.Value;
+                if (param != null)
+                    val = param.Value;
             }
             return val;
         }
