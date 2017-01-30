@@ -215,10 +215,12 @@
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-reader-directive.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoicefieldpropertyevaluator.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoiceobjecttype.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\InitialSequenceValuePartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\SerialNumberPatternInvoiceSettingPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\BillingPeriodInvoiceSettingPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\AutomaticInvoiceSettingPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\DuePeriodPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-initialsequencevalue.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-serialnumberpatterninvoicesettingpart.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-billingperiodinvoicesettingpart.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-automaticinvoicesettingpart.js" />
