@@ -11,7 +11,6 @@ namespace Vanrise.NumberingPlan.Business
 {
     public class ClosePendingClosedCodeCondition : BusinessRuleCondition
     {
-
         public override bool ShouldValidate(IRuleTarget target)
         {
             return (target as ZoneToProcess != null);
@@ -19,32 +18,28 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
 
-            if (zoneToProcess.CodesToClose != null)
+            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
-                foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+                ExistingCode existingCodeToClose = codeToClose.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToClose.Code);
+
+                if (existingCodeToClose != null && existingCodeToClose.CodeEntity.EED.HasValue)
                 {
-                    ExistingCode existingCodeToClose = codeToClose.ChangedExistingCodes.FindRecord(item=>item.CodeEntity.Code == codeToClose.Code);
-
-                    if (existingCodeToClose != null && existingCodeToClose.CodeEntity.EED.HasValue)
-                        return false;
+                    context.Message = string.Format("Can not close code {0} at zone {1} because this code is already pending closed", codeToClose.Code, zoneToProcess.ZoneName);
+                    return false;
                 }
-
             }
 
-
-            if (zoneToProcess.CodesToMove != null)
+            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
-                foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+                ExistingCode existingCodeToMove = codeToMove.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToMove.Code);
+
+                if (existingCodeToMove != null && existingCodeToMove.CodeEntity.EED.HasValue)
                 {
-                    ExistingCode existingCodeToMove = codeToMove.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToMove.Code);
-
-                    if (existingCodeToMove != null && existingCodeToMove.CodeEntity.EED.HasValue)
-                        return false;
+                    context.Message = string.Format("Can not move code {0} at zone {1} because code is already pending closed", codeToMove.Code, zoneToProcess.ZoneName);
+                    return false;
                 }
-
             }
 
             return true;
@@ -54,6 +49,5 @@ namespace Vanrise.NumberingPlan.Business
         {
             return string.Format("Zone {0} has a pending closed code that can not be moved or closed", (target as ZoneToProcess).ZoneName);
         }
-
     }
 }

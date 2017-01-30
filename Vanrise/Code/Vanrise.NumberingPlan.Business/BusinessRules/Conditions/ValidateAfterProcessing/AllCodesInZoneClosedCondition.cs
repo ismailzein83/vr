@@ -11,7 +11,6 @@ namespace Vanrise.NumberingPlan.Business
 {
     public class AllCodesInZoneClosedCondition : BusinessRuleCondition
     {
-
         public override bool ShouldValidate(IRuleTarget target)
         {
             return (target as ZoneToProcess != null || target as NotImportedZone != null);
@@ -19,14 +18,17 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             if (zoneToProcess != null)
-                return !(zoneToProcess.ChangeType == Entities.ZoneChangeType.Deleted);
+            {
+                if (zoneToProcess.ChangeType == Entities.ZoneChangeType.Deleted)
+                {
+                    context.Message = string.Format("All codes in zone '{0}' are closed. Zone '{0}' will be closed", zoneToProcess.ZoneName);
+                    return false;
+                }
+            }
 
-            NotImportedZone notImportedZone = context.Target as NotImportedZone;
-            return !notImportedZone.HasChanged;
-
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)
@@ -35,6 +37,5 @@ namespace Vanrise.NumberingPlan.Business
 
             return string.Format("All codes in zone {0} are closed, zone {0} will be closed", zoneName);
         }
-
     }
 }

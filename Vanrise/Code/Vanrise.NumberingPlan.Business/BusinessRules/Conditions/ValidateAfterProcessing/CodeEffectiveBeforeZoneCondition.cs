@@ -11,7 +11,6 @@ namespace Vanrise.NumberingPlan.Business
 {
     public class CodeEffectiveBeforeZoneCondition : BusinessRuleCondition
     {
-
         public override bool ShouldValidate(IRuleTarget target)
         {
             return (target as ZoneToProcess != null);
@@ -19,26 +18,23 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             ZoneToProcess zone = context.Target as ZoneToProcess;
 
-            if (zone.CodesToAdd != null)
+            foreach (CodeToAdd codeToAdd in zone.CodesToAdd)
             {
-                foreach (CodeToAdd codeToAdd in zone.CodesToAdd)
+                if (zone.ExistingZones.Any(item => item.BED > codeToAdd.BED))
                 {
-                    if (zone.ExistingZones.Any(item => item.BED > codeToAdd.BED))
-                        return false;
+                    context.Message = string.Format("Can not add code {0} at zone {1} with an effective date less than the effective date of its zone", codeToAdd.Code, zone.ZoneName);
+                    return false;
                 }
-
             }
 
-
-            if (zone.CodesToMove != null)
+            foreach (CodeToMove codeToMove in zone.CodesToMove)
             {
-                foreach (CodeToMove codeToMove in zone.CodesToMove)
+                if (zone.ExistingZones.Any(item => item.BED > codeToMove.BED))
                 {
-                    if (zone.ExistingZones.Any(item => item.BED > codeToMove.BED))
-                        return false;
+                    context.Message = string.Format("Can not move code {0} at zone {1} with an effective date less than the effective date of its zone", codeToMove.Code, zone.ZoneName);
+                    return false;
                 }
             }
 
@@ -49,6 +45,5 @@ namespace Vanrise.NumberingPlan.Business
         {
             return string.Format("Zone {0} has a code with effective date less than the effective date of the zone", (target as ZoneToProcess).ZoneName);
         }
-
     }
 }

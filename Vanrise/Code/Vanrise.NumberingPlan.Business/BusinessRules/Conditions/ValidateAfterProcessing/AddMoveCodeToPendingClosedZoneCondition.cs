@@ -11,7 +11,6 @@ namespace Vanrise.NumberingPlan.Business
 {
     public class AddMoveCodeToPendingClosedZoneCondition : BusinessRuleCondition
     {
-
         public override bool ShouldValidate(IRuleTarget target)
         {
             return (target as ZoneToProcess != null);
@@ -19,21 +18,19 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
 
-            foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
+            if (zoneToProcess.CodesToAdd.Count() > 0 && zoneToProcess.EED.HasValue)
             {
-                if (zoneToProcess.EED.HasValue)
-                    return false;
+                context.Message = string.Format("Can not add code to pending closed zone '{0}'", zoneToProcess.ZoneName);
+                return false;
             }
 
 
-
-            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+            if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.EED.HasValue)
             {
-                if (zoneToProcess.EED.HasValue)
-                    return false;
+                context.Message = string.Format("Can not move code to pending closed zone '{0}'", zoneToProcess.ZoneName);
+                return false;
             }
 
             return true;
@@ -43,6 +40,5 @@ namespace Vanrise.NumberingPlan.Business
         {
             return string.Format("Can not move or add code to the pending closed zone {0}", (target as ZoneToProcess).ZoneName);
         }
-
     }
 }

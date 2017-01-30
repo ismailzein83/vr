@@ -17,9 +17,14 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCode importedData = context.Target as ImportedCode;
 
-            return !string.IsNullOrEmpty(importedData.Code);
+            ImportedCode importedData = context.Target as ImportedCode;
+            var result = !string.IsNullOrEmpty(importedData.Code);
+
+            if (result == false)
+                context.Message = string.Format("Can not add Zone {0} because it has a missing code", importedData.ZoneName);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)

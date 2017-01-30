@@ -11,7 +11,6 @@ namespace Vanrise.NumberingPlan.Business
 {
     public class ClosePendingEffectiveCodeCondition : BusinessRuleCondition
     {
-
         public override bool ShouldValidate(IRuleTarget target)
         {
             return (target as ZoneToProcess != null);
@@ -21,24 +20,22 @@ namespace Vanrise.NumberingPlan.Business
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
 
-            if (zoneToProcess.CodesToClose != null)
+            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
-                foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+                if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                 {
-                    if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
-                        return false;
+                    context.Message = string.Format("Can not close code {0} at zone {1} because this code is pending effective", codeToClose.Code, codeToClose.ZoneName);
+                    return false;
                 }
-
             }
 
-            if (zoneToProcess.CodesToMove != null)
+            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
-                foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+                if (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                 {
-                    if (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
-                        return false;
+                    context.Message = string.Format("Can not move code {0} at zone {1} because this code is pending effective", codeToMove.Code, codeToMove.OldZoneName);
+                    return false;
                 }
-
             }
 
             return true;
@@ -48,6 +45,5 @@ namespace Vanrise.NumberingPlan.Business
         {
             return string.Format("Zone {0} has a pending effective code that can not be closed or moved", (target as ZoneToProcess).RecentZoneName);
         }
-
     }
 }

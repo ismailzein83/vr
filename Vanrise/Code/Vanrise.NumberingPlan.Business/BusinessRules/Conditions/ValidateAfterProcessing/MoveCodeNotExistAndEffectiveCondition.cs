@@ -13,14 +13,25 @@ namespace Vanrise.NumberingPlan.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as CodeToMove != null);
+            return (target as ZoneToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            CodeToMove codeToMove = context.Target as CodeToMove;
-            return (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToMove.Code
-                        && item.ParentZone.ZoneEntity.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase)));
+            ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+
+            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+            {
+                if (!(codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToMove.Code
+                         && item.ParentZone.ZoneEntity.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase))))
+                {
+                    context.Message = string.Format("Can not move Code {0} because this code does not exist in zone {1}", codeToMove.Code, codeToMove.OldZoneName);
+                    return false;
+                }
+
+            }
+
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)

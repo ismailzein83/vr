@@ -18,32 +18,31 @@ namespace Vanrise.NumberingPlan.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
-            
 
-            if(zoneToProcess.CodesToAdd != null)
+            foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
             {
-                foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
+                if (!Vanrise.Common.Utilities.IsNumeric(codeToAdd.Code, 0))
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToAdd.Code, 0))
-                        return false;
+                    context.Message = string.Format("Can not add Code {0} to Zone {1} because this code is not a positive number", codeToAdd.Code, zoneToProcess.ZoneName);
+                    return false;
                 }
             }
 
-            if (zoneToProcess.CodesToMove != null)
+            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
-                foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+                if (!Vanrise.Common.Utilities.IsNumeric(codeToMove.Code, 0))
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToMove.Code, 0))
-                        return false;
+                    context.Message = string.Format("Can not move Code {0} to Zone {1} because this code is not a positive number", codeToMove.Code, zoneToProcess.ZoneName);
+                    return false;
                 }
             }
 
-            if (zoneToProcess.CodesToClose != null)
+            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
-                foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+                if (!Vanrise.Common.Utilities.IsNumeric(codeToClose.Code, 0))
                 {
-                    if (!Vanrise.Common.Utilities.IsNumeric(codeToClose.Code, 0))
-                        return false;
+                    context.Message = string.Format("Can not close Code {0} in Zone {1} because this code is not a positive number", codeToClose.Code, zoneToProcess.ZoneName);
+                    return false;
                 }
             }
 

@@ -20,13 +20,17 @@ namespace Vanrise.NumberingPlan.Business
         {
             CodeToAdd codeToAdd = context.Target as CodeToAdd;
 
-            return !(codeToAdd.ChangedExistingCodes != null && codeToAdd.ChangedExistingCodes.Count() > 0);
+            var result = !(codeToAdd.ChangedExistingCodes != null && codeToAdd.ChangedExistingCodes.Count() > 0);
+
+            if (result == false)
+                context.Message = string.Format("Can not add Code {0} because it is already exists", codeToAdd.Code);
+
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
             return string.Format("Code {0} already exists", (target as CodeToAdd).Code);
         }
- 
     }
 }

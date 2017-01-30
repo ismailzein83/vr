@@ -17,20 +17,25 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var returnedResult = false;
+            var result = true;
 
             IRuleTarget target = context.Target;
-           
+
             CodeToAdd codeToAdd = target as CodeToAdd;
             CodeToClose codeToClose = target as CodeToClose;
 
-            if (codeToAdd != null)
-                returnedResult = codeToAdd.CodeGroup != null;
+            if (codeToAdd != null && codeToAdd.CodeGroup == null)
+            {
+                result = false;
+                context.Message = string.Format("Can not add Code {0} because it is not assigned to a code group", codeToAdd.Code);
+            }
+            else if (codeToClose != null && codeToClose.CodeGroup == null)
+            {
+                result = false;
+                context.Message = string.Format("Can not close Code {0} because it is not assigned to a code group", codeToClose.Code);
+            }
 
-            else if (codeToClose != null)
-                returnedResult = codeToClose.CodeGroup != null;
-
-            return returnedResult;
+            return result;
         }
 
         public override string GetMessage(IRuleTarget target)
