@@ -41,8 +41,8 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
 			};
 
 			$scope.scopeModel.onBulkActionSelected = function (selectedBulkAction) {
-				if (bulkActionContext != undefined && bulkActionContext.requireEvaluation != undefined)
-					bulkActionContext.requireEvaluation();
+				if (bulkActionContext != undefined && bulkActionContext.onBulkActionChanged != undefined)
+					bulkActionContext.onBulkActionChanged();
 			};
 
 			$scope.scopeModel.onDirectiveReady = function (api) {

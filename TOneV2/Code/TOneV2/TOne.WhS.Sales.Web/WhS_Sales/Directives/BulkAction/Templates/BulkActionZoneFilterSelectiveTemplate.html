@@ -14,10 +14,9 @@
 </vr-row>
 <span vr-loader="scopeModel.isLoadingDirective">
 	<vr-row removeline>
-		<vr-directivewrapper ng-if="scopeModel.selectedExtensionConfig != undefined"
-							 directive="scopeModel.selectedExtensionConfig.Editor"
+		<vr-directivewrapper directive="scopeModel.selectedExtensionConfig.Editor"
 							 on-ready="scopeModel.onDirectiveReady"
-							 normal-col-num="{{selectiveCtrl.normalColNum}}"
+							 normal-col-num="{{selectiveCtrl.normalColNum / 2}}"
 							 isrequired="selectiveCtrl.isrequired">
 		</vr-directivewrapper>
 	</vr-row>

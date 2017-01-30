@@ -105,6 +105,7 @@
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneIsPendingClosedAndChangedCondition.cs" />
     <Compile Include="Context\RatePlanContext.cs" />
+    <Compile Include="Country\CountrySoldToCustomerFilter.cs" />
     <Compile Include="DefaultItemManager.cs" />
     <Compile Include="NotificationContext.cs" />
     <Compile Include="Preview\ChangedCustomerCountryPreviewManager.cs" />

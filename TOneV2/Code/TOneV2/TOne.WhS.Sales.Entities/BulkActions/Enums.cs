@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.Sales.Entities.BulkActions
+namespace TOne.WhS.Sales.Entities
 {
 	public enum SpecificApplicableZoneEntityType
 	{

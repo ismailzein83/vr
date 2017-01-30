@@ -165,6 +165,8 @@
     <Content Include="WhS_Sales\Constants\PeriodTypes.js" />
     <Content Include="WhS_Sales\Constants\RatePlanStatusEnum.js" />
     <Content Include="WhS_Sales\Constants\SalePriceListOwnerTypeEnum.js" />
+    <Content Include="WhS_Sales\Constants\SpecificApplicableZoneEntityTypeEnum.js" />
+    <Content Include="WhS_Sales\Constants\SpecificApplicableZoneFilterTypeEnum.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\Templates\ActionBulkActionStepTemplate.html" />
     <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionTypeSelectiveTemplate.html" />
     <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionZoneFilterSelectiveTemplate.html" />
