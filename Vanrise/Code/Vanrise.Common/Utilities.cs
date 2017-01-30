@@ -329,13 +329,45 @@ namespace Vanrise.Common
             }
             throw new ArgumentException("textFilterType");
         }
+        public static object GetTypeDefault(Type type)
+        {
+            if (type.IsValueType)
+            {
+                return Activator.CreateInstance(type);
+            }
+            return null;
+        }
+        public static Object GetPropValue(string fieldName, dynamic obj)
+        {
+            Resolver resolver = new Resolver();
+            return resolver.Resolve(obj, fieldName);
+            //if (fieldName == null)
+            //    return null;
+            //string[] arr = fieldName.Split('.');
+            //PropertyInfo propertyInfo;
+            //dynamic value = obj;
+            //for (var i = 0; i < arr.Length; i++)
+            //{
+            //    string field = arr[i];
+            //    if (value != null)
+            //    {
+            //        propertyInfo = value.GetType().GetProperty(field);
+            //        value = propertyInfo.GetValue(value, null);
+            //        if (i == arr.Length - 1)
+            //        {
+            //            return value;
+            //        }
+            //    }
+
+            //}
+            //return null;
+        }
     }
 
     public interface IPropValueReader
     {
         Object GetPropertyValue(dynamic target);
     }
-
     public interface IPropValueReaderCompilationStep
     {
         HashSet<string> GetPropertiesToCompile(IPropValueReaderCompilationStepContext context);
