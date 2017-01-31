@@ -71,7 +71,7 @@
 
                     var modulesVisibility;
 
-                    if (payload != undefined && payload.Settings != undefined) {
+                    if (payload != undefined) {
                         modulesVisibilityEditorRuntime = payload.ModulesVisibilityEditorRuntime;
 
                         if (payload.Settings != undefined) {

@@ -42,11 +42,14 @@ namespace Vanrise.Common.Business
             var editorRuntime = new VRApplicationVisibilityEditorRuntime();
             editorRuntime.Entity = GetVRApplicationVisibility(vrApplicationVisibilityId);
             editorRuntime.ModulesVisibilityEditorRuntime = new Dictionary<Guid, VRModuleVisibilityEditorRuntime>();
-            
-            if (editorRuntime.Entity.Settings != null && editorRuntime.Entity.Settings.ModulesVisibility != null)
+
+            if (editorRuntime.Entity != null && editorRuntime.Entity.Settings != null && editorRuntime.Entity.Settings.ModulesVisibility != null)
             {
                 foreach (var moduleVisibility in editorRuntime.Entity.Settings.ModulesVisibility)
-                    editorRuntime.ModulesVisibilityEditorRuntime.Add(moduleVisibility.Key, moduleVisibility.Value.GetEditorRuntime());
+                {
+                    if (moduleVisibility.Value != null)
+                        editorRuntime.ModulesVisibilityEditorRuntime.Add(moduleVisibility.Key, moduleVisibility.Value.GetEditorRuntime());
+                }
             }
 
             return editorRuntime;
