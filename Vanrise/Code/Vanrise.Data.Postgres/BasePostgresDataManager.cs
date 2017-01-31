@@ -130,6 +130,7 @@ namespace Vanrise.Data.Postgres
                         command.ExecuteNonQuery();
                     }
                 }
+                connection.Close();
             }
         }
         protected int ExecuteNonQueryText(string cmdText, Action<NpgsqlCommand> prepareCommand)
