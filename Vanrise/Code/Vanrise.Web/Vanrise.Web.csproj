@@ -251,6 +251,7 @@
     <Content Include="Client\Javascripts\Directives\Excel\vr-cellviewer-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\ChoiceFilter\vr-choice-filter-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\ChoiceFilter\vr-choices-filter-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Warning\vr-warning-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Hint\vr-hint-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\CkeckIcon\vr-check-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\FilterEditor\vr-filtereditor-enum.js" />
@@ -338,6 +339,7 @@
     <Content Include="Client\Javascripts\Services\NotificationService\vr-confirmation-modal.html" />
     <Content Include="Client\Javascripts\Services\NotificationService\vr-notification-service.js" />
     <Content Include="Client\Javascripts\Services\TimerService.js" />
+    <Content Include="Client\Javascripts\Services\UISettingsService.js" />
     <Content Include="Client\Javascripts\Services\UIUtilsService.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Services\ValidationService.js" />
