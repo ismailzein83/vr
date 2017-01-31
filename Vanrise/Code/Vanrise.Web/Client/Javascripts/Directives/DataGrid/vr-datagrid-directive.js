@@ -3,7 +3,7 @@
 app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType','UISettingsService',
     function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService, DataGridRetrieveDataEventType, UISettingsService) {
 
-        
+
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -48,12 +48,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 ctrl.showgmenu = false;
                 ctrl.toggelGridMenu = function (e, bool) {
-                    if (bool != undefined){                       
+                    if (bool != undefined){
                         $scope.$apply(function () {
                             ctrl.showgmenu = bool;
                         })
                     }
-                       
+
                     else {
                         if (ctrl.showgmenu == false) {
                             setTimeout(function () {
@@ -144,7 +144,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
         var cellTemplateClickableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
         var cellTemplateExpendableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onDescriptionClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
 
-        var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{#CELLTOOLTIP#}}" >'
+        var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{#CELLTOOLTIP# #TOOLTIPFILTER#}}" >'
                             + '#CELLCONTENT#'
                          + '</div>';
 
@@ -261,10 +261,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     colDef.widthFactor = 10;
                 else
                     colDef.widthFactor = col.widthFactor;
-                
+
                 if (col.fixedWidth == undefined)
                     col.fixedWidth = 0;
-                else  
+                else
                     col.fixedWidth = col.fixedWidth;
                 if (columnIndex == undefined)
                     ctrl.columnDefs.splice(ctrl.columnDefs.length, 0, colDef);//to insert before the actionType column
@@ -351,8 +351,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
             }
             $(window).resize(function() {
                 setTimeout(function() {
-                      calculateColumnsWidth();
-                 },100)
+                    calculateColumnsWidth();
+               }, 100)
             });
 
             function calculateColumnsWidth() {
@@ -374,22 +374,22 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 var initialTotalWidth = 100;
                 var totalWidth = initialTotalWidth;
 
-                if (ctrl.margin !=undefined &&  innerWidth>1366) {
-                        totalWidth = initialTotalWidth -(ctrl.margin * (innerWidth/1920));
+                if (ctrl.margin != undefined && innerWidth > 1366) {
+                    totalWidth = initialTotalWidth - (ctrl.margin * (innerWidth / 1920));
                 }
 
 
-                 //if(ctrl.margin !=undefined &&  innerWidth>1920)
-                 //   totalWidth = initialTotalWidth - (ctrl.margin * (innerWidth / 1920));
+                //if(ctrl.margin !=undefined &&  innerWidth>1920)
+                //   totalWidth = initialTotalWidth - (ctrl.margin * (innerWidth / 1920));
 
                 angular.forEach(ctrl.columnDefs, function (col) {
                     if (col.isHidden != true) {
-                        if (col.fixedWidth!=undefined) {
+                        if (col.fixedWidth != undefined) {
                             col.width = col.fixedWidth + 'px';
                         }
                         else {
-                            col.width = "calc(" + (totalWidth * col.widthFactor / totalWidthFactors) + "% - " + (totalfixedWidth * (totalWidth * col.widthFactor / totalWidthFactors)/100) + "px)";
-                         }
+                            col.width = "calc(" + (totalWidth * col.widthFactor / totalWidthFactors) + "% - " + (totalfixedWidth * (totalWidth * col.widthFactor / totalWidthFactors) / 100) + "px)";
+                        }
 
                     }
                 });
@@ -593,7 +593,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         var object = ctrl.getrowstyle(dataItem);
                         if (object != null)
                             return object.CssClass;
-                    }                    
+                    }
                 }
 
                 scope.$watchCollection('ctrl.datasource', onDataSourceChanged);
@@ -606,7 +606,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             for (var j = 0; j < ctrl.columnDefs.length; j++) {
                                 var colDef = ctrl.columnDefs[j];
                                 filldataItemColumnValues(dataItem, colDef);
-                                dataItem.CssClass = getRowCSSClass(dataItem);                                    
+                                dataItem.CssClass = getRowCSSClass(dataItem);
                             }
                             dataItem.isColumnValuesFilled = true;
                         }
@@ -656,6 +656,25 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         gridvalue = "{{::" + dataItemColumnPropertyPath + ".dataValue}}";
                         ctrl.rowHtml += '<vr-progressbar gridvalue="' + gridvalue + '" ></vr-progressbar></div>';
                     } else {
+                        var tooltipFilter = "";
+                        if (currentColumn.type == "Number") {
+                            var numberPrecision = UISettingsService.getNormalPrecision() || 2;
+                            if (currentColumn.numberPrecision == "NoDecimal")
+                                numberPrecision = 0;
+                            else if (currentColumn.numberPrecision == "LongPrecision")
+                                numberPrecision = UISettingsService.getUIParameterValue('LongPrecision') || 4;
+                            tooltipFilter = " | vrtextOrNumber:" + numberPrecision;
+                        }
+                        else {
+                            if (currentColumn.type == "LongDatetime")
+                                tooltipFilter = " | date:'yyyy-MM-dd HH:mm:ss'";
+                            else if (currentColumn.type == "Datetime")
+                                tooltipFilter = " | date:'yyyy-MM-dd HH:mm'";
+                            else if (currentColumn.type == "Date")
+                                tooltipFilter = " | date:'yyyy-MM-dd'";
+
+                        }
+
                         var cellTemplate = currentColumn.cellTemplate;
                         if (ctrl.hasExpendableColumn(currentColumn))
                             cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateExpendableContent);
@@ -676,8 +695,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" + dataItemColumnPropertyPath + ".tooltip");
                             cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
                             cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
-
                         }
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#TOOLTIPFILTER#", tooltipFilter);
+
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
                         cellTemplate = getCellTemplateWithFilter(cellTemplate, currentColumn);
                         ctrl.rowHtml += '<div class="vr-datagrid-cell">'
@@ -1209,7 +1229,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 if (clearBeforeRetrieve) {
                     retrieveDataResultKey = null;
-                    
+
                     if (defaultSortByFieldName != undefined) {
                         sortColumn = undefined;
                     }
@@ -1219,8 +1239,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             if (sortColumn.isHidden)
                                 sortColumn = undefined;
                         }
-                    }                   
-                    
+                    }
+
                     sortDirection = defaultSortDirection != undefined ? defaultSortDirection : "ASC";
                 }
                 if (clearBeforeRetrieve || isSorting) {
