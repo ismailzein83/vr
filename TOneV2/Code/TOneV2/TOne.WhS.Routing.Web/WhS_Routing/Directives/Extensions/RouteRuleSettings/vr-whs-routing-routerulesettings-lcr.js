@@ -87,10 +87,6 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                 };
 
                 $scope.scopeModel.onDeleteRow = function (deletedItem) {
-
-                    //console.log(deletedItem);
-                    //console.log($scope.scopeModel.selectedSuppliers);
-
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedSuppliers, deletedItem.SupplierId, 'SupplierId');
                     $scope.scopeModel.selectedSuppliers.splice(index, 1);
                     $scope.scopeModel.onDeselectSupplier(deletedItem);
