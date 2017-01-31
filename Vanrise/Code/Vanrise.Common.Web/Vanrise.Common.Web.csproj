@@ -203,7 +203,9 @@
     <Content Include="Common\Directives\GeneralSettings\vr-common-pagesize-selector.js" />
     <Content Include="Common\Directives\GridColumnWidth\Templates\GridColumnWidthEditorTemplate.html" />
     <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\SQLConnectionEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\InterAppRestConnectionEditorTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-sqlconnection-editor.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-interapprestconnection-editor.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-company-setting-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
