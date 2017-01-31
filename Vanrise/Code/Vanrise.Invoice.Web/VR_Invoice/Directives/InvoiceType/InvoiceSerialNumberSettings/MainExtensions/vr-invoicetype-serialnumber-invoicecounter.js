@@ -43,7 +43,6 @@ app.directive("vrInvoicetypeSerialnumberInvoicesequence", ["UtilsService", "VRNo
                         context = payload.context;
                         if (payload.concatenatedPartSettings != undefined) {
                             $scope.scopeModel.includePartnerId = payload.concatenatedPartSettings.IncludePartnerId;
-                            $scope.scopeModel.initialSequenceValue = payload.concatenatedPartSettings.InitialSequenceValue;
                             $scope.scopeModel.selectedDateCounterType = UtilsService.getItemByVal($scope.scopeModel.dateCounterTypes, payload.concatenatedPartSettings.DateCounterType, "value");
                             $scope.scopeModel.paddingLeft = payload.concatenatedPartSettings.PaddingLeft;
                         }
@@ -56,7 +55,6 @@ app.directive("vrInvoicetypeSerialnumberInvoicesequence", ["UtilsService", "VRNo
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts.InvoiceSequenceSerialNumberPart ,Vanrise.Invoice.MainExtensions",
                         IncludePartnerId: $scope.scopeModel.includePartnerId,
-                        InitialSequenceValue: $scope.scopeModel.initialSequenceValue,
                         DateCounterType: $scope.scopeModel.selectedDateCounterType != undefined ? $scope.scopeModel.selectedDateCounterType.value : undefined,
                         PaddingLeft: $scope.scopeModel.paddingLeft
                     };

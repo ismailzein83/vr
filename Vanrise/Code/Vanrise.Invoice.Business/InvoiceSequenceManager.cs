@@ -9,10 +9,10 @@ namespace Vanrise.Invoice.Business
 {
     public class InvoiceSequenceManager
     {
-        public long GetNextSequenceValue(Guid invoiceTypeId, string sequenceKey, long initialValue)
+        public long GetNextSequenceValue(string sequenceGroup, Guid invoiceTypeId, string sequenceKey, long initialValue)
         {
             IInvoiceSequenceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceSequenceDataManager>();
-            return dataManager.GetNextSequenceValue(invoiceTypeId, sequenceKey, initialValue);
+            return dataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue);
         }
     }
 }

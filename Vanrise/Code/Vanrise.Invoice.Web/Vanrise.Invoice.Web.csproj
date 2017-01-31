@@ -220,7 +220,7 @@
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\BillingPeriodInvoiceSettingPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\AutomaticInvoiceSettingPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\DuePeriodPartTemplate.html" />
-    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-initialsequencevalue.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-initialsequencevaluepart.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-serialnumberpatterninvoicesettingpart.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-billingperiodinvoicesettingpart.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-automaticinvoicesettingpart.js" />

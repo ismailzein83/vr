@@ -15,27 +15,36 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
         public override Guid ConfigId { get { return new Guid("034D0103-916C-48DC-8A7F-986DEB09FE3F"); } }
         public bool IncludePartnerId { get; set; }
         public DateCounterType? DateCounterType { get; set; }
-        public long InitialSequenceValue { get; set; }
         public int PaddingLeft { get; set; }
-
         public override string GetPartText(IInvoiceSerialNumberConcatenatedPartContext context)
         {
             StringBuilder sequenceKey = new StringBuilder();
+            StringBuilder sequenceGroup = new StringBuilder();
+            sequenceGroup.Append("OVERALL");
+            long initialSequenceValue = new PartnerManager().GetInitialSequenceValue(context.InvoiceTypeId, context.Invoice.PartnerId);
+
             if (this.IncludePartnerId)
-               sequenceKey.Append(context.Invoice.PartnerId);
-            if (this.DateCounterType != null)
             {
+                sequenceKey.Append(context.Invoice.PartnerId);
+                sequenceGroup.Append("_");
+                sequenceGroup.Append(context.Invoice.PartnerId);
+            }
+            if (this.DateCounterType.HasValue)
+            {
+                if (sequenceKey.Length > 0)
+                    sequenceKey.Append("_");
+                sequenceGroup.Append("_");
+                sequenceGroup.Append(Common.Utilities.GetEnumDescription(this.DateCounterType.Value));
                 switch (this.DateCounterType)
                 {
                     case SerialNumberParts.DateCounterType.Yearly:
-                        sequenceKey.Append(new DateTime(context.Invoice.IssueDate.Year, 1, 1, 0, 0, 0, 0));
-                        sequenceKey.Append(new DateTime(context.Invoice.IssueDate.Year + 1, 1, 1, 0, 0, 0, 0));
+                        sequenceKey.Append(string.Format("{0}_{1}", context.Invoice.IssueDate.Year, context.Invoice.IssueDate.Year + 1));
                         break;
                 }
             }
-           InvoiceSequenceManager manager = new InvoiceSequenceManager();
-           var sequenceNumber = manager.GetNextSequenceValue(context.InvoiceTypeId, sequenceKey.ToString(), this.InitialSequenceValue);
-           return sequenceNumber.ToString().PadLeft(this.PaddingLeft, '0');
+            InvoiceSequenceManager manager = new InvoiceSequenceManager();
+            var sequenceNumber = manager.GetNextSequenceValue(sequenceGroup.ToString(), context.InvoiceTypeId, sequenceKey.ToString(), initialSequenceValue);
+            return sequenceNumber.ToString().PadLeft(this.PaddingLeft, '0');
         }
     }
 }

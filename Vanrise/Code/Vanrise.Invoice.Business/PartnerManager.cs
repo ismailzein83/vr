@@ -10,44 +10,48 @@ namespace Vanrise.Invoice.Business
 {
     public class PartnerManager
     {
-        public InvoicePartnerManager GetPartnerDetails(Guid invoiceTypeId)
+        public InvoicePartnerManager GetPartnerManager(Guid invoiceTypeId)
         {
             InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
-            if (invoiceType.Settings == null || invoiceType.Settings.ExtendedSettings ==null)
-                throw new NullReferenceException("InvoicePartnerDetails");
-            return invoiceType.Settings.ExtendedSettings.GetPartnerManager();
+            if (invoiceType.Settings == null )
+               throw new NullReferenceException("invoiceType.Settings");
+             if (invoiceType.Settings.ExtendedSettings == null )
+               throw new NullReferenceException("invoiceType.Settings.ExtendedSettings");
+            var invoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
+            if(invoicePartnerManager == null)
+                  throw new NullReferenceException("invoicePartnerManager");
+            return invoicePartnerManager;
         }
         public dynamic GetPartnerInfo(Guid invoiceTypeId, string partnerId,string infoType)
         {
-            var partnerSettings = GetPartnerDetails(invoiceTypeId);
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
 
             PartnerManagerInfoContext context = new PartnerManagerInfoContext
             {
                 InfoType = infoType,
                 PartnerId = partnerId,
-                InvoicePartnerManager = partnerSettings
+                InvoicePartnerManager = invoicePartnerManager
             };
-            if (partnerSettings == null || partnerSettings.GetPartnerInfo(context) == null)
-                throw new NullReferenceException("PartnerManager");
-            return partnerSettings.GetPartnerInfo(context);
+            var partnerInfo = invoicePartnerManager.GetPartnerInfo(context);
+            if (partnerInfo == null)
+                throw new NullReferenceException("partnerInfo");
+            return partnerInfo;
         }
         public dynamic GetActualPartnerId(Guid invoiceTypeId, string partnerId)
         {
 
-            var partnerSettings = GetPartnerDetails(invoiceTypeId);
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
 
             ActualPartnerContext context = new ActualPartnerContext
             {
                 PartnerId = partnerId,
             };
-            if (partnerSettings == null)
-                throw new NullReferenceException("PartnerManagerFQTN");
-            return partnerSettings.GetActualPartnerId(context);
+            return invoicePartnerManager.GetActualPartnerId(context);
         }
         public int GetPartnerDuePeriod(Guid invoiceTypeId, string partnerId)
         {
-            var invoicePartnerManager = GetPartnerDetails(invoiceTypeId);
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
             var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
             InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
             {
@@ -62,7 +66,7 @@ namespace Vanrise.Invoice.Business
         }
         public string GetPartnerSerialNumberPattern(Guid invoiceTypeId, string partnerId)
         {
-            var invoicePartnerManager = GetPartnerDetails(invoiceTypeId);
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
             var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
             InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
             {
@@ -75,21 +79,19 @@ namespace Vanrise.Invoice.Business
                 return serialNumberPartern.SerialNumberPattern;
             return null;
         }
-        public InvoicePartnerSettings GetInvoicePartnerSetting(Guid invoiceTypeId, string partnerId)
+        public EffectivePartnerInvoiceSetting GetInvoicePartnerSetting(Guid invoiceTypeId, string partnerId)
         {
-            var partnerSettings = GetPartnerDetails(invoiceTypeId);
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
             Context.InvoicePartnerSettingsContext context = new Context.InvoicePartnerSettingsContext
             {
                 PartnerId = partnerId,
                 InvoiceTypeId = invoiceTypeId
             };
-            if (partnerSettings == null)
-                throw new NullReferenceException("partnerSettings");
-            return partnerSettings.GetInvoicePartnerSettings(context);
+            return invoicePartnerManager.GetEffectivePartnerInvoiceSetting(context);
         }
         public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
         {
-            var invoicePartnerManager = GetPartnerDetails(invoiceTypeId);
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
             var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
             InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
             {
@@ -104,7 +106,7 @@ namespace Vanrise.Invoice.Business
         }
         public BillingPeriod GetPartnerBillingPeriod(Guid invoiceTypeId, string partnerId)
         {
-            var invoicePartnerManager = GetPartnerDetails(invoiceTypeId);
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
             var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
             InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
             {
@@ -116,6 +118,21 @@ namespace Vanrise.Invoice.Business
             if (billingPeriod != null)
                 return billingPeriod.BillingPeriod;
             return null;
+        }
+        public long GetInitialSequenceValue(Guid invoiceTypeId, string partnerId)
+        {
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
+            var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+            InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
+            {
+                InvoiceTypeId = invoiceTypeId,
+                PartnerId = partnerId,
+                InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
+            };
+            var initialSequenceValueSettingPart = invoicePartnerManager.GetInvoicePartnerSettingPart<InitialSequenceValueSettingPart>(invoicePartnerSettingPartContext);
+            if (initialSequenceValueSettingPart != null)
+                return initialSequenceValueSettingPart.InitialValue;
+            return 1;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrInvoiceInvoicesettingRuntimeInitialsequencevalue', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrInvoiceInvoicesettingRuntimeInitialsequencevaluepart', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -37,6 +37,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeInitialsequencevalue', ['UtilsServi
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.initialValue = 1;
                 defineAPI();
             }
 

@@ -8,6 +8,6 @@ namespace Vanrise.Invoice.Data
 {
     public interface IInvoiceSequenceDataManager:IDataManager
     {
-        long GetNextSequenceValue(Guid invoiceTypeId,string sequenceKey,long initialValue);
+        long GetNextSequenceValue(string sequenceGroup,Guid invoiceTypeId, string sequenceKey, long initialValue);
     }
 }

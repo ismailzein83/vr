@@ -17,9 +17,9 @@ namespace Vanrise.Invoice.Data.SQL
         }
 
         #endregion
-        public long GetNextSequenceValue(Guid invoiceTypeId, string sequenceKey, long initialValue)
+        public long GetNextSequenceValue(string sequenceGroup, Guid invoiceTypeId, string sequenceKey, long initialValue)
         {
-            return (long)ExecuteScalarSP("VR_Invoice.sp_InvoiceSequence_GetNext",invoiceTypeId, sequenceKey, initialValue);
+            return (long)ExecuteScalarSP("VR_Invoice.sp_InvoiceSequence_GetNext", sequenceGroup,invoiceTypeId, sequenceKey, initialValue);
         }
     }
 }

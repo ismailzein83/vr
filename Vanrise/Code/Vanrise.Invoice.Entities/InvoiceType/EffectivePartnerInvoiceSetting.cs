@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public class InvoicePartnerSettings
+    public class EffectivePartnerInvoiceSetting
     {
         public InvoiceSetting InvoiceSetting { get; set; }
     }

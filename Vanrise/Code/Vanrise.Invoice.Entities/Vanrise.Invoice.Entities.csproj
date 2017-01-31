@@ -85,7 +85,7 @@
     <Compile Include="InvoiceType\Configs\InvoiceGridFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridActionSettingsConfig.cs" />
     <Compile Include="InvoiceType\InvoiceFileConverter.cs" />
-    <Compile Include="InvoiceType\InvoicePartnerSettings.cs" />
+    <Compile Include="InvoiceType\EffectivePartnerInvoiceSetting.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\AutomaticInvoiceSettingPart.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\BillingPeriodInvoiceSettingPart.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\DuePeriodInvoiceSettingPart.cs" />
