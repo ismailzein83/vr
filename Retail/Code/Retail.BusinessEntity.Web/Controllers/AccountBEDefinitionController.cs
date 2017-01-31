@@ -64,5 +64,14 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountActionDefinitions(accountBEDefinitionId);
         }
+        [HttpGet]
+        [Route("GetAccountActionDefinitionsInfo")]
+        public IEnumerable<AccountActionDefinitionInfo> GetAccountActionDefinitionsInfo(Guid accountBEDefinitionId, string serializedFilter = null)
+        {
+            AccountActionDefinitionInfoFilter filter = null;
+            if (serializedFilter != null)
+                filter = Vanrise.Common.Serializer.Deserialize<AccountActionDefinitionInfoFilter>(serializedFilter);
+            return _manager.GetAccountActionDefinitionsInfo(accountBEDefinitionId, filter);
+        }
     }
 }

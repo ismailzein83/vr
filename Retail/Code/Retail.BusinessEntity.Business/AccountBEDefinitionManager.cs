@@ -172,7 +172,21 @@ namespace Retail.BusinessEntity.Business
 
             return accountActionDefinitions.FirstOrDefault(x => x.AccountActionDefinitionId == actionDefinitionId);
         }
-
+        public IEnumerable<AccountActionDefinitionInfo> GetAccountActionDefinitionsInfo(Guid accountBEDefinitionId, AccountActionDefinitionInfoFilter filter)
+        {
+            var accountBEActions = GetAccountActionDefinitions(accountBEDefinitionId);
+            Func<AccountActionDefinition, bool> filterFunc = null;
+            if (filter != null)
+            {
+                filterFunc = (accountActionDefinition) =>
+                {
+                    if (filter.VisibleInBalanceAlertRule.HasValue && accountActionDefinition.VisibleInBalanceAlertRule != filter.VisibleInBalanceAlertRule.Value)
+                        return false;
+                    return true;
+                };
+            }
+            return accountBEActions.MapRecords(AccountActionDefinitionInfoMapper, filterFunc).OrderBy(x => x.Name);
+        }
         #endregion
 
         #region Private Methods
@@ -243,7 +257,20 @@ namespace Retail.BusinessEntity.Business
                 return accountActionDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
             return true;
         }
-        
+
         #endregion
+
+        #region Private Mappers
+        AccountActionDefinitionInfo AccountActionDefinitionInfoMapper(AccountActionDefinition accountActionDefinition)
+        {
+            return new AccountActionDefinitionInfo
+            {
+                AccountActionDefinitionId = accountActionDefinition.AccountActionDefinitionId,
+                Name = accountActionDefinition.Name,
+                BackendExecutorSettingEditor = accountActionDefinition.ActionDefinitionSettings.BackendExecutorSettingEditor
+            };
+        }
+        #endregion
+
     }
 }

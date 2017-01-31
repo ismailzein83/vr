@@ -76,6 +76,8 @@
     <Compile Include="AccountCondition\AccountConditionConfig.cs" />
     <Compile Include="AccountDefinition\AccountActionDefinition.cs" />
     <Compile Include="AccountDefinition\AccountActionDefinitionConfig.cs" />
+    <Compile Include="AccountDefinition\AccountActionDefinitionInfo.cs" />
+    <Compile Include="AccountDefinition\AccountActionDefinitionInfoFilter.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionFilter.cs" />
