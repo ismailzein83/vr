@@ -177,6 +177,17 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
+        private bool IsColumnVisible(VRRetailBEVisibility retailBEVisibility, Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> visibleGridColumns, AccountGridColumnDefinition accountGridColumnDefinition)
+        {
+            VRRetailBEVisibilityAccountDefinitionGridColumns gridColumn = null;
+            if (retailBEVisibility != null && !visibleGridColumns.TryGetValue(accountGridColumnDefinition.FieldName, out gridColumn))
+                return false;
+
+            if (gridColumn != null && !string.IsNullOrEmpty(gridColumn.Title))
+                accountGridColumnDefinition.Header = gridColumn.Title;
+
+            return true;
+        }
         private bool IsColumnAvailable(Guid accountBEDefinitionId, long? parentAccountId, AccountGridColumnDefinition gridColumnDefinition)
         {
             bool isRoot = parentAccountId.HasValue ? false : true;
@@ -196,24 +207,7 @@ namespace Retail.BusinessEntity.Business
 
             return true;
         }
-        private bool IsColumnVisible( VRRetailBEVisibility retailBEVisibility, Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> visibleGridColumns, AccountGridColumnDefinition accountGridColumnDefinition)
-        {
-            VRRetailBEVisibilityAccountDefinitionGridColumns gridColumn = null;
-            if (retailBEVisibility != null && !visibleGridColumns.TryGetValue(accountGridColumnDefinition.FieldName, out gridColumn))
-                return false;
 
-            if (gridColumn != null && !string.IsNullOrEmpty(gridColumn.Title))
-                accountGridColumnDefinition.Header = gridColumn.Title;
-
-            return true;
-        }
-
-        private bool IsViewAvailable(AccountViewDefinition accountViewDefinition, Account account)
-        {
-            if (accountViewDefinition.AvailabilityCondition != null)
-                return accountViewDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
-            return true;
-        }
         private bool IsViewVisible(VRRetailBEVisibility retailBEVisibility, Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> visibleViews, AccountViewDefinition accountViewDefinition)
         {
             VRRetailBEVisibilityAccountDefinitionView view = null;
@@ -225,13 +219,13 @@ namespace Retail.BusinessEntity.Business
 
             return true;
         }
-
-        private bool IsActionAvailable(AccountActionDefinition accountActionDefinition, Account account)
+        private bool IsViewAvailable(AccountViewDefinition accountViewDefinition, Account account)
         {
-            if (accountActionDefinition.AvailabilityCondition != null)
-                return accountActionDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
+            if (accountViewDefinition.AvailabilityCondition != null)
+                return accountViewDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
             return true;
         }
+
         private bool IsActionVisible(VRRetailBEVisibility retailBEVisibility, Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleViews, AccountActionDefinition accountActionDefinition)
         {
             VRRetailBEVisibilityAccountDefinitionAction action = null;
@@ -243,9 +237,13 @@ namespace Retail.BusinessEntity.Business
 
             return true;
         }
-
-
-
+        private bool IsActionAvailable(AccountActionDefinition accountActionDefinition, Account account)
+        {
+            if (accountActionDefinition.AvailabilityCondition != null)
+                return accountActionDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
+            return true;
+        }
+        
         #endregion
     }
 }
