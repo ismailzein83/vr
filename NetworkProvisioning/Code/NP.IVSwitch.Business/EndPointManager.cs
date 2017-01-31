@@ -305,7 +305,7 @@ namespace NP.IVSwitch.Business
             {
                 EndPointCarrierAccountExtension extendedSettingsObject =
                     carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(customerItem);
-                if (extendedSettingsObject == null) continue;
+                if (extendedSettingsObject == null || extendedSettingsObject.AclEndPointInfo == null) continue;
                 foreach (var aclInfo in extendedSettingsObject.AclEndPointInfo)
                 {
                     if (!result.ContainsKey(aclInfo.EndPointId))
