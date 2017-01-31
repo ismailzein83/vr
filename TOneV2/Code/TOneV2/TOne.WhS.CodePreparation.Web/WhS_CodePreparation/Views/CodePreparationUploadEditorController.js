@@ -84,7 +84,7 @@
         function loadEffectiveDate() {
 
         	return WhS_CP_CodePrepAPIService.GetCPEffectiveDateDayOffset().then(function (effectiveDateDayOffset) {
-                var effectiveDate = new Date();
+	            var effectiveDate = UtilsService.getDateFromDateTime(new Date());
                 effectiveDate.setDate(effectiveDate.getDate() + effectiveDateDayOffset);
                 $scope.effectiveDate = effectiveDate;
             });
