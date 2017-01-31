@@ -34,10 +34,8 @@ app.directive('vrCommonSqlconnectionEditor', [function () {
             api.getData = function () {
                 
                 return {
-                    $type: 'Vanrise.Common.Business.VRInterAppRestConnection, Vanrise.Common.Business',
-                    BaseURL: $scope.scopeModel.baseURL,
-                    Username: $scope.scopeModel.username,
-                    Password: $scope.scopeModel.password
+                    $type: 'Vanrise.Common.Business.SQLConnection, Vanrise.Common.Business',
+                    ConnectionString: $scope.scopeModel.connectionString
 
                 };
             };
