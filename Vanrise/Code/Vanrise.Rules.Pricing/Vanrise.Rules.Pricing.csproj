@@ -41,12 +41,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.GenericData.Entities">
-      <HintPath>..\Output\Vanrise.GenericData.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtraCharge\IPricingRuleExtraChargeActionContext.cs" />
@@ -74,6 +68,14 @@
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
       <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
       <Name>Vanrise.Common.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
       <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>

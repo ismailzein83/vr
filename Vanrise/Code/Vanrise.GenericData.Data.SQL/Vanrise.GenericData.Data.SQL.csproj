@@ -41,10 +41,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BELookupRuleDefinitionDataManager.cs" />
@@ -79,6 +75,10 @@
     <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
       <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
       <Name>Vanrise.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Data\Vanrise.GenericData.Data.csproj">
       <Project>{2c487e04-e583-411a-b116-f4485c78a572}</Project>

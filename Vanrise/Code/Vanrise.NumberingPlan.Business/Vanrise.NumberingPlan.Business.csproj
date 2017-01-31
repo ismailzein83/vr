@@ -51,16 +51,6 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Data">
-      <HintPath>..\Output\Vanrise.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Security.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Security.Entities">
-      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\AddMoveCodeToPendingClosedZoneCondition.cs" />
@@ -121,6 +111,10 @@
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
@@ -140,6 +134,14 @@
     <ProjectReference Include="..\Vanrise.NumberingPlan.Entities\Vanrise.NumberingPlan.Entities.csproj">
       <Project>{0370dad0-c425-4005-896f-5169eb915205}</Project>
       <Name>Vanrise.NumberingPlan.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
+      <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
+      <Name>Vanrise.Security.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

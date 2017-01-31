@@ -59,10 +59,6 @@
     <Reference Include="Vanrise.BusinessProcess.WFActivities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
@@ -97,6 +93,10 @@
     <ProjectReference Include="..\Vanrise.BEBridge.MainExtensions\Vanrise.BEBridge.MainExtensions.csproj">
       <Project>{b5a56148-0dd1-4bc5-9357-72d289c6f863}</Project>
       <Name>Vanrise.BEBridge.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

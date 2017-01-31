@@ -51,12 +51,6 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.Business">
-      <HintPath>..\Output\Vanrise.Notification.Business.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
@@ -95,6 +89,10 @@
       <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
       <Name>Vanrise.Common.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
       <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
       <Name>Vanrise.GenericData.Business</Name>
@@ -102,6 +100,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Business\Vanrise.Notification.Business.csproj">
+      <Project>{918ce99a-576c-49f0-897e-07817959e79c}</Project>
+      <Name>Vanrise.Notification.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
       <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>

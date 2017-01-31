@@ -46,15 +46,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Common">
-      <HintPath>..\Output\Vanrise.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Data">
-      <HintPath>..\Output\Vanrise.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Data.SQL">
-      <HintPath>..\Output\Vanrise.Data.SQL.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDataManager.cs" />
@@ -71,6 +62,18 @@
     <ProjectReference Include="..\Vanrise.BI.Entities\Vanrise.BI.Entities.csproj">
       <Project>{e7326271-88cd-46c2-97b4-5c7eb58637aa}</Project>
       <Name>Vanrise.BI.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.SQL\Vanrise.Data.SQL.csproj">
+      <Project>{4ab70e59-2c65-4167-8d5f-897702cf161b}</Project>
+      <Name>Vanrise.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

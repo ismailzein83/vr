@@ -62,9 +62,6 @@
     <Reference Include="Vanrise.BusinessProcess.WFActivities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Common">
-      <HintPath>..\Output\Vanrise.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
@@ -100,6 +97,10 @@
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
       <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
       <Name>Vanrise.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>

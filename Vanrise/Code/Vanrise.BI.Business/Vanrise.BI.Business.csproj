@@ -47,13 +47,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Common.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Security.Entities">
-      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BIConfigurationManager.cs" />
@@ -74,6 +67,10 @@
       <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
       <Name>Vanrise.Caching</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
+      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
+      <Name>Vanrise.Common.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
@@ -89,6 +86,10 @@
     <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
       <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
       <Name>Vanrise.Security.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

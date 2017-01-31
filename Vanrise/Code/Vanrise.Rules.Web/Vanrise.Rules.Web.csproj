@@ -109,9 +109,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Rules.Normalization">
-      <HintPath>..\Output\Vanrise.Rules.Normalization.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -132,6 +129,10 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Rules.Normalization\Vanrise.Rules.Normalization.csproj">
+      <Project>{f3cf9f95-be98-44e0-8c54-9bd36c7b43f8}</Project>
+      <Name>Vanrise.Rules.Normalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Rules.Pricing\Vanrise.Rules.Pricing.csproj">
       <Project>{a8a1a6c8-be71-4b51-b5b8-490645c32bf2}</Project>

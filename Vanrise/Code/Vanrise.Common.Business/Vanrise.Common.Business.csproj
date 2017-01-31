@@ -57,9 +57,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Security.Entities">
-      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigData\BigDataManager.cs" />
@@ -167,6 +164,10 @@
     <ProjectReference Include="..\Vanrise.Runtime\Vanrise.Runtime.csproj">
       <Project>{2cdddf60-45b6-4ce6-ac2b-4470bb9bfe96}</Project>
       <Name>Vanrise.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

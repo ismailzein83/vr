@@ -41,14 +41,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Security.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticConfigurationManager.cs" />
@@ -112,6 +104,14 @@
     <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
       <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>
       <Name>Vanrise.Notification.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
+      <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
+      <Name>Vanrise.Security.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

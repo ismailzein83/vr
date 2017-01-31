@@ -44,14 +44,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Common.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConcatenatedParts\CellFieldConcatenatedPart.cs" />
@@ -61,6 +53,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
+      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
+      <Name>Vanrise.Common.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.ExcelConversion.Business\Vanrise.ExcelConversion.Business.csproj">
       <Project>{70f50f72-75d6-462e-b5c1-07bcb4afeac2}</Project>
       <Name>Vanrise.ExcelConversion.Business</Name>
