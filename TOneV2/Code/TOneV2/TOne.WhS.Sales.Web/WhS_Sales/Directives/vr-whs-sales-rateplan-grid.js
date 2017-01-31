@@ -119,7 +119,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 if (dataItem.RPRouteDetail != undefined && dataItem.RPRouteDetail.RouteOptionsDetails != undefined && dataItem.RPRouteDetail.RouteOptionsDetails.length > 0)
                     WhS_Sales_RatePlanService.openTQIEditor(context, onTQIEvaluated);
                 else
-                    VRNotificationService.showInformation("No Route Options");
+                    VRNotificationService.showInformation("TQI can not be calculated for zones have no route options");
             };
 
             $scope.onNewRateChanged = function (dataItem) {
