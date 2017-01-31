@@ -21,16 +21,23 @@
 
         function GetRouteOptionPercentageSettingsTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteOptionPercentageSettingsTemplates"));
-        } 
+        }
+
         function GetRoutingOptimizerSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRoutingOptimizerSettingsConfigs"));
-        } 
+        }
+
+        function GetCustomerRouteBuildNumberOfOptions() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetCustomerRouteBuildNumberOfOptions"));
+        }
+
         return ({
             GetRouteOptionSettingsGroupTemplates: GetRouteOptionSettingsGroupTemplates,
             GetRouteOptionOrderSettingsTemplates: GetRouteOptionOrderSettingsTemplates,
             GetRouteOptionFilterSettingsTemplates: GetRouteOptionFilterSettingsTemplates,
             GetRouteOptionPercentageSettingsTemplates: GetRouteOptionPercentageSettingsTemplates,
-            GetRoutingOptimizerSettingsConfigs: GetRoutingOptimizerSettingsConfigs
+            GetRoutingOptimizerSettingsConfigs: GetRoutingOptimizerSettingsConfigs,
+            GetCustomerRouteBuildNumberOfOptions: GetCustomerRouteBuildNumberOfOptions
         });
     }
 

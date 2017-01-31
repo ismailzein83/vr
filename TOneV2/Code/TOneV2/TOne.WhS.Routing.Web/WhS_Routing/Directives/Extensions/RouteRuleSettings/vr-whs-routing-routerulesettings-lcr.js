@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RoutRuleSettingsAPIService',
+    function (UtilsService, VRUIUtilsService, WhS_Routing_RoutRuleSettingsAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -111,6 +111,8 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                         }
                     }
 
+                    var getCustomerRouteBuildNumberOfOptionsPromise = getCustomerRouteBuildNumberOfOptions();
+                    promises.push(getCustomerRouteBuildNumberOfOptionsPromise);
 
                     var loadCarrierAccountSelectorPromise = getLoadCarrierAccountSelectorPromise(supplierFilterSettings, options);
                     promises.push(loadCarrierAccountSelectorPromise);
@@ -131,6 +133,12 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                         }
                     });
 
+                    function getCustomerRouteBuildNumberOfOptions()
+                    {
+                        return WhS_Routing_RoutRuleSettingsAPIService.GetCustomerRouteBuildNumberOfOptions().then(function (response) {
+                            $scope.scopeModel.maxPositionValue = response;
+                        });
+                    }
                     function getLoadCarrierAccountSelectorPromise(supplierFilterSettings, options) {
                         var loadCarrierAccountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 

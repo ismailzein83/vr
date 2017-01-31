@@ -45,12 +45,21 @@ namespace TOne.WhS.Routing.Web.Controllers
             RouteRuleSettingsManager manager = new RouteRuleSettingsManager();
             return manager.GetRouteOptionPercentageSettingsTemplates();
         }
+
         [HttpGet]
         [Route("GetRoutingOptimizerSettingsConfigs")]
         public IEnumerable<RoutingOptimizerSettingsConfig> GetRoutingOptimizerSettingsConfigs()
         {
             RouteRuleSettingsManager manager = new RouteRuleSettingsManager();
             return manager.GetRoutingOptimizerSettingsConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetCustomerRouteBuildNumberOfOptions")]
+        public int GetCustomerRouteBuildNumberOfOptions()
+        {
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetCustomerRouteBuildNumberOfOptions();
         }
     }
 }
