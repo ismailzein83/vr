@@ -24,10 +24,13 @@ namespace Retail.Runtime.Mappers
         }
 
 
-        public Vanrise.Integration.Entities.MappingOutput ImportingVoiceEDR_File()
+        public Vanrise.Integration.Entities.MappingOutput ImportingVoiceEDR_File(object localData)
         {
+            //Retail.Runtime.Mappers.RingoMapper mapper = new Retail.Runtime.Mappers.RingoMapper();
+            //return mapper.ImportingVoiceEDR_File(data);
+
             LogVerbose("Started");
-            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(localData));
             var voiceEDRs = new List<dynamic>();
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
@@ -36,7 +39,6 @@ namespace Retail.Runtime.Mappers
 
             var currentItemCount = 27;
             var headerText = "H";
-
             DateTime creationDate = default(DateTime);
             System.IO.StreamReader sr = ImportedData.StreamReader;
             while (!sr.EndOfStream)
@@ -49,7 +51,7 @@ namespace Retail.Runtime.Mappers
 
                 if (rowData.Length == 2 && rowData[0] == headerText)
                 {
-                    creationDate = DateTime.ParseExact(rowData[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+                    creationDate = DateTime.ParseExact(rowData[1].Trim(new char[] { ',' }), "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
                     continue;
                 }
 
@@ -99,7 +101,7 @@ namespace Retail.Runtime.Mappers
             }
 
             var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(voiceEDRs, "#RECORDSCOUNT# of Raw EDRs");
-            mappedBatches.Add("Voice EDR Storage Stage", batch);
+            mappedBatches.Add("Voice Transformation", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
@@ -141,7 +143,7 @@ namespace Retail.Runtime.Mappers
 
                 dynamic edr = Activator.CreateInstance(messageEDRRuntimeType) as dynamic;
                 edr.IdCDR = long.Parse(rowData[0]);
-                edr.StartDate = DateTime.ParseExact(rowData[2], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                edr.StartDate = DateTime.ParseExact(rowData[2].Trim(new char[] { ',' }), "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
                 string parentIdCDR = rowData[22];
                 edr.ParentIdCDR = !string.IsNullOrEmpty(parentIdCDR) ? long.Parse(parentIdCDR) : default(long?);
@@ -185,7 +187,7 @@ namespace Retail.Runtime.Mappers
             }
 
             var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(smsEDRs, "#RECORDSCOUNT# of Raw EDRs");
-            mappedBatches.Add("Message EDR Storage Stage", batch);
+            mappedBatches.Add("Message EDR Transformation", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsService', 'Retail_BE_EntityTypeEnum',
-    function (UtilsService, VRUIUtilsService, Retail_BE_EntityTypeEnum) {
+app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -198,7 +198,13 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         statusDefinitionSelectorReadyDeferred.promise.then(function () {
                             var statusDefinitionSelectorPayload = {
-                                filter: { EntityType: Retail_BE_EntityTypeEnum.Account.value },
+                                filter: {
+                                    Filters: [{
+                                        $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
+                                        AccountBEDefinitionId: payload != undefined ? payload.AccountBEDefinitionId : undefined
+
+                                    }]
+                                },
                                 selectedIds: payload != undefined ? payload.InitialStatusId : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);

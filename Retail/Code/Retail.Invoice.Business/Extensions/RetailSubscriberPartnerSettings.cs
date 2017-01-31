@@ -29,7 +29,7 @@ namespace Retail.Invoice.Business
     {
         Guid _acountBEDefinitionId;
 
-        public RetailSubscriberPartnerSettings (Guid acountBEDefinitionId)
+        public RetailSubscriberPartnerSettings(Guid acountBEDefinitionId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
         }
@@ -65,6 +65,11 @@ namespace Retail.Invoice.Business
         {
             switch (context.InfoType)
             {
+                case "Account":
+                    AccountBEManager accountBeManager = new AccountBEManager();
+                    long accountId = 0;
+                    long.TryParse(context.PartnerId, out accountId);
+                    return accountBeManager.GetAccount(_acountBEDefinitionId, accountId);
                 case "InvoiceRDLCReport":
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
                     long partnerId = Convert.ToInt32(context.PartnerId);

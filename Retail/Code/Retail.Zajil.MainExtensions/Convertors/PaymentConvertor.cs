@@ -53,7 +53,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

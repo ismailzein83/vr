@@ -200,7 +200,7 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                                 //filter: { EntityType: Retail_BE_EntityTypeEnum.Account.value },
                                 filter: {
                                     Filters: [{
-                                        $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business",
+                                        $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
                                         AccountBEDefinitionId: payload != undefined ? payload.AccountBEDefinitionId : undefined
 
                                     }]
