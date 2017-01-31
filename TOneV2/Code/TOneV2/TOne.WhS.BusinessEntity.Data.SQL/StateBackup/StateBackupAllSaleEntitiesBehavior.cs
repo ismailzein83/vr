@@ -33,7 +33,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             SaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
             backupCommand.AppendLine(saleEntityRoutingProductDataManager.BackupAllSaleEntityRoutingProductDataBySellingNumberPlanId(stateBackupId, base.BackupDatabaseName, sellingNumberPlanId));
-            
+
+            CustomerCountryDataManager customerCountryDataManager = new CustomerCountryDataManager();
+            backupCommand.AppendLine(
+                customerCountryDataManager.BackupAllSaleEntityCustomerCountryBySellingNumberPlanId(stateBackupId,
+                    BackupDatabaseName, sellingNumberPlanId));
+
             return backupCommand.ToString();
         }
 
@@ -50,6 +55,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             SaleRateDataManager saleRateDataManager = new SaleRateDataManager();
             SaleEntityServiceDataManager saleEntityServiceDataManager = new SaleEntityServiceDataManager();
             SaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
+            CustomerCountryDataManager customerCountryDataManager = new CustomerCountryDataManager();
 
             restoreCommands.AppendLine(saleRateDataManager.GetDeleteCommandsBySellingNumberPlanId(sellingNumberPlanId));
             restoreCommands.AppendLine(saleCodeDataManager.GetDeleteCommandsBySellingNumberPlanId(sellingNumberPlanId));
@@ -57,7 +63,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetDeleteCommandsBySellingNumberPlanId(sellingNumberPlanId));
             restoreCommands.AppendLine(saleZoneDataManager.GetDeleteCommandsBySellingNumberPlanId(sellingNumberPlanId));
             restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsBySellingNumberPlanId(sellingNumberPlanId));
-
+            restoreCommands.AppendLine(
+                customerCountryDataManager.GetDeleteCommandsBySellingNumberPlanId(sellingNumberPlanId));
 
             restoreCommands.AppendLine(salePriceListDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleZoneDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
@@ -65,9 +72,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             restoreCommands.AppendLine(saleRateDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleEntityServiceDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
+            restoreCommands.AppendLine(customerCountryDataManager.GetRestoreCommands(stateBackupId,
+                base.BackupDatabaseName));
 
             return restoreCommands.ToString();
         }
- 
+
     }
 }

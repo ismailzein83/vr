@@ -88,6 +88,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #endregion
         #region StateBackup Methods
+        public string BackupAllSaleEntityCustomerCountryBySellingNumberPlanId(long stateBackupId, string backupDatabase, int sellingNumberPlanId)
+        {
+            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[CustomerCountry] WITH (TABLOCK)
+                                           SELECT  CC.[ID]
+                                                  ,CC.[CustomerID]
+                                                  ,CC.[CountryID]
+                                                  ,CC.[BED]
+                                                  ,CC.[EED]
+	                                              ,{1} AS StateBackupID 
+                                              FROM [TOneWhS_BE].[CustomerCountry] CC WITH (NOLOCK)
+                                              JOIN [TOneWhS_BE].[CarrierAccount] CA ON CA.ID = CC.[CustomerID]  
+                                              WHERE CA.SellingNumberPlanID ={2}", backupDatabase, stateBackupId,
+                sellingNumberPlanId);
+        }
+
         public string BackupSaleEntityCustomerCountryByOwner(long stateBackupId, string backupDatabase, int ownerId)
         {
             return String.Format(@"INSERT INTO {0}.[TOneWhS_BE_Bkup].[CustomerCountry] WITH (TABLOCK)
@@ -103,7 +118,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                               ,cc.BED
                                               ,cc.EED
                                               ,{1}
-                                          FROM [TOneWhS_BE].[CustomerCountry] cc  (NOLOCK) where CustomerID = {2}",
+                                          FROM [TOneWhS_BE].[CustomerCountry] cc  WITH(NOLOCK) where CustomerID = {2}",
                 backupDatabase,
                 stateBackupId, ownerId);
         }
@@ -111,6 +126,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return String.Format(@"DELETE FROM [TOneWhS_BE].[CustomerCountry]
                                            Where CustomerID ={0} ", ownerId);
+        }
+        public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
+        {
+            return String.Format(@"
+                                    DELETE FROM [TOneWhS_BE].[CustomerCountry] 
+                                    WHERE CustomerID IN ( SELECT ID FROM [TOneWhS_BE].[CarrierAccount]
+                                    WHERE SellingNumberPlanID = {0})",
+                sellingNumberPlanId);
         }
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
