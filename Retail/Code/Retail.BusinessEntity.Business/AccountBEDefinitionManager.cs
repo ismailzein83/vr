@@ -116,9 +116,13 @@ namespace Retail.BusinessEntity.Business
             List<AccountViewDefinition> results = new List<AccountViewDefinition>();
             List<AccountViewDefinition> accoutViewDefinitions = this.GetAccountViewDefinitions(accountBEDefinitionId);
 
+            VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
+            VRRetailBEVisibility retailBEVisibility = retailBEVisibilityManager.GetRetailBEVisibility();
+            var visibleViews = retailBEVisibilityManager.GetVisibleViews(retailBEVisibility);
+
             foreach (var itm in accoutViewDefinitions)
             {
-                if (IsViewAvailable(itm, account))
+                if (IsViewVisible(retailBEVisibility, visibleViews, itm) && IsViewAvailable(itm, account))
                     results.Add(itm);
             }
             return results;
@@ -137,9 +141,13 @@ namespace Retail.BusinessEntity.Business
             List<AccountActionDefinition> results = new List<AccountActionDefinition>();
             List<AccountActionDefinition> accoutActionDefinitions = this.GetAccountActionDefinitions(accountBEDefinitionId);
 
+            VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
+            VRRetailBEVisibility retailBEVisibility = retailBEVisibilityManager.GetRetailBEVisibility();
+            var visibleActions = retailBEVisibilityManager.GetVisibleActions(retailBEVisibility);
+
             foreach (var itm in accoutActionDefinitions)
             {
-                if (IsActionAvailable(itm, account))
+                if (IsActionVisible(retailBEVisibility, visibleActions, itm) && IsActionAvailable(itm, account))
                     results.Add(itm);
             }
             return results;
@@ -206,11 +214,33 @@ namespace Retail.BusinessEntity.Business
                 return accountViewDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
             return true;
         }
+        private bool IsViewVisible(VRRetailBEVisibility retailBEVisibility, Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> visibleViews, AccountViewDefinition accountViewDefinition)
+        {
+            VRRetailBEVisibilityAccountDefinitionView view = null;
+            if (retailBEVisibility != null && !visibleViews.TryGetValue(accountViewDefinition.AccountViewDefinitionId, out view))
+                return false;
+
+            if (view != null && !string.IsNullOrEmpty(view.Title))
+                accountViewDefinition.Name = view.Title;
+
+            return true;
+        }
 
         private bool IsActionAvailable(AccountActionDefinition accountActionDefinition, Account account)
         {
             if (accountActionDefinition.AvailabilityCondition != null)
                 return accountActionDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
+            return true;
+        }
+        private bool IsActionVisible(VRRetailBEVisibility retailBEVisibility, Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleViews, AccountActionDefinition accountActionDefinition)
+        {
+            VRRetailBEVisibilityAccountDefinitionAction action = null;
+            if (retailBEVisibility != null && !visibleViews.TryGetValue(accountActionDefinition.AccountActionDefinitionId, out action))
+                return false;
+
+            if (action != null && !string.IsNullOrEmpty(action.Title))
+                accountActionDefinition.Name = action.Title;
+
             return true;
         }
 

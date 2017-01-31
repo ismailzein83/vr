@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_VisibilityAccountDefinitionController" width="'60%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Retail_BE_VisibilityAccountDefinitionController" width="'75%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formVisibilityAccountDefinitionEditor">
 
@@ -17,14 +17,17 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Account Types'">
-                    <retail-be-visibilityaccounttype-management on-ready="scopeModel.onVisibilityAccountTypeDirectiveReady"></retail-be-visibilityaccounttype-management>
-                </vr-tab>
                 <vr-tab header="'Grid Columns'">
                     <retail-be-visibilitygridcolumn-management on-ready="scopeModel.onVisibilityGridColumnDirectiveReady"></retail-be-visibilitygridcolumn-management>
                 </vr-tab>
-                <vr-tab header="'Grid Columns'">
+                <vr-tab header="'Views'">
                     <retail-be-visibilityview-management on-ready="scopeModel.onVisibilityViewDirectiveReady"></retail-be-visibilityview-management>
+                </vr-tab>
+                <vr-tab header="'Actions'">
+                    <retail-be-visibilityaction-management on-ready="scopeModel.onVisibilityActionDirectiveReady"></retail-be-visibilityaction-management>
+                </vr-tab>
+                <vr-tab header="'Account Types'">
+                    <retail-be-visibilityaccounttype-management on-ready="scopeModel.onVisibilityAccountTypeDirectiveReady"></retail-be-visibilityaccounttype-management>
                 </vr-tab>
             </vr-tabs>
 

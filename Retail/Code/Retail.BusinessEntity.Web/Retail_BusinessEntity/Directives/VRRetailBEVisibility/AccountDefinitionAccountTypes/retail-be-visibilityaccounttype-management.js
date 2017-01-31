@@ -1,18 +1,16 @@
-﻿(function (app) {
+﻿'use strict';
 
-    'use strict';
+app.directive('retailBeVisibilityaccounttypeManagement', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
-    VisibilityAccountTypeManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_VisibilityAccountDefinitionService'];
-
-    function VisibilityAccountTypeManagementDirective(UtilsService, VRNotificationService, Retail_BE_VisibilityAccountDefinitionService) {
-        return {
+        var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new VisibilityAccountTypesCtor($scope, ctrl);
+                var ctor = new VisibilityAccountType(ctrl, $scope);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -24,50 +22,57 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionAccountTypes/Templates/VisibilityAccountTypeManagementTemplate.html'
+            templateUrl: function (element, attrs) {
+                return '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionAccountTypes/Templates/VisibilityAccountTypeManagementTemplate.html';
+            }
         };
 
-        function VisibilityAccountTypesCtor($scope, ctrl) {
+        function VisibilityAccountType(ctrl, $scope) {
             this.initializeController = initializeController;
 
-            var accountBEDefinitionId;
-
-            var gridAPI;
+            var accountTypeSelectorAPI;
+            var accountTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.accountTypeDefinitions = [];
+                $scope.scopeModel.selectedAccountTypeDefinitions = [];
                 $scope.scopeModel.accountTypes = [];
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
+                $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
+                    accountTypeSelectorAPI = api;
+                    accountTypeSelectorPromiseDeferred.resolve();
                 };
 
-                $scope.scopeModel.onAddAccountType = function () {
-                    var onAccountTypeAdded = function (addedAccountType) {
-                        $scope.scopeModel.accountTypes.push({ Entity: addedAccountType });
-                    };
+                $scope.scopeModel.onSelectAccountType = function (selectedItem) {
 
-                    Retail_BE_VisibilityAccountDefinitionService.addVisibilityAccountType(accountBEDefinitionId, onAccountTypeAdded);
-                };
-                $scope.scopeModel.onDeleteAccountType = function (accountType) {
-                    VRNotificationService.showConfirmation().then(function (confirmed) {
-                        if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.accountTypes, accountType.Entity.AccountTypeTitle, 'Entity.AccountTypeTitle');
-                            $scope.scopeModel.accountTypes.splice(index, 1);
-                        }
+                    $scope.scopeModel.accountTypes.push({
+                        AccountTypeId: selectedItem.AccountTypeId,
+                        Name: selectedItem.Title
                     });
                 };
+                $scope.scopeModel.onDeselectAccountType = function (deselectedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.accountTypes, deselectedItem.AccountTypeId, 'AccountTypeId');
+                    $scope.scopeModel.accountTypes.splice(index, 1);
+                };
 
-                defineMenuActions();
+                $scope.scopeModel.onDeleteRow = function (deletedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedAccountTypeDefinitions, deletedItem.AccountTypeId, 'AccountTypeId');
+                    $scope.scopeModel.selectedAccountTypeDefinitions.splice(index, 1);
+                    $scope.scopeModel.onDeselectAccountType(deletedItem);
+                };
+
+                defineAPI();
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
                     var accountTypes;
                     var accountTypeTitlesById;
+                    var accountBEDefinitionId;
 
                     if (payload != undefined) {
                         accountTypes = payload.accountTypes;
@@ -75,63 +80,79 @@
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                     }
 
-                    //Loading AccountTypes Grid
-                    if (accountTypes != undefined) {
-                        for (var index = 0 ; index < accountTypes.length; index++) {
-                            if (index != "$type") {
-                                var accountType = accountTypes[index];
-                                extendAccountTypeObj(accountType);
-                                $scope.scopeModel.accountTypes.push({ Entity: accountType });
+                    var loadAccountTypeSelectorPromise = getAccountTypeSelectorLoadPromise();
+                    promises.push(loadAccountTypeSelectorPromise);
+
+                    loadAccountTypeSelectorPromise.then(function () {
+
+                        //Loading Grid
+                        if ($scope.scopeModel.selectedAccountTypes != undefined) {
+                            for (var i = 0; i < $scope.scopeModel.selectedAccountTypes.length; i++) {
+                                var accountTypeDefinition = $scope.scopeModel.selectedAccountTypes[i];
+                                var accountType = accountTypes[i];
+
+                                var name = accountType.Name != undefined ? accountType.Name : accountTypeTitlesById[accountTypeDefinition.AccountTypeId];
+
+                                $scope.scopeModel.accountTypes.push({
+                                    AccountTypeId: accountTypeDefinition.AccountTypeId,
+                                    Name: name,
+                                    Title: accountType.Title
+                                });
                             }
                         }
+                    });
+
+                    function getAccountTypeSelectorLoadPromise() {
+                        var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        accountTypeSelectorPromiseDeferred.promise.then(function () {
+
+                            var selectorPayload = {
+                                filter: {
+                                    IncludeHiddenAccountTypes: true,
+                                    AccountBEDefinitionId: accountBEDefinitionId
+                                },
+                                selectedIds: []
+                            };
+                            if (accountTypes != undefined) {
+                                for (var index = 0; index < accountTypes.length; index++) {
+                                    selectorPayload.selectedIds.push(accountTypes[index].AccountTypeId);
+                                }
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, selectorPayload, accountTypeSelectorLoadDeferred);
+                        });
+
+                        return accountTypeSelectorLoadDeferred.promise;
                     }
 
-                    function extendAccountTypeObj(accountType) {
-                        if (accountTypeTitlesById == undefined || accountType.AccountTypeTitle != undefined)
-                            return;
-
-                        accountType.AccountTypeTitle = accountTypeTitlesById[accountType.AccountTypeId];
-                    }
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
 
-                    var accountTypes;
+                    var _accountTypes;
                     if ($scope.scopeModel.accountTypes.length > 0) {
-                        accountTypes = [];
+                        _accountTypes = [];
                         for (var i = 0; i < $scope.scopeModel.accountTypes.length; i++) {
-                            var accountType = $scope.scopeModel.accountTypes[i].Entity;
-                            accountTypes.push(accountType);
+                            var currentAccountType = $scope.scopeModel.accountTypes[i];
+                            _accountTypes.push({
+                                AccountTypeId: currentAccountType.AccountTypeId,
+                                Name: currentAccountType.Name,
+                                Title: currentAccountType.Title
+                            });
                         }
                     }
-
-                    return accountTypes;
+                    return _accountTypes
                 };
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                if (ctrl.onReady != null)
                     ctrl.onReady(api);
-                }
             }
-
-            function defineMenuActions() {
-                $scope.scopeModel.menuActions = [{
-                    name: 'Edit',
-                    clicked: editAccountType
-                }];
-            }
-            function editAccountType(accountType) {
-                var onAccountTypeUpdated = function (updatedAccountType) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.accountTypes, accountType.Entity.AccountTypeTitle, 'Entity.AccountTypeTitle');
-                    $scope.scopeModel.accountTypes[index] = { Entity: updatedAccountType };
-                };
-
-                Retail_BE_VisibilityAccountDefinitionService.editVisibilityAccountType(accountType.Entity, accountBEDefinitionId, onAccountTypeUpdated);
-            }
-
-
         }
-    }
 
-    app.directive('retailBeVisibilityaccounttypeManagement', VisibilityAccountTypeManagementDirective);
+        return directiveDefinitionObject;
+    }]);
 
-})(app);
+
+

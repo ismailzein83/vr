@@ -3,19 +3,19 @@
 <vr-row>
     <vr-columns width="1/4row">
         <vr-select on-ready="scopeModel.onSelectorReady"
-                   datasource="scopeModel.viewDefinitions"
-                   selectedvalues="scopeModel.selectedViewDefinitions"
-                   onselectitem="scopeModel.onSelectViewDefinition"
-                   ondeselectitem="scopeModel.onDeselectViewDefinition"
-                   datavaluefield="AccountViewDefinitionId"
+                   datasource="scopeModel.actionDefinitions"
+                   selectedvalues="scopeModel.selectedActionDefinitions"
+                   onselectitem="scopeModel.onSelectActionDefinition"
+                   ondeselectitem="scopeModel.onDeselectActionDefinition"
+                   datavaluefield="AccountActionDefinitionId"
                    datatextfield="Name"
-                   label="Views"
+                   label="Actions"
                    ismultipleselection
                    hideremoveicon>
         </vr-select>
     </vr-columns>
     <vr-columns width="3/4row" simplecol>
-        <vr-datagrid datasource="scopeModel.views"
+        <vr-datagrid datasource="scopeModel.actions"
                      ondeleterow="scopeModel.onDeleteRow"
                      hidegridmenu>
 

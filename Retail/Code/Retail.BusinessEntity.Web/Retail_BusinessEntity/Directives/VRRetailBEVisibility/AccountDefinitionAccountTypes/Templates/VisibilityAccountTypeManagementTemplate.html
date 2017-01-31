@@ -1,25 +1,24 @@
 ﻿
 
 <vr-row>
-    <vr-columns width="1/2row">
-        <vr-button type="Add" data-onclick="scopeModel.onAddAccountType" standalone></vr-button>
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-datagrid on-ready="scopeModel.onGridReady"
-                     datasource="scopeModel.accountTypes"
-                     ondeleterow="scopeModel.onDeleteAccountType"
-                     menuactions="scopeModel.menuActions"
-                     enabledraggablerow="true"
+    <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                    selectedvalues="scopeModel.selectedAccountTypes"
+                                    onselectitem="scopeModel.onSelectAccountType" 
+                                    ondeselectitem="scopeModel.onDeselectAccountType"
+                                    normal-col-num="3"
+                                    ismultipleselection
+                                    hideremoveicon>
+    </retail-be-accounttype-selector>
+    <vr-columns width="3/4row" simplecol>
+        <vr-datagrid datasource="scopeModel.accountTypes"
+                     ondeleterow="scopeModel.onDeleteRow"
                      hidegridmenu>
 
-            <vr-datagridcolumn field="'Entity.AccountTypeTitle'" headertext="'Account Type'" type="'Text'" widthfactor="1" disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn field="'Entity.Title'" headertext="'Title'" type="'Text'" widthfactor="1" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn field="'Name'" headertext="'Name'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Title'" disablesorting>
+                <vr-textbox value="dataItem.Title"></vr-textbox>
+            </vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
 </vr-row>
-
-
-
 

@@ -19,24 +19,26 @@ namespace Retail.BusinessEntity.Business
 
         public override VRModuleVisibilityEditorRuntime GetEditorRuntime()
         {
-            string temp;
             var accountBEDefinitionNamesById = new Dictionary<Guid, string>();
             var accountTypeTitlesById = new Dictionary<Guid, string>();
 
             var businessEntityDefinitionManager = new Vanrise.GenericData.Business.BusinessEntityDefinitionManager();
             var accountTypeManager = new AccountTypeManager();
 
-            foreach (var accountDefinitionsVisibility in AccountDefinitions)
+            if (AccountDefinitions != null)
             {
-                if (!accountBEDefinitionNamesById.TryGetValue(accountDefinitionsVisibility.Key, out temp))
-                    accountBEDefinitionNamesById.Add(accountDefinitionsVisibility.Key, businessEntityDefinitionManager.GetBusinessEntityDefinitionName(accountDefinitionsVisibility.Key));
-
-                if (accountDefinitionsVisibility.Value.AccountTypes != null)
+                foreach (var accountDefinitionsVisibility in AccountDefinitions)
                 {
-                    foreach (var accountType in accountDefinitionsVisibility.Value.AccountTypes)
+                    if (!accountBEDefinitionNamesById.ContainsKey(accountDefinitionsVisibility.Key))
+                        accountBEDefinitionNamesById.Add(accountDefinitionsVisibility.Key, businessEntityDefinitionManager.GetBusinessEntityDefinitionName(accountDefinitionsVisibility.Key));
+
+                    if (accountDefinitionsVisibility.Value.AccountTypes != null)
                     {
-                        if (!accountTypeTitlesById.TryGetValue(accountType.AccountTypeId, out temp))
-                            accountTypeTitlesById.Add(accountType.AccountTypeId, accountTypeManager.GetAccountTypeName(accountType.AccountTypeId));
+                        foreach (var accountType in accountDefinitionsVisibility.Value.AccountTypes)
+                        {
+                            if (!accountTypeTitlesById.ContainsKey(accountType.AccountTypeId))
+                                accountTypeTitlesById.Add(accountType.AccountTypeId, accountTypeManager.GetAccountTypeName(accountType.AccountTypeId));
+                        }
                     }
                 }
             }

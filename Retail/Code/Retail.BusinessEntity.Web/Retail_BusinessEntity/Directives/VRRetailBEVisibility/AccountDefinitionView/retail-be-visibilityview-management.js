@@ -1,18 +1,16 @@
-﻿(function (app) {
+﻿'use strict';
 
-    'use strict';
+app.directive('retailBeVisibilityviewManagement', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
-    VisibilityViewManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_VisibilityAccountDefinitionService'];
-
-    function VisibilityViewManagementDirective(UtilsService, VRNotificationService, Retail_BE_VisibilityAccountDefinitionService) {
-        return {
+        var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new VisibilityViewsCtor($scope, ctrl);
+                var ctor = new VisibilityView(ctrl, $scope);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -24,42 +22,38 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionViews/Templates/VisibilityViewManagementTemplate.html'
+            templateUrl: function (element, attrs) {
+                return '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionView/Templates/VisibilityViewManagementTemplate.html';
+            }
         };
 
-        function VisibilityViewsCtor($scope, ctrl) {
-            this.initializeController = initializeController;
-
-            var columnDefinitions;
-
-            var gridAPI;
+        function VisibilityView(ctrl, $scope) {
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.viewDefinitions = [];
+                $scope.scopeModel.selectedViewDefinitions = [];
                 $scope.scopeModel.views = [];
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
-                };
+                $scope.scopeModel.onSelectViewDefinition = function (selectedItem) {
 
-                $scope.scopeModel.onAddView = function () {
-                    var onViewAdded = function (addedView) {
-                        $scope.scopeModel.views.push({ Entity: addedView });
-                    };
-
-                    Retail_BE_VisibilityAccountDefinitionService.addVisibilityView(columnDefinitions, onViewAdded);
-                };
-                $scope.scopeModel.onDeleteView = function (view) {
-                    VRNotificationService.showConfirmation().then(function (confirmed) {
-                        if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.views, view.Entity.ViewTitle, 'Entity.ViewTitle');
-                            $scope.scopeModel.views.splice(index, 1);
-                        }
+                    $scope.scopeModel.views.push({
+                        AccountViewDefinitionId: selectedItem.AccountViewDefinitionId,
+                        Name: selectedItem.Name
                     });
                 };
+                $scope.scopeModel.onDeselectViewDefinition = function (deselectedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.views, deselectedItem.Name, 'Name');
+                    $scope.scopeModel.views.splice(index, 1);
+                };
 
-                defineMenuActions();
+                $scope.scopeModel.onDeleteRow = function (deletedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedViewDefinitions, deletedItem.Name, 'Name');
+                    $scope.scopeModel.selectedViewDefinitions.splice(index, 1);
+                    $scope.scopeModel.onDeselectViewDefinition(deletedItem);
+                };
+
+                defineAPI();
             }
             function defineAPI() {
                 var api = {};
@@ -67,75 +61,67 @@
                 api.load = function (payload) {
 
                     var views;
-
-                    console.log(payload);
+                    var viewDefinitions;
 
                     if (payload != undefined) {
                         views = payload.views;
-                        columnDefinitions = payload.columnDefinitions;
+                        viewDefinitions = payload.viewDefinitions;
                     }
 
-                    //Loading Views Grid
-                    if (views != undefined) {
-                        for (var index = 0 ; index < views.length; index++) {
-                            if (index != "$type") {
-                                var view = views[index];
-                                extendViewObj(view);
-                                $scope.scopeModel.views.push({ Entity: view });
+                    //Loading Selector
+                    if (viewDefinitions != undefined) {
+                        for (var i = 0; i < viewDefinitions.length; i++) {
+                            $scope.scopeModel.viewDefinitions.push(viewDefinitions[i]);
+                        }
+                        if (views != undefined) {
+                            for (var i = 0; i < views.length; i++) {
+                                var currentView = views[i];
+                                for (var j = 0; j < viewDefinitions.length; j++) {
+                                    var currentViewDefinition = viewDefinitions[j];
+                                    if (currentViewDefinition.AccountViewDefinitionId == currentView.ViewId)
+                                        $scope.scopeModel.selectedViewDefinitions.push(currentViewDefinition);
+                                }
                             }
                         }
                     }
 
-                    function extendViewObj(view) {
-                        if (columnDefinitions == undefined || view.Name != undefined)
-                            return;
+                    //Loading Grid
+                    if ($scope.scopeModel.selectedViewDefinitions != undefined) {
+                        for (var i = 0; i < $scope.scopeModel.selectedViewDefinitions.length; i++) {
+                            var viewDefinition = $scope.scopeModel.selectedViewDefinitions[i];
+                            var view = views[i];
 
-                        for (var index = 0; index < columnDefinitions.length; index++) {
-                            var currentColumnDefinition = columnDefinitions[index];
-                            if (currentColumnDefinition.FieldName == view.FieldName)
-                                view.Name = currentColumnDefinition.Name;
+                            $scope.scopeModel.views.push({
+                                AccountViewDefinitionId: viewDefinition.AccountViewDefinitionId,
+                                Name: viewDefinition.Name,
+                                Title: view.Title,
+                            });
                         }
                     }
                 };
 
                 api.getData = function () {
 
-                    var views;
+                    var _views;
                     if ($scope.scopeModel.views.length > 0) {
-                        views = [];
+                        _views = [];
                         for (var i = 0; i < $scope.scopeModel.views.length; i++) {
-                            var view = $scope.scopeModel.views[i].Entity;
-                            views.push(view);
+                            var currentView = $scope.scopeModel.views[i];
+                            _views.push({
+                                ViewId: currentView.AccountViewDefinitionId,
+                                Title: currentView.Title
+                            });
                         }
                     }
-
-                    return views;
+                    return _views;
                 };
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                if (ctrl.onReady != null)
                     ctrl.onReady(api);
-                }
             }
 
-            function defineMenuActions() {
-                $scope.scopeModel.menuActions = [{
-                    name: 'Edit',
-                    clicked: editView
-                }];
-            }
-            function editView(view) {
-                var onViewUpdated = function (updatedView) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.views, view.Entity.ViewTitle, 'Entity.ViewTitle');
-                    $scope.scopeModel.views[index] = { Entity: updatedView };
-                };
-
-                Retail_BE_VisibilityAccountDefinitionService.editVisibilityView(view.Entity, columnDefinitions, onViewUpdated);
-            }
-
-
+            this.initializeController = initializeController;
         }
-    }
 
-    app.directive('retailBeVisibilitygridcolumnManagement', VisibilityViewManagementDirective);
-
-})(app);
+        return directiveDefinitionObject;
+    }]);

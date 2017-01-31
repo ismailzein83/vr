@@ -1,18 +1,16 @@
-﻿(function (app) {
+﻿'use strict';
 
-    'use strict';
+app.directive('retailBeVisibilitygridcolumnManagement', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
-    VisibilityGridColumnManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_VisibilityAccountDefinitionService'];
-
-    function VisibilityGridColumnManagementDirective(UtilsService, VRNotificationService, Retail_BE_VisibilityAccountDefinitionService) {
-        return {
+        var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new VisibilityGridColumnsCtor($scope, ctrl);
+                var ctor = new VisibilityGridColumn(ctrl, $scope);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -24,42 +22,39 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionGridColumns/Templates/VisibilityGridColumnManagementTemplate.html'
+            templateUrl: function (element, attrs) {
+                return '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionGridColumns/Templates/VisibilityGridColumnManagementTemplate.html';
+            }
         };
 
-        function VisibilityGridColumnsCtor($scope, ctrl) {
+        function VisibilityGridColumn(ctrl, $scope) {
             this.initializeController = initializeController;
-
-            var columnDefinitions;
-
-            var gridAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.gridColumnDefinitions = [];
+                $scope.scopeModel.selectedGridColumnDefinitions = [];
                 $scope.scopeModel.gridColumns = [];
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
-                };
+                $scope.scopeModel.onSelectGridColumnDefinition = function (selectedItem) {
 
-                $scope.scopeModel.onAddGridColumn = function () {
-                    var onGridColumnAdded = function (addedGridColumn) {
-                        $scope.scopeModel.gridColumns.push({ Entity: addedGridColumn });
-                    };
-
-                    Retail_BE_VisibilityAccountDefinitionService.addVisibilityGridColumn(columnDefinitions, onGridColumnAdded);
-                };
-                $scope.scopeModel.onDeleteGridColumn = function (gridColumn) {
-                    VRNotificationService.showConfirmation().then(function (confirmed) {
-                        if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.gridColumns, gridColumn.Entity.GridColumnTitle, 'Entity.GridColumnTitle');
-                            $scope.scopeModel.gridColumns.splice(index, 1);
-                        }
+                    $scope.scopeModel.gridColumns.push({
+                        FieldName: selectedItem.FieldName,
+                        Header: selectedItem.Header
                     });
                 };
+                $scope.scopeModel.onDeselectGridColumnDefinition = function (deselectedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.gridColumns, deselectedItem.FieldName, 'FieldName');
+                    $scope.scopeModel.gridColumns.splice(index, 1);
+                };
 
-                defineMenuActions();
+                $scope.scopeModel.onDeleteRow = function (deletedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGridColumnDefinitions, deletedItem.FieldName, 'FieldName');
+                    $scope.scopeModel.selectedGridColumnDefinitions.splice(index, 1);
+                    $scope.scopeModel.onDeselectGridColumnDefinition(deletedItem);
+                };
+
+                defineAPI();
             }
             function defineAPI() {
                 var api = {};
@@ -67,74 +62,66 @@
                 api.load = function (payload) {
 
                     var gridColumns;
+                    var gridColumnDefinitions;
 
                     if (payload != undefined) {
                         gridColumns = payload.gridColumns;
-                        columnDefinitions = payload.columnDefinitions;
+                        gridColumnDefinitions = payload.gridColumnDefinitions;
                     }
 
-                    //Loading GridColumns Grid
-                    if (gridColumns != undefined) {
-                        for (var index = 0 ; index < gridColumns.length; index++) {
-                            if (index != "$type") {
-                                var gridColumn = gridColumns[index];
-                                extendGridColumnObj(gridColumn);
-                                $scope.scopeModel.gridColumns.push({ Entity: gridColumn });
+                    //Loading Selector
+                    if (gridColumnDefinitions != undefined) {
+                        for (var i = 0; i < gridColumnDefinitions.length; i++) {
+                            $scope.scopeModel.gridColumnDefinitions.push(gridColumnDefinitions[i]);
+                        }
+                        if (gridColumns != undefined) {
+                            for (var i = 0; i < gridColumns.length; i++) {
+                                var currentGridColumn = gridColumns[i];
+                                for (var j = 0; j < gridColumnDefinitions.length; j++) {
+                                    var currentGridColumnDefinition = gridColumnDefinitions[j];
+                                    if (currentGridColumnDefinition.FieldName == currentGridColumn.FieldName)
+                                        $scope.scopeModel.selectedGridColumnDefinitions.push(currentGridColumnDefinition);
+                                }
                             }
                         }
                     }
 
-                    function extendGridColumnObj(gridColumn) {
-                        if (columnDefinitions == undefined || gridColumn.Header != undefined)
-                            return;
+                    //Loading Grid
+                    if ($scope.scopeModel.selectedGridColumnDefinitions != undefined) {
+                        for (var i = 0; i < $scope.scopeModel.selectedGridColumnDefinitions.length; i++) {
+                            var gridColumnDefinition = $scope.scopeModel.selectedGridColumnDefinitions[i];
+                            var gridColumn = gridColumns[i];
 
-                        for (var index = 0; index < columnDefinitions.length; index++)
-                        {
-                            var currentColumnDefinition = columnDefinitions[index];
-                            if(currentColumnDefinition.FieldName == gridColumn.FieldName)
-                                gridColumn.Header = currentColumnDefinition.Header;
+                            $scope.scopeModel.gridColumns.push({
+                                FieldName: gridColumnDefinition.FieldName,
+                                Header: gridColumnDefinition.Header,
+                                Title: gridColumn.Title
+                            });
                         }
                     }
                 };
 
                 api.getData = function () {
 
-                    var gridColumns;
+                    var _gridColumns;
                     if ($scope.scopeModel.gridColumns.length > 0) {
-                        gridColumns = [];
+                        _gridColumns = [];
                         for (var i = 0; i < $scope.scopeModel.gridColumns.length; i++) {
-                            var gridColumn = $scope.scopeModel.gridColumns[i].Entity;
-                            gridColumns.push(gridColumn);
+                            var currentGridColumn = $scope.scopeModel.gridColumns[i];
+                            _gridColumns.push({
+                                FieldName: currentGridColumn.FieldName,
+                                Title: currentGridColumn.Title
+                            });
                         }
                     }
-
-                    return gridColumns;
+                    return _gridColumns
                 };
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                if (ctrl.onReady != null)
                     ctrl.onReady(api);
-                }
             }
-
-            function defineMenuActions() {
-                $scope.scopeModel.menuActions = [{
-                    name: 'Edit',
-                    clicked: editGridColumn
-                }];
-            }
-            function editGridColumn(gridColumn) {
-                var onGridColumnUpdated = function (updatedGridColumn) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.gridColumns, gridColumn.Entity.GridColumnTitle, 'Entity.GridColumnTitle');
-                    $scope.scopeModel.gridColumns[index] = { Entity: updatedGridColumn };
-                };
-
-                Retail_BE_VisibilityAccountDefinitionService.editVisibilityGridColumn(gridColumn.Entity, columnDefinitions, onGridColumnUpdated);
-            }
-
-
         }
-    }
 
-    app.directive('retailBeVisibilitygridcolumnManagement', VisibilityGridColumnManagementDirective);
+        return directiveDefinitionObject;
+    }]);
 
-})(app);

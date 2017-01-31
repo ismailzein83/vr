@@ -19,14 +19,17 @@
         var accountBEDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
         var accountBEDefinitionSelectionChangedDeferred;
 
-        var visibilityAccountTypeDirectiveAPI;
-        var visibilityAccountTypeDirectiveReady = UtilsService.createPromiseDeferred();
-
         var visibilityGridColumnDirectiveAPI;
         var visibilityGridColumnDirectiveReady = UtilsService.createPromiseDeferred();
 
         var visibilityViewDirectiveAPI;
         var visibilityViewDirectiveReady = UtilsService.createPromiseDeferred();
+
+        var visibilityActionDirectiveAPI;
+        var visibilityActionDirectiveReady = UtilsService.createPromiseDeferred();
+
+        var visibilityAccountTypeDirectiveAPI;
+        var visibilityAccountTypeDirectiveReady = UtilsService.createPromiseDeferred();
 
 
         loadParameters();
@@ -50,10 +53,6 @@
                 accountBEDefinitionSelectorAPI = api;
                 accountBEDefinitionSelectorDeferred.resolve();
             };
-            $scope.scopeModel.onVisibilityAccountTypeDirectiveReady = function (api) {
-                visibilityAccountTypeDirectiveAPI = api;
-                visibilityAccountTypeDirectiveReady.resolve();
-            };
             $scope.scopeModel.onVisibilityGridColumnDirectiveReady = function (api) {
                 visibilityGridColumnDirectiveAPI = api;
                 visibilityGridColumnDirectiveReady.resolve();
@@ -61,6 +60,14 @@
             $scope.scopeModel.onVisibilityViewDirectiveReady = function (api) {
                 visibilityViewDirectiveAPI = api;
                 visibilityViewDirectiveReady.resolve();
+            };
+            $scope.scopeModel.onVisibilityActionDirectiveReady = function (api) {
+                visibilityActionDirectiveAPI = api;
+                visibilityActionDirectiveReady.resolve();
+            };
+            $scope.scopeModel.onVisibilityAccountTypeDirectiveReady = function (api) {
+                visibilityAccountTypeDirectiveAPI = api;
+                visibilityAccountTypeDirectiveReady.resolve();
             };
 
             $scope.scopeModel.onAccountBEDefinitionSelectionChanged = function (selectedAccountBEDefinition) {
@@ -124,8 +131,8 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelector, loadVisibilityAccountTypeDirective, loadVisibilityGridColumnDirective,
-                        loadVisibilityViewDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountDefinitionSelector, loadVisibilityGridColumnDirective, loadVisibilityViewDirective,
+                        loadVisibilityActionDirective, loadVisibilityAccountTypeDirective])
                 .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -164,23 +171,6 @@
 
             return accountBEDefinitionLoadDeferred.promise;
         }
-        function loadVisibilityAccountTypeDirective() {
-            if (!isEditMode)
-                return;
-
-            var visibilityAccountTypeLoadDeferred = UtilsService.createPromiseDeferred();
-
-            UtilsService.waitMultiplePromises([visibilityAccountTypeDirectiveReady.promise, accountBEDefinitionSelectionChangedDeferred.promise]).then(function () {
-                var visibilityAccountTypeDirectivePayload = {
-                    accountBEDefinitionId: accountBEDefinitionId,
-                    accountTypes: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.AccountTypes : undefined,
-                    accountTypeTitlesById: retailBEVisibilityEditorRuntime != undefined ? retailBEVisibilityEditorRuntime.AccountTypeTitlesById : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(visibilityAccountTypeDirectiveAPI, visibilityAccountTypeDirectivePayload, visibilityAccountTypeLoadDeferred);
-            });
-
-            return visibilityAccountTypeLoadDeferred.promise;
-        }
         function loadVisibilityGridColumnDirective() {
             if (!isEditMode)
                 return;
@@ -189,7 +179,7 @@
 
             UtilsService.waitMultiplePromises([visibilityGridColumnDirectiveReady.promise, accountBEDefinitionSelectionChangedDeferred.promise]).then(function () {
                 var visibilityGridColumnDirectivePayload = {
-                    columnDefinitions: (accountBEDefinitionSettings && accountBEDefinitionSettings.GridDefinition) ? accountBEDefinitionSettings.GridDefinition.ColumnDefinitions: undefined,
+                    gridColumnDefinitions: (accountBEDefinitionSettings && accountBEDefinitionSettings.GridDefinition) ? accountBEDefinitionSettings.GridDefinition.ColumnDefinitions: undefined,
                     gridColumns: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.GridColumns : undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(visibilityGridColumnDirectiveAPI, visibilityGridColumnDirectivePayload, visibilityGridColumnLoadDeferred);
@@ -212,6 +202,39 @@
             });
 
             return visibilityViewLoadDeferred.promise;
+        }
+        function loadVisibilityActionDirective() {
+            if (!isEditMode)
+                return;
+
+            var visibilityActionLoadDeferred = UtilsService.createPromiseDeferred();
+
+            UtilsService.waitMultiplePromises([visibilityViewDirectiveReady.promise, accountBEDefinitionSelectionChangedDeferred.promise]).then(function () {
+                var visibilityActionDirectivePayload = {
+                    actionDefinitions: accountBEDefinitionSettings != undefined ? accountBEDefinitionSettings.ActionDefinitions : undefined,
+                    actions: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.Actions : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(visibilityActionDirectiveAPI, visibilityActionDirectivePayload, visibilityActionLoadDeferred);
+            });
+
+            return visibilityActionLoadDeferred.promise;
+        }
+        function loadVisibilityAccountTypeDirective() {
+            if (!isEditMode)
+                return;
+
+            var visibilityAccountTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+            UtilsService.waitMultiplePromises([visibilityAccountTypeDirectiveReady.promise, accountBEDefinitionSelectionChangedDeferred.promise]).then(function () {
+                var visibilityAccountTypeDirectivePayload = {
+                    accountBEDefinitionId: accountBEDefinitionId,
+                    accountTypes: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.AccountTypes : undefined,
+                    accountTypeTitlesById: retailBEVisibilityEditorRuntime != undefined ? retailBEVisibilityEditorRuntime.AccountTypeTitlesById : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(visibilityAccountTypeDirectiveAPI, visibilityAccountTypeDirectivePayload, visibilityAccountTypeLoadDeferred);
+            });
+
+            return visibilityAccountTypeLoadDeferred.promise;
         }
 
         function insert() {
@@ -237,8 +260,10 @@
                 Title: $scope.scopeModel.title,
                 AccountBEDefinitionId: selectedAccountBEDefinition != undefined ? selectedAccountBEDefinition.BusinessEntityDefinitionId : undefined,
                 AccountBEDefinitionName: selectedAccountBEDefinition != undefined ? selectedAccountBEDefinition.Name : undefined,
-                AccountTypes: visibilityAccountTypeDirectiveAPI.getData(),
-                GridColumns: visibilityGridColumnDirectiveAPI.getData()
+                GridColumns: visibilityGridColumnDirectiveAPI.getData(),
+                Views: visibilityViewDirectiveAPI.getData(),
+                Actions: visibilityActionDirectiveAPI.getData(),
+                AccountTypes: visibilityAccountTypeDirectiveAPI.getData()
             };
         }
     }

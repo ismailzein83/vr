@@ -198,6 +198,7 @@
     <Compile Include="BalanceManager.cs" />
     <Compile Include="VRRetailBEVisibility\VRRetailBEVisibility.cs" />
     <Compile Include="VRRetailBEVisibility\VRRetailBEVisibilityEditorRuntime.cs" />
+    <Compile Include="VRRetailBEVisibility\VRRetailBEVisibilityManager.cs" />
     <Compile Include="ZoneManager.cs" />
     <Compile Include="PackageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
