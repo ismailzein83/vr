@@ -65,12 +65,12 @@
   <ItemGroup>
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\AddMoveCodeToPendingClosedZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\AllCodesInZoneClosedCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CloseCodeNotExistAndEffectiveCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessingCodes\CloseCodeNotExistAndEffectiveCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ClosePendingClosedCodeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ClosePendingEffectiveCodeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEffectiveBeforeZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeWithDifferentCountryCodeGroupCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\MoveCodeNotExistAndEffectiveCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessingCodes\MoveCodeNotExistAndEffectiveCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\MoveCodeToPendingEffectiveZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\WrongMoveCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\InvalidStatusCondition.cs" />
