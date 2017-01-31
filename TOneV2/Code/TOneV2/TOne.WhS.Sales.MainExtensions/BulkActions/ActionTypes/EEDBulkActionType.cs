@@ -30,7 +30,7 @@ namespace TOne.WhS.Sales.MainExtensions
 			if (context.SaleZone.BED > EED || context.SaleZone.EED.HasValue)
 				return false;
 
-			if (context.ZoneDraft == null || context.ZoneDraft.NewRates == null || !context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue))
+			if (context.ZoneDraft != null && context.ZoneDraft.NewRates != null && context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue))
 				return false;
 
 			DateTime effectiveOn = DateTime.Today;
