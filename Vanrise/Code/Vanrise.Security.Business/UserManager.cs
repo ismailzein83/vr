@@ -14,7 +14,7 @@ using Vanrise.Common.Business;
 
 namespace Vanrise.Security.Business
 {
-    public class UserManager
+    public class UserManager : IUserManager
     {
         static TimeSpan s_tempPasswordValidity;
 

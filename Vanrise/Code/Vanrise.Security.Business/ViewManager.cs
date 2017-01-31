@@ -9,7 +9,7 @@ using Vanrise.Security.Entities;
 using Vanrise.Common;
 namespace Vanrise.Security.Business
 {
-    public class ViewManager
+    public class ViewManager : IViewManager
     {
      
         #region ctor

@@ -55,6 +55,10 @@
     <Compile Include="BusinessEntity\BusinessEntityNode.cs" />
     <Compile Include="BusinessEntity\BusinessEntityModule.cs" />
     <Compile Include="BusinessEntity\BusinessEntityQuery.cs" />
+    <Compile Include="BusinessManagers\BEManagerFactory.cs" />
+    <Compile Include="BusinessManagers\IBEManager.cs" />
+    <Compile Include="BusinessManagers\IUserManager.cs" />
+    <Compile Include="BusinessManagers\IViewManager.cs" />
     <Compile Include="ChangedPasswordObject.cs" />
     <Compile Include="Cloud\CloudApplicationIdentification.cs" />
     <Compile Include="Cloud\CloudApplicationTenant.cs" />
@@ -63,7 +67,7 @@
     <Compile Include="Cloud\ICloudApplicationService.cs" />
     <Compile Include="Cloud\ICloudService.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="ContextFactory.cs" />
+    <Compile Include="BusinessManagers\ContextFactory.cs" />
     <Compile Include="CredentialsInput.cs" />
     <Compile Include="Group\GroupFilter.cs" />
     <Compile Include="Group\GroupInfo.cs" />

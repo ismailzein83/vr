@@ -137,6 +137,8 @@ namespace Vanrise.GenericData.QueueActivators
     {
         public string RecordName { get; set; }
 
+        public string GroupingFieldName { get; set; }
+
         public List<string> NextStages { get; set; }
     }
 }
