@@ -9,7 +9,6 @@ using Vanrise.GenericData.Entities;
 using System.Drawing;
 using System.IO;
 using Vanrise.Security.Entities;
-using Vanrise.Security.Business;
 namespace Vanrise.Common.Business
 {
     public class UserActionAuditManager
@@ -75,11 +74,8 @@ namespace Vanrise.Common.Business
         {
             UserActionAuditDetail userActionAuditDetail = new UserActionAuditDetail();
             userActionAuditDetail.Entity = userActionAudit;
-            User user = null;
-            if(userActionAudit.UserId.HasValue)
-                 user = new UserManager().GetUserbyId(userActionAudit.UserId.Value);
-            if (user != null)
-                userActionAuditDetail.UserName = user.Name;
+           if (userActionAudit.UserId.HasValue)
+                userActionAuditDetail.UserName = BEManagerFactory.GetManager<IUserManager>().GetUserName(userActionAudit.UserId.Value);
 
             return userActionAuditDetail;
         }

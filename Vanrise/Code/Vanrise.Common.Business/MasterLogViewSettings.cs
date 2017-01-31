@@ -18,7 +18,7 @@ namespace Vanrise.Common.Business
 
         public override bool DoesUserHaveAccess(IViewUserAccessContext context)
         {
-            return new MasterLogManager().DoesUserHaveViewAccess(context.UserId, this.Items);
+            return new MasterLogManager().DoesUserHaveViewAccess(this.Items);
         }
     }
 

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Vanrise.Common;
-using Vanrise.Security.Business;
 using Vanrise.Common.Business;
 
 namespace Vanrise.Web.App_Start

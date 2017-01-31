@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
-using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 namespace Vanrise.Common.Business
 {
@@ -25,7 +24,7 @@ namespace Vanrise.Common.Business
                 if (generalSettingData.UIData.DefaultViewId.HasValue)
                 {
                     string defaultURL;
-                    View defaultView = new ViewManager().GetView(generalSettingData.UIData.DefaultViewId.Value);
+                    View defaultView = BEManagerFactory.GetManager<IViewManager>().GetView(generalSettingData.UIData.DefaultViewId.Value);
                     if (defaultView.Settings != null)
                         defaultURL = defaultView.Settings.GetURL(defaultView);
                     else
