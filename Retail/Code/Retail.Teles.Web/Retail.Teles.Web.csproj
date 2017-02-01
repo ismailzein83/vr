@@ -138,11 +138,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Teles\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Teles\Directives\Extensions\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelesaccount.js" />
+    <Content Include="Retail_Teles\Directives\Extensions\MappingTelesAccountAction\Templates\MappingTelesAccountActionSettingsTemplate.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Retail_Teles\APIServices\" />
-    <Folder Include="Retail_Teles\Directives\" />
     <Folder Include="Retail_Teles\Services\" />
     <Folder Include="Retail_Teles\Views\" />
   </ItemGroup>
