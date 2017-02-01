@@ -155,7 +155,7 @@ namespace Vanrise.GenericData.Business
         public string GetBusinessEntityNullDisplayText(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
-            return beDefinition != null && beDefinition.Settings  != null ? beDefinition.Settings.NullDisplayText : null;
+            return beDefinition != null && beDefinition.Settings != null ? beDefinition.Settings.NullDisplayText : null;
         }
         public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
         {
@@ -166,17 +166,6 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Methods
-
-        private Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
-        {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBusinessEntityDefinitions",
-                () =>
-                {
-                    IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
-                    IEnumerable<BusinessEntityDefinition> beDefinitions = dataManager.GetBusinessEntityDefinitions();
-                    return beDefinitions.ToDictionary(beDefinition => beDefinition.BusinessEntityDefinitionId, beDefinition => beDefinition);
-                });
-        }
 
         private bool CheckIfFilterIsMatch(BusinessEntityDefinition entityDefinition, List<IBusinessEntityDefinitionFilter> filters)
         {
@@ -191,7 +180,29 @@ namespace Vanrise.GenericData.Business
 
         #endregion
 
-        #region Private Classes
+        #region Caching
+
+        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+        CacheManager GetCacheManager()
+        {
+            return s_cacheManager;
+        }
+
+        public T GetCachedOrCreate<T>(Object cacheName, Func<T> createObject)
+        {
+            return GetCacheManager().GetOrCreateObject(cacheName, createObject);
+        }
+
+        private Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
+        {
+            return GetCacheManager().GetOrCreateObject("GetBusinessEntityDefinitions",
+                () =>
+                {
+                    IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
+                    IEnumerable<BusinessEntityDefinition> beDefinitions = dataManager.GetBusinessEntityDefinitions();
+                    return beDefinitions.ToDictionary(beDefinition => beDefinition.BusinessEntityDefinitionId, beDefinition => beDefinition);
+                });
+        }
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
