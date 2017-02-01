@@ -5,11 +5,10 @@
 					   label="Cost Column"
 					   datasource="scopeModel.costCalculationMethods"
 					   selectedvalues="scopeModel.selectedCostCalculationMethod"
-					   onselectitem="scopeModel.onBulkActionChanged"
+					   onselectionchanged="scopeModel.onBulkActionChanged"
 					   datavaluefield="ConfigId"
 					   datatextfield="Title"
-					   isrequired="scopeModel.isCostCalculationMethodRequired()"
-					   hideremoveicon="rateBulkActionTypeCtrl.isrequired">
+					   isrequired="scopeModel.isCostCalculationMethodRequired()">
 			</vr-select>
 		</vr-columns>
 	</div>
