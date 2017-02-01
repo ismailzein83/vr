@@ -17,13 +17,11 @@ namespace Vanrise.Common
                 // New code:
                 client.BaseAddress = new Uri(url);
                 if (headers != null && headers.Count > 0)
-                    AddHeaders(client, headers);               
+                    AddHeaders(client, headers);
                 var responseTask = client.PostAsJsonAsync(actionPath, request);
                 responseTask.Wait();
                 if (responseTask.Exception != null)
                     throw responseTask.Exception;
-                if (responseTask.Result.StatusCode != System.Net.HttpStatusCode.OK)
-                    throw new Exception(String.Format("Error occured when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
                 if (responseTask.Result.IsSuccessStatusCode)
                 {
                     var rsltTask = responseTask.Result.Content.ReadAsAsync<Q>();
@@ -32,8 +30,38 @@ namespace Vanrise.Common
                         throw rsltTask.Exception;
                     return rsltTask.Result;
                 }
+                else
+                {
+                    throw new Exception(String.Format("Error occured when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
+                }
             }
-            return default(Q);
+        }
+
+        public static Q Put<T, Q>(string url, string actionPath, T request, Dictionary<string, string> headers = null)
+        {
+            using (var client = new HttpClient())
+            {
+                // New code:
+                client.BaseAddress = new Uri(url);
+                if (headers != null && headers.Count > 0)
+                    AddHeaders(client, headers);
+                var responseTask = client.PutAsJsonAsync(actionPath, request);
+                responseTask.Wait();
+                if (responseTask.Exception != null)
+                    throw responseTask.Exception;
+                if (responseTask.Result.IsSuccessStatusCode)
+                {
+                    var rsltTask = responseTask.Result.Content.ReadAsAsync<Q>();
+                    rsltTask.Wait();
+                    if (rsltTask.Exception != null)
+                        throw rsltTask.Exception;
+                    return rsltTask.Result;
+                }
+                else
+                {
+                    throw new Exception(String.Format("Error occured when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
+                }
+            }
         }
 
         public static T Get<T>(string url, string actionPath, Dictionary<string, string> headers = null)
@@ -48,8 +76,6 @@ namespace Vanrise.Common
                 responseTask.Wait();
                 if (responseTask.Exception != null)
                     throw responseTask.Exception;
-                if (responseTask.Result.StatusCode != System.Net.HttpStatusCode.OK)
-                    throw new Exception(String.Format("Error occured when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
                 if (responseTask.Result.IsSuccessStatusCode)
                 {
                     var rsltTask = responseTask.Result.Content.ReadAsAsync<T>();
@@ -58,8 +84,11 @@ namespace Vanrise.Common
                         throw rsltTask.Exception;
                     return rsltTask.Result;
                 }
+                else
+                {
+                    throw new Exception(String.Format("Error occured when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
+                }
             }
-            return default(T);
         }
 
         private static void AddHeaders(HttpClient client, Dictionary<string, string> headers)
