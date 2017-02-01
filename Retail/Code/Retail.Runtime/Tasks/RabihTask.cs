@@ -26,7 +26,7 @@ namespace Retail.Runtime.Tasks
         public void Execute()
         {
 
-            UpdateUsageBalance();
+            //UpdateUsageBalance();
             //var str = GetSerialisedSettings();
 
             var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
