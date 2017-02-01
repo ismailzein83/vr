@@ -419,12 +419,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
 		private RoutingProductInfo RoutingProductInfoMapper(RoutingProduct routingProduct)
 		{
-			return new RoutingProductInfo()
+			var routingProductInfo = new RoutingProductInfo()
 			{
 				RoutingProductId = routingProduct.RoutingProductId,
 				Name = routingProduct.Name,
 				SellingNumberPlanId = routingProduct.SellingNumberPlanId
 			};
+			if (routingProduct.Settings == null)
+				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of RoutingProduct '{0}' were not found", routingProduct.RoutingProductId));
+			routingProductInfo.IsDefinedForAllZones = (routingProduct.Settings.ZoneRelationType == RoutingProductZoneRelationType.AllZones);
+			return routingProductInfo;
 		}
 
 		private RoutingProductDetail RoutingProductDetailMapper(RoutingProduct routingProduct)

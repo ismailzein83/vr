@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService, VRNotificationService) {
 	return {
 		restrict: "E",
 		scope: {
@@ -39,6 +39,8 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 			};
 
 			$scope.scopeModel.onRoutingProductSelected = function (selectedRoutingProduct) {
+				if (selectedRoutingProduct.IsDefinedForAllZones === false)
+					VRNotificationService.showInformation("Routing product '" + selectedRoutingProduct.Name + "' is defined for specific zones");
 				WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
 			};
 		}
@@ -92,6 +94,7 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 	function getTemplate(attrs) {
 		return '<vr-columns colnum="{{ctrl.normalColNum}}">\
 					<vr-whs-be-routingproduct-selector on-ready="scopeModel.onSelectorReady"\
+						selectedvalues="scopeModel.selectedRoutingProduct"\
 						onselectitem="scopeModel.onRoutingProductSelected"\
 						isrequired="ctrl.isrequired"\
 						hideremoveicon="ctrl.isrequired">\
