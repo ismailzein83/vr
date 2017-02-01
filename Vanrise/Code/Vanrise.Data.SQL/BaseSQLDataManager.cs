@@ -102,11 +102,11 @@ namespace Vanrise.Data.SQL
             return rowsAffected;
         }
 
-        protected int ExecuteNonQueryText(string cmdText, Action<DbCommand> prepareCommand)
+        protected int ExecuteNonQueryText(string cmdText, Action<DbCommand> prepareCommand, int? commandTimeoutInSeconds = null)
         {
             int rowsAffected;
             var db = CreateDatabase();
-            using (var cmd = CreateCommand(db, cmdText))
+            using (var cmd = CreateCommand(db, cmdText, commandTimeoutInSeconds))
             {
                 if (prepareCommand != null)
                     prepareCommand(cmd);
@@ -539,10 +539,10 @@ namespace Vanrise.Data.SQL
             return db;
         }
 
-        private DbCommand CreateCommand(SqlDatabase db, string sql)
+        private DbCommand CreateCommand(SqlDatabase db, string sql, int? commandTimeoutInSeconds = null)
         {
             var cmd = db.GetSqlStringCommand(sql);
-            cmd.CommandTimeout = 600;
+            cmd.CommandTimeout = commandTimeoutInSeconds.HasValue ? commandTimeoutInSeconds.Value : 600;
             return cmd;
         }
 
