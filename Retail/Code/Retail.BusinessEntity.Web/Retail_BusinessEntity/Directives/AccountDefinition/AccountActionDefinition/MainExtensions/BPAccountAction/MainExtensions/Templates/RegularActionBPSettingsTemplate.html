@@ -1,0 +1,9 @@
+﻿<vr-row>
+    <vr-tabs>
+        <vr-tab header="'Provisioner'">
+            <span ng-if="scopeModel.selectedExtensionConfig  != undefined">
+                <vr-directivewrapper directive="scopeModel.selectedExtensionConfig.RuntimeEditor" on-ready="scopeModel.onProvisionerRuntimeSettingReady" isrequired="true"></vr-directivewrapper>
+            </span>
+        </vr-tab>
+    </vr-tabs>
+</vr-row>

@@ -10,7 +10,6 @@ namespace Retail.BusinessEntity.Entities
     public class ActionBPDefinitionConfig:ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "Retail_BE_ActionBPDefinition";
-        public string DefinitionEditor { get; set; }
-        public string RuntimeEditor { get; set; }
+        public string Editor { get; set; }
     }
 }

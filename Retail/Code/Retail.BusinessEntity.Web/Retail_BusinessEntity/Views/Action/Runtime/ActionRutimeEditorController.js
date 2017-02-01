@@ -23,16 +23,17 @@
                 accountId = parameters.accountId;
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountActionDefinition = parameters.accountActionDefinition;
+
+               
                 onActionExecuted = parameters.onActionExecuted;
             }
         }
 
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.selectedEditor = accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings.RuntimeEditor;
             $scope.scopeModel.extensionConfigs = [];
 
-            $scope.scopeModel.selectedExtensionConfig;
 
             $scope.scopeModel.onDirectiveReady = function (api) {
                 directiveAPI = api;
@@ -82,7 +83,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadDirective, loadActionBPDefinitionExtensionConfigs]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -94,17 +95,6 @@
             $scope.title = actionDefinitionName;
         }
 
-        function loadActionBPDefinitionExtensionConfigs() {
-            return Retail_BE_ActionDefinitionAPIService.GetActionBPDefinitionExtensionConfigs().then(function (response) {
-                if (response != undefined) {
-                    for (var i = 0; i < response.length; i++) {
-                        $scope.scopeModel.extensionConfigs.push(response[i]);
-                    }
-                    if (accountActionDefinition != undefined && accountActionDefinition.ActionDefinitionSettings != undefined && accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings != undefined)
-                        $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
-                }
-            });
-        }
 
         function loadDirective() {
             if (accountActionDefinition != undefined && accountActionDefinition.ActionDefinitionSettings != undefined && accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings != undefined) {

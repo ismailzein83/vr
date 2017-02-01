@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/Action/Runtime/ActionBPRuntime/Templates/RegularActionBPSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/MainExtensions/BPAccountAction/MainExtensions/Templates/RegularActionBPSettingsTemplate.html"
 
         };
         function RegularActionbpdefinitionRuntimesettings($scope, ctrl, $attrs) {

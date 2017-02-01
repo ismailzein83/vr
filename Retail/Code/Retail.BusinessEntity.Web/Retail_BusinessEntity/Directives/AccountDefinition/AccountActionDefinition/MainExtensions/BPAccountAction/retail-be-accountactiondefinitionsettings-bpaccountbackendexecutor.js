@@ -22,6 +22,7 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccountbackendexecutor',
             this.initializeController = initializeController;
             var bPDefinitionSettingsApi;
             var bPDefinitionSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -37,11 +38,15 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccountbackendexecutor',
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var accountActionDefinitionSettings;
+                    var accountActionBackendExecutorEntity;
+
                     if (payload != undefined)
                     {
-                        accountActionDefinitionSettings = payload.accountActionDefinitionSettings;
+                        accountActionDefinitionSettings = payload.actionDefinitionSettings;
+                        accountActionBackendExecutorEntity = payload.accountActionBackendExecutorEntity;
+                        if (accountActionDefinitionSettings != undefined && accountActionDefinitionSettings.BPDefinitionSettings != undefined)
+                            $scope.scopeModel.bpAccountActionRuntimeEditor = accountActionDefinitionSettings.BPDefinitionSettings.RuntimeEditor;
                     }
                     var promises = [];
 
@@ -52,7 +57,14 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccountbackendexecutor',
                         var bPDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 
                         bPDefinitionSettingsPromiseDeferred.promise.then(function () {
-                            var payloadBPDefinition = accountActionDefinitionSettings != undefined ? { bpDefinitionSettings: accountActionDefinitionSettings.BPDefinitionSettings } : undefined;
+                            var payloadBPDefinition = {};
+                            if (accountActionBackendExecutorEntity != undefined)
+                            {
+                                payloadBPDefinition.vrActionEntity = { ActionBPSettings: accountActionBackendExecutorEntity.BPSettings };
+                            }
+                            if (accountActionDefinitionSettings != undefined) {
+                                payloadBPDefinition.bpDefinitionSettings = accountActionDefinitionSettings.BPDefinitionSettings;
+                            }
                             VRUIUtilsService.callDirectiveLoad(bPDefinitionSettingsApi, payloadBPDefinition, bPDefinitionSettingsLoadDeferred);
                         });
 

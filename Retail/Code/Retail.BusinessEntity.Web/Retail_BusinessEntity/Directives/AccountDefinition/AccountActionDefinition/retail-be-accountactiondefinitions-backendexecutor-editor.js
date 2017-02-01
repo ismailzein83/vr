@@ -42,7 +42,7 @@ app.directive('retailBeAccountactiondefinitionsBackendexecutorEditor', ['UtilsSe
 
 
             var backendExecutorSettingEditorAPI;
-            var backendExecutorSettingEditorReadyDeferred = UtilsService.createPromiseDeferred();
+            var backendExecutorSettingEditorReadyDeferred;
 
             var accountActionBackendExecutorEntity;
 
@@ -57,27 +57,19 @@ app.directive('retailBeAccountactiondefinitionsBackendexecutorEditor', ['UtilsSe
                 $scope.scopeModel.onAccountActionDefinitionSelectionChanged = function (value) {
                     if (value != undefined)
                     {
-                        if (selectedAccountActionDefinitionSelectorReadyDeferred != undefined)
-                            selectedAccountActionDefinitionSelectorReadyDeferred.resolve();
-                        else
-                        {
-                            getAccountActionDefinition(value.AccountActionDefinitionId).then(function () {
-                                if ($scope.scopeModel.backendExecutorSettingEditor != undefined)
-                                {
-                                    $scope.scopeModel.isLoadingDirective = true;
-                                    loadBackendExecutorSetting().finally(function () {
-                                        $scope.scopeModel.isLoadingDirective = false;
-                                    });
-                                }
-                            });
-                        }
-                      
+                        getAccountActionDefinition(value.AccountActionDefinitionId);
                     }
                 };
 
                 $scope.scopeModel.onBackendExecutorSettingEditorReady = function (api) {
                     backendExecutorSettingEditorAPI = api;
-                    backendExecutorSettingEditorReadyDeferred.resolve();
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    var backendExecutorSettingEditorPayload = {
+                        actionDefinitionSettings: accountActionDefinitionEntity.ActionDefinitionSettings
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, backendExecutorSettingEditorAPI, backendExecutorSettingEditorPayload, setLoader, backendExecutorSettingEditorReadyDeferred);
                 };
 
                 defineAPI();
@@ -92,37 +84,46 @@ app.directive('retailBeAccountactiondefinitionsBackendexecutorEditor', ['UtilsSe
                         accountBEDefinitionId = payload.accountBEDefinitionId;
 
                         accountActionBackendExecutorEntity = payload.accountActionBackendExecutorEntity;
+
                         if (accountActionBackendExecutorEntity != undefined) {
-                            var promiseDeferred = UtilsService.createPromiseDeferred();
-                            getAccountActionDefinition(accountActionBackendExecutorEntity.ActionDefinitionId).then(function () {
-                                if($scope.scopeModel.backendExecutorSettingEditor  != undefined)
-                                {
-                                    loadBackendExecutorSetting(accountActionBackendExecutorEntity).then(function () {
-                                        promiseDeferred.resolve();
-                                    });
-                                }else
-                                {
-                                    promiseDeferred.resolve();
-                                }
-                            });
-                            promises.push(promiseDeferred.promise);
+                            promises.push(getAccountActionDefinition(accountActionBackendExecutorEntity.ActionDefinitionId));
+                            backendExecutorSettingEditorReadyDeferred = UtilsService.createPromiseDeferred();
+                            function loadBackendExecutorSetting() {
+                                var backendExecutorSettingEditorLoadDeferred = UtilsService.createPromiseDeferred();
+                                backendExecutorSettingEditorReadyDeferred.promise.then(function () {
+                                    backendExecutorSettingEditorReadyDeferred = undefined;
+                                    var backendExecutorSettingEditorPayload = {
+                                        accountActionBackendExecutorEntity: accountActionBackendExecutorEntity,
+                                        actionDefinitionSettings: accountActionDefinitionEntity.ActionDefinitionSettings
+                                    };
+                                    VRUIUtilsService.callDirectiveLoad(backendExecutorSettingEditorAPI, backendExecutorSettingEditorPayload, backendExecutorSettingEditorLoadDeferred);
+                                });
+                                return backendExecutorSettingEditorLoadDeferred.promise;
+                            }
+
+                            promises.push(loadBackendExecutorSetting());
+                          
                         }
                     }
 
-                    var accountActionDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    accountActionDefinitionSelectorReadyDeferred.promise.then(function () {
-                        var accountActionDefinitionSelectorPayload = {
-                            accountBEDefinitionId: accountBEDefinitionId,
-                            filter: {
-                                VisibleInBalanceAlertRule:false
-                            },
-                        };
-                        if (accountActionBackendExecutorEntity) {
-                            accountActionDefinitionSelectorPayload.selectedIds = accountActionBackendExecutorEntity.ActionDefinitionId;
-                        }
-                        VRUIUtilsService.callDirectiveLoad(accountActionDefinitionAPI, accountActionDefinitionSelectorPayload, accountActionDefinitionSelectorLoadDeferred);
-                    });
-                    promises.push(accountActionDefinitionSelectorLoadDeferred.promise);
+                    function loadAccountActionDefinitionSelector() {
+                        var accountActionDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        accountActionDefinitionSelectorReadyDeferred.promise.then(function () {
+                            var accountActionDefinitionSelectorPayload = {
+                                accountBEDefinitionId: accountBEDefinitionId,
+                                filter: {
+                                    VisibleInBalanceAlertRule: true
+                                },
+                            };
+                            if (accountActionBackendExecutorEntity) {
+                                accountActionDefinitionSelectorPayload.selectedIds = accountActionBackendExecutorEntity.ActionDefinitionId;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(accountActionDefinitionAPI, accountActionDefinitionSelectorPayload, accountActionDefinitionSelectorLoadDeferred);
+                        });
+                        return accountActionDefinitionSelectorLoadDeferred.promise;
+                    }
+                 
+                    promises.push(loadAccountActionDefinitionSelector());
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
@@ -137,18 +138,7 @@ app.directive('retailBeAccountactiondefinitionsBackendexecutorEditor', ['UtilsSe
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            function loadBackendExecutorSetting(accountActionBackendExecutorEntity)
-            {
-                var backendExecutorSettingEditorLoadDeferred = UtilsService.createPromiseDeferred();
-                backendExecutorSettingEditorReadyDeferred.promise.then(function () {
-                    var backendExecutorSettingEditorPayload = {
-                        accountActionBackendExecutorEntity: accountActionBackendExecutorEntity,
-                        actionDefinitionSettings: accountActionDefinitionEntity.ActionDefinitionSettings
-                    };
-                    VRUIUtilsService.callDirectiveLoad(backendExecutorSettingEditorAPI, backendExecutorSettingEditorPayload, backendExecutorSettingEditorLoadDeferred);
-                });
-                return backendExecutorSettingEditorLoadDeferred.promise;
-            }
+         
             function getAccountActionDefinition(accountActionDefinitionId)
             {
                return Retail_BE_AccountBEDefinitionAPIService.GetAccountActionDefinition(accountBEDefinitionId, accountActionDefinitionId).then(function (response) {

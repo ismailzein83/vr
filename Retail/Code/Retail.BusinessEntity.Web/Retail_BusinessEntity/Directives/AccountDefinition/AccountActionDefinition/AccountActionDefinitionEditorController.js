@@ -68,6 +68,9 @@
                 if (accountActionDefinitionEntity == undefined)
                     return;
                 $scope.scopeModel.name = accountActionDefinitionEntity.Name;
+                $scope.scopeModel.visibleInBalanceAlertRule = accountActionDefinitionEntity.VisibleInBalanceAlertRule;
+                $scope.scopeModel.visibleInActionMenu = accountActionDefinitionEntity.VisibleInActionMenu;
+
             }
             function loadSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -126,7 +129,9 @@
                 AccountActionDefinitionId: accountActionDefinitionEntity != undefined ? accountActionDefinitionEntity.AccountActionDefinitionId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
                 ActionDefinitionSettings: settingsDirectiveAPI.getData(),
-                AvailabilityCondition: accountConditionSelectiveAPI.getData()
+                AvailabilityCondition: accountConditionSelectiveAPI.getData(),
+                VisibleInBalanceAlertRule: $scope.scopeModel.visibleInBalanceAlertRule,
+                VisibleInActionMenu: $scope.scopeModel.visibleInActionMenu,
             };
         }
     }

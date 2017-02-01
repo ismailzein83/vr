@@ -1,2 +1,3 @@
-﻿
-<retail-be-bpaccountaction-selective on-ready="scopeModel.onBPAccountActionSelectiveReady" normal-col-num="6"></retail-be-bpaccountaction-selective>
+﻿<span ng-if="scopeModel.bpAccountActionRuntimeEditor  != undefined">
+    <vr-directivewrapper directive="scopeModel.bpAccountActionRuntimeEditor" on-ready="scopeModel.onBPAccountActionSelectiveReady" isrequired="true" vr-loader="scopeModel.isLoadingDirective"></vr-directivewrapper>
+</span>

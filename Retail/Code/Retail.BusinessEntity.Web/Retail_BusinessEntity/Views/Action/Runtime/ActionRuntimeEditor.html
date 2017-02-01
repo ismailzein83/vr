@@ -2,8 +2,8 @@
     <vr-modalbody>
         <vr-form name="formActionRuntimeEditor">
             <vr-tabs>
-                <span ng-if="scopeModel.selectedExtensionConfig  != undefined">
-                    <vr-directivewrapper directive="scopeModel.selectedExtensionConfig.RuntimeEditor" on-ready="scopeModel.onDirectiveReady" isrequired="true"></vr-directivewrapper>
+                <span ng-if="scopeModel.selectedEditor  != undefined">
+                    <vr-directivewrapper directive="scopeModel.selectedEditor" on-ready="scopeModel.onDirectiveReady" isrequired="true"></vr-directivewrapper>
                 </span>
             </vr-tabs>
         </vr-form>

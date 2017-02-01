@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
+    <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\" />
     <Folder Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionPackageDefinitions\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionProductDefinitions\Templates\" />
@@ -412,8 +413,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\Templates\RegularActionBPDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-radiussql.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\Templates\RadiusSQLProvisionerDefinitionSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\retail-be-actionbpdefinition-runtimesettings-regular.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\Templates\RegularActionBPSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\retail-be-actionbpdefinition-runtimesettings-regular.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\Templates\RegularActionBPSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\retail-be-provisioner-runtimesettings-radiussql.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ProvisionerRuntime\Templates\RadiusSQLProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertAccount\retail-be-action-balancealertaccount.js" />
