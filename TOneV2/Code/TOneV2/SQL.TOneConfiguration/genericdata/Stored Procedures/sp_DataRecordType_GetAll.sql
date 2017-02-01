@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT	[ID],[Name],ParentID,Fields
+	SELECT	[ID],[Name],ParentID,Fields, ExtraFieldsEvaluator
     FROM	[genericdata].DataRecordType WITH(NOLOCK) 
 	ORDER BY [Name]
 END
