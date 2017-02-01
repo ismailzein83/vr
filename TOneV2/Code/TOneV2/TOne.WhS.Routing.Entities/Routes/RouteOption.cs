@@ -11,7 +11,7 @@ namespace TOne.WhS.Routing.Entities
         static RouteOption()
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RouteOption),
-                "SupplierId", "SupplierCode", "SupplierZoneId", "SupplierRate", "Percentage", "IsBlocked", "IsFiltered", "ExecutedRuleId", "ExactSupplierServiceIds");
+                "SupplierId", "SupplierCode", "SupplierZoneId", "SupplierRate", "Percentage", "IsBlocked", "IsFiltered", "ExecutedRuleId", "ExactSupplierServiceIds", "NumberOfTries");
         }
         public int SupplierId { get; set; }
 
@@ -30,5 +30,7 @@ namespace TOne.WhS.Routing.Entities
         public int? ExecutedRuleId { get; set; }
 
         public HashSet<int> ExactSupplierServiceIds { get; set; }
+
+        public int NumberOfTries { get; set; }
     }
 }

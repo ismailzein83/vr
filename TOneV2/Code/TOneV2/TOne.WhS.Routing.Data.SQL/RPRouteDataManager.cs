@@ -133,7 +133,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return Vanrise.Common.Serializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(routeOptionSuppliersSerialized.ToString());
         }
 
-        public void FinalizeProductRoute(Action<string> trackStep)
+        public void FinalizeProductRoute(Action<string> trackStep, int commandTimeoutInSeconds)
         {
             string query;
 
@@ -143,7 +143,7 @@ namespace TOne.WhS.Routing.Data.SQL
                           [RoutingProductId] ASC,
                           SaleZoneId ASC
                     )";
-            ExecuteNonQueryText(query, null);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Clustered Index on ProductRoute table (RoutingProductId and SaleZoneId).");
 
             trackStep("Starting create Index on ProductRoute table (SaleZoneId).");
@@ -151,7 +151,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     (
                           SaleZoneId ASC
                     )";
-            ExecuteNonQueryText(query, null);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Index on ProductRoute table (SaleZoneId).");
         }
 

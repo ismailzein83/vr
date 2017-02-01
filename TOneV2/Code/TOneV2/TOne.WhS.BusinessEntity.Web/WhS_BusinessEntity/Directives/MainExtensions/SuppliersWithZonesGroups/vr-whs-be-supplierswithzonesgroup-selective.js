@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeSupplierswithzonesSelective', ['UtilsService', '$compile','VRUIUtilsService',
+app.directive('vrWhsBeSupplierswithzonesSelective', ['UtilsService', '$compile', 'VRUIUtilsService',
 function (UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -35,11 +35,25 @@ function (UtilsService, $compile, VRUIUtilsService) {
                 carrierAccountReadyPromiseDeferred.resolve();
             };
             ctrl.isValid = function () {
+                if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
+                    return "You Should Select at least one Supplier ";
 
-                if (ctrl.datasource.length > 0)
-                    return null;
-                return "You Should Select at least one Supplier ";
+                var supplierWithZonesCount = 0;
+                var supplierWithNoZonesCount = 0;
+                for (var x = 0; x < ctrl.datasource.length; x++) {
+                    var currentItem = ctrl.datasource[x];
+                    if (currentItem.selectedSuplierZones == undefined || currentItem.selectedSuplierZones.length == 0)
+                        supplierWithNoZonesCount++;
+                    else
+                        supplierWithZonesCount++;
+
+                    if (supplierWithNoZonesCount > 0 && supplierWithZonesCount > 0)
+                        return "You should select either specific zones or all zones for all suppliers."
+                }
+
+                return null;
             };
+
             ctrl.datasource = [];
             ctrl.onSelectItem = function (dataItem) {
                 addSupplierZoneAPIFunction(dataItem);
@@ -67,7 +81,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                     }
                 };
-              
+
                 ctrl.datasource.push(dataItem);
             }
             ctrl.removeFilter = function (dataItem) {
@@ -94,7 +108,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
 
                 return suppliersWithZones;
             };
- 
+
             api.load = function (payload) {
 
                 var supplierIds = [];

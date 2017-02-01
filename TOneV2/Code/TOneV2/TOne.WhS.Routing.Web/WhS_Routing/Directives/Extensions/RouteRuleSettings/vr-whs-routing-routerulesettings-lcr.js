@@ -46,12 +46,12 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                     if (suppliers == undefined)
                         return null;
 
-                    var positionArray = [];
+                    //var positionArray = [];
 
                     var total = undefined;
                     for (var x = 0; x < suppliers.length; x++) {
                         var currentSupplier = suppliers[x];
-                        positionArray.push(currentSupplier.Position)
+                        //positionArray.push(currentSupplier.Position)
                         if (currentSupplier.Percentage != undefined) {
                             if (total == undefined) {
                                 total = 0;
@@ -60,8 +60,8 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                         }
                     }
 
-                    if (checkForDuplicateValues(positionArray))
-                        return "Positions should be unique";
+                    //if (checkForDuplicateValues(positionArray))
+                    //    return "Positions should be unique";
 
                     if (total != undefined && total != 100)
                         return "Sum of all Percentages must be equal to 100";
@@ -74,7 +74,7 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                     $scope.scopeModel.suppliers.push({
                         SupplierId: selectedItem.CarrierAccountId,
                         Name: selectedItem.Name,
-                        Position: selectedItem.Position,
+                        //Position: selectedItem.Position,
                         ForceOption: selectedItem.ForceOption,
                         NumberOfTries: selectedItem.NumberOfTries,
                         Percentage: selectedItem.Percentage
@@ -111,8 +111,8 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                         }
                     }
 
-                    var getCustomerRouteBuildNumberOfOptionsPromise = getCustomerRouteBuildNumberOfOptions();
-                    promises.push(getCustomerRouteBuildNumberOfOptionsPromise);
+                    //var getCustomerRouteBuildNumberOfOptionsPromise = getCustomerRouteBuildNumberOfOptions();
+                    //promises.push(getCustomerRouteBuildNumberOfOptionsPromise);
 
                     var loadCarrierAccountSelectorPromise = getLoadCarrierAccountSelectorPromise(supplierFilterSettings, options);
                     promises.push(loadCarrierAccountSelectorPromise);
@@ -125,7 +125,7 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                             $scope.scopeModel.suppliers.push({
                                 SupplierId: currentSupplier.CarrierAccountId,
                                 Name: currentSupplier.Name,
-                                Position: currentOption.Position,
+                                //Position: currentOption.Position,
                                 ForceOption: currentOption.ForceOption,
                                 NumberOfTries: currentOption.NumberOfTries,
                                 Percentage: currentOption.Percentage
@@ -133,11 +133,12 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                         }
                     });
 
-                    function getCustomerRouteBuildNumberOfOptions() {
-                        return WhS_Routing_RoutRuleSettingsAPIService.GetCustomerRouteBuildNumberOfOptions().then(function (response) {
-                            $scope.scopeModel.maxPositionValue = response;
-                        });
-                    }
+                    //function getCustomerRouteBuildNumberOfOptions() {
+                    //    return WhS_Routing_RoutRuleSettingsAPIService.GetCustomerRouteBuildNumberOfOptions().then(function (response) {
+                    //        $scope.scopeModel.maxPositionValue = response;
+                    //    });
+                    //}
+
                     function getLoadCarrierAccountSelectorPromise(supplierFilterSettings, options) {
                         var loadCarrierAccountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -147,6 +148,7 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                                 filter: { SupplierFilterSettings: supplierFilterSettings },
                                 selectedIds: []
                             };
+                            console.log(options);
                             if (options != undefined) {
                                 for (var key in options) {
                                     if (key != "$type") {
@@ -172,9 +174,11 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
 
                     function getOptions() {
                         var options = {};
+                        console.log($scope.scopeModel.suppliers);
                         for (var i = 0; i < $scope.scopeModel.suppliers.length; i++) {
                             var supplier = $scope.scopeModel.suppliers[i];
-                            options[supplier.SupplierId] = supplier
+                            supplier.Position = i + 1;
+                            options[supplier.SupplierId] = supplier;
                         }
                         return options;
                     }
@@ -184,16 +188,16 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                     ctrl.onReady(api);
             }
 
-            function checkForDuplicateValues(array) {
-                var array_sorted = array.slice().sort();
+            //function checkForDuplicateValues(array) {
+            //    var array_sorted = array.slice().sort();
 
-                var results = [];
-                for (var i = 0; i < array.length - 1; i++) {
-                    if (array_sorted[i] != undefined && array_sorted[i + 1] == array_sorted[i])
-                        return true;
-                }
-                return false;
-            }
+            //    var results = [];
+            //    for (var i = 0; i < array.length - 1; i++) {
+            //        if (array_sorted[i] != undefined && array_sorted[i + 1] == array_sorted[i])
+            //            return true;
+            //    }
+            //    return false;
+            //}
 
             this.initializeController = initializeController;
         }

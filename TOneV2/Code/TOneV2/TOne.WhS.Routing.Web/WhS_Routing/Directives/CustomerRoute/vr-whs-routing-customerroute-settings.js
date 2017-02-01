@@ -38,9 +38,12 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     if (payload.CustomerRoute != undefined) {
                         ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
                         ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.AddBlockedOptions;
+                        ctrl.customerRouteIndexCommandTimeout = payload.CustomerRoute.IndexesCommandTimeoutInMinutes;
                     }
+
                     if (payload.ProductRoute != undefined) {
                         ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
+                        ctrl.productRouteIndexCommandTimeout = payload.ProductRoute.IndexesCommandTimeoutInMinutes;
                     }
 
                     if (payload.IncludedRules != undefined) {
@@ -57,11 +60,13 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     CustomerRoute: {
                         $type: "TOne.WhS.Routing.Entities.CustomerRouteBuildConfiguration, TOne.WhS.Routing.Entities",
                         NumberOfOptions: ctrl.customerRouteNumberOfOptions,
-                        AddBlockedOptions: ctrl.customerRouteAddBlockedOptions
+                        AddBlockedOptions: ctrl.customerRouteAddBlockedOptions,
+                        IndexesCommandTimeoutInMinutes: ctrl.customerRouteIndexCommandTimeout
                     },
                     ProductRoute: {
                         $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                        AddBlockedOptions: ctrl.productRouteAddBlockedOptions
+                        AddBlockedOptions: ctrl.productRouteAddBlockedOptions,
+                        IndexesCommandTimeoutInMinutes: ctrl.productRouteIndexCommandTimeout
                     },
                     IncludedRules: {
                         $type: "TOne.WhS.Routing.Entities.IncludedRulesConfiguration, TOne.WhS.Routing.Entities",

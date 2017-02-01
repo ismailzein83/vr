@@ -201,7 +201,8 @@ namespace TOne.WhS.Routing.Business
             bool addBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
 
             SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions, addBlockedOptions);
-            routeRuleExecutionContext.NumberOfOptions = configManager.GetCustomerRouteBuildNumberOfOptions();
+            int numberOfOptionsInSettings = configManager.GetCustomerRouteBuildNumberOfOptions();
+            routeRuleExecutionContext.NumberOfOptions = numberOfOptionsInSettings;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
             routeRuleExecutionContext.SaleZoneServiceList = customerZoneDetail.SaleZoneServiceIds;//used for service matching
@@ -262,6 +263,10 @@ namespace TOne.WhS.Routing.Business
                     foreach (var blockedOrFilteredItem in blockedOrFilteredItems)
                         blockedOrFilteredItem.Percentage = null;
                 }
+
+                FinalizeRouteOptionContext finalizeRouteOptionContext = new FinalizeRouteOptionContext() { NumberOfOptionsInSettings = numberOfOptionsInSettings, RouteOptions = route.Options };
+                route.Options = routeRule.Settings.GetFinalOptions(finalizeRouteOptionContext);
+
                 routeRule.Settings.ApplyOptionsPercentage(route.Options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered));
             }
             else
@@ -401,6 +406,13 @@ namespace TOne.WhS.Routing.Business
                 }
             }
             return route;
+        }
+
+        private class FinalizeRouteOptionContext : IFinalizeRouteOptionContext
+        {
+            public List<RouteOption> RouteOptions { get; set; }
+
+            public int NumberOfOptionsInSettings { get; set; }
         }
 
         #endregion

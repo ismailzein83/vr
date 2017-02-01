@@ -132,7 +132,8 @@ namespace TOne.WhS.Routing.Business
                 IsBlocked = targetOption.BlockOption,
                 ExecutedRuleId = targetOption.ExecutedRuleId,
                 ExactSupplierServiceIds = targetOption.ExactSupplierServiceIds,
-                IsFiltered = targetOption.FilterOption
+                IsFiltered = targetOption.FilterOption,
+                NumberOfTries = targetOption.NumberOfTries
             };
             targetOption.ExecutedRuleId = null;
             targetOption.BlockOption = false;

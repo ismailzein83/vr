@@ -43,5 +43,10 @@ namespace TOne.WhS.Routing.Entities
         {
             return context.NumberOfOptions;
         }
+
+        public virtual List<RouteOption> GetFinalOptions(IFinalizeRouteOptionContext context)
+        {
+            return context.RouteOptions;
+        }
     }
 }

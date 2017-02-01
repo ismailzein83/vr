@@ -20,7 +20,7 @@ namespace TOne.WhS.Routing.Data
 
         IEnumerable<RPRoute> GetRPRoutes(IEnumerable<RPZone> rpZones);
 
-        void FinalizeProductRoute(Action<string> trackStep);
+        void FinalizeProductRoute(Action<string> trackStep, int commandTimeoutInSeconds);
     }
 
 }

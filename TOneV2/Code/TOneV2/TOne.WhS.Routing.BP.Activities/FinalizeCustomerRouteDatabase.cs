@@ -1,31 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
+﻿using System.Activities;
+using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
-using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
+    #region Argument Classes
 
-    public sealed class FinalizeCustomerRouteDatabase : CodeActivity
+    public class FinalizeCustomerRouteDatabaseInput
+    {
+        public int RoutingDatabaseId { get; set; }
+    }
+
+    public class FinalizeCustomerRouteDatabaseOutput
+    {
+
+    }
+
+    #endregion
+
+    public sealed class FinalizeCustomerRouteDatabase : BaseAsyncActivity<FinalizeCustomerRouteDatabaseInput, FinalizeCustomerRouteDatabaseOutput>
     {
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override FinalizeCustomerRouteDatabaseOutput DoWorkWithResult(FinalizeCustomerRouteDatabaseInput inputArgument, AsyncActivityHandle handle)
         {
             IRoutingDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDataManager>();
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(this.RoutingDatabaseId.Get(context));
+            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
-            dataManager.FinalizeCustomerRouteDatabase((message) => 
+            ConfigManager routingConfigManager = new ConfigManager();
+            int commandTimeoutInSeconds = routingConfigManager.GetCustomerRouteIndexesCommandTimeoutInSeconds();
+
+            dataManager.FinalizeCustomerRouteDatabase((message) =>
             {
-                context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
-            });
+                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
+            }, commandTimeoutInSeconds);
+            return new FinalizeCustomerRouteDatabaseOutput();
+        }
+
+
+        protected override FinalizeCustomerRouteDatabaseInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new FinalizeCustomerRouteDatabaseInput()
+            {
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, FinalizeCustomerRouteDatabaseOutput result)
+        {
+
         }
     }
 }
-

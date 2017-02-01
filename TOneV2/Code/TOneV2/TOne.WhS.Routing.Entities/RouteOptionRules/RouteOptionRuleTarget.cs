@@ -33,6 +33,8 @@ namespace TOne.WhS.Routing.Entities
 
         public int SupplierServiceWeight { get; set; }
 
+        public int NumberOfTries { get; set; }
+
         #region Interfaces
 
         string IRuleCodeTarget.Code

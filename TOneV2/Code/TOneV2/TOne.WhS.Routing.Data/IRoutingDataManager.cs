@@ -10,6 +10,6 @@ namespace TOne.WhS.Routing.Data
     public interface IRoutingDataManager : IDataManager
     {
         RoutingDatabase RoutingDatabase { get; set; }
-        void FinalizeCustomerRouteDatabase(Action<string> trackStep);
+        void FinalizeCustomerRouteDatabase(Action<string> trackStep, int commandTimeoutInSeconds);
     }
 }

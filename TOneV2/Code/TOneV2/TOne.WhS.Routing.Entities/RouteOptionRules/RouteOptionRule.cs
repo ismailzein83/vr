@@ -120,7 +120,28 @@ namespace TOne.WhS.Routing.Entities
                 {
                     var suppliersWithZones = this.GetSuppliersWithZonesGroupContext().GetSuppliersWithZones(this.Criteria.SuppliersWithZonesGroupSettings);
                     if (suppliersWithZones != null)
-                        return suppliersWithZones.SelectMany(itm => itm.SupplierZoneIds != null ? itm.SupplierZoneIds : new List<long>());
+                    {
+                        bool hasSupplierWithSpecificZones = false;
+                        bool hasSupplierWithAllZones = false;
+
+                        List<long> suppliersZoneIds = new List<long>();
+                        foreach (var supplierWithZones in suppliersWithZones)
+                        {
+                            if (supplierWithZones.SupplierZoneIds == null || supplierWithZones.SupplierZoneIds.Count == 0)
+                            {
+                                hasSupplierWithAllZones = true;
+                            }
+                            else
+                            {
+                                suppliersZoneIds.AddRange(supplierWithZones.SupplierZoneIds);
+                                hasSupplierWithSpecificZones = true;
+                            }
+
+                            if (hasSupplierWithAllZones && hasSupplierWithSpecificZones)
+                                throw new Exception(string.Format("Rule Id:{0} contains Suppliers with All and Specific Zones.", RuleId));
+                        }
+                        return hasSupplierWithAllZones ? null : suppliersZoneIds;
+                    }
                 }
                 return null;
             }

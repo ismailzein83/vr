@@ -212,7 +212,8 @@ namespace TOne.WhS.Routing.Business
                 EffectiveOn = routeRuleTarget.EffectiveOn,
                 IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
                 ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds,
-                SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight
+                SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
+                NumberOfTries = 1
             };
             if (percentage.HasValue)
                 option.Percentage = percentage.Value;

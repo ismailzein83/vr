@@ -119,7 +119,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             bool hasOptionBlock = false;
 
             CustomerRouteBulkInsert customerRouteBulkInsert = dbApplyStream as CustomerRouteBulkInsert;
-            int counter = 0;
+            int counter = 10;
 
             int isToDAffected = 0;
             int isSpecialRequestAffected = 0;
@@ -129,7 +129,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             switch (record.CorrespondentType)
             {
                 case CorrespondentType.Block: isBlockAffected = 1; break;
-                case CorrespondentType.Override: isOverrideAffected = 1; counter = 10; break;
+                case CorrespondentType.Override: isOverrideAffected = 1; break;
                 case CorrespondentType.SpecialRequest: isSpecialRequestAffected = 1; break;
                 case CorrespondentType.LCR:
                 case CorrespondentType.Other:
@@ -156,12 +156,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                     if (Routing_TOne_Testing)
                     {
                         customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
-                            supplierServiceFlag, priority, 1, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0, option.ExecutedRuleId);
+                            supplierServiceFlag, priority, option.NumberOfTries, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0, option.ExecutedRuleId);
                     }
                     else
                     {
                         customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
-                            supplierServiceFlag, priority, 1, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0);
+                            supplierServiceFlag, priority, option.NumberOfTries, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? Convert.ToInt32(option.Percentage.Value) : 0);
                     }
                 }
             }
@@ -219,15 +219,15 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             throw new NotImplementedException();
         }
 
-        public void FinalizeCurstomerRoute(Action<string> trackStep)
+        public void FinalizeCurstomerRoute(Action<string> trackStep, int commnadTimeoutInSeconds)
         {
             StringBuilder query = new StringBuilder();
             if (!Routing_TOne_Testing)
             {
-                CreateIndex(string.Format(query_CreateZoneRateIndexes, Routing_TOneV1_FileGroup), trackStep, "Zone Rate");
-                CreateIndex(query_CreateCodeMatchIndexes, trackStep, "Code Match");
-                CreateIndex(string.Format(query_CreateRouteIndexes, Routing_TOneV1_FileGroup), trackStep, "Route");
-                CreateIndex(string.Format(query_CreateRouteOptionIndexes, Routing_TOneV1_FileGroup), trackStep, "Route Option");
+                CreateIndex(string.Format(query_CreateZoneRateIndexes, Routing_TOneV1_FileGroup), trackStep, "Zone Rate", commnadTimeoutInSeconds);
+                CreateIndex(query_CreateCodeMatchIndexes, trackStep, "Code Match", commnadTimeoutInSeconds);
+                CreateIndex(string.Format(query_CreateRouteIndexes, Routing_TOneV1_FileGroup), trackStep, "Route", commnadTimeoutInSeconds);
+                CreateIndex(string.Format(query_CreateRouteOptionIndexes, Routing_TOneV1_FileGroup), trackStep, "Route Option", commnadTimeoutInSeconds);
             }
 
             query.AppendLine(query_DropSupplierZoneDetailsTable);
@@ -244,10 +244,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         }
 
 
-        void CreateIndex(string query, Action<string> trackStep, string obejctName)
+        void CreateIndex(string query, Action<string> trackStep, string obejctName, int commandTimeoutInSeconds)
         {
             DateTime startDate = DateTime.Now;
-            ExecuteNonQueryText(query, null);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             DateTime endDate = DateTime.Now;
             trackStep(string.Format("Building Indexes for {0} table took {1}", obejctName, endDate.Subtract(startDate)));
         }

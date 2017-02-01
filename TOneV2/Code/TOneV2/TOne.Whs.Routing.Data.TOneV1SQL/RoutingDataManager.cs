@@ -44,10 +44,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             return _databaseName;
         }
 
-        public void FinalizeCustomerRouteDatabase(Action<string> trackStep)
+        public void FinalizeCustomerRouteDatabase(Action<string> trackStep, int commnadTimeoutInSeconds)
         {
             CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager();
-            customerRouteDataManager.FinalizeCurstomerRoute(trackStep);
+            customerRouteDataManager.FinalizeCurstomerRoute(trackStep, commnadTimeoutInSeconds);
         }
 
         /// <summary>

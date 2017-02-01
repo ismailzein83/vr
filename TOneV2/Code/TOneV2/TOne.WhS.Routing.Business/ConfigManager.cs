@@ -5,9 +5,19 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.Routing.Business
 {
-    public class ConfigManager 
+    public class ConfigManager
     {
         #region public methods
+        public int GetCustomerRouteIndexesCommandTimeoutInSeconds()
+        {
+            return GetCustomerRouteBuildConfiguration().IndexesCommandTimeoutInMinutes * 60;
+        }
+
+        public int GetProductRouteIndexesCommandTimeoutInSeconds()
+        {
+            return GetProductRouteBuildConfiguration().IndexesCommandTimeoutInMinutes * 60;
+        }
+
         public int GetCustomerRouteBuildNumberOfOptions()
         {
             return GetCustomerRouteBuildConfiguration().NumberOfOptions;
@@ -163,7 +173,7 @@ namespace TOne.WhS.Routing.Business
 
             return routeBuildConfiguration.CustomerRoute;
         }
-         
+
         private ProductRouteBuildConfiguration GetProductRouteBuildConfiguration()
         {
             RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();

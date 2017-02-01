@@ -127,7 +127,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 });
         }
 
-        public void FinalizeCurstomerRoute(Action<string> trackStep)
+        public void FinalizeCurstomerRoute(Action<string> trackStep, int commandTimeoutInSeconds)
         {
             string query;
 
@@ -136,7 +136,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     (
                           CustomerID ASC
                     )";
-            ExecuteNonQueryText(query, null);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Index on CustomerRoute table (CustomerId).");
 
             trackStep("Starting create Index on CustomerRoute table (Code).");
@@ -144,7 +144,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     (
                           Code ASC
                     )";
-            ExecuteNonQueryText(query, null);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Index on CustomerRoute table (Code).");
 
             trackStep("Starting create Index on CustomerRoute table (SaleZoneId).");
@@ -152,7 +152,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     (
                           SaleZoneId ASC
                     )";
-            ExecuteNonQueryText(query, null);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Index on CustomerRoute table (SaleZoneId).");
         }
 

@@ -16,11 +16,15 @@ namespace TOne.WhS.Routing.Entities
         public bool AddBlockedOptions { get; set; }
 
         public int NumberOfOptions { get; set; }
+
+        public int IndexesCommandTimeoutInMinutes { get; set; }
     }
 
     public class ProductRouteBuildConfiguration
     {
         public bool AddBlockedOptions { get; set; }
+
+        public int IndexesCommandTimeoutInMinutes { get; set; }
     }
 
     public class IncludedRulesConfiguration
