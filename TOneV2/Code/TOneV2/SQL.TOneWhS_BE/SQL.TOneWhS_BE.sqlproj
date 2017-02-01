@@ -430,7 +430,5 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfterByOwnerAndZones.sql" />
-    <Build Include="TOneWhS_BE\Tables\SwitchZTemp.sql" />
-    <Build Include="TOneWhS_BE\Tables\SwitchConnectivityZTemp.sql" />
   </ItemGroup>
 </Project>
