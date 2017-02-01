@@ -9,14 +9,35 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
 
-namespace Retail.BusinessEntity.Business
+namespace Retail.BusinessEntity.Business 
 {
     public class AccountBEDefinitionManager : IAccountBEDefinitionManager
     {
+        #region Ctor/Fields
+
+        static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+
+        #endregion
+
         #region Public Methods
 
         public AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
         {
+            //s_businessEntityDefinitionManager.GetCachedOrCreate("GetAccountBEDefinitionSettings", () => 
+            //{
+            //    var businessEntityDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(accountBEDefinitionId);
+
+            //    if (businessEntityDefinition == null)
+            //        throw new NullReferenceException(string.Format("businessEntityDefinition Id : {0}", accountBEDefinitionId));
+
+            //    if (businessEntityDefinition.Settings == null)
+            //        throw new NullReferenceException(string.Format("businessEntityDefinition.Settings Id : {0}", accountBEDefinitionId));
+
+            //    return businessEntityDefinition.Settings as AccountBEDefinitionSettings;
+
+            //    return new AccountBEDefinitionSettings();
+            //});
+
             var businessEntityDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(accountBEDefinitionId);
 
             if (businessEntityDefinition == null)
@@ -26,6 +47,7 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("businessEntityDefinition.Settings Id : {0}", accountBEDefinitionId));
 
             return businessEntityDefinition.Settings as AccountBEDefinitionSettings;
+
         }
         public AccountGridDefinition GetAccountGridDefinition(Guid accountBEDefinitionId)
         {
@@ -187,6 +209,7 @@ namespace Retail.BusinessEntity.Business
             }
             return accountBEActions.MapRecords(AccountActionDefinitionInfoMapper, filterFunc).OrderBy(x => x.Name);
         }
+
         #endregion
 
         #region Private Methods
@@ -196,9 +219,6 @@ namespace Retail.BusinessEntity.Business
             VRRetailBEVisibilityAccountDefinitionGridColumns gridColumn = null;
             if (retailBEVisibility != null && !visibleGridColumns.TryGetValue(accountGridColumnDefinition.FieldName, out gridColumn))
                 return false;
-
-            if (gridColumn != null && !string.IsNullOrEmpty(gridColumn.Title))
-                accountGridColumnDefinition.Header = gridColumn.Title;
 
             return true;
         }
@@ -228,9 +248,6 @@ namespace Retail.BusinessEntity.Business
             if (retailBEVisibility != null && !visibleViews.TryGetValue(accountViewDefinition.AccountViewDefinitionId, out view))
                 return false;
 
-            if (view != null && !string.IsNullOrEmpty(view.Title))
-                accountViewDefinition.Name = view.Title;
-
             return true;
         }
         private bool IsViewAvailable(AccountViewDefinition accountViewDefinition, Account account)
@@ -245,9 +262,6 @@ namespace Retail.BusinessEntity.Business
             VRRetailBEVisibilityAccountDefinitionAction action = null;
             if (retailBEVisibility != null && !visibleViews.TryGetValue(accountActionDefinition.AccountActionDefinitionId, out action))
                 return false;
-
-            if (action != null && !string.IsNullOrEmpty(action.Title))
-                accountActionDefinition.Name = action.Title;
 
             return true;
         }
@@ -271,6 +285,5 @@ namespace Retail.BusinessEntity.Business
             };
         }
         #endregion
-
     }
 }
