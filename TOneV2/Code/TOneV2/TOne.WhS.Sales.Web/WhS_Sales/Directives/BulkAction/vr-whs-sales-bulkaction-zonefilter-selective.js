@@ -73,10 +73,8 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
 					bulkActionContext = payload.bulkActionContext;
 				}
 
-				if (zoneFilterType != undefined) {
-					var loadDirectivePromise = loadDirective();
-					promises.push(loadDirectivePromise);
-				}
+				var loadDirectivePromise = loadDirective();
+				promises.push(loadDirectivePromise);
 
 				var loadBulkActionZoneFilterTypeExtensionCofigsPromise = loadBulkActionZoneFilterTypeExtensionCofigs();
 				promises.push(loadBulkActionZoneFilterTypeExtensionCofigsPromise);
@@ -89,6 +87,9 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
 							}
 							if (zoneFilterType != undefined) {
 								$scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, zoneFilterType.ConfigId, 'ExtensionConfigurationId');
+							}
+							else if ($scope.scopeModel.extensionConfigs.length > 0) {
+								$scope.scopeModel.selectedExtensionConfig = $scope.scopeModel.extensionConfigs[0];
 							}
 						}
 					});
