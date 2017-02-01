@@ -78,5 +78,6 @@
     <Build Include="TOneWhS_BE_Bkup\Tables\SupplierCode.sql" />
     <Build Include="TOneWhS_BE_Bkup\Tables\SupplierPriceList.sql" />
     <Build Include="Security\TOneWhS_BE_Bkup.sql" />
+    <Build Include="TOneWhS_BE_Bkup\Tables\CustomerCountry.sql" />
   </ItemGroup>
 </Project>
