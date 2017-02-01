@@ -101,6 +101,7 @@
     <Compile Include="ProductFamily\ProductFamilyPackageItem.cs" />
     <Compile Include="ProductFamily\ProductFamilyQuery.cs" />
     <Compile Include="ProductFamily\ProductFamilySettings.cs" />
+    <Compile Include="Product\Definition\ProductDefinitionFilter.cs" />
     <Compile Include="Product\IProductFilter.cs" />
     <Compile Include="Product\Product.cs" />
     <Compile Include="Product\ProductDetail.cs" />

@@ -8,8 +8,12 @@ namespace Retail.BusinessEntity.Entities
 {
     public class ServiceTypeInfoFilter
     {
-        public IEnumerable<Guid> ExcludedServiceTypeIds { get; set; }
-        public List<IServiceTypeFilter> Filters { get; set; }
+        public Guid? AccountBEDefinitionId { get; set; }
 
+        public IEnumerable<Guid> ExcludedServiceTypeIds { get; set; }
+
+        public bool IncludeHiddenServiceTypes { get; set; }
+
+        public List<IServiceTypeFilter> Filters { get; set; }
     }
 }
