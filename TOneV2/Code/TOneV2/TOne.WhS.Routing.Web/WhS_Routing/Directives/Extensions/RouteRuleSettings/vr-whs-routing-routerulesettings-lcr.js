@@ -133,8 +133,7 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                         }
                     });
 
-                    function getCustomerRouteBuildNumberOfOptions()
-                    {
+                    function getCustomerRouteBuildNumberOfOptions() {
                         return WhS_Routing_RoutRuleSettingsAPIService.GetCustomerRouteBuildNumberOfOptions().then(function (response) {
                             $scope.scopeModel.maxPositionValue = response;
                         });
@@ -185,13 +184,12 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                     ctrl.onReady(api);
             }
 
-            function checkForDuplicateValues(array)
-            {
+            function checkForDuplicateValues(array) {
                 var array_sorted = array.slice().sort();
 
                 var results = [];
                 for (var i = 0; i < array.length - 1; i++) {
-                    if (array_sorted[i + 1] == array_sorted[i]) 
+                    if (array_sorted[i] != undefined && array_sorted[i + 1] == array_sorted[i])
                         return true;
                 }
                 return false;
