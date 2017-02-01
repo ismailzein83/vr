@@ -33,7 +33,7 @@ namespace Retail.Zajil.MainExtensions
         public Guid FinancialPartDefinitionId { get; set; }
         public Guid CompanyProfilePartDefinitionId { get; set; }
         public Guid OrderDetailsPartDefinitionId { get; set; }
-
+        public Guid CompanyExtendedInfoPartdefinitionId { get; set; }
         #endregion
 
         #region Public Methods
@@ -139,7 +139,25 @@ namespace Retail.Zajil.MainExtensions
                     Contacts = GetContactsList(row),
                     PhoneNumbers = new List<string> { row["PhoneNo"].ToString() },
                     Faxes = new List<string> { row["FaxNo"].ToString() },
-                    Street = row["Address"].ToString()
+                    Address = row["Address"].ToString(),
+                    ArabicName = row["ArabicName"].ToString()
+                }
+            });
+        }
+
+        void FillCompanyExtendedInfo(SourceAccountData accountData, DataRow row)
+        {
+
+            accountData.Account.Settings.Parts.Add(this.CompanyExtendedInfoPartdefinitionId, new AccountPart
+            {
+                Settings = new ZajilCompanyExtendedInfo
+                {
+                      CRMCompanyId = row["CRM_Company_ID"].ToString(),
+                      CRMCompanyAccountNo = row["CRM_Company_AccountNo"].ToString(),
+                      ServiceType = row["ServiceType"].ToString(),
+                      Remarks = row["Remarks"].ToString(),
+                      GPVoiceCustomerNo = row["GP_VoiceCustomer_No"].ToString(),
+                      ServiceId = row["ServiceID"].ToString()
                 }
             });
         }
