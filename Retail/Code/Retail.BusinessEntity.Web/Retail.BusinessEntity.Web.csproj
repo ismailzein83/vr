@@ -421,8 +421,6 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleDurationTariffChargingPolicyPartTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ChargingPolicy\ChargingPolicyPart\Templates\SingleRateValueChargingPolicyPartTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Package\PackageItem\retail-be-package-packageitem-chargingpolicy.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\SwitchIntegrations\retail-be-switchintegrations-telesapi.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\SwitchIntegrations\Templates\SwitchIntegrationTelesAPITemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TargetSynchronizer\retail-be-accountsynchronizer-directive.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TargetSynchronizer\Templates\AccountSynchronizerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail-be-retailaccount-objecttype.js" />

@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/SwitchIntegrations/Templates/SwitchIntegrationTelesAPITemplate.html"
+            templateUrl: "/Client/Modules/Retail_Teles/Directives/SwitchIntegrations/Templates/SwitchIntegrationTelesAPITemplate.html"
 
         };
         function TelesAPIIntegration($scope, ctrl, $attrs) {
@@ -56,7 +56,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.BusinessEntity.MainExtensions.TelesAPISwitchIntegration,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.Teles.Business.SwitchIntegrations.TelesAPISwitchIntegration,Retail.Teles.Business",
                         Authorization: $scope.scopeModel.authorization,
                         Token: $scope.scopeModel.token,
                         URL:$scope.scopeModel.url,
@@ -67,6 +67,6 @@
         }
     }
 
-    app.directive('retailBeSwitchintegrationsTelesapi', SwitchIntegrationTelesAPI);
+    app.directive('retailTelesSwitchintegrationsTelesapi', SwitchIntegrationTelesAPI);
 
 })(app);

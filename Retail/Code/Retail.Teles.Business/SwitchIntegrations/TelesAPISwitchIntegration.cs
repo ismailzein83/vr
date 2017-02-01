@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions
+namespace Retail.Teles.Business.SwitchIntegrations
 {
     public class TelesAPISwitchIntegration : SwitchIntegration
     {

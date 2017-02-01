@@ -16,7 +16,7 @@ namespace Retail.Teles.Business.AccountBEActionTypes
 
         public override string ClientActionName
         {
-            get { return " MappingTelesAccount"; }
+            get { return "MappingTelesAccount"; }
         }
         public long DomainId { get; set; }
         public int SwitchId { get; set; }

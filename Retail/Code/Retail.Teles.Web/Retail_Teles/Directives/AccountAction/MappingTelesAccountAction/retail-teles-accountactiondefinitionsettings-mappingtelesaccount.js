@@ -15,7 +15,7 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', [
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_Teles/Directives/Extensions/MappingTelesAccountAction/Templates/MappingTelesAccountActionSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_Teles/Directives/AccountAction/MappingTelesAccountAction/Templates/MappingTelesAccountActionSettingsTemplate.html'
         };
 
         function MappingTelesAccountActionSettingsCtor($scope, ctrl, $attrs) {
