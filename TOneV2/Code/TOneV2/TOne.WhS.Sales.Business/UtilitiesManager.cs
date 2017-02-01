@@ -109,14 +109,20 @@ namespace TOne.WhS.Sales.Business
 		public static bool IsCustomerZoneCountryApplicable(int countryId, DateTime rateBED, Dictionary<int, DateTime> datesByCountry)
 		{
 			DateTime soldOn;
-			
+
 			if (!datesByCountry.TryGetValue(countryId, out soldOn))
 				return false;
 
 			if (soldOn > rateBED)
 				return false;
-			
+
 			return true;
+		}
+
+		public static bool CustomerZoneHasPendingClosedNormalRate(int customerId, int sellingProductId, long zoneId, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate)
+		{
+			SaleEntityZoneRate customerZoneRate = getCustomerZoneRate(customerId, sellingProductId, zoneId, false);
+			return (customerZoneRate != null && customerZoneRate.Rate != null && customerZoneRate.Rate.EED.HasValue);
 		}
 
 		#region Private Methods
@@ -146,8 +152,8 @@ namespace TOne.WhS.Sales.Business
 
 		public Changes Draft { get; set; }
 
-		public Func<int, long, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
+		public Func<int, long, bool, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
 
-		public Func<int, int, long, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
+		public Func<int, int, long, bool, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
 	}
 }

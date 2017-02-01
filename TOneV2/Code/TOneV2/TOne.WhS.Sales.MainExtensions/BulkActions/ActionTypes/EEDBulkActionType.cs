@@ -35,7 +35,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
 			DateTime effectiveOn = DateTime.Today;
 			Dictionary<int, DateTime> datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, effectiveOn, false);
-			
+
 			DateTime soldOn;
 			if (!datesByCountry.TryGetValue(context.SaleZone.CountryId, out soldOn))
 				return false;
@@ -52,13 +52,16 @@ namespace TOne.WhS.Sales.MainExtensions
 				}
 			}
 
-			SaleEntityZoneRate customerZoneRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId);
+			if (UtilitiesManager.CustomerZoneHasPendingClosedNormalRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, context.GetCustomerZoneRate))
+				return false;
+
+			SaleEntityZoneRate customerZoneRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, true);
 			if (customerZoneRate == null || customerZoneRate.Rate == null)
 				return false;
 			else if (customerZoneRate.Rate.BED > EED)
 				return false;
 
-			SaleEntityZoneRate sellingProductZoneRate = context.GetSellingProductZoneRate(_sellingProductId.Value, context.SaleZone.SaleZoneId);
+			SaleEntityZoneRate sellingProductZoneRate = context.GetSellingProductZoneRate(_sellingProductId.Value, context.SaleZone.SaleZoneId, true);
 			if (sellingProductZoneRate == null || sellingProductZoneRate.Rate == null)
 				return false;
 			else if (sellingProductZoneRate.Rate.BED > EED)

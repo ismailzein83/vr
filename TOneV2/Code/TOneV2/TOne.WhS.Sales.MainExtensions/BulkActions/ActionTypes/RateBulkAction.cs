@@ -16,6 +16,8 @@ namespace TOne.WhS.Sales.MainExtensions
 	{
 		private Dictionary<int, DateTime> _datesByCountry;
 
+		private int? _sellingProductId;
+
 		public override Guid ConfigId
 		{
 			get { return new Guid("A893F3C6-D4BF-4C60-BA7D-2A773791D7BD"); }
@@ -34,6 +36,14 @@ namespace TOne.WhS.Sales.MainExtensions
 
 			if (context.OwnerType == SalePriceListOwnerType.Customer)
 			{
+				if (!_sellingProductId.HasValue)
+				{
+					_sellingProductId = new RatePlanManager().GetSellingProductId(context.OwnerId, DateTime.Today, false);
+				}
+
+				if (UtilitiesManager.CustomerZoneHasPendingClosedNormalRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, context.GetCustomerZoneRate))
+					return false;
+
 				if (_datesByCountry == null)
 				{
 					_datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, DateTime.Today, false);

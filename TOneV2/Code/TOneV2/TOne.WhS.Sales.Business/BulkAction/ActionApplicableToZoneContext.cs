@@ -11,11 +11,11 @@ namespace TOne.WhS.Sales.Business
 {
 	public class ActionApplicableToZoneContext : IActionApplicableToZoneContext
 	{
-		private Func<int, long, SaleEntityZoneRate> _getSellingProductZoneRate;
+		private Func<int, long, bool, SaleEntityZoneRate> _getSellingProductZoneRate;
 
-		private Func<int, int, long, SaleEntityZoneRate> _getCustomerZoneRate;
+		private Func<int, int, long, bool, SaleEntityZoneRate> _getCustomerZoneRate;
 
-		public ActionApplicableToZoneContext(Func<int, long, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate)
+		public ActionApplicableToZoneContext(Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate)
 		{
 			_getSellingProductZoneRate = getSellingProductZoneRate;
 			_getCustomerZoneRate = getCustomerZoneRate;
@@ -29,14 +29,14 @@ namespace TOne.WhS.Sales.Business
 
 		public ZoneChanges ZoneDraft { get; set; }
 
-		public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId)
+		public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate)
 		{
-			return _getSellingProductZoneRate(sellingProductId, zoneId);
+			return _getSellingProductZoneRate(sellingProductId, zoneId, getFutureRate);
 		}
 
-		public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId)
+		public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate)
 		{
-			return _getCustomerZoneRate(customerId, sellingProductId, zoneId);
+			return _getCustomerZoneRate(customerId, sellingProductId, zoneId, getFutureRate);
 		}
 	}
 }

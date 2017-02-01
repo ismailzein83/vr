@@ -56,12 +56,12 @@ namespace TOne.WhS.Sales.Business
 				Draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
 			}
 
-			public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId)
+			public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate)
 			{
 				return _futureRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId);
 			}
 
-			public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId)
+			public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate)
 			{
 				return _futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
 			}

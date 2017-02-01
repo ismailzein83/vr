@@ -19,16 +19,17 @@ namespace TOne.WhS.Sales.MainExtensions
 			if (context.SaleZones == null || context.SaleZones.Count() == 0)
 				throw new MissingMemberException("SaleZones");
 
+			var currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Today));
 			var futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
 
-			Func<int, long, SaleEntityZoneRate> getSellingProductZoneRate = (sellingProductId, zoneId) =>
+			Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate = (sellingProductId, zoneId, getFutureRate) =>
 			{
-				return futureRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId);
+				return (getFutureRate) ? futureRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId) : currentRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId);
 			};
 
-			Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate = (customerId, sellingProductId, zoneId) =>
+			Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate = (customerId, sellingProductId, zoneId, getFutureRate) =>
 			{
-				return futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+				return (getFutureRate) ? futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId) : currentRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
 			};
 
 			List<long> applicableZoneIds = new List<long>();

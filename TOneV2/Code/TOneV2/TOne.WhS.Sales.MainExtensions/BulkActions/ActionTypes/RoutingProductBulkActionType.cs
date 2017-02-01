@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 
@@ -13,10 +14,11 @@ namespace TOne.WhS.Sales.MainExtensions
 	public class RoutingProductBulkActionType : BulkActionType
 	{
 		#region Fields
-		
+
 		private RoutingProductManager _routingProductManager = new RoutingProductManager();
 		private RoutingProductZoneRelationType? _rpZoneRelationType;
 		private IEnumerable<long> _rpZoneIds;
+		private int? _sellingProductId;
 
 		#endregion
 
@@ -31,8 +33,19 @@ namespace TOne.WhS.Sales.MainExtensions
 
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{
+			if (context.OwnerType == SalePriceListOwnerType.Customer)
+			{
+				if (!_sellingProductId.HasValue)
+				{
+					_sellingProductId = new RatePlanManager().GetSellingProductId(context.OwnerId, DateTime.Today, false);
+				}
+				if (UtilitiesManager.CustomerZoneHasPendingClosedNormalRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, context.GetCustomerZoneRate))
+					return false;
+			}
+
 			if (!_rpZoneRelationType.HasValue)
 				SetRoutingProductFields();
+
 			return (_rpZoneRelationType.Value == RoutingProductZoneRelationType.SpecificZones) ? _rpZoneIds.Contains(context.SaleZone.SaleZoneId) : true;
 		}
 

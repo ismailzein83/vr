@@ -29,9 +29,9 @@ namespace TOne.WhS.Sales.Entities
 
 		ZoneChanges ZoneDraft { get; }
 
-		SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId);
+		SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
 
-		SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId);
+		SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
 	}
 
 	public interface IApplyBulkActionToZoneItemContext
