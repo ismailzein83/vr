@@ -6,8 +6,6 @@ namespace Retail.BusinessEntity.Business
     public class VRRetailBEVisibilityEditorRuntime : Vanrise.Entities.VRModuleVisibilityEditorRuntime
     {
         public Dictionary<Guid, string> AccountBEDefinitionNamesById { get; set; }
-
-        public Dictionary<Guid, string> AccountTypeTitlesById { get; set; }
     }
 
 }

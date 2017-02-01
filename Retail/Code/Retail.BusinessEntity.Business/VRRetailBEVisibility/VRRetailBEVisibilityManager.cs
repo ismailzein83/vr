@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -14,65 +15,104 @@ namespace Retail.BusinessEntity.Business
             return new VRApplicationVisibilityManager().GetModuleVisibility<VRRetailBEVisibility>();
         }
 
-        public Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> GetVisibleAccountTypes(VRRetailBEVisibility retailBEVisibility)
+        public bool ShouldApplyGridColumnsVisibility(out Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> gridColumnsByFieldName)
         {
-            var visibleAccountTypes = new List<VRRetailBEVisibilityAccountDefinitionAccountType>();
+            gridColumnsByFieldName = new Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns>();
+
+            var retailBEVisibility = this.GetRetailBEVisibility();
+            if (retailBEVisibility == null)
+                return false;
 
             if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
             {
                 foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
                 {
-                    if (accountDefinition.AccountTypes != null && accountDefinition.AccountTypes.Count > 0)
-                        visibleAccountTypes.AddRange(accountDefinition.AccountTypes);
+                    if (accountDefinition.GridColumns != null)
+                    {
+                        foreach (var gridColumn in accountDefinition.GridColumns)
+                        {
+                            if (!gridColumnsByFieldName.ContainsKey(gridColumn.FieldName))
+                                gridColumnsByFieldName.Add(gridColumn.FieldName, gridColumn);
+                        }
+                    }
                 }
             }
-
-            return visibleAccountTypes.ToDictionary(itm => itm.AccountTypeId, itm => itm);
+            return true;
         }
 
-        public Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> GetVisibleGridColumns(VRRetailBEVisibility retailBEVisibility)
+        public bool ShouldApplyViewsVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> viewsById)
         {
-            var visibleGridColumns = new List<VRRetailBEVisibilityAccountDefinitionGridColumns>();
+            viewsById = new Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView>();
+
+            var retailBEVisibility = this.GetRetailBEVisibility();
+            if (retailBEVisibility == null)
+                return false;
 
             if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
             {
                 foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
                 {
-                    if (accountDefinition.GridColumns != null && accountDefinition.GridColumns.Count > 0)
-                        visibleGridColumns.AddRange(accountDefinition.GridColumns);
+                    if (accountDefinition.Views != null)
+                    {
+                        foreach (var view in accountDefinition.Views)
+                        {
+                            if (!viewsById.ContainsKey(view.ViewId))
+                                viewsById.Add(view.ViewId, view);
+                        }
+                    }
                 }
             }
-            return visibleGridColumns.ToDictionary(itm => itm.FieldName, itm => itm);
+            return true;
         }
-
-        public Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> GetVisibleViews(VRRetailBEVisibility retailBEVisibility)
+        
+        public bool ShouldApplyActionsVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> actionsById)
         {
-            var visibleViews = new List<VRRetailBEVisibilityAccountDefinitionView>();
+            actionsById = new Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction>();
+
+            var retailBEVisibility = this.GetRetailBEVisibility();
+            if (retailBEVisibility == null)
+                return false;
 
             if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
             {
                 foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
                 {
-                    if (accountDefinition.GridColumns != null && accountDefinition.GridColumns.Count > 0)
-                        visibleViews.AddRange(accountDefinition.Views);
+                    if (accountDefinition.Actions != null)
+                    {
+                        foreach (var action in accountDefinition.Actions)
+                        {
+                            if (!actionsById.ContainsKey(action.ActionId))
+                                actionsById.Add(action.ActionId, action);
+                        }
+                    }
                 }
             }
-            return visibleViews.ToDictionary(itm => itm.ViewId, itm => itm);
+            return true;
         }
-
-        public Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> GetVisibleActions(VRRetailBEVisibility retailBEVisibility)
+        
+        public bool ShouldApplyAccountTypesVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> accountTypesById)
         {
-            var visibleActions = new List<VRRetailBEVisibilityAccountDefinitionAction>();
+            accountTypesById = new Dictionary<Guid,VRRetailBEVisibilityAccountDefinitionAccountType>();
+            
+            var retailBEVisibility = this.GetRetailBEVisibility();
+            if (retailBEVisibility == null)
+                return false;
 
             if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
             {
                 foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
                 {
-                    if (accountDefinition.GridColumns != null && accountDefinition.GridColumns.Count > 0)
-                        visibleActions.AddRange(accountDefinition.Actions);
+                    if (accountDefinition.AccountTypes != null)
+                    {
+                        foreach (var accountType in accountDefinition.AccountTypes)
+                        {
+                            if (!accountTypesById.ContainsKey(accountType.AccountTypeId))
+                                accountTypesById.Add(accountType.AccountTypeId, accountType);
+                        }
+                    }
                 }
             }
-            return visibleActions.ToDictionary(itm => itm.ActionId, itm => itm);
+            return true;
         }
     }
 }

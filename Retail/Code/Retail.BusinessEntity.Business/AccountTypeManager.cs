@@ -275,6 +275,7 @@ namespace Retail.BusinessEntity.Business
             {
                 List<AccountType> includedAccountTypes = new List<AccountType>();
                 IEnumerable<AccountType> allAccountTypes = this.GetCachedAccountTypesWithHidden().Values;
+
                 VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
                 VRRetailBEVisibility retailBEVisibility = retailBEVisibilityManager.GetRetailBEVisibility();
 
@@ -286,11 +287,7 @@ namespace Retail.BusinessEntity.Business
                     foreach (var itm in allAccountTypes)
                     {
                         if (visibleAccountTypes.TryGetValue(itm.AccountTypeId, out accountType))
-                        {
-                            if (!string.IsNullOrEmpty(accountType.Title))
-                                itm.Title = accountType.Title;
                             includedAccountTypes.Add(itm);
-                        }
                     }
                 }
                 else

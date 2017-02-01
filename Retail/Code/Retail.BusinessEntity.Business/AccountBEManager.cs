@@ -19,19 +19,6 @@ namespace Retail.BusinessEntity.Business
     {
         #region Public Methods
 
-
-        public Account GetSelfOrParentAccountOfType(Guid accountBEDefinitionId, long accountId, Guid accountTypeId)
-        {
-            var account = GetAccount(accountBEDefinitionId, accountId);
-            if (account == null)
-                throw new NullReferenceException(String.Format("Account '{0}'", account));
-            if (account.TypeId == accountTypeId)
-                return account;
-            else if (account.ParentAccountId.HasValue)
-                return GetSelfOrParentAccountOfType(accountBEDefinitionId, account.ParentAccountId.Value, accountTypeId);
-            else return null;
-        }
-
         public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
             var recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
@@ -349,8 +336,6 @@ namespace Retail.BusinessEntity.Business
             return retailSubscriberInvoiceSettings.DefaultEmailId;
         }
 
-
-         
         public Account GetAccountBySourceId(Guid accountBEDefinitionId, string sourceId)
         {
             Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId(accountBEDefinitionId);
@@ -422,6 +407,18 @@ namespace Retail.BusinessEntity.Business
                 }
             }
             return false;
+        }
+
+        public Account GetSelfOrParentAccountOfType(Guid accountBEDefinitionId, long accountId, Guid accountTypeId)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("Account '{0}'", account));
+            if (account.TypeId == accountTypeId)
+                return account;
+            else if (account.ParentAccountId.HasValue)
+                return GetSelfOrParentAccountOfType(accountBEDefinitionId, account.ParentAccountId.Value, accountTypeId);
+            else return null;
         }
 
         #endregion

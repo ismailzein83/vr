@@ -17,10 +17,10 @@ namespace Retail.BusinessEntity.Web.Controllers
         AccountBEDefinitionManager _manager = new AccountBEDefinitionManager();
 
         [HttpGet]
-        [Route("GetAccountBEDefinitionSettings")]
-        public AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
+        [Route("GetAccountBEDefinitionSettingsWithHidden")]
+        public AccountBEDefinitionSettings GetAccountBEDefinitionSettingsWithHidden(Guid accountBEDefinitionId)
         {
-            return _manager.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            return _manager.GetAccountBEDefinitionSettingsWithHidden(accountBEDefinitionId);
         }
 
         [HttpGet]
@@ -64,6 +64,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountActionDefinitions(accountBEDefinitionId);
         }
+
         [HttpGet]
         [Route("GetAccountActionDefinitionsInfo")]
         public IEnumerable<AccountActionDefinitionInfo> GetAccountActionDefinitionsInfo(Guid accountBEDefinitionId, string serializedFilter = null)
@@ -73,6 +74,7 @@ namespace Retail.BusinessEntity.Web.Controllers
                 filter = Vanrise.Common.Serializer.Deserialize<AccountActionDefinitionInfoFilter>(serializedFilter);
             return _manager.GetAccountActionDefinitionsInfo(accountBEDefinitionId, filter);
         }
+
         [HttpGet]
         [Route("GetAccountActionDefinition")]
         public AccountActionDefinition GetAccountActionDefinition(Guid accountBEDefinitionId, Guid actionDefinitionId)

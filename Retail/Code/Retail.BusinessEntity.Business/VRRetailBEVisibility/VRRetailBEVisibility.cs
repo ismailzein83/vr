@@ -20,10 +20,7 @@ namespace Retail.BusinessEntity.Business
         public override VRModuleVisibilityEditorRuntime GetEditorRuntime()
         {
             var accountBEDefinitionNamesById = new Dictionary<Guid, string>();
-            var accountTypeTitlesById = new Dictionary<Guid, string>();
-
             var businessEntityDefinitionManager = new Vanrise.GenericData.Business.BusinessEntityDefinitionManager();
-            var accountTypeManager = new AccountTypeManager();
 
             if (AccountDefinitions != null)
             {
@@ -31,21 +28,11 @@ namespace Retail.BusinessEntity.Business
                 {
                     if (!accountBEDefinitionNamesById.ContainsKey(accountDefinitionsVisibility.Key))
                         accountBEDefinitionNamesById.Add(accountDefinitionsVisibility.Key, businessEntityDefinitionManager.GetBusinessEntityDefinitionName(accountDefinitionsVisibility.Key));
-
-                    if (accountDefinitionsVisibility.Value.AccountTypes != null)
-                    {
-                        foreach (var accountType in accountDefinitionsVisibility.Value.AccountTypes)
-                        {
-                            if (!accountTypeTitlesById.ContainsKey(accountType.AccountTypeId))
-                                accountTypeTitlesById.Add(accountType.AccountTypeId, accountTypeManager.GetAccountTypeName(accountType.AccountTypeId));
-                        }
-                    }
                 }
             }
 
             VRRetailBEVisibilityEditorRuntime retailBEVisibilityEditorRuntime = new VRRetailBEVisibilityEditorRuntime();
             retailBEVisibilityEditorRuntime.AccountBEDefinitionNamesById = accountBEDefinitionNamesById;
-            retailBEVisibilityEditorRuntime.AccountTypeTitlesById = accountTypeTitlesById;
 
             return retailBEVisibilityEditorRuntime;
         }
@@ -76,49 +63,35 @@ namespace Retail.BusinessEntity.Business
     public class VRRetailBEVisibilityAccountDefinitionGridColumns
     {
         public string FieldName { get; set; }
-
-        public string Title { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionView
     {
         public Guid ViewId { get; set; }
-
-        public string Title { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionAction
     {
         public Guid ActionId { get; set; }
-
-        public string Title { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionAccountType
     {
         public Guid AccountTypeId { get; set; }
-
-        public string Title { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionServiceType
     {
         public Guid ServiceTypeId { get; set; }
-
-        public string Title { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionProductDefinition
     {
-        public Guid ServiceTypeId { get; set; }
-
-        public string Title { get; set; }
+        public Guid ProductDefinitionId { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionPackageDefinition
     {
         public Guid PackageDefinitionId { get; set; }
-
-        public string Title { get; set; }
     }
 }

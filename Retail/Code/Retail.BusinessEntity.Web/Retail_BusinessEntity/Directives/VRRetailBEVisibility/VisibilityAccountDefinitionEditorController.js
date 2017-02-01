@@ -72,10 +72,9 @@
 
             $scope.scopeModel.onAccountBEDefinitionSelectionChanged = function (selectedAccountBEDefinition) {
                 if (selectedAccountBEDefinition != undefined) {
-
                     accountBEDefinitionId = selectedAccountBEDefinition.BusinessEntityDefinitionId;
 
-                    Retail_BE_AccountBEDefinitionAPIService.GetAccountBEDefinitionSettings(accountBEDefinitionId).then(function (response) {
+                    Retail_BE_AccountBEDefinitionAPIService.GetAccountBEDefinitionSettingsWithHidden(accountBEDefinitionId).then(function (response) {
                         accountBEDefinitionSettings = response;
 
                         if (accountBEDefinitionSelectionChangedDeferred != undefined) {

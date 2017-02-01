@@ -14,7 +14,7 @@ namespace Retail.BusinessEntity.Entities
         public override string ManagerFQTN
         {
             get { return "Retail.BusinessEntity.Business.AccountBEManager, Retail.BusinessEntity.Business"; }
-        }
+        } 
 
         public override string DefinitionEditor
         { 

@@ -8,8 +8,8 @@
 
         var controllerName = 'AccountBEDefinition';
 
-        function GetAccountBEDefinitionSettings(accountBEDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountBEDefinitionSettings"), {
+        function GetAccountBEDefinitionSettingsWithHidden(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountBEDefinitionSettingsWithHidden"), {
                 accountBEDefinitionId: accountBEDefinitionId
             });
         }
@@ -60,7 +60,7 @@
             });
         }
         return {
-            GetAccountBEDefinitionSettings: GetAccountBEDefinitionSettings,
+            GetAccountBEDefinitionSettingsWithHidden: GetAccountBEDefinitionSettingsWithHidden,
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
             GetAccountActionDefinitionSettingsConfigs: GetAccountActionDefinitionSettingsConfigs,
             GetAccountGridColumnAttributes: GetAccountGridColumnAttributes,

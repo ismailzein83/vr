@@ -72,8 +72,6 @@ app.directive('retailBeVisibilityaccounttypeManagement', ['UtilsService', 'VRUIU
                     var accountTypes;
                     var accountBEDefinitionId;
 
-                    console.log(payload);
-
                     if (payload != undefined) {
                         accountTypes = payload.accountTypes;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
