@@ -491,7 +491,6 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSetting_Insert.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSetting_GetAll.sql" />
     <Build Include="common\Tables\VRAppVisibility.sql" />
-    <Build Include="common\Tables\ExtensionConfiguration_Temp.sql" />
     <Build Include="common\Tables\Connection.sql" />
     <Build Include="common\Stored Procedures\sp_VRAppVisibility_Update.sql" />
     <Build Include="common\Stored Procedures\sp_VRAppVisibility_Insert.sql" />
