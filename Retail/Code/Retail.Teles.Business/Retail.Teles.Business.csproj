@@ -41,11 +41,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Integration.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangeUsersRoutingGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RevertUsersRoutingGroup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Teles.Entities\Retail.Teles.Entities.csproj">
       <Project>{e7df81ab-c163-4dfb-b50b-5dff1b9f0aec}</Project>
       <Name>Retail.Teles.Entities</Name>
