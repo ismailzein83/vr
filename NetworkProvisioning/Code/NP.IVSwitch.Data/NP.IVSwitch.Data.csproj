@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICDRDataManager.cs" />
     <Compile Include="IDomainDataManager.cs" />
     <Compile Include="IEndPointDataManager.cs" />
     <Compile Include="IAccountDataManager.cs" />

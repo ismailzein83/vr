@@ -53,7 +53,13 @@ namespace NP.IVSwitch.Business
             IAccountDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IAccountDataManager>();
             Helper.SetSwitchConfig(dataManager);
             int accountId;
-            dataManager.Insert(accountItem, out  accountId);
+            bool succInsert = dataManager.Insert(accountItem, out  accountId);
+            if (succInsert)
+            {
+                ICDRDataManager cdrDataManager = IVSwitchDataManagerFactory.GetDataManager<ICDRDataManager>();
+                Helper.SetSwitchConfig(cdrDataManager);
+                cdrDataManager.InsertHelperUser(accountId, accountItem.LogAlias);
+            }
 
             return accountId;
         }

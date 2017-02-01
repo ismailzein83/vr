@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CDRDataManager.cs" />
     <Compile Include="CustomerRouteDataManager.cs" />
     <Compile Include="DomainDataManager.cs" />
     <Compile Include="EndPointDataManager.cs" />

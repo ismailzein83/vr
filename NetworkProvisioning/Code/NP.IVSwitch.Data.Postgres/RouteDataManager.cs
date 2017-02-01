@@ -119,9 +119,15 @@ namespace NP.IVSwitch.Data.Postgres
             int groupId = GetGroupId(route);
             int tariffId = CheckTariffTable();
             int? userIdInserted = InserVendorUSer(route, groupId);
-            if (!userIdInserted.HasValue) return userIdInserted;
+            if (!userIdInserted.HasValue) return null;
             route.UserId = userIdInserted.Value;
-            return InsertRoutes(route, groupId, tariffId);
+            int? routeId = InsertRoutes(route, groupId, tariffId);
+            if (routeId.HasValue)
+            {
+                RouteTableDataManager routeTableDataManager = new RouteTableDataManager(IvSwitchSync.RouteConnectionString, IvSwitchSync.OwnerName);
+                routeTableDataManager.InsertHelperRoute(routeId.Value, route.Description);
+            }
+            return routeId;
         }
         private void UpdateCustomerChannelLimit(int accountId)
         {

@@ -21,7 +21,19 @@ namespace NP.IVSwitch.Data.Postgres
         {
             return ConnectionString;
         }
-
+        public bool InsertHelperRoute(int routeId, string description)
+        {
+            string query = @"INSERT INTO ui_helper_routes(
+	                            route_id, description)
+	                            SELECT @route_id, @description WHERE NOT EXISTS 
+                                ( SELECT 1 FROM ui_helper_routes WHERE (route_id = @route_id ))";
+            int recordsEffected = ExecuteNonQueryText(query, cmd =>
+            {
+                cmd.Parameters.AddWithValue("@route_id", routeId);
+                cmd.Parameters.AddWithValue("@description", description);
+            });
+            return recordsEffected > 0;
+        }
         public int CreateRouteTable(int routeId)
         {
             if (routeId == -1) return -1;
