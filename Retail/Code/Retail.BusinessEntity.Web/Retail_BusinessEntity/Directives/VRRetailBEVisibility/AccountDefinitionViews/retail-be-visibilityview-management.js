@@ -23,7 +23,7 @@ app.directive('retailBeVisibilityviewManagement', ['UtilsService', 'VRUIUtilsSer
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionView/Templates/VisibilityViewManagementTemplate.html';
+                return '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionViews/Templates/VisibilityViewManagementTemplate.html';
             }
         };
 
@@ -89,12 +89,10 @@ app.directive('retailBeVisibilityviewManagement', ['UtilsService', 'VRUIUtilsSer
                     if ($scope.scopeModel.selectedViewDefinitions != undefined) {
                         for (var i = 0; i < $scope.scopeModel.selectedViewDefinitions.length; i++) {
                             var viewDefinition = $scope.scopeModel.selectedViewDefinitions[i];
-                            var view = views[i];
 
                             $scope.scopeModel.views.push({
                                 AccountViewDefinitionId: viewDefinition.AccountViewDefinitionId,
-                                Name: viewDefinition.Name,
-                                Title: view.Title,
+                                Name: viewDefinition.Name
                             });
                         }
                     }
@@ -108,8 +106,7 @@ app.directive('retailBeVisibilityviewManagement', ['UtilsService', 'VRUIUtilsSer
                         for (var i = 0; i < $scope.scopeModel.views.length; i++) {
                             var currentView = $scope.scopeModel.views[i];
                             _views.push({
-                                ViewId: currentView.AccountViewDefinitionId,
-                                Title: currentView.Title
+                                ViewId: currentView.AccountViewDefinitionId
                             });
                         }
                     }

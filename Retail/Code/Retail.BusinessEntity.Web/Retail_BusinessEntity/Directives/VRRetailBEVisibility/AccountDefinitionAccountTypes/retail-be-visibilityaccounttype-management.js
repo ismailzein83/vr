@@ -36,7 +36,6 @@ app.directive('retailBeVisibilityaccounttypeManagement', ['UtilsService', 'VRUIU
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.accountTypeDefinitions = [];
-                $scope.scopeModel.selectedAccountTypeDefinitions = [];
                 $scope.scopeModel.accountTypes = [];
 
                 $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
@@ -57,8 +56,8 @@ app.directive('retailBeVisibilityaccounttypeManagement', ['UtilsService', 'VRUIU
                 };
 
                 $scope.scopeModel.onDeleteRow = function (deletedItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedAccountTypeDefinitions, deletedItem.AccountTypeId, 'AccountTypeId');
-                    $scope.scopeModel.selectedAccountTypeDefinitions.splice(index, 1);
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedAccountTypes, deletedItem.AccountTypeId, 'AccountTypeId');
+                    $scope.scopeModel.selectedAccountTypes.splice(index, 1);
                     $scope.scopeModel.onDeselectAccountType(deletedItem);
                 };
 
@@ -71,12 +70,12 @@ app.directive('retailBeVisibilityaccounttypeManagement', ['UtilsService', 'VRUIU
                     var promises = [];
 
                     var accountTypes;
-                    var accountTypeTitlesById;
                     var accountBEDefinitionId;
+
+                    console.log(payload);
 
                     if (payload != undefined) {
                         accountTypes = payload.accountTypes;
-                        accountTypeTitlesById = payload.accountTypeTitlesById;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                     }
 
@@ -89,14 +88,10 @@ app.directive('retailBeVisibilityaccounttypeManagement', ['UtilsService', 'VRUIU
                         if ($scope.scopeModel.selectedAccountTypes != undefined) {
                             for (var i = 0; i < $scope.scopeModel.selectedAccountTypes.length; i++) {
                                 var accountTypeDefinition = $scope.scopeModel.selectedAccountTypes[i];
-                                var accountType = accountTypes[i];
-
-                                var name = accountType.Name != undefined ? accountType.Name : accountTypeTitlesById[accountTypeDefinition.AccountTypeId];
 
                                 $scope.scopeModel.accountTypes.push({
                                     AccountTypeId: accountTypeDefinition.AccountTypeId,
-                                    Name: name,
-                                    Title: accountType.Title
+                                    Name: accountTypeDefinition.Title
                                 });
                             }
                         }
@@ -137,9 +132,7 @@ app.directive('retailBeVisibilityaccounttypeManagement', ['UtilsService', 'VRUIU
                         for (var i = 0; i < $scope.scopeModel.accountTypes.length; i++) {
                             var currentAccountType = $scope.scopeModel.accountTypes[i];
                             _accountTypes.push({
-                                AccountTypeId: currentAccountType.AccountTypeId,
-                                Name: currentAccountType.Name,
-                                Title: currentAccountType.Title
+                                AccountTypeId: currentAccountType.AccountTypeId
                             });
                         }
                     }

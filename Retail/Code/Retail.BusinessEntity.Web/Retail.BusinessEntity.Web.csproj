@@ -186,6 +186,9 @@
   <ItemGroup>
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\" />
+    <Folder Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionPackageDefinitions\Templates\" />
+    <Folder Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionProductDefinitions\Templates\" />
+    <Folder Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionServiceTypes\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
@@ -529,12 +532,12 @@
     <Content Include="Retail_BusinessEntity\Directives\Switch\retail-be-switch-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionAccountTypes\retail-be-visibilityaccounttype-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionAccountTypes\Templates\VisibilityAccountTypeManagementTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionAction\retail-be-visibilityaction-management.js" />
-    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionAction\Templates\VisibilityActionManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionActions\retail-be-visibilityaction-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionActions\Templates\VisibilityActionManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionGridColumns\retail-be-visibilitygridcolumn-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionGridColumns\Templates\VisibilityGridColumnManagementTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionView\retail-be-visibilityview-management.js" />
-    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionView\Templates\VisibilityViewManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionViews\retail-be-visibilityview-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionViews\Templates\VisibilityViewManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\retail-be-visibilityaccountdefinitions-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\Templates\VisibilityAccountDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\Templates\VisibilityAccountDefinitionsManagementTemplate.html" />

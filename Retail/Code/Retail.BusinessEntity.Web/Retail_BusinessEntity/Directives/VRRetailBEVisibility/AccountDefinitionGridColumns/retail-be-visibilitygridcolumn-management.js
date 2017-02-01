@@ -90,12 +90,10 @@ app.directive('retailBeVisibilitygridcolumnManagement', ['UtilsService', 'VRUIUt
                     if ($scope.scopeModel.selectedGridColumnDefinitions != undefined) {
                         for (var i = 0; i < $scope.scopeModel.selectedGridColumnDefinitions.length; i++) {
                             var gridColumnDefinition = $scope.scopeModel.selectedGridColumnDefinitions[i];
-                            var gridColumn = gridColumns[i];
 
                             $scope.scopeModel.gridColumns.push({
                                 FieldName: gridColumnDefinition.FieldName,
-                                Header: gridColumnDefinition.Header,
-                                Title: gridColumn.Title
+                                Header: gridColumnDefinition.Header
                             });
                         }
                     }
@@ -109,8 +107,7 @@ app.directive('retailBeVisibilitygridcolumnManagement', ['UtilsService', 'VRUIUt
                         for (var i = 0; i < $scope.scopeModel.gridColumns.length; i++) {
                             var currentGridColumn = $scope.scopeModel.gridColumns[i];
                             _gridColumns.push({
-                                FieldName: currentGridColumn.FieldName,
-                                Title: currentGridColumn.Title
+                                FieldName: currentGridColumn.FieldName
                             });
                         }
                     }

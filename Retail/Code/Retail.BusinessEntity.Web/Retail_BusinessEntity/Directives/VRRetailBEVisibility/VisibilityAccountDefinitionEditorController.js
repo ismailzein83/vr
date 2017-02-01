@@ -228,8 +228,7 @@
             UtilsService.waitMultiplePromises([visibilityAccountTypeDirectiveReady.promise, accountBEDefinitionSelectionChangedDeferred.promise]).then(function () {
                 var visibilityAccountTypeDirectivePayload = {
                     accountBEDefinitionId: accountBEDefinitionId,
-                    accountTypes: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.AccountTypes : undefined,
-                    accountTypeTitlesById: retailBEVisibilityEditorRuntime != undefined ? retailBEVisibilityEditorRuntime.AccountTypeTitlesById : undefined
+                    accountTypes: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.AccountTypes : undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(visibilityAccountTypeDirectiveAPI, visibilityAccountTypeDirectivePayload, visibilityAccountTypeLoadDeferred);
             });

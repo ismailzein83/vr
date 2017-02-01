@@ -23,7 +23,7 @@ app.directive('retailBeVisibilityactionManagement', ['UtilsService', 'VRUIUtilsS
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionAction/Templates/VisibilityActionManagementTemplate.html';
+                return '/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/AccountDefinitionActions/Templates/VisibilityActionManagementTemplate.html';
             }
         };
 
@@ -89,12 +89,10 @@ app.directive('retailBeVisibilityactionManagement', ['UtilsService', 'VRUIUtilsS
                     if ($scope.scopeModel.selectedActionDefinitions != undefined) {
                         for (var i = 0; i < $scope.scopeModel.selectedActionDefinitions.length; i++) {
                             var actionDefinition = $scope.scopeModel.selectedActionDefinitions[i];
-                            var action = actions[i];
 
                             $scope.scopeModel.actions.push({
                                 AccountActionDefinitionId: actionDefinition.AccountActionDefinitionId,
-                                Name: actionDefinition.Name,
-                                Title: action.Title
+                                Name: actionDefinition.Name
                             });
                         }
                     }
@@ -108,8 +106,7 @@ app.directive('retailBeVisibilityactionManagement', ['UtilsService', 'VRUIUtilsS
                         for (var i = 0; i < $scope.scopeModel.actions.length; i++) {
                             var currentAction = $scope.scopeModel.actions[i];
                             _actions.push({
-                                ActionId: currentAction.AccountActionDefinitionId,
-                                Title: currentAction.Title
+                                ActionId: currentAction.AccountActionDefinitionId
                             });
                         }
                     }
