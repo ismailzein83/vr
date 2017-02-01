@@ -187,9 +187,6 @@
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\" />
-    <Folder Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionPackageDefinitions\Templates\" />
-    <Folder Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionProductDefinitions\Templates\" />
-    <Folder Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionServiceTypes\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
@@ -537,6 +534,12 @@
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionActions\Templates\VisibilityActionManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionGridColumns\retail-be-visibilitygridcolumn-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionGridColumns\Templates\VisibilityGridColumnManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionPackageDefinitions\retail-be-visibilitypackagedefinition-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionPackageDefinitions\Templates\VisibilityPackageDefinitionManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionProductDefinitions\retail-be-visibilityproductdefinition-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionProductDefinitions\Templates\VisibilityProductDefinitionManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionServiceTypes\retail-be-visibilityservicetype-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionServiceTypes\Templates\VisibilityServiceTypeManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionViews\retail-be-visibilityview-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\AccountDefinitionViews\Templates\VisibilityViewManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\VRRetailBEVisibility\retail-be-visibilityaccountdefinitions-management.js" />
