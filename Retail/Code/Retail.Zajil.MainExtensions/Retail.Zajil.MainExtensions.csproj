@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountConvertor.cs" />
+    <Compile Include="ZajilCompanyExtendedInfo.cs" />
+    <Compile Include="ZajilCompanyExtendedInfoDefinition.cs" />
     <Compile Include="AccountPartOrderDetail.cs" />
     <Compile Include="AccountPartOrderDetailDefinition.cs" />
     <Compile Include="OrderDetailItem.cs" />

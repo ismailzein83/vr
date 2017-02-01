@@ -26,7 +26,14 @@
             <vr-textbox value="scopeModel.poBox" label="POBox"></vr-textbox>
         </vr-columns>
     </vr-row>
-
+    <vr-row removeline>
+        <vr-columns width="1/2row" ng-if="scopeModel.showArabicName">
+            <vr-textbox value="scopeModel.arabicName" label="Arabic Name"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.address" label="Address"></vr-textbox>
+        </vr-columns>
+    </vr-row>
     <vr-row removeline>
         <vr-columns width="1/2row">
             <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModel.onPhoneValueChange" value="scopeModel.phoneNumberValue"></vr-textbox>

@@ -103,9 +103,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Zajil\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Definition\retail-zajil-accounttype-part-definition-companyextendedinfo.js" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Definition\retail-zajil-accounttype-part-definition-orderdetails.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Definition\Templates\AccountTypePartCompanyExtendedInfoDefinitionTemplate.html" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Definition\Templates\AccountTypePartOrderDetailDefinitionTemplate.html" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Runtime\retail-zajil-accounttype-part-runtime-companyextendedinfo.js" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Runtime\retail-zajil-accounttype-part-runtime-orderdetails.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Runtime\Templates\AccountTypePartCompanyExtendedInfoRuntimeTemplate.html" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Part\Runtime\Templates\AccountTypePartOrderDetailsRuntimeTemplate.html" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\retail-zajil-account-convertor-editor.js" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Templates\AccountConvertorEditor.html" />

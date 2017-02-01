@@ -75,6 +75,7 @@ app.directive('retailBeAccounttypePartDefinitionCompanyprofile', [function () {
                             $scope.scopeModel.contactTypes.push(currentContactType);
                         }
                     }
+                    $scope.scopeModel.includeArabicName = payload.partDefinitionSettings != undefined && payload.partDefinitionSettings.IncludeArabicName || false;
                 }
             };
 
@@ -89,7 +90,8 @@ app.directive('retailBeAccounttypePartDefinitionCompanyprofile', [function () {
                 }
                 return {
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfileDefinition,Retail.BusinessEntity.MainExtensions',
-                    ContactTypes: contactTypes
+                    ContactTypes: contactTypes,
+                    IncludeArabicName: $scope.scopeModel.includeArabicName
                 };
             };
 

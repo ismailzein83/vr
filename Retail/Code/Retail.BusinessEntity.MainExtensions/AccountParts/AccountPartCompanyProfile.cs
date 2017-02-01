@@ -29,6 +29,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public string Website { get; set; }
 
+        public string ArabicName { get; set; }
+
         public List<AccountCompanyContact> Contacts { get; set; }
 
         #region IAccountProfile Memebers
@@ -37,33 +39,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public List<string> Faxes { get; set; }
 
-        public string Address
-        {
-            get
-            {
-                string countryName = string.Empty;
-                string cityName = string.Empty;
-
-                if (this.CountryId != null)
-                    countryName = s_countryManager.GetCountryName(this.CountryId.Value);
-
-                if (this.CityId != null)
-                    cityName = s_cityManager.GetCityName(this.CityId.Value);
-
-                List<string> address = new List<string>();
-
-                if (string.IsNullOrEmpty(countryName))
-                    address.Add(countryName);
-
-                if (string.IsNullOrEmpty(cityName))
-                    address.Add(cityName);
-
-                address.Add(this.Town);
-                address.Add(this.Street);
-
-                return string.Join(",", address.ToArray());
-            }
-        }
+        public string Address { get; set; }
 
         #endregion
 

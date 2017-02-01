@@ -102,6 +102,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                     if (payload.partDefinition != undefined && payload.partDefinition.Settings !=undefined)
                     {
                         $scope.scopeModel.contacts.length = 0;
+                        $scope.scopeModel.showArabicName = payload.partDefinition.Settings.IncludeArabicName == true || false;
                         for (var i = 0; i < payload.partDefinition.Settings.ContactTypes.length; i++) {
                             var contactType = payload.partDefinition.Settings.ContactTypes[i];
                             var settings;
@@ -152,6 +153,8 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                         $scope.scopeModel.town = payload.partSettings.Town;
                         $scope.scopeModel.website = payload.partSettings.Website;
                         $scope.scopeModel.poBox = payload.partSettings.POBox;
+                        $scope.scopeModel.arabicName = payload.partSettings.ArabicName;
+                        $scope.scopeModel.address = payload.partSettings.Address;
 
                         $scope.scopeModel.phoneNumbers = [];
                         if (payload.partSettings.PhoneNumbers != undefined)
@@ -204,7 +207,9 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                     POBox:$scope.scopeModel.poBox,
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModel.phoneNumbers, "phoneNumber"),
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModel.faxes, "fax"),
-                    Contacts: contacts
+                    Contacts: contacts,
+                    ArabicName: $scope.scopeModel.arabicName,
+                    Address: $scope.scopeModel.address
                 };
             };
 
