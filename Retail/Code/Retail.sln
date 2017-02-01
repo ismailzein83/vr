@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -119,9 +119,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Zajil.Data", "Retail
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Zajil.Data.SQL", "Retail.Zajil.Data.SQL\Retail.Zajil.Data.SQL.csproj", "{C138C333-CB11-460A-8559-AE2E5E3AA087}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.Teles", "Retail.Teles", "{B308930C-7B05-4773-8AA9-67A1653A4F21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Teles.Entities", "Retail.Teles.Entities\Retail.Teles.Entities.csproj", "{E7DF81AB-C163-4DFB-B50B-5DFF1B9F0AEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Teles.Business", "Retail.Teles.Business\Retail.Teles.Business.csproj", "{96171ED5-87C9-42C6-B052-38D788C63192}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Teles.Web", "Retail.Teles.Web\Retail.Teles.Web.csproj", "{ED21E892-FDFE-4385-87DD-0332E6344C4C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 46
+		SccNumberOfProjects = 49
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -305,6 +313,18 @@ Global
 		SccProjectTopLevelParentUniqueName45 = Retail.sln
 		SccProjectName45 = Retail.Zajil.Data.SQL
 		SccLocalPath45 = Retail.Zajil.Data.SQL
+		SccProjectUniqueName46 = Retail.Teles.Entities\\Retail.Teles.Entities.csproj
+		SccProjectTopLevelParentUniqueName46 = Retail.sln
+		SccProjectName46 = Retail.Teles.Entities
+		SccLocalPath46 = Retail.Teles.Entities
+		SccProjectUniqueName47 = Retail.Teles.Business\\Retail.Teles.Business.csproj
+		SccProjectTopLevelParentUniqueName47 = Retail.sln
+		SccProjectName47 = Retail.Teles.Business
+		SccLocalPath47 = Retail.Teles.Business
+		SccProjectUniqueName48 = Retail.Teles.Web\\Retail.Teles.Web.csproj
+		SccProjectTopLevelParentUniqueName48 = Retail.sln
+		SccProjectName48 = Retail.Teles.Web
+		SccLocalPath48 = Retail.Teles.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -497,6 +517,18 @@ Global
 		{C138C333-CB11-460A-8559-AE2E5E3AA087}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C138C333-CB11-460A-8559-AE2E5E3AA087}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C138C333-CB11-460A-8559-AE2E5E3AA087}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7DF81AB-C163-4DFB-B50B-5DFF1B9F0AEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7DF81AB-C163-4DFB-B50B-5DFF1B9F0AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7DF81AB-C163-4DFB-B50B-5DFF1B9F0AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7DF81AB-C163-4DFB-B50B-5DFF1B9F0AEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96171ED5-87C9-42C6-B052-38D788C63192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96171ED5-87C9-42C6-B052-38D788C63192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96171ED5-87C9-42C6-B052-38D788C63192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96171ED5-87C9-42C6-B052-38D788C63192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED21E892-FDFE-4385-87DD-0332E6344C4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED21E892-FDFE-4385-87DD-0332E6344C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED21E892-FDFE-4385-87DD-0332E6344C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED21E892-FDFE-4385-87DD-0332E6344C4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -555,5 +587,9 @@ Global
 		{5725B506-D34A-481C-B630-3D0AE3AA410B} = {E96ED88A-8574-4AFE-8BF0-66075777B899}
 		{7CCAE9AC-6CEA-419A-B08A-5B827B8746C6} = {E96ED88A-8574-4AFE-8BF0-66075777B899}
 		{C138C333-CB11-460A-8559-AE2E5E3AA087} = {E96ED88A-8574-4AFE-8BF0-66075777B899}
+		{B308930C-7B05-4773-8AA9-67A1653A4F21} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{E7DF81AB-C163-4DFB-B50B-5DFF1B9F0AEC} = {B308930C-7B05-4773-8AA9-67A1653A4F21}
+		{96171ED5-87C9-42C6-B052-38D788C63192} = {B308930C-7B05-4773-8AA9-67A1653A4F21}
+		{ED21E892-FDFE-4385-87DD-0332E6344C4C} = {B308930C-7B05-4773-8AA9-67A1653A4F21}
 	EndGlobalSection
 EndGlobal

@@ -720,6 +720,18 @@
       <Project>{756d0871-0e8a-40eb-b63d-0671c8a8fd9c}</Project>
       <Name>Retail.SMS.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Teles.Business\Retail.Teles.Business.csproj">
+      <Project>{96171ed5-87c9-42c6-b052-38d788c63192}</Project>
+      <Name>Retail.Teles.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Teles.Entities\Retail.Teles.Entities.csproj">
+      <Project>{e7df81ab-c163-4dfb-b50b-5dff1b9f0aec}</Project>
+      <Name>Retail.Teles.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Teles.Web\Retail.Teles.Web.csproj">
+      <Project>{ed21e892-fdfe-4385-87dd-0332e6344c4c}</Project>
+      <Name>Retail.Teles.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Voice.Business\Retail.Voice.Business.csproj">
       <Project>{95ae4730-ee1b-4a0b-a785-baf36f130714}</Project>
       <Name>Retail.Voice.Business</Name>

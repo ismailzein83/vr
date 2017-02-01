@@ -69,7 +69,7 @@ namespace Retail.BusinessEntity.Business
             {
                 foreach (var accountDetail in bigResult.Data)
                 {
-                    AccountDetailMapperStep2(accountDetail, accountDetail.Entity);
+                    AccountDetailMapperStep2(input.Query.AccountBEDefinitionId, accountDetail, accountDetail.Entity);
                 }
             }
 
@@ -651,7 +651,7 @@ namespace Retail.BusinessEntity.Business
         {
             AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
             var accountDetail = AccountDetailMapperStep1(accountType.AccountBEDefinitionId, account, null);
-            AccountDetailMapperStep2(accountDetail, account);
+            AccountDetailMapperStep2(accountType.AccountBEDefinitionId, accountDetail, account);
             return accountDetail;
         }
 
@@ -659,7 +659,6 @@ namespace Retail.BusinessEntity.Business
         {
             var statusDefinitionManager = new StatusDefinitionManager();
             var accountTypeManager = new AccountTypeManager();
-            var accountBEDefinitionManager = new AccountBEDefinitionManager();
             var accountServices = new AccountServiceManager();
             var accountPackages = new AccountPackageManager();
 
@@ -683,9 +682,6 @@ namespace Retail.BusinessEntity.Business
                 fieldValues.Add(field.Name, accountFieldValue);
             }
 
-            List<AccountViewDefinition> accountViewDefinitions = accountBEDefinitionManager.GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
-            List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionManager.GetAccountActionDefinitionsByAccount(accountBEDefinitionId, account);
-
             return new AccountDetail()
             {
                 Entity = account,
@@ -695,19 +691,21 @@ namespace Retail.BusinessEntity.Business
                 StatusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId),
                 NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
                 NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId),
-                FieldValues = fieldValues,
-                AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null,
-                AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Select(itm => itm.AccountActionDefinitionId).ToList() : null
+                FieldValues = fieldValues         
             };
         }
 
-        private void AccountDetailMapperStep2(AccountDetail accountDetail, Account account)
+        private void AccountDetailMapperStep2(Guid accountBEDefinitionId, AccountDetail accountDetail, Account account)
         {
             var accountTypeManager = new AccountTypeManager();
             IEnumerable<AccountTypeInfo> accountTypeInfoEntities = accountTypeManager.GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
             accountDetail.CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0);
-            ActionDefinitionManager actionDefinitionManager = new ActionDefinitionManager();
-            accountDetail.ActionDefinitions = actionDefinitionManager.GetActionDefinitionInfoByEntityType(EntityType.Account, account.StatusId);
+            var accountBEDefinitionManager = new AccountBEDefinitionManager();
+            List<AccountViewDefinition> accountViewDefinitions = accountBEDefinitionManager.GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
+            List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionManager.GetAccountActionDefinitionsByAccount(accountBEDefinitionId, account);
+            accountDetail.AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null;
+            accountDetail.AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Select(itm => itm.AccountActionDefinitionId).ToList() : null;
+
             accountDetail.Style = GetStatuStyle(account.StatusId);
         }
 

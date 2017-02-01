@@ -601,6 +601,14 @@
       <Project>{324f5b0b-84e3-403f-9b0b-a53eb997c941}</Project>
       <Name>Retail.Invoice.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Teles.Business\Retail.Teles.Business.csproj">
+      <Project>{96171ed5-87c9-42c6-b052-38d788c63192}</Project>
+      <Name>Retail.Teles.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Teles.Entities\Retail.Teles.Entities.csproj">
+      <Project>{e7df81ab-c163-4dfb-b50b-5dff1b9f0aec}</Project>
+      <Name>Retail.Teles.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Voice.Business\Retail.Voice.Business.csproj">
       <Project>{95ae4730-ee1b-4a0b-a785-baf36f130714}</Project>
       <Name>Retail.Voice.Business</Name>
