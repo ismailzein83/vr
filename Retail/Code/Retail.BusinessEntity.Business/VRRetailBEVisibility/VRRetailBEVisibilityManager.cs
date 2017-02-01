@@ -64,7 +64,7 @@ namespace Retail.BusinessEntity.Business
             }
             return true;
         }
-        
+
         public bool ShouldApplyActionsVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> actionsById)
         {
             actionsById = new Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction>();
@@ -89,7 +89,22 @@ namespace Retail.BusinessEntity.Business
             }
             return true;
         }
-        
+
+        public Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> GetVisibleAccountTypes(VRRetailBEVisibility retailBEVisibility)
+        {
+            var visibleAccountTypes = new List<VRRetailBEVisibilityAccountDefinitionAccountType>();
+
+            if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
+            {
+                foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
+                {
+                    if (accountDefinition.AccountTypes != null && accountDefinition.AccountTypes.Count > 0)
+                        visibleAccountTypes.AddRange(accountDefinition.AccountTypes);
+                }
+            }
+
+            return visibleAccountTypes.ToDictionary(itm => itm.AccountTypeId, itm => itm);
+        }
         public bool ShouldApplyAccountTypesVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> accountTypesById)
         {
             accountTypesById = new Dictionary<Guid,VRRetailBEVisibilityAccountDefinitionAccountType>();
