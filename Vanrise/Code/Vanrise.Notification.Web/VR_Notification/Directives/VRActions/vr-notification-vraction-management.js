@@ -26,6 +26,7 @@ function (UtilsService, VR_Notification_VRActionService) {
 
         var extensionType;
         var isRequired;
+        var context;
 
         function initializeController() {
 
@@ -43,7 +44,7 @@ function (UtilsService, VR_Notification_VRActionService) {
                 var onVRActionAdded = function (action) {
                     ctrl.datasource.push({ Entity: action });
                 };
-                VR_Notification_VRActionService.addVRAction(onVRActionAdded, extensionType);
+                VR_Notification_VRActionService.addVRAction(onVRActionAdded, extensionType, getContext());
 
             };
 
@@ -67,14 +68,18 @@ function (UtilsService, VR_Notification_VRActionService) {
                     }
 
                 }
+
                 return data;
             };
 
             api.load = function (payload) {
+
                 if (payload != undefined) {
+                    context = payload.context;
                     isRequired = payload.isRequired;
                     extensionType = payload.extensionType;
                 }
+
                 ctrl.datasource.length = 0;
                 if (payload != undefined && payload.actions != undefined) {
                     for (var i = 0; i < payload.actions.length; i++) {
@@ -98,7 +103,13 @@ function (UtilsService, VR_Notification_VRActionService) {
             var onVRActionUpdated = function (vrActionObj) {
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: vrActionObj };
             };
-            VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated, extensionType);
+            VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated, extensionType, getContext());
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
 

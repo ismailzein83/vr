@@ -5,12 +5,13 @@
     VRAlertRuleSettingsService.$inject = ['VRModalService', 'VRNotificationService'];
 
     function VRAlertRuleSettingsService(VRModalService, VRNotificationService) {
-        function addAlertRuleThreshold(onAlertRuleSettingsAdded, actionExtensionType, thresholdExtensionType) {
+        function addAlertRuleThreshold(onAlertRuleSettingsAdded, actionExtensionType, thresholdExtensionType,context) {
 
             var settings = {};
             var parameters = {
                 actionExtensionType: actionExtensionType,
-                thresholdExtensionType: thresholdExtensionType
+                thresholdExtensionType: thresholdExtensionType,
+                context: context
             };
             settings.onScopeReady = function (modalScope) {
                 modalScope.onAlertRuleSettingsAdded = onAlertRuleSettingsAdded
@@ -18,12 +19,13 @@
 
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRuleSettings/AlertRuleSettingsEditor.html', parameters, settings);
         };
-        function editAlertRuleThreshold(thresholdActionEntity, onAlertRuleSettingsUpdated, actionExtensionType, thresholdExtensionType) {
+        function editAlertRuleThreshold(thresholdActionEntity, onAlertRuleSettingsUpdated, actionExtensionType, thresholdExtensionType, context) {
             var settings = {};
             var parameters = {
                 thresholdActionEntity: thresholdActionEntity,
                 actionExtensionType: actionExtensionType,
-                thresholdExtensionType: thresholdExtensionType
+                thresholdExtensionType: thresholdExtensionType,
+                context: context
             };
 
             settings.onScopeReady = function (modalScope) {

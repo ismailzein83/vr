@@ -7,20 +7,24 @@
 
     function VRAlertRuleService(VRModalService) {
 
-        function addVRAlertRule(onVRAlertRuleAdded) {
+        function addVRAlertRule(onVRAlertRuleAdded, context) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRAlertRuleAdded = onVRAlertRuleAdded
             };
-            VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRule/VRAlertRuleEditor.html', null, settings);
+            var parameters = {
+                context: context
+            };
+            VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRule/VRAlertRuleEditor.html', parameters, settings);
         };
 
-        function editVRAlertRule(vrAlertRuleId, onVRAlertRuleUpdated) {
+        function editVRAlertRule(vrAlertRuleId, onVRAlertRuleUpdated, context) {
             var settings = {};
 
             var parameters = {
                 vrAlertRuleId: vrAlertRuleId,
+                context: context
             };
 
             settings.onScopeReady = function (modalScope) {

@@ -35,6 +35,8 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
             var alertExtendedSettings;
             var alertTypeSettings;
 
+            var context;
+
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -57,9 +59,10 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                 var api = {};
 
                 api.load = function (payload) {
-
                     var promises = [];
                     if (payload != undefined) {
+                        context = payload.context;
+
                         criteriaDefinitionFields = payload.alertTypeSettings.CriteriaDefinition.Fields;
                         extensionType = payload.alertTypeSettings.VRActionExtensionType;
 
@@ -78,7 +81,8 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                     criteriaDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             criteriaDefinitionFields: criteriaDefinitionFields,
-                            criteriaFieldsValues: criteriaFieldsValues
+                            criteriaFieldsValues: criteriaFieldsValues,
+                            context: getContext()
                         };
                         VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, payload, loadCriteriaSectionPromiseDeferred);
                     });
@@ -91,7 +95,8 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                     vrAlertRuleSettingsDirectiveReadyDeferred.promise.then(function () {
                         var payload = {
                             settings: alertExtendedSettings,
-                            alertTypeSettings: alertTypeSettings
+                            alertTypeSettings: alertTypeSettings,
+                            context: getContext()
                         };
                         VRUIUtilsService.callDirectiveLoad(vrAlertRuleSettingsDirectiveAPI, payload, loadRuleSettingsSectionPromiseDeferred);
                     });
@@ -109,6 +114,16 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function getContext()
+            {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                currentContext.getAlertRuleTypeSettings = function () {
+                        return alertTypeSettings;
+                };
+                return currentContext;
             }
         }
     }]);

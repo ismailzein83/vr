@@ -20,6 +20,7 @@
         var vrAlertRuleTypeSelectoReadyDeferred = UtilsService.createPromiseDeferred();
         var vrAlertRuleTypeSelectionChangedDeferred;
 
+        var context;
 
         loadParameters();
         defineScope();
@@ -30,8 +31,8 @@
 
             if (parameters != undefined && parameters != null) {
                 vrAlertRuleId = parameters.vrAlertRuleId;
+                context = parameters.context;
             }
-
             isEditMode = (vrAlertRuleId != undefined);
         }
 
@@ -189,7 +190,8 @@
         function getDirectiveWrapperPayload() {
             return {
                 alertTypeSettings: vrAlertRuleTypeEntity.Settings,
-                alertExtendedSettings: vrAlertRuleEntity != undefined ? vrAlertRuleEntity.Settings.ExtendedSettings : undefined
+                alertExtendedSettings: vrAlertRuleEntity != undefined ? vrAlertRuleEntity.Settings.ExtendedSettings : undefined,
+                context:getContext()
             };
         }
 
@@ -235,6 +237,13 @@
                     ExtendedSettings: directiveAPI.getData()
                 }
             };
+        }
+        function getContext()
+        {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
 
     }

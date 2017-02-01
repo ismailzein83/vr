@@ -11,6 +11,7 @@
         var extensionType;
         var actionDirectiveApi;
         var actionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var context;
 
         loadParameters();
         defineScope();
@@ -23,8 +24,8 @@
             if (parameters != undefined && parameters != null) {
                 actionEntity = parameters.vrActionEntity;
                 extensionType = parameters.extensionType;
+                context = parameters.context;
             }
-
             isEditMode = (actionEntity != undefined);
         }
 
@@ -83,7 +84,7 @@
             var actionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             actionReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = { extensionType: extensionType, vrActionEntity : actionEntity };
+                    var directivePayload = {context: getContext() , extensionType: extensionType, vrActionEntity : actionEntity };
                     VRUIUtilsService.callDirectiveLoad(actionDirectiveApi, directivePayload, actionLoadPromiseDeferred);
                 });
             return actionLoadPromiseDeferred.promise;
@@ -104,6 +105,12 @@
 
         function buildActionObjFromScope() {
             return actionDirectiveApi.getData();
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
 
