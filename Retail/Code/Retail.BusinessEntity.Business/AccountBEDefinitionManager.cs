@@ -281,7 +281,6 @@ namespace Retail.BusinessEntity.Business
             {
                 AccountActionDefinitionId = accountActionDefinition.AccountActionDefinitionId,
                 Name = accountActionDefinition.Name,
-                BackendExecutorSettingEditor = accountActionDefinition.ActionDefinitionSettings.BackendExecutorSettingEditor
             };
         }
         #endregion

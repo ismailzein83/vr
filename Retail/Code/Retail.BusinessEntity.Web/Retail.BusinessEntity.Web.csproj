@@ -177,6 +177,7 @@
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\ServiceTypeController.cs" />
     <Compile Include="Controllers\TelestSwitchController.cs" />
+    <Compile Include="Controllers\VRAccountBalanceManager.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Controllers\ProductDefinitionController.cs" />
@@ -220,13 +221,18 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\SubAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\retail-be-accountcondition-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\Templates\AccountConditionSelectiveTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-accountactiondefinitionsettings-bpaccountbackendexecutor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-bpaccountaction-selective.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\Templates\BPAccountActionBackendExecutorSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\EditAccountAction\retail-be-accountactiondefinitionsettings-editaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-accountactiondefinitionsettings-bpaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\EditAccountAction\Templates\EditAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\Templates\BPAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\retail-be-accountactiondefinitionsettings-open360degreeaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\Templates\Open360DegreeAccountActionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-backendexecutor-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\Templates\BackendExecutorEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-actions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-childberelation.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-financialtransactions.js" />
@@ -561,6 +567,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountSynchronizerHandlerAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\VRAccountBalanceAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\ProductFamilyService.js" />
     <Content Include="Retail_BusinessEntity\Services\RecurringChargeDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />

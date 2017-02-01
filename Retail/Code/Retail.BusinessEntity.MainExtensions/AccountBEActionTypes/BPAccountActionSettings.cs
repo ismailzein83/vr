@@ -19,14 +19,20 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         {
             get { return "BPAction"; }
         }
-
+        public override string BackendExecutorSettingEditor
+        {
+            get
+            {
+                return "retail-be-accountactiondefinitionsettings-bpaccountbackendexecutor";
+            }
+        }
         public ActionBPDefinitionSettings BPDefinitionSettings { get; set; }
     }
 
     public class BPAccountActionBackendExecutor : AccountActionBackendExecutor
     {
         public ActionBPSettings BPSettings { get; set; }
-
+       
         public override bool TryConvertToBPArg(IAccountActionBackendExecutorConvertToBPArgContext context)
         {
             context.BPInputArgument = new ActionBPInputArgument

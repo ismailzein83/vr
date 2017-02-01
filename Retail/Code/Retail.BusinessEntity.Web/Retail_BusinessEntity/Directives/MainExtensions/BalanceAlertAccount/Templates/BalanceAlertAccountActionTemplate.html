@@ -1,12 +1,8 @@
 ﻿<vr-tabs>
     <vr-tab header="'Definition'">
         <vr-row>
-            <retail-be-actiondefinition-selector on-ready="scopeModel.onActionDefinitionSelectorReady" normal-col-num="4" onselectionchanged=" scopeModel.onActionDefinitionSelectionChanged" isrequired="true" selectedvalues="scopeModel.selectedActionDefinition"></retail-be-actiondefinition-selector>
+            <retail-be-accountactiondefinitions-backendexecutor-editor on-ready="scopeModel.onActionBackendExecutorEditorReady" normal-col-num="4" ></retail-be-accountactiondefinitions-backendexecutor-editor>
         </vr-row>
     </vr-tab>
-    <span ng-if="scopeModel.selectedExtensionConfig  != undefined">
-        <vr-directivewrapper directive="scopeModel.selectedExtensionConfig.RuntimeEditor" on-ready="scopeModel.onActionDefinitionRuntimeReady" isrequired="true" vr-loader="scopeModel.isLoadingDirective"></vr-directivewrapper>
-    </span>
-
 </vr-tabs>
 

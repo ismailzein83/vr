@@ -9,5 +9,6 @@ namespace Retail.BusinessEntity.Entities
     public abstract class ActionBPDefinitionSettings
     {
         public abstract Guid ConfigId { get; }
+        public virtual string RuntimeEditor { get; set; }
     }
 }

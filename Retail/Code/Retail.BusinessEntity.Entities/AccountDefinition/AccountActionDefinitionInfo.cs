@@ -10,6 +10,5 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid AccountActionDefinitionId { get; set; }
         public string Name { get; set; }
-        public string BackendExecutorSettingEditor { get; set; }
     }
 }

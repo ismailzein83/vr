@@ -47,7 +47,18 @@
                 accountBEDefinitionId: accountBEDefinitionId
             });
         }
-
+        function GetAccountActionDefinitionsInfo(accountBEDefinitionId, serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountActionDefinitionsInfo"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                serializedFilter: serializedFilter
+            });
+        }
+        function GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountActionDefinition"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                actionDefinitionId: actionDefinitionId
+            });
+        }
         return {
             GetAccountBEDefinitionSettings: GetAccountBEDefinitionSettings,
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
@@ -55,7 +66,9 @@
             GetAccountGridColumnAttributes: GetAccountGridColumnAttributes,
             GetAccountViewDefinitions: GetAccountViewDefinitions,
             GetAccountViewDefinitionsByAccountId: GetAccountViewDefinitionsByAccountId,
-            GetAccountActionDefinitions: GetAccountActionDefinitions
+            GetAccountActionDefinitions: GetAccountActionDefinitions,
+            GetAccountActionDefinitionsInfo: GetAccountActionDefinitionsInfo,
+            GetAccountActionDefinition:GetAccountActionDefinition
         };
     }
 

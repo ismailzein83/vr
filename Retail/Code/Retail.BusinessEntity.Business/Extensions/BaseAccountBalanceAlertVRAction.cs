@@ -13,18 +13,13 @@ namespace Retail.BusinessEntity.Business
     public abstract class BaseAccountBalanceAlertVRAction : VRAction
     {
         static Vanrise.Notification.Business.VRAlertRuleTypeManager s_alertRuleTypeManager = new Vanrise.Notification.Business.VRAlertRuleTypeManager();
-        static Vanrise.AccountBalance.Business.AccountTypeManager s_balanceAccountTypeManager = new Vanrise.AccountBalance.Business.AccountTypeManager();
         static AccountBEManager s_accountBEManager = new AccountBEManager();
+        static VRAccountBalanceManager s_vRAccountBalanceManager = new VRAccountBalanceManager();
         protected Guid GetAccountBEDefinitionId(VRBalanceAlertEventPayload balanceAlertEventPayload)
         {
             Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleTypeSettings balanceRuleTypeSettings = s_alertRuleTypeManager.GetVRAlertRuleTypeSettings<AccountBalanceAlertRuleTypeSettings>(balanceAlertEventPayload.AlertRuleTypeId);
             balanceRuleTypeSettings.ThrowIfNull("balanceRuleTypeSettings", balanceAlertEventPayload.AlertRuleTypeId);
-            Vanrise.AccountBalance.Entities.AccountTypeSettings accountTypeSettings = s_balanceAccountTypeManager.GetAccountTypeSettings(balanceRuleTypeSettings.AccountTypeId);
-            accountTypeSettings.ThrowIfNull("accountTypeSettings", balanceRuleTypeSettings.AccountTypeId);
-            
-            SubscriberAccountBalanceSetting retailAccountBalanceSetting = accountTypeSettings.ExtendedSettings.CastWithValidate<SubscriberAccountBalanceSetting>("accountTypeSettings.ExtendedSettings");
-
-            return retailAccountBalanceSetting.AccountBEDefinitionId;
+            return s_vRAccountBalanceManager.GetAccountBEDefinitionIdByAccountTypeId(balanceRuleTypeSettings.AccountTypeId);
         }
 
         protected long GetAccountId(VRBalanceAlertEventPayload balanceAlertEventPayload)

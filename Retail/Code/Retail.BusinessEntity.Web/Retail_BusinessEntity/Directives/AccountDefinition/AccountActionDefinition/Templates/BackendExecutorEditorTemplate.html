@@ -1,0 +1,9 @@
+﻿<vr-row>
+    <retail-be-accountactiondefinitions-selector on-ready="scopeModel.onAccountActionDefinitionSelectorReady" normal-col-num="4" onselectionchanged="    scopeModel.onAccountActionDefinitionSelectionChanged" isrequired="true" selectedvalues="scopeModel.selectedAccountActionDefinition"></retail-be-accountactiondefinitions-selector>
+</vr-row>
+
+<span ng-if="scopeModel.backendExecutorSettingEditor  != undefined">
+    <vr-directivewrapper directive="scopeModel.backendExecutorSettingEditor" on-ready="scopeModel.onBackendExecutorSettingEditorReady" isrequired="true" vr-loader="scopeModel.isLoadingDirective"></vr-directivewrapper>
+</span>
+
+

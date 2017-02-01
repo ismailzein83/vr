@@ -8,7 +8,6 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountActionDefinitionInfoFilter
     {
-        public Guid AccountBEDefinition { get; set; }
         public bool? VisibleInBalanceAlertRule { get; set; }
     }
 }
