@@ -38,6 +38,9 @@
                     return WhS_SupPL_SupplierPriceListTemplateAPIService.TestConversionForSupplierPriceList(priceListTemplateObject).then(function (response) {
                         $scope.scopeModel.isLoading = false;
                         UtilsService.downloadFile(response.data, response.headers);
+                    }).catch(function (error) {
+                        $scope.scopeModel.isLoading = false;
+                        VRNotificationService.notifyException(error, $scope);
                     });
                 };
 
