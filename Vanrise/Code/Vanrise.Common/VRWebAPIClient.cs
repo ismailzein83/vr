@@ -36,6 +36,32 @@ namespace Vanrise.Common
             return default(Q);
         }
 
+        public static T Get<T>(string url, string actionPath, Dictionary<string, string> headers = null)
+        {
+            using (var client = new HttpClient())
+            {
+                // New code:
+                client.BaseAddress = new Uri(url);
+                if (headers != null && headers.Count > 0)
+                    AddHeaders(client, headers);     
+                var responseTask = client.GetAsync(actionPath);
+                responseTask.Wait();
+                if (responseTask.Exception != null)
+                    throw responseTask.Exception;
+                if (responseTask.Result.StatusCode != System.Net.HttpStatusCode.OK)
+                    throw new Exception(String.Format("Error occured when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
+                if (responseTask.Result.IsSuccessStatusCode)
+                {
+                    var rsltTask = responseTask.Result.Content.ReadAsAsync<T>();
+                    rsltTask.Wait();
+                    if (rsltTask.Exception != null)
+                        throw rsltTask.Exception;
+                    return rsltTask.Result;
+                }
+            }
+            return default(T);
+        }
+
         private static void AddHeaders(HttpClient client, Dictionary<string, string> headers)
         {
             client.DefaultRequestHeaders.Accept.Clear();
