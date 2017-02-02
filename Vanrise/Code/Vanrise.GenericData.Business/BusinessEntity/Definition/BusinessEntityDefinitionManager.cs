@@ -183,19 +183,15 @@ namespace Vanrise.GenericData.Business
         #region Caching
 
         static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
-        CacheManager GetCacheManager()
-        {
-            return s_cacheManager;
-        }
 
         public T GetCachedOrCreate<T>(Object cacheName, Func<T> createObject)
         {
-            return GetCacheManager().GetOrCreateObject(cacheName, createObject);
+            return s_cacheManager.GetOrCreateObject(cacheName, createObject);
         }
 
         private Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
         {
-            return GetCacheManager().GetOrCreateObject("GetBusinessEntityDefinitions",
+            return s_cacheManager.GetOrCreateObject("GetBusinessEntityDefinitions",
                 () =>
                 {
                     IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
