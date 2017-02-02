@@ -1,7 +1,7 @@
-﻿Create PROCEDURE [common].[sp_VRAppVisibility_GetAll]
+﻿CREATE PROCEDURE [common].[sp_VRAppVisibility_GetAll]
 AS
 BEGIN
-	SELECT	ID, Name, Settings
+	SELECT	ID, Name, IsCurrent, Settings
 	FROM	[common].VRAppVisibility WITH(NOLOCK) 
 	ORDER BY [Name]
 END
