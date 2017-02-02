@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Business
         static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
 
         #endregion
-
+         
         #region Public Methods
 
         public AccountBEDefinitionSettings GetAccountBEDefinitionSettingsWithHidden(Guid accountBEDefinitionId)
@@ -59,45 +59,45 @@ namespace Retail.BusinessEntity.Business
                 accountBEDefinitionSettings.StatusBEDefinitionId = businessEntityDefinitionSettings.StatusBEDefinitionId;
 
                 //GridColumns
-                Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> gridColumnsByFieldName;
+                Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> visibleGridColumnsByFieldName;
                 
                 if (businessEntityDefinitionSettings.GridDefinition != null && businessEntityDefinitionSettings.GridDefinition.ColumnDefinitions != null &&
-                    retailBEVisibilityManager.ShouldApplyGridColumnsVisibility(out gridColumnsByFieldName))
+                    retailBEVisibilityManager.ShouldApplyGridColumnsVisibility(out visibleGridColumnsByFieldName))
                 {
                     accountBEDefinitionSettings.GridDefinition = new AccountGridDefinition();
                     accountBEDefinitionSettings.GridDefinition.ColumnDefinitions = new List<AccountGridColumnDefinition>();
 
                     foreach (var gridColumn in businessEntityDefinitionSettings.GridDefinition.ColumnDefinitions)
                     {
-                        if (IsColumnVisible(gridColumnsByFieldName, gridColumn))
+                        if (IsColumnVisible(visibleGridColumnsByFieldName, gridColumn))
                             accountBEDefinitionSettings.GridDefinition.ColumnDefinitions.Add(gridColumn);
                     }
                 }
 
                 //Views
-                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> viewsById;
+                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> visibleViewsById;
 
-                if (businessEntityDefinitionSettings.AccountViewDefinitions != null && retailBEVisibilityManager.ShouldApplyViewsVisibility(out viewsById))
+                if (businessEntityDefinitionSettings.AccountViewDefinitions != null && retailBEVisibilityManager.ShouldApplyViewsVisibility(out visibleViewsById))
                 {
                     accountBEDefinitionSettings.AccountViewDefinitions = new List<AccountViewDefinition>();
 
                     foreach (var view in businessEntityDefinitionSettings.AccountViewDefinitions)
                     {
-                        if (IsViewVisible(viewsById, view))
+                        if (IsViewVisible(visibleViewsById, view))
                             accountBEDefinitionSettings.AccountViewDefinitions.Add(view);
                     }
                 }
 
                 //Actions
-                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> actionsById;
+                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleActionsById;
 
-                if (businessEntityDefinitionSettings.AccountViewDefinitions != null && retailBEVisibilityManager.ShouldApplyActionsVisibility(out actionsById))
+                if (businessEntityDefinitionSettings.AccountViewDefinitions != null && retailBEVisibilityManager.ShouldApplyActionsVisibility(out visibleActionsById))
                 {
                     accountBEDefinitionSettings.ActionDefinitions = new List<AccountActionDefinition>();
 
                     foreach (var action in businessEntityDefinitionSettings.ActionDefinitions)
                     {
-                        if (IsActionVisible(actionsById, action))
+                        if (IsActionVisible(visibleActionsById, action))
                             accountBEDefinitionSettings.ActionDefinitions.Add(action);
                     }
                 }
@@ -238,17 +238,17 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<AccountActionDefinitionInfo> GetAccountActionDefinitionsInfo(Guid accountBEDefinitionId, AccountActionDefinitionInfoFilter filter)
         {
             var accountBEActions = GetAccountActionDefinitions(accountBEDefinitionId);
-            Func<AccountActionDefinition, bool> filterFunc = null;
+            Func<AccountActionDefinition, bool> filterExpression = null;
             if (filter != null)
             {
-                filterFunc = (accountActionDefinition) =>
+                filterExpression = (accountActionDefinition) =>
                 {
                     if (filter.VisibleInBalanceAlertRule.HasValue && accountActionDefinition.VisibleInBalanceAlertRule != filter.VisibleInBalanceAlertRule.Value)
                         return false;
                     return true;
                 };
             }
-            return accountBEActions.MapRecords(AccountActionDefinitionInfoMapper, filterFunc).OrderBy(x => x.Name);
+            return accountBEActions.MapRecords(AccountActionDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         #endregion

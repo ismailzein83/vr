@@ -6,22 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Common;
- 
+
 namespace Retail.BusinessEntity.Business
 {
     public class ProductDefinitionManager
     {
         #region Public Methods
 
-        public IEnumerable<ProductDefinition> GetProductDefinitions()
-        {
-            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-            return vrComponentTypeManager.GetComponentTypes<ProductDefinitionSettings, ProductDefinition>();
-        }
-
         public ProductDefinition GetProductDefinition(Guid productDefinitionId)
         {
-            var productDefinitions = GetProductDefinitions();
+            var productDefinitions = GetCachedProductDefinitionsWithHidden();
             return productDefinitions.FindRecord(x => x.VRComponentTypeId == productDefinitionId);
         }
         public ProductDefinitionSettings GetProductDefinitionSettings(Guid productDefinitionId)
@@ -34,10 +28,29 @@ namespace Retail.BusinessEntity.Business
             return productDefinition.Settings;
         }
 
-        public IEnumerable<ProductDefinitionInfo> GetProductDefinitionsInfo()
+        public IEnumerable<ProductDefinitionInfo> GetProductDefinitionsInfo(ProductDefinitionFilter filter)
         {
-            var productDefinitions = GetProductDefinitions();
-            return productDefinitions.MapRecords(ProductDefinitionInfoMapper);
+            IEnumerable<ProductDefinition> cachedProductDefinitions = null;
+
+            Func<ProductDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+                if (filter.IncludeHiddenProductDefinitions)
+                    cachedProductDefinitions = this.GetCachedProductDefinitionsWithHidden();
+
+                filterExpression = (productDefinition) =>
+                    {
+                        if (filter.AccountBEDefinitionId.HasValue && productDefinition.Settings != null && 
+                            filter.AccountBEDefinitionId.Value != productDefinition.Settings.AccountBEDefinitionId)
+                            return false;
+                        return true;
+                    };
+            }
+            
+            if (cachedProductDefinitions == null)
+                cachedProductDefinitions = this.GetCachedProductDefinitions();
+
+            return cachedProductDefinitions.MapRecords(ProductDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public IEnumerable<ProductDefinitionConfig> GetProductDefinitionExtendedSettingsConfigs()
@@ -57,6 +70,43 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("productDefinition.Settings of productDefinitionId: {0}", productDefinitionId));
 
             return productDefinition.Settings.AccountBEDefinitionId;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private IEnumerable<ProductDefinition> GetCachedProductDefinitionsWithHidden()
+        {
+            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
+            return vrComponentTypeManager.GetComponentTypes<ProductDefinitionSettings, ProductDefinition>();
+        }
+
+        private IEnumerable<ProductDefinition> GetCachedProductDefinitions()
+        {
+            return new VRComponentTypeManager().GetCachedOrCreate("GetProductDefinitions", () =>
+            {
+                VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
+                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionProductDefinition> visibleProductDefinitionsById;
+                List<ProductDefinition> includedProductDefinitions = new List<ProductDefinition>();
+                
+                var allProductDefinitions = this.GetCachedProductDefinitionsWithHidden();
+
+                if (retailBEVisibilityManager.ShouldApplyProductDefinitionsVisibility(out visibleProductDefinitionsById))
+                {
+                    foreach (var productDefinition in allProductDefinitions)
+                    {
+                        if (visibleProductDefinitionsById.ContainsKey(productDefinition.VRComponentTypeId))
+                            includedProductDefinitions.Add(productDefinition);
+                    }
+                }
+                else
+                {
+                    includedProductDefinitions = allProductDefinitions.ToList();
+                }
+
+                return includedProductDefinitions;
+            });
         }
 
         #endregion

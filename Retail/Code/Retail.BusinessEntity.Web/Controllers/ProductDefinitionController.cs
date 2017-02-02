@@ -13,19 +13,20 @@ namespace Retail.BusinessEntity.Web
     [JSONWithTypeAttribute]
     public class ProductDefinitionController : BaseAPIController
     {
+        ProductDefinitionManager manager = new ProductDefinitionManager();
+
         [HttpGet]
         [Route("GetProductDefinitionsInfo")]
         public IEnumerable<ProductDefinitionInfo> GetProductDefinitionsInfo(string serializedFilter = null)
         {
-            ProductDefinitionManager manager = new ProductDefinitionManager();
-            return manager.GetProductDefinitionsInfo();
+            ProductDefinitionFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<ProductDefinitionFilter>(serializedFilter) : null;
+            return manager.GetProductDefinitionsInfo(deserializedFilter);
         }
 
         [HttpGet]
         [Route("GetProductDefinitionExtendedSettingsConfigs")]
         public IEnumerable<ProductDefinitionConfig> GetProductDefinitionExtendedSettingsConfigs()
         {
-            ProductDefinitionManager manager = new ProductDefinitionManager();
             return manager.GetProductDefinitionExtendedSettingsConfigs();
         }
     }

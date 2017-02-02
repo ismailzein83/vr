@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AccountTypeDetail> GetFilteredAccountTypes(Vanrise.Entities.DataRetrievalInput<AccountTypeQuery> input)
         {
-            Dictionary<Guid, AccountType> cachedAccountTypes = this.GetCachedAccountTypes();
+            Dictionary<Guid, AccountType> cachedAccountTypes = this.GetCachedAccountTypesWithHidden();
 
             Func<AccountType, bool> filterExpression = (accountType) =>
                 (input.Query.Name == null || accountType.Name.ToLower().Contains(input.Query.Name.ToLower()));
@@ -274,19 +274,16 @@ namespace Retail.BusinessEntity.Business
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountTypes", () =>
             {
                 List<AccountType> includedAccountTypes = new List<AccountType>();
+                VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
+                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> visibleAccountTypesById;
+
                 IEnumerable<AccountType> allAccountTypes = this.GetCachedAccountTypesWithHidden().Values;
 
-                VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
-                VRRetailBEVisibility retailBEVisibility = retailBEVisibilityManager.GetRetailBEVisibility();
-
-                if (retailBEVisibility != null) 
+                if (retailBEVisibilityManager.ShouldApplyAccountTypesVisibility(out visibleAccountTypesById))
                 {
-                    Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> visibleAccountTypes = retailBEVisibilityManager.GetVisibleAccountTypes(retailBEVisibility);
-
-                    VRRetailBEVisibilityAccountDefinitionAccountType accountType;
                     foreach (var itm in allAccountTypes)
                     {
-                        if (visibleAccountTypes.TryGetValue(itm.AccountTypeId, out accountType))
+                        if (visibleAccountTypesById.ContainsKey(itm.AccountTypeId))
                             includedAccountTypes.Add(itm);
                     }
                 }
@@ -325,12 +322,12 @@ namespace Retail.BusinessEntity.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreAccountTypesUpdated(ref _updateHandle)
-                            |   
+                            |
                         Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountPartDefinitionManager.CacheManager>().IsCacheExpired(ref _accountPartDefinitionCacheLastCheck);
             }
         }
 
-        #endregion 
+        #endregion
 
         #region Mappers
 

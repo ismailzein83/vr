@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_VisibilityAccountDefinitionController" width="'75%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Retail_BE_VisibilityAccountDefinitionController" width="'80%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formVisibilityAccountDefinitionEditor">
 
@@ -9,25 +9,31 @@
                             <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountBEDefinitionSelectorReady"
                                                                               selectedvalues="scopeModel.selectedAccountBEDefinition"
                                                                               onselectionchanged="scopeModel.onAccountBEDefinitionSelectionChanged"
-                                                                              customlabel="Account Definition" normal-col-num="6" isrequired="true">
+                                                                              customlabel="Account Definition" isrequired="true" hideremoveicon>
                             </vr-genericdata-businessentitydefinition-selector>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.title" label="Title" type="text"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Grid Columns'">
+                <vr-tab header="'Grid Columns'" ng-show="scopeModel.isAccountBEDefinitionSelected">
                     <retail-be-visibilitygridcolumn-management on-ready="scopeModel.onVisibilityGridColumnDirectiveReady"></retail-be-visibilitygridcolumn-management>
                 </vr-tab>
-                <vr-tab header="'Views'">
+                <vr-tab header="'Views'" ng-show="scopeModel.isAccountBEDefinitionSelected">
                     <retail-be-visibilityview-management on-ready="scopeModel.onVisibilityViewDirectiveReady"></retail-be-visibilityview-management>
                 </vr-tab>
-                <vr-tab header="'Actions'">
+                <vr-tab header="'Actions'" ng-show="scopeModel.isAccountBEDefinitionSelected">
                     <retail-be-visibilityaction-management on-ready="scopeModel.onVisibilityActionDirectiveReady"></retail-be-visibilityaction-management>
                 </vr-tab>
-                <vr-tab header="'Account Types'">
+                <vr-tab header="'Account Types'" ng-show="scopeModel.isAccountBEDefinitionSelected">
                     <retail-be-visibilityaccounttype-management on-ready="scopeModel.onVisibilityAccountTypeDirectiveReady"></retail-be-visibilityaccounttype-management>
+                </vr-tab>
+                <vr-tab header="'Service Types'" ng-show="scopeModel.isAccountBEDefinitionSelected">
+                    <retail-be-visibilityservicetype-management on-ready="scopeModel.onVisibilityServiceTypeDirectiveReady"></retail-be-visibilityservicetype-management>
+                </vr-tab>
+                <vr-tab header="'Product Definition'" ng-show="scopeModel.isAccountBEDefinitionSelected">
+                    <retail-be-visibilityproductdefinition-management on-ready="scopeModel.onVisibilityProductDefinitionDirectiveReady"></retail-be-visibilityproductdefinition-management>
+                </vr-tab>
+                <vr-tab header="'Package Definition'" ng-show="scopeModel.isAccountBEDefinitionSelected">
+                    <retail-be-visibilitypackagedefinition-management on-ready="scopeModel.onVisibilityPackageDefinitionDirectiveReady"></retail-be-visibilitypackagedefinition-management>
                 </vr-tab>
             </vr-tabs>
 

@@ -1,9 +1,21 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿
 
-</body>
-</html>
+<vr-row>
+    <retail-be-servicetype-selector on-ready="scopeModel.onServiceTypeSelectorReady"
+                                    selectedvalues="scopeModel.selectedServiceTypes"
+                                    onselectitem="scopeModel.onSelectServiceType"
+                                    ondeselectitem="scopeModel.onDeselectServiceType"
+                                    normal-col-num="3"
+                                    ismultipleselection
+                                    hideremoveicon>
+    </retail-be-servicetype-selector>
+    <vr-columns width="3/4row" simplecol>
+        <vr-datagrid datasource="scopeModel.serviceTypes"
+                     ondeleterow="scopeModel.onDeleteRow"
+                     hidegridmenu>
+
+            <vr-datagridcolumn field="'Name'" headertext="'Name'" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
+

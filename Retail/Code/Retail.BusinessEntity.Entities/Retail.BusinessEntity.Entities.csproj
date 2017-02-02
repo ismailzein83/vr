@@ -92,6 +92,7 @@
     <Compile Include="DID\DIDQuery.cs" />
     <Compile Include="DID\DIDSettings.cs" />
     <Compile Include="DID\IDIDFilter.cs" />
+    <Compile Include="Package\Definition\PackageDefinitionFilter.cs" />
     <Compile Include="Package\IPackageFilter.cs" />
     <Compile Include="ProductFamily\ProductFamily.cs" />
     <Compile Include="ProductFamily\ProductFamilyDetail.cs" />
@@ -272,7 +273,6 @@
     <Compile Include="ServiceType\ServiceTypeSettings.cs" />
     <Compile Include="ServiceType\ServiceTypeToEdit.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodSettings.cs" />
-    <Compile Include="Settings\RetailBETechnicalSettings.cs" />
     <Compile Include="StatusChargingSetDetail.cs" />
     <Compile Include="Status\EntityStatusChargeInfo.cs" />
     <Compile Include="Status\StatusChargingSet.cs" />

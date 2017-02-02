@@ -1,7 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeServicetypeSelector', ['Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService)
-{
+app.directive('retailBeServicetypeSelector', ['Retail_BE_ServiceTypeAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_BE_ServiceTypeAPIService, UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -14,7 +13,7 @@ app.directive('retailBeServicetypeSelector', ['Retail_BE_ServiceTypeAPIService',
             isrequired: '=',
             hideremoveicon: '@',
             normalColNum: '@',
-            customvalidate:'='
+            customvalidate: '='
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -57,17 +56,24 @@ app.directive('retailBeServicetypeSelector', ['Retail_BE_ServiceTypeAPIService',
 
                 var selectedIds;
                 var excludedServiceTypeIds;
+                var accountBEDefinitionId;
+                var includeHiddenServiceTypes;
                 var filter;
 
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                     excludedServiceTypeIds = payload.excludedServiceTypeIds;
+                    accountBEDefinitionId = payload.accountBEDefinitionId;
+                    includeHiddenServiceTypes = payload.includeHiddenServiceTypes;
+
                     if (payload.filter != undefined)
                         filter = payload.filter;
                 }
                 if (filter == undefined)
                     filter = {};
                 filter.ExcludedServiceTypeIds = excludedServiceTypeIds;
+                filter.AccountBEDefinitionId = accountBEDefinitionId;
+                filter.IncludeHiddenServiceTypes = includeHiddenServiceTypes;
 
                 return Retail_BE_ServiceTypeAPIService.GetServiceTypesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                     if (response != null) {

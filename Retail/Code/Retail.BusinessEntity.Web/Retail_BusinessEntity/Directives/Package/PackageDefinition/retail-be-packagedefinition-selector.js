@@ -56,11 +56,19 @@ app.directive('retailBePackagedefinitionSelector', ['Retail_BE_PackageDefinition
 
                 var selectedIds;
                 var filter;
+                var accountBEDefinitionId;
+                var includeHiddenPackageDefinitions;
 
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                     filter = payload.filter;
+                    accountBEDefinitionId = payload.accountBEDefinitionId;
+                    includeHiddenPackageDefinitions = payload.includeHiddenPackageDefinitions;
                 }
+                if (filter == undefined)
+                    filter = {};
+                filter.AccountBEDefinitionId = accountBEDefinitionId;
+                filter.IncludeHiddenPackageDefinitions = includeHiddenPackageDefinitions;
 
                 return Retail_BE_PackageDefinitionAPIService.GetPackageDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                     if (response != null) {

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ProductDefinitionFilter
+    public class PackageDefinitionFilter
     {
         public Guid? AccountBEDefinitionId { get; set; }
 
-        public bool IncludeHiddenProductDefinitions { get; set; }
+        public bool IncludeHiddenPackageDefinitions { get; set; }
     }
 }

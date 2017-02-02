@@ -57,11 +57,20 @@ app.directive('retailBeProductdefinitionSelector', ['UtilsService', 'VRUIUtilsSe
 
                     var selectedIds;
                     var filter;
+                    var accountBEDefinitionId;
+                    var includeHiddenProductDefinitions;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
+                        includeHiddenProductDefinitions = payload.includeHiddenProductDefinitions;
                     }
+                    if (filter == undefined)
+                        filter = {};
+                    filter.AccountBEDefinitionId = accountBEDefinitionId;
+                    filter.IncludeHiddenProductDefinitions = includeHiddenProductDefinitions;
+
 
                     return Retail_BE_ProductDefinitionAPIService.GetProductDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         if (response != null) {

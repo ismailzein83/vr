@@ -15,22 +15,35 @@ namespace Retail.BusinessEntity.Business
     {
         #region Public Methods
 
-        public IEnumerable<PackageDefinition> GetPackageDefinitions()
-        {
-            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-            return vrComponentTypeManager.GetComponentTypes<PackageDefinitionSettings, PackageDefinition>();
-        }
-
-        public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo()
-        {
-            var packageDefinitions = GetPackageDefinitions();
-            return packageDefinitions.MapRecords(PackageDefinitionInfoMapper);
-        }
-
         public PackageDefinition GetPackageDefinitionById(Guid packageDefinitionId)
         {
-            var packageDefinitions = GetPackageDefinitions();
+            var packageDefinitions = GetCachedPackageDefinitionswithHidden();
             return packageDefinitions.FindRecord(x => x.VRComponentTypeId == packageDefinitionId);
+        }
+
+        public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo(PackageDefinitionFilter filter)
+        {
+            IEnumerable<PackageDefinition> cachedPackageDefinitions = null;
+
+            Func<PackageDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+                if (filter.IncludeHiddenPackageDefinitions)
+                    cachedPackageDefinitions = this.GetCachedPackageDefinitionswithHidden();
+
+                filterExpression = (packageDefinition) =>
+                {
+                    if (filter.AccountBEDefinitionId.HasValue && packageDefinition.Settings != null &&
+                        filter.AccountBEDefinitionId.Value != packageDefinition.Settings.AccountBEDefinitionId)
+                        return false;
+                    return true;
+                };
+            }
+
+            if (cachedPackageDefinitions == null)
+                cachedPackageDefinitions = this.GetCachedPackageDefinitions();
+
+            return cachedPackageDefinitions.MapRecords(PackageDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public IEnumerable<PackageDefinitionConfig> GetPackageDefinitionExtendedSettingsConfigs()
@@ -51,6 +64,43 @@ namespace Retail.BusinessEntity.Business
 
             return packageDefinition.Settings.AccountBEDefinitionId;
         }
+
+        #region Private Methods
+
+        public IEnumerable<PackageDefinition> GetCachedPackageDefinitionswithHidden()
+        {
+            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
+            return vrComponentTypeManager.GetComponentTypes<PackageDefinitionSettings, PackageDefinition>();
+        }
+
+        private IEnumerable<PackageDefinition> GetCachedPackageDefinitions()
+        {
+            return new VRComponentTypeManager().GetCachedOrCreate("GetCachedProductDefinitions", () =>
+            {
+                VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
+                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionPackageDefinition> visiblePackageDefinitionsById;
+                List<PackageDefinition> includedProductDefinitions = new List<PackageDefinition>();
+                
+                var allPackageDefinitions = this.GetCachedPackageDefinitionswithHidden();
+
+                if (retailBEVisibilityManager.ShouldApplyPackageDefinitionsVisibility(out visiblePackageDefinitionsById))
+                {
+                    foreach (var productDefinition in allPackageDefinitions)
+                    {
+                        if (visiblePackageDefinitionsById.ContainsKey(productDefinition.VRComponentTypeId))
+                            includedProductDefinitions.Add(productDefinition);
+                    }
+                }
+                else
+                {
+                    includedProductDefinitions = allPackageDefinitions.ToList();
+                }
+
+                return includedProductDefinitions;
+            });
+        }
+
+        #endregion
 
         #endregion
 

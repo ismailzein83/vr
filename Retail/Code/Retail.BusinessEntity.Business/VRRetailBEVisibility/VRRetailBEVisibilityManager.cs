@@ -90,21 +90,6 @@ namespace Retail.BusinessEntity.Business
             return true;
         }
 
-        public Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> GetVisibleAccountTypes(VRRetailBEVisibility retailBEVisibility)
-        {
-            var visibleAccountTypes = new List<VRRetailBEVisibilityAccountDefinitionAccountType>();
-
-            if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
-            {
-                foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
-                {
-                    if (accountDefinition.AccountTypes != null && accountDefinition.AccountTypes.Count > 0)
-                        visibleAccountTypes.AddRange(accountDefinition.AccountTypes);
-                }
-            }
-
-            return visibleAccountTypes.ToDictionary(itm => itm.AccountTypeId, itm => itm);
-        }
         public bool ShouldApplyAccountTypesVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> accountTypesById)
         {
             accountTypesById = new Dictionary<Guid,VRRetailBEVisibilityAccountDefinitionAccountType>();
@@ -123,6 +108,81 @@ namespace Retail.BusinessEntity.Business
                         {
                             if (!accountTypesById.ContainsKey(accountType.AccountTypeId))
                                 accountTypesById.Add(accountType.AccountTypeId, accountType);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool ShouldApplyServiceTypesVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionServiceType> serviceTypesById)
+        {
+            serviceTypesById = new Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionServiceType>();
+
+            var retailBEVisibility = this.GetRetailBEVisibility();
+            if (retailBEVisibility == null)
+                return false;
+
+            if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
+            {
+                foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
+                {
+                    if (accountDefinition.ServiceTypes != null)
+                    {
+                        foreach (var serviceType in accountDefinition.ServiceTypes)
+                        {
+                            if (!serviceTypesById.ContainsKey(serviceType.ServiceTypeId))
+                                serviceTypesById.Add(serviceType.ServiceTypeId, serviceType);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool ShouldApplyProductDefinitionsVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionProductDefinition> productDefinitionsById)
+        {
+            productDefinitionsById = new Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionProductDefinition>();
+
+            var retailBEVisibility = this.GetRetailBEVisibility();
+            if (retailBEVisibility == null)
+                return false;
+
+            if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
+            {
+                foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
+                {
+                    if (accountDefinition.ProductDefinitions != null)
+                    {
+                        foreach (var productDefinition in accountDefinition.ProductDefinitions)
+                        {
+                            if (!productDefinitionsById.ContainsKey(productDefinition.ProductDefinitionId))
+                                productDefinitionsById.Add(productDefinition.ProductDefinitionId, productDefinition);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool ShouldApplyPackageDefinitionsVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionPackageDefinition> packageDefinitionsById)
+        {
+            packageDefinitionsById = new Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionPackageDefinition>();
+
+            var retailBEVisibility = this.GetRetailBEVisibility();
+            if (retailBEVisibility == null)
+                return false;
+
+            if (retailBEVisibility != null && retailBEVisibility.AccountDefinitions != null)
+            {
+                foreach (var accountDefinition in retailBEVisibility.AccountDefinitions.Values)
+                {
+                    if (accountDefinition.ProductDefinitions != null)
+                    {
+                        foreach (var packageDefinition in accountDefinition.PackageDefinitions)
+                        {
+                            if (!packageDefinitionsById.ContainsKey(packageDefinition.PackageDefinitionId))
+                                packageDefinitionsById.Add(packageDefinition.PackageDefinitionId, packageDefinition);
                         }
                     }
                 }

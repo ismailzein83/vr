@@ -42,8 +42,6 @@ namespace Retail.BusinessEntity.Business
     {
         public Guid AccountBEDefinitionId { get; set; }
 
-        public string Title { get; set; }
-
         public List<VRRetailBEVisibilityAccountDefinitionGridColumns> GridColumns { get; set; }
 
         public List<VRRetailBEVisibilityAccountDefinitionView> Views { get; set; }

@@ -13,11 +13,11 @@ namespace Retail.BusinessEntity.Business
 {
     public class ServiceTypeManager : IBusinessEntityManager
     {
-        #region Public Methods 
+        #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<ServiceTypeDetail> GetFilteredServiceTypes(Vanrise.Entities.DataRetrievalInput<ServiceTypeQuery> input)
         {
-            Dictionary<Guid, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
+            Dictionary<Guid, ServiceType> cachedServiceTypes = this.GetCachedServiceTypesWithHidden();
 
             Func<ServiceType, bool> filterExpression = (serviceType) =>
                 (input.Query.Name == null || serviceType.Name.ToLower().Contains(input.Query.Name.ToLower()));
@@ -27,7 +27,7 @@ namespace Retail.BusinessEntity.Business
 
         public ServiceType GetServiceType(Guid serviceTypeId)
         {
-            Dictionary<Guid, ServiceType> cachedServiceTypes = this.GetCachedServiceTypes();
+            Dictionary<Guid, ServiceType> cachedServiceTypes = this.GetCachedServiceTypesWithHidden();
             return cachedServiceTypes.GetRecord(serviceTypeId);
         }
 
@@ -63,7 +63,7 @@ namespace Retail.BusinessEntity.Business
 
             IServiceTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
 
-            if (dataManager.Update(updatedServiceType.ServiceTypeId, updatedServiceType.Title,updatedServiceType.AccountBEDefinitionId, serviceTypeSettings))
+            if (dataManager.Update(updatedServiceType.ServiceTypeId, updatedServiceType.Title, updatedServiceType.AccountBEDefinitionId, serviceTypeSettings))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
@@ -79,19 +79,33 @@ namespace Retail.BusinessEntity.Business
 
         public IEnumerable<ServiceTypeInfo> GetServiceTypesInfo(ServiceTypeInfoFilter filter)
         {
-            if (filter == null)
-                return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper).OrderBy(x => x.Title);
+            Dictionary<Guid, ServiceType> cachedServiceTypes = null;
 
-            Func<ServiceType, bool> filterPredicate = (serviceType) =>
+            Func<ServiceType, bool> filterExpression = null;
+            if (filter != null)
             {
-                if (filter.ExcludedServiceTypeIds != null && filter.ExcludedServiceTypeIds.Count() > 0 && filter.ExcludedServiceTypeIds.Contains(serviceType.ServiceTypeId))
-                    return false;
-                if (filter.Filters != null && !CheckIfFilterIsMatch(serviceType, filter.Filters))
-                   return false;
-                return true;
-            };
+                if (filter.IncludeHiddenServiceTypes)
+                    cachedServiceTypes = this.GetCachedServiceTypesWithHidden();
 
-            return this.GetCachedServiceTypes().MapRecords(ServiceTypeInfoMapper, filterPredicate).OrderBy(x => x.Title);
+                filterExpression = (serviceType) =>
+                {
+                    if (filter.AccountBEDefinitionId.HasValue && filter.AccountBEDefinitionId.Value != serviceType.AccountBEDefinitionId)
+                        return false;
+
+                    if (filter.ExcludedServiceTypeIds != null && filter.ExcludedServiceTypeIds.Count() > 0 && filter.ExcludedServiceTypeIds.Contains(serviceType.ServiceTypeId))
+                        return false;
+
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(serviceType, filter.Filters))
+                        return false;
+
+                    return true;
+                };
+            }
+
+            if (cachedServiceTypes == null)
+                cachedServiceTypes = this.GetCachedServiceTypes();
+
+            return cachedServiceTypes.MapRecords(ServiceTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
         }
 
         public ChargingPolicyDefinitionSettings GetServiceTypeChargingPolicyDefinitionSettings(Guid serviceTypeId)
@@ -207,6 +221,44 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Methods
+
+        private Dictionary<Guid, ServiceType> GetCachedServiceTypesWithHidden()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetServiceTypesWithHidden", () =>
+            {
+                IServiceTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
+                IEnumerable<ServiceType> serviceTypes = dataManager.GetServiceTypes();
+                return serviceTypes.ToDictionary(kvp => kvp.ServiceTypeId, kvp => kvp);
+            });
+        }
+
+        Dictionary<Guid, ServiceType> GetCachedServiceTypes()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountTypes", () =>
+            {
+                List<ServiceType> includedServiceTypes = new List<ServiceType>();
+                VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
+                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionServiceType> visibleServiceTypesById;
+
+                IEnumerable<ServiceType> allServiceTypes = this.GetCachedServiceTypesWithHidden().Values;
+
+                if (retailBEVisibilityManager.ShouldApplyServiceTypesVisibility(out visibleServiceTypesById))
+                {
+                    foreach (var itm in allServiceTypes)
+                    {
+                        if (visibleServiceTypesById.ContainsKey(itm.ServiceTypeId))
+                            includedServiceTypes.Add(itm);
+                    }
+                }
+                else
+                {
+                    includedServiceTypes = allServiceTypes.ToList();
+                }
+
+                return includedServiceTypes.ToDictionary(kvp => kvp.ServiceTypeId, kvp => kvp);
+            });
+        }
+
         private bool CheckIfFilterIsMatch(ServiceType entityDefinition, List<IServiceTypeFilter> filters)
         {
             PackageDefinitionServiceTypeFilterContext context = new PackageDefinitionServiceTypeFilterContext { entityDefinition = entityDefinition };
@@ -216,15 +268,6 @@ namespace Retail.BusinessEntity.Business
                     return false;
             }
             return true;
-        }
-        private Dictionary<Guid, ServiceType> GetCachedServiceTypes()
-        {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetServiceTypes", () =>
-            {
-                IServiceTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceTypeDataManager>();
-                IEnumerable<ServiceType> serviceTypes = dataManager.GetServiceTypes();
-                return serviceTypes.ToDictionary(kvp => kvp.ServiceTypeId, kvp => kvp);
-            });
         }
 
         private void FillAccountServiceCommonGenericFields(List<AccountServiceGenericField> fields)

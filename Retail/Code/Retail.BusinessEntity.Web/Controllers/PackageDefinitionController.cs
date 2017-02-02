@@ -13,11 +13,12 @@ namespace Retail.BusinessEntity.Web.Controllers
     [JSONWithTypeAttribute]
     public class PackageDefinitionController : BaseAPIController
     {
+        PackageDefinitionManager manager = new PackageDefinitionManager();
+
         [HttpGet]
         [Route("GetPackageDefinitionExtendedSettingsConfigs")]
         public IEnumerable<PackageDefinitionConfig> GetPackageDefinitionExtendedSettingsConfigs()
         {
-            PackageDefinitionManager manager = new PackageDefinitionManager();
             return manager.GetPackageDefinitionExtendedSettingsConfigs();
         }
 
@@ -25,8 +26,8 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetPackageDefinitionsInfo")]
         public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo(string serializedFilter = null)
         {
-            PackageDefinitionManager manager = new PackageDefinitionManager();
-            return manager.GetPackageDefinitionsInfo();
+            PackageDefinitionFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<PackageDefinitionFilter>(serializedFilter) : null;
+            return manager.GetPackageDefinitionsInfo(deserializedFilter);
         }
     }
 }

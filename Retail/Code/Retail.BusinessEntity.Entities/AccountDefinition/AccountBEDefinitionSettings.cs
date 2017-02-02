@@ -14,11 +14,11 @@ namespace Retail.BusinessEntity.Entities
         public override string ManagerFQTN
         {
             get { return "Retail.BusinessEntity.Business.AccountBEManager, Retail.BusinessEntity.Business"; }
-        } 
+        }
 
         public override string DefinitionEditor
-        { 
-            get { return "retail-be-accountbedefinitions-editor"; } 
+        {
+            get { return "retail-be-accountbedefinitions-editor"; }
         }
 
         public override string IdType
@@ -26,9 +26,9 @@ namespace Retail.BusinessEntity.Entities
             get { return "System.Int64"; }
         }
 
-        public override string SelectorFilterEditor 
-        { 
-            get { return "retail-be-accountcondition-selective"; } 
+        public override string SelectorFilterEditor
+        {
+            get { return "retail-be-accountcondition-selective"; }
         }
 
         public override string SelectorUIControl
@@ -42,9 +42,9 @@ namespace Retail.BusinessEntity.Entities
 
         public List<AccountViewDefinition> AccountViewDefinitions { get; set; }
 
-        public FixedChargingDefinition FixedChargingDefinition { get; set; }
-
         public List<AccountActionDefinition> ActionDefinitions { get; set; }
+
+        public FixedChargingDefinition FixedChargingDefinition { get; set; }
     }
 
     public abstract class AccountBEDefinitionCondition
