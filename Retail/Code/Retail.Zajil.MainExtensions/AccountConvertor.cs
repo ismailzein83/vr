@@ -105,6 +105,7 @@ namespace Retail.Zajil.MainExtensions
             FillCompanyProfile(accountData, row);
             FillOrderDetails(accountData, row);
             FillFinancialInfo(accountData, row);
+            FillCompanyExtendedInfo(accountData, row);
         }
         void FillOrderDetails(SourceAccountData accountData, DataRow row)
         {
