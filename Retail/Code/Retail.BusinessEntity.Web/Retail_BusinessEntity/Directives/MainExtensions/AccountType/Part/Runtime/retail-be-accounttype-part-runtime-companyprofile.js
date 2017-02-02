@@ -108,7 +108,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                             var settings;
                             if(payload.partSettings !=undefined && payload.partSettings.Contacts !=undefined)
                             {
-                                settings = UtilsService.getItemByVal(payload.partSettings.Contacts,contactType.Name,"ContactType");
+                                settings = payload.partSettings.Contacts[contactType.Name];
                             }
                             addContact(contactType, settings);
                          
@@ -182,18 +182,19 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
             };
 
             api.getData = function () {
-                var contacts = [];
+                var contacts = {};
                 if ($scope.scopeModel.contacts.length > 0)
                 {
                     for(var i=0;i<$scope.scopeModel.contacts.length;i++)
                     {
                         var contact = $scope.scopeModel.contacts[i];
-                        contacts.push({
+                        var obj =  {
                             ContactName: contact.name,
-                            ContactType: contact.contactType,
                             Email: contact.email,
                             PhoneNumbers: UtilsService.getPropValuesFromArray(contact.phoneNumbers, "phoneNumber")
-                        });
+                        };
+                        if (obj != null)
+                            contacts[contact.contactType] = obj;
                     }
                 }
 

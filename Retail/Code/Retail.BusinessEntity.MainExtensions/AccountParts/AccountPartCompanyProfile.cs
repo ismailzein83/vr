@@ -77,7 +77,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
             {
                 List<string> namePart = FieldName.Split('_').ToList();
                 var contact = this.Contacts.GetRecord(namePart[0]);
-                return contact != null ?string.Join(",", contact.PhoneNumbers): null;
+                return contact != null && contact.PhoneNumbers!=null ? string.Join(",", contact.PhoneNumbers) : null;
             }    
             else 
                 return null;
