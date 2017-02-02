@@ -28,7 +28,7 @@ namespace Vanrise.BusinessProcess
             return new Tuple<T, AsyncActivityStatus>(GetInputArgument2(context), this.PreviousActivityStatus.Get(context));
         }
 
-        protected void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, Action actionToDo)
+        public void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, Action actionToDo)
         {
             while (previousActivityStatus != null && !previousActivityStatus.IsComplete && !ShouldStop(handle))
             {
@@ -48,7 +48,7 @@ namespace Vanrise.BusinessProcess
 
         protected abstract Q DoWorkWithResult(T inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle);
 
-        protected void PrepareDataForDBApply<R, S>(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, IBulkApplyDataManager<R> dataManager, BaseQueue<S> inputQueue, BaseQueue<Object> outputQueue, Func<S, IEnumerable<R>> GetItems)
+        public void PrepareDataForDBApply<R, S>(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, IBulkApplyDataManager<R> dataManager, BaseQueue<S> inputQueue, BaseQueue<Object> outputQueue, Func<S, IEnumerable<R>> GetItems)
         {
            //System.Threading.Tasks.Parallel.For(0, 3, (i) =>
            //{

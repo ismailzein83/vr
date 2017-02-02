@@ -13,7 +13,7 @@ namespace Vanrise.BusinessProcess
         protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
         {
             this.Status.Set(context, new AsyncActivityStatus());
-            Func<T, AsyncActivityHandle, Q> executeAction = new Func<T, AsyncActivityHandle, Q>(DoWorkWithResult);
+            Func<T, AsyncActivityHandle, Q> executeAction = new Func<T, AsyncActivityHandle, Q>(DoWorkWithResult_Private);
             context.UserState = executeAction;
             AsyncActivityHandle handle = new AsyncActivityHandle
                 {
@@ -25,6 +25,7 @@ namespace Vanrise.BusinessProcess
 
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
+            Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(context.GetSharedInstanceData().InstanceInfo.InitiatorUserId);
             Func<T, AsyncActivityHandle, Q> executeAction = (Func<T, AsyncActivityHandle, Q>)context.UserState;
             Q workResult = executeAction.EndInvoke(result);
             OnWorkComplete(context, workResult);
@@ -32,6 +33,12 @@ namespace Vanrise.BusinessProcess
         }
 
         protected abstract T GetInputArgument(AsyncCodeActivityContext context);
+
+        private Q DoWorkWithResult_Private(T inputArgument, AsyncActivityHandle handle)
+        {
+            Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(handle.SharedInstanceData.InstanceInfo.InitiatorUserId);
+            return DoWorkWithResult(inputArgument, handle);
+        }
 
         protected abstract Q DoWorkWithResult(T inputArgument, AsyncActivityHandle handle);
 
