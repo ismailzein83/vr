@@ -130,10 +130,11 @@
     <Compile Include="RoutingCarrierInfo\RoutingCarrierInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingCustomerInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingSupplierInfo.cs" />
-    <Compile Include="RoutingProduct\CustomerZoneRoutingProduct.cs" />
+    <Compile Include="RoutingProduct\SaleEntityZoneRoutingProduct.cs" />
     <Compile Include="RoutingProduct\DefaultRoutingProduct.cs" />
     <Compile Include="RoutingProduct\RoutingProduct.cs" />
     <Compile Include="RoutingProduct\RoutingProductInfoFilter.cs" />
+    <Compile Include="RoutingProduct\SaleEntityZoneRoutingProductDetail.cs" />
     <Compile Include="RoutingProduct\SaleZoneRoutingProduct.cs" />
     <Compile Include="Settings\PurchaseAreaSettingsData.cs" />
     <Compile Include="Settings\SaleAreaSettingsData.cs" />
