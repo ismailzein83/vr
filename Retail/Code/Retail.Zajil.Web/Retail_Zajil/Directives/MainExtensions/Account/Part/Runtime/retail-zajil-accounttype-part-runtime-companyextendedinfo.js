@@ -27,6 +27,8 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
             $scope.scopeModel = {};
             var api = {};
             api.load = function (payload) {
+                console.log(payload)
+
                 if (payload != undefined && payload.partSettings != undefined) {
                     $scope.scopeModel.cRMCompanyId =  payload.partSettings.CRMCompanyId ;
                     $scope.scopeModel.cRMCompanyAccountNo =  payload.partSettings.CRMCompanyAccountNo ;

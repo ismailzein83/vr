@@ -50,6 +50,10 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             var orderDetailsDefinitionSelectorAPI;
             var orderDetailsDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var companyExtendedInfoSelectorAPI;
+            var companyExtendedInfoReadyDeferred = UtilsService.createPromiseDeferred();
+            
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onAccountDefinitionSelectorReady = function (api) {
@@ -86,7 +90,11 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 orderDetailsDefinitionSelectorAPI = api;
                 orderDetailsDefinitionSelectorReadyDeferred.resolve();
             };
-
+            $scope.scopeModel.onCompanyExtentedInfoSelectorReady = function (api) {
+                companyExtendedInfoSelectorAPI = api;
+                companyExtendedInfoReadyDeferred.resolve();
+            };
+            
             $scope.scopeModel.onAccountDefinitionSelectionChanged = function (selectedItem) {
                 if (selectedItem != undefined && businessEntityDefinitionSelectionChangedDeferred == undefined) {
                     businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
@@ -171,7 +179,7 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                     promises.push(loadCompanyProfileDefinitionSelector());
                     promises.push(loadFinancialDefinitionSelector());
                     promises.push(loadOrderDetailsDefinitionSelector());
-
+                    promises.push(loadCompanyExtendedInfoDefinitionSelector());
                     function loadAccountDefinitionSelectorLoad() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -253,12 +261,25 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         });
                         return orderDetailsSelectorLoadDeferred.promise;
                     };
-
+                    function loadCompanyExtendedInfoDefinitionSelector() {
+                        var extendedInfoSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        companyExtendedInfoReadyDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                filter: {
+                                    AccountPartDefinitionIds: getAccountPartDefinitionIds('F6630722-4E85-4DF2-915F-F9942074743C')
+                                },
+                                selectedIds: payload != undefined ? payload.CompanyExtendedInfoPartdefinitionId : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(companyExtendedInfoSelectorAPI, selectorPayload, extendedInfoSelectorLoadDeferred);
+                        });
+                        return extendedInfoSelectorLoadDeferred.promise;
+                    };
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         businessEntityDefinitionSelectionChangedDeferred = undefined;
                     });
                 };
 
+                
                 api.getData = function () {
                     var data = {
                         $type: "Retail.Zajil.MainExtensions.AccountConvertor, Retail.Zajil.MainExtensions",
@@ -269,7 +290,8 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         SiteAccountTypeId: siteAccountTypeSelectorAPI.getSelectedIds(),
                         CompanyProfilePartDefinitionId: companyProfileDefinitionSelectorAPI.getSelectedIds(),
                         FinancialPartDefinitionId: financialDefinitionSelectorAPI.getSelectedIds(),
-                        OrderDetailsPartDefinitionId: orderDetailsDefinitionSelectorAPI.getSelectedIds()
+                        OrderDetailsPartDefinitionId: orderDetailsDefinitionSelectorAPI.getSelectedIds(),
+                        CompanyExtendedInfoPartdefinitionId: companyExtendedInfoSelectorAPI.getSelectedIds()
                     };
                     return data;
                 };
