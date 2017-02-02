@@ -14,6 +14,6 @@ namespace Retail.BusinessEntity.MainActionBPs.Entities
         public override string RuntimeEditor { get { return "retail-be-actionbpdefinition-runtimesettings-regular"; } }
 
         public ActionProvisionerDefinitionSettings ProvisionerDefinitionSettings { get; set; }
-        public Guid NewStatusDefinitionId { get; set; }
+        public Guid? NewStatusDefinitionId { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
         public InArgument<long> AccountId { get; set; }
 
         //[RequiredArgument]
-        public InArgument<Guid> StatusDefinitionId { get; set; }
+        public InArgument<Guid?> StatusDefinitionId { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {

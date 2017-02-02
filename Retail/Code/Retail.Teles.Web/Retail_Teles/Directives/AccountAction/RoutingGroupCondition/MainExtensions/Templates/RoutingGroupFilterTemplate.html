@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select datasource="scopeModel.routingGroupFilterOperators"
+                   selectedvalues="scopeModel.selectedRoutingGroupFilterOperator"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   isrequired="true"
+                   label="Operator"
+                   hideremoveicon>
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.routingGroupName" label="Routing Group Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-row>

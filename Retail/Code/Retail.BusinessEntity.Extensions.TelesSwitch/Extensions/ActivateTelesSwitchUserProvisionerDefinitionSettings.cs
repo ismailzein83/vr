@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Extensions.TelesSwitch
 {
     public class ActivateTelesSwitchUserProvisionerDefinitionSettings : ActionProvisionerDefinitionSettings
     {
-        public List<Guid> ServiceTypeIds { get; set; }
+        //public List<Guid> ServiceTypeIds { get; set; }
 
         public override Guid ConfigId
         {

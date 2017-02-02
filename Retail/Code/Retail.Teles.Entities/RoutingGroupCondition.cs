@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Retail.Teles.Entities
 {
-    public abstract class RoutingGroupFilter
+    public abstract class RoutingGroupCondition
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract bool Evaluate(IRoutingGroupFilterContext context);
+        public abstract bool Evaluate(IRoutingGroupConditionContext context);
     }
 
-    public interface IRoutingGroupFilterContext
+    public interface IRoutingGroupConditionContext
     {
         string RoutingGroupName { get; }
     }

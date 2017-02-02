@@ -22,8 +22,8 @@ namespace Retail.Teles.Business
         /// </summary>
         public string ActionType { get; set; }
 
-        public RoutingGroupFilter NewRoutingGroupFilter { get; set; }
+        public RoutingGroupCondition NewRoutingGroupCondition { get; set; }
 
-        public RoutingGroupFilter ExistingRoutingGroupFilter { get; set; }
+        public RoutingGroupCondition ExistingRoutingGroupCondition { get; set; }
     }
 }

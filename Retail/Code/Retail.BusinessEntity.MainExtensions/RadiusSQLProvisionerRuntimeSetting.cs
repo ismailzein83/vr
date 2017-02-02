@@ -7,14 +7,14 @@ using Vanrise.Integration.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions
 {
-    public class RadiusSQLProvisionerRuntimeSetting : ActionProvisioner
-    {
-        public override void Execute(IActionProvisioningContext context)
-        {
-            context.ExecutionOutput = new ActionProvisioningOutput
-            {
-                Result = ActionProvisioningResult.Succeeded
-            };
-        }
-    }
+    //public class RadiusSQLProvisionerRuntimeSetting : ActionProvisioner
+    //{
+    //    public override void Execute(IActionProvisioningContext context)
+    //    {
+    //        context.ExecutionOutput = new ActionProvisioningOutput
+    //        {
+    //            Result = ActionProvisioningResult.Succeeded
+    //        };
+    //    }
+    //}
 }

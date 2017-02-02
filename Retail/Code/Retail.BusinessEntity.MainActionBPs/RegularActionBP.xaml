@@ -50,6 +50,8 @@
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Integration.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Integration.Entities</AssemblyReference>
@@ -59,9 +61,7 @@
       <AssemblyReference>Retail.BusinessEntity.MainActionBPs.Entities</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.MainExtensions</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
-      <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.MainActionBPs</AssemblyReference>
-      <AssemblyReference>Vanrise.Entities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -119,7 +119,7 @@
       </Assign.To>
       <Assign.Value>
         <InArgument x:TypeArguments="ve:StatusDefinition">
-          <mca:CSharpValue x:TypeArguments="ve:StatusDefinition">(new Vanrise.Common.Business.StatusDefinitionManager()).GetStatusDefinition(actionBPDefinitionSettings.NewStatusDefinitionId)</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="ve:StatusDefinition">(new Vanrise.Common.Business.StatusDefinitionManager()).GetStatusDefinition(actionBPDefinitionSettings.NewStatusDefinitionId.Value)</mca:CSharpValue>
         </InArgument>
       </Assign.Value>
     </Assign>
@@ -192,19 +192,20 @@
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <rbma1:CreateStatusBillingTransaction sap2010:WorkflowViewState.IdRef="CreateStatusBillingTransaction_1">
+          <rbma1:CreateStatusBillingTransaction>
             <rbma1:CreateStatusBillingTransaction.AccountId>
               <InArgument x:TypeArguments="x:Int64">
                 <mca:CSharpValue x:TypeArguments="x:Int64">Input.AccountId</mca:CSharpValue>
               </InArgument>
             </rbma1:CreateStatusBillingTransaction.AccountId>
             <rbma1:CreateStatusBillingTransaction.StatusDefinitionId>
-              <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">actionBPDefinitionSettings.NewStatusDefinitionId</mca:CSharpValue>
+              <InArgument x:TypeArguments="s:Nullable(s:Guid)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(s:Guid)">actionBPDefinitionSettings.NewStatusDefinitionId</mca:CSharpValue>
               </InArgument>
             </rbma1:CreateStatusBillingTransaction.StatusDefinitionId>
+            <sap2010:WorkflowViewState.IdRef>CreateStatusBillingTransaction_2</sap2010:WorkflowViewState.IdRef>
           </rbma1:CreateStatusBillingTransaction>
-          <rbma1:UpdateEntityStatus sap2010:WorkflowViewState.IdRef="UpdateEntityStatus_1">
+          <rbma1:UpdateEntityStatus>
             <rbma1:UpdateEntityStatus.AccountBEDefinitionId>
               <InArgument x:TypeArguments="s:Guid">
                 <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountBEDefinitionId</mca:CSharpValue>
@@ -226,15 +227,16 @@
               </InArgument>
             </rbma1:UpdateEntityStatus.ExecutedActionsData>
             <rbma1:UpdateEntityStatus.StatusDefinitionId>
-              <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">actionBPDefinitionSettings.NewStatusDefinitionId</mca:CSharpValue>
+              <InArgument x:TypeArguments="s:Nullable(s:Guid)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(s:Guid)">actionBPDefinitionSettings.NewStatusDefinitionId</mca:CSharpValue>
               </InArgument>
             </rbma1:UpdateEntityStatus.StatusDefinitionId>
+            <sap2010:WorkflowViewState.IdRef>UpdateEntityStatus_2</sap2010:WorkflowViewState.IdRef>
           </rbma1:UpdateEntityStatus>
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwnQwPuAQ4CAQFOBVkOAwGGAloFZQ4DAfEBZgVxDgMB3AFyBX0OAwHHAX4FiQEOAwGyAYoBBZ8BGAMBiQGgAQW6ARwCAVa7AQXsAQoCAQJWC1a7AQMBkQJRC1F1AwGHAmILYpICAwH8AV0LXYABAwHyAW4LbucBAwHnAWkLaYkBAwHdAXoLetEBAwHSAXULdW8DAcgBhgELhgHuAQMBvQGBAQuBAXsDAbMBlwELlwFXAwGoAZwBC5wBbgMBngGSAQuSAVcDAZQBjQELjQFiAwGKAa0BC60BTwIBf7IBC7IBbgIBdagBC6gBoAECAWu3AQu3AXcCAWGjAQujAXgCAVe+AQu+AaYBAgEDwgEJ6gEUAgENwwELzgEyAgFBzwEL6QEmAgEOxgERxgFdAgFMywERywF9AgFC4QER4QFsAgE31wER1wFdAgEt5gER5gF9AgEj3AER3AFlAgEZ0gER0gFoAgEP</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwnQwPwAQ4CAQFOBVkOAwGGAloFZQ4DAfEBZgVxDgMB3AFyBX0OAwHHAX4FiQEOAwGyAYoBBZ8BGAMBiQGgAQW6ARwCAVa7AQXuAQoCAQJWC1a7AQMBkQJRC1F1AwGHAmILYpICAwH8AV0LXYABAwHyAW4LbucBAwHnAWkLaYkBAwHdAXoLetcBAwHSAXULdW8DAcgBhgELhgHuAQMBvQGBAQuBAXsDAbMBlwELlwFXAwGoAZwBC5wBbgMBngGSAQuSAVcDAZQBjQELjQFiAwGKAa0BC60BTwIBf7IBC7IBbgIBdagBC6gBoAECAWu3AQu3AXcCAWGjAQujAXgCAVe+AQu+AaYBAgEDwgEJ7AEUAgENwwELzwEyAgFB0AEL6wEmAgEOxgERxgFdAgFMywERywGJAQIBQuIBEeIBbAIBN9gBEdgBXQIBLecBEecBiQECASPdARHdAWUCARnTARHTAWgCAQ8=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -245,8 +247,8 @@
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="LoadEntity_2" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="ProvisionAction_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="CreateStatusBillingTransaction_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="UpdateEntityStatus_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="CreateStatusBillingTransaction_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="UpdateEntityStatus_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

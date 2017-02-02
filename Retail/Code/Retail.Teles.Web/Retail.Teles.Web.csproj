@@ -113,6 +113,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -125,6 +129,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\TelesEnterpriseController.cs" />
+    <Compile Include="Controllers\TelesRoutingGroupController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,15 +148,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Teles\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Teles\Constant\RoutingGroupFilterOperatorEnum.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesAccountEditorController.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelesaccount.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesAccountActionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesAccountEditor.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-definitionsettings-changeusersrgs.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\MainExtensions\retail-teles-routinggroupcondition-routinggroupfilter.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\MainExtensions\Templates\RoutingGroupFilterTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\retail-teles-routinggroupcondition.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\ChangeUsersRGsProvisionerDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\Templates\RoutingGroupConditionTemplate.html" />
     <Content Include="Retail_Teles\Directives\SwitchIntegrations\retail-teles-switchintegrations-telesapi.js" />
     <Content Include="Retail_Teles\Directives\SwitchIntegrations\Templates\SwitchIntegrationTelesAPITemplate.html" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprises-selector.js" />
     <Content Include="Retail_Teles\ModuleInitialization.js" />
     <Content Include="Retail_Teles\Services\APIServices\EnterpriseAPIService.js" />
+    <Content Include="Retail_Teles\Services\APIServices\TelesRoutingGroupAPIService.js" />
     <Content Include="Retail_Teles\Services\TelesAccountActionService.js" />
   </ItemGroup>
   <ItemGroup>

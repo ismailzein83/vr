@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
         [RequiredArgument]
         public InArgument<long> AccountId { get; set; }
         [RequiredArgument]
-        public InArgument<Guid> StatusDefinitionId { get; set; }
+        public InArgument<Guid?> StatusDefinitionId { get; set; }
 
         [RequiredArgument]
         public InArgument<List<Object>> ExecutedActionsData { get; set; }
@@ -30,7 +30,7 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             var statusDefinitionId =  this.StatusDefinitionId.Get(context);
 
             AccountBEManager accountBEManager = new AccountBEManager();
-            accountBEManager.UpdateStatus(accountBEDefinitionId, accountId, statusDefinitionId);
+            accountBEManager.UpdateStatus(accountBEDefinitionId, accountId, statusDefinitionId.Value);
             var account = accountBEManager.GetAccount(accountBEDefinitionId,accountId);
             ExecutedActions accountActions = account.ExecutedActions;
             if (accountActions == null)

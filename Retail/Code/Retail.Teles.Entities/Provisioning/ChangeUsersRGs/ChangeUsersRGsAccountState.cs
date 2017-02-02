@@ -8,18 +8,16 @@ namespace Retail.Teles.Entities
 {
     public class ChangeUsersRGsAccountState
     {
-        public Dictionary<string, ChangeUsersRGsAccountStateActionTypeChanges> ChangesByActionType { get; set; }
+        public Dictionary<string, ChURGsActionCh> ChangesByActionType { get; set; }
     }
 
-    public class ChangeUsersRGsAccountStateActionTypeChanges
+    public class ChURGsActionCh
     {
-        public Dictionary<long, ChangeUsersRGsAccountStateUserChange> ChangesByUser { get; set; }
+        public Dictionary<long, ChURGsUserCh> ChangesByUser { get; set; }
     }
 
-    public class ChangeUsersRGsAccountStateUserChange
+    public class ChURGsUserCh
     {
-        public long SiteId { get; set; }
-
         public long OriginalRGId { get; set; }
     }
 }
