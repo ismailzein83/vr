@@ -49,10 +49,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
             switch (context.FieldName)
             {
                 case "Emails": return this.Contacts != null ? this.Contacts.Select(itm => itm.Email) : null;
+                case "ArabicName": return this.ArabicName;
 
                 default: return null;
             }
         }
+       
     }
 
     public class AccountCompanyContact

@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public override List<GenericFieldDefinition> GetFieldDefinitions()
         {
-            return new List<GenericFieldDefinition>()
+           var  list =  new List<GenericFieldDefinition>()
                 {
                     new GenericFieldDefinition()
                     {
@@ -27,6 +27,14 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
                     }
                 };
+           if (this.IncludeArabicName == true)
+               list.Add(new GenericFieldDefinition()
+                    {
+                        Name = "ArabicName",
+                        Title = "Arabic Name",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                    });
+           return list;
         }
     }
     public class CompanyProfileContactType

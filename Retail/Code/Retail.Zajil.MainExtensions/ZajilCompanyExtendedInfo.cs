@@ -24,5 +24,19 @@ namespace Retail.Zajil.MainExtensions
         public string GPVoiceCustomerNo { get; set; }
 
         public string ServiceId { get; set; }
+
+        public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
+        {
+            switch (context.FieldName)
+            {
+                case "CRMCompanyId": return this.CRMCompanyId;
+                case "CRMCompanyAccountNo": return this.CRMCompanyAccountNo;
+                case "ServiceType": return this.ServiceType;
+                case "Remarks": return this.Remarks;
+                case "GPVoiceCustomerNo": return this.GPVoiceCustomerNo;
+                case "ServiceId": return this.ServiceId;
+                default: return null;
+            }
+        }
     }
 }
