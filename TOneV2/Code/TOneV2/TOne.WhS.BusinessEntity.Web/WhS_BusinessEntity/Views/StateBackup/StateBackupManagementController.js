@@ -15,7 +15,7 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.stateBackupTypes = [];
-            $scope.scopeModel.fromBackupDate = new Date();
+            $scope.scopeModel.fromBackupDate = UtilsService.getDateFromDateTime(new Date());
 
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());
