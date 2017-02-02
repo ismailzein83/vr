@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Business
 {
-    class PortalAccountManager
+    public class PortalAccountManager
     {
     }
 }

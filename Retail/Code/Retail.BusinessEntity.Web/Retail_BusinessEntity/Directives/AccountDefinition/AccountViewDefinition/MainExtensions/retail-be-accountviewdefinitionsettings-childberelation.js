@@ -11,7 +11,7 @@ app.directive("retailBeAccountviewdefinitionsettingsChildberelation", ["UtilsSer
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new AccountBEDefinitionViewEditorCtor($scope, ctrl, $attrs);
+                var ctor = new BEParentChildRelationViewDefinitionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,7 +21,8 @@ app.directive("retailBeAccountviewdefinitionsettingsChildberelation", ["UtilsSer
             },
             templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountViewDefinition/MainExtensions/Templates/ChildBERelationViewSettingsTemplate.html"
         };
-        function AccountBEDefinitionViewEditorCtor($scope, ctrl, $attrs) {
+
+        function BEParentChildRelationViewDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var beParentChildRelationDefinitionSelectorAPI;

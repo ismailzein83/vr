@@ -113,5 +113,4 @@ app.directive('retailBeProductdefinitionSelector', ['UtilsService', 'VRUIUtilsSe
                         '</vr-select>' +
                     '</vr-columns>';
         }
-
     }]);

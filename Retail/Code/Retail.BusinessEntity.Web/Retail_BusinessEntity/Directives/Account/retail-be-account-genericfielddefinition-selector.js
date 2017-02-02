@@ -10,10 +10,14 @@
             scope: {
                 onReady: "=",
                 normalColNum: '@',
-                isrequired: '='
+                isrequired: '=',
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
+
+                if (ctrl.customlabel == undefined)
+                    ctrl.customlabel = "Account Field";
 
                 var ctor = new AccountGenericFieldDefinitionSelectorCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
@@ -92,6 +96,26 @@
                     ctrl.onReady(api);
                 }
             }
+        }
+
+        function getTemplate(attrs) {
+
+            var multipleselection = "";
+            var label = "Account Field";
+
+            if (attrs.ismultipleselection != undefined) {
+                label = "Account Fields";
+                multipleselection = "ismultipleselection";
+            }
+            if (attrs.customlabel != undefined)
+                label = attrs.customlabel;
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
+                        '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
+                            + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '
+                            + ' hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                        '</vr-select>' +
+                    '</vr-columns>';
         }
     }
 
