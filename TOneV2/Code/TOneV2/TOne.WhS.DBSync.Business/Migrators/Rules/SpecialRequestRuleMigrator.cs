@@ -38,36 +38,44 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<string, List<SourceSpecialRequest>> groupedSourceRules = GroupSpecialRequests(sourceRules);
             foreach (var groupedRule in groupedSourceRules.Values)
             {
-                StructureSpecialRequestRulesByDate(groupedRule, (processedRules, bed, eed) =>
+
+                var outputRules = StructureSpecialRequestRulesByDate(groupedRule);
+                foreach (var outputRule in outputRules)
                 {
-                    processedRules.ThrowIfNull("processedRules", "");
-                    RouteRule routeRule = GetRouteRuleDetails(processedRules, bed, eed);
-                    SourceRule rule = new SourceRule
-                    {
-                        Rule = new Rule
-                        {
-                            BED = bed,
-                            EED = eed,
-                            RuleDetails = Serializer.Serialize(routeRule),
-                            TypeId = _routeRuleTypeId
-                        }
-                    };
+                    SourceRule rule = GetSourceRule(outputRule);
                     rules.Add(rule);
-                });
+                }
             }
             return rules;
         }
 
-        #region Private Methods
-        static void StructureSpecialRequestRulesByDate(List<SourceSpecialRequest> specialRequestRules, Action<IEnumerable<SourceSpecialRequest>, DateTime, DateTime?> onSpecialRequestRulesMatch)
+        private SourceRule GetSourceRule(SpecialRequestOutput outputRule)
         {
-            if (specialRequestRules == null)
-                return;
+            RouteRule routeRule = GetRouteRuleDetails(outputRule.SpecialRequests, outputRule.BED, outputRule.EED);
+            SourceRule rule = new SourceRule
+            {
+                Rule = new Rule
+                {
+                    BED = outputRule.BED,
+                    EED = outputRule.EED,
+                    RuleDetails = Serializer.Serialize(routeRule),
+                    TypeId = _routeRuleTypeId
+                }
+            };
+            return rule;
+        }
 
-            HashSet<DateTime> distinctDateTimes = specialRequestRules.FindAll(itm => itm.EED.HasValue).Select(itm => itm.EED.Value)
-                                                  .Union(specialRequestRules.Select(itm => itm.BED))
-                                                  .OrderBy(itm => itm).ToHashSet();
-
+        #region Private Methods
+        static List<SpecialRequestOutput> StructureSpecialRequestRulesByDate(List<SourceSpecialRequest> specialRequestRules)
+        {
+            List<SpecialRequestOutput> outputRules = new List<SpecialRequestOutput>();
+            HashSet<DateTime> distinctDateTimes = new HashSet<DateTime>();
+            foreach (var specialRequest in specialRequestRules)
+            {
+                distinctDateTimes.Add(specialRequest.BED);
+                if (specialRequest.EED.HasValue)
+                    distinctDateTimes.Add(specialRequest.EED.Value);
+            }
             List<DateTime> intervalDates = distinctDateTimes.ToList();
 
             for (var index = 0; index < intervalDates.Count; index++)
@@ -88,8 +96,15 @@ namespace TOne.WhS.DBSync.Business
                 };
 
                 IEnumerable<SourceSpecialRequest> matchingSpecialRequestRules = specialRequestRules.FindAllRecords(predicate);
-                onSpecialRequestRulesMatch(matchingSpecialRequestRules, bed, eed);
+                outputRules.Add(new SpecialRequestOutput
+                {
+                    SpecialRequests = matchingSpecialRequestRules,
+                    BED = bed,
+                    EED = eed
+                });
             }
+
+            return outputRules;
         }
         RouteRule GetRouteRuleDetails(IEnumerable<SourceSpecialRequest> specialRequestRules, DateTime bed, DateTime? eed)
         {
@@ -113,7 +128,8 @@ namespace TOne.WhS.DBSync.Business
                       CustomerGroupSettings = new SelectiveCustomerGroup
                     {
                         CustomerIds = new List<int>() { customer.CarrierAccountId },
-                    }
+                    },
+                      ExcludedCodes = defaultRule.ExcludedCodesList == null ? null : defaultRule.ExcludedCodesList.ToList()
                   },
                   Settings = new LCRRouteRule
                   {
@@ -128,7 +144,7 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<int, LCRRouteOptionSettings> options = new Dictionary<int, LCRRouteOptionSettings>();
             int position = 0;
 
-            foreach (var option in suppliers.OrderByDescending(s => s.Priority))
+            foreach (var option in suppliers.OrderByDescending(s => s.Priority).ThenBy(itm => itm.SupplierId))
             {
                 CarrierAccount supplier;
                 if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
@@ -137,8 +153,8 @@ namespace TOne.WhS.DBSync.Business
                 {
                     ForceOption = option.ForcedOption,
                     NumberOfTries = option.NumberOfTries,
-                    Percentage = option.Percentage,
-                    Position = option.Priority > 0 ? ++position : 0,
+                    Percentage = option.Percentage == 0 ? (decimal?)null : option.Percentage,
+                    Position = ++position,
                     SupplierId = supplier.CarrierAccountId
                 };
                 options.Add(supplier.CarrierAccountId, specialRequestOptionSettings);
@@ -173,9 +189,17 @@ namespace TOne.WhS.DBSync.Business
         }
         string GetKey(SourceSpecialRequest specialRequest)
         {
-            return string.Format("{0}-{1}-{2}-{3}", specialRequest.CustomerId, specialRequest.Code, specialRequest.IncludeSubCode, specialRequest.ExcludedCodes);
+            return string.Format("{0}-{1}-{2}-{3}", specialRequest.CustomerId, specialRequest.Code, specialRequest.IncludeSubCode, specialRequest.ExcludedCodesList == null ? "" : specialRequest.ExcludedCodesList.Aggregate((i, j) => i + j));
         }
 
         #endregion
+    }
+
+    class SpecialRequestOutput
+    {
+        public IEnumerable<SourceSpecialRequest> SpecialRequests { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
+
     }
 }
