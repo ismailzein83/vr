@@ -121,14 +121,16 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                         for (var i = 0; i < $scope.scopeModel.selectedSuppliers.length; i++) {
                             var currentSupplier = $scope.scopeModel.selectedSuppliers[i];
                             var currentOption = options[currentSupplier.CarrierAccountId];
-
                             $scope.scopeModel.suppliers.push({
                                 SupplierId: currentSupplier.CarrierAccountId,
                                 Name: currentSupplier.Name,
-                                //Position: currentOption.Position,
+                                Position: currentOption.Position,
                                 ForceOption: currentOption.ForceOption,
                                 NumberOfTries: currentOption.NumberOfTries,
                                 Percentage: currentOption.Percentage
+                            });
+                            $scope.scopeModel.suppliers.sort(function (firstItem, secondItem) {
+                                return firstItem.Position - secondItem.Position;
                             });
                         }
                     });
