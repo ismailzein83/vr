@@ -106,7 +106,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 throw new InvalidOperationException("Backup Type is not specified");
 
             _stateBackupBehavior.Data = backupType;
-            _stateBackupBehavior.BackupDatabaseName = System.Configuration.ConfigurationManager.AppSettings["StateBackupDatabase"];
+            string backUpDataBaseName = System.Configuration.ConfigurationManager.AppSettings["StateBackupDatabase"];
+            if (string.IsNullOrEmpty(backUpDataBaseName))
+                throw new ArgumentNullException("StateBackupDatabase key is missing");
+            _stateBackupBehavior.BackupDatabaseName = backUpDataBaseName;
         }
 
         #endregion
