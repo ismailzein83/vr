@@ -140,7 +140,7 @@ namespace Retail.Zajil.MainExtensions
                     PhoneNumbers = new List<string> { row["PhoneNo"].ToString() },
                     Faxes = new List<string> { row["FaxNo"].ToString() },
                     Address = row["Address"].ToString(),
-                    ArabicName = row["ArabicName"].ToString()
+                    ArabicName = row["Arabic_Name"].ToString()
                 }
             });
         }
