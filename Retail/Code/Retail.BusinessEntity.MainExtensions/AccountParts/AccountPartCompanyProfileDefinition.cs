@@ -18,15 +18,31 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public override List<GenericFieldDefinition> GetFieldDefinitions()
         {
-           var  list =  new List<GenericFieldDefinition>()
+            var list = new List<GenericFieldDefinition>();
+
+            if(this.ContactTypes != null)
+            foreach (var a in this.ContactTypes)
+            {
+                list.Add(new GenericFieldDefinition()
                 {
-                    new GenericFieldDefinition()
-                    {
-                        Name = "Emails",
-                        Title = "Emails",
-                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
-                    }
-                };
+                    Name = string.Format("{0}_Name",a.Name),
+                    Title = string.Format("{0} Name", a.Name),
+                    FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                });
+                list.Add(new GenericFieldDefinition()
+                {
+                    Name = string.Format("{0}_Email", a.Name),
+                    Title = string.Format("{0} Email", a.Name),
+                    FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                });
+                list.Add(new GenericFieldDefinition()
+                {
+                    Name = string.Format("{0}_PhoneNumbers", a.Name),
+                    Title = string.Format("{0} Phone Numbers", a.Name),
+                    FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                });
+            }
+
            if (this.IncludeArabicName == true)
                list.Add(new GenericFieldDefinition()
                     {

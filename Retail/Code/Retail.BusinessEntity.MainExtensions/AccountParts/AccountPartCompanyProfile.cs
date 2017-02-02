@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
@@ -31,7 +32,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public string ArabicName { get; set; }
 
-        public List<AccountCompanyContact> Contacts { get; set; }
+        public Dictionary<string,AccountCompanyContact> Contacts { get; set; }
 
         #region IAccountProfile Memebers
 
@@ -48,11 +49,39 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         {
             switch (context.FieldName)
             {
-                case "Emails": return this.Contacts != null ? this.Contacts.Select(itm => itm.Email) : null;
                 case "ArabicName": return this.ArabicName;
 
-                default: return null;
+                default:
+                    return GetDynamicFieldValue(context.FieldName);
+                   
             }
+
+           
+        }
+
+        dynamic GetDynamicFieldValue(string FieldName)
+        {
+            if (FieldName.Contains("Name"))
+            {
+                List<string> namePart = FieldName.Split('_').ToList();
+                var contact = this.Contacts.GetRecord(namePart[0]);
+                return contact != null ? contact.ContactName : null;
+            }
+            if (FieldName.Contains("Email"))
+            {
+                List<string> namePart = FieldName.Split('_').ToList();
+                var contact = this.Contacts.GetRecord(namePart[0]);
+                return contact != null ? contact.Email : null;
+            }
+            if (FieldName.Contains("PhoneNumbers"))
+            {
+                List<string> namePart = FieldName.Split('_').ToList();
+                var contact = this.Contacts.GetRecord(namePart[0]);
+                return contact != null ?string.Join(",", contact.PhoneNumbers): null;
+            }    
+            else 
+                return null;
+           
         }
        
     }
@@ -60,11 +89,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
     public class AccountCompanyContact
     {
         public string ContactName { get; set; }
-
-        public string ContactType { get; set; }
-
+        
         public string Email { get; set; }
 
         public List<string> PhoneNumbers { get; set; }
     }
+
+   
+
 }

@@ -187,13 +187,12 @@ namespace Retail.Zajil.MainExtensions
             decimal.TryParse(row[columnName].ToString(), out result);
             return result;
         }
-        List<AccountCompanyContact> GetContactsList(DataRow row)
+        Dictionary<string,AccountCompanyContact> GetContactsList(DataRow row)
         {
-            List<AccountCompanyContact> contacts = new List<AccountCompanyContact>();
+            Dictionary<string, AccountCompanyContact> contacts = new Dictionary<string, AccountCompanyContact>();
 
-            contacts.Add(new AccountCompanyContact
+            contacts.Add("Finance", new AccountCompanyContact
             {
-                ContactType = "Finance",
                 ContactName = row["finance_contact_person"].ToString(),
                 Email = row["finance_contact_email"].ToString(),
                 PhoneNumbers = new List<string> { row["finance_contact_number"].ToString() }
