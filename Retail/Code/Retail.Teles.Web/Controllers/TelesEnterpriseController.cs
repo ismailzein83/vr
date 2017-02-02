@@ -21,5 +21,11 @@ namespace Retail.Teles.Web.Controllers
             TelesEnterpriseFilter filter = Vanrise.Common.Serializer.Deserialize<TelesEnterpriseFilter>(serializedFilter);
             return _manager.GetEnterprisesInfo(switchId, domainId, filter);
         }
+        [HttpPost]
+        [Route("MapEnterpriseToAccount")]
+        public bool MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
+        {
+            return _manager.MapEnterpriseToAccount(input);
+        }
     }
 }

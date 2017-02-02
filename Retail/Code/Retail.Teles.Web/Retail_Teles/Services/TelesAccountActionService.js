@@ -13,22 +13,23 @@ app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsS
                     var accountBEDefinitionId = payload.accountBEDefinitionId;
                     var accountActionId = payload.accountActionDefinition.AccountActionDefinitionId;
                     var onItemUpdated = payload.onItemUpdated;
-
+                    var account = payload.account;
                     var onAccountUpdated = function (updatedAccount) {
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedAccount);
                     };
-                    mapTelesAccountEditor(accountBEDefinitionId, accountActionId, onAccountUpdated);
+                    mapTelesAccountEditor(accountBEDefinitionId, accountActionId, account.Entity.AccountId,onAccountUpdated);
                 }
             };
             Retail_BE_AccountActionService.registerActionType(actionType);
         }
 
-        function mapTelesAccountEditor(accountBEDefinitionId, accountActionId, onMappingAccount)
+        function mapTelesAccountEditor(accountBEDefinitionId, accountActionId,accountId, onMappingAccount)
         {
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
-                actionDefinitionId: accountActionId
+                actionDefinitionId: accountActionId,
+                accountId: accountId
             };
 
             var modalSettings = {};

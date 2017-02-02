@@ -7,6 +7,7 @@
     function MappingTelesAccountEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_Teles_EnterpriseAPIService, Retail_BE_AccountBEDefinitionAPIService) {
         var isEditMode;
 
+        var accountId;
         var enterpriseIdId;
         var accountActionDefinitionEntity;
 
@@ -27,6 +28,7 @@
                 enterpriseIdId = parameters.enterpriseIdId;
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 actionDefinitionId = parameters.actionDefinitionId;
+                accountId = parameters.accountId;
             }
             isEditMode = (enterpriseIdId != undefined);
         }
@@ -38,12 +40,7 @@
                 enterprisesDirectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
-                if (isEditMode) {
-                    return update();
-                }
-                else {
-                    return insert();
-                }
+                return insert();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
@@ -70,7 +67,7 @@
             });
 
             function setTitle() {
-                $scope.title = 'Mapping Teles Account';
+                $scope.title = 'Mapping to teles account';
             }
             function loadStaticData() {
             }
@@ -93,37 +90,29 @@
         }
 
         function insert() {
-            //$scope.scopeModel.isLoading = true;
-            //return Retail_Teles_EnterpriseAPIService.AddEnterprise(buildEnterpriseObjFromScope()).then(function (response) {
-            //    if (VRNotificationService.notifyOnItemAdded('Enterprise', response, 'Name')) {
-            //        if ($scope.onEnterpriseAdded != undefined)
-            //            $scope.onEnterpriseAdded(response.InsertedObject);
-            //        $scope.modalContext.closeModal();
-            //    }
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyException(error, $scope);
-            //}).finally(function () {
-            //    $scope.scopeModel.isLoading = false;
-            //});
-        }
-        function update() {
-            //$scope.scopeModel.isLoading = true;
-            //return Retail_Teles_EnterpriseAPIService.UpdateEnterprise(buildEnterpriseObjFromScope()).then(function (response) {
-            //    if (VRNotificationService.notifyOnItemUpdated('Enterprise', response, 'Name')) {
-            //        if ($scope.onEnterpriseUpdated != undefined) {
-            //            $scope.onEnterpriseUpdated(response.UpdatedObject);
-            //        }
-            //        $scope.modalContext.closeModal();
-            //    }
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyException(error, $scope);
-            //}).finally(function () {
-            //    $scope.scopeModel.isLoading = false;
-            //});
+            $scope.scopeModel.isLoading = true;
+            return Retail_Teles_EnterpriseAPIService.MapEnterpriseToAccount(buildMapEnterpriseToAccountObjFromScope()).then(function (response) {
+                if (response)
+                {
+                    VRNotificationService.showSuccess("Account mapped successfully");
+                    $scope.modalContext.closeModal();
+                } else
+                {
+                    VRNotificationService.showSuccess("Failed to map account");
+
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
-        function buildEnterpriseObjFromScope() {
+        function buildMapEnterpriseToAccountObjFromScope() {
             return {
+                TelesEnterpriseId: enterprisesDirectiveAPI.getSelectedIds(),
+                AccountBEDefinitionId: accountBEDefinitionId,
+                AccountId: accountId
             };
         }
     }

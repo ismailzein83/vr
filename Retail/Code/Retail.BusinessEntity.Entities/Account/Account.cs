@@ -34,6 +34,7 @@ namespace Retail.BusinessEntity.Entities
         public long? ParentAccountId { get; set; }
         public string SourceId { get; set; }
         public ExecutedActions ExecutedActions { get; set; }
+        public Dictionary<string, BaseAccountExtendedSettings> ExtendedSettings { get; set; }
     }
 
     public class AccountToInsert : BaseAccount
@@ -81,5 +82,9 @@ namespace Retail.BusinessEntity.Entities
 
     public class PaymentMethodSettings
     {
+    }
+    public abstract class BaseAccountExtendedSettings
+    {
+
     }
 }

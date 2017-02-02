@@ -14,8 +14,13 @@
                 serializedFilter: serializedFilter,
             });
         }
+
+        function MapEnterpriseToAccount(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "MapEnterpriseToAccount"), input);
+        }
         return ({
-            GetEnterprisesInfo: GetEnterprisesInfo
+            GetEnterprisesInfo: GetEnterprisesInfo,
+            MapEnterpriseToAccount: MapEnterpriseToAccount
         });
     }
 

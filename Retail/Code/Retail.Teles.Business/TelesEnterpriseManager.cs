@@ -1,4 +1,5 @@
-﻿using Retail.Teles.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.Teles.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,13 @@ namespace Retail.Teles.Business
                 }
             }
             return telesEnterpriseInfo;
+        }
+        public bool MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
+        {
+            AccountBEManager accountBEManager = new AccountBEManager();
+
+            return accountBEManager.UpdateAccountExtendedSetting<InterpriseAccountMappingInfo>(input.AccountBEDefinitionId, input.AccountId,
+                new InterpriseAccountMappingInfo { TelesEnterpriseId = input.TelesEnterpriseId });
         }
     }
 }

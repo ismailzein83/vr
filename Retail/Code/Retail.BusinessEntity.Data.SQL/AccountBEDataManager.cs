@@ -22,7 +22,11 @@ namespace Retail.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-
+        public bool UpdateExtendedSettings(long accountId, Dictionary<string, BaseAccountExtendedSettings> extendedSettings)
+        {
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_Account_UpdateExtendedSettings", accountId, Vanrise.Common.Serializer.Serialize(extendedSettings));
+            return (recordsEffected > 0);
+        }
         public IEnumerable<Account> GetAccounts(Guid accountBEDefinitionId)
         {
             return GetItemsSP("Retail.sp_Account_GetByDefinition", AccountMapper, accountBEDefinitionId);
@@ -91,7 +95,9 @@ namespace Retail.BusinessEntity.Data.SQL
                 ParentAccountId = GetReaderValue<long?>(reader, "ParentID"),
                 ExecutedActions = reader["ExecutedActionsData"] as string != null ? Vanrise.Common.Serializer.Deserialize<ExecutedActions>(reader["ExecutedActionsData"] as string) : null,
                 StatusId = GetReaderValue<Guid>(reader, "StatusID"),
-                SourceId = reader["SourceID"] as string
+                SourceId = reader["SourceID"] as string,
+                ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, BaseAccountExtendedSettings>
+
             };
         }
 
