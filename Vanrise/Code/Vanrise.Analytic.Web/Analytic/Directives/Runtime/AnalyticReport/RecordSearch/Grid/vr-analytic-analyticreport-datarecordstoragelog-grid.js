@@ -35,6 +35,10 @@
             var sortColumns;
             var dataRecordTypeAttributes;
 
+            $scope.isExpandable = function (dataItem) {
+                return ctrl.showDetails;
+            };
+
             function initializeController() {
                 gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
                 detailWidths = UtilsService.getArrayEnum(ColumnWidthEnum);
@@ -71,6 +75,8 @@
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    ctrl.showDetails = false;
+
                     if (query.ItemDetails && query.ItemDetails.length > 0)
                         ctrl.showDetails = true;
 
@@ -79,7 +85,7 @@
 
                     var promiseDeffer = UtilsService.createPromiseDeferred();
                     getDataRecordAttributes(query).then(function () {
-                        
+
                         var searchQuery = {
                             DataRecordStorageIds: query.DataRecordStorageIds,
                             FromTime: query.FromTime,

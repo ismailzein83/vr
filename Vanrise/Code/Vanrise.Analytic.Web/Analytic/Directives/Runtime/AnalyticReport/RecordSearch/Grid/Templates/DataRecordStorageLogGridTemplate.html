@@ -1,6 +1,6 @@
 ﻿<!--<div ng-show="ctrl.showGrid">-->
 <div>
-    <vr-datagrid datasource="ctrl.dataRecordStorageLogs"
+    <vr-datagrid datasource="ctrl.dataRecordStorageLogs" showexpand="isExpandable"
                  dataretrievalfunction="ctrl.dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
                  on-ready="ctrl.onGridReady"
@@ -8,7 +8,7 @@
         <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" numberprecision="column.numberprecision" type="column.type"
                            field="column.Field"
                            tag="column" columnindex="$index" widthfactor="column.Widthfactor" fixedwidth="column.ColumnSettings.FixedWidth"></vr-datagridcolumn>
-        <vr-datagridexpandablerow ng-if="ctrl.showDetails > 0">
+        <vr-datagridexpandablerow>
             <vr-columns ng-repeat="detail in dataItem.details" colnum="{{detail.colnum}}">
                 <vr-label>{{detail.FieldTitle}}:</vr-label>
                 <vr-label isvalue>{{dataItem.FieldValues[detail.FieldName].Description}}</vr-label>
