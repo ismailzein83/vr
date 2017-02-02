@@ -7,13 +7,13 @@ using Vanrise.Integration.Entities;
 
 namespace Retail.Teles.Business
 {
-    public class ChangeUsersRoutingGroup : ActionProvisionerDefinitionSettings
+    public class RevertUsersRGsDefinitionSettings : ActionProvisionerDefinitionSettings
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("F5AEB249-3D8A-4235-8C7B-2BA5B99D0B0D"); }
         }
 
-        public int RoutingGroupId { get; set; }
+        public string ActionType { get; set; }
     }
 }

@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="InterpriseAccountMappingInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsAccountState.cs" />
+    <Compile Include="RoutingGroupFilter.cs" />
     <Compile Include="TelesEnterpriseFilter.cs" />
     <Compile Include="TelesEnterpriseInfo.cs" />
   </ItemGroup>
