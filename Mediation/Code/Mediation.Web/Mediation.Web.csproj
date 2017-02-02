@@ -440,6 +440,10 @@
       <Project>{edbd3a6e-4535-4b84-8c2a-2ae6aedf5005}</Project>
       <Name>Mediation.Generic.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mediation.Generic.MainExtensions\Mediation.Generic.MainExtensions.csproj">
+      <Project>{53c6cf7d-fd79-413c-aba1-01f34777a005}</Project>
+      <Name>Mediation.Generic.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Generic.QueueActivators\Mediation.Generic.QueueActivators.csproj">
       <Project>{0455b391-9661-41b7-90f5-f6e14fc30b2d}</Project>
       <Name>Mediation.Generic.QueueActivators</Name>

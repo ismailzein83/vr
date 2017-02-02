@@ -45,11 +45,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.BP.Activi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.BP.Arguments", "Mediation.Generic.BP.Arguments\Mediation.Generic.BP.Arguments.csproj", "{C08816B3-1E52-4D76-8CFA-2672A00FAC64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.MainExtensions", "Mediation.Generic.MainExtensions\Mediation.Generic.MainExtensions.csproj", "{53C6CF7D-FD79-413C-ABA1-01F34777A005}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = Mediation.sln
@@ -111,6 +113,10 @@ Global
 		SccProjectTopLevelParentUniqueName15 = Mediation.sln
 		SccProjectName15 = Mediation.Generic.BP.Arguments
 		SccLocalPath15 = Mediation.Generic.BP.Arguments
+		SccProjectUniqueName16 = Mediation.Generic.MainExtensions\\Mediation.Generic.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName16 = Mediation.sln
+		SccProjectName16 = Mediation.Generic.MainExtensions
+		SccLocalPath16 = Mediation.Generic.MainExtensions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +185,10 @@ Global
 		{C08816B3-1E52-4D76-8CFA-2672A00FAC64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C08816B3-1E52-4D76-8CFA-2672A00FAC64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C08816B3-1E52-4D76-8CFA-2672A00FAC64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53C6CF7D-FD79-413C-ABA1-01F34777A005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53C6CF7D-FD79-413C-ABA1-01F34777A005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53C6CF7D-FD79-413C-ABA1-01F34777A005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53C6CF7D-FD79-413C-ABA1-01F34777A005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -200,5 +210,6 @@ Global
 		{904E691D-ED2C-4B47-997A-EEA12C2F4710} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 		{4AFAFB2B-67CD-465E-85C5-7EE41316FAD3} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 		{C08816B3-1E52-4D76-8CFA-2672A00FAC64} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{53C6CF7D-FD79-413C-ABA1-01F34777A005} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 	EndGlobalSection
 EndGlobal
