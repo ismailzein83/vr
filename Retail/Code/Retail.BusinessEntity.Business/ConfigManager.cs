@@ -22,24 +22,6 @@ namespace Retail.BusinessEntity.Business
             return accountDIDRelationDefinitionId;
         }
 
-        public List<Guid> GetIncludedAccountTypeIds()
-        {
-            IncludedAccountTypes includedAccountTypes = this.GetIncludedAccountTypes();
-            List<Guid> includedAccountTypeIds = includedAccountTypes.AcountTypeIds;
-            if (includedAccountTypeIds == null)
-                throw new NullReferenceException("includedAccountTypeIds");
-
-            return includedAccountTypeIds;
-        }
-
-        public Guid GetVRRetailVisibilityId()
-        {
-            RetailBETechnicalSettings retailBETechnicalSettings = GetRetailBETechnicalSettings();
-            if (retailBETechnicalSettings.VRRetailVisibilityId == null)
-                throw new NullReferenceException("retailBETechnicalSettings.VRRetailVisibilityId");
-
-            return retailBETechnicalSettings.VRRetailVisibilityId;
-        }
 
         #endregion
 
@@ -52,25 +34,6 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException("didTechnicalSettings");
 
             return didTechnicalSettings;
-        }
-
-        private RetailBETechnicalSettings GetRetailBETechnicalSettings()
-        {
-            RetailBETechnicalSettings retailBETechnicalSettings = new SettingManager().GetSetting<RetailBETechnicalSettings>(RetailBETechnicalSettings.SETTING_TYPE);
-            if (retailBETechnicalSettings == null)
-                throw new NullReferenceException("didTechnicalSettings");
-
-            return retailBETechnicalSettings;
-        }
-
-        private IncludedAccountTypes GetIncludedAccountTypes()
-        {
-            RetailBETechnicalSettings retailBETechnicalSettings = this.GetRetailBETechnicalSettings();
-            IncludedAccountTypes includedAccountTypes = retailBETechnicalSettings.IncludedAccountTypes;
-            if (includedAccountTypes == null)
-                throw new NullReferenceException("includedAccountTypes");
-
-            return includedAccountTypes;
         }
 
         #endregion
