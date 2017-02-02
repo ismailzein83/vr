@@ -7,21 +7,23 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountViews
 {
-    public class ChildBERelation : AccountViewDefinitionSettings
+    public class PortalAccount : AccountViewDefinitionSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("871CEED6-F7E0-4D4F-9A30-8F2869B6E0EE"); }
+            get { return new Guid("DAB350C7-1451-42B2-9E04-215E252433E0"); }
         }
 
         public override string RuntimeEditor
         {
             get
             {
-                return "retail-be-childberelations-view";
+                return "retail-be-accountportal-view";
             }
         }
 
-        public Guid BEParentChildRelationDefinitionId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public Guid Connection { get; set; }
     }
 }

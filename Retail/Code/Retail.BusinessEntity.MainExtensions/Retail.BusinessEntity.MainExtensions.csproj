@@ -117,6 +117,7 @@
     <Compile Include="AccountViews\AccountIdentificationRules.cs" />
     <Compile Include="AccountViews\AccountInfo.cs" />
     <Compile Include="AccountViews\AccountPackages.cs" />
+    <Compile Include="AccountViews\PortalAccount.cs" />
     <Compile Include="AccountViews\AccountServices.cs" />
     <Compile Include="AccountViews\Actions.cs" />
     <Compile Include="AccountViews\ChildBERelation.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="AccountBEActionTypes\BPAccountActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\EditAccountActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\Open360DegreeAccountActionSettings.cs" />
+    <Compile Include="Account\ExtendedSettings\PortalAccountSettings.cs" />
     <Compile Include="ChangeRoutingGroupProvisionerDefinitionSetting.cs" />
     <Compile Include="ChangeRoutingGroupProvisionerRuntimeSetting.cs" />
     <Compile Include="ChargingPolicyParts\DurationTariffs\GenericRuleDurationTariff.cs" />

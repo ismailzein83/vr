@@ -167,6 +167,7 @@
     <Compile Include="Controllers\CreditClassController.cs" />
     <Compile Include="Controllers\DIDController.cs" />
     <Compile Include="Controllers\PopController.cs" />
+    <Compile Include="Controllers\PortalAccountController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProductFamilyController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />
@@ -302,6 +303,8 @@
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-assignproductandpackages.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Account\ExtendedSettings\retail-be-portalaccount-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Account\ExtendedSettings\Templates\PortalAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\ProductFamilyPackageItemEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\retail-be-productfamily-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\retail-be-productfamily-selector.js" />
@@ -624,6 +627,8 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Account\ExtendedSettings\PortalAccountEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Account\ExtendedSettings\PortalAccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyManagement.html" />
