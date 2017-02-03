@@ -35,4 +35,10 @@ namespace Mediation.Generic.Entities
 
         void PrepareDataForDBApply<R, S>(IBulkApplyDataManager<R> dataManager, BaseQueue<S> inputQueue, BaseQueue<object> outputQueue, Func<S, System.Collections.Generic.IEnumerable<R>> GetItems);
     }
+
+    public interface IMediationProcessContext
+    {
+        void DeleteSessionId(string sessionId);
+        string GetMultiLegSessionId(IEnumerable<string> legIds);
+    }
 }
