@@ -349,6 +349,18 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         			text: "Evaluate",
         			class: "glyphicon glyphicon-play"
         		};
+            case "CreateUser":
+                return {
+                    text: "Create User",
+                    class: "glyphicon  glyphicon-plus-sign"
+                };
+            case "ResetPassword":
+                return {
+                    text: "Reset Password",
+                    class: "glyphicon glyphicon-repeat"
+                };
+
+                
         }
     }
 }]);
