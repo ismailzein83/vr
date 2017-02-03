@@ -25,16 +25,18 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         SourceTod SourceTodMapper(IDataReader reader)
         {
+            string beginTime = reader["BeginTime"] as string;
+            string endTime = reader["EndTime"] as string;
             return new SourceTod
             {
-                TodId = (int)reader["ToDConsiderationID"],
+                TodId = (long)reader["ToDConsiderationID"],
                 SupplierId = reader["SupplierId"] as string,
                 CustomerId = reader["CustomerId"] as string,
                 ZoneId = (int)reader["ZoneId"],
-                BeginTime = reader["BeginTime"] as string,
-                EndTime = reader["EndTime"] as string,
-                RateType = GetReaderValue<short>(reader, "RateType"),
-                WeekDay = GetReaderValue<short>(reader, "Amount"),
+                BeginTime = string.IsNullOrEmpty(beginTime) ? (TimeSpan?)null : TimeSpan.Parse(beginTime),
+                EndTime = string.IsNullOrEmpty(endTime) ? (TimeSpan?)null : TimeSpan.Parse(endTime),
+                RateType = (ToDRateType)GetReaderValue<byte>(reader, "RateType"),
+                DayOfWeek = (DayOfWeek?)GetReaderValue<byte>(reader, "WeekDay"),
                 HolidayDateTime = GetReaderValue<DateTime?>(reader, "HolidayDate"),
                 HolidayName = reader["HolidayName"] as string,
                 BED = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),

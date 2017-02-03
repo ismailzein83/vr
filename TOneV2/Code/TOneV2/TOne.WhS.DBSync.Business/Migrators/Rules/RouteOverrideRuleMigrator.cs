@@ -31,7 +31,6 @@ namespace TOne.WhS.DBSync.Business
         public RouteOverrideRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
-
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
@@ -55,36 +54,9 @@ namespace TOne.WhS.DBSync.Business
             return routeRules;
         }
 
+        #region Private Methods
         SourceRule GetDefaultRule()
         {
-            //RouteRule rule = new RouteRule
-            //{
-            //    Criteria = new RouteRuleCriteria
-            //    {
-            //    },
-            //    Settings = new RegularRouteRule
-            //    {
-            //        OptionOrderSettings = new List<RouteOptionOrderSettings>
-            //        {
-            //            new OptionOrderByRate(),
-            //            new OptionOrderByService()
-            //        },
-            //        OptionFilters = new List<RouteOptionFilterSettings> 
-            //        {
-            //            new ServiceOptionFilter(),
-            //            new RateOptionFilter
-            //            {
-            //        RateOption = RateOption.MaximumLoss,
-            //        RateOptionType = RateOptionType.Fixed,
-            //        RateOptionValue = 0
-            //        }
-            //        },
-            //        OrderType = OrderType.Sequential
-            //    },
-            //    BeginEffectiveTime = RuleMigrator.s_defaultRuleBED,
-            //    Description = "Default Routing Rule",
-            //    Name = "Default Routing Rule"
-            //};
             RouteRule rule = new RouteRule
             {
                 Criteria = new RouteRuleCriteria(),
@@ -106,6 +78,69 @@ namespace TOne.WhS.DBSync.Business
             };
             return defaultRouteRule;
         }
+        Dictionary<string, List<SourceRouteOverrideRule>> GetRulesDictionary(IEnumerable<SourceRouteOverrideRule> overrideRules)
+        {
+            Dictionary<string, List<SourceRouteOverrideRule>> dicRules = new Dictionary<string, List<SourceRouteOverrideRule>>();
+            foreach (var routeRule in overrideRules)
+            {
+                string key = string.Format("{0},{1},{2},{3},{4},{5}", routeRule.CustomerId,
+                    routeRule.SupplierOptions.Select(s => s.ToString()).Aggregate((i, j) => i + j), routeRule.BED, routeRule.EED, routeRule.Code, routeRule.ExcludedCodes);
+
+                List<SourceRouteOverrideRule> lstRules;
+                if (!dicRules.TryGetValue(key, out lstRules))
+                {
+                    lstRules = new List<SourceRouteOverrideRule>();
+                    dicRules.Add(key, lstRules);
+                }
+                lstRules.Add(routeRule);
+            }
+            return dicRules;
+        }
+        FixedRouteRule GetRuleSettings(SourceRouteOverrideRule sourceRule)
+        {
+            var rule = new FixedRouteRule()
+            {
+                Filters = GetSuppliersFilters(sourceRule),
+                Options = GetOptions(sourceRule),
+            };
+            return rule;
+        }
+        Dictionary<int, List<RouteOptionFilterSettings>> GetSuppliersFilters(SourceRouteOverrideRule sourceRule)
+        {
+            Dictionary<int, List<RouteOptionFilterSettings>> filters = new Dictionary<int, List<RouteOptionFilterSettings>>();
+            List<RouteOptionFilterSettings> supplierFilters;
+            foreach (var option in sourceRule.SupplierOptions)
+            {
+                var supplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId;
+                if (!option.IsLoss)
+                {
+                    if (!filters.TryGetValue(supplierId, out supplierFilters))
+                    {
+                        supplierFilters = new List<RouteOptionFilterSettings>();
+                        filters.Add(supplierId, supplierFilters);
+                    }
+                    supplierFilters.Add(new RateOptionFilter
+                    {
+                        RateOption = RateOption.MaximumLoss,
+                        RateOptionType = RateOptionType.Fixed,
+                        RateOptionValue = 0
+                    });
+                }
+            }
+
+            return filters;
+
+        }
+        List<RouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
+        {
+            return sourceRule.SupplierOptions.Select(option => new RouteOptionSettings
+            {
+                SupplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId,
+                Percentage = option.Percentage
+            }).ToList();
+        }
+
+        #region ZonePart
         IEnumerable<SourceRule> GetRulesWithZone(IEnumerable<SourceRouteOverrideRule> overrideRules)
         {
             List<SourceRule> routeRules = new List<SourceRule>();
@@ -128,24 +163,77 @@ namespace TOne.WhS.DBSync.Business
             return routeRules;
 
         }
-        Dictionary<string, List<SourceRouteOverrideRule>> GetRulesDictionary(IEnumerable<SourceRouteOverrideRule> overrideRules)
+        SourceRule GetSourceRuleFromZones(IEnumerable<SourceRouteOverrideRule> rules)
         {
-            Dictionary<string, List<SourceRouteOverrideRule>> dicRules = new Dictionary<string, List<SourceRouteOverrideRule>>();
-            foreach (var routeRule in overrideRules)
-            {
-                string key = string.Format("{0},{1},{2},{3},{4},{5}", routeRule.CustomerId,
-                    routeRule.SupplierOptions.Select(s => s.ToString()).Aggregate((i, j) => i + j), routeRule.BED, routeRule.EED, routeRule.Code, routeRule.ExcludedCodes);
+            SourceRouteOverrideRule sourceRule = rules.First();
 
-                List<SourceRouteOverrideRule> lstRules;
-                if (!dicRules.TryGetValue(key, out lstRules))
+            List<long> lstZoneIds = new List<long>();
+
+            foreach (var rule in rules)
+                if (!_allSaleZones.ContainsKey(rule.SaleZoneId.ToString()))
+                    this.TotalRowsFailed++;
+                else
+                    lstZoneIds.Add(_allSaleZones[rule.SaleZoneId.ToString()].SaleZoneId);
+
+            var ruleDetails = GetRuleDetailsFromZone(rules, sourceRule, lstZoneIds);
+            if (ruleDetails == null)
+                return null;
+            else
+            {
+                return new SourceRule
                 {
-                    lstRules = new List<SourceRouteOverrideRule>();
-                    dicRules.Add(key, lstRules);
-                }
-                lstRules.Add(routeRule);
+                    Rule = new Rule
+                    {
+                        BED = sourceRule.BED,
+                        EED = sourceRule.EED,
+                        TypeId = _routeRuleTypeId,
+                        RuleDetails = Serializer.Serialize(ruleDetails)
+                    }
+                };
             }
-            return dicRules;
         }
+        RouteRule GetRuleDetailsFromZone(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule, List<long> lstZoneIds)
+        {
+            var criteria = GetRuleZoneCriteria(lstZoneIds, sourceRule);
+            if (criteria == null)
+                return null;
+            else
+            {
+                RouteRule details = new RouteRule
+                {
+                    BeginEffectiveTime = sourceRule.BED,
+                    EndEffectiveTime = sourceRule.EED,
+                    Description = sourceRule.Reason,
+                    Name = string.Format("Migrated Fixed Rule {0}", Context.Counter++),
+                    Criteria = criteria,
+                    Settings = GetRuleSettings(sourceRule)
+                };
+                return details;
+            }
+        }
+        RouteRuleCriteria GetRuleZoneCriteria(List<long> lstZoneIds, SourceRouteOverrideRule sourceRule)
+        {
+            CarrierAccount customer;
+            if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
+            {
+                return null;
+            }
+            else
+            {
+                return new RouteRuleCriteria
+                {
+                    SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = lstZoneIds, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId },
+                    CustomerGroupSettings = new SelectiveCustomerGroup
+                    {
+                        CustomerIds = new List<int>() { customer.CarrierAccountId },
+                    }
+                };
+            }
+        }
+
+        #endregion
+
+        #region CodePart
         IEnumerable<SourceRule> GetRulesWithCode(IEnumerable<SourceRouteOverrideRule> overrideRules)
         {
             List<SourceRule> routeRules = new List<SourceRule>();
@@ -185,7 +273,6 @@ namespace TOne.WhS.DBSync.Business
                 };
             }
         }
-
         RouteRule GetRuleDetailsFromCode(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule)
         {
             var criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule);
@@ -205,7 +292,6 @@ namespace TOne.WhS.DBSync.Business
                 return details;
             }
         }
-
         List<CodeCriteria> GetRuleCodeCriterias(IEnumerable<SourceRouteOverrideRule> rules)
         {
             List<CodeCriteria> criterias = new List<CodeCriteria>();
@@ -246,129 +332,9 @@ namespace TOne.WhS.DBSync.Business
                 return routeRuleCriteria;
             }
         }
-        SourceRule GetSourceRuleFromZones(IEnumerable<SourceRouteOverrideRule> rules)
-        {
-            SourceRouteOverrideRule sourceRule = rules.First();
 
-            List<long> lstZoneIds = new List<long>();
+        #endregion
+        #endregion
 
-            foreach (var rule in rules)
-                if (!_allSaleZones.ContainsKey(rule.SaleZoneId.ToString()))
-                    this.TotalRowsFailed++;
-                else
-                    lstZoneIds.Add(_allSaleZones[rule.SaleZoneId.ToString()].SaleZoneId);
-
-            var ruleDetails = GetRuleDetailsFromZone(rules, sourceRule, lstZoneIds);
-            if (ruleDetails == null)
-                return null;
-            else
-            {
-                return new SourceRule
-                {
-                    Rule = new Rule
-                    {
-                        BED = sourceRule.BED,
-                        EED = sourceRule.EED,
-                        TypeId = _routeRuleTypeId,
-                        RuleDetails = Serializer.Serialize(ruleDetails)
-                    }
-                };
-            }
-        }
-
-        private RouteRule GetRuleDetailsFromZone(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule, List<long> lstZoneIds)
-        {
-            var criteria = GetRuleZoneCriteria(lstZoneIds, sourceRule);
-            if (criteria == null)
-                return null;
-            else
-            {
-                RouteRule details = new RouteRule
-                {
-                    BeginEffectiveTime = sourceRule.BED,
-                    EndEffectiveTime = sourceRule.EED,
-                    Description = sourceRule.Reason,
-                    Name = string.Format("Migrated Fixed Rule {0}", Context.Counter++),
-                    Criteria = criteria,
-                    Settings = GetRuleSettings(sourceRule)
-                };
-                return details;
-            }
-        }
-
-        FixedRouteRule GetRuleSettings(SourceRouteOverrideRule sourceRule)
-        {
-            var rule = new FixedRouteRule()
-            {
-                Filters = GetSuppliersFilters(sourceRule),
-                Options = GetOptions(sourceRule),
-            };
-            return rule;
-        }
-
-        private Dictionary<int, List<RouteOptionFilterSettings>> GetSuppliersFilters(SourceRouteOverrideRule sourceRule)
-        {
-            Dictionary<int, List<RouteOptionFilterSettings>> filters = new Dictionary<int, List<RouteOptionFilterSettings>>();
-            List<RouteOptionFilterSettings> supplierFilters;
-            foreach (var option in sourceRule.SupplierOptions)
-            {
-                var supplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId;
-                if (!option.IsLoss)
-                {
-                    if (!filters.TryGetValue(supplierId, out supplierFilters))
-                    {
-                        supplierFilters = new List<RouteOptionFilterSettings>();
-                        filters.Add(supplierId, supplierFilters);
-                    }
-                    supplierFilters.Add(new RateOptionFilter
-                    {
-                        RateOption = RateOption.MaximumLoss,
-                        RateOptionType = RateOptionType.Fixed,
-                        RateOptionValue = 0
-                    });
-                }
-            }
-
-            return filters;
-
-        }
-        RouteRuleCriteria GetRuleZoneCriteria(List<long> lstZoneIds, SourceRouteOverrideRule sourceRule)
-        {
-            CarrierAccount customer;
-            if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
-            {
-                return null;
-            }
-            else
-            {
-                return new RouteRuleCriteria
-                {
-                    SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = lstZoneIds, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId },
-                    CustomerGroupSettings = new SelectiveCustomerGroup
-                    {
-                        CustomerIds = new List<int>() { customer.CarrierAccountId },
-                    }
-                };
-            }
-        }
-        FixedOptionPercentage GetOptionPercentageSettings(SourceRouteOverrideRule sourceRule)
-        {
-            if (sourceRule.SupplierOptions.Where(s => s.Percentage.HasValue).Sum(s => s.Percentage) != (short)100)
-                return null;
-
-            FixedOptionPercentage setting = new FixedOptionPercentage { Percentages = new List<decimal>() };
-            foreach (var option in sourceRule.SupplierOptions)
-                if (option.Percentage.HasValue)
-                    setting.Percentages.Add(option.Percentage.Value);
-            return setting;
-        }
-        List<RouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
-        {
-            return sourceRule.SupplierOptions.Select(option => new RouteOptionSettings
-            {
-                SupplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId,
-                Percentage = option.Percentage
-            }).ToList();
-        }
     }
 }

@@ -57,7 +57,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                                                           ,[BeginEffectiveDate]
                                                           ,[EndEffectiveDate]
                                                       FROM      [dbo].[Tariff]
-                                                      WHERE  ((@GetEffectiveOnly = 0 and ro.BeginEffectiveDate <= getdate()) 
-                                                                or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
+                                                      WHERE  ((@GetEffectiveOnly = 0 and BeginEffectiveDate <= getdate()) 
+                                                                or (@GetEffectiveOnly = 1 and IsEffective = 'Y'))";
     }
 }

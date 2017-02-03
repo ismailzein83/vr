@@ -31,6 +31,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             var sellingProductId;
             var offPeakRateTypeId;
             var weekendRateTypeId;
+            var holidayRateTypeId;
 
             var sellingNumberPlanDirectiveAPI;
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -40,6 +41,9 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
             var weekendRateTypeSelectorAPI;
             var weekendRateTypeSelectorReadyPrmoiseDeferred = UtilsService.createPromiseDeferred();
+
+            var holidayRateTypeSelectorAPI;
+            var holidayRateTypeSelectorReadyPrmoiseDeferred = UtilsService.createPromiseDeferred();
 
             var sellingProductDirectiveAPI;
 
@@ -73,10 +77,20 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     weekendRateTypeSelectorReadyPrmoiseDeferred.resolve();
                 };
 
+                $scope.onHolidayRateTypeSelectorReady = function (api) {
+                    holidayRateTypeSelectorAPI = api;
+                    holidayRateTypeSelectorReadyPrmoiseDeferred.resolve();
+                };
+
 
                 $scope.validateOffPeakAndWeekendRate = function () {
-                    if (weekendRateTypeSelectorAPI != undefined && offPeakRateTypeSelectorAPI != undefined && weekendRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds())
-                        return "offPeak rate must be different to weekend rate";
+                    if (weekendRateTypeSelectorAPI != undefined
+                            && offPeakRateTypeSelectorAPI != undefined
+                            && holidayRateTypeSelectorAPI != undefined
+                            && (weekendRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds()
+                                    || holidayRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds()
+                                    || holidayRateTypeSelectorAPI.getSelectedIds() == weekendRateTypeSelectorAPI.getSelectedIds()))
+                        return "Rate Types must be different.";
                     return null;
                 };
 
@@ -118,6 +132,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction.SellingProductId = sellingProductDirectiveAPI.getSelectedIds();
                     schedulerTaskAction.OffPeakRateTypeId = offPeakRateTypeSelectorAPI.getSelectedIds();
                     schedulerTaskAction.WeekendRateTypeId = weekendRateTypeSelectorAPI.getSelectedIds();
+                    schedulerTaskAction.HolidayRateTypeId = holidayRateTypeSelectorAPI.getSelectedIds();
                     schedulerTaskAction.MigratePriceListData = $scope.migratePriceListData;
                     schedulerTaskAction.OnlyEffective = $scope.onlyEffective;
                     var selectedTables = [];
@@ -145,6 +160,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         sellingProductId = payload.data.SellingProductId;
                         offPeakRateTypeId = payload.data.OffPeakRateTypeId;
                         weekendRateTypeId = payload.data.WeekendRateTypeId;
+                        holidayRateTypeId = payload.data.HolidayRateTypeId;
                         $scope.migratePriceListData = payload.data.MigratePriceListData;
                         $scope.onlyEffective = payload.data.OnlyEffective;
                         $scope.migrationTablesSelectedValues = [];
@@ -157,7 +173,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
                     }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadOffPeakRateTypeSelector, loadWeekendRateTypeSelector])
+                    return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadOffPeakRateTypeSelector, loadWeekendRateTypeSelector, loadHolidayRateTypeSelector])
                          .catch(function (error) {
                              VRNotificationService.notifyExceptionWithClose(error, $scope);
                          });
@@ -204,10 +220,23 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     var weekendRatePayload = {
                         selectedIds: weekendRateTypeId
                     };
-                  VRUIUtilsService.callDirectiveLoad(weekendRateTypeSelectorAPI, weekendRatePayload, loadWeekendRateTypeSelectorPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(weekendRateTypeSelectorAPI, weekendRatePayload, loadWeekendRateTypeSelectorPromiseDeferred);
                 });
 
                 return loadWeekendRateTypeSelectorPromiseDeferred.promise;
+            }
+
+            function loadHolidayRateTypeSelector() {
+                var loadHolidayRateTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                holidayRateTypeSelectorReadyPrmoiseDeferred.promise.then(function () {
+                    var holidayRatePayload = {
+                        selectedIds: holidayRateTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoad(holidayRateTypeSelectorAPI, holidayRatePayload, loadHolidayRateTypeSelectorPromiseDeferred);
+                });
+
+                return loadHolidayRateTypeSelectorPromiseDeferred.promise;
             }
 
 

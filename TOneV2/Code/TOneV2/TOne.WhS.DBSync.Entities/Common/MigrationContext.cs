@@ -18,7 +18,7 @@ namespace TOne.WhS.DBSync.Entities
 
         public int OffPeakRateTypeId { get; set; }
         public int WeekendRateTypeId { get; set; }
-
+        public int HolidayRateTypeId { get; set; }
         public bool MigratePriceListData { get; set; }
 
         public bool OnlyEffective { get; set; }

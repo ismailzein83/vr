@@ -18,6 +18,7 @@ using Vanrise.GenericData.Pricing;
 using Vanrise.Rules.Entities;
 using Vanrise.Rules.Pricing;
 using Vanrise.Rules.Pricing.MainExtensions.ExtraCharge;
+using Vanrise.Rules.Pricing.MainExtensions.Tariff;
 
 namespace TOne.WhS.DBSync.Business.Migrators
 {
@@ -31,6 +32,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
         readonly Dictionary<string, SupplierZone> _allSupplierZones;
         readonly Dictionary<string, SaleZone> _allSaleZones;
         readonly int _ruleTypeId;
+        Guid _CostDefinitionId = new Guid("5AEB0DAD-4BB8-44B4-ACBE-C8C917E88B58");
+        Guid _SaleDefinitionId = new Guid("F24CB510-0B65-48C8-A723-1F6EBFEEA9E8");
 
         public TariffRuleMigrator(RuleMigrationContext context)
             : base(context)
@@ -56,53 +59,107 @@ namespace TOne.WhS.DBSync.Business.Migrators
             sourceRules.Add(GetDefaultSaleTariffRule());
             sourceRules.Add(GetDefaultSupplierTariffRule());
 
-            //SourceTariffRuleDataManager dataManager = new SourceTariffRuleDataManager(Context.MigrationContext.ConnectionString, true);
-            //var tariffRules = dataManager.GetTariffRules();
+            SourceTariffRuleDataManager dataManager = new SourceTariffRuleDataManager(Context.MigrationContext.ConnectionString, true);
+            var tariffRules = dataManager.GetTariffRules();
 
-            //sourceRules.AddRange(GetSaleTariffRules(tariffRules.Where(t => t.SupplierId == "SYS")));
-            //sourceRules.AddRange(GetCostTariffRules(tariffRules.Where(t => t.SupplierId != "SYS")));
+            sourceRules.AddRange(GetTariffRules(tariffRules.Where(t => t.SupplierId == "SYS"), RuleType.Sale));
+            sourceRules.AddRange(GetTariffRules(tariffRules.Where(t => t.SupplierId != "SYS"), RuleType.Purchase));
 
             return sourceRules;
         }
 
-        private List<SourceRule> GetCostTariffRules(IEnumerable<SourceTariffRule> sourceTariffRules)
+        #region Private Methods
+        private List<SourceRule> GetTariffRules(IEnumerable<SourceTariffRule> sourceTariffRules, RuleType type)
         {
             List<SourceRule> routeRules = new List<SourceRule>();
-            var dicRules = GetRulesDictionary(sourceTariffRules);
+            var dicRules = GetRulesDictionary(sourceTariffRules, type);
             foreach (var rules in dicRules.Values)
             {
                 SourceTariffRule sourceRule = rules.First();
                 if (sourceRule == null)
                     continue;
-                var rule = GetCostSourceRule(rules);
+                var rule = GetSourceRule(rules, type);
                 if (rule == null)
                 {
                     this.TotalRowsFailed++;
+                    continue;
                 }
-                else
-                {
-                    routeRules.Add(rule);
-                }
+                routeRules.Add(rule);
             }
             return routeRules;
         }
-
-        private SourceRule GetCostSourceRule(List<SourceTariffRule> rules)
+        private SourceRule GetSourceRule(List<SourceTariffRule> rules, RuleType type)
         {
-            TariffRule supplierTariffRule = new TariffRule
+            CarrierAccount carrier = null;
+            SourceTariffRule defaultRule = rules.FirstOrDefault();
+            TariffRule tariffRule = new TariffRule
             {
-                BeginEffectiveTime = RuleMigrator.s_defaultRuleBED,
-                EndEffectiveTime = null,
+                BeginEffectiveTime = defaultRule.BED,
+                EndEffectiveTime = defaultRule.EED,
+
                 Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
                 {
+                    FractionUnit = defaultRule.FractionUnit,
+                    FirstPeriod = defaultRule.FirstPeriod,
+                    CallFee = defaultRule.CallFee,
+                    FirstPeriodRate = defaultRule.FirstPeriodRate,
                     PricingUnit = 60,
-                    FractionUnit = 0,
-                    CurrencyId = Context.CurrencyId
+                    FirstPeriodRateType = FirstPeriodRateType.FixedRate
                 },
 
-                DefinitionId = new Guid("5AEB0DAD-4BB8-44B4-ACBE-C8C917E88B58"),
-                Description = "Default Supplier Tariff Rule"
+                Criteria = new GenericRuleCriteria
+                {
+                    FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
+                }
             };
+
+            switch (type)
+            {
+                case RuleType.Sale:
+                    if (!_allCarrierAccounts.TryGetValue(defaultRule.CustomerId, out carrier))
+                        throw new NullReferenceException(string.Format("customer not found. Customer Source Id {0}.", defaultRule.CustomerId));
+                    tariffRule.Criteria.FieldsValues.Add("CustomerId", new BusinessEntityValues()
+                    {
+                        BusinessEntityGroup = new SelectiveCustomerGroup
+                        {
+                            CustomerIds = new List<int>() { carrier.CarrierAccountId }
+                        }
+                    });
+                    tariffRule.Criteria.FieldsValues.Add("SaleZoneId", new BusinessEntityValues()
+                    {
+                        BusinessEntityGroup = new SelectiveSaleZoneGroup
+                        {
+                            SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId,
+                            ZoneIds = GetZoneIds(rules, type).ToList()
+                        }
+                    });
+                    tariffRule.Settings.CurrencyId = carrier.CarrierAccountSettings == null ? Context.CurrencyId : carrier.CarrierAccountSettings.CurrencyId;
+                    tariffRule.Description = string.Format("Migrated Sale Tariff Rule {0}", Context.Counter++);
+                    tariffRule.DefinitionId = _SaleDefinitionId;
+                    break;
+                case RuleType.Purchase:
+                    if (!_allCarrierAccounts.TryGetValue(defaultRule.SupplierId, out carrier))
+                        throw new NullReferenceException(string.Format("Supplier not found. Supplier Source Id {0}.", defaultRule.CustomerId));
+                    tariffRule.Settings.CurrencyId = Context.CurrencyId;
+                    tariffRule.Description = string.Format("Migrated Supplier Tariff Rule {0}", Context.Counter++);
+                    tariffRule.DefinitionId = _CostDefinitionId;
+                    tariffRule.Criteria.FieldsValues.Add("SupplierZoneId", new BusinessEntityValues()
+                    {
+                        BusinessEntityGroup = new SelectiveSupplierZoneGroup()
+                        {
+                            SuppliersWithZones = new List<SupplierWithZones>()
+                            {
+                               new SupplierWithZones
+                                {
+                                    SupplierId = carrier.CarrierAccountId,
+                                    SupplierZoneIds =   GetZoneIds(rules, type).ToList()
+                                }
+                            }
+                        }
+                    });
+
+                    break;
+            }
             SourceRule sourceRule = new SourceRule
             {
                 Rule = new Rule
@@ -110,46 +167,45 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     BED = RuleMigrator.s_defaultRuleBED,
                     EED = null,
                     TypeId = _ruleTypeId,
-                    RuleDetails = Serializer.Serialize(supplierTariffRule)
+                    RuleDetails = Serializer.Serialize(tariffRule)
                 }
             };
 
             return sourceRule;
         }
-
-        List<long> GetZoneIds(List<SourceTariffRule> rules, bool isSale)
+        HashSet<long> GetZoneIds(List<SourceTariffRule> rules, RuleType type)
         {
-            List<long> zoneIds = new List<long>();
-            if (isSale)
+            HashSet<long> zoneIds = new HashSet<long>();
+            switch (type)
             {
-                foreach (var rule in rules)
-                    if (!_allSaleZones.ContainsKey(rule.ZoneId.ToString()))
-                        this.TotalRowsFailed++;
-                    else
-                        zoneIds.Add(_allSaleZones[rule.ZoneId.ToString()].SaleZoneId);
-            }
-            else
-            {
-                foreach (var rule in rules)
-                    if (!_allSupplierZones.ContainsKey(rule.ZoneId.ToString()))
-                        this.TotalRowsFailed++;
-                    else
-                        zoneIds.Add(_allSupplierZones[rule.ZoneId.ToString()].SupplierZoneId);
+                case RuleType.Sale:
+                    foreach (SourceTariffRule sourcetariff in rules)
+                    {
+                        if (!_allSaleZones.ContainsKey(sourcetariff.ZoneId.ToString()))
+                            this.TotalRowsFailed++;
+                        else
+                            zoneIds.Add(_allSaleZones[sourcetariff.ZoneId.ToString()].SaleZoneId);
+                    }
+                    break;
+                case RuleType.Purchase:
+                    foreach (SourceTariffRule sourcetariff in rules)
+                    {
+                        if (!_allSupplierZones.ContainsKey(sourcetariff.ZoneId.ToString()))
+                            this.TotalRowsFailed++;
+                        else
+                            zoneIds.Add(_allSupplierZones[sourcetariff.ZoneId.ToString()].SupplierZoneId);
+                    }
+                    break;
+
             }
             return zoneIds;
         }
-
-        private List<SourceRule> GetSaleTariffRules(IEnumerable<SourceTariffRule> sourceTariffRules)
-        {
-            throw new NotImplementedException();
-        }
-
-        Dictionary<string, List<SourceTariffRule>> GetRulesDictionary(IEnumerable<SourceTariffRule> tariffRules)
+        Dictionary<string, List<SourceTariffRule>> GetRulesDictionary(IEnumerable<SourceTariffRule> tariffRules, RuleType type)
         {
             Dictionary<string, List<SourceTariffRule>> dicRules = new Dictionary<string, List<SourceTariffRule>>();
             foreach (var tariffRule in tariffRules)
             {
-                string key = string.Format("{0},{1},{2},{3},{4},{5},{6}", tariffRule.BED, tariffRule.EED, tariffRule.CallFee, tariffRule.FirstPeriod, tariffRule.FirstPeriodRate, tariffRule.FractionUnit, tariffRule.SupplierId);
+                string key = GetTariffRuleKey(tariffRule, type);
 
                 List<SourceTariffRule> lstRules;
                 if (!dicRules.TryGetValue(key, out lstRules))
@@ -161,7 +217,6 @@ namespace TOne.WhS.DBSync.Business.Migrators
             }
             return dicRules;
         }
-
         SourceRule GetDefaultSupplierTariffRule()
         {
             TariffRule supplierTariffRule = new TariffRule
@@ -177,7 +232,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     FirstPeriodRate = 0
 
                 },
-                DefinitionId = new Guid("5AEB0DAD-4BB8-44B4-ACBE-C8C917E88B58"),
+                DefinitionId = _CostDefinitionId,
                 Description = "Default Supplier Tariff Rule"
             };
             SourceRule defaultRouteRule = new SourceRule
@@ -193,7 +248,6 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
             return defaultRouteRule;
         }
-
         SourceRule GetDefaultSaleTariffRule()
         {
             TariffRule saleTariffRule = new TariffRule
@@ -208,7 +262,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     FirstPeriodRateType = Vanrise.Rules.Pricing.MainExtensions.Tariff.FirstPeriodRateType.FixedRate,
                     FirstPeriodRate = 0
                 },
-                DefinitionId = new Guid("F24CB510-0B65-48C8-A723-1F6EBFEEA9E8"),
+                DefinitionId = _SaleDefinitionId,
                 Description = "Default Sale Tariff Rule"
             };
 
@@ -225,8 +279,20 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
             return defaultRouteRule;
         }
+        string GetTariffRuleKey(SourceTariffRule rule, RuleType ruleType)
+        {
+            switch (ruleType)
+            {
+                case RuleType.Sale:
+                    return string.Format("{0}-{1}-{2}-{3}-{4}-{5}-{6}", rule.CustomerId, rule.BED, rule.EED, rule.FirstPeriod, rule.FirstPeriodRate, rule.FractionUnit, rule.CallFee);
+                case RuleType.Purchase:
+                    return string.Format("{0}-{1}-{2}-{3}-{4}-{5}-{6}", rule.SupplierId, rule.BED, rule.EED, rule.FirstPeriod, rule.FirstPeriodRate, rule.FractionUnit, rule.CallFee);
+                default:
+                    return "";
+            }
+        }
 
-
+        #endregion
 
     }
 }

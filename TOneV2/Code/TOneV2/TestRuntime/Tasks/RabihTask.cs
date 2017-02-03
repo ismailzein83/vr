@@ -32,8 +32,8 @@ namespace TestRuntime
         public void Execute()
         {
 
-            RunMigration();
-            return;
+            //RunMigration();
+            //return;
 
             var runtimeServices = new List<RuntimeService>();
 
@@ -206,25 +206,23 @@ namespace TestRuntime
                     //case DBTableName.File:
                     //    migrationTables.Add(table);
                     //    break;
-                    //case DBTableName.CustomerZone:
-                    //    migrationTables.Add(table);
-                    //    break;
-
                     //case DBTableName.ZoneServiceConfig:
                     //    migrationTables.Add(table);
                     //    break;
                     case DBTableName.Rule:
                         migrationTables.Add(table);
                         break;
+                    default:
+                        break;
                 }
             }
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument
             {
-                //ConnectionString = "Server=192.168.110.185;Database=TOneV1_Spactrom;User ID=development;Password=dev!123;",
                 ConnectionString = "Server=192.168.110.195;Database=MMOKDAD;User ID=sa;Password=no@cce$$dev;",
                 DefaultSellingNumberPlanId = 1,
                 SellingProductId = 1,
+                HolidayRateTypeId = -1,
                 OffPeakRateTypeId = -2,
                 WeekendRateTypeId = -3,
                 UseTempTables = true,

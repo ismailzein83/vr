@@ -51,7 +51,6 @@ namespace TOne.WhS.DBSync.Business
             routeRules.AddRange(GetRules(blockRules.Where(o => !o.SupplierZoneId.HasValue)));
             return routeRules;
         }
-
         IEnumerable<SourceRule> GetRules(IEnumerable<SourceRouteOptionBlockRule> blockRules)
         {
             List<SourceRule> routeRules = new List<SourceRule>();
@@ -117,7 +116,6 @@ namespace TOne.WhS.DBSync.Business
                 }
             };
         }
-
         RouteOptionRule GetRouteOptionRuleSettings(IEnumerable<SourceRouteOptionBlockRule> rules, SourceRouteOptionBlockRule sourceRule,
            List<long> lstZoneIds)
         {

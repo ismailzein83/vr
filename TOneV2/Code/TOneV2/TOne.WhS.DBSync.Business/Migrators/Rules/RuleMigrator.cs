@@ -43,14 +43,7 @@ namespace TOne.WhS.DBSync.Business
 
             RuleMigrationContext ruleContext = new RuleMigrationContext
             {
-                MigrationContext = new MigrationContext
-                {
-                    ConnectionString = Context.ConnectionString,
-                    DBTables = Context.DBTables,
-                    UseTempTables = Context.UseTempTables,
-                    DefaultSellingNumberPlanId = Context.DefaultSellingNumberPlanId
-
-                },
+                MigrationContext = Context,
                 CurrencyId = _currencySettingData.CurrencyId
             };
 
@@ -76,9 +69,9 @@ namespace TOne.WhS.DBSync.Business
                     case RuleEntitiesEnum.Tariff:
                         _rulesBaseMigrator = new TariffRuleMigrator(ruleContext);
                         break;
-                    //case RuleEntitiesEnum.Tod:
-                    //   _rulesBaseMigrator = new TodRuleMigrator(ruleContext);
-                    //    break;
+                    case RuleEntitiesEnum.Tod:
+                        _rulesBaseMigrator = new TodRuleMigrator(ruleContext);
+                        break;
                     //case RuleEntitiesEnum.SwitchRules:
                     //    _rulesBaseMigrator = new SwitchRuleMigrator(ruleContext);
                     //    break;
