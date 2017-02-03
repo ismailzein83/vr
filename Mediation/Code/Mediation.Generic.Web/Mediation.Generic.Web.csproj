@@ -147,9 +147,14 @@
   <ItemGroup>
     <Content Include="Mediation_Generic\Constant\ModuleConfig.js" />
     <Content Include="Mediation_Generic\Constant\StorageStagingStatusEnum.js" />
+    <Content Include="Mediation_Generic\Directives\MainExtensions\OutPutHandler\mediation-outputhandler-othermediation-editor.js" />
+    <Content Include="Mediation_Generic\Directives\MainExtensions\OutPutHandler\mediation-outputhandler-storerecords-editor.js" />
+    <Content Include="Mediation_Generic\Directives\MainExtensions\OutPutHandler\Templates\OutPutHandlerOtherMediationEditorTemplate.html" />
+    <Content Include="Mediation_Generic\Directives\MainExtensions\OutPutHandler\Templates\OutPutHandlerStoreRecordsEditorTemplate.html" />
     <Content Include="Mediation_Generic\Directives\MediationDefinition\mediation-generic-mediationdefinition-grid.js" />
     <Content Include="Mediation_Generic\Directives\MediationDefinition\mediation-generic-mediationdefinition-selector.js" />
     <Content Include="Mediation_Generic\Directives\MediationDefinition\Templates\MediationDefinitionGrid.html" />
+    <Content Include="Mediation_Generic\Directives\MediationDefinition\mediation-generic-handlertypeconfig-selector.js" />
     <Content Include="Mediation_Generic\Directives\ProcessInput\Normal\mediation-generic-mediationprocess-manual.js" />
     <Content Include="Mediation_Generic\Directives\ProcessInput\Normal\Templates\MediationProcessManualTemplate.html" />
     <Content Include="Mediation_Generic\Directives\ProcessInput\Scheduled\mediation-generic-mediationprocess.js" />
@@ -157,7 +162,10 @@
     <Content Include="Mediation_Generic\Directives\QueueActivator\Templates\QueueActivatorStoreStagingRecordsTemplate.html" />
     <Content Include="Mediation_Generic\Directives\QueueActivator\mediation-generic-queueactivator-storestagingrecords.js" />
     <Content Include="Mediation_Generic\Services\APIServices\MediationDefinitionAPIService.js" />
+    <Content Include="Mediation_Generic\Services\OutPutHandlerService.js" />
     <Content Include="Mediation_Generic\Services\MediationDefinitionService.js" />
+    <Content Include="Mediation_Generic\Views\MediationDefinition\OutPutHandlerEditor.html" />
+    <Content Include="Mediation_Generic\Views\MediationDefinition\OutPutHandlerEditorEditorController.js" />
     <Content Include="Mediation_Generic\Views\MediationDefinition\MediationDefinitionEditorController.js" />
     <Content Include="Mediation_Generic\Views\MediationDefinition\MediationDefinitionEditor.html" />
     <Content Include="Mediation_Generic\Views\MediationDefinition\MediationDefinitionManagementController.js" />

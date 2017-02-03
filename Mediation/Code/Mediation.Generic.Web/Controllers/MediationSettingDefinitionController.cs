@@ -63,6 +63,13 @@ namespace Vanrise.GenericData.Web.Controllers
             return GetWebResponse(input, mediationDefinitionManager.GetFilteredMediationDefinitions(input));
         }
 
+        [HttpGet]
+        [Route("GetMediationHandlerConfigTypes")]
+        public IEnumerable<MediationOutputHandlerConfig> GetMediationHandlerConfigTypes()
+        {
+            MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
+            return mediationDefinitionManager.GetMediationHandlerConfigTypes();
+        }
 
     }
 }

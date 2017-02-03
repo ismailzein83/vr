@@ -44,6 +44,7 @@ app.directive('mediationGenericMediationdefinitionSelector', ['Mediation_Generic
                 label = "Mediation Definitions";
                 multipleselection = "ismultipleselection";
             }
+            var hideremoveicon = (attrs.hideremoveicon != undefined && attrs.hideremoveicon != null) ? 'hideremoveicon' : null;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '<vr-select on-ready="ctrl.onSelectorReady"'
@@ -56,6 +57,7 @@ app.directive('mediationGenericMediationdefinitionSelector', ['Mediation_Generic
                    + '  isrequired="ctrl.isrequired"'
                    + '  label="' + label + '"'
                    + ' entityName="' + label + '"'
+                   + hideremoveicon
                    + '  >'
                    + '</vr-select>'
                    + '</vr-columns>'

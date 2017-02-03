@@ -1,0 +1,28 @@
+﻿<div vr-modalcontent ng-controller="Mediation_Generic_HandlerEditorController" vr-loader="scopeModel.isLoading" size="small">
+    <vr-modalbody>
+        <vr-form validationcontext="outPutHandlerEditorGroup">
+            <vr-tabs>
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-textbox label="Name" value="scopeModel.outputRecordName" isrequired></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <mediation-generic-handlertypeconfig-selector on-ready="scopeModel.onHandlerTypeSelectorReady"
+                                                                      isrequired="true"
+                                                                      selectedvalues="scopeModel.handlerType"
+                                                                      hideremoveicon>
+                        </mediation-generic-handlertypeconfig-selector>
+                    </vr-columns>
+                    <vr-directivewrapper vr-loader="scopeModel.isLoadingEditor" normal-col-num=" 6" ng-if="scopeModel.handlerType.Editor" directive="scopeModel.handlerType.Editor" on-ready="scopeModel.onHandlerTypeEditorReady"></vr-directivewrapper>
+                </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="outPutHandlerEditorGroup" data-onclick="scopeModel.saveHandler" ></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

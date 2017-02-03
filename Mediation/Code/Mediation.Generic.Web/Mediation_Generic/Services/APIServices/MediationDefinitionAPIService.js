@@ -15,7 +15,8 @@
             UpdateMediationDefinition: UpdateMediationDefinition,
             HasUpdateMediationDefinition: HasUpdateMediationDefinition,
             GetMediationDefinitionsInfo: GetMediationDefinitionsInfo,
-            GetMediationDefinitionsInfoByIds: GetMediationDefinitionsInfoByIds
+            GetMediationDefinitionsInfoByIds: GetMediationDefinitionsInfoByIds,
+            GetMediationHandlerConfigTypes: GetMediationHandlerConfigTypes,
         });
 
         function GetFilteredMediationDefinitions(input) {
@@ -42,6 +43,9 @@
         }
         function GetMediationDefinitionsInfoByIds(mediationDefinitionIds) {
             return BaseAPIService.post(UtilsService.getServiceURL(Mediation_Generic_ModuleConfig.moduleName, controllerName, "GetMediationDefinitionsInfoByIds"), mediationDefinitionIds);
+        }
+        function GetMediationHandlerConfigTypes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Mediation_Generic_ModuleConfig.moduleName, controllerName, "GetMediationHandlerConfigTypes"));
         }
     }
 

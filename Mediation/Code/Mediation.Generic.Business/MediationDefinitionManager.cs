@@ -8,6 +8,7 @@ using Mediation.Generic.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Common.Business;
 
 namespace Mediation.Generic.Business
 {
@@ -97,6 +98,10 @@ namespace Mediation.Generic.Business
             return mediationDefinitions.MapRecords(MediationDefinitionInfoMapper, mediationDefinitionFilter).OrderBy(x => x.Name); ;
         }
 
+        public IEnumerable<MediationOutputHandlerConfig> GetMediationHandlerConfigTypes()
+        {
+            return new ExtensionConfigurationManager().GetExtensionConfigurations<MediationOutputHandlerConfig>(MediationOutputHandlerConfig.EXTENSION_TYPE);
+        }
         #region Private Methods
         private Dictionary<int, MediationDefinition> GetCachedMediationDefinitions()
         {

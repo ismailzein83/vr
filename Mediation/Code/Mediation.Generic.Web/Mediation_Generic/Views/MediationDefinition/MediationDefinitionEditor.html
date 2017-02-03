@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Mediation_Generic_MediationDefinitionEditorController" vr-loader="scopeModal.isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="Mediation_Generic_MediationDefinitionEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form validationcontext="mediationDefinitionEditorGroup">
             <vr-tabs>
@@ -7,15 +7,15 @@
 
                     <vr-row>
                         <vr-columns width="1/4row">
-                            <vr-textbox label="Name" value="scopeModal.name" isrequired></vr-textbox>
+                            <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
                         </vr-columns>
                     </vr-row>
 
                     <vr-row>
                         <vr-columns width="1/4row">
-                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onParsedDataRecordTypeSelectorReady"
-                                                                    selectedvalues="scopeModal.selectedParsedDataRecordType"
-                                                                    onselectionchanged="scopeModal.onParsedRecordTypeSelectionChanged"
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onParsedDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModel.selectedParsedDataRecordType"
+                                                                    onselectionchanged="scopeModel.onParsedRecordTypeSelectionChanged"
                                                                     isrequired="true"
                                                                     label="Parsed Record Type"
                                                                     hideremoveicon>
@@ -25,9 +25,9 @@
 
                     <vr-row>
                         <vr-columns width="1/4row">
-                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onCookedDataRecordTypeSelectorReady"
-                                                                    selectedvalues="scopeModal.selectedSummaryDataRecordType"
-                                                                    onselectionchanged="scopeModal.onCookedRecordTypeSelectionChanged"
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onCookedDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModel.selectedSummaryDataRecordType"
+                                                                    onselectionchanged="scopeModel.onCookedRecordTypeSelectionChanged"
                                                                     isrequired="true"
                                                                     label="Cooked Record Type"
                                                                     hideremoveicon>
@@ -40,19 +40,19 @@
                 <vr-tab header="'Parsed Record Settings'">
                     <vr-row removeline>
 
-                        <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingParsedSessionID">
+                        <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingParsedSessionID">
 
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onParsedDataRecordSessionIDFieldSelectorReady"
-                                                                          selectedvalues="scopeModal.selectedParsedDataRecordTypeSessionId"
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onParsedDataRecordSessionIDFieldSelectorReady"
+                                                                          selectedvalues="scopeModel.selectedParsedDataRecordTypeSessionId"
                                                                           isrequired="true"
                                                                           label="Session ID Field"
                                                                           hideremoveicon>
                             </vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
 
-                        <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingParsedTimeField">
+                        <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingParsedTimeField">
 
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onParsedDataRecordTimeFieldSelectorReady" selectedvalues="scopeModal.selectedParsedDataRecordTypeTimeField" 
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onParsedDataRecordTimeFieldSelectorReady" selectedvalues="scopeModel.selectedParsedDataRecordTypeTimeField" 
                               label="Time Field" hideremoveicon>
                             </vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
@@ -62,7 +62,7 @@
                         <vr-section title="Event Status Conditions">
 
                             <vr-columns width="1/4row">
-                                <vr-select label="Field" datasource="scopeModal.statusMappings" selectedvalues="scopeModal.selectedStatusMappings"
+                                <vr-select label="Field" datasource="scopeModel.statusMappings" selectedvalues="scopeModel.selectedStatusMappings"
                                            datavaluefield="Id" datatextfield="Status" hideremoveicon ismultipleselection>
                                 </vr-select>
                             </vr-columns>
@@ -71,11 +71,11 @@
                             <vr-columns width="fullrow">
                                 <vr-row>
                                     <vr-columns width="fullrow">
-                                        <vr-validator validate="scopeModal.ValidateStatusConditions()">
-                                            <vr-datagrid datasource="scopeModal.selectedStatusMappings"
+                                        <vr-validator validate="scopeModel.ValidateStatusConditions()">
+                                            <vr-datagrid datasource="scopeModel.selectedStatusMappings"
                                                          pagingtype="'PagingOnScroll'"
-                                                         menuactions="scopeModal.gridMenuActions"
-                                                         on-ready="scopeModal.onGridReady"
+                                                         menuactions="scopeModel.gridMenuActions"
+                                                         on-ready="scopeModel.onGridReady"
                                                          idfield="Id"
                                                          enabledraggablerow="true">
                                                 <vr-datagridcolumn headertext="'Status'" field="'Status'" disablesorting="true"></vr-datagridcolumn>
@@ -95,9 +95,9 @@
                     <vr-row>
 
                         <vr-columns width="1/3row">
-                            <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModal.onDataTransformationDefinitionInsertReady"
-                                                                                  selectedvalues="scopeModal.selectedDataTransformationDefinitionInsert"
-                                                                                  onselectionchanged="scopeModal.onDataTransformationDefinitionInsertSelectionChanged"
+                            <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModel.onDataTransformationDefinitionInsertReady"
+                                                                                  selectedvalues="scopeModel.selectedDataTransformationDefinitionInsert"
+                                                                                  onselectionchanged="scopeModel.onDataTransformationDefinitionInsertSelectionChanged"
                                                                                   isrequired="true"
                                                                                   hideremoveicon>
 
@@ -108,9 +108,9 @@
 
                     <vr-row>
 
-                        <vr-columns width="1/3row" vr-loader="scopeModal.isLoadingDataTransformationDefinitionInsertParsed">
-                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionParsedRecordReady"
-                                                                                        selectedvalues="scopeModal.selectedDataTransformationDefinitionParsedRecord"
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingDataTransformationDefinitionInsertParsed">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModel.onDataTransformationDefinitionParsedRecordReady"
+                                                                                        selectedvalues="scopeModel.selectedDataTransformationDefinitionParsedRecord"
                                                                                         isrequired="true"
                                                                                         customlabel="Parsed Record"
                                                                                         hideremoveicon>
@@ -118,9 +118,9 @@
                             </vr-genericdata-datatransformationdefinitionrecord-selector>
                         </vr-columns>
 
-                        <vr-columns width="1/3row" vr-loader="scopeModal.isLoadingDataTransformationDefinitionInsertCooked">
-                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionCookedRecordReady"
-                                                                                        selectedvalues="scopeModal.selectedDataTransformationDefinitionCookedRecord"
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingDataTransformationDefinitionInsertCooked">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModel.onDataTransformationDefinitionCookedRecordReady"
+                                                                                        selectedvalues="scopeModel.selectedDataTransformationDefinitionCookedRecord"
                                                                                         isrequired="true"
                                                                                         customlabel="Cooked Record"
                                                                                         hideremoveicon>
@@ -131,15 +131,19 @@
                     </vr-row>
 
                 </vr-tab>
-
-                <vr-tab header="'Output Data Storage'">
-
-                    <vr-columns width="1/3row">
-                        <vr-genericdata-datarecordstorage-selector on-ready="scopeModal.onDataRecordStorageSelectorReady" isrequired="true" selectedvalues="scopeModal.selectedDataRecordStorages">
-                        </vr-genericdata-datarecordstorage-selector>
-                    </vr-columns>
+                <vr-tab header="'Output Handler'">
+                    <vr-row>
+                        <vr-columns width="normal">
+                            <vr-button type="Add" data-onclick="scopeModel.addHandler" standalone></vr-button>
+                        </vr-columns>
+                        <vr-columns width="fullrow">
+                            <vr-datagrid datasource="scopeModel.handlers" menuactions="scopeModel.handlersGridMenuActions" ondeleterow="scopeModel.removeHandler" norowhighlightonclick="true" hidegridmenu>
+                                <vr-datagridcolumn headertext="'Record Name'" field="'OutputRecordName'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Handler'" field="'HandlerType'"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
-
                 <vr-tab ng-show="false" header="'Bad Record Settings'">
                     <div><p>Under Construction</p></div>
                 </vr-tab>
@@ -150,8 +154,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" validationcontext="mediationDefinitionEditorGroup" data-onclick="scopeModal.SaveMediationDefinition" haspermission="hasSaveMediationDefinition"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+                <vr-button type="Save" validationcontext="mediationDefinitionEditorGroup" data-onclick="scopeModel.SaveMediationDefinition" haspermission="hasSaveMediationDefinition"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>
