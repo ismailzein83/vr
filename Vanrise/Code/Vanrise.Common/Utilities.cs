@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
@@ -175,9 +176,9 @@ namespace Vanrise.Common
         {
             var compilationStepTypes = GetAllImplementations<IPropValueReaderCompilationStep>();
             HashSet<string> propNames = new HashSet<string>();
-            foreach(var stepType in compilationStepTypes)
+            foreach (var stepType in compilationStepTypes)
             {
-                foreach(var propName in (Activator.CreateInstance(stepType) as IPropValueReaderCompilationStep).GetPropertiesToCompile(null))
+                foreach (var propName in (Activator.CreateInstance(stepType) as IPropValueReaderCompilationStep).GetPropertiesToCompile(null))
                 {
                     propNames.Add(propName);
                 }
@@ -188,7 +189,7 @@ namespace Vanrise.Common
         static void AddPropValueReaders(HashSet<string> propNames)
         {
             List<string> propNamesToInclude = propNames.Where(itm => !s_cachedProbValueReaders.ContainsKey(itm)).ToList();
-            if(propNamesToInclude.Count > 0)
+            if (propNamesToInclude.Count > 0)
             {
                 string classDefinitionTemplate = @"public class #CLASSNAME# : Vanrise.Common.IPropValueReader
                     {   
@@ -198,13 +199,13 @@ namespace Vanrise.Common
                         }
                     }";
 
-                Dictionary<string, string> classNamesByProperties = new Dictionary<string,string>();
+                Dictionary<string, string> classNamesByProperties = new Dictionary<string, string>();
                 StringBuilder classDefinitionsBuilder = new StringBuilder();
 
-                foreach(var propName in propNamesToInclude)
+                foreach (var propName in propNamesToInclude)
                 {
                     string className = string.Format("PropValueReader_{0}", propName.Replace(".", "_").Replace("[", "_").Replace("]", "_"));
-                    
+
                     classNamesByProperties.Add(propName, className);
                     StringBuilder builder = new StringBuilder(classDefinitionTemplate);
                     builder.Replace("#CLASSNAME#", className);
@@ -239,7 +240,7 @@ namespace Vanrise.Common
                     throw new Exception(String.Format("Compile Error when building executor type for PropValueReader. Errors: {0}",
                         errorsBuilder));
                 }
-                foreach(var propEntry in classNamesByProperties)
+                foreach (var propEntry in classNamesByProperties)
                 {
                     var runtimeType = compilationOutput.OutputAssembly.GetType(String.Format("{0}.{1}", classNamespace, propEntry.Value));
                     if (runtimeType == null)
@@ -361,6 +362,19 @@ namespace Vanrise.Common
 
             //}
             //return null;
+        }
+
+        public static bool IsEmailValid(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return false;
+
+            string validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
+                + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"
+                + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
+
+            Regex regularExpression = new Regex(validEmailPattern, RegexOptions.IgnoreCase);
+            return regularExpression.IsMatch(email);
         }
     }
 

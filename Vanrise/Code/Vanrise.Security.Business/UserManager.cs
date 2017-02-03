@@ -129,6 +129,13 @@ namespace Vanrise.Security.Business
             insertOperationOutput.InsertedObject = null;
             int userId = -1;
             bool insertActionSucc;
+
+            if (!Utilities.IsEmailValid(userObject.Email))
+            {
+                insertOperationOutput.Message = "Invalid Email Address.";
+                return insertOperationOutput;
+            }
+
             var cloudServiceProxy = GetCloudServiceProxy();
 
             if (cloudServiceProxy != null)
