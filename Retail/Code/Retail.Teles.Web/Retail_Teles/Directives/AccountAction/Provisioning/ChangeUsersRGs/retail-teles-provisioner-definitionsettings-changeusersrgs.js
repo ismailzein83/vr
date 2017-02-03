@@ -54,6 +54,8 @@
                         {
                             $scope.scopeModel.saveChangesToAccountState = provisionerDefinitionSettings.SaveChangesToAccountState;
                             $scope.scopeModel.actionType = provisionerDefinitionSettings.ActionType;
+                            $scope.scopeModel.switchId = provisionerDefinitionSettings.SwitchId;
+
                         }
 
                     }
@@ -104,6 +106,8 @@
                         ActionType: $scope.scopeModel.saveChangesToAccountState?$scope.scopeModel.actionType:undefined,
                         NewRoutingGroupCondition: newRoutingGroupConditionAPI.getData(),
                         ExistingRoutingGroupCondition: existingRoutingGroupConditionAPI.getData(),
+                        SwitchId: $scope.scopeModel.switchId,
+
                     };
                     return data;
                 }

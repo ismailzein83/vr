@@ -89,7 +89,7 @@
                             var settingPayload = { provisionerDefinitionSettings: provisionerDefinitionSettings };
                             if (actionBPSettings != undefined)
                             {
-                                settingPayload.provisionerRuntimeEntity = actionBPSettings.ActionProvisioner;
+                                settingPayload.provisionerRuntimeEntity = actionBPSettings.AccountProvisioner;
                             }
                             VRUIUtilsService.callDirectiveLoad(provisionerRuntimeAPI, settingPayload, provisionerSettingLoadDeferred);
                         });
@@ -108,7 +108,7 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.MainActionBPs.Entities.RegularActionBPSettings, Retail.BusinessEntity.MainActionBPs.Entities",
-                        ActionProvisioner: provisionerRuntimeAPI.getData()
+                        AccountProvisioner: provisionerRuntimeAPI.getData()
                     };
                     return data;
                 }

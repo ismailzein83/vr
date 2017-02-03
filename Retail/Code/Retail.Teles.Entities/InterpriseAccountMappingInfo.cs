@@ -9,6 +9,6 @@ namespace Retail.Teles.Entities
 {
     public class InterpriseAccountMappingInfo : BaseAccountExtendedSettings
     {
-        public int TelesEnterpriseId { get; set; }
+        public dynamic TelesEnterpriseId { get; set; }
     }
 }

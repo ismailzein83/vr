@@ -13,5 +13,6 @@ namespace Retail.Teles.Business.SwitchIntegrations
         public string Token { get; set; }
         public string Authorization { get; set; }
         public string URL { get; set; }
+        public string ActionPrefix { get; set; }
     }
 }

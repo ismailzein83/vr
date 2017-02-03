@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Integration.Entities;
 
 namespace Retail.BusinessEntity.MainActionBPs.Entities
 {
@@ -13,7 +12,7 @@ namespace Retail.BusinessEntity.MainActionBPs.Entities
         public override Guid ConfigId { get { return new Guid("b2255268-649b-4648-8584-c00ab98e56de"); } }
         public override string RuntimeEditor { get { return "retail-be-actionbpdefinition-runtimesettings-regular"; } }
 
-        public ActionProvisionerDefinitionSettings ProvisionerDefinitionSettings { get; set; }
+        public AccountProvisionerDefinitionSettings ProvisionerDefinitionSettings { get; set; }
         public Guid? NewStatusDefinitionId { get; set; }
     }
 }

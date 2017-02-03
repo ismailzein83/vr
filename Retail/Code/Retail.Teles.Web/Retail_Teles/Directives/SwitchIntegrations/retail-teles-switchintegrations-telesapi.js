@@ -45,6 +45,7 @@
                         $scope.scopeModel.authorization = switchIntegration.Authorization;
                         $scope.scopeModel.token = switchIntegration.Token;
                         $scope.scopeModel.url = switchIntegration.URL;
+                        $scope.scopeModel.actionPrefix = switchIntegration.ActionPrefix;
                     }
                 };
 
@@ -59,7 +60,8 @@
                         $type: "Retail.Teles.Business.SwitchIntegrations.TelesAPISwitchIntegration,Retail.Teles.Business",
                         Authorization: $scope.scopeModel.authorization,
                         Token: $scope.scopeModel.token,
-                        URL:$scope.scopeModel.url,
+                        URL: $scope.scopeModel.url,
+                        ActionPrefix: $scope.scopeModel.actionPrefix,
                     };
                     return data;
                 }

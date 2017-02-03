@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using Vanrise.Integration.Entities;
 
 namespace Retail.Teles.Business
 {
-    public class RevertUsersRGsDefinitionSettings : ActionProvisionerDefinitionSettings
+    public class RevertUsersRGsDefinitionSettings : AccountProvisionerDefinitionSettings
     {
         public override Guid ConfigId
         {

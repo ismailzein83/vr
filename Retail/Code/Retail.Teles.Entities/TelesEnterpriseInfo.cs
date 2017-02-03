@@ -8,7 +8,7 @@ namespace Retail.Teles.Entities
 {
     public class TelesEnterpriseInfo
     {
-        public int TelesEnterpriseId { get; set; }
+        public dynamic TelesEnterpriseId { get; set; }
         public string Name { get; set; }
     }
 }
