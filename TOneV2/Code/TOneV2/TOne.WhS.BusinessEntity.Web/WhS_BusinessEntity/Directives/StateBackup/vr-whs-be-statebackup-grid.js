@@ -89,7 +89,6 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
                     return WhS_BE_StateBackupAPIService.RestoreData(stateBackupObject.Entity.StateBackupId).then(function (response) {
                         if (VRNotificationService.notifyOnItemUpdated("State Backup", response, ""))
                             onStateBackupRestored(response.UpdatedObject);
-                        ctrl.isRestoring = false;
                     }).finally(function () {
                         ctrl.isRestoring = false;
                     });
