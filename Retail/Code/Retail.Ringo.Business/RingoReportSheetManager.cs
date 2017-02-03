@@ -22,65 +22,77 @@ namespace Retail.Ringo.Business
 
             Workbook wbk = new Workbook(physicalFilePath);
 
-            UpdateCellValue(wbk, 0, 3, 1, ringoMessageManager.GetRingoMessageTotal(filter.FromDate, filter.ToDate));
-            UpdateCellValue(wbk, 0, 6, 1, ringoMessageManager.GetRingoMessageTotal(filter.FromDate.AddMonths(-1), filter.ToDate.AddMonths(-1)));
-
+            UpdateCellValue(wbk, 0, 3, 1, ringoMessageManager.GetRingoMessageTotal(new RingoMessageFilter
+             {
+                 From = filter.FromDate.AddMonths(-1),
+                 To = filter.ToDate.AddMonths(-1),
+                 Sender = "ICSI",
+                 MessageTypes = new List<int> { 1 }
+             }));
+            UpdateCellValue(wbk, 0, 6, 1, ringoMessageManager.GetRingoMessageTotal(
+                new RingoMessageFilter
+             {
+                 From = filter.FromDate,
+                 To = filter.ToDate,
+                 Sender = "ICSI",
+                 MessageTypes = new List<int> { 1 }
+             }));
+            //1r
             UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
             {
                 MessageTypes = new List<int>() { 1 },
-                RecipientNetwork = "ICSI",
+                Recipient = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
             }), wbk, 2, 13, 1, 170, 168);
-
+            //2r
             UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
             {
                 MessageTypes = new List<int>() { 1 },
-                RecipientNetwork = "ICSI",
+                Recipient = "ICSI",
                 From = filter.FromDate.AddMonths(-1),
                 To = filter.ToDate.AddMonths(-1)
             }), wbk, sheetIndex: 3, rowIndex: 13, columnIndex: 1, valueColumn: 170, count: 168);
 
-
+            //3r
             UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
             {
                 StateRequests = new List<int>() { 1, 8 },
-                RecipientNetwork = "ICSI",
+                Recipient = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
             }), wbk, 4, 11, 3, 18, 168);
 
-
-            UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            //3d
+            UpdateWorkSheetByRow(ringoMessageManager.GetRecipientRingoMessageRecords(new RingoMessageFilter
             {
                 StateRequests = new List<int>() { 1, 8 },
-                SenderNetwork = "ICSI",
+                Sender = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
             }), wbk, 5, 11, 3, 16, 168);
 
-
-            UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            //5t
+            UpdateWorkSheetByColumn(ringoMessageManager.GetRecipientRingoMessageRecords_CTE(new RingoMessageFilter
             {
                 MessageTypes = new List<int>() { 6 },
-                SenderNetwork = "ICSI",
+                Sender = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
             }), wbk, 8, 13, 1, 170, 168);
 
-
-            UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            //5s
+            UpdateWorkSheetByColumn(ringoMessageManager.GetRecipientRingoMessageRecords_CTE(new RingoMessageFilter
             {
                 MessageTypes = new List<int>() { 6 },
-                RecipientNetwork = "ICSI",
+                Sender = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
             }), wbk, 9, 13, 1, 170, 168);
 
             UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
             {
-                RecipientNetwork = "ICSI",
-                From = filter.FromDate,
+                Recipient = "ICSI",
                 To = filter.ToDate
             }), wbk, 12, 13, 1, 170, 168);
 

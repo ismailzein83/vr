@@ -15,8 +15,6 @@
                     ToDate: $scope.scopeModel.toDate
                 };
                 return Retail_Ringo_RingoReportSheetAPIService.DownloadMNPReport(filter).then(function (response) {
-                    //console.log(response.data);
-                    console.log(response.headers);
                     utilsService.downloadFile(response.data, response.headers);
                 });
             };

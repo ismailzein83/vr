@@ -10,22 +10,22 @@ namespace Retail.Ringo.Business
 {
     public class RingoMessageManager
     {
-        public long GetRingoMessageTotal(DateTime from, DateTime to)
+        public long GetRingoMessageTotal(RingoMessageFilter filter)
         {
             IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
-            return dataManager.GetTotal(new RingoMessageFilter
-             {
-                 From = from,
-                 To = to,
-                 Sender = "ICSI",
-                 MessageTypes = new List<int> { 1 }
-             });
+            return dataManager.GetTotal(filter);
         }
 
         public Dictionary<string, RingoMessageCountEntity> GetSenderRingoMessageRecords(RingoMessageFilter filter)
         {
             IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
             return dataManager.GetRingoMessageCountEntityBySender(filter).ToDictionary(k => k.Name, v => v);
+        }
+
+        public Dictionary<string, RingoMessageCountEntity> GetRecipientRingoMessageRecords_CTE(RingoMessageFilter filter)
+        {
+            IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
+            return dataManager.GetRingoMessageCountEntityByRecipient_CTE(filter).ToDictionary(k => k.Name, v => v);
         }
 
         public Dictionary<string, RingoMessageCountEntity> GetRecipientRingoMessageRecords(RingoMessageFilter filter)

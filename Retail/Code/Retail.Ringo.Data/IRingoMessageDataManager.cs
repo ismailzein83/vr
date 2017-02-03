@@ -10,8 +10,8 @@ namespace Retail.Ringo.Data
     public interface IRingoMessageDataManager : IDataManager
     {
         long GetTotal(RingoMessageFilter filter);
-
         IEnumerable<RingoMessageCountEntity> GetRingoMessageCountEntityByRecipient(RingoMessageFilter filter);
         IEnumerable<RingoMessageCountEntity> GetRingoMessageCountEntityBySender(RingoMessageFilter filter);
+        IEnumerable<RingoMessageCountEntity> GetRingoMessageCountEntityByRecipient_CTE(RingoMessageFilter filter);
     }
 }
