@@ -57,7 +57,8 @@ namespace Retail.Teles.Business
             {
                 if (definitionSettings.ExistingRoutingGroupCondition != null)
                 {
-                    existingRoutingGroups = new List<dynamic>();
+                    if (existingRoutingGroups == null)
+                       existingRoutingGroups = new List<dynamic>();
                     RoutingGroupConditionContext oldcontext = new RoutingGroupConditionContext
                     {
                         RoutingGroupName = siteRoutingGroup.name

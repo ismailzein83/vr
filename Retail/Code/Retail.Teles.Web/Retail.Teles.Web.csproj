@@ -153,8 +153,12 @@
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelesaccount.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesAccountActionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesAccountEditor.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-definitionsettings-revertusersrgs.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-definitionsettings-changeusersrgs.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-runtimesettings-revertusersrgs.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-runtimesettings-changeusersrgs.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\RevertUsersRGsProvisionerRuntimeSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\RevertUsersRGsProvisionerDefinitionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\ChangeUsersRGsProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\MainExtensions\retail-teles-routinggroupcondition-routinggroupfilter.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\MainExtensions\Templates\RoutingGroupFilterTemplate.html" />

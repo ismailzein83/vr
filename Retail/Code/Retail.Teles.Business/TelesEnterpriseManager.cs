@@ -51,6 +51,11 @@ namespace Retail.Teles.Business
             var actionPath = string.Format("/user/{0}", user.id);
             return TelesWebAPIClient.Put<dynamic, dynamic>(switchId, actionPath, user);
         }
+        public dynamic GetUser(int switchId, dynamic userId)
+        {
+            var actionPath = string.Format("/user/{0}", userId);
+            return TelesWebAPIClient.Get<dynamic>(switchId, actionPath);
+        }
         public bool MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
         {
             AccountBEManager accountBEManager = new AccountBEManager();
