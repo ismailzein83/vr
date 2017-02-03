@@ -40,6 +40,7 @@
                         $scope.scopeModel.MasterConnectionString = ivSwSynSettings.MasterConnectionString;
                         $scope.scopeModel.RouteConnectionString = ivSwSynSettings.RouteConnectionString;
                         $scope.scopeModel.TariffConnectionString = ivSwSynSettings.TariffConnectionString;
+                        $scope.scopeModel.CdrConnectionString = ivSwSynSettings.CdrConnectionString;
                         $scope.scopeModel.OwnerName = ivSwSynSettings.OwnerName;
                         $scope.scopeModel.NumberOfOptions = ivSwSynSettings.NumberOfOptions;
                         $scope.scopeModel.BlockedAccountMapping = ivSwSynSettings.BlockedAccountMapping;
@@ -53,6 +54,7 @@
                         MasterConnectionString: $scope.scopeModel.MasterConnectionString,
                         RouteConnectionString: $scope.scopeModel.RouteConnectionString,
                         TariffConnectionString: $scope.scopeModel.TariffConnectionString,
+                        CdrConnectionString: $scope.scopeModel.CdrConnectionString,
                         OwnerName: $scope.scopeModel.OwnerName,
                         NumberOfOptions: $scope.scopeModel.NumberOfOptions,
                         BlockedAccountMapping: $scope.scopeModel.BlockedAccountMapping,
