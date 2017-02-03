@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using Mediation.Generic.Entities;
 using Mediation.Generic.Business;
+using Vanrise.Common;
 
 namespace Mediation.Generic.BP.Activities
 {
@@ -22,8 +23,8 @@ namespace Mediation.Generic.BP.Activities
             int mediationDefinitionId = MediationDefinitionId.Get(context);
             MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
             var mediationDefinition = mediationDefinitionManager.GetMediationDefinition(mediationDefinitionId);
-            if (mediationDefinition == null)
-                throw new NullReferenceException(string.Format("GetMediationDefinition: mediationDefinitionId {0}", mediationDefinitionId));
+            mediationDefinition.ThrowIfNull("mediationDefinition", mediationDefinitionId);
+            mediationDefinition.OutputHandlers.ThrowIfNull("mediationDefinition.OutputHandlers", mediationDefinitionId);
             MediationDefinition.Set(context, mediationDefinition);
         }
     }

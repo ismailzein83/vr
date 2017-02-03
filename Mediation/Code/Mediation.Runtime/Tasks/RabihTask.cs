@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mediation.Generic.BP.Arguments;
+using Mediation.Generic.Entities;
+using Mediation.Generic.MainExtensions.MediationOutputHandlers;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
@@ -23,6 +25,25 @@ namespace Mediation.Runtime.Tasks
 
         void RunImportProcess()
         {
+            MediationDefinition definition = new MediationDefinition
+            {
+                OutputHandlers = new List<MediationOutputHandlerDefinition>(),
+                ParsedRecordTypeId = new Guid(),
+                ParsedRecordIdentificationSetting = new ParsedRecordIdentificationSetting()
+                {
+                    StatusMappings = new List<StatusMapping>()
+                }
+            };
+            definition.OutputHandlers.Add(new MediationOutputHandlerDefinition()
+            {
+                Handler = new StoreRecordsOutputHandler()
+                {
+                    DataRecordStorageId = new Guid("0B1837DF-C8CE-4B2A-B07E-1A9F75408741")
+                },
+                OutputRecordName = "cookedCDR"
+            });
+
+            string serielized = Vanrise.Common.Serializer.Serialize(definition);
             var runtimeServices = new List<RuntimeService>();
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };

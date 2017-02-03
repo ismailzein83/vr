@@ -15,8 +15,8 @@ namespace Mediation.Generic.BP.Activities
 
     public class ExecuteOutputInput
     {
-       public MediationDefinition MediationDefinition { get; set; }
-       public BaseQueue<PreparedCdrBatch> InputQueue { get; set; }
+        public OutputHandlerExecutionEntity OutputHandlerExecutionEntity { get; set; }
+        public MediationDefinition MediationDefinition { get; set; }
     }
 
     public class ExecuteOutputOutput
@@ -27,22 +27,31 @@ namespace Mediation.Generic.BP.Activities
 
     public sealed class ExecuteOutputHandler : DependentAsyncActivity<ExecuteOutputInput, ExecuteOutputOutput>
     {
+        [RequiredArgument]
+        public InArgument<MediationDefinition> MediationDefinition { get; set; }
+        [RequiredArgument]
+        public InArgument<OutputHandlerExecutionEntity> OutputHandlerExecutionEntity { get; set; }
 
         protected override ExecuteOutputOutput DoWorkWithResult(ExecuteOutputInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            var executionContext = new MediationOutputHandlerContext(this, previousActivityStatus, handle, inputArgument.MediationDefinition, inputArgument.InputQueue);
+            var executionContext = new MediationOutputHandlerContext(this, previousActivityStatus, handle, inputArgument.MediationDefinition, inputArgument.OutputHandlerExecutionEntity.InputQueue);
+            inputArgument.OutputHandlerExecutionEntity.OutputHandler.Handler.Execute(executionContext);
 
-            throw new NotImplementedException();
+            return new ExecuteOutputOutput { };
         }
+
 
         protected override ExecuteOutputInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new ExecuteOutputInput
+            {
+                OutputHandlerExecutionEntity = this.OutputHandlerExecutionEntity.Get(context),
+                MediationDefinition = this.MediationDefinition.Get(context)
+            };
         }
-
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ExecuteOutputOutput result)
         {
-           throw new NotImplementedException();
+
         }
 
         #region Private Classes
@@ -55,7 +64,7 @@ namespace Mediation.Generic.BP.Activities
             MediationDefinition _mediationDefinition;
             BaseQueue<PreparedCdrBatch> _inputQueue;
 
-            public MediationOutputHandlerContext(ExecuteOutputHandler parentActivity, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, 
+            public MediationOutputHandlerContext(ExecuteOutputHandler parentActivity, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle,
                 MediationDefinition mediationDefinition, BaseQueue<PreparedCdrBatch> inputQueue)
             {
                 _parentActivity = parentActivity;
@@ -84,7 +93,7 @@ namespace Mediation.Generic.BP.Activities
             }
 
             public void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo)
-            { 
+            {
                 _parentActivity.DoWhilePreviousRunning(previousActivityStatus, _handle, actionToDo);
             }
 
@@ -110,5 +119,7 @@ namespace Mediation.Generic.BP.Activities
         }
 
         #endregion
+
+        
     }
 }

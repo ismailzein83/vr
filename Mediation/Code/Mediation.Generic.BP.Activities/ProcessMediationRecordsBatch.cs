@@ -18,7 +18,7 @@ namespace Mediation.Generic.BP.Activities
         public MediationDefinition MediationDefinition { get; set; }
         public BaseQueue<MediationRecordBatch> MediationRecordsBatch { get; set; }
         public DataTransformationDefinition DataTransformationDefinition { get; set; }
-        public BaseQueue<PreparedCdrBatch> OutputQueue { get; set; }
+        public List<OutputHandlerExecutionEntity> OutputHandlerExecutionEntities { get; set; }
     }
     public sealed class ProcessMediationRecordsBatch : DependentAsyncActivity<ProcessMediationRecordsBatchInput>
     {
@@ -31,45 +31,66 @@ namespace Mediation.Generic.BP.Activities
         [RequiredArgument]
         public InArgument<DataTransformationDefinition> DataTransformationDefinition { get; set; }
 
-        [RequiredArgument]
-        public InOutArgument<BaseQueue<PreparedCdrBatch>> OutputQueue { get; set; }
+        public InArgument<List<OutputHandlerExecutionEntity>> OutputHandlerExecutionEntities { get; set; }
+
         protected override void DoWork(ProcessMediationRecordsBatchInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            PreparedCdrBatch cdrBatch = new PreparedCdrBatch();
+            List<ProcessHandlerItem> processHandlers = new List<ProcessHandlerItem>();
+            foreach (var outputHandler in inputArgument.OutputHandlerExecutionEntities)
+            {
+                ProcessHandlerItem item = new ProcessHandlerItem
+                {
+                    RecordName = outputHandler.OutputHandler.OutputRecordName,
+                    InputQueue = outputHandler.InputQueue,
+                    CdrBatch = new PreparedCdrBatch()
+                };
+                processHandlers.Add(item);
+            }
             MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
             DataTransformer dataTransformer = new DataTransformer();
 
-            var cookedRecordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == inputArgument.MediationDefinition.CookedFromParsedSettings.CookedRecordName);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItems = false;
-
                 do
                 {
                     hasItems = inputArgument.MediationRecordsBatch.TryDequeue((mediationRecordBatch) =>
                     {
-                        var output = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.CookedFromParsedSettings.TransformationDefinitionId, (context) =>
+                        var transformationOutput = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.CookedFromParsedSettings.TransformationDefinitionId, (context) =>
                         {
                             var details = mediationRecordBatch.MediationRecords.Select(m => m.EventDetails).ToList();
                             context.SetRecordValue(inputArgument.MediationDefinition.CookedFromParsedSettings.ParsedRecordName, details);
                         });
-                        if (cookedRecordType.IsArray)
-                            cdrBatch.Cdrs.AddRange(output.GetRecordValue(cookedRecordType.RecordName) as List<dynamic>);
-                        else
-                            cdrBatch.Cdrs.Add(output.GetRecordValue(cookedRecordType.RecordName));
 
-                        if (cdrBatch.Cdrs.Count > 100)
+                        foreach (var processHandler in processHandlers)
                         {
-                            inputArgument.OutputQueue.Enqueue(cdrBatch);
-                            cdrBatch = new PreparedCdrBatch();
+                            UpdateProcessHandlers(inputArgument, transformationOutput, processHandler);
                         }
                     });
                 } while (!ShouldStop(handle) && hasItems);
 
-                if (cdrBatch.Cdrs.Count > 0)
-                    inputArgument.OutputQueue.Enqueue(cdrBatch);
+                foreach (var processHandler in processHandlers)
+                {
+                    if (processHandler.CdrBatch.Cdrs.Count > 0)
+                        processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
+                }
             });
+        }
 
+        void UpdateProcessHandlers(ProcessMediationRecordsBatchInput inputArgument, DataTransformationExecutionOutput output, ProcessHandlerItem processHandler)
+        {
+            var recordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == processHandler.RecordName);
+            recordType.ThrowIfNull("recordType", "");
+            if (recordType.IsArray)
+                processHandler.CdrBatch.Cdrs.AddRange(output.GetRecordValue(processHandler.RecordName) as List<dynamic>);
+            else
+                processHandler.CdrBatch.Cdrs.Add(output.GetRecordValue(processHandler.RecordName));
+
+            if (processHandler.CdrBatch.Cdrs.Count > 100)
+            {
+                processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
+                processHandler.CdrBatch = new PreparedCdrBatch();
+            }
         }
 
         protected override ProcessMediationRecordsBatchInput GetInputArgument2(AsyncCodeActivityContext context)
@@ -79,7 +100,7 @@ namespace Mediation.Generic.BP.Activities
                 MediationDefinition = this.MediationDefinition.Get(context),
                 MediationRecordsBatch = this.MediationRecordsBatch.Get(context),
                 DataTransformationDefinition = this.DataTransformationDefinition.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputHandlerExecutionEntities = this.OutputHandlerExecutionEntities.Get(context)
             };
         }
 
@@ -89,9 +110,14 @@ namespace Mediation.Generic.BP.Activities
                 this.MediationRecordsBatch.Set(context, new MemoryQueue<MediationRecord>());
             if (this.DataTransformationDefinition.Get(context) == null)
                 this.DataTransformationDefinition.Set(context, new DataTransformationDefinition());
-            if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<PreparedCdrBatch>());
             base.OnBeforeExecute(context, handle);
         }
+    }
+
+    class ProcessHandlerItem
+    {
+        public PreparedCdrBatch CdrBatch { get; set; }
+        public BaseQueue<PreparedCdrBatch> InputQueue { get; set; }
+        public string RecordName { get; set; }
     }
 }

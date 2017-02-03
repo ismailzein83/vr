@@ -31,6 +31,10 @@ namespace Mediation.Generic.Business
             dataManager.DataRecordTypeId = dataRecordTypeId;
             return dataManager.GetMediationRecordsByIds(mediationDefinitionId, sessionIds);
         }
-
+        public void SaveMediationRecordsToDB(List<MediationRecord> mediationRecords)
+        {
+            IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
+            dataManager.SaveMediationRecordsToDB(mediationRecords);
+        }
     }
 }

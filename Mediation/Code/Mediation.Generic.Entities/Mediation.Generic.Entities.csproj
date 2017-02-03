@@ -63,12 +63,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMediationProcessContext.cs" />
     <Compile Include="MediationDefinition\MediationDefinition.cs" />
     <Compile Include="MediationDefinition\MediationDefinitionDetail.cs" />
     <Compile Include="MediationDefinition\MediationDefinitionInfo.cs" />
     <Compile Include="MediationDefinition\MediationDefinitionQuery.cs" />
     <Compile Include="MediationDefinition\MediationOutputHandler.cs" />
     <Compile Include="MediationDefinition\MediationOutputHandlerConfig.cs" />
+    <Compile Include="OutputHandlerExecutionEntity.cs" />
     <Compile Include="PreparedCdrBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusMapping.cs" />
