@@ -299,7 +299,6 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-synchronizer-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGenericFieldDefinitionSelectorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountSynchronizerEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\Templates\CRMAccountConvertorEditor.html" />
@@ -570,6 +569,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\DIDAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\PortalAccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductFamilyAPIService.js" />
@@ -578,6 +578,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountSynchronizerHandlerAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\VRAccountBalanceAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\PortalAccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\ProductFamilyService.js" />
     <Content Include="Retail_BusinessEntity\Services\RecurringChargeDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\InvoiceSettingsService.js" />

@@ -8,23 +8,27 @@
         return {
             restrict: "E",
             scope: {
-                onReady: "=",
-                normalColNum: '@',
+                onReady: '=',
+                ismultipleselection: '@',
+                selectedvalues: '=',
+                onselectionchanged: '=',
+                onselectitem: '=',
+                ondeselectitem: '=',
                 isrequired: '=',
-                customlabel: '@'
+                hideremoveicon: '@',
+                normalColNum: '@',
+                customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
-                if (ctrl.customlabel == undefined)
-                    ctrl.customlabel = "Account Field";
-
                 var ctor = new AccountGenericFieldDefinitionSelectorCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Account/Templates/AccountGenericFieldDefinitionSelectorTemplate.html"
+            template: function (element, attrs) {
+                return getTemplate(attrs);
+            }
         };
 
         function AccountGenericFieldDefinitionSelectorCtor($scope, ctrl, $attrs) {
@@ -33,22 +37,21 @@
             var selectorAPI;
 
             function initializeController() {
+                $scope.scopeModel = { };
+                ctrl.genericFieldDefinitions =[];
 
-                $scope.scopeModel = {};
-                $scope.scopeModel.genericFieldDefinitions = [];
-
-                $scope.scopeModel.onSelectorReady = function (api) {
+                ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
                 };
             }
             function defineAPI() {
-                var api = {};
+                var api = { };
 
                 api.load = function (payload) {
 
                     var promises = [];
-                    
+
                     var accountBEDefinitionId;
                     var genericFieldDefinition;
 
@@ -63,14 +66,14 @@
 
                     function getSelectorLoadPromise() {
 
-                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo(accountBEDefinitionId).then(function (response) {
-                            if (response != null) {
+                        return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo(accountBEDefinitionId).then(function(response) {
+                            if(response != null) {
                                 for (var i = 0; i < response.length; i++) {
-                                    $scope.scopeModel.genericFieldDefinitions.push(response[i]);
+                                    ctrl.genericFieldDefinitions.push(response[i]);
                                 }
                                 if (genericFieldDefinition != undefined) {
-                                    $scope.scopeModel.selectedGenericFieldDefinition =
-                                        UtilsService.getItemByVal($scope.scopeModel.genericFieldDefinitions, genericFieldDefinition.Name, 'Name');
+                                    ctrl.selectedGenericFieldDefinition =
+                                        UtilsService.getItemByVal(ctrl.genericFieldDefinitions, genericFieldDefinition.Name, 'Name');
                                 }
                             }
                         });
@@ -81,15 +84,15 @@
 
                 api.getData = function () {
 
-                    var obj = $scope.scopeModel.selectedGenericFieldDefinition;
+                    var obj = ctrl.selectedGenericFieldDefinition;
                     if (obj == undefined)
                         return;
 
                     return {
-                        Name: obj.Name,
-                        Title: obj.Title,
-                        FieldType: obj.FieldType
-                    };
+                            Name: obj.Name,
+                            Title: obj.Title,
+                            FieldType: obj.FieldType
+                        };
                 };
 
                 if (ctrl.onReady != null) {
@@ -110,15 +113,15 @@
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                        '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
-                            + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '
-                            + ' hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
-                        '</vr-select>' +
-                    '</vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">' 
+                      + '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.genericFieldDefinitions" on-ready="ctrl.onSelectorReady" '
+                            + ' selectedvalues="ctrl.selectedGenericFieldDefinition" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '
+                            + ' hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' 
+                       + '</vr-select>'
+                   + '</vr-columns>';
         }
     }
 
     app.directive('retailBeAccountGenericfielddefinitionSelector', AccountGenericFieldDefinitionSelector);
 
-})(app);
+}) (app);

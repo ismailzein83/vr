@@ -39,6 +39,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetGenericFieldDefinitionsInfo'), { accountBEDefinitionId: accountBEDefinitionId }, { useCache: true });
         }
 
+        function GetAccountGenericFieldValues(accountBEDefinitionId, accountId, serializedAccountGenericFieldNames) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountGenericFieldValues'), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId,
+                serializedAccountGenericFieldNames: serializedAccountGenericFieldNames
+            });
+        }
+
         function HasViewAccountTypesPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['GetFilteredAccountTypes']));
         }
@@ -59,6 +67,7 @@
             AddAccountType: AddAccountType,
             UpdateAccountType: UpdateAccountType,
             GetGenericFieldDefinitionsInfo: GetGenericFieldDefinitionsInfo,
+            GetAccountGenericFieldValues: GetAccountGenericFieldValues,
             HasViewAccountTypesPermission: HasViewAccountTypesPermission,
             HasAddAccountTypePermission: HasAddAccountTypePermission,
             HasUpdateAccountTypePermission: HasUpdateAccountTypePermission

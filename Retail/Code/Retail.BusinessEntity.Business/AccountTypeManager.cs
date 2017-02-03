@@ -201,6 +201,28 @@ namespace Retail.BusinessEntity.Business
                     return fields.ToDictionary(fld => fld.Name, fld => fld);
                 });
         }
+        public Dictionary<string, object> GetAccountGenericFieldValues(Guid accountBEDefinitionId, long accountId, List<string> accountGenericFieldNames)
+        {
+            if (accountGenericFieldNames == null)
+                return null;
+
+            Dictionary<string, object> results = new Dictionary<string, object>();
+            Dictionary<string, AccountGenericField> accountGenericFields = this.GetAccountGenericFields(accountBEDefinitionId);
+            Account account = new AccountBEManager().GetAccount(accountBEDefinitionId, accountId);
+            AccountGenericFieldContext accountGenericFieldContext = new AccountGenericFieldContext(account);
+
+            AccountGenericField accountGenericField;
+            foreach (var name in accountGenericFieldNames)
+            {
+                if (accountGenericFields.TryGetValue(name, out accountGenericField))
+                {
+                    if(!results.ContainsKey(name))
+                        results.Add(name, accountGenericField.GetValue(accountGenericFieldContext));
+                }
+            }
+
+            return results;
+        }
 
         public AccountGenericField GetAccountGenericField(Guid accountBEDefinitionId, string fieldName)
         {

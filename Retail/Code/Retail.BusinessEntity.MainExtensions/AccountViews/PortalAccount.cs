@@ -24,6 +24,6 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
 
         public string Name { get; set; }
         public string Email { get; set; }
-        public Guid Connection { get; set; }
+        public Guid ConnectionId { get; set; }
     }
-}
+} 

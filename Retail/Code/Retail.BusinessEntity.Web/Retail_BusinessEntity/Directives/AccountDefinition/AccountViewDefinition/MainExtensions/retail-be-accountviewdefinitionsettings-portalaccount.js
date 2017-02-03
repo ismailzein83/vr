@@ -27,12 +27,28 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
             var nameAccountGenericFieldDefinitionSelectorAPI;
             var nameAccountGenericFieldDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var emailAccountGenericFieldDefinitionSelectorAPI;
+            var emailAccountGenericFieldDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var connectionSelectorAPI;
+            var connectionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onNameAccountGenericFieldDefinitionSelectorReady = function (api) {
                     nameAccountGenericFieldDefinitionSelectorAPI = api;
                     nameAccountGenericFieldDefinitionSelectorPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onEmailAccountGenericFieldDefinitionSelectorReady = function (api) {
+                    emailAccountGenericFieldDefinitionSelectorAPI = api;
+                    emailAccountGenericFieldDefinitionSelectorPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onConnectionSelectorReady = function (api) {
+                    connectionSelectorAPI = api;
+                    connectionSelectorPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -43,25 +59,29 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                 api.load = function (payload) {
                     var promises = [];
 
-                    console.log(payload);
-
                     var accountBEDefinitionId;
                     var name;
-                    var email
-
-                    //var beParentChildRelationDefinitionId;
+                    var email;
+                    var connectionId;
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         name = payload.accountViewDefinitionSettings != undefined ? payload.accountViewDefinitionSettings.Name : undefined;
                         email = payload.accountViewDefinitionSettings != undefined ? payload.accountViewDefinitionSettings.Email : undefined;
-
-                        //beParentChildRelationDefinitionId = payload.accountViewDefinitionSettings != undefined ? payload.accountViewDefinitionSettings.BEParentChildRelationDefinitionId : undefined;
+                        connectionId = payload.accountViewDefinitionSettings != undefined ? payload.accountViewDefinitionSettings.ConnectionId : undefined;
                     }
 
                     //Loading Name selector
                     var nameAccountGenericFieldDefinitionSelectorLoadPromise = getNameAccountGenericFieldDefinitionSelectorLoadPromise();
                     promises.push(nameAccountGenericFieldDefinitionSelectorLoadPromise);
+
+                    //Loading Email selector
+                    var emailAccountGenericFieldDefinitionSelectorLoadPromise = getEmailAccountGenericFieldDefinitionSelectorLoadPromise();
+                    promises.push(emailAccountGenericFieldDefinitionSelectorLoadPromise);
+
+                    //Loading Email selector
+                    var connectionSelectorLoadPromise = getConnectionSelectorLoadPromise();
+                    promises.push(connectionSelectorLoadPromise);
 
 
                     function getNameAccountGenericFieldDefinitionSelectorLoadPromise() {
@@ -80,21 +100,58 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
 
                         return nameAccountGenericFieldDefinitionSelectorLoadDeferred.promise;
                     }
+                    function getEmailAccountGenericFieldDefinitionSelectorLoadPromise() {
+                        var emailAccountGenericFieldDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        nameAccountGenericFieldDefinitionSelectorPromiseDeferred.promise.then(function () {
+
+                            var emailAccountGenericFieldDefinitionSelectorPayload = {
+                                accountBEDefinitionId: accountBEDefinitionId
+                            };
+                            if (email != undefined) {
+                                emailAccountGenericFieldDefinitionSelectorPayload.genericFieldDefinition = { Name: email }
+                            };
+                            VRUIUtilsService.callDirectiveLoad(emailAccountGenericFieldDefinitionSelectorAPI, emailAccountGenericFieldDefinitionSelectorPayload, emailAccountGenericFieldDefinitionSelectorLoadDeferred);
+                        });
+
+                        return emailAccountGenericFieldDefinitionSelectorLoadDeferred.promise;
+                    }
+                    function getConnectionSelectorLoadPromise() {
+                        var connectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        nameAccountGenericFieldDefinitionSelectorPromiseDeferred.promise.then(function () {
+
+                            var connectionSelectorPayload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "Vanrise.Common.Business.VRInterAppRestConnectionFilter, Vanrise.Common.Business"
+                                    }]
+                                },
+                                accountBEDefinitionId: accountBEDefinitionId
+                            };
+                            if (connectionId != undefined) {
+                                connectionSelectorPayload.selectedIds = connectionId;
+                            };
+                            VRUIUtilsService.callDirectiveLoad(connectionSelectorAPI, connectionSelectorPayload, connectionSelectorLoadDeferred);
+                        });
+
+                        return connectionSelectorLoadDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
 
-                    var name = nameAccountGenericFieldDefinitionSelectorAPI.getData();
-
-                    console.log(name);
+                    var nameAccountGenericField = nameAccountGenericFieldDefinitionSelectorAPI.getData();
+                    var emailAccountGenericField = emailAccountGenericFieldDefinitionSelectorAPI.getData();
 
                     var obj = {
                         $type: "Retail.BusinessEntity.MainExtensions.AccountViews.PortalAccount, Retail.BusinessEntity.MainExtensions",
-                        Name: name != undefined ? name : undefined
+                        Name: nameAccountGenericField != undefined ? nameAccountGenericField.Name : undefined,
+                        Email: emailAccountGenericField != undefined ? emailAccountGenericField.Name : undefined,
+                        ConnectionId: connectionSelectorAPI.getSelectedIds()
                     };
-
                     return obj;
                 };
 
