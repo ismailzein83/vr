@@ -101,7 +101,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 else
                     zoneIds.Add(_allSupplierZones[sourceCommission.ZoneId.ToString()].SupplierZoneId);
             }
-
+            if (zoneIds.Count == 0)
+                return null;
             ExtraChargeRule extraChargeRule = new ExtraChargeRule
             {
 
@@ -121,7 +122,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 EndEffectiveTime = defaultCommission.EED
             };
 
-            extraChargeRule.Criteria.FieldsValues.Add("Carriers", new BusinessEntityValues
+            extraChargeRule.Criteria.FieldsValues.Add("SupplierZoneId", new BusinessEntityValues
             {
                 BusinessEntityGroup = new SelectiveSupplierZoneGroup()
                 {
@@ -155,7 +156,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 else
                     zoneIds.Add(_allSaleZones[sourceCommission.ZoneId.ToString()].SaleZoneId);
             }
-
+            if (zoneIds.Count == 0)
+                return null;
             ExtraChargeRule extraChargeRule = new ExtraChargeRule
             {
                 Settings = new PricingRuleExtraChargeSettings
@@ -173,14 +175,14 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 EndEffectiveTime = defaultCommission.EED
             };
 
-            extraChargeRule.Criteria.FieldsValues.Add("Carriers", new BusinessEntityValues
+            extraChargeRule.Criteria.FieldsValues.Add("CustomerId", new BusinessEntityValues
             {
                 BusinessEntityGroup = new SelectiveCustomerGroup
                 {
                     CustomerIds = new List<int>() { customer.CarrierAccountId },
                 }
             });
-            extraChargeRule.Criteria.FieldsValues.Add("Zones", new BusinessEntityValues
+            extraChargeRule.Criteria.FieldsValues.Add("SaleZoneId", new BusinessEntityValues
             {
                 BusinessEntityGroup = new SelectiveSaleZoneGroup
                 {

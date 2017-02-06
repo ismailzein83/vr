@@ -20,5 +20,6 @@ namespace TOne.WhS.DBSync.Entities
         public byte Percentage { get; set; }
         public byte Priority { get; set; }
         public bool ForcedOption { get; set; }
+        public int SourceId { get; set; }
     }
 }

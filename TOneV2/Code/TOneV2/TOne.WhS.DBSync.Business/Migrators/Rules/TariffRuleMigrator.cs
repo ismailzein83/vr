@@ -26,7 +26,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
     {
         public override string EntityName
         {
-            get { return "Tod"; }
+            get { return "Tariff"; }
         }
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SupplierZone> _allSupplierZones;

@@ -28,6 +28,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 
         private SourceSpecialRequest SourceSpecialRequestRuleMapper(IDataReader reader)
         {
+            int sourceId = (int)reader["SpecialRequestID"];
             return new SourceSpecialRequest
             {
                 BED = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
@@ -38,14 +39,15 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 ExcludedCodesList = GetExcludedCodes(reader["ExcludedCodes"] as string),
                 Reason = reader["Reason"] as string,
                 CustomerId = reader["CustomerId"] as string,
-                SourceId = ((int)reader["SpecialRequestID"]).ToString(),
+                SourceId = sourceId.ToString(),
                 SupplierOption = new SpecialRequestSupplierOption
                 {
                     SupplierId = reader["SupplierId"] as string,
                     NumberOfTries = GetReaderValue<byte>(reader, "NumberOfTries"),
                     Percentage = GetReaderValue<byte>(reader, "Percentage"),
                     Priority = GetReaderValue<byte>(reader, "Priority"),
-                    ForcedOption = GetReaderValue<byte>(reader, "SpecialRequestType") == 1
+                    ForcedOption = GetReaderValue<byte>(reader, "SpecialRequestType") == 1,
+                    SourceId = sourceId
                 }
             };
         }

@@ -17,6 +17,13 @@ namespace TOne.WhS.DBSync.Business
 {
     public class SpecialRequestRuleMigrator : RuleBaseMigrator
     {
+        public override string EntityName
+        {
+            get
+            {
+                return "Special Request";
+            }
+        }
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly int _routeRuleTypeId;
         public SpecialRequestRuleMigrator(RuleMigrationContext context)
@@ -76,7 +83,7 @@ namespace TOne.WhS.DBSync.Business
                 if (specialRequest.EED.HasValue)
                     distinctDateTimes.Add(specialRequest.EED.Value);
             }
-            List<DateTime> intervalDates = distinctDateTimes.ToList();
+            List<DateTime> intervalDates = distinctDateTimes.OrderBy(itm => itm).ToList();
 
             for (var index = 0; index < intervalDates.Count; index++)
             {
@@ -86,9 +93,10 @@ namespace TOne.WhS.DBSync.Business
 
                 Func<SourceSpecialRequest, bool> predicate = (itm) =>
                 {
+                    if (!isLastItem && !itm.EED.HasValue)
+                        return false;
                     if (!isLastItem && itm.BED > bed)
                         return false;
-
                     if (itm.EED.HasValue && itm.EED.Value <= bed)
                         return false;
 
@@ -96,12 +104,13 @@ namespace TOne.WhS.DBSync.Business
                 };
 
                 IEnumerable<SourceSpecialRequest> matchingSpecialRequestRules = specialRequestRules.FindAllRecords(predicate);
-                outputRules.Add(new SpecialRequestOutput
-                {
-                    SpecialRequests = matchingSpecialRequestRules,
-                    BED = bed,
-                    EED = eed
-                });
+                if (matchingSpecialRequestRules.Count() > 0)
+                    outputRules.Add(new SpecialRequestOutput
+                    {
+                        SpecialRequests = matchingSpecialRequestRules,
+                        BED = bed,
+                        EED = eed
+                    });
             }
 
             return outputRules;
@@ -144,7 +153,7 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<int, LCRRouteOptionSettings> options = new Dictionary<int, LCRRouteOptionSettings>();
             int position = 0;
 
-            foreach (var option in suppliers.OrderByDescending(s => s.Priority).ThenBy(itm => itm.SupplierId))
+            foreach (var option in suppliers.OrderByDescending(s => s.SourceId).ThenByDescending(s => s.Priority).ThenBy(itm => itm.SupplierId))
             {
                 CarrierAccount supplier;
                 if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
@@ -157,7 +166,8 @@ namespace TOne.WhS.DBSync.Business
                     Position = ++position,
                     SupplierId = supplier.CarrierAccountId
                 };
-                options.Add(supplier.CarrierAccountId, specialRequestOptionSettings);
+                if (!options.ContainsKey(supplier.CarrierAccountId))
+                    options.Add(supplier.CarrierAccountId, specialRequestOptionSettings);
             }
             return options;
         }
