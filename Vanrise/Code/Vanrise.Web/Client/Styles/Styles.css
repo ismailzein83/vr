@@ -1499,14 +1499,14 @@ loader .outer-loader {
     padding: 4px 6px 4px 0px;
     margin-top: -17px;
 }
-    .panel-vr.panel-vr-child > .panel-heading label {
-        font-weight: bold;
-        font-size: 12px;
-        top: 17px;
-        background-color: #FFF;
-        padding: 0px 5px 0px 0px;
-        position: relative;
-    }
+.panel-vr.panel-vr-child > .panel-heading label {
+    font-weight: bold;
+    font-size: 12px;
+    top: 17px;
+    background-color: #FFF;
+    padding: 0px 5px 0px 0px;
+    position: relative;
+}
 
 .panel-vr.panel-vr-child > .panel-body {
     border: 0px none !important;
@@ -1514,7 +1514,20 @@ loader .outer-loader {
     padding: 0px;
     margin: 0px -10px;
 }
-
+.section-menu{
+    display: inline-block;
+    position: absolute;
+    right: 2px;
+    
+}
+.panel-vr-child .section-menu{ 
+    top:14px
+}
+.section-menu vr-button span{ 
+   font-size:11px !important;
+   font-weight: normal;
+   text-transform: none;
+}
 .fieldset-vr {
     margin-top: 10px;
 }
