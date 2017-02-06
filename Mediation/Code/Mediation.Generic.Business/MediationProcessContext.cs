@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mediation.Generic.Data;
 
 namespace Mediation.Generic.Business
 {
@@ -24,12 +25,12 @@ namespace Mediation.Generic.Business
             string sessionId = null;
             List<string> nonAssociatedLegIds = new List<string>();
             HashSet<string> sessionLegIds = null;
-            foreach(var legId in legIds)
+            foreach (var legId in legIds)
             {
                 bool isLegAssociatedToSession = false;
                 if (sessionId == null)//sessionId not found yet, try to locate it
                 {
-                    if(sessionIdsMemStore.SessionIdsByLegId.TryGetValue(legId, out sessionId))
+                    if (sessionIdsMemStore.SessionIdsByLegId.TryGetValue(legId, out sessionId))
                     {
                         sessionLegIds = sessionIdsMemStore.LegIdsBySessionId[sessionId];
                         isLegAssociatedToSession = true;
@@ -44,16 +45,16 @@ namespace Mediation.Generic.Business
                     nonAssociatedLegIds.Add(legId);
                 }
             }
-            if(sessionId == null)
+            if (sessionId == null)
             {
                 sessionId = Guid.NewGuid().ToString();
                 sessionLegIds = new HashSet<string>();
                 sessionIdsMemStore.LegIdsBySessionId.Add(sessionId, sessionLegIds);
             }
-            if(nonAssociatedLegIds.Count > 0)
+            if (nonAssociatedLegIds.Count > 0)
             {
                 AddSessionLegsToDB(sessionId, nonAssociatedLegIds);
-                foreach(var legId in nonAssociatedLegIds)
+                foreach (var legId in nonAssociatedLegIds)
                 {
                     sessionLegIds.Add(legId);
                     sessionIdsMemStore.SessionIdsByLegId.Add(legId, sessionId);
@@ -83,17 +84,39 @@ namespace Mediation.Generic.Business
 
         private MultiLegSessionIdsMemoryStore GetSessionIdsMemStore()
         {
-            throw new NotImplementedException();
+            MultiLegSessionIdsMemoryStore store = new MultiLegSessionIdsMemoryStore();
+            IMultiLegSessionIdDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMultiLegSessionIdDataManager>();
+            IEnumerable<MultiLegSessionIdEntity> multiLegSessionIdEntities = dataManager.GetMultiLegSessionIds(_mediationDefinitionId);
+
+            foreach (var item in multiLegSessionIdEntities)
+            {
+                HashSet<string> legIds;
+                if (!store.LegIdsBySessionId.TryGetValue(item.SessionId, out legIds))
+                {
+                    legIds = new HashSet<string>();
+                    store.LegIdsBySessionId.Add(item.SessionId, legIds);
+                }
+                legIds.Add(item.LegId);
+
+                if (!store.SessionIdsByLegId.ContainsKey(item.LegId))
+                    store.SessionIdsByLegId.Add(item.LegId, item.SessionId);
+            }
+
+            return store;
         }
 
         private void AddSessionLegsToDB(string sessionId, List<string> nonAssociatedLegIds)
         {
-            throw new NotImplementedException();
+            if (nonAssociatedLegIds == null)
+                return;
+            IMultiLegSessionIdDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMultiLegSessionIdDataManager>();
+            dataManager.AddSessionLegsToDB(_mediationDefinitionId, sessionId, nonAssociatedLegIds);
         }
 
         private void DeleteSessionIdFromDB(string sessionId)
         {
-            throw new NotImplementedException();
+            IMultiLegSessionIdDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMultiLegSessionIdDataManager>();
+            dataManager.DeleteSessionIdFromDB(_mediationDefinitionId, sessionId);
         }
 
         #endregion
@@ -101,7 +124,12 @@ namespace Mediation.Generic.Business
 
     internal class MultiLegSessionIdsMemoryStore
     {
-        public Dictionary<string,string> SessionIdsByLegId { get; set; }
+        public MultiLegSessionIdsMemoryStore()
+        {
+            this.SessionIdsByLegId = new Dictionary<string, string>();
+            this.LegIdsBySessionId = new Dictionary<string, HashSet<string>>();
+        }
+        public Dictionary<string, string> SessionIdsByLegId { get; set; }
 
         public Dictionary<string, HashSet<string>> LegIdsBySessionId { get; set; }
     }
