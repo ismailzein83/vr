@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ProvisionerDefinitionsettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService'];
+    ProvisionerDefinitionsettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService','Retail_Teles_NewRGNoMatchHandlingEnum','Retail_Teles_NewRGMultiMatchHandlingEnum','Retail_Teles_ExistingRGNoMatchHandling'];
 
-    function ProvisionerDefinitionsettingsDirective(UtilsService, VRUIUtilsService) {
+    function ProvisionerDefinitionsettingsDirective(UtilsService, VRUIUtilsService,Retail_Teles_NewRGNoMatchHandlingEnum,Retail_Teles_NewRGMultiMatchHandlingEnum,Retail_Teles_ExistingRGNoMatchHandling) {
         return {
             restrict: "E",
             scope: {
@@ -31,6 +31,12 @@
             var existingRoutingGroupConditionReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.newRGNoMatchHandlings = UtilsService.getArrayEnum(Retail_Teles_NewRGNoMatchHandlingEnum);
+                $scope.scopeModel.newRGMultiMatchHandlings = UtilsService.getArrayEnum(Retail_Teles_NewRGMultiMatchHandlingEnum);
+                $scope.scopeModel.existingRGNoMatchHandlings = UtilsService.getArrayEnum(Retail_Teles_ExistingRGNoMatchHandling);
+
+
+
                 $scope.scopeModel.onNewRoutingGroupConditionReady = function (api) {
                     newRoutingGroupConditionAPI = api;
                     newRoutingGroupConditionReadyDeferred.resolve();
@@ -55,6 +61,11 @@
                             $scope.scopeModel.saveChangesToAccountState = provisionerDefinitionSettings.SaveChangesToAccountState;
                             $scope.scopeModel.actionType = provisionerDefinitionSettings.ActionType;
                             $scope.scopeModel.switchId = provisionerDefinitionSettings.SwitchId;
+
+
+                            $scope.scopeModel.selectedNewRGNoMatchHandling = UtilsService.getItemByVal($scope.scopeModel.newRGNoMatchHandlings, provisionerDefinitionSettings.NewRGNoMatchHandling, "value");
+                            $scope.scopeModel.selectedNewRGMultiMatchHandling = UtilsService.getItemByVal($scope.scopeModel.newRGMultiMatchHandlings, provisionerDefinitionSettings.NewRGMultiMatchHandling, "value");
+                            $scope.scopeModel.selectedExistingRGNoMatchHandling = UtilsService.getItemByVal($scope.scopeModel.existingRGNoMatchHandlings, provisionerDefinitionSettings.ExistingRGNoMatchHandling, "value");
 
                         }
 
@@ -107,7 +118,9 @@
                         NewRoutingGroupCondition: newRoutingGroupConditionAPI.getData(),
                         ExistingRoutingGroupCondition: existingRoutingGroupConditionAPI.getData(),
                         SwitchId: $scope.scopeModel.switchId,
-
+                        NewRGNoMatchHandling: $scope.scopeModel.selectedNewRGNoMatchHandling.value,
+                        NewRGMultiMatchHandling:$scope.scopeModel.selectedNewRGMultiMatchHandling.value,
+                        ExistingRGNoMatchHandling: $scope.scopeModel.selectedExistingRGNoMatchHandling.value
                     };
                     return data;
                 }

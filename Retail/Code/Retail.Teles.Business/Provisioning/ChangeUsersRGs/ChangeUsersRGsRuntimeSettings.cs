@@ -75,15 +75,51 @@ namespace Retail.Teles.Business
                 if (definitionSettings.NewRoutingGroupCondition.Evaluate(newcontext))
                 {
                     if (newRoutingGroup != null)
-                        throw new Exception("More than one routing group available for new routing group condition.");
+                    {
+                        switch (definitionSettings.NewRGMultiMatchHandling)
+                        {
+                            case NewRGMultiMatchHandling.Skip: return;
+                            case NewRGMultiMatchHandling.Stop: throw new Exception("More than one routing group available for new routing group condition.");
+                        }
+                    }
                     newRoutingGroup = siteRoutingGroup.id;
                 }
             }
             if (newRoutingGroup == null)
-                throw new Exception("No routing group available for new routing group condition.");
+            {
+                switch(definitionSettings.NewRGNoMatchHandling)
+                {
+                    case NewRGNoMatchHandling.Skip: return;
+                    case NewRGNoMatchHandling.Stop: throw new Exception("No routing group available for new routing group condition.");
+                }
+            }
+            if (definitionSettings.ExistingRoutingGroupCondition == null)
+            {
+                ProcessUsersToBlock(definitionSettings, users, existingRoutingGroups, newRoutingGroup, usersToBlock, changeUsersRGsAccountState, true);
+            }else if (existingRoutingGroups == null)
+            {
+                switch (definitionSettings.ExistingRGNoMatchHandling)
+                {
+                    case ExistingRGNoMatchHandling.Skip: return;
+                    case ExistingRGNoMatchHandling.UpdateAll:
+                        ProcessUsersToBlock(definitionSettings, users, existingRoutingGroups, newRoutingGroup, usersToBlock, changeUsersRGsAccountState, true);
+                        break;
+                    case ExistingRGNoMatchHandling.Stop:
+                        if (existingRoutingGroups == null)
+                            throw new Exception("No routing group available for existing routing group condition.");
+                        break;
+                }
+            }
+            else
+            {
+                ProcessUsersToBlock(definitionSettings, users, existingRoutingGroups, newRoutingGroup, usersToBlock, changeUsersRGsAccountState, false);
+            }
+        }
+        void ProcessUsersToBlock(ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> users, List<dynamic> existingRoutingGroups, dynamic newRoutingGroup ,List<dynamic> usersToBlock, ChangeUsersRGsAccountState changeUsersRGsAccountState,bool updateAll)
+        {
             foreach (var user in users)
             {
-                if (existingRoutingGroups == null || (user.routingGroupId != newRoutingGroup && existingRoutingGroups.Contains(user.routingGroupId)))
+                if (user.routingGroupId != newRoutingGroup && (updateAll || existingRoutingGroups.Contains(user.routingGroupId)))
                 {
                     if (definitionSettings.SaveChangesToAccountState)
                     {
@@ -108,7 +144,6 @@ namespace Retail.Teles.Business
                 }
             }
         }
-
         void UpdateBlockedUsers(ChangeUsersRGsDefinitionSettings definitionSettings,List<dynamic> usersToBlock)
         {
             if ( usersToBlock != null)

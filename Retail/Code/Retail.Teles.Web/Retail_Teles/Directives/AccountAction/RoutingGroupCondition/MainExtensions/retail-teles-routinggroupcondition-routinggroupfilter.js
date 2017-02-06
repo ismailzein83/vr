@@ -49,7 +49,7 @@
                         {
                             $scope.scopeModel.routingGroupName = routingGroupCondition.RoutingGroupName;
 
-                            $scope.scopeModel.selectedRoutingGroupFilterOperator = UtilsService.getItemByVal($scope.scopeModel.routingGroupFilterOperators, routingGroupCondition.Operator, "value")
+                            $scope.scopeModel.selectedRoutingGroupFilterOperator = UtilsService.getItemByVal($scope.scopeModel.routingGroupFilterOperators, routingGroupCondition.Operator, "value");
                         }
                     }
 

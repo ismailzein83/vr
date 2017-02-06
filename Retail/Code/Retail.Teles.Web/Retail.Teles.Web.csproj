@@ -147,7 +147,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_Teles\Constant\ExistingRGNoMatchHandlingEnum.js" />
     <Content Include="Retail_Teles\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Teles\Constant\NewRGMultiMatchHandlingEnum.js" />
+    <Content Include="Retail_Teles\Constant\NewRGNoMatchHandlingEnum.js" />
     <Content Include="Retail_Teles\Constant\RoutingGroupFilterOperatorEnum.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesAccountEditorController.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelesaccount.js" />

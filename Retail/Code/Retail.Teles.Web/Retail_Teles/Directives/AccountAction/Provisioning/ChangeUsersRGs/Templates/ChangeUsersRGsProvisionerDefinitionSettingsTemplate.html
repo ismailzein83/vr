@@ -11,11 +11,46 @@
 </vr-row>
 <vr-row>
     <vr-section title="Existing Routing Group Condition">
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-select datasource="scopeModel.existingRGNoMatchHandlings"
+                           selectedvalues="scopeModel.selectedExistingRGNoMatchHandling"
+                           datavaluefield="value"
+                           datatextfield="description"
+                           isrequired="true"
+                           label="No Match Handling"
+                           hideremoveicon>
+                </vr-select>
+            </vr-columns>
+        </vr-row>
+      
         <retail-teles-routinggroupcondition on-ready="scopeModel.onExistingRoutingGroupConditionReady" normal-col-num="6" ></retail-teles-routinggroupcondition>
     </vr-section>
 </vr-row>
 <vr-row>
     <vr-section title="New Routing Group Condition">
-        <retail-teles-routinggroupcondition on-ready="scopeModel.onNewRoutingGroupConditionReady" normal-col-num="6" isrequired="true"></retail-teles-routinggroupcondition>
-    </vr-section>
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-select datasource="scopeModel.newRGNoMatchHandlings"
+                           selectedvalues="scopeModel.selectedNewRGNoMatchHandling"
+                           datavaluefield="value"
+                           datatextfield="description"
+                           isrequired="true"
+                           label="No Match Handling"
+                           hideremoveicon>
+                </vr-select>
+            </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-select datasource="scopeModel.newRGMultiMatchHandlings"
+                           selectedvalues="scopeModel.selectedNewRGMultiMatchHandling"
+                           datavaluefield="value"
+                           datatextfield="description"
+                           isrequired="true"
+                           label="Multi Match Handling"
+                           hideremoveicon>
+                </vr-select>
+            </vr-columns>
+            </vr-row>
+            <retail-teles-routinggroupcondition on-ready="scopeModel.onNewRoutingGroupConditionReady" normal-col-num="6" isrequired="true"></retail-teles-routinggroupcondition>
+</vr-section>
 </vr-row>
