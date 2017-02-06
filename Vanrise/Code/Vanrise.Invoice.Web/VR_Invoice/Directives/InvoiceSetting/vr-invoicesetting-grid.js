@@ -79,6 +79,7 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
                             return gridAPI.retrieveData(gridQuery);
                         };
                         directiveAPI.onInvoiceSettingAdded = function (invoiceSetting) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(invoiceSetting);
                             gridAPI.itemAdded(invoiceSetting);
                         };
 
@@ -142,6 +143,8 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
             }
             function editInvoiceSetting(dataItem) {
                 var onInvoiceSettingUpdated = function (invoiceSetting) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(invoiceSetting);
+
                     gridAPI.itemUpdated(invoiceSetting);
                 };
                 VR_Invoice_InvoiceSettingService.editInvoiceSetting(onInvoiceSettingUpdated, dataItem.Entity.InvoiceSettingId, dataItem.Entity.InvoiceTypeId)
