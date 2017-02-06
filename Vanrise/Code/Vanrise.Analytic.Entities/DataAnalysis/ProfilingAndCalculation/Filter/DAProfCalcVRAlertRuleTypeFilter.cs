@@ -7,7 +7,7 @@ using Vanrise.Notification.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
-    class DAProfCalVRAlertRuleTypeFilter : IVRAlertRuleTypeFilter
+    class DAProfCalcVRAlertRuleTypeFilter : IVRAlertRuleTypeFilter
     {
         Guid _configId { get { return new Guid("57033e80-65cb-4359-95f6-22a57084d027"); } }
         public bool IsMatch(VRAlertRuleType alertRuleType)

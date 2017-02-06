@@ -46,7 +46,9 @@ function (UtilsService, VRUIUtilsService) {
                 var setLoader = function (value) {
                     $scope.scopeModel.isDirectiveLoading = value;
                 };
-                var daPayload = { dataAnalysisDefinitionId: dataAnalysisDefinitionSelectorDirectiveApi.getSelectedIds() };
+                var daPayload = { filter: { Filters: [] }, dataAnalysisDefinitionId: dataAnalysisDefinitionSelectorDirectiveApi.getSelectedIds() };
+                daPayload.filter.Filters.push({ $type: "Vanrise.Analytic.Entities.DAProfCalcDataAnalysisItemDefinitionFilter, Vanrise.Analytic.Entities" });
+
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataAnalysisDefinitionItemSelectorDirectiveApi, daPayload, setLoader, dataAnalysisDefinitionItemSelectorReadyPromiseDeferred);
             };
 
@@ -55,7 +57,9 @@ function (UtilsService, VRUIUtilsService) {
                     var setLoader = function (value) {
                         $scope.scopeModel.isDirectiveLoading = value;
                     };
-                    var daPayload = { dataAnalysisDefinitionId: dataAnalysisDefinitionSelectorDirectiveApi.getSelectedIds() };
+                    var daPayload = { filter: { Filters: [] }, dataAnalysisDefinitionId: dataAnalysisDefinitionSelectorDirectiveApi.getSelectedIds() };
+                    daPayload.filter.Filters.push({ $type: "Vanrise.Analytic.Entities.DAProfCalcDataAnalysisItemDefinitionFilter, Vanrise.Analytic.Entities" });
+
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataAnalysisDefinitionItemSelectorDirectiveApi, daPayload, setLoader, dataAnalysisDefinitionItemSelectorReadyPromiseDeferred);
                 }
             }
@@ -70,10 +74,12 @@ function (UtilsService, VRUIUtilsService) {
                 var loadDataAnalysisDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 dataAnalysisDefinitionSelectorReadyPromiseDeferred.promise.then(function () {
-                    var dataAnalysisDefinitionPayload;
+                    var dataAnalysisDefinitionPayload = { filter: { Filters: [] } };
+                    dataAnalysisDefinitionPayload.filter.Filters.push({ $type: "Vanrise.Analytic.Entities.DAProfCalcDataAnalysisDefinitionFilter, Vanrise.Analytic.Entities" });
+
                     if (payload != undefined) {
 
-                        dataAnalysisDefinitionPayload = { selectedIds: payload.DataAnalysisDefinitionId };
+                        dataAnalysisDefinitionPayload.selectedIds = payload.DataAnalysisDefinitionId;
                     }
                     VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorDirectiveApi, dataAnalysisDefinitionPayload, loadDataAnalysisDefinitionPromiseDeferred);
                 });
@@ -86,7 +92,10 @@ function (UtilsService, VRUIUtilsService) {
 
                     dataAnalysisDefinitionItemSelectorReadyPromiseDeferred.promise.then(function () {
                         dataAnalysisDefinitionItemSelectorReadyPromiseDeferred = undefined;
-                        var dataAnalysisDefinitionItemPayload = { selectedIds: payload.DataAnalysisItemDefinitionId, dataAnalysisDefinitionId: payload.DataAnalysisDefinitionId };
+
+                        var dataAnalysisDefinitionItemPayload = { filter: { Filters: [] }, selectedIds: payload.DataAnalysisItemDefinitionId, dataAnalysisDefinitionId: payload.DataAnalysisDefinitionId };
+                        dataAnalysisDefinitionItemPayload.filter.Filters.push({ $type: "Vanrise.Analytic.Entities.DAProfCalcDataAnalysisItemDefinitionFilter, Vanrise.Analytic.Entities" });
+
                         VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionItemSelectorDirectiveApi, dataAnalysisDefinitionItemPayload, dataAnalysisDefinitionItemSelectorLoadDeferred);
                     });
 
@@ -99,7 +108,7 @@ function (UtilsService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.RecordTypeExtraFields.DataAnalysisItemExtraFields,Vanrise.Analytic.MainExtensions',
+                    $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.RecordTypeExtraFields.DAProfCalcRecordTypeExtraFields,Vanrise.Analytic.MainExtensions',
                     DataAnalysisItemDefinitionId: dataAnalysisDefinitionItemSelectorDirectiveApi.getSelectedIds(),
                     DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorDirectiveApi.getSelectedIds(),
                 };

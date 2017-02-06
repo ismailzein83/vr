@@ -8,5 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public class DataAnalysisItemDefinitionFilter
     {
+        public List<IDataAnalysisItemDefinitionFilter> Filters { get; set; }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.DataAnalysis.RecordTypeExtraFields
 {
-    public class DataAnalysisItemExtraFields : DataRecordTypeExtraField
+    public class DAProfCalcRecordTypeExtraFields : DataRecordTypeExtraField
     {
         public Guid DataAnalysisItemDefinitionId { get; set; }
 
@@ -14,7 +16,21 @@ namespace Vanrise.Analytic.MainExtensions.DataAnalysis.RecordTypeExtraFields
 
         public override List<DataRecordField> GetFields(IDataRecordExtraFieldContext context)
         {
-            throw new NotImplementedException();
+            DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
+            DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(this.DataAnalysisItemDefinitionId);
+
+            if (dataAnalysisItemDefinition == null)
+                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition. DataAnalysisItemDefinitionId: {0}", this.DataAnalysisItemDefinitionId));
+
+            if (dataAnalysisItemDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition.Settings. DataAnalysisItemDefinitionId: {0}", this.DataAnalysisItemDefinitionId));
+
+            DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinition.Settings as DAProfCalcOutputSettings;
+            if (daProfCalcOutputSettings == null)
+                throw new Exception(String.Format("daProfCalcOutputSettings is not of type DAProfCalcOutputSettings. it is of type {0}", dataAnalysisItemDefinition.Settings.GetType()));
+
+            IDAProfCalcOutputSettingsGetOutputFieldsContext outputFieldContext = null;
+            return daProfCalcOutputSettings.GetOutputFields(outputFieldContext);
         }
     }
 }

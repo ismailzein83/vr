@@ -119,11 +119,22 @@ namespace Vanrise.Analytic.Business
 
         public IEnumerable<DataAnalysisItemDefinitionInfo> GetDataAnalysisItemDefinitionsInfo(DataAnalysisItemDefinitionFilter filter, Guid dataAnalysisDefinitonId)
         {
-            Func<DataAnalysisItemDefinition, bool> filterExpression = (item) =>
+            Func<DataAnalysisItemDefinition, bool> filterExpression = (dataAnalysisItemDefinition) =>
             {
-                if (item.DataAnalysisDefinitionId != dataAnalysisDefinitonId)
+                if (dataAnalysisItemDefinition.DataAnalysisDefinitionId != dataAnalysisDefinitonId)
                     return false;
 
+                if (filter != null)
+                {
+                    if (filter.Filters != null)
+                    {
+                        foreach (IDataAnalysisItemDefinitionFilter dataAnalysisItemDefinitionFilter in filter.Filters)
+                        {
+                            if (!dataAnalysisItemDefinitionFilter.IsMatch(dataAnalysisItemDefinition))
+                                return false;
+                        }
+                    }
+                }
                 return true;
             };
 

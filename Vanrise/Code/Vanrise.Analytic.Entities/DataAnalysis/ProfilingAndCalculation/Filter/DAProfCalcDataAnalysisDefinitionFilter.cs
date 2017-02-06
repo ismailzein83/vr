@@ -2,7 +2,7 @@
 
 namespace Vanrise.Analytic.Entities
 {
-    public class DAProfCalDataAnalysisDefinitionFilter : IDataAnalysisDefinitionFilter
+    public class DAProfCalcDataAnalysisDefinitionFilter : IDataAnalysisDefinitionFilter
     {
         Guid _configId { get { return new Guid("B3AF681B-72CE-4DD8-9090-CC727690F7E0"); } }
         public bool IsMatch(DataAnalysisDefinition dataAnalysisDefinition)

@@ -111,7 +111,7 @@ app.directive("vrAnalyticDaprofcalcStoreoutputprocessinput", ['UtilsService', 'V
 
                     dataAnalysisDefinitionSelectorReadyDeferred.promise.then(function () {
                         var payload = { filter: { Filters: [] } };
-                        payload.filter.Filters.push({ $type: "Vanrise.Analytic.Entities.DAProfCalDataAnalysisDefinitionFilter, Vanrise.Analytic.Entities" });
+                        payload.filter.Filters.push({ $type: "Vanrise.Analytic.Entities.DAProfCalcDataAnalysisDefinitionFilter, Vanrise.Analytic.Entities" });
                         VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorAPI, payload, dataAnalysisDefinitionSelectorLoadDeferred);
                     });
 

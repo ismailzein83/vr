@@ -120,6 +120,7 @@
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionDetail.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionQuery.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionSettings.cs" />
+    <Compile Include="DataAnalysis\DataAnalysisItemDefinition\IDataAnalysisItemDefinitionFilter.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleActionEventPayload.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleCriteria.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleExecPayload.cs" />
@@ -130,9 +131,10 @@
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcChunkTime.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcGroupingField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\IDAProfCalcOutputRecordProcessor.cs" />
-    <Compile Include="DataAnalysis\ProfilingAndCalculation\Filter\DAProfCalDataAnalysisDefinitionFilter.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Filter\DAProfCalcDataAnalysisItemDefinitionFilter.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Filter\DAProfCalcDataAnalysisDefinitionFilter.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Input\DAProfCalcExecInput.cs" />
-    <Compile Include="DataAnalysis\ProfilingAndCalculation\Filter\DAProfCalVRAlertRuleTypeFilter.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Filter\DAProfCalcVRAlertRuleTypeFilter.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Output\DAProfCalcOutputRecord.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcOutputSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcSettings.cs" />
