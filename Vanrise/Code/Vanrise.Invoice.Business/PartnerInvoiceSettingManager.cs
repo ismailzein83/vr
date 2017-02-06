@@ -72,6 +72,23 @@ namespace Vanrise.Invoice.Business
 
             return updateOperationOutput;
         }
+        public Vanrise.Entities.DeleteOperationOutput<object> DeletePartnerInvoiceSetting(Guid partnerInvoiceSettingId)
+        {
+            var deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<object>()
+            {
+                Result = Vanrise.Entities.DeleteOperationResult.Failed
+            };
+
+            IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
+            bool deleted = dataManager.DeletePartnerInvoiceSetting(partnerInvoiceSettingId);
+            if (deleted)
+            {
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            return deleteOperationOutput;
+        }
+
         public IEnumerable<PartnerInvoiceSetting> GetPartnerInvoiceSettings()
         {
             return GetCachedPartnerInvoiceSettings().Values;

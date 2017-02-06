@@ -78,6 +78,10 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
                             gridQuery = query;
                             return gridAPI.retrieveData(gridQuery);
                         };
+                        directiveAPI.onInvoiceSettingAdded = function (invoiceSetting) {
+                            gridAPI.itemAdded(invoiceSetting);
+                        };
+
                         return directiveAPI;
                     }
                 };

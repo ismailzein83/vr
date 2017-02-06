@@ -69,6 +69,9 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                 var defaultMenuAction = [{
                     name: "Edit",
                     clicked: editPartnerInvoiceSetting,
+                }, {
+                    name: "Delete",
+                    clicked: deletePartnerInvoiceSetting,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -80,6 +83,12 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                     gridAPI.itemUpdated(invoiceSetting);
                 };
                 VR_Invoice_PartnerInvoiceSettingService.editPartnerInvoiceSetting(onPartnerInvoiceSettingUpdated, dataItem.Entity.PartnerInvoiceSettingId)
+            }
+            function deletePartnerInvoiceSetting(dataItem) {
+                var onPartnerInvoiceSettingDeleted = function () {
+                    gridAPI.itemDeleted(dataItem);
+                };
+                VR_Invoice_PartnerInvoiceSettingService.deletePartnerInvoiceSetting($scope, dataItem.Entity.PartnerInvoiceSettingId, onPartnerInvoiceSettingDeleted);
             }
         }
 

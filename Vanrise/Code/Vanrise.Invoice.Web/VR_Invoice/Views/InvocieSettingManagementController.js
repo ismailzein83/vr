@@ -71,7 +71,8 @@
             return invoiceTypeSelectorPayloadLoadDeferred.promise;
         }
         function addInvoiceSetting() {
-            var onInvoiceSettingAdded = function (invoice) {
+            var onInvoiceSettingAdded = function (invoiceSetting) {
+                gridAPI.onInvoiceSettingAdded(invoiceSetting);
             };
             VR_Invoice_InvoiceSettingService.addInvoiceSetting(onInvoiceSettingAdded, invoiceTypeSelectorAPI.getSelectedIds());
         }

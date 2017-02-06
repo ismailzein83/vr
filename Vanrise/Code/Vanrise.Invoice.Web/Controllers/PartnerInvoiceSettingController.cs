@@ -40,5 +40,11 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.UpdatePartnerInvoiceSetting(partnerInvoiceSetting);
         }
+        [HttpGet]
+        [Route("DeletePartnerInvoiceSetting")]
+        public Vanrise.Entities.DeleteOperationOutput<object> DeletePartnerInvoiceSetting(Guid partnerInvoiceSettingId)
+        {
+            return _manager.DeletePartnerInvoiceSetting(partnerInvoiceSettingId);
+        }
     }
 }

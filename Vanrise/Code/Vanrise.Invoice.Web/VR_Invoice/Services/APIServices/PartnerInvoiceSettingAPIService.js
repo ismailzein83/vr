@@ -21,12 +21,17 @@
         function UpdatePartnerInvoiceSetting(partnerInvoiceSetting) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "UpdatePartnerInvoiceSetting"), partnerInvoiceSetting);
         }
-
+        function DeletePartnerInvoiceSetting(partnerInvoiceSettingId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "DeletePartnerInvoiceSetting"), {
+                partnerInvoiceSettingId: partnerInvoiceSettingId
+            });
+        }
         return ({
             GetPartnerInvoiceSetting: GetPartnerInvoiceSetting,
             GetFilteredPartnerInvoiceSettings: GetFilteredPartnerInvoiceSettings,
             AddPartnerInvoiceSetting: AddPartnerInvoiceSetting,
             UpdatePartnerInvoiceSetting: UpdatePartnerInvoiceSetting,
+            DeletePartnerInvoiceSetting: DeletePartnerInvoiceSetting
         });
     }
 
