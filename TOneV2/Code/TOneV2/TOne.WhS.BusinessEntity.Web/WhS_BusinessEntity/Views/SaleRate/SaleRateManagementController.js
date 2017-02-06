@@ -2,9 +2,9 @@
 
     "use strict";
 
-    saleRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum'];
+    saleRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_SaleRateAPIService'];
 
-    function saleRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum) {
+    function saleRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum, whSBeSaleRateApiService) {
 
 
         var gridAPI;
@@ -19,6 +19,7 @@
 
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var saleAreaSettingsData;
 
         defineScope();
         load();
@@ -109,7 +110,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadSellingProduct, loadCarrierAccount])
+            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadSellingProduct, loadCarrierAccount, loadSaleAreaSettingsData])
               .catch(function (error) {
                   VRNotificationService.notifyExceptionWithClose(error, $scope);
               })
@@ -158,9 +159,15 @@
                 SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
                 OwnerType:$scope.selectedOwnerType.value,
-                OwnerId: ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorAPI.getSelectedIds() : carrierAccountSelectorAPI.getSelectedIds()
+                OwnerId: ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorAPI.getSelectedIds() : carrierAccountSelectorAPI.getSelectedIds(),
+                SaleAreaSettings: saleAreaSettingsData
             };
            
+        }
+        function loadSaleAreaSettingsData() {
+            return whSBeSaleRateApiService.GetSaleAreaSettingsData().then(function (response) {
+                saleAreaSettingsData = response;
+            });
         }
 
     }

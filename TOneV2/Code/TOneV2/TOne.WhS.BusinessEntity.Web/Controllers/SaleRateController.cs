@@ -21,6 +21,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SaleRateManager manager = new SaleRateManager();
             return GetWebResponse(input, manager.GetFilteredSaleRates(input));
         }
+        [HttpGet]
+        [Route("GetSaleAreaSettingsData")]
+        public SaleAreaSettingsData GetSaleAreaSettingsData()
+        {
+            var manager = new SaleRateManager();
+            return manager.GetSaleAreaSettingsData();
+        }
     }
 
 }

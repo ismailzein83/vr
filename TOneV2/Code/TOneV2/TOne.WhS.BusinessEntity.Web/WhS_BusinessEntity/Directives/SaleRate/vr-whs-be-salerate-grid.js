@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService","VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService, VRUIUtilsService) {
+app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService", "VRUIUtilsService", 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum',
+function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtilsService, whSBeSalePriceListOwnerTypeEnum, whSBePrimarySaleEntityEnum) {
 
     var directiveDefinitionObject = {
 
@@ -26,6 +26,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService, VRUIUt
     function SaleRateGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridQuery;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -46,18 +47,18 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService, VRUIUt
                     rateItem.otherRateGridAPI.loadGrid(rateItem.OtherRates);
                 };
                 drillDownDefinitions.push(drillDownDefinition);
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-                
+                gridDrillDownTabsObj = vruiUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
-                   
+
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
                     };
-                   
+
                     return directiveAPI;
                 }
             };
@@ -65,24 +66,42 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleRateAPIService, VRUIUt
                 return (dataItem.OtherRates != null && dataItem.OtherRates.length > 0);
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SaleRateAPIService.GetFilteredSaleRate(dataRetrievalInput)
+                gridQuery = dataRetrievalInput.Query;
+                return whSBeSaleRateApiService.GetFilteredSaleRate(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                var item = response.Data[i];
+                                setNormalRateIconProperties(item);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(item);
                             }
                         }
                         $scope.showGrid = true;
-                         onResponseReady(response);
+                        onResponseReady(response);
                     })
                     .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
+                        vrNotificationService.notifyException(error, $scope);
                     });
             };
         }
-
+        function setNormalRateIconProperties(dataItem) {
+            console.log(dataItem);
+            if (gridQuery.OwnerType === whSBeSalePriceListOwnerTypeEnum.SellingProduct.value)
+                return;
+            if (gridQuery.SaleAreaSettings == undefined || gridQuery.SaleAreaSettings.PrimarySaleEntity == null)
+                return;
+            if (gridQuery.SaleAreaSettings.PrimarySaleEntity === whSBePrimarySaleEntityEnum.SellingProduct.value) {
+                if (dataItem.IsRateInherited === false) {
+                    dataItem.iconType = 'explicit';
+                    dataItem.iconTooltip = 'Explicit';
+                }
+            }
+            else if (dataItem.IsRateInherited === true) {
+                dataItem.iconType = 'inherited';
+                dataItem.iconTooltip = 'Inherited';
+            }
+        }
     }
-
     return directiveDefinitionObject;
 
 }]);
