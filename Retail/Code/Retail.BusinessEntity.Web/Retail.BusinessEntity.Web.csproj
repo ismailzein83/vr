@@ -305,7 +305,9 @@
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\retail-be-crmaccount-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-assignproductandpackages.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-portalaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\PortalAccountInsertHandlerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Account\ExtendedSettings\retail-be-portalaccount-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Account\ExtendedSettings\Templates\PortalAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\ProductFamilyPackageItemEditorController.js" />
