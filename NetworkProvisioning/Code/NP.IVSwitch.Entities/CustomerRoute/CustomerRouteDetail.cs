@@ -6,9 +6,5 @@ namespace NP.IVSwitch.Entities
     {
         public ConvertedCustomerRoute Entity { get; set; }
 
-        public string Options
-        {
-            get { return string.Join(",", Entity.Options.Select(r => r.ToString())); }
-        }
     }
 }

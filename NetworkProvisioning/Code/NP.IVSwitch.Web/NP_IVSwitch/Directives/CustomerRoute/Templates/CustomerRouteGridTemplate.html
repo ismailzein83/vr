@@ -4,5 +4,12 @@
              pagingtype="'PagingOnScroll'"
              menuactions="menuActions">
     <vr-datagridcolumn headertext="'Destination'" field="'Entity.DestinationCode'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Options'" field="'Options'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Route Options'" disablesorting>
+        <div class="responsive-container" style="white-space: normal;">
+            <span ng-repeat="details in dataItem.Entity.Options"
+                  style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px;">
+                {{details.SupplierName}} <span ng-if="details.Percentage!=null">{{details.Percentage}}%</span>
+            </span>
+        </div>
+    </vr-datagridcolumn>
 </vr-datagrid>

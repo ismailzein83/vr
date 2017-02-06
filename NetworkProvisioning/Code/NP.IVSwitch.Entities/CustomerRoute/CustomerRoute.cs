@@ -27,9 +27,5 @@ namespace NP.IVSwitch.Entities
         public decimal Percentage { get; set; }
         public int Priority { get; set; }
         public int SupplierId { get; set; }
-        public override string ToString()
-        {
-            return string.Format("{0} | {1}", SupplierName, Percentage);
-        }
     }
 }
