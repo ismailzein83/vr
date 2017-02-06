@@ -75,20 +75,57 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySellingNumberingPlanId(long stateBackupId, string backupDatabase, int sellingNumberPlanId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SalePriceList] WITH (TABLOCK)
-                                            SELECT sp.[ID], sp.[OwnerType], sp.[OwnerID], sp.[CurrencyID], sp.[EffectiveOn], sp.[SourceID], {1} AS StateBackupID  FROM [TOneWhS_BE].[SalePriceList]
-                                            sp WITH (NOLOCK) Inner Join [TOneWhS_BE].CarrierAccount ca WITH (NOLOCK) on sp.OwnerID = ca.ID
+                                            SELECT 
+                                                     sp.[ID]
+		                                            ,sp.[OwnerType]
+		                                            ,sp.[OwnerID]
+		                                            ,sp.[CurrencyID]
+		                                            ,sp.[EffectiveOn]
+		                                            ,sp.[PriceListType]
+		                                            ,sp.[SourceID]
+		                                            ,sp.[ProcessInstanceID]
+		                                            ,sp.[FileID]
+		                                            ,sp.[CreatedTime]
+                                                    ,{1} AS StateBackupID  
+                                            FROM [TOneWhS_BE].[SalePriceList] sp WITH (NOLOCK) 
+                                            Inner Join [TOneWhS_BE].CarrierAccount ca WITH (NOLOCK) on sp.OwnerID = ca.ID
 											Inner Join [TOneWhS_BE].SellingNumberPlan np on ca.SellingNumberPlanID=np.ID
-                                            Where ca.SellingNumberPlanID = {2} and sp.OwnerType=1  Union SELECT sp.[ID], sp.[OwnerType], sp.[OwnerID], sp.[CurrencyID], sp.[EffectiveOn], sp.[SourceID], {1} AS StateBackupID  FROM [TOneWhS_BE].[SalePriceList]
-                                            sp WITH (NOLOCK) Inner Join [TOneWhS_BE].SellingProduct sellp WITH (NOLOCK) on sp.OwnerID = sellp.ID
-											Inner Join [TOneWhS_BE].SellingNumberPlan np on sellp.SellingNumberPlanID=np.ID
-                                            Where sellp.SellingNumberPlanID = {2} and sp.OwnerType=0 ", backupDatabase, stateBackupId, sellingNumberPlanId);
+                                            Where ca.SellingNumberPlanID = {2} and sp.OwnerType=1  
+                                            Union 
+                                            SELECT 
+                                                     sp.[ID]
+		                                            ,sp.[OwnerType]
+		                                            ,sp.[OwnerID]
+		                                            ,sp.[CurrencyID]
+		                                            ,sp.[EffectiveOn]
+                                                    ,sp.[PriceListType]
+		                                            ,sp.[SourceID]
+		                                            ,sp.[ProcessInstanceID]
+		                                            ,sp.[FileID]
+		                                            ,sp.[CreatedTime]
+                                                    ,{1} AS StateBackupID 
+                                           FROM [TOneWhS_BE].[SalePriceList] sp WITH (NOLOCK) 
+                                           Inner Join [TOneWhS_BE].SellingProduct sellp WITH (NOLOCK) on sp.OwnerID = sellp.ID
+										   Inner Join [TOneWhS_BE].SellingNumberPlan np on sellp.SellingNumberPlanID=np.ID
+                                           Where sellp.SellingNumberPlanID = {2} and sp.OwnerType=0 ", backupDatabase,
+                stateBackupId, sellingNumberPlanId);
         }
 
 
         public string BackupAllDataByOwner(long stateBackupId, string backupDatabase, int ownerId, int ownerType)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SalePriceList] WITH (TABLOCK)
-                                            SELECT [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn], [SourceID], {1} AS StateBackupID FROM [TOneWhS_BE].[SalePriceList]
+                                            SELECT   [ID]
+                                                    ,[OwnerType] 
+                                                    ,[OwnerID] 
+                                                    ,[CurrencyID] 
+                                                    ,[EffectiveOn]
+                                                    ,[PriceListType]
+                                                    ,[SourceID]
+                                                    ,[ProcessInstanceID]
+                                                    ,[FileID]
+                                                    ,[CreatedTime]
+                                                    ,{1} AS StateBackupID FROM [TOneWhS_BE].[SalePriceList]
                                             WITH (NOLOCK) Where OwnerId = {2} and OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
         }
 
