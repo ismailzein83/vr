@@ -22,22 +22,9 @@
                             </vr-genericdata-datarecordtype-selector>
                         </vr-columns>
                     </vr-row>
-
-                    <vr-row>
-                        <vr-columns width="1/4row">
-                            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onCookedDataRecordTypeSelectorReady"
-                                                                    selectedvalues="scopeModel.selectedSummaryDataRecordType"
-                                                                    onselectionchanged="scopeModel.onCookedRecordTypeSelectionChanged"
-                                                                    isrequired="true"
-                                                                    label="Cooked Record Type"
-                                                                    hideremoveicon>
-                            </vr-genericdata-datarecordtype-selector>
-                        </vr-columns>
-                    </vr-row>
-
                 </vr-tab>
 
-                <vr-tab header="'Parsed Record Settings'">
+                <vr-tab header="'Parsed Record Settings'" ng-show="scopeModel.selectedParsedDataRecordType">
                     <vr-row removeline>
 
                         <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingParsedSessionID">
@@ -52,8 +39,8 @@
 
                         <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingParsedTimeField">
 
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onParsedDataRecordTimeFieldSelectorReady" selectedvalues="scopeModel.selectedParsedDataRecordTypeTimeField" 
-                              label="Time Field" hideremoveicon>
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onParsedDataRecordTimeFieldSelectorReady" selectedvalues="scopeModel.selectedParsedDataRecordTypeTimeField"
+                                                                          label="Time Field" hideremoveicon>
                             </vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
 
@@ -90,7 +77,7 @@
                     </vr-row>
                 </vr-tab>
 
-                <vr-tab header="'Parsed to Cooked'">
+                <vr-tab header="'Parsed Transformation'" ng-show="scopeModel.selectedParsedDataRecordType">
 
                     <vr-row>
 
@@ -113,16 +100,6 @@
                                                                                         selectedvalues="scopeModel.selectedDataTransformationDefinitionParsedRecord"
                                                                                         isrequired="true"
                                                                                         customlabel="Parsed Record"
-                                                                                        hideremoveicon>
-
-                            </vr-genericdata-datatransformationdefinitionrecord-selector>
-                        </vr-columns>
-
-                        <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingDataTransformationDefinitionInsertCooked">
-                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModel.onDataTransformationDefinitionCookedRecordReady"
-                                                                                        selectedvalues="scopeModel.selectedDataTransformationDefinitionCookedRecord"
-                                                                                        isrequired="true"
-                                                                                        customlabel="Cooked Record"
                                                                                         hideremoveicon>
 
                             </vr-genericdata-datatransformationdefinitionrecord-selector>

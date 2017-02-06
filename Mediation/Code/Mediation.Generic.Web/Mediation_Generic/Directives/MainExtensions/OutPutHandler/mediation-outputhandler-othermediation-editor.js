@@ -24,7 +24,6 @@ app.directive('mediationOutputhandlerOthermediationEditor', ['UtilsService', 'VR
         var mediationSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         $scope.scopeModel = {};
         $scope.scopeModel.onMediationDefinitionSelectorReady = function (api) {
-            console.log("in");
             mediationSelectorAPI = api;
             mediationSelectorReadyDeferred.resolve();
         };

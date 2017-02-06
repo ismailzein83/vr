@@ -17,8 +17,6 @@
         var dataParsedRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var dataParsedRecordTypeSelectedPromiseDeferred;
 
-        var dataCookedRecordTypeSelectorAPI;
-        var dataCookedRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var dataCookedRecordTypeSelectedPromiseDeferred;
 
         //#endregion
@@ -41,9 +39,6 @@
 
         var dataTransformationDefinitionRecordParsedSelectorAPI;
         var dataTransformationDefinitionRecordParsedSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var dataTransformationDefinitionRecordCookedSelectorAPI;
-        var dataTransformationDefinitionRecordCookedSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         //#endregion
 
@@ -77,10 +72,7 @@
             };
 
             $scope.scopeModel.selectedCookedDataRecordType;
-            $scope.scopeModel.onCookedDataRecordTypeSelectorReady = function (api) {
-                dataCookedRecordTypeSelectorAPI = api;
-                dataCookedRecordTypeSelectorReadyDeferred.resolve();
-            };
+           
 
             $scope.scopeModel.onParsedRecordTypeSelectionChanged = function () {
                 var selectedParsedDataRecordTypeId = dataParsedRecordTypeSelectorAPI.getSelectedIds();
@@ -112,7 +104,6 @@
             };
             $scope.scopeModel.onDataTransformationDefinitionInsertSelectionChanged = function () {
                 var selectedParsedDataRecordTypeId = dataParsedRecordTypeSelectorAPI.getSelectedIds();
-                var selectedCookedDataRecordTypeId = dataCookedRecordTypeSelectorAPI.getSelectedIds();
 
                 var selectedDataTransformationDefinitionInsertId = dataTransformationDefinitionInsertSelectorAPI.getSelectedIds();
                 if (selectedDataTransformationDefinitionInsertId != undefined) {
@@ -124,22 +115,11 @@
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordParsedSelectorAPI, payloadfornDataTransformationDefinitionInsertParsed, setLoaderDataTransformationDefinitionInsertParsed, dataTransformationDefinitionInsertSelectedPromiseDeferred);
 
-                    var setLoaderDataTransformationDefinitionInsertCooked = function (value) { $scope.scopeModel.isLoadingDataTransformationDefinitionInsertCooked = value };
-                    var payloadfornDataTransformationDefinitionInsertCooked = {
-                        dataTransformationDefinitionId: selectedDataTransformationDefinitionInsertId,
-                        filter: { DataRecordTypeIds: [selectedCookedDataRecordTypeId], IsArray: false }
-                    };
-
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordCookedSelectorAPI, payloadfornDataTransformationDefinitionInsertCooked, setLoaderDataTransformationDefinitionInsertCooked, dataTransformationDefinitionInsertSelectedPromiseDeferred);
-
                 }
                 else {
                     if (dataTransformationDefinitionRecordParsedSelectorAPI != undefined)
                         dataTransformationDefinitionRecordParsedSelectorAPI.clearDataSource();
-
-                    if (dataTransformationDefinitionRecordCookedSelectorAPI != undefined)
-                        dataTransformationDefinitionRecordCookedSelectorAPI.clearDataSource();
-                }
+                   }
             }
 
             $scope.scopeModel.selectedDataTransformationDefinitionParsedRecord;
@@ -149,10 +129,7 @@
             };
 
             $scope.scopeModel.selectedDataTransformationDefinitionCookedRecord;
-            $scope.scopeModel.onDataTransformationDefinitionCookedRecordReady = function (api) {
-                dataTransformationDefinitionRecordCookedSelectorAPI = api;
-                dataTransformationDefinitionRecordCookedSelectorReadyDeferred.resolve();
-            };
+          
             //#endregion
 
             //#region Parsed Identification Tab
@@ -302,9 +279,7 @@
             //#endregion
 
             //#region Load Cooked Data Record Type
-            var dataCookedRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            promises.push(dataCookedRecordTypeSelectorLoadDeferred.promise);
-
+          
             var payloadCookedRecordTypeSelector;
             if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.CookedRecordTypeId != undefined) {
                 dataCookedRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -339,10 +314,6 @@
                 });
             }
 
-            dataCookedRecordTypeSelectorReadyDeferred.promise.then(function () {
-
-                VRUIUtilsService.callDirectiveLoad(dataCookedRecordTypeSelectorAPI, payloadCookedRecordTypeSelector, dataCookedRecordTypeSelectorLoadDeferred);
-            });
 
             //#endregion
 
@@ -388,16 +359,14 @@
                 });
 
 
-                var dataTransformationDefinitionRecordCookedSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                promises.push(dataTransformationDefinitionRecordCookedSelectorLoadDeferred.promise);
-                UtilsService.waitMultiplePromises([dataTransformationDefinitionInsertSelectedPromiseDeferred.promise, dataTransformationDefinitionRecordCookedSelectorReadyDeferred.promise]).then(function () {
+               
+                UtilsService.waitMultiplePromises([dataTransformationDefinitionInsertSelectedPromiseDeferred.promise]).then(function () {
                     var payload;
                     payload = {
                         dataTransformationDefinitionId: mediationDefinitionEntity.CookedFromParsedSettings.TransformationDefinitionId,
                         filter: { IsArray: false },
                         selectedIds: mediationDefinitionEntity.CookedFromParsedSettings.CookedRecordName
                     };
-                    VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordCookedSelectorAPI, payload, dataTransformationDefinitionRecordCookedSelectorLoadDeferred);
                     dataTransformationDefinitionInsertSelectedPromiseDeferred = undefined;
                 });
 
@@ -484,7 +453,6 @@
                 Name: $scope.scopeModel.name,
                 MediationDefinitionId: mediationDefinitionId,
                 ParsedRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds(),
-                CookedRecordTypeId: dataCookedRecordTypeSelectorAPI.getSelectedIds(),
                 ParsedRecordIdentificationSetting: getParsedRecordIdentificationSetting(),
                 CookedFromParsedSettings: getCookedFromParsedSettings(),
                 OutputHandlers:buildHandlersGridData($scope.scopeModel.handlers)
@@ -572,8 +540,7 @@
         function getCookedFromParsedSettings() {
             return {
                 TransformationDefinitionId: dataTransformationDefinitionInsertSelectorAPI.getSelectedIds(),
-                ParsedRecordName: dataTransformationDefinitionRecordParsedSelectorAPI.getSelectedIds(),
-                CookedRecordName: dataTransformationDefinitionRecordCookedSelectorAPI.getSelectedIds()
+                ParsedRecordName: dataTransformationDefinitionRecordParsedSelectorAPI.getSelectedIds()
             };
         }
 
