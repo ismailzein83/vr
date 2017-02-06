@@ -17,8 +17,22 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
             var ctrl = this;
             
             ctrl.onInternalClick = function (evnt) {
-                if (ctrl.menuActions != undefined)
+                if (ctrl.menuActions != undefined) {
+                    var self = angular.element(evnt.currentTarget);
+
                     ctrl.showMenuActions = true;
+                    if ($(self).parents('.section-menu').length == 0)
+                        return;
+                    var selfHeight = $(self).height();
+                    var selfOffset = $(self).offset();
+                    var dropDown = self.find('.dropdown-menu')[0];
+                    var basetop = selfOffset.top - $(window).scrollTop() + $(self).height();
+                    var eltop = selfOffset.top - $(window).scrollTop();
+                    var elleft = selfOffset.left - $(window).scrollLeft();
+                    $(dropDown).css({ position: 'fixed', top: basetop, left: elleft - 100 , bottom: 'unset' });
+
+                    
+                }                    
                 else {
                     if (ctrl.onclick != undefined && typeof (ctrl.onclick) == 'function') {
                         var promise = ctrl.onclick();//this function should return a promise in case it is performing asynchronous task
