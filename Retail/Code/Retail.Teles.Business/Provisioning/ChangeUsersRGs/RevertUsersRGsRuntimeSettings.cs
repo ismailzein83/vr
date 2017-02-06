@@ -30,11 +30,14 @@ namespace Retail.Teles.Business
 
         void RevertBlockedUsersState(Guid accountBEDefinition, long accountId, ChangeUsersRGsAccountState changeUsersRGsAccountState)
         {
-            if (changeUsersRGsAccountState != null)
+            if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null && changeUsersRGsAccountState.ChangesByActionType.Count == 0)
+            {
+                accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(accountBEDefinition, accountId);
+
+            }else
             {
                 accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(accountBEDefinition, accountId, changeUsersRGsAccountState);
             }
-
         }
         void RevertBlockedUsers(int switchId, List<dynamic> changedUsers)
         {

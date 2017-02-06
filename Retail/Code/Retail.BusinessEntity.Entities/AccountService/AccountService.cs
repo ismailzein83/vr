@@ -14,7 +14,6 @@ namespace Retail.BusinessEntity.Entities
         public Guid ServiceTypeId { get; set; }
         public int? ServiceChargingPolicyId { get; set; }
         public AccountServiceSettings Settings { get; set; }
-        public ExecutedActions ExecutedActions { get; set; }
     }
 
     public class AccountServiceToAdd : AccountService

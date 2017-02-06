@@ -83,7 +83,7 @@ namespace Retail.Teles.Business
                 throw new Exception("No routing group available for new routing group condition.");
             foreach (var user in users)
             {
-                if(existingRoutingGroups == null || existingRoutingGroups.Contains(user.routingGroupId))
+                if (existingRoutingGroups == null || (user.routingGroupId != newRoutingGroup && existingRoutingGroups.Contains(user.routingGroupId)))
                 {
                     if (definitionSettings.SaveChangesToAccountState)
                     {

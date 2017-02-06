@@ -70,16 +70,6 @@ namespace Retail.BusinessEntity.Business
             }
             return updateStatus;
         }
-        public bool UpdateExecutedActions(long accountServiceId, ExecutedActions executedActions)
-        {
-            IAccountServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountServiceDataManager>();
-            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountServiceId, executedActions);
-            if (updateExecutedAction)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-            }
-            return updateExecutedAction;
-        }
         public InsertOperationOutput<AccountServiceDetail> AddAccountService(AccountServiceToAdd accountServiceToAdd)
         {
             InsertOperationOutput<AccountServiceDetail> insertOperationOutput = new InsertOperationOutput<AccountServiceDetail>();

@@ -19,8 +19,6 @@ namespace Retail.BusinessEntity.Data
 
         bool UpdateStatus(long accountId, Guid statusId);
 
-        bool UpdateExecutedActions(long accountId, ExecutedActions executedAction);
-
         bool UpdateExtendedSettings(long accountId, Dictionary<string, BaseAccountExtendedSettings> extendedSettings);
 
     }

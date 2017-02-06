@@ -73,13 +73,6 @@ namespace Retail.BusinessEntity.Data.SQL
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_UpdateStatusID", accountId, statusId);
             return (affectedRecords > 0);
         }
-
-        public bool UpdateExecutedActions(long accountId, ExecutedActions executedAction)
-        {
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_UpdateExecutedActions", accountId, Vanrise.Common.Serializer.Serialize(executedAction));
-            return (affectedRecords > 0);
-        }
-
         #endregion
 
         #region Mappers
@@ -93,7 +86,6 @@ namespace Retail.BusinessEntity.Data.SQL
                 TypeId = GetReaderValue<Guid>(reader, "TypeID"),
                 Settings = Vanrise.Common.Serializer.Deserialize<AccountSettings>(reader["Settings"] as string),
                 ParentAccountId = GetReaderValue<long?>(reader, "ParentID"),
-                ExecutedActions = reader["ExecutedActionsData"] as string != null ? Vanrise.Common.Serializer.Deserialize<ExecutedActions>(reader["ExecutedActionsData"] as string) : null,
                 StatusId = GetReaderValue<Guid>(reader, "StatusID"),
                 SourceId = reader["SourceID"] as string,
                 ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, BaseAccountExtendedSettings>

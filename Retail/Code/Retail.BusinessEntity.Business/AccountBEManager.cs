@@ -359,17 +359,6 @@ namespace Retail.BusinessEntity.Business
             var account = GetAccount(accountBEDefinitionId, accountId.Value);
             return GetFinancialAccountId(accountBEDefinitionId, account.ParentAccountId);
         }
-        public bool UpdateExecutedActions(Guid accountBEDefinitionId, long accountId, ExecutedActions executedActions)
-        {
-            IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-            bool updateExecutedAction = dataManager.UpdateExecutedActions(accountId, executedActions);
-            if (updateExecutedAction)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
-            }
-            return updateExecutedAction;
-        }
-
         public bool TryGetAccountPart(Guid accountBEDefinitionId, Account account, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
         {
             if (account.Settings != null && account.Settings.Parts != null && account.Settings.Parts.TryGetValue(partDefinitionId, out accountPart))
@@ -387,7 +376,6 @@ namespace Retail.BusinessEntity.Business
                 return false;
             }
         }
-
         public bool IsFinancial(Account account)
         {
             IAccountPayment accountPayment;
@@ -403,7 +391,6 @@ namespace Retail.BusinessEntity.Business
             }
             return false;
         }
-
         public Account GetSelfOrParentAccountOfType(Guid accountBEDefinitionId, long accountId, Guid accountTypeId)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
@@ -415,7 +402,10 @@ namespace Retail.BusinessEntity.Business
                 return GetSelfOrParentAccountOfType(accountBEDefinitionId, account.ParentAccountId.Value, accountTypeId);
             else return null;
         }
-
+        public bool DeleteAccountExtendedSetting<T>(Guid accountBEDefinitionId, long accountId) where T : BaseAccountExtendedSettings
+        {
+           return  UpdateAccountExtendedSetting<T>(accountBEDefinitionId, accountId, null);
+        }
         public bool UpdateAccountExtendedSetting<T>(Guid accountBEDefinitionId, long accountId, T extendedSettings) where T : BaseAccountExtendedSettings
         {
             Account account = GetAccount(accountBEDefinitionId,accountId);
@@ -426,11 +416,16 @@ namespace Retail.BusinessEntity.Business
             BaseAccountExtendedSettings exitingExtendedSettings;
             if (account.ExtendedSettings.TryGetValue(extendedSettingName, out exitingExtendedSettings))
             {
-                account.ExtendedSettings[extendedSettingName] = extendedSettings;
+                if (extendedSettings == null)
+                    account.ExtendedSettings.Remove(extendedSettingName);
+                else
+                {
+                    account.ExtendedSettings[extendedSettingName] = extendedSettings;
+                }
             }
-            else
+            else if (extendedSettings != null)
             {
-                account.ExtendedSettings.Add(extendedSettingName, extendedSettings);
+               account.ExtendedSettings.Add(extendedSettingName, extendedSettings);
             }
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
             if (dataManager.UpdateExtendedSettings(accountId, account.ExtendedSettings))

@@ -14,7 +14,6 @@ namespace Retail.BusinessEntity.Data
         bool AreAccountServicesUpdated(ref object updateHandle);
         List<AccountService> GetAccountServices();
         bool UpdateStatus(long accountServiceId, Guid statusId);
-        bool UpdateExecutedActions(long accountServiceId, ExecutedActions executedAction);
 
     }
 }
