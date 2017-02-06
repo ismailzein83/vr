@@ -100,6 +100,13 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retail_Zajil\Reports\Reporting.aspx.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Retail_Zajil\Reports\Reporting.aspx.designer.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Zajil\Constant\ModuleConfig.js" />
@@ -115,6 +122,7 @@
     <Content Include="Retail_Zajil\Directives\MainExtensions\Account\Templates\AccountConvertorEditor.html" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Payment\retail-zajil-payment-convertor-editor.js" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Payment\Templates\PaymentConvertorEditor.html" />
+    <Content Include="Retail_Zajil\Reports\Reporting.aspx" />
     <Content Include="Retail_Zajil\Services\OrderDetailService.js" />
     <Content Include="Retail_Zajil\Views\OrderDetail\OrderDetailEditor.html" />
     <Content Include="Retail_Zajil\Views\OrderDetail\OrderDetailEditorController.js" />
@@ -144,6 +152,9 @@
       <Project>{edbaa879-19f5-43da-9205-998e5529ffca}</Project>
       <Name>Retail.Zajil.MainExtensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Retail_Zajil\Reports\SubscriberInvoiceReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
