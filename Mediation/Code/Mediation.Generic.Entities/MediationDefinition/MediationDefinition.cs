@@ -17,9 +17,7 @@ namespace Mediation.Generic.Entities
         public Guid ParsedRecordTypeId { get; set; }
         public Guid CookedRecordTypeId { get; set; }
         public ParsedRecordIdentificationSetting ParsedRecordIdentificationSetting { get; set; }
-        public UpdateCookedFromParsed CookedFromParsedSettings { get; set; }
-        public CookedCDRDataStoreSetting CookedCDRDataStoreSetting { get; set; }
-
+        public ParsedTransformationSettings ParsedTransformationSettings { get; set; }
         public List<MediationOutputHandlerDefinition> OutputHandlers { get; set; }
     }
 
@@ -31,18 +29,11 @@ namespace Mediation.Generic.Entities
 
     }
 
-    public class UpdateCookedFromParsed
+    public class ParsedTransformationSettings
     {
         public Guid TransformationDefinitionId { get; set; }
 
         public string ParsedRecordName { get; set; }
-
-        public string CookedRecordName { get; set; }
-    }
-
-    public class CookedCDRDataStoreSetting
-    {
-        public Guid DataRecordStorageId { get; set; }
     }
 
     public class MediationOutputHandlerDefinition
@@ -51,6 +42,4 @@ namespace Mediation.Generic.Entities
 
         public MediationOutputHandler Handler { get; set; }
     }
-
-   
 }

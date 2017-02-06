@@ -56,10 +56,10 @@ namespace Mediation.Generic.BP.Activities
                 {
                     hasItems = inputArgument.MediationRecordsBatch.TryDequeue((mediationRecordBatch) =>
                     {
-                        var transformationOutput = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.CookedFromParsedSettings.TransformationDefinitionId, (context) =>
+                        var transformationOutput = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.ParsedTransformationSettings.TransformationDefinitionId, (context) =>
                         {
                             var details = mediationRecordBatch.MediationRecords.Select(m => m.EventDetails).ToList();
-                            context.SetRecordValue(inputArgument.MediationDefinition.CookedFromParsedSettings.ParsedRecordName, details);
+                            context.SetRecordValue(inputArgument.MediationDefinition.ParsedTransformationSettings.ParsedRecordName, details);
                         });
 
                         foreach (var processHandler in processHandlers)
