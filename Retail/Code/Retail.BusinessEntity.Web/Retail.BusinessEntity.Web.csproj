@@ -328,9 +328,6 @@
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\Templates\PackageDefinitionSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\retail-be-packagedefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\retail-be-packagedefinition-settings.js" />
-    <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\Templates\InvoiceSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\retail-be-invoice-setting-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\InvoiceSettings\retail-be-invoicesettings-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-activatetelesswitch.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-blocktelesswitch.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-changeroutinggroup.js" />

@@ -25,27 +25,24 @@ namespace Retail.Invoice.Business
             switch (context.InfoType)
             {
                 case "MailTemplate":
-                    Guid invoiceTemplateId = Guid.Empty;
-                    var invoiceDetails = context.Invoice.Details as RetailSubscriberInvoiceDetails;
                     long accountId = Convert.ToInt32(context.Invoice.PartnerId);
-
                     AccountBEManager accountBEManager = new AccountBEManager();
                     var account = accountBEManager.GetAccount(this.AcountBEDefinitionId, accountId);
-                    invoiceTemplateId = accountBEManager.GetDefaultInvoiceEmailId(accountId);
-
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("Account", account);
                     objects.Add("Invoice", context.Invoice);
-                    VRMailManager vrMailManager = new VRMailManager();
-                    VRMailEvaluatedTemplate template = vrMailManager.EvaluateMailTemplate(invoiceTemplateId, objects);
-                    return template;
+                    return objects;
             }
             return null;
         }
 
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
-            throw new NotImplementedException();
+            long accountId = Convert.ToInt32(context.PartnerId);
+            AccountBEManager accountBEManager = new AccountBEManager();
+            var account = accountBEManager.GetAccount(this.AcountBEDefinitionId, accountId);
+            context.PartnerCreationDate = account.CreatedTime;
+
         }
 
         public override InvoiceGenerator GetInvoiceGenerator()
@@ -60,7 +57,11 @@ namespace Retail.Invoice.Business
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
-            throw new NotImplementedException();
+            AccountBEManager accountBEManager = new AccountBEManager();
+            var financialAccounts = accountBEManager.GetFinancialAccounts(this.AcountBEDefinitionId);
+            if (financialAccounts == null)
+                return null;
+            return financialAccounts.Select(x => x.AccountId.ToString());
         }
     }
 }

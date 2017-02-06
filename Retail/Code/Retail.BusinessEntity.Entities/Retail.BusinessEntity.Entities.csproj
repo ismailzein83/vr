@@ -125,7 +125,6 @@
     <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />
     <Compile Include="IAccountBEDefinitionManager.cs" />
     <Compile Include="Settings\DIDTechnicalSettings.cs" />
-    <Compile Include="Settings\InvoiceSettings.cs" />
     <Compile Include="Package\Definition\PackageDefinition.cs" />
     <Compile Include="Package\Definition\PackageDefinitionConfig.cs" />
     <Compile Include="Package\Definition\PackageDefinitionExtendedSettings.cs" />

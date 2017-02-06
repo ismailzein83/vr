@@ -34,6 +34,7 @@ namespace Retail.BusinessEntity.Entities
         public long? ParentAccountId { get; set; }
         public string SourceId { get; set; }
         public Dictionary<string, BaseAccountExtendedSettings> ExtendedSettings { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 
     public class AccountToInsert : BaseAccount

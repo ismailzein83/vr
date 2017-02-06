@@ -125,7 +125,7 @@ namespace Retail.Invoice.Business
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = 8,
+                    TableId = 9,
                     FromTime = fromDate,
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),

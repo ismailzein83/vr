@@ -88,8 +88,8 @@ namespace Retail.BusinessEntity.Data.SQL
                 ParentAccountId = GetReaderValue<long?>(reader, "ParentID"),
                 StatusId = GetReaderValue<Guid>(reader, "StatusID"),
                 SourceId = reader["SourceID"] as string,
-                ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, BaseAccountExtendedSettings>
-
+                ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, BaseAccountExtendedSettings>,
+                CreatedTime = GetReaderValue<DateTime>(reader,"CreatedTime")
             };
         }
 

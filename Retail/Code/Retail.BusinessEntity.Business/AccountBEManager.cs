@@ -312,23 +312,10 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        public int GetAccountDuePeriod(long accountId)
-        {
-            return 0;
-        }
-
         public CompanySetting GetCompanySetting(long accountId)
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             return configManager.GetDefaultCompanySetting();
-        }
-
-        public Guid GetDefaultInvoiceEmailId(long accountId)
-        {
-            var retailSubscriberInvoiceSettings = GetRetailDefaulSubscriberInvoiceSettings();
-            if (retailSubscriberInvoiceSettings == null)
-                throw new NullReferenceException("retailSubscriberInvoiceSettings");
-            return retailSubscriberInvoiceSettings.DefaultEmailId;
         }
 
         public Account GetAccountBySourceId(Guid accountBEDefinitionId, string sourceId)
@@ -358,6 +345,20 @@ namespace Retail.BusinessEntity.Business
 
             var account = GetAccount(accountBEDefinitionId, accountId.Value);
             return GetFinancialAccountId(accountBEDefinitionId, account.ParentAccountId);
+        }
+        public IEnumerable<Account> GetFinancialAccounts(Guid accountBEDefinitionId)
+        {
+            var accounts = GetCachedAccounts(accountBEDefinitionId);
+            if(accounts == null)
+                return null;
+           
+            var financialAccounts = accounts.Values.FindAllRecords(x =>
+                {
+                    if (IsFinancial(x))
+                        return true;
+                    return false;
+                });
+            return financialAccounts;
         }
         public bool TryGetAccountPart(Guid accountBEDefinitionId, Account account, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
         {
@@ -516,22 +517,6 @@ namespace Retail.BusinessEntity.Business
                     }
                     return treeNodes;
                 });
-        }
-
-        private SubscriberInvoiceSettings GetRetailDefaulSubscriberInvoiceSettings()
-        {
-            SettingManager settingManager = new SettingManager();
-            InvoiceSettings settings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
-
-            if (settings == null || settings.SubscriberInvoiceSettings == null)
-                throw new NullReferenceException("setting.SubscriberInvoiceSettings");
-
-            foreach (var item in settings.SubscriberInvoiceSettings)
-            {
-                if (item.IsDefault)
-                    return item;
-            }
-            throw new NullReferenceException("setting.SubscriberInvoiceSettings");
         }
 
         #endregion
