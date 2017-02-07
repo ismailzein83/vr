@@ -426,7 +426,7 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
-Delete from [common].[Setting] where [ID]='682c68ef-5687-47f1-957c-0150a6132f7e'
+Delete from [common].[Setting] where [ID] in ('682c68ef-5687-47f1-957c-0150a6132f7e','547C43CD-58D2-45A3-BF87-F97E93C1DB9A')--old Product Info GUID
 --[common].[Setting]---------------------------201 to 300-------------------------------------------
 BEGIN
 set nocount on;
