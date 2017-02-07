@@ -63,6 +63,7 @@ app.directive("retailBeAccountsynchronizerhandlerPortalaccount", ["UtilsService"
                     var name;
                     var email;
                     var connectionId;
+                    var tenantId;
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
@@ -71,6 +72,7 @@ app.directive("retailBeAccountsynchronizerhandlerPortalaccount", ["UtilsService"
                             name = payload.Settings.AccountNameMappingField;
                             email = payload.Settings.AccountEmailMappingField;
                             connectionId = payload.Settings.ConnectionId;
+                            tenantId = payload.Settings.TenantId;
                         }
                     }
 
@@ -82,9 +84,12 @@ app.directive("retailBeAccountsynchronizerhandlerPortalaccount", ["UtilsService"
                     var emailAccountGenericFieldDefinitionSelectorLoadPromise = getEmailAccountGenericFieldDefinitionSelectorLoadPromise();
                     promises.push(emailAccountGenericFieldDefinitionSelectorLoadPromise);
 
-                    //Loading Email selector
+                    //Loading ConnectionId selector
                     var connectionSelectorLoadPromise = getConnectionSelectorLoadPromise();
                     promises.push(connectionSelectorLoadPromise);
+
+                    //Loading TenantId
+                    $scope.scopeModel.tenantId = tenantId != undefined ? tenantId : 1;
 
 
                     function getNameAccountGenericFieldDefinitionSelectorLoadPromise() {
@@ -153,7 +158,8 @@ app.directive("retailBeAccountsynchronizerhandlerPortalaccount", ["UtilsService"
                         $type: "Retail.BusinessEntity.MainExtensions.AccountSynchronizerInsertHandlers.PortalAccountInsertHandler, Retail.BusinessEntity.MainExtensions",
                         AccountNameMappingField: nameAccountGenericField != undefined ? nameAccountGenericField.Name : undefined,
                         AccountEmailMappingField: emailAccountGenericField != undefined ? emailAccountGenericField.Name : undefined,
-                        ConnectionId: connectionSelectorAPI.getSelectedIds()
+                        ConnectionId: connectionSelectorAPI.getSelectedIds(),
+                        TenantId: $scope.scopeModel.tenantId
                     };
                     return obj;
                 };
@@ -165,4 +171,4 @@ app.directive("retailBeAccountsynchronizerhandlerPortalaccount", ["UtilsService"
 
         return directiveDefinitionObject;
     }
-]);
+]); 

@@ -4,10 +4,14 @@
 
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                    <span vr-disabled="true">
+                        <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                    </span>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.email" label="Email" isrequired></vr-textbox>
+                    <span vr-disabled="true">
+                        <vr-textbox value="scopeModel.email" label="Email" isrequired></vr-textbox>
+                    </span>
                 </vr-columns>
             </vr-row>
 
@@ -17,7 +21,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Save" data-onclick="scopeModel.save" formname="formPortalAccountEditor" haspermission="hasSavePortalAccountPermission"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+                <vr-button type="Close" customlabel="Create User" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>

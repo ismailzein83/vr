@@ -12,51 +12,57 @@ namespace Retail.BusinessEntity.Business
 {
     public class PortalAccountManager
     {
-        public Vanrise.Entities.InsertOperationOutput<PortalAccountSettings> AddPortalAccount(Guid accountBEDefinitionId, long accountId, string name, string email, Guid connectionId)
+        public Vanrise.Entities.InsertOperationOutput<PortalAccountSettings> AddPortalAccount(Guid accountBEDefinitionId, long accountId, string name, string email, Guid connectionId, int tenantId)
         {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PortalAccountSettings>();
+            insertOperationOutput.InsertedObject = null;
+
             VRConnectionManager connectionManager = new VRConnectionManager();
-            var vrConnection = connectionManager.GetVRConnection(connectionId);
-
-            if (vrConnection == null)
-                throw new NullReferenceException("vrConnection");
-
-            if (vrConnection.Settings == null)
-                throw new NullReferenceException("vrConnection.Settings");
-
+            var vrConnection = connectionManager.GetVRConnectionByType<VRInterAppRestConnection>(connectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-            if (connectionSettings == null)
-                throw new Exception(String.Format("vrConnection.Settings is not of type VRInterAppRestConnection. it is of type '{0}'.", vrConnection.Settings.GetType()));
 
             var retailAccount = new PartnerPortal.CustomerAccess.Entities.RetailAccount()
             {
                 AccountId = accountId,
                 Name = name,
-                Email = email
+                Email = email,
+                TenantId = tenantId
             };
 
-            InsertOperationOutput<UserDetail> userDetails = 
+            InsertOperationOutput<UserDetail> userDetails =
                 connectionSettings.Post<PartnerPortal.CustomerAccess.Entities.RetailAccount, InsertOperationOutput<UserDetail>>("/api/PartnerPortal_CustomerAccess/RetailAccountUser/AddRetailAccountUser", retailAccount);
 
-            PortalAccountSettings portalAccountSettings = null;
-            if (userDetails != null && userDetails.InsertedObject != null && userDetails.InsertedObject.Entity != null)
-            {
-                portalAccountSettings = new PortalAccountSettings()
-                {
-                    UserId = userDetails.InsertedObject.Entity.UserId,
-                    Name = userDetails.InsertedObject.Entity.Name,
-                    Email = userDetails.InsertedObject.Entity.Email
-                };
-            }
+            insertOperationOutput.Result = userDetails.Result;
+            insertOperationOutput.Message = userDetails.Message;
 
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PortalAccountSettings>();
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-
-            bool IsAccountExtendedSettingsUpdated = new AccountBEManager().UpdateAccountExtendedSetting(accountBEDefinitionId, accountId, portalAccountSettings);
-            if (portalAccountSettings != null)
+            switch (userDetails.Result)
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = portalAccountSettings;
+                case InsertOperationResult.Succeeded:
+                    PortalAccountSettings portalAccountSettings = new PortalAccountSettings()
+                    {
+                        UserId = userDetails.InsertedObject.Entity.UserId,
+                        Name = userDetails.InsertedObject.Entity.Name,
+                        Email = userDetails.InsertedObject.Entity.Email,
+                        TenantId = userDetails.InsertedObject.Entity.TenantId
+                    };
+
+                    bool IsAccountExtendedSettingsUpdated = new AccountBEManager().UpdateAccountExtendedSetting(accountBEDefinitionId, accountId, portalAccountSettings);
+                    if (IsAccountExtendedSettingsUpdated)
+                    {
+                        insertOperationOutput.InsertedObject = portalAccountSettings;
+                    }
+                    else
+                    {
+                        insertOperationOutput.Result = InsertOperationResult.Failed;
+                        insertOperationOutput.Message = "Update Retail Account has failed";
+                    }
+                    break;
+
+
+                case InsertOperationResult.Failed:
+                case InsertOperationResult.SameExists:
+                default: break;
+
             }
 
             return insertOperationOutput;

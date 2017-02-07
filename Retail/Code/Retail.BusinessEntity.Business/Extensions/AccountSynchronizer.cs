@@ -93,7 +93,12 @@ namespace Retail.BusinessEntity.Business
             s_accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId, true);
             if (accountId > 0)
             {
+                AccountBEManager accountManager = new AccountBEManager();
                 accountData.Account.AccountId = accountId;
+                var cachedAccounts = accountManager.GetCachedAccounts(this.AccountBEDefinitionId);
+                if (!cachedAccounts.ContainsKey((accountId)))
+                    cachedAccounts.Add(accountId, accountData.Account);
+
                 if (accountData.IdentificationRulesToInsert != null)
                     foreach (MappingRule mappingRule in accountData.IdentificationRulesToInsert)
                     {

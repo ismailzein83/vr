@@ -22,8 +22,9 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
             }
         }
 
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public string AccountNameMappingField { get; set; }
+        public string AccountEmailMappingField { get; set; }
         public Guid ConnectionId { get; set; }
+        public int TenantId { get; set; }
     }
 } 

@@ -36,6 +36,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.sectionMenuActions = [];
                 $scope.scopeModel.isPortalUserAccountCreated = false;
 
                 $scope.scopeModel.onPortalAccountAdded = function () {
@@ -64,6 +65,7 @@
                         parentAccountId = payload.parentAccountId;
                     }
 
+
                     Retail_BE_PortalAccountAPIService.GetPortalUserAccount(accountBEDefinitionId, parentAccountId).then(function (response) {
                         if (response != undefined) {
                             $scope.scopeModel.isPortalUserAccountCreated = true;
@@ -71,6 +73,13 @@
                             $scope.scopeModel.userId = portalAccountSettings.UserId;
                             $scope.scopeModel.name = portalAccountSettings.Name;
                             $scope.scopeModel.email = portalAccountSettings.Email;
+                        }
+                        else {
+                            $scope.scopeModel.sectionMenuActions.push({
+                                name: 'Add Portal Account',
+                                clicked: $scope.scopeModel.onPortalAccountAdded
+                                //haspermission: hasEditDIDPermission
+                            })
                         }
                     });
                 };
@@ -86,20 +95,26 @@
                         if (accountViewDefinition == undefined || accountViewDefinition.Settings == undefined)
                             return;
 
-                        return accountViewDefinition.Settings.Name;
+                        return accountViewDefinition.Settings.AccountNameMappingField;
                     },
                     getEmail: function () {
                         if (accountViewDefinition == undefined || accountViewDefinition.Settings == undefined)
                             return;
 
-                        return accountViewDefinition.Settings.Email;
+                        return accountViewDefinition.Settings.AccountEmailMappingField;
                     },
                     getConnectionId: function () {
                         if (accountViewDefinition == undefined || accountViewDefinition.Settings == undefined)
                             return;
 
                         return accountViewDefinition.Settings.ConnectionId;
-                    }
+                    },
+                    getTenantId: function () {
+                        if (accountViewDefinition == undefined || accountViewDefinition.Settings == undefined)
+                            return;
+
+                        return accountViewDefinition.Settings.TenantId;
+                    },
                 }
                 return context;
             }

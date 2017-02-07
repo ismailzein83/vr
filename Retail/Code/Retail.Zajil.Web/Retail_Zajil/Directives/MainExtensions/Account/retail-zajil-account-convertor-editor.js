@@ -157,7 +157,7 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         siteAccountTypeId = payload.SiteAccountTypeId;
 
                         accountBEDefinitionId = payload.AccountBEDefinitionId;
-                        console.log(accountBEDefinitionId);
+
                         var siteAccountTypeSelectorPayload = {
                             filter: {
                                 AccountBEDefinitionId: accountBEDefinitionId
@@ -301,8 +301,6 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             }
 
             function loadSiteAccountTypeSelector(accountTypeSelectorPayload) {
-                console.log(accountTypeSelectorPayload);
-
                 var siteAccountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 UtilsService.waitMultiplePromises([siteAccountTypeSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {

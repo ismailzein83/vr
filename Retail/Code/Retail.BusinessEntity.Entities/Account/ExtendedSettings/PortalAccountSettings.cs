@@ -11,5 +11,6 @@ namespace Retail.BusinessEntity.Entities
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public int TenantId { get; set; }
     }
 }

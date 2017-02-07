@@ -63,12 +63,17 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                     var name;
                     var email;
                     var connectionId;
+                    var tenantId;
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
-                        name = payload.accountViewDefinitionSettings != undefined ? payload.accountViewDefinitionSettings.Name : undefined;
-                        email = payload.accountViewDefinitionSettings != undefined ? payload.accountViewDefinitionSettings.Email : undefined;
-                        connectionId = payload.accountViewDefinitionSettings != undefined ? payload.accountViewDefinitionSettings.ConnectionId : undefined;
+
+                        if (payload.accountViewDefinitionSettings != undefined) {
+                            name = payload.accountViewDefinitionSettings.AccountNameMappingField;
+                            email = payload.accountViewDefinitionSettings.AccountEmailMappingField;
+                            connectionId = payload.accountViewDefinitionSettings.ConnectionId;
+                            tenantId = payload.accountViewDefinitionSettings.TenantId;
+                        }
                     }
 
                     //Loading Name selector
@@ -79,11 +84,14 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                     var emailAccountGenericFieldDefinitionSelectorLoadPromise = getEmailAccountGenericFieldDefinitionSelectorLoadPromise();
                     promises.push(emailAccountGenericFieldDefinitionSelectorLoadPromise);
 
-                    //Loading Email selector
+                    //Loading ConnectionId selector
                     var connectionSelectorLoadPromise = getConnectionSelectorLoadPromise();
                     promises.push(connectionSelectorLoadPromise);
 
+                    //Loading TenantId
+                    $scope.scopeModel.tenantId = tenantId != undefined ? tenantId : 1;
 
+                     
                     function getNameAccountGenericFieldDefinitionSelectorLoadPromise() {
                         var nameAccountGenericFieldDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -148,9 +156,10 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
 
                     var obj = {
                         $type: "Retail.BusinessEntity.MainExtensions.AccountViews.PortalAccount, Retail.BusinessEntity.MainExtensions",
-                        Name: nameAccountGenericField != undefined ? nameAccountGenericField.Name : undefined,
-                        Email: emailAccountGenericField != undefined ? emailAccountGenericField.Name : undefined,
-                        ConnectionId: connectionSelectorAPI.getSelectedIds()
+                        AccountNameMappingField: nameAccountGenericField != undefined ? nameAccountGenericField.Name : undefined,
+                        AccountEmailMappingField: emailAccountGenericField != undefined ? emailAccountGenericField.Name : undefined,
+                        ConnectionId: connectionSelectorAPI.getSelectedIds(),
+                        TenantId: $scope.scopeModel.tenantId
                     };
                     return obj;
                 };

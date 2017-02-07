@@ -201,14 +201,16 @@ namespace Retail.BusinessEntity.Business
                     return fields.ToDictionary(fld => fld.Name, fld => fld);
                 });
         }
-        public Dictionary<string, object> GetAccountGenericFieldValues(Guid accountBEDefinitionId, long accountId, List<string> accountGenericFieldNames)
+        public Dictionary<string, object> GetAccountGenericFieldValues(Guid accountBEDefinitionId, Account account, List<string> accountGenericFieldNames)
         {
+            if (account == null)
+                throw new NullReferenceException("account");
+
             if (accountGenericFieldNames == null)
                 return null;
 
             Dictionary<string, object> results = new Dictionary<string, object>();
             Dictionary<string, AccountGenericField> accountGenericFields = this.GetAccountGenericFields(accountBEDefinitionId);
-            Account account = new AccountBEManager().GetAccount(accountBEDefinitionId, accountId);
             AccountGenericFieldContext accountGenericFieldContext = new AccountGenericFieldContext(account);
 
             AccountGenericField accountGenericField;
@@ -216,12 +218,20 @@ namespace Retail.BusinessEntity.Business
             {
                 if (accountGenericFields.TryGetValue(name, out accountGenericField))
                 {
-                    if(!results.ContainsKey(name))
+                    if (!results.ContainsKey(name))
                         results.Add(name, accountGenericField.GetValue(accountGenericFieldContext));
                 }
             }
 
             return results;
+        }
+        public Dictionary<string, object> GetAccountGenericFieldValues(Guid accountBEDefinitionId, long accountId, List<string> accountGenericFieldNames)
+        {
+            Account account = new AccountBEManager().GetAccount(accountBEDefinitionId, accountId);
+            if (account == null)
+                throw new NullReferenceException(string.Format("account of accountBEDefinitionId : {0} and accountId : {1}", accountBEDefinitionId, accountId));
+
+            return this.GetAccountGenericFieldValues(accountBEDefinitionId, account, accountGenericFieldNames);
         }
 
         public AccountGenericField GetAccountGenericField(Guid accountBEDefinitionId, string fieldName)

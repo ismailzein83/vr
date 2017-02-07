@@ -6,16 +6,12 @@
 
     function portalAccountEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_AccountTypeAPIService, Retail_BE_PortalAccountAPIService) {
 
-        var isEditMode;
-
-        var portalAccountId;
-        var portalAccountEntity;
-
         var accountBEDefinitionId;
         var parentAccountId;
         var name;
         var email;
         var connectionId;
+        var tenantId;
         var accountGenericFieldValuesByName;
 
         loadParameters();
@@ -26,70 +22,41 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                //portalAccountId = parameters.portalAccountId;
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 parentAccountId = parameters.parentAccountId;
-
 
                 var context = parameters.context;
                 if (context != undefined) {
                     name = context.getName();
                     email = context.getEmail();
-                    connectionId = context.getConnectionId()
+                    connectionId = context.getConnectionId();
+                    tenantId = context.getTenantId();
                 }
             }
-
-            isEditMode = (portalAccountId != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.save = function () {
-                if (isEditMode) {
-                    return updatePortalAccount();
-                }
-                else {
-                    return insertPortalAccount();
-                }
+                return insertPortalAccount();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
 
             $scope.scopeModel.hasSavePortalAccountPermission = function () {
-                if ($scope.scopeModel.isEditMode)
-                    return Retail_BE_PortalAccountAPIService.HasUpdatePortalAccountPermission();
-                else
-                    return Retail_BE_PortalAccountAPIService.HasAddPortalAccountPermission();
+                return Retail_BE_PortalAccountAPIService.HasAddPortalAccountPermission();
             };
         }
         function load() {
             $scope.scopeModel.isLoading = true;
 
             getAccountGenericFieldValues().then(function () {
-                loadAllControls()
-                //.finally(function () {
-                //    portalAccountEntity = undefined;
-                //});
+                loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoading = false;
             });
-
-            //if (isEditMode) {
-            //    getPortalAccount().then(function () {
-            //        loadAllControls()
-            //            .finally(function () {
-            //                portalAccountEntity = undefined;
-            //            });
-            //    }).catch(function (error) {
-            //        VRNotificationService.notifyExceptionWithClose(error, $scope);
-            //        $scope.scopeModel.isLoading = false;
-            //    });
-            //}
-            //else {
-            //    loadAllControls();
-            //}
         }
 
         function getAccountGenericFieldValues() {
@@ -113,7 +80,7 @@
                });
         }
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(portalAccountEntity ? portalAccountEntity.Number : undefined, 'PortalAccount') : UtilsService.buildTitleForAddEditor('PortalAccount');
+            $scope.title = UtilsService.buildTitleForAddEditor('PortalAccount');
         }
         function loadStaticData() {
             if (accountGenericFieldValuesByName == undefined)
@@ -128,26 +95,9 @@
 
             return Retail_BE_PortalAccountAPIService.AddPortalAccount(buildPortalAccountObjFromScope())
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("PortalAccount", response, "Name")) {
+                    if (VRNotificationService.notifyOnItemAdded("Portal Account", response, "Email")) {
                         if ($scope.onPortalAccountAdded != undefined)
                             $scope.onPortalAccountAdded(response.InsertedObject);
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
-        }
-        function updatePortalAccount() {
-            $scope.scopeModel.isLoading = true;
-
-            return Retail_BE_PortalAccountAPIService.UpdatePortalAccount(buildPortalAccountObjFromScope())
-                .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("PortalAccount", response, "Name")) {
-                        if ($scope.onPortalAccountUpdated != undefined)
-                            $scope.onPortalAccountUpdated(response.UpdatedObject);
-
                         $scope.modalContext.closeModal();
                     }
                 }).catch(function (error) {
@@ -163,7 +113,8 @@
                 AccountId: parentAccountId,
                 Name: accountGenericFieldValuesByName ? accountGenericFieldValuesByName[name] : undefined,
                 Email: accountGenericFieldValuesByName ? accountGenericFieldValuesByName[email] : undefined,
-                ConnectionId: connectionId
+                ConnectionId: connectionId,
+                TenantId: tenantId
             };
             return obj;
         }

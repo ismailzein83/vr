@@ -19,7 +19,8 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("AddPortalAccount")]
         public Vanrise.Entities.InsertOperationOutput<PortalAccountSettings> AddPortalAccount(PortalAccountEditorObject portalAccountEditorObject)
         {
-            return _manager.AddPortalAccount(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountId, portalAccountEditorObject.Name, portalAccountEditorObject.Email, portalAccountEditorObject.ConnectionId);
+            return _manager.AddPortalAccount(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountId, portalAccountEditorObject.Name, portalAccountEditorObject.Email, 
+                                             portalAccountEditorObject.ConnectionId, portalAccountEditorObject.TenantId);
         }
 
         [HttpGet]
@@ -41,5 +42,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         public string Email { get; set; }
 
         public Guid ConnectionId { get; set; }
+
+        public int TenantId { get; set; }
     }
 }
