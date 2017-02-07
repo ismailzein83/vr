@@ -11,12 +11,14 @@
     [CompletionNotifier] NVARCHAR (MAX)   NULL,
     [ExecutionStatus]    INT              NOT NULL,
     [LastMessage]        NVARCHAR (MAX)   NULL,
-    [EntityId]           VARCHAR (50)     NULL,
+    [EntityId]           VARCHAR (255)    NULL,
     [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
     [StatusUpdatedTime]  DATETIME         NULL,
     [timestamp]          ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

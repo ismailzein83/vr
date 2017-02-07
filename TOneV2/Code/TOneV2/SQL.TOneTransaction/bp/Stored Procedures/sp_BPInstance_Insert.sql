@@ -11,7 +11,7 @@ CREATE PROCEDURE [bp].[sp_BPInstance_Insert]
 	@CompletionNotifier nvarchar(max),
 	@ExecutionStatus int,
 	@InitiatorUserId int,
-	@EntityId varchar(50),
+	@EntityId varchar(255),
 	@ID bigint out
 	
 AS
