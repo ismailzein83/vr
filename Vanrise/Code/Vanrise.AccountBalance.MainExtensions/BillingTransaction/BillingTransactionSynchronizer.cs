@@ -31,9 +31,10 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
             BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
             foreach (var targetBillingTransaction in context.TargetBE)
             {
+                long billingTransactionId = -1;
                 SourceBillingTransaction sourceTransaction = targetBillingTransaction as SourceBillingTransaction;
                 sourceTransaction.BillingTransaction.AccountTypeId = this.BalanceAccountTypeId;
-                billingTransactionManager.AddBillingTransaction(sourceTransaction.BillingTransaction);
+                billingTransactionManager.TryAddBillingTransaction(sourceTransaction.BillingTransaction, out billingTransactionId);
             }
         }
 

@@ -18,7 +18,7 @@ namespace Vanrise.AccountBalance.Entities
 
         public object SourceBEId
         {
-            get { throw new NotImplementedException(); }
+            get { return this.BillingTransaction.SourceId; }
         }
     }
 }

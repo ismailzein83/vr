@@ -113,7 +113,7 @@
             return '<vr-row><vr-columns colnum="{{targetbesynchronizerCtrl.normalColNum}}">'
                    + '<vr-select on-ready="onSelectorReady" datasource="extensionConfigs" selectedvalues="selectedExtensionConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" ' + label + ' isrequired="targetbesynchronizerCtrl.isrequired" hideremoveicon></vr-select>'
                + '</vr-columns></vr-row>'
-               + '<vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{targetbesynchronizerCtrl.normalColNum}}" isrequired="targetbesynchronizerCtrl.isrequired" customvalidate="targetbesynchronizerCtrl.customvalidate"></vr-directivewrapper>';
+               + '<vr-row><vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{targetbesynchronizerCtrl.normalColNum}}" isrequired="targetbesynchronizerCtrl.isrequired" customvalidate="targetbesynchronizerCtrl.customvalidate"></vr-directivewrapper></vr-row>';
         }
     }
 
