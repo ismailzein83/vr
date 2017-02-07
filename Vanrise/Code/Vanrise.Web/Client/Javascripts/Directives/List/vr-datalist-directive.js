@@ -86,7 +86,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
                              + '<span style="left: 22px;top: 6px;position:absolute" class="hand-cursor glyphicon" ng-show="VRDatalistCtrl.collapsible" ng-init="expande=true" ng-click="expande=!expande" ng-class="expande?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'"></span>'
                              + '<span style="left: 40px;top: 3px;position:absolute" ng-show="!expande" ng-if="VRDatalistCtrl.collapsible && dataItem.title"><vr-label>{{dataItem.title}}</vr-label></span>'
                              + draggableIconTemplate
-                             + '<div ' + onItemClickedAttr + ' style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden; padding:0px 10px;white-space: nowrap;"' + title + ' ng-show="expande==true">' + element.html() + '</div>'
+                             + '<div ' + onItemClickedAttr + ' style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden; padding:0px 0px;white-space: nowrap;"' + title + ' ng-show="expande==true">' + element.html() + '</div>'
                              + '</vr-listitem>'
                             + '</div>'
                            + '</vr-list>';
