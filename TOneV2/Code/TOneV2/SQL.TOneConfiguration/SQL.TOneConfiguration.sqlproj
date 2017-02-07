@@ -502,6 +502,7 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_Update.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_Insert.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_GetAll.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
