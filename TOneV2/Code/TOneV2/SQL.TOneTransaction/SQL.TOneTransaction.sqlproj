@@ -170,15 +170,6 @@
     <Build Include="common\Stored Procedures\sp_BigDataService_Update.sql" />
     <Build Include="Security\common.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_Delete.sql" />
-    <Build Include="runtime\Tables\LockService.sql" />
-    <Build Include="runtime\Tables\FreezedTransactionLock.sql" />
-    <Build Include="runtime\Stored Procedures\sp_LockService_UpdateServiceURL.sql" />
-    <Build Include="runtime\Stored Procedures\sp_LockService_UpdateLockingDetails.sql" />
-    <Build Include="runtime\Stored Procedures\sp_LockService_TryLock.sql" />
-    <Build Include="runtime\Stored Procedures\sp_LockService_GetServiceURL.sql" />
-    <Build Include="runtime\Stored Procedures\sp_FreezedTransactionLock_Insert.sql" />
-    <Build Include="runtime\Stored Procedures\sp_FreezedTransactionLock_GetAll.sql" />
-    <Build Include="runtime\Stored Procedures\sp_FreezedTransactionLock_DeleteBeforeId.sql" />
     <Build Include="queue\Tables\SummaryBatchActivator.sql" />
     <Build Include="queue\Tables\QueueActivatorInstance.sql" />
     <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_Insert.sql" />
@@ -219,6 +210,11 @@
     <Build Include="VRNotification\Stored Procedures\sp_VRNotification_Insert.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotification_GetByNotificationType.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotification_GetById.sql" />
+    <Build Include="runtime\Tables\TransactionLock.sql" />
+    <Build Include="runtime\Stored Procedures\sp_TransactionLock_Insert.sql" />
+    <Build Include="runtime\Stored Procedures\sp_TransactionLock_GetForNotRunningProcesses.sql" />
+    <Build Include="runtime\Stored Procedures\sp_TransactionLock_GetAll.sql" />
+    <Build Include="runtime\Stored Procedures\sp_TransactionLock_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
