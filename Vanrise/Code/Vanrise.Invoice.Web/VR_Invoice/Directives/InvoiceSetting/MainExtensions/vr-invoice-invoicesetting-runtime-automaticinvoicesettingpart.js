@@ -57,6 +57,8 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoicesettingpart', ['Uti
                         if (payload.fieldValue != undefined)
                         {
                             $scope.scopeModel.enableAutomaticInvoice = payload.fieldValue.IsEnabled;
+                            if( currentContext != undefined && currentContext.setRequiredBillingPeriod != undefined)
+                                currentContext.setRequiredBillingPeriod($scope.scopeModel.enableAutomaticInvoice);
                         }
                     }
                 };

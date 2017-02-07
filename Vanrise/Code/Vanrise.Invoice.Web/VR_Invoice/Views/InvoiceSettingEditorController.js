@@ -168,7 +168,7 @@
 
         function getContext()
         {
-            var requiredBillingPeriod = true;
+            var requiredBillingPeriod = false;
             var context = {
                 setRequiredBillingPeriod:function(value)
                 {
