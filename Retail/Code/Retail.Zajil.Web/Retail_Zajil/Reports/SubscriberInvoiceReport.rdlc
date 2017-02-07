@@ -670,7 +670,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!FromDate.Value</Value>
+                <Value>=CDate(Parameters!FromDate.Value).ToString("dd/MM/yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -738,7 +738,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!ToDate.Value</Value>
+                <Value>=CDate(Parameters!ToDate.Value).ToString("dd/MM/yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -893,7 +893,7 @@ Zajil International Telecom Company K.S.C.C
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>= Parameters!Currency.Value + Parameters!TotalAmount.Value</Value>
+                <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -961,7 +961,7 @@ Zajil International Telecom Company K.S.C.C
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>= Parameters!Currency.Value + "0.000"</Value>
+                <Value>= Parameters!Currency.Value + " 0.000"</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -1029,7 +1029,7 @@ Zajil International Telecom Company K.S.C.C
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>= Parameters!Currency.Value + "0.000"</Value>
+                <Value>= Parameters!Currency.Value + " 0.000"</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -1097,7 +1097,7 @@ Zajil International Telecom Company K.S.C.C
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>= Parameters!Currency.Value + Parameters!TotalAmount.Value</Value>
+                <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -1496,7 +1496,7 @@ not receive anything in writing with in a week starting from invoice delivery</V
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>= Parameters!Currency.Value + Parameters!TotalAmount.Value</Value>
+                <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -1566,7 +1566,7 @@ not receive anything in writing with in a week starting from invoice delivery</V
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>= Parameters!Currency.Value + Parameters!TotalAmount.Value</Value>
+                <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
