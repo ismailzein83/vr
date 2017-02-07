@@ -12,8 +12,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddPortalAccount'), portalAccountEditorObject);
         }
 
-        function GetPortalUserAccount(accountBEDefinitionId, accountId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetPortalUserAccount'), {
+        function GetPortalAccountSettings(accountBEDefinitionId, accountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetPortalAccountSettings'), {
                 accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId
             });
@@ -22,7 +22,7 @@
 
         return ({
             AddPortalAccount: AddPortalAccount,
-            GetPortalUserAccount: GetPortalUserAccount
+            GetPortalAccountSettings: GetPortalAccountSettings
         });
     }
 

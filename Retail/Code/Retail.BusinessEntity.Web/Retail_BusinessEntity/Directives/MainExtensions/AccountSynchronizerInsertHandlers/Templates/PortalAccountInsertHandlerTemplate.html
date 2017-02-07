@@ -1,22 +1,27 @@
 ﻿
 
-<retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onNameAccountGenericFieldDefinitionSelectorReady"
-                                                   normal-col-num="6"
-                                                   customlabel="Account Name"
-                                                   isrequired="true">
-</retail-be-account-genericfielddefinition-selector>
-<retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onEmailAccountGenericFieldDefinitionSelectorReady"
-                                                   normal-col-num="6"
-                                                   customlabel="Account Email"
-                                                   isrequired="true">
-</retail-be-account-genericfielddefinition-selector>
+<vr-row>
+    <retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onNameAccountGenericFieldDefinitionSelectorReady"
+                                                       normal-col-num="6"
+                                                       customlabel="Account Name"
+                                                       isrequired="true">
+    </retail-be-account-genericfielddefinition-selector>
+    <retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onEmailAccountGenericFieldDefinitionSelectorReady"
+                                                       normal-col-num="6"
+                                                       customlabel="Account Email"
+                                                       isrequired="true">
+    </retail-be-account-genericfielddefinition-selector>
+</vr-row>
+<vr-row>
+    <vr-common-connection-selector on-ready="scopeModel.onConnectionSelectorReady"
+                                   normal-col-num="6"
+                                   isrequired="true">
+    </vr-common-connection-selector>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.tenantId" label="Tenant Id" type="number" decimalprecision="0" isrequired></vr-textbox>
+    </vr-columns>
+</vr-row>
 
-<vr-common-connection-selector on-ready="scopeModel.onConnectionSelectorReady"
-                               normal-col-num="6"
-                               isrequired="true">
-</vr-common-connection-selector>
-<vr-columns width="1/2row">
-    <vr-textbox value="scopeModel.tenantId" label="Tenant Id" type="number" decimalprecision="0" isrequired></vr-textbox>
-</vr-columns>
 
- 
+
+

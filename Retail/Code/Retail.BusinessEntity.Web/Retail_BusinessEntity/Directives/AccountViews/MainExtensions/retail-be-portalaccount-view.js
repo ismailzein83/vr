@@ -66,7 +66,7 @@
                     }
 
 
-                    Retail_BE_PortalAccountAPIService.GetPortalUserAccount(accountBEDefinitionId, parentAccountId).then(function (response) {
+                    Retail_BE_PortalAccountAPIService.GetPortalAccountSettings(accountBEDefinitionId, parentAccountId).then(function (response) {
                         if (response != undefined) {
                             $scope.scopeModel.isPortalUserAccountCreated = true;
                             var portalAccountSettings = response;

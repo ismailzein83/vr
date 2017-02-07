@@ -1,13 +1,25 @@
 ﻿<div vr-modalcontent ng-controller="Retail_BE_AccountSynchronizerInsertHandlerEditoController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formAccountSynchronizerHandlerEditor">
-            <vr-columns width="1/2row">
-                <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
-            </vr-columns>
-            <retail-be-accountsynchronizerhandler-settings on-ready="scopeModel.onAccountSynchronizerHandlerSettingsReady"
-                                                           normal-col-num="6" isrequired="true">
 
-            </retail-be-accountsynchronizerhandler-settings>
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
+                                                          normal-col-num="6">
+                    </retail-be-accountcondition-selective>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <retail-be-accountsynchronizerhandler-settings on-ready="scopeModel.onAccountSynchronizerHandlerSettingsReady"
+                                                                   normal-col-num="6" isrequired="true">
+                    </retail-be-accountsynchronizerhandler-settings>
+                </vr-tab>
+            </vr-tabs>
+
         </vr-form>
     </vr-modalbody>
     <div>

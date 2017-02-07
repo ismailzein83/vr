@@ -11,8 +11,12 @@
 
         var accountSynchronizerHandlerEntity;
 
+        var accountConditionSelectiveAPI;
+        var accountConditionSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         var accountSynchronizerHandlerSettingsAPI;
         var accountSynchronizerHandlerSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -31,6 +35,10 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onAccountConditionSelectiveReady = function (api) {
+                accountConditionSelectiveAPI = api;
+                accountConditionSelectiveReadyDeferred.resolve();
+            };
             $scope.scopeModel.onAccountSynchronizerHandlerSettingsReady = function (api) {
                 accountSynchronizerHandlerSettingsAPI = api;
                 accountSynchronizerHandlerSettingsReadyDeferred.resolve();
@@ -53,7 +61,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountSynchronizerHandlerSettings]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAccountSynchronizerHandlerSettings, loadAccountConditionSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -69,6 +77,22 @@
                 return;
 
             $scope.scopeModel.name = accountSynchronizerHandlerEntity.Name;
+        }
+        function loadAccountConditionSelective() {
+            var accountConditionSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            accountConditionSelectiveReadyDeferred.promise.then(function () {
+
+                var accountConditionSelectivePayload = {
+                    accountBEDefinitionId: accountBEDefinitionId
+                };
+                if (accountSynchronizerHandlerEntity != undefined) {
+                    accountConditionSelectivePayload.beFilter = accountSynchronizerHandlerEntity.AccountCondition;
+                }
+                VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveLoadDeferred);
+            });
+
+            return accountConditionSelectiveLoadDeferred.promise;
         }
         function loadAccountSynchronizerHandlerSettings() {
             var settingsLoadDeferred = UtilsService.createPromiseDeferred();
@@ -109,6 +133,7 @@
             return {
                 Name: $scope.scopeModel.name,
                 AccountSynchronizerInsertHandlerId: accountSynchronizerHandlerEntity != undefined ? accountSynchronizerHandlerEntity.AccountSynchronizerInsertHandlerId : UtilsService.guid(),
+                AccountCondition: accountConditionSelectiveAPI.getData(),
                 Settings: accountSynchronizerHandlerSettingsAPI.getData()
             };
         }

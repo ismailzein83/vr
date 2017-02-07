@@ -24,10 +24,10 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetPortalUserAccount")]
-        public PortalAccountSettings GetPortalUserAccount(Guid accountBEDefinitionId, long accountId)
+        [Route("GetPortalAccountSettings")]
+        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId)
         {
-            return _manager.GetPortalUserAccount(accountBEDefinitionId, accountId);
+            return _manager.GetPortalAccountSettings(accountBEDefinitionId, accountId);
         }
     }
 

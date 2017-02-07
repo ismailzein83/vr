@@ -30,9 +30,6 @@ namespace Retail.BusinessEntity.MainExtensions.AccountSynchronizerInsertHandlers
 
         public override void OnPostInsert(IAccountSynchronizerInsertHandlerPostInsertContext context)
         {
-            if (context.Account.TypeId != new Guid("046078A0-3434-4934-8F4D-272608CFFEBF"))
-                return;
-
             var account = context.Account;
             var accountBEDefinitionId = context.AccountBEDefinitionId;
 

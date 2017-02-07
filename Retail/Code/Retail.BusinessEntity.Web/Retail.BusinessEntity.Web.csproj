@@ -188,6 +188,7 @@
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\" />
+    <Folder Include="Retail_BusinessEntity\Views\Account\ExtendedSettings\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
@@ -625,14 +626,16 @@
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountViews\ResetPasswordEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountViews\ResetPasswordEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\Account360DegreeEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\Account360DegreeEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagement.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
-    <Content Include="Retail_BusinessEntity\Views\Account\ExtendedSettings\PortalAccountEditor.html" />
-    <Content Include="Retail_BusinessEntity\Views\Account\ExtendedSettings\PortalAccountEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountViews\PortalAccountEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountViews\PortalAccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyManagement.html" />

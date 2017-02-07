@@ -68,7 +68,7 @@ namespace Retail.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public PortalAccountSettings GetPortalUserAccount(Guid accountBEDefinitionId, long accountId)
+        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId)
         {
             return new AccountBEManager().GetExtendedSettings<PortalAccountSettings>(accountBEDefinitionId, accountId);
         }

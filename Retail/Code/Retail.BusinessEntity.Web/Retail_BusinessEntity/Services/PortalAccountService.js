@@ -20,26 +20,12 @@
                 modalScope.onPortalAccountAdded = onPortalAccountAdded
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/ExtendedSettings/PortalAccountEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountViews/PortalAccountEditor.html', parameters, settings);
         };
-        //function editPortalAccount(portalAccountId, onPortalAccountUpdated) {
 
-        //    var parameters = {
-        //        portalAccountId: portalAccountId
-        //    };
-
-        //    var settings = {};
-
-        //    settings.onScopeReady = function (modalScope) {
-        //        modalScope.onPortalAccountUpdated = onPortalAccountUpdated;
-        //    };
-
-        //    VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/ExtendedSettings/PortalAccountEditor.html', parameters, settings);
-        //}
 
         return {
-            addPortalAccount: addPortalAccount,
-            //editPortalAccount: editPortalAccount
+            addPortalAccount: addPortalAccount
         };
     }
 
