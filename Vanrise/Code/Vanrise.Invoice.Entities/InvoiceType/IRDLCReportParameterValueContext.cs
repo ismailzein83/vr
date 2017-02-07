@@ -9,5 +9,6 @@ namespace Vanrise.Invoice.Entities
     public interface IRDLCReportParameterValueContext
     {
         Entities.Invoice Invoice { get; }
+        InvoiceType InvoiceType { get; }
     }
 }

@@ -60,6 +60,7 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsField", ["UtilsServic
                         if (payload.parameterEntity != undefined) {
                             $scope.scopeModel.selectedInvoiceField = UtilsService.getItemByVal($scope.scopeModel.invoiceFields, payload.parameterEntity.Field, "value");
                             $scope.scopeModel.selectedRecordField = UtilsService.getItemByVal($scope.scopeModel.recordFields, payload.parameterEntity.FieldName, "FieldName");
+                            $scope.scopeModel.useFieldValue = payload.parameterEntity.UseFieldValue;
                         }
 
                     }
@@ -71,7 +72,8 @@ app.directive("vrInvoicetypeOpenrdlcreportParametersettingsField", ["UtilsServic
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.FieldRDLReportParameterValue ,Vanrise.Invoice.MainExtensions",
                         Field: $scope.scopeModel.selectedInvoiceField.value,
-                        FieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined
+                        FieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined,
+                        UseFieldValue: $scope.scopeModel.useFieldValue
                     };
                 };
 

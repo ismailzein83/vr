@@ -115,7 +115,8 @@ namespace Vanrise.Invoice.MainExtensions
                 {
                     RDLCReportParameterValueContext paramterContext = new RDLCReportParameterValueContext
                     {
-                        Invoice = invoice
+                        Invoice = invoice,
+                        InvoiceType = invoiceType
                     };
                     foreach (var parameter in parameters)
                     {

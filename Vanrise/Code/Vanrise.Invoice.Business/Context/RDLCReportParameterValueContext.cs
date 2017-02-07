@@ -10,5 +10,6 @@ namespace Vanrise.Invoice.Business.Context
     public class RDLCReportParameterValueContext : IRDLCReportParameterValueContext
     {
         public Entities.Invoice Invoice { get; set; }
+        public InvoiceType InvoiceType { get; set; }
     }
 }

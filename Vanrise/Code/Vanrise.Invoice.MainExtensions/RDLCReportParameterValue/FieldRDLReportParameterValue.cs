@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
@@ -14,9 +16,10 @@ namespace Vanrise.Invoice.MainExtensions
         public Entities.InvoiceField Field { get; set; }
 
         public string FieldName { get; set; }
+        public bool UseFieldValue { get; set; }
         public override dynamic Evaluate(IRDLCReportParameterValueContext context)
         {
-            switch(this.Field)
+            switch (this.Field)
             {
                 case Entities.InvoiceField.DueDate: return context.Invoice.DueDate;
                 case Entities.InvoiceField.FromDate: return context.Invoice.FromDate;
@@ -24,9 +27,24 @@ namespace Vanrise.Invoice.MainExtensions
                 case Entities.InvoiceField.Partner: return context.Invoice.PartnerId;
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate;
-                case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null) : null;//Utilities.GetPropValue(this.FieldName,context.Invoice.Details) : null; 
-                //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Invoice.Details) 
-                   //  
+                case Entities.InvoiceField.CustomField:
+                    DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+
+                    var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(context.InvoiceType.Settings.InvoiceDetailsRecordTypeId);
+                    var fieldValue = context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null);
+                    if (this.UseFieldValue)
+                    {
+                        return fieldValue;
+                    }
+                    else
+                    {
+                        DataRecordField dataRecordField;
+                        if (dataRecordTypeFields.TryGetValue(this.FieldName, out dataRecordField))
+                        {
+                            return dataRecordField.Type.GetDescription(fieldValue);
+                        }
+                    }
+                    return null;
             }
             return null;
         }
