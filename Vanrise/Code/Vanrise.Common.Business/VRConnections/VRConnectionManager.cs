@@ -8,7 +8,7 @@ namespace Vanrise.Common.Business
 {
     public class VRConnectionManager
     {
-        ExtensionConfigurationManager _extensionManager ;
+        ExtensionConfigurationManager _extensionManager;
 
         public VRConnectionManager()
         {
@@ -21,7 +21,7 @@ namespace Vanrise.Common.Business
             {
                 if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-                if (input.Query.ExtensionConfigIds!=null &&  !input.Query.ExtensionConfigIds.Contains(x.Settings.ConfigId) )
+                if (input.Query.ExtensionConfigIds != null && !input.Query.ExtensionConfigIds.Contains(x.Settings.ConfigId))
                     return false;
                 return true;
             };
@@ -35,6 +35,23 @@ namespace Vanrise.Common.Business
                 return null;
 
             return vrConnections.GetRecord(vrConnectionId);
+        }
+
+        public VRConnection GetVRConnectionByType<T>(Guid vrConnectionId) where T : VRConnectionSettings
+        {
+            VRConnection vrConnection = GetVRConnection(vrConnectionId);
+
+            if (vrConnection == null)
+                throw new NullReferenceException("vrConnection");
+
+            if (vrConnection.Settings == null)
+                throw new NullReferenceException("vrConnection.Settings");
+
+            T connectionSettings = vrConnection.Settings as T;
+            if (connectionSettings == null)
+                throw new Exception(String.Format("vrConnection.Settings is not of type {0}. it is of type '{1}'.", typeof(T), vrConnection.Settings.GetType()));
+
+            return vrConnection;
         }
 
         public IEnumerable<VRConnectionInfo> GetVRConnectionInfos(VRConnectionFilter filter)

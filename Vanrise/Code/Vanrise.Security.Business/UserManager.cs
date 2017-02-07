@@ -105,8 +105,11 @@ namespace Vanrise.Security.Business
 
         public User GetUserbyEmail(string email)
         {
-            var users = GetCachedUsers();
-            return users.FindRecord(x => string.Equals(x.Email, email, StringComparison.CurrentCultureIgnoreCase));
+            if (string.IsNullOrEmpty(email))
+                return null;
+
+            var users = GetCachedUsersByEmail();
+            return users.GetRecord(email.ToLower());
         }
 
         public string GetUserPassword(int userId)
@@ -618,6 +621,16 @@ namespace Vanrise.Security.Business
                        users = dataManager.GetUsers();
                    }
                    return users.ToDictionary(kvp => kvp.UserId, kvp => kvp);
+               });
+        }
+
+        private Dictionary<string, User> GetCachedUsersByEmail()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedUsersByEmail",
+               () =>
+               {
+                   var users = GetCachedUsers();
+                   return users.ToDictionary(itm => itm.Value.Email.ToLower(), itm => itm.Value);
                });
         }
 
