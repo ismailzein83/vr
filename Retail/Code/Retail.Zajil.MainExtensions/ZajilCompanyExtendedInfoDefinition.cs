@@ -29,6 +29,12 @@ namespace Retail.Zajil.MainExtensions
                     },
                     new GenericFieldDefinition()
                     {
+                        Name = "SalesAgent",
+                        Title = "Sales Agent",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                    },
+                    new GenericFieldDefinition()
+                    {
                         Name = "ServiceType",
                         Title = "Service Type",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()

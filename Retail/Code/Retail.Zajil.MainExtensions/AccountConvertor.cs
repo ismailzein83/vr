@@ -48,7 +48,7 @@ namespace Retail.Zajil.MainExtensions
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 ITargetBE targetZajilAccount;
-                var sourceId = row["CRM_Company_ID"].ToString();
+                var sourceId = row["CRM_Company_ID"] as string;
                 if (zajilAccounts.TryGetValue(sourceId, out targetZajilAccount))
                 {
                     ((targetZajilAccount as SourceAccountData).Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings as AccountPartOrderDetail).OrderDetailItems.Add(GetOrderDetailItem(row));
@@ -138,10 +138,10 @@ namespace Retail.Zajil.MainExtensions
                 Settings = new AccountPartCompanyProfile
                 {
                     Contacts = GetContactsList(row),
-                    PhoneNumbers = new List<string> { row["PhoneNo"].ToString() },
-                    Faxes = new List<string> { row["FaxNo"].ToString() },
-                    Address = row["Address"].ToString(),
-                    ArabicName = row["Arabic_Name"].ToString()
+                    PhoneNumbers = new List<string> { row["PhoneNo"] as string },
+                    Faxes = new List<string> { row["FaxNo"] as string },
+                    Address = row["Address"] as string,
+                    ArabicName = row["Arabic_Name"] as string
                 }
             });
         }
@@ -153,12 +153,13 @@ namespace Retail.Zajil.MainExtensions
             {
                 Settings = new ZajilCompanyExtendedInfo
                 {
-                      CRMCompanyId = row["CRM_Company_ID"].ToString(),
-                      CRMCompanyAccountNo = row["CRM_Company_AccountNo"].ToString(),
-                      ServiceType = row["ServiceType"].ToString(),
-                      Remarks = row["Remarks"].ToString(),
-                      GPVoiceCustomerNo = row["GP_VoiceCustomer_No"].ToString(),
-                      ServiceId = row["ServiceID"].ToString()
+                    CRMCompanyId = row["CRM_Company_ID"] as string,
+                    CRMCompanyAccountNo = row["CRM_Company_AccountNo"] as string,
+                    SalesAgent = row["SalesAgent"] as string,
+                    ServiceType = row["ServiceType"] as string,
+                    Remarks = row["Remarks"] as string,
+                    GPVoiceCustomerNo = row["GP_VoiceCustomer_No"] as string,
+                    ServiceId = row["ServiceID"] as string
                 }
             });
         }
@@ -166,17 +167,17 @@ namespace Retail.Zajil.MainExtensions
         {
             return new OrderDetailItem
             {
-                Achievement = row["Achievement"].ToString(),
-                Charges = row["Charges"].ToString(),
+                Achievement = row["Achievement"] as string,
+                Charges = row["Charges"] as string,
                 ChargesYear1 = GetDecimalValue(row, "Charges_Year1"),
                 ChargesYear2 = GetDecimalValue(row, "Charges_Year2"),
                 ChargesYear3 = GetDecimalValue(row, "Charges_Year3"),
                 ContractDays = GetDecimalValue(row, "contract_days"),
                 ContractPeriod = GetDecimalValue(row, "ContractPeriod"),
                 ContractRemain = GetDecimalValue(row, "ContractRemain"),
-                Discount = row["Discount"].ToString(),
+                Discount = row["Discount"] as string,
                 Installation = GetDecimalValue(row, "Installation"),
-                Payment = row["Payment"].ToString(),
+                Payment = row["Payment"] as string,
                 ThirdParty = GetDecimalValue(row, "ThirdParty"),
                 TotalContract = GetDecimalValue(row, "total_contract")
             };
@@ -184,18 +185,25 @@ namespace Retail.Zajil.MainExtensions
         decimal GetDecimalValue(DataRow row, string columnName)
         {
             decimal result = 0;
-            decimal.TryParse(row[columnName].ToString(), out result);
+            decimal.TryParse(row[columnName] as string, out result);
             return result;
         }
         Dictionary<string,AccountCompanyContact> GetContactsList(DataRow row)
         {
             Dictionary<string, AccountCompanyContact> contacts = new Dictionary<string, AccountCompanyContact>();
 
+            contacts.Add("Main", new AccountCompanyContact
+            {
+                ContactName = row["Contact_Person"] as string,
+                Email = row["Email"] as string,
+                PhoneNumbers = new List<string> { row["Mobile"] as string }
+            });
+
             contacts.Add("Finance", new AccountCompanyContact
             {
-                ContactName = row["finance_contact_person"].ToString(),
-                Email = row["finance_contact_email"].ToString(),
-                PhoneNumbers = new List<string> { row["finance_contact_number"].ToString() }
+                ContactName = row["finance_contact_person"] as string,
+                Email = row["finance_contact_email"] as string,
+                PhoneNumbers = new List<string> { row["finance_contact_number"] as string }
             });
 
             return contacts;

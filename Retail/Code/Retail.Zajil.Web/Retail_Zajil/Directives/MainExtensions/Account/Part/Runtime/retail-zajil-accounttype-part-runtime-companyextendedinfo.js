@@ -31,7 +31,8 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
 
                 if (payload != undefined && payload.partSettings != undefined) {
                     $scope.scopeModel.cRMCompanyId =  payload.partSettings.CRMCompanyId ;
-                    $scope.scopeModel.cRMCompanyAccountNo =  payload.partSettings.CRMCompanyAccountNo ;
+                    $scope.scopeModel.cRMCompanyAccountNo = payload.partSettings.CRMCompanyAccountNo;
+                    $scope.scopeModel.salesAgent = payload.partSettings.SalesAgent;
                     $scope.scopeModel.serviceType =  payload.partSettings.ServiceType ;
                     $scope.scopeModel.remarks =  payload.partSettings.Remarks ;
                     $scope.scopeModel.gPVoiceCustomerNo =  payload.partSettings.GPVoiceCustomerNo ;
@@ -44,6 +45,7 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
                     $type: 'Retail.Zajil.MainExtensions.ZajilCompanyExtendedInfo, Retail.Zajil.MainExtensions',
                     CRMCompanyId: $scope.scopeModel.cRMCompanyId,
                     CRMCompanyAccountNo: $scope.scopeModel.cRMCompanyAccountNo,
+                    SalesAgent: $scope.scopeModel.salesAgent,
                     ServiceType: $scope.scopeModel.serviceType,
                     Remarks: $scope.scopeModel.remarks,
                     GPVoiceCustomerNo: $scope.scopeModel.gPVoiceCustomerNo,

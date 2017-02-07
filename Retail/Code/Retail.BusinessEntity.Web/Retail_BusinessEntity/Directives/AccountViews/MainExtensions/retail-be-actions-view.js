@@ -65,7 +65,7 @@
 
                 var actionGridPayload = {
                     accountBEDefinitionId: accountBEDefinitionId,
-                    EntityId: Retail_BE_ActionDefinitionService.getEntityId(Retail_BE_EntityTypeEnum.Account.value, parentAccountId)
+                    EntityId: 'Retail_BE_' + accountBEDefinitionId + '_' + parentAccountId
                 };
                 return actionGridPayload;
             }
