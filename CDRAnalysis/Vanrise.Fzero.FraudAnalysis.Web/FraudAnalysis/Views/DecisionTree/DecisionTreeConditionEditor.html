@@ -1,0 +1,40 @@
+﻿<div vr-modalcontent ng-controller="CDRAnalysis_FA_ConditionEditorController" width="'40%'">
+    <vr-modalbody vr-loader="scopeModel.isLoading">
+        <vr-form name="formConditionEditor">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-select datasource="scopeModel.filters"
+                               selectedvalues="scopeModel.selectedFilter"
+                               datavaluefield="FilterId"
+                               datatextfield="Abbreviation"
+                               ng-init="scopeModel.selectedFilter = (scopeModel.selectedFilter == undefined ? scopeModel.filters[0] : scopeModel.selectedFilter)"
+                               isrequired = "true"
+                               label="Filters"
+                               hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-select datasource="scopeModel.operators"
+                               selectedvalues="scopeModel.selectedOperator"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               ng-init="scopeModel.selectedOperator = (scopeModel.selectedOperator == undefined ? scopeModel.operators[0] : scopeModel.selectedOperator)"
+                               label="Operator"
+                               hideremoveicon isrequired="true">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="scopeModel.conditionValue" label="Condition Value" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.saveCondition" formname="formConditionEditor"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="BPTaskData\BPTaskDataConfirmCancelStrategyonCaseCount.cs" />
     <Compile Include="BPTaskExecution\BPTaskConfirmCancelStrategyonCaseCount.cs" />
+    <Compile Include="DecisionTreeStrategySettingsCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuspicionRuleStrategySettingsCriteria.cs" />
   </ItemGroup>

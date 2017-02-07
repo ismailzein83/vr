@@ -33,7 +33,7 @@ namespace Vanrise.Fzero.FraudAnalysis.MainExtensions
                 foreach (var j in i.StrategyLevelCriterias)
                 {
                     LevelCriteriaInfo levelCriteriasThresholdPercentage = new LevelCriteriaInfo();
-                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new Filter() { CompareOperator = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.CompareOperator, FilterId = j.FilterId, Description = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.Description };
+                    levelCriteriasThresholdPercentage.FilterId = j.FilterId;
                     levelCriteriasThresholdPercentage.Percentage = j.Percentage;
                     levelCriteriasThresholdPercentage.Threshold = this.StrategyFilters.Where(x => x.FilterId == j.FilterId).FirstOrDefault().Threshold;
                     strategyLevelWithCriterias.LevelCriteriasThresholdPercentage.Add(levelCriteriasThresholdPercentage);
@@ -57,16 +57,17 @@ namespace Vanrise.Fzero.FraudAnalysis.MainExtensions
 
                     foreach (LevelCriteriaInfo levelCriteriaThresholdPercentage in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
                     {
-                        Decimal? criteriaValue = context.GetCriteriaValue(levelCriteriaThresholdPercentage.CriteriaDefinitions);
+                        Decimal? criteriaValue = context.GetCriteriaValue(levelCriteriaThresholdPercentage.FilterId);
 
                         decimal? criteriaValuesThreshold = criteriaValue / levelCriteriaThresholdPercentage.Threshold;
-                        criteriaValuesThresholds.Add(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, criteriaValuesThreshold);
+                        criteriaValuesThresholds.Add(levelCriteriaThresholdPercentage.FilterId, criteriaValuesThreshold);
 
+                        var filter = context.GetFilter(levelCriteriaThresholdPercentage.FilterId);
                         if (criteriaValuesThreshold != null)
                             isLevelMatch =
-                                (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual && criteriaValuesThreshold >= levelCriteriaThresholdPercentage.Percentage)
+                                (filter.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual && criteriaValuesThreshold >= levelCriteriaThresholdPercentage.Percentage)
                                 ||
-                                (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual && criteriaValuesThreshold <= levelCriteriaThresholdPercentage.Percentage);
+                                (filter.CompareOperator == CriteriaCompareOperator.LessThanorEqual && criteriaValuesThreshold <= levelCriteriaThresholdPercentage.Percentage);
                         if (!isLevelMatch)
                             break;
                     }
@@ -99,7 +100,7 @@ namespace Vanrise.Fzero.FraudAnalysis.MainExtensions
     }
     public class LevelCriteriaInfo
     {
-        public Filter CriteriaDefinitions { get; set; }
+        public int FilterId { get; set; }
 
         public Decimal Threshold { get; set; }
 

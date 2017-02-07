@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Integration.Mappers;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 
@@ -47,6 +49,10 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
+        
+
+
+
             //BPClient bpClient = new BPClient();
             //int strategyId = int.Parse(Console.ReadLine());
             //Console.WriteLine("Strategy: {0}", strategyId);
@@ -62,7 +68,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //        //StrategyIds = new List<int> { 2, 4, 5, 6, 7, 8, 9, 10, 11, 12 },//daily
             //    }
             //});
-
+ 
             //Console.ReadKey();
         }
 
@@ -105,6 +111,24 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManagerFactory.GetCDRDataManager<Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManager>(DateTime.Now.AddDays(2));
 
             //Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManagerFactory.GetCDRDataManager<Vanrise.Fzero.CDRImport.Data.SQL.PartitionedCDRDataManager>(DateTime.Now.AddDays(3));
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
     }
+
 }
+
+
+
+

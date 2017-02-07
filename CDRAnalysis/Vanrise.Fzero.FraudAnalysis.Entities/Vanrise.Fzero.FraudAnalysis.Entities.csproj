@@ -70,6 +70,7 @@
     <Compile Include="CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManagerFactory.cs" />
     <Compile Include="AccountStatusSource.cs" />
+    <Compile Include="DecisionTree\DecisionTree.cs" />
     <Compile Include="IBusinessManager.cs" />
     <Compile Include="StrategyExecutionItemAccountInfo.cs" />
     <Compile Include="FindRelatedNumbersProgress.cs" />

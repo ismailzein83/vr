@@ -123,7 +123,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         Object PreparedData { get; }
         NumberProfile NumberProfile { get; }
-        Decimal? GetCriteriaValue(Filter filterId);
+        Decimal? GetCriteriaValue(int filterId);
+        Filter GetFilter(int filterId);
         StrategyExecutionItem StrategyExecutionItem { set; }
     }
 

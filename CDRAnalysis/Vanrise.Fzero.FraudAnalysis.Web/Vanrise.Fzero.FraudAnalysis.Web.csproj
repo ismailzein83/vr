@@ -145,13 +145,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FraudAnalysis\Constants\AccountStatusSourceEnum.js" />
+    <Content Include="FraudAnalysis\Constants\DecisionTreeNodeTypeEnum.js" />
+    <Content Include="FraudAnalysis\Constants\DecisionTreeConditionOperatorEnum.js" />
     <Content Include="FraudAnalysis\Directives\AccountStatus\Templates\AccountStatusGridTemplate.html" />
     <Content Include="FraudAnalysis\Directives\AccountStatus\vr-cdr-fraudanalysis-accountstatus-grid.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-criteria.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-parameters.js" />
+    <Content Include="FraudAnalysis\Directives\Strategy\MainExtensions\cdranalysis-fa-strategy-criteria-decisiontree.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\MainExtensions\cdranalysis-fa-strategy-criteria-suspicionrule.js" />
+    <Content Include="FraudAnalysis\Directives\Strategy\MainExtensions\Templates\DecisionTreeStrategyTemplate.html" />
     <Content Include="FraudAnalysis\Directives\Strategy\MainExtensions\Templates\SuspicionRuleStrategyTemplate.html" />
     <Content Include="FraudAnalysis\Directives\Strategy\Templates\StrategyParameterTemplate.html" />
+    <Content Include="FraudAnalysis\Services\DecisionTreeService.js" />
     <Content Include="FraudAnalysis\Template\AccountStatusList.xls" />
     <None Include="Properties\PublishProfiles\New.pubxml" />
   </ItemGroup>
@@ -254,6 +259,10 @@
     <Content Include="FraudAnalysis\Services\StrategyService.js" />
     <Content Include="FraudAnalysis\Views\BPTask\BPTaskConfirmCancelStrategyonCaseCount.html" />
     <Content Include="FraudAnalysis\Views\BPTask\BPTaskConfirmCancelStrategyonCaseCountController.js" />
+    <Content Include="FraudAnalysis\Views\DecisionTree\DecisionTreeConditionEditor.html" />
+    <Content Include="FraudAnalysis\Views\DecisionTree\DecisionTreeConditionEditorController.js" />
+    <Content Include="FraudAnalysis\Views\DecisionTree\DecisionTreeLabelEditor.html" />
+    <Content Include="FraudAnalysis\Views\DecisionTree\DecisionTreeLabelEditorController.js" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialog.html" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialogController.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />
