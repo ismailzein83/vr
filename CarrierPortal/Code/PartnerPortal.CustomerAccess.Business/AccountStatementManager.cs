@@ -31,18 +31,10 @@ namespace PartnerPortal.CustomerAccess.Business
             settings.AccountStatementViewData.AccountStatementHandler.PrepareQuery(context);
 
             VRConnectionManager connectionManager = new VRConnectionManager();
-            var vrConnection = connectionManager.GetVRConnection(settings.AccountStatementViewData.VRConnectionId);
-
-            if (vrConnection == null)
-                throw new NullReferenceException("vrConnection");
-
-            if (vrConnection.Settings == null)
-                throw new NullReferenceException("vrConnection.Settings");
+            var vrConnection = connectionManager.GetVRConnectionByType<VRInterAppRestConnection>(settings.AccountStatementViewData.VRConnectionId);
 
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-            if (connectionSettings == null)
-                throw new Exception(String.Format("vrConnection.Settings is not of type VRInterAppRestConnection. it is of type '{0}'.", vrConnection.Settings.GetType()));
-            
+
             return connectionSettings.Post<DataRetrievalInput<AccountStatementAppQuery>, AccountStatementResult>("/api/VR_AccountBalance/AccountStatement/GetFilteredAccountStatments", input);
 
             //CredentialsInput credentialsInput = new CredentialsInput() { Email = "admin@vanrise.com", Password = "1" };

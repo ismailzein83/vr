@@ -21,6 +21,9 @@ namespace PartnerPortal.CustomerAccess.Business
 
         public Vanrise.Entities.InsertOperationOutput<Vanrise.Security.Entities.UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
         {
+            object userExtendedSettings;
+            UserManager userManager = new UserManager();
+
             User user = new User()
             {
                 Description = retailAccount.Description,
@@ -30,10 +33,30 @@ namespace PartnerPortal.CustomerAccess.Business
                 TenantId = retailAccount.TenantId,
                 ExtendedSettings = new Dictionary<string, object>()
             };
-            user.ExtendedSettings.Add(typeof(RetailAccountSettings).FullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId });
+            string retailAccountSettingsFullName = typeof(RetailAccountSettings).FullName;
+            user.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId });
 
-            UserManager userManager = new UserManager();
-            return userManager.AddUser(user);
+            Vanrise.Entities.InsertOperationOutput<Vanrise.Security.Entities.UserDetail> insertOperationOutput = userManager.AddUser(user);
+
+            if (insertOperationOutput.Result == Vanrise.Entities.InsertOperationResult.SameExists)
+            {
+                var existedUser = userManager.GetUserbyEmail(retailAccount.Email);
+                if (existedUser.ExtendedSettings != null && existedUser.ExtendedSettings.TryGetValue(retailAccountSettingsFullName, out userExtendedSettings))
+                {
+                    if (((RetailAccountSettings)userExtendedSettings).AccountId == retailAccount.AccountId)
+                    {
+                        user.UserId = existedUser.UserId;
+                        Vanrise.Entities.UpdateOperationOutput<Vanrise.Security.Entities.UserDetail> updateOperationOutput = userManager.UpdateUser(user);
+                        if (updateOperationOutput.Result == Vanrise.Entities.UpdateOperationResult.Succeeded)
+                        {
+                            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                            insertOperationOutput.InsertedObject = updateOperationOutput.UpdatedObject;
+                        }
+                    }
+                }
+            }
+
+            return insertOperationOutput;
         }
     }
 }
