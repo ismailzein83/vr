@@ -60,18 +60,14 @@
     <Compile Include="RuntimeManager\RuntimeManager.cs" />
     <Compile Include="RuntimeHost.cs" />
     <Compile Include="RuntimeManager\RuntimeManagerWCFService.cs" />
+    <Compile Include="RuntimeManager\TransactionLockHandler.cs" />
     <Compile Include="RuntimeService.cs" />
     <Compile Include="SchedulerService.cs" />
     <Compile Include="SchedulerTaskCheckProgressContext.cs" />
     <Compile Include="RuntimeServiceInstanceManager.cs" />
     <Compile Include="SingletonServiceProcessIdGetter.cs" />
-    <Compile Include="TransactionLock\ITransactionLockHandler.cs" />
-    <Compile Include="TransactionLock\ITransactionLockWCFService.cs" />
-    <Compile Include="TransactionLock\LocalTransactionLockHandler.cs" />
-    <Compile Include="TransactionLock\TransactionLocker.cs" />
+    <Compile Include="RuntimeManager\TransactionLocker.cs" />
     <Compile Include="TransactionLock\TransactionLockRuntimeService.cs" />
-    <Compile Include="TransactionLock\TransactionLockWCFService.cs" />
-    <Compile Include="TransactionLock\WCFClientTransactionLockHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">

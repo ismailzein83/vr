@@ -15,6 +15,13 @@ namespace Vanrise.Runtime
                 response.Result = HeartBeatResult.Succeeded;
             else
                 response.Result = HeartBeatResult.ProcessNotExists;
+            if(request.FreezedTransactionLocks != null)
+            {
+                foreach(var transactionLockItem in request.FreezedTransactionLocks)
+                {
+                    UnLock(transactionLockItem);
+                }
+            }
             //Console.WriteLine("{0: HH:mm:ss} heartbeat received from process {1}. Result is {2}", DateTime.Now, request.RunningProcessId, response.Result);
             return response;
         }
@@ -67,6 +74,23 @@ namespace Vanrise.Runtime
              }
              else
                  return null;
+        }
+
+
+        public bool TryLock(Entities.TransactionLockItem lockItem, int maxAllowedConcurrency)
+        {
+            TransactionLockHandler transactionLockHandler = TransactionLockHandler.Current;
+            if (transactionLockHandler == null)
+                throw new NullReferenceException("TransactionLockHandler.Current");
+            return transactionLockHandler.TryLock(lockItem, maxAllowedConcurrency);
+        }
+
+        public void UnLock(Entities.TransactionLockItem lockItem)
+        {
+            TransactionLockHandler transactionLockHandler = TransactionLockHandler.Current;
+            if (transactionLockHandler == null)
+                throw new NullReferenceException("TransactionLockHandler.Current");
+            transactionLockHandler.UnLock(lockItem);
         }
     }
 }

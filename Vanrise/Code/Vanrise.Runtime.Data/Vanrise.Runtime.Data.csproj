@@ -53,6 +53,7 @@
     <Compile Include="ISchedulerTaskDataManager.cs" />
     <Compile Include="ISchedulerTaskTriggerTypeDataManager.cs" />
     <Compile Include="IRuntimeServiceInstanceDataManager.cs" />
+    <Compile Include="ITransactionLockDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeDataManagerFactory.cs" />
   </ItemGroup>

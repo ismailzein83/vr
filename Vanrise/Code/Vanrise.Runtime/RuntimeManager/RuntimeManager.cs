@@ -19,17 +19,20 @@ namespace Vanrise.Runtime
         static int s_hostingRuntimeManagerWCFServiceMaxRetryCount;
         static int s_pingRunningProcessMaxRetryCount;
         static TimeSpan s_pingRunningProcessRetryOffset;
+        static TimeSpan s_removeLocksForNotRunningProcessInterval;
 
         static RuntimeManager()
         {
             if (!int.TryParse(ConfigurationManager.AppSettings["Runtime_HostingRuntimeManagerWCFServiceMaxRetryCount"], out s_hostingRuntimeManagerWCFServiceMaxRetryCount))
                 s_hostingRuntimeManagerWCFServiceMaxRetryCount = 10;
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_RunningProcessHeartBeatTimeout"], out s_RunningProcessHeartBeatTimeout))
-                s_RunningProcessHeartBeatTimeout = TimeSpan.FromSeconds(80);
+                s_RunningProcessHeartBeatTimeout = TimeSpan.FromSeconds(120);
             if (!int.TryParse(ConfigurationManager.AppSettings["Runtime_PingRunningProcessMaxRetryCount"], out s_pingRunningProcessMaxRetryCount))
                 s_pingRunningProcessMaxRetryCount = 3;
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_PingRunningProcessRetryOffset"], out s_pingRunningProcessRetryOffset))
                 s_pingRunningProcessRetryOffset = TimeSpan.FromSeconds(1);
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_RemoveLocksForNotRunningProcessInterval"], out s_removeLocksForNotRunningProcessInterval))
+                s_removeLocksForNotRunningProcessInterval = TimeSpan.FromSeconds(60);
         }
 
         #endregion
@@ -109,6 +112,8 @@ namespace Vanrise.Runtime
 
         IRuntimeManagerDataManager _dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeManagerDataManager>();
 
+        static DateTime s_lastTimeLocksRemovedForNotRunningProcesses;
+
         internal void Execute()
         {
             var runningProcessesIds = new RunningProcessManager().GetRunningProcessesFromDB().Select(itm => itm.ProcessId).ToList();
@@ -117,12 +122,19 @@ namespace Vanrise.Runtime
                 if (ProcessHeartBeatManager.s_current == null)
                 {
                     ProcessHeartBeatManager.s_current = new ProcessHeartBeatManager(runningProcessesIds);
+                    TransactionLockHandler.InitializeCurrent();
+                }
+                else if ((DateTime.Now - s_lastTimeLocksRemovedForNotRunningProcesses) > s_removeLocksForNotRunningProcessInterval)
+                {
+                    TransactionLockHandler.Current.RemoveLocksForNotRunningProcesses(runningProcessesIds);
+                    s_lastTimeLocksRemovedForNotRunningProcesses = DateTime.Now;
                 }
                 PingRunningProcesses(runningProcessesIds);
                 new RuntimeServiceInstanceManager().DeleteNonRunningServices();
             }
             else
             {
+                TransactionLockHandler.RemoveCurrent();
                 ProcessHeartBeatManager.s_current = null;
             }
         }

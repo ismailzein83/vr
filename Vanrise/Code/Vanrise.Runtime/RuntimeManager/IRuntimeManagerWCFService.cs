@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime
 {
@@ -18,11 +19,19 @@ namespace Vanrise.Runtime
 
         [OperationContract]
         GetServiceProcessIdResponse TryGetServiceProcessId(GetServiceProcessIdRequest request);
+
+        [OperationContract]
+        bool TryLock(TransactionLockItem lockItem, int maxAllowedConcurrency);
+
+        [OperationContract]
+        void UnLock(TransactionLockItem lockItem);
     }
 
     public class HeartBeatRequest
     {
         public int RunningProcessId { get; set; }
+
+        public List<TransactionLockItem> FreezedTransactionLocks { get; set; }
     }
 
     public enum HeartBeatResult { Succeeded, ProcessNotExists }

@@ -39,13 +39,20 @@ namespace Vanrise.Runtime
                 {
                     try
                     {
+                        TransactionLockItem lockItem;
+                        while (s_queueFreezedTransactionLocks.TryDequeue(out lockItem))
+                        {
+                            s_FreezedTransactionLocks.Add(lockItem);
+                        }
                         HeartBeatResponse hpResponse = null;
                         Common.ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(GetRuntimeManagerServiceURL(), (client) =>
                             {
                                 hpResponse = client.UpdateHeartBeat(new HeartBeatRequest
                                     {
-                                        RunningProcessId = CurrentProcess.ProcessId
+                                        RunningProcessId = CurrentProcess.ProcessId,
+                                        FreezedTransactionLocks = s_FreezedTransactionLocks
                                     });
+                                s_FreezedTransactionLocks.Clear();
                             });
                         if (hpResponse == null || hpResponse.Result != HeartBeatResult.Succeeded)
                         {
@@ -59,8 +66,6 @@ namespace Vanrise.Runtime
                     }
                 }
 
-                if (s_FreezedTransactionLocks.Count > 0 || s_queueFreezedTransactionLocks.Count > 0)
-                    SaveFreezedTransactionLocks();
             }
             catch (Exception ex)
             {
@@ -70,7 +75,7 @@ namespace Vanrise.Runtime
                 s_isRunning = false;
         }
 
-        private static string GetRuntimeManagerServiceURL()
+        internal static string GetRuntimeManagerServiceURL()
         {
             if (_runtimeManagerServiceURL == null)
                 _runtimeManagerServiceURL = RuntimeDataManagerFactory.GetDataManager<IRuntimeManagerDataManager>().GetRuntimeManagerServiceURL();
@@ -79,17 +84,7 @@ namespace Vanrise.Runtime
             return _runtimeManagerServiceURL;
         }
 
-        static List<Guid> s_FreezedTransactionLocks = new List<Guid>();
-        private static void SaveFreezedTransactionLocks()
-        {
-            Guid lockItemId;
-            while(s_queueFreezedTransactionLocks.TryDequeue(out lockItemId))
-            {
-                s_FreezedTransactionLocks.Add(lockItemId);
-            }
-            RuntimeDataManagerFactory.GetDataManager<IFreezedTransactionLockDataManager>().SaveFreezedLockTransaction(s_FreezedTransactionLocks);
-            s_FreezedTransactionLocks.Clear();
-        }
+        static List<TransactionLockItem> s_FreezedTransactionLocks = new List<TransactionLockItem>();       
 
         static object s_lockObj = new object();
         static bool s_isRunning;
@@ -242,10 +237,10 @@ namespace Vanrise.Runtime
             get { return RunningProcessManager.CurrentProcess; }
         }
 
-        static ConcurrentQueue<Guid> s_queueFreezedTransactionLocks = new ConcurrentQueue<Guid>();
+        static ConcurrentQueue<TransactionLockItem> s_queueFreezedTransactionLocks = new ConcurrentQueue<TransactionLockItem>();
         internal void SetTransactionLockFreezed(TransactionLockItem transactionLockItem)
         {
-            s_queueFreezedTransactionLocks.Enqueue(transactionLockItem.LockItemUniqueId);
+            s_queueFreezedTransactionLocks.Enqueue(transactionLockItem);
         }
 
         public bool TryLockRuntimeService(string serviceTypeUniqueName)

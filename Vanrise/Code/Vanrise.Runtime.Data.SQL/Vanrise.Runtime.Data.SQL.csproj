@@ -54,6 +54,7 @@
     <Compile Include="SchedulerTaskDataManager.cs" />
     <Compile Include="SchedulerTaskTriggerTypeDataManager.cs" />
     <Compile Include="RuntimeServiceInstanceDataManager.cs" />
+    <Compile Include="TransactionLockDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">

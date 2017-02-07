@@ -27,6 +27,10 @@ namespace Vanrise.Runtime
         {
             Vanrise.Common.Utilities.CompilePredefinedPropValueReaders();
             _services = services;
+
+            if (tryHostRuntimeManager)
+                InitializeRuntimeManager();
+
             TimeSpan timerInterval = TimeSpan.FromSeconds(1);
             if (services != null && services.Count > 0)
             {
@@ -35,9 +39,6 @@ namespace Vanrise.Runtime
             }
             _timer = new Timer(timerInterval.TotalMilliseconds);
             _timer.Elapsed += timer_Elapsed;
-
-            if (tryHostRuntimeManager)
-                InitializeRuntimeManager();
 
             if (services != null && services.Count > 0)
             {
@@ -99,7 +100,7 @@ namespace Vanrise.Runtime
         private static void InitializeRuntimeManager()
         {
             s_runtimeManager = new RuntimeManager();
-            s_runtimeManager.Execute();
+            ExecuteRuntimeManagerIfIdle();
         }
 
         private static void CreateAndAddRuntimeServices(List<RuntimeService> runtimeServices, Configuration.RuntimeServiceGroup runtimeServiceGroupConfig)
