@@ -20,7 +20,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
             switch (context.FieldName)
             {
                 case "Currency": return this.CurrencyId;
-
+                case "Product": return this.ProductId;
                 default: return null;
             }
         }

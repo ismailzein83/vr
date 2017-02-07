@@ -60,8 +60,8 @@ namespace Retail.Teles.Business
         {
             AccountBEManager accountBEManager = new AccountBEManager();
 
-            return accountBEManager.UpdateAccountExtendedSetting<InterpriseAccountMappingInfo>(input.AccountBEDefinitionId, input.AccountId,
-                new InterpriseAccountMappingInfo { TelesEnterpriseId = input.TelesEnterpriseId });
+            return accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(input.AccountBEDefinitionId, input.AccountId,
+                new EnterpriseAccountMappingInfo { TelesEnterpriseId = input.TelesEnterpriseId });
         }
     }
 }

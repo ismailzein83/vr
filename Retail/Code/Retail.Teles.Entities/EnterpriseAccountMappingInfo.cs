@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.Teles.Entities
 {
-    public class InterpriseAccountMappingInfo : BaseAccountExtendedSettings
+    public class EnterpriseAccountMappingInfo : BaseAccountExtendedSettings
     {
         public dynamic TelesEnterpriseId { get; set; }
     }

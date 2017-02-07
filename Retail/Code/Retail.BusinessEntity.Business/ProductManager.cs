@@ -6,13 +6,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
  
 namespace Retail.BusinessEntity.Business
 {
-    public class ProductManager 
+    public class ProductManager : IBusinessEntityManager
     {
-        #region Public Methods
 
+
+        #region Public Methods
+        #region IBusinessEntityManager
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetProductName(Convert.ToInt32(context.EntityId));
+        }
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetProduct(context.EntityId);
+        }
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllProducts().Select(itm => itm as dynamic).ToList();
+        }
+        public IEnumerable<Product> GetAllProducts()
+        {
+            Dictionary<int, Product> cachedProducts = this.GetCachedProducts();
+            return cachedProducts.Values;
+
+        }
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
         public Vanrise.Entities.IDataRetrievalResult<ProductDetail> GetFilteredProducts(Vanrise.Entities.DataRetrievalInput<ProductQuery> input)
         {
             var allProducts = GetCachedProducts();
@@ -36,7 +76,13 @@ namespace Retail.BusinessEntity.Business
             Dictionary<int, Product> cachedProducts = this.GetCachedProducts();
             return cachedProducts.GetRecord(productId);
         }
-
+        public string GetProductName(int productId)
+        {
+            Product product = this.GetProduct(productId);
+            if (product == null)
+                return null;
+            return product.Name;
+        }
         public ProductEditorRuntime GetProductEditorRuntime(int productId)
         {
             //var packageNameByIds = new Dictionary<int,string>();

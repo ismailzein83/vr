@@ -47,7 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InterpriseAccountMappingInfo.cs" />
+    <Compile Include="EnterpriseAccountMappingInfo.cs" />
     <Compile Include="MapEnterpriseToAccountInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsAccountState.cs" />

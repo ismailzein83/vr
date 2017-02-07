@@ -19,7 +19,7 @@ namespace Retail.Teles.Business
             if (definitionSettings == null)
                 throw new NullReferenceException("definitionSettings");
 
-            var accountExtendedSettings = new AccountBEManager().GetExtendedSettings<InterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
+            var accountExtendedSettings = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
             var changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
             var changedUsers = GetChangedUsers(definitionSettings.ActionType, definitionSettings.SwitchId, changeUsersRGsAccountState);
 

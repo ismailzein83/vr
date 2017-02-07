@@ -19,36 +19,46 @@ namespace Retail.Teles.Business
         {
             var definitionSettings = context.DefinitionSettings as ChangeUsersRGsDefinitionSettings;
 
-            var accountExtendedSettings = new AccountBEManager().GetExtendedSettings<InterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
-            if(accountExtendedSettings != null)
+            var enterpriseAccountMappingInfo = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
+
+            if (enterpriseAccountMappingInfo != null)
             {
-                var sites = GetSites(definitionSettings.SwitchId, accountExtendedSettings.TelesEnterpriseId);
-                if(sites != null)
+                var changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+                if (changeUsersRGsAccountState == null)
+                    changeUsersRGsAccountState = new ChangeUsersRGsAccountState();
+                if (changeUsersRGsAccountState.ChangesByActionType == null)
+                    changeUsersRGsAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
+               
+                ChURGsActionCh chURGsActionCh;
+                if (!changeUsersRGsAccountState.ChangesByActionType.TryGetValue(definitionSettings.ActionType, out chURGsActionCh))
+                    changeUsersRGsAccountState.ChangesByActionType.Add(definitionSettings.ActionType, new ChURGsActionCh());
+               
+
+                var sites = GetSites(definitionSettings.SwitchId, enterpriseAccountMappingInfo.TelesEnterpriseId);
+                if (sites != null)
                 {
-                    ChangeUsersRGsAccountState changeUsersRGsAccountState;
-                    var usersToBlock = GetUsersToBlockForeachSite(definitionSettings, sites, out changeUsersRGsAccountState);
-                    UpdateBlockedUsersState(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState);
+                    var usersToBlock = GetUsersToBlockForeachSite(definitionSettings, sites, chURGsActionCh);
+                    UpdateBlockedUsers(definitionSettings, usersToBlock);
+                    
+                    if (chURGsActionCh != null && chURGsActionCh.ChangesByUser != null && chURGsActionCh.ChangesByUser.Count != 0)
+                        UpdateBlockedUsersState(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState);
                 }
             }
         }
-        List<dynamic> GetUsersToBlockForeachSite(ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, out ChangeUsersRGsAccountState changeUsersRGsAccountState)
+        List<dynamic> GetUsersToBlockForeachSite(ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, ChURGsActionCh chURGsActionCh)
         {
-            changeUsersRGsAccountState = new ChangeUsersRGsAccountState();
             List<dynamic> usersToBlock = new List<dynamic>();
-
-            foreach(var site in sites)
+            foreach (var site in sites)
             {
-                 var users = GetUsers(definitionSettings.SwitchId, site.id);
-                 Dictionary<dynamic, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.SwitchId, site.id);
-                 if (users != null && siteRoutingGroups != null)
+                Dictionary<dynamic, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.SwitchId, site.id);
+                if (siteRoutingGroups != null)
                 {
-                    GetUsersToBlock(definitionSettings, usersToBlock, changeUsersRGsAccountState, siteRoutingGroups, users);
-                    UpdateBlockedUsers(definitionSettings, usersToBlock);
+                    GetUsersToBlock(definitionSettings, usersToBlock, siteRoutingGroups, site.id, chURGsActionCh);
                 }
             }
             return usersToBlock;
         }
-        void GetUsersToBlock(ChangeUsersRGsDefinitionSettings definitionSettings, List<dynamic> usersToBlock, ChangeUsersRGsAccountState changeUsersRGsAccountState, Dictionary<dynamic, dynamic> siteRoutingGroups, IEnumerable<dynamic> users)
+        void GetUsersToBlock(ChangeUsersRGsDefinitionSettings definitionSettings, List<dynamic> usersToBlock, Dictionary<dynamic, dynamic> siteRoutingGroups, dynamic siteId, ChURGsActionCh chURGsActionCh)
         {
 
             List<dynamic> existingRoutingGroups = null;
@@ -95,14 +105,14 @@ namespace Retail.Teles.Business
             }
             if (definitionSettings.ExistingRoutingGroupCondition == null)
             {
-                ProcessUsersToBlock(definitionSettings, users, existingRoutingGroups, newRoutingGroup, usersToBlock, changeUsersRGsAccountState, true);
+                ProcessUsersToBlock(definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, true);
             }else if (existingRoutingGroups == null)
             {
                 switch (definitionSettings.ExistingRGNoMatchHandling)
                 {
                     case ExistingRGNoMatchHandling.Skip: return;
                     case ExistingRGNoMatchHandling.UpdateAll:
-                        ProcessUsersToBlock(definitionSettings, users, existingRoutingGroups, newRoutingGroup, usersToBlock, changeUsersRGsAccountState, true);
+                        ProcessUsersToBlock(definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, true);
                         break;
                     case ExistingRGNoMatchHandling.Stop:
                         if (existingRoutingGroups == null)
@@ -112,37 +122,36 @@ namespace Retail.Teles.Business
             }
             else
             {
-                ProcessUsersToBlock(definitionSettings, users, existingRoutingGroups, newRoutingGroup, usersToBlock, changeUsersRGsAccountState, false);
+                ProcessUsersToBlock(definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, false);
             }
         }
-        void ProcessUsersToBlock(ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> users, List<dynamic> existingRoutingGroups, dynamic newRoutingGroup ,List<dynamic> usersToBlock, ChangeUsersRGsAccountState changeUsersRGsAccountState,bool updateAll)
+        void ProcessUsersToBlock(ChangeUsersRGsDefinitionSettings definitionSettings, dynamic siteId, List<dynamic> existingRoutingGroups, dynamic newRoutingGroup, List<dynamic> usersToBlock, ChURGsActionCh chURGsActionCh, bool updateAll)
         {
-            foreach (var user in users)
+            var users = GetUsers(definitionSettings.SwitchId, siteId);
+            if(users != null)
             {
-                if (user.routingGroupId != newRoutingGroup && (updateAll || existingRoutingGroups.Contains(user.routingGroupId)))
+                foreach (var user in users)
                 {
-                    if (definitionSettings.SaveChangesToAccountState)
+                    if (user.routingGroupId != newRoutingGroup && (updateAll || existingRoutingGroups.Contains(user.routingGroupId)))
                     {
-                        if (changeUsersRGsAccountState.ChangesByActionType == null)
-                            changeUsersRGsAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
-                        ChURGsActionCh chURGsActionCh;
-                        if (!changeUsersRGsAccountState.ChangesByActionType.TryGetValue(definitionSettings.ActionType, out chURGsActionCh))
+                        if (definitionSettings.SaveChangesToAccountState)
                         {
-                            chURGsActionCh = new ChURGsActionCh();
-                            changeUsersRGsAccountState.ChangesByActionType.Add(definitionSettings.ActionType, chURGsActionCh);
+                            if(chURGsActionCh == null)
+                                chURGsActionCh = new ChURGsActionCh();
+                            if (chURGsActionCh.ChangesByUser == null)
+                                chURGsActionCh.ChangesByUser = new Dictionary<dynamic, ChURGsUserCh>();
+                            ChURGsUserCh chURGsUserCh;
+                            if (!chURGsActionCh.ChangesByUser.TryGetValue(user.id, out chURGsUserCh))
+                            {
+                                chURGsActionCh.ChangesByUser.Add(user.id, new ChURGsUserCh { OriginalRGId = user.routingGroupId });
+                            }
                         }
-                        if (chURGsActionCh.ChangesByUser == null)
-                            chURGsActionCh.ChangesByUser = new Dictionary<dynamic, ChURGsUserCh>();
-                        ChURGsUserCh chURGsUserCh;
-                        if (!chURGsActionCh.ChangesByUser.TryGetValue(user.id, out chURGsUserCh))
-                        {
-                            chURGsActionCh.ChangesByUser.Add(user.id, new ChURGsUserCh { OriginalRGId = user.routingGroupId });
-                        }
+                        user.routingGroupId = newRoutingGroup;
+                        usersToBlock.Add(user);
                     }
-                    user.routingGroupId = newRoutingGroup;
-                    usersToBlock.Add(user);
                 }
             }
+            
         }
         void UpdateBlockedUsers(ChangeUsersRGsDefinitionSettings definitionSettings,List<dynamic> usersToBlock)
         {
