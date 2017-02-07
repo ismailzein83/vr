@@ -29,7 +29,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
                     var basetop = selfOffset.top - $(window).scrollTop() + $(self).height();
                     var eltop = selfOffset.top - $(window).scrollTop();
                     var elleft = selfOffset.left - $(window).scrollLeft();
-                    $(dropDown).css({ position: 'fixed', top: basetop, left: elleft - 100 , bottom: 'unset' });
+                    $(dropDown).css({ position: 'fixed', top: basetop - 10, left: elleft - 100 , bottom: 'unset' });
 
                     
                 }                    
