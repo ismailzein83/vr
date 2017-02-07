@@ -150,7 +150,6 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
                                 filter: { SupplierFilterSettings: supplierFilterSettings },
                                 selectedIds: []
                             };
-                            console.log(options);
                             if (options != undefined) {
                                 for (var key in options) {
                                     if (key != "$type") {
@@ -176,7 +175,6 @@ app.directive('vrWhsRoutingRouterulesettingsLcr', ['UtilsService', 'VRUIUtilsSer
 
                     function getOptions() {
                         var options = {};
-                        console.log($scope.scopeModel.suppliers);
                         for (var i = 0; i < $scope.scopeModel.suppliers.length; i++) {
                             var supplier = $scope.scopeModel.suppliers[i];
                             supplier.Position = i + 1;
