@@ -64,8 +64,6 @@ namespace Mediation.Runtime.Tasks
             //Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             //runtimeServices.Add(bigDataService);
 
-            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(transactionLockRuntimeService);
 
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(dsRuntimeService);
