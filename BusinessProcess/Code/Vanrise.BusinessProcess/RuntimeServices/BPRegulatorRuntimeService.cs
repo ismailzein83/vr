@@ -28,6 +28,8 @@ namespace Vanrise.BusinessProcess
             TransactionLocker.Instance.TryLock("BPRegulatorRuntimeService_Execute", () =>
             {
                 var bpServiceInstances = GetRunningServiceInstances();
+                if (bpServiceInstances == null)
+                    return;
                 List<BPPendingInstanceInfo> runningInstances;
                 AssignPendingInstancesToServices(bpServiceInstances, out runningInstances);
                 if(runningInstances != null && runningInstances.Count > 0)
