@@ -218,12 +218,16 @@ namespace Vanrise.GenericData.Business
                     if (vrObjectTypeDefinition.Settings.ObjectType == null)
                         throw new NullReferenceException(String.Format("vrObjectTypeDefinition.Settings.ObjectType: '{0}'", criteriaField.ValueObjectName));
 
+                    VRObjectTypePropertyDefinition vrObjectTypePropertyDefinition;
+                    if(!vrObjectTypeDefinition.Settings.Properties.TryGetValue(criteriaField.ValuePropertyName,out vrObjectTypePropertyDefinition))
+                        throw new NullReferenceException(String.Format("vrObjectTypeDefinition.Settings.Properties: '{0}'", criteriaField.ValuePropertyName));
+                   
                     ruleCriteriaEvaluationInfos.Add(new CriteriaEvaluationInfo
                     {
                         CriteriaName = criteriaField.FieldName,
                         ObjectName = criteriaField.ValueObjectName,
                         ObjectType = vrObjectTypeDefinition.Settings.ObjectType,
-                        PropertyEvaluator = vrObjectTypeDefinition.Settings.Properties[criteriaField.ValuePropertyName].PropertyEvaluator
+                        PropertyEvaluator = vrObjectTypePropertyDefinition.PropertyEvaluator
                     });
                 }
             }
