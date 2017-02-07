@@ -31,7 +31,10 @@ namespace Retail.Teles.Business
                
                 ChURGsActionCh chURGsActionCh;
                 if (!changeUsersRGsAccountState.ChangesByActionType.TryGetValue(definitionSettings.ActionType, out chURGsActionCh))
-                    changeUsersRGsAccountState.ChangesByActionType.Add(definitionSettings.ActionType, new ChURGsActionCh());
+                {
+                    chURGsActionCh = new ChURGsActionCh();
+                    changeUsersRGsAccountState.ChangesByActionType.Add(definitionSettings.ActionType, chURGsActionCh);
+                }
                
 
                 var sites = GetSites(definitionSettings.SwitchId, enterpriseAccountMappingInfo.TelesEnterpriseId);
@@ -136,8 +139,6 @@ namespace Retail.Teles.Business
                     {
                         if (definitionSettings.SaveChangesToAccountState)
                         {
-                            if(chURGsActionCh == null)
-                                chURGsActionCh = new ChURGsActionCh();
                             if (chURGsActionCh.ChangesByUser == null)
                                 chURGsActionCh.ChangesByUser = new Dictionary<dynamic, ChURGsUserCh>();
                             ChURGsUserCh chURGsUserCh;
