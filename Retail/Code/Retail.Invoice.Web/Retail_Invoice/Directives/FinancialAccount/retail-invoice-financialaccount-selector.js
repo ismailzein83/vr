@@ -30,7 +30,7 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
         };
 
         function getTemplate(attrs) {
-            return '<retail-be-account-selector isrequired="financialAccountCtrl.isrequired" normal-col-num="{{financialAccountCtrl.normalColNum}}" on-ready="financialAccountCtrl.onDirectiveReady"hideremoveicon></retail-be-account-selector>';
+            return '<retail-be-account-selector isrequired="financialAccountCtrl.isrequired" normal-col-num="{{financialAccountCtrl.normalColNum}}" on-ready="financialAccountCtrl.onDirectiveReady" hideremoveicon onselectionchanged="financialAccountCtrl.onSelectionChanged"></retail-be-account-selector>';
         }
 
         function carriersCtor(ctrl, $scope, attrs) {
@@ -44,6 +44,12 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
                 ctrl.onDirectiveReady = function (api) {
                     directiveReadyAPI = api;
                     directiveReadyPromiseDeferred.resolve();
+                };
+
+                ctrl.onSelectionChanged = function (selectedAccount) {
+                    if (selectedAccount != undefined && context != undefined && context.reloadBillingPeriod != undefined) {
+                        context.reloadBillingPeriod();
+                    }
                 };
                 defineAPI();
             }
