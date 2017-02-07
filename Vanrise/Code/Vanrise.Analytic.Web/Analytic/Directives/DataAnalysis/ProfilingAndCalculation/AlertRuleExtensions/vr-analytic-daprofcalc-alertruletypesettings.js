@@ -47,7 +47,7 @@
                     if (dataItem != undefined) {
                         var filters = [];
                         var daProfCalcDataRecordStorageFilter = {
-                            $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.MainExtensions',
+                            $type: 'Vanrise.Analytic.Business.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.Business',
                             DataAnalysisDefinitionId: dataItem.DataAnalysisDefinitionId
                         };
                         filters.push(daProfCalcDataRecordStorageFilter);
@@ -95,7 +95,7 @@
                             selectedDataAnalysisDefinitionSelectoReadyDeferred = undefined;
                             var filters = [];
                             var daProfCalcDataRecordStorageFilter = {
-                                $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.MainExtensions',
+                                $type: 'Vanrise.Analytic.Business.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.Business',
                                 DataAnalysisDefinitionId: vrAlertRuleTypeSettings.DataAnalysisDefinitionId
                             };
                             filters.push(daProfCalcDataRecordStorageFilter);

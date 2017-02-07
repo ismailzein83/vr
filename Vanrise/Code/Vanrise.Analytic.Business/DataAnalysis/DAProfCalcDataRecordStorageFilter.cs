@@ -1,9 +1,8 @@
 ﻿using System;
-using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities.DataStorage.DataRecordStorage;
 
-namespace Vanrise.Analytic.MainExtensions.DataAnalysis
+namespace Vanrise.Analytic.Business
 {
     public class DAProfCalcDataRecordStorageFilter : IDataRecordStorageFilter
     {

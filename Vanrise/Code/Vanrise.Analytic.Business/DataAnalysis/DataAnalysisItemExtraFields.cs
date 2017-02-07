@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
 
-namespace Vanrise.Analytic.MainExtensions.DataAnalysis.RecordTypeExtraFields
+namespace Vanrise.Analytic.Business
 {
     public class DAProfCalcRecordTypeExtraFields : DataRecordTypeExtraField
     {

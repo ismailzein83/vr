@@ -108,7 +108,7 @@ function (UtilsService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.RecordTypeExtraFields.DAProfCalcRecordTypeExtraFields,Vanrise.Analytic.MainExtensions',
+                    $type: 'Vanrise.Analytic.Business.DAProfCalcRecordTypeExtraFields,Vanrise.Analytic.Business',
                     DataAnalysisItemDefinitionId: dataAnalysisDefinitionItemSelectorDirectiveApi.getSelectedIds(),
                     DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorDirectiveApi.getSelectedIds(),
                 };

@@ -10,6 +10,13 @@ using Vanrise.Entities;
 using Vanrise.Common.Business;
 namespace Vanrise.GenericData.Business
 {
+    public interface IDataRecordFiller
+    {
+        void FillDataRecordTypeFromDictionary(Dictionary<string, dynamic> source);
+        void SetFieldValue(string fieldName, dynamic fieldValue);
+        dynamic GetFieldValue(string fieldName);
+    }
+
     public class DataRecordTypeManager : IDataRecordTypeManager
     {
         #region Public Methods
@@ -224,7 +231,7 @@ namespace Vanrise.GenericData.Business
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordTypes",
                () =>
-               {  
+               {
                    Dictionary<Guid, DataRecordType> dataRecordTypes = new Dictionary<Guid, DataRecordType>();
                    var dataRecordTypeDefinitions = GetCachedDataRecordTypeDefinitions();
                    StringBuilder strBuilder = new StringBuilder();
@@ -284,27 +291,63 @@ namespace Vanrise.GenericData.Business
 
                 namespace #NAMESPACE#
                 {
-                    public class #CLASSNAME#
+                    public class #CLASSNAME# : Vanrise.GenericData.Business.IDataRecordFiller
                     {                   
                         static #CLASSNAME#()
                         {
                              Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(#CLASSNAME#) #PROPERTIESTOSETSERIALIZED#);
                         }     
                         #GLOBALMEMBERS#
+                            
+                        public void SetFieldValue(string fieldName, dynamic fieldValue)
+                        {
+                            switch(fieldName)
+                            {
+                                #SETFIELDMEMBERS#
+                                default : break;
+                            }
+                        }
+
+                        public dynamic GetFieldValue(string fieldName)
+                        {
+                            switch(fieldName)
+                            {
+                                #GETFIELDMEMBERS#
+                                default : break;
+                            }
+                            return null;
+                        }
+
+                        public void FillDataRecordTypeFromDictionary(Dictionary<string, dynamic> source)
+                        {
+                            foreach(var item in source)
+                            {
+                                SetFieldValue(item.Key, item.Value);
+                            }
+                        }
                     }
                 }
                 ");
 
             StringBuilder propertiesToSetSerializedBuilder = new StringBuilder();
             StringBuilder globalMembersBuilder = new StringBuilder();
+
+            StringBuilder setFieldValueBuilder = new StringBuilder();
+            StringBuilder getFieldValueBuilder = new StringBuilder();
+
             foreach (var field in dataRecordType.Fields)
             {
                 globalMembersBuilder.AppendFormat("public {0} {1} {{ get; set; }}", CSharpCompiler.TypeToString(field.Type.GetRuntimeType()), field.Name);
                 propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
+                setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); break;", field.Name, field.Type.GetNonNullableRuntimeType());
+                getFieldValueBuilder.AppendFormat(@"case ""{0}"" : return {0};", field.Name);
             }
 
             classDefinitionBuilder.Replace("#GLOBALMEMBERS#", globalMembersBuilder.ToString());
             classDefinitionBuilder.Replace("#PROPERTIESTOSETSERIALIZED#", propertiesToSetSerializedBuilder.ToString());
+
+            classDefinitionBuilder.Replace("#SETFIELDMEMBERS#", setFieldValueBuilder.ToString());
+            classDefinitionBuilder.Replace("#GETFIELDMEMBERS#", getFieldValueBuilder.ToString());
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
             string className = "DataRecord";
@@ -316,7 +359,7 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-
+        
         #region Private Classes
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {

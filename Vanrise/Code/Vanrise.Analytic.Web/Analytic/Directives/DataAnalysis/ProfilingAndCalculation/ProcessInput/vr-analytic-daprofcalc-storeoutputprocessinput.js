@@ -67,7 +67,7 @@ app.directive("vrAnalyticDaprofcalcStoreoutputprocessinput", ['UtilsService', 'V
                 if (dataItem != undefined) {
                     var filters = [];
                     var daProfCalcDataRecordStorageFilter = {
-                        $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.MainExtensions',
+                        $type: 'Vanrise.Analytic.Business.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.Business',
                         DataAnalysisDefinitionId: dataItem.DataAnalysisDefinitionId
                     };
                     filters.push(daProfCalcDataRecordStorageFilter);
