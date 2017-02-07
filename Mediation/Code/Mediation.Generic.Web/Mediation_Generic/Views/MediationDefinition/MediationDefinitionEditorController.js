@@ -327,11 +327,11 @@
             promises.push(dataTransformationDefinitionInsertSelectorLoadDeferred.promise);
 
             var payload;
-            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.CookedFromParsedSettings != undefined) {
+            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.ParsedTransformationSettings != undefined) {
                 dataTransformationDefinitionInsertSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 payload = {
-                    selectedIds: mediationDefinitionEntity.CookedFromParsedSettings.TransformationDefinitionId
+                    selectedIds: mediationDefinitionEntity.ParsedTransformationSettings.TransformationDefinitionId
                 };
             }
 
@@ -343,16 +343,16 @@
 
             //#region Load Existing Setting
 
-            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.CookedFromParsedSettings != undefined && mediationDefinitionEntity.CookedFromParsedSettings.TransformationDefinitionId != undefined) {
+            if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.ParsedTransformationSettings != undefined && mediationDefinitionEntity.ParsedTransformationSettings.TransformationDefinitionId != undefined) {
 
                 var dataTransformationDefinitionRecordParsedInsertSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 promises.push(dataTransformationDefinitionRecordParsedInsertSelectorLoadDeferred.promise);
                 UtilsService.waitMultiplePromises([dataTransformationDefinitionInsertSelectedPromiseDeferred.promise, dataTransformationDefinitionRecordParsedSelectorReadyDeferred.promise]).then(function () {
                     var payload;
                     payload = {
-                        dataTransformationDefinitionId: mediationDefinitionEntity.CookedFromParsedSettings.TransformationDefinitionId,
+                        dataTransformationDefinitionId: mediationDefinitionEntity.ParsedTransformationSettings.TransformationDefinitionId,
                         filter: { IsArray: true },
-                        selectedIds: mediationDefinitionEntity.CookedFromParsedSettings.ParsedRecordName
+                        selectedIds: mediationDefinitionEntity.ParsedTransformationSettings.ParsedRecordName
                     };
                     VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordParsedSelectorAPI, payload, dataTransformationDefinitionRecordParsedInsertSelectorLoadDeferred);
                     dataTransformationDefinitionInsertSelectedPromiseDeferred = undefined;
@@ -363,9 +363,9 @@
                 UtilsService.waitMultiplePromises([dataTransformationDefinitionInsertSelectedPromiseDeferred.promise]).then(function () {
                     var payload;
                     payload = {
-                        dataTransformationDefinitionId: mediationDefinitionEntity.CookedFromParsedSettings.TransformationDefinitionId,
+                        dataTransformationDefinitionId: mediationDefinitionEntity.ParsedTransformationSettings.TransformationDefinitionId,
                         filter: { IsArray: false },
-                        selectedIds: mediationDefinitionEntity.CookedFromParsedSettings.CookedRecordName
+                        selectedIds: mediationDefinitionEntity.ParsedTransformationSettings.CookedRecordName
                     };
                     dataTransformationDefinitionInsertSelectedPromiseDeferred = undefined;
                 });
@@ -454,7 +454,7 @@
                 MediationDefinitionId: mediationDefinitionId,
                 ParsedRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds(),
                 ParsedRecordIdentificationSetting: getParsedRecordIdentificationSetting(),
-                CookedFromParsedSettings: getCookedFromParsedSettings(),
+                ParsedTransformationSettings: getParsedTransformationSettings(),
                 OutputHandlers:buildHandlersGridData($scope.scopeModel.handlers)
             }
             return item;
@@ -537,7 +537,7 @@
             };
         }
 
-        function getCookedFromParsedSettings() {
+        function getParsedTransformationSettings() {
             return {
                 TransformationDefinitionId: dataTransformationDefinitionInsertSelectorAPI.getSelectedIds(),
                 ParsedRecordName: dataTransformationDefinitionRecordParsedSelectorAPI.getSelectedIds()
