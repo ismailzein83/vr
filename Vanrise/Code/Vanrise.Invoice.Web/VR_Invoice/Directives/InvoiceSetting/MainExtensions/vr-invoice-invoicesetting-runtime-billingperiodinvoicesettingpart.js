@@ -42,6 +42,12 @@ app.directive('vrInvoiceInvoicesettingRuntimeBillingperiodinvoicesettingpart', [
                     billingPeriodAPI = api;
                     billingPeriodReadyPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.isBillingPeriodRequired = function () {
+                    if (currentContext != undefined && currentContext.isBillingPeriodRequired != undefined)
+                    {
+                        return currentContext.isBillingPeriodRequired();
+                    }
+                };
                 defineAPI();
             }
 
@@ -49,9 +55,12 @@ app.directive('vrInvoiceInvoicesettingRuntimeBillingperiodinvoicesettingpart', [
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined && payload.fieldValue != undefined)
-                    {
-                        $scope.scopeModel.followBillingPeriod = payload.fieldValue.FollowBillingPeriod;
+                    if (payload != undefined) {
+                        currentContext = payload.context;
+                        if (payload.fieldValue != undefined) {
+                            $scope.scopeModel.followBillingPeriod = payload.fieldValue.FollowBillingPeriod;
+
+                        }
                     }
 
                     function loadBillingPeriod() {

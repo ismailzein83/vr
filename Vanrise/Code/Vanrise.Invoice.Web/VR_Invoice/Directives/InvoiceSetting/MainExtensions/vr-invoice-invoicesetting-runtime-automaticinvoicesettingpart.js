@@ -37,6 +37,13 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoicesettingpart', ['Uti
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.onEnableAutomaticInvoiceChanged = function(value)
+                {
+                    if(currentContext != undefined && currentContext.setRequiredBillingPeriod != undefined)
+                    {
+                        currentContext.setRequiredBillingPeriod($scope.scopeModel.enableAutomaticInvoice);
+                    }
+                }
                 defineAPI();
             }
 
@@ -44,9 +51,13 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoicesettingpart', ['Uti
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined && payload.fieldValue != undefined)
+                    if(payload != undefined)
                     {
-                        $scope.scopeModel.enableAutomaticInvoice = payload.fieldValue.IsEnabled;
+                        currentContext = payload.context;
+                        if (payload.fieldValue != undefined)
+                        {
+                            $scope.scopeModel.enableAutomaticInvoice = payload.fieldValue.IsEnabled;
+                        }
                     }
                 };
 

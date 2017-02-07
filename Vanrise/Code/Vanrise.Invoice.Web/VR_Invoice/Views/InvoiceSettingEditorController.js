@@ -146,7 +146,8 @@
                             var runtimeEditorPayload = {
                                 sections: invoiceTypeEntity.Settings.InvoiceSettingPartUISections,
                                 selectedValues: (isEditMode) ? invoiceSettingEntity.Details.InvoiceSettingParts : undefined,
-                                invoiceTypeId: invoiceTypeId
+                                invoiceTypeId: invoiceTypeId,
+                                context: getContext()
                             };
                             VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
                         });
@@ -163,6 +164,22 @@
                       $scope.scopeModel.isLoading = false;
                   });
             }
+        }
+
+        function getContext()
+        {
+            var requiredBillingPeriod = true;
+            var context = {
+                setRequiredBillingPeriod:function(value)
+                {
+                    requiredBillingPeriod = value;
+                },
+                isBillingPeriodRequired : function()
+                {
+                    return requiredBillingPeriod;
+                }
+            };
+            return context;
         }
     }
 

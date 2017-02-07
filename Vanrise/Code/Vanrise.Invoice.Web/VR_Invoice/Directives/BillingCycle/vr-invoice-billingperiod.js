@@ -11,7 +11,8 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -136,8 +137,10 @@
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + 'label="Billing Period" '
-                            + ' ' + hideremoveicon +' >'
-
+                            + ' ' + hideremoveicon +' '
+                             + 'isrequired ="ctrl.isrequired"' 
+                           +' >'
+                           
                             
                         + '</vr-select>'
                     + ' </vr-columns>'

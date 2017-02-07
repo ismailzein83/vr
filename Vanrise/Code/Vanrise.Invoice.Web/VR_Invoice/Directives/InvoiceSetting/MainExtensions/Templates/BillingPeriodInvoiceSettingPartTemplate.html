@@ -2,5 +2,5 @@
     <vr-switch value="scopeModel.followBillingPeriod" label="Follow Billing Period"></vr-switch>
 </vr-columns>
 <vr-columns width="fullrow" haschildcolumns>
-    <vr-invoice-billingperiod on-ready="scopeModel.onBillingPeriodReady" normal-col-num="4"></vr-invoice-billingperiod>
+    <vr-invoice-billingperiod on-ready="scopeModel.onBillingPeriodReady" normal-col-num="4" isrequired="scopeModel.isBillingPeriodRequired()"></vr-invoice-billingperiod>
 </vr-columns>

@@ -32,7 +32,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
         };
 
         function RowCtor(ctrl, $scope) {
-            var currentContext;
+            var context;
             var invoiceTypeId;
             function initializeController() {
                 ctrl.parts = [];
@@ -45,7 +45,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
                 api.load = function (payload) {
                     if (payload.parts != undefined) {
                         invoiceTypeId = payload.invoiceTypeId;
-                        currentContext = payload.context;
+                        context = payload.context;
                         var promises = [];
                         for (var i = 0; i < payload.parts.length; i++) {
                             var part = payload.parts[i];
@@ -74,15 +74,16 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
 
             function preparePartObject(part) {
 
-                if (currentContext != undefined)
-                    part.runTimeEditor = currentContext.getRuntimeEditor(part.PartConfigId);
+                if (context != undefined)
+                    part.runTimeEditor = context.getRuntimeEditor(part.PartConfigId);
                 part.onPartDirectiveReady = function (api) {
                     part.partAPI = api;
                     part.readyPromiseDeferred.resolve();
                 };
                 var payload = {
-                    fieldValue: currentContext != undefined ? currentContext.getPartsPathValue(part.PartConfigId) : undefined,
-                    invoiceTypeId: invoiceTypeId
+                    fieldValue: context != undefined ? context.getPartsPathValue(part.PartConfigId) : undefined,
+                    invoiceTypeId: invoiceTypeId,
+                    context:getContext()
                 };
                 if (part.readyPromiseDeferred != undefined) {
                     part.readyPromiseDeferred.promise.then(function () {
@@ -92,7 +93,13 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
                 }
                 ctrl.parts.push(part);
             }
-
+            function getContext()
+            {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
+            }
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

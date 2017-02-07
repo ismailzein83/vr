@@ -35,6 +35,8 @@ app.directive('vrInvoiceInvoicesettingRuntimeEditor', ['UtilsService', 'VRUIUtil
             var selectedValues;
             var invoiceSettingsPartsConfigs;
             var invoiceTypeId;
+
+            var context;
             function initializeController() {
                 ctrl.sections = [];
                 defineAPI();
@@ -46,6 +48,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeEditor', ['UtilsService', 'VRUIUtil
                 api.load = function (payload) {
                   
                     if (payload != undefined && payload.sections != undefined) {
+                        context = payload.context;
                         invoiceTypeId = payload.invoiceTypeId;
                         selectedValues = payload.selectedValues;
                         ctrl.sections.length = 0;
@@ -107,11 +110,12 @@ app.directive('vrInvoiceInvoicesettingRuntimeEditor', ['UtilsService', 'VRUIUtil
             }
 
             function getContext() {
-                var context = {
-                    getRuntimeEditor: getRuntimeEditor,
-                    getPartsPathValue: getPartsPathValue
-                };
-                return context;
+                var currentContext = context;
+                if (context == undefined)
+                    currentContext = {};
+                currentContext.getRuntimeEditor = getRuntimeEditor;
+                currentContext.getPartsPathValue = getPartsPathValue;
+                return currentContext;
             }
 
             function getPartsPathValue(fieldPath)
