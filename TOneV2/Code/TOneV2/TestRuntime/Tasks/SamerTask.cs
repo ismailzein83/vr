@@ -73,9 +73,7 @@ namespace TestRuntime.Tasks
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-
-            runtimeServices.Add(transactionLockRuntimeService);
+           
             runtimeServices.Add(queueActivationService);
            // runtimeServices.Add(schedulerService);
             runtimeServices.Add(dsRuntimeService);

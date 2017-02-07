@@ -64,9 +64,7 @@ namespace TestRuntime
 
             //Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>(0, "testCDRQueue");
             //var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
-            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(transactionLockRuntimeService);
-            
+           
             Vanrise.Caching.Runtime.CachingDistributorRuntimeService cachingDistributorRuntimeService = new Vanrise.Caching.Runtime.CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(cachingDistributorRuntimeService);
             //Vanrise.Caching.Runtime.CachingRuntimeService cachingRuntimeService = new Vanrise.Caching.Runtime.CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };

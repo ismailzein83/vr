@@ -40,9 +40,6 @@ namespace TestRuntime.Tasks
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(schedulerService);
 
-            TransactionLockRuntimeService transactionLockRuntimeService = new Vanrise.Runtime.TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(transactionLockRuntimeService);
-
             DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(dsRuntimeService);
 
