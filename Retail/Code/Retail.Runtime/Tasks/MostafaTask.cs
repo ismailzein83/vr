@@ -16,11 +16,10 @@ namespace Retail.Runtime.Tasks
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             BPRegulatorRuntimeService regulatorRuntimeService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            TransactionLockRuntimeService transactionLockRuntimeService = new Vanrise.Runtime.TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            
             var runtimeServices = new List<RuntimeService>();
 
             runtimeServices.Add(bpService);
-            runtimeServices.Add(transactionLockRuntimeService);
             runtimeServices.Add(regulatorRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);

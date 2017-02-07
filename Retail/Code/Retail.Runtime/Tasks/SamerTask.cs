@@ -17,8 +17,7 @@ namespace Retail.Runtime.Tasks
         {
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
             var runtimeServices = new List<RuntimeService>();
-            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(transactionLockRuntimeService);
+            
             BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpRegulatorService);
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
