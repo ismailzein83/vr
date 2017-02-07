@@ -13,6 +13,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Business;
 //using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Caching.Runtime;
 using Vanrise.Common.Business;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
@@ -24,377 +25,70 @@ namespace TestRuntime.Tasks
     {
         public void Execute()
         {
-            //var services = Vanrise.Common.Serializer.Deserialize<List<TOne.WhS.BusinessEntity.Entities.ZoneService>>("{\"$values\":[{\"ServiceId\":1},{\"ServiceId\":2},{\"ServiceId\":3}]}");
-            //string inIP = null;
-            //while (true)
-            //{
-
-            //    Uri url;
-            //    System.Net.IPAddress ip;
-            //    if (Uri.TryCreate(String.Format("http://{0}", inIP), UriKind.Absolute, out url) && System.Net.IPAddress.TryParse(url.Host, out ip))
-            //    {
-            //        Console.WriteLine("valid IP");
-            //    }
-            //    else
-            //        Console.WriteLine("Invalid");
-            //    inIP = Console.ReadLine();
-            //}
-            ////TestCacheCleaner();
-
-            //var saleZoneDataManager = new SaleZoneDataManager();
-            //object lastReceivedTimeStamp = null;
-            //while(true)
-            //{
-            //    bool isDataUpdated = saleZoneDataManager.IsDataUpdated(ref lastReceivedTimeStamp);
-            //    Console.WriteLine(isDataUpdated);
-            //    Console.ReadKey();
-            //}
-            ////TOne.LCR.Data.SQL.CodeDataManager codeDataManager = new TOne.LCR.Data.SQL.CodeDataManager();
-            ////TOne.LCR.Data.SQL.CodeMatchDataManager codeMatchDataManager = new TOne.LCR.Data.SQL.CodeMatchDataManager();
-            ////List<SupplierCodeInfo> suppliersCodeInfo = codeDataManager.GetActiveSupplierCodeInfo(DateTime.Today, DateTime.Today);
-            ////List<string> distinctCodes = codeDataManager.GetDistinctCodes(false);
-            ////codeMatchDataManager.FillCodeMatchesFromCodes(new CodeList(distinctCodes), suppliersCodeInfo, DateTime.Today);
-            ////Console.ReadKey();
-            ////return;
-            System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
             var runtimeServices = new List<RuntimeService>();
 
-            //var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            //Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("DemoRawCDR");
-
-            //Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>(0, "testCDRQueue");
-            //var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
-            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(transactionLockRuntimeService);
-
-            Vanrise.Caching.Runtime.CachingDistributorRuntimeService cachingDistributorRuntimeService = new Vanrise.Caching.Runtime.CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(cachingDistributorRuntimeService);
-            //Vanrise.Caching.Runtime.CachingRuntimeService cachingRuntimeService = new Vanrise.Caching.Runtime.CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(cachingRuntimeService);
-            BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(bpRegulatorService);
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            BusinessProcessService bpService = new BusinessProcessService() {Interval = new TimeSpan(0, 0, 2)};
             runtimeServices.Add(bpService);
 
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService()
+            {
+                Interval = new TimeSpan(0, 0, 2)
+            };
+            runtimeServices.Add(queueRegulatorService);
 
-            //QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            //QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            //SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService()
+            {
+                Interval = new TimeSpan(0, 0, 2)
+            };
+            runtimeServices.Add(queueActivationService);
 
+            SummaryQueueActivationRuntimeService summaryQueueActivationService =
+                new SummaryQueueActivationRuntimeService() {Interval = new TimeSpan(0, 0, 2)};
+            runtimeServices.Add(summaryQueueActivationService);
 
-            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService schedulerService = new SchedulerService() {Interval = new TimeSpan(0, 0, 1)};
+            runtimeServices.Add(schedulerService);
+
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService =
+                new Vanrise.Common.Business.BigDataRuntimeService {Interval = new TimeSpan(0, 0, 2)};
             runtimeServices.Add(bigDataService);
-            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(queueRegulatorService);
-            //runtimeServices.Add(queueActivationService);
-            //runtimeServices.Add(summaryQueueActivationService);
 
+            TransactionLockRuntimeService transactionLockRuntimeService = new TransactionLockRuntimeService()
+            {
+                Interval = new TimeSpan(0, 0, 1)
+            };
+            runtimeServices.Add(transactionLockRuntimeService);
 
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService =
+                new Vanrise.Integration.Business.DataSourceRuntimeService {Interval = new TimeSpan(0, 0, 2)};
+            runtimeServices.Add(dsRuntimeService);
 
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService
+            {
+                Interval = new TimeSpan(0, 0, 2)
+            };
+            runtimeServices.Add(bpRegulatorRuntimeService);
 
+            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService {Interval = new TimeSpan(0, 0, 2)};
+            runtimeServices.Add(cachingRuntimeService);
 
-            //DataGroupingDistributorRuntimeService dataGroupingDistributorService = new DataGroupingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 1) };
-            //runtimeServices.Add(dataGroupingDistributorService);
-            //DataGroupingExecutorRuntimeService dataGroupingExecutorService = new DataGroupingExecutorRuntimeService { Interval = new TimeSpan(0, 0, 1) };
-            //runtimeServices.Add(dataGroupingExecutorService);
-            //runtimeServices.Add(schedulerService);
-            //runtimeServices.Add(dsRuntimeService);
+            CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService
+            {
+                Interval = new TimeSpan(0, 0, 2)
+            };
+            runtimeServices.Add(cachingDistributorRuntimeService);
 
+            DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService =
+                new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() {Interval = new TimeSpan(0, 0, 2)};
+            runtimeServices.Add(dataGroupingExecutorRuntimeService);
+
+            DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService =
+                new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() {Interval = new TimeSpan(0, 0, 2)};
+            runtimeServices.Add(dataGroupingDistributorRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
             Console.ReadKey();
-            Parallel.For(0, 10, (i) =>
-            {
-                Lock(String.Format("Transaction {0}", i % 3), 2);
-            });
-            Lock("transaction X");
-            //var storeCDRRawsStage = new QueueStageExecutionActivity { StageName = "Store CDR Raws", QueueName = "CDRRaw", QueueTypeFQTN = typeof(CDRBatch).AssemblyQualifiedName , QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreCDRRawsActivator).AssemblyQualifiedName} };
-            //var processRawCDRsStage = new QueueStageExecutionActivity { StageName = "Process Raw CDRs", QueueName = "CDRRawForBilling", QueueTypeFQTN = typeof(CDRBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(ProcessRawCDRsActivator).AssemblyQualifiedName } };
-            //QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
-            //{
-            //    Activities = new List<BaseExecutionActivity>
-            //    {
-            //        new ParallelExecutionActivity {
-            //             Activities = new List<BaseExecutionActivity>
-            //             {
-            //                  storeCDRRawsStage,
-            //                  new SequenceExecutionActivity{ 
-            //                      Activities = new List<BaseExecutionActivity>                              
-            //                      {
-            //                          processRawCDRsStage,
-            //                          new ParallelExecutionActivity
-            //                          {
-            //                              Activities = new List<BaseExecutionActivity>
-            //                              {
-            //                                  new SequenceExecutionActivity 
-            //                                  {
-            //                                        Activities = new List<BaseExecutionActivity>
-            //                                        {
-            //                                            new QueueStageExecutionActivity  { StageName = "Process Billing CDRs", QueueName ="CDRBilling", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
-            //                                            new SplitExecutionActivity 
-            //                                            { 
-            //                                                Activities = new List<BaseExecutionActivity>
-            //                                                {
-            //                                                    new QueueStageExecutionActivity{ StageName = "Store CDR Main",  QueueName = "CDRMain", QueueTypeFQTN = typeof(CDRMainBatch).AssemblyQualifiedName},
-            //                                                    new QueueStageExecutionActivity  { StageName = "Store CDR Invalid",  QueueName = "CDRInvalid", QueueTypeFQTN = typeof(CDRInvalidBatch).AssemblyQualifiedName}
-            //                                                }
-            //                                            }
-            //                                        }
-            //                                  },
-            //                                  new SequenceExecutionActivity
-            //                                  {
-            //                                      Activities = new List<BaseExecutionActivity>
-            //                                      {
-            //                                          new QueueStageExecutionActivity { StageName = "Process Traffic Statistics",QueueName = "CDRBillingForTrafficStats", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
-            //                                          new QueueStageExecutionActivity  { StageName = "Store Traffic Statistics", QueueName = "TrafficStatistics", QueueTypeFQTN = typeof(TrafficStatisticBatch).AssemblyQualifiedName}
-            //                                      }
-            //                                  },
-            //                                  new SequenceExecutionActivity
-            //                                  {
-            //                                      Activities = new List<BaseExecutionActivity>
-            //                                      {
-            //                                          new QueueStageExecutionActivity { StageName = "Process Daily Traffic Statistics",  QueueName = "CDRBillingForDailyTrafficStats", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
-            //                                          new QueueStageExecutionActivity  { StageName = "Store Daily Traffic Statistics", QueueName = "TrafficStatisticsDaily", QueueTypeFQTN = typeof(TrafficStatisticDailyBatch).AssemblyQualifiedName}
-            //                                      }
-            //                                  }
-            //                              }
-            //                          }
-            //                      }
-            //                  }
-            //             }
-            //        }
-            //    }
-            //};
-            //var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
-
-
-
-            //QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
-            //var queuesByStages = executionFlowManager.GetQueuesByStages(7);
-            //TOne.CDR.Entities.CDRBatch cdrBatch = new CDRBatch();
-            //cdrBatch.CDRs = new List<TABS.CDR> { 
-            // new TABS.CDR {  AttemptDateTime = DateTime.Now, CDPN = "343565436", CGPN = "5465436547", ConnectDateTime = DateTime.Now, Duration = new TimeSpan(0,2,4), IN_CARRIER="Trer", OUT_CARRIER = "6546"
-            // }
-            //};
-            //cdrBatch.SwitchId = 8;
-            //while (true)
-            //{
-            //    Console.ReadKey();
-            //    queuesByStages["Store CDR Raws"].Queue.EnqueueObject(cdrBatch);
-            //}
-
-
-
-            ////QueueGroupType queueGroupType = new QueueGroupType() { ChildItems = new Dictionary<string, QueueGroupTypeItem>() };
-            ////var cdrRaw = new QueueGroupTypeItem(typeof(CDRBatch).AssemblyQualifiedName);
-            ////queueGroupType.ChildItems.Add("CDR Raw", cdrRaw);
-            ////var cdrRawForBilling = new QueueGroupTypeItem (typeof(CDRBatch).AssemblyQualifiedName );            
-            ////queueGroupType.ChildItems.Add("CDR Raw for Billing", cdrRawForBilling);
-            ////var cdrBilling = new QueueGroupTypeItem(typeof(CDRBillingBatch).AssemblyQualifiedName);
-            ////cdrRawForBilling.ChildItems.Add("CDR Billing", cdrBilling);
-            ////var cdrMain = new QueueGroupTypeItem(typeof(CDRMainBatch).AssemblyQualifiedName);
-            ////cdrBilling.ChildItems.Add("CDR Main", cdrMain);
-            //Console.ReadKey();
-            //host.Stop();
-            //Console.ReadKey();
-            //BusinessProcessRuntime.Current.TerminatePendingProcesses();
-            //Timer timer = new Timer(1000);
-            //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-            //timer.Start();
-
-            //////System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-            //////    {
-            //////        for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
-            //////        {
-            //////            TriggerProcess(d);
-            //////            System.Threading.Thread.Sleep(30000);
-            //////        }
-            //////    });
-            //////t.Start();
-
-            ////BPClient bpClient = new BPClient();
-            //////bpClient.CreateNewProcess(new CreateProcessInput
-            //////{
-            //////    ProcessName = "RoutingProcess",
-            //////    InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
-            //////    {
-            //////        DivideProcessIntoSubProcesses = true,
-            //////        EffectiveTime = DateTime.Now,
-            //////        IsFuture = false,
-            //////        IsLcrOnly = false
-            //////    }
-            //////});
-
-            ////bpClient.CreateNewProcess(new CreateProcessInput
-            ////{
-            ////    InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
-            ////    {
-            ////        RepricingDay = DateTime.Parse("2013-03-29")//,
-            ////       // DivideProcessIntoSubProcesses = true
-            ////    }
-            ////});
-
-            //bpClient.CreateNewProcess(new CreateProcessInput
-            //{
-            //    ProcessName = "RoutingProcess",
-            //    InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
-            //    {
-            //        EffectiveTime = DateTime.Now,
-            //        IsFuture = true
-            //    }
-            //});
-
-            //bpClient.CreateNewProcess(new CreateProcessInput
-            //{
-            //    ProcessName = "UpdateCodeZoneMatchProcess",
-            //    InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
-            //    {
-            //        IsFuture = false,
-            //        CodeEffectiveOn = DateTime.Now
-            //    }
-            //});
-
-            //processManager.CreateNewProcess(new CreateProcessInput
-            //{
-            //    ProcessName = "UpdateZoneRateProcess",
-            //    InputArguments = new TOne.LCRProcess.Arguments.UpdateZoneRateProcessInput
-            //    {
-            //        IsFuture = false,
-            //        ForSupplier = true,
-            //        RateEffectiveOn = DateTime.Now
-            //    }
-            //});
-        }
-
-        private static void Lock(string transactionName, int maxConcurrency = 1)
-        {
-            Vanrise.Runtime.TransactionLocker locker = TransactionLocker.Instance;
-            bool isLocked = locker.TryLock(transactionName, maxConcurrency, () =>
-            {
-                Console.WriteLine("Transaction '{0}' Locked", transactionName);
-                Console.ReadKey();
-            });
-            if (isLocked)
-                Console.WriteLine("Transaction '{0}' unlocked", transactionName);
-            else
-                Console.WriteLine("Cannot lock Transaction '{0}'", transactionName);
-            Console.ReadKey();
-        }
-
-        private void TestCacheCleaner()
-        {
-            int itemsAdded = 0;
-            while (true)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManagerSmall>().GetOrCreateObject(Guid.NewGuid().ToString(),
-                       () => GenerateBigList(100));
-                }
-                for (int i = 0; i < 3; i++)
-                {
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager1>().GetOrCreateObject(Guid.NewGuid().ToString(),
-                       () => GenerateBigList(10000));
-                }
-
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManagerLarge>(Guid.NewGuid()).GetOrCreateObject(Guid.NewGuid().ToString(),
-                    () => GenerateBigList(1000000));
-
-                // System.Threading.Thread.Sleep(50);
-                Console.WriteLine(++itemsAdded);
-
-            }
-        }
-
-        private List<string> GenerateBigList(int count)
-        {
-            List<string> lst = new List<string>();
-            for (int i = 0; i < count; i++)
-            {
-                lst.Add(String.Format("Item Nb : {0}", i));
-            }
-            return lst;
-        }
-
-        private class CacheManager1 : Vanrise.Caching.BaseCacheManager
-        {
-
-        }
-
-        private class CacheManagerLarge : Vanrise.Caching.BaseCacheManager
-        {
-            public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
-            {
-                get
-                {
-                    return Vanrise.Caching.CacheObjectSize.Large;
-                }
-            }
-        }
-
-        private class CacheManagerSmall : Vanrise.Caching.BaseCacheManager
-        {
-            public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
-            {
-                get
-                {
-                    return Vanrise.Caching.CacheObjectSize.Small;
-                }
-            }
-        }
-
-        //static bool _isRunning;
-        //static object _lockObj = new object();
-        //static void timer_Elapsed(object sender, ElapsedEventArgs e)
-        //{
-        //    lock (_lockObj)
-        //    {
-        //        if (_isRunning)
-        //            return;
-        //        _isRunning = true;
-        //    }
-        //    try
-        //    {
-        //        //BusinessProcessRuntime.Current.LoadAndExecutePendings();
-
-        //        BusinessProcessRuntime.Current.ExecutePendings();
-        //        BusinessProcessRuntime.Current.TriggerPendingEvents();
-        //    }
-        //    finally
-        //    {
-        //        lock (_lockObj)
-        //        {
-        //            _isRunning = false;
-        //        }
-        //    }
-        //}
-
-        private static void TriggerProcess(DateTime date)
-        {
-            TOne.CDRProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                InputArguments = inputArguments
-            };
-            BPInstanceManager processManager = new BPInstanceManager();
-            processManager.CreateNewProcess(input);
-        }
-    }
-
-    public class SaleZoneDataManager : Vanrise.Data.SQL.BaseSQLDataManager
-    {
-        public SaleZoneDataManager()
-            : base("TOneV2DBConnString")
-        {
-
-        }
-
-
-        public bool IsDataUpdated(ref object lastReceivedTimeStamp)
-        {
-            return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedTimeStamp);
         }
     }
 }
