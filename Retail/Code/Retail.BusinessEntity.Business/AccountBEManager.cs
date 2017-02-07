@@ -126,6 +126,7 @@ namespace Retail.BusinessEntity.Business
         public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(AccountToInsert accountToInsert)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountDetail>();
+       
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;

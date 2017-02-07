@@ -41,6 +41,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                     Title = string.Format("{0} Phone Numbers", a.Name),
                     FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
                 });
+                list.Add(new GenericFieldDefinition()
+                {
+                    Name = string.Format("{0}_Title", a.Name),
+                    Title = string.Format("{0} Title", a.Name),
+                    FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                });
             }
 
            if (this.IncludeArabicName == true)

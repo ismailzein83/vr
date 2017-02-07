@@ -120,28 +120,28 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                            if (settings != undefined && settings.PhoneNumbers !=undefined)
                             {
                                for (var i = 0; i < settings.PhoneNumbers.length; i++) {
-                                   phoneNumbers.push({
-                                        phoneNumber: settings.PhoneNumbers[i]
-                                    });
+                                   phoneNumbers.push(settings.PhoneNumbers[i]);
                                 }
                             }
                             var contact = {
                                 label: contactType.Title,
-                                name:settings !=undefined?settings.ContactName:undefined,
+                                name: settings != undefined ? settings.ContactName : undefined,
+                                title: settings != undefined ? settings.Title : undefined,
                                 email: settings != undefined ? settings.Email : undefined,
                                 contactType: contactType.Name,
                                 disabledphone: true,
-                                phoneNumbers:settings !=undefined?phoneNumbers: [],
-                                addPhoneNumberOption: function () {
-                                    contact.phoneNumbers.push({
-                                        phoneNumber: contact.phoneNumberValue
-                                    });
-                                    contact.phoneNumberValue = undefined;
-                                    contact.disabledphone = true;
-                                },
-                                onPhoneValueChange: function (value) {
-                                    contact.disabledphone = (value == undefined);
-                                }
+                                phoneNumbers: settings != undefined ? phoneNumbers : []
+                                //,
+                                //addPhoneNumberOption: function () {
+                                //    contact.phoneNumbers.push({
+                                //        phoneNumber: contact.phoneNumberValue
+                                //    });
+                                //    contact.phoneNumberValue = undefined;
+                                //    contact.disabledphone = true;
+                                //},
+                                //onPhoneValueChange: function (value) {
+                                //    contact.disabledphone = (value == undefined);
+                                //}
                             };
                             $scope.scopeModel.contacts.push(contact);
                         }
@@ -190,8 +190,9 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                         var contact = $scope.scopeModel.contacts[i];
                         var obj =  {
                             ContactName: contact.name,
+                            Title: contact.title,
                             Email: contact.email,
-                            PhoneNumbers: UtilsService.getPropValuesFromArray(contact.phoneNumbers, "phoneNumber")
+                            PhoneNumbers: contact.phoneNumbers
                         };
                         if (obj != null)
                             contacts[contact.contactType] = obj;

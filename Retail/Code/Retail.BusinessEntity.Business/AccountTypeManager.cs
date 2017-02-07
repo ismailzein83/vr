@@ -332,7 +332,7 @@ namespace Retail.BusinessEntity.Business
         {
             fields.Add(new AccountNameGenericField());
             fields.Add(new AccountSourceIdGenericField());
-
+            fields.Add(new AccountCreatedTimeGenericField());
             if (accountBEDefinitionId.HasValue)
             {
                 fields.Add(new AccountTypeGenericField(accountBEDefinitionId.Value));

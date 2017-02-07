@@ -78,7 +78,13 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                 List<string> namePart = FieldName.Split('_').ToList();
                 var contact = this.Contacts.GetRecord(namePart[0]);
                 return contact != null && contact.PhoneNumbers!=null ? string.Join(",", contact.PhoneNumbers) : null;
-            }    
+            }
+            if (FieldName.Contains("Title"))
+            {
+                List<string> namePart = FieldName.Split('_').ToList();
+                var contact = this.Contacts.GetRecord(namePart[0]);
+                return contact != null ? contact.Title : null;
+            }
             else 
                 return null;
            
@@ -89,10 +95,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
     public class AccountCompanyContact
     {
         public string ContactName { get; set; }
-        
+        public string Title { get; set; }
         public string Email { get; set; }
 
         public List<string> PhoneNumbers { get; set; }
+
+      
     }
 
    

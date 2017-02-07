@@ -68,19 +68,15 @@
             <vr-textbox value="c.name" type="c.inputetype"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
+            <vr-label>Title</vr-label>
+            <vr-textbox value="c.title" type="c.inputetype"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/2row">
             <vr-label>Email</vr-label>
             <vr-textbox value="c.email" type="c.inputetype"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-textbox label="Phones" type="number" decimalprecision="0" onvaluechanged="c.onPhoneValueChange" value="c.phoneNumberValue"></vr-textbox>
-        </vr-columns>
-        <vr-columns withemptyline width="1/2row">
-            <vr-button type="Add" data-onclick="c.addPhoneNumberOption" vr-disabled="c.disabledphone" standalone></vr-button>
-        </vr-columns>
-        <vr-columns width="fullrow">
-            <vr-datalist maxitemsperrow="2" datasource="c.phoneNumbers" autoremoveitem="true">
-                {{dataItem.phoneNumber}}
-            </vr-datalist>
-        </vr-columns>
+            <vr-textbox-multiple label="Phones" datatype="number" value="c.phoneNumbers"></vr-textbox-multiple>
+        </vr-columns>        
     </vr-section>
 </vr-tab>

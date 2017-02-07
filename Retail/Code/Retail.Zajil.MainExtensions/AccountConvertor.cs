@@ -61,6 +61,7 @@ namespace Retail.Zajil.MainExtensions
                 };
 
                 accountData.Account.Name = accountName;
+                accountData.Account.CreatedTime = row["CreateDate"] != DBNull.Value ? (DateTime)row["CreateDate"] : default(DateTime);
                 accountData.Account.SourceId = sourceId;
                 accountData.Account.TypeId = this.AccountTypeId;
                 FillAccountSettings(accountData, row);
@@ -196,14 +197,15 @@ namespace Retail.Zajil.MainExtensions
             {
                 ContactName = row["Contact_Person"] as string,
                 Email = row["Email"] as string,
-                PhoneNumbers = new List<string> { row["Mobile"] as string }
+                PhoneNumbers = new List<string> { row["Mobile"] as string },
+                Title = row["title"] as string
             });
 
             contacts.Add("Finance", new AccountCompanyContact
             {
                 ContactName = row["finance_contact_person"] as string,
                 Email = row["finance_contact_email"] as string,
-                PhoneNumbers = new List<string> { row["finance_contact_number"] as string }
+                PhoneNumbers = new List<string> { row["finance_contact_number"] as string },
             });
 
             return contacts;

@@ -36,7 +36,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             object accountId;
             string serializedSettings = accountToInsert.Settings != null ? Vanrise.Common.Serializer.Serialize(accountToInsert.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, accountToInsert.Name, accountToInsert.TypeId, serializedSettings, accountToInsert.ParentAccountId, accountToInsert.StatusId, accountToInsert.SourceId);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, accountToInsert.Name, accountToInsert.TypeId, serializedSettings, accountToInsert.ParentAccountId, accountToInsert.StatusId, accountToInsert.SourceId, ToDBNullIfDefault(accountToInsert.CreatedTime));
 
             if (affectedRecords > 0)
             {
