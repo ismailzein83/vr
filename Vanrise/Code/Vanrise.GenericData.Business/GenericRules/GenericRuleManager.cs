@@ -182,11 +182,12 @@ namespace Vanrise.GenericData.Business
         public static RuleTree BuildRuleTree<Q>(GenericRuleDefinitionCriteria ruleDefinitionCriteria, IEnumerable<Q> rules) where Q : class, IVRRule, IGenericRule
         {
             List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
-            foreach (var ruleDefinitionCriteriaField in ruleDefinitionCriteria.Fields.OrderBy(itm => itm.Priority))
-            {
-                BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
-                ruleStructureBehaviors.Add(ruleStructureBehavior);
-            }
+            if (ruleDefinitionCriteria != null)
+                foreach (var ruleDefinitionCriteriaField in ruleDefinitionCriteria.Fields.OrderBy(itm => itm.Priority))
+                {
+                    BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
+                    ruleStructureBehaviors.Add(ruleStructureBehavior);
+                }
             return new RuleTree(rules, ruleStructureBehaviors);
         }
 
