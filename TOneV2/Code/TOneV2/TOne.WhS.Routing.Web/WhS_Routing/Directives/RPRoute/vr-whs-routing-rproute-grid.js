@@ -103,13 +103,13 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
-                name: "Rule",
+                name: "Matching Rule",
                 clicked: openRouteRuleEditor,
             }
             ];
         }
         function openRouteRuleEditor(dataItem) {
-            WhS_Routing_RouteRuleService.editRouteRule(dataItem.ExecutedRuleId);
+            WhS_Routing_RouteRuleService.viewRouteRule(dataItem.ExecutedRuleId);
         }
 
         function setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail) {

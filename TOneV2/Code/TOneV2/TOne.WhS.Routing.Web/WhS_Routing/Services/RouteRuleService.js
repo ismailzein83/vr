@@ -2,13 +2,14 @@
 
     'use strict';
 
-    RouteRuleService.$inject = ['WhS_Routing_RouteRuleAPIService', 'VRModalService', 'VRNotificationService'];
+    RouteRuleService.$inject = ['WhS_Routing_RouteRuleAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService'];
 
-    function RouteRuleService(WhS_Routing_RouteRuleAPIService, VRModalService, VRNotificationService) {
+    function RouteRuleService(WhS_Routing_RouteRuleAPIService, VRModalService, VRNotificationService, UtilsService) {
         return ({
             addRouteRule: addRouteRule,
             editRouteRule: editRouteRule,
-            deleteRouteRule: deleteRouteRule
+            deleteRouteRule: deleteRouteRule,
+            viewRouteRule: viewRouteRule
         });
 
         function addRouteRule(onRouteRuleAdded, routingProductId, sellingNumberPlanId) {
@@ -39,7 +40,18 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
         }
+        function viewRouteRule(routeRuleId) {
+            var modalSettings = {
+            };
+            var parameters = {
+                routeRuleId: routeRuleId
+            };
 
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
+        }
         function deleteRouteRule(scope, routeRuleObj, onRouteRuleDeleted) {
             VRNotificationService.showConfirmation('Are you sure you want to delete the route rule ' + routeRuleObj.Entity.Name + '?')
                 .then(function (response) {

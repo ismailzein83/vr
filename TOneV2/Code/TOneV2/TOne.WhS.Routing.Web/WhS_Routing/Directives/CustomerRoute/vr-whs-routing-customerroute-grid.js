@@ -113,7 +113,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                 var menu = [];
                 if (dataItem.Entity.ExecutedRuleId!=undefined)
                     menu.push({
-                        name: "Rule",
+                        name: "Matching Rule",
                         clicked: openRouteRuleEditor,
                     });
                 return menu;
@@ -121,7 +121,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
              
         }
         function openRouteRuleEditor(dataItem) {
-            WhS_Routing_RouteRuleService.editRouteRule(dataItem.Entity.ExecutedRuleId);
+            WhS_Routing_RouteRuleService.viewRouteRule(dataItem.Entity.ExecutedRuleId);
         }
 
         function initDrillDownDefinitions()

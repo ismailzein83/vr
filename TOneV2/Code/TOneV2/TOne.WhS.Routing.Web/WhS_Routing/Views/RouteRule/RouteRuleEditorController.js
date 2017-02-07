@@ -212,7 +212,8 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
-                $scope.title = "Edit Route Rule";
+                //$scope.title = "Edit Route Rule";
+                $scope.title = UtilsService.buildTitleForUpdateEditor("", "Route Rule", $scope);
                 getRouteRule().then(function () {
                     loadAllControls()
                         .finally(function () {
