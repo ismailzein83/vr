@@ -154,7 +154,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     ctrl.file = null
                 }
                 if ($attrs.onvaluechanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
+                    var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
                     if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
                         onvaluechangedMethod();
                     }
