@@ -180,7 +180,8 @@ namespace Retail.BusinessEntity.Business
                 SourceId = account.SourceId,
                 StatusId = account.StatusId,
                 TypeId = account.TypeId,
-                ParentAccountId = account.ParentAccountId
+                ParentAccountId = account.ParentAccountId,
+                CreatedTime = account.CreatedTime
             };
         }
         IGenericRuleManager GetRuleManager(Guid ruleDefinitionId)
