@@ -143,10 +143,17 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                                 type: response.Extension,
                                 fileId: response.FileId,
                                 lastModifiedDate: response.lastModifiedDate
-                            };
+                            };                            
                         }
                         else
                             ctrl.file = {};
+
+                        if ($attrs.onvaluechanged != undefined) {
+                            var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
+                            if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
+                                onvaluechangedMethod();
+                            }
+                        }
                     });
 
                 }
