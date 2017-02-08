@@ -8,3 +8,4 @@ Security						C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 CP_SupplierPricelist			C:\TFS\CarrierPortal\Code\CP.SupplierPricelist.Web\CP_SupplierPricelist
 Runtime							C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 PartnerPortal_CustomerAccess	C:\TFS\CarrierPortal\Code\PartnerPortal.CustomerAccess.Web\PartnerPortal_CustomerAccess
+VR_GenericData					C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
