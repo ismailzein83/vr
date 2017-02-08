@@ -28,13 +28,16 @@
 
     function getLastWeekInterval() {
         var beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000);
+        var beforeOneWeekTo = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000);
         var day = beforeOneWeek.getDay();
         var diffToMonday = beforeOneWeek.getDate() - day + (day === 0 ? -6 : 1);
         var beforeLastMonday = new Date(beforeOneWeek.setDate(diffToMonday));
-        var lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
+        var lastSunday = new Date(beforeOneWeekTo.setDate(diffToMonday + 6));
+        var fromDate = new Date(beforeLastMonday.getFullYear(), beforeLastMonday.getMonth(), beforeLastMonday.getDate(), 0, 0, 0);
+        var toDate = new Date(lastSunday.getFullYear(), lastSunday.getMonth(), lastSunday.getDate(), 23, 59, 59,998);
         return {
-            from: new Date(beforeLastMonday.getFullYear(), beforeLastMonday.getMonth(), beforeLastMonday.getDate(), 0, 0, 0),
-            to: new Date(lastSunday.getFullYear(), lastSunday.getMonth(), lastSunday.getDate(), 23, 59, 59,998)
+            from: fromDate,
+            to: toDate
         };
     }
 
