@@ -40,12 +40,10 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                     nameAccountGenericFieldDefinitionSelectorAPI = api;
                     nameAccountGenericFieldDefinitionSelectorPromiseDeferred.resolve();
                 };
-
                 $scope.scopeModel.onEmailAccountGenericFieldDefinitionSelectorReady = function (api) {
                     emailAccountGenericFieldDefinitionSelectorAPI = api;
                     emailAccountGenericFieldDefinitionSelectorPromiseDeferred.resolve();
                 };
-
                 $scope.scopeModel.onConnectionSelectorReady = function (api) {
                     connectionSelectorAPI = api;
                     connectionSelectorPromiseDeferred.resolve();
@@ -127,7 +125,7 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                     function getConnectionSelectorLoadPromise() {
                         var connectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        nameAccountGenericFieldDefinitionSelectorPromiseDeferred.promise.then(function () {
+                        connectionSelectorPromiseDeferred.promise.then(function () {
 
                             var connectionSelectorPayload = {
                                 filter: {
