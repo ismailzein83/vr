@@ -152,24 +152,51 @@ namespace TOne.WhS.DBSync.Business
         {
             Dictionary<int, LCRRouteOptionSettings> options = new Dictionary<int, LCRRouteOptionSettings>();
             int position = 0;
-
-            foreach (var option in suppliers.OrderByDescending(s => s.SourceId).ThenByDescending(s => s.Priority).ThenBy(itm => itm.SupplierId))
+            Dictionary<int, List<SpecialRequestSupplierOption>> groupedOptionsByPriority = new Dictionary<int, List<SpecialRequestSupplierOption>>();
+            suppliers = suppliers.OrderByDescending(s => s.Priority).ThenByDescending(s => s.SourceId);
+            foreach (var item in suppliers)
             {
-                CarrierAccount supplier;
-                if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
-                    throw new NullReferenceException(string.Format("supplier not found. Supplier Source Id {0}.", option.SupplierId));
-                LCRRouteOptionSettings specialRequestOptionSettings = new LCRRouteOptionSettings
-                {
-                    ForceOption = option.ForcedOption,
-                    NumberOfTries = option.NumberOfTries,
-                    Percentage = option.Percentage == 0 ? (decimal?)null : option.Percentage,
-                    Position = ++position,
-                    SupplierId = supplier.CarrierAccountId
-                };
-                if (!options.ContainsKey(supplier.CarrierAccountId))
-                    options.Add(supplier.CarrierAccountId, specialRequestOptionSettings);
+                List<SpecialRequestSupplierOption> supplierOptions = groupedOptionsByPriority.GetOrCreateItem(item.Priority);
+                supplierOptions.Add(item);
             }
+
+            foreach (var item in groupedOptionsByPriority)
+            {
+                int priority = item.Key;
+                if (priority != 0)
+                {
+                    SpecialRequestSupplierOption option = item.Value[0];
+
+                    position = AddLCRRouteOptionSettings(options, position, option);
+                }
+                else
+                {
+                    foreach (var option in item.Value)
+                    {
+                        position = AddLCRRouteOptionSettings(options, position, option);
+                    }
+                }
+            }
+
             return options;
+        }
+
+        private int AddLCRRouteOptionSettings(Dictionary<int, LCRRouteOptionSettings> options, int position, SpecialRequestSupplierOption option)
+        {
+            CarrierAccount supplier;
+            if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
+                throw new NullReferenceException(string.Format("supplier not found. Supplier Source Id {0}.", option.SupplierId));
+            LCRRouteOptionSettings specialRequestOptionSettings = new LCRRouteOptionSettings
+            {
+                ForceOption = option.ForcedOption,
+                NumberOfTries = option.NumberOfTries,
+                Percentage = option.Percentage == 0 ? (decimal?)null : option.Percentage,
+                Position = ++position,
+                SupplierId = supplier.CarrierAccountId
+            };
+            if (!options.ContainsKey(supplier.CarrierAccountId))
+                options.Add(supplier.CarrierAccountId, specialRequestOptionSettings);
+            return position;
         }
         List<CodeCriteria> GetCodeCriteria(SourceSpecialRequest groupedRule)
         {
