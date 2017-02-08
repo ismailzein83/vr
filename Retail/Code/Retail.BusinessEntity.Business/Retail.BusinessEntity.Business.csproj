@@ -134,7 +134,6 @@
     <Compile Include="AccountBalanceManager.cs" />
     <Compile Include="AccountGenericFields\AccountSourceIdGenericField.cs" />
     <Compile Include="AccountGenericFields\AccountCreatedTimeGenericField.cs" />
-    <Compile Include="AccountProvisioning\AccountProvisioningContext.cs" />
     <Compile Include="AccountSynchronizerHandlerManager.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Extensions\BaseAccountBalanceAlertVRAction.cs" />
