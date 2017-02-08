@@ -20,6 +20,10 @@
     [IdCdrGprs]       BIGINT           NULL,
     [FileName]        VARCHAR (64)     NULL,
     [FileDate]        DATETIME         NULL,
-    [CreationDate]    DATETIME         NULL
+    [CreationDate]    DATETIME         NULL,
+    [AirtimeRate]     DECIMAL (20, 10) NULL,
+    [AirtimeAmount]   DECIMAL (20, 10) NULL
 );
+
+
 

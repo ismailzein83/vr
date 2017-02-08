@@ -6,8 +6,11 @@
     [BurnDate]       DATETIME       NULL,
     [MSISDN]         NVARCHAR (100) NULL,
     [Token]          NVARCHAR (100) NULL,
-    [AccountId]      BIGINT         NULL
+    [AccountId]      BIGINT         NULL,
+    [FileName]       NVARCHAR (200) NULL
 );
+
+
 
 
 

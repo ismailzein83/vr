@@ -30,8 +30,14 @@
     [AgentCommission]     DECIMAL (20, 10) NULL,
     [AccountID]           BIGINT           NULL,
     [OriginatingZoneID]   BIGINT           NULL,
-    [TerminatingZoneID]   BIGINT           NULL
+    [TerminatingZoneID]   BIGINT           NULL,
+    [AirtimeRate]         DECIMAL (20, 10) NULL,
+    [AirtimeAmount]       DECIMAL (20, 10) NULL,
+    [TerminationRate]     DECIMAL (20, 10) NULL,
+    [TerminationAmount]   DECIMAL (20, 10) NULL
 );
+
+
 
 
 

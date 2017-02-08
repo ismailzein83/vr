@@ -6,7 +6,7 @@
     [MSISDN]                    NVARCHAR (100) NULL,
     [RecipientRequestCode]      NVARCHAR (100) NULL,
     [MessageType]               SMALLINT       NULL,
-    [FileName]                  NVARCHAR (100) NULL,
+    [FileName]                  NVARCHAR (200) NULL,
     [MessageDate]               DATETIME       NULL,
     [ACKMessageFileName]        NVARCHAR (100) NULL,
     [ACKMessageDate]            DATETIME       NULL,
@@ -14,8 +14,11 @@
     [FlagCredit]                SMALLINT       NULL,
     [TransferredCredit]         INT            NULL,
     [FlagRequestCreditTransfer] SMALLINT       NULL,
-    [AccountID]                 BIGINT         NULL
+    [AccountID]                 BIGINT         NULL,
+    [NovercaFileName]           NVARCHAR (200) NULL
 );
+
+
 
 
 
