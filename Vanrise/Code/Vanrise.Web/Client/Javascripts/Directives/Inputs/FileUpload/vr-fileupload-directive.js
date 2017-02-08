@@ -147,18 +147,17 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                         }
                         else
                             ctrl.file = {};
-
-                        if ($attrs.onvaluechanged != undefined) {
-                            var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
-                            if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
-                                onvaluechangedMethod();
-                            }
-                        }
                     });
 
                 }
                 else {
                     ctrl.file = null
+                }
+                if ($attrs.onvaluechanged != undefined) {
+                    var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
+                    if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
+                        onvaluechangedMethod();
+                    }
                 }
             });
             ctrl.downloadFile = function () {
