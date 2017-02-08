@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Entities;
 
 namespace PartnerPortal.CustomerAccess.Business
 {
@@ -19,7 +20,7 @@ namespace PartnerPortal.CustomerAccess.Business
             return retailAccountSettings.AccountId;
         }
 
-        public Vanrise.Entities.InsertOperationOutput<Vanrise.Security.Entities.UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
+        public InsertOperationOutput<Vanrise.Security.Entities.UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
         {
             object userExtendedSettings;
             UserManager userManager = new UserManager();
@@ -57,6 +58,11 @@ namespace PartnerPortal.CustomerAccess.Business
             }
 
             return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<object> ResetPassword(int userId, string password)
+        {
+            return new UserManager().ResetPassword(userId, password);
         }
     }
 }

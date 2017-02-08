@@ -18,5 +18,13 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
             RetailAccountUserManager _manager = new RetailAccountUserManager();
             return _manager.AddRetailAccountUser(retailAccount);
         }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(Vanrise.Security.Entities.ResetPasswordInput resetPasswordInput)
+        {
+            RetailAccountUserManager _manager = new RetailAccountUserManager();
+            return _manager.ResetPassword(resetPasswordInput.UserId, resetPasswordInput.Password);
+        }
     }
 }
