@@ -84,10 +84,11 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                 };
 
                 api.getData = function () {
+                    console.log(actionBackendExecutorEditorAPI.getData());
                     return {
                         $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertAccountAction, Retail.BusinessEntity.Business",
                         ActionExecutor: actionBackendExecutorEditorAPI.getData(),
-                        ActionName: "Balance Alert Account"
+                        ActionName: "Account Action"
                     };
                 };
 

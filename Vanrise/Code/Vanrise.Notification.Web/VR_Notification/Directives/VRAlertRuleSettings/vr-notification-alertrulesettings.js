@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrNotificationAlertrulesettings', ['UtilsService', 'VR_Notification_AlertRuleSettingsService',
-function (UtilsService, VR_Notification_AlertRuleSettingsService) {
+app.directive('vrNotificationAlertrulesettings', ['UtilsService', 'VR_Notification_AlertRuleSettingsService','VR_Notification_VRBalanceAlertRuleAPIService',
+function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notification_VRBalanceAlertRuleAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -26,6 +26,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
     function AlertRuleSettings(ctrl, $scope, $attrs) {
         var actionExtensionType;
         var thresholdExtensionType;
+        var balanceAlertThresholdConfigs = [];
         var context;
         function initializeController() {
 
@@ -41,7 +42,10 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
             ctrl.addThresholdAction = function () {
                 var onAlertRuleSettingsAdded = function (balanceAlertThreshold) {
                     balanceAlertThreshold.ActionNames = getActionNames(balanceAlertThreshold.Actions);
-
+                    var threshold = UtilsService.getItemByVal(balanceAlertThresholdConfigs, balanceAlertThreshold.Threshold.ConfigId, "ExtensionConfigurationId");
+                    if (threshold != undefined) {
+                        balanceAlertThreshold.ThresholdType = threshold.Title;
+                    }
                     balanceAlertThreshold.RollbackActionNames = getActionNames(balanceAlertThreshold.RollbackActions);
                     ctrl.datasource.push({ Entity: balanceAlertThreshold });
                 };
@@ -71,29 +75,36 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
             };
 
             api.load = function (payload) {
-                if (payload != undefined)
-                {
-                    context = payload.context;
+                if (payload != undefined) {
                     if (payload.alertTypeSettings != undefined) {
                         actionExtensionType = payload.alertTypeSettings.VRActionExtensionType;
                         thresholdExtensionType = payload.alertTypeSettings.ThresholdExtensionType;
-
-                        if (payload.settings != undefined) {
-                            if (payload.settings.ThresholdActions != undefined) {
-                                for (var i = 0; i < payload.settings.ThresholdActions.length; i++) {
-                                    var thresholdAction = payload.settings.ThresholdActions[i];
-                                    if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0) {
-                                        thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
+                        context = payload.context;
+                        return getVRBalanceAlertThresholdConfigs().then(function () {
+                            if (payload.settings != undefined) {
+                                if (payload.settings.ThresholdActions != undefined) {
+                                    for (var i = 0; i < payload.settings.ThresholdActions.length; i++) {
+                                        var thresholdAction = payload.settings.ThresholdActions[i];
+                                        var threshold = UtilsService.getItemByVal(balanceAlertThresholdConfigs, thresholdAction.Threshold.ConfigId, "ExtensionConfigurationId");
+                                        if (threshold != undefined)
+                                        {
+                                            thresholdAction.ThresholdType = threshold.Title;
+                                        }
+                                        if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0) {
+                                            thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
+                                        }
+                                        if (thresholdAction.RollbackActions != undefined && thresholdAction.RollbackActions.length > 0) {
+                                            thresholdAction.RollbackActionNames = getActionNames(thresholdAction.RollbackActions);
+                                        }
+                                        ctrl.datasource.push({ Entity: thresholdAction });
                                     }
-                                    if (thresholdAction.RollbackActions != undefined && thresholdAction.RollbackActions.length > 0) {
-                                        thresholdAction.RollbackActionNames = getActionNames(thresholdAction.RollbackActions);
-                                    }
-                                    ctrl.datasource.push({ Entity: thresholdAction });
                                 }
                             }
-                        }
+
+                        });
                     }
                 }
+
 
             };
 
@@ -130,10 +141,24 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService) {
             var onThresholdActionUpdated = function (thresholdActionObj) {
                 thresholdActionObj.ActionNames = getActionNames(thresholdActionObj.Actions);
                 thresholdActionObj.RollbackActionNames = getActionNames(thresholdActionObj.RollbackActions);
-
+                var threshold = UtilsService.getItemByVal(balanceAlertThresholdConfigs, thresholdActionObj.Threshold.ConfigId, "ExtensionConfigurationId");
+                if (threshold != undefined) {
+                    thresholdActionObj.ThresholdType = threshold.Title;
+                }
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
             };
             VR_Notification_AlertRuleSettingsService.editAlertRuleThreshold(dataItem.Entity, onThresholdActionUpdated, actionExtensionType, thresholdExtensionType, getContext());
+        }
+
+        function getVRBalanceAlertThresholdConfigs()
+        {
+            return VR_Notification_VRBalanceAlertRuleAPIService.GetVRBalanceAlertThresholdConfigs(thresholdExtensionType).then(function (response) {
+                if (response != null) {
+                    for (var i = 0; i < response.length; i++) {
+                        balanceAlertThresholdConfigs.push(response[i]);
+                    }
+                }
+            });
         }
 
         function getContext()
