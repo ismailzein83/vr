@@ -42,7 +42,7 @@
 
         //#endregion
 
-     
+
 
         loadParameters();
         defineScope();
@@ -61,7 +61,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.statusMappings = [];
             $scope.scopeModel.selectedStatusMappings = [];
-           
+
 
             //#region Definition Tab
 
@@ -72,7 +72,7 @@
             };
 
             $scope.scopeModel.selectedCookedDataRecordType;
-           
+
 
             $scope.scopeModel.onParsedRecordTypeSelectionChanged = function () {
                 var selectedParsedDataRecordTypeId = dataParsedRecordTypeSelectorAPI.getSelectedIds();
@@ -117,9 +117,11 @@
 
                 }
                 else {
-                    if (dataTransformationDefinitionRecordParsedSelectorAPI != undefined)
+                    if (dataTransformationDefinitionRecordParsedSelectorAPI != undefined) {
                         dataTransformationDefinitionRecordParsedSelectorAPI.clearDataSource();
-                   }
+                        $scope.scopeModel.handlers.length = 0;
+                    }
+                }
             }
 
             $scope.scopeModel.selectedDataTransformationDefinitionParsedRecord;
@@ -129,7 +131,7 @@
             };
 
             $scope.scopeModel.selectedDataTransformationDefinitionCookedRecord;
-          
+
             //#endregion
 
             //#region Parsed Identification Tab
@@ -151,21 +153,21 @@
             //#region handlers Grid
             $scope.scopeModel.handlers = [];
             $scope.scopeModel.addHandler = function () {
+                var dataTransformationDefinitionId = dataTransformationDefinitionInsertSelectorAPI.getSelectedIds()
                 var onOutPutHandlerAdded = function (obj) {
-                    console.log(obj)
                     $scope.scopeModel.handlers.push(buildHandlerRecord(obj));
                 };
-                Mediation_Generic_OutPutHandlerService.addOutPutHandler(onOutPutHandlerAdded);
+                Mediation_Generic_OutPutHandlerService.addOutPutHandler(dataTransformationDefinitionId, onOutPutHandlerAdded);
             };
             $scope.scopeModel.handlersGridMenuActions = function () {
                 return [{
                     name: "Edit",
                     clicked: function (dataItem) {
+                        var dataTransformationDefinitionId = dataTransformationDefinitionInsertSelectorAPI.getSelectedIds();
                         var onOutPutHandlerUpdated = function (obj) {
-                            console.log(obj)
                             $scope.scopeModel.handlers[$scope.scopeModel.handlers.indexOf(dataItem)] = buildHandlerRecord(obj);
                         };
-                        Mediation_Generic_OutPutHandlerService.editOutPutHandler(dataItem, onOutPutHandlerUpdated);
+                        Mediation_Generic_OutPutHandlerService.editOutPutHandler(dataItem,dataTransformationDefinitionId, onOutPutHandlerUpdated);
                     }
                 }];
             };
@@ -193,7 +195,7 @@
                 }
             };
 
-           
+
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
             }
@@ -214,6 +216,15 @@
                 return null;
 
             }
+
+            $scope.scopeModel.validateHandlers = function () {
+                if (dataTransformationDefinitionInsertSelectorAPI.getSelectedIds() == undefined)
+                    return "You Should select Data Transformation Definition first.";
+                if ($scope.scopeModel.handlers.length == 0)
+                    return "You Should add at least one handler.";
+                return null;
+            };
+
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
@@ -279,7 +290,7 @@
             //#endregion
 
             //#region Load Cooked Data Record Type
-          
+
             var payloadCookedRecordTypeSelector;
             if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.CookedRecordTypeId != undefined) {
                 dataCookedRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -359,7 +370,7 @@
                 });
 
 
-               
+
                 UtilsService.waitMultiplePromises([dataTransformationDefinitionInsertSelectedPromiseDeferred.promise]).then(function () {
                     var payload;
                     payload = {
@@ -381,21 +392,21 @@
 
         }
 
-        
+
 
         function loadHandlerGrid() {
-            
+
             return Mediation_Generic_MediationDefinitionAPIService.GetMediationHandlerConfigTypes().then(function (response) {
-               
+
                 configTypes = response;
 
 
-                if(mediationDefinitionEntity!=undefined && mediationDefinitionEntity.OutputHandlers!=null && mediationDefinitionEntity.OutputHandlers.length >0  )
-                    $scope.scopeModel.handlers =  buildHandlersGridData(mediationDefinitionEntity.OutputHandlers);
+                if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.OutputHandlers != null && mediationDefinitionEntity.OutputHandlers.length > 0)
+                    $scope.scopeModel.handlers = buildHandlersGridData(mediationDefinitionEntity.OutputHandlers);
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadParsedToCookedSection, PrepareStatusMappings ,loadHandlerGrid])
+            return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadParsedToCookedSection, PrepareStatusMappings, loadHandlerGrid])
                  .catch(function (error) {
                      VRNotificationService.notifyExceptionWithClose(error, $scope);
                  })
@@ -455,7 +466,7 @@
                 ParsedRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds(),
                 ParsedRecordIdentificationSetting: getParsedRecordIdentificationSetting(),
                 ParsedTransformationSettings: getParsedTransformationSettings(),
-                OutputHandlers:buildHandlersGridData($scope.scopeModel.handlers)
+                OutputHandlers: buildHandlersGridData($scope.scopeModel.handlers)
             }
             return item;
         }
@@ -468,11 +479,11 @@
             return tab;
         }
         function buildHandlerRecord(rec) {
-            var handlerTypeConfig =( rec.Handler!=null)? UtilsService.getItemByVal(configTypes, rec.Handler.ConfigId, "ExtensionConfigurationId") : null;
+            var handlerTypeConfig = (rec.Handler != null) ? UtilsService.getItemByVal(configTypes, rec.Handler.ConfigId, "ExtensionConfigurationId") : null;
             return {
-                OutputRecordName:rec.OutputRecordName,
+                OutputRecordName: rec.OutputRecordName,
                 Handler: rec.Handler,
-                HandlerType: handlerTypeConfig!=null && handlerTypeConfig.Title || null
+                HandlerType: handlerTypeConfig != null && handlerTypeConfig.Title || null
             };
         }
 

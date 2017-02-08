@@ -108,17 +108,19 @@
                     </vr-row>
 
                 </vr-tab>
-                <vr-tab header="'Output Handler'">
-                    <vr-row>
-                        <vr-columns width="normal">
-                            <vr-button type="Add" data-onclick="scopeModel.addHandler" standalone></vr-button>
-                        </vr-columns>
-                        <vr-columns width="fullrow">
-                            <vr-datagrid datasource="scopeModel.handlers" menuactions="scopeModel.handlersGridMenuActions" ondeleterow="scopeModel.removeHandler" norowhighlightonclick="true" hidegridmenu>
-                                <vr-datagridcolumn headertext="'Record Name'" field="'OutputRecordName'"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Handler'" field="'HandlerType'"></vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-columns>
+                <vr-tab header="'Output Handlers'">
+                    <vr-row>                       
+                        <vr-validator validate="scopeModel.validateHandlers()">
+                            <vr-columns width="normal">
+                                <vr-button type="Add" data-onclick="scopeModel.addHandler" standalone vr-disabled="scopeModel.selectedDataTransformationDefinitionInsert ==  undefined"></vr-button>
+                            </vr-columns>
+                            <vr-columns width="fullrow">
+                                <vr-datagrid datasource="scopeModel.handlers" menuactions="scopeModel.handlersGridMenuActions" ondeleterow="scopeModel.removeHandler" norowhighlightonclick="true" hidegridmenu>
+                                    <vr-datagridcolumn headertext="'Record Name'" field="'OutputRecordName'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Handler'" field="'HandlerType'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-validator>
                     </vr-row>
                 </vr-tab>
                 <vr-tab ng-show="false" header="'Bad Record Settings'">

@@ -4,7 +4,15 @@
             <vr-tabs>
                 <vr-row>
                     <vr-columns width="1/2row">
-                        <vr-textbox label="Name" value="scopeModel.outputRecordName" isrequired></vr-textbox>
+                        <!--<vr-textbox label="Name" value="scopeModel.outputRecordName" isrequired></vr-textbox>-->
+
+                        <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModel.onDataTransformationDefinitionParsedRecordReady"
+                                                                                    selectedvalues="scopeModel.selectedDataTransformationDefinitionParsedRecord"
+                                                                                    isrequired="true"
+                                                                                    customlabel="Record Name"
+                                                                                    hideremoveicon>
+
+                        </vr-genericdata-datatransformationdefinitionrecord-selector>
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <mediation-generic-handlertypeconfig-selector on-ready="scopeModel.onHandlerTypeSelectorReady"

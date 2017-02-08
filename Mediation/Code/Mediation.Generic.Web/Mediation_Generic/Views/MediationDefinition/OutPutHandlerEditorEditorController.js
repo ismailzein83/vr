@@ -8,6 +8,11 @@
 
         var isEditMode;
         var outPutHandlerEntity;
+        var parsedDataRecordTypeId;
+        var dataTransformationDefinitionId;
+
+        var dataTransformationSelectorAPI;
+        var dataTransformationSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var handlerTypeSelectorAPI;
         var handlerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -22,6 +27,8 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 outPutHandlerEntity = parameters.outPutHandler;
+                dataTransformationDefinitionId = parameters.dataTransformationDefinitionId;
+
             }
             isEditMode = (outPutHandlerEntity != undefined);
         }
@@ -38,7 +45,10 @@
                     return insertHandler();
                 }
             };
-
+            $scope.scopeModel.onDataTransformationDefinitionParsedRecordReady = function (api) {
+                dataTransformationSelectorAPI = api;
+                dataTransformationSelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.onHandlerTypeSelectorReady = function (api) {
                 handlerTypeSelectorAPI = api;
                 handlerTypeSelectorReadyDeferred.resolve();
@@ -47,9 +57,6 @@
                 handlerTypeEditorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingEditor = value; };
                 var payloadDirective;
-                //if (outPutHandlerEntity!=undefined){
-                //    payloadDirective = { data: outPutHandlerEntity };
-                //}
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, handlerTypeEditorAPI, payloadDirective, setLoader, handlerTypeEditorReadyDeferred);
             };
             $scope.scopeModel.close = function () {
@@ -65,7 +72,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadHandlerTypeSelector, loadHandlerEditor])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadRecordNameSelector, loadHandlerTypeSelector, loadHandlerEditor])
                  .catch(function (error) {
                      VRNotificationService.notifyExceptionWithClose(error, $scope);
                  })
@@ -79,10 +86,21 @@
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Handler');
         }
-        function loadStaticData() {
-            if (outPutHandlerEntity != undefined) {
-                $scope.scopeModel.outputRecordName = outPutHandlerEntity.OutputRecordName;
-            }
+       
+        function loadRecordNameSelector() {
+
+            var loadDataTransformationSelectorDeferred = UtilsService.createPromiseDeferred();
+            dataTransformationSelectorReadyDeferred.promise.then(function () {
+                var payload = {
+                    dataTransformationDefinitionId: dataTransformationDefinitionId,
+                    filter: {  IsArray: true },
+                    selectedIds:outPutHandlerEntity && outPutHandlerEntity.OutputRecordName || undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(dataTransformationSelectorAPI, payload, loadDataTransformationSelectorDeferred);
+            });
+            return loadDataTransformationSelectorDeferred.promise;
+
+          
         }
 
         function loadHandlerTypeSelector() {
@@ -130,7 +148,7 @@
             var settings = handlerTypeEditorAPI.getData();
             settings.ConfigId = handlerTypeSelectorAPI.getSelectedIds()
             var item = {
-                OutputRecordName: $scope.scopeModel.outputRecordName,
+                OutputRecordName: dataTransformationSelectorAPI.getSelectedIds(),
                 Handler: settings
             }
             return item;

@@ -10,19 +10,24 @@
             editOutPutHandler: editOutPutHandler,
         });
 
-        function addOutPutHandler(onOutPutHandlerAdded) {
+        function addOutPutHandler(dataTransformationDefinitionId, onOutPutHandlerAdded) {
+            var modalParameters = {
+                dataTransformationDefinitionId: dataTransformationDefinitionId
+            };
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onOutPutHandlerAdded = onOutPutHandlerAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Mediation_Generic/Views/MediationDefinition/OutPutHandlerEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Mediation_Generic/Views/MediationDefinition/OutPutHandlerEditor.html', modalParameters, modalSettings);
         }
 
-        function editOutPutHandler(outPutHandler, onOutPutHandlerUpdated) {
+        function editOutPutHandler(outPutHandler,dataTransformationDefinitionId, onOutPutHandlerUpdated) {
             var modalParameters = {
+                dataTransformationDefinitionId: dataTransformationDefinitionId,
                 outPutHandler: outPutHandler
+                
             };
 
             var modalSettings = {};
