@@ -8,7 +8,7 @@ namespace Retail.Voice.Entities
 {
     public class VoiceEventPrice
     {
-        public int PackageId { get; set; }
+        public int? PackageId { get; set; }
 
         public int? UsageChargingPolicyId { get; set; }
 

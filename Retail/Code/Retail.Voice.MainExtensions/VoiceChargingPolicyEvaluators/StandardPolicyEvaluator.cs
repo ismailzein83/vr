@@ -26,10 +26,8 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
 
         public override void ApplyChargingPolicyToVoiceEvent(IVoiceChargingPolicyEvaluatorContext context)
-        {
-            //Output
-            VoiceEventPricingInfo voiceEventPricingInfo = new VoiceEventPricingInfo();
-            voiceEventPricingInfo.ChargingPolicyId = context.ChargingPolicyId;
+        {          
+            
 
             GenericRuleTarget genericRuleTarget = BuildingGenericRuleTarget(context);
 
@@ -51,13 +49,14 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                     throw new Exception(string.Format("rate of rateTypeId: {0} not found at rateValueRuleContext.RatesByRateType", rateTypeRuleContext.RateTypeId.Value));
 
                 ApplyTariffRule(context, tariffRuleContext, genericRuleTarget, rateValueRuleContext.CurrencyId != 0 ? rateValueRuleContext.CurrencyId : default(int?), rate);
-
+                VoiceEventPricingInfo voiceEventPricingInfo = new VoiceEventPricingInfo();
+                voiceEventPricingInfo.ChargingPolicyId = context.ChargingPolicyId;
                 voiceEventPricingInfo.Amount = tariffRuleContext.TotalAmount;
                 voiceEventPricingInfo.RateTypeId = rateTypeRuleContext.RateTypeId;
                 voiceEventPricingInfo.CurrencyId = tariffRuleContext.DestinationCurrencyId.HasValue ? tariffRuleContext.DestinationCurrencyId.Value : tariffRuleContext.SourceCurrencyId;
                 voiceEventPricingInfo.Rate = tariffRuleContext.Rate;
+                context.EventPricingInfo = voiceEventPricingInfo;
             }
-            context.EventPricingInfo = voiceEventPricingInfo;
         }
 
 

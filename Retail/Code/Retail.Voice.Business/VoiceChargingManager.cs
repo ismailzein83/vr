@@ -65,11 +65,11 @@ namespace Retail.Voice.Business
             if (voiceEventPrice.VoiceEventPricedParts.Count > 1)
                 throw new NotSupportedException("Case of multipler VoiceEventPricedParts not supported yet.");
 
-            if (remainingDurationToPrice > 0)
-                throw new Exception(String.Format("Can't price entire duration. remaining duration '{0}'", remainingDurationToPrice));
 
             if (voiceEventPrice.VoiceEventPricedParts.Count > 0)
             {
+                if (remainingDurationToPrice > 0)
+                    throw new Exception(String.Format("Can't price entire duration. remaining duration '{0}'", remainingDurationToPrice));
                 var voiceEventPricedPart = voiceEventPrice.VoiceEventPricedParts[0];
                 voiceEventPrice.PackageId = voiceEventPricedPart.PackageId;
                 voiceEventPrice.UsageChargingPolicyId = voiceEventPricedPart.UsageChargingPolicyId;
