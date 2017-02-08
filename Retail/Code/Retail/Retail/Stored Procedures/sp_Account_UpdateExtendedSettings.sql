@@ -3,9 +3,16 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail].[sp_Account_GetAll]
+create PROCEDURE Retail.[sp_Account_UpdateExtendedSettings]
+	@ID bigint, 
+	@ExtendedSettings nvarchar(MAX)
+	
 AS
 BEGIN
-	SELECT	ID, Name, [TypeID], Settings, [StatusID] ,ParentID, SourceID,ExecutedActionsData,ExtendedSettings,CreatedTime
-	FROM	Retail.Account  with(nolock)
+ 
+	Update Retail.Account
+	Set 
+		 ExtendedSettings = @ExtendedSettings		
+	Where ID = @ID
+
 END

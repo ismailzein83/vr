@@ -270,7 +270,6 @@
     <Build Include="Retail_BE\Tables\RecurringChargeDefinition.sql" />
     <Build Include="Retail_BE\Tables\Product.sql" />
     <Build Include="Retail_BE\Tables\DID.sql" />
-    <Build Include="Retail_BE\Tables\ActionDefinition_old.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_RecurringChargeDefinition_Update.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_RecurringChargeDefinition_Insert.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_RecurringChargeDefinition_GetAll.sql" />
@@ -290,5 +289,6 @@
     <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_Update.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_Insert.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_GetAll.sql" />
+    <Build Include="Retail\Stored Procedures\sp_Account_UpdateExtendedSettings.sql" />
   </ItemGroup>
 </Project>
