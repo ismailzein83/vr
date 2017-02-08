@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Retail.Teles.Business
 {
@@ -20,36 +21,40 @@ namespace Retail.Teles.Business
                 throw new NullReferenceException("definitionSettings");
 
             var accountExtendedSettings = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
-            var changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
-            var changedUsers = GetChangedUsers(definitionSettings.ActionType, definitionSettings.SwitchId, changeUsersRGsAccountState);
 
-            RevertBlockedUsers(definitionSettings.SwitchId, changedUsers);
-            RevertBlockedUsersState(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState);
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
+
+            var changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+            var changedUsers = GetChangedUsers( context,definitionSettings.ActionType, definitionSettings.SwitchId, changeUsersRGsAccountState);
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Blocked Users Loaded."));
+
+            RevertBlockedUsers(context,definitionSettings.SwitchId, changedUsers);
+            RevertBlockedUsersState(context, changeUsersRGsAccountState);
            
         }
 
-        void RevertBlockedUsersState(Guid accountBEDefinition, long accountId, ChangeUsersRGsAccountState changeUsersRGsAccountState)
+        void RevertBlockedUsersState(IAccountProvisioningContext context, ChangeUsersRGsAccountState changeUsersRGsAccountState)
         {
             if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null && changeUsersRGsAccountState.ChangesByActionType.Count == 0)
             {
-                accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(accountBEDefinition, accountId);
-
+                accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
             }else
             {
-                accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(accountBEDefinition, accountId, changeUsersRGsAccountState);
+                accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState);
             }
         }
-        void RevertBlockedUsers(int switchId, List<dynamic> changedUsers)
+        void RevertBlockedUsers(IAccountProvisioningContext context,int switchId, List<dynamic> changedUsers)
         {
             if (changedUsers != null)
             {
                 foreach (dynamic changedUser in changedUsers)
                 {
                     UpdateUser(switchId, changedUser);
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} Unblocked.", changedUser.loginName));
                 }
             }
         }
-        List<dynamic> GetChangedUsers(string actionType,int switchId, ChangeUsersRGsAccountState changeUsersRGsAccountState)
+        List<dynamic> GetChangedUsers(IAccountProvisioningContext context,string actionType,int switchId, ChangeUsersRGsAccountState changeUsersRGsAccountState)
         {
             List<dynamic> changedUsers = null;
             if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null)
@@ -65,6 +70,7 @@ namespace Retail.Teles.Business
                             var user = GetUser(switchId, changesByUser.Key);
                             if(user != null)
                             {
+                                context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} Loaded.", user.loginName));
                                 user.routingGroupId = changesByUser.Value.OriginalRGId;
                                 changedUsers.Add(user);
                             }

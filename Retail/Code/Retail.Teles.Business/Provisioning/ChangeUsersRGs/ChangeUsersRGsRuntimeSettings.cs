@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Integration.Entities;
 
 namespace Retail.Teles.Business
@@ -35,12 +36,13 @@ namespace Retail.Teles.Business
                     chURGsActionCh = new ChURGsActionCh();
                     changeUsersRGsAccountState.ChangesByActionType.Add(definitionSettings.ActionType, chURGsActionCh);
                 }
-               
 
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading all sites for enterpriseId {0}.", enterpriseAccountMappingInfo.TelesEnterpriseId));
                 var sites = GetSites(definitionSettings.SwitchId, enterpriseAccountMappingInfo.TelesEnterpriseId);
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("All sites for enterpriseId {0} loaded.", enterpriseAccountMappingInfo.TelesEnterpriseId));
                 if (sites != null)
                 {
-                    var usersToBlock = GetUsersToBlockForeachSite(definitionSettings, sites, chURGsActionCh);
+                    var usersToBlock = GetUsersToBlockForeachSite(context,definitionSettings, sites, chURGsActionCh);
                     UpdateBlockedUsers(definitionSettings, usersToBlock);
                     
                     if (chURGsActionCh != null && chURGsActionCh.ChangesByUser != null && chURGsActionCh.ChangesByUser.Count != 0)
@@ -48,20 +50,24 @@ namespace Retail.Teles.Business
                 }
             }
         }
-        List<dynamic> GetUsersToBlockForeachSite(ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, ChURGsActionCh chURGsActionCh)
+        List<dynamic> GetUsersToBlockForeachSite(IAccountProvisioningContext context,ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, ChURGsActionCh chURGsActionCh)
         {
             List<dynamic> usersToBlock = new List<dynamic>();
             foreach (var site in sites)
             {
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing site {0}.", site.name));
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading routing groups for site {0}.", site.name));
                 Dictionary<dynamic, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.SwitchId, site.id);
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Routing groups for site {0} loaded.", site.name));
                 if (siteRoutingGroups != null)
                 {
-                    GetUsersToBlock(definitionSettings, usersToBlock, siteRoutingGroups, site.id, chURGsActionCh);
+                    GetUsersToBlock(context,definitionSettings, usersToBlock, siteRoutingGroups, site.id, chURGsActionCh);
                 }
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing site {0}.", site.name));
             }
             return usersToBlock;
         }
-        void GetUsersToBlock(ChangeUsersRGsDefinitionSettings definitionSettings, List<dynamic> usersToBlock, Dictionary<dynamic, dynamic> siteRoutingGroups, dynamic siteId, ChURGsActionCh chURGsActionCh)
+        void GetUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, List<dynamic> usersToBlock, Dictionary<dynamic, dynamic> siteRoutingGroups, dynamic siteId, ChURGsActionCh chURGsActionCh)
         {
 
             List<dynamic> existingRoutingGroups = null;
@@ -108,14 +114,14 @@ namespace Retail.Teles.Business
             }
             if (definitionSettings.ExistingRoutingGroupCondition == null)
             {
-                ProcessUsersToBlock(definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, true);
+                ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, true);
             }else if (existingRoutingGroups == null)
             {
                 switch (definitionSettings.ExistingRGNoMatchHandling)
                 {
                     case ExistingRGNoMatchHandling.Skip: return;
                     case ExistingRGNoMatchHandling.UpdateAll:
-                        ProcessUsersToBlock(definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, true);
+                        ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, true);
                         break;
                     case ExistingRGNoMatchHandling.Stop:
                         if (existingRoutingGroups == null)
@@ -125,18 +131,25 @@ namespace Retail.Teles.Business
             }
             else
             {
-                ProcessUsersToBlock(definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, false);
+                ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, false);
             }
         }
-        void ProcessUsersToBlock(ChangeUsersRGsDefinitionSettings definitionSettings, dynamic siteId, List<dynamic> existingRoutingGroups, dynamic newRoutingGroup, List<dynamic> usersToBlock, ChURGsActionCh chURGsActionCh, bool updateAll)
+        void ProcessUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, dynamic siteId, List<dynamic> existingRoutingGroups, dynamic newRoutingGroup, List<dynamic> usersToBlock, ChURGsActionCh chURGsActionCh, bool updateAll)
         {
             var users = GetUsers(definitionSettings.SwitchId, siteId);
             if(users != null)
             {
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing {0} users.", users.Count));
+                List<string> usersNames = new List<string>(); ;
                 foreach (var user in users)
                 {
                     if (user.routingGroupId != newRoutingGroup && (updateAll || existingRoutingGroups.Contains(user.routingGroupId)))
                     {
+                        if (usersNames.Count <= 10 )
+                        {
+                           usersNames.Add(user.loginName.Value);
+                        }
+                         
                         if (definitionSettings.SaveChangesToAccountState)
                         {
                             if (chURGsActionCh.ChangesByUser == null)
@@ -151,6 +164,11 @@ namespace Retail.Teles.Business
                         usersToBlock.Add(user);
                     }
                 }
+                if (usersNames.Count > 0)
+                {
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Users processed: {0}. ", String.Join<string>(",", usersNames)));
+                }
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing {0} users.", users.Count));
             }
             
         }
