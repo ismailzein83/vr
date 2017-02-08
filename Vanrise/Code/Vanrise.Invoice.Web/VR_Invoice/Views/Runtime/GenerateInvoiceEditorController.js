@@ -183,7 +183,11 @@
                 if(invoiceEntity != undefined)
                 {
                     $scope.scopeModel.fromDate = invoiceEntity.FromDate;
-                    $scope.scopeModel.toDate = invoiceEntity.ToDate;
+                    if (invoiceEntity.ToDate != undefined)
+                    {
+                        var toDate = UtilsService.createDateFromString(invoiceEntity.ToDate);
+                        $scope.scopeModel.toDate = new Date(toDate.setHours(23, 59, 59, 998));
+                    }
                     $scope.scopeModel.issueDate = invoiceEntity.IssueDate;
                 }
             }
