@@ -378,6 +378,11 @@ namespace Retail.BusinessEntity.Business
                 return false;
             }
         }
+        public bool TryGetAccountPart(Guid accountBEDefinitionId, long accountId, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            return TryGetAccountPart(accountBEDefinitionId, account, partDefinitionId, getInherited, out accountPart);
+        }
         public bool IsFinancial(Account account)
         {
             IAccountPayment accountPayment;

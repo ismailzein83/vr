@@ -46,6 +46,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.AccountBalance.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BEBridge.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
@@ -91,6 +95,10 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
@@ -112,6 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBalanceAlertRule\PercentageBalanceAlertThreshold.cs" />
     <Compile Include="AccountChargeEvaluators\FixedChargeAccountRecurringChargeEvaluator.cs" />
     <Compile Include="AccountConditions\FinancialAccountCondition.cs" />
     <Compile Include="AccountConditions\SubAccountCondition.cs" />

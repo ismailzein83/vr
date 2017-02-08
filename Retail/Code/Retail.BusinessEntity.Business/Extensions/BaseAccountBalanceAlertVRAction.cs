@@ -12,14 +12,11 @@ namespace Retail.BusinessEntity.Business
 {
     public abstract class BaseAccountBalanceAlertVRAction : VRAction
     {
-        static Vanrise.Notification.Business.VRAlertRuleTypeManager s_alertRuleTypeManager = new Vanrise.Notification.Business.VRAlertRuleTypeManager();
         static AccountBEManager s_accountBEManager = new AccountBEManager();
         static VRAccountBalanceManager s_vRAccountBalanceManager = new VRAccountBalanceManager();
         protected Guid GetAccountBEDefinitionId(VRBalanceAlertEventPayload balanceAlertEventPayload)
         {
-            Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleTypeSettings balanceRuleTypeSettings = s_alertRuleTypeManager.GetVRAlertRuleTypeSettings<AccountBalanceAlertRuleTypeSettings>(balanceAlertEventPayload.AlertRuleTypeId);
-            balanceRuleTypeSettings.ThrowIfNull("balanceRuleTypeSettings", balanceAlertEventPayload.AlertRuleTypeId);
-            return s_vRAccountBalanceManager.GetAccountBEDefinitionIdByAccountTypeId(balanceRuleTypeSettings.AccountTypeId);
+            return s_vRAccountBalanceManager.GetAccountBEDefinitionIdByAlertRuleTypeId(balanceAlertEventPayload.AlertRuleTypeId);
         }
 
         protected long GetAccountId(VRBalanceAlertEventPayload balanceAlertEventPayload)

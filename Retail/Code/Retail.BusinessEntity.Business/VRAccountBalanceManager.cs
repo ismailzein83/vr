@@ -24,5 +24,13 @@ namespace Retail.BusinessEntity.Business
            var retailAccountBalanceSetting = GetSubscriberAccountBalanceSetting(accountTypeId);
             return retailAccountBalanceSetting.AccountBEDefinitionId;
         }
+        public Guid GetAccountBEDefinitionIdByAlertRuleTypeId(Guid alertRuleTypeId)
+        {
+            VRAlertRuleTypeManager alertRuleTypeManager = new VRAlertRuleTypeManager();
+            AccountBalanceAlertRuleTypeSettings balanceRuleTypeSettings = alertRuleTypeManager.GetVRAlertRuleTypeSettings<AccountBalanceAlertRuleTypeSettings>(alertRuleTypeId);
+            balanceRuleTypeSettings.ThrowIfNull("balanceRuleTypeSettings", alertRuleTypeId);
+
+            return GetAccountBEDefinitionIdByAccountTypeId(balanceRuleTypeSettings.AccountTypeId);
+        }
     }
 }
