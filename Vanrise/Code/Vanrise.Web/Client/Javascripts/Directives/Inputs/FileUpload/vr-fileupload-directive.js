@@ -118,6 +118,12 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     $timeout(function () { $scope.complet = true }, 2000);
                     $scope.isUploading = false;
                     data.originalFiles.length = 0;
+                    if ($attrs.onvaluechanged != undefined) {
+                        var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
+                        if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
+                            onvaluechangedMethod();
+                        }
+                    }
                 },
                 fail: function (e, data) {
                     $scope.broken = true;
@@ -147,13 +153,6 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                         }
                         else
                             ctrl.file = {};
-
-                        if ($attrs.onvaluechanged != undefined) {
-                            var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
-                            if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
-                                onvaluechangedMethod();
-                            }
-                        }
                     });
 
                 }
