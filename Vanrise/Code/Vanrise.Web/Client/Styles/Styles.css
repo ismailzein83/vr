@@ -1520,6 +1520,16 @@ loader .outer-loader {
     right: 2px;
     
 }
+.section-menu .btncustom {
+  border-radius: 0px;
+  border-color: transparent;
+  background-color: transparent;
+  color: #000 !important;
+  font-size:11px;
+}
+.section-menu .btncustom:hover {
+    background-color: transparent !important;
+}
 .panel-vr-child .section-menu{ 
     top:14px
 }
