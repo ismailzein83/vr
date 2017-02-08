@@ -36,7 +36,8 @@ app.directive("vrInvoiceAutomaticinvoiceprocessManual", ['UtilsService', 'VRUIUt
                 invoiceTypeSelectorAPI = api;
                 invoiceTypeSelectorAPIReadyDeferred.resolve();
             };
-
+            $scope.endDateOffsetFromToday = 0;
+            $scope.issueDateOffsetFromToday = 0;
             defineAPI();
         }
 
@@ -48,6 +49,8 @@ app.directive("vrInvoiceAutomaticinvoiceprocessManual", ['UtilsService', 'VRUIUt
                     InputArguments: {
                         $type: "Vanrise.Invoice.BP.Arguments.AutomaticInvoiceProcessInput, Vanrise.Invoice.BP.Arguments",
                         InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
+                        EndDateOffsetFromToday: $scope.endDateOffsetFromToday,
+                        IssueDateOffsetFromToday:$scope.issueDateOffsetFromToday
                     }
                 };
             };

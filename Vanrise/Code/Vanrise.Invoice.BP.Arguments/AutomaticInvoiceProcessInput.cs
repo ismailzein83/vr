@@ -9,6 +9,8 @@ namespace Vanrise.Invoice.BP.Arguments
     public class AutomaticInvoiceProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public Guid InvoiceTypeId { get; set; }
+        public int EndDateOffsetFromToday { get; set; }
+        public int IssueDateOffsetFromToday { get; set; }
         public override string GetTitle()
         {
             return "Automatic Invoice Process";

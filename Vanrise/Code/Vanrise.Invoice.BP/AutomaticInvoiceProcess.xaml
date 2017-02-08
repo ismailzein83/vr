@@ -39,11 +39,11 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
-      <AssemblyReference>Vanrise.Invoice.BP.Activities</AssemblyReference>
-      <AssemblyReference>Vanrise.Invoice.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.Invoice.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Invoice.BP.Arguments</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP</AssemblyReference>
     </sco:Collection>
@@ -76,11 +76,21 @@
         </ActivityAction.Argument>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
           <viba1:GeneratePartnersInvoices sap2010:WorkflowViewState.IdRef="GeneratePartnersInvoices_1">
+            <viba1:GeneratePartnersInvoices.EndDateOffsetFromToday>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.EndDateOffsetFromToday</mca:CSharpValue>
+              </InArgument>
+            </viba1:GeneratePartnersInvoices.EndDateOffsetFromToday>
             <viba1:GeneratePartnersInvoices.InvoiceTypeId>
               <InArgument x:TypeArguments="s:Guid">
                 <mca:CSharpValue x:TypeArguments="s:Guid">Input.InvoiceTypeId</mca:CSharpValue>
               </InArgument>
             </viba1:GeneratePartnersInvoices.InvoiceTypeId>
+            <viba1:GeneratePartnersInvoices.IssueDateOffsetFromToday>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.IssueDateOffsetFromToday</mca:CSharpValue>
+              </InArgument>
+            </viba1:GeneratePartnersInvoices.IssueDateOffsetFromToday>
             <viba1:GeneratePartnersInvoices.PartnerId>
               <InArgument x:TypeArguments="x:String">
                 <mca:CSharpValue x:TypeArguments="x:String">partnerId</mca:CSharpValue>
@@ -90,7 +100,7 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sCjMDXg4CAQE3BUIfAgEQQwVcFwIBAjoLOloCARQ/Cz9sAgERRgtGZAIBDU0JWhQCAQNOC1ksAgEEURFRYAIBCVYRVlgCAQU=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sDDMDaA4CAQE3BUIfAgEYQwVmFwIBAjoLOloCARw/Cz9sAgEZRgtGZAIBFU0JZBQCAQNOC2MsAgEEURFRagIBEVYRVmACAQ1bEVtsAgEJYBFgWAIBBQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
