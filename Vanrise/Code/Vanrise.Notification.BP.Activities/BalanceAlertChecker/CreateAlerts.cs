@@ -65,7 +65,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                 {
                                     VRBalanceAlertThresholdAction balanceAlertThresholdAction = balanceAlertRuleSettings.ThresholdActions[i];
 
-                                    VRBalanceAlertThresholdContext vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext { EntityBalanceInfo = entityBalanceInfo };
+                                    VRBalanceAlertThresholdContext vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext { EntityBalanceInfo = entityBalanceInfo,AlertRuleTypeId = inputArgument.AlertTypeId };
                                     var currentThreshold = balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext);
                                     if (entityBalanceInfo.CurrentBalance < currentThreshold)
                                     {

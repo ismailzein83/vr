@@ -11,6 +11,7 @@ namespace Vanrise.Notification.BP.Activities
             get;
             set;
         }
+        public Guid AlertRuleTypeId { get; set; }
     }
 
     public class VRBalanceAlertRuleCreateRuleTargetContext : IVRBalanceAlertRuleCreateRuleTargetContext

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Vanrise.Invoice.Business;
 using Vanrise.BusinessProcess;
 using Vanrise.Invoice.Entities;
+using Vanrise.Invoice.Business.Context;
+using Vanrise.Entities;
 namespace Vanrise.Invoice.BP.Activities
 {
      public sealed class GeneratePartnersInvoices : BaseCodeActivity
@@ -23,11 +25,17 @@ namespace Vanrise.Invoice.BP.Activities
             var partnerId = context.ActivityContext.GetValue(this.PartnerId);
             InvoiceManager invoiceManager = new InvoiceManager();
             InvoiceSettingManager invoiceSettingManager = new Business.InvoiceSettingManager();
+            InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
+           
+
             var issueDate = DateTime.Now;
             if (partnerId != null)
             {
-                PartnerManager partnerManager = new PartnerManager();
+                var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+                var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
+               
 
+                PartnerManager partnerManager = new PartnerManager();
                 var partnerSetting = partnerManager.GetInvoicePartnerSetting(invoiceTypeId, partnerId);
 
                 AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceSettingManager.GetInvoiceSettingDetailByType<AutomaticInvoiceSettingPart>(partnerSetting.InvoiceSetting.InvoiceSettingId);
@@ -36,7 +44,7 @@ namespace Vanrise.Invoice.BP.Activities
                     var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
                     if (billingPeriod != null)
                     {
-                        invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
+                      var generatedInvoice =  invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
                         {
                             InvoiceTypeId = invoiceTypeId,
                             IssueDate = issueDate,
@@ -44,7 +52,23 @@ namespace Vanrise.Invoice.BP.Activities
                             FromDate = billingPeriod.FromDate,
                             ToDate = billingPeriod.ToDate
                         });
+                      PartnerNameManagerContext PartnerNameManagerContext = new PartnerNameManagerContext
+                      {
+                          PartnerId = partnerId
+                      };
+                        var partnerName = invoiceTypePartnerManager.GetPartnerName(PartnerNameManagerContext);
+                        if(generatedInvoice.Result == InsertOperationResult.Succeeded)
+                        {
+
+                            context.ActivityContext.WriteTrackingMessage(LogEntryType.Information, string.Format("Invoice generated for {0} from period {1} to  period {2}", partnerName, billingPeriod.FromDate.ToShortDateString(), billingPeriod.ToDate.ToShortDateString()));
+                        }
+                        else
+                        {
+                            context.ActivityContext.WriteTrackingMessage(LogEntryType.Information, string.Format("Invoice not generated for {0} from period {1} to  period {2} :{3}", partnerName, billingPeriod.FromDate.Date.ToShortDateString(), billingPeriod.ToDate.ToShortDateString(), generatedInvoice.Message));
+                        }
+                       
                     }
+                    
                 }
             }
         }

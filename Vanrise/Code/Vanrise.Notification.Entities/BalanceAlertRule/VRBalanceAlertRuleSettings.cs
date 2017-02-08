@@ -32,5 +32,6 @@ namespace Vanrise.Notification.Entities
     public interface IVRBalanceAlertThresholdContext
     {
         IVREntityBalanceInfo EntityBalanceInfo { get; }
+        Guid AlertRuleTypeId { get;  }
     }
 }
