@@ -1,0 +1,18 @@
+﻿<vr-datagrid datasource="zoneRoutingProduct"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.ZoneRoutingProductId">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.ZoneRoutingProductId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn widthfactor="5">
+        <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip"></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Services'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>

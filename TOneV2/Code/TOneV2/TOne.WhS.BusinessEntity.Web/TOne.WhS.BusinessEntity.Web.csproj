@@ -170,6 +170,7 @@
     <Compile Include="Controllers\SupplierZoneController.cs" />
     <Compile Include="Controllers\SwitchConnectivityController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
+    <Compile Include="Controllers\ZoneRoutingProductController.cs" />
     <Compile Include="Controllers\ZoneServiceConfigController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -384,6 +385,8 @@
     <Content Include="WhS_BusinessEntity\Directives\Switch\Templates\SwitchGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\Templates\ZoneRoutingProductGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\vr-whs-zoneroutingproduct-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceViewer.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceConfigGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
@@ -416,6 +419,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchConnectivityAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\TechnicalSettingsAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneRoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListTemplateService.js" />
@@ -524,6 +528,8 @@
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\ZoneRoutingProduct\ZoneRoutingProductManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\ZoneRoutingProduct\ZoneRoutingProductManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigManagement.html" />

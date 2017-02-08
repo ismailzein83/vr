@@ -264,6 +264,9 @@
     <Compile Include="Switch\SwitchDetail.cs" />
     <Compile Include="Switch\SwitchInfo.cs" />
     <Compile Include="Switch\SwitchQuery.cs" />
+    <Compile Include="ZoneRoutingProduct\ZoneRoutingProduct.cs" />
+    <Compile Include="ZoneRoutingProduct\ZoneRoutingProductDetail.cs" />
+    <Compile Include="ZoneRoutingProduct\ZoneRoutingProductQuery.cs" />
     <Compile Include="ZoneServiceConfig\ZoneServiceConfigFilter.cs" />
     <Compile Include="ZoneServiceConfig\ZoneServiceConfigInfo.cs" />
     <Compile Include="ZoneServiceConfig\ZoneServiceConfigDetail.cs" />
