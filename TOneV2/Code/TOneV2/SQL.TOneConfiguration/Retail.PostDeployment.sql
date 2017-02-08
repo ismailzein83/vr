@@ -6,7 +6,7 @@ Post-Deployment Script Template
  Example:      :r .\myfile.sql								
  Use SQLCMD syntax to reference a variable in the post-deployment script.		
  Example:      :setvar TableName MyTable							
-               SELECT * FROM [$(TableName)]					
+               SELECT * FROM [$(TableName)]					 
 --------------------------------------------------------------------------------------
 */
 
@@ -86,7 +86,10 @@ as (select * from (values
 ('70CF19AC-B860-4010-A544-B6D41F94F505','Retail_BE_AccountBEDefinition','Account BE','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"retail-be-accountbedefinition-vieweditor"}'),
 ('70D4A6AD-10CC-4F0B-8364-7D8EF3C044C4','Account Business Entity','Account BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"retail-be-accountbedefinitions-editor"}'),
 ('F123F0C6-42CF-4B6F-B3EB-F1AD5E0E8931','Assign Product and Packages Handler','Assign Product and Packages Handler','Retail_BE_AccountSynchronizerInsertHandlerConfig','{"Editor":"retail-be-accountsynchronizerhandler-assignproductandpackages"}'),
-('EB85EE78-78CE-437D-B13E-18DD15EABE54','Retail_BE_Visibility','Retail Business Entity','VRCommon_ModuleVisibility','{"Editor":"retail-be-visibilityaccountdefinitions-management"}')
+('EB85EE78-78CE-437D-B13E-18DD15EABE54','Retail_BE_Visibility','Retail Business Entity','VRCommon_ModuleVisibility','{"Editor":"retail-be-visibilityaccountdefinitions-management"}'),
+
+('DAB350C7-1451-42B2-9E04-215E252433E0','Portal Account','Portal Account','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-portalaccount"}'),
+('1CBD8BEF-14D6-4D47-BB9B-264ECC0E92B4','Portal Account Handler','Portal Account Handler','Retail_BE_AccountSynchronizerInsertHandlerConfig','{"Editor":"retail-be-accountsynchronizerhandler-portalaccount"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
