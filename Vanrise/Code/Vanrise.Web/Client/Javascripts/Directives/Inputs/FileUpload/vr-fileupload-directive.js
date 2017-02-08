@@ -114,6 +114,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                         fileId: data.result.FileId,
                         fileName: data.result.Name
                     };
+                    var obj = ctrl.value;
                     isInternalSetValue = true;
                     $timeout(function () { $scope.complet = true }, 2000);
                     $scope.isUploading = false;
@@ -121,7 +122,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     if ($attrs.onvaluechanged != undefined) {
                         var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
                         if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
-                            onvaluechangedMethod();
+                            onvaluechangedMethod(obj);
                         }
                     }
                 },
