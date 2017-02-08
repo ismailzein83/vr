@@ -36,7 +36,9 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
                     $scope.scopeModel.serviceType =  payload.partSettings.ServiceType ;
                     $scope.scopeModel.remarks =  payload.partSettings.Remarks ;
                     $scope.scopeModel.gPVoiceCustomerNo =  payload.partSettings.GPVoiceCustomerNo ;
-                    $scope.scopeModel.serviceId =  payload.partSettings.ServiceId ;
+                    $scope.scopeModel.serviceId = payload.partSettings.ServiceId;
+                    $scope.scopeModel.customerPO = payload.partSettings.CustomerPO;
+
                 }
 
             };
@@ -49,7 +51,8 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
                     ServiceType: $scope.scopeModel.serviceType,
                     Remarks: $scope.scopeModel.remarks,
                     GPVoiceCustomerNo: $scope.scopeModel.gPVoiceCustomerNo,
-                    ServiceId: $scope.scopeModel.serviceId
+                    ServiceId: $scope.scopeModel.serviceId,
+                    CustomerPO: $scope.scopeModel.customerPO
                 };
             };
             if (ctrl.onReady != null)

@@ -27,6 +27,8 @@ namespace Retail.Zajil.MainExtensions
 
         public string ServiceId { get; set; }
 
+        public string CustomerPO { get; set; }
+
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
             switch (context.FieldName)
@@ -38,6 +40,7 @@ namespace Retail.Zajil.MainExtensions
                 case "Remarks": return this.Remarks;
                 case "GPVoiceCustomerNo": return this.GPVoiceCustomerNo;
                 case "ServiceId": return this.ServiceId;
+                case "CustomerPO": return this.CustomerPO;
                 default: return null;
             }
         }

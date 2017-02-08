@@ -160,7 +160,8 @@ namespace Retail.Zajil.MainExtensions
                     ServiceType = row["ServiceType"] as string,
                     Remarks = row["Remarks"] as string,
                     GPVoiceCustomerNo = row["GP_VoiceCustomer_No"] as string,
-                    ServiceId = row["ServiceID"] as string
+                    ServiceId = row["ServiceID"] as string,
+                    CustomerPO = row["customer_po"] as string
                 }
             });
         }

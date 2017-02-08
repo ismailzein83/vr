@@ -56,6 +56,12 @@ namespace Retail.Zajil.MainExtensions
                         Name = "ServiceId",
                         Title = "Service Id",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                    },
+                    new GenericFieldDefinition()
+                    {
+                        Name = "CustomerPO",
+                        Title = "Customer PO",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
                     }
 
                 };
