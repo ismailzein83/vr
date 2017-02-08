@@ -374,6 +374,45 @@ namespace TOne.WhS.Analytics.Business
                     sheet.Rows.Add(row);
                 }
 
+                var emptyRow = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                for (int k = 0; k < result.TimePeriods.Count() + 4; k++)
+                    emptyRow.Cells.Add(new ExportExcelCell() { Value = "" });
+                sheet.Rows.Add(emptyRow);
+
+                var totalRow = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                var summary = ((TOne.WhS.Analytics.Entities.VariationReportBigResult) (context.BigResult)).Summary;
+                totalRow.Cells.Add(new ExportExcelCell()
+                {
+                    Value = "Total"
+                });
+
+                totalRow.Cells.Add(new ExportExcelCell()
+                {
+                    Value = summary.Average
+                });
+
+                totalRow.Cells.Add(new ExportExcelCell()
+                {
+                    Value = summary.Percentage
+                });
+
+                int totalCount = 0;
+                do
+                {
+                    if (totalCount == 1)
+                    {
+                        totalRow.Cells.Add(new ExportExcelCell() { Value = summary.PreviousPeriodPercentage });
+                        var value = summary.TimePeriodValues[totalCount];
+                        totalRow.Cells.Add(new ExportExcelCell() { Value = value });
+                    }
+                    else
+                    {
+                        var value = summary.TimePeriodValues[totalCount];
+                        totalRow.Cells.Add(new ExportExcelCell() { Value = value });
+                    }
+                    totalCount++;
+                } while (totalCount < summary.TimePeriodValues.Count());
+                sheet.Rows.Add(totalRow);
                 context.MainSheet = sheet;
             }
         }
