@@ -130,12 +130,6 @@ namespace Vanrise.Security.Web.Controllers
         public string Email { get; set; }
     }
 
-    public class ResetPasswordInput
-    {
-        public int UserId { get; set; }
-        public string Password { get; set; }
-    }
-
     public class ActivatePasswordInput
     {
         public string Email { get; set; }

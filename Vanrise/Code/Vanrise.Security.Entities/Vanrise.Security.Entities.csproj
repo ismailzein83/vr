@@ -92,6 +92,7 @@
     <Compile Include="Group\Group.cs" />
     <Compile Include="Group\GroupDetail.cs" />
     <Compile Include="RequiredPermissionSettings.cs" />
+    <Compile Include="ResetPassword.cs" />
     <Compile Include="Settings\MailMessageTemplateSettings.cs" />
     <Compile Include="Settings\SecuritySettings.cs" />
     <Compile Include="SystemAction\SystemAction.cs" />

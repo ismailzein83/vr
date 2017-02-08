@@ -37,7 +37,7 @@ namespace Vanrise.Common.Business
             return vrConnections.GetRecord(vrConnectionId);
         }
 
-        public VRConnection GetVRConnectionByType<T>(Guid vrConnectionId) where T : VRConnectionSettings
+        public VRConnection GetVRConnection<T>(Guid vrConnectionId) where T : VRConnectionSettings
         {
             VRConnection vrConnection = GetVRConnection(vrConnectionId);
 
