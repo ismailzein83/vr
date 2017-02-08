@@ -15,6 +15,13 @@ namespace Retail.BusinessEntity.Web.Controllers
     {
         PortalAccountManager _manager = new PortalAccountManager();
 
+        [HttpGet]
+        [Route("GetPortalAccountSettings")]
+        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId)
+        {
+            return _manager.GetPortalAccountSettings(accountBEDefinitionId, accountId);
+        }
+
         [HttpPost]
         [Route("AddPortalAccount")]
         public Vanrise.Entities.InsertOperationOutput<PortalAccountSettings> AddPortalAccount(PortalAccountEditorObject portalAccountEditorObject)
@@ -23,11 +30,11 @@ namespace Retail.BusinessEntity.Web.Controllers
                                              portalAccountEditorObject.ConnectionId, portalAccountEditorObject.TenantId);
         }
 
-        [HttpGet]
-        [Route("GetPortalAccountSettings")]
-        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId)
+        [HttpPost]
+        [Route("ResetPassword")]
+        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(ResetPasswordInput resetPasswordInput)
         {
-            return _manager.GetPortalAccountSettings(accountBEDefinitionId, accountId);
+            return _manager.ResetPassword(resetPasswordInput.UserId, resetPasswordInput.Password, resetPasswordInput.ConnectionId);
         }
     }
 
@@ -44,5 +51,14 @@ namespace Retail.BusinessEntity.Web.Controllers
         public Guid ConnectionId { get; set; }
 
         public int TenantId { get; set; }
+    }
+
+    public class ResetPasswordInput
+    {
+        public int UserId {get; set;}
+
+        public string Password {get; set;}
+
+        public Guid ConnectionId { get; set; }
     }
 }

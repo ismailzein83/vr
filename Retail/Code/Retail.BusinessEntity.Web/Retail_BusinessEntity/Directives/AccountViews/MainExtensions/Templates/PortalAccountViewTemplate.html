@@ -7,7 +7,7 @@
             <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-label>Name:</vr-label>
-                    <vr-label isvalue> {{scopeModel.name}} </vr-label>
+                    <vr-label isvalue>{{scopeModel.name}}</vr-label>
                 </vr-columns>
             </vr-row>
             <vr-row>
@@ -16,29 +16,15 @@
                     <vr-label isvalue>{{scopeModel.email}}</vr-label>
                 </vr-columns>
             </vr-row>
-            <!--<vr-row>
-                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <div transclude-to="buttons">
-                        <vr-button type="ResetPassword" data-onclick="scopeModel.onPortalAccountAdded"></vr-button>
-                    </div>
-                </vr-actionbar>
-            </vr-row>-->
         </vr-row>
 
         <vr-row ng-if="!scopeModel.isPortalUserAccountCreated">
             <vr-row width="fullrow">
                 <vr-columns width="fullrow">
                     <vr-label>
-                        Portal User Account is not yet created. <a href="" ng-click="scopeModel.onPortalAccountAdded()" style="color:rgb(255, 0, 0)">Click to Add!!</a>
+                        Portal User Account is not yet created. <a href="" ng-click="scopeModel.onPortalAccountAdded()" style="color:#ff0000">Click to Add</a>
                     </vr-label>
                 </vr-columns>
-            </vr-row>
-            <vr-row>
-                <!--<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <div transclude-to="buttons">
-                        <vr-button type="CreateUser" data-onclick="scopeModel.onPortalAccountAdded"></vr-button>
-                    </div>
-                </vr-actionbar>-->
             </vr-row>
         </vr-row>
 

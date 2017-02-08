@@ -42,7 +42,6 @@
                 $scope.scopeModel.onPortalAccountAdded = function () {
                     var onPortalAccountAdded = function (addedPortalAccount) {
                         $scope.scopeModel.isPortalUserAccountCreated = true;
-                        $scope.scopeModel.userId = addedPortalAccount.UserId;
                         $scope.scopeModel.name = addedPortalAccount.Name;
                         $scope.scopeModel.email = addedPortalAccount.Email;
                     };
@@ -68,11 +67,17 @@
 
                     Retail_BE_PortalAccountAPIService.GetPortalAccountSettings(accountBEDefinitionId, parentAccountId).then(function (response) {
                         if (response != undefined) {
-                            $scope.scopeModel.isPortalUserAccountCreated = true;
                             var portalAccountSettings = response;
-                            $scope.scopeModel.userId = portalAccountSettings.UserId;
+                            $scope.scopeModel.isPortalUserAccountCreated = true;
                             $scope.scopeModel.name = portalAccountSettings.Name;
                             $scope.scopeModel.email = portalAccountSettings.Email;
+
+                            $scope.scopeModel.sectionMenuActions.push({
+                                name: 'Reset Password',
+                                clicked: function () {
+                                    Retail_BE_PortalAccountService.resetPassword(portalAccountSettings.UserId, buildContext());
+                                }
+                            })
                         }
                         else {
                             $scope.scopeModel.sectionMenuActions.push({
@@ -114,8 +119,8 @@
                             return;
 
                         return accountViewDefinition.Settings.TenantId;
-                    },
-                }
+                    }
+                };
                 return context;
             }
         }

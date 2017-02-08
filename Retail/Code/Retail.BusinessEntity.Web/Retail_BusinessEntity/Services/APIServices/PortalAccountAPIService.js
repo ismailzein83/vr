@@ -8,10 +8,6 @@
 
         var controllerName = "PortalAccount";
 
-        function AddPortalAccount(portalAccountEditorObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddPortalAccount'), portalAccountEditorObject);
-        }
-
         function GetPortalAccountSettings(accountBEDefinitionId, accountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetPortalAccountSettings'), {
                 accountBEDefinitionId: accountBEDefinitionId,
@@ -19,10 +15,19 @@
             });
         }
 
+        function AddPortalAccount(portalAccountEditorObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddPortalAccount'), portalAccountEditorObject);
+        }
+
+        function ResetPassword(resetPasswordInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'ResetPassword'), resetPasswordInput);
+        }
+
 
         return ({
+            GetPortalAccountSettings: GetPortalAccountSettings,
             AddPortalAccount: AddPortalAccount,
-            GetPortalAccountSettings: GetPortalAccountSettings
+            ResetPassword: ResetPassword
         });
     }
 

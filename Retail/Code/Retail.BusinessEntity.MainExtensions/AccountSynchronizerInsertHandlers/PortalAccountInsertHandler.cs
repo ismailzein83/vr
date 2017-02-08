@@ -34,7 +34,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountSynchronizerInsertHandlers
             var accountBEDefinitionId = context.AccountBEDefinitionId;
 
             VRConnectionManager connectionManager = new VRConnectionManager();
-            var vrConnection = connectionManager.GetVRConnectionByType<VRInterAppRestConnection>(this.ConnectionId);
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(this.ConnectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
             List<string> accountGenericFields = new List<string>();

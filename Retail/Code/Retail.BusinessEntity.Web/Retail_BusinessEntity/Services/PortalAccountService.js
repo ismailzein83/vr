@@ -23,9 +23,25 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountViews/PortalAccountEditor.html', parameters, settings);
         };
 
+        function resetPassword(userId, context) {
+
+            var parameters = {
+                userId: userId,
+                context: context
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountViews/ResetPasswordEditor.html', parameters, settings);
+        };
+
 
         return {
-            addPortalAccount: addPortalAccount
+            addPortalAccount: addPortalAccount,
+            resetPassword: resetPassword
         };
     }
 
