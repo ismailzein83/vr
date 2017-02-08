@@ -361,7 +361,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "SectionAction":
                 return {
-                    text: "Section Action",
+                    text: "Actions",
                     class: "glyphicon glyphicon-chevron-down"
                 };
 
