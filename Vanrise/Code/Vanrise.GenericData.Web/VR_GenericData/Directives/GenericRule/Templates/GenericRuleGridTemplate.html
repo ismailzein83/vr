@@ -8,6 +8,6 @@
     <vr-datagridcolumn headertext="'Description'" type="'Text'" field="'Entity.Description'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="field in ctrl.criteriaFields" headertext="field.Title" type="'Text'" field="'FieldValueDescriptions[' + field.fieldValueIndex + ']'" columnindex="2 + $index" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Settings'" type="'Text'" field="'SettingsDescription'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Begin Effective Date'" type="'Datetime'" field="'Entity.BeginEffectiveTime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'End Effective Date'" type="'Datetime'" field="'Entity.EndEffectiveTime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Begin Effective Date'" type="'LongDatetime'" field="'Entity.BeginEffectiveTime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Effective Date'" type="'LongDatetime'" field="'Entity.EndEffectiveTime'"></vr-datagridcolumn>
 </vr-datagrid>  
