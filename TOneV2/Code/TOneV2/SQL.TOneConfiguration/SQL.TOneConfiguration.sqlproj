@@ -542,6 +542,7 @@
     <None Include="Retail_Zajil.PostDeployment.sql" />
     <None Include="Retail_Centrex.PostDeployment.sql" />
     <None Include="Retail_Teles.PostDeployment1.sql" />
+    <None Include="TOne_Spactron.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
