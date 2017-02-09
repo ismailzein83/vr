@@ -335,9 +335,23 @@
                     FromTime: currentFromDate,
                     ToTime: new Date(),
                     FilterGroup: filterObj,
-                    TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit != undefined ? $scope.scopeModel.selectedTimeGroupingUnit.value : undefined
+                    TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit != undefined ? $scope.scopeModel.selectedTimeGroupingUnit.value : undefined,
+                    LastHours: getLastHours(),
                 };
                 return query;
+            }
+            function getLastHours()
+            {
+                if( $scope.scopeModel.showSinceLast)
+                {
+                    switch($scope.scopeModel.selectedTimeUnit.value)
+                    {
+                        case VR_Analytic_TimeUnitEnum.Days.value:
+                            return ($scope.scopeModel.last * 24);
+                        case VR_Analytic_TimeUnitEnum.Hours.value:
+                            return $scope.scopeModel.last;
+                    }
+                }
             }
         }
 

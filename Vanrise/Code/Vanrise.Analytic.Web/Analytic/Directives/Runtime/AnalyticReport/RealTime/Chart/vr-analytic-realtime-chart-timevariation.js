@@ -32,6 +32,7 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
             ctrl.sortField = "";
             var fromTime;
             var toTime;
+            var lastHours;
 
             function initializeController() {
 
@@ -111,6 +112,8 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
             function getQuery(payLoad) {
                 fromTime = payLoad.FromTime;
                 toTime = payLoad.ToTime;
+                lastHours = payLoad.LastHours;
+
                 ctrl.measures.length = 0;
 
                 if (payLoad.Dimensions != undefined) {
@@ -138,7 +141,8 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     Filters: payLoad.DimensionFilters,
                     MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                     FromTime: fromTime,
-                    ToTime: toTime,
+                    LastHours:lastHours,
+                 //   ToTime: toTime,
                     TableId: payLoad.TableId,
                     TimeGroupingUnit: payLoad.TimeGroupingUnit,
                     FilterGroup: payLoad.FilterGroup,

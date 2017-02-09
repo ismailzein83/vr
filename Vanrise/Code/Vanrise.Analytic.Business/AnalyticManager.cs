@@ -526,6 +526,10 @@ namespace Vanrise.Analytic.Business
             AnalyticRecord _summaryRecord;
             public override IEnumerable<AnalyticRecord> RetrieveAllData(DataRetrievalInput<AnalyticQuery> input)
             {
+                if(input.Query.LastHours.HasValue)
+                {
+                    input.Query.FromTime = DateTime.Now.AddHours(-input.Query.LastHours.Value);
+                }
                 var query = input.Query;
                 var queryContext = new AnalyticTableQueryContext(query);
                 var dataProvider = queryContext.GetTable().Settings.DataProvider;

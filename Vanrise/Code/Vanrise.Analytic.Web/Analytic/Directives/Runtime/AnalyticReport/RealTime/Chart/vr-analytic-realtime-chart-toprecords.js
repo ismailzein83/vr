@@ -32,7 +32,7 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
             ctrl.sortField = "";
             var fromTime;
             var toTime;
-
+            var lastHours;
             function initializeController() {
 
                 ctrl.chartReady = function (api) {
@@ -111,6 +111,7 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
             };
 
             function getQuery(payLoad) {
+                lastHours = payLoad.LastHours;
                 fromTime = payLoad.FromTime;
                 toTime = payLoad.ToTime;
                 ctrl.groupingDimensions.length = 0;
@@ -165,7 +166,8 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                     DimensionFields: UtilsService.getPropValuesFromArray(ctrl.groupingDimensions, 'Name'),
                     MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                     FromTime: fromTime,
-                    ToTime: toTime,
+                    LastHours: lastHours,
+                 //   ToTime: toTime,
                     FilterGroup: payLoad.FilterGroup,
                     TableId: payLoad.TableId
                 };
