@@ -10,7 +10,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
     public class NewSupplierRateDataManager : BaseSQLDataManager, INewSupplierRateDataManager
     {
-        readonly string[] _columns = { "ID", "ProcessInstanceID", "ZoneID", "CurrencyID", "NormalRate", "RateTypeID", "BED", "EED" };
+        readonly string[] _columns = { "ID", "ProcessInstanceID", "ZoneID", "CurrencyID", "NormalRate", "RateTypeID", "Change", "BED", "EED" };
         public NewSupplierRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -55,13 +55,14 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         public void WriteRecordToStream(NewRate record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
                        record.RateId,
                        _processInstanceID,
                        record.Zone.ZoneId,
                        record.CurrencyId,
                        decimal.Round(record.NormalRate, 8),
                        record.RateTypeId,
+                       (int)record.Change,
                        GetDateTimeForBCP(record.BED),
                        GetDateTimeForBCP(record.EED));
         }

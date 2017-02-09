@@ -462,7 +462,8 @@ namespace TOne.WhS.SupplierPriceList.Business
                 CurrencyId = importedRate.CurrencyId,
                 Zone = zone,
                 BED = zone.BED > currentRateBED ? zone.BED : currentRateBED,
-                EED = importedRate.EED
+                EED = importedRate.EED,
+                Change = importedRate.ChangeType
             };
             if (newRate.EED.VRGreaterThan(zone.EED))//this means that zone has EED value
             {
