@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
 using System.Collections.Concurrent;
+
 namespace Vanrise.GenericData.Business
 {
     public interface IDataRecordFiller
@@ -54,6 +55,16 @@ namespace Vanrise.GenericData.Business
             var dataRecordTypes = GetCachedDataRecordTypes();
             return dataRecordTypes.GetRecord(dataRecordTypeId);
         }
+        public string GetDataRecordTypeName(Guid dataRecordTypeId)
+        {
+            var dataRecordTypes = GetCachedDataRecordTypes();
+            DataRecordType dataRecordType = dataRecordTypes.GetRecord(dataRecordTypeId);
+
+            if (dataRecordType != null)
+                return dataRecordType.Name;
+
+            return null;
+        } 
 
         public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(Guid dataRecordTypeId)
         {
@@ -81,16 +92,6 @@ namespace Vanrise.GenericData.Business
                });
         }
 
-        public string GetDataRecordTypeName(Guid dataRecordTypeId)
-        {
-            var dataRecordTypes = GetCachedDataRecordTypes();
-            DataRecordType dataRecordType = dataRecordTypes.GetRecord(dataRecordTypeId);
-
-            if (dataRecordType != null)
-                return dataRecordType.Name;
-
-            return null;
-        }
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypeInfo(DataRecordTypeInfoFilter filter)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
@@ -106,6 +107,7 @@ namespace Vanrise.GenericData.Business
 
 
         }
+
         public Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail> AddDataRecordType(DataRecordType dataRecordType)
         {
             InsertOperationOutput<DataRecordTypeDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail>();
@@ -152,6 +154,7 @@ namespace Vanrise.GenericData.Business
 
             return updateOperationOutput;
         }
+
         public dynamic CreateDataRecordObject(string dataRecordTypeName)
         {
             Type dataRecordRuntimeType = GetDataRecordRuntimeType(dataRecordTypeName);
@@ -227,9 +230,11 @@ namespace Vanrise.GenericData.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<DataRecordTypeExtraFieldTemplate>(DataRecordTypeExtraFieldTemplate.EXTENSION_TYPE);
         }
+
         #endregion
 
         #region Private Methods
+
         public Dictionary<Guid, DataRecordType> GetCachedDataRecordTypeDefinitions()
         {
             return GetCacheManager().GetOrCreateObject("GetDataRecordTypeDefinitions",
@@ -375,6 +380,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Classes
+
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDataRecordTypeDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
@@ -399,7 +405,6 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-
         #endregion
 
         #region Mappers
@@ -419,6 +424,7 @@ namespace Vanrise.GenericData.Business
             dataRecordTypeInfo.Name = dataRecordTypeObject.Name;
             return dataRecordTypeInfo;
         }
+
         #endregion
     }
 
