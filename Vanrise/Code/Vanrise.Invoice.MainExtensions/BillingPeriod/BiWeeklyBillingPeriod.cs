@@ -28,27 +28,41 @@ namespace Vanrise.Invoice.MainExtensions
                     }
                 }
                 nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(13);
-                perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
-                perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                while (nextBillingInterval.ToDate <= context.IssueDate)
+                if (nextBillingInterval.ToDate > context.IssueDate)
+                {
+                    perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
+                }
+                else
                 {
                     perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                     perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                    nextBillingInterval.FromDate = nextBillingInterval.ToDate.AddDays(1);
-                    nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(13);
+                    while (nextBillingInterval.ToDate <= context.IssueDate)
+                    {
+                        perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
+                        perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
+                        nextBillingInterval.FromDate = nextBillingInterval.ToDate.AddDays(1);
+                        nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(13);
+                    }
                 }
             }
             else
             {
-                perviousBillingInterval.ToDate = context.IssueDate.AddDays(-1);
-                perviousBillingInterval.FromDate = perviousBillingInterval.ToDate.AddDays(-13);
-                if (perviousBillingInterval.FromDate.DayOfWeek != DailyType)
+                perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
+            }
+            return perviousBillingInterval;
+        }
+
+        private BillingInterval GetIntervalIfPreviousPeriodNotValid(DateTime issueDate)
+        {
+            BillingInterval perviousBillingInterval = new BillingInterval();
+            perviousBillingInterval.ToDate = issueDate.AddDays(-1);
+            perviousBillingInterval.FromDate = perviousBillingInterval.ToDate.AddDays(-13);
+            if (perviousBillingInterval.FromDate.DayOfWeek != DailyType)
+            {
+                while (perviousBillingInterval.FromDate.DayOfWeek != DailyType)
                 {
-                    while (perviousBillingInterval.FromDate.DayOfWeek != DailyType)
-                    {
-                        perviousBillingInterval.FromDate = perviousBillingInterval.FromDate.AddDays(-1);
-                        perviousBillingInterval.ToDate = perviousBillingInterval.ToDate.AddDays(-1);
-                    }
+                    perviousBillingInterval.FromDate = perviousBillingInterval.FromDate.AddDays(-1);
+                    perviousBillingInterval.ToDate = perviousBillingInterval.ToDate.AddDays(-1);
                 }
             }
             return perviousBillingInterval;
