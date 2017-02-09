@@ -63,7 +63,7 @@ namespace Vanrise.AccountBalance.BP.Activities
         }
         private void ProcessCorrectUsageBalanceMethod(BalanceUsageQueue<CorrectUsageBalancePayload> balanceUsageQueue, AccountBalanceUpdateHandler acountBalanceUpdateHandler)
         {
-            if (balanceUsageQueue.UsageDetails != null && balanceUsageQueue.UsageDetails.CorrectUsageBalanceItems != null)
+            if (balanceUsageQueue.UsageDetails != null)
             {
                 acountBalanceUpdateHandler.CorrectBalanceFromBalanceUsageQueue(balanceUsageQueue.BalanceUsageQueueId, balanceUsageQueue.UsageDetails.TransactionTypeId, balanceUsageQueue.UsageDetails.CorrectUsageBalanceItems, balanceUsageQueue.UsageDetails.PeriodDate, balanceUsageQueue.UsageDetails.CorrectionProcessId, balanceUsageQueue.UsageDetails.IsLastBatch);
             }
