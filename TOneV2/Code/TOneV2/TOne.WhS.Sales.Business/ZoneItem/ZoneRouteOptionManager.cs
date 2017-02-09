@@ -21,8 +21,13 @@ namespace TOne.WhS.Sales.Business
 
 		public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
 		{
-			if (rpZones != null && rpZones.Count() > 0)
-				_routes = new RPRouteManager().GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones);
+            if (rpZones != null && rpZones.Count() > 0)
+            {
+                int? customerId = null;
+                if (ownerType == SalePriceListOwnerType.Customer)
+                    customerId = ownerId;
+                _routes = new RPRouteManager().GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId, customerId);
+            }
 
 			_costCalculationMethods = costCalculationMethods;
 			_rateCalculationCostColumnConfigId = rateCalculationCostColumnConfigId;
