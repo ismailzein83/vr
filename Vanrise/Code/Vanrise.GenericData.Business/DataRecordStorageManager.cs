@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.Business
 
         DataStoreManager _dataStoreManager = new DataStoreManager();
 
-        #endregion
+        #endregion 
 
         #region Public Methods
 
@@ -108,8 +108,6 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-
-
         public IDataRecordDataManager GetStorageDataManager(Guid recordStorageId)
         {
             var dataRecordStorage = GetDataRecordStorage(recordStorageId);
@@ -191,7 +189,6 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
-
         public Vanrise.Entities.UpdateOperationOutput<DataRecordStorageDetail> UpdateDataRecordStorage(DataRecordStorage dataRecordStorage)
         {
             Vanrise.Entities.UpdateOperationOutput<DataRecordStorageDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<DataRecordStorageDetail>();
@@ -259,6 +256,7 @@ namespace Vanrise.GenericData.Business
             }
             return true;
         }
+
         #endregion
 
         #region Private Methods
@@ -300,7 +298,7 @@ namespace Vanrise.GenericData.Business
                 throw new ArgumentNullException("dataStore.Settings");
         }
 
-        private IDataRecordDataManager GetStorageDataManager(DataRecordStorage dataRecordStorage)
+        IDataRecordDataManager GetStorageDataManager(DataRecordStorage dataRecordStorage)
         {
             var dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
             if (dataStore == null)
@@ -314,7 +312,6 @@ namespace Vanrise.GenericData.Business
             };
             return dataStore.Settings.GetDataRecordDataManager(getRecordStorageDataManagerContext);
         }
-
 
         #endregion
 
