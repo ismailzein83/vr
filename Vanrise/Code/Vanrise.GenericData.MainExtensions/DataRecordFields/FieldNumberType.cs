@@ -7,6 +7,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 using System.Globalization;
+using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -46,10 +47,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             switch (DataType)
             {
                 case FieldNumberDataType.Decimal:
+                    decimalPrecision = "N";
                     switch (DataPrecision)
                     {
-                        case FieldNumberPrecision.Long: decimalPrecision = "0.0000"; break;
+                        case FieldNumberPrecision.Long:
+                            var longPrecision = new UISettingsManager().GetLongPrecision();
+                            decimalPrecision += longPrecision;
+                            break;
                         case FieldNumberPrecision.Normal: 
+                            var normalPrecision = new UISettingsManager().GetNormalPrecision();
+                            decimalPrecision += normalPrecision;
+                            break;
                         default: decimalPrecision = "0.00"; break;
                     }
                     break;

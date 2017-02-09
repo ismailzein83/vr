@@ -69,6 +69,26 @@ namespace Vanrise.Common.Business
             return uiSettings;
         }
 
+        public UIParameter GetParameter(string parameterName)
+        {
+            var uiSettings = GetUIParameters();
+            return uiSettings.Parameters.FirstOrDefault(x => x.Name == parameterName);
+        }
+
+        public string GetNormalPrecision()
+        {
+            var parameter = GetParameter("NormalPrecision");
+            if (parameter == null)
+                return null;
+            return parameter.Value;
+        }
+        public string GetLongPrecision()
+        {
+            var parameter = GetParameter("LongPrecision");
+            if (parameter == null)
+                return null;
+            return parameter.Value;
+        }
     }
     
 }
