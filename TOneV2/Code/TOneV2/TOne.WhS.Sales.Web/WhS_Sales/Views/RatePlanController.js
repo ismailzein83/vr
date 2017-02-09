@@ -519,9 +519,11 @@
         function loadRatePlanSettingsData() {
             return WhS_Sales_RatePlanAPIService.GetRatePlanSettingsData().then(function (response) {
                 ratePlanSettingsData = response;
-                settings.costCalculationMethods = [];
-                for (var i = 0; i < response.CostCalculationsMethods.length; i++) {
-                    settings.costCalculationMethods.push(response.CostCalculationsMethods[i]);
+                if (response != undefined && response.CostCalculationsMethods != null) {
+                    settings.costCalculationMethods = [];
+                    for (var i = 0; i < response.CostCalculationsMethods.length; i++) {
+                        settings.costCalculationMethods.push(response.CostCalculationsMethods[i]);
+                    }
                 }
             });
         }
