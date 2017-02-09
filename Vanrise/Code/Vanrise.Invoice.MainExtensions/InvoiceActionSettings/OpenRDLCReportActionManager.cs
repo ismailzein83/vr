@@ -22,8 +22,7 @@ namespace Vanrise.Invoice.MainExtensions
         Dictionary<string, RepeatedReportDetails> repeatedReports;
         public void BuildRdlcReport(ReportViewer reportViewer, ReportInput reportInput)
         {
-            try
-            {
+          
                 repeatedReports = new Dictionary<string, RepeatedReportDetails>();
                 invoiceActionContext = reportInput.Context;
 
@@ -58,13 +57,6 @@ namespace Vanrise.Invoice.MainExtensions
                 }
                 reportViewer.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(SubreportProcessingEventHandler);
                 reportViewer.LocalReport.SetParameters(invoiceReportParameters.ToArray());
-
-
-            }
-            catch (Exception error)
-            {
-                throw error;
-            }
         }
         void SubreportProcessingEventHandler(object sender, SubreportProcessingEventArgs e)
         {

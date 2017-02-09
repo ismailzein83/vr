@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.Invoice.Business;
@@ -37,6 +38,7 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                 }
                 catch(Exception error)
                 {
+                    LoggerFactory.GetExceptionLogger().WriteException(error);
                     labelError.Text = error.Message;
                 }
             }
