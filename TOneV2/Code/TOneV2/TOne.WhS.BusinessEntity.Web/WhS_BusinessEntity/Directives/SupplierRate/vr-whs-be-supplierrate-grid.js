@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierRateAPIService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VRUIUtilsService) {
+app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierRateAPIService", "VRUIUtilsService", "FileAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VRUIUtilsService, fileApiService) {
 
     var directiveDefinitionObject = {
 
@@ -64,8 +64,21 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
+            defineMenuActions();
         }
 
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Download",
+                clicked: downloadPriceList
+            }];
+        }
+        function downloadPriceList(priceListObj) {
+            fileApiService.DownloadFile(priceListObj.Entity.PriceListFileId)
+                    .then(function (response) {
+                        UtilsService.downloadFile(response.data, response.headers);
+                    });
+        }
         function getDirectiveTabs() {
             var directiveTabs = [];
 

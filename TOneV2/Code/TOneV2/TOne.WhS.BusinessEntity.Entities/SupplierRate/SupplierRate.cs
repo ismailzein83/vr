@@ -23,5 +23,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string SourceId { get; set; }
         public RateChangeType RateChange { get; set; }
+        public long? PriceListFileId { get; set; }
     }
 }

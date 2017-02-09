@@ -145,10 +145,11 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SupplierPriceListManager manager = new SupplierPriceListManager();
                 SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
+                supplierRate.PriceListFileId = priceList.FileId;
                 currencyId = priceList.CurrencyId;
             }
 
-            return new SupplierRateDetail()
+            return new SupplierRateDetail
             {
                 Entity = supplierRate,
                 CurrencyName = currencyManager.GetCurrencySymbol(currencyId),
