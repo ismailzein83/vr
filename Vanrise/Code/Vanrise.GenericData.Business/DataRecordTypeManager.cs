@@ -8,6 +8,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
+using System.Collections.Concurrent;
 namespace Vanrise.GenericData.Business
 {
     public interface IDataRecordFiller
@@ -20,6 +21,19 @@ namespace Vanrise.GenericData.Business
     public class DataRecordTypeManager : IDataRecordTypeManager
     {
         #region Public Methods
+
+        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+
+        CacheManager GetCacheManager()
+        {
+            return s_cacheManager;
+        }
+
+        public void AddDataRecordTypeCachingExpirationChecker(DataRecordTypeCachingExpirationChecker dataRecordTypeCachingExpirationChecker)
+        {
+            GetCacheManager().DataRecordTypeCachingExpirationCheckers.Add(dataRecordTypeCachingExpirationChecker);
+        }
+
         public IDataRetrievalResult<DataRecordTypeDetail> GetFilteredDataRecordTypes(DataRetrievalInput<DataRecordTypeQuery> input)
         {
             var allItems = GetCachedDataRecordTypes();
@@ -55,7 +69,7 @@ namespace Vanrise.GenericData.Business
         public Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetDataRecordTypeFields_{0}", dataRecordTypeId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+            return GetCacheManager().GetOrCreateObject(cacheName,
                () =>
                {
                    var dataRecordType = GetDataRecordType(dataRecordTypeId);
@@ -105,7 +119,7 @@ namespace Vanrise.GenericData.Business
 
             if (insertActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                GetCacheManager().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataRecordTypeDetailMapper(dataRecordType);
             }
@@ -127,7 +141,7 @@ namespace Vanrise.GenericData.Business
 
             if (updateActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                GetCacheManager().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataRecordTypeDetailMapper(dataRecordType);
             }
@@ -148,7 +162,7 @@ namespace Vanrise.GenericData.Business
         public Type GetDataRecordRuntimeType(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetDataRecordRuntimeTypeById_{0}", dataRecordTypeId);
-            var runtimeType = CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+            var runtimeType = GetCacheManager().GetOrCreateObject(cacheName,
                 () =>
                 {
                     DataRecordType dataRecordType = GetCachedDataRecordTypes().GetRecord(dataRecordTypeId);
@@ -164,7 +178,7 @@ namespace Vanrise.GenericData.Business
         public Type GetDataRecordRuntimeType(string dataRecordTypeName)
         {
             string cacheName = String.Format("GetDataRecordRuntimeTypeByName_{0}", dataRecordTypeName);
-            var runtimeType = CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+            var runtimeType = GetCacheManager().GetOrCreateObject(cacheName,
                 () =>
                 {
                     DataRecordType dataRecordType = GetCachedDataRecordTypes().FindRecord(itm => itm.Name == dataRecordTypeName);
@@ -193,7 +207,7 @@ namespace Vanrise.GenericData.Business
         public IDataRecordFieldEvaluator GetFieldEvaluator(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetFieldEvaluator_{0}", dataRecordTypeId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+            return GetCacheManager().GetOrCreateObject(cacheName,
                 () =>
                 {
                     var fields = GetDataRecordTypeFields(dataRecordTypeId);
@@ -218,7 +232,7 @@ namespace Vanrise.GenericData.Business
         #region Private Methods
         public Dictionary<Guid, DataRecordType> GetCachedDataRecordTypeDefinitions()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordTypeDefinitions",
+            return GetCacheManager().GetOrCreateObject("GetDataRecordTypeDefinitions",
                () =>
                {
                    IDataRecordTypeDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
@@ -229,7 +243,7 @@ namespace Vanrise.GenericData.Business
 
         public Dictionary<Guid, DataRecordType> GetCachedDataRecordTypes()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordTypes",
+            return GetCacheManager().GetOrCreateObject("GetDataRecordTypes",
                () =>
                {
                    Dictionary<Guid, DataRecordType> dataRecordTypes = new Dictionary<Guid, DataRecordType>();
@@ -359,16 +373,29 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-        
+
         #region Private Classes
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDataRecordTypeDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
             object _updateHandle;
-
+            public ConcurrentBag<DataRecordTypeCachingExpirationChecker> DataRecordTypeCachingExpirationCheckers = new ConcurrentBag<DataRecordTypeCachingExpirationChecker>();
             protected override bool ShouldSetCacheExpired()
             {
-                return _dataManager.AreDataRecordTypeUpdated(ref _updateHandle);
+                bool isDataRecordTypeUpdated = _dataManager.AreDataRecordTypeUpdated(ref _updateHandle);
+                if (isDataRecordTypeUpdated)
+                    return true;
+
+                if (DataRecordTypeCachingExpirationCheckers == null)
+                    return false;
+
+                foreach (DataRecordTypeCachingExpirationChecker dataRecordTypeCachingExpirationChecker in DataRecordTypeCachingExpirationCheckers)
+                {
+                    if (dataRecordTypeCachingExpirationChecker.IsDataRecordTypeDependenciesCacheExpired())
+                        return true;
+                }
+
+                return false;
             }
         }
 
@@ -420,4 +447,8 @@ namespace Vanrise.GenericData.Business
         }
     }
 
+    public abstract class DataRecordTypeCachingExpirationChecker
+    {
+        public abstract bool IsDataRecordTypeDependenciesCacheExpired();
+    }
 }

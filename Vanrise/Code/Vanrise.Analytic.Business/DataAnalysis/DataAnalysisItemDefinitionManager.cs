@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Business;
 
 
 namespace Vanrise.Analytic.Business
 {
     public class DataAnalysisItemDefinitionManager
     {
+        static DataAnalysisItemDefinitionManager()
+        {
+            DataRecordTypeManager instance = new DataRecordTypeManager();
+            instance.AddDataRecordTypeCachingExpirationChecker(new DataAnalysisItemDataRecordTypeCachingExpirationChecker());
+        }
+
         #region Public Methods
 
         public DataAnalysisItemDefinition GetDataAnalysisItemDefinition(Guid dataAnalysisItemDefinitionId)
@@ -154,6 +159,16 @@ namespace Vanrise.Analytic.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreDataAnalysisItemDefinitionUpdated(ref _updateHandle);
+            }
+        }
+
+        private class DataAnalysisItemDataRecordTypeCachingExpirationChecker : DataRecordTypeCachingExpirationChecker
+        {
+            DateTime? _lastCheck;
+
+            public override bool IsDataRecordTypeDependenciesCacheExpired()
+            {
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref _lastCheck);
             }
         }
 
