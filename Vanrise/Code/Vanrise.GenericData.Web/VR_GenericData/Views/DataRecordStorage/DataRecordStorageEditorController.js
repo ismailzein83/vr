@@ -8,6 +8,9 @@
 
         var isEditMode;
 
+        var dataRecordStorageId;
+        var dataRecordStorageEntity;
+
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var typeSelectorChangeCount = 0;
@@ -21,12 +24,6 @@
 
         var requiredPermissionAPI;
         var requiredPermissionReadyDeferred = UtilsService.createPromiseDeferred();
-
-
-        var dataRecordStorageId;
-        var dataRecordStorageEntity;
-
-        var dateFieldSelectorAPI;
 
         loadParameters();
         defineScope();
@@ -43,10 +40,8 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
             $scope.scopeModel.dataRecordTypeFields = [];
             $scope.scopeModel.datasources = [];
-
             $scope.scopeModel.settingsEditor;
 
             $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
@@ -76,21 +71,24 @@
                 }
                 loadSettingsEditor();
             };
+
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 loadSettingsDirectiveFromScope();
             };
+
             $scope.scopeModel.onRequiredPermissionReady = function (api) {
                 requiredPermissionAPI = api;
                 requiredPermissionReadyDeferred.resolve();
             };
-            $scope.saveDataRecordStorage = function () {
+
+            $scope.scopeModel.saveDataRecordStorage = function () {
                 if (isEditMode)
                     return updateDataRecordStorage();
                 else
                     return insertDataRecordStorage();
             };
-            $scope.hasSaveDataRecordStorage = function () {
+            $scope.scopeModel.hasSaveDataRecordStorage = function () {
                 if (isEditMode) {
                     return VR_GenericData_DataRecordStorageAPIService.HasUpdateDataRecordStorage();
                 }
@@ -98,15 +96,10 @@
                     return VR_GenericData_DataRecordStorageAPIService.HasAddDataRecordStorage();
                 }
             };
-            $scope.close = function () {
+            $scope.scopeModel.closeDataRecordStorage = function () {
                 $scope.modalContext.closeModal();
             };
-
-            $scope.scopeModel.onDateFieldSelectorReady = function (api) {
-                dateFieldSelectorAPI = api;
-            };
         }
-
         function load() {
             $scope.isLoading = true;
 
@@ -121,11 +114,13 @@
                 loadAllControls();
             }
         }
+
         function getDataRecordStorage() {
             return VR_GenericData_DataRecordStorageAPIService.GetDataRecordStorage(dataRecordStorageId).then(function (response) {
                 dataRecordStorageEntity = response;
             });
         }
+
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadDataStoreSelector, loadDataRecordFields, loadRequiredPermission, loadDataStoreConfigs]).then(function () {
                 loadSettingsDirectiveOnPageLoad().then(function () {
@@ -138,105 +133,98 @@
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
-            function setTitle() {
-                $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((dataRecordStorageEntity != undefined) ? dataRecordStorageEntity.Name : null, 'Data Record Storage') :
-                    UtilsService.buildTitleForAddEditor('Data Record Storage');
+        }
+        function setTitle() {
+            $scope.title = (isEditMode) ?
+                UtilsService.buildTitleForUpdateEditor((dataRecordStorageEntity != undefined) ? dataRecordStorageEntity.Name : null, 'Data Record Storage') :
+                UtilsService.buildTitleForAddEditor('Data Record Storage');
+        }
+        function loadStaticData() {
+            if (dataRecordStorageEntity == undefined) {
+                return;
             }
-            function loadStaticData() {
-                if (dataRecordStorageEntity == undefined) {
-                    return;
-                }
-                $scope.scopeModel.name = dataRecordStorageEntity.Name;
-            }
-            function loadDataRecordTypeSelector() {
-                var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            $scope.scopeModel.name = dataRecordStorageEntity.Name;
+        }
+        function loadDataRecordTypeSelector() {
+            var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                dataRecordTypeSelectorReadyDeferred.promise.then(function () {
-                    var payload;
-
-                    if (dataRecordStorageEntity != undefined) {
-                        payload = {
-                            selectedIds: dataRecordStorageEntity.DataRecordTypeId
-                        };
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, payload, dataRecordTypeSelectorLoadDeferred);
-                });
-
-                return dataRecordTypeSelectorLoadDeferred.promise;
-            }
-            function loadDataStoreSelector() {
-                var dataStoreSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                dataStoreSelectorReadyDeferred.promise.then(function () {
-                    var payload;
-
-                    if (dataRecordStorageEntity != undefined) {
-                        payload = {
-                            selectedIds: dataRecordStorageEntity.DataStoreId,
-                            showaddbutton: true
-                        };
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, payload, dataStoreSelectorLoadDeferred);
-                });
-
-                return dataStoreSelectorLoadDeferred.promise;
-            }
-            function loadSettingsDirectiveOnPageLoad() {
-                var promises = [];
-
-                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                promises.push(settingsDirectiveLoadDeferred.promise);
+            dataRecordTypeSelectorReadyDeferred.promise.then(function () {
+                var payload;
 
                 if (dataRecordStorageEntity != undefined) {
-                    var loadSettingsEditorPromise = loadSettingsEditor();
-                    promises.push(loadSettingsEditorPromise);
-
-                    loadSettingsEditorPromise.then(function () {
-                        settingsDirectiveReadyDeferred.promise.then(function () {
-                            settingsDirectiveReadyDeferred = undefined;
-                            var payload = dataRecordStorageEntity.Settings; // The Settings columns doesn't allow NULL values
-                            payload.DataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId;
-                            VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, settingsDirectiveLoadDeferred);
-                        });
-                    });
-                }
-                else {
-                    settingsDirectiveLoadDeferred.resolve();
+                    payload = {
+                        selectedIds: dataRecordStorageEntity.DataRecordTypeId
+                    };
                 }
 
-                return UtilsService.waitMultiplePromises(promises);
-            }
-        }
-        function loadSettingsEditor() {
-            var promises = [];
-            var dataStoreEntity;
-            settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-            var getDataStorePromise = getDataStore();
-            promises.push(getDataStorePromise);
-
-            getDataStore().then(function () {
-                
-                var item = UtilsService.getItemByVal($scope.scopeModel.datasources, dataStoreEntity.Settings.ConfigId, "ExtensionConfigurationId");
-                if (item != undefined)
-                {
-                    $scope.scopeModel.settingsEditor = item.DataRecordSettingsEditor;
-                }
+                VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, payload, dataRecordTypeSelectorLoadDeferred);
             });
-            return UtilsService.waitMultiplePromises(promises);
 
-            function getDataStore() {
-                var dataStoreId = (dataRecordStorageEntity != undefined) ? dataRecordStorageEntity.DataStoreId : dataStoreSelectorAPI.getSelectedIds();
-                return VR_GenericData_DataStoreAPIService.GetDataStore(dataStoreId).then(function (response) {
-                    dataStoreEntity = response;
+            return dataRecordTypeSelectorLoadDeferred.promise;
+        }
+        function loadDataStoreSelector() {
+            var dataStoreSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            dataStoreSelectorReadyDeferred.promise.then(function () {
+                var payload;
+
+                if (dataRecordStorageEntity != undefined) {
+                    payload = {
+                        selectedIds: dataRecordStorageEntity.DataStoreId,
+                        showaddbutton: true
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, payload, dataStoreSelectorLoadDeferred);
+            });
+
+            return dataStoreSelectorLoadDeferred.promise;
+        }
+        function loadDataRecordFields() {
+            $scope.scopeModel.selectedDataRecordTypeField = undefined;
+            $scope.scopeModel.dataRecordTypeFields.length = 0;
+
+            var obj = undefined;
+            if (dataRecordStorageEntity != undefined) {
+                obj = { DataRecordTypeId: dataRecordStorageEntity.DataRecordTypeId };
+            }
+            else if ($scope.scopeModel.selectedDataRecordType) {
+                obj = { DataRecordTypeId: $scope.scopeModel.selectedDataRecordType.DataRecordTypeId };
+            }
+
+            if (obj != undefined) {
+                var serializedFilter = UtilsService.serializetoJson(obj);
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
+                    if (response != undefined) {
+                        angular.forEach(response, function (item) {
+                            $scope.scopeModel.dataRecordTypeFields.push(item);
+                        });
+
+                        if (dataRecordStorageEntity != undefined) {
+                            $scope.scopeModel.selectedDataRecordTypeField = UtilsService.getItemByVal($scope.scopeModel.dataRecordTypeFields, dataRecordStorageEntity.Settings.DateTimeField, 'Entity.Name');
+                        }
+                    }
                 });
             }
         }
-        function loadDataStoreConfigs()
-        {
+        function loadRequiredPermission() {
+            var requiredPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+            requiredPermissionReadyDeferred.promise.then(function () {
+                var payload;
+
+                if (dataRecordStorageEntity != undefined && dataRecordStorageEntity.Settings != undefined && dataRecordStorageEntity.Settings.RequiredPermission != null) {
+                    payload = {
+                        data: dataRecordStorageEntity.Settings.RequiredPermission
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(requiredPermissionAPI, payload, requiredPermissionLoadDeferred);
+            });
+
+            return requiredPermissionLoadDeferred.promise;
+        }
+        function loadDataStoreConfigs() {
             VR_GenericData_DataStoreAPIService.GetDataStoreConfigs().then(function (response) {
                 if (response) {
                     for (var i = 0; i < response.length; i++) {
@@ -245,6 +233,32 @@
                 }
             });
         }
+        function loadSettingsDirectiveOnPageLoad() {
+            var promises = [];
+
+            var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            promises.push(settingsDirectiveLoadDeferred.promise);
+
+            if (dataRecordStorageEntity != undefined) {
+                var loadSettingsEditorPromise = loadSettingsEditor();
+                promises.push(loadSettingsEditorPromise);
+
+                loadSettingsEditorPromise.then(function () {
+                    settingsDirectiveReadyDeferred.promise.then(function () {
+                        settingsDirectiveReadyDeferred = undefined;
+                        var payload = dataRecordStorageEntity.Settings; // The Settings columns doesn't allow NULL values
+                        payload.DataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId;
+                        VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, settingsDirectiveLoadDeferred);
+                    });
+                });
+            }
+            else {
+                settingsDirectiveLoadDeferred.resolve();
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
+        }
+
         function loadSettingsDirectiveFromScope() {
             var selectedTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
             var selectedStoreId = dataStoreSelectorAPI.getSelectedIds();
@@ -266,23 +280,31 @@
             var setLoader = function (value) { $scope.scopeModel.isLoading = value; };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, payload, setLoader, settingsDirectiveReadyDeferred);
         }
-        function loadRequiredPermission() {
-            var requiredPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadSettingsEditor() {
+            var promises = [];
+            var dataStoreEntity;
+            settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            requiredPermissionReadyDeferred.promise.then(function () {
-                var payload;
+            var getDataStorePromise = getDataStore();
+            promises.push(getDataStorePromise);
 
-                if (dataRecordStorageEntity != undefined && dataRecordStorageEntity.Settings != undefined && dataRecordStorageEntity.Settings.RequiredPermission != null) {
-                    payload = {
-                        data: dataRecordStorageEntity.Settings.RequiredPermission
-                    };
+            getDataStore().then(function () {
+
+                var item = UtilsService.getItemByVal($scope.scopeModel.datasources, dataStoreEntity.Settings.ConfigId, "ExtensionConfigurationId");
+                if (item != undefined) {
+                    $scope.scopeModel.settingsEditor = item.DataRecordSettingsEditor;
                 }
-
-                VRUIUtilsService.callDirectiveLoad(requiredPermissionAPI, payload, requiredPermissionLoadDeferred);
             });
+            return UtilsService.waitMultiplePromises(promises);
 
-            return requiredPermissionLoadDeferred.promise;
+            function getDataStore() {
+                var dataStoreId = (dataRecordStorageEntity != undefined) ? dataRecordStorageEntity.DataStoreId : dataStoreSelectorAPI.getSelectedIds();
+                return VR_GenericData_DataStoreAPIService.GetDataStore(dataStoreId).then(function (response) {
+                    dataStoreEntity = response;
+                });
+            }
         }
+
         function insertDataRecordStorage() {
             $scope.isLoading = true;
 
@@ -314,34 +336,6 @@
             }).finally(function () {
                 $scope.isLoading = false;
             });
-        }
-
-        function loadDataRecordFields() {
-            $scope.scopeModel.selectedDataRecordTypeField = undefined;
-            $scope.scopeModel.dataRecordTypeFields.length = 0;
-
-            var obj = undefined;
-            if (dataRecordStorageEntity != undefined) {
-                obj = { DataRecordTypeId: dataRecordStorageEntity.DataRecordTypeId };
-            }
-            else if ($scope.scopeModel.selectedDataRecordType) {
-                obj = { DataRecordTypeId: $scope.scopeModel.selectedDataRecordType.DataRecordTypeId };
-            }
-
-            if (obj != undefined) {
-                var serializedFilter = UtilsService.serializetoJson(obj);
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
-                    if (response != undefined) {
-                        angular.forEach(response, function (item) {
-                            $scope.scopeModel.dataRecordTypeFields.push(item);
-                        });
-
-                        if (dataRecordStorageEntity != undefined) {
-                            $scope.scopeModel.selectedDataRecordTypeField = UtilsService.getItemByVal($scope.scopeModel.dataRecordTypeFields, dataRecordStorageEntity.Settings.DateTimeField, 'Entity.Name');
-                        }
-                    }
-                });
-            }
         }
 
         function buildDataRecordStorageObjectFromScope() {
