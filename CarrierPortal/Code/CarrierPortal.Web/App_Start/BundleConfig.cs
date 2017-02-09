@@ -9,10 +9,12 @@ namespace CarrierPortal.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
+
             var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_GenericData", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/Analytic", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true);
 
             bundles.Add(modulesJSBundle);
