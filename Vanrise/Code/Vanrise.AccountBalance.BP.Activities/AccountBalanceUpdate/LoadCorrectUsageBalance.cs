@@ -38,7 +38,7 @@ namespace Vanrise.AccountBalance.BP.Activities
             UsageBalanceManager.LoadCorrectUsageBalance(inputArgument.AccountTypeId, (balanceUsageQueue) =>
             {
                 inputArgument.OutputQueue.Enqueue(balanceUsageQueue);
-                if (balanceUsageQueue.UsageDetails.CorrectUsageBalanceItems.Count() > 0)
+                if (balanceUsageQueue.UsageDetails.CorrectUsageBalanceItems != null && balanceUsageQueue.UsageDetails.CorrectUsageBalanceItems.Count() > 0)
                 handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("{0} New Correct Usage Balance loaded.", balanceUsageQueue.UsageDetails.CorrectUsageBalanceItems.Count()));
             });
 
