@@ -1,0 +1,28 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_ImportRatePlanController" vr-loader="scopeModel.isLoading">
+	<vr-modalbody>
+		<vr-form name="formImportRatePlan">
+			<vr-row removeline>
+				<vr-columns width="1/2row">
+					<vr-fileupload label="Upload Rate Plan" extension="xls,xlsx" value="scopeModel.file" isrequired> </vr-fileupload>
+				</vr-columns>
+				<vr-columns width="1/2row">
+					<vr-switch label="Header" value="scopeModel.header" isrequired></vr-switch>
+				</vr-columns>
+			</vr-row>
+			<vr-row removeline ng-show="scopeModel.showResult">
+				<vr-columns width="1/2row" withemptyline>
+					<vr-label isvalue>Download Result</vr-label>
+					<vr-button type="Download" data-onclick="scopeModel.downloadResult" standalone></vr-button>
+				</vr-columns>
+			</vr-row>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Upload" formname="formImportRatePlan" data-onclick="scopeModel.upload"></vr-button>
+				<vr-button type="Download" data-onclick="scopeModel.download"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+</div>

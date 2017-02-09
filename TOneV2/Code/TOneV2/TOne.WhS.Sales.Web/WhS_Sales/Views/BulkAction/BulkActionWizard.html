@@ -1,36 +1,50 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Sales_BulkActionWizardController" width="'90%'" vr-loader="scopeModel.isLoading">
-	<vr-modalbody>
-		<vr-form name="formBulkActionWizard">
-			<vr-row>
-				<vr-columns width="1/2row">
-					<vr-validation-group validationcontext="validationContext">
-						<vr-whs-sales-bulkaction-step-action on-ready="scopeModel.onActionStepReady" normal-col-num="6" isrequired="true"></vr-whs-sales-bulkaction-step-action>
-					</vr-validation-group>
-				</vr-columns>
-				<vr-columns width="1/2row">
-					<span vr-disabled="validationContext.validate() != null">
-						<vr-whs-sales-bulkaction-step-filter on-ready="scopeModel.onFilterStepReady" normal-col-num="6" isrequired="true"></vr-whs-sales-bulkaction-step-filter>
-					</span>
-				</vr-columns>
-			</vr-row>
-			<vr-row>
-				<vr-columns width="fullrow">
-					<vr-section title="Preview">
-						<div ng-show="scopeModel.showPreview">
-							<vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>
-						</div>
-					</vr-section>
-				</vr-columns>
-			</vr-row>
-		</vr-form>
-	</vr-modalbody>
-	<div>
-		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-			<div transclude-to="buttons">
-				<vr-button type="Evaluate" formname="formBulkActionWizard" data-onclick="scopeModel.evaluate"></vr-button>
-				<vr-button type="Apply" formname="formBulkActionWizard" data-onclick="scopeModel.apply" vr-disabled="scopeModel.isApplyButtonDisabled"></vr-button>
-				<vr-button type="Cancel" data-onclick="scopeModel.cancel"></vr-button>
-			</div>
-		</vr-actionbar>
-	</div>
+    <vr-modalbody>
+        <vr-form name="formBulkActionWizard">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-validation-group validationcontext="validationContext">
+                        <vr-whs-sales-bulkaction-step-action on-ready="scopeModel.onActionStepReady" normal-col-num="6" isrequired="true"></vr-whs-sales-bulkaction-step-action>
+                    </vr-validation-group>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <span vr-disabled="validationContext.validate() != null">
+                        <vr-whs-sales-bulkaction-step-filter on-ready="scopeModel.onFilterStepReady" normal-col-num="6" isrequired="true"></vr-whs-sales-bulkaction-step-filter>
+                    </span>
+                </vr-columns>
+            </vr-row>
+            <vr-tabs>
+                <vr-tab header="'Applicable Zones'">
+                    <div style="margin-top: 15px; height: 400px; max-height: 400px;">
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <div ng-show="scopeModel.showPreview">
+                                    <vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>
+                                </div>
+                            </vr-columns>
+                        </vr-row>
+                    </div>
+                </vr-tab>
+                <vr-tab header="'Invalid Zones'" ng-if="scopeModel.showInvalidTab">
+                    <div style="margin-top: 15px; height: 400px; max-height: 400px;">
+                        <vr-row>
+                            <vr-directivewrapper directive="scopeModel.validationDirectiveName"
+                                                 on-ready="scopeModel.onValidationDirectiveReady"
+                                                 normal-col-num="4">
+                            </vr-directivewrapper>
+                        </vr-row>
+                    </div>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Evaluate" formname="formBulkActionWizard" data-onclick="scopeModel.evaluate"></vr-button>
+                <vr-button type="Apply" formname="formBulkActionWizard" data-onclick="scopeModel.apply" vr-disabled="scopeModel.isApplyButtonDisabled"></vr-button>
+                <vr-button type="Cancel" data-onclick="scopeModel.cancel"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
 </div>

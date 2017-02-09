@@ -24,5 +24,7 @@ namespace TOne.WhS.Sales.Entities
 		public BulkActionType BulkAction { get; set; }
 
 		public BulkActionZoneFilter BulkActionFilter { get; set; }
+
+        public IEnumerable<long> ExcludedZoneIds { get; set; }
     }
 }

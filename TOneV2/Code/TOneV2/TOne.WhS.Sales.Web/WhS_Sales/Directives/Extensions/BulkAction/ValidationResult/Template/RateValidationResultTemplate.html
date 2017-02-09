@@ -1,0 +1,66 @@
+﻿<vr-tabs>
+    <vr-tab header="'Empty Rates'">
+        <vr-row>
+            <vr-columns colnum="{{rateValidationResultCtrl.normalColNum}}">
+                <vr-datagrid on-ready="scopeModel.onEmptyRateGridReady"
+                             datasource="scopeModel.emptyRates"
+                             loadmoredata="scopeModel.loadMoreEmptyRates"
+                             pagingtype="'PagingOnScroll'"
+                             norowhighlightonclick="'true'"
+                             maxheight="100px"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Zero Rates'">
+        <vr-row>
+            <vr-columns colnum="{{rateValidationResultCtrl.normalColNum}}">
+                <vr-datagrid on-ready="scopeModel.onZeroRateGridReady"
+                             datasource="scopeModel.zeroRates"
+                             loadmoredata="scopeModel.loadMoreZeroRates"
+                             pagingtype="'PagingOnScroll'"
+                             norowhighlightonclick="'true'"
+                             maxheight="300px"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Negative Rates'">
+        <vr-row>
+            <vr-columns colnum="{{rateValidationResultCtrl.normalColNum}}">
+                <vr-datagrid on-ready="scopeModel.onNegativeRateGridReady"
+                             datasource="scopeModel.negativeRates"
+                             loadmoredata="scopeModel.loadMoreNegativeRates"
+                             pagingtype="'PagingOnScroll'"
+                             norowhighlightonclick="'true'"
+                             maxheight="300px"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Duplicate Rates'">
+        <vr-row>
+            <vr-columns colnum="{{rateValidationResultCtrl.normalColNum}}">
+                <vr-datagrid on-ready="scopeModel.onDuplicateRateGridReady"
+                             datasource="scopeModel.duplicateRates"
+                             loadmoredata="scopeModel.loadMoreDuplicateRates"
+                             pagingtype="'PagingOnScroll'"
+                             norowhighlightonclick="'true'"
+                             maxheight="300px"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>

@@ -10,150 +10,163 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
-	public class UtilitiesManager
-	{
-		public static DateTime? GetMaxDate(IEnumerable<DateTime?> dates)
-		{
-			int count;
-			DateTime? maxDate = GetFirstDate(dates, out count);
+    public class UtilitiesManager
+    {
+        public static DateTime? GetMaxDate(IEnumerable<DateTime?> dates)
+        {
+            int count;
+            DateTime? maxDate = GetFirstDate(dates, out count);
 
-			if (count == 1)
-				return maxDate;
+            if (count == 1)
+                return maxDate;
 
-			for (int i = 1; i < count; i++)
-			{
-				DateTime? date = dates.ElementAt(i);
-				if (date.HasValue)
-				{
-					if (!maxDate.HasValue)
-						maxDate = date;
-					else if (date.Value > maxDate.Value)
-						maxDate = date;
-				}
-			}
+            for (int i = 1; i < count; i++)
+            {
+                DateTime? date = dates.ElementAt(i);
+                if (date.HasValue)
+                {
+                    if (!maxDate.HasValue)
+                        maxDate = date;
+                    else if (date.Value > maxDate.Value)
+                        maxDate = date;
+                }
+            }
 
-			return maxDate;
-		}
+            return maxDate;
+        }
 
-		public static DateTime? GetMinDate(IEnumerable<DateTime?> dates)
-		{
-			int count;
-			DateTime? minDate = GetFirstDate(dates, out count);
+        public static DateTime? GetMinDate(IEnumerable<DateTime?> dates)
+        {
+            int count;
+            DateTime? minDate = GetFirstDate(dates, out count);
 
-			if (count == 1)
-				return minDate;
+            if (count == 1)
+                return minDate;
 
-			for (int i = 1; i < count; i++)
-			{
-				DateTime? date = dates.ElementAt(i);
-				if (date.HasValue)
-				{
-					if (!minDate.HasValue)
-						minDate = date;
-					else if (date.Value < minDate.Value)
-						minDate = date;
-				}
-			}
+            for (int i = 1; i < count; i++)
+            {
+                DateTime? date = dates.ElementAt(i);
+                if (date.HasValue)
+                {
+                    if (!minDate.HasValue)
+                        minDate = date;
+                    else if (date.Value < minDate.Value)
+                        minDate = date;
+                }
+            }
 
-			return minDate;
-		}
+            return minDate;
+        }
 
-		public static string GetDateTimeAsString(DateTime dateTime)
-		{
-			return dateTime.ToShortDateString();
-		}
+        public static string GetDateTimeAsString(DateTime dateTime)
+        {
+            return dateTime.ToShortDateString();
+        }
 
-		public static bool IsActionApplicableToZone(IsActionApplicableToZoneInput context)
-		{
-			ZoneChanges zoneDraft = null;
+        public static bool IsActionApplicableToZone(IsActionApplicableToZoneInput context)
+        {
+            ZoneChanges zoneDraft = null;
 
-			if (context.Draft != null && context.Draft.ZoneChanges != null)
-				zoneDraft = context.Draft.ZoneChanges.FindRecord(x => x.ZoneId == context.SaleZone.SaleZoneId);
+            if (context.Draft != null && context.Draft.ZoneChanges != null)
+                zoneDraft = context.Draft.ZoneChanges.FindRecord(x => x.ZoneId == context.SaleZone.SaleZoneId);
 
-			var actionApplicableToZoneContext = new ActionApplicableToZoneContext(context.GetSellingProductZoneRate, context.GetCustomerZoneRate)
-			{
-				OwnerType = context.OwnerType,
-				OwnerId = context.OwnerId,
-				SaleZone = context.SaleZone,
-				ZoneDraft = zoneDraft
-			};
+            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(context.GetSellingProductZoneRate, context.GetCustomerZoneRate)
+            {
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                SaleZone = context.SaleZone,
+                ZoneDraft = zoneDraft
+            };
 
-			return context.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
-		}
+            return context.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
+        }
 
-		public static Dictionary<int, DateTime> GetDatesByCountry(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
-		{
-			var datesByCountry = new Dictionary<int, DateTime>();
+        public static Dictionary<int, DateTime> GetDatesByCountry(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            var datesByCountry = new Dictionary<int, DateTime>();
 
-			IEnumerable<CustomerCountry2> customerCountries = new CustomerCountryManager().GetCustomerCountries(customerId, effectiveOn, false);
-			if (customerCountries != null)
-			{
-				foreach (CustomerCountry2 customerCountry in customerCountries)
-					if (!datesByCountry.ContainsKey(customerCountry.CountryId))
-						datesByCountry.Add(customerCountry.CountryId, customerCountry.BED);
-			}
+            IEnumerable<CustomerCountry2> customerCountries = new CustomerCountryManager().GetCustomerCountries(customerId, effectiveOn, false);
+            if (customerCountries != null)
+            {
+                foreach (CustomerCountry2 customerCountry in customerCountries)
+                    if (!datesByCountry.ContainsKey(customerCountry.CountryId))
+                        datesByCountry.Add(customerCountry.CountryId, customerCountry.BED);
+            }
 
-			Changes draft = new RatePlanDraftManager().GetDraft(SalePriceListOwnerType.Customer, customerId);
-			if (draft != null && draft.CountryChanges != null && draft.CountryChanges.NewCountries != null)
-			{
-				foreach (DraftNewCountry newCountry in draft.CountryChanges.NewCountries)
-				{
-					if (!datesByCountry.ContainsKey(newCountry.CountryId))
-						datesByCountry.Add(newCountry.CountryId, newCountry.BED);
-				}
-			}
+            Changes draft = new RatePlanDraftManager().GetDraft(SalePriceListOwnerType.Customer, customerId);
+            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.NewCountries != null)
+            {
+                foreach (DraftNewCountry newCountry in draft.CountryChanges.NewCountries)
+                {
+                    if (!datesByCountry.ContainsKey(newCountry.CountryId))
+                        datesByCountry.Add(newCountry.CountryId, newCountry.BED);
+                }
+            }
 
-			return datesByCountry;
-		}
+            return datesByCountry;
+        }
 
-		public static bool IsCustomerZoneCountryApplicable(int countryId, DateTime rateBED, Dictionary<int, DateTime> datesByCountry)
-		{
-			DateTime soldOn;
+        public static bool IsCustomerZoneCountryApplicable(int countryId, DateTime rateBED, Dictionary<int, DateTime> datesByCountry)
+        {
+            DateTime soldOn;
 
-			if (!datesByCountry.TryGetValue(countryId, out soldOn))
-				return false;
+            if (!datesByCountry.TryGetValue(countryId, out soldOn))
+                return false;
 
-			if (soldOn > rateBED)
-				return false;
+            if (soldOn > rateBED)
+                return false;
 
-			return true;
-		}
+            return true;
+        }
 
-		public static bool CustomerZoneHasPendingClosedNormalRate(int customerId, int sellingProductId, long zoneId, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate)
-		{
-			SaleEntityZoneRate customerZoneRate = getCustomerZoneRate(customerId, sellingProductId, zoneId, false);
-			return (customerZoneRate != null && customerZoneRate.Rate != null && customerZoneRate.Rate.EED.HasValue);
-		}
+        public static bool CustomerZoneHasPendingClosedNormalRate(int customerId, int sellingProductId, long zoneId, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate)
+        {
+            SaleEntityZoneRate customerZoneRate = getCustomerZoneRate(customerId, sellingProductId, zoneId, false);
+            return (customerZoneRate != null && customerZoneRate.Rate != null && customerZoneRate.Rate.EED.HasValue);
+        }
 
-		#region Private Methods
-		private static DateTime? GetFirstDate(IEnumerable<DateTime?> dates, out int count)
-		{
-			if (dates == null)
-				throw new ArgumentNullException("dates");
+        public static int? GetCostCalculationMethodIndex(IEnumerable<CostCalculationMethod> costCalculationMethods, Guid costCalculationMethodConfigId)
+        {
+            if (costCalculationMethods != null)
+            {
+                for (int i = 0; i < costCalculationMethods.Count(); i++)
+                {
+                    if (costCalculationMethods.ElementAt(i).ConfigId.Equals(costCalculationMethodConfigId))
+                        return i;
+                }
+            }
+            return null;
+        }
 
-			count = dates.Count();
-			if (count == 0)
-				throw new ArgumentException("dates.Count = 0");
+        #region Private Methods
+        private static DateTime? GetFirstDate(IEnumerable<DateTime?> dates, out int count)
+        {
+            if (dates == null)
+                throw new ArgumentNullException("dates");
 
-			return dates.ElementAt(0);
-		}
-		#endregion
-	}
+            count = dates.Count();
+            if (count == 0)
+                throw new ArgumentException("dates.Count = 0");
 
-	public class IsActionApplicableToZoneInput
-	{
-		public SalePriceListOwnerType OwnerType { get; set; }
+            return dates.ElementAt(0);
+        }
+        #endregion
+    }
 
-		public int OwnerId { get; set; }
+    public class IsActionApplicableToZoneInput
+    {
+        public SalePriceListOwnerType OwnerType { get; set; }
 
-		public SaleZone SaleZone { get; set; }
+        public int OwnerId { get; set; }
 
-		public BulkActionType BulkAction { get; set; }
+        public SaleZone SaleZone { get; set; }
 
-		public Changes Draft { get; set; }
+        public BulkActionType BulkAction { get; set; }
 
-		public Func<int, long, bool, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
+        public Changes Draft { get; set; }
 
-		public Func<int, int, long, bool, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
-	}
+        public Func<int, long, bool, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
+
+        public Func<int, int, long, bool, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
+    }
 }

@@ -48,6 +48,10 @@ app.directive('vrWhsSalesBulkactionStepAction', ['UtilsService', 'VRUIUtilsServi
 				};
 			};
 
+			api.getValidationDirectiveName = function () {
+			    return bulkActionTypeSelectiveAPI.getValidationDirectiveName();
+			};
+
 			if (ctrl.onReady != null) {
 				ctrl.onReady(api);
 			}

@@ -13,7 +13,8 @@
 			viewInvalidRates: viewInvalidRates,
 			viewZoneInfo: viewZoneInfo,
 			openBulkActionWizard: openBulkActionWizard,
-			openTQIEditor: openTQIEditor
+			openTQIEditor: openTQIEditor,
+			importRatePlan: importRatePlan
 		};
 
 		function sellNewCountries(customerId, countryChanges, saleAreaSettings, ratePlanSettings, onCountryChangesUpdated) {
@@ -117,13 +118,17 @@
 			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ZoneInfo.html", parameters, settings);
 		}
 
-		function openBulkActionWizard(ownerType, ownerId, ownerSellingNumberPlanId, gridQuery, onBulkActionAppliedToDraft) {
+		function openBulkActionWizard(ownerType, ownerId, ownerSellingNumberPlanId, gridQuery, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, currencyId, onBulkActionAppliedToDraft) {
 
 			var parameters = {
 				ownerType: ownerType,
 				ownerId: ownerId,
 				ownerSellingNumberPlanId: ownerSellingNumberPlanId,
-				gridQuery: gridQuery
+				gridQuery: gridQuery,
+				routingDatabaseId: routingDatabaseId,
+				policyConfigId: policyConfigId,
+				numberOfOptions: numberOfOptions,
+				currencyId: currencyId
 			};
 
 			var modalSettings = {};
@@ -133,6 +138,21 @@
 			};
 
 			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/BulkAction/BulkActionWizard.html", parameters, modalSettings);
+		}
+
+		function importRatePlan(ownerType, ownerId, onRatePlanImported)
+		{
+			var parameters = {
+				ownerType: ownerType,
+				ownerId: ownerId
+			};
+
+			var modalSettings = {
+				onScopeReady: function (modalScope) {
+					modalScope.onRatePlanImported = onRatePlanImported;
+				}
+			};
+			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ImportRatePlan/ImportRatePlan.html", parameters, modalSettings);
 		}
 	}
 

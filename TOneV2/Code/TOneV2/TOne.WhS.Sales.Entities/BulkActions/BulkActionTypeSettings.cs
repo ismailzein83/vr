@@ -13,6 +13,8 @@ namespace TOne.WhS.Sales.Entities
 
 		public string Editor { get; set; }
 
+        public string ValidationResultDirective { get; set; }
+
 		public bool IsApplicableToSellingProduct { get; set; }
 
 		public bool IsApplicableToCustomer { get; set; }

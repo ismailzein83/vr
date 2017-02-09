@@ -26,8 +26,15 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
 
         function initializeController() {
 
-        	ctrl.onFixedRateChanged = function () {
-        		WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
+        	ctrl.validate = function () {
+        	    if (ctrl.fixedRate == undefined)
+        	        return null;
+        	    var fixedRateAsNumber = Number(ctrl.fixedRate);
+        	    if (isNaN(fixedRateAsNumber))
+        	        return 'Value is an invalid number';
+        	    if (fixedRateAsNumber <= 0)
+        	        return 'Value must be greater than zero';
+        	    return null;
         	};
 
         	defineAPI();

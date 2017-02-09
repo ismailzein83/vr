@@ -63,14 +63,25 @@
   <ItemGroup>
     <Compile Include="BulkActions\ApplyActionToDraftInput.cs" />
     <Compile Include="BulkActions\BulkActionTypeSettings.cs" />
+    <Compile Include="BulkActions\BulkActionValidationResult.cs" />
     <Compile Include="BulkActions\BulkActionZoneFilter.cs" />
     <Compile Include="BulkActions\BulkActionType.cs" />
     <Compile Include="BulkActions\BulkActionZoneFilterTypeSettings.cs" />
+    <Compile Include="BulkActions\BulkActionZoneValidationInput.cs" />
     <Compile Include="BulkActions\Enums.cs" />
     <Compile Include="BulkActions\GetZoneItemsInput.cs" />
+    <Compile Include="ImportRatePlan\ImportedRowValidationInput.cs" />
+    <Compile Include="ImportRatePlan\ImportedRowValidationResult.cs" />
+    <Compile Include="ImportRatePlan\InvalidImportedRow.cs" />
     <Compile Include="CostCalculation\CostCalculationMethod.cs" />
     <Compile Include="CostCalculation\CostCalculationMethodSetting.cs" />
     <Compile Include="CostCalculation\ICostCalculationMethodContext.cs" />
+    <Compile Include="ImportRatePlan\IImportedRowValidator.cs" />
+    <Compile Include="ImportRatePlan\IIsImportedRowValidContext.cs" />
+    <Compile Include="ImportRatePlan\ImportedRow.cs" />
+    <Compile Include="ImportRatePlan\ImportRatePlanInput.cs" />
+    <Compile Include="ImportRatePlan\ImportRatePlanResult.cs" />
+    <Compile Include="ImportRatePlan\ImportRatePlanResultRow.cs" />
     <Compile Include="RateCalculation\IRateCalculationMethodContext.cs" />
     <Compile Include="RateCalculation\RateCalculationMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

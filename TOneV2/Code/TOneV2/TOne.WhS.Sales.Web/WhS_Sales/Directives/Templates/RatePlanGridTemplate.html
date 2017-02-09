@@ -84,7 +84,9 @@
 				</vr-datagridcolumn>
 
 				<vr-datagridcolumn headertext="'TQI'" type="'Text'" widthfactor="7" disablesorting="true">
-					<span ng-click="viewScope.onTQIClicked(dataItem)" style="cursor: pointer; text-decoration: underline">...</span>
+					<span vr-disabled="viewScope.scopeModel.isPreview">
+						<span ng-click="viewScope.onTQIClicked(dataItem)" style="cursor: pointer; text-decoration: underline">...</span>
+					</span>
 				</vr-datagridcolumn>
 
 

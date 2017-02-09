@@ -122,6 +122,10 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
 				return data;
 			};
 
+			api.getValidationDirectiveName = function () {
+			    return ($scope.scopeModel.selectedExtensionConfig != null) ? $scope.scopeModel.selectedExtensionConfig.ValidationResultDirective : undefined;
+			};
+
 			if (selectiveCtrl.onReady != null) {
 				selectiveCtrl.onReady(api);
 			}

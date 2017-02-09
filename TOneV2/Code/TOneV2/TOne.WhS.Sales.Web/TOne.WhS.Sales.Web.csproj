@@ -128,7 +128,6 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\RatePlanController.cs" />
@@ -166,7 +165,6 @@
     <Content Include="WhS_Sales\Constants\RatePlanStatusEnum.js" />
     <Content Include="WhS_Sales\Constants\SalePriceListOwnerTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\SpecificApplicableZoneEntityTypeEnum.js" />
-    <Content Include="WhS_Sales\Constants\SpecificApplicableZoneFilterTypeEnum.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\Steps\Templates\ActionBulkActionStepTemplate.html" />
     <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionTypeSelectiveTemplate.html" />
     <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionZoneFilterSelectiveTemplate.html" />
@@ -181,11 +179,16 @@
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\Templates\RateBulkActionTypeTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-bed.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-eed.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-import.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-rate.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-routingproduct.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\Templates\SpecificBulkActionZoneFilterTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-all.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-specific.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\Template\ImportValidationResultTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\Template\RateValidationResultTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\vr-whs-sales-bulkaction-validationresult-import.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\vr-whs-sales-bulkaction-validationresult-rate.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\WeightedAvgCostCalculation.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-weightedavgcostcalculation.js" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\FixedRateCalculationTemplate.html" />
@@ -258,6 +261,8 @@
     <Content Include="WhS_Sales\Views\EmailCustomerController.js" />
     <Content Include="WhS_Sales\Views\FutureRate.html" />
     <Content Include="WhS_Sales\Views\FutureRateController.js" />
+    <Content Include="WhS_Sales\Views\ImportRatePlan\ImportRatePlan.html" />
+    <Content Include="WhS_Sales\Views\ImportRatePlan\ImportRatePlanController.js" />
     <Content Include="WhS_Sales\Views\InvalidRate.html" />
     <Content Include="WhS_Sales\Views\InvalidRateController.js" />
     <Content Include="WhS_Sales\Views\RatePlanPreview.html" />
@@ -280,6 +285,9 @@
     <Content Include="WhS_Sales\Views\TQI\TQIEditorController.js" />
     <Content Include="WhS_Sales\Views\ZoneInfo.html" />
     <Content Include="WhS_Sales\Views\ZoneInfoController.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WhS_Sales\Templates\Import Rate Plan Template.xls" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

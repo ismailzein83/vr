@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-	public enum SpecificApplicableZoneEntityType
-	{
-		Country = 0,
-		Zone = 1
-	}
+    public enum SpecificApplicableZoneEntityType
+    {
+        Country = 0,
+        Zone = 1
+    }
 
-	public enum SpecificApplicableZoneFilterType
-	{
-		Specific = 0,
-		AllExcept = 1
-	}
+    public enum RateBulkActionValidationResultType
+    {
+        Valid = 0,
+        DoesNotExist = 1,
+        Zero = 2,
+        Negative = 3,
+        EqualsCurrentNormalRate = 4
+    }
 }

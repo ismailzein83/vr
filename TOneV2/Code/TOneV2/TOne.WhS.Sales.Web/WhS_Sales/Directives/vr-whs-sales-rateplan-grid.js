@@ -14,15 +14,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 UtilsService.setContextReadOnly($scope);
             }
 
-            var ratePlanGrid = new RatePlanGrid($scope, ctrl);
+            var ratePlanGrid = new RatePlanGrid($scope, ctrl, $attrs);
             ratePlanGrid.initializeController();
         },
-        controllerAs: "ctrl",
+        controllerAs: "ratePlanGridCtrl",
         bindToController: true,
         templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/RatePlanGridTemplate.html"
     };
 
-    function RatePlanGrid($scope, ctrl) {
+    function RatePlanGrid($scope, ctrl, attrs) {
         this.initializeController = initializeController;
 
         var gridAPI;
@@ -40,9 +40,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
         function initializeController() {
 
-            $scope.scopeModel = {};
+        	$scope.scopeModel = {};
             $scope.zoneLetters = [];
             $scope.scopeModel.selectedZoneLetterIndex = 0;
+            $scope.scopeModel.isPreview = (attrs.ispreview != undefined);
 
             $scope.onZoneLetterSelectionChanged = function () {
 
@@ -320,6 +321,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         getZoneLettersInput.ZoneNameFilterType = gridQuery.Filter.ZoneNameFilterType;
                         getZoneLettersInput.ZoneNameFilter = gridQuery.Filter.ZoneNameFilter;
                         getZoneLettersInput.BulkActionFilter = gridQuery.Filter.BulkActionFilter;
+                        getZoneLettersInput.ExcludedZoneIds = gridQuery.Filter.ExcludedZoneIds;
                     }
 
                     return WhS_Sales_RatePlanAPIService.GetZoneLetters(getZoneLettersInput).then(function (response) {

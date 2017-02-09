@@ -11,39 +11,31 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
-	public class ApplyBulkActionToZoneItemContext : IApplyBulkActionToZoneItemContext
-	{
-		private Func<Dictionary<long, ZoneItem>> _getContextZoneItems;
+    public class ApplyBulkActionToZoneItemContext : IApplyBulkActionToZoneItemContext
+    {
+        private Func<Dictionary<long, ZoneItem>> _getContextZoneItems;
 
-		private IEnumerable<CostCalculationMethod> _costCalculationMethods;
+        private IEnumerable<CostCalculationMethod> _costCalculationMethods;
 
-		public ApplyBulkActionToZoneItemContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods)
-		{
-			_getContextZoneItems = getContextZoneItems;
-			_costCalculationMethods = costCalculationMethods;
-		}
+        public ApplyBulkActionToZoneItemContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods)
+        {
+            _getContextZoneItems = getContextZoneItems;
+            _costCalculationMethods = costCalculationMethods;
+        }
 
-		public ZoneItem ZoneItem { get; set; }
+        public ZoneItem ZoneItem { get; set; }
 
-		public ZoneChanges ZoneDraft { get; set; }
+        public ZoneChanges ZoneDraft { get; set; }
 
-		public ZoneItem GetContextZoneItem(long zoneId)
-		{
-			Dictionary<long, ZoneItem> zoneItemsByZone = _getContextZoneItems();
-			return (zoneItemsByZone != null) ? zoneItemsByZone.GetRecord(zoneId) : null;
-		}
+        public ZoneItem GetContextZoneItem(long zoneId)
+        {
+            Dictionary<long, ZoneItem> zoneItemsByZone = _getContextZoneItems();
+            return (zoneItemsByZone != null) ? zoneItemsByZone.GetRecord(zoneId) : null;
+        }
 
-		public int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId)
-		{
-			if (_costCalculationMethods != null)
-			{
-				for (int i = 0; i < _costCalculationMethods.Count(); i++)
-				{
-					if (_costCalculationMethods.ElementAt(i).ConfigId.Equals(costCalculationMethodConfigId))
-						return i;
-				}
-			}
-			return null;
-		}
-	}
+        public int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId)
+        {
+            return UtilitiesManager.GetCostCalculationMethodIndex(_costCalculationMethods, costCalculationMethodConfigId);
+        }
+    }
 }

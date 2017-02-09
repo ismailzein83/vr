@@ -34,9 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.2.2.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -89,6 +94,7 @@
     <Compile Include="BulkAction\ApplicableZoneIdsContext.cs" />
     <Compile Include="BulkAction\ApplyBulkActionToZoneDraftContext.cs" />
     <Compile Include="BulkAction\ApplyBulkActionToZoneItemContext.cs" />
+    <Compile Include="BulkAction\Input\ContextZoneItemInput.cs" />
     <Compile Include="BusinessRules\BusinessRuleUtilities.cs" />
     <Compile Include="BusinessRules\Conditions\Country\ChangedCountryEEDIsLessThanToday.cs" />
     <Compile Include="BusinessRules\Conditions\Country\NewCountryBEDIsLessThanRetroactiveDateCondition.cs" />
@@ -107,6 +113,9 @@
     <Compile Include="Context\RatePlanContext.cs" />
     <Compile Include="Country\CountrySoldToCustomerFilter.cs" />
     <Compile Include="DefaultItemManager.cs" />
+    <Compile Include="ImportRatePlan\ImportedRowValidator.cs" />
+    <Compile Include="ImportRatePlan\IsImportedRowValidContext.cs" />
+    <Compile Include="ImportRatePlan\ZoneValidationContext.cs" />
     <Compile Include="NotificationContext.cs" />
     <Compile Include="Preview\ChangedCustomerCountryPreviewManager.cs" />
     <Compile Include="Preview\NewCustomerCountryPreviewManager.cs" />

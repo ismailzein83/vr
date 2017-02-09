@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
@@ -56,13 +58,13 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.GetDefaultItem(ownerType, ownerId, effectiveOn);
         }
 
-		[HttpGet]
-		[Route("GetCountryChanges")]
-		public CountryChanges GetCountryChanges(int customerId)
-		{
-			var manager = new RatePlanDraftManager();
-			return manager.GetCountryChanges(customerId);
-		}
+        [HttpGet]
+        [Route("GetCountryChanges")]
+        public CountryChanges GetCountryChanges(int customerId)
+        {
+            var manager = new RatePlanDraftManager();
+            return manager.GetCountryChanges(customerId);
+        }
 
         [HttpGet]
         [Route("GetTQIMethods")]
@@ -104,21 +106,21 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.GetRateCalculationMethodTemplates();
         }
 
-		[HttpGet]
-		[Route("GetBulkActionTypeExtensionConfigs")]
-		public IEnumerable<BulkActionTypeSettings> GetBulkActionTypeExtensionConfigs(SalePriceListOwnerType ownerType)
-		{
-			var manager = new RatePlanExtensionConfigManager();
-			return manager.GetBulkActionTypeExtensionConfigs(ownerType);
-		}
+        [HttpGet]
+        [Route("GetBulkActionTypeExtensionConfigs")]
+        public IEnumerable<BulkActionTypeSettings> GetBulkActionTypeExtensionConfigs(SalePriceListOwnerType ownerType)
+        {
+            var manager = new RatePlanExtensionConfigManager();
+            return manager.GetBulkActionTypeExtensionConfigs(ownerType);
+        }
 
-		[HttpGet]
-		[Route("GetBulkActionZoneFilterTypeExtensionConfigs")]
-		public IEnumerable<BulkActionZoneFilterTypeSettings> GetBulkActionZoneFilterTypeExtensionConfigs()
-		{
-			var manager = new RatePlanExtensionConfigManager();
-			return manager.GetBulkActionZoneFilterTypeExtensionConfigs();
-		}
+        [HttpGet]
+        [Route("GetBulkActionZoneFilterTypeExtensionConfigs")]
+        public IEnumerable<BulkActionZoneFilterTypeSettings> GetBulkActionZoneFilterTypeExtensionConfigs()
+        {
+            var manager = new RatePlanExtensionConfigManager();
+            return manager.GetBulkActionZoneFilterTypeExtensionConfigs();
+        }
 
         [HttpPost]
         [Route("SaveChanges")]
@@ -144,13 +146,13 @@ namespace TOne.WhS.Sales.Web.Controllers
             manager.ApplyCalculatedRates(input);
         }
 
-		[HttpPost]
-		[Route("ApplyBulkActionToDraft")]
-		public void ApplyBulkActionToDraft(ApplyActionToDraftInput input)
-		{
-			var manager = new RatePlanManager();
-			manager.ApplyBulkActionToDraft(input);
-		}
+        [HttpPost]
+        [Route("ApplyBulkActionToDraft")]
+        public void ApplyBulkActionToDraft(ApplyActionToDraftInput input)
+        {
+            var manager = new RatePlanManager();
+            manager.ApplyBulkActionToDraft(input);
+        }
 
         [HttpGet]
         [Route("CheckIfDraftExists")]
@@ -216,12 +218,55 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.GetZoneInheritedService(input);
         }
 
-		[HttpPost]
-		[Route("GetFilteredSoldCountries")]
-		public object GetFilteredSoldCountries(Vanrise.Entities.DataRetrievalInput<SoldCountryQuery> input)
-		{
-			var manager = new SoldCountryManager();
-			return base.GetWebResponse(input, manager.GetFilteredSoldCountries(input));
-		}
+        [HttpPost]
+        [Route("GetFilteredSoldCountries")]
+        public object GetFilteredSoldCountries(Vanrise.Entities.DataRetrievalInput<SoldCountryQuery> input)
+        {
+            var manager = new SoldCountryManager();
+            return base.GetWebResponse(input, manager.GetFilteredSoldCountries(input));
+        }
+
+        [HttpPost]
+        [Route("ImportRatePlan")]
+        public ImportRatePlanResult ImportRatePlan(ImportRatePlanInput input)
+        {
+            return new RatePlanManager().ImportRatePlan(input);
+        }
+
+        [HttpGet]
+        [Route("DownloadImportRatePlanResult")]
+        public object DownloadImportRatePlanResult(long fileId)
+        {
+            byte[] fileContent = new RatePlanManager().DownloadImportRatePlanResult(fileId);
+            return GetExcelResponse(fileContent, "Imported Rate Plan Result.xls");
+        }
+
+        [HttpGet]
+        [Route("DownloadImportRatePlanTemplate")]
+        public object DownloadImportRatePlanTemplate()
+        {
+            string templateRelativePath = "~/Client/Modules/WhS_Sales/Templates/Import Rate Plan Template.xls";
+            string templateAbsolutePath = HttpContext.Current.Server.MapPath(templateRelativePath);
+            byte[] bytes = File.ReadAllBytes(templateAbsolutePath);
+
+            MemoryStream memoryStream = new System.IO.MemoryStream();
+            memoryStream.Write(bytes, 0, bytes.Length);
+            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+            return GetExcelResponse(memoryStream, "Import Rate Plan Template.xls");
+        }
+
+        [HttpPost]
+        [Route("ValidateBulkActionZones")]
+        public object ValidateBulkActionZones(BulkActionZoneValidationInput input)
+        {
+            return new RatePlanManager().ValidateBulkActionZones(input);
+        }
+
+        [HttpPost]
+        [Route("ValidateImportedData")]
+        public ImportedDataValidationResult ValidateImportedData(ImportedDataValidationInput input)
+        {
+            return new RatePlanManager().ValidateImportedData(input);
+        }
     }
 }

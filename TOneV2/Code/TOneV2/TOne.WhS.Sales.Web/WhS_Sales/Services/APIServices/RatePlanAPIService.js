@@ -36,11 +36,11 @@
         }
 
         function GetCountryChanges(customerId) {
-        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCountryChanges"), {
-        		customerId: customerId
-        	});
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCountryChanges"), {
+                customerId: customerId
+            });
         }
-       
+
         function GetCostCalculationMethodTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCostCalculationMethodTemplates"));
         }
@@ -48,15 +48,15 @@
         function GetRateCalculationMethodTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRateCalculationMethodTemplates"));
         }
-        
+
         function GetBulkActionTypeExtensionConfigs(ownerType) {
-        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetBulkActionTypeExtensionConfigs"), {
-        		ownerType: ownerType
-        	});
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetBulkActionTypeExtensionConfigs"), {
+                ownerType: ownerType
+            });
         }
 
         function GetBulkActionZoneFilterTypeExtensionConfigs() {
-        	return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetBulkActionZoneFilterTypeExtensionConfigs"));
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetBulkActionZoneFilterTypeExtensionConfigs"));
         }
 
         function SaveChanges(input) {
@@ -70,9 +70,9 @@
         function ApplyCalculatedRates(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ApplyCalculatedRates"), input);
         }
-        
+
         function ApplyBulkActionToDraft(input) {
-        	return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ApplyBulkActionToDraft"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ApplyBulkActionToDraft"), input);
         }
 
         function CheckIfDraftExists(ownerType, ownerId) {
@@ -92,7 +92,7 @@
         function GetRatePlanSettingsData() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRatePlanSettingsData"));
         }
-        
+
         function GetSaleAreaSettingsData() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetSaleAreaSettingsData"));
         }
@@ -103,7 +103,7 @@
                 ownerId: ownerId
             });
         }
-        
+
         function DeleteChangedRates(ownerType, ownerId, newCurrencyId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "DeleteChangedRates"), {
                 ownerType: ownerType,
@@ -121,7 +121,7 @@
         }
 
         function GetFilteredSoldCountries(input) {
-        	return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredSoldCountries"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredSoldCountries"), input);
         }
 
         function GetTQIMethods() {
@@ -134,6 +134,34 @@
 
         function GetTQISuppliersInfo(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetTQISuppliersInfo"), input);
+        }
+
+        function ImportRatePlan(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ImportRatePlan"), input);
+        }
+
+        function DownloadImportRatePlanResult(fileId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "DownloadImportRatePlanResult"), {
+                fileId: fileId
+            }, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
+
+        function DownloadImportRatePlanTemplate() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "DownloadImportRatePlanTemplate"), {}, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
+
+        function ValidateBulkActionZones(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ValidateBulkActionZones"), input);
+        }
+
+        function ValidateImportedData(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ValidateImportedData"), input);
         }
 
         return {
@@ -162,7 +190,12 @@
             GetFilteredSoldCountries: GetFilteredSoldCountries,
             GetTQIMethods: GetTQIMethods,
             GetTQIEvaluatedRate: GetTQIEvaluatedRate,
-            GetTQISuppliersInfo: GetTQISuppliersInfo
+            GetTQISuppliersInfo: GetTQISuppliersInfo,
+            ImportRatePlan: ImportRatePlan,
+            DownloadImportRatePlanResult: DownloadImportRatePlanResult,
+            DownloadImportRatePlanTemplate: DownloadImportRatePlanTemplate,
+            ValidateBulkActionZones: ValidateBulkActionZones,
+            ValidateImportedData: ValidateImportedData
         };
 
     }

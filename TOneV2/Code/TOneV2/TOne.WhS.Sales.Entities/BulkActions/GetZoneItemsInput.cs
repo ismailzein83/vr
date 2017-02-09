@@ -7,43 +7,45 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-	public class GetZoneItemsInput
-	{
-		public ZoneItemsFilter Filter { get; set; }
+    public class GetZoneItemsInput
+    {
+        public ZoneItemsFilter Filter { get; set; }
 
-		public SalePriceListOwnerType OwnerType { get; set; }
+        public SalePriceListOwnerType OwnerType { get; set; }
 
-		public int OwnerId { get; set; }
+        public int OwnerId { get; set; }
 
-		public int CurrencyId { get; set; }
+        public int CurrencyId { get; set; }
 
-		public int RoutingDatabaseId { get; set; }
+        public int RoutingDatabaseId { get; set; }
 
-		public Guid PolicyConfigId { get; set; }
+        public Guid PolicyConfigId { get; set; }
 
-		public int NumberOfOptions { get; set; }
+        public int NumberOfOptions { get; set; }
 
-		public List<CostCalculationMethod> CostCalculationMethods { get; set; }
+        public List<CostCalculationMethod> CostCalculationMethods { get; set; }
 
-		public BulkActionType BulkAction { get; set; }
+        public BulkActionType BulkAction { get; set; }
 
-		public DateTime EffectiveOn { get; set; }
-	}
+        public DateTime EffectiveOn { get; set; }
+    }
 
-	public class ZoneItemsFilter
-	{
-		public IEnumerable<int> CountryIds { get; set; }
+    public class ZoneItemsFilter
+    {
+        public IEnumerable<long> ExcludedZoneIds { get; set; }
 
-		public string ZoneNameFilter { get; set; }
+        public IEnumerable<int> CountryIds { get; set; }
 
-		public Vanrise.Entities.TextFilterType? ZoneNameFilterType { get; set; }
+        public string ZoneNameFilter { get; set; }
 
-		public BulkActionZoneFilter BulkActionFilter { get; set; }
+        public Vanrise.Entities.TextFilterType? ZoneNameFilterType { get; set; }
 
-		public char ZoneLetter { get; set; }
+        public BulkActionZoneFilter BulkActionFilter { get; set; }
 
-		public int FromRow { get; set; }
+        public char ZoneLetter { get; set; }
 
-		public int ToRow { get; set; }
-	}
+        public int FromRow { get; set; }
+
+        public int ToRow { get; set; }
+    }
 }

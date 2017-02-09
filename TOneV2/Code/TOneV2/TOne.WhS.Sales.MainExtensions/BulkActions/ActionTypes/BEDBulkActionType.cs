@@ -10,64 +10,77 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
-	public class BEDBulkActionType : BulkActionType
-	{
-		private Dictionary<int, DateTime> _datesByCountry;
+    public class BEDBulkActionType : BulkActionType
+    {
+        #region Fields
 
-		private int? _sellingProductId;
+        private Dictionary<int, DateTime> _datesByCountry;
 
-		public override Guid ConfigId
-		{
-			get { return new Guid("310EAF9D-68B5-466A-9CC4-96121B03A5FD"); }
-		}
+        private int? _sellingProductId;
+        
+        #endregion
 
-		public DateTime BED { get; set; }
+        public override Guid ConfigId
+        {
+            get { return new Guid("310EAF9D-68B5-466A-9CC4-96121B03A5FD"); }
+        }
 
-		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
-		{
-			if (context.ZoneDraft == null || context.ZoneDraft.NewRates == null || !context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue))
-				return false;
+        public DateTime BED { get; set; }
 
-			if (context.SaleZone.BED > BED)
-				return false;
+        public override void ValidateZone(IZoneValidationContext context)
+        {
 
-			if (context.OwnerType == SalePriceListOwnerType.Customer)
-			{
-				if (!_sellingProductId.HasValue)
-				{
-					_sellingProductId = new RatePlanManager().GetSellingProductId(context.OwnerId, DateTime.Today, false);
-				}
+        }
 
-				if (UtilitiesManager.CustomerZoneHasPendingClosedNormalRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, context.GetCustomerZoneRate))
-					return false;
+        public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
+        {
+            if (context.ZoneDraft == null || context.ZoneDraft.NewRates == null || !context.ZoneDraft.NewRates.Any(x => !x.RateTypeId.HasValue))
+                return false;
 
-				if (_datesByCountry == null)
-				{
-					_datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, DateTime.Today, false);
-				}
+            if (context.SaleZone.BED > BED)
+                return false;
 
-				if (!UtilitiesManager.IsCustomerZoneCountryApplicable(context.SaleZone.CountryId, BED, _datesByCountry))
-					return false;
-			}
+            if (context.OwnerType == SalePriceListOwnerType.Customer)
+            {
+                if (!_sellingProductId.HasValue)
+                {
+                    _sellingProductId = new RatePlanManager().GetSellingProductId(context.OwnerId, DateTime.Today, false);
+                }
 
-			return true;
-		}
+                if (UtilitiesManager.CustomerZoneHasPendingClosedNormalRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, context.GetCustomerZoneRate))
+                    return false;
 
-		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
-		{
-			DraftRateToChange newNormalRate = GetZoneNewNormalRate(context.ZoneDraft);
-			newNormalRate.BED = BED;
-		}
+                if (_datesByCountry == null)
+                {
+                    _datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, DateTime.Today, false);
+                }
 
-		public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
-		{
-			DraftRateToChange newNormalRate = GetZoneNewNormalRate(context.ZoneDraft);
-			newNormalRate.BED = BED;
-		}
+                if (!UtilitiesManager.IsCustomerZoneCountryApplicable(context.SaleZone.CountryId, BED, _datesByCountry))
+                    return false;
+            }
 
-		private DraftRateToChange GetZoneNewNormalRate(ZoneChanges zoneDraft)
-		{
-			return zoneDraft.NewRates.FindRecord(x => !x.RateTypeId.HasValue);
-		}
-	}
+            return true;
+        }
+
+        public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
+        {
+            DraftRateToChange newNormalRate = GetZoneNewNormalRate(context.ZoneDraft);
+            newNormalRate.BED = BED;
+        }
+
+        public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
+        {
+            DraftRateToChange newNormalRate = GetZoneNewNormalRate(context.ZoneDraft);
+            newNormalRate.BED = BED;
+        }
+
+        #region Private Methods
+
+        private DraftRateToChange GetZoneNewNormalRate(ZoneChanges zoneDraft)
+        {
+            return zoneDraft.NewRates.FindRecord(x => !x.RateTypeId.HasValue);
+        }
+
+        #endregion
+    }
 }

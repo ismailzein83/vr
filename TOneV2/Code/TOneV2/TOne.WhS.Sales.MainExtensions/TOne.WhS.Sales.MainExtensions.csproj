@@ -66,10 +66,13 @@
   <ItemGroup>
     <Compile Include="BulkActions\ActionTypes\BEDBulkActionType.cs" />
     <Compile Include="BulkActions\ActionTypes\EEDBulkActionType.cs" />
+    <Compile Include="BulkActions\ActionTypes\ImportBulkAction.cs" />
     <Compile Include="BulkActions\ActionTypes\RateBulkAction.cs" />
     <Compile Include="BulkActions\ActionTypes\RoutingProductBulkActionType.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\AllApplicableZones.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\SpecificApplicableZones.cs" />
+    <Compile Include="BulkActions\ValidationResult\ImportBulkActionValidationResult.cs" />
+    <Compile Include="BulkActions\ValidationResult\RateBulkActionValidationResult.cs" />
     <Compile Include="CostCalculation\AvgCostCalculation.cs" />
     <Compile Include="CostCalculation\PercentageCostCalculation.cs" />
     <Compile Include="CostCalculation\RoutePercentageCostCalculation.cs" />
