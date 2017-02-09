@@ -103,6 +103,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     if (payload != undefined) {
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
@@ -217,13 +218,11 @@
                             if(checkIfAllow(settings.Sources[i].RecordStorageIds,response))
                                 $scope.drSearchPageStorageSources[$scope.drSearchPageStorageSources.length] = settings.Sources[i]
                         }
+                        if (itemActionSettings != undefined) {
+                            $scope.selectedDRSearchPageStorageSource = UtilsService.getItemByVal($scope.drSearchPageStorageSources, itemActionSettings.SourceName, "Name");
+                        }
                     });
                 }
-                if (itemActionSettings != undefined) {
-                    $scope.selectedDRSearchPageStorageSource = UtilsService.getItemByVal($scope.drSearchPageStorageSources, itemActionSettings.SourceName, "Name");
-                }
-
-
                
             }
             function setStaticData() {
