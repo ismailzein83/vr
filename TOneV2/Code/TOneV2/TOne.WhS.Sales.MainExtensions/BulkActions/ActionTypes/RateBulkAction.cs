@@ -117,6 +117,9 @@ namespace TOne.WhS.Sales.MainExtensions
             if (context.SaleZone.BED > BED)
                 return false;
 
+            if (context.SaleZone.EED.HasValue)
+                return false;
+
             if (context.OwnerType == SalePriceListOwnerType.Customer)
             {
                 if (!_sellingProductId.HasValue)

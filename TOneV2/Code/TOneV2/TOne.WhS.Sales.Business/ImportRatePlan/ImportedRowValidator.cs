@@ -135,6 +135,12 @@ namespace TOne.WhS.Sales.Business
                     return false;
                 }
 
+                if (context.ExistingZone.EED.HasValue)
+                {
+                    context.ErrorMessage = string.Format("Zone '{0}' will be closed on '{1}'. Cannot define new Rates for pending closed Zones", context.ExistingZone.SaleZoneId, context.ExistingZone.EED);
+                    return false;
+                }
+
                 if (context.OwnerType == BusinessEntity.Entities.SalePriceListOwnerType.Customer)
                 {
                     DateTime countryBED;
