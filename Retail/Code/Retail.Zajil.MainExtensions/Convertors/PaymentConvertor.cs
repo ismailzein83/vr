@@ -41,7 +41,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
                         TransactionTypeId = TransactionTypeId,
                         SourceId = row["PaymentId"].ToString(),
                         CurrencyId = this.CurrencyId,
-                        AccountId = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row[this.SourceAccountIdColumn].ToString()).AccountId,
+                        AccountId = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row[this.SourceAccountIdColumn].ToString()).AccountId.ToString(),
                         TransactionTime = (DateTime)row[this.TimeColumn],
                         Amount = (decimal)row[this.AmountColumn]
                     }

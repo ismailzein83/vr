@@ -80,7 +80,7 @@ namespace Retail.Runtime.Tasks
             CorrectUsageBalanceItem ub3 = new CorrectUsageBalanceItem
             {
                 Value = 20,
-                AccountId = 381587,
+                AccountId = "381587",
                 CurrencyId = 1
             };
 
@@ -99,14 +99,14 @@ namespace Retail.Runtime.Tasks
             UpdateUsageBalanceItem ub1 = new UpdateUsageBalanceItem
             {
                 Value = 200,
-                AccountId = 381587,
+                AccountId = "381587",
                 EffectiveOn = DateTime.Parse("2016-11-21 00:00:00.000"),
                 CurrencyId = 1
             };
             UpdateUsageBalanceItem ub2 = new UpdateUsageBalanceItem
             {
                 Value = 500,
-                AccountId = 393486,
+                AccountId = "393486",
                 EffectiveOn = DateTime.Parse("2016-11-21 00:00:00.000"),
                 CurrencyId = 1
             };
@@ -119,7 +119,7 @@ namespace Retail.Runtime.Tasks
             UpdateUsageBalanceItem ub3 = new UpdateUsageBalanceItem
             {
                 Value = 6980,
-                AccountId = 384577,
+                AccountId = "384577",
                 EffectiveOn = DateTime.Parse("2016-11-21 00:00:00.000"),
                 CurrencyId = 1
             };

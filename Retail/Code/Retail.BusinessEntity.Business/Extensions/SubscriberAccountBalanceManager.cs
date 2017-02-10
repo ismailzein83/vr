@@ -19,12 +19,12 @@ namespace Retail.BusinessEntity.Business
         public dynamic GetAccount(IAccountContext context) 
         {
             AccountBEManager accountBEManager = new AccountBEManager();
-            return accountBEManager.GetAccount(this._accountBEDefinitionId, context.AccountId);
+            return accountBEManager.GetAccount(this._accountBEDefinitionId,Convert.ToInt64(context.AccountId));
         }
         public Vanrise.AccountBalance.Entities.AccountInfo GetAccountInfo(IAccountInfoContext context)
         {
             AccountBEManager accountBEManager = new AccountBEManager();
-            var account = accountBEManager.GetAccount(this._accountBEDefinitionId, context.AccountId);
+            var account = accountBEManager.GetAccount(this._accountBEDefinitionId, Convert.ToInt64(context.AccountId));
             Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
             {
                 Name = account.Name,
