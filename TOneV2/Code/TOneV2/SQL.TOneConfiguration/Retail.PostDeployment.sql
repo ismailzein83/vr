@@ -51,7 +51,10 @@ as (select * from (values
 ('E5EBA8E1-B0DC-4977-B770-2B9F62DCBC17','DurationTariff','Duration Tariff','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_DurationTariff"}'),
 ('7E54E33D-EF53-4DA9-9786-DC6721BEF618','RateValue','Rate Value','Retail_BE_ChargingPolicyPartType','{"PartTypeExtensionName":"Retail_BE_ChargingPolicyPart_RateValue"}'),
 ('BE74A60E-D312-4B4F-BD76-5B7BE81ABE62','Send Email', 'Send Email','VR_AccountBalance_BalanceAlert_VRAction','{"Editor":"retail-be-accountaction-email"}'),
-('497557D1-399E-4AF5-BA10-A03338D1CAF4','FixedBalanceAlertThreshold','Fixed','VR_Notification_BalanceAlertThreshold','{"Editor":"retail-be-balancealertrule-threshold-fixed"}'),
+
+('497557D1-399E-4AF5-BA10-A03338D1CAF4','FixedBalanceAlertThreshold','Fixed','Retail_BE_AccountBalance_AlertThreshold_PostPaidAccount','{"Editor":"retail-be-balancealertrule-threshold-fixed"}'),
+('30B37A0A-63D8-4323-899B-3A2782FC5A05','PercentageBalanceAlertThreshold','Percentage','Retail_BE_AccountBalance_AlertThreshold_PostPaidAccount','{"Editor":"retail-be-balancealertrule-threshold-percentage"}'),
+
 ('FB2D7DC4-AF79-4068-8452-1058AF7544D7','PriceVoiceEventStep','PriceVoiceEventStep','VR_GenericData_DataTransformationStepConfig','{"Editor":"retail-voice-pricevoiceeventstep","StepPreviewUIControl":"retail-voice-pricevoiceeventstep-preview"}'),
 ('2FF81206-1E07-4E66-9E35-7F53BF049AB3','Retail_Voice_VoiceServiceType','Voice','Retail_BE_ServiceTypeExtendedSettingsConfig','{"Editor":"retail-voice-voiceservicetype"}'),
 ('B0B5BC1F-E899-4AE5-AEFB-4FCD5D1BA140','Retail_Voice_StandardPolicyEvaluator','Standard','Retail_Voice_VoiceChargingPolicyEvaluatorConfig','{"Editor":"retail-voice-standardpolicyevaluator"}'),
