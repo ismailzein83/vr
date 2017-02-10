@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -28,6 +29,13 @@ namespace Vanrise.AccountBalance.Business
                AccountId = accountId
            };
            return accountManager.GetAccountInfo(context);
+        }
+
+        public string GetAccountName(Guid accountTypeId, String accountId)
+        {
+            var accountInfo = GetAccountInfo(accountTypeId, accountId);
+            accountInfo.ThrowIfNull("accountInfo", String.Format("{0} {1}", accountTypeId, accountId));
+            return accountInfo.Name;
         }
     }
 }

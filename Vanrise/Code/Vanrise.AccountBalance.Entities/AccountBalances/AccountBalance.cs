@@ -19,10 +19,6 @@ namespace Vanrise.AccountBalance.Entities
         public decimal InitialBalance { get; set; }
 
         public decimal CurrentBalance { get; set; }
-
-        public decimal UsageBalance { get; set; }
-
-
     }
 
 }

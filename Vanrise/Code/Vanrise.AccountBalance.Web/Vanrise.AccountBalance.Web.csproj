@@ -121,7 +121,6 @@
     <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\AccountUsageController.cs" />
     <Compile Include="Controllers\BalanceAccountTypeController.cs" />
-    <Compile Include="Controllers\BalanceAlertController.cs" />
     <Compile Include="Controllers\BillingTransactionTypeController.cs" />
     <Compile Include="Controllers\BillingTransactionController.cs" />
     <Compile Include="Controllers\LiveBalanceController.cs" />

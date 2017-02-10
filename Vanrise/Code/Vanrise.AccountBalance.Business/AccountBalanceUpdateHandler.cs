@@ -185,7 +185,7 @@ namespace Vanrise.AccountBalance.Business
         }
         private LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, int currencyId)
         {
-            return liveBalanceDataManager.TryAddLiveBalanceAndGet(accountId, _accountTypeId, 0, currencyId, 0, 0);
+            return liveBalanceDataManager.TryAddLiveBalanceAndGet(accountId, _accountTypeId, 0, currencyId, 0);
 
         }
         private void GroupLiveBalanceToUpdateById(Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate, DateTime effectiveOn, int currencyId, decimal value, LiveBalanceAccountInfo liveBalanceInfo)

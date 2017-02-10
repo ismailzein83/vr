@@ -11,8 +11,10 @@ namespace Vanrise.Notification.BP.Arguments
     {
         public override string GetTitle()
         {
-            return "Execute Notification Process";
+            return this.ProcessTitle != null ? this.ProcessTitle : "Execute Notification Process";
         }
+
+        public string ProcessTitle { get; set; }
 
         public Guid NotificationId { get; set; }
     }

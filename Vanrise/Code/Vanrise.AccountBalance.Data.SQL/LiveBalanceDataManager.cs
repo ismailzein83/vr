@@ -58,64 +58,6 @@ namespace Vanrise.AccountBalance.Data.SQL
             });
 
         }
-
-       
-        public bool ResetInitialAndUsageBalance(Guid accountTypeId)
-        {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_ResetInitialAndUsage]", accountTypeId) > 0);
-        }
-        public bool UpdateLiveBalanceThreshold(Guid accountTypeId, List<BalanceAccountThreshold> balanceAccountsThresholds)
-        {
-            var options = new TransactionOptions
-            {
-                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-            };
-
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
-            {
-                DataTable liveBalanceThresholdToUpdate = GetLiveBalanceThresholdTable();
-                foreach (var item in balanceAccountsThresholds)
-                {
-                    DataRow dr = liveBalanceThresholdToUpdate.NewRow();
-                    FillLiveBalanceThresholdRow(dr, item);
-                    liveBalanceThresholdToUpdate.Rows.Add(dr);
-                }
-                liveBalanceThresholdToUpdate.EndLoadData();
-                if (liveBalanceThresholdToUpdate.Rows.Count > 0)
-                    ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateBalanceThreshold]",
-                           (cmd) =>
-                           {
-                               var dtPrm = new System.Data.SqlClient.SqlParameter("@AccountTypeId", SqlDbType.UniqueIdentifier);
-                               dtPrm.Value = accountTypeId;
-                               cmd.Parameters.Add(dtPrm);
-
-                               dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceThresholdTable", SqlDbType.Structured);
-                               dtPrm.Value = liveBalanceThresholdToUpdate;
-                               cmd.Parameters.Add(dtPrm);
-                           });
-                scope.Complete();
-            }
-            return true;
-        }
-        public void UpdateLiveBalanceAlertRule(List<AccountBalanceAlertRule> accountBalanceAlertRules)
-        {
-            DataTable liveBalanceAlertRuleTable = GetAccountBalanceAlertRuleTable();
-            foreach (var item in accountBalanceAlertRules)
-            {
-                DataRow dr = liveBalanceAlertRuleTable.NewRow();
-                FillLiveBalanceAlerRuleRow(dr, item);
-                liveBalanceAlertRuleTable.Rows.Add(dr);
-            }
-            liveBalanceAlertRuleTable.EndLoadData();
-            if (liveBalanceAlertRuleTable.Rows.Count > 0)
-                ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateAlertRule]",
-                       (cmd) =>
-                       {
-                           var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceAlertRuleTable", SqlDbType.Structured);
-                           dtPrm.Value = liveBalanceAlertRuleTable;
-                           cmd.Parameters.Add(dtPrm);
-                       });
-        }
         public void UpdateBalanceRuleInfos(List<LiveBalanceNextThresholdUpdateEntity> updateEntities)
         {
             DataTable liveBalanceThresholdToUpdate = GetNextThresholdUpdateTable();
@@ -177,9 +119,9 @@ namespace Vanrise.AccountBalance.Data.SQL
                        });
         }
 
-        public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
+        public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal currentBalance)
         {
-            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance);
+            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountId, accountTypeId, initialBalance, currencyId, currentBalance);
         }
         public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
@@ -228,13 +170,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                 CurrentBalance = GetReaderValue<Decimal>(reader, "CurrentBalance"),
                 AccountId = reader["AccountId"] as string,
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeID"),
-                UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
                 AlertRuleID = GetReaderValue<int?>(reader, "AlertRuleID"),
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
                 NextThreshold = GetReaderValue<decimal?>(reader, "NextAlertThreshold"),
                 LastExecutedThreshold = GetReaderValue<decimal?>(reader, "LastExecutedActionThreshold"),
-                ThresholdIndex = GetReaderValue<int?>(reader, "ThresholdActionIndex"),
                 LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader["ActiveAlertsInfo"] as string, typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo
             };
         }
@@ -247,7 +187,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                 AccountId = reader["AccountId"] as String,
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeID"),
                 CurrentBalance = GetReaderValue<Decimal>(reader, "CurrentBalance"),
-                UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
                
@@ -299,26 +238,13 @@ namespace Vanrise.AccountBalance.Data.SQL
             dr["ID"] = liveBalanceToUpdate.LiveBalanceId;
             dr["UpdateValue"] = liveBalanceToUpdate.Value;
         }
-        private void FillLiveBalanceThresholdRow(DataRow dr, BalanceAccountThreshold balanceAccountThreshold)
-        {
-            dr["AccountID"] = balanceAccountThreshold.AccountId;
-            dr["Threshold"] = balanceAccountThreshold.Threshold;
-            dr["ThresholdActionIndex"] = balanceAccountThreshold.ThresholdActionIndex;
-            dr["AlertRuleId"] = balanceAccountThreshold.AlertRuleId;
-        }
         private DataTable GetLiveBalanceThresholdTable()
         {
             DataTable dt = new DataTable(LiveBalance_TABLENAME);
             dt.Columns.Add("AccountID", typeof(String));
             dt.Columns.Add("Threshold", typeof(decimal));
-            dt.Columns.Add("ThresholdActionIndex", typeof(int));
             dt.Columns.Add("AlertRuleId", typeof(int));
             return dt;
-        }
-        private void FillLiveBalanceAlerRuleRow(DataRow dr, AccountBalanceAlertRule accountBalanceAlertRule)
-        {
-            dr["AccountID"] = accountBalanceAlertRule.AccountId;
-            dr["AlertRuleId"] = accountBalanceAlertRule.AlertRuleId;
         }
         private DataTable GetAccountBalanceAlertRuleTable()
         {
@@ -336,8 +262,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                 dr["NextAlertThreshold"] = updateEntity.NextAlertThreshold;
             if (updateEntity.AlertRuleId.HasValue)
                 dr["AlertRuleId"] = updateEntity.AlertRuleId;
-            if (updateEntity.ThresholdActionIndex.HasValue)
-                dr["ThresholdActionIndex"] = updateEntity.ThresholdActionIndex;
         }
         DataTable GetNextThresholdUpdateTable()
         {
@@ -346,7 +270,6 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AccountID", typeof(String));
             dt.Columns.Add("NextAlertThreshold", typeof(decimal));
             dt.Columns.Add("AlertRuleId", typeof(int));
-            dt.Columns.Add("ThresholdActionIndex", typeof(int));
             return dt;
         }
         void FillLastThresholdUpdateRow(DataRow dr, LiveBalanceLastThresholdUpdateEntity updateEntity)
@@ -378,7 +301,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             if (query.Sign != null)
                 whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign , query.Balance));
 
-            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.UsageBalance, lb.CurrentBalance 
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance 
                                                                     FROM [VR_AccountBalance].[LiveBalance] as lb
                                                                     WHERE  (#WHEREPART#) 
                                                                     ORDER BY  lb.CurrentBalance #ORDERDIRECTION#

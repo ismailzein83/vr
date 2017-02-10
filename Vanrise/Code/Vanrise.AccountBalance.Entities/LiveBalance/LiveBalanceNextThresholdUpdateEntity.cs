@@ -12,7 +12,6 @@ namespace Vanrise.AccountBalance.Entities
         public String AccountId { get; set; }
         public decimal? NextAlertThreshold { get; set; }
         public long? AlertRuleId { get; set; }
-        public int? ThresholdActionIndex { get; set; }
 
     }
 }

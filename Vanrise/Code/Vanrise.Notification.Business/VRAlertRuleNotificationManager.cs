@@ -44,6 +44,7 @@ namespace Vanrise.Notification.Business
                 EventKey = notificationInput.EventKey,
                 NotificationTypeId = notificationTypeId,
                 ParentTypes = notificationParentTypes,
+                Description = notificationInput.Description,
                 UserId = notificationInput.UserId
             };
             _vrNofiticationManager.ClearNotifications(clearNotificationInput);

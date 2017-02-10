@@ -49,7 +49,6 @@
     <Compile Include="AccountTypeManager.cs" />
     <Compile Include="AccountTypeViewFilter.cs" />
     <Compile Include="AccountUsageManager.cs" />
-    <Compile Include="BalanceAlertManager.cs" />
     <Compile Include="BillingTransactionTypeManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Context\AccountContext.cs" />
@@ -58,6 +57,7 @@
     <Compile Include="Context\BalancePeriodContext.cs" />
     <Compile Include="Extensions\AccountBalanceAlertRuleBehavior.cs" />
     <Compile Include="Extensions\AccountBalanceAlertRuleTypeSettings.cs" />
+    <Compile Include="Extensions\AlertRuleEntityBalanceInfo.cs" />
     <Compile Include="LiveBalanceManager.cs" />
     <Compile Include="UsageBalanceManager.cs" />
     <Compile Include="BillingTransactionManager.cs" />

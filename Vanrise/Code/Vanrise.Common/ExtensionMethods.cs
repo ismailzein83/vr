@@ -396,7 +396,7 @@ namespace Vanrise.Common
         /// <param name="obj"></param>
         /// <param name="objectName">Defined Object Name</param>
         /// <param name="id">Object Id</param>
-        public static void ThrowIfNull<T>(this T obj, string objectName, object id) where T : class
+        public static void ThrowIfNull<T>(this T obj, string objectName, object id = null) where T : class
         {
             if (obj == null)
                 throw new NullReferenceException(string.Format("{0} '{1}'", objectName, id));

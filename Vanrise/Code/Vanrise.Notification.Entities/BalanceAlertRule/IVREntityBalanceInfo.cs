@@ -10,6 +10,8 @@ namespace Vanrise.Notification.Entities
     {
         string EntityId { get; }
 
+        string EntityName { get; }
+
         Decimal CurrentBalance { get; }
 
         int? AlertRuleId { get; }
@@ -17,7 +19,6 @@ namespace Vanrise.Notification.Entities
         Decimal? NextAlertThreshold { get; }
 
         Decimal? LastExecutedAlertThreshold { get; }
-        int? ThresholdActionIndex { get; }
 
         VRBalanceActiveAlertInfo ActiveAlertsInfo { get; }
     }

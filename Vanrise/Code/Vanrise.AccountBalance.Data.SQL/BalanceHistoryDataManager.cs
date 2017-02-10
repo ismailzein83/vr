@@ -15,11 +15,5 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
         }
         #endregion
-
-        public bool InsertBalanceHistoryFromLiveBalance(long closingPeriodID, Guid accountTypeId)
-        {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceHistory_InsertFromLiveBalance]", closingPeriodID, accountTypeId) > 0);
-
-        }
     }
 }

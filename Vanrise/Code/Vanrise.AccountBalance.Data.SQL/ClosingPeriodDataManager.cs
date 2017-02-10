@@ -25,29 +25,6 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemSP("[VR_AccountBalance].[sp_BalanceClosingPeriod_GetLastClosingPeriod]", BalanceClosingPeriodMapper, accountTypeId);
         }
-        public void CreateClosingPeriod(DateTime balanceClosingPeriod, Guid accountTypeId, Guid usageTransactionTypeId)
-        {
-            var options = new TransactionOptions
-           {
-               IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-           };
-
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
-            {
-                long closingPeriodID = -1;
-                if (Insert(balanceClosingPeriod, accountTypeId, out closingPeriodID))
-                {
-                    BillingTransactionDataManager billingTransactionDataManager = new BillingTransactionDataManager();
-                    billingTransactionDataManager.CreateBillingUsageTransactionFromLiveBalance(balanceClosingPeriod, accountTypeId, usageTransactionTypeId, closingPeriodID);
-                    BalanceHistoryDataManager balanceHistoryDataManager = new BalanceHistoryDataManager();
-                    balanceHistoryDataManager.InsertBalanceHistoryFromLiveBalance(closingPeriodID, accountTypeId);
-                    LiveBalanceDataManager liveBalanceDataManager = new LiveBalanceDataManager();
-                    liveBalanceDataManager.ResetInitialAndUsageBalance(accountTypeId);
-                    billingTransactionDataManager.UpdateBillingTransactionClosingPeriod(closingPeriodID, accountTypeId);
-                };
-                scope.Complete();
-            }
-        }
         #endregion
 
         #region Private Methods

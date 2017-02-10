@@ -7,51 +7,16 @@ using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class LiveBalance : IVREntityBalanceInfo
+    public class LiveBalance
     {
         public String AccountId { get; set; }
         public Guid AccountTypeId { get; set; }
         public decimal InitialBalance { get; set; }
-        public Decimal UsageBalance { get; set; }
         public int? AlertRuleID { get; set; }
-        public int? ThresholdIndex { get; set; }
         public Decimal CurrentBalance { get; set; }
         public int CurrencyId { get; set; }
         public decimal? LastExecutedThreshold { get; set; }
         public decimal? NextThreshold { get; set; }
         public VRBalanceActiveAlertInfo LiveBalanceActiveAlertsInfo { get; set; }
-
-        #region Interface Implementation
-        public string EntityId
-        {
-            get { return this.AccountId.ToString(); }
-        }
-
-        public decimal? NextAlertThreshold
-        {
-            get { return this.NextThreshold; }
-        }
-
-        public decimal? LastExecutedAlertThreshold
-        {
-            get { return this.LastExecutedThreshold; }
-        }
-
-        public int? AlertRuleId
-        {
-            get { return this.AlertRuleID; }
-        }
-
-        public int? ThresholdActionIndex
-        {
-            get { return this.ThresholdIndex; }
-        }
-        
-        public VRBalanceActiveAlertInfo ActiveAlertsInfo
-        {
-            get { return this.LiveBalanceActiveAlertsInfo; }
-        }
-
-        #endregion
     }
 }

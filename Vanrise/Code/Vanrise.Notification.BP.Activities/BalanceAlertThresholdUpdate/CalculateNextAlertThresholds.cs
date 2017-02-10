@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Activities;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Queueing;
+using Vanrise.Common;
+using System.Linq;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
 {
@@ -45,11 +48,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                             foreach (IVREntityBalanceInfo entityBalanceInfo in vrEntityBalanceInfoBatch.BalanceInfos)
                             {
                                 decimal? currentNextThreshold = entityBalanceInfo.NextAlertThreshold;
-                                int? currentAlertRuleId = entityBalanceInfo.AlertRuleId;
-
-                                decimal? finalNextThreshold = default(decimal?);
-                                int? thresholdIndex = default(int?);
-                                long? finalAlertRuleId;
+                                int? currentAlertRuleId = entityBalanceInfo.AlertRuleId;                           
 
 
                                 VRBalanceAlertRuleCreateRuleTargetContext vrBalanceAlertRuleCreateRuleTargetContext = new VRBalanceAlertRuleCreateRuleTargetContext
@@ -58,40 +57,58 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                     RuleTypeSettings = inputArgument.RuleTypeSettings
                                 };
 
-                                GenericRuleTarget ruleTareget = inputArgument.RuleTypeSettings.Behavior.CreateRuleTarget(vrBalanceAlertRuleCreateRuleTargetContext);
-                                VRAlertRule matchedRule = vrBalanceAlertRuleManager.GetMatchRule(inputArgument.AlertTypeId, ruleTareget);
-
-                                finalAlertRuleId = matchedRule != null ? (long?)matchedRule.VRAlertRuleId : null;
+                                GenericRuleTarget ruleTarget = inputArgument.RuleTypeSettings.Behavior.CreateRuleTarget(vrBalanceAlertRuleCreateRuleTargetContext);
+                                VRAlertRule matchedRule = vrBalanceAlertRuleManager.GetMatchRule(inputArgument.AlertTypeId, ruleTarget);                                
 
                                 if (matchedRule != null)
                                 {
-                                    VRBalanceAlertRuleSettings balanceAlertRuleSettings = matchedRule.Settings.ExtendedSettings as VRBalanceAlertRuleSettings;
+                                    long finalAlertRuleId = matchedRule.VRAlertRuleId;
 
+                                    decimal? finalNextThreshold = null;
+
+                                    matchedRule.Settings.ThrowIfNull("matchedRule.Settings", matchedRule.VRAlertRuleId);
+                                    VRBalanceAlertRuleSettings balanceAlertRuleSettings = matchedRule.Settings.ExtendedSettings.CastWithValidate<VRBalanceAlertRuleSettings>("matchedRule.Settings.ExtendedSettings", matchedRule.VRAlertRuleId);
+
+                                    List<Decimal> thresholds = new List<Decimal>();
                                     for (int i = 0; i < balanceAlertRuleSettings.ThresholdActions.Count; i++)
                                     {
                                         VRBalanceAlertThresholdAction balanceAlertThresholdAction = balanceAlertRuleSettings.ThresholdActions[i];
                                         VRBalanceAlertThresholdContext vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext { EntityBalanceInfo = entityBalanceInfo, AlertRuleTypeId = inputArgument.AlertTypeId };
                                         decimal ruleThresholdValue = balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext);
-                                        if (currentNextThreshold != ruleThresholdValue  && ruleThresholdValue < entityBalanceInfo.CurrentBalance)
+                                        thresholds.Add(ruleThresholdValue);
+                                    }
+                                    foreach (var threshold in thresholds.OrderByDescending(itm => itm))
+                                    {
+                                        if (entityBalanceInfo.LastExecutedAlertThreshold.HasValue && entityBalanceInfo.LastExecutedAlertThreshold.Value <= threshold)
+                                            continue;
+
+                                        if (threshold < entityBalanceInfo.CurrentBalance)
                                         {
-                                            finalNextThreshold = ruleThresholdValue;
-                                            thresholdIndex = i;
+                                            finalNextThreshold = threshold;
                                             break;
                                         }
-                                    }
-                                }
 
-                                if (finalAlertRuleId != currentAlertRuleId || (finalNextThreshold.HasValue && finalNextThreshold != currentNextThreshold))
-                                {
-                                    totalAccountsUpdated++;
-                                    VRBalanceUpdateRuleInfoPayload updateRuleInfoPayload = new VRBalanceUpdateRuleInfoPayload
+                                        if (finalAlertRuleId == currentAlertRuleId && currentNextThreshold.HasValue)
+                                        {
+                                            if (threshold <= currentNextThreshold.Value)
+                                            {
+                                                finalNextThreshold = threshold;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if (finalAlertRuleId != currentAlertRuleId || finalNextThreshold != currentNextThreshold)
                                     {
-                                        AlertRuleId = finalAlertRuleId,
-                                        EntityBalanceInfo = entityBalanceInfo,
-                                        NextAlertThreshold = finalNextThreshold,
-                                        ThresholdActionIndex = thresholdIndex
-                                    };
-                                    updateRuleInfoPayloadBatch.Items.Add(updateRuleInfoPayload);
+                                        totalAccountsUpdated++;
+                                        VRBalanceUpdateRuleInfoPayload updateRuleInfoPayload = new VRBalanceUpdateRuleInfoPayload
+                                        {
+                                            EntityBalanceInfo = entityBalanceInfo,
+                                            AlertRuleId = finalAlertRuleId,
+                                            NextAlertThreshold = finalNextThreshold
+                                        };
+                                        updateRuleInfoPayloadBatch.Items.Add(updateRuleInfoPayload);
+                                    }
                                 }
                             }
                             if (updateRuleInfoPayloadBatch.Items.Count > 0)

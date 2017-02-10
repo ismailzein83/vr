@@ -12,5 +12,7 @@ namespace Vanrise.Notification.Entities
         public Guid NotificationTypeId { get; set; }
         public VRNotificationParentTypes ParentTypes { get; set; }
         public string EventKey { get; set; }
+
+        public string Description { get; set; }
     }
 }

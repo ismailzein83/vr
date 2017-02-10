@@ -46,11 +46,10 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                 RuleTypeSettings = inputArgument.RuleTypeSettings
                             };
 
-                            decimal? lastExecutedThreshold = default(decimal?);
                             var activeAlertThresholds = new VRBalanceActiveAlertInfo();
                             activeAlertThresholds.ActiveAlertsThersholds.AddRange(entityBalanceInfo.ActiveAlertsInfo.ActiveAlertsThersholds);
 
-                            foreach (var activeThreshold in entityBalanceInfo.ActiveAlertsInfo.ActiveAlertsThersholds.OrderByDescending(t => t.Threshold))
+                            foreach (var activeThreshold in entityBalanceInfo.ActiveAlertsInfo.ActiveAlertsThersholds.OrderBy(t => t.Threshold))
                             {
                                 if (entityBalanceInfo.CurrentBalance > activeThreshold.Threshold)
                                 {
@@ -63,18 +62,22 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                         UserId = handle.SharedInstanceData.InstanceInfo.InitiatorUserId,
                                         EventKey = string.Format("{0}_{1}", entityBalanceInfo.EntityId, activeThreshold.Threshold),
                                         AlertRuleId = activeThreshold.AlertRuleId,
-                                        RuleTypeId = alertRule.RuleTypeId
+                                        RuleTypeId = alertRule.RuleTypeId,
+                                        Description = string.Format("Rolling back balance actions for '{0}' (threshold '{1}')", entityBalanceInfo.EntityName, activeThreshold.Threshold)
                                     };
                                     alertRuleNotificationManager.ClearNotifications(notificationInput);
                                     activeAlertThresholds.ActiveAlertsThersholds.Remove(activeThreshold);
-
+                                }
+                                else
+                                {
+                                    break;
                                 }
                             }
 
                             balanceUpdateLastAlertInfoPayloadBatch.Items.Add(new VRBalanceUpdateLastAlertInfoPayload
                             {
                                 EntityBalanceInfo = entityBalanceInfo,
-                                LastExecutedAlertThreshold = activeAlertThresholds.ActiveAlertsThersholds.Min(a => a.Threshold),
+                                LastExecutedAlertThreshold = activeAlertThresholds.ActiveAlertsThersholds.Count > 0 ? activeAlertThresholds.ActiveAlertsThersholds.Min(a => a.Threshold) : null,
                                 ActiveAlertsInfo = activeAlertThresholds
                             });
                         }

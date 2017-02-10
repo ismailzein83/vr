@@ -8,6 +8,5 @@ namespace Vanrise.AccountBalance.Data
 {
     public interface IBalanceHistoryDataManager : IDataManager
     {
-        bool InsertBalanceHistoryFromLiveBalance(long closingPeriodID, Guid accountTypeId);
     }
 }

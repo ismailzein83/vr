@@ -52,10 +52,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                 }, accountTypeId);
         }
 
-        public bool CreateBillingUsageTransactionFromLiveBalance(DateTime closingTime, Guid accountTypeId, Guid usageTransactionTypeId, long closingPeriodID)
-        {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_CreateUsageTransactionFromLiveBalance]", closingTime, accountTypeId, usageTransactionTypeId, closingPeriodID) > 0);
-        }
         public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
         {
             object billingTransactionID;
@@ -68,11 +64,6 @@ namespace Vanrise.AccountBalance.Data.SQL
             }
             billingTransactionId = -1;
             return false;
-        }
-
-        public bool UpdateBillingTransactionClosingPeriod(long closingPeriodID, Guid accountTypeId)
-        {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_UpdateClosingPeriodId]", closingPeriodID, accountTypeId) > 0);
         }
         public bool InsertBillingTransactionFromAccountUsageAndUpdate(Guid accountTypeId,TimeSpan timeOffset)
         {
