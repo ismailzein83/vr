@@ -27,7 +27,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
             var accountBEDefinitionId = vRAccountBalanceManager.GetAccountBEDefinitionIdByAlertRuleTypeId(context.AlertRuleTypeId);
             AccountBEManager accountBEManager = new AccountBEManager();
             AccountPart accountPart;
-          
+
             if (!accountBEManager.TryGetAccountPart(accountBEDefinitionId, Convert.ToInt64(context.EntityBalanceInfo.EntityId), AccountPartFinancial._ConfigId, false, out accountPart))
                 throw new NullReferenceException("accountPart");
             var accountPartFinancial = accountPart.Settings as AccountPartFinancial;
@@ -43,7 +43,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
             if (postPaidSettings == null)
                 throw new NullReferenceException("postPaidSettings");
 
-            return (postPaidSettings.CreditLimit * this.Percentage / 100);
+            return -(postPaidSettings.CreditLimit * (100 - this.Percentage) / 100);
         }
     }
 }

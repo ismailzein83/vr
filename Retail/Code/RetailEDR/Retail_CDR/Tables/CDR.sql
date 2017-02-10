@@ -17,8 +17,11 @@
     [OutgoingGwId]         VARCHAR (100)   NULL,
     [TransferredCall_Id]   VARCHAR (100)   NULL,
     [OriginatorIP]         VARCHAR (50)    NULL,
-    [TerminatorIP]         VARCHAR (50)    NULL
+    [TerminatorIP]         VARCHAR (50)    NULL,
+    [AttemptDateTime]      DATETIME        NULL
 );
+
+
 
 
 

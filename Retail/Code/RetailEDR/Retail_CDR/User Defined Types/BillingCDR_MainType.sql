@@ -20,7 +20,10 @@
     [Amount]                 DECIMAL (20, 4)  NULL,
     [RateTypeId]             INT              NULL,
     [CurrencyId]             INT              NULL,
-    [FinancialAccountId]     BIGINT           NULL);
+    [FinancialAccountId]     BIGINT           NULL,
+    [AttemptDateTime]        DATETIME         NULL);
+
+
 
 
 

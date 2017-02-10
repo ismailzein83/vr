@@ -20,8 +20,11 @@
     [Rate]                   DECIMAL (20, 8)  NULL,
     [Amount]                 DECIMAL (20, 4)  NULL,
     [RateTypeId]             INT              NULL,
-    [CurrencyId]             INT              NULL
+    [CurrencyId]             INT              NULL,
+    [AttemptDateTime]        DATETIME         NULL
 );
+
+
 
 
 
