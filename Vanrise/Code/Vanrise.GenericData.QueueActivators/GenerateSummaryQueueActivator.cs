@@ -54,7 +54,7 @@ namespace Vanrise.GenericData.QueueActivators
         {
             var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
             var allSummaryBatches = new VRDictionary<DateTime, VRDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
-            List<GenericSummaryRecordBatch> genericSummaryRecordBatches = new List<GenericSummaryRecordBatch>();
+            Dictionary<DateTime, List<GenericSummaryRecordBatch>> genericSummaryRecordBatchesDict = new Dictionary<DateTime, List<GenericSummaryRecordBatch>>();
 
             context.DoWhilePreviousRunning(() =>
             {
@@ -93,33 +93,41 @@ namespace Vanrise.GenericData.QueueActivators
             foreach (var summaryBatchEntry in allSummaryBatches)
             {
                 var summaryItems = summaryBatchEntry.Value.Values;
+
+                var currentBatchStart = summaryBatchEntry.Key;
+                var currentBatchEnd = summaryItems.First().SummaryItem.BatchEnd;
+
                 var genericSummaryBatch = new GenericSummaryRecordBatch
                 {
-                    BatchStart = summaryBatchEntry.Key,
+                    BatchStart = currentBatchStart,
                     Items = summaryItems.Select(summaryItemInProcess => summaryItemInProcess.SummaryItem).ToList(),
                     SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId
                 };
 
-                if (context.To >= summaryItems.First().SummaryItem.BatchEnd && context.From <= summaryBatchEntry.Key)
+                StagingSummaryRecord stagingSummaryRecord = new StagingSummaryRecord()
                 {
+                    ProcessInstanceId = context.ProcessInstanceId,
+                    BatchStart = currentBatchStart,
+                    BatchEnd = currentBatchEnd,
+                    StageName = context.CurrentStageName
+                };
+
+                if (context.To >= currentBatchEnd && context.From <= currentBatchStart)
+                {
+                    var genericSummaryRecordBatches = genericSummaryRecordBatchesDict.GetOrCreateItem(currentBatchStart);
                     genericSummaryRecordBatches.Add(genericSummaryBatch);
+                    stagingSummaryRecord.AlreadyFinalised = true;
                 }
                 else
                 {
                     byte[] serializedBatch = genericSummaryBatch.Serialize();
-
-                    StagingSummaryRecord obj = new StagingSummaryRecord()
-                    {
-                        ProcessInstanceId = context.ProcessInstanceId,
-                        Data = serializedBatch,
-                        BatchStart = summaryBatchEntry.Key,
-                        StageName = context.CurrentStageName,
-                    };
-
-                    if (dbApplyStream == null)
-                        dbApplyStream = dataManager.InitialiazeStreamForDBApply();
-                    dataManager.WriteRecordToStream(obj, dbApplyStream);
+                    stagingSummaryRecord.Data = serializedBatch;
+                    stagingSummaryRecord.AlreadyFinalised = false;
                 }
+
+                if (dbApplyStream == null)
+                    dbApplyStream = dataManager.InitialiazeStreamForDBApply();
+                dataManager.WriteRecordToStream(stagingSummaryRecord, dbApplyStream);
             }
             List<Task> runningTasks = new List<Task>();
             if (dbApplyStream != null)
@@ -133,9 +141,10 @@ namespace Vanrise.GenericData.QueueActivators
                 runningTasks.Add(applyDataTask);
             }
 
-            if (genericSummaryRecordBatches.Count > 0)
+            if (genericSummaryRecordBatchesDict.Count > 0)
             {
-                StartEnqueuingBatches(context, genericSummaryRecordBatches, transformationManager);
+                foreach (var genericSummaryRecordBatches in genericSummaryRecordBatchesDict)
+                    StartEnqueuingBatches(context, genericSummaryRecordBatches.Value, transformationManager);
             }
             Task.WaitAll(runningTasks.ToArray());
         }
@@ -153,15 +162,22 @@ namespace Vanrise.GenericData.QueueActivators
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
 
-            Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches = new Queueing.MemoryQueue<GenericSummaryRecordBatch>();
-            AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
-            Task loadDataTask = new Task(() =>
+            if (stageBatchRecord.IsEmptyBatch)
             {
-                StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus, stageBatchRecord);
-            });
-            loadDataTask.Start();
+                recordStorageDataManager.DeleteRecords(stageBatchRecord.BatchStart, stageBatchRecord.BatchEnd);
+            }
+            else
+            {
+                Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches = new Queueing.MemoryQueue<GenericSummaryRecordBatch>();
+                AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
+                Task loadDataTask = new Task(() =>
+                {
+                    StartLoadingBatches(context, queueLoadedBatches, loadBatchStatus, stageBatchRecord);
+                });
+                loadDataTask.Start();
 
-            PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName);
+                PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName, null);
+            }
         }
 
         private static void StartEnqueuingBatches(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, List<GenericSummaryRecordBatch> genericSummaryRecordBatches, GenericSummaryTransformationManager transformationManager)
@@ -182,13 +198,13 @@ namespace Vanrise.GenericData.QueueActivators
             }
             loadBatchStatus.IsComplete = true;
 
-            PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName);
+            PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName, context);
             context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
         }
 
         private static void PrepareAndInsertBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
             GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager,
-            Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, string currentStageName)
+            Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, string currentStageName, Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
             Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches = new Queueing.MemoryQueue<List<GenericSummaryRecordBatch>>();
             AsyncActivityStatus prepareBatchStatus = new AsyncActivityStatus();
@@ -197,7 +213,7 @@ namespace Vanrise.GenericData.QueueActivators
                     StartPreparingBatches(writeTrackingMessage, doWhilePreviousRunning, queueLoadedBatches, loadBatchStatus, queuePreparedBatches, prepareBatchStatus, currentStageName);
                 });
             prepareBatchTask.Start();
-            StartInsertingBatches(writeTrackingMessage, doWhilePreviousRunning, transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus, currentStageName);
+            StartInsertingBatches(writeTrackingMessage, doWhilePreviousRunning, transformationManager, recordStorageDataManager, queuePreparedBatches, prepareBatchStatus, currentStageName, context);
         }
 
         private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, StageBatchRecord stageBatchRecord)
@@ -270,7 +286,7 @@ namespace Vanrise.GenericData.QueueActivators
 
         private static void StartInsertingBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
             GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager,
-            Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus, string currentStageName)
+            Queueing.MemoryQueue<List<GenericSummaryRecordBatch>> queuePreparedBatches, AsyncActivityStatus prepareBatchStatus, string currentStageName, Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
@@ -300,7 +316,7 @@ namespace Vanrise.GenericData.QueueActivators
                         }
                     });
                 } while (!prepareBatchStatus.IsComplete || hasItem);
-                
+
                 if (_existingSummaryBatches.Values.Count > 0)
                 {
                     transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
@@ -325,19 +341,61 @@ namespace Vanrise.GenericData.QueueActivators
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
             List<StagingSummaryInfo> stagingSummaryInfoList = dataManager.GetStagingSummaryInfo(context.ProcessInstanceId, context.CurrentStageName);
 
-            if (stagingSummaryInfoList == null || stagingSummaryInfoList.Count == 0)
-                return null;
-
             List<BatchRecord> stageBatchRecords = new List<BatchRecord>();
-            foreach (StagingSummaryInfo stagingSummaryInfo in stagingSummaryInfoList)
-            {
-                StageBatchRecord stageBatchRecord = new StageBatchRecord()
-                {
-                    BatchStart = stagingSummaryInfo.BatchStart
-                };
-                stageBatchRecords.Add(stageBatchRecord);
-            }
 
+            if (stagingSummaryInfoList == null || stagingSummaryInfoList.Count == 0)
+            {
+                StageBatchRecord batchRecord = new StageBatchRecord()
+                {
+                    BatchStart = context.StartDate,
+                    BatchEnd = context.EndDate,
+                    IsEmptyBatch = true
+                };
+                stageBatchRecords.Add(batchRecord);
+            }
+            else
+            {
+                Dictionary<DateTime, StagingSummaryInfo> availableStagingSummaryInfos = stagingSummaryInfoList.ToDictionary(itm => itm.BatchStart, itm => itm);
+
+                var firstStagingSummaryInfoItem = stagingSummaryInfoList[0];
+                DateTime firstBatchStart = firstStagingSummaryInfoItem.BatchStart;
+                DateTime firstBatchEnd = firstStagingSummaryInfoItem.BatchEnd;
+
+                var batchDurationInMinutes = (firstBatchEnd - firstBatchStart).TotalMinutes;
+
+                DateTime endDate = context.StartDate;
+                DateTime startDate;
+
+                while (endDate != context.EndDate)
+                {
+                    startDate = endDate;
+                    endDate = startDate.AddMinutes(batchDurationInMinutes);
+
+                    if (endDate > context.EndDate)
+                        endDate = context.EndDate;
+
+                    StageBatchRecord stageBatchRecord = new StageBatchRecord()
+                    {
+                        BatchStart = startDate,
+                        BatchEnd = endDate
+                    };
+
+                    StagingSummaryInfo stagingSummaryInfo;
+                    if (availableStagingSummaryInfos.TryGetValue(startDate, out stagingSummaryInfo))
+                    {
+                        stageBatchRecord.IsEmptyBatch = false;
+                        if (!stagingSummaryInfo.AlreadyFinalised)
+                            stageBatchRecords.Add(stageBatchRecord);
+                        else
+                            dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, startDate);
+                    }
+                    else
+                    {
+                        stageBatchRecord.IsEmptyBatch = true;
+                        stageBatchRecords.Add(stageBatchRecord);
+                    }
+                }
+            }
             return stageBatchRecords;
         }
     }
@@ -345,9 +403,11 @@ namespace Vanrise.GenericData.QueueActivators
     public class StageBatchRecord : BatchRecord
     {
         public DateTime BatchStart { get; set; }
+        public DateTime BatchEnd { get; set; }
+        public bool IsEmptyBatch { get; set; }
         public override string GetBatchTitle()
         {
-            return string.Format("Batch Start: {0}", BatchStart);
+            return string.Format("Batch Start: {0}, Batch End : {1}", BatchStart, BatchEnd);
         }
     }
 }

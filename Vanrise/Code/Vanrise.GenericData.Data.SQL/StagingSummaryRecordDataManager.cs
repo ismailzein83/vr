@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Data.SQL
 {
     public class StagingSummaryRecordDataManager : BaseSQLDataManager, IStagingSummaryRecordDataManager
     {
-        readonly string[] columns = { "ProcessInstanceId", "StageName", "BatchStart", "Data" };
+        readonly string[] columns = { "ProcessInstanceId", "StageName", "BatchStart", "BatchEnd", "Data", "AlreadyFinalised" };
 
         public StagingSummaryRecordDataManager()
             : base(GetConnectionStringName("BusinessProcessDBConnStringKey", "BusinessProcessDBConnString"))
@@ -33,8 +33,6 @@ namespace Vanrise.GenericData.Data.SQL
                        onItemLoaded(instance);
                    }
                }, processInstanceId, stageName, batchStart);
-
-            //return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetAll", StagingSummaryRecordMapper, processInstanceId, stageName);
         }
 
         public void DeleteStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart)
@@ -49,7 +47,7 @@ namespace Vanrise.GenericData.Data.SQL
         public void WriteRecordToStream(StagingSummaryRecord record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.ProcessInstanceId, record.StageName, GetDateTimeForBCP(record.BatchStart), Convert.ToBase64String(record.Data));
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.ProcessInstanceId, record.StageName, GetDateTimeForBCP(record.BatchStart), GetDateTimeForBCP(record.BatchEnd), record.Data != null ? Convert.ToBase64String(record.Data) : null, record.AlreadyFinalised ? 1 : 0);
         }
 
 
@@ -82,7 +80,9 @@ namespace Vanrise.GenericData.Data.SQL
             {
                 ProcessInstanceId = GetReaderValue<long>(reader, "ProcessInstanceId"),
                 BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
+                BatchEnd = GetReaderValue<DateTime>(reader, "BatchEnd"),
                 Data = reader["Data"] != DBNull.Value ? Convert.FromBase64String(reader["Data"] as string) : null,
+                AlreadyFinalised = GetReaderValue<bool>(reader, "AlreadyFinalised"),
                 StageName = reader["StageName"] as string
             };
         }
@@ -91,7 +91,9 @@ namespace Vanrise.GenericData.Data.SQL
         {
             return new StagingSummaryInfo()
             {
-                BatchStart = GetReaderValue<DateTime>(reader, "BatchStart")
+                BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
+                BatchEnd = GetReaderValue<DateTime>(reader, "BatchEnd"),
+                AlreadyFinalised = GetReaderValue<bool>(reader, "AlreadyFinalised")
             };
         }
         #endregion
