@@ -72,8 +72,8 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
         public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
-            Dictionary<DateTime, Dictionary<long, CorrectUsageBalanceItem>> accountCorrectUsageBalanceItemsByBatchStart = new Dictionary<DateTime, Dictionary<long, CorrectUsageBalanceItem>>();
-            Dictionary<long, CorrectUsageBalanceItem> correctUsageBalanceItems;
+            Dictionary<DateTime, Dictionary<String, CorrectUsageBalanceItem>> accountCorrectUsageBalanceItemsByBatchStart = new Dictionary<DateTime, Dictionary<String, CorrectUsageBalanceItem>>();
+            Dictionary<String, CorrectUsageBalanceItem> correctUsageBalanceItems;
             CorrectUsageBalanceItem correctUsageBalanceItem;
 
             var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
@@ -97,7 +97,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
                             if (amount.HasValue && amount.Value > 0)
                             {
-                                long accountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record);
+                                String accountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record);
                                 DateTime effectiveOn = Vanrise.Common.Utilities.GetPropValueReader(this.EffectiveOn).GetPropertyValue(record);
                                 int currencyId = Vanrise.Common.Utilities.GetPropValueReader(this.CurrencyId).GetPropertyValue(record);
                                 decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(amount.Value, currencyId, systemCurrencyId, effectiveOn);
@@ -125,7 +125,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
             object dbApplyStream = null;
-
+             
             //Store UsageBalance Batches for finalization step
             foreach (var accountUsageBalanceBatchEntry in accountCorrectUsageBalanceItemsByBatchStart)
             {
