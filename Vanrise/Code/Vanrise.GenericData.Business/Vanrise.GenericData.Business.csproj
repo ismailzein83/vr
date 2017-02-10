@@ -66,6 +66,7 @@
     <Compile Include="DataRecordFieldTypeConfigManager.cs" />
     <Compile Include="DataRecordStorageManager.cs" />
     <Compile Include="DataRecordTypeManager.cs" />
+    <Compile Include="DataStorage\GetRemoteRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStoreConfigManager.cs" />
     <Compile Include="DataStoreManager.cs" />
     <Compile Include="ExpressionBuilderConfigManager.cs" />
