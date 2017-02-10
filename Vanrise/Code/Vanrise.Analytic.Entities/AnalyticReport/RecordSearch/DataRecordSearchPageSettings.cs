@@ -10,6 +10,11 @@ namespace Vanrise.Analytic.Entities
 {
     public class DataRecordSearchPageSettings : AnalyticReportSettings
     {
+        public override Guid ConfigId
+        {
+            get { return new Guid("82AA89F6-4D19-4168-A499-CDD2875F1702"); }
+        }
+
         public List<DRSearchPageStorageSource> Sources { get; set; }
         public int? MaxNumberOfRecords { get; set; }
         public int NumberOfRecords { get; set; }
@@ -23,7 +28,6 @@ namespace Vanrise.Analytic.Entities
             }
             return false;
         }
-
     }
 
     public class DRSearchPageStorageSource

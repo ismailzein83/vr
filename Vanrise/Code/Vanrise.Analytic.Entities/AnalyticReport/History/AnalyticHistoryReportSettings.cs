@@ -8,6 +8,11 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticHistoryReportSettings : AnalyticReportSettings
     {
+        public override Guid ConfigId
+        {
+            get { return new Guid("E5FB0790-5428-44B4-BB1F-4F79B69CD6EF"); }
+        }
+
         public List<int> AnalyticTableIds { get; set; }
 
         public AnalyticHistoryReportSearchSettings SearchSettings { get; set; }

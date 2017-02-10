@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Entities
 {
     public abstract class AnalyticReportSettings
     {
-        public Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public virtual bool DoesUserHaveAccess(IViewUserAccessContext context)
         {
