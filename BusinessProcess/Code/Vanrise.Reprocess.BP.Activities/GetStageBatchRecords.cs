@@ -15,6 +15,12 @@ namespace Vanrise.Reprocess.BP.Activities
         public InArgument<ReprocessStage> Stage { get; set; }
 
         [RequiredArgument]
+        public InArgument<DateTime> From { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DateTime> To { get; set; }
+
+        [RequiredArgument]
         public OutArgument<IEnumerable<BatchRecord>> StageBatchRecords { get; set; }
 
         protected override void Execute(CodeActivityContext context)
@@ -22,7 +28,7 @@ namespace Vanrise.Reprocess.BP.Activities
             ReprocessStage stage = this.Stage.Get(context);
 
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, string.Format("{0} Preparation is started.", stage.StageName), null);
-            var executionContext = new ReprocessStageActivatorPreparingContext(stage.StageName, context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID);
+            var executionContext = new ReprocessStageActivatorPreparingContext(stage.StageName, context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, this.From.Get(context), this.To.Get(context));
 
             List<BatchRecord> data = stage.Activator.GetStageBatchRecords(executionContext);
             this.StageBatchRecords.Set(context, data);
@@ -34,10 +40,15 @@ namespace Vanrise.Reprocess.BP.Activities
         {
             string _currentStageName;
             long _processInstanceId;
-            public ReprocessStageActivatorPreparingContext(string currentStageName, long processInstanceId)
+            DateTime _startDate;
+            DateTime _endDate;
+
+            public ReprocessStageActivatorPreparingContext(string currentStageName, long processInstanceId, DateTime startDate, DateTime endDate)
             {
                 _currentStageName = currentStageName;
                 _processInstanceId = processInstanceId;
+                _startDate = startDate;
+                _endDate = endDate;
             }
 
             public long ProcessInstanceId
@@ -48,6 +59,17 @@ namespace Vanrise.Reprocess.BP.Activities
             public string CurrentStageName
             {
                 get { return _currentStageName; }
+            }
+
+
+            public DateTime StartDate
+            {
+                get { return _startDate; }
+            }
+
+            public DateTime EndDate
+            {
+                get { return _endDate; }
             }
         }
     }

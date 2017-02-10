@@ -52,6 +52,7 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
@@ -60,7 +61,6 @@
       <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
     </sco:Collection>
@@ -306,6 +306,11 @@
                   </vbw:WriteTrackingMessage.Severity>
                 </vbw:WriteTrackingMessage>
                 <vrba1:GetStageBatchRecords sap2010:WorkflowViewState.IdRef="GetStageBatchRecords_1">
+                  <vrba1:GetStageBatchRecords.From>
+                    <InArgument x:TypeArguments="s:DateTime">
+                      <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
+                    </InArgument>
+                  </vrba1:GetStageBatchRecords.From>
                   <vrba1:GetStageBatchRecords.Stage>
                     <InArgument x:TypeArguments="vrba1:ReprocessStage">
                       <mca:CSharpValue x:TypeArguments="vrba1:ReprocessStage">stage</mca:CSharpValue>
@@ -316,6 +321,11 @@
                       <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vre:BatchRecord)">StageBatchRecords</mca:CSharpReference>
                     </OutArgument>
                   </vrba1:GetStageBatchRecords.StageBatchRecords>
+                  <vrba1:GetStageBatchRecords.To>
+                    <InArgument x:TypeArguments="s:DateTime">
+                      <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
+                    </InArgument>
+                  </vrba1:GetStageBatchRecords.To>
                 </vrba1:GetStageBatchRecords>
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6">
                   <vbw:WriteTrackingMessage.Message>
@@ -440,7 +450,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXEQDvAMOAgEBSDNINgIBA0kzSTYCAQJOBVQgAwHaBFUFaiIDAbUEawV2DgMBogR3BfgBFwMBvAL5AQWzAwoCAQ+0AwW6AyACAQRRC1GFAQMB3AROYE6AAQMB2wRnC2dXAwHRBF0LXVkDAcgEWAtYeAMBvwRiC2LYAQMBtgRzC3NeAwGsBG4LbmADAaMEegt6egMBmQSBAQn2ARQDAb0C/AEL/AFgAgEQgAIJsQMUAgEZtwMLtwOFAQIBBrQDYLQDgAECAQWHAQuSASYDAf4DkwELpQEcAwHiA6YBC7EBFAMBxwOyAQv1ARADAb4CgQILjAIqAwGpAo0CC5gCFAMBlgKZAguwAx0CARqPARGPAYsBAwGMBIoBEYoBkQEDAf8DlgERnQEgAwHxA6IBEaIBhAEDAeQDkwF8kwGCAQMB4wOuARGuAWQDAdUDqQERqQFqAwHIA7UBEbUBsQEDAb8CuQEPvwEjAwG5A8IBD/MBGgMBzAKJAhGJAmgDAbMChAIRhAJ4AwGqApUCEZUCfQMBoAKQAhGQAm0DAZcCnAIRnAKQAQMBjQKjAg+uAxoCARu8ARW8AdwBAwG6A8MBEc4BGgMBngPPARHaARoDAYMD2wER5gEaAwHoAucBEfIBLAMBzQKmAj+mAkICARyoAhGzAiwDAfQBtAIRvwIuAwHbAcACEcsCLAMBwgHMAhGtAxYCAR3LARfLAbABAwGsA8YBF8YBkgEDAZ8D1wEX1wF7AwGRA9IBF9IBawMBhAPjARfjAXUDAfYC3gEX3gFrAwHpAu8BF+8BkQEDAdsC6gEX6gGtAgMBzgKwAhewApEBAwGBAqsCF6sCnwEDAfUBvAIXvAKGAQMB6AG3Ahe3AmYDAdwByAIXyAKRAQMBzwHDAhfDAp8BAwHDAc8CF88CbQIBHtMCFasDJwIBKtYCG9YCjAEDAbYB3QIZqQMkAgEr3gIb6QI2AwGbAeoCG/wCLAIBf/0CG6gDIAIBLOYCIeYCmwEDAakB4QIh4QK6AQMBnAHtAiH0AiADAY4B+QIh+QKcAQMBgQHqAowB6gKSAQMBgAGAAyGAA8sBAgEthAMfigMzAgFxjQMfpgMqAgE6hwMlhwODAgIBco4DIZkDKgIBVpoDIaUDPAIBO5YDJ5YDfQIBZJEDJ5EDgQECAVeiAyeiA6EBAgFJnQMnnQOLAgIBPA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXkQDxgMOAgEBSDNINgIBA0kzSTYCAQJOBVQgAwHyBFUFaiIDAc0EawV2DgMBugR3BfgBFwMB1AL5AQW9AwoCAQ++AwXEAyACAQRRC1GFAQMB9AROYE6AAQMB8wRnC2dXAwHpBF0LXVkDAeAEWAtYeAMB1wRiC2LYAQMBzgRzC3NeAwHEBG4LbmADAbsEegt6egMBsQSBAQn2ARQDAdUC/AEL/AFgAgEQgAIJuwMUAgEZwQMLwQOFAQIBBr4DYL4DgAECAQWHAQuSASYDAZYEkwELpQEcAwH6A6YBC7EBFAMB3wOyAQv1ARADAdYCgQILjAIqAwHBAo0CC5gCFAMBrgKZAgu6Ax0CARqPARGPAYsBAwGkBIoBEYoBkQEDAZcElgERnQEgAwGJBKIBEaIBhAEDAfwDkwF8kwGCAQMB+wOuARGuAWQDAe0DqQERqQFqAwHgA7UBEbUBsQEDAdcCuQEPvwEjAwHRA8IBD/MBGgMB5AKJAhGJAmgDAcsChAIRhAJ4AwHCApUCEZUCfQMBuAKQAhGQAm0DAa8CnAIRnAKQAQMBpQKjAg+4AxoCARu8ARW8AdwBAwHSA8MBEc4BGgMBtgPPARHaARoDAZsD2wER5gEaAwGAA+cBEfIBLAMB5QKmAj+mAkICARyoAhGzAiwDAYwCtAIRyQIuAwHbAcoCEdUCLAMBwgHWAhG3AxYCAR3LARfLAbABAwHEA8YBF8YBkgEDAbcD1wEX1wF7AwGpA9IBF9IBawMBnAPjARfjAXUDAY4D3gEX3gFrAwGBA+8BF+8BkQEDAfMC6gEX6gGtAgMB5gKwAhewApEBAwGZAqsCF6sCnwEDAY0CwQIXwQKGAQMBgALGAhfGAmMDAfQBvAIXvAJmAwHoAbcCF7cCZQMB3AHSAhfSApEBAwHPAc0CF80CnwEDAcMB2QIX2QJtAgEe3QIVtQMnAgEq4AIb4AKMAQMBtgHnAhmzAyQCASvoAhvzAjYDAZsB9AIbhgMsAgF/hwMbsgMgAgEs8AIh8AKbAQMBqQHrAiHrAroBAwGcAfcCIf4CIAMBjgGDAyGDA5wBAwGBAfQCjAH0ApIBAwGAAYoDIYoDywECAS2OAx+UAzMCAXGXAx+wAyoCATqRAyWRA4MCAgFymAMhowMqAgFWpAMhrwM8AgE7oAMnoAN9AgFkmwMnmwOBAQIBV6wDJ6wDoQECAUmnAyenA4sCAgE8</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

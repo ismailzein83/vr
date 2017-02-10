@@ -65,6 +65,10 @@ namespace Vanrise.Reprocess.Entities
         long ProcessInstanceId { get; }
 
         string CurrentStageName { get; }
+
+        DateTime StartDate { get; }
+
+        DateTime EndDate { get; }
     }
 
     public abstract class BatchRecord
