@@ -123,9 +123,6 @@
         function evaluate() {
             $scope.scopeModel.isLoading = true;
 
-            $scope.scopeModel.showPreview = true;
-            $scope.scopeModel.isApplyButtonDisabled = false;
-
             var promises = [];
             var bulkActionValidationResult;
             var invalidDataExists;
@@ -225,6 +222,15 @@
                 var gridLoadDeferred = UtilsService.createPromiseDeferred();
 
                 gridReadyDeferred.promise.then(function () {
+                    extendGridQuery();
+                    gridAPI.load(gridQuery).then(function () {
+                        gridLoadDeferred.resolve();
+                    }).catch(function (error) {
+                        gridLoadDeferred.reject(error);
+                    });
+                });
+
+                function extendGridQuery() {
                     gridQuery.BulkAction = bulkAction;
 
                     if (gridQuery.Filter == null)
@@ -233,12 +239,14 @@
                     gridQuery.Filter.ExcludedZoneIds = excludedZoneIds;
                     gridQuery.Filter.BulkActionFilter = bulkActionZoneFilter;
 
-                    gridAPI.load(gridQuery).then(function () {
-                        gridLoadDeferred.resolve();
-                    }).catch(function (error) {
-                        gridLoadDeferred.reject(error);
-                    });
-                });
+                    if (gridQuery.context == undefined) {
+                        gridQuery.context = {};
+                    }
+                    gridQuery.context.showBulkActionTabs = function (value) {
+                        $scope.scopeModel.showTabs = value;
+                        $scope.scopeModel.isApplyButtonDisabled = !value;
+                    };
+                }
 
                 return gridLoadDeferred.promise;
             }

@@ -13,27 +13,21 @@
                     </span>
                 </vr-columns>
             </vr-row>
-            <vr-tabs>
+            <vr-tabs ng-show="scopeModel.showTabs">
                 <vr-tab header="'Applicable Zones'">
-                    <div style="margin-top: 15px; height: 400px; max-height: 400px;">
-                        <vr-row>
-                            <vr-columns width="fullrow">
-                                <div ng-show="scopeModel.showPreview">
-                                    <vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>
-                                </div>
-                            </vr-columns>
-                        </vr-row>
-                    </div>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Invalid Zones'" ng-if="scopeModel.showInvalidTab">
-                    <div style="margin-top: 15px; height: 400px; max-height: 400px;">
-                        <vr-row>
-                            <vr-directivewrapper directive="scopeModel.validationDirectiveName"
-                                                 on-ready="scopeModel.onValidationDirectiveReady"
-                                                 normal-col-num="4">
-                            </vr-directivewrapper>
-                        </vr-row>
-                    </div>
+                    <vr-row>
+                        <vr-directivewrapper directive="scopeModel.validationDirectiveName"
+                                             on-ready="scopeModel.onValidationDirectiveReady"
+                                             normal-col-num="4">
+                        </vr-directivewrapper>
+                    </vr-row>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
