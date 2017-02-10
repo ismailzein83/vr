@@ -10,6 +10,6 @@ namespace Mediation.Generic.Entities
     public class OutputHandlerExecutionEntity
     {
         public MediationOutputHandlerDefinition OutputHandler { get; set; }
-        public BaseQueue<PreparedCdrBatch> InputQueue { get; set; }
+        public BaseQueue<PreparedRecordsBatch> InputQueue { get; set; }
     }
 }

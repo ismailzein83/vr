@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Mediation.Generic.Entities
 {
-    public class PreparedCdrBatch
+    public class PreparedRecordsBatch
     {
-        public List<dynamic> Cdrs { get; set; }
-        public PreparedCdrBatch()
+        public List<dynamic> BatchRecords { get; set; }
+        public PreparedRecordsBatch()
         {
-            this.Cdrs = new List<dynamic>();
+            this.BatchRecords = new List<dynamic>();
         }
     }
 }

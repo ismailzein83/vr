@@ -20,8 +20,7 @@ namespace Mediation.Generic.QueueActivators
 
         public override void ProcessItem(IQueueActivatorExecutionContext context)
         {
-            IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
-
+            MediationRecordsManager mediationRecordsManager = new MediationRecordsManager();
             MediationDefinitionManager mediationManager = new MediationDefinitionManager();
             MediationDefinition mediationDefinition = mediationManager.GetMediationDefinition(MediationDefinitionId);
             DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
@@ -30,35 +29,8 @@ namespace Mediation.Generic.QueueActivators
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
-
-            RecordFilterManager filterManager = new RecordFilterManager();
-
-            List<MediationRecord> mediationRecords = new List<MediationRecord>();
-            foreach (var batchRecord in batchRecords)
-            {
-                DataRecordFilterGenericFieldMatchContext dataRecordFilterContext = new DataRecordFilterGenericFieldMatchContext(batchRecord, recordTypeId);
-                MediationRecord mediationRecord = new MediationRecord();
-                mediationRecord.SessionId = GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.SessionIdField) as string;
-                mediationRecord.EventTime = (DateTime)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.EventTimeField);
-                foreach (var statusMapping in mediationDefinition.ParsedRecordIdentificationSetting.StatusMappings)
-                {
-                    if (filterManager.IsFilterGroupMatch(statusMapping.FilterGroup, dataRecordFilterContext))
-                    {
-                        mediationRecord.EventStatus = statusMapping.Status;
-                        break;
-                    }
-                }
-                mediationRecord.EventDetails = batchRecord;
-                mediationRecord.MediationDefinitionId = mediationDefinition.MediationDefinitionId;
-                mediationRecords.Add(mediationRecord);
-            }
-            dataManager.SaveMediationRecordsToDB(mediationRecords);
-        }
-
-        object GetPropertyValue(object batchRecord, string propertyName)
-        {
-            var reader = Vanrise.Common.Utilities.GetPropValueReader(propertyName);
-            return reader.GetPropertyValue(batchRecord);
+            List<MediationRecord> mediationRecords = mediationRecordsManager.GenerateMediationRecordsFromBatchRecords(mediationDefinition, recordTypeId, batchRecords);
+            mediationRecordsManager.SaveMediationRecordsToDB(mediationRecords);
         }
     }
 }

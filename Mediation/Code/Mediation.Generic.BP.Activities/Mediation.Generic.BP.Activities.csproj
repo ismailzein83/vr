@@ -86,7 +86,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyTransformationRecordsToDB.cs" />
     <Compile Include="DeleteProcessedMediationRecords.cs" />
     <Compile Include="ExecuteOutputHandler.cs" />
     <Compile Include="GetDataTransormationDefinition.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="GetMediationEventIds.cs" />
     <Compile Include="LoadMediationRecordsByIds.cs" />
     <Compile Include="LoadMediationRecordsByStatus.cs" />
-    <Compile Include="PrepareTransormationRecordsForDBApply.cs" />
     <Compile Include="ProcessMediationRecordsBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

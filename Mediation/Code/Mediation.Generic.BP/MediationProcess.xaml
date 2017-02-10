@@ -177,7 +177,7 @@
             <AddToCollection.Item>
               <InArgument x:TypeArguments="mge:OutputHandlerExecutionEntity">
                 <mca:CSharpValue x:TypeArguments="mge:OutputHandlerExecutionEntity" xml:space="preserve">new OutputHandlerExecutionEntity { 
-             InputQueue = new MemoryQueue&lt;PreparedCdrBatch&gt;(),
+             InputQueue = new MemoryQueue&lt;PreparedRecordsBatch&gt;(),
               OutputHandler = handler
             }</mca:CSharpValue>
               </InArgument>
@@ -198,9 +198,9 @@
           </Variable.Default>
         </Variable>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="processMediationRecordsStatus" />
-        <Variable x:TypeArguments="vq:BaseQueue(mge:PreparedCdrBatch)" Name="queuePreparedCdrBatch">
+        <Variable x:TypeArguments="vq:BaseQueue(mge:PreparedRecordsBatch)" Name="queuePreparedCdrBatch">
           <Variable.Default>
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(mge:PreparedCdrBatch)">new MemoryQueue&lt;PreparedCdrBatch&gt;()</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(mge:PreparedRecordsBatch)">new MemoryQueue&lt;PreparedRecordsBatch&gt;()</mca:CSharpValue>
           </Variable.Default>
         </Variable>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareTransormationRecordsStatus" />

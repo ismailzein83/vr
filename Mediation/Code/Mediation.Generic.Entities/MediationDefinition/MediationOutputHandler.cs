@@ -21,7 +21,7 @@ namespace Mediation.Generic.Entities
     {
         MediationDefinition MediationDefinition { get; }
 
-        BaseQueue<PreparedCdrBatch> InputQueue { get; }
+        BaseQueue<PreparedRecordsBatch> InputQueue { get; }
 
         void DoWhilePreviousRunning(Action actionToDo);
 

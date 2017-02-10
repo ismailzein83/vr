@@ -9,6 +9,6 @@ namespace Mediation.Generic.Entities
     public interface IMediationProcessContext
     {
         void DeleteSessionId(string sessionId);
-        string GetMultiLegSessionId(IEnumerable<string> legIds);
+        string GetMultiLegSessionId(params string[] legIds);
     }
 }

@@ -36,5 +36,36 @@ namespace Mediation.Generic.Business
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.SaveMediationRecordsToDB(mediationRecords);
         }
+        public List<MediationRecord> GenerateMediationRecordsFromBatchRecords(MediationDefinition mediationDefinition, Guid recordTypeId, List<dynamic> batchRecords)
+        {
+            List<MediationRecord> mediationRecords = new List<MediationRecord>();
+            foreach (var batchRecord in batchRecords)
+            {
+                if (batchRecord == null)
+                    continue;
+                DataRecordFilterGenericFieldMatchContext dataRecordFilterContext = new DataRecordFilterGenericFieldMatchContext(batchRecord, recordTypeId);
+                MediationRecord mediationRecord = new MediationRecord();
+                mediationRecord.SessionId = GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.SessionIdField) as string;
+                mediationRecord.EventTime = (DateTime)GetPropertyValue(batchRecord, mediationDefinition.ParsedRecordIdentificationSetting.EventTimeField);
+                foreach (var statusMapping in mediationDefinition.ParsedRecordIdentificationSetting.StatusMappings)
+                {
+                    RecordFilterManager filterManager = new RecordFilterManager();
+                    if (filterManager.IsFilterGroupMatch(statusMapping.FilterGroup, dataRecordFilterContext))
+                    {
+                        mediationRecord.EventStatus = statusMapping.Status;
+                        break;
+                    }
+                }
+                mediationRecord.EventDetails = batchRecord;
+                mediationRecord.MediationDefinitionId = mediationDefinition.MediationDefinitionId;
+                mediationRecords.Add(mediationRecord);
+            }
+            return mediationRecords;
+        }
+        object GetPropertyValue(object batchRecord, string propertyName)
+        {
+            var reader = Vanrise.Common.Utilities.GetPropValueReader(propertyName);
+            return reader.GetPropertyValue(batchRecord);
+        }
     }
 }

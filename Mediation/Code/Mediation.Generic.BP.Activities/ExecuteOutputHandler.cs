@@ -62,10 +62,10 @@ namespace Mediation.Generic.BP.Activities
             AsyncActivityStatus _previousActivityStatus;
             AsyncActivityHandle _handle;
             MediationDefinition _mediationDefinition;
-            BaseQueue<PreparedCdrBatch> _inputQueue;
+            BaseQueue<PreparedRecordsBatch> _inputQueue;
 
             public MediationOutputHandlerContext(ExecuteOutputHandler parentActivity, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle,
-                MediationDefinition mediationDefinition, BaseQueue<PreparedCdrBatch> inputQueue)
+                MediationDefinition mediationDefinition, BaseQueue<PreparedRecordsBatch> inputQueue)
             {
                 _parentActivity = parentActivity;
                 _previousActivityStatus = previousActivityStatus;
@@ -82,7 +82,7 @@ namespace Mediation.Generic.BP.Activities
                 }
             }
 
-            public BaseQueue<PreparedCdrBatch> InputQueue
+            public BaseQueue<PreparedRecordsBatch> InputQueue
             {
                 get { return _inputQueue; }
             }

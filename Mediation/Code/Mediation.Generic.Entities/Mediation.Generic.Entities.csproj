@@ -72,7 +72,7 @@
     <Compile Include="MediationDefinition\MediationOutputHandlerConfig.cs" />
     <Compile Include="MultiLegSessionIdEntity.cs" />
     <Compile Include="OutputHandlerExecutionEntity.cs" />
-    <Compile Include="PreparedCdrBatch.cs" />
+    <Compile Include="PreparedRecordsBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusMapping.cs" />
     <Compile Include="MediationRecords\MediationRecord.cs" />

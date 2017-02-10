@@ -39,7 +39,7 @@ namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
             {                
                 try
                 {
-                    context.PrepareDataForDBApply(recordStorageDataManager, context.InputQueue, queuePreparedBatchesForDBApply, CDRsBatch => CDRsBatch.Cdrs.Cast<Object>());
+                    context.PrepareDataForDBApply(recordStorageDataManager, context.InputQueue, queuePreparedBatchesForDBApply, CDRsBatch => CDRsBatch.BatchRecords.Cast<Object>());
                 }
                 finally
                 {

@@ -35,6 +35,7 @@ namespace Mediation.Generic.BP.Activities
 
         protected override void DoWork(ProcessMediationRecordsBatchInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            IMediationProcessContext mediationProcessContext = new MediationProcessContext(inputArgument.MediationDefinition.MediationDefinitionId);
             List<ProcessHandlerItem> processHandlers = new List<ProcessHandlerItem>();
             foreach (var outputHandler in inputArgument.OutputHandlerExecutionEntities)
             {
@@ -42,7 +43,7 @@ namespace Mediation.Generic.BP.Activities
                 {
                     RecordName = outputHandler.OutputHandler.OutputRecordName,
                     InputQueue = outputHandler.InputQueue,
-                    CdrBatch = new PreparedCdrBatch()
+                    CdrBatch = new PreparedRecordsBatch()
                 };
                 processHandlers.Add(item);
             }
@@ -58,6 +59,9 @@ namespace Mediation.Generic.BP.Activities
                     {
                         var transformationOutput = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.ParsedTransformationSettings.TransformationDefinitionId, (context) =>
                         {
+                            var contextRecordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == "context");
+                            if (contextRecordType != null)
+                                context.SetRecordValue("context", mediationProcessContext);
                             var details = mediationRecordBatch.MediationRecords.Select(m => m.EventDetails).ToList();
                             context.SetRecordValue(inputArgument.MediationDefinition.ParsedTransformationSettings.ParsedRecordName, details);
                         });
@@ -71,7 +75,7 @@ namespace Mediation.Generic.BP.Activities
 
                 foreach (var processHandler in processHandlers)
                 {
-                    if (processHandler.CdrBatch.Cdrs.Count > 0)
+                    if (processHandler.CdrBatch.BatchRecords.Count > 0)
                         processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
                 }
             });
@@ -82,14 +86,22 @@ namespace Mediation.Generic.BP.Activities
             var recordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == processHandler.RecordName);
             recordType.ThrowIfNull("recordType", "");
             if (recordType.IsArray)
-                processHandler.CdrBatch.Cdrs.AddRange(output.GetRecordValue(processHandler.RecordName) as List<dynamic>);
+            {
+                var records = output.GetRecordValue(processHandler.RecordName) as List<dynamic>;
+                if (records != null)
+                    processHandler.CdrBatch.BatchRecords.AddRange(records);
+            }
             else
-                processHandler.CdrBatch.Cdrs.Add(output.GetRecordValue(processHandler.RecordName));
+            {
+                dynamic record = output.GetRecordValue(processHandler.RecordName);
+                if(record !=null)
+                    processHandler.CdrBatch.BatchRecords.Add(record);
+            }
 
-            if (processHandler.CdrBatch.Cdrs.Count > 100)
+            if (processHandler.CdrBatch.BatchRecords.Count > 100)
             {
                 processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
-                processHandler.CdrBatch = new PreparedCdrBatch();
+                processHandler.CdrBatch = new PreparedRecordsBatch();
             }
         }
 
@@ -116,8 +128,8 @@ namespace Mediation.Generic.BP.Activities
 
     class ProcessHandlerItem
     {
-        public PreparedCdrBatch CdrBatch { get; set; }
-        public BaseQueue<PreparedCdrBatch> InputQueue { get; set; }
+        public PreparedRecordsBatch CdrBatch { get; set; }
+        public BaseQueue<PreparedRecordsBatch> InputQueue { get; set; }
         public string RecordName { get; set; }
     }
 }
