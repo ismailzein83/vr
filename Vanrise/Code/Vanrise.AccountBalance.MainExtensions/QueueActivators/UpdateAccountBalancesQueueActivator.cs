@@ -46,7 +46,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
                 {
                     UpdateUsageBalanceItem usageBalanceUpdate = new UpdateUsageBalanceItem();
                     usageBalanceUpdate.Value = amount.Value;
-                    usageBalanceUpdate.AccountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record);
+                    usageBalanceUpdate.AccountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record).ToString();
                     usageBalanceUpdate.EffectiveOn = Vanrise.Common.Utilities.GetPropValueReader(this.EffectiveOn).GetPropertyValue(record);
                     usageBalanceUpdate.CurrencyId = Vanrise.Common.Utilities.GetPropValueReader(this.CurrencyId).GetPropertyValue(record);
 
@@ -97,7 +97,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
                             if (amount.HasValue && amount.Value > 0)
                             {
-                                String accountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record);
+                                String accountId = Vanrise.Common.Utilities.GetPropValueReader(this.AccountId).GetPropertyValue(record).ToString();
                                 DateTime effectiveOn = Vanrise.Common.Utilities.GetPropValueReader(this.EffectiveOn).GetPropertyValue(record);
                                 int currencyId = Vanrise.Common.Utilities.GetPropValueReader(this.CurrencyId).GetPropertyValue(record);
                                 decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(amount.Value, currencyId, systemCurrencyId, effectiveOn);
