@@ -45,9 +45,9 @@ function (VRCommon_CompanySettingsAPIService, UtilsService, VRUIUtilsService) {
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Company Settings";
+        var label = "Company";
         if (attrs.ismultipleselection != undefined) {
-            label = "Company Settings";
+            label = "Company";
             multipleselection = "ismultipleselection";
         }
 
