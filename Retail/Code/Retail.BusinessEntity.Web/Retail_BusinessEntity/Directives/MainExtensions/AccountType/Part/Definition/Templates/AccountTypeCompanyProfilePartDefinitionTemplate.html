@@ -7,17 +7,15 @@
             <vr-button type="Add" data-onclick="scopeModel.addContactType" standalone></vr-button>
         </vr-columns>
         <vr-columns width="fullrow">
-            <vr-validator validate="scopeModel.validateContactTypes()">
-                <vr-datagrid datasource="scopeModel.contactTypes" norowhighlightonclick="true" enabledraggablerow="true"
-                             on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeContactType" hidegridmenu>
-                    <vr-datagridcolumn headertext="'Name'" disablesorting="true">
-                        <vr-textbox value="dataItem.Name" isrequired="true"></vr-textbox>
-                    </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Title'" disablesorting="true">
-                        <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
-                    </vr-datagridcolumn>
-                </vr-datagrid>
-            </vr-validator>
+            <vr-datagrid datasource="scopeModel.contactTypes" norowhighlightonclick="true" enabledraggablerow="true"
+                         on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeContactType" hidegridmenu>
+                <vr-datagridcolumn headertext="'Name'" disablesorting="true">
+                    <vr-textbox value="dataItem.Name" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Title'" disablesorting="true">
+                    <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
         </vr-columns>
     </vr-section>
 </vr-columns>

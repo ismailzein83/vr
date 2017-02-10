@@ -27,6 +27,7 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             var accountBEDefinitionId;
             var accountTypeId;
             var siteAccountTypeId;
+            var statusDefinitionId;
 
             var accountDefinitionSelectorApi;
             var accountDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -52,7 +53,6 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
             var companyExtendedInfoSelectorAPI;
             var companyExtendedInfoReadyDeferred = UtilsService.createPromiseDeferred();
-            
 
             $scope.scopeModel = {};
 
@@ -90,11 +90,12 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 orderDetailsDefinitionSelectorAPI = api;
                 orderDetailsDefinitionSelectorReadyDeferred.resolve();
             };
+
             $scope.scopeModel.onCompanyExtentedInfoSelectorReady = function (api) {
                 companyExtendedInfoSelectorAPI = api;
                 companyExtendedInfoReadyDeferred.resolve();
             };
-            
+
             $scope.scopeModel.onAccountDefinitionSelectionChanged = function (selectedItem) {
                 if (selectedItem != undefined && businessEntityDefinitionSelectionChangedDeferred == undefined) {
                     businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
@@ -102,11 +103,6 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
                     $scope.scopeModel.isAccountTypeSelectorLoading = true;
                     var promises = [];
-                    //var payload = {
-                    //    filter: {
-                    //        AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
-                    //    }
-                    //};
                     var siteAccountTypeSelectorPayload = {
                         filter: {
                             AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
@@ -120,8 +116,19 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         },
                         selectedIds: accountTypeId
                     };
+                    var statusSelectorPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
+                                AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
+
+                            }]
+                        },
+                        selectedIds: statusDefinitionId
+                    };
                     promises.push(loadAccountTypeSelector(accountTypeSelectorPayload));
                     promises.push(loadSiteAccountTypeSelector(siteAccountTypeSelectorPayload));
+                    promises.push(loadStatusDefinitionSelector(statusSelectorPayload));
 
                     UtilsService.waitMultiplePromises(promises).then(function () {
                         businessEntityDefinitionSelectionChangedDeferred = undefined;
@@ -135,7 +142,6 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 }
             };
 
-
             function initializeController() {
                 defineAPI();
             }
@@ -147,39 +153,53 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                     var promises = [];
                     var accountTypeSelectorPayload;
                     var siteAccountTypeSelectorPayload
-
+                    var statusDefinitionSelectorPayload;
 
                     promises.push(loadAccountDefinitionSelectorLoad());
-                    promises.push(loadStatusDefinitionSelector());
+                    //promises.push(loadStatusDefinitionSelector());
 
                     if (payload != undefined) {
                         accountTypeId = payload.AccountTypeId;
                         siteAccountTypeId = payload.SiteAccountTypeId;
-
+                        statusDefinitionId = payload.InitialStatusId;
                         accountBEDefinitionId = payload.AccountBEDefinitionId;
 
-                        var siteAccountTypeSelectorPayload = {
+                        siteAccountTypeSelectorPayload = {
                             filter: {
                                 AccountBEDefinitionId: accountBEDefinitionId
                             },
                             selectedIds: payload.SiteAccountTypeId
                         };
 
-                        var accountTypeSelectorPayload = {
+                        accountTypeSelectorPayload = {
                             filter: {
                                 AccountBEDefinitionId: accountBEDefinitionId
                             },
                             selectedIds: payload.AccountTypeId
                         };
+
+                        statusDefinitionSelectorPayload = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
+                                    AccountBEDefinitionId: payload.AccountBEDefinitionId
+
+                                }]
+                            },
+                            selectedIds: payload.InitialStatusId
+                        };
+
                         businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadAccountTypeSelector(accountTypeSelectorPayload));
                         promises.push(loadSiteAccountTypeSelector(siteAccountTypeSelectorPayload));
+                        promises.push(loadStatusDefinitionSelector(statusDefinitionSelectorPayload));
                     }
 
                     promises.push(loadCompanyProfileDefinitionSelector());
                     promises.push(loadFinancialDefinitionSelector());
                     promises.push(loadOrderDetailsDefinitionSelector());
                     promises.push(loadCompanyExtendedInfoDefinitionSelector());
+
                     function loadAccountDefinitionSelectorLoad() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -199,25 +219,6 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         });
 
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
-                    };
-
-                    function loadStatusDefinitionSelector() {
-                        var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                            var statusDefinitionSelectorPayload = {
-                                //filter: { EntityType: Retail_BE_EntityTypeEnum.Account.value },
-                                filter: {
-                                    Filters: [{
-                                        $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
-                                        AccountBEDefinitionId: payload != undefined ? payload.AccountBEDefinitionId : undefined
-
-                                    }]
-                                },
-                                selectedIds: payload != undefined ? payload.InitialStatusId : undefined
-                            };
-                            VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-                        });
-                        return statusDefinitionSelectorLoadDeferred.promise;
                     };
 
                     function loadCompanyProfileDefinitionSelector() {
@@ -279,7 +280,7 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                     });
                 };
 
-                
+
                 api.getData = function () {
                     var data = {
                         $type: "Retail.Zajil.MainExtensions.AccountConvertor, Retail.Zajil.MainExtensions",
@@ -322,12 +323,22 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 return accountTypeSelectorLoadDeferred.promise;
             }
 
+            function loadStatusDefinitionSelector(accountTypeSelectorPayload) {
+                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                UtilsService.waitMultiplePromises([statusDefinitionSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
+
+                    VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
+                });
+
+                return accountTypeSelectorLoadDeferred.promise;
+            }
+
             function getAccountPartDefinitionIds(id) {
                 var partDefinitionIds = [];
                 partDefinitionIds.push(id);
                 return partDefinitionIds;
             }
         }
-
         return directiveDefinitionObject;
     }]);

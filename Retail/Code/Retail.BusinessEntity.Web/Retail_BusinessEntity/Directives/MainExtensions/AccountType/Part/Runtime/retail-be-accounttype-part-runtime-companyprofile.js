@@ -88,8 +88,8 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                 $scope.scopeModel.disabledfax = true;
             };
 
-      
-           
+
+
             defineAPI();
         }
         function defineAPI() {
@@ -97,30 +97,28 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
 
             api.load = function (payload) {
                 mainPayload = payload;
-                if (payload != undefined)
-                {
-                    if (payload.partDefinition != undefined && payload.partDefinition.Settings !=undefined)
-                    {
+                if (payload != undefined) {
+                    if (payload.partDefinition != undefined && payload.partDefinition.Settings != undefined) {
                         $scope.scopeModel.contacts.length = 0;
                         $scope.scopeModel.showArabicName = payload.partDefinition.Settings.IncludeArabicName == true || false;
-                        for (var i = 0; i < payload.partDefinition.Settings.ContactTypes.length; i++) {
-                            var contactType = payload.partDefinition.Settings.ContactTypes[i];
-                            var settings;
-                            if(payload.partSettings !=undefined && payload.partSettings.Contacts !=undefined)
-                            {
-                                settings = payload.partSettings.Contacts[contactType.Name];
-                            }
-                            addContact(contactType, settings);
-                         
-                        }
-                        function addContact(contactType,settings)
-                        {
 
-                           var phoneNumbers = [];
-                           if (settings != undefined && settings.PhoneNumbers !=undefined)
-                            {
-                               for (var i = 0; i < settings.PhoneNumbers.length; i++) {
-                                   phoneNumbers.push(settings.PhoneNumbers[i]);
+                        if (payload.partDefinition.Settings.ContactTypes != undefined) {
+                            for (var i = 0; i < payload.partDefinition.Settings.ContactTypes.length; i++) {
+                                var contactType = payload.partDefinition.Settings.ContactTypes[i];
+                                var settings;
+                                if (payload.partSettings != undefined && payload.partSettings.Contacts != undefined) {
+                                    settings = payload.partSettings.Contacts[contactType.Name];
+                                }
+                                addContact(contactType, settings);
+
+                            }
+                        }
+                        function addContact(contactType, settings) {
+
+                            var phoneNumbers = [];
+                            if (settings != undefined && settings.PhoneNumbers != undefined) {
+                                for (var i = 0; i < settings.PhoneNumbers.length; i++) {
+                                    phoneNumbers.push(settings.PhoneNumbers[i]);
                                 }
                             }
                             var contact = {
@@ -131,17 +129,6 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                                 contactType: contactType.Name,
                                 disabledphone: true,
                                 phoneNumbers: settings != undefined ? phoneNumbers : []
-                                //,
-                                //addPhoneNumberOption: function () {
-                                //    contact.phoneNumbers.push({
-                                //        phoneNumber: contact.phoneNumberValue
-                                //    });
-                                //    contact.phoneNumberValue = undefined;
-                                //    contact.disabledphone = true;
-                                //},
-                                //onPhoneValueChange: function (value) {
-                                //    contact.disabledphone = (value == undefined);
-                                //}
                             };
                             $scope.scopeModel.contacts.push(contact);
                         }
@@ -157,8 +144,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                         $scope.scopeModel.address = payload.partSettings.Address;
 
                         $scope.scopeModel.phoneNumbers = [];
-                        if (payload.partSettings.PhoneNumbers != undefined)
-                        {
+                        if (payload.partSettings.PhoneNumbers != undefined) {
                             for (var i = 0; i < payload.partSettings.PhoneNumbers.length; i++) {
                                 $scope.scopeModel.phoneNumbers.push({
                                     phoneNumber: payload.partSettings.PhoneNumbers[i]
@@ -166,29 +152,26 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                             }
                         }
                         $scope.scopeModel.faxes = [];
-                        if (payload.partSettings.Faxes !=undefined)
-                        {
+                        if (payload.partSettings.Faxes != undefined) {
                             for (var j = 0; j < payload.partSettings.Faxes.length; j++) {
                                 $scope.scopeModel.faxes.push({
                                     fax: payload.partSettings.Faxes[j]
                                 });
                             }
                         }
-                      
+
                     }
                 }
-              
+
                 return loadCountryCitySection();
             };
 
             api.getData = function () {
                 var contacts = {};
-                if ($scope.scopeModel.contacts.length > 0)
-                {
-                    for(var i=0;i<$scope.scopeModel.contacts.length;i++)
-                    {
+                if ($scope.scopeModel.contacts.length > 0) {
+                    for (var i = 0; i < $scope.scopeModel.contacts.length; i++) {
                         var contact = $scope.scopeModel.contacts[i];
-                        var obj =  {
+                        var obj = {
                             ContactName: contact.name,
                             Title: contact.title,
                             Email: contact.email,
@@ -206,7 +189,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                     Town: $scope.scopeModel.town,
                     Street: $scope.scopeModel.street,
                     Website: $scope.scopeModel.website,
-                    POBox:$scope.scopeModel.poBox,
+                    POBox: $scope.scopeModel.poBox,
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModel.phoneNumbers, "phoneNumber"),
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModel.faxes, "fax"),
                     Contacts: contacts,

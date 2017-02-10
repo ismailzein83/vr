@@ -44,21 +44,6 @@ app.directive('retailBeAccounttypePartDefinitionCompanyprofile', [function () {
                 $scope.scopeModel.contactTypes.splice($scope.scopeModel.contactTypes.indexOf(contactTypeObj), 1);
             };
 
-            $scope.scopeModel.validateContactTypes = function () {
-                for (var i = 0; i < $scope.scopeModel.contactTypes.length; i++) {
-                    var contactType = $scope.scopeModel.contactTypes[i];
-                    for (var j = 0; j < $scope.scopeModel.contactTypes.length; j++) {
-                        var currentContactType = $scope.scopeModel.contactTypes[j];
-                        if (contactType.Name == currentContactType.Name && contactType.ContactId != currentContactType.ContactId)
-                            return "Contact types with same name exist.";
-                    }
-                }
-                if ($scope.scopeModel.contactTypes.length > 0)
-                    return null;
-
-                return "One contact type at least should be added.";
-
-            };
             defineAPI();
         }
         function defineAPI() {
@@ -67,7 +52,7 @@ app.directive('retailBeAccounttypePartDefinitionCompanyprofile', [function () {
             api.load = function (payload) {
                 if (payload != undefined) {
                     $scope.scopeModel.contactTypes.length = 0;
-                    if (payload.partDefinitionSettings != undefined && payload.partDefinitionSettings.ContactTypes) {
+                    if (payload.partDefinitionSettings != undefined && payload.partDefinitionSettings.ContactTypes != undefined) {
                         for (var i = 0; i < payload.partDefinitionSettings.ContactTypes.length; i++) {
                             var currentContactType = payload.partDefinitionSettings.ContactTypes[i];
                             currentContactType.ContactId = counter + 1;
@@ -86,11 +71,11 @@ app.directive('retailBeAccounttypePartDefinitionCompanyprofile', [function () {
                     contactTypes.push({
                         Name: contactType.Name,
                         Title: contactType.Title,
-                        });
+                    });
                 }
                 return {
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfileDefinition,Retail.BusinessEntity.MainExtensions',
-                    ContactTypes: contactTypes,
+                    ContactTypes: contactTypes.length > 0 ? contactTypes : undefined,
                     IncludeArabicName: $scope.scopeModel.includeArabicName
                 };
             };
