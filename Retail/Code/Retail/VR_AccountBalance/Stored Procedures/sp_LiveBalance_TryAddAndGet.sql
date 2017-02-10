@@ -8,7 +8,6 @@ CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]
 	@AccountTypeID uniqueidentifier,
 	@InitialBalance decimal(20,6),
 	@CurrencyId int,
-	@UsageBalance decimal(20,6),
 	@CurrentBalance decimal(20,6)
 	
 AS

@@ -18,7 +18,10 @@
     [TransferredCall_Id]   VARCHAR (100)   NULL,
     [OriginatorIP]         VARCHAR (50)    NULL,
     [TerminatorIP]         VARCHAR (50)    NULL,
-    [AttemptDateTime]      DATETIME        NULL);
+    [AttemptDateTime]      DATETIME        NULL,
+    [FileName]             VARCHAR (200)   NULL);
+
+
 
 
 
