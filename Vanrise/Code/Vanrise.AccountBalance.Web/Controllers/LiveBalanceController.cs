@@ -14,7 +14,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
     {
         [HttpGet]
         [Route("GetCurrentAccountBalance")]
-        public CurrentAccountBalance GetCurrentAccountBalance(long accountId, Guid accountTypeId)
+        public CurrentAccountBalance GetCurrentAccountBalance(String accountId, Guid accountTypeId)
         {
             LiveBalanceManager manager = new LiveBalanceManager();
             return manager.GetCurrentAccountBalance(accountTypeId, accountId);

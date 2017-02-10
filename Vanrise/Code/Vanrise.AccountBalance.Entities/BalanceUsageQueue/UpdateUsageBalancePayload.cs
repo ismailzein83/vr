@@ -22,7 +22,7 @@ namespace Vanrise.AccountBalance.Entities
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(UpdateUsageBalanceItem), "AccountId", "Value", "CurrencyId", "EffectiveOn");
         }
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
         public DateTime EffectiveOn { get; set; }
         public Decimal Value { get; set; }
         public int CurrencyId { get; set; }

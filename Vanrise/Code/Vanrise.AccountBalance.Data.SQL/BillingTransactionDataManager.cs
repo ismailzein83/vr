@@ -24,7 +24,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             string accountsIds = null;
             if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
-                accountsIds = string.Join<long>(",", query.AccountsIds);
+                accountsIds = string.Join<String>(",", query.AccountsIds);
 
             string transactionTypeIds = null;
             if (query.TransactionTypeIds != null && query.TransactionTypeIds.Count() > 0)
@@ -87,7 +87,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             return new BillingTransaction
             {
                 AccountBillingTransactionId = (long)reader["ID"],
-                AccountId = (long)reader["AccountID"],
+                AccountId = reader["AccountID"] as string,
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeId"),
                 Amount = GetReaderValue<Decimal>(reader, "Amount"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),

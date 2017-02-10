@@ -33,10 +33,10 @@ namespace Vanrise.AccountBalance.Entities
     }
     public interface IAccountContext
     {
-        long AccountId { get; }
+        String AccountId { get; }
     }
     public interface IAccountInfoContext
     {
-        long AccountId { get; }
+        String AccountId { get; }
     }
 }

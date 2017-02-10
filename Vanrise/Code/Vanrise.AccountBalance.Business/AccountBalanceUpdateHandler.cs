@@ -16,7 +16,7 @@ namespace Vanrise.AccountBalance.Business
 
         static ConcurrentDictionary<Guid, AccountBalanceUpdateHandler> _handlersByAccountTypeId = new ConcurrentDictionary<Guid, AccountBalanceUpdateHandler>();
 
-        Dictionary<long, LiveBalanceAccountInfo> AccountsInfo;
+        Dictionary<String, LiveBalanceAccountInfo> AccountsInfo;
         static Dictionary<DateTime, Dictionary<AccountTransaction, AccountUsageInfo>> AccountsUsageByPeriod;
         CurrencyExchangeRateManager currencyExchangeRateManager;
         AccountManager manager;
@@ -25,6 +25,7 @@ namespace Vanrise.AccountBalance.Business
         Guid _accountTypeId;
         AccountUsagePeriodSettings _accountUsagePeriodSettings;
         BillingTransactionTypeManager billingTransactionTypeManager;
+        AccountUsageManager accountUsageManager;
         #endregion
 
         #region ctor
@@ -36,6 +37,9 @@ namespace Vanrise.AccountBalance.Business
             manager = new AccountManager();
             _accountTypeId = accountTypeId;
             billingTransactionTypeManager = new BillingTransactionTypeManager();
+            accountUsageManager = new AccountUsageManager();
+
+
             IntializeAccountsInfo();
         }
 
@@ -159,7 +163,7 @@ namespace Vanrise.AccountBalance.Business
 
         private void IntializeAccountsInfo()
         {
-            AccountsInfo = new Dictionary<long, LiveBalanceAccountInfo>();
+            AccountsInfo = new Dictionary<String, LiveBalanceAccountInfo>();
             var accountBlances = liveBalanceDataManager.GetLiveBalanceAccountsInfo(_accountTypeId);
             AccountsInfo = accountBlances.ToDictionary(x => x.AccountId, x => x);
             AccountsUsageByPeriod = new Dictionary<DateTime, Dictionary<AccountTransaction, AccountUsageInfo>>();
@@ -167,19 +171,19 @@ namespace Vanrise.AccountBalance.Business
         }
 
         #region Live Balance
-        private LiveBalanceAccountInfo GetLiveBalanceInfo(long accountId)
+        private LiveBalanceAccountInfo GetLiveBalanceInfo(String accountId)
         {
             return AccountsInfo.GetOrCreateItem(accountId, () =>
             {
                 return AddLiveAccountInfo(accountId);
             });
         }
-        private LiveBalanceAccountInfo AddLiveAccountInfo(long accountId)
+        private LiveBalanceAccountInfo AddLiveAccountInfo(String accountId)
         {
             var account = manager.GetAccountInfo(_accountTypeId, accountId);
             return TryAddLiveBalanceAndGet(accountId, account.CurrencyId);
         }
-        private LiveBalanceAccountInfo TryAddLiveBalanceAndGet(long accountId, int currencyId)
+        private LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, int currencyId)
         {
             return liveBalanceDataManager.TryAddLiveBalanceAndGet(accountId, _accountTypeId, 0, currencyId, 0, 0);
 
@@ -209,7 +213,7 @@ namespace Vanrise.AccountBalance.Business
                 Value = value
             });
         }
-        private AccountUsageInfo GetAccountUsageInfo(Guid transactionTypeId, long accountId, DateTime periodStart, DateTime periodEnd, int currencyId)
+        private AccountUsageInfo GetAccountUsageInfo(Guid transactionTypeId, String accountId, DateTime periodStart, DateTime periodEnd, int currencyId)
         {
             var accountsUsageByPeriod = AccountsUsageByPeriod.GetOrCreateItem(periodStart, () =>
             {
@@ -222,11 +226,11 @@ namespace Vanrise.AccountBalance.Business
                 return AddAccountUsageInfo(transactionTypeId, accountId, periodStart, periodEnd, currencyId);
             });
         }
-        private AccountUsageInfo AddAccountUsageInfo(Guid transactionTypeId, long accountId, DateTime periodStart, DateTime periodEnd, int currencyId)
+        private AccountUsageInfo AddAccountUsageInfo(Guid transactionTypeId, String accountId, DateTime periodStart, DateTime periodEnd, int currencyId)
         {
             return TryAddAccountUsageAndGet(transactionTypeId, accountId, periodStart, periodEnd, currencyId);
         }
-        private AccountUsageInfo TryAddAccountUsageAndGet(Guid transactionTypeId, long accountId, DateTime periodStart, DateTime periodEnd, int currencyId)
+        private AccountUsageInfo TryAddAccountUsageAndGet(Guid transactionTypeId, String accountId, DateTime periodStart, DateTime periodEnd, int currencyId)
         {
             string billingTransactionNote = string.Format("Usage From {0:yyyy-MM-dd HH:mm} to {1:yyyy-MM-dd HH:mm}", periodStart, periodEnd);
             return accountUsageDataManager.TryAddAccountUsageAndGet(_accountTypeId, transactionTypeId, accountId, periodStart, periodEnd, currencyId, 0, billingTransactionNote);
@@ -240,11 +244,15 @@ namespace Vanrise.AccountBalance.Business
             });
             accountUsageToUpdate.Value += usageCurrencyId != liveBalanceCurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(value, usageCurrencyId, liveBalanceCurrencyId, effectiveOn) : value;
         }
-        #endregion
-        private IEnumerable<AccountUsage> GetAccountUsageForSpecificPeriodByAccountIds(Guid accountTypeId, Guid transactionTypeId, DateTime datePeriod, List<long> accountIds)
+        private IEnumerable<AccountUsage> GetAccountUsageForSpecificPeriodByAccountIds(Guid accountTypeId, Guid transactionTypeId, DateTime datePeriod, List<String> accountIds)
         {
-            return new AccountUsageManager().GetAccountUsageForSpecificPeriodByAccountIds(accountTypeId, transactionTypeId, datePeriod, accountIds);
+            return accountUsageManager.GetAccountUsageForSpecificPeriodByAccountIds(accountTypeId, transactionTypeId, datePeriod, accountIds);
         }
+        private List<AccountUsage> GetAccountUsageErrorData(Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
+        {
+            return accountUsageManager.GetAccountUsageErrorData(_accountTypeId, transactionTypeId, correctionProcessId, periodDate);
+        }
+        #endregion
         private decimal ConvertValueToCurrency(decimal amount, int fromCurrencyId, int currencyId, DateTime effectiveOn)
         {
             return currencyExchangeRateManager.ConvertValueToCurrency(amount, fromCurrencyId, currencyId, effectiveOn);
@@ -253,7 +261,7 @@ namespace Vanrise.AccountBalance.Business
         {
             return liveBalanceDataManager.UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalnacesToUpdate, accountsUsageToUpdate, correctionProcessId);
         }
-        private void CorrectLiveBalanceAndAccountUsage(List<LiveBalanceToUpdate> liveBalanceToUpdates, List<AccountUsageToUpdate> accountUsageToUpdates, long accountId, BillingTransactionType transactionType,decimal value,int currencyId, AccountUsage accountUsage, DateTime periodDate)
+        private void CorrectLiveBalanceAndAccountUsage(List<LiveBalanceToUpdate> liveBalanceToUpdates, List<AccountUsageToUpdate> accountUsageToUpdates, String accountId, BillingTransactionType transactionType, decimal value, int currencyId, AccountUsage accountUsage, DateTime periodDate)
         {
             var accountInfo = GetLiveBalanceInfo(accountId);
             var amount = ConvertValueToCurrency(value, currencyId, accountInfo.CurrencyId, periodDate);
@@ -279,17 +287,13 @@ namespace Vanrise.AccountBalance.Business
                 Value = transactionType != null && transactionType.IsCredit ? differenceAmount : -differenceAmount
             });
         }
-        private List<AccountUsage> GetAccountUsageErrorData(Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
-        {
-            AccountUsageManager manager = new AccountUsageManager();
-            return manager.GetAccountUsageErrorData(_accountTypeId, transactionTypeId,  correctionProcessId,  periodDate);
-        }
+    
         #endregion
        
     }
     public struct AccountTransaction
     {
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
         public Guid TransactionTypeId { get; set; }
     }
 }

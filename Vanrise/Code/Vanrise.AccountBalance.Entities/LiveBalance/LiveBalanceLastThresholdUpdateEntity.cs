@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Entities
     public class LiveBalanceLastThresholdUpdateEntity
     {
         public Guid AccountTypeId { get; set; }
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
         public decimal? LastExecutedActionThreshold { get; set; }
         public VRBalanceActiveAlertInfo ActiveAlertsInfo { get; set; }
     }

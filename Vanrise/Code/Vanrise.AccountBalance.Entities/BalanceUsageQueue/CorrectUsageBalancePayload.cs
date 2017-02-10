@@ -25,7 +25,7 @@ namespace Vanrise.AccountBalance.Entities
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CorrectUsageBalanceItem), "AccountId", "Value", "CurrencyId");
         }
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
         public Decimal Value { get; set; }
         public int CurrencyId { get; set; }
     }

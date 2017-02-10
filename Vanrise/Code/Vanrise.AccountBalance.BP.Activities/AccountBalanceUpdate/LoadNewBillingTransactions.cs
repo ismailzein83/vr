@@ -36,11 +36,11 @@ namespace Vanrise.AccountBalance.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading New Billing Transactions ...");
 
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
-            long accountId = -1;
+            String accountId = null;
             var list = new List<BillingTransaction>();
             dataManager.GetBillingTransactionsByBalanceUpdated(inputArgument.AccountTypeId, (billingTransaction) =>
             {
-                if (accountId == -1)
+                if (accountId == null)
                     accountId = billingTransaction.AccountId;
 
                 if (billingTransaction.AccountId != accountId)

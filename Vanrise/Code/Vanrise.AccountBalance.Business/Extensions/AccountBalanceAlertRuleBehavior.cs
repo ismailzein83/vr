@@ -21,7 +21,7 @@ namespace Vanrise.AccountBalance.Business.Extensions
         public override GenericData.Entities.GenericRuleTarget CreateRuleTarget(IVRBalanceAlertRuleCreateRuleTargetContext context)
         {
             var ruleTypeSettings = GetRuleTypeSettings(context);
-            long accountId = (context.EntityBalanceInfo as LiveBalance).AccountId;
+            String accountId = (context.EntityBalanceInfo as LiveBalance).AccountId;
             var accountManager = new AccountManager();
             var account = accountManager.GetAccount(ruleTypeSettings.AccountTypeId, accountId);
             GenericRuleTarget ruleTarget = new GenericRuleTarget

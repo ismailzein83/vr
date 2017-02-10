@@ -8,7 +8,7 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class AccountBalanceQuery
     {
-        public List<long> AccountsIds { get; set; }
+        public List<String> AccountsIds { get; set; }
         public Guid AccountTypeId { get; set; }
         public int Top { get; set; }
 

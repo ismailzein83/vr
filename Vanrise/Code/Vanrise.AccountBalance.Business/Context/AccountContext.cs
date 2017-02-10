@@ -9,6 +9,6 @@ namespace Vanrise.AccountBalance.Business
 {
     public class AccountContext : IAccountContext
     {
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
     }
 }

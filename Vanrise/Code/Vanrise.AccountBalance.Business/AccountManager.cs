@@ -11,7 +11,7 @@ namespace Vanrise.AccountBalance.Business
     {
         AccountTypeManager _accountTypeManager = new AccountTypeManager();
         GenericData.Business.BusinessEntityManager _businessEntityManager = new GenericData.Business.BusinessEntityManager();
-        public dynamic GetAccount(Guid accountTypeId, long accountId)
+        public dynamic GetAccount(Guid accountTypeId, String accountId)
         {
             var accountManager = _accountTypeManager.GetAccountManager(accountTypeId);
             AccountContext context = new AccountContext
@@ -20,7 +20,7 @@ namespace Vanrise.AccountBalance.Business
             };
             return accountManager.GetAccount(context);
         }
-        public AccountInfo GetAccountInfo(Guid accountTypeId, long accountId)
+        public AccountInfo GetAccountInfo(Guid accountTypeId, String accountId)
         {
            var accountManager = _accountTypeManager.GetAccountManager(accountTypeId);
            AccountInfoContext context = new AccountInfoContext

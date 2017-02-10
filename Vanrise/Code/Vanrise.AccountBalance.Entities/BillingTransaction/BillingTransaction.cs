@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Entities
     public class BillingTransaction
     {
         public long AccountBillingTransactionId { get; set; }
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
         public Guid AccountTypeId { get; set; }
         public Guid TransactionTypeId { get; set; }
         public Decimal Amount { get; set; }

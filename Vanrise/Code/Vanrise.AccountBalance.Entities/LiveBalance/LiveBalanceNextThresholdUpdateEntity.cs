@@ -9,7 +9,7 @@ namespace Vanrise.AccountBalance.Entities
     public class LiveBalanceNextThresholdUpdateEntity
     {
         public Guid AccountTypeId { get; set; }
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
         public decimal? NextAlertThreshold { get; set; }
         public long? AlertRuleId { get; set; }
         public int? ThresholdActionIndex { get; set; }

@@ -55,7 +55,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return new AlertRuleActionExecution
             {
-                AccountID = GetReaderValue<long>(reader, "AccountID"),
+                AccountID = GetReaderValue<String>(reader, "AccountID"),
                 ActionExecutionInfo = reader["ActionExecutionInfo"] != null ? Vanrise.Common.Serializer.Deserialize<ActionExecutionInfo>(reader["ActionExecutionInfo"] as string) : null,
                 AlertRuleActionExecutionId = (long)reader["ID"],
                 ExecutionTime = GetReaderValue<DateTime>(reader, "ExecutionTime"),

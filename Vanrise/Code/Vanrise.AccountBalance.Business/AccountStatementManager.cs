@@ -58,13 +58,13 @@ namespace Vanrise.AccountBalance.Business
                 };
                 return analyticBigResult;
             }
-            private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, long accountId, DateTime fromDate, int currencyId)
+            private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, String accountId, DateTime fromDate, int currencyId)
             {
                 CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
                 BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
                 BillingTransactionQuery billingTransactionQuery = new BillingTransactionQuery
                 {
-                    AccountsIds = new List<long> { accountId },
+                    AccountsIds = new List<String> { accountId },
                     AccountTypeId = accountTypeId,
                     FromTime = new DateTime(1980, 01, 01),
                 };
@@ -135,7 +135,7 @@ namespace Vanrise.AccountBalance.Business
                 return accountStatementItems;
 
             }
-            private AccountStatementItem GetPendingAcountUsages(Guid accountTypeId, long accountId,int currencyId)
+            private AccountStatementItem GetPendingAcountUsages(Guid accountTypeId, String accountId, int currencyId)
             {
                 AccountTypeManager accountTypeManager = new AccountTypeManager();
                 BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();

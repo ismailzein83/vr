@@ -8,7 +8,7 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class AccountBalanceForAlertRule
     {
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
         public decimal Threshold { get; set; }
         public int ThresholdActionIndex { get; set; }
         public int AlertRuleId { get; set; }

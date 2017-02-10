@@ -26,7 +26,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         #endregion
 
         #region Public Methods
-        public LiveBalance GetLiveBalance(Guid accountTypeId, long accountId)
+        public LiveBalance GetLiveBalance(Guid accountTypeId, String accountId)
         {
             return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_GetById]", LiveBalanceMapper, accountTypeId, accountId);
         }
@@ -177,7 +177,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                        });
         }
 
-        public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(long accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
+        public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal usageBalance, decimal currentBalance)
         {
             return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountId, accountTypeId, initialBalance, currencyId, usageBalance, currentBalance);
         }
@@ -226,7 +226,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             return new LiveBalance
             {
                 CurrentBalance = GetReaderValue<Decimal>(reader, "CurrentBalance"),
-                AccountId = (long)reader["AccountId"],
+                AccountId = reader["AccountId"] as string,
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeID"),
                 UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
@@ -244,7 +244,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             return new Vanrise.AccountBalance.Entities.AccountBalance
             {
                 AccountBalanceId = (long)reader["ID"],
-                AccountId = (long)reader["AccountId"],
+                AccountId = reader["AccountId"] as String,
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeID"),
                 CurrentBalance = GetReaderValue<Decimal>(reader, "CurrentBalance"),
                 UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
@@ -258,7 +258,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             return new LiveBalanceAccountInfo
             {
                 LiveBalanceId = (long)reader["ID"],
-                AccountId = (long)reader["AccountId"],
+                AccountId = reader["AccountId"] as String,
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
             };
         }
@@ -309,7 +309,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         private DataTable GetLiveBalanceThresholdTable()
         {
             DataTable dt = new DataTable(LiveBalance_TABLENAME);
-            dt.Columns.Add("AccountID", typeof(long));
+            dt.Columns.Add("AccountID", typeof(String));
             dt.Columns.Add("Threshold", typeof(decimal));
             dt.Columns.Add("ThresholdActionIndex", typeof(int));
             dt.Columns.Add("AlertRuleId", typeof(int));
@@ -323,7 +323,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         private DataTable GetAccountBalanceAlertRuleTable()
         {
             DataTable dt = new DataTable(LiveBalance_TABLENAME);
-            dt.Columns.Add("AccountID", typeof(long));
+            dt.Columns.Add("AccountID", typeof(String));
             dt.Columns.Add("AlertRuleId", typeof(decimal));
             return dt;
         }
@@ -343,7 +343,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("AccountTypeID", typeof(Guid));
-            dt.Columns.Add("AccountID", typeof(long));
+            dt.Columns.Add("AccountID", typeof(String));
             dt.Columns.Add("NextAlertThreshold", typeof(decimal));
             dt.Columns.Add("AlertRuleId", typeof(int));
             dt.Columns.Add("ThresholdActionIndex", typeof(int));
@@ -362,7 +362,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("AccountTypeID", typeof(Guid));
-            dt.Columns.Add("AccountID", typeof(long));
+            dt.Columns.Add("AccountID", typeof(String));
             dt.Columns.Add("LastExecutedActionThreshold", typeof(decimal));
             dt.Columns.Add("ActiveAlertsInfo", typeof(string));
             return dt;
@@ -373,7 +373,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             StringBuilder whereBuilder = new StringBuilder(@"lb.AccountTypeID = @AccountTypeID");
 
             if (query.AccountsIds!=null && query.AccountsIds.Count() > 0)
-                whereBuilder.Append(String.Format(@" AND lb.AccountID in ({0})", string.Join<long>(",", query.AccountsIds)));
+                whereBuilder.Append(String.Format(@" AND lb.AccountID in ({0})", string.Join<String>(",", query.AccountsIds)));
 
             if (query.Sign != null)
                 whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign , query.Balance));

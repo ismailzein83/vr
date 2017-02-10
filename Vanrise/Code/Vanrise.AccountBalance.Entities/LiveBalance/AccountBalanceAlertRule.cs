@@ -8,7 +8,7 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class AccountBalanceAlertRule
     {
-        public long AccountId { get; set; }
+        public String AccountId { get; set; }
         public long AlertRuleId { get; set; }
     }
 }

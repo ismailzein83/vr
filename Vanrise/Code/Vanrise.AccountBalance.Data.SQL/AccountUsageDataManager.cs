@@ -28,7 +28,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByPeriod]", AccountUsageInfoMapper, accountTypeId, periodStart, transactionTypeId);
         }
-        public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, Guid transactionTypeId, long accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance, string billingTransactionNote)
+        public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, Guid transactionTypeId, String accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance, string billingTransactionNote)
         {
             return GetItemSP("[VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]", AccountUsageInfoMapper, accountTypeId,transactionTypeId, accountId, periodStart, periodEnd, currencyId, usageBalance, billingTransactionNote);
         }
@@ -59,16 +59,16 @@ namespace Vanrise.AccountBalance.Data.SQL
               
             return true;
         }
-        public IEnumerable<AccountUsage> GetPendingAccountUsages(Guid accountTypeId, long accountId)
+        public IEnumerable<AccountUsage> GetPendingAccountUsages(Guid accountTypeId, String accountId)
         {
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetAccountPendingUsage]", AccountUsageMapper, accountTypeId, accountId);
         }
-        public IEnumerable<AccountUsage> GetAccountUsageForSpecificPeriodByAccountIds(Guid accountTypeId, Guid transactionTypeId, DateTime datePeriod, List<long> accountIds)
+        public IEnumerable<AccountUsage> GetAccountUsageForSpecificPeriodByAccountIds(Guid accountTypeId, Guid transactionTypeId, DateTime datePeriod, List<String> accountIds)
         {
             string accountIdsString = null;
             if (accountIds != null)
             {
-                accountIdsString = string.Join<long>(",", accountIds);
+                accountIdsString = string.Join<String>(",", accountIds);
             }
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAccountIds]", AccountUsageMapper, accountTypeId, transactionTypeId, datePeriod, accountIdsString);
         }
@@ -98,7 +98,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             return new AccountUsage
             {
                 AccountUsageId = GetReaderValue<long>(reader, "ID"),
-                AccountId = (long)reader["AccountId"],
+                AccountId = reader["AccountId"] as string,
                 TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeId"),
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeId"),
                 BillingTransactionId = GetReaderValue<long?>(reader, "BillingTransactionId"),
@@ -114,7 +114,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return new AccountUsageInfo
             {
-                AccountId = (long)reader["AccountId"],
+                AccountId = reader["AccountId"] as string,
                 AccountUsageId = GetReaderValue<long>(reader, "ID"),
                 TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeId"),
             };
