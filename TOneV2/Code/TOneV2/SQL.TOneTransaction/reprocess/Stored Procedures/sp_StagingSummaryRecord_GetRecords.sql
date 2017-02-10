@@ -6,7 +6,7 @@ CREATE PROCEDURE [reprocess].[sp_StagingSummaryRecord_GetRecords]
 
 AS
 BEGIN
-	SELECT [ProcessInstanceId], [StageName], [BatchStart], [Data]
+	SELECT [ProcessInstanceId], [StageName], [BatchStart], [BatchEnd],AlreadyFinalised, [Data]
     from reprocess.StagingSummaryRecord with(nolock)
     where ProcessInstanceId = @ProcessInstanceId and StageName = @StageName and BatchStart = @BatchStart
 END

@@ -5,8 +5,9 @@ CREATE PROCEDURE [reprocess].[sp_StagingSummaryRecord_GetStageRecordInfo]
 
 AS
 BEGIN
-	SELECT distinct BatchStart
+	SELECT BatchStart, BatchEnd,AlreadyFinalised
     from reprocess.StagingSummaryRecord with(nolock)
     where ProcessInstanceId = @ProcessInstanceId and StageName = @StageName
+	group by BatchStart, BatchEnd,AlreadyFinalised
     order by BatchStart
 END

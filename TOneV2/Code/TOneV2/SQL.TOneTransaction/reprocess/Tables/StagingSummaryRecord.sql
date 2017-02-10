@@ -2,9 +2,13 @@
     [ProcessInstanceId] BIGINT         NOT NULL,
     [StageName]         NVARCHAR (255) NOT NULL,
     [BatchStart]        DATETIME       NOT NULL,
-    [Data]              VARCHAR (MAX)  NOT NULL,
+    [BatchEnd]          DATETIME       NOT NULL,
+    [Data]              VARCHAR (MAX)  NULL,
+    [AlreadyFinalised]  BIT            NOT NULL,
     [CreatedTime]       DATETIME       CONSTRAINT [DF_StagingSummaryRecord_CreatedTime] DEFAULT (getdate()) NOT NULL
 );
+
+
 
 
 
