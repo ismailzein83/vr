@@ -13,5 +13,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int SupplierId { get; set; }
 
         public List<int> ZoneIds { get; set; }
+        public bool ShowPending { get; set; }
     }
 }

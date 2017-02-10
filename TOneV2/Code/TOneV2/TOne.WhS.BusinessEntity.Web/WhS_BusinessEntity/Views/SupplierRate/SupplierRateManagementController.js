@@ -27,6 +27,10 @@
                 supplierZoneReadyPromiseDeferred.resolve();
             };
 
+            $scope.resetDate = function () {
+                if ($scope.IsPending)
+                    $scope.effectiveOn = new Date();
+            };
             $scope.onSelectSupplier = function (selectedItem) {
                 $scope.showSupplierZoneSelector = true;
                 $scope.selectedSupplierZones.length = 0;
@@ -86,7 +90,8 @@
             filter = {
                 SupplierId: supplierDirectiveApi.getSelectedIds(),
                 EffectiveOn: $scope.effectiveOn,
-                ZoneIds: supplierZoneDirectiveAPI.getSelectedIds()
+                ZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
+                ShowPending: $scope.IsPending
             };
         }
 

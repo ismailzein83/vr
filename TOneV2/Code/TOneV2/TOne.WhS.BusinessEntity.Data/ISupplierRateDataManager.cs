@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
 
         IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery input);
+        IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery input);
 
         List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate);
 

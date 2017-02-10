@@ -70,6 +70,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetFiltered]", SupplierRateMapper, query.SupplierId, zonesids, query.EffectiveOn);
         }
+        public IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery query)
+        {
+            string zonesids = null;
+            if (query.ZoneIds != null && query.ZoneIds.Any())
+                zonesids = string.Join(",", query.ZoneIds);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetPending]", SupplierRateMapper, query.SupplierId, zonesids, query.EffectiveOn);
+        }
+        
 
         #endregion
 

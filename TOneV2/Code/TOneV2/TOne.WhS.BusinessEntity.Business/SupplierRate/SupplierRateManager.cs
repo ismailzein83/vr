@@ -171,7 +171,9 @@ namespace TOne.WhS.BusinessEntity.Business
             public override IEnumerable<SupplierRate> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
             {
                 ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-                return dataManager.GetFilteredSupplierRates(input.Query);
+                return !input.Query.ShowPending
+                    ? dataManager.GetFilteredSupplierRates(input.Query)
+                    : dataManager.GetFilteredSupplierPendingRates(input.Query);
             }
         }
 
