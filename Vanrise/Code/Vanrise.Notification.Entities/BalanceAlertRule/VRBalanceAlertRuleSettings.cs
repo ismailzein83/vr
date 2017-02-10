@@ -14,7 +14,7 @@ namespace Vanrise.Notification.Entities
     public class VRBalanceAlertThresholdAction
     {
         public Guid AlertLevelId { get; set; }
-
+        public string  ThresholdDescription { get; set; }
         public VRBalanceAlertThreshold Threshold { get; set; }
 
         public List<VRAction> Actions { get; set; }

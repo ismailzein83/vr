@@ -129,10 +129,12 @@
         }
 
         function buildBalanceAlertThresholdObjFromScope() {
+            var threshold = balanceAlertThresholdAPI.getData();
             var obj = {
-                Threshold: balanceAlertThresholdAPI.getData(),
+                Threshold: threshold,
                 Actions: vRActionManagementAPI.getData(),
-                RollbackActions: rollBackVRActionManagementAPI.getData()
+                RollbackActions: rollBackVRActionManagementAPI.getData(),
+                ThresholdDescription: threshold.ThresholdDescription
             };
             return obj;
         }

@@ -108,7 +108,7 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                     return {
                         $type: "Vanrise.Notification.Entities.VRBalanceAlertRuleSettings,Vanrise.Notification.Entities",
                         Criteria: criteriaDirectiveAPI.getData(),
-                        ThresholdActions: vrAlertRuleSettingsDirectiveAPI.getData()
+                        ThresholdActions: vrAlertRuleSettingsDirectiveAPI.getData(),
                     };
                 };
 

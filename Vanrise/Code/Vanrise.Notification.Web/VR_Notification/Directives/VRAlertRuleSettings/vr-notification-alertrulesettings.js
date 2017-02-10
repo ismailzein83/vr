@@ -42,10 +42,6 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
             ctrl.addThresholdAction = function () {
                 var onAlertRuleSettingsAdded = function (balanceAlertThreshold) {
                     balanceAlertThreshold.ActionNames = getActionNames(balanceAlertThreshold.Actions);
-                    var threshold = UtilsService.getItemByVal(balanceAlertThresholdConfigs, balanceAlertThreshold.Threshold.ConfigId, "ExtensionConfigurationId");
-                    if (threshold != undefined) {
-                        balanceAlertThreshold.ThresholdType = threshold.Title;
-                    }
                     balanceAlertThreshold.RollbackActionNames = getActionNames(balanceAlertThreshold.RollbackActions);
                     ctrl.datasource.push({ Entity: balanceAlertThreshold });
                 };
@@ -80,28 +76,21 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
                         actionExtensionType = payload.alertTypeSettings.VRActionExtensionType;
                         thresholdExtensionType = payload.alertTypeSettings.ThresholdExtensionType;
                         context = payload.context;
-                        return getVRBalanceAlertThresholdConfigs().then(function () {
-                            if (payload.settings != undefined) {
-                                if (payload.settings.ThresholdActions != undefined) {
-                                    for (var i = 0; i < payload.settings.ThresholdActions.length; i++) {
-                                        var thresholdAction = payload.settings.ThresholdActions[i];
-                                        var threshold = UtilsService.getItemByVal(balanceAlertThresholdConfigs, thresholdAction.Threshold.ConfigId, "ExtensionConfigurationId");
-                                        if (threshold != undefined)
-                                        {
-                                            thresholdAction.ThresholdType = threshold.Title;
-                                        }
-                                        if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0) {
-                                            thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
-                                        }
-                                        if (thresholdAction.RollbackActions != undefined && thresholdAction.RollbackActions.length > 0) {
-                                            thresholdAction.RollbackActionNames = getActionNames(thresholdAction.RollbackActions);
-                                        }
-                                        ctrl.datasource.push({ Entity: thresholdAction });
+                        if (payload.settings != undefined) {
+                            if (payload.settings.ThresholdActions != undefined) {
+                                for (var i = 0; i < payload.settings.ThresholdActions.length; i++) {
+                                    var thresholdAction = payload.settings.ThresholdActions[i];
+                                    if (thresholdAction.Actions != undefined && thresholdAction.Actions.length > 0) {
+                                        thresholdAction.ActionNames = getActionNames(thresholdAction.Actions);
                                     }
+                                    if (thresholdAction.RollbackActions != undefined && thresholdAction.RollbackActions.length > 0) {
+                                        thresholdAction.RollbackActionNames = getActionNames(thresholdAction.RollbackActions);
+                                    }
+                                    ctrl.datasource.push({ Entity: thresholdAction });
                                 }
                             }
+                        }
 
-                        });
                     }
                 }
 
@@ -141,10 +130,6 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
             var onThresholdActionUpdated = function (thresholdActionObj) {
                 thresholdActionObj.ActionNames = getActionNames(thresholdActionObj.Actions);
                 thresholdActionObj.RollbackActionNames = getActionNames(thresholdActionObj.RollbackActions);
-                var threshold = UtilsService.getItemByVal(balanceAlertThresholdConfigs, thresholdActionObj.Threshold.ConfigId, "ExtensionConfigurationId");
-                if (threshold != undefined) {
-                    thresholdActionObj.ThresholdType = threshold.Title;
-                }
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
             };
             VR_Notification_AlertRuleSettingsService.editAlertRuleThreshold(dataItem.Entity, onThresholdActionUpdated, actionExtensionType, thresholdExtensionType, getContext());
