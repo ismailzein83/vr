@@ -3,14 +3,15 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Entity.SupplierRateId">
+             idfield="Entity.SupplierRateId"
+             showexpand="isExpandable">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.SupplierRateId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Normal Rate'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Begin Effective Date'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'End Effective Date'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridexpandablerow>
+    <vr-datagridexpandablerow >
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
 </vr-datagrid>

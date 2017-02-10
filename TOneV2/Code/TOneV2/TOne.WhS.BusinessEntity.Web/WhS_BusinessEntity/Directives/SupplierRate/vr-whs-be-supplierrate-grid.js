@@ -28,10 +28,12 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
         var gridAPI;
         var drillDownManager;
         var effectiveOn;
+        var supplierId;
+        var isExpandable;
         this.initializeController = initializeController;
 
         function initializeController() {
-           
+
             $scope.supplierrates = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -40,15 +42,20 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
-                   
+
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                        isExpandable = query.IsChild;
                         effectiveOn = query.EffectiveOn;
+                        supplierId = query.SupplierId;
                         return gridAPI.retrieveData(query);
                     };
-                   
+
                     return directiveAPI;
                 }
+            };
+            $scope.isExpandable = function () {
+                return !isExpandable;
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SupplierRateAPIService.GetFilteredSupplierRates(dataRetrievalInput)
@@ -58,7 +65,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                                 drillDownManager.setDrillDownExtensionObject(response.Data[i]);
 
                         }
-                         onResponseReady(response);
+                        onResponseReady(response);
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
@@ -98,6 +105,22 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
             };
 
             directiveTabs.push(otherRatesTab);
+
+            var pendingRatesTab = {
+                title: "History",
+                directive: "vr-whs-be-supplierrate-grid",
+                loadDirective: function (directiveApi, rateDataItem) {
+                    rateDataItem.pendingRateGridAPI = directiveApi;
+                    var pendingRateGridPayload = {
+                        SupplierZoneName: rateDataItem.SupplierZoneName,
+                        SupplierId: supplierId,
+                        IsChild: true
+                    };
+                    return rateDataItem.pendingRateGridAPI.loadGrid(pendingRateGridPayload);
+                }
+            };
+
+            directiveTabs.push(pendingRatesTab);
 
             return directiveTabs;
         }

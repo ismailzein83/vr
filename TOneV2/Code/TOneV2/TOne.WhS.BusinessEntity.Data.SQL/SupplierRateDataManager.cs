@@ -77,7 +77,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 zonesids = string.Join(",", query.ZoneIds);
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetPending]", SupplierRateMapper, query.SupplierId, zonesids, query.EffectiveOn);
         }
-        
+
+        public IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds, int supplierId)
+        {
+            string zoneIdsStr = "";
+            if (zoneIds != null && zoneIds.Any())
+                zoneIdsStr = string.Join(",", zoneIds);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetZoneHistory]", SupplierRateMapper, supplierId,
+                zoneIdsStr);
+        }
 
         #endregion
 
@@ -131,6 +139,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
 
         #endregion
+
 
     }
 }

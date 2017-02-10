@@ -14,5 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<int> ZoneIds { get; set; }
         public bool ShowPending { get; set; }
+        public string SupplierZoneName { get; set; }
+        public bool IsChild { get; set; }
     }
 }
