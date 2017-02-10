@@ -50,7 +50,8 @@ app.directive('retailBeBalancealertruleThresholdPercentage', ['UtilsService',
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule.PercentageBalanceAlertThreshold, Retail.BusinessEntity.MainExtensions",
-                        Percentage: $scope.scopeModel.percentage
+                        Percentage: $scope.scopeModel.percentage,
+                        ThresholdDescription: $scope.scopeModel.percentage + " %"
                     };
                 };
 

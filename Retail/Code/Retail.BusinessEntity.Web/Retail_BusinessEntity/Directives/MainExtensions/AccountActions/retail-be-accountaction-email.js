@@ -75,10 +75,9 @@ app.directive('retailBeAccountactionEmail', ['UtilsService', 'VRUIUtilsService',
                 };
 
                 api.getData = function () {
-
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.AccountActions.SendEmailAction, Retail.BusinessEntity.MainExtensions",
-                        ActionName: "Email",
+                        ActionName: "Email (" + $scope.scopeModel.selectedEmailTemplate.Name + " )",
                         MailMessageTemplateId: mailTemplateSelectorReadyAPI.getSelectedIds()
                     };
                 };

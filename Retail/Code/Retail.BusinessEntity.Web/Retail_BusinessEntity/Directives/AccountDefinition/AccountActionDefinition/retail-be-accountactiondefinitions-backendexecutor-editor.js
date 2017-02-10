@@ -131,7 +131,12 @@ app.directive('retailBeAccountactiondefinitionsBackendexecutorEditor', ['UtilsSe
                 api.getData = function () {
                     var actionBPSettings =  backendExecutorSettingEditorAPI.getData();
                     if (actionBPSettings != undefined)
+                    {
                         actionBPSettings.ActionDefinitionId = accountActionDefinitionAPI.getSelectedIds();
+                        actionBPSettings.ActionName = "Account Action (" +  $scope.scopeModel.selectedAccountActionDefinition.Name +" )";
+                    }
+                      
+
                     return actionBPSettings;
                 };
 

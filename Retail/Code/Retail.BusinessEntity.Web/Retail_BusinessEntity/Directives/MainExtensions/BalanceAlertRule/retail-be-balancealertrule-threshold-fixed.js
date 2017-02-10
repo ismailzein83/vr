@@ -50,7 +50,8 @@ app.directive('retailBeBalancealertruleThresholdFixed', ['UtilsService',
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule.FixedBalanceAlertThreshold, Retail.BusinessEntity.MainExtensions",
-                        Threshold: $scope.scopeModel.threshold
+                        Threshold: $scope.scopeModel.threshold,
+                        ThresholdDescription: $scope.scopeModel.threshold
                     };
                 };
 
