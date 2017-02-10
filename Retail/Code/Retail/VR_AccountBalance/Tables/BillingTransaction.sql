@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [VR_AccountBalance].[BillingTransaction] (
     [ID]                BIGINT           IDENTITY (1, 1) NOT NULL,
     [AccountTypeID]     UNIQUEIDENTIFIER NOT NULL,
-    [AccountID]         BIGINT           NOT NULL,
+    [AccountID]         VARCHAR (50)     NOT NULL,
     [TransactionTypeID] UNIQUEIDENTIFIER NOT NULL,
     [Amount]            DECIMAL (20, 6)  NOT NULL,
     [CurrencyId]        INT              NOT NULL,
@@ -15,6 +15,8 @@
     [IsDeleted]         BIT              NULL,
     CONSTRAINT [PK_BillingTransaction] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[sp_AccountUsage_GetAccountPendingUsage]
 	@AccountTypeID uniqueidentifier,
-	@AccountId bigint
+	@AccountId varchar(50)
 AS
 BEGIN
 	SELECT ID, AccountTypeID,TransactionTypeID, AccountID,CurrencyId,PeriodStart,PeriodEnd,UsageBalance,BillingTransactionNote,BillingTransactionID,ShouldRecreateTransaction

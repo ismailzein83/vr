@@ -6,7 +6,6 @@ BEGIN
 
 	UPDATE [VR_AccountBalance].LiveBalance
 	SET 
-	[VR_AccountBalance].LiveBalance.UsageBalance += lbt.UpdateValue, 
 	[VR_AccountBalance].LiveBalance.CurrentBalance += lbt.UpdateValue
 	FROM [VR_AccountBalance].LiveBalance 
 	inner join @LiveBalanceTable as lbt ON  LiveBalance.AccountID = lbt.AccountID

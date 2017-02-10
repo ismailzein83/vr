@@ -6,7 +6,7 @@
 CREATE PROCEDURE [VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]
 	@AccountTypeID uniqueidentifier,
 	@TransactionTypeID uniqueidentifier,
-	@AccountID bigint,
+	@AccountID varchar(50),
 	@PeriodStart datetime,
 	@PeriodEnd datetime,
 	@CurrencyId int,

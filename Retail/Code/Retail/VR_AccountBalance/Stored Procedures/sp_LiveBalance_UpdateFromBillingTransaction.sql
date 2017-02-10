@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_UpdateFromBillingTransaction]
 	@AccountTypeId uniqueidentifier,
-	@AccountId bigint,
+	@AccountId varchar(50),
 	@Amount decimal(20,6)
 AS
 BEGIN

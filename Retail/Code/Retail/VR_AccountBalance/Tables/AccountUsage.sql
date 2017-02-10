@@ -2,7 +2,7 @@
     [ID]                        BIGINT           IDENTITY (1, 1) NOT NULL,
     [AccountTypeID]             UNIQUEIDENTIFIER NOT NULL,
     [TransactionTypeID]         UNIQUEIDENTIFIER NOT NULL,
-    [AccountID]                 BIGINT           NOT NULL,
+    [AccountID]                 VARCHAR (50)     NOT NULL,
     [CurrencyId]                INT              NOT NULL,
     [PeriodStart]               DATETIME         NOT NULL,
     [PeriodEnd]                 DATETIME         NOT NULL,
@@ -15,6 +15,8 @@
     [timestamp]                 ROWVERSION       NULL,
     CONSTRAINT [PK_AccountUsage] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -12,7 +12,7 @@ BEGIN
   SET @BeforeDate =  DATEADD(SECOND, -@TimeOffset,GETDATE())
 
   DECLARE @AccountUsageId bigint,
-          @AccountID bigint,
+          @AccountID varchar(50),
           @TransactionTypeID uniqueidentifier,
           @ExistingBillingTransactionId bigint,
           @PeriodStart datetime,

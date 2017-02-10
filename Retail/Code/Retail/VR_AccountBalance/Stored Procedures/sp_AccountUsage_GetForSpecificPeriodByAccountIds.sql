@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAccountIds]
+CREATE PROCEDURE [VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAccountIds]
 	@AccountTypeID uniqueidentifier,
 	@TransactionTypeId uniqueidentifier,
 	@DatePeriod Datetime,
@@ -11,9 +11,9 @@ create PROCEDURE [VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAcco
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE @AccountIdsTable TABLE (AccountId bigint)
+	DECLARE @AccountIdsTable TABLE (AccountId varchar(50))
 	INSERT INTO @AccountIdsTable (AccountId)
-	SELECT CONVERT(INT, ParsedString) FROM [VR_AccountBalance].[ParseStringList](@AccountIds)
+	SELECT ParsedString FROM [VR_AccountBalance].[ParseStringList](@AccountIds)
 
 	SELECT  au.ID,
 			au.AccountTypeID,

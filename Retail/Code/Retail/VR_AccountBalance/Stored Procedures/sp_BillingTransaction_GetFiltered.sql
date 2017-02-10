@@ -11,9 +11,9 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	    BEGIN
-	    DECLARE @AccountsIdsTable TABLE (AccountID int)
+	    DECLARE @AccountsIdsTable TABLE (AccountID varchar(50))
 		INSERT INTO @AccountsIdsTable (AccountID)
-		select Convert(int, ParsedString) from [VR_AccountBalance].[ParseStringList](@AccountsIds)
+		select ParsedString from [VR_AccountBalance].[ParseStringList](@AccountsIds)
 
 		 DECLARE @TransactionTypeIdsTable TABLE (TransactionTypeID uniqueidentifier)
 		INSERT INTO @TransactionTypeIdsTable (TransactionTypeID)

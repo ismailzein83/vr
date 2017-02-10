@@ -10,11 +10,9 @@ BEGIN
 			,[AccountTypeID] 
 			,[CurrencyID]
 			,[InitialBalance]
-			,[UsageBalance]
 			,[CurrentBalance]
 			,[NextAlertThreshold]
 			,[AlertRuleID]
-			,ThresholdActionIndex
 			,LastExecutedActionThreshold
 			,ActiveAlertsInfo
 	FROM	VR_AccountBalance.LiveBalance  with(nolock)

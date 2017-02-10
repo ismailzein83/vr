@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_Insert]
-	@AccountID INT,
+	@AccountID varchar(50),
 	@AccountTypeID uniqueidentifier,
 	@Amount decimal(20,6),
 	@CurrencyId int,
