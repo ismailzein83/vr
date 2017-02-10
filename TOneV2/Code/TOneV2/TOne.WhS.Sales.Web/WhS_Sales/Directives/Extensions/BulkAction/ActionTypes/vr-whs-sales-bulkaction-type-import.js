@@ -32,6 +32,7 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
         function initializeController() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.headerRowExists = true;
 
             $scope.scopeModel.onUploadedFileChanged = function (uploadedFile) {
                 validateFile(uploadedFile);

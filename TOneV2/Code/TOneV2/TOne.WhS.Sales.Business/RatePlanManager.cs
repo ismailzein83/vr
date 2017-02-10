@@ -968,15 +968,41 @@ namespace TOne.WhS.Sales.Business
 
             for (int i = startingRowIndex; i < worksheet.Cells.Rows.Count; i++)
             {
-                importedRows.Add(new ImportedRow()
+                Cell zoneCell = worksheet.Cells[i, 0], rateCell = worksheet.Cells[i, 1], dateCell = worksheet.Cells[i, 2];
+                string importedZone, importedRate, importedDate;
+
+                if (!IsRowEmpty(zoneCell, rateCell, dateCell, out importedZone, out importedRate, out importedDate))
                 {
-                    Zone = worksheet.Cells[i, 0].StringValue,
-                    Rate = worksheet.Cells[i, 1].StringValue,
-                    EffectiveDate = worksheet.Cells[i, 2].StringValue
-                });
+                    importedRows.Add(new ImportedRow()
+                    {
+                        Zone = importedZone.ToLower(),
+                        Rate = importedRate,
+                        EffectiveDate = importedDate
+                    });
+                }
             }
 
             return importedRows;
+        }
+
+        private bool IsRowEmpty(Cell zoneCell, Cell rateCell, Cell dateCell, out string importedZone, out string importedRate, out string importedDate)
+        {
+            bool isImportedZoneEmpty = IsStringEmpty(zoneCell.StringValue, out importedZone);
+            bool isImportedRateEmpty = IsStringEmpty(rateCell.StringValue, out importedRate);
+            bool isImportedDateEmpty = IsStringEmpty(dateCell.StringValue, out importedDate);
+
+            return (isImportedZoneEmpty && isImportedRateEmpty && isImportedDateEmpty);
+        }
+
+        private bool IsStringEmpty(string originalString, out string trimmedString)
+        {
+            if (originalString == null)
+            {
+                trimmedString = null;
+                return false;
+            }
+            trimmedString = originalString.Trim();
+            return (trimmedString == string.Empty);
         }
 
         private IEnumerable<ValidatedImportedRow> GetValidatedImportedRows(SalePriceListOwnerType ownerType, IEnumerable<ImportedRow> importedRows, Dictionary<string, SaleZone> saleZonesByName, Dictionary<string, ZoneChanges> zoneDraftsByZoneName, Dictionary<int, DateTime> countryBEDsByCountry, out bool invalidImportedRowsExist)
@@ -1130,8 +1156,9 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach (SaleZone saleZone in saleZones)
                 {
-                    if (!saleZonesByName.ContainsKey(saleZone.Name))
-                        saleZonesByName.Add(saleZone.Name, saleZone);
+                    string saleZoneName = saleZone.Name.ToLower();
+                    if (!saleZonesByName.ContainsKey(saleZoneName))
+                        saleZonesByName.Add(saleZoneName, saleZone);
                 }
             }
 
