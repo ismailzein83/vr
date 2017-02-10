@@ -131,8 +131,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SalePriceList] ( [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn], [SourceID])
-                                            SELECT [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn], [SourceID] FROM [{0}].[TOneWhS_BE_Bkup].[SalePriceList]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SalePriceList] ( [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn] ,[PriceListType], [SourceID] ,[ProcessInstanceID],[FileID],[CreatedTime])
+                                            SELECT   [ID] 
+                                                    ,[OwnerType] 
+                                                    ,[OwnerID] 
+                                                    ,[CurrencyID] 
+                                                    ,[EffectiveOn] 
+                                                    ,[PriceListType]
+                                                    ,[SourceID] 
+                                                    ,[ProcessInstanceID]
+                                                    ,[FileID]
+                                                    ,[CreatedTime]
+                                            FROM [{0}].[TOneWhS_BE_Bkup].[SalePriceList]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 
