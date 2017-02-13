@@ -91,7 +91,16 @@ namespace Vanrise.GenericData.Business
                    return dataRecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
                });
         }
-
+        public DataRecordField GetDataRecordField(Guid dataRecordTypeId, string fieldName)
+        {
+            var dataRecordFields = GetDataRecordTypeFields(dataRecordTypeId);
+            DataRecordField dataRecordField = null;
+            if(dataRecordFields != null)
+            {
+                dataRecordFields.TryGetValue(fieldName, out dataRecordField);
+            }
+            return dataRecordField;
+        }
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypeInfo(DataRecordTypeInfoFilter filter)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
