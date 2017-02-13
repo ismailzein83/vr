@@ -57,6 +57,7 @@
     <Compile Include="DataRecordFields\FieldDateTimeType.cs" />
     <Compile Include="DataRecordFields\FieldTextType.cs" />
     <Compile Include="DataStorages\DataRecordStorage\VRRestAPIDataRecordStorageSettings.cs" />
+    <Compile Include="DataStorages\DataRecordStorage\VRRestAPIRecordQueryInterceptor.cs" />
     <Compile Include="DataStorages\DataStore\VRRestAPIDataStoreSettings.cs" />
     <Compile Include="DataStorages\SQLDataRecordStorageSettings.cs" />
     <Compile Include="DataStorages\SQLDataRecordStorageState.cs" />
