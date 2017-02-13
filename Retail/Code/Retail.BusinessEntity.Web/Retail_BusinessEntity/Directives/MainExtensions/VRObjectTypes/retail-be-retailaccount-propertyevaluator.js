@@ -53,6 +53,7 @@
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.objectType != undefined ? payload.objectType.AccountBEDefinitionId : undefined;
                         genericFieldDefinition = payload.objectPropertyEvaluator != undefined ? payload.objectPropertyEvaluator.GenericFieldDefinition : undefined;
+                        $scope.scopeModel.useDescription = payload.objectPropertyEvaluator != undefined ? payload.objectPropertyEvaluator.UseDescription : undefined;
                     }
 
                     var accountGenericFieldDefinitionSelectorLoadPromise = getAccountGenericFieldDefinitionSelectorLoadPromise();
@@ -79,7 +80,8 @@
 
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.VRObjectTypes.RetailAccountPropertyEvaluator, Retail.BusinessEntity.MainExtensions",
-                        GenericFieldDefinition: accountGenericFieldDefinitionSelectorAPI.getData()
+                        GenericFieldDefinition: accountGenericFieldDefinitionSelectorAPI.getData(),
+                        UseDescription: $scope.scopeModel.useDescription
                     };
                     return data;
                 };
