@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ActionRuntimeEditorController.$inject = ['$scope', 'Retail_BE_ActionDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_BPInstanceAPIService','BusinessProcess_BPInstanceService','WhS_BP_CreateProcessResultEnum'];
+    ActionRuntimeEditorController.$inject = ['$scope', 'Retail_BE_ActionDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_BPInstanceAPIService','BusinessProcess_BPInstanceService','WhS_BP_CreateProcessResultEnum','Retail_BE_AccountBEAPIService'];
 
-    function ActionRuntimeEditorController($scope, Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum) {
+    function ActionRuntimeEditorController($scope, Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, Retail_BE_AccountBEAPIService) {
 
         var accountActionDefinition;
         var accountBEDefinitionId;
@@ -12,7 +12,6 @@
         var directiveAPI;
         var directiveReadyDeferred;
 
-        var onActionExecuted;
         loadParameters();
         defineScope();
         load();
@@ -23,9 +22,6 @@
                 accountId = parameters.accountId;
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountActionDefinition = parameters.accountActionDefinition;
-
-               
-                onActionExecuted = parameters.onActionExecuted;
             }
         }
 
@@ -59,9 +55,12 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         var context = {
                             onClose: function () {
-                                if (onActionExecuted != undefined && typeof (onActionExecuted) == 'function') {
-                                    return onActionExecuted();
+                                if ($scope.onActionExecuted != undefined && typeof ($scope.onActionExecuted) == 'function') {
+                                    Retail_BE_AccountBEAPIService.GetAccountDetail(accountBEDefinitionId, accountId).then(function (response) {
+                                        return $scope.onActionExecuted(response);
+                                    });
                                 }
+                              
                             }
                         };
                         $scope.modalContext.closeModal();

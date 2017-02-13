@@ -103,6 +103,9 @@
                 if (response)
                 {
                     VRNotificationService.showSuccess("Account mapped successfully");
+                    if ($scope.onMappingAccount != undefined) {
+                        $scope.onMappingAccount(response.UpdatedObject);
+                    }
                     $scope.modalContext.closeModal();
                 } else
                 {

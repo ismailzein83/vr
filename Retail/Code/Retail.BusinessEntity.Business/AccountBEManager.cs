@@ -466,7 +466,6 @@ namespace Retail.BusinessEntity.Business
         {
             return GetCachedAccounts(accountBEDefinitionId);
         }
-       
         #endregion
 
         #region Private Methods

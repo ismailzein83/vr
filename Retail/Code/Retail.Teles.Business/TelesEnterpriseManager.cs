@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Retail.BusinessEntity.Entities;
 namespace Retail.Teles.Business
 {
     public class TelesEnterpriseManager : IBusinessEntityManager
@@ -74,12 +75,27 @@ namespace Retail.Teles.Business
             var actionPath = string.Format("/user/{0}", userId);
             return TelesWebAPIClient.Get<dynamic>(switchId, actionPath);
         }
-        public bool MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
         {
-            AccountBEManager accountBEManager = new AccountBEManager();
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
 
-            return accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(input.AccountBEDefinitionId, input.AccountId,
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            AccountBEManager accountBEManager = new AccountBEManager();
+            bool result = accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(input.AccountBEDefinitionId, input.AccountId,
                 new EnterpriseAccountMappingInfo { TelesEnterpriseId = input.TelesEnterpriseId });
+            if (result)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            } else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+           
         }
 
 

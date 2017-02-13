@@ -131,7 +131,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                     var accountBEDefinitionId = payload.accountBEDefinitionId;
                     var accountId = payload.account.Entity.AccountId;
                     var onItemUpdated = payload.onItemUpdated;
-                    var onActionExecuted = function () {
+                    var onActionExecuted = function (updatedAccount) {
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedAccount);
                     };

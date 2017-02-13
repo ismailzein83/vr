@@ -1,4 +1,5 @@
-﻿using Retail.Teles.Business;
+﻿using Retail.BusinessEntity.Entities;
+using Retail.Teles.Business;
 using Retail.Teles.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Retail.Teles.Web.Controllers
         }
         [HttpPost]
         [Route("MapEnterpriseToAccount")]
-        public bool MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
         {
             return _manager.MapEnterpriseToAccount(input);
         }
