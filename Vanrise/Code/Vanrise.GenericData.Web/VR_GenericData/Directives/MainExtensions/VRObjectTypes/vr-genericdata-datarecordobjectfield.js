@@ -46,6 +46,7 @@
 
                     if (payload != undefined && payload.objectPropertyEvaluator != undefined) {
                         selectorPayload.selectedIds = payload.objectPropertyEvaluator.FieldName;
+                        $scope.scopeModel.useDescription = payload.objectPropertyEvaluator != undefined ? payload.objectPropertyEvaluator.UseDescription : undefined;
                     }
 
                     var dataRecordObjectTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -62,7 +63,8 @@
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.GenericData.MainExtensions.VRObjectTypes.VRDataRecordFieldPropertyEvaluator, Vanrise.GenericData.MainExtensions",
-                        FieldName: selectorAPI.getSelectedIds()
+                        FieldName: selectorAPI.getSelectedIds(),
+                        UseDescription: $scope.scopeModel.useDescription
                     };
                     return data;
                 };
