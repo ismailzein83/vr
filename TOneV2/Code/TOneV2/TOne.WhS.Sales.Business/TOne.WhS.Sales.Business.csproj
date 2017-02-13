@@ -113,6 +113,7 @@
     <Compile Include="Context\RatePlanContext.cs" />
     <Compile Include="Country\CountrySoldToCustomerFilter.cs" />
     <Compile Include="DefaultItemManager.cs" />
+    <Compile Include="ImportRatePlan\ImportBulkActionValidationCacheManager.cs" />
     <Compile Include="ImportRatePlan\ImportedRowValidator.cs" />
     <Compile Include="ImportRatePlan\IsImportedRowValidContext.cs" />
     <Compile Include="ImportRatePlan\ZoneValidationContext.cs" />

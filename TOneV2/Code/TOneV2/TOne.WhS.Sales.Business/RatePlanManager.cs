@@ -675,13 +675,14 @@ namespace TOne.WhS.Sales.Business
             for (int i = 0; i < importedRows.Count(); i++)
             {
                 ImportedRow importedRow = importedRows.ElementAt(i);
+                string zoneName = (importedRow.Zone != null) ? importedRow.Zone.ToLower() : null;
 
                 var context = new IsImportedRowValidContext()
                 {
                     OwnerType = input.OwnerType,
                     ImportedRow = importedRow,
-                    ExistingZone = saleZonesByName.GetRecord(importedRow.Zone),
-                    ZoneDraft = zoneDraftsByZoneName.GetRecord(importedRow.Zone),
+                    ExistingZone = saleZonesByName.GetRecord(zoneName),
+                    ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
                     CountryBEDsByCountry = countryBEDsByCountry
                 };
 
@@ -975,7 +976,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     importedRows.Add(new ImportedRow()
                     {
-                        Zone = importedZone.ToLower(),
+                        Zone = importedZone,
                         Rate = importedRate,
                         EffectiveDate = importedDate
                     });
@@ -999,7 +1000,7 @@ namespace TOne.WhS.Sales.Business
             if (originalString == null)
             {
                 trimmedString = null;
-                return false;
+                return true;
             }
             trimmedString = originalString.Trim();
             return (trimmedString == string.Empty);

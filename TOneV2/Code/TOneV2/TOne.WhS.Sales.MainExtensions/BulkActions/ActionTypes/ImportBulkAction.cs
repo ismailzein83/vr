@@ -3,20 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Caching;
 using Vanrise.Common;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
     public class ImportBulkAction : BulkActionType
     {
-        public Dictionary<long, ImportedRow> ValidDataByZoneId { get; set; }
-
-        public Dictionary<int, InvalidImportedRow> InvalidDataByRowIndex { get; set; }
+        private ImportBulkActionValidationCacheManager _cacheManager;
 
         public override Guid ConfigId
         {
             get { return new Guid("1136DAC5-A1EE-4C72-B12C-05FF513CE3D3"); }
+        }
+
+        public long FileId { get; set; }
+
+        public bool HeaderRowExists { get; set; }
+
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public Guid CacheObjectName { get; set; }
+
+        public ImportBulkAction()
+        {
+            _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<ImportBulkActionValidationCacheManager>();
         }
 
         public override void ValidateZone(IZoneValidationContext context)
@@ -25,11 +41,13 @@ namespace TOne.WhS.Sales.MainExtensions
             {
                 var validationResult = new ImportBulkActionValidationResult();
 
-                if (InvalidDataByRowIndex != null && InvalidDataByRowIndex.Values != null && InvalidDataByRowIndex.Values.Count > 0)
+                ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+
+                if (cachedValidationData.InvalidDataByRowIndex != null && cachedValidationData.InvalidDataByRowIndex.Values != null && cachedValidationData.InvalidDataByRowIndex.Values.Count > 0)
                 {
                     validationResult.InvalidDataExists = true;
 
-                    foreach (InvalidImportedRow invalidImportedRow in InvalidDataByRowIndex.Values)
+                    foreach (InvalidImportedRow invalidImportedRow in cachedValidationData.InvalidDataByRowIndex.Values)
                     {
                         validationResult.InvalidImportedRows.Add(invalidImportedRow);
 
@@ -46,7 +64,8 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
-            return ValidDataByZoneId.ContainsKey(context.SaleZone.SaleZoneId);
+            ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+            return cachedValidationData.ValidDataByZoneId.ContainsKey(context.SaleZone.SaleZoneId);
         }
 
         public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
@@ -62,7 +81,9 @@ namespace TOne.WhS.Sales.MainExtensions
 
         private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates)
         {
-            ImportedRow importedRow = ValidDataByZoneId.GetRecord(zoneId);
+            ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+            ImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
+
             var newRates = new List<DraftRateToChange>();
 
             if (zoneDraftNewRates != null)
@@ -84,6 +105,20 @@ namespace TOne.WhS.Sales.MainExtensions
 
             newRates.Add(newNormalRate);
             return newRates;
+        }
+
+        private ImportedDataValidationResult GetOrCreateObject()
+        {
+            return _cacheManager.GetOrCreateObject(CacheObjectName, () =>
+            {
+                return new RatePlanManager().ValidateImportedData(new ImportedDataValidationInput()
+                {
+                    FileId = FileId,
+                    HeaderRowExists = HeaderRowExists,
+                    OwnerType = OwnerType,
+                    OwnerId = OwnerId
+                });
+            });
         }
     }
 }

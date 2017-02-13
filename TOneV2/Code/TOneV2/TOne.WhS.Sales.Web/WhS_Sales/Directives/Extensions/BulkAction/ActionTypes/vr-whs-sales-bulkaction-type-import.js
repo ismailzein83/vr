@@ -25,21 +25,16 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
         this.initializeController = initializeController;
 
         var bulkActionContext;
-
-        var validDataByZoneId;
-        var invalidDataByRowIndex;
+        var cacheObjectName; // The cacheObjectName is defined on the client-side to preserve it between the following method calls: ValidateBulkActionZones, GetZoneLetters, GetZoneItems
 
         function initializeController() {
-
             $scope.scopeModel = {};
-            $scope.scopeModel.headerRowExists = true;
 
-            $scope.scopeModel.onUploadedFileChanged = function (uploadedFile) {
-                validateFile(uploadedFile);
-            };
+            $scope.scopeModel.headerRowExists = true;
+            cacheObjectName = UtilsService.guid();
 
             $scope.scopeModel.onSwitchValueChanged = function () {
-                validateFile($scope.scopeModel.file);
+                cacheObjectName = UtilsService.guid();
             };
 
             defineAPI();
@@ -58,22 +53,18 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
             };
 
             api.getData = function () {
-                // Otherwise, the serializer would throw an exception
-                deleteObjectTypeProperty(validDataByZoneId);
-                deleteObjectTypeProperty(invalidDataByRowIndex);
-
                 var data = {
                     $type: 'TOne.WhS.Sales.MainExtensions.ImportBulkAction, TOne.WhS.Sales.MainExtensions',
-                    ValidDataByZoneId: validDataByZoneId,
-                    InvalidDataByRowIndex: invalidDataByRowIndex
+                    HeaderRowExists: $scope.scopeModel.headerRowExists,
+                    CacheObjectName: cacheObjectName
                 };
-
-                function deleteObjectTypeProperty(object) {
-                    if (object != undefined) {
-                        delete object.$type;
-                    }
+                if ($scope.scopeModel.file != undefined) {
+                    data.FileId = $scope.scopeModel.file.fileId;
                 }
-
+                if (bulkActionContext != undefined) {
+                    data.OwnerType = bulkActionContext.ownerType;
+                    data.OwnerId = bulkActionContext.ownerId;
+                }
                 return data;
             };
 
@@ -81,38 +72,12 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                 ctrl.onReady(api);
             }
         }
-
-        function validateFile(uploadedFile) {
-            WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
-
-            if (uploadedFile == undefined)
-                return;
-
-            $scope.scopeModel.isLoading = true;
-
-            var importedDataValidationInput = {
-                FileId: uploadedFile.fileId,
-                HeaderRowExists: $scope.scopeModel.headerRowExists
-            };
-            if (bulkActionContext != undefined) {
-                importedDataValidationInput.OwnerType = bulkActionContext.ownerType;
-                importedDataValidationInput.OwnerId = bulkActionContext.ownerId;
-            }
-            return WhS_Sales_RatePlanAPIService.ValidateImportedData(importedDataValidationInput).then(function (response) {
-                if (response != undefined) {
-                    validDataByZoneId = response.ValidDataByZoneId;
-                    invalidDataByRowIndex = response.InvalidDataByRowIndex;
-                }
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
-        }
     }
 
     function getTemplate(attrs) {
         return '<span vr-loader="scopeModel.isLoading">\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
-                        <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onUploadedFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
+                        <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
                     </vr-columns>\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
                         <vr-switch label="Header" value="scopeModel.headerRowExists" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
