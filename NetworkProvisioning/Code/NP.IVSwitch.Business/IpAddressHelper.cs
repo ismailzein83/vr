@@ -57,7 +57,10 @@ namespace NP.IVSwitch.Business
                     return false;
                 }
             }
-            return IsInSameSubnet(endPoints, originalPoint.Host, out message);
+            var limitedAccounts =
+                endPoints.Values.Where(a => a.AccountId != originalPoint.EndPointId)
+                    .ToDictionary(a => a.EndPointId, a => a);
+            return IsInSameSubnet(limitedAccounts, originalPoint.Host, out message);
         }
     }
     public static class SubnetMask
