@@ -257,9 +257,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\ParentBusinessEntityFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-parentbusinessentity.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSettingsRestAPITemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\VRRestAPIRecordQueryInterceptorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-restapi.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-restapirecordqueryinterceptor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RestAPITemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\Templates\EmptyDefinitionSettingsTemplate.html" />
