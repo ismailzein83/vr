@@ -1,54 +1,64 @@
 ﻿<span vr-loader="scopeModel.isLoading">
-	<vr-columns colnum="{{ctrl.normalColNum}}">
-		<vr-select on-ready="scopeModel.onEntityTypeSelectorReady"
-				   label="Filter By"
-				   datasource="scopeModel.entityTypes"
-				   selectedvalues="scopeModel.selectedEntityType"
-				   onselectionchanged="scopeModel.onEntityTypeSelectionChanged"
-				   datavaluefield="value"
-				   datatextfield="description"
-				   hideremoveicon="true">
-		</vr-select>
-	</vr-columns>
-	<vr-common-country-selector on-ready="scopeModel.onCountrySelectorReady"
-								selectedvalues="scopeModel.selectedCountry"
-								onselectionchanged="scopeModel.onCountrySelectionChanged"
-								normal-col-num="{{ctrl.normalColNum}}">
-	</vr-common-country-selector>
-	<span ng-show="scopeModel.isSaleZoneSelectorVisible">
-		<vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady"
-									 selectedvalues="scopeModel.selectedSaleZones"
-									 normal-col-num="{{ctrl.normalColNum}}"
-									 hideremoveicon="ctrl.isrequired"
-									 ismultipleselection>
-		</vr-whs-be-salezone-selector>
-	</span>
-	<vr-columns colnum="{{ctrl.normalColNum}}" withemptyline>
-		<vr-button type="Add" data-onclick="scopeModel.add" vr-disabled="scopeModel.isAddButtonDisabled()" standalone></vr-button>
-	</vr-columns>
-	<vr-row>
-		<vr-columns colnum="{{ctrl.normalColNum * 4}}">
-			<div style="margin-top: 10px;">
-				<vr-validator validate="scopeModel.isGridDataValid()">
-					<vr-datagrid on-ready="scopeModel.onGridReady"
-								 datasource="scopeModel.gridDataSource"
-								 ondeleterow="scopeModel.remove"
-								 enabledraggablerow="true"
-								 norowhighlightonclick="'true'"
-								 maxheight="150px"
-								 hidegridmenu>
-						<vr-datagridcolumn headertext="'Type'" field="'Entity.entityTypeDescription'" disablesorting></vr-datagridcolumn>
-						<vr-datagridcolumn headertext="'Name'" field="'Entity.entityName'" disablesorting></vr-datagridcolumn>
-						<vr-datagridcolumn headertext="'Excluded'" disablesorting>
-							<vr-whs-be-salezone-selector ng-if="dataItem.Entity.isCountryEntityType"
-														 on-ready="dataItem.Entity.onSaleZoneSelectorReady"
-														 ismultipleselection
-														 hidelabel>
-							</vr-whs-be-salezone-selector>
-						</vr-datagridcolumn>
-					</vr-datagrid>
-				</vr-validator>
-			</div>
-		</vr-columns>
-	</vr-row>
+    <vr-columns colnum="{{ctrl.normalColNum}}">
+        <vr-select on-ready="scopeModel.onEntityTypeSelectorReady"
+                   label="Filter By"
+                   datasource="scopeModel.entityTypes"
+                   selectedvalues="scopeModel.selectedEntityType"
+                   onselectionchanged="scopeModel.onEntityTypeSelectionChanged"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   hideremoveicon="true">
+        </vr-select>
+    </vr-columns>
+    <span ng-init="scopeModel.showCountrySelector = false" ng-show="scopeModel.showCountrySelector">
+        <vr-common-country-selector on-ready="scopeModel.onCountrySelectorReady"
+                                    selectedvalues="scopeModel.selectedCountry"
+                                    onselectionchanged="scopeModel.onCountrySelectionChanged"
+                                    normal-col-num="{{ctrl.normalColNum}}">
+        </vr-common-country-selector>
+    </span>
+    <span ng-init="scopeModel.showMultipleCountrySelector = true" ng-show="scopeModel.showMultipleCountrySelector">
+        <vr-common-country-selector on-ready="scopeModel.onMultipleCountrySelectorReady"
+                                    selectedvalues="scopeModel.selectedCountries"
+                                    onselectionchanged="scopeModel.onMultipleCountrySelectionChanged"
+                                    normal-col-num="{{ctrl.normalColNum}}"
+                                    ismultipleselection>
+        </vr-common-country-selector>
+    </span>
+    <span ng-show="scopeModel.isSaleZoneSelectorVisible">
+        <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady"
+                                     selectedvalues="scopeModel.selectedSaleZones"
+                                     normal-col-num="{{ctrl.normalColNum}}"
+                                     hideremoveicon="ctrl.isrequired"
+                                     ismultipleselection>
+        </vr-whs-be-salezone-selector>
+    </span>
+    <vr-columns colnum="{{ctrl.normalColNum}}" withemptyline>
+        <vr-button type="Add" data-onclick="scopeModel.add" vr-disabled="scopeModel.isAddButtonDisabled()" standalone></vr-button>
+    </vr-columns>
+    <vr-row>
+        <vr-columns colnum="{{ctrl.normalColNum * 4}}">
+            <div style="margin-top: 10px;">
+                <vr-validator validate="scopeModel.isGridDataValid()">
+                    <vr-datagrid on-ready="scopeModel.onGridReady"
+                                 datasource="scopeModel.gridDataSource"
+                                 ondeleterow="scopeModel.remove"
+                                 enabledraggablerow="true"
+                                 norowhighlightonclick="'true'"
+                                 maxheight="150px"
+                                 hidegridmenu>
+                        <vr-datagridcolumn headertext="'Type'" field="'Entity.entityTypeDescription'" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Name'" field="'Entity.entityName'" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Excluded'" disablesorting>
+                            <vr-whs-be-salezone-selector ng-if="dataItem.Entity.isCountryEntityType"
+                                                         on-ready="dataItem.Entity.onSaleZoneSelectorReady"
+                                                         ismultipleselection
+                                                         hidelabel>
+                            </vr-whs-be-salezone-selector>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </div>
+        </vr-columns>
+    </vr-row>
 </span>

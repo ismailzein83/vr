@@ -1,351 +1,427 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_Sales_SpecificApplicableZoneEntityTypeEnum', 'UtilsService', 'VRUIUtilsService', function (WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_SpecificApplicableZoneEntityTypeEnum, UtilsService, VRUIUtilsService) {
-	return {
-		restrict: "E",
-		scope: {
-			onReady: "=",
-			normalColNum: '@',
-			isrequired: '='
-		},
-		controller: function ($scope, $element, $attrs) {
-			var ctrl = this;
-			var specificBulkActionZoneFilter = new SpecificBulkActionZoneFilter($scope, ctrl, $attrs);
-			specificBulkActionZoneFilter.initializeController();
-		},
-		controllerAs: "ctrl",
-		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ActionZoneFilters/Templates/SpecificBulkActionZoneFilterTemplate.html'
-	};
+app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_Sales_SpecificApplicableZoneEntityTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_SpecificApplicableZoneEntityTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+    return {
+        restrict: "E",
+        scope: {
+            onReady: "=",
+            normalColNum: '@',
+            isrequired: '='
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var specificBulkActionZoneFilter = new SpecificBulkActionZoneFilter($scope, ctrl, $attrs);
+            specificBulkActionZoneFilter.initializeController();
+        },
+        controllerAs: "ctrl",
+        bindToController: true,
+        templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ActionZoneFilters/Templates/SpecificBulkActionZoneFilterTemplate.html'
+    };
 
-	function SpecificBulkActionZoneFilter($scope, ctrl, $attrs) {
+    function SpecificBulkActionZoneFilter($scope, ctrl, $attrs) {
 
-		this.initializeController = initializeController;
+        this.initializeController = initializeController;
 
-		var zoneFilter;
-		var bulkActionContext;
+        var zoneFilter;
+        var bulkActionContext;
 
-		var entityTypeSelectorAPI;
-		var entityTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var entityTypeSelectorAPI;
+        var entityTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var countrySelectorAPI;
-		var countrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var countrySelectorAPI;
+        var countrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var saleZoneSelectorAPI;
-		var saleZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var multipleCountrySelectorAPI;
+        var multipleCountrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var gridAPI;
-		var gridReadyDeferred = UtilsService.createPromiseDeferred();
+        var saleZoneSelectorAPI;
+        var saleZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		function initializeController() {
+        var gridAPI;
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
-			$scope.scopeModel = {};
-			$scope.scopeModel.gridDataSource = [];
-			$scope.scopeModel.entityTypes = UtilsService.getArrayEnum(WhS_Sales_SpecificApplicableZoneEntityTypeEnum);
-			$scope.scopeModel.selectedEntityType = UtilsService.getItemByVal($scope.scopeModel.entityTypes, WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value, 'value');
+        function initializeController() {
 
-			$scope.scopeModel.onEntityTypeSelectorReady = function (api) {
-				entityTypeSelectorAPI = api;
-				entityTypeSelectorReadyDeferred.resolve();
-			};
+            $scope.scopeModel = {};
+            $scope.scopeModel.gridDataSource = [];
+            $scope.scopeModel.entityTypes = UtilsService.getArrayEnum(WhS_Sales_SpecificApplicableZoneEntityTypeEnum);
+            $scope.scopeModel.selectedEntityType = UtilsService.getItemByVal($scope.scopeModel.entityTypes, WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value, 'value');
 
-			$scope.scopeModel.onEntityTypeSelectionChanged = function (selectedEntityType) {
-				if (selectedEntityType == undefined)
-					return;
-				$scope.scopeModel.selectedCountry = undefined;
-				$scope.scopeModel.isSaleZoneSelectorVisible = (selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value);
-				loadSaleZoneSelector();
-			};
+            $scope.scopeModel.onEntityTypeSelectorReady = function (api) {
+                entityTypeSelectorAPI = api;
+                entityTypeSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onEntityTypeSelectionChanged = function (selectedEntityType) {
+                if (selectedEntityType == undefined)
+                    return;
+                $scope.scopeModel.selectedCountry = undefined;
+                $scope.scopeModel.selectedCountries.length = 0;
+                $scope.scopeModel.isSaleZoneSelectorVisible = (selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value);
+                loadSaleZoneSelector();
 
-			$scope.scopeModel.onCountrySelectorReady = function (api) {
-				countrySelectorAPI = api;
-				countrySelectorReadyDeferred.resolve();
-			};
+                switch (selectedEntityType.value) {
+                    case WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value:
+                        $scope.scopeModel.showCountrySelector = false;
+                        $scope.scopeModel.showMultipleCountrySelector = true;
+                        break;
+                    case WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value:
+                        $scope.scopeModel.showCountrySelector = true;
+                        $scope.scopeModel.showMultipleCountrySelector = false;
+                        break;
+                }
+            };
 
-			$scope.scopeModel.onCountrySelectionChanged = function (selectedCountry) {
-				if ($scope.scopeModel.selectedEntityType != undefined && $scope.scopeModel.selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
-					loadSaleZoneSelector();
-			};
+            $scope.scopeModel.onCountrySelectorReady = function (api) {
+                countrySelectorAPI = api;
+                countrySelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onCountrySelectionChanged = function (selectedCountry) {
+                if ($scope.scopeModel.selectedEntityType != undefined && $scope.scopeModel.selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
+                    loadSaleZoneSelector();
+            };
 
-			$scope.scopeModel.onSaleZoneSelectorReady = function (api) {
-				saleZoneSelectorAPI = api;
-				saleZoneSelectorReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onMultipleCountrySelectorReady = function (api) {
+                multipleCountrySelectorAPI = api;
+                multipleCountrySelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onMultipleCountrySelectionChanged = function (selectedCountry) {
+                //if ($scope.scopeModel.selectedEntityType != undefined && $scope.scopeModel.selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
+                //    loadSaleZoneSelector();
+            };
 
-			$scope.scopeModel.isAddButtonDisabled = function () {
-				if ($scope.scopeModel.selectedEntityType == undefined) {
-					return true;
-				}
-				else if ($scope.scopeModel.selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value) {
-					return ($scope.scopeModel.selectedCountry == undefined);
-				}
-				else {
-					return ($scope.scopeModel.selectedSaleZones == undefined || $scope.scopeModel.selectedSaleZones.length == 0);
-				}
-			};
+            $scope.scopeModel.onSaleZoneSelectorReady = function (api) {
+                saleZoneSelectorAPI = api;
+                saleZoneSelectorReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onGridReady = function (api) {
-				gridAPI = api;
-				gridReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onGridReady = function (api) {
+                gridAPI = api;
+                gridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.isGridDataValid = function () {
+                return ($scope.scopeModel.gridDataSource.length == 0) ? 'No filters exist' : null;
+            };
 
-			$scope.scopeModel.add = function ()
-			{
-				if ($scope.scopeModel.selectedEntityType == undefined)
-					return;
+            $scope.scopeModel.add = function () {
+                add();
+            };
+            $scope.scopeModel.isAddButtonDisabled = function () {
+                if ($scope.scopeModel.selectedEntityType == undefined) {
+                    return true;
+                }
+                else if ($scope.scopeModel.selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value) {
+                    return ($scope.scopeModel.selectedCountries == undefined || $scope.scopeModel.selectedCountries.length == 0);
+                }
+                else {
+                    return ($scope.scopeModel.selectedSaleZones == undefined || $scope.scopeModel.selectedSaleZones.length == 0);
+                }
+            };
+            $scope.scopeModel.remove = function (dataRow) {
+                var entities = UtilsService.getPropValuesFromArray($scope.scopeModel.gridDataSource, 'Entity');
+                if (entities == undefined)
+                    return;
+                var index = UtilsService.getItemIndexByVal(entities, dataRow.Entity.id, 'id');
+                $scope.scopeModel.gridDataSource.splice(index, 1);
 
-				var entityTypeValue = $scope.scopeModel.selectedEntityType.value;
-				var entityTypeDescription = $scope.scopeModel.selectedEntityType.description;
+                $scope.scopeModel.isLoading = true;
+                UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadMultipleCountrySelector, loadSaleZoneSelector]).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            };
 
-				if ($scope.scopeModel.selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value)
-				{
-					var entity = {
-						id: ($scope.scopeModel.gridDataSource.length + 1),
-						entityTypeValue: entityTypeValue,
-						entityTypeDescription: entityTypeDescription,
-						isCountryEntityType: true
-					};
-					if ($scope.scopeModel.selectedCountry != undefined) {
-						entity.entityId = $scope.scopeModel.selectedCountry.CountryId;
-						entity.entityName = $scope.scopeModel.selectedCountry.Name;
-					}
-					entity.onSaleZoneSelectorReady = function (api) {
-						entity.saleZoneSelectorAPI = api;
+            UtilsService.waitMultiplePromises([entityTypeSelectorReadyDeferred.promise, countrySelectorReadyDeferred.promise, saleZoneSelectorReadyDeferred.promise, gridReadyDeferred.promise]).then(function () {
+                defineAPI();
+            });
+        }
+        function defineAPI() {
 
-						$scope.scopeModel.isLoading = true;
-						var saleZoneSelectorPayload = getSaleZoneSelectorPayload();
+            var api = {};
 
-						entity.saleZoneSelectorAPI.load(saleZoneSelectorPayload).finally(function () {
-							loadCountrySelector().finally(function () {
-								$scope.scopeModel.isLoading = false;
-							});
-						});
-					};
-					$scope.scopeModel.gridDataSource.push({ Entity: entity });
-				}
-				else if ($scope.scopeModel.selectedSaleZones != undefined)
-				{
-					for (var i = 0; i < $scope.scopeModel.selectedSaleZones.length; i++)
-					{
-						var saleZone = $scope.scopeModel.selectedSaleZones[i];
-						var entity = {
-							id: ($scope.scopeModel.gridDataSource.length + 1),
-							entityTypeValue: entityTypeValue,
-							entityTypeDescription: entityTypeDescription,
-							entityId: saleZone.SaleZoneId,
-							entityName: saleZone.Name
-						};
-						$scope.scopeModel.gridDataSource.push({ Entity: entity });
-					}
-					$scope.scopeModel.isLoading = true;
-					loadSaleZoneSelector().finally(function () {
-						$scope.scopeModel.isLoading = false;
-					});
-				}
-			};
+            api.load = function (payload) {
 
-			$scope.scopeModel.remove = function (dataRow) {
-				var entities = UtilsService.getPropValuesFromArray($scope.scopeModel.gridDataSource, 'Entity');
-				if (entities == undefined)
-					return;
-				var index = UtilsService.getItemIndexByVal(entities, dataRow.Entity.id, 'id');
-				$scope.scopeModel.gridDataSource.splice(index, 1);
+                var promises = [];
 
-				$scope.scopeModel.isLoading = true;
-				UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadSaleZoneSelector]).finally(function () {
-					$scope.scopeModel.isLoading = false;
-				});
-			};
+                if (payload != undefined) {
+                    zoneFilter = payload.zoneFilter;
+                    bulkActionContext = payload.bulkActionContext;
+                }
 
-			$scope.scopeModel.isGridDataValid = function () {
-				return ($scope.scopeModel.gridDataSource.length == 0) ? 'No filters exist' : null;
-			};
+                extendBulkActionContext();
 
-			UtilsService.waitMultiplePromises([entityTypeSelectorReadyDeferred.promise, countrySelectorReadyDeferred.promise, saleZoneSelectorReadyDeferred.promise, gridReadyDeferred.promise]).then(function () {
-				defineAPI();
-			});
-		}
-		function defineAPI() {
+                var loadCountrySelectorPromise = loadCountrySelector();
+                promises.push(loadCountrySelectorPromise);
 
-			var api = {};
+                var loadMultipleCountrySelectorPromise = loadMultipleCountrySelector();
+                promises.push(loadMultipleCountrySelectorPromise);
 
-			api.load = function (payload) {
+                return UtilsService.waitMultiplePromises(promises);
+            };
 
-				var promises = [];
+            api.getData = function () {
+                var data = {
+                    $type: 'TOne.WhS.Sales.MainExtensions.SpecificApplicableZones, TOne.WhS.Sales.MainExtensions',
+                    CountryZonesByCountry: {},
+                    IncludedZoneIds: []
+                };
+                for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
+                    var entity = $scope.scopeModel.gridDataSource[i].Entity;
+                    if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
+                        data.IncludedZoneIds.push(entity.entityId);
+                    else {
+                        data.CountryZonesByCountry[entity.entityId] = {
+                            CountryId: entity.entityId,
+                            ExcludedZoneIds: entity.saleZoneSelectorAPI.getSelectedIds()
+                        };
+                    }
+                }
+                return data;
+            };
 
-				if (payload != undefined) {
-					zoneFilter = payload.zoneFilter;
-					bulkActionContext = payload.bulkActionContext;
-				}
+            if (ctrl.onReady != null) {
+                ctrl.onReady(api);
+            }
+        }
 
-				extendBulkActionContext();
+        function extendBulkActionContext() {
+            if (bulkActionContext == undefined)
+                return;
+            bulkActionContext.onBulkActionChanged = function () {
+                $scope.scopeModel.gridDataSource.length = 0;
+                $scope.scopeModel.isLoading = true;
+                UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadMultipleCountrySelector, loadSaleZoneSelector]).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            };
+        }
 
-				var loadCountrySelectorPromise = loadCountrySelector();
-				promises.push(loadCountrySelectorPromise);
+        function loadCountrySelector() {
+            var countrySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-				return UtilsService.waitMultiplePromises(promises);
-			};
+            var countrySelectorPayload = {
+                filter: {
+                    ExcludedCountryIds: getExcludedCountryIds(),
+                    Filters: getCountrySelectorFilters()
+                }
+            };
+            VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countrySelectorPayload, countrySelectorLoadDeferred);
 
-			api.getData = function () {
-				var data = {
-					$type: 'TOne.WhS.Sales.MainExtensions.SpecificApplicableZones, TOne.WhS.Sales.MainExtensions',
-					CountryZonesByCountry: {},
-					IncludedZoneIds: []
-				};
-				for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
-					var entity = $scope.scopeModel.gridDataSource[i].Entity;
-					if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
-						data.IncludedZoneIds.push(entity.entityId);
-					else {
-						data.CountryZonesByCountry[entity.entityId] = {
-							CountryId: entity.entityId,
-							ExcludedZoneIds: entity.saleZoneSelectorAPI.getSelectedIds()
-						};
-					}
-				}
-				return data;
-			};
+            return countrySelectorLoadDeferred.promise;
+        }
+        function loadMultipleCountrySelector() {
+            var multipleCountrySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-			if (ctrl.onReady != null) {
-				ctrl.onReady(api);
-			}
-		}
+            var multipleCountrySelectorPayload = {
+                filter: {
+                    ExcludedCountryIds: getExcludedCountryIds(),
+                    Filters: getCountrySelectorFilters()
+                }
+            };
+            VRUIUtilsService.callDirectiveLoad(multipleCountrySelectorAPI, multipleCountrySelectorPayload, multipleCountrySelectorLoadDeferred);
 
-		function extendBulkActionContext() {
-			if (bulkActionContext == undefined)
-				return;
-			bulkActionContext.onBulkActionChanged = function () {
-				$scope.scopeModel.gridDataSource.length = 0;
-				$scope.scopeModel.isLoading = true;
-				UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadSaleZoneSelector]).finally(function () {
-					$scope.scopeModel.isLoading = false;
-				});
-			};
-		}
+            return multipleCountrySelectorLoadDeferred.promise;
+        }
+        function getExcludedCountryIds() {
+            var excludedCountryIds = [];
+            for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
+                var entity = $scope.scopeModel.gridDataSource[i].Entity;
+                if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value)
+                    excludedCountryIds.push(entity.entityId);
+            }
+            return excludedCountryIds;
+        }
+        function getCountrySelectorFilters() {
+            var countrySelectorFilters = [];
 
-		function loadCountrySelector() {
-			var countrySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            var ownerType;
+            var ownerId;
 
-			var countrySelectorPayload = {
-				filter: {
-					ExcludedCountryIds: getExcludedCountryIds(),
-					Filters: getCountrySelectorFilters()
-				}
-			};
-			VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countrySelectorPayload, countrySelectorLoadDeferred);
+            if (bulkActionContext != undefined) {
+                ownerType = bulkActionContext.ownerType;
+                ownerId = bulkActionContext.ownerId;
+            }
 
-			return countrySelectorLoadDeferred.promise;
-		}
-		function getExcludedCountryIds() {
-			var excludedCountryIds = [];
-			for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
-				var entity = $scope.scopeModel.gridDataSource[i].Entity;
-				if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value)
-					excludedCountryIds.push(entity.entityId);
-			}
-			return excludedCountryIds;
-		}
-		function getCountrySelectorFilters() {
-			var countrySelectorFilters = [];
+            if (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                var countrySoldToCustomerFilter = {
+                    $type: 'TOne.WhS.Sales.Business.CountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
+                    CustomerId: bulkActionContext.ownerId,
+                    EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                    IsEffectiveInFuture: false
+                };
+                countrySelectorFilters.push(countrySoldToCustomerFilter);
+            }
 
-			var ownerType;
-			var ownerId;
+            return countrySelectorFilters;
+        }
 
-			if (bulkActionContext != undefined) {
-				ownerType = bulkActionContext.ownerType;
-				ownerId = bulkActionContext.ownerId;
-			}
+        function loadSaleZoneSelector() {
+            var saleZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-			if (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-				var countrySoldToCustomerFilter = {
-					$type: 'TOne.WhS.Sales.Business.CountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
-					CustomerId: bulkActionContext.ownerId,
-					EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
-					IsEffectiveInFuture: false
-				};
-				countrySelectorFilters.push(countrySoldToCustomerFilter);
-			}
+            var saleZoneSelectorPayload = getSaleZoneSelectorPayload();
+            VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, saleZoneSelectorPayload, saleZoneSelectorLoadDeferred);
 
-			return countrySelectorFilters;
-		}
+            return saleZoneSelectorLoadDeferred.promise;
+        }
+        function getSaleZoneSelectorPayload() {
+            var saleZoneSelectorPayload = {
+                filter: {}
+            };
 
-		function loadSaleZoneSelector() {
-			var saleZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            if (bulkActionContext != undefined) {
+                saleZoneSelectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
+            }
 
-			var saleZoneSelectorPayload = getSaleZoneSelectorPayload();
-			VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, saleZoneSelectorPayload, saleZoneSelectorLoadDeferred);
+            var countryId = countrySelectorAPI.getSelectedIds();
+            if (countryId != undefined) {
+                saleZoneSelectorPayload.filter.CountryIds = [];
+                saleZoneSelectorPayload.filter.CountryIds.push(countryId);
+            }
 
-			return saleZoneSelectorLoadDeferred.promise;
-		}
-		function getSaleZoneSelectorPayload() {
-			var saleZoneSelectorPayload = {
-				filter: {}
-			};
+            saleZoneSelectorPayload.filter.ExcludedZoneIds = getExcludedSaleZoneIds();
+            saleZoneSelectorPayload.filter.Filters = getSaleZoneSelectorFilters();
 
-			if (bulkActionContext != undefined) {
-				saleZoneSelectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
-			}
+            return saleZoneSelectorPayload;
+        }
+        function getExcludedSaleZoneIds() {
+            var excludedSaleZoneIds = [];
+            for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
+                var entity = $scope.scopeModel.gridDataSource[i].Entity;
+                if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
+                    excludedSaleZoneIds.push(entity.entityId);
+                else {
+                    var selectedSaleZoneIds = entity.saleZoneSelectorAPI.getSelectedIds();
+                    if (selectedSaleZoneIds != undefined) {
+                        for (var j = 0; j < selectedSaleZoneIds.length; j++)
+                            excludedSaleZoneIds.push(selectedSaleZoneIds[j]);
+                    }
+                }
+            }
+            return excludedSaleZoneIds;
+        }
+        function getSaleZoneSelectorFilters() {
+            var saleZoneSelectorFilters = [];
 
-			var countryId = countrySelectorAPI.getSelectedIds();
-			if (countryId != undefined) {
-				saleZoneSelectorPayload.filter.CountryIds = [];
-				saleZoneSelectorPayload.filter.CountryIds.push(countryId);
-			}
+            var ownerType;
+            var ownerId;
+            var bulkAction;
 
-			saleZoneSelectorPayload.filter.ExcludedZoneIds = getExcludedSaleZoneIds();
-			saleZoneSelectorPayload.filter.Filters = getSaleZoneSelectorFilters();
+            if (bulkActionContext != undefined) {
+                ownerType = bulkActionContext.ownerType;
+                ownerId = bulkActionContext.ownerId;
+                if (bulkActionContext.getSelectedBulkAction != undefined)
+                    bulkAction = bulkActionContext.getSelectedBulkAction();
+            }
 
-			return saleZoneSelectorPayload;
-		}
-		function getExcludedSaleZoneIds() {
-			var excludedSaleZoneIds = [];
-			for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
-				var entity = $scope.scopeModel.gridDataSource[i].Entity;
-				if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
-					excludedSaleZoneIds.push(entity.entityId);
-				else {
-					var selectedSaleZoneIds = entity.saleZoneSelectorAPI.getSelectedIds();
-					if (selectedSaleZoneIds != undefined) {
-						for (var j = 0; j < selectedSaleZoneIds.length; j++)
-							excludedSaleZoneIds.push(selectedSaleZoneIds[j]);
-					}
-				}
-			}
-			return excludedSaleZoneIds;
-		}
-		function getSaleZoneSelectorFilters() {
-			var saleZoneSelectorFilters = [];
+            var applicableSaleZoneFilter = {
+                $type: 'TOne.WhS.Sales.Business.ApplicableSaleZoneFilter, TOne.WhS.Sales.Business',
+                OwnerType: ownerType,
+                OwnerId: ownerId,
+                ActionType: bulkAction
+            };
+            saleZoneSelectorFilters.push(applicableSaleZoneFilter);
 
-			var ownerType;
-			var ownerId;
-			var bulkAction;
+            if (ownerType != undefined && ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                var countrySoldToCustomerFilter = {
+                    $type: 'TOne.WhS.Sales.Business.SaleZoneCountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
+                    CustomerId: ownerId,
+                    EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                    IsEffectiveInFuture: false
+                };
+                saleZoneSelectorFilters.push(countrySoldToCustomerFilter);
+            }
 
-			if (bulkActionContext != undefined) {
-				ownerType = bulkActionContext.ownerType;
-				ownerId = bulkActionContext.ownerId;
-				if (bulkActionContext.getSelectedBulkAction != undefined)
-					bulkAction = bulkActionContext.getSelectedBulkAction();
-			}
+            return saleZoneSelectorFilters;
+        }
 
-			var applicableSaleZoneFilter = {
-				$type: 'TOne.WhS.Sales.Business.ApplicableSaleZoneFilter, TOne.WhS.Sales.Business',
-				OwnerType: ownerType,
-				OwnerId: ownerId,
-				ActionType: bulkAction
-			};
-			saleZoneSelectorFilters.push(applicableSaleZoneFilter);
+        function add() {
+            if ($scope.scopeModel.selectedEntityType == undefined)
+                return;
 
-			if (ownerType != undefined && ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-				var countrySoldToCustomerFilter = {
-					$type: 'TOne.WhS.Sales.Business.SaleZoneCountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
-					CustomerId: ownerId,
-					EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
-					IsEffectiveInFuture: false
-				};
-				saleZoneSelectorFilters.push(countrySoldToCustomerFilter);
-			}
+            var entityTypeValue = $scope.scopeModel.selectedEntityType.value;
+            var entityTypeDescription = $scope.scopeModel.selectedEntityType.description;
 
-			return saleZoneSelectorFilters;
-		}
-	}
+            if ($scope.scopeModel.selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value) {
+                addCountries(entityTypeValue, entityTypeDescription);
+            }
+            else if ($scope.scopeModel.selectedSaleZones != undefined) {
+                for (var i = 0; i < $scope.scopeModel.selectedSaleZones.length; i++) {
+                    var saleZone = $scope.scopeModel.selectedSaleZones[i];
+                    var entity = {
+                        id: ($scope.scopeModel.gridDataSource.length + 1),
+                        entityTypeValue: entityTypeValue,
+                        entityTypeDescription: entityTypeDescription,
+                        entityId: saleZone.SaleZoneId,
+                        entityName: saleZone.Name
+                    };
+                    $scope.scopeModel.gridDataSource.push({ Entity: entity });
+                }
+                $scope.scopeModel.isLoading = true;
+                loadSaleZoneSelector().finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
+        }
+        function addCountries(entityTypeValue, entityTypeDescription) {
+            if ($scope.scopeModel.selectedCountries == undefined || $scope.scopeModel.selectedCountries.length == 0)
+                return;
+
+            $scope.scopeModel.isLoading = true;
+
+            var directiveLoadPromises = [];
+            var commonDirectivePayload = getCommonSaleZoneSelectorPayload();
+
+            for (var i = 0; i < $scope.scopeModel.selectedCountries.length; i++) {
+                var country = $scope.scopeModel.selectedCountries[i];
+                addCountry(country, entityTypeValue, entityTypeDescription, commonDirectivePayload, directiveLoadPromises);
+            }
+
+            UtilsService.waitMultiplePromises(directiveLoadPromises).then(function () {
+                UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadMultipleCountrySelector]).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+                $scope.scopeModel.isLoading = false;
+            });
+
+            function getCommonSaleZoneSelectorPayload() {
+                var selectorPayload = {
+                    filter: {
+                        Filters: getSaleZoneSelectorFilters(),
+                        ExcludedZoneIds: getExcludedSaleZoneIds()
+                    }
+                };
+                if (bulkActionContext != undefined) {
+                    selectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
+                }
+                return selectorPayload;
+            }
+        }
+        function addCountry(country, entityTypeValue, entityTypeDescription, commonDirectivePayload, directiveLoadPromises) {
+
+            var countryEntity = {
+                id: ($scope.scopeModel.gridDataSource.length + 1),
+                entityId: country.CountryId,
+                entityName: country.Name,
+                entityTypeValue: entityTypeValue,
+                entityTypeDescription: entityTypeDescription,
+                isCountryEntityType: true
+            };
+
+            countryEntity.saleZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            directiveLoadPromises.push(countryEntity.saleZoneSelectorLoadDeferred.promise);
+
+            countryEntity.onSaleZoneSelectorReady = function (api) {
+                countryEntity.saleZoneSelectorAPI = api;
+                onDirectiveReady(api, commonDirectivePayload, countryEntity.entityId, countryEntity.saleZoneSelectorLoadDeferred);
+            };
+
+            $scope.scopeModel.gridDataSource.push({ Entity: countryEntity });
+        }
+        function onDirectiveReady(directiveAPI, directivePayload, countryId, directiveLoadDeferred) {
+            directivePayload.filter.CountryIds = [countryId];
+            VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+        }
+    }
 }]);
