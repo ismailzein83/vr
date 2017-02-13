@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class DataRecordQueryInterceptorConfig : ExtensionConfiguration
+    public class VRRestAPIRecordQueryInterceptorConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VR_GenericData_DataRecordQueryInterceptorConfig";
 
