@@ -123,8 +123,20 @@ namespace Retail.BusinessEntity.Business
                     }
                 }
 
+                //Extra Fields
+               // Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleExtraFieldsById;
+
+                accountBEDefinitionSettings.AccountExtraFieldDefinitions = businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
+
                 return accountBEDefinitionSettings;
             });
+        }
+
+        public List<AccountExtraFieldDefinition> GetAccountExtraFieldDefinitions(Guid accountBEDefinitionId)
+        {
+            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+
+            return accountBEDefinitionSettings.AccountExtraFieldDefinitions;
         }
 
         public AccountGridDefinition GetAccountGridDefinition(Guid accountBEDefinitionId)

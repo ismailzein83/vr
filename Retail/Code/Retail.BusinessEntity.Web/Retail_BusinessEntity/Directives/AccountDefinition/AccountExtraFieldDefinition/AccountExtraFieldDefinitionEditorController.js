@@ -28,6 +28,7 @@
             }
             isEditMode = (accountExtraFieldDefinitionEntity != undefined);
         }
+
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -45,6 +46,7 @@
                 $scope.modalContext.closeModal();
             };
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
@@ -93,6 +95,7 @@
             }
             $scope.modalContext.closeModal();
         }
+
         function update() {
             var accountExtraFieldDefinitionObject = buildAccountExtraFieldDefinitionObjectFromScope();
 
@@ -109,6 +112,7 @@
                 Settings: settingsDirectiveAPI.getData()
             };
         }
+
     }
 
     appControllers.controller('Retail_BE_AccountExtraFieldDefinitionEditorController', AccountExtraFieldDefinitionEditorController);

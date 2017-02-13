@@ -57,6 +57,7 @@
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
+
             function defineAPI() {
                 var api = {};
 
@@ -95,6 +96,7 @@
                             }
                         });
                     }
+
                     function loadDirective() {
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
 

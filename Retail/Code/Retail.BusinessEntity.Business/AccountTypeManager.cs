@@ -198,6 +198,7 @@ namespace Retail.BusinessEntity.Business
                             }
                         }
                     }
+
                     return fields.ToDictionary(fld => fld.Name, fld => fld);
                 });
         }
@@ -337,6 +338,21 @@ namespace Retail.BusinessEntity.Business
             {
                 fields.Add(new AccountTypeGenericField(accountBEDefinitionId.Value));
                 fields.Add(new AccountStatusGenericField(accountBEDefinitionId.Value));
+                var accountExtraFieldDefinitions = new AccountBEDefinitionManager().GetAccountExtraFieldDefinitions(accountBEDefinitionId.Value);
+                if (accountExtraFieldDefinitions != null)
+                {
+                    foreach (var item in accountExtraFieldDefinitions)
+                    {
+                        if (item.Settings != null)
+                        {
+                            var accountGenericFields = item.Settings.GetFields(new AccountExtraFieldSettingsContext());
+                            if (accountGenericFields != null && accountGenericFields.Count() > 0)
+                            {
+                                fields.AddRange(accountGenericFields);
+                            }
+                        }
+                    }
+                }
             }
         }
 

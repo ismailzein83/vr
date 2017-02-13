@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_Teles_EnterpriseAPIService, UtilsService, VRUIUtilsService) {
+app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService', function (Retail_Teles_EnterpriseAPIService, UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService) {
     return {
         restrict: 'E',
         scope: {
@@ -52,6 +52,8 @@ app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIServ
             var api = {};
 
             api.load = function (payload) {
+                var promises = [];
+
                 selectorAPI.clearDataSource();
 
                 var selectedIds;
@@ -62,20 +64,34 @@ app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIServ
                     selectedIds = payload.selectedIds;
                     switchId = payload.switchId;
                     domainId = payload.domainId;
+
+
                     if (payload.filter != undefined)
                         filter = payload.filter;
-                }
-                return Retail_Teles_EnterpriseAPIService.GetEnterprisesInfo(switchId, domainId,UtilsService.serializetoJson(filter)).then(function (response) {
-                    if (response != null) {
-                        for (var i = 0; i < response.length; i++) {
-                            ctrl.datasource.push(response[i]);
-                        }
 
-                        if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'TelesEnterpriseId', attrs, ctrl);
-                        }
+                    var loadPromise = UtilsService.createPromiseDeferred();
+                    promises.push(loadPromise.promise);
+
+                    if(payload.businessEntityDefinitionId != undefined)
+                    {
+                        VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(payload.businessEntityDefinitionId).then(function (response) {
+                            if (response != undefined && response.Settings != undefined) {
+                                switchId = response.Settings.SwitchId;
+                                domainId = response.Settings.DomainId;
+                                loadEnterPrisesInfo(attrs, ctrl, switchId, domainId, filter, selectedIds).then(function () {
+                                    loadPromise.resolve();
+                                });
+                            }
+                        });
+                     
+                    }else
+                    {
+                        loadEnterPrisesInfo(attrs, ctrl, switchId, domainId, filter, selectedIds).then(function () {
+                            loadPromise.resolve();
+                        });
                     }
-                });
+                }
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getSelectedIds = function () {
@@ -84,6 +100,21 @@ app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIServ
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function loadEnterPrisesInfo(attrs, ctrl, switchId, domainId, filter, selectedIds)
+        {
+            return Retail_Teles_EnterpriseAPIService.GetEnterprisesInfo(switchId, domainId, UtilsService.serializetoJson(filter)).then(function (response) {
+                if (response != null) {
+                    for (var i = 0; i < response.length; i++) {
+                        ctrl.datasource.push(response[i]);
+                    }
+
+                    if (selectedIds != undefined) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'TelesEnterpriseId', attrs, ctrl);
+                    }
+                }
+            });
         }
     }
 

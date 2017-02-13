@@ -29,6 +29,7 @@ app.directive('retailTelesEnterprisebedefinitionEditor', ['UtilsService', 'VRUIU
 
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 

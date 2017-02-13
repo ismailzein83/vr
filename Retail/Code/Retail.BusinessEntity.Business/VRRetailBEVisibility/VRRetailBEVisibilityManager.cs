@@ -89,7 +89,6 @@ namespace Retail.BusinessEntity.Business
             }
             return true;
         }
-
         public bool ShouldApplyAccountTypesVisibility(out Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAccountType> accountTypesById)
         {
             accountTypesById = new Dictionary<Guid,VRRetailBEVisibilityAccountDefinitionAccountType>();

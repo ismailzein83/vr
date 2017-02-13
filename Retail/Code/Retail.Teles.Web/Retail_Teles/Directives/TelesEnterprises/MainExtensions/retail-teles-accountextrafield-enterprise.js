@@ -26,12 +26,15 @@ app.directive('retailTelesAccountextrafieldEnterprise', ['UtilsService','VRUIUti
 
             function initializeController() {
                 $scope.scopeModel = {};
+
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     beDefinitionSelectorApi = api;
                     beDefinitionSelectorPromiseDeferred.resolve();
                 };
+
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
                 
