@@ -104,9 +104,18 @@ namespace Vanrise.GenericData.Business
             {
                 return dataRecordTypes.MapRecords(DataRecordTypeInfoMapper);
             }
-
-
         }
+
+        //public IEnumerable<DataRecordTypeInfo> GetRemoteDataRecordTypeInfo(Guid connectionId, DataRecordTypeInfoFilter filter)
+        //{
+        //    VRConnectionManager connectionManager = new VRConnectionManager();
+        //    var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+        //    VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+
+        //    string serializedFilter = filter != null ? Vanrise.Common.Serializer.Serialize(filter) : string.Empty;
+
+        //    return connectionSettings.Get<IEnumerable<DataRecordTypeInfo>>(string.Format("/api/VR_GenericData/DataRecordType/GetDataRecordTypeInfo?serializedFilter={0}", serializedFilter));
+        //}
 
         public Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail> AddDataRecordType(DataRecordType dataRecordType)
         {
