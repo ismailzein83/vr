@@ -169,7 +169,7 @@ namespace Vanrise.Web
 
                 //encode file hash as a query string param
                 //string version = HttpServerUtility.UrlTokenEncode(fileHash);
-                var cacheSettingData = new GenraSettingsManager().GetCacheSettingData();
+                var cacheSettingData = new GeneralSettingsManager().GetCacheSettingData();
                 long version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
                 file.IncludedVirtualPath = string.Concat(file.IncludedVirtualPath, "?v=", version);
             }
