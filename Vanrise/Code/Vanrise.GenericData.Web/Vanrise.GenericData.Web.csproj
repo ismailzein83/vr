@@ -219,8 +219,8 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-grid.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-selector.js" />
-    <Content Include="VR_GenericData\Directives\DataRecords\Templates\DataRecordQueryInterceptorSelectiveTemplate.html" />
-    <Content Include="VR_GenericData\Directives\DataRecords\vr-genericdata-datarecordqueryinterceptor-selective.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\VRRestAPIRecordQueryInterceptorSelectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-restapirecordqueryinterceptor-selective.js" />
     <Content Include="VR_GenericData\Directives\DataStoreConfig\vr-genericdata-datastoreconfig-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\StepSequenceDesignTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinitionrecord-selector.js" />
@@ -558,7 +558,9 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_GenericData\Directives\DataRecords\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />
