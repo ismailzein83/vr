@@ -167,6 +167,8 @@
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\RevertUsersRGsProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\RevertUsersRGsProvisionerDefinitionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\ChangeUsersRGsProvisionerRuntimeSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\retail-teles-accountextrafield-internationalcallsblocked.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\Templates\InternationalCallsBlockedExtraFieldTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\MainExtensions\retail-teles-routinggroupcondition-routinggroupfilter.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\MainExtensions\Templates\RoutingGroupFilterTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\retail-teles-routinggroupcondition.js" />
