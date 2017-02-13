@@ -87,7 +87,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
             {
 
                 string[] supplierOptionEntries = optionString.Split(',');
-                string percentage = supplierOptionEntries.Length < 3 ? supplierOptionEntries[2] : null;
+                string percentage = supplierOptionEntries.Length == 3 ? supplierOptionEntries[2] : null;
                 decimal? calculatedPercentage = null;
                 if (!string.IsNullOrEmpty(percentage))
                 {

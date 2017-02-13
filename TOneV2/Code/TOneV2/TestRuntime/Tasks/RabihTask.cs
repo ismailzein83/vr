@@ -141,23 +141,23 @@ namespace TestRuntime
 
                 switch (table)
                 {
-                    case DBTableName.CarrierAccount:
-                        migrationTables.Add(table);
-                        break;
+                    //case DBTableName.CarrierAccount:
+                    //    migrationTables.Add(table);
+                    //    break;
 
 
-                    case DBTableName.CarrierProfile:
-                        migrationTables.Add(table);
-                        break;
+                    //case DBTableName.CarrierProfile:
+                    //    migrationTables.Add(table);
+                    //    break;
 
 
-                    case DBTableName.Currency:
-                        migrationTables.Add(table);
-                        break;
+                    //case DBTableName.Currency:
+                    //    migrationTables.Add(table);
+                    //    break;
 
-                    case DBTableName.CurrencyExchangeRate:
-                        migrationTables.Add(table);
-                        break;
+                    //case DBTableName.CurrencyExchangeRate:
+                    //    migrationTables.Add(table);
+                    //    break;
 
                     //case DBTableName.Switch:
                     //    migrationTables.Add(table);
@@ -200,12 +200,12 @@ namespace TestRuntime
                     //case DBTableName.SaleZone:
                     //    migrationTables.Add(table);
                     //    break;
-                    case DBTableName.File:
-                        migrationTables.Add(table);
-                        break;
-                    case DBTableName.ZoneServiceConfig:
-                        migrationTables.Add(table);
-                        break;
+                    //case DBTableName.File:
+                    //    migrationTables.Add(table);
+                    //    break;
+                    //case DBTableName.ZoneServiceConfig:
+                    //    migrationTables.Add(table);
+                    //    break;
                     case DBTableName.Rule:
                         migrationTables.Add(table);
                         break;
@@ -216,7 +216,7 @@ namespace TestRuntime
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument
             {
-                ConnectionString = "Server=192.168.110.195;Database=TONEQA;User ID=sa;Password=no@cce$$dev;",
+                ConnectionString = "Server=192.168.110.195;Database=MMOKDAD;User ID=sa;Password=no@cce$$dev;",
                 DefaultSellingNumberPlanId = 1,
                 SellingProductId = 1,
                 HolidayRateTypeId = -1,
