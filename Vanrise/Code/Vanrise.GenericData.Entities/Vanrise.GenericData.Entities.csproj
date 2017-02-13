@@ -85,7 +85,6 @@
     <Compile Include="DataRecords\DataRecord.cs" />
     <Compile Include="DataRecords\DataRecordColumn.cs" />
     <Compile Include="DataRecords\DataRecordDetailBigResult.cs" />
-    <Compile Include="DataRecords\DataRecordQueryInterceptor.cs" />
     <Compile Include="DataRecords\DataRecordQueryInterceptorConfig.cs" />
     <Compile Include="DataRecords\DataRecordSearchPageSettings.cs" />
     <Compile Include="DataRecordTypes\DataRecordTypeExtraFieldTemplate.cs" />
