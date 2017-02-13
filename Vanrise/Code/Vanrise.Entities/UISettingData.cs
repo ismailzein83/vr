@@ -9,6 +9,8 @@ namespace Vanrise.Entities
     public class GeneralSettingData :SettingData
     {
         public UISettingData UIData { get; set; }
+
+        public CacheSettingData CacheData { get; set; }
     }
     public class UISettingData
     {
@@ -19,5 +21,10 @@ namespace Vanrise.Entities
         public int? LongPrecision { get; set; }
 
         public int? GridPageSize { get; set; }
+    }
+
+    public class CacheSettingData
+    {
+        public long ClientCacheNumber { get; set; }
     }
 }

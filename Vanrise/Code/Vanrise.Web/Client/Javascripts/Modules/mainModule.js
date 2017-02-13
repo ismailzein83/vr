@@ -327,11 +327,11 @@ app.controller('DocumentCtrl',['$scope', function documentCtrl($scope) {
     };
 }]);
 angular.module('mainModule')
-.config(function ($popoverProvider) {
+.config(['$popoverProvider',function ($popoverProvider) {
     angular.extend($popoverProvider.defaults, {
         animation: 'am-flip-x',
         trigger: 'hover',
         autoClose: true,
         delay: { show: 1, hide: 100000 }
     });
-})
+}])

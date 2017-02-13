@@ -197,8 +197,10 @@
     <Content Include="Common\Directives\Filter\Text\Templates\TextFilterTemplate.html" />
     <Content Include="Common\Directives\Filter\Text\vr-common-filter-text.js" />
     <Content Include="Common\Directives\Filter\Text\vr-common-textfiltertype-selector.js" />
+    <Content Include="Common\Directives\GeneralSettings\Templates\CacheTemplateSettings.html" />
     <Content Include="Common\Directives\GeneralSettings\Templates\UITemplateSettings.html" />
     <Content Include="Common\Directives\GeneralSettings\Templates\GeneralTemplateSettings.html" />
+    <Content Include="Common\Directives\GeneralSettings\vr-common-cache-settings-editor.js" />
     <Content Include="Common\Directives\GeneralSettings\vr-common-ui-settings-editor.js" />
     <Content Include="Common\Directives\GeneralSettings\vr-common-general-settings-editor.js" />
     <Content Include="Common\Directives\GeneralSettings\vr-common-pagesize-selector.js" />

@@ -21,10 +21,16 @@ app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsServic
         function settingEditorCtor(ctrl, $scope, $attrs) {
             var uiSettingsAPI;
             var uiSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+            var cacheSettingsAPI;
+            var cacheSettingsReadyDeferred = UtilsService.createPromiseDeferred();
             $scope.scopeModel = {};
             $scope.scopeModel.onUISettingsReady = function (api) {
                 uiSettingsAPI = api;
                 uiSettingsReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onCacheSettingsReady = function (api) {
+                cacheSettingsAPI = api;
+                cacheSettingsReadyDeferred.resolve();
             };
             function initializeController() {
                 defineAPI();
@@ -46,13 +52,25 @@ app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         };
                         VRUIUtilsService.callDirectiveLoad(uiSettingsAPI, uipayload, uiSettingsLoadDeferred);
                     });
+                    var cacheSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(cacheSettingsLoadDeferred.promise);
+
+                    cacheSettingsReadyDeferred.promise.then(function () {
+                        var cachepayload = {
+                            data: payload != undefined && payload.data != undefined ? payload.data.CacheData : undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(cacheSettingsAPI, cachepayload, cacheSettingsLoadDeferred);
+                    });
+
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Entities.GeneralSettingData, Vanrise.Entities",
-                        UIData: uiSettingsAPI.getData()
+                        UIData: uiSettingsAPI.getData(),
+                        CacheData: cacheSettingsAPI.getData(),
                     };
                 };
                 

@@ -51,11 +51,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     switch (DataPrecision)
                     {
                         case FieldNumberPrecision.Long:
-                            var longPrecision = new UISettingsManager().GetLongPrecision();
+                            var longPrecision = new GeneralSettingsManager().GetLongPrecision();
                             decimalPrecision += longPrecision;
                             break;
                         case FieldNumberPrecision.Normal: 
-                            var normalPrecision = new UISettingsManager().GetNormalPrecision();
+                            var normalPrecision = new GeneralSettingsManager().GetNormalPrecision();
                             decimalPrecision += normalPrecision;
                             break;
                         default: decimalPrecision = "0.00"; break;

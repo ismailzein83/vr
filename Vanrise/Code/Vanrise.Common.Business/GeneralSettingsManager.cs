@@ -9,14 +9,25 @@ using Vanrise.Entities;
 using Vanrise.Security.Entities;
 namespace Vanrise.Common.Business
 {
-    public class UISettingsManager
+    public class GeneralSettingsManager
     {
+        public GeneralSettingData GetGeneralSettingData()
+        {
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetGeneralSetting();
+        }
 
+        public CacheSettingData GetCacheSettingData()
+        {
+            var generalSettingData = GetGeneralSettingData();
+            if (generalSettingData != null && generalSettingData.CacheData!=null)
+               return generalSettingData.CacheData;
+            return null;
+        }
         public UISettings GetUIParameters()
         {
             UISettings uiSettings = new UISettings(){Parameters= new List<UIParameter>()};
-            ConfigManager configManager = new ConfigManager();
-            GeneralSettingData generalSettingData = configManager.GetGeneralSetting();
+            var generalSettingData = GetGeneralSettingData();
 
             if (generalSettingData!=null && generalSettingData.UIData != null)
             {

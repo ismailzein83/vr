@@ -56,7 +56,7 @@
                 if (isEditMode) {
                     getGenericBusinessEntity().then(function () {
                         loadAllControls().finally(function () {
-                                genericRuleEntity = undefined;
+                            genericBusinessEntity = undefined;
                             });
                     }).catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

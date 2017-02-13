@@ -84,7 +84,7 @@
     <Compile Include="DataGrouping\Execution\IDataGroupingExecutorWCFService.cs" />
     <Compile Include="Extensions\StatusDefinitionBESettings.cs" />
     <Compile Include="Filters\StatusDefinitionBEFilter.cs" />
-    <Compile Include="UISettingsManager.cs" />
+    <Compile Include="GeneralSettingsManager.cs" />
     <Compile Include="GenericParameterManager.cs" />
     <Compile Include="MasterLogManager.cs" />
     <Compile Include="MasterLogViewSettings.cs" />

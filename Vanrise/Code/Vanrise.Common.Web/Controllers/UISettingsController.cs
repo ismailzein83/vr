@@ -17,7 +17,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetUIParameters")]
         public UISettings GetUIParameters()
         {
-            UISettingsManager manager = new UISettingsManager();
+            GeneralSettingsManager manager = new GeneralSettingsManager();
             return manager.GetUIParameters();
         }
     }

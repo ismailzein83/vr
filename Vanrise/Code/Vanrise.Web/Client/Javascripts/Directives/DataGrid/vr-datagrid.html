@@ -49,7 +49,7 @@
                 <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="ctrl.expandableColumnWidth != undefined">
                 </div>
                 <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}">
-                    <div vr-htmlcompiler="ctrl.summaryRowHtml"></div>
+                    <div vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
                 </div>
             </div>
             <div ng-sortable="ctrl.itemsSortable">
@@ -86,7 +86,7 @@
             </div>
         </div>
         <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false" ng-class="$parent.ctrl.getRowCSSClass(dataItem)">
-            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" vr-htmlcompiler="$parent.ctrl.rowHtml"></div>
+            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
             <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" showMenu == true"
                 ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
                 <li role="presentation" ng-if="showMenu==true">

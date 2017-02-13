@@ -465,7 +465,7 @@
         function downloadFile(data, headers) {
             var octetStreamMime = 'application/octet-stream';
             var success = false;
-            headersTab = headers();
+            var headersTab = headers();
             var matcher = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i;
 
             var results = headersTab['content-disposition'].match(matcher);

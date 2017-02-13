@@ -1,6 +1,7 @@
-﻿(function (appControllers) {
+﻿'use strict';
+(function (appControllers) {
 
-    "use strict";
+
 
     genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldAPIService',
         'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
@@ -76,7 +77,7 @@
             }
         }
 
-        function load() {
+        function load(genericRuleEntity) {
             $scope.scopeModel.isLoading = true;
 
             getGenericRuleDefinition().then(function () {
@@ -118,7 +119,7 @@
                 });
         }
 
-        function getGenericRule() {
+        function getGenericRule(genericRuleEntity) {
             return VR_GenericData_GenericRuleAPIService.GetGenericRule(genericRuleDefinitionId, genericRuleId).then(function (genericRule) {
                 genericRuleEntity = genericRule;
                 criteriaFieldsValues = (genericRuleEntity != undefined && genericRuleEntity.Criteria != null && genericRuleEntity.Criteria.FieldsValues != null) ? genericRuleEntity.Criteria.FieldsValues : undefined;

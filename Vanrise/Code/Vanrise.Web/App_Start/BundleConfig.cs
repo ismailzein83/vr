@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Optimization;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Web
 {
@@ -12,8 +13,8 @@ namespace Vanrise.Web
             bundles.DirectoryFilter.Clear();
             bundles.IgnoreList.Clear();
 
-            #region Bower
 
+            #region Bower
             #region JQuery
             bundles.Add(new ScriptBundle("~/bundles/JQuery").Include(
                 "~/Client/Libraries/Bower/jquery/dist/jquery.min.js"));
@@ -76,7 +77,7 @@ namespace Vanrise.Web
 
             #endregion
 
-            
+
             //AngularExtensions
             //bundles.Add(new ScriptBundle("~/bundles/AngularExtensions").IncludeDirectory(
             //  "~/Client/Libraries/AngularExtensions", "*.js", true));
@@ -98,7 +99,9 @@ namespace Vanrise.Web
             //Helpers
             bundles.Add(new ScriptBundle("~/bundles/helpers").IncludeDirectory(
                "~/Client/Libraries/Helpers", "*.js", true));
-
+            //FontStyle
+            bundles.Add(new StyleBundle("~/Content/FontStyle").IncludeDirectory(
+               "~/Client/FontStyle", "*.css", true));
             //Style
             bundles.Add(new StyleBundle("~/Content/Styles").IncludeDirectory(
                "~/Client/Styles", "*.css", true));
@@ -106,8 +109,8 @@ namespace Vanrise.Web
             bundles.Add(new StyleBundle("~/Content/Themes").Include(
           "~/Client/Themes/theme.css").IncludeDirectory(
            "~/Client/Themes", "*.css", true));
-            
-            
+
+
             //Style bootstrap
             bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(
                "~/Client/Libraries/Bootstrap", "*.css", true).IncludeDirectory(
@@ -132,6 +135,10 @@ namespace Vanrise.Web
                 "~/Client/Javascripts/Filters", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Controllers", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Directives", "*.js", true));
+
+            foreach (var b in bundles)
+                b.Transforms.Add(new FileHashVersionBundleTransform());
+          
         }
 
         public static ScriptBundle CreateModulesScriptBundle()
@@ -147,7 +154,25 @@ namespace Vanrise.Web
                 }
             }
 
+            modulesJSBundle.Transforms.Add(new FileHashVersionBundleTransform());
             return modulesJSBundle;
+        }
+
+
+    }
+    public class FileHashVersionBundleTransform : IBundleTransform
+    {
+        public void Process(BundleContext context, BundleResponse response)
+        {
+            foreach (var file in response.Files)
+            {
+
+                //encode file hash as a query string param
+                //string version = HttpServerUtility.UrlTokenEncode(fileHash);
+                var cacheSettingData = new GenraSettingsManager().GetCacheSettingData();
+                long version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
+                file.IncludedVirtualPath = string.Concat(file.IncludedVirtualPath, "?v=", version);
+            }
         }
     }
 }
