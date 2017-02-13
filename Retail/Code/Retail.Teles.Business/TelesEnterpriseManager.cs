@@ -14,9 +14,26 @@ namespace Retail.Teles.Business
         public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(int switchId, int domainId, TelesEnterpriseFilter filter)
         {
             var cachedEnterprises = GetCachedEnterprises(switchId, domainId);
+
+            Func<TelesEnterpriseInfo, bool> filterFunc = null;
+            if(filter != null)
+            {
+                filterFunc = (telesEnterpriseInfo) =>
+                {
+
+                    if (filter.Filters != null)
+                    {
+                        var context = new TelesEnterpriseFilterContext() { EnterpriseId = telesEnterpriseInfo.TelesEnterpriseId, AccountBEDefinitionId = filter.AccountBEDefinitionId };
+                        if (filter.Filters.Any(x => x.IsExcluded(context)))
+                            return false;
+                    }
+                    return true;
+                };
+            }
+
             if (cachedEnterprises == null)
                 return null;
-            return cachedEnterprises.Values;
+            return cachedEnterprises.FindAllRecords(filterFunc).OrderBy(x => x.Name);
         }
         public TelesEnterpriseInfo GetEnterprise(int switchId, int domainId,dynamic enterpriseId)
         {
@@ -65,6 +82,50 @@ namespace Retail.Teles.Business
                 new EnterpriseAccountMappingInfo { TelesEnterpriseId = input.TelesEnterpriseId });
         }
 
+
+        public Dictionary<dynamic,long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
+        {
+
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedAccountsByEnterprises_{0}",accountBEDefinitionId), () =>
+               {
+                   var accountBEManager = new AccountBEManager();
+                   var cashedAccounts = accountBEManager.GetAccounts(accountBEDefinitionId);
+                   Dictionary<dynamic, long> accountsByEnterprises = null;
+                   foreach(var item in cashedAccounts)
+                   {
+                       var enterpriseAccountMappingInfo = accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(item.Value);
+                       if (enterpriseAccountMappingInfo !=  null)
+                       {
+                           if (accountsByEnterprises == null)
+                               accountsByEnterprises = new Dictionary<dynamic, long>();
+                           accountsByEnterprises.Add(enterpriseAccountMappingInfo.TelesEnterpriseId,item.Key);
+                       }
+                   }
+                   return accountsByEnterprises;
+               });
+        }
+        public Dictionary<long, dynamic> GetCachedEnterprisesByAccounts(Guid accountBEDefinitionId)
+        {
+
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedEnterprisesByAccounts_{0}", accountBEDefinitionId), () =>
+            {
+                var accountBEManager = new AccountBEManager();
+                var cashedAccounts = accountBEManager.GetAccounts(accountBEDefinitionId);
+                Dictionary<long, dynamic> enterprisesByAccounts = null;
+                foreach (var item in cashedAccounts)
+                {
+                    var enterpriseAccountMappingInfo = accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(item.Value);
+                    if (enterpriseAccountMappingInfo != null)
+                    {
+                        if (enterprisesByAccounts == null)
+                            enterprisesByAccounts = new Dictionary<long, dynamic>();
+                        enterprisesByAccounts.Add( item.Key , enterpriseAccountMappingInfo.TelesEnterpriseId);
+                    }
+                }
+                return enterprisesByAccounts;
+            });
+        }
+
         #region Private Classes
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -98,7 +159,7 @@ namespace Retail.Teles.Business
                            telesEnterpriseInfo.Add(new TelesEnterpriseInfo
                            {
                                Name = enterprise.name,
-                               TelesEnterpriseId = enterprise.id
+                               TelesEnterpriseId = enterprise.id.Value
                            });
                        }
                    }

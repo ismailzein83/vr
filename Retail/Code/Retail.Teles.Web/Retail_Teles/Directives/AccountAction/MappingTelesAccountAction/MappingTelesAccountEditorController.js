@@ -8,7 +8,7 @@
         var isEditMode;
 
         var accountId;
-        var enterpriseIdId;
+        var enterpriseInfoEntity;
         var accountActionDefinitionEntity;
 
         var accountBEDefinitionId;
@@ -25,12 +25,12 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                enterpriseIdId = parameters.enterpriseIdId;
+                enterpriseInfoEntity = parameters.enterpriseInfoEntity;
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 actionDefinitionId = parameters.actionDefinitionId;
                 accountId = parameters.accountId;
             }
-            isEditMode = (enterpriseIdId != undefined);
+            isEditMode = (enterpriseInfoEntity != undefined);
         }
 
         function defineScope() {
@@ -80,6 +80,14 @@
                         enterprisesDirectivePayload = {
                             switchId: accountActionDefinitionEntity.ActionDefinitionSettings.SwitchId,
                             domainId: accountActionDefinitionEntity.ActionDefinitionSettings.DomainId,
+                            selectedIds: enterpriseInfoEntity != undefined ? enterpriseInfoEntity.TelesEnterpriseId : undefined,
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.Teles.Business.EnterpriseNotMappedToAccountFilter,Retail.Teles.Business",
+                                    EditedEnterpriseId: enterpriseInfoEntity != undefined ? enterpriseInfoEntity.TelesEnterpriseId : undefined,
+                                }],
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            }
                         };
                     }
                     VRUIUtilsService.callDirectiveLoad(enterprisesDirectiveAPI, enterprisesDirectivePayload, enterprisesDirectiveLoadDeferred);

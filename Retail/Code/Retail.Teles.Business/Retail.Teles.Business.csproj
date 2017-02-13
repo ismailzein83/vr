@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AccountBEActionTypes\MappingTelesAccountActionSettings.cs" />
     <Compile Include="EnterpriseBEDefinitionFilter.cs" />
+    <Compile Include="EnterpriseNotMappedToAccountFilter.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsRuntimeSettings.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="SwitchIntegrations\TelesAPISwitchIntegration.cs" />
     <Compile Include="TelesEnterpriseBEDefinitionSettings.cs" />
     <Compile Include="TelesEnterpriseExtraFieldDefinition.cs" />
+    <Compile Include="TelesEnterpriseFilterContext.cs" />
     <Compile Include="TelesEnterpriseGenericField.cs" />
     <Compile Include="TelesEnterpriseManager.cs" />
     <Compile Include="TelesRoutingGroupManager.cs" />

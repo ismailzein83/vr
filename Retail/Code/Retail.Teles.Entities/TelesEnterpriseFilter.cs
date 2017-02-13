@@ -8,5 +8,7 @@ namespace Retail.Teles.Entities
 {
     public class TelesEnterpriseFilter
     {
+        public Guid AccountBEDefinitionId { get; set; }
+        public List<ITelesEnterpriseFilter> Filters { get; set; }
     }
 }

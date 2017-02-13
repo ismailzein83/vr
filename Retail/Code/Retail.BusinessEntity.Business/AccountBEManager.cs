@@ -461,6 +461,11 @@ namespace Retail.BusinessEntity.Business
             else
                 return default(T);
         }
+
+        public Dictionary<long, Account> GetAccounts(Guid accountBEDefinitionId)
+        {
+            return GetCachedAccounts(accountBEDefinitionId);
+        }
        
         #endregion
 
