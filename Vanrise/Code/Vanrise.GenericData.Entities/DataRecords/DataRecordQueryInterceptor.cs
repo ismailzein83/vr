@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class DataRecordQueryInterceptor
+    public abstract class DataRecordQueryInterceptor
     {
         public abstract Guid ConfigId { get; }
         public abstract void PrepareQuery(IDataRecordQueryInterceptorContext context);
