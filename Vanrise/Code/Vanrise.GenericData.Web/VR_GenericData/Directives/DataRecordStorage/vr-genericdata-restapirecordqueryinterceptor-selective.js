@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VRRestAPIRecordQueryInterceptorSelectiveDirective.$inject = ['VR_GenericData_DataRecordStorageAPIService', 'UtilsService', 'VRUIUtilsService'];
+    VRRestAPIRecordQueryInterceptorSelectiveDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordStorageAPIService'];
 
-    function VRRestAPIRecordQueryInterceptorSelectiveDirective(VR_GenericData_DataRecordStorageAPIService, UtilsService, VRUIUtilsService) {
+    function VRRestAPIRecordQueryInterceptorSelectiveDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordStorageAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -20,7 +20,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/DataRecords/Templates/VRRestAPIRecordQueryInterceptorSelectiveTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/DataRecordStorage/Templates/VRRestAPIRecordQueryInterceptorSelectiveTemplate.html"
         };
 
         function VRRestAPIRecordQueryInterceptorCtor($scope, ctrl, $attrs) {
@@ -58,20 +58,19 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var VRRestAPIRecordQueryInterceptor;
+                    var vrRestAPIRecordQueryInterceptor;
 
                     if (payload != undefined) {
-                        VRRestAPIRecordQueryInterceptor = payload.VRRestAPIRecordQueryInterceptor;
+                        vrRestAPIRecordQueryInterceptor = payload.vrRestAPIRecordQueryInterceptor;
                     }
 
                     var getVRRestAPIRecordQueryInterceptorTemplateConfigsPromise = getVRRestAPIRecordQueryInterceptorTemplateConfigs();
                     promises.push(getVRRestAPIRecordQueryInterceptorTemplateConfigsPromise);
 
-                    if (VRRestAPIRecordQueryInterceptor != undefined) {
+                    if (vrRestAPIRecordQueryInterceptor != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
-
 
                     function getVRRestAPIRecordQueryInterceptorTemplateConfigs() {
                         return VR_GenericData_DataRecordStorageAPIService.GetVRRestAPIRecordQueryInterceptorConfigs().then(function (response) {
@@ -79,9 +78,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (VRRestAPIRecordQueryInterceptor != undefined) {
+                                if (vrRestAPIRecordQueryInterceptor != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, VRRestAPIRecordQueryInterceptor.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrRestAPIRecordQueryInterceptor.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -94,7 +93,7 @@
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
-                                VRRestAPIRecordQueryInterceptor: VRRestAPIRecordQueryInterceptor
+                                vrRestAPIRecordQueryInterceptor: vrRestAPIRecordQueryInterceptor
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
