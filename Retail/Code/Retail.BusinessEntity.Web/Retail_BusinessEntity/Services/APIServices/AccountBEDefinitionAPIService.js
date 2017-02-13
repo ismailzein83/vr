@@ -59,6 +59,10 @@
                 actionDefinitionId: actionDefinitionId
             });
         }
+
+        function GetAccountExtraFieldDefinitionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountExtraFieldDefinitionSettingsConfigs"));
+        }
         return {
             GetAccountBEDefinitionSettingsWithHidden: GetAccountBEDefinitionSettingsWithHidden,
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
@@ -68,7 +72,8 @@
             GetAccountViewDefinitionsByAccountId: GetAccountViewDefinitionsByAccountId,
             GetAccountActionDefinitions: GetAccountActionDefinitions,
             GetAccountActionDefinitionsInfo: GetAccountActionDefinitionsInfo,
-            GetAccountActionDefinition:GetAccountActionDefinition
+            GetAccountActionDefinition: GetAccountActionDefinition,
+            GetAccountExtraFieldDefinitionSettingsConfigs: GetAccountExtraFieldDefinitionSettingsConfigs
         };
     }
 

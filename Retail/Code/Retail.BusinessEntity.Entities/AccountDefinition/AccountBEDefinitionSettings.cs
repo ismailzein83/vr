@@ -43,10 +43,25 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountViewDefinition> AccountViewDefinitions { get; set; }
 
         public List<AccountActionDefinition> ActionDefinitions { get; set; }
-
+        public List<AccountExtraFieldDefinition> AccountExtraFieldDefinitions { get; set; }
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
     }
+    public class AccountExtraFieldDefinition
+    {
+        public Guid AccountExtraFieldDefinitionId { get; set; }
 
+        public string Name { get; set; }
+
+        public AccountExtraFieldDefinitionSettings Settings { get; set; }
+    }
+    public abstract class AccountExtraFieldDefinitionSettings
+    {
+        public abstract Guid ConfigId  { get; }
+        public abstract IEnumerable<AccountGenericField> GetFields(IAccountExtraFieldSettingsContext context);
+    }
+    public interface IAccountExtraFieldSettingsContext
+    {
+    }
     public abstract class AccountBEDefinitionCondition
     {
         public abstract Guid ConfigId { get; }

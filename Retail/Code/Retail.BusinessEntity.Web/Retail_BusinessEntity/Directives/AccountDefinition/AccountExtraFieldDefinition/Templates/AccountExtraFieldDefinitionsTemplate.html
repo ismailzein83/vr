@@ -1,0 +1,15 @@
+﻿
+
+<vr-button type="Add" data-onclick="scopeModel.onAddExtraFieldDefinition" standalone></vr-button>
+
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.extraFieldDefinitions"
+             ondeleterow="scopeModel.onDeleteExtraFieldDefinition"
+             menuactions="gridMenuActions"
+             enabledraggablerow="true"
+             hidegridmenu>
+
+    <vr-datagridcolumn field="'Entity.Name'" headertext="'Name'" type="'Text'" widthfactor="1" disablesorting></vr-datagridcolumn>
+</vr-datagrid>
+
+

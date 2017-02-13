@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -55,12 +59,17 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBEActionTypes\MappingTelesAccountActionSettings.cs" />
+    <Compile Include="EnterpriseBEDefinitionFilter.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsRuntimeSettings.cs" />
@@ -69,6 +78,9 @@
     <Compile Include="Provisioning\RoutingGroupConditionContext.cs" />
     <Compile Include="RoutingGroupCondition\RoutingGroupFilter.cs" />
     <Compile Include="SwitchIntegrations\TelesAPISwitchIntegration.cs" />
+    <Compile Include="TelesEnterpriseBEDefinitionSettings.cs" />
+    <Compile Include="TelesEnterpriseExtraFieldDefinition.cs" />
+    <Compile Include="TelesEnterpriseGenericField.cs" />
     <Compile Include="TelesEnterpriseManager.cs" />
     <Compile Include="TelesRoutingGroupManager.cs" />
     <Compile Include="TelesWebAPIClient.cs" />

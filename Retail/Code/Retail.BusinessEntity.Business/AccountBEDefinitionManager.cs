@@ -255,7 +255,11 @@ namespace Retail.BusinessEntity.Business
             var extensionConfigurationManager = new ExtensionConfigurationManager();
             return extensionConfigurationManager.GetExtensionConfigurations<AccountActionDefinitionConfig>(AccountActionDefinitionConfig.EXTENSION_TYPE);
         }
-
+        public IEnumerable<AccountExtraFieldDefinitionConfig> GetAccountExtraFieldDefinitionSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountExtraFieldDefinitionConfig>(AccountExtraFieldDefinitionConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<AccountActionDefinitionInfo> GetAccountActionDefinitionsInfo(Guid accountBEDefinitionId, AccountActionDefinitionInfoFilter filter)
         {
             var accountBEActions = GetAccountActionDefinitions(accountBEDefinitionId);

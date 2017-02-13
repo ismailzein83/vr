@@ -36,6 +36,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var accountActionDefinitionDirectiveAPI;
             var accountActionDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
 
+            var accountExtraFieldDefinitionsDirectiveAPI;
+            var accountExtraFieldDefinitionsDirectiveDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -55,7 +58,10 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     accountActionDefinitionDirectiveAPI = api;
                     accountActionDefinitionDirectiveDeferred.resolve();
                 }
-
+                $scope.scopeModel.onAccountExtraFieldDefinitionsReady = function (api) {
+                    accountExtraFieldDefinitionsDirectiveAPI = api;
+                    accountExtraFieldDefinitionsDirectiveDeferred.resolve();
+                }
                 UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 });
@@ -71,7 +77,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountGridDefinition;
                     var accountViewDefinitions;
                     var accountActionDefinitions;
-
+                    var accountExtraFieldDefinitions;
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.businessEntityDefinitionId;
@@ -81,6 +87,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountGridDefinition = payload.businessEntityDefinitionSettings.GridDefinition;
                             accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
                             accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
+                            accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
                         }
                     }
 
@@ -100,6 +107,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountActionDefinitionLoadPromise = getAccountActionDefinitionLoadPromise();
                     promises.push(accountActionDefinitionLoadPromise);
 
+                    var accountExtraFieldDefinitionsLoadPromise = getAccountExtraFieldDefinitionsLoadPromise();
+                    promises.push(accountExtraFieldDefinitionsLoadPromise);
 
                     function getStatusDefinitionSelectorLoadPromise() {
                         var statusBEDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
@@ -157,7 +166,19 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                         return accountActionDefitnionLoadDeferred.promise;
                     }
+                    function getAccountExtraFieldDefinitionsLoadPromise() {
+                        var accountExtraFieldDefinitionsLoadDeferred = UtilsService.createPromiseDeferred();
 
+                        accountExtraFieldDefinitionsDirectiveDeferred.promise.then(function () {
+                            var accountExtraFieldDefinitionsDefinitionPayload = {
+                                accountBEDefinitionId: accountBEDefinitionId,
+                                accountExtraFieldDefinitions: accountExtraFieldDefinitions
+                            };
+                            VRUIUtilsService.callDirectiveLoad(accountExtraFieldDefinitionsDirectiveAPI, accountExtraFieldDefinitionsDefinitionPayload, accountExtraFieldDefinitionsLoadDeferred);
+                        });
+
+                        return accountExtraFieldDefinitionsLoadDeferred.promise;
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -167,7 +188,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         StatusBEDefinitionId: statusBEDefinitionSelectorAPI.getSelectedIds(),
                         GridDefinition: accountGridDefinitionDirectiveAPI.getData(),
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
-                        ActionDefinitions: accountActionDefinitionDirectiveAPI.getData()
+                        ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
+                        AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData()
                     };
                     return obj;
                 };

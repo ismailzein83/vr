@@ -117,6 +117,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -170,7 +174,11 @@
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\Templates\RoutingGroupConditionTemplate.html" />
     <Content Include="Retail_Teles\Directives\SwitchIntegrations\retail-teles-switchintegrations-telesapi.js" />
     <Content Include="Retail_Teles\Directives\SwitchIntegrations\Templates\SwitchIntegrationTelesAPITemplate.html" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\MainExtensions\retail-teles-accountextrafield-enterprise.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\MainExtensions\Templates\EnterpriseAccountExtraFieldTemplate.html" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprisebedefinition-editor.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprises-selector.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\TelesEnterpriseBEDefinitionEditorTemplate.html" />
     <Content Include="Retail_Teles\ModuleInitialization.js" />
     <Content Include="Retail_Teles\Services\APIServices\EnterpriseAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\TelesRoutingGroupAPIService.js" />
@@ -178,7 +186,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Retail_Teles\APIServices\" />
-    <Folder Include="Retail_Teles\Directives\TelesEnterprises\Templates\" />
     <Folder Include="Retail_Teles\Views\" />
   </ItemGroup>
   <PropertyGroup>
