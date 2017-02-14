@@ -115,7 +115,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneItem: dataItem,
                     ownerName: ownerName,
                     routingDatabaseId: gridQuery.RoutingDatabaseId,
-                    currencyId: gridQuery.CurrencyId
+                    currencyId: gridQuery.CurrencyId,
+                    ratePlanSettings: gridQuery.Settings
                 };
                 if (dataItem.RPRouteDetail != undefined && dataItem.RPRouteDetail.RouteOptionsDetails != undefined && dataItem.RPRouteDetail.RouteOptionsDetails.length > 0)
                     WhS_Sales_RatePlanService.openTQIEditor(context, onTQIEvaluated);

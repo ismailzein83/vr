@@ -16,9 +16,13 @@
         var zoneItem;
         var routingDatabaseId;
         var currencyId;
+        var ratePlanSettings;
 
         var tqiGridAPI;
         var tqiGridAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var periodSelectorAPI;
+        var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -33,10 +37,13 @@
                 ownerName = parameters.context.ownerName;
                 routingDatabaseId = parameters.context.routingDatabaseId;
                 currencyId = parameters.context.currencyId;
+                ratePlanSettings = parameters.context.ratePlanSettings;
             }
         }
         function defineScope() {
-            $scope.marginTypes = [];
+            
+            $scope.marginTypes = UtilsService.getArrayEnum(WhS_Sales_MarginTypesEnum);
+            $scope.marginTypesSelectedValue = UtilsService.getItemByVal($scope.marginTypes, WhS_Sales_MarginTypesEnum.Percentage.value, 'value');
 
             $scope.showMarginPercentage = false;
 
@@ -58,13 +65,6 @@
                 return $scope.calculatedRate == undefined;
             }
 
-            $scope.onMarginTypesSelectorReady = function (api) {
-                var marginTypes = UtilsService.getArrayEnum(WhS_Sales_MarginTypesEnum);
-
-                for (var i = 0; i < marginTypes.length; i++)
-                    $scope.marginTypes.push(marginTypes[i]);
-            };
-
             $scope.evaluate = function () {
                 return WhS_Sales_RatePlanAPIService.GetTQIEvaluatedRate(buildTQIEvaluatedRateObjFromScope()).then(function (response) {
                     if (response != undefined) {
@@ -75,10 +75,6 @@
 
             $scope.calculateRate = function () {
                 calculateRate();
-            };
-
-            $scope.onPeriodTypeSelectorReady = function (api) {
-                $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum);
             };
 
             $scope.onServiceReady = function (api) {
@@ -98,13 +94,18 @@
             $scope.onTQIMethodSelectionChanged = function () {
                 clearData();
             };
+
+            $scope.onPeriodSelectorReady = function (api) {
+                periodSelectorAPI = api;
+                periodSelectorReadyDeferred.resolve();
+            };
         }
         function load() {
             loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTQISelectiveDirective, loadServicesDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTQISelectiveDirective, loadServicesDirective, loadPeriodSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
 
@@ -157,20 +158,40 @@
 
             tqiGridAPIReadyPromiseDeferred.promise.then(function () {
 
-                var payload = {
+                var tqiGridPayload = {
                     rpRouteDetail: rpRouteDetail,
-                    periodType: $scope.periodTypeSelectedValue != undefined ? $scope.periodTypeSelectedValue.value : undefined,
-                    periodValue: $scope.periodValue,
                     currencyId: currencyId,
                     routingDatabaseId: routingDatabaseId,
                     routingProductId: zoneItem.EffectiveRoutingProductId,
                     saleZoneId: zoneItem.ZoneId
                 };
 
-                VRUIUtilsService.callDirectiveLoad(tqiGridAPI, payload, loadTQIGridPromiseDeferred);
+                var period = periodSelectorAPI.getData();
+                if (period != undefined) {
+                    tqiGridPayload.periodValue = period.PeriodValue;
+                    tqiGridPayload.periodType = period.PeriodType;
+                }
+
+                VRUIUtilsService.callDirectiveLoad(tqiGridAPI, tqiGridPayload, loadTQIGridPromiseDeferred);
             });
 
             return loadTQIGridPromiseDeferred.promise;
+        }
+        function loadPeriodSelector() {
+            var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            periodSelectorReadyDeferred.promise.then(function () {
+                var periodSelectorPayload = {
+                    period: {}
+                };
+                if (ratePlanSettings != undefined) {
+                    periodSelectorPayload.period.periodValue = ratePlanSettings.TQIPeriodValue;
+                    periodSelectorPayload.period.periodType = ratePlanSettings.TQIPeriodType;
+                }
+                VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, periodSelectorPayload, periodSelectorLoadDeferred);
+            });
+
+            return periodSelectorLoadDeferred.promise;
         }
 
         function buildTQIEvaluatedRateObjFromScope() {
@@ -216,10 +237,15 @@
         function getContext() {
             var context = {
                 getDuration: function () {
-                    return {
-                        periodValue: $scope.periodValue,
-                        periodType: $scope.periodTypeSelectedValue.value
-                    };
+                    var duration = {};
+
+                    var period = periodSelectorAPI.getData();
+                    if (period != undefined) {
+                        duration.periodValue = period.PeriodValue;
+                        duration.periodType = period.PeriodType;
+                    }
+
+                    return duration;
                 }
             };
 

@@ -205,6 +205,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CDPNIdentificationEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\PeriodTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ProfilePropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CustomerPropertyEnum.js" />
@@ -294,6 +295,7 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-salepricelistpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerobjecttype.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SaleAreaSettingsTemplate.html" />

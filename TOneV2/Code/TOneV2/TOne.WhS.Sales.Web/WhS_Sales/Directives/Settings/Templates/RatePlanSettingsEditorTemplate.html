@@ -1,9 +1,9 @@
 ﻿<vr-tabs>
     <vr-tab header="'Rate Settings'">
         <vr-row>
-			<vr-columns width="1/2row">
-				<vr-textbox label="New Rate Day Offset" type="number" value="scopeModel.newRateDayOffset" minvalue="0" isrequired="true"></vr-textbox>
-			</vr-columns>
+            <vr-columns width="1/2row">
+                <vr-textbox label="New Rate Day Offset" type="number" value="scopeModel.newRateDayOffset" minvalue="0" isrequired="true"></vr-textbox>
+            </vr-columns>
             <vr-columns width="1/2row">
                 <vr-textbox label="Increased Rate Day Offset" type="number" value="scopeModel.increasedRateDayOffset" minvalue="0" isrequired="true"></vr-textbox>
             </vr-columns>
@@ -12,13 +12,14 @@
             </vr-columns>
         </vr-row>
     </vr-tab>
-
-    <vr-tab header ="'Cost Columns'">
+    <vr-tab header="'Cost Columns'">
         <span vr-loader="scopeModel.isLoadingCostCalculationsMethods">
-            <vr-whs-sales-costcolumns on-ready="scopeModel.onCostColumnsGridReady"
-                                      isrequired>
-            </vr-whs-sales-costcolumns>
+            <vr-whs-sales-costcolumns on-ready="scopeModel.onCostColumnDirectiveReady" isrequired="true"></vr-whs-sales-costcolumns>
         </span>
-
+    </vr-tab>
+    <vr-tab header="'TQI Settings'">
+        <vr-row>
+            <vr-whs-be-period-selector on-ready="scopeModel.onPeriodSelectorReady" label="Last" normal-col-num="6" isrequired="true"></vr-whs-be-period-selector>
+        </vr-row>
     </vr-tab>
 </vr-tabs>

@@ -12,4 +12,11 @@ namespace TOne.WhS.BusinessEntity.Entities
         OffPeak = 1,
         Weekend = 2
     }
+
+    public enum PeriodTypeEnum
+    {
+        Days = 0,
+        Hours = 1,
+        Minutes = 2
+    }
 }

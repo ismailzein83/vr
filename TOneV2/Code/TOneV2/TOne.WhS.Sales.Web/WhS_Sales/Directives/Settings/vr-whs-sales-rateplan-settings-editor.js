@@ -18,45 +18,99 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
     };
 
     function RatePlanSettings(ctrl, $scope) {
-        var costColumnsDirectiveAPI;
         this.initializeController = initializeController;
 
+        var costColumnDirectiveAPI;
+        var costColumnDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var periodSelectorAPI;
+        var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
-           
+
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onCostColumnsGridReady = function (api) {
-                costColumnsDirectiveAPI = api;
-                defineAPI();
-            }
+            $scope.scopeModel.onCostColumnDirectiveReady = function (api) {
+                costColumnDirectiveAPI = api;
+                costColumnDirectiveReadyDeferred.resolve();
+            };
 
-          
+            $scope.scopeModel.onPeriodSelectorReady = function (api) {
+                periodSelectorAPI = api;
+                periodSelectorReadyDeferred.resolve();
+            };
+
+            UtilsService.waitMultiplePromises([costColumnDirectiveReadyDeferred.promise, periodSelectorReadyDeferred.promise]).then(function () {
+                defineAPI();
+            });
         }
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
-                var costCalculationsMethodsPayload = {};
+
+                var costCalculationMethods;
+                var tqiPeriodValue;
+                var tqiPeriodType;
 
                 if (payload != undefined && payload.data != null) {
-                	$scope.scopeModel.newRateDayOffset = payload.data.NewRateDayOffset;
-                	$scope.scopeModel.increasedRateDayOffset = payload.data.IncreasedRateDayOffset;
-                	$scope.scopeModel.decreasedRateDayOffset = payload.data.DecreasedRateDayOffset;
-                	costCalculationsMethodsPayload.costCalculationMethods = payload.data.CostCalculationsMethods;
+                    $scope.scopeModel.newRateDayOffset = payload.data.NewRateDayOffset;
+                    $scope.scopeModel.increasedRateDayOffset = payload.data.IncreasedRateDayOffset;
+                    $scope.scopeModel.decreasedRateDayOffset = payload.data.DecreasedRateDayOffset;
+                    costCalculationMethods = payload.data.CostCalculationsMethods;
+                    tqiPeriodValue = payload.data.TQIPeriodValue;
+                    tqiPeriodType = payload.data.TQIPeriodType;
                 }
 
-                var setLoader = function (value) { $scope.scopeModel.isLoadingCostCalculationsMethods = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, costColumnsDirectiveAPI, costCalculationsMethodsPayload, setLoader);
+                var promises = [];
+
+                var loadCostColumnDirectivePromise = loadCostColumnDirective();
+                promises.push(loadCostColumnDirectivePromise);
+
+                var loadPeriodSelectorPromise = loadPeriodSelector();
+                promises.push(loadPeriodSelectorPromise);
+
+                function loadCostColumnDirective() {
+                    var costColumnDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    var costColumnDirectivePayload = {
+                        costCalculationMethods: costCalculationMethods
+                    };
+                    VRUIUtilsService.callDirectiveLoad(costColumnDirectiveAPI, costColumnDirectivePayload, costColumnDirectiveLoadDeferred);
+
+                    return costColumnDirectiveLoadDeferred.promise;
+                }
+                function loadPeriodSelector() {
+                    var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    var periodSelectorPayload = {
+                        period: {
+                            periodValue: tqiPeriodValue,
+                            periodType: tqiPeriodType
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, periodSelectorPayload, periodSelectorLoadDeferred);
+
+                    return periodSelectorLoadDeferred.promise;
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
-                return {
+                var data = {
                     $type: "TOne.WhS.Sales.Entities.RatePlanSettingsData, TOne.WhS.Sales.Entities",
                     NewRateDayOffset: $scope.scopeModel.newRateDayOffset,
                     IncreasedRateDayOffset: $scope.scopeModel.increasedRateDayOffset,
                     DecreasedRateDayOffset: $scope.scopeModel.decreasedRateDayOffset,
-                    CostCalculationsMethods: costColumnsDirectiveAPI.getData()
+                    CostCalculationsMethods: costColumnDirectiveAPI.getData()
                 };
+                var period = periodSelectorAPI.getData();
+                if (period != undefined) {
+                    data.TQIPeriodValue = period.periodValue;
+                    data.TQIPeriodType = period.periodType;
+                }
+                return data;
             };
 
             if (ctrl.onReady != null)
