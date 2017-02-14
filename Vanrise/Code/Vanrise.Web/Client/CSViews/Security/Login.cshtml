@@ -17,7 +17,7 @@
     @Styles.Render("~/Content/Themes")
 
 </head>
-<body ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';setVersionNumber('@ViewBag.version')">
+<body ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';">
 
     @*<nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
             <div class="container">
@@ -30,7 +30,7 @@
             </div>
         </nav>*@
     <div class="main">
-        <div ng-include="'/Client/Modules/Security/Views/Login.html'"></div>
+        <div ng-include="'/Client/Modules/Security/Views/Login.html?v='+@ViewBag.version"></div>
     </div>
 
 </body>
