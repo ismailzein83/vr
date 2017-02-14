@@ -6,8 +6,8 @@
     function saleRateAPIService(BaseAPIService, UtilsService, whSBeModuleConfig) {
 
         var controllerName = "SaleRate";
-        function GetSaleAreaSettingsData() {
-            return BaseAPIService.get(UtilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetSaleAreaSettingsData"));
+        function GetPrimarySaleEntity() {
+            return BaseAPIService.get(UtilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetPrimarySaleEntity"));
         }
         function GetFilteredSaleRate(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredSaleRates"), input);
@@ -15,7 +15,7 @@
 
         return ({
             GetFilteredSaleRate: GetFilteredSaleRate,
-            GetSaleAreaSettingsData: GetSaleAreaSettingsData
+            GetPrimarySaleEntity: GetPrimarySaleEntity
         });
     }
 

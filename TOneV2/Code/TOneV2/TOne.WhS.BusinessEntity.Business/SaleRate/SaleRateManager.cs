@@ -43,24 +43,6 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             return dataManager.GetSaleRatesEffectiveAfter(ownerType, ownerId, minimumDate);
         }
-        public SaleAreaSettingsData GetSaleAreaSettingsData()
-        {
-            object saleAreaSettingData = GetSettingData(Constants.SaleAreaSettings);
-            var saleAreaSettings = saleAreaSettingData as SaleAreaSettingsData;
-            if (saleAreaSettings == null)
-                throw new NullReferenceException("saleAreaSettings");
-            return saleAreaSettings;
-        }
-        private object GetSettingData(string settingType)
-        {
-            var settingManager = new SettingManager();
-            Setting setting = settingManager.GetSettingByType(settingType);
-            if (setting == null)
-                throw new NullReferenceException("setting");
-            if (setting.Data == null)
-                throw new NullReferenceException("setting.Data");
-            return setting.Data;
-        }
         public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new SaleRateRequestHandler());

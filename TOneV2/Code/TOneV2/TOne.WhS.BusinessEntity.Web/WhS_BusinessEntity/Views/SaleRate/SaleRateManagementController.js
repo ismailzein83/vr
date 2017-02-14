@@ -19,7 +19,7 @@
 
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        var saleAreaSettingsData;
+        var primarySaleEntity;
 
         defineScope();
         load();
@@ -110,7 +110,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadSellingProduct, loadCarrierAccount, loadSaleAreaSettingsData])
+            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadSellingProduct, loadCarrierAccount, loadPrimarySaleEntity])
               .catch(function (error) {
                   VRNotificationService.notifyExceptionWithClose(error, $scope);
               })
@@ -150,13 +150,13 @@
                 ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
                 OwnerType: $scope.selectedOwnerType.value,
                 OwnerId: ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorAPI.getSelectedIds() : carrierAccountSelectorAPI.getSelectedIds(),
-                SaleAreaSettings: saleAreaSettingsData
+                PrimarySaleEntity: primarySaleEntity
             };
 
         }
-        function loadSaleAreaSettingsData() {
-            return whSBeSaleRateApiService.GetSaleAreaSettingsData().then(function (response) {
-                saleAreaSettingsData = response;
+        function loadPrimarySaleEntity() {
+            return whSBeSaleRateApiService.GetPrimarySaleEntity().then(function (response) {
+                primarySaleEntity = response;
             });
         }
 

@@ -13,6 +13,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
+
         public int GetOffPeakRateTypeId()
         {
             BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
@@ -21,6 +22,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("setting.RateTypeConfiguration");
 
             return setting.RateTypeConfiguration.OffPeakRateTypeId;
+        }
+        public PrimarySaleEntity GetPrimarySaleEntity()
+        {
+            SaleAreaSettingsData saleAreaSettingsData = GetSaleAreaSettingsData();
+            return saleAreaSettingsData.PrimarySaleEntity;
         }
         public Guid GetCustomerRuleDefinitionId()
         {
@@ -112,12 +118,12 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.RetroactiveDayOffset;
         }
-		public int GetPurchaseAreaEffectiveDateDayOffset()
-		{
-			PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
-			return purchaseAreaSettings.EffectiveDateDayOffset;
-		}
-		public int GetPurchaseAreaRetroactiveDayOffset()
+        public int GetPurchaseAreaEffectiveDateDayOffset()
+        {
+            PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+            return purchaseAreaSettings.EffectiveDateDayOffset;
+        }
+        public int GetPurchaseAreaRetroactiveDayOffset()
         {
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
             return purchaseAreaSettings.RetroactiveDayOffset;
@@ -143,6 +149,15 @@ namespace TOne.WhS.BusinessEntity.Business
             if (cdrSettingData == null)
                 throw new NullReferenceException("CDRImportTechnicalSettingData");
             return cdrSettingData;
+        }
+        private SaleAreaSettingsData GetSaleAreaSettingsData()
+        {
+            SettingManager manager = new SettingManager();
+            SaleAreaSettingsData saleAreaSettingsData =
+                manager.GetSetting<SaleAreaSettingsData>(Constants.SaleAreaSettings);
+            if (saleAreaSettingsData == null)
+                throw new NullReferenceException("SaleAreaSettings");
+            return saleAreaSettingsData;
         }
         private BusinessEntityTechnicalSettingsData GetBusinessEntitySettingData()
         {

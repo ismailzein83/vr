@@ -22,11 +22,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredSaleRates(input));
         }
         [HttpGet]
-        [Route("GetSaleAreaSettingsData")]
-        public SaleAreaSettingsData GetSaleAreaSettingsData()
+        [Route("GetPrimarySaleEntity")]
+        public PrimarySaleEntity GetPrimarySaleEntity()
         {
-            var manager = new SaleRateManager();
-            return manager.GetSaleAreaSettingsData();
+            var configManager = new ConfigManager();
+            return configManager.GetPrimarySaleEntity();
         }
     }
 

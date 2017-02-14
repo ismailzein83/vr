@@ -85,12 +85,11 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
             };
         }
         function setNormalRateIconProperties(dataItem) {
-            console.log(dataItem);
             if (gridQuery.OwnerType === whSBeSalePriceListOwnerTypeEnum.SellingProduct.value)
                 return;
-            if (gridQuery.SaleAreaSettings == undefined || gridQuery.SaleAreaSettings.PrimarySaleEntity == null)
+            if (gridQuery.PrimarySaleEntity == undefined || gridQuery.PrimarySaleEntity == null)
                 return;
-            if (gridQuery.SaleAreaSettings.PrimarySaleEntity === whSBePrimarySaleEntityEnum.SellingProduct.value) {
+            if (gridQuery.PrimarySaleEntity === whSBePrimarySaleEntityEnum.SellingProduct.value) {
                 if (dataItem.IsRateInherited === false) {
                     dataItem.iconType = 'explicit';
                     dataItem.iconTooltip = 'Explicit';
