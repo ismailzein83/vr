@@ -1,21 +1,20 @@
-﻿using Rebex.Net;
-using System;
+﻿using System;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Rebex.Net;
 using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
-using System.Text.RegularExpressions;
-using System.Linq;
 
 namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
     public class FTPReceiveAdapter : BaseReceiveAdapter
     {
-
         public override void ImportData(IAdapterImportDataContext context)
         {
             FTPAdapterArgument ftpAdapterArgument = context.AdapterArgument as FTPAdapterArgument;
 
-            FTPAdapterState ftpAdapterState = GetAdapterState(context, ftpAdapterArgument, null);
+            FTPAdapterState ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument);
 
             var ftp = new Rebex.Net.Ftp();
             string mask = string.IsNullOrEmpty(ftpAdapterArgument.Mask) ? "" : ftpAdapterArgument.Mask;
@@ -40,21 +39,27 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 base.LogInformation("{0} files are ready to be imported", currentItems.Count);
                 if (currentItems.Count > 0)
                 {
-                    DateTime maxFileModifiedTime = ftpAdapterState.LastRetrievedFileTime;
+                    DateTime? localLastRetrievedFileTime = null;
                     foreach (var fileObj in currentItems.OrderBy(c => c.Modified))
                     {
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
-                            if (ftpAdapterArgument.BasedOnLastModifiedTime && DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) >= 0)
-                                continue;
+                            if (ftpAdapterArgument.BasedOnLastModifiedTime)
+                            {
+                                if ((!localLastRetrievedFileTime.HasValue || DateTime.Compare(localLastRetrievedFileTime.Value, fileObj.Modified) != 0) 
+                                    && DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) >= 0 )
+                                    continue;
+                            }
                             String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
                             CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath);
                             AfterImport(ftp, fileObj, filePath, ftpAdapterArgument);
-                            maxFileModifiedTime = fileObj.Modified;
-
+                            if (ftpAdapterState.LastRetrievedFileTime != fileObj.Modified)
+                            {
+                                ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Modified);
+                                localLastRetrievedFileTime = fileObj.Modified;
+                            }
                         }
                     }
-                    ftpAdapterState = GetAdapterState(context, ftpAdapterArgument, maxFileModifiedTime);
                 }
                 CloseConnection(ftp);
             }
@@ -65,7 +70,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             }
         }
 
-        private FTPAdapterState GetAdapterState(IAdapterImportDataContext context, FTPAdapterArgument ftpAdapterArgument, DateTime? fileModifiedDate)
+        private FTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, FTPAdapterArgument ftpAdapterArgument, DateTime? fileModifiedDate = null)
         {
             FTPAdapterState adapterState = null;
             context.GetStateWithLock((state) =>
@@ -76,7 +81,9 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                     adapterState = new FTPAdapterState();
 
                 if (fileModifiedDate != null && fileModifiedDate.HasValue)
+                {
                     adapterState.LastRetrievedFileTime = fileModifiedDate.Value;
+                }
                 return adapterState;
             });
 
