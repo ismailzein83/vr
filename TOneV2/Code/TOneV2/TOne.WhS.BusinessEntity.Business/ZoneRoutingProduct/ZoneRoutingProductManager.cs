@@ -114,7 +114,7 @@ namespace TOne.WhS.BusinessEntity.Business
                                 zoneRoutingProduct.RoutingProductId, saleZone.SaleZoneId);
                             ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(zoneRoutingProduct,
                                 saleZone.SaleZoneId, serviceIds,
-                                zoneRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerZone);
+                                zoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone);
                             zoneRoutingProducts.Add(routingProduct);
                         }
                     }
