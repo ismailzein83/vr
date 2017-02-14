@@ -12,11 +12,9 @@ namespace TOne.WhS.BusinessEntity.Business
     {
 
         #region Public Methods
-        public IDataRetrievalResult<SupplierRateDetail> GetFilteredSupplierRates(DataRetrievalInput<SupplierRateQuery> input)
+        public IDataRetrievalResult<SupplierRateDetail> GetFilteredSupplierRates(DataRetrievalInput<BaseSupplierRateQueryHandler> input)
         {
-            return !input.Query.IsChild
-                ? BigDataManager.Instance.RetrieveData(input, new SupplierRateRequestHandler())
-                : BigDataManager.Instance.RetrieveData(input, new SupplierZoneRateHistoryRequestHandler());
+            return BigDataManager.Instance.RetrieveData(input, new SupplierRateRequestHandler());
         }
         public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
@@ -162,8 +160,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Classes
 
-        private class SupplierZoneRateHistoryRequestHandler :
-            BigDataRequestHandler<SupplierRateQuery, SupplierRate, SupplierRateDetail>
+        private class SupplierRateRequestHandler : BigDataRequestHandler<BaseSupplierRateQueryHandler, SupplierRate, SupplierRateDetail>
         {
             public override SupplierRateDetail EntityDetailMapper(SupplierRate entity)
             {
@@ -171,32 +168,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 return manager.SupplierRateDetailMapper(entity);
             }
 
-            public override IEnumerable<SupplierRate> RetrieveAllData(DataRetrievalInput<SupplierRateQuery> input)
+            public override IEnumerable<SupplierRate> RetrieveAllData(DataRetrievalInput<BaseSupplierRateQueryHandler> input)
             {
-                ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-                SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
-                var allZones = supplierZoneManager.GetCachedSupplierZones();
-                var allZoneIds =
-                    allZones.Values.Where(z => z.Name.ToLower().Equals(input.Query.SupplierZoneName.ToLower()))
-                        .Select(r => r.SupplierZoneId).ToList();
-                return dataManager.GetZoneRateHistory(allZoneIds, input.Query.SupplierId);
-            }
-        }
-
-        private class SupplierRateRequestHandler : BigDataRequestHandler<SupplierRateQuery, SupplierRate, SupplierRateDetail>
-        {
-            public override SupplierRateDetail EntityDetailMapper(SupplierRate entity)
-            {
-                SupplierRateManager manager = new SupplierRateManager();
-                return manager.SupplierRateDetailMapper(entity);
-            }
-
-            public override IEnumerable<SupplierRate> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
-            {
-                ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-                return !input.Query.ShowPending
-                    ? dataManager.GetFilteredSupplierRates(input.Query)
-                    : dataManager.GetFilteredSupplierPendingRates(input.Query);
+                return input.Query.GetFilteredSupplierRates();
             }
         }
 

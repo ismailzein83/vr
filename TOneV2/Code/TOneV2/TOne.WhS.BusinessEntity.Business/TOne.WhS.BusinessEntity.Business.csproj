@@ -181,6 +181,8 @@
     <Compile Include="SupplierCode\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierCode\SupplierCodeManager.cs" />
     <Compile Include="SupplierPriceList\SupplierPriceListManager.cs" />
+    <Compile Include="SupplierRate\QueryHandlers\SupplierRateHistoryQueryHandler.cs" />
+    <Compile Include="SupplierRate\QueryHandlers\SupplierRateQueryHandler.cs" />
     <Compile Include="SupplierRate\SupplierRateCachedObjectCreationHandler.cs" />
     <Compile Include="SupplierRate\SupplierRateCacheManager.cs" />
     <Compile Include="SupplierRate\SupplierRateManager.cs" />

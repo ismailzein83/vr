@@ -229,8 +229,10 @@
     <Compile Include="SupplierOtherRate\SupplierOtherRate.cs" />
     <Compile Include="SupplierOtherRate\SupplierOtherRateDetail.cs" />
     <Compile Include="SupplierOtherRate\SupplierOtherRateQuery.cs" />
+    <Compile Include="SupplierRate\Query\BaseSupplierRateQueryHandler.cs" />
+    <Compile Include="SupplierRate\Query\SupplierRateHistoryQuery.cs" />
     <Compile Include="SupplierRate\SupplierRateDetail.cs" />
-    <Compile Include="SupplierRate\SupplierRateQuery.cs" />
+    <Compile Include="SupplierRate\Query\SupplierRateQuery.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneCriteria.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneTarget.cs" />
     <Compile Include="SupplierPriceList\SupplierPriceListDetail.cs" />

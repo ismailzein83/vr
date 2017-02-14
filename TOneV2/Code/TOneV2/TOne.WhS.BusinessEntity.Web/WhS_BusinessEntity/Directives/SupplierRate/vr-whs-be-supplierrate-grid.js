@@ -44,11 +44,11 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                 function getDirectiveAPI() {
 
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                        isExpandable = query.IsChild;
-                        effectiveOn = query.EffectiveOn;
-                        supplierId = query.SupplierId;
-                        return gridAPI.retrieveData(query);
+                    directiveAPI.loadGrid = function (input) {
+                        isExpandable = input.Query.IsChild;
+                        effectiveOn = input.Query.EffectiveOn;
+                        supplierId = input.Query.SupplierId;
+                        return gridAPI.retrieveData(input);
                     };
 
                     return directiveAPI;
@@ -99,33 +99,32 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                         ZoneId: rateDataItem.Entity.ZoneId,
                         EffectiveOn: effectiveOn
                     };
-
                     return rateDataItem.otherRateGridAPI.loadGrid(otherRateGridPayload);
                 }
             };
 
             directiveTabs.push(otherRatesTab);
 
-            var pendingRatesTab = {
+            var historyRatesTab = {
                 title: "History",
                 directive: "vr-whs-be-supplierrate-grid",
                 loadDirective: function (directiveApi, rateDataItem) {
-                    rateDataItem.pendingRateGridAPI = directiveApi;
-                    var pendingRateGridPayload = {
-                        SupplierZoneName: rateDataItem.SupplierZoneName,
-                        SupplierId: supplierId,
-                        IsChild: true
+                    rateDataItem.historygRateGridAPI = directiveApi;
+                    var historyRateGridPayload = {
+                        $type: "TOne.WhS.BusinessEntity.Business.SupplierRateHistoryQueryHandler,TOne.WhS.BusinessEntity.Business",
+                        Query: {
+                            SupplierZoneName: rateDataItem.SupplierZoneName,
+                            SupplierId: supplierId,
+                            IsChild: true
+                        }
                     };
-                    return rateDataItem.pendingRateGridAPI.loadGrid(pendingRateGridPayload);
+                    return rateDataItem.historygRateGridAPI.loadGrid(historyRateGridPayload);
                 }
             };
-
-            directiveTabs.push(pendingRatesTab);
+            directiveTabs.push(historyRatesTab);
 
             return directiveTabs;
         }
-
-
     }
 
     return directiveDefinitionObject;

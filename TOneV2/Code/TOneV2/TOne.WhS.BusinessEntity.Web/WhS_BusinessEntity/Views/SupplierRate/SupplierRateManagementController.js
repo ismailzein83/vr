@@ -12,14 +12,14 @@
         var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
-        var filter = {};
+        var payload = {};
 
         function defineScope() {
             $scope.effectiveOn = new Date();
 
             $scope.searchClicked = function () {
                 setFilterObject();
-                return gridAPI.loadGrid(filter);
+                return gridAPI.loadGrid(payload);
             };
 
             $scope.onSupplierZoneDirectiveReady = function (api) {
@@ -87,14 +87,16 @@
         }
 
         function setFilterObject() {
-            filter = {
-                SupplierId: supplierDirectiveApi.getSelectedIds(),
-                EffectiveOn: $scope.effectiveOn,
-                ZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
-                ShowPending: $scope.IsPending
+            payload = {
+                $type: "TOne.WhS.BusinessEntity.Business.SupplierRateQueryHandler,TOne.WhS.BusinessEntity.Business",
+                Query: {
+                    SupplierId: supplierDirectiveApi.getSelectedIds(),
+                    EffectiveOn: $scope.effectiveOn,
+                    ZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
+                    ShowPending: $scope.IsPending
+                }
             };
         }
-
     }
 
     appControllers.controller('WhS_BE_SupplierRateManagementController', supplierRateManagementController);
