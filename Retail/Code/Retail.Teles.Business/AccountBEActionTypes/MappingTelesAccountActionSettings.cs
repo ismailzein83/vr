@@ -18,7 +18,6 @@ namespace Retail.Teles.Business.AccountBEActionTypes
         {
             get { return "MappingTelesAccount"; }
         }
-        public long DomainId { get; set; }
-        public int SwitchId { get; set; }
+        public Guid VRConnectionId { get; set; }
     }
 }

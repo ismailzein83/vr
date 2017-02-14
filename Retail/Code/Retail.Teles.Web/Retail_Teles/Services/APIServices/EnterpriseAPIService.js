@@ -7,10 +7,9 @@
 
         var controllerName = "TelesEnterprise";
 
-        function GetEnterprisesInfo(switchId, domainId, serializedFilter) {
+        function GetEnterprisesInfo(vrConnectionId, serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "GetEnterprisesInfo"), {
-                switchId: switchId,
-                domainId: domainId,
+                vrConnectionId: vrConnectionId,
                 serializedFilter: serializedFilter,
             });
         }

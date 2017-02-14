@@ -80,14 +80,13 @@
     <Compile Include="Provisioning\ChangeUsersRGs\RevertUsersRGsRuntimeSettings.cs" />
     <Compile Include="Provisioning\RoutingGroupConditionContext.cs" />
     <Compile Include="RoutingGroupCondition\RoutingGroupFilter.cs" />
-    <Compile Include="SwitchIntegrations\TelesAPISwitchIntegration.cs" />
     <Compile Include="TelesEnterpriseBEDefinitionSettings.cs" />
     <Compile Include="TelesEnterpriseExtraFieldDefinition.cs" />
     <Compile Include="TelesEnterpriseFilterContext.cs" />
     <Compile Include="TelesEnterpriseGenericField.cs" />
     <Compile Include="TelesEnterpriseManager.cs" />
+    <Compile Include="TelesRestConnection.cs" />
     <Compile Include="TelesRoutingGroupManager.cs" />
-    <Compile Include="TelesWebAPIClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">

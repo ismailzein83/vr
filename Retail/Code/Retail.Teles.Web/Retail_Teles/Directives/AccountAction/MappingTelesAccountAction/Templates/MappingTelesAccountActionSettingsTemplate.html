@@ -1,9 +1,4 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
-        <vr-textbox value="scopeModel.domainId" isrequired type="number" minvalue="0" label="Domain Id"></vr-textbox>
-    </vr-columns>
-    <vr-columns width="1/2row">
-        <vr-textbox value="scopeModel.switchId" isrequired type="number" minvalue="0" label="Switch Id"></vr-textbox>
-    </vr-columns>
+    <vr-common-connection-selector on-ready="scopeModel.onConectionTypeReady" normal-col-num="4" isrequired="true"></vr-common-connection-selector>
 </vr-row>
 

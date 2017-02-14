@@ -17,10 +17,10 @@ namespace Retail.Teles.Web.Controllers
         TelesEnterpriseManager _manager = new TelesEnterpriseManager();
         [HttpGet]
         [Route("GetEnterprisesInfo")]
-        public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(int switchId, int domainId, string serializedFilter = null)
+        public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(Guid vrConnectionId, string serializedFilter = null)
         {
             TelesEnterpriseFilter filter = Vanrise.Common.Serializer.Deserialize<TelesEnterpriseFilter>(serializedFilter);
-            return _manager.GetEnterprisesInfo(switchId, domainId, filter);
+            return _manager.GetEnterprisesInfo(vrConnectionId, filter);
         }
         [HttpPost]
         [Route("MapEnterpriseToAccount")]

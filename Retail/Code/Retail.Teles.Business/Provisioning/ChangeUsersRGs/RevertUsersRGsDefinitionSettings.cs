@@ -16,6 +16,6 @@ namespace Retail.Teles.Business
         }
 
         public string ActionType { get; set; }
-        public int SwitchId { get; set; }
+        public Guid VRConnectionId { get; set; }
     }
 }

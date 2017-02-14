@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', ['UtilsService',
-    function (UtilsService) {
+app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', ['UtilsService','VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,9 +20,14 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', [
 
         function MappingTelesAccountActionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var conectionTypeAPI;
+            var conectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.onConectionTypeReady = function (api) {
+                    conectionTypeAPI = api;
+                    conectionTypeReadyDeferred.resolve();
+                };
                 defineAPI();
             }
             function defineAPI() {
@@ -31,16 +36,30 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', [
                 api.load = function (payload) {
                     if(payload != undefined && payload.accountActionDefinitionSettings != undefined)
                     {
-                        $scope.scopeModel.domainId = payload.accountActionDefinitionSettings.DomainId;
-                        $scope.scopeModel.switchId = payload.accountActionDefinitionSettings.SwitchId;
                     }
+                    var promises = [];
+
+                    promises.push(loadConectionTypes());
+                    function loadConectionTypes() {
+                        var conectionTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        conectionTypeReadyDeferred.promise.then(function () {
+                            var conectionTypePayload;
+                            if (payload != undefined && payload.accountActionDefinitionSettings != undefined) {
+                                conectionTypePayload = { selectedIds: payload.accountActionDefinitionSettings.VRConnectionId };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(conectionTypeAPI, conectionTypePayload, conectionTypeLoadDeferred);
+                        });
+                        return conectionTypeLoadDeferred.promise
+                    }
+                    return UtilsService.waitMultiplePromises(promises);
+
                 };
 
                 api.getData = function () {
                     return {
                         $type: 'Retail.Teles.Business.AccountBEActionTypes.MappingTelesAccountActionSettings, Retail.Teles.Business',
-                        DomainId:$scope.scopeModel.domainId,
-                        SwitchId: $scope.scopeModel.switchId,
+                        VRConnectionId: conectionTypeAPI.getSelectedIds(),
                     };
                 };
 

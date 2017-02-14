@@ -8,7 +8,6 @@ app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsS
             var actionType = {
                 ActionTypeName: "MappingTelesAccount",
                 ExecuteAction: function (payload) {
-                    console.log(payload);
                     if (payload == undefined)
                         return;
                     var accountBEDefinitionId = payload.accountBEDefinitionId;

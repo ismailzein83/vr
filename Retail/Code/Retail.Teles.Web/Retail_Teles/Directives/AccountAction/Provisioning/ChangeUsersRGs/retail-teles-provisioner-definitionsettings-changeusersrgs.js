@@ -29,13 +29,20 @@
 
             var existingRoutingGroupConditionAPI;
             var existingRoutingGroupConditionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var conectionTypeAPI;
+            var conectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.newRGNoMatchHandlings = UtilsService.getArrayEnum(Retail_Teles_NewRGNoMatchHandlingEnum);
                 $scope.scopeModel.newRGMultiMatchHandlings = UtilsService.getArrayEnum(Retail_Teles_NewRGMultiMatchHandlingEnum);
                 $scope.scopeModel.existingRGNoMatchHandlings = UtilsService.getArrayEnum(Retail_Teles_ExistingRGNoMatchHandling);
 
-
+                $scope.scopeModel.onConectionTypeReady = function (api) {
+                    conectionTypeAPI = api;
+                    conectionTypeReadyDeferred.resolve();
+                };
 
                 $scope.scopeModel.onNewRoutingGroupConditionReady = function (api) {
                     newRoutingGroupConditionAPI = api;
@@ -60,7 +67,6 @@
                         {
                             $scope.scopeModel.saveChangesToAccountState = provisionerDefinitionSettings.SaveChangesToAccountState;
                             $scope.scopeModel.actionType = provisionerDefinitionSettings.ActionType;
-                            $scope.scopeModel.switchId = provisionerDefinitionSettings.SwitchId;
 
 
                             $scope.scopeModel.selectedNewRGNoMatchHandling = UtilsService.getItemByVal($scope.scopeModel.newRGNoMatchHandlings, provisionerDefinitionSettings.NewRGNoMatchHandling, "value");
@@ -101,6 +107,19 @@
                     promises.push(loadNewRoutingGroupCondition());
                     promises.push(loadExistingRoutingGroupCondition());
 
+                    promises.push(loadConectionTypes());
+                    function loadConectionTypes() {
+                        var conectionTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        conectionTypeReadyDeferred.promise.then(function () {
+                            var conectionTypePayload;
+                            if (provisionerDefinitionSettings != undefined) {
+                                conectionTypePayload = { selectedIds: provisionerDefinitionSettings.VRConnectionId };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(conectionTypeAPI, conectionTypePayload, conectionTypeLoadDeferred);
+                        });
+                        return conectionTypeLoadDeferred.promise
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -117,7 +136,7 @@
                         ActionType: $scope.scopeModel.saveChangesToAccountState?$scope.scopeModel.actionType:undefined,
                         NewRoutingGroupCondition: newRoutingGroupConditionAPI.getData(),
                         ExistingRoutingGroupCondition: existingRoutingGroupConditionAPI.getData(),
-                        SwitchId: $scope.scopeModel.switchId,
+                        VRConnectionId: conectionTypeAPI.getSelectedIds(),
                         NewRGNoMatchHandling: $scope.scopeModel.selectedNewRGNoMatchHandling.value,
                         NewRGMultiMatchHandling:$scope.scopeModel.selectedNewRGMultiMatchHandling.value,
                         ExistingRGNoMatchHandling: $scope.scopeModel.selectedExistingRGNoMatchHandling.value

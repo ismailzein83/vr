@@ -25,10 +25,10 @@ namespace Retail.Teles.Business
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
 
             var changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
-            var changedUsers = GetChangedUsers( context,definitionSettings.ActionType, definitionSettings.SwitchId, changeUsersRGsAccountState);
+            var changedUsers = GetChangedUsers( context,definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Blocked Users Loaded."));
 
-            RevertBlockedUsers(context,definitionSettings.SwitchId, changedUsers);
+            RevertBlockedUsers(context,definitionSettings.VRConnectionId, changedUsers);
             RevertBlockedUsersState(context, changeUsersRGsAccountState);
            
         }
@@ -43,18 +43,18 @@ namespace Retail.Teles.Business
                 accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState);
             }
         }
-        void RevertBlockedUsers(IAccountProvisioningContext context,int switchId, List<dynamic> changedUsers)
+        void RevertBlockedUsers(IAccountProvisioningContext context, Guid vrConnectionId, List<dynamic> changedUsers)
         {
             if (changedUsers != null)
             {
                 foreach (dynamic changedUser in changedUsers)
                 {
-                    UpdateUser(switchId, changedUser);
+                    UpdateUser(vrConnectionId, changedUser);
                     context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} Unblocked.", changedUser.loginName));
                 }
             }
         }
-        List<dynamic> GetChangedUsers(IAccountProvisioningContext context,string actionType,int switchId, ChangeUsersRGsAccountState changeUsersRGsAccountState)
+        List<dynamic> GetChangedUsers(IAccountProvisioningContext context,string actionType,Guid vrConnectionId, ChangeUsersRGsAccountState changeUsersRGsAccountState)
         {
             List<dynamic> changedUsers = null;
             if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null)
@@ -67,7 +67,7 @@ namespace Retail.Teles.Business
                         changedUsers = new List<dynamic>();
                         foreach (var changesByUser in chURGsActionCh.ChangesByUser)
                         {
-                            var user = GetUser(switchId, changesByUser.Key);
+                            var user = GetUser(vrConnectionId, changesByUser.Key);
                             if(user != null)
                             {
                                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} Loaded.", user.loginName));
@@ -82,13 +82,13 @@ namespace Retail.Teles.Business
             return changedUsers;
         }
 
-        dynamic GetUser(int switchId,dynamic userId)
+        dynamic GetUser(Guid vrConnectionId, dynamic userId)
         {
-            return telesEnterpriseManager.GetUser(switchId, userId);
+            return telesEnterpriseManager.GetUser(vrConnectionId, userId);
         }
-        void UpdateUser(int switchId, dynamic user)
+        void UpdateUser(Guid vrConnectionId, dynamic user)
         {
-            telesEnterpriseManager.UpdateUser(switchId, user);
+            telesEnterpriseManager.UpdateUser(vrConnectionId, user);
         }
     }
 }

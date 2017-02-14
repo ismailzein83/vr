@@ -1,10 +1,5 @@
 ﻿<vr-tab header="'Settings'">
     <vr-row>
-        <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.switchId" label="Swtich ID" isrequired ="true"></vr-textbox>
-        </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.domainId" label="Domain ID" isrequired="true"></vr-textbox>
-        </vr-columns>
+        <vr-common-connection-selector on-ready="scopeModel.onConectionTypeReady" normal-col-num="4" isrequired="true"></vr-common-connection-selector>
     </vr-row>
 </vr-tab>

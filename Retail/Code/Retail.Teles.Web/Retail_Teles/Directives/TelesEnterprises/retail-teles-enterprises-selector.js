@@ -58,13 +58,10 @@ app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIServ
 
                 var selectedIds;
                 var filter;
-                var switchId;
-                var domainId;
+                var vrConnectionId;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
-                    switchId = payload.switchId;
-                    domainId = payload.domainId;
-
+                    vrConnectionId = payload.vrConnectionId;
 
                     if (payload.filter != undefined)
                         filter = payload.filter;
@@ -76,9 +73,8 @@ app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIServ
                     {
                         VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(payload.businessEntityDefinitionId).then(function (response) {
                             if (response != undefined && response.Settings != undefined) {
-                                switchId = response.Settings.SwitchId;
-                                domainId = response.Settings.DomainId;
-                                loadEnterPrisesInfo(attrs, ctrl, switchId, domainId, filter, selectedIds).then(function () {
+                                vrConnectionId = response.Settings.VRConnectionId;
+                                loadEnterPrisesInfo(attrs, ctrl, vrConnectionId, filter, selectedIds).then(function () {
                                     loadPromise.resolve();
                                 });
                             }
@@ -86,7 +82,7 @@ app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIServ
                      
                     }else
                     {
-                        loadEnterPrisesInfo(attrs, ctrl, switchId, domainId, filter, selectedIds).then(function () {
+                        loadEnterPrisesInfo(attrs, ctrl, vrConnectionId, filter, selectedIds).then(function () {
                             loadPromise.resolve();
                         });
                     }
@@ -102,9 +98,9 @@ app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIServ
                 ctrl.onReady(api);
         }
 
-        function loadEnterPrisesInfo(attrs, ctrl, switchId, domainId, filter, selectedIds)
+        function loadEnterPrisesInfo(attrs, ctrl, vrConnectionId, filter, selectedIds)
         {
-            return Retail_Teles_EnterpriseAPIService.GetEnterprisesInfo(switchId, domainId, UtilsService.serializetoJson(filter)).then(function (response) {
+            return Retail_Teles_EnterpriseAPIService.GetEnterprisesInfo(vrConnectionId, UtilsService.serializetoJson(filter)).then(function (response) {
                 if (response != null) {
                     for (var i = 0; i < response.length; i++) {
                         ctrl.datasource.push(response[i]);

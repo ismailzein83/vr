@@ -33,9 +33,6 @@ namespace Retail.Teles.Business
         }
 
         public override string GroupSelectorUIControl { get; set; }
-
-        public int SwitchId { get; set; }
-        public int DomainId { get; set; }
-
+        public Guid VRConnectionId { get; set; }
     }
 }

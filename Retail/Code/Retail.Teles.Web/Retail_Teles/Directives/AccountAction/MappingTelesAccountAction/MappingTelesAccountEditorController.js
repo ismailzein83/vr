@@ -78,8 +78,7 @@
                     var enterprisesDirectivePayload;
                     if (accountActionDefinitionEntity != undefined && accountActionDefinitionEntity.ActionDefinitionSettings != undefined) {
                         enterprisesDirectivePayload = {
-                            switchId: accountActionDefinitionEntity.ActionDefinitionSettings.SwitchId,
-                            domainId: accountActionDefinitionEntity.ActionDefinitionSettings.DomainId,
+                            vrConnectionId: accountActionDefinitionEntity.ActionDefinitionSettings.VRConnectionId,
                             selectedIds: enterpriseInfoEntity != undefined ? enterpriseInfoEntity.TelesEnterpriseId : undefined,
                             filter: {
                                 Filters: [{

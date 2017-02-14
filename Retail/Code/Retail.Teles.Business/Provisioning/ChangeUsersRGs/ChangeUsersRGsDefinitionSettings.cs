@@ -18,7 +18,7 @@ namespace Retail.Teles.Business
         {
             get { return new Guid("7ACEF5E4-0392-445F-97A9-C7251A66DFFC"); }
         }
-        public int SwitchId { get; set; }
+        public Guid VRConnectionId { get; set; }
 
         public bool SaveChangesToAccountState { get; set; }
 

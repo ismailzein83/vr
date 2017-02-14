@@ -38,7 +38,7 @@ namespace Retail.Teles.Business
                 }
 
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading all sites for enterpriseId {0}.", enterpriseAccountMappingInfo.TelesEnterpriseId));
-                var sites = GetSites(definitionSettings.SwitchId, enterpriseAccountMappingInfo.TelesEnterpriseId);
+                var sites = GetSites(definitionSettings.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("All sites for enterpriseId {0} loaded.", enterpriseAccountMappingInfo.TelesEnterpriseId));
                 if (sites != null)
                 {
@@ -57,7 +57,7 @@ namespace Retail.Teles.Business
             {
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing site {0}.", site.name));
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading routing groups for site {0}.", site.name));
-                Dictionary<dynamic, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.SwitchId, site.id);
+                Dictionary<dynamic, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.VRConnectionId, site.id);
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Routing groups for site {0} loaded.", site.name));
                 if (siteRoutingGroups != null)
                 {
@@ -136,7 +136,7 @@ namespace Retail.Teles.Business
         }
         void ProcessUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, dynamic siteId, List<dynamic> existingRoutingGroups, dynamic newRoutingGroup, List<dynamic> usersToBlock, ChURGsActionCh chURGsActionCh, bool updateAll)
         {
-            var users = GetUsers(definitionSettings.SwitchId, siteId);
+            var users = GetUsers(definitionSettings.VRConnectionId, siteId);
             if(users != null)
             {
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing {0} users.", users.Count));
@@ -178,7 +178,7 @@ namespace Retail.Teles.Business
             {
                 foreach (var userToBlock in usersToBlock)
                 {
-                    UpdateUser(definitionSettings.SwitchId, userToBlock);
+                    UpdateUser(definitionSettings.VRConnectionId, userToBlock);
                 }
             }
         }
@@ -190,21 +190,21 @@ namespace Retail.Teles.Business
             }
 
         }
-        IEnumerable<dynamic> GetSites(int switchId, dynamic telesEnterpriseId)
+        IEnumerable<dynamic> GetSites(Guid vrConnectionId, dynamic telesEnterpriseId)
         {
-            return telesEnterpriseManager.GetSites(switchId, telesEnterpriseId);
+            return telesEnterpriseManager.GetSites(vrConnectionId, telesEnterpriseId);
         }
-        IEnumerable<dynamic> GetUsers(int switchId, dynamic siteId)
+        IEnumerable<dynamic> GetUsers(Guid vrConnectionId, dynamic siteId)
         {
-            return telesEnterpriseManager.GetUsers(switchId, siteId);
+            return telesEnterpriseManager.GetUsers(vrConnectionId, siteId);
         }
-        Dictionary<dynamic, dynamic> GetSiteRoutingGroups(int switchId, dynamic siteId)
+        Dictionary<dynamic, dynamic> GetSiteRoutingGroups(Guid vrConnectionId, dynamic siteId)
         {
-            return  telesEnterpriseManager.GetSiteRoutingGroups(switchId, siteId);
+            return  telesEnterpriseManager.GetSiteRoutingGroups(vrConnectionId, siteId);
         }
-        void UpdateUser(int switchId, dynamic user)
+        void UpdateUser(Guid vrConnectionId, dynamic user)
         {
-            telesEnterpriseManager.UpdateUser(switchId, user);
+            telesEnterpriseManager.UpdateUser(vrConnectionId, user);
         }
     }
 }

@@ -23,10 +23,14 @@ app.directive('retailTelesEnterprisebedefinitionEditor', ['UtilsService', 'VRUIU
         };
 
         function RetailBeDefinitionsSettingsEditorCtor(ctrl, $scope, $attrs) {
-
+            var conectionTypeAPI;
+            var conectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.onConectionTypeReady = function (api) {
+                    conectionTypeAPI = api;
+                    conectionTypeReadyDeferred.resolve();
+                };
                 defineAPI();
             }
 
@@ -39,20 +43,31 @@ app.directive('retailTelesEnterprisebedefinitionEditor', ['UtilsService', 'VRUIU
                     if (payload != undefined) {
 
                         if (payload.businessEntityDefinitionSettings != undefined) {
-                            $scope.scopeModel.switchId = payload.businessEntityDefinitionSettings.SwitchId;
-                            $scope.scopeModel.domainId = payload.businessEntityDefinitionSettings.DomainId;
 
                         }
                     }
 
+                    promises.push(loadConectionTypes());
+                    function loadConectionTypes() {
+                        var conectionTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        conectionTypeReadyDeferred.promise.then(function () {
+                            var conectionTypePayload;
+                            if (payload != undefined && payload.businessEntityDefinitionSettings != undefined) {
+                                conectionTypePayload = { selectedIds: payload.businessEntityDefinitionSettings.VRConnectionId };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(conectionTypeAPI, conectionTypePayload, conectionTypeLoadDeferred);
+                        });
+                        return conectionTypeLoadDeferred.promise
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     var obj = {
                         $type: "Retail.Teles.Business.TelesEnterpriseBEDefinitionSettings, Retail.Teles.Business",
-                        DomainId: $scope.scopeModel.domainId,
-                        SwitchId: $scope.scopeModel.switchId,
+                        VRConnectionId: conectionTypeAPI.getSelectedIds(),
+
                     };
                     return obj;
                 };
