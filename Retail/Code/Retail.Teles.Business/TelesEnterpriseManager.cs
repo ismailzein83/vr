@@ -32,11 +32,13 @@ namespace Retail.Teles.Business
                     }
                     return true;
                 };
+                return cachedEnterprises.FindAllRecords(filterFunc).OrderBy(x => x.Name);
+
             }
 
             if (cachedEnterprises == null)
                 return null;
-            return cachedEnterprises.FindAllRecords(filterFunc).OrderBy(x => x.Name);
+            return cachedEnterprises.Values.OrderBy(x => x.Name);
         }
         public TelesEnterpriseInfo GetEnterprise(Guid vrConnectionId, dynamic enterpriseId)
         {
