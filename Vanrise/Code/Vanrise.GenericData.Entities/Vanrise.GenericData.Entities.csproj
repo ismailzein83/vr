@@ -68,8 +68,9 @@
     <Compile Include="BusinessEntities\BusinessEntityDescriptionContext.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinition.cs" />
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\BusinessEntityDefinitionSettingsConfig.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\StaticBEDefinitionSettings.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\BusinessEntityDefinitionSettingsConfig.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\StaticBEDefinitionSettings.cs" />
+    <Compile Include="BusinessEntities\VRRestAPIBEDefinitionSettings\VRRestAPIBEDefinitionSettings.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordStorageManager.cs" />
@@ -108,7 +109,7 @@
     <Compile Include="GenericManagement\GenericFilter\Runtime\GenericFilterRuntime.cs" />
     <Compile Include="GenericManagement\GenericFilter\Runtime\GenericFilterRuntimeField.cs" />
     <Compile Include="GenericManagement\GenericGrid\Runtime\GenericGridRuntime.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\GenericManagement.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericManagement.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityDescriptionContext.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityGroupContext.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityMatchContext.cs" />
@@ -146,7 +147,7 @@
     <Compile Include="DataStorage\IGetRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\IUpdateRecordStorageSettingsContext.cs" />
     <Compile Include="ExpressionBuilder\ExpressionBuilderConfig.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\GenericBEDefinitionSettings.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntity.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityDetail.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityInfo.cs" />
