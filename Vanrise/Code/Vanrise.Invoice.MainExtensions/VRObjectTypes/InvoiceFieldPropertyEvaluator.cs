@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Business.Context;
@@ -20,6 +21,7 @@ namespace Vanrise.Invoice.MainExtensions
         }
         public InvoiceField InvoiceField { get; set; }
         public string FieldName { get; set; }
+
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
             Vanrise.Invoice.Entities.Invoice invoice = context.Object as Vanrise.Invoice.Entities.Invoice;
@@ -63,6 +65,15 @@ namespace Vanrise.Invoice.MainExtensions
                 //    //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
                 case InvoiceField.Paid:
                     return invoice.PaidDate;
+                case InvoiceField.TimeZone:
+                    if (invoice.TimeZoneId.HasValue)
+                    {
+                        VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
+                        var timeZone = timeZoneManager.GetVRTimeZone(invoice.TimeZoneId.Value);
+                        return timeZone.Name;
+                    }
+                    else
+                        return null;
                 default: return null;
             }
         }

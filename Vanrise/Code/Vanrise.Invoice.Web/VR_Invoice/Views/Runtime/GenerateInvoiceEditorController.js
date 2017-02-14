@@ -11,6 +11,10 @@
         $scope.scopeModel.invoiceTypeEntity;
         var partnerSelectorAPI;
         var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var timeZoneSelectorAPI;
+        var timeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var invoiceGeneratorActions;
         var invoiceEntity;
         var validateResult = false;
@@ -28,9 +32,16 @@
             }
             $scope.scopeModel.isEditMode = (invoiceId != undefined);
         }
+
         function defineScope() {
             $scope.scopeModel.actions = [];
             $scope.scopeModel.issueDate = new Date();
+
+            $scope.scopeModel.onTimeZoneSelectorReady = function(api)
+            {
+                timeZoneSelectorAPI = api;
+                timeZoneSelectorReadyDeferred.resolve();
+            }
             $scope.scopeModel.onPartnerSelectorReady = function (api) {
                 partnerSelectorAPI = api;
                 partnerSelectorReadyDeferred.resolve();
@@ -160,6 +171,7 @@
             }
 
         }
+
         function loadAllControls() {
 
             function setTitle() {
@@ -191,9 +203,21 @@
                     $scope.scopeModel.issueDate = invoiceEntity.IssueDate;
                 }
             }
-           
+            function loadTimeZoneSelector() {
+                var timeZoneSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                timeZoneSelectorReadyDeferred.promise.then(function () {
+                    var timeZoneSelectorPayload;
+                    if (invoiceEntity != undefined) {
+                        timeZoneSelectorPayload = {
+                            selectedIds: invoiceEntity.TimeZoneId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(timeZoneSelectorAPI, timeZoneSelectorPayload, timeZoneSelectorPayloadLoadDeferred);
+                });
+                return timeZoneSelectorPayloadLoadDeferred.promise;
+            }
             
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective, loadTimeZoneSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -204,18 +228,18 @@
   
         function buildInvoiceObjFromScope() {
             var partnerObject = partnerSelectorAPI.getData();
-
             var obj = {
                 InvoiceId:invoiceId,
                 InvoiceTypeId: invoiceTypeId,
                 PartnerId: partnerObject != undefined ? partnerObject.selectedIds:undefined,
                 FromDate: $scope.scopeModel.fromDate,
                 ToDate: $scope.scopeModel.toDate,
-                IssueDate: $scope.scopeModel.issueDate
+                IssueDate: $scope.scopeModel.issueDate,
+                TimeZoneId: timeZoneSelectorAPI.getSelectedIds()
             };
             return obj;
         }
-       
+
         function buildInvoiceGeneratorActions() {
             if (!validateResult) {
                 $scope.scopeModel.isLoading = true;

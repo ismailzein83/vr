@@ -54,8 +54,19 @@ namespace Vanrise.Invoice.Business
                 {
                     InvoiceTypeManager manager = new InvoiceTypeManager();
                     var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
+
+                    if (createInvoiceInput.TimeZoneId.HasValue)
+                    {
+                        VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(createInvoiceInput.TimeZoneId.Value);
+                        if (timeZone != null)
+                        {
+                            createInvoiceInput.FromDate = createInvoiceInput.FromDate.Add(timeZone.Settings.Offset);
+                            createInvoiceInput.ToDate = createInvoiceInput.ToDate.Add(timeZone.Settings.Offset);
+                        }
+                    }
+
                     GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId);
-                    Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails);
+                    Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate,createInvoiceInput.TimeZoneId, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails);
                     invoice.SerialNumber = currentInvocie.SerialNumber;
                     invoice.Note = currentInvocie.Note;
 
@@ -108,6 +119,16 @@ namespace Vanrise.Invoice.Business
             {
                 InvoiceTypeManager manager = new InvoiceTypeManager();
                 var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
+                if (createInvoiceInput.TimeZoneId.HasValue)
+                {
+                    VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(createInvoiceInput.TimeZoneId.Value);
+                    if (timeZone != null)
+                    {
+                        createInvoiceInput.FromDate = createInvoiceInput.FromDate.Add(timeZone.Settings.Offset);
+                        createInvoiceInput.ToDate = createInvoiceInput.ToDate.Add(timeZone.Settings.Offset);
+                    }
+                }
+
                 GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId);
 
 
@@ -117,7 +138,7 @@ namespace Vanrise.Invoice.Business
                 }
 
 
-                var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails);
+                var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate,createInvoiceInput.TimeZoneId, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails);
 
                 var serialNumber = new PartnerManager().GetPartnerSerialNumberPattern(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId);                 InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
                 {
@@ -266,7 +287,6 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Mappers
-
         private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice, InvoiceType invoiceType)
         {
 
@@ -383,7 +403,7 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Private Methods
-        private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic invoiceDetails)
+        private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate,int? timeZoneId, DateTime issueDate, dynamic invoiceDetails)
         {
             Entities.Invoice invoice = new Entities.Invoice
             {
@@ -394,6 +414,7 @@ namespace Vanrise.Invoice.Business
                 PartnerId = partnerId,
                 ToDate = toDate,
                 IssueDate = issueDate,
+                TimeZoneId = timeZoneId
             };
 
             var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
@@ -408,7 +429,7 @@ namespace Vanrise.Invoice.Business
             {
                 throw new InvoiceGeneratorException("Invoices must not overlapped.");
             }
-
+          
             InvoiceGenerationContext context = new InvoiceGenerationContext
             {
                 CustomSectionPayload = customSectionPayload,

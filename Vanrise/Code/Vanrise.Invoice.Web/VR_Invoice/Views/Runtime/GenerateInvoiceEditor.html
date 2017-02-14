@@ -20,7 +20,7 @@
                             <vr-datetimepicker type="date" label="To" value="scopeModel.toDate" isrequired="true" customvalidate="scopeModel.validateToDate()" vr-disabled="scopeModel.isDateDisabled" applytimemax></vr-datetimepicker>
                         </vr-columns>
                     </span>
-                </vr-row>
+                    <vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="4" isrequired="true" selectedvalues ="scopeModel.selectedTimeZone"></vr-common-timezone-selector></vr-row>
             </vr-validator>
 
         </vr-form>

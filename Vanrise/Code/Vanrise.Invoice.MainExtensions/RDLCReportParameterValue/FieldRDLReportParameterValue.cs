@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Entities;
@@ -27,6 +28,16 @@ namespace Vanrise.Invoice.MainExtensions
                 case Entities.InvoiceField.Partner: return context.Invoice.PartnerId;
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate;
+                case InvoiceField.TimeZone:
+                    if (context.Invoice.TimeZoneId.HasValue)
+                    {
+                        VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
+                        var timeZone = timeZoneManager.GetVRTimeZone(context.Invoice.TimeZoneId.Value);
+                        return timeZone.Name;
+                    }
+                    else
+                        return null;
+                   
                 case Entities.InvoiceField.CustomField:
                     DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
 

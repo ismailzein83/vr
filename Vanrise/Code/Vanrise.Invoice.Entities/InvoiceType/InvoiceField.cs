@@ -20,6 +20,7 @@ namespace Vanrise.Invoice.Entities
         UserId = 9,
         CreatedTime = 10,
         Lock = 11,
-        Note = 12
+        Note = 12,
+        TimeZone = 13
     }
 }
