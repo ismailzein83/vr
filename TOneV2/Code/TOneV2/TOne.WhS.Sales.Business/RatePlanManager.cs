@@ -633,9 +633,13 @@ namespace TOne.WhS.Sales.Business
             };
             var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods);
 
-            var newDraft = new Changes();
-            newDraft.CurrencyId = input.CurrencyId;
-            newDraft.ZoneChanges = new List<ZoneChanges>();
+            var newDraft = new Changes()
+            {
+                CurrencyId = input.CurrencyId,
+                ZoneChanges = new List<ZoneChanges>()
+            };
+            if (draft != null)
+                newDraft.CountryChanges = draft.CountryChanges;
 
             foreach (SaleZone zone in filteredSaleZones)
             {
