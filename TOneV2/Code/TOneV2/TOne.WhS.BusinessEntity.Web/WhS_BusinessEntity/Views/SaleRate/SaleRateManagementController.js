@@ -40,7 +40,7 @@
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
             };
-           
+
             $scope.onSellingNumberPlanSelectionChanged = function () {
 
                 if (sellingNumberPlanDirectiveAPI.getSelectedIds() == undefined)
@@ -91,7 +91,7 @@
                 }
             };
 
-           
+
             $scope.onSellingProductSelectorReady = function (api) {
                 sellingProductSelectorAPI = api;
                 sellingProductSelectorReadyDeferred.resolve();
@@ -103,9 +103,9 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
             };
-          
+
         }
-        function load() {           
+        function load() {
             $scope.isLoadingFilter = true;
             loadAllControls();
         }
@@ -118,8 +118,8 @@
                  $scope.isLoadingFilter = false;
              });
         }
-      
-        
+
+
         function loadSellingNumberPlan() {
             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
@@ -132,37 +132,27 @@
             var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             sellingProductSelectorReadyDeferred.promise.then(function () {
-                var payload = {
-                    filter: null,
-                    selectedIds: null
-                };
-
-                VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, payload, sellingProductSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, undefined, sellingProductSelectorLoadDeferred);
             });
             return sellingProductSelectorLoadDeferred.promise;
         }
         function loadCarrierAccount() {
             var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             carrierAccountSelectorReadyDeferred.promise.then(function () {
-                var payload = {
-                    filter: null,
-                    selectedIds: null
-                };
-
-                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, undefined, carrierAccountSelectorLoadDeferred);
             });
             return carrierAccountSelectorLoadDeferred.promise;
         }
         function setFilterObject() {
-            filter = {                
+            filter = {
                 EffectiveOn: $scope.effectiveOn,
                 SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
-                OwnerType:$scope.selectedOwnerType.value,
+                OwnerType: $scope.selectedOwnerType.value,
                 OwnerId: ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorAPI.getSelectedIds() : carrierAccountSelectorAPI.getSelectedIds(),
                 SaleAreaSettings: saleAreaSettingsData
             };
-           
+
         }
         function loadSaleAreaSettingsData() {
             return whSBeSaleRateApiService.GetSaleAreaSettingsData().then(function (response) {

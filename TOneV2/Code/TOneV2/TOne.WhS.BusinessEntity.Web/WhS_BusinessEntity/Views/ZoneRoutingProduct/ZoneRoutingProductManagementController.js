@@ -126,24 +126,14 @@
             var sellingProductSelectorLoadDeferred = utilsService.createPromiseDeferred();
 
             sellingProductSelectorReadyDeferred.promise.then(function () {
-                var payload = {
-                    filter: null,
-                    selectedIds: null
-                };
-
-                vruiUtilsService.callDirectiveLoad(sellingProductSelectorApi, payload, sellingProductSelectorLoadDeferred);
+                vruiUtilsService.callDirectiveLoad(sellingProductSelectorApi, undefined, sellingProductSelectorLoadDeferred);
             });
             return sellingProductSelectorLoadDeferred.promise;
         }
         function loadCarrierAccount() {
             var carrierAccountSelectorLoadDeferred = utilsService.createPromiseDeferred();
             carrierAccountSelectorReadyDeferred.promise.then(function () {
-                var payload = {
-                    filter: null,
-                    selectedIds: null
-                };
-
-                vruiUtilsService.callDirectiveLoad(carrierAccountSelectorApi, payload, carrierAccountSelectorLoadDeferred);
+                vruiUtilsService.callDirectiveLoad(carrierAccountSelectorApi, undefined, carrierAccountSelectorLoadDeferred);
             });
             return carrierAccountSelectorLoadDeferred.promise;
         }
