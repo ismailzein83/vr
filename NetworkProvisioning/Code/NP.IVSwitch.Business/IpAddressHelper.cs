@@ -58,7 +58,7 @@ namespace NP.IVSwitch.Business
                 }
             }
             var limitedAccounts =
-                endPoints.Values.Where(a => a.AccountId != originalPoint.EndPointId)
+                endPoints.Values.Where(a => a.AccountId != originalPoint.AccountId)
                     .ToDictionary(a => a.EndPointId, a => a);
             return IsInSameSubnet(limitedAccounts, originalPoint.Host, out message);
         }
