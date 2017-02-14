@@ -35,7 +35,6 @@
                 currencyId = parameters.context.currencyId;
             }
         }
-
         function defineScope() {
             $scope.marginTypes = [];
 
@@ -66,7 +65,6 @@
                     $scope.marginTypes.push(marginTypes[i]);
             };
 
-
             $scope.evaluate = function () {
                 return WhS_Sales_RatePlanAPIService.GetTQIEvaluatedRate(buildTQIEvaluatedRateObjFromScope()).then(function (response) {
                     if (response != undefined) {
@@ -75,13 +73,12 @@
                 });
             };
 
-
             $scope.calculateRate = function () {
                 calculateRate();
             };
 
             $scope.onPeriodTypeSelectorReady = function (api) {
-                $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum)
+                $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum);
             };
 
             $scope.onServiceReady = function (api) {
@@ -98,13 +95,10 @@
                 $scope.modalContext.closeModal();
             };
 
-
             $scope.onTQIMethodSelectionChanged = function () {
                 clearData();
             };
         }
-
-
         function load() {
             loadAllControls();
         }
@@ -116,11 +110,9 @@
 
             });
         }
-
         function setTitle() {
             $scope.title = 'TQI';
         }
-
         function loadStaticData() {
             $scope.saleEntityName = ownerName;
 
@@ -131,7 +123,6 @@
                 $scope.newRate = zoneItem.NewRate;
             }
         }
-
         function loadTQISelectiveDirective() {
             var loadTQISelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -147,7 +138,6 @@
 
             return loadTQISelectiveDirectivePromiseDeferred.promise;
         }
-
         function loadServicesDirective() {
             var loadServicesDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -162,7 +152,6 @@
 
             return loadServicesDirectivePromiseDeferred.promise;
         }
-
         function loadTQIGrid() {
             var loadTQIGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -191,7 +180,6 @@
             };
         }
 
-
         function calculateRate() {
             if ($scope.marginTypesSelectedValue != undefined && $scope.evaluatedRate != undefined && !isEmpty($scope.margin)) {
                 if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
@@ -218,7 +206,6 @@
                 $scope.showMarginPercentage = false;
             }
         }
-
         function clearData() {
             $scope.evaluatedRate = undefined;
             $scope.margin = undefined;
@@ -226,7 +213,6 @@
             $scope.marginPercentage = undefined;
             $scope.marginTypesSelectedValue = undefined;
         }
-
         function getContext() {
             var context = {
                 getDuration: function () {
@@ -239,11 +225,9 @@
 
             return context;
         }
-
         function isEmpty(value) {
             return (value == undefined || value == null || value == '');
         }
-
         function getRoundedNumber(number) {
             if (!isEmpty(number)) {
                 var castedNumber = Number(number);
