@@ -37,13 +37,10 @@ namespace Retail.BusinessEntity.Entities
         }
 
         public Guid StatusBEDefinitionId { get; set; }
-
-        public AccountGridDefinition GridDefinition { get; set; }
-
-        public List<AccountViewDefinition> AccountViewDefinitions { get; set; }
-
-        public List<AccountActionDefinition> ActionDefinitions { get; set; }
         public List<AccountExtraFieldDefinition> AccountExtraFieldDefinitions { get; set; }
+        public AccountGridDefinition GridDefinition { get; set; }
+        public List<AccountViewDefinition> AccountViewDefinitions { get; set; }
+        public List<AccountActionDefinition> ActionDefinitions { get; set; }
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
     }
     public class AccountExtraFieldDefinition
