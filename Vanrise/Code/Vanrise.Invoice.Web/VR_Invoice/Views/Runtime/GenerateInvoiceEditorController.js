@@ -204,17 +204,20 @@
                 }
             }
             function loadTimeZoneSelector() {
-                var timeZoneSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
-                timeZoneSelectorReadyDeferred.promise.then(function () {
-                    var timeZoneSelectorPayload;
-                    if (invoiceEntity != undefined) {
-                        timeZoneSelectorPayload = {
-                            selectedIds: invoiceEntity.TimeZoneId
-                        };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(timeZoneSelectorAPI, timeZoneSelectorPayload, timeZoneSelectorPayloadLoadDeferred);
-                });
-                return timeZoneSelectorPayloadLoadDeferred.promise;
+                if ($scope.scopeModel.invoiceTypeEntity != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.UseTimeZone)
+                {
+                    var timeZoneSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                    timeZoneSelectorReadyDeferred.promise.then(function () {
+                        var timeZoneSelectorPayload;
+                        if (invoiceEntity != undefined) {
+                            timeZoneSelectorPayload = {
+                                selectedIds: invoiceEntity.TimeZoneId
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(timeZoneSelectorAPI, timeZoneSelectorPayload, timeZoneSelectorPayloadLoadDeferred);
+                    });
+                    return timeZoneSelectorPayloadLoadDeferred.promise;
+                }
             }
             
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective, loadTimeZoneSelector])
@@ -235,7 +238,7 @@
                 FromDate: $scope.scopeModel.fromDate,
                 ToDate: $scope.scopeModel.toDate,
                 IssueDate: $scope.scopeModel.issueDate,
-                TimeZoneId: timeZoneSelectorAPI.getSelectedIds()
+                TimeZoneId: timeZoneSelectorAPI != undefined? timeZoneSelectorAPI.getSelectedIds():undefined
             };
             return obj;
         }

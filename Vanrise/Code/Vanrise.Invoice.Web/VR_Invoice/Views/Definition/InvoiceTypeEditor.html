@@ -10,7 +10,9 @@
                         <vr-columns width="1/3row">
                             <vr-genericdata-datarecordtype-selector isrequired="true" on-ready="scopeModel.onDataRecordTypeSelectorReady" label="Invoice Record Type" onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"></vr-genericdata-datarecordtype-selector>
                         </vr-columns>
-
+                        <vr-columns width="1/3row">
+                            <vr-switch label="Use Time Zone" value="scopeModel.useTimeZone" ></vr-switch>
+                        </vr-columns>
                     </vr-row>
                     <vr-invoice-startdatecalculationmethod on-ready="scopeModel.onStartCalculationMethodDirectiveReady" normal-col-num="4"></vr-invoice-startdatecalculationmethod>
                 </vr-tab>

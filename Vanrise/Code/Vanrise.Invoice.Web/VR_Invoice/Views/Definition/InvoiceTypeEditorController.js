@@ -191,7 +191,8 @@
                         ItemGroupings: itemGroupingsDirectiveAPI.getData(),
                         StartDateCalculationMethod:startCalculationMethodAPI.getData(),
                         InvoiceSettingPartUISections: invoiceSettingDefinitionDirectiveAPI.getData(),
-                        AutomaticInvoiceActions: automaticInvoiceActionsAPI.getData()
+                        AutomaticInvoiceActions: automaticInvoiceActionsAPI.getData(),
+                        UseTimeZone:$scope.scopeModel.useTimeZone
                     }
                 };
                 return obj;
@@ -267,6 +268,7 @@
                 function loadStaticData() {
                     if (invoiceTypeEntity != undefined) {
                         $scope.scopeModel.name = invoiceTypeEntity.Name;
+                        $scope.scopeModel.useTimeZone = invoiceTypeEntity.Settings.UseTimeZone;
                     }
                 }
 

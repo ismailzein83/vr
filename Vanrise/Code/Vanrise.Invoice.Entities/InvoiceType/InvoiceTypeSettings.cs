@@ -22,6 +22,7 @@ namespace Vanrise.Invoice.Entities
         public InvoiceTypeSecurity Security { get; set; }
         public List<AutomaticInvoiceAction> AutomaticInvoiceActions { get; set; }
         public List<InvoiceSettingPartUISection> InvoiceSettingPartUISections { get; set; }
+        public bool UseTimeZone { get; set; }
     }
 
     public class InvoiceSettingPartUISection
