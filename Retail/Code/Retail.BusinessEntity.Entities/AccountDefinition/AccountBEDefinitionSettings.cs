@@ -43,6 +43,7 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountActionDefinition> ActionDefinitions { get; set; }
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
     }
+
     public class AccountExtraFieldDefinition
     {
         public Guid AccountExtraFieldDefinitionId { get; set; }
@@ -65,7 +66,6 @@ namespace Retail.BusinessEntity.Entities
 
         public abstract bool Evaluate(IAccountConditionEvaluationContext context);
     }
-
     public interface IAccountBEDefinitionConditionContext
     {
         AccountBEDefinitionSettings AccountBEDefinitionSettings { get; }
