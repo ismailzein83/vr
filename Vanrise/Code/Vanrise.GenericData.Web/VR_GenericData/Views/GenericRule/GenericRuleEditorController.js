@@ -77,7 +77,7 @@
             }
         }
 
-        function load(genericRuleEntity) {
+        function load() {
             $scope.scopeModel.isLoading = true;
 
             getGenericRuleDefinition().then(function () {
@@ -119,7 +119,7 @@
                 });
         }
 
-        function getGenericRule(genericRuleEntity) {
+        function getGenericRule() {
             return VR_GenericData_GenericRuleAPIService.GetGenericRule(genericRuleDefinitionId, genericRuleId).then(function (genericRule) {
                 genericRuleEntity = genericRule;
                 criteriaFieldsValues = (genericRuleEntity != undefined && genericRuleEntity.Criteria != null && genericRuleEntity.Criteria.FieldsValues != null) ? genericRuleEntity.Criteria.FieldsValues : undefined;
