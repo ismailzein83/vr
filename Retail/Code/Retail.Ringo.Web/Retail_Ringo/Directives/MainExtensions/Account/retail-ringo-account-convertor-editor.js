@@ -24,8 +24,9 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
         function retailBeAccountConvertorEditorCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
-
             var accountBEDefinitionId;
+            var accountTypeId;
+            var statusDefinitionId;
 
             var accountDefinitionSelectorApi;
             var accountDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -70,7 +71,7 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 otherDefinitionSelectorAPI = api;
                 otherDefinitionSelectorReadyDeferred.resolve();
             };
-            
+
             $scope.scopeModel.onFinancialDefinitionSelectorReady = function (api) {
                 financialDefinitionSelectorAPI = api;
                 financialDefinitionSelectorReadyDeferred.resolve();
@@ -95,7 +96,7 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 dealersDefinitionSelectorAPI = api;
                 dealersDefinitionSelectorReadyDeferred.resolve();
             };
-                        
+
             $scope.scopeModel.onAccountDefinitionSelectorReady = function (api) {
                 accountDefinitionSelectorApi = api;
                 accountDefinitionSelectorPromiseDeferred.resolve();
@@ -128,18 +129,41 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
             $scope.scopeModel.onAccountDefinitionSelectionChanged = function (selectedItem) {
 
-                if (selectedItem != undefined) {
-                    accountBEDefinitionId = selectedItem.BusinessEntityDefinitionId;
+                if (selectedItem != undefined && businessEntityDefinitionSelectionChangedDeferred == undefined) {
+                    businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                    businessEntityDefinitionSelectionChangedDeferred.resolve();
+
+                    $scope.scopeModel.isAccountTypeSelectorLoading = true;
+                    var promises = [];
 
                     var accountTypeSelectorPayload = {
                         filter: {
-                            AccountBEDefinitionId: accountBEDefinitionId
-                        }
+                            AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
+                        },
+                        selectedIds: accountTypeId
                     };
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isAccountTypeSelectorLoading = value;
+                    var statusSelectorPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
+                                AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
+
+                            }]
+                        },
+                        selectedIds: statusDefinitionId
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, accountTypeSelectorPayload, setLoader, businessEntityDefinitionSelectionChangedDeferred);
+                    promises.push(loadAccountTypeSelector(accountTypeSelectorPayload));
+                    promises.push(loadStatusDefinitionSelector(statusSelectorPayload));
+
+                    UtilsService.waitMultiplePromises(promises).then(function () {
+                        businessEntityDefinitionSelectionChangedDeferred = undefined;
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.scopeModel.isAccountTypeSelectorLoading = false;
+                    });
+                } else if (businessEntityDefinitionSelectionChangedDeferred != undefined) {
+                    businessEntityDefinitionSelectionChangedDeferred.resolve();
                 }
             };
 
@@ -152,10 +176,38 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
                 api.load = function (payload) {
                     var promises = [];
+                    var accountTypeSelectorPayload;
+                    var statusDefinitionSelectorPayload;
 
                     promises.push(getAccountDefinitionSelectorLoad());
-                    promises.push(loadStatusDefinitionSelector());
-                    promises.push(loadAccountTypeSelector());
+
+                    if (payload != undefined) {
+                        accountTypeId = payload.AccountTypeId;
+                        statusDefinitionId = payload.InitialStatusId;
+                        accountBEDefinitionId = payload.AccountBEDefinitionId;
+
+                        accountTypeSelectorPayload = {
+                            filter: {
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            },
+                            selectedIds: payload.AccountTypeId
+                        };
+
+                        statusDefinitionSelectorPayload = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
+                                    AccountBEDefinitionId: payload.AccountBEDefinitionId
+
+                                }]
+                            },
+                            selectedIds: payload.InitialStatusId
+                        };
+
+                        businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadAccountTypeSelector(accountTypeSelectorPayload));
+                        promises.push(loadStatusDefinitionSelector(statusDefinitionSelectorPayload));
+                    }                 
 
                     promises.push(loadFinancialDefinitionSelector());
                     promises.push(loadOtherDefinitionSelector());
@@ -192,47 +244,6 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         });
 
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
-                    };
-
-                    function loadStatusDefinitionSelector() {
-                        var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                            var statusDefinitionSelectorPayload = {
-                                filter: {
-                                    Filters: [{
-                                        $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
-                                        AccountBEDefinitionId: payload != undefined ? payload.AccountBEDefinitionId : undefined
-
-                                    }]
-                                },
-                                selectedIds: payload != undefined ? payload.InitialStatusId : undefined
-                            };
-                            VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-                        });
-                        return statusDefinitionSelectorLoadDeferred.promise;
-                    };
-
-                    function loadAccountTypeSelector() {
-
-                        if (businessEntityDefinitionSelectionChangedDeferred == undefined)
-                            businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-
-                        var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        UtilsService.waitMultiplePromises([accountTypeSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
-                            businessEntityDefinitionSelectionChangedDeferred = undefined;
-
-                            var accountTypeSelectorPayload = {
-                                filter: {
-                                    AccountBEDefinitionId: accountBEDefinitionId
-                                },
-                                selectedIds: payload != undefined ? payload.AccountTypeId : undefined
-                            };
-
-                            VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
-                        });
-
-                        return accountTypeSelectorLoadDeferred.promise;
                     };
 
                     function getAgentDefinitionSelectorLoadPromise() {
@@ -326,7 +337,6 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         return selectorLoadDeferred.promise;
                     };
 
-
                     function loadPersonalDefinitionSelector() {
                         var selectorLoadDeferred = UtilsService.createPromiseDeferred();
                         personalInfoDefinitionSelectorReadyDeferred.promise.then(function () {
@@ -383,7 +393,9 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         return selectorLoadDeferred.promise;
                     };
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        businessEntityDefinitionSelectionChangedDeferred = undefined;
+                    });
                 };
 
                 api.getData = function () {
@@ -396,12 +408,12 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         DistributorBEDefinitionId: distributorDefinitionSelectorApi.getSelectedIds(),
                         AgentBEDefinitionId: agentDefinitionSelectorApi.getSelectedIds(),
                         PosBEDefinitionId: posDefinitionSelectorApi.getSelectedIds(),
-                        ActivationPartDefinitionId:activationDefinitionSelectorAPI.getSelectedIds(),
+                        ActivationPartDefinitionId: activationDefinitionSelectorAPI.getSelectedIds(),
                         OtherPartDefinitionId: otherDefinitionSelectorAPI.getSelectedIds(),
                         DealersPartDefinitionId: dealersDefinitionSelectorAPI.getSelectedIds(),
                         FinancialPartDefinitionId: financialDefinitionSelectorAPI.getSelectedIds(),
                         ResidentialProfilePartDefinitionId: residentialDefinitionSelectorAPI.getSelectedIds(),
-                        PersonalInfoPartDefinitionId:personalInfoDefinitionSelectorAPI .getSelectedIds()
+                        PersonalInfoPartDefinitionId: personalInfoDefinitionSelectorAPI.getSelectedIds()
                     };
                     return data;
                 };
@@ -414,6 +426,29 @@ app.directive('retailRingoAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 var partDefinitionIds = [];
                 partDefinitionIds.push(id);
                 return partDefinitionIds;
+            }
+
+
+            function loadAccountTypeSelector(accountTypeSelectorPayload) {
+                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                UtilsService.waitMultiplePromises([accountTypeSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
+
+                    VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
+                });
+
+                return accountTypeSelectorLoadDeferred.promise;
+            }
+
+            function loadStatusDefinitionSelector(accountTypeSelectorPayload) {
+                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                UtilsService.waitMultiplePromises([statusDefinitionSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
+
+                    VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
+                });
+
+                return accountTypeSelectorLoadDeferred.promise;
             }
         }
 

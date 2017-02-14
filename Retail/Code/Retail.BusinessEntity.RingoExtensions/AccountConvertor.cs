@@ -18,9 +18,7 @@ using Vanrise.GenericData.Transformation.Entities;
 namespace Retail.Ringo.MainExtensions
 {
     public class AccountConvertor : TargetBEConvertor
-    {
-        
-        CurrencySettingData _currencySettingData;
+    {     
 
         #region Properties
         public Guid AccountBEDefinitionId { get; set; }
@@ -29,16 +27,13 @@ namespace Retail.Ringo.MainExtensions
         public Guid AgentBEDefinitionId { get; set; }
         public Guid DistributorBEDefinitionId { get; set; }
         public Guid PosBEDefinitionId { get; set; }
-
         public Guid ActivationPartDefinitionId { get; set; }
         public Guid OtherPartDefinitionId { get; set; }
         public Guid DealersPartDefinitionId { get; set; }
         public Guid FinancialPartDefinitionId { get; set; }
         public Guid ResidentialProfilePartDefinitionId { get; set; }
         public Guid PersonalInfoPartDefinitionId { get; set; }
-
-
-
+        
         public override string Name
         {
             get
@@ -51,11 +46,7 @@ namespace Retail.Ringo.MainExtensions
 
         #region Public Methods
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
-        {
-            SettingManager settingManager = new SettingManager();
-            var _systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
-            _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;
-
+        {            
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;
 
             List<ITargetBE> lstTargets = new List<ITargetBE>();
@@ -137,20 +128,7 @@ namespace Retail.Ringo.MainExtensions
             FillResidentialProfilePart(accountData, accountRecords);
             FillActivationPart(accountData, accountRecords);
             FillEntitiesPart(accountData, accountRecords);
-            FillFinancialPart(accountData, accountRecords);
             FillOtherPart(accountData, accountRecords);
-        }
-
-        private void FillFinancialPart(SourceAccountData accountData, string[] accountRecords)
-        {
-
-            accountData.Account.Settings.Parts.Add(this.FinancialPartDefinitionId, new AccountPart
-            {
-                Settings = new AccountPartFinancial
-                {
-                    CurrencyId = _currencySettingData.CurrencyId
-                }
-            });
         }
 
         void FillOtherPart(SourceAccountData accountData, string[] accountRecords)
