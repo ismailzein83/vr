@@ -72,9 +72,9 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
         function setRateIconProperties(dataItem) {
             if (gridQuery.OwnerType === whSBeSalePriceListOwnerTypeEnum.SellingProduct.value)
                 return;
-            if (gridQuery.SaleAreaSettings == undefined || gridQuery.SaleAreaSettings.PrimarySaleEntity == null)
+            if (gridQuery.PrimarySaleEntity == null)
                 return;
-            if (gridQuery.SaleAreaSettings.PrimarySaleEntity === whSBePrimarySaleEntityEnum.SellingProduct.value) {
+            if (gridQuery.PrimarySaleEntity === whSBePrimarySaleEntityEnum.SellingProduct.value) {
                 if (dataItem.Entity.IsInherited === false) {
                     dataItem.iconType = 'explicit';
                     dataItem.iconTooltip = 'Explicit';

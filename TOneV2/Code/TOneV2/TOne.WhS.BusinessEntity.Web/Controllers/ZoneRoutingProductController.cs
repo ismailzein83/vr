@@ -17,11 +17,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredZoneRoutingProducts(input));
         }
         [HttpGet]
-        [Route("GetSaleAreaSettingsData")]
-        public SaleAreaSettingsData GetSaleAreaSettingsData()
+        [Route("GetPrimarySaleEntity")]
+        public PrimarySaleEntity GetPrimarySaleEntity()
         {
-            var manager = new ZoneRoutingProductManager();
-            return manager.GetSaleAreaSettingsData();
+            var manager = new ConfigManager();
+            return manager.GetPrimarySaleEntity();
         }
     }
 }

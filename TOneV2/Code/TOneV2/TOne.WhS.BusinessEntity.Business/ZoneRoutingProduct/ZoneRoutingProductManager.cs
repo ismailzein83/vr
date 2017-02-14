@@ -17,27 +17,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return BigDataManager.Instance.RetrieveData(input, new ZoneRoutingProductHandler());
         }
-        public SaleAreaSettingsData GetSaleAreaSettingsData()
-        {
-            object saleAreaSettingData = GetSettingData(Constants.SaleAreaSettings);
-            var saleAreaSettings = saleAreaSettingData as SaleAreaSettingsData;
-            if (saleAreaSettings == null)
-                throw new NullReferenceException("saleAreaSettings");
-            return saleAreaSettings;
-        }
         #endregion
 
         #region private Methods
-        private object GetSettingData(string settingType)
-        {
-            var settingManager = new SettingManager();
-            Setting setting = settingManager.GetSettingByType(settingType);
-            if (setting == null)
-                throw new NullReferenceException("setting");
-            if (setting.Data == null)
-                throw new NullReferenceException("setting.Data");
-            return setting.Data;
-        }
         private class ZoneRoutingProductHandler : BigDataRequestHandler<ZoneRoutingProductQuery, ZoneRoutingProduct, ZoneRoutingProductDetail>
         {
             RoutingProductManager _routingProductManager = new RoutingProductManager();

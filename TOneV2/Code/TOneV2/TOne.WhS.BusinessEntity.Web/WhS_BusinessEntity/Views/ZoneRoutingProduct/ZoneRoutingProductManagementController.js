@@ -18,7 +18,7 @@
 
         var carrierAccountSelectorApi;
         var carrierAccountSelectorReadyDeferred = utilsService.createPromiseDeferred();
-        var saleAreaSettingsData;
+        var primarySaleEntity;
 
         defineScope();
         load();
@@ -144,13 +144,13 @@
                 ZonesIds: saleZoneDirectiveApi.getSelectedIds(),
                 OwnerType: $scope.selectedOwnerType.value,
                 OwnerId: ($scope.selectedOwnerType.value === whSBeSalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorApi.getSelectedIds() : carrierAccountSelectorApi.getSelectedIds(),
-                SaleAreaSettings: saleAreaSettingsData
+                PrimarySaleEntity: primarySaleEntity
             };
 
         }
         function loadSaleAreaSettingsData() {
-            return whSBeSaleRateApiService.GetSaleAreaSettingsData().then(function (response) {
-                saleAreaSettingsData = response;
+            return whSBeSaleRateApiService.GetPrimarySaleEntity().then(function (response) {
+                primarySaleEntity = response;
             });
         }
     }
