@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Entities
 
     public class AccountTypeSettings
     {
-
+        public bool ShowConcatenatedName { get; set; }
         public bool CanBeRootAccount { get; set; }
 
         public List<Guid> SupportedParentAccountTypeIds { get; set; }

@@ -180,6 +180,7 @@
 
                 if (accountTypeEntity.Settings != undefined) {
                     $scope.scopeModel.canBeRootAccount = accountTypeEntity.Settings.CanBeRootAccount;
+                    $scope.scopeModel.showConcatenatedName = accountTypeEntity.Settings.ShowConcatenatedName;
                 }
 
             }
@@ -344,7 +345,8 @@
                     CanBeRootAccount: $scope.scopeModel.canBeRootAccount,
                     SupportedParentAccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
                     PartDefinitionSettings: partDefinitionSettings,
-                    InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds()
+                    InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds(),
+                    ShowConcatenatedName: $scope.scopeModel.showConcatenatedName,
                 },
                 AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds()
             };

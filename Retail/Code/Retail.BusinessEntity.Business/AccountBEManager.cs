@@ -71,7 +71,12 @@ namespace Retail.BusinessEntity.Business
         public string GetAccountName(Guid accountBEDefinitionId, long accountId)
         {
             Account account = this.GetAccount(accountBEDefinitionId, accountId);
-            return (account != null) ? account.Name : null;
+            if (account != null)
+            {
+                AccountInfo accountInfo = AccountInfoMapper(account);
+                return accountInfo.Name;
+            }
+            return null;
         }
 
         public AccountEditorRuntime GetAccountEditorRuntime(Guid accountBEDefinitionId, Guid accountTypeId, int? parentAccountId)
@@ -707,7 +712,6 @@ namespace Retail.BusinessEntity.Business
 
                 fieldValues.Add(field.Name, accountFieldValue);
             }
-
             return new AccountDetail()
             {
                 Entity = account,
@@ -751,13 +755,28 @@ namespace Retail.BusinessEntity.Business
 
         private AccountInfo AccountInfoMapper(Account account)
         {
+            AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
+            string name = account.Name;
+            if (accountType.Settings.ShowConcatenatedName && account.ParentAccountId.HasValue)
+            {
+                name = BuildAccountFullName(accountType.AccountBEDefinitionId, account.ParentAccountId.Value, name);
+            }
             return new AccountInfo
             {
                 AccountId = account.AccountId,
-                Name = account.Name
+                Name = name
             };
         }
-
+        private string BuildAccountFullName(Guid accountBEDefinitionId, long accountId, string name)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            name = string.Format("{0} -> {1}", account.Name, name);
+            if (account.ParentAccountId.HasValue)
+            {
+                return BuildAccountFullName(accountBEDefinitionId, account.ParentAccountId.Value, name);
+            }
+            return name;
+        }
         #endregion
 
         #region IBusinessEntityManager
