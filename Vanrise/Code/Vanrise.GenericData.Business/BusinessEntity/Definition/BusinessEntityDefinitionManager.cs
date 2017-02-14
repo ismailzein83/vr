@@ -26,6 +26,7 @@ namespace Vanrise.GenericData.Business
                 (input.Query.Name == null || dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return DataRetrievalManager.Instance.ProcessResult(input, cachedBEDefinitions.ToBigResult(input, filterExpression, BusinessEntityDefinitionDetailMapper));
         }
+        
         public Guid GetBusinessEntityDefinitionId(string businessEntityDefinitionName)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
@@ -39,6 +40,12 @@ namespace Vanrise.GenericData.Business
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
             return cachedBEDefinitions.GetRecord(businessEntityDefinitionId);
         }
+        public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
+        {
+            var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
+            return beDefinition != null ? beDefinition.Name : null;
+        }
+
         public IEnumerable<BusinessEntityDefinitionInfo> GetBusinessEntityDefinitionsInfo(BusinessEntityDefinitionInfoFilter filter)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
@@ -130,17 +137,20 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
+
         public Vanrise.Security.Entities.View GetGenericBEDefinitionView(Guid businessEntityDefinitionId)
         {
             var viewManager = new Vanrise.Security.Business.ViewManager();
             var allViews = viewManager.GetViews();
             return allViews.FirstOrDefault(v => (v.Settings as GenericBEViewSettings) != null && (v.Settings as GenericBEViewSettings).BusinessEntityDefinitionId == businessEntityDefinitionId);
         }
-        public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
+
+        public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
         {
-            var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
-            return beDefinition != null ? beDefinition.Name : null;
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<BusinessEntityDefinitionSettingsConfig>(BusinessEntityDefinitionSettingsConfig.EXTENSION_TYPE);
         }
+
         public Guid? GetBEDataRecordTypeIdIfGeneric(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
@@ -156,11 +166,6 @@ namespace Vanrise.GenericData.Business
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
             return beDefinition != null && beDefinition.Settings != null ? beDefinition.Settings.NullDisplayText : null;
-        }
-        public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
-        {
-            var extensionConfigurationManager = new ExtensionConfigurationManager();
-            return extensionConfigurationManager.GetExtensionConfigurations<BusinessEntityDefinitionSettingsConfig>(BusinessEntityDefinitionSettingsConfig.EXTENSION_TYPE);
         }
 
         #endregion
