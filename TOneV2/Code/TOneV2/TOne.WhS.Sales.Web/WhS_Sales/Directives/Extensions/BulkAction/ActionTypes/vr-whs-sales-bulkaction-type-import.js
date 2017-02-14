@@ -33,6 +33,10 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
             $scope.scopeModel.headerRowExists = true;
             cacheObjectName = UtilsService.guid();
 
+            $scope.scopeModel.onFileChanged = function () {
+                cacheObjectName = UtilsService.guid();
+            };
+
             $scope.scopeModel.onSwitchValueChanged = function () {
                 cacheObjectName = UtilsService.guid();
             };
@@ -77,7 +81,7 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
     function getTemplate(attrs) {
         return '<span vr-loader="scopeModel.isLoading">\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
-                        <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
+                        <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
                     </vr-columns>\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
                         <vr-switch label="Header" value="scopeModel.headerRowExists" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\

@@ -1161,7 +1161,7 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach (SaleZone saleZone in saleZones)
                 {
-                    string saleZoneName = saleZone.Name.ToLower();
+                    string saleZoneName = saleZone.Name.Trim().ToLower();
                     if (!saleZonesByName.ContainsKey(saleZoneName))
                         saleZonesByName.Add(saleZoneName, saleZone);
                 }
