@@ -410,19 +410,19 @@ namespace TOne.WhS.SupplierPriceList.Business
                                 EED = importedRate.EED.Value
                             };
                             importedRate.ChangedExistingRates.Add(existingRate);
+                            shouldNotAddRate = true;
+                            break;
                         }
 
                     }
-                    else
+
+                    DateTime existingRateEED = Utilities.Max(importedRate.BED, existingRate.BED);
+                    existingRate.ChangedRate = new ChangedRate
                     {
-                        DateTime existingRateEED = Utilities.Max(importedRate.BED, existingRate.BED);
-                        existingRate.ChangedRate = new ChangedRate
-                        {
-                            EntityId = existingRate.RateEntity.SupplierRateId,
-                            EED = existingRateEED
-                        };
-                        importedRate.ChangedExistingRates.Add(existingRate);
-                    }
+                        EntityId = existingRate.RateEntity.SupplierRateId,
+                        EED = existingRateEED
+                    };
+                    importedRate.ChangedExistingRates.Add(existingRate);
                 }
             }
 
