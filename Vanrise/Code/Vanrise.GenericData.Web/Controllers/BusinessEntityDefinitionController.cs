@@ -15,6 +15,13 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         BusinessEntityDefinitionManager _manager = new BusinessEntityDefinitionManager();
 
+        [HttpPost]
+        [Route("GetFilteredBusinessEntityDefinitions")]
+        public object GetFilteredDataRecordStorages(Vanrise.Entities.DataRetrievalInput<BusinessEntityDefinitionQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredBusinessEntityDefinitions(input));
+        }
+
         [HttpGet]
         [Route("GetBusinessEntityDefinition")]
         public BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId)
@@ -31,23 +38,16 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpPost]
-        [Route("GetFilteredBusinessEntityDefinitions")]
-        public object GetFilteredDataRecordStorages(Vanrise.Entities.DataRetrievalInput<BusinessEntityDefinitionQuery> input)
+        [Route("AddBusinessEntityDefinition")]
+        public Vanrise.Entities.InsertOperationOutput<BusinessEntityDefinitionDetail> AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
         {
-            return GetWebResponse(input, _manager.GetFilteredBusinessEntityDefinitions(input));
+            return _manager.AddBusinessEntityDefinition(businessEntityDefinition);
         }
 
         [Route("UpdateBusinessEntityDefinition")]
         public Vanrise.Entities.UpdateOperationOutput<BusinessEntityDefinitionDetail> UpdateBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
         {
             return _manager.UpdateBusinessEntityDefinition(businessEntityDefinition);
-        }
-
-        [HttpPost]
-        [Route("AddBusinessEntityDefinition")]
-        public Vanrise.Entities.InsertOperationOutput<BusinessEntityDefinitionDetail> AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
-        {
-            return _manager.AddBusinessEntityDefinition(businessEntityDefinition);
         }
 
         [HttpGet]
@@ -58,17 +58,17 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetBEDataRecordTypeIdIfGeneric")]
-        public Guid? GetBEDataRecordTypeIdIfGeneric(Guid businessEntityDefinitionId)
-        {
-            return _manager.GetBEDataRecordTypeIdIfGeneric(businessEntityDefinitionId);
-        }
-
-        [HttpGet]
         [Route("GetBEDefinitionSettingConfigs")]
         public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
         {
             return _manager.GetBEDefinitionSettingConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetBEDataRecordTypeIdIfGeneric")]
+        public Guid? GetBEDataRecordTypeIdIfGeneric(Guid businessEntityDefinitionId)
+        {
+            return _manager.GetBEDataRecordTypeIdIfGeneric(businessEntityDefinitionId);
         }
     }
 }
