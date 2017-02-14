@@ -471,7 +471,7 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\RecordFilterAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\SummaryTransformationDefinitionAPIService.js" />
-    <Content Include="VR_GenericData\Services\APIServices\VRRestAPIBEDefinitionAPIController.js" />
+    <Content Include="VR_GenericData\Services\APIServices\VRRestAPIBEDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\BELookupRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\BEParentChildRelationService.js" />
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
