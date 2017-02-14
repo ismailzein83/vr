@@ -123,10 +123,19 @@
 
         function loadStaticData() {
             $scope.saleEntityName = ownerName;
-            $scope.zoneName = zoneItem.ZoneName;
-            $scope.rate = zoneItem.CurrentRate;
-            $scope.rateBED = zoneItem.CurrentRateBED;
-            $scope.newRate = zoneItem.NewRate;
+
+            if (zoneItem != undefined) {
+                $scope.zoneName = zoneItem.ZoneName;
+
+                if (zoneItem.CurrentRate != undefined) {
+                    var currentRateAsNumber = Number(zoneItem.CurrentRate);
+                    if (!isNaN(currentRateAsNumber))
+                        $scope.rate = UtilsService.round(currentRateAsNumber, 4);
+                }
+
+                $scope.rateBED = zoneItem.CurrentRateBED;
+                $scope.newRate = zoneItem.NewRate;
+            }
         }
 
         function loadTQISelectiveDirective() {
@@ -151,7 +160,7 @@
             servicesDirectiveReadyPromiseDeferred.promise.then(function () {
 
                 var payload = {
-                    selectedIds: zoneItem.CurrentServiceIds
+                    selectedIds: zoneItem.EffectiveServiceIds
                 };
 
                 VRUIUtilsService.callDirectiveLoad(servicesDirectiveAPI, payload, loadServicesDirectivePromiseDeferred);
@@ -190,20 +199,29 @@
 
 
         function calculateRate() {
-            if ($scope.marginTypesSelectedValue != undefined && $scope.evaluatedRate != undefined && $scope.margin != undefined) {
+            if ($scope.marginTypesSelectedValue != undefined && $scope.evaluatedRate != undefined && !isEmpty($scope.margin)) {
                 if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
                     $scope.marginPercentage = (parseFloat($scope.margin) * 100 / parseFloat($scope.evaluatedRate)).toFixed(2) + "%";
                     $scope.showMarginPercentage = true;
                 }
                 else {
-                    $scope.marginPercentage = undefined;
-                    $scope.showMarginPercentage = true;
+                    clearMarginPercentage();
                 }
 
-                if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Fixed.value)
+                if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
                     $scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, $scope.margin);
-                else if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Percentage.value)
+                }
+                else if ($scope.marginTypesSelectedValue.value == WhS_Sales_MarginTypesEnum.Percentage.value) {
                     $scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, (Number($scope.margin) * $scope.evaluatedRate) / 100);
+                }
+            }
+            else {
+                clearMarginPercentage();
+            }
+
+            function clearMarginPercentage() {
+                $scope.marginPercentage = undefined;
+                $scope.showMarginPercentage = false;
             }
         }
 
@@ -228,6 +246,9 @@
             return context;
         }
 
+        function isEmpty(value) {
+            return (value == undefined || value == null || value == '');
+        }
     }
 
     appControllers.controller('WhS_Sales_TQIEditor', TQIEditor);
