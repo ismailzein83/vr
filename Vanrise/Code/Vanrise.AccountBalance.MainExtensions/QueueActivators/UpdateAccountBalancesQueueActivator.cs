@@ -175,7 +175,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
             }
             else
             {
-                Queueing.MemoryQueue<Dictionary<long, CorrectUsageBalanceItem>> queueLoadedBatches = new Queueing.MemoryQueue<Dictionary<long, CorrectUsageBalanceItem>>();
+                Queueing.MemoryQueue<Dictionary<string, CorrectUsageBalanceItem>> queueLoadedBatches = new Queueing.MemoryQueue<Dictionary<string, CorrectUsageBalanceItem>>();
                 AsyncActivityStatus loadBatchStatus = new AsyncActivityStatus();
                 Task loadDataTask = new Task(() =>
                 {
@@ -183,13 +183,13 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
                 });
                 loadDataTask.Start();
 
-                Dictionary<long, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems = new Dictionary<long, CorrectUsageBalanceItem>();
+                Dictionary<string, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems = new Dictionary<string, CorrectUsageBalanceItem>();
                 PrepareUsageBalanceItems(context.WriteTrackingMessage, context.DoWhilePreviousRunning, queueLoadedBatches, loadBatchStatus, context.CurrentStageName, preparedCorrectUsageBalanceItems);
                 InsertUsageBalanceItems(context.WriteTrackingMessage, context.CurrentStageName, stageBatchRecord.BatchStart, this.AccountTypeId, this.TransactionTypeId, preparedCorrectUsageBalanceItems);
             }
         }
 
-        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<Dictionary<long, CorrectUsageBalanceItem>> queueLoadedBatches,
+        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<Dictionary<string, CorrectUsageBalanceItem>> queueLoadedBatches,
             AsyncActivityStatus loadBatchStatus, StageBatchRecord stageBatchRecord)
         {
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
@@ -198,7 +198,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Loading Batches for Stage {0}", context.CurrentStageName));
                 dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart, (stagingSummaryRecord) =>
                 {
-                    Dictionary<long, CorrectUsageBalanceItem> accountUsageBalance = ProtoBufSerializer.Deserialize<Dictionary<long, CorrectUsageBalanceItem>>(stagingSummaryRecord.Data);
+                    Dictionary<string, CorrectUsageBalanceItem> accountUsageBalance = ProtoBufSerializer.Deserialize<Dictionary<string, CorrectUsageBalanceItem>>(stagingSummaryRecord.Data);
                     queueLoadedBatches.Enqueue(accountUsageBalance);
                 });
             }
@@ -211,8 +211,8 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
         }
 
         private static void PrepareUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
-            Queueing.MemoryQueue<Dictionary<long, CorrectUsageBalanceItem>> queueLoadedBatches, AsyncActivityStatus loadBatchStatus,
-            string currentStageName, Dictionary<long, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems)
+            Queueing.MemoryQueue<Dictionary<string, CorrectUsageBalanceItem>> queueLoadedBatches, AsyncActivityStatus loadBatchStatus,
+            string currentStageName, Dictionary<string, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems)
         {
             CorrectUsageBalanceItem correctUsageBalanceItem;
 
@@ -226,7 +226,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
                     {
                         hasItem = queueLoadedBatches.TryDequeue((item) =>
                         {
-                            Dictionary<long, CorrectUsageBalanceItem> accountUsageBalanceItems = item as Dictionary<long, CorrectUsageBalanceItem>;
+                            Dictionary<string, CorrectUsageBalanceItem> accountUsageBalanceItems = item as Dictionary<string, CorrectUsageBalanceItem>;
                             if (accountUsageBalanceItems == null)
                                 throw new Exception(String.Format("item should be of type 'Dictionary<long, CorrectUsageBalanceItem>' and not of type '{0}'", item.GetType()));
 
@@ -257,7 +257,7 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
         }
 
         private static void InsertUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, string currentStageName, DateTime batchStart, Guid accountTypeId,
-            Guid transactionTypeId, Dictionary<long, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems)
+            Guid transactionTypeId, Dictionary<string, CorrectUsageBalanceItem> preparedCorrectUsageBalanceItems)
         {
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
 
@@ -331,40 +331,19 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
             }
             else
             {
-                Dictionary<DateTime, StagingSummaryInfo> availableStagingSummaryInfos = stagingSummaryInfoList.ToDictionary(itm => itm.BatchStart, itm => itm);
-
-                var firstStagingSummaryInfoItem = stagingSummaryInfoList[0];
-                DateTime firstBatchStart = firstStagingSummaryInfoItem.BatchStart;
-                DateTime firstBatchEnd = firstStagingSummaryInfoItem.BatchEnd;
-
-                var batchDurationInMinutes = (firstBatchEnd - firstBatchStart).TotalMinutes;
-
-                DateTime endDate = context.StartDate;
-                DateTime startDate;
-
-                while (endDate != context.EndDate)
+                DateTime current = context.StartDate;
+                foreach (var stagingSummaryInfo in stagingSummaryInfoList.OrderBy(itm => itm.BatchStart))
                 {
-                    startDate = endDate;
-                    endDate = startDate.AddMinutes(batchDurationInMinutes);
-
-                    if (endDate > context.EndDate)
-                        endDate = context.EndDate;
-
-                    StageBatchRecord stageBatchRecord = new StageBatchRecord()
+                    if (current < stagingSummaryInfo.BatchStart)
                     {
-                        BatchStart = startDate,
-                        BatchEnd = endDate
-                    };
-
-                    if (availableStagingSummaryInfos.ContainsKey(startDate))
-                    {
-                        stageBatchRecord.IsEmptyBatch = false;
+                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = stagingSummaryInfo.BatchStart, IsEmptyBatch = true });
                     }
-                    else
-                    {
-                        stageBatchRecord.IsEmptyBatch = true;
-                    }
-                    stageBatchRecords.Add(stageBatchRecord);
+                    current = stagingSummaryInfo.BatchEnd;
+                    stageBatchRecords.Add(new StageBatchRecord { BatchStart = stagingSummaryInfo.BatchStart, BatchEnd = stagingSummaryInfo.BatchEnd, IsEmptyBatch = false });
+                }
+                if (current < context.EndDate)
+                {
+                    stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = context.EndDate, IsEmptyBatch = true });
                 }
             }
             return stageBatchRecords;
