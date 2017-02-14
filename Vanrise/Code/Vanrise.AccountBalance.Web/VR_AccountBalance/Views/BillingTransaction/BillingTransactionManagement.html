@@ -6,10 +6,10 @@
                                                         onselectionchanged="scopeModel.onAccountTypeSelectorSelectionChange" customlabel="Account Type"
                                                         isrequired="true" hideremoveicon></vr-accountbalance-accounttype-selector>
                 <vr-columns width="normal" ng-show="scopeModel.accountType">
-                    <vr-datetimepicker type="dateTime" label="From" isrequired="true" value="fromTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" label="From" isrequired="true" value="scopeModel.fromTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="scopeModel.accountType">
-                    <vr-datetimepicker type="dateTime" label="To" value="toTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" label="To" value="scopeModel.toTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="scopeModel.accountType">
                     <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady" ismultipleselection="true"></vr-accountbalance-billingtransactiontype-selector>
