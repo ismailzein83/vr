@@ -38,7 +38,7 @@ namespace TOne.WhS.Routing.Business
         {
             int? numberOfOptions = base.GetMaxNumberOfOptions(context);
             if(!numberOfOptions.HasValue)
-                throw new NullReferenceException("numberOfOptions must have a value for LCR Route Rule");
+                throw new NullReferenceException("numberOfOptions must have a value for Speical Request Route Rule");
 
             return Options != null ? Math.Max(numberOfOptions.Value, Options.Count) : numberOfOptions.Value;
         }
@@ -59,7 +59,7 @@ namespace TOne.WhS.Routing.Business
 
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
-            throw new NotSupportedException("ExecuteForSaleEntity is not supported for LCRRouteRule.");
+            throw new NotSupportedException("ExecuteForSaleEntity is not supported for SpecialRequestRouteRule.");
         }
 
         public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
