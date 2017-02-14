@@ -160,7 +160,10 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Services\AccountStatementAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagement.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagementController.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountqueryinterceptor.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIRecordQueryInterceptorTemplate.html" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
