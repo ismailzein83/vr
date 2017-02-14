@@ -31,12 +31,26 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             else
                 listDimensions.Add("SaleRateType");
 
-            if (parameters.GroupBySupplier)
+            if (parameters.IsCost)
             {
-                if (parameters.GroupByProfile)
-                    listDimensions.Add("SupplierProfile");
-                else
+                if (parameters.GroupBySupplier)
+                {
                     listDimensions.Add("Supplier");
+                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile");
+                }
+            }
+            else
+            {
+                if (parameters.GroupBySupplier)
+                {
+                    listDimensions.Add("Supplier");
+                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile");
+                }
+                else
+                {
+                    listDimensions.Add("Customer");
+                    if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile");
+                }
             }
 
             if (parameters.IsCost)
@@ -44,7 +58,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("CostRate");
                 listMeasures.Add("CostDuration");
                 listMeasures.Add("CostNetNotNULL");
-                //  listMeasures.Add("CostCommissions");
                 listMeasures.Add("CostExtraCharges");
             }
             else
@@ -52,7 +65,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("SaleRate");
                 listMeasures.Add("SaleDuration");
                 listMeasures.Add("SaleNetNotNULL");
-                // listMeasures.Add("SaleCommissions");
                 listMeasures.Add("SaleExtraCharges");
             }
 
@@ -110,7 +122,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                             summaryByZone.RateType = (int)rateTypeValue.Value;
                     summaryByZone.RateTypeFormatted = ((RateTypeEnum)summaryByZone.RateType).ToString();
 
-                    if (parameters.GroupBySupplier)
+                    if (parameters.IsCost && parameters.GroupBySupplier)
                     {
                         var supplierValue = analyticRecord.DimensionValues[2];
                         if (supplierValue != null)
