@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -12,8 +11,6 @@ namespace TOne.WhS.Routing.Business
 
         public override Guid ConfigId { get { return new Guid("31B3226E-A2B2-40D5-8C33-83C6601E8730"); } }
 
-        public Dictionary<int, LCRRouteOptionSettings> Options { get; set; }
-
         public override bool UseOrderedExecution
         {
             get
@@ -22,32 +19,18 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        public override CorrespondentType CorrespondentType
-        {
-            get
-            {
-                return Options == null || Options.Count == 0 ? Entities.CorrespondentType.LCR : Entities.CorrespondentType.SpecialRequest;
-            }
-        }
+        public override CorrespondentType CorrespondentType { get { return Entities.CorrespondentType.LCR; } }
 
         #endregion
 
 
         #region SaleEntity Execution
-        public override int? GetMaxNumberOfOptions(ISaleEntityRouteRuleExecutionContext context)
-        {
-            int? numberOfOptions = base.GetMaxNumberOfOptions(context);
-            if(!numberOfOptions.HasValue)
-                throw new NullReferenceException("numberOfOptions must have a value for LCR Route Rule");
-
-            return Options != null ? Math.Max(numberOfOptions.Value, Options.Count) : numberOfOptions.Value;
-        }
 
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             var options = CreateOptions(context, target);
             if (options != null)
-                return ApplyOptionsOrder(options, context.NumberOfOptions);
+                return ApplyOptionsOrder(options);
             else
                 return null;
         }
@@ -62,68 +45,6 @@ namespace TOne.WhS.Routing.Business
             throw new NotSupportedException("ExecuteForSaleEntity is not supported for LCRRouteRule.");
         }
 
-        public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
-        {
-            if (options == null)
-                return;
-
-            decimal? totalAssignedPercentage = null;
-
-            var unblockedOptions = options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered);
-            if (unblockedOptions != null)
-            {
-                var unblockedOptionsWithPercentage = unblockedOptions.FindAllRecords(itm => itm.Percentage.HasValue);
-                if (unblockedOptionsWithPercentage != null && unblockedOptionsWithPercentage.Count() > 0)
-                    totalAssignedPercentage = unblockedOptionsWithPercentage.Sum(itm => itm.Percentage.Value);
-            }
-
-            if (!totalAssignedPercentage.HasValue || totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
-                return;
-
-            decimal unassignedPercentages = 100 - totalAssignedPercentage.Value;
-
-            foreach (var option in options)
-            {
-                if (!option.Percentage.HasValue)
-                    continue;
-
-                option.Percentage = option.IsBlocked || option.IsFiltered ? 0 : decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value, 2);
-            }
-        }
-
-        public override List<RouteOption> GetFinalOptions(IFinalizeRouteOptionContext context)
-        {
-            if (context.RouteOptions == null)
-                return null;
-
-            if (Options == null)
-                return context.RouteOptions;
-
-            int blockedOptionsCount = context.RouteOptions.Count(itm => itm.IsBlocked || itm.IsFiltered);
-
-            int totalCount = blockedOptionsCount + context.NumberOfOptionsInSettings;
-            if (context.RouteOptions.Count <= totalCount)
-                return context.RouteOptions;
-
-            int routeOptionsCount = context.RouteOptions.Count;
-            for (int i = routeOptionsCount - 1; i >= totalCount; i--)
-            {
-                var currentRouteOption = context.RouteOptions[i];
-                if (!Options.ContainsKey(currentRouteOption.SupplierId))
-                    context.RouteOptions.Remove(currentRouteOption);
-                else
-                    break;
-            }
-            return context.RouteOptions;
-        }
-
-        private int AddOption(List<RouteOption> options, RouteOption optionToAdd, int currentIndex, HashSet<int> addedSupplierIds, bool incrementIndex)
-        {
-            int newIndex = incrementIndex ? currentIndex++ : currentIndex;
-            options.Add(optionToAdd);
-            addedSupplierIds.Add(optionToAdd.SupplierId);
-            return newIndex;
-        }
         #endregion
 
 
@@ -146,7 +67,7 @@ namespace TOne.WhS.Routing.Business
         public override void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options)
         {
             if (options != null)
-                options = ApplyOptionsOrder(options, null);
+                options = ApplyOptionsOrder(options);
         }
 
         #endregion
@@ -173,16 +94,6 @@ namespace TOne.WhS.Routing.Business
         private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate)
         {
             var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
-            LCRRouteOptionSettings supplierSettings;
-            int? numberOfTries = null;
-            decimal? percentage = null;
-
-            if (Options != null && Options.TryGetValue(supplierCodeMatch.SupplierId, out supplierSettings))
-            {
-                numberOfTries = supplierSettings.NumberOfTries;
-                percentage = supplierSettings.Percentage;
-            }
-
             var option = new RouteOptionRuleTarget
             {
                 RouteTarget = routeRuleTarget,
@@ -194,8 +105,7 @@ namespace TOne.WhS.Routing.Business
                 IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
                 ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds,
                 SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
-                Percentage = percentage,
-                NumberOfTries = numberOfTries.HasValue ? numberOfTries.Value : 1
+                NumberOfTries = 1
             };
 
             return option;
@@ -203,24 +113,14 @@ namespace TOne.WhS.Routing.Business
 
         private bool FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, RouteOptionRuleTarget option)
         {
-            bool checkFilters = true;
-            LCRRouteOptionSettings supplierSettings;
+            HashSet<int> supplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null;
 
-            if (Options != null && Options.TryGetValue(option.SupplierId, out supplierSettings))
-            {
-                checkFilters = !supplierSettings.ForceOption;
-            }
+            if (ExecuteRateOptionFilter(target.SaleRate, option.SupplierRate))
+                return true;
 
-            if (checkFilters)
-            {
-                HashSet<int> supplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null;
+            if (ExecuteServiceOptionFilter(customerServiceIds, supplierServices))
+                return true;
 
-                if (ExecuteRateOptionFilter(target.SaleRate, option.SupplierRate))
-                    return true;
-
-                if (ExecuteServiceOptionFilter(customerServiceIds, supplierServices))
-                    return true;
-            }
             return false;
         }
         private bool ExecuteServiceOptionFilter(HashSet<int> customerServices, HashSet<int> supplierServices)
@@ -244,35 +144,10 @@ namespace TOne.WhS.Routing.Business
             return (saleRate.Value - supplierRate) < 0;
         }
 
-        private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options, int? numberOfOptions) where T : IRouteOptionOrderTarget
+        private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget
         {
-            if (options == null)
-                return null;
-
-            IEnumerable<T> finalOptions = new List<T>(options);
-
-            if (Options != null)
-                finalOptions = finalOptions.FindAllRecords(itm => !Options.ContainsKey(itm.SupplierId));
-
-            finalOptions = finalOptions.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
-
-            List<T> orderedOptions = finalOptions.ToList();
-
-            if (Options != null)
-            {
-                List<LCRRouteOptionSettings> settings = Options.Values.OrderByDescending(itm => itm.Position).ToList();
-
-                foreach (LCRRouteOptionSettings setting in settings)
-                {
-                    var matchedSupplier = options.FindRecord(itm => itm.SupplierId == setting.SupplierId);
-                    if (matchedSupplier != null)
-                    {
-                        orderedOptions.Insert(0, matchedSupplier);
-                    }
-                }
-            }
-
-            return orderedOptions;
+            options = options.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
+            return options != null ? options.ToList() : null;
         }
 
         #endregion

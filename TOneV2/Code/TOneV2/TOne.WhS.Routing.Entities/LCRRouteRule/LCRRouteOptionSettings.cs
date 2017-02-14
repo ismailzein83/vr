@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class LCRRouteOptionSettings
+    public class SpecialRequestRouteOptionSettings
     {
         public int SupplierId { get; set; }
 

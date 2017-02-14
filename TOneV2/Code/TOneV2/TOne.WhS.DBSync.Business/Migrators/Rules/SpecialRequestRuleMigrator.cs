@@ -140,7 +140,7 @@ namespace TOne.WhS.DBSync.Business
                     },
                       ExcludedCodes = defaultRule.ExcludedCodesList == null ? null : defaultRule.ExcludedCodesList.ToList()
                   },
-                  Settings = new LCRRouteRule
+                  Settings = new SpecialRequestRouteRule
                   {
                       Options = GetSupplierOptions(specialRequestRules.Select(s => s.SupplierOption))
                   }
@@ -148,9 +148,9 @@ namespace TOne.WhS.DBSync.Business
 
             return routeRule;
         }
-        Dictionary<int, LCRRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
+        Dictionary<int, SpecialRequestRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
         {
-            Dictionary<int, LCRRouteOptionSettings> options = new Dictionary<int, LCRRouteOptionSettings>();
+            Dictionary<int, SpecialRequestRouteOptionSettings> options = new Dictionary<int, SpecialRequestRouteOptionSettings>();
             int position = 0;
             Dictionary<int, List<SpecialRequestSupplierOption>> groupedOptionsByPriority = new Dictionary<int, List<SpecialRequestSupplierOption>>();
             suppliers = suppliers.OrderByDescending(s => s.Priority).ThenByDescending(s => s.SourceId);
@@ -167,13 +167,13 @@ namespace TOne.WhS.DBSync.Business
                 {
                     SpecialRequestSupplierOption option = item.Value[0];
 
-                    position = AddLCRRouteOptionSettings(options, position, option);
+                    position = AddSpecialRequestRouteOptionSettings(options, position, option);
                 }
                 else
                 {
                     foreach (var option in item.Value)
                     {
-                        position = AddLCRRouteOptionSettings(options, position, option);
+                        position = AddSpecialRequestRouteOptionSettings(options, position, option);
                     }
                 }
             }
@@ -181,12 +181,12 @@ namespace TOne.WhS.DBSync.Business
             return options;
         }
 
-        private int AddLCRRouteOptionSettings(Dictionary<int, LCRRouteOptionSettings> options, int position, SpecialRequestSupplierOption option)
+        private int AddSpecialRequestRouteOptionSettings(Dictionary<int, SpecialRequestRouteOptionSettings> options, int position, SpecialRequestSupplierOption option)
         {
             CarrierAccount supplier;
             if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
                 throw new NullReferenceException(string.Format("supplier not found. Supplier Source Id {0}.", option.SupplierId));
-            LCRRouteOptionSettings specialRequestOptionSettings = new LCRRouteOptionSettings
+            SpecialRequestRouteOptionSettings specialRequestOptionSettings = new SpecialRequestRouteOptionSettings
             {
                 ForceOption = option.ForcedOption,
                 NumberOfTries = option.NumberOfTries,

@@ -92,6 +92,7 @@
     <Compile Include="RouteRules\Filters\RateOptionFilter.cs" />
     <Compile Include="RouteRules\Filters\ServiceOptionFilter.cs" />
     <Compile Include="RouteRules\FixedRouteRule.cs" />
+    <Compile Include="RouteRules\SpecialRequestRouteRule.cs" />
     <Compile Include="RouteRules\LCRRouteRule.cs" />
     <Compile Include="RouteRules\OptionSettingsGroups\ExcludedOptions.cs" />
     <Compile Include="RouteRules\Orders\OptionOrderByService.cs" />
