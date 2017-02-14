@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsZoneroutingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_ZoneRoutingProductAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "VRUIUtilsService",
+app.directive("vrWhsBeZoneroutingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_ZoneRoutingProductAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "VRUIUtilsService",
 function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService, whSBeSalePriceListOwnerTypeEnum, whSBePrimarySaleEntityEnum, vruiUtilsService) {
 
     var directiveDefinitionObject = {

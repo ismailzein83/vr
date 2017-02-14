@@ -386,7 +386,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Switch\vr-whs-be-switch-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\Templates\ZoneRoutingProductGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\vr-whs-zoneroutingproduct-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\vr-whs-be-zoneroutingproduct-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceViewer.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\Templates\ZoneServiceConfigGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
