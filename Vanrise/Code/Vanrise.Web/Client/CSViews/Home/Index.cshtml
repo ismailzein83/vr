@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app="mainModule" ng-controller="mainCtrl" ng-init="setCookieName('@ViewBag.CookieName');setLoginURL('@ViewBag.LoginURL'); spinner=true">
+<html ng-app="mainModule" ng-controller="mainCtrl" ng-init="setCookieName('@ViewBag.CookieName');setLoginURL('@ViewBag.LoginURL'); spinner=true;setVersionNumber('@ViewBag.version')">
 <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="/images/iconheader.ico" type="image/ico" />
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title  ng-bind="getPageName()"></title>
+    <title ng-bind="getPageName()"></title>
     @Styles.Render("~/Content/bootstrap")
     @Styles.Render("~/Content/AngularExtensions")
     @Styles.Render("~/Content/HandsonTable")
@@ -63,8 +63,7 @@
         </nav>
         <div class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
             <div class="inner-sub ">
-                <h4 class="vr-page-title" ng-bind="currentPage.Title">
-                </h4>
+                <h4 class="vr-page-title" ng-bind="currentPage.Title"></h4>
             </div>
         </div>
         <div id="wrapper" ng-style="toogled==true?{'padding-left':'185px'}:{'padding-left':'25px'}">
@@ -171,7 +170,7 @@
             <!-- Page Content -->
             <div id="page-content-wrapper">
                 <div class="container-fluid vr-container">
-                   <div class="col-lg-12" ng-view></div>
+                    <div class="col-lg-12" ng-view></div>
                 </div>
                 <!-- /#page-content-wrapper -->
             </div>

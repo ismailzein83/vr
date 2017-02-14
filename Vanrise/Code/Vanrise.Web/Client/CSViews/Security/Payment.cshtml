@@ -15,18 +15,18 @@
     @Styles.Render("~/Content/Styles")
 
 </head>
-<body ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';">
+<body ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';setVersionNumber('@ViewBag.version')">
 
     @*<nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
-        <div class="container">
-            <div class="navbar-header">
-                <img src="/Client/Images/logoonheader.png" class="minilogo" />
-            </div>
-            <div id="navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <img src="/Client/Images/logoonheader.png" class="minilogo" />
+                </div>
+                <div id="navbar">
 
-            </div>/.nav-collapse
-        </div>
-    </nav>*@
+                </div>/.nav-collapse
+            </div>
+        </nav>*@
     <div class="main">
         <div ng-include="'/Client/Modules/Security/Views/Payment.html'"></div>
     </div>

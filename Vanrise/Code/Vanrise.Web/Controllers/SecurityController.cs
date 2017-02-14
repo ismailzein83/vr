@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Vanrise.Common.Business;
 using Vanrise.Security.Business;
 
 namespace Vanrise.Web.Controllers
@@ -13,6 +14,8 @@ namespace Vanrise.Web.Controllers
         {
             ViewBag.Title = "Login Page";
             ViewBag.CookieName = (new SecurityManager()).GetCookieName();
+            var cacheSettingData = new GeneralSettingsManager().GetCacheSettingData();
+            ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
             ViewBag.RedirectTo = redirectTo;
             return View("~/Client/CSViews/Security/Login.cshtml");
         }
@@ -21,6 +24,8 @@ namespace Vanrise.Web.Controllers
         {
             ViewBag.Title = "Payment";
             ViewBag.CookieName = (new SecurityManager()).GetCookieName();
+            var cacheSettingData = new GeneralSettingsManager().GetCacheSettingData();
+            ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
             ViewBag.RedirectTo = redirectTo;
             return View("~/Client/CSViews/Security/Payment.cshtml");
         }

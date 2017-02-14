@@ -50,8 +50,26 @@ appControllers.directive('draggable',['$document', function ($document) {
         }
     };
 }]);
+appControllers.factory('vrInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
+     
+    var requestInterceptor = {
+        request: function(config) {
+            if (/\.html$/.test(config.url) && config.url.indexOf("Client/") > -1) {
+                config.url = config.url + "?v=" + $rootScope.version;
+             }
 
+            var deferred = $q.defer();
+            deferred.resolve(config);
+            return deferred.promise;
+            }
+            };
 
+    return requestInterceptor;
+    }]);
+
+appControllers.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.interceptors.push('vrInterceptor');
+}]);
 appControllers.directive('draggablemodal',['$document',function ($document) {
     "use strict";
     return function (scope, element) {
