@@ -26,7 +26,7 @@
         var filter = {};
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = UtilsService.getDateFromDateTime(new Date());
             $scope.searchClicked = function () {
                 setFilterObject();
                 return gridAPI.loadGrid(filter);

@@ -4,18 +4,18 @@
 
     supplierRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function supplierRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function supplierRateManagementController($scope, utilsService, vrNotificationService, vruiUtilsService) {
         var gridAPI;
         var supplierDirectiveApi;
-        var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var supplierReadyPromiseDeferred = utilsService.createPromiseDeferred();
         var supplierZoneDirectiveAPI;
-        var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var supplierZoneReadyPromiseDeferred = utilsService.createPromiseDeferred();
         defineScope();
         load();
         var payload = {};
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = utilsService.getDateFromDateTime(new Date());
 
             $scope.searchClicked = function () {
                 setFilterObject();
@@ -29,7 +29,7 @@
 
             $scope.resetDate = function () {
                 if ($scope.IsPending)
-                    $scope.effectiveOn = new Date();
+                    $scope.effectiveOn = utilsService.getDateFromDateTime(new Date());
             };
             $scope.onSelectSupplier = function (selectedItem) {
                 $scope.showSupplierZoneSelector = true;
@@ -40,7 +40,7 @@
                 };
 
                 var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
+                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
             };
 
 
@@ -66,9 +66,9 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector, loadSupplierZoneSection])
+            return utilsService.waitMultipleAsyncOperations([loadSupplierSelector, loadSupplierZoneSection])
                .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+                   vrNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.isGettingData = false;
@@ -76,12 +76,12 @@
         }
 
         function loadSupplierSelector() {
-            var supplierLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            var supplierLoadPromiseDeferred = utilsService.createPromiseDeferred();
 
             supplierReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {};
-                    VRUIUtilsService.callDirectiveLoad(supplierDirectiveApi, directivePayload, supplierLoadPromiseDeferred);
+                    vruiUtilsService.callDirectiveLoad(supplierDirectiveApi, directivePayload, supplierLoadPromiseDeferred);
                 });
             return supplierLoadPromiseDeferred.promise;
         }
