@@ -70,7 +70,7 @@
             $scope.evaluate = function () {
                 return WhS_Sales_RatePlanAPIService.GetTQIEvaluatedRate(buildTQIEvaluatedRateObjFromScope()).then(function (response) {
                     if (response != undefined) {
-                        $scope.evaluatedRate = response.EvaluatedRate;
+                        $scope.evaluatedRate = getRoundedNumber(response.EvaluatedRate);
                     }
                 });
             };
@@ -126,13 +126,7 @@
 
             if (zoneItem != undefined) {
                 $scope.zoneName = zoneItem.ZoneName;
-
-                if (zoneItem.CurrentRate != undefined) {
-                    var currentRateAsNumber = Number(zoneItem.CurrentRate);
-                    if (!isNaN(currentRateAsNumber))
-                        $scope.rate = UtilsService.round(currentRateAsNumber, 4);
-                }
-
+                $scope.rate = getRoundedNumber(zoneItem.CurrentRate)
                 $scope.rateBED = zoneItem.CurrentRateBED;
                 $scope.newRate = zoneItem.NewRate;
             }
@@ -248,6 +242,14 @@
 
         function isEmpty(value) {
             return (value == undefined || value == null || value == '');
+        }
+
+        function getRoundedNumber(number) {
+            if (!isEmpty(number)) {
+                var castedNumber = Number(number);
+                if (!isNaN(castedNumber))
+                    return UtilsService.round(castedNumber, 4);
+            }
         }
     }
 
