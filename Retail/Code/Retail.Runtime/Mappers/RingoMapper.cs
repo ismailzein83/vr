@@ -181,7 +181,7 @@ namespace Retail.Runtime.Mappers
                 if (string.IsNullOrEmpty(currentLine))
                     continue;
 
-                string[] rowData = currentLine.Split(';');
+                string[] rowData = currentLine.Replace("\"", string.Empty).Split(';');
 
                 if (rowData.Length == 2 && rowData[0] == headerText)
                 {
