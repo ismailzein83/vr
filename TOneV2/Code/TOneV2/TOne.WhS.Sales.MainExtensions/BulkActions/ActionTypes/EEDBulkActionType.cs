@@ -65,7 +65,7 @@ namespace TOne.WhS.Sales.MainExtensions
                 return false;
 
             SaleEntityZoneRate customerZoneRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, true);
-            if (customerZoneRate == null || customerZoneRate.Rate == null)
+            if (customerZoneRate == null || customerZoneRate.Rate == null || customerZoneRate.Source == SalePriceListOwnerType.SellingProduct)
                 return false;
             else if (customerZoneRate.Rate.BED > EED)
                 return false;
