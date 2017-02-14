@@ -44,6 +44,13 @@
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
@@ -54,6 +61,7 @@
   <ItemGroup>
     <Compile Include="AccountStatement\RetailAccountUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VRRestAPIRecordQueryInterceptor\RetailAccountVRRestAPIRecordQueryInterceptor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PartnerPortal.CustomerAccess.Business\PartnerPortal.CustomerAccess.Business.csproj">
