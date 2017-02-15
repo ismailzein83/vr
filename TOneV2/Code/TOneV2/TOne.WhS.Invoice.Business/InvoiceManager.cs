@@ -54,12 +54,17 @@ namespace TOne.WhS.Invoice.Business
                         var invoiceCarrierId = string.Format("Profile_{0}", carrierProfile.CarrierProfileId);
                         if (CheckIfPartnerMatched(filters, invoiceCarrierId))
                         {
-                            invoiceCarriers.Add(new InvoiceCarrier
+
+                            var invoiceCarrier = new InvoiceCarrier
                             {
                                 InvoiceCarrierId = invoiceCarrierId,
                                 Name = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId),
-                                TimeZoneId = carrierProfile.Settings.TimeZoneId
-                            });
+                            };
+                            if (carrierProfile.Settings.CustomerInvoiceTimeZone)
+                            {
+                                invoiceCarrier.TimeZoneId = carrierProfile.Settings.DefaultCusotmerTimeZoneId;
+                            }
+                            invoiceCarriers.Add(invoiceCarrier);
                         }
                     }
 
@@ -76,12 +81,20 @@ namespace TOne.WhS.Invoice.Business
                                 var invoiceCarrierId = string.Format("Account_{0}", account.CarrierAccountId); 
                                 if (CheckIfPartnerMatched(filters, invoiceCarrierId))
                                 {
-                                    invoiceCarriers.Add(new InvoiceCarrier
+                                    var invoiceCarrier = new InvoiceCarrier
                                     {
                                         InvoiceCarrierId = invoiceCarrierId,
                                         Name = carrierAccountManager.GetCarrierAccountName(account.CarrierAccountId),
-                                        TimeZoneId = account.CustomerSettings.TimeZoneId
-                                    });
+                                    };
+                                    if(account.CustomerSettings.InvoiceTimeZone && account.CustomerSettings.TimeZoneId.HasValue)
+                                    {
+                                        invoiceCarrier.TimeZoneId = account.CustomerSettings.TimeZoneId.Value;
+
+                                    }else if(carrierProfile.Settings.CustomerInvoiceTimeZone)
+                                    {
+                                       invoiceCarrier.TimeZoneId = carrierProfile.Settings.DefaultCusotmerTimeZoneId;
+                                    }
+                                    invoiceCarriers.Add(invoiceCarrier);
                                 }
                             }
                         }

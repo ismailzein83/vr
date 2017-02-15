@@ -56,9 +56,11 @@
                 </vr-tab>
                 <vr-tab header="'Customer Settings'" ng-if="scopeModel.showSellingNumberPlan">
                     <vr-row>
+                            <vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" normal-col-num="6"></vr-common-timezone-selector>
                         <vr-columns width="1/2row">
-                            <vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" isrequired="true"></vr-common-timezone-selector>
+                            <vr-switch value="scopeModel.customerInvoiceTimeZone" label="Invoice Time Zone"></vr-switch>
                         </vr-columns>
+
                         <span vr-loader="scopeModel.isLoadingSellingNumberPlan" ng-show="scopeModel.showSellingNumberPlan" vr-disabled="scopeModel.disableSellingNumberPlan">
                             <vr-whs-be-sellingnumberplan-selector normal-col-num="6" selectedvalues="scopeModel.sellingNumberPlan" on-ready="scopeModel.onSellingNumberPlanDirectiveReady" isrequired="scopeModel.showSellingNumberPlan">
                             </vr-whs-be-sellingnumberplan-selector>
@@ -75,9 +77,7 @@
                 </vr-tab>
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
                     <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" isrequired="true"></vr-common-timezone-selector>
-                        </vr-columns>
+                            <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" isrequired="true" normal-col-num="6"></vr-common-timezone-selector>
                         <span ng-show="scopeModel.showZoneServiceConfig" vr-loader="scopeModel.isLoadingZoneServiceConfig">
                             <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceConfigSelectorReady"
                                                                     selectedvalues="scopeModel.zoneServiceConfigSelectedValues"

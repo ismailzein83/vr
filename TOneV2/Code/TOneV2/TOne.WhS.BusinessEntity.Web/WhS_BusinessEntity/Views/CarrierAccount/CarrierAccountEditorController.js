@@ -385,6 +385,7 @@
 
                     if (carrierAccountEntity.CustomerSettings) {
                         $scope.scopeModel.isAToZ = carrierAccountEntity.CustomerSettings.IsAToZ;
+                        $scope.scopeModel.customerInvoiceTimeZone = carrierAccountEntity.CustomerSettings.InvoiceTimeZone;
                     }
                 }
             }
@@ -490,7 +491,8 @@
                 CustomerSettings: {
                     TimeZoneId: customerTimeDirectiveAPI != undefined ? customerTimeDirectiveAPI.getSelectedIds() : undefined,
                     RoutingStatus: cusRoutingStatusSelectorAPI != undefined ? cusRoutingStatusSelectorAPI.getSelectedIds() : undefined,
-                    IsAToZ : $scope.scopeModel.isAToZ
+                    IsAToZ: $scope.scopeModel.isAToZ,
+                    InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone
                 }
             };
 

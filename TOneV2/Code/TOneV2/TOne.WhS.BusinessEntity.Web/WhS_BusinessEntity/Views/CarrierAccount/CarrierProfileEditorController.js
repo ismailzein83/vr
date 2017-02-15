@@ -27,9 +27,11 @@
 
         var countrySelectedPromiseDeferred;
 
-        var timeZoneDirectiveAPI;
-        var timeZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var defaultCustomerTimeZoneDirectiveAPI;
+        var defaultCustomerTimeZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var defaultSupplierTimeZoneDirectiveAPI;
+        var defaultSupplierTimeZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -63,9 +65,14 @@
                 documents: [],
                 documentCategories: []
             };
-            $scope.scopeModal.onTimeZoneSelectorReady = function (api) {
-                timeZoneDirectiveAPI = api;
-                timeZoneReadyPromiseDeferred.resolve();
+            $scope.scopeModal.onDefaultCustomerTimeZoneSelectorReady = function (api) {
+                defaultCustomerTimeZoneDirectiveAPI = api;
+                defaultCustomerTimeZoneReadyPromiseDeferred.resolve();
+
+            };
+            $scope.scopeModal.onDefaultSupplierTimeZoneSelectorReady = function (api) {
+                defaultSupplierTimeZoneDirectiveAPI = api;
+                defaultSupplierTimeZoneReadyPromiseDeferred.resolve();
 
             };
             $scope.scopeModal.onCompanySettingSelectorReady = function (api) {
@@ -181,7 +188,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes,loadTimeZoneSelector, loadDocuments,  loadCompanySettingSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector,loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -210,20 +217,36 @@
             return loadCurrencySelectorPromiseDeferred.promise;
         }
 
-        function loadTimeZoneSelector() {
-            var loadTimeZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadDefaultCustomerTimeZoneSelector() {
+            var loadDefaultCustomerTimeZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            timeZoneReadyPromiseDeferred.promise.then(function () {
+            defaultCustomerTimeZoneReadyPromiseDeferred.promise.then(function () {
 
                 var payload = {
-                    selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.TimeZoneId : undefined)
+                    selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.DefaultCusotmerTimeZoneId : undefined)
                 };
 
-                VRUIUtilsService.callDirectiveLoad(timeZoneDirectiveAPI, payload, loadTimeZoneSelectorPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(defaultCustomerTimeZoneDirectiveAPI, payload, loadDefaultCustomerTimeZoneSelectorPromiseDeferred);
 
             });
 
-            return loadTimeZoneSelectorPromiseDeferred.promise;
+            return loadDefaultCustomerTimeZoneSelectorPromiseDeferred.promise;
+        }
+
+        function loadDefaultSupplierTimeZoneSelector() {
+            var loadDefaultSupplierTimeZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            defaultSupplierTimeZoneReadyPromiseDeferred.promise.then(function () {
+
+                var payload = {
+                    selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.DefaultSupplierTimeZoneId : undefined)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(defaultSupplierTimeZoneDirectiveAPI, payload, loadDefaultSupplierTimeZoneSelectorPromiseDeferred);
+
+            });
+
+            return loadDefaultSupplierTimeZoneSelectorPromiseDeferred.promise;
         }
 
         function loadCompanySettingSelector() {
@@ -373,6 +396,7 @@
                     $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                     $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
                     $scope.scopeModal.customerInvoiceByProfile = carrierProfileEntity.Settings.CustomerInvoiceByProfile;
+                    $scope.scopeModal.cusotmerInvoiceTimeZone = carrierProfileEntity.Settings.CustomerInvoiceTimeZone;
                     if (carrierProfileEntity.Settings.CompanyLogo > 0)
                         $scope.scopeModal.companyLogo = {
                             fileId: carrierProfileEntity.Settings.CompanyLogo
@@ -457,7 +481,9 @@
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax"),
                     CustomerInvoiceByProfile: $scope.scopeModal.customerInvoiceByProfile,
                     Documents: documentsGridAPI.getData(),
-                    TimeZoneId: timeZoneDirectiveAPI.getSelectedIds()
+                    DefaultCusotmerTimeZoneId: defaultCustomerTimeZoneDirectiveAPI.getSelectedIds(),
+                    DefaultSupplierTimeZoneId: defaultSupplierTimeZoneDirectiveAPI.getSelectedIds(),
+                    CustomerInvoiceTimeZone: $scope.scopeModal.cusotmerInvoiceTimeZone
                 }
             };
 
