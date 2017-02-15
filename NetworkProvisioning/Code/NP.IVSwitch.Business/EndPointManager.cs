@@ -84,8 +84,9 @@ namespace NP.IVSwitch.Business
                 var hosts = GetCachedEndPoint();
                 var relatedAccount = hosts.Values.FirstOrDefault(r => r.EndPointId == endPointItem.Entity.EndPointId);
                 if (relatedAccount != null) endPointItem.Entity.AccountId = relatedAccount.AccountId;
+                IpAddressHelper helper = new IpAddressHelper();
                 string message;
-                if (IpAddressHelper.ValidateSameAccountHost(hosts, endPointItem.Entity, out message))
+                if (helper.ValidateSameAccountHost(hosts, endPointItem.Entity, out message))
                 {
                     if (!string.IsNullOrEmpty(message))
                     {
@@ -260,13 +261,14 @@ namespace NP.IVSwitch.Business
         private bool Validatingsubnet(AccountCarrierProfileExtension accountExtended, EndPointToAdd endPointItem, int profileId,
            out string mssg)
         {
+            IpAddressHelper helper = new IpAddressHelper();
             Dictionary<int, Entities.EndPoint> hosts = GetCachedEndPoint();
             if (accountExtended != null && accountExtended.CustomerAccountId.HasValue)
             {
                 endPointItem.Entity.AccountId = accountExtended.CustomerAccountId.Value;
-                return IpAddressHelper.ValidateSameAccountHost(hosts, endPointItem.Entity, out mssg);
+                return helper.ValidateSameAccountHost(hosts, endPointItem.Entity, out mssg);
             }
-            if (IpAddressHelper.IsInSameSubnet(hosts, endPointItem.Entity.Host, out mssg)) return true;
+            if (helper.IsInSameSubnet(hosts, endPointItem.Entity.Host, out mssg)) return true;
             endPointItem.Entity.AccountId = CreateNewAccount(profileId);
             return false;
         }

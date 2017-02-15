@@ -8,13 +8,17 @@ namespace NP.IVSwitch.Business
 {
     public class IpAddressHelper
     {
-        public static bool IsInSameSubnet(Dictionary<int, Entities.EndPoint> endPoints, string originalHost, out string message)
+        private Dictionary<int, int> _endPointIds;
+        public IpAddressHelper()
         {
+            EndPointManager manager = new EndPointManager();
+            _endPointIds = manager.GetEndPointWithCarrierId();
+        }
+        public bool IsInSameSubnet(Dictionary<int, Entities.EndPoint> endPoints, string originalHost, out string message)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             int originalSubnet;
             message = "";
-            EndPointManager manager = new EndPointManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var endpointWithIds = manager.GetEndPointWithCarrierId();
             string[] originalParts = originalHost.Split('/');
             if (originalParts.Length > 1)
                 int.TryParse(originalParts[1], out originalSubnet);
@@ -32,7 +36,7 @@ namespace NP.IVSwitch.Business
                 if (toCompareIp.IsInSameSubnet(originalIp, toCompareClassCMask))
                 {
                     int carrierId;
-                    if (!endpointWithIds.TryGetValue(toCompareEndPoint.Value.EndPointId, out carrierId)) continue;
+                    if (!_endPointIds.TryGetValue(toCompareEndPoint.Value.EndPointId, out carrierId)) continue;
                     string carrierName = carrierAccountManager.GetCarrierAccountName(carrierId);
                     message = string.Format("Subnet address({0}) conflicts with an existing IP address for ({1})",
                         originalHost, carrierName);
@@ -42,18 +46,30 @@ namespace NP.IVSwitch.Business
             return false;
         }
 
-        public static bool ValidateSameAccountHost(Dictionary<int, Entities.EndPoint> endPoints, Entities.EndPoint originalPoint, out string message)
+        public bool ValidateSameAccountHost(Dictionary<int, Entities.EndPoint> endPoints, Entities.EndPoint originalPoint, out string message)
         {
+            int carrierId;
+            string carrierName = "";
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            if (_endPointIds.TryGetValue(originalPoint.EndPointId, out carrierId))
+                carrierName = carrierAccountManager.GetCarrierAccountName(carrierId);
             originalPoint.TechPrefix = string.IsNullOrEmpty(originalPoint.TechPrefix)
                 ? "."
                 : originalPoint.TechPrefix;
-            foreach (var item in endPoints.Values.Where(
-                    a => a.AccountId == originalPoint.AccountId && a.EndPointId != originalPoint.EndPointId))
+            var endpoints = endPoints.Values.Where(
+                a => a.AccountId == originalPoint.AccountId && a.EndPointId != originalPoint.EndPointId);
+            foreach (var item in endpoints)
             {
                 string[] hostparts = item.Host.Split('/');
-                if (hostparts[0].Equals(originalPoint.Host) && !item.TechPrefix.Equals(originalPoint.TechPrefix))
+                if (hostparts[0].Equals(originalPoint.Host))
                 {
                     message = "";
+                    if (item.TechPrefix.Equals(originalPoint.TechPrefix))
+                    {
+                        message = string.Format("Subnet address({0}) conflicts with an existing IP address for ({1})",
+                            originalPoint.Host, carrierName);
+                        return true;
+                    }
                     return false;
                 }
             }
