@@ -16,7 +16,11 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('2f5c2fb4-4380-4a18-986c-210459134b4b','Centrex Subscriber Invoice','Centrex Subscriber Invoice', 'VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig','{"Editor":"retail-invoice-invoicetype-retailsubscriberinvoicesettings"}')
+('4DE3ADCE-B8D4-4266-868D-6C78CB3738DF','VR_AccountBalance_FinancialTransactionsView','Financial Transactions','VR_Security_ViewTypeConfig'					,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-accountbalance-billingtransaction-vieweditor"}'),
+('CD4A108F-AE74-424B-924C-A1FF0D353A36','VR_AccountBalance_AccountStatmentView','Account Statment','VR_Security_ViewTypeConfig'								,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-accountbalance-accountstatement-vieweditor"}'),
+('C057CFBA-1E29-4C86-BB24-E3B504562E77','VR_AccountBalance_AccountBalancesView','Account Balances','VR_Security_ViewTypeConfig'								,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-accountbalance-accountbalances-vieweditor"}'),
+
+('2f5c2fb4-4380-4a18-986c-210459134b4b','Centrex Subscriber Invoice','Centrex Subscriber Invoice', 'VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig'	,'{"Editor":"retail-invoice-invoicetype-retailsubscriberinvoicesettings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
