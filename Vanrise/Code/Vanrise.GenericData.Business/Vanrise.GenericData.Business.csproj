@@ -58,7 +58,7 @@
     <Compile Include="BusinessEntity\BusinessEntityGroupContext.cs" />
     <Compile Include="BusinessEntity\BaseBEManager.cs" />
     <Compile Include="BusinessEntity\Definition\GenericBusinessEntityDefinitionFilter.cs" />
-    <Compile Include="BusinessEntity\Definition\VRRestAPIBEDefinitionManager.cs" />
+    <Compile Include="BusinessEntity\VRRestAPIBEManager.cs" />
     <Compile Include="BusinessEntity\IExtensibleBEManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordFieldChoiceManager.cs" />
