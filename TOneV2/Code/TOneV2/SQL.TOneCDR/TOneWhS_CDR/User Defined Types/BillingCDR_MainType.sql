@@ -27,13 +27,13 @@
     [SaleRateID]                  BIGINT          NULL,
     [SaleRateValue]               DECIMAL (20, 8) NULL,
     [SaleRateTypeID]              INT             NULL,
-    [SaleNet]                     DECIMAL (20, 4) NULL,
+    [SaleNet]                     DECIMAL (22, 6) NULL,
     [SaleCurrencyId]              INT             NULL,
     [SaleDurationInSeconds]       DECIMAL (20, 4) NULL,
     [CostRateID]                  BIGINT          NULL,
     [CostRateValue]               DECIMAL (20, 8) NULL,
     [CostRateTypeID]              INT             NULL,
-    [CostNet]                     DECIMAL (20, 4) NULL,
+    [CostNet]                     DECIMAL (22, 6) NULL,
     [CostCurrencyID]              INT             NULL,
     [CostDurationInSeconds]       DECIMAL (20, 4) NULL,
     [ReleaseCode]                 VARCHAR (50)    NULL,
@@ -46,12 +46,14 @@
     [SaleTariffRuleId]            INT             NULL,
     [CostExtraChargeRuleId]       INT             NULL,
     [SaleExtraChargeRuleId]       INT             NULL,
-    [CostExtraChargeValue]        DECIMAL (20, 4) NULL,
-    [SaleExtraChargeValue]        DECIMAL (20, 4) NULL,
+    [CostExtraChargeValue]        DECIMAL (22, 6) NULL,
+    [SaleExtraChargeValue]        DECIMAL (22, 6) NULL,
     [CDPNIn]                      VARCHAR (50)    NULL,
     [CountryId]                   INT             NULL,
     [SaleExtraChargeRateValue]    DECIMAL (20, 8) NULL,
     [CostExtraChargeRateValue]    DECIMAL (20, 8) NULL);
+
+
 
 
 
