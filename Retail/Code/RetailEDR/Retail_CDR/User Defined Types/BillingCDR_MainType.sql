@@ -17,11 +17,13 @@
     [PackageId]              INT              NULL,
     [ChargingPolicyId]       INT              NULL,
     [Rate]                   DECIMAL (20, 8)  NULL,
-    [Amount]                 DECIMAL (20, 4)  NULL,
+    [Amount]                 DECIMAL (22, 6)  NULL,
     [RateTypeId]             INT              NULL,
     [CurrencyId]             INT              NULL,
     [FinancialAccountId]     BIGINT           NULL,
     [AttemptDateTime]        DATETIME         NULL);
+
+
 
 
 

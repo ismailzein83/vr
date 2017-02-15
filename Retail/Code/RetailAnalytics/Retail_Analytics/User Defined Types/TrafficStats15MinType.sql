@@ -12,6 +12,8 @@
     [Rate]                   DECIMAL (20, 8)  NULL,
     [CurrencyId]             INT              NULL,
     [TotalDuration]          DECIMAL (20, 4)  NULL,
-    [TotalAmount]            DECIMAL (20, 4)  NULL,
+    [TotalAmount]            DECIMAL (26, 10) NULL,
     [NumberOfCDRs]           INT              NULL);
+
+
 

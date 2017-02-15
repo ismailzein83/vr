@@ -18,7 +18,7 @@
     [PackageId]              INT              NULL,
     [ChargingPolicyId]       INT              NULL,
     [Rate]                   DECIMAL (20, 8)  NULL,
-    [Amount]                 DECIMAL (20, 4)  NULL,
+    [Amount]                 DECIMAL (22, 6)  NULL,
     [RateTypeId]             INT              NULL,
     [CurrencyId]             INT              NULL,
     [AttemptDateTime]        DATETIME         NULL
@@ -27,4 +27,16 @@
 
 
 
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BillingCDR_Main_CDRId]
+    ON [Retail_CDR].[BillingCDR_Main]([CDRID] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingCDR_Main_AttemptDateTime]
+    ON [Retail_CDR].[BillingCDR_Main]([AttemptDateTime] ASC);
 

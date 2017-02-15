@@ -28,3 +28,15 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_CDR_CDRId]
+    ON [Retail_CDR].[CDR]([ID] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_CDR_AttemptDateTime]
+    ON [Retail_CDR].[CDR]([AttemptDateTime] ASC);
+

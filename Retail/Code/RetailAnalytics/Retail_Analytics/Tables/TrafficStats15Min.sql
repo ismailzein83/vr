@@ -12,7 +12,15 @@
     [Rate]                   DECIMAL (20, 8)  NULL,
     [CurrencyId]             INT              NULL,
     [TotalDuration]          DECIMAL (20, 4)  NULL,
-    [TotalAmount]            DECIMAL (20, 4)  NULL,
-    [NumberOfCDRs]           INT              NULL
+    [TotalAmount]            DECIMAL (26, 10) NULL,
+    [NumberOfCDRs]           INT              NULL,
+    CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_TrafficStats15Min_BatchStart]
+    ON [Retail_Analytics].[TrafficStats15Min]([BatchStart] ASC);
 

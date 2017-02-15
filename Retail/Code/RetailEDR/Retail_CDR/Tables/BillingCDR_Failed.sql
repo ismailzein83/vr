@@ -22,3 +22,15 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BillingCDR_Failed_CDRId]
+    ON [Retail_CDR].[BillingCDR_Failed]([CDRID] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingCDR_Failed_AttemptDateTime]
+    ON [Retail_CDR].[BillingCDR_Failed]([AttemptDateTime] ASC);
+
