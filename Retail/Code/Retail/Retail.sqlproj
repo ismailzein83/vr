@@ -273,5 +273,6 @@
     <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_GetAll.sql" />
     <Build Include="Retail\Stored Procedures\sp_Account_UpdateExtendedSettings.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetForSynchronizerProcess.sql" />
   </ItemGroup>
 </Project>
