@@ -137,17 +137,11 @@ namespace TOne.WhS.BusinessEntity.Business
         private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate)
         {
             CurrencyManager currencyManager = new CurrencyManager();
-            int currencyId;
+            SupplierPriceListManager manager = new SupplierPriceListManager();
+            SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
+            supplierRate.PriceListFileId = priceList.FileId;
 
-            if (supplierRate.CurrencyId.HasValue)
-                currencyId = supplierRate.CurrencyId.Value;
-            else
-            {
-                SupplierPriceListManager manager = new SupplierPriceListManager();
-                SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
-                supplierRate.PriceListFileId = priceList.FileId;
-                currencyId = priceList.CurrencyId;
-            }
+            int currencyId = supplierRate.CurrencyId ?? priceList.CurrencyId;
 
             return new SupplierRateDetail
             {
