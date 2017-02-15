@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService", "VRUIUtilsService", 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum',
-function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtilsService, whSBeSalePriceListOwnerTypeEnum, whSBePrimarySaleEntityEnum) {
+app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService", "VRUIUtilsService", 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum', 'WhS_BE_RateChangeTypeEnum',
+function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtilsService, whSBeSalePriceListOwnerTypeEnum, whSBePrimarySaleEntityEnum, whSBeRateChangeTypeEnum) {
 
     var directiveDefinitionObject = {
 
@@ -73,6 +73,7 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                             for (var i = 0; i < response.Data.length; i++) {
                                 var item = response.Data[i];
                                 setNormalRateIconProperties(item);
+                                SetRateChangeIcon(item);
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(item);
                             }
                         }
@@ -98,6 +99,31 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
             else if (dataItem.IsRateInherited === true) {
                 dataItem.iconType = 'inherited';
                 dataItem.iconTooltip = 'Inherited';
+            }
+        }
+        function SetRateChangeIcon(dataItem) {
+            switch (dataItem.Entity.RateChange) {
+                case whSBeRateChangeTypeEnum.New.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.New.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.New.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.New.iconType;
+                    break;
+                case whSBeRateChangeTypeEnum.Increase.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.Increase.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.Increase.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.Increase.iconType;
+                    break;
+
+                case whSBeRateChangeTypeEnum.Decrease.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.Decrease.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.Decrease.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.Decrease.iconType;
+                    break;
+                case whSBeRateChangeTypeEnum.NotChanged.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.NotChanged.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.NotChanged.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.NotChanged.iconType;
+                    break;
             }
         }
     }
