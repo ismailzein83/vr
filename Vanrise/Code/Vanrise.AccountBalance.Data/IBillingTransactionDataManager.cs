@@ -13,5 +13,6 @@ namespace Vanrise.AccountBalance.Data
         bool Insert(BillingTransaction billingTransaction, out long billingTransactionId);
         void GetBillingTransactionsByBalanceUpdated(Guid accountTypeId, Action<BillingTransaction> onBillingTransactionReady);
         bool InsertBillingTransactionFromAccountUsageAndUpdate(Guid accountTypeId, TimeSpan timeOffset);
+        IEnumerable<BillingTransaction> GetBillingTransactionsForSynchronizerProcess(List<Guid> billingTransactionIds, Guid accountTypeId);
     }
 }

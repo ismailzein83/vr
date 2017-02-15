@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Common;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -81,5 +82,10 @@ namespace Vanrise.AccountBalance.Business
 
         #endregion
 
+        public Dictionary<string, BillingTransaction> GetBillingTransactionsForSynchronizerProcess(List<Guid> billingTransactionTypeIds, Guid balanceAccountTypeId)
+        {
+            IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+            return dataManager.GetBillingTransactionsForSynchronizerProcess(billingTransactionTypeIds, balanceAccountTypeId).ToDictionary(kvp => kvp.SourceId, kvp => kvp);
+        }
     }
 }

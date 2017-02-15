@@ -1,4 +1,17 @@
-﻿<vr-accountbalance-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+﻿
+<vr-accountbalance-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
                                         normal-col-num="6"
                                         isrequired="true">
 </vr-accountbalance-accounttype-selector>
+
+<vr-columns colnum="2">
+    <vr-switch value="scopeModel.checkExisting" label="Check Existing"></vr-switch>
+</vr-columns>
+<vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady"
+                                                   isrequired="false"
+                                                   normal-col-num="4"
+                                                   ismultipleselection
+                                                   ng-show="scopeModel.checkExisting == true"
+                                                   hideremoveicon>
+</vr-accountbalance-billingtransactiontype-selector>
+

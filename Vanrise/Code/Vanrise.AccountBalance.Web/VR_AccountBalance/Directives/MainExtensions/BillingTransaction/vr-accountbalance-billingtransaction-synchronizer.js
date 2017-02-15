@@ -27,13 +27,19 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
             var accountTypeSelectorApi;
             var accountTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var transactionTypeDirectiveAPI;
+            var transactionTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
                 accountTypeSelectorApi = api;
                 accountTypeSelectorPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.onBillingTransactionTypeReady = function (api) {
+                transactionTypeDirectiveAPI = api;
+                transactionTypeDirectiveReadyDeferred.resolve();
+            };
             function initializeController() {
                 defineAPI();
             }
@@ -41,10 +47,14 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-
+                    console.log(payload);
+                    if (payload != undefined) {
+                        $scope.scopeModel.checkExisting = payload.CheckExisting;
+                    }
                     var promises = [];
 
                     promises.push(loadAccountTypeSelector());
+                    promises.push(loadBillingTransactionTypeSelectorPromise());
 
                     function loadAccountTypeSelector() {
                         var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -58,15 +68,33 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                         return accountTypeSelectorLoadDeferred.promise;
                     }
 
+                    function loadBillingTransactionTypeSelectorPromise() {
+                        var billingTransactionTypeLoadDeferred = UtilsService.createPromiseDeferred();
+                        transactionTypeDirectiveReadyDeferred.promise.then(function () {
+                            var selectorPayload;
+                            if (payload != undefined) {
+                                selectorPayload = {
+                                    selectedIds: payload.BillingTransactionTypeIds
+                                }
+                            }
+                            VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, selectorPayload, billingTransactionTypeLoadDeferred);
+                        });
+                        return billingTransactionTypeLoadDeferred.promise;
+                    };
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
+
                     var data = {
                         $type: "Vanrise.AccountBalance.MainExtensions.BillingTransaction.BillingTransactionSynchronizer, Vanrise.AccountBalance.MainExtensions",
                         Name: "Billing Transaction Synchronizer",
-                        BalanceAccountTypeId: accountTypeSelectorApi.getSelectedIds()
+                        BalanceAccountTypeId: accountTypeSelectorApi.getSelectedIds(),
+                        CheckExisting: $scope.scopeModel.checkExisting,
+                        BillingTransactionTypeIds: $scope.scopeModel.checkExisting ? transactionTypeDirectiveAPI.getSelectedIds() : undefined
                     };
+                    console.log(data);
                     return data;
                 };
 

@@ -51,11 +51,20 @@ namespace Vanrise.AccountBalance.Data.SQL
                     }
                 }, accountTypeId);
         }
-
         public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
         {
             object billingTransactionID;
-            int affectedRecords = ExecuteNonQuerySP("[VR_AccountBalance].sp_BillingTransaction_Insert", out billingTransactionID, billingTransaction.AccountId, billingTransaction.AccountTypeId, billingTransaction.Amount, billingTransaction.CurrencyId, billingTransaction.TransactionTypeId, billingTransaction.TransactionTime, billingTransaction.Notes, billingTransaction.Reference);
+            int affectedRecords = ExecuteNonQuerySP("[VR_AccountBalance].sp_BillingTransaction_Insert",
+                                                        out billingTransactionID,
+                                                        billingTransaction.AccountId,
+                                                        billingTransaction.AccountTypeId,
+                                                        billingTransaction.Amount,
+                                                        billingTransaction.CurrencyId,
+                                                        billingTransaction.TransactionTypeId,
+                                                        billingTransaction.TransactionTime,
+                                                        billingTransaction.Notes,
+                                                        billingTransaction.Reference,
+                                                        billingTransaction.SourceId);
 
             if (affectedRecords > 0)
             {
@@ -65,9 +74,16 @@ namespace Vanrise.AccountBalance.Data.SQL
             billingTransactionId = -1;
             return false;
         }
-        public bool InsertBillingTransactionFromAccountUsageAndUpdate(Guid accountTypeId,TimeSpan timeOffset)
+        public bool InsertBillingTransactionFromAccountUsageAndUpdate(Guid accountTypeId, TimeSpan timeOffset)
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_InsertFromAccountUsageAndUpdate]", accountTypeId, timeOffset.TotalSeconds) > 0);
+        }
+        public IEnumerable<BillingTransaction> GetBillingTransactionsForSynchronizerProcess(List<Guid> billingTransactionTypeIds, Guid accountTypeId)
+        {
+            string transactionTypeIds = null;
+            if (billingTransactionTypeIds != null && billingTransactionTypeIds.Count() > 0)
+                transactionTypeIds = string.Join<Guid>(",", billingTransactionTypeIds);
+            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetForSynchronizerProcess]", BillingTransactionMapper, transactionTypeIds, accountTypeId);
         }
         #endregion
 
@@ -86,14 +102,13 @@ namespace Vanrise.AccountBalance.Data.SQL
                 TransactionTime = GetReaderValue<DateTime>(reader, "TransactionTime"),
                 TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeID"),
                 Reference = reader["Reference"] as string,
-                IsBalanceUpdated = GetReaderValue<bool>(reader, "IsBalanceUpdated")
+                IsBalanceUpdated = GetReaderValue<bool>(reader, "IsBalanceUpdated"),
+                SourceId = reader["SourceId"] as string
             };
         }
 
         #endregion
 
 
-
-       
     }
 }
