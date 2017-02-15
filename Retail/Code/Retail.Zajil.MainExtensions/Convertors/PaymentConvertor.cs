@@ -33,17 +33,24 @@ namespace Retail.Zajil.MainExtensions.Convertors
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 AccountBEManager accountBeManager = new AccountBEManager();
-
+                var account = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row[this.SourceAccountIdColumn].ToString());
                 SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
                 {
                     BillingTransaction = new BillingTransaction
                     {
                         TransactionTypeId = TransactionTypeId,
-                        SourceId = row["PaymentId"].ToString(),
+                        SourceId = row["Document_Number"] as string,
                         CurrencyId = this.CurrencyId,
-                        AccountId = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row[this.SourceAccountIdColumn].ToString()).AccountId.ToString(),
+                        AccountId = account.AccountId.ToString(),
                         TransactionTime = (DateTime)row[this.TimeColumn],
-                        Amount = (decimal)row[this.AmountColumn]
+                        Amount = (decimal)row[this.AmountColumn],
+                        AccountTypeId = account.TypeId,
+                        Reference = row["Applied_to_Doc_Number"] as string,
+                        Notes = string.Format("Description: {0}, Document_Type_and_Number: {1}, PONUMBER: {2}, Invoive Description: {3}",
+                                                row["trx_desc"] as string,
+                                                row["Document_Type_and_Number"] as string,
+                                                row["PONUMBER"] as string,
+                                                row["Description"] as string)
                     }
                 };
                 transactionTargetBEs.Add(sourceTransaction);
@@ -53,7 +60,15 @@ namespace Retail.Zajil.MainExtensions.Convertors
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
+            SourceBillingTransaction existingBe = context.ExistingBE as SourceBillingTransaction;
+            SourceBillingTransaction newBe = context.NewBE as SourceBillingTransaction;
 
+            SourceBillingTransaction finalBe = new SourceBillingTransaction
+            {
+                BillingTransaction = existingBe.BillingTransaction
+            };
+
+            context.FinalBE = finalBe;
         }
     }
 }
