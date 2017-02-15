@@ -328,8 +328,8 @@ set nocount on;
 ;with cte_data([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('1D1B5AB7-5063-47FA-8DE9-12D9008EBE4A',null,'Voice Technical Settings','Retail_Voice_VoiceTechnicalSettings','General','{"Editor":"retail-voice-technicalsettings-editor"}','{"$type":"Retail.Voice.Entities.VoiceTechnicalSettings, Retail.Voice.Entities","AccountIdentification":{"$type":"Retail.Voice.MainExtensions.DIDAccountIdentification, Retail.Voice.MainExtensions","ConfigId":"1a73d2e9-1419-4b41-ad2b-6ab04930466b"},"InternationalIdentification":{"$type":"Retail.Voice.MainExtensions.RuleInternationalIdentification, Retail.Voice.MainExtensions","ConfigId":"d65ac3f8-3e92-4b48-ae0b-1f25c588916d","RuleDefinitionId":"f67a1a52-e16e-4b81-839f-d5a2e2d70317"}}',1),
-('46EA803F-55A5-45FF-90EB-8DEBA2047F47',null,'DID Technical Settings','Retail_BE_DIDTechnicalSettings','Business Entities','{"Editor":"retail-be-didtechnicalsettings"}','{"$type":"Retail.BusinessEntity.Entities.DIDTechnicalSettings, Retail.BusinessEntity.Entities","AccountDIDRelationDefinitionId":"ab66335b-7d26-4a4b-a7fa-fb4d2728b080"}',1)
+('1D1B5AB7-5063-47FA-8DE9-12D9008EBE4A',null,'Voice Technical','Retail_Voice_VoiceTechnicalSettings','General','{"Editor":"retail-voice-technicalsettings-editor"}','{"$type":"Retail.Voice.Entities.VoiceTechnicalSettings, Retail.Voice.Entities","AccountIdentification":{"$type":"Retail.Voice.MainExtensions.DIDAccountIdentification, Retail.Voice.MainExtensions","ConfigId":"1a73d2e9-1419-4b41-ad2b-6ab04930466b"},"InternationalIdentification":{"$type":"Retail.Voice.MainExtensions.RuleInternationalIdentification, Retail.Voice.MainExtensions","ConfigId":"d65ac3f8-3e92-4b48-ae0b-1f25c588916d","RuleDefinitionId":"f67a1a52-e16e-4b81-839f-d5a2e2d70317"}}',1),
+('46EA803F-55A5-45FF-90EB-8DEBA2047F47',null,'DID Technical','Retail_BE_DIDTechnicalSettings','Business Entities','{"Editor":"retail-be-didtechnicalsettings"}','{"$type":"Retail.BusinessEntity.Entities.DIDTechnicalSettings, Retail.BusinessEntity.Entities","AccountDIDRelationDefinitionId":"ab66335b-7d26-4a4b-a7fa-fb4d2728b080"}',1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
@@ -553,7 +553,7 @@ END
 
 
 
---[Retail_Dev_Configuration].[common].[VRComponentType]-------------------------------------
+--[common].[VRComponentType]-------------------------------------
 ----------------------------------------------------------------------------------------------------
 
 BEGIN
@@ -582,7 +582,7 @@ END
 
 
 
---[Retail_Dev_Configuration].[common].[StatusDefinition]------------------------------------
+--[common].[StatusDefinition]------------------------------------
 ----------------------------------------------------------------------------------------------------
 
 BEGIN
