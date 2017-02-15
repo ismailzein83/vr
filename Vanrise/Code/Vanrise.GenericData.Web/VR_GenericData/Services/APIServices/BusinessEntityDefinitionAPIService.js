@@ -22,6 +22,13 @@
             });
         }
 
+        function GetRemoteBusinessEntityDefinitionsInfo(connectionId, serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetRemoteBusinessEntityDefinitionsInfo'), {
+                connectionId: connectionId,
+                serializedFilter: serializedFilter
+            });
+        }
+
         function AddBusinessEntityDefinition(businessEntityDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'AddBusinessEntityDefinition'), businessEntityDefinition);
         }
@@ -60,6 +67,7 @@
             GetFilteredBusinessEntityDefinitions: GetFilteredBusinessEntityDefinitions,
             GetBusinessEntityDefinition: GetBusinessEntityDefinition,
             GetBusinessEntityDefinitionsInfo: GetBusinessEntityDefinitionsInfo,
+            GetRemoteBusinessEntityDefinitionsInfo: GetRemoteBusinessEntityDefinitionsInfo,
             AddBusinessEntityDefinition: AddBusinessEntityDefinition,
             HasAddBusinessEntityDefinition: HasAddBusinessEntityDefinition,
             UpdateBusinessEntityDefinition: UpdateBusinessEntityDefinition,
