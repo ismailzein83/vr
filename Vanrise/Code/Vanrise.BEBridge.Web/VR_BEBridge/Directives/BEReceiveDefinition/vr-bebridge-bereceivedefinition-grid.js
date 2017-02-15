@@ -54,8 +54,12 @@ app.directive('vrBebridgeBereceivedefinitionGrid', ['VR_BEBridge_BERecieveDefini
             function defineMenuActions() {
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
-                    clicked: editReceiveDefinition
+                    clicked: editReceiveDefinition,
+                    haspermission: hasEditReceiveDefinitionPermission
                 });
+            }
+            function hasEditReceiveDefinitionPermission() {
+                return beRecieveDefinitionApiService.HasUpdateReceiveDefinitionPermission()
             }
         }
 

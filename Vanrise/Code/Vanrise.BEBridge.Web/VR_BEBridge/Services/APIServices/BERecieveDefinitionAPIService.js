@@ -32,6 +32,13 @@
         function GetTargetConvertorExtensionConfigs() {
             return baseApiService.get(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, "GetTargetConvertorExtensionConfigs"));
         }
+        function HasAddReceiveDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(vrBeBridgeModuleConfig.moduleName, controllerName, ['AddReceiveDefinition']));
+        }
+        function HasUpdateReceiveDefinitionPermission() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(vrBeBridgeModuleConfig.moduleName, controllerName, ['UpdateReceiveDefinition']));
+        }
+
         return ({
             GetBERecieveDefinitionsInfo: GetBERecieveDefinitionsInfo,
             GetFilteredBeReceiveDefinitions: GetFilteredBeReceiveDefinitions,
@@ -40,7 +47,9 @@
             AddReceiveDefinition: AddReceiveDefinition,
             GetSourceReaderExtensionConfigs: GetSourceReaderExtensionConfigs,
             GetTargetSynchronizerExtensionConfigs: GetTargetSynchronizerExtensionConfigs,
-            GetTargetConvertorExtensionConfigs: GetTargetConvertorExtensionConfigs
+            GetTargetConvertorExtensionConfigs: GetTargetConvertorExtensionConfigs,
+            HasAddReceiveDefinitionPermission: HasAddReceiveDefinitionPermission,
+            HasUpdateReceiveDefinitionPermission: HasUpdateReceiveDefinitionPermission
         });
     }
 

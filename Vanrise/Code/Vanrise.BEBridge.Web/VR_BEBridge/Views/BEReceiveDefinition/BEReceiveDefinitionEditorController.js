@@ -160,6 +160,13 @@
                 beSettingsAPI = api;
                 beSettingsAPIReadyPromiseDeferred.resolve();
             };
+
+            $scope.scopeModel.hasSaveBeReceiveDefinitionPermission = function () {
+                if (isEditMode)
+                    return beRecieveDefinitionApiService.HasUpdateReceiveDefinitionPermission();
+                else
+                    return beRecieveDefinitionApiService.HasAddReceiveDefinitionPermission();
+            };
         }
 
         function loadTSourceReaderDefinitions() {

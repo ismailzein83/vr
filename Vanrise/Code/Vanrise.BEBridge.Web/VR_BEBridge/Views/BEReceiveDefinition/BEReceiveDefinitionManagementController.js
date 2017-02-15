@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function beReceiveDefinitionManagementController($scope, beReceiveDefinitionService) {
+    function beReceiveDefinitionManagementController($scope, beReceiveDefinitionService, beRecieveDefinitionAPIService) {
 
         var gridAPI;
         defineScope();
@@ -29,6 +29,10 @@
                 beReceiveDefinitionService.addReceiveDefinition(onReceiveDefinitionAdded);
             };
 
+            $scope.scopeModel.hasAddBEReceiveDefinitionPermission = function () {
+                return beRecieveDefinitionAPIService.HasAddReceiveDefinitionPermission();
+            };
+
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
@@ -36,6 +40,6 @@
         }
     }
 
-    beReceiveDefinitionManagementController.$inject = ['$scope', 'VR_BEBridge_BEReceiveDefinitionService'];
+    beReceiveDefinitionManagementController.$inject = ['$scope', 'VR_BEBridge_BEReceiveDefinitionService', 'VR_BEBridge_BERecieveDefinitionAPIService'];
     appControllers.controller('VR_BEBridge_BEReceiveDefinitionManagementController', beReceiveDefinitionManagementController);
 })(appControllers);
