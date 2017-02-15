@@ -78,13 +78,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetPending]", SupplierRateMapper, query.SupplierId, zonesids, query.EffectiveOn);
         }
 
-        public IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds, int supplierId)
+        public IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds, List<int> countryIds, int supplierId)
         {
-            string zoneIdsStr = "";
+            string zoneIdsStr = "", countryIdsStr = "";
             if (zoneIds != null && zoneIds.Any())
                 zoneIdsStr = string.Join(",", zoneIds);
+            if (countryIds != null && countryIds.Any())
+                countryIdsStr = string.Join(",", countryIds);
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetZoneHistory]", SupplierRateMapper, supplierId,
-                zoneIdsStr);
+                zoneIdsStr, countryIdsStr);
         }
 
         #endregion

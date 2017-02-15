@@ -14,10 +14,11 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
             var allZones = supplierZoneManager.GetCachedSupplierZones();
-            var allZoneIds =
-                allZones.Values.Where(z => z.Name.ToLower().Equals(Query.SupplierZoneName.ToLower()))
-                    .Select(r => r.SupplierZoneId).ToList();
-            return dataManager.GetZoneRateHistory(allZoneIds, Query.SupplierId);
+            var filteredZones =
+                allZones.Values.Where(z => z.Name.ToLower().Equals(Query.SupplierZoneName.ToLower()));
+            List<long> allZonesIds = filteredZones.Select(z => z.SupplierZoneId).ToList();
+            List<int> allContryIds = filteredZones.Select(c => c.CountryId).Distinct().ToList();
+            return dataManager.GetZoneRateHistory(allZonesIds, allContryIds, Query.SupplierId);
         }
     }
 }
