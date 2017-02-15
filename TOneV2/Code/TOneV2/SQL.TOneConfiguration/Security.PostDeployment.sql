@@ -200,9 +200,6 @@ set nocount on;
 -------------------------------------------------------------------------------------------------------------
 end
 
---update permission to existing users.delete	
-from	[sec].[Permission]
-where	ISNUMERIC(EntityId)>0 and HolderId=1
 --[sec].[Permission]--------------------------------------------------------------------------------
 begin
 set nocount on;;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////(0,'1',0,'5A9E78AE-229E-41B9-9DBF-492997B42B61','[{"Name":"Full Control","Value":1}]')--(0,'1',1,'102B6C02-7D5D-4768-B65B-87BB141EAADC','[{"Name":"View","Value":1}, {"Name":"Assign Permissions","Value":1}]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))merge	[sec].[Permission] as tusing	cte_data as son		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]when matched then	update set	[PermissionFlags] = s.[PermissionFlags]when not matched by target then	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
