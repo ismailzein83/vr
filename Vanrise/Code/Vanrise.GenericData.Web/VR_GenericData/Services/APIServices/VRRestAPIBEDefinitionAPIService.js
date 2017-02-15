@@ -2,22 +2,25 @@
 
     'use strict';
 
-    BusinessEntityDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'VR_GenericData_ModuleConfig'];
+    VRRestAPIBEDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'VR_GenericData_ModuleConfig'];
 
-    function BusinessEntityDefinitionAPIService(BaseAPIService, UtilsService, SecurityService, VR_GenericData_ModuleConfig) {
+    function VRRestAPIBEDefinitionAPIService(BaseAPIService, UtilsService, SecurityService, VR_GenericData_ModuleConfig) {
 
-        function GetBusinessEntityDefinitionsInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetBusinessEntityDefinitionsInfo'), {
-                filter: filter
+        var controllerName = 'VRRestAPIBEDefinition';
+
+        function GetRemoteBusinessEntityDefinitionsInfo(connectionId, serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetRemoteBusinessEntityDefinitionsInfo'), {
+                connectionId: connectionId,
+                serializedFilter: serializedFilter
             });
         }
-
+         
 
         return {
-            GetBusinessEntityDefinitionsInfo: GetBusinessEntityDefinitionsInfo
+            GetRemoteBusinessEntityDefinitionsInfo: GetRemoteBusinessEntityDefinitionsInfo
         };
     }
 
-    appControllers.service('VR_GenericData_BusinessEntityDefinitionAPIService', BusinessEntityDefinitionAPIService);
+    appControllers.service('VR_GenericData_VRRestAPIBEDefinitionAPIService', VRRestAPIBEDefinitionAPIService);
 
 })(appControllers);
