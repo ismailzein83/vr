@@ -106,8 +106,8 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
             function defineMenuActions() {
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
-                    clicked: editProductFamily
-                    //haspermission: hasEditProductFamilyPermission
+                    clicked: editProductFamily,
+                    haspermission: hasEditProductFamilyPermission
                 });
             }
             function editProductFamily(productFamilyItem) {
@@ -118,8 +118,8 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
 
                 Retail_BE_ProductFamilyService.editProductFamily(productFamilyItem.Entity.ProductFamilyId, onProductFamilyUpdated);
             }
-            //function hasEditProductFamilyPermission() {
-            //    return Retail_BE_ProductFamilyAPIService.HasUpdateProductFamilyPermission()
-            //}
+            function hasEditProductFamilyPermission() {
+                return Retail_BE_ProductFamilyAPIService.HasUpdateProductFamilyPermission()
+            }
         }
     }]);

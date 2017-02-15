@@ -26,6 +26,11 @@
                 Retail_BE_DIDService.addDID(onDIDAdded);
             };
 
+            $scope.scopeModel.hasAddDIDPermission = function () {
+                return Retail_BE_DIDAPIService.HasAddDIDPermission();
+            };
+
+
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});

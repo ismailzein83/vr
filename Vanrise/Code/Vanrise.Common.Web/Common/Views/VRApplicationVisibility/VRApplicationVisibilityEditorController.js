@@ -48,6 +48,12 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
+            $scope.scopeModel.hasSaveVRApplicationVisibilityPermission = function () {
+                if (isEditMode)
+                    return Retail_BE_DIDAPIService.HasEditVRApplicationVisibilityPermission();
+                else
+                    return Retail_BE_DIDAPIService.HasAddVRApplicationVisibilityPermission();
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;

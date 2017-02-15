@@ -22,7 +22,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="scopeModel.save" formname="formDIDEditor" haspermission="hasSaveDIDPermission"></vr-button>
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formDIDEditor" haspermission="scopeModel.hasSaveDIDPermission"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

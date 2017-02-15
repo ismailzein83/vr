@@ -32,9 +32,9 @@
                 gridAPI.load({});
             };
 
-            //$scope.scopeModel.hasAddProductFamilyPermission = function () {
-            //    return Retail_BE_ProductFamilyAPIService.HasAddProductFamilyPermission();
-            //};
+            $scope.scopeModel.hasAddProductFamilyPermission = function () {
+                return Retail_BE_ProductFamilyAPIService.HasAddProductFamilyPermission();
+            };
         }
         function load() {
 

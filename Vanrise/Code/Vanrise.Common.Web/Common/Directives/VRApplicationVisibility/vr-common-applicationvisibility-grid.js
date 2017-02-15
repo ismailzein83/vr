@@ -61,8 +61,8 @@ app.directive('vrCommonApplicationvisibilityGrid', ['VRNotificationService', 'VR
             function defineMenuActions() {
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
-                    clicked: editVRApplicationVisibility
-                    //haspermission: hasEditVRApplicationVisibilityPermission
+                    clicked: editVRApplicationVisibility,
+                    haspermission: hasEditVRApplicationVisibilityPermission
                 });
             }
             function editVRApplicationVisibility(vrApplicationVisibilityItem) {
@@ -72,8 +72,8 @@ app.directive('vrCommonApplicationvisibilityGrid', ['VRNotificationService', 'VR
 
                 VRCommon_VRApplicationVisibilityService.editVRApplicationVisibility(vrApplicationVisibilityItem.Entity.VRApplicationVisibilityId, onVRApplicationVisibilityUpdated);
             }
-            //function hasEditVRApplicationVisibilityPermission() {
-            //    return VRCommon_VRApplicationVisibilityAPIService.HasEditVRApplicationVisibilityPermission();
-            //}
+            function hasEditVRApplicationVisibilityPermission() {
+                return VRCommon_VRApplicationVisibilityAPIService.HasEditVRApplicationVisibilityPermission();
+            }
         }
     }]);
