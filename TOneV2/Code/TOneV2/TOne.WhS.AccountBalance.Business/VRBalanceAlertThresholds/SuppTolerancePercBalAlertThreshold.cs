@@ -25,7 +25,7 @@ namespace TOne.WhS.AccountBalance.Business
             context.ThrowIfNull("context");
             context.EntityBalanceInfo.ThrowIfNull("context.EntityBalanceInfo");
             Decimal creditLimit = new AccountBalanceManager().GetSupplierCreditLimit(context.EntityBalanceInfo.EntityId);
-            context.IsUpThreshold = true;
+            //context.IsUpThreshold = true;
             return  creditLimit * (100 - this.Percentage) / 100;
         }
     }

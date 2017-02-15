@@ -25,7 +25,7 @@ namespace TOne.WhS.AccountBalance.Business
             context.ThrowIfNull("context");
             context.EntityBalanceInfo.ThrowIfNull("context.EntityBalanceInfo");
             Decimal maxBalance = new AccountBalanceManager().GetSupplierEstimatedMaxBalance(context.EntityBalanceInfo.EntityId);
-            context.IsUpThreshold = true;
+            //context.IsUpThreshold = true;
             return -(maxBalance * this.Percentage / 100);
         }
     }
