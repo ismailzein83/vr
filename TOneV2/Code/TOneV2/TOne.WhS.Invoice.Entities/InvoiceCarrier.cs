@@ -10,5 +10,6 @@ namespace TOne.WhS.Invoice.Entities
     {
         public string InvoiceCarrierId { get; set; }
         public string Name { get; set; }
+        public int TimeZoneId { get; set; }
     }
 }
