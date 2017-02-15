@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierRateAPIService", "VRUIUtilsService", "FileAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VRUIUtilsService, fileApiService) {
+app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierRateAPIService", "VRUIUtilsService", "FileAPIService", "WhS_BE_RateChangeTypeEnum",
+function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VRUIUtilsService, fileApiService, whSBeRateChangeTypeEnum) {
 
     var directiveDefinitionObject = {
 
@@ -61,8 +61,11 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                 return WhS_BE_SupplierRateAPIService.GetFilteredSupplierRates(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
-                            for (var i = 0; i < response.Data.length; i++)
-                                drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                            for (var i = 0; i < response.Data.length; i++) {
+                                var item = response.Data[i];
+                                SetRateChangeIcon(item);
+                                drillDownManager.setDrillDownExtensionObject(item);
+                            }
 
                         }
                         onResponseReady(response);
@@ -72,6 +75,32 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                     });
             };
             defineMenuActions();
+        }
+
+        function SetRateChangeIcon(dataItem) {
+            switch (dataItem.Entity.RateChange) {
+                case whSBeRateChangeTypeEnum.New.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.New.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.New.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.New.iconType;
+                    break;
+                case whSBeRateChangeTypeEnum.Increase.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.Increase.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.Increase.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.Increase.iconType;
+                    break;
+
+                case whSBeRateChangeTypeEnum.Decrease.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.Decrease.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.Decrease.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.Decrease.iconType;
+                    break;
+                case whSBeRateChangeTypeEnum.NotChanged.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.NotChanged.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.NotChanged.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.NotChanged.iconType;
+                    break;
+            }
         }
 
         function defineMenuActions() {
