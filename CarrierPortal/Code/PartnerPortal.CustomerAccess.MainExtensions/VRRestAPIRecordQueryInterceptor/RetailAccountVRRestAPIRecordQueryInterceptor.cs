@@ -24,18 +24,23 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterc
 
             NumberRecordFilter numberRecordFilter = new NumberRecordFilter()
             {
-                FieldName = "AccountId",
+                FieldName = "FinancialAccountId",
                 CompareOperator = NumberRecordFilterOperator.Equals,
                 Value = manager.GetRetailAccountId(userId)
             };
 
-            if (vrRestAPIRecordQueryInterceptorContext.Query != null)
+            if (vrRestAPIRecordQueryInterceptorContext.Query == null)
+                vrRestAPIRecordQueryInterceptorContext.Query = new DataRecordQuery();
+
+            if (vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup == null)
             {
-                if (vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup == null)
-                {
-                    vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup();
-                    vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup.Filters = new List<RecordFilter>();
-                }
+                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = new List<RecordFilter>() { numberRecordFilter }, LogicalOperator = RecordQueryLogicalOperator.And };
+            }
+            else
+            {
+                var existingFilterGroup = vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup;
+                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = new List<RecordFilter>(), LogicalOperator = RecordQueryLogicalOperator.And };
+                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup.Filters.Add(existingFilterGroup);
                 vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup.Filters.Add(numberRecordFilter);
             }
         }

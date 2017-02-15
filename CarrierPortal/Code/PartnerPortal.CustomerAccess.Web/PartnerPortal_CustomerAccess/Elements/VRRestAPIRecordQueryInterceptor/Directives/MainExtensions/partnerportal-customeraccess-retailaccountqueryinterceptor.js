@@ -1,5 +1,5 @@
 ﻿(function (app) {
-
+     
     'use strict';
 
     RestAPIRecordQueryInterceptorDirective.$inject = ['UtilsService'];

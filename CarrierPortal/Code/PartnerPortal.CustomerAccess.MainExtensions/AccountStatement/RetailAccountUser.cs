@@ -17,7 +17,7 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.AccountStatement
 
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
-            retailAccountUserHandlerContext.Query.AccountId = manager.GetRetailAccountId(userId);
+            retailAccountUserHandlerContext.Query.AccountId = manager.GetRetailAccountId(userId).ToString();
         }
     }
 }
