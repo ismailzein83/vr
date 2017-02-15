@@ -29,6 +29,14 @@ namespace Vanrise.Invoice.Web.Controllers
             return manager.GetInvoice(invoiceId);
         }
         [HttpGet]
+        [Route("GetInvoiceEditorRuntime")]
+        public Entities.InvoiceEditorRuntime GetInvoiceEditorRuntime(long invoiceId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetInvoiceEditorRuntime(invoiceId);
+        }
+
+        [HttpGet]
         [Route("CheckInvoiceFollowBillingPeriod")]
         public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId,string partnerId)
         {

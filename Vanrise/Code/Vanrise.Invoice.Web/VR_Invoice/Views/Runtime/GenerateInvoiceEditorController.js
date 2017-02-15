@@ -160,7 +160,7 @@
             }
             function getInvoice()
             {
-              return  VR_Invoice_InvoiceAPIService.GetInvoice(invoiceId).then(function (response) {
+                return VR_Invoice_InvoiceAPIService.GetInvoiceEditorRuntime(invoiceId).then(function (response) {
                   invoiceEntity = response;
                 });
             }
@@ -184,8 +184,8 @@
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                 partnerSelectorReadyDeferred.promise.then(function () {
                     var partnerSelectorPayload = { context: getContext(), extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings };
-                    if (invoiceEntity != undefined) {
-                        partnerSelectorPayload.selectedIds = invoiceEntity.PartnerId;
+                    if (invoiceEntity != undefined && invoiceEntity.Invoice != undefined) {
+                        partnerSelectorPayload.selectedIds = invoiceEntity.Invoice.PartnerId;
                     }
                     VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
                 });
@@ -194,13 +194,21 @@
             function loadStaticData() {
                 if(invoiceEntity != undefined)
                 {
-                    $scope.scopeModel.fromDate = invoiceEntity.FromDate;
+                    
                     if (invoiceEntity.ToDate != undefined)
                     {
                         var toDate = UtilsService.createDateFromString(invoiceEntity.ToDate);
                         $scope.scopeModel.toDate = new Date(toDate.setHours(23, 59, 59, 998));
+                      
                     }
-                    $scope.scopeModel.issueDate = invoiceEntity.IssueDate;
+                    if (invoiceEntity.FromDate != undefined) {
+                        var fromDate = UtilsService.createDateFromString(invoiceEntity.FromDate);
+                        $scope.scopeModel.fromDate = new Date(fromDate.setHours(0, 0, 0, 0));
+                    }
+                    if (invoiceEntity.Invoice != undefined)
+                    {
+                        $scope.scopeModel.issueDate = invoiceEntity.Invoice.IssueDate;
+                    }
                 }
             }
             function loadTimeZoneSelector() {
@@ -209,9 +217,9 @@
                     var timeZoneSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                     timeZoneSelectorReadyDeferred.promise.then(function () {
                         var timeZoneSelectorPayload;
-                        if (invoiceEntity != undefined) {
+                        if (invoiceEntity != undefined && invoiceEntity.Invoice != undefined) {
                             timeZoneSelectorPayload = {
-                                selectedIds: invoiceEntity.TimeZoneId
+                                selectedIds: invoiceEntity.Invoice.TimeZoneId
                             };
                         }
                         VRUIUtilsService.callDirectiveLoad(timeZoneSelectorAPI, timeZoneSelectorPayload, timeZoneSelectorPayloadLoadDeferred);
@@ -220,12 +228,22 @@
                 }
             }
             
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective, loadTimeZoneSelector])
-               .catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective]).then(function () {
+                var promise = loadTimeZoneSelector();
+                if(promise != undefined)
+                {
+                    promise.finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
+                }else
+                {
+                    $scope.scopeModel.isLoading = false;
+
+                }
+            }).catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.scopeModel.isLoading = false;
               });
         }
   
@@ -373,8 +391,16 @@
                                     }).catch(function (error) {
                                         $scope.scopeModel.isLoading = false;
                                     });
-                                    $scope.scopeModel.fromDate = response.FromDate;
-                                    $scope.scopeModel.toDate = response.ToDate;
+
+                                    if (response.ToDate != undefined) {
+                                        var toDate = UtilsService.createDateFromString(response.ToDate);
+                                        $scope.scopeModel.toDate = new Date(toDate.setHours(23, 59, 59, 998));
+
+                                    }
+                                    if (response.FromDate != undefined) {
+                                        var fromDate = UtilsService.createDateFromString(response.FromDate);
+                                        $scope.scopeModel.fromDate = new Date(fromDate.setHours(0, 0, 0, 0));
+                                    }
                                 } else {
                                     $scope.scopeModel.fromDate = undefined;
                                     $scope.scopeModel.toDate = undefined;

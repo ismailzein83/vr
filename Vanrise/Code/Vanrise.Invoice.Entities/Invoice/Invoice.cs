@@ -28,6 +28,7 @@ namespace Vanrise.Invoice.Entities
         public DateTime? PaidDate { get; set; }
         public string Note { get; set; }
         public int? TimeZoneId { get; set; }
+        public string TimeZoneOffset { get; set; }
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()
         {

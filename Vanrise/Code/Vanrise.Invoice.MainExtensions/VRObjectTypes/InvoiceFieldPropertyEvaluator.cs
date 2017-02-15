@@ -74,6 +74,8 @@ namespace Vanrise.Invoice.MainExtensions
                     }
                     else
                         return null;
+                case InvoiceField.TimeZoneOffset:
+                    return invoice.TimeZoneOffset;
                 default: return null;
             }
         }

@@ -123,6 +123,7 @@
     <Compile Include="InvoiceItem\InvoiceItem.cs" />
     <Compile Include="InvoiceItem\InvoiceItemDetail.cs" />
     <Compile Include="InvoiceItem\InvoiceItemQuery.cs" />
+    <Compile Include="Invoice\InvoiceEditorRuntime.cs" />
     <Compile Include="Invoice\InvoiceQuery.cs" />
     <Compile Include="InvoiceType\InvoiceType.cs" />
     <Compile Include="InvoiceType\InvoiceTypeSettings.cs" />

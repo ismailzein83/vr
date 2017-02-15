@@ -3,8 +3,8 @@
     InvoiceId: { value: 1, description: "ID", fieldName: "Entity.InvoiceId", type: "Text" },
     Partner: { value: 2, description: "Partner", fieldName: "PartnerName", type: "Text" },
     SerialNumber: { value: 3, description: "Serial Number", fieldName: "Entity.SerialNumber", type: "Text" },
-    FromDate: { value: 4, description: "From Date", fieldName: "Entity.FromDate", type: "Date" },
-    ToDate: { value: 5, description: "To Date", fieldName: "Entity.ToDate", type: "Date" },
+    FromDate: { value: 4, description: "From Date", fieldName: "Entity.FromDate", type: "Datetime" },
+    ToDate: { value: 5, description: "To Date", fieldName: "Entity.ToDate", type: "Datetime" },
     IssueDate: { value: 6, description: "Issue Date", fieldName: "Entity.IssueDate", type: "Date" },
     DueDate: { value: 7, description: "Due Date", fieldName: "Entity.DueDate", type: "Date" },
     Paid: { value: 8, description: "Paid Date", fieldName: "Entity.PaidDate", type: "Datetime" },
@@ -13,4 +13,5 @@
     Lock: { value: 11, description: "Lock", fieldName: "Lock", type: "Datetime" },
     Note: { value: 12, description: "Note", fieldName: "HasNote", type: "Text" },
     TimeZone: { value: 13, description: "TimeZone", fieldName: "TimeZone", type: "Text" },
+    TimeZoneOffset: { value: 14, description: "TimeZoneOffset", fieldName: "TimeZoneOffset", type: "Text" },
 });

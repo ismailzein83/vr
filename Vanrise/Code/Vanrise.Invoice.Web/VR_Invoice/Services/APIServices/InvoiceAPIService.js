@@ -70,6 +70,11 @@
                 partnerId: partnerId
             });
         }
+        function GetInvoiceEditorRuntime(invoiceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceEditorRuntime"), {
+                invoiceId: invoiceId
+            });
+        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -82,7 +87,8 @@
             UpdateInvoiceNote: UpdateInvoiceNote,
             GetBillingInterval: GetBillingInterval,
             CheckGeneratedInvoicePeriodGaP: CheckGeneratedInvoicePeriodGaP,
-            CheckInvoiceFollowBillingPeriod: CheckInvoiceFollowBillingPeriod
+            CheckInvoiceFollowBillingPeriod: CheckInvoiceFollowBillingPeriod,
+            GetInvoiceEditorRuntime: GetInvoiceEditorRuntime
         });
     }
 

@@ -56,6 +56,8 @@ namespace Vanrise.Invoice.MainExtensions
                         }
                     }
                     return null;
+                case InvoiceField.TimeZoneOffset:
+                    return context.Invoice.TimeZoneOffset;
             }
             return null;
         }

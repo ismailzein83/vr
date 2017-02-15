@@ -25,7 +25,10 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
                 case Entities.InvoiceField.IssueDate: return context.Invoice.IssueDate.ToString();
                 case Entities.InvoiceField.Partner: 
                     PartnerManager partnerManager = new PartnerManager();
-                    return partnerManager.GetActualPartnerId(context.InvoiceTypeId, context.Invoice.PartnerId);
+                    var partnerId = partnerManager.GetActualPartnerId(context.InvoiceTypeId, context.Invoice.PartnerId);
+                    if (partnerId != null)
+                        return partnerId.ToString();
+                    return null;
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber.ToString();
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate.ToString();
                 case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null)
@@ -39,6 +42,8 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
                     }
                     else
                         return null;
+                case InvoiceField.TimeZoneOffset:
+                    return context.Invoice.TimeZoneOffset;
                    // Utilities.GetPropValue(this.FieldName,context.Invoice.Details) 
                        //  Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Invoice.Details) 
             }
