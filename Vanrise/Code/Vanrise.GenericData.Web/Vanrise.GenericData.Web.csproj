@@ -126,6 +126,7 @@
     <Compile Include="Controllers\BELookupRuleDefinitionController.cs" />
     <Compile Include="Controllers\BEParentChildRelationController.cs" />
     <Compile Include="Controllers\BEParentChildRelationDefinitionController.cs" />
+    <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\DataRecordFieldChoiceController.cs" />
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\DataRecordStorageLogController.cs" />
