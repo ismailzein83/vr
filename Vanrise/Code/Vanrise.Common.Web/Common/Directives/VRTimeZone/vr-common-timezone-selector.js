@@ -73,20 +73,26 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TimeZoneId" isrequired="ctrl.isrequired"'
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="ctrl.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="TimeZoneId" isrequired="ctrl.isrequired"'
             + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Time Zone" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>';
     }
 
     function timeZoneCtor(ctrl, $scope, attrs) {
-
+        var selectorApi;
         function initializeController() {
-            defineAPI();
+            ctrl.onSelectorReady = function(api)
+            {
+                selectorApi = api;
+                defineAPI();
+            }
+           
         }
 
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
+                selectorApi.clearDataSource();
 
                 var selectedIds;
                 if (payload != undefined) {

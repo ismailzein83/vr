@@ -385,7 +385,18 @@
                         }
                           
                     }
+                },
+                setTimeZone: function(timeZoneId)
+                {
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingTimeZoneDirective = value;
+                    };
+                    var payload = {
+                        selectedIds: timeZoneId,
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timeZoneSelectorAPI, payload, setLoader);
                 }
+
             };
             return context;
         }

@@ -124,8 +124,8 @@ namespace Vanrise.Invoice.Business
                     VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(createInvoiceInput.TimeZoneId.Value);
                     if (timeZone != null)
                     {
-                        createInvoiceInput.FromDate = createInvoiceInput.FromDate.Add(timeZone.Settings.Offset);
-                        createInvoiceInput.ToDate = createInvoiceInput.ToDate.Add(timeZone.Settings.Offset);
+                        createInvoiceInput.FromDate = createInvoiceInput.FromDate.Add(-timeZone.Settings.Offset);
+                        createInvoiceInput.ToDate = createInvoiceInput.ToDate.Add(-timeZone.Settings.Offset);
                     }
                 }
 
