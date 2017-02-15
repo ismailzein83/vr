@@ -23,7 +23,8 @@ BEGIN
 			CreatedTime,
 			LockDate,
 			Notes,
-			TimeZoneId
+			TimeZoneId,
+			TimeZoneOffset
 	FROM	VR_Invoice.Invoice with(nolock)
 	where	(InvoiceTypeId = @InvoiceTypeId) 
 			AND (@LastImportedId is Null or ID > @LastImportedId)
