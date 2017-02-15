@@ -57,7 +57,8 @@ namespace TOne.WhS.Invoice.Business
                             invoiceCarriers.Add(new InvoiceCarrier
                             {
                                 InvoiceCarrierId = invoiceCarrierId,
-                                Name = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId)
+                                Name = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId),
+                                TimeZoneId = carrierProfile.Settings.TimeZoneId
                             });
                         }
                     }
@@ -78,7 +79,8 @@ namespace TOne.WhS.Invoice.Business
                                     invoiceCarriers.Add(new InvoiceCarrier
                                     {
                                         InvoiceCarrierId = invoiceCarrierId,
-                                        Name = carrierAccountManager.GetCarrierAccountName(account.CarrierAccountId)
+                                        Name = carrierAccountManager.GetCarrierAccountName(account.CarrierAccountId),
+                                        TimeZoneId = account.CustomerSettings.TimeZoneId
                                     });
                                 }
                             }

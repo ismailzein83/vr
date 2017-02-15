@@ -77,15 +77,18 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
-                        <vr-columns width="1/2row">
-                            <vr-fileupload extension="images" value="scopeModal.companyLogo" label="Company Logo"> </vr-fileupload>
-                        </vr-columns>
-
-                        <vr-columns width="1/2row">
-                            <vr-preview-image height="80px" width="80px" value="scopeModal.companyLogo.fileId"> </vr-preview-image>
-                        </vr-columns>
+                       <vr-common-timezone-selector on-ready="scopeModal.onTimeZoneSelectorReady" normal-col-num="6"></vr-common-timezone-selector>
                     </vr-row>
-                </vr-tab>
+                        <vr-row removeline>
+                            <vr-columns width="1/2row">
+                                <vr-fileupload extension="images" value="scopeModal.companyLogo" label="Company Logo"> </vr-fileupload>
+                            </vr-columns>
+
+                            <vr-columns width="1/2row">
+                                <vr-preview-image height="80px" width="80px" value="scopeModal.companyLogo.fileId"> </vr-preview-image>
+                            </vr-columns>
+                        </vr-row>
+</vr-tab>
                 <vr-tab header="'Contacts'">
                     <vr-row>
                         <vr-columns width="1/2row" ng-repeat="c in scopeModal.contacts">

@@ -27,6 +27,10 @@
 
         var countrySelectedPromiseDeferred;
 
+        var timeZoneDirectiveAPI;
+        var timeZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         loadParameters();
         defineScope();
         load();
@@ -50,7 +54,7 @@
                 else
                     return WhS_BE_CarrierProfileAPIService.HasAddCarrierProfilePermission();
             };
-
+           
             $scope.scopeModal = {
                 contacts: [],
                 taxes: [],
@@ -59,7 +63,11 @@
                 documents: [],
                 documentCategories: []
             };
+            $scope.scopeModal.onTimeZoneSelectorReady = function (api) {
+                timeZoneDirectiveAPI = api;
+                timeZoneReadyPromiseDeferred.resolve();
 
+            };
             $scope.scopeModal.onCompanySettingSelectorReady = function (api) {
                 companySettingsSelectorAPI = api;
                 companySettingsSelectorReadyPromiseDeferred.resolve();
@@ -173,7 +181,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDocuments,  loadCompanySettingSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes,loadTimeZoneSelector, loadDocuments,  loadCompanySettingSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -200,6 +208,22 @@
             });
 
             return loadCurrencySelectorPromiseDeferred.promise;
+        }
+
+        function loadTimeZoneSelector() {
+            var loadTimeZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            timeZoneReadyPromiseDeferred.promise.then(function () {
+
+                var payload = {
+                    selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.TimeZoneId : undefined)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(timeZoneDirectiveAPI, payload, loadTimeZoneSelectorPromiseDeferred);
+
+            });
+
+            return loadTimeZoneSelectorPromiseDeferred.promise;
         }
 
         function loadCompanySettingSelector() {
@@ -432,7 +456,8 @@
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax"),
                     CustomerInvoiceByProfile: $scope.scopeModal.customerInvoiceByProfile,
-                    Documents : documentsGridAPI.getData()
+                    Documents: documentsGridAPI.getData(),
+                    TimeZoneId: timeZoneDirectiveAPI.getSelectedIds()
                 }
             };
 
