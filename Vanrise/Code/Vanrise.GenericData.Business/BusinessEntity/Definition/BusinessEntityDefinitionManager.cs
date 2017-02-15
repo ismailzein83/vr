@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.Business
                 (input.Query.Name == null || dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return DataRetrievalManager.Instance.ProcessResult(input, cachedBEDefinitions.ToBigResult(input, filterExpression, BusinessEntityDefinitionDetailMapper));
         }
-        
+
         public Guid GetBusinessEntityDefinitionId(string businessEntityDefinitionName)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.Business
         public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
-            return beDefinition != null ? beDefinition.Name : null;
+            return beDefinition != null ? beDefinition.Title : null;
         }
 
         public IEnumerable<BusinessEntityDefinitionInfo> GetBusinessEntityDefinitionsInfo(BusinessEntityDefinitionInfoFilter filter)
@@ -58,6 +58,14 @@ namespace Vanrise.GenericData.Business
 
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
+        //public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteBusinessEntityDefinitionsInfo(Guid connectionId, BusinessEntityDefinitionInfoFilter filter)
+        //{
+        //    VRConnectionManager connectionManager = new VRConnectionManager();
+        //    var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+        //    VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+
+        //    return connectionSettings.Get<IEnumerable<BusinessEntityDefinitionInfo>>(string.Format("/api/VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinitionsInfo?filter={0}", filter));
+        //}
 
         private struct GetBusinessEntityManagerCacheName
         {
@@ -225,10 +233,11 @@ namespace Vanrise.GenericData.Business
             return new BusinessEntityDefinitionInfo()
             {
                 BusinessEntityDefinitionId = beDefinition.BusinessEntityDefinitionId,
-                Name = beDefinition.Name,
+                Name = beDefinition.Title,
                 SelectorFilterEditor = beDefinition.Settings.SelectorFilterEditor
             };
         }
+
         BusinessEntityDefinitionDetail BusinessEntityDefinitionDetailMapper(BusinessEntityDefinition beDefinition)
         {
             Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
