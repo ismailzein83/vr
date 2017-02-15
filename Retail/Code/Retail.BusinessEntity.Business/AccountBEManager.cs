@@ -538,7 +538,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
+        public class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IAccountBEDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
             ConcurrentDictionary<Guid, Object> _updateHandlesByBEDefinitionId = new ConcurrentDictionary<Guid, Object>();

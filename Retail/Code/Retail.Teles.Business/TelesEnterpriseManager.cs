@@ -101,7 +101,7 @@ namespace Retail.Teles.Business
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().SetCacheExpired(input.AccountBEDefinitionId);
             } else
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
@@ -114,8 +114,7 @@ namespace Retail.Teles.Business
 
         public Dictionary<dynamic,long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
         {
-
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedAccountsByEnterprises_{0}",accountBEDefinitionId), () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedAccountsByEnterprises_{0}", accountBEDefinitionId),accountBEDefinitionId, () =>
                {
                    var accountBEManager = new AccountBEManager();
                    var cashedAccounts = accountBEManager.GetAccounts(accountBEDefinitionId);
@@ -136,7 +135,7 @@ namespace Retail.Teles.Business
         public Dictionary<long, dynamic> GetCachedEnterprisesByAccounts(Guid accountBEDefinitionId)
         {
 
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedEnterprisesByAccounts_{0}", accountBEDefinitionId), () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedEnterprisesByAccounts_{0}", accountBEDefinitionId),accountBEDefinitionId, () =>
             {
                 var accountBEManager = new AccountBEManager();
                 var cashedAccounts = accountBEManager.GetAccounts(accountBEDefinitionId);
@@ -158,16 +157,12 @@ namespace Retail.Teles.Business
         #region Private Classes
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            object _updateHandle;
-
-            public override bool IsCacheExpired(object parameter, ref DateTime? lastCheckTime)
+            protected virtual bool IsTimeExpirable
             {
-                if (lastCheckTime.HasValue)
+                get
                 {
-                    if (lastCheckTime.Value < DateTime.Now.AddMinutes(-5))
-                        return true;
+                    return true;
                 }
-                return false;
             }
         }
         #endregion
