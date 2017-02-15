@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
-namespace Vanrise.GenericData.MainExtensions.DataStorages
+namespace Vanrise.GenericData.Business
 {
     public class GetRemoteRecordStorageDataManagerContext : IGetRemoteRecordStorageDataManagerContext
     {

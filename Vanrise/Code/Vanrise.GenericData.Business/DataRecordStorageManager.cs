@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.Business
 
         DataStoreManager _dataStoreManager = new DataStoreManager();
 
-        #endregion 
+        #endregion
 
         #region Public Methods
 
@@ -32,30 +32,44 @@ namespace Vanrise.GenericData.Business
             if (dataRecordStorage == null)
                 throw new NullReferenceException(String.Format("dataRecordStorage. Id '{0}'", dataRecordStorage.DataRecordStorageId));
 
-            if (input.Query.Columns == null)
-                throw new NullReferenceException("input.Query.Columns");
+            DataStore dataStore = new DataStoreManager().GetDataStore(dataRecordStorage.DataStoreId);
+            if (dataStore == null)
+                throw new NullReferenceException(String.Format("dataStore. Id '{0}'", dataRecordStorage.DataStoreId));
 
-            input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
+            if (dataStore.Settings == null)
+                throw new NullReferenceException(String.Format("dataStore.Settings. Id '{0}'", dataRecordStorage.DataStoreId));
 
-            var recordTypeManager = new DataRecordTypeManager();
-            DataRecordType recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
-            if (recordType == null)
-                throw new NullReferenceException(String.Format("recordType ID '{0}'", dataRecordStorage.DataRecordTypeId));
-            if (recordType.Fields == null)
-                throw new NullReferenceException(String.Format("recordType.Fields ID '{0}'", dataRecordStorage.DataRecordTypeId));
-
-            if (input.Query.FilterGroup != null)
+            var remoteRecordDataManager = dataStore.Settings.GetRemoteRecordDataManager(new GetRemoteRecordStorageDataManagerContext() { DataStore = dataStore, DataRecordStorage = dataRecordStorage });
+            
+            if (remoteRecordDataManager != null)
+                return remoteRecordDataManager.GetFilteredDataRecords(input);
+            else
             {
-                var filterGroup = ConvertFilterGroup(input.Query.FilterGroup, recordType);
-                input.Query.FilterGroup = filterGroup;
-            }
+                if (input.Query.Columns == null)
+                    throw new NullReferenceException("input.Query.Columns");
 
-            if (input.SortByColumnName.Contains("FieldValues"))
-            {
-                string[] fieldValueproperty = input.SortByColumnName.Split('.');
-                input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldValueproperty[0], fieldValueproperty[1], fieldValueproperty[2]);
+                input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
+
+                var recordTypeManager = new DataRecordTypeManager();
+                DataRecordType recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+                if (recordType == null)
+                    throw new NullReferenceException(String.Format("recordType ID '{0}'", dataRecordStorage.DataRecordTypeId));
+                if (recordType.Fields == null)
+                    throw new NullReferenceException(String.Format("recordType.Fields ID '{0}'", dataRecordStorage.DataRecordTypeId));
+
+                if (input.Query.FilterGroup != null)
+                {
+                    var filterGroup = ConvertFilterGroup(input.Query.FilterGroup, recordType);
+                    input.Query.FilterGroup = filterGroup;
+                }
+
+                if (input.SortByColumnName.Contains("FieldValues"))
+                {
+                    string[] fieldValueproperty = input.SortByColumnName.Split('.');
+                    input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldValueproperty[0], fieldValueproperty[1], fieldValueproperty[2]);
+                }
+                return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler() { DataRecordTypeId = dataRecordStorage.DataRecordTypeId });
             }
-            return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler() { DataRecordTypeId = dataRecordStorage.DataRecordTypeId });
         }
 
         private RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType)
@@ -103,8 +117,6 @@ namespace Vanrise.GenericData.Business
                     }
 
                 }
-
-
             }
         }
 
@@ -151,11 +163,17 @@ namespace Vanrise.GenericData.Business
 
                 return true;
             };
-            //if (filter != null)
-            //{
-            //    if (filter.DataRecordTypeId.HasValue)
-            //        filterExpression = (x) => x.DataRecordTypeId == filter.DataRecordTypeId;
             return this.GetCachedDataRecordStorages().MapRecords(DataRecordStorageInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
+        public IEnumerable<DataRecordStorageInfo> GetRemoteDataRecordsStorageInfo(Guid connectionId, DataRecordStorageFilter filter)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+
+            string serializedFilter = filter != null ? Vanrise.Common.Serializer.Serialize(filter) : string.Empty;
+            return connectionSettings.Get<IEnumerable<DataRecordStorageInfo>>(string.Format("/api/VR_GenericData/DataRecordStorage/GetDataRecordsStorageInfo?filter={0}", serializedFilter));
         }
 
         public DataRecordStorage GetDataRecordStorage(Guid dataRecordStorageId)
@@ -257,6 +275,12 @@ namespace Vanrise.GenericData.Business
             return true;
         }
 
+        public IEnumerable<VRRestAPIRecordQueryInterceptorConfig> GetVRRestAPIRecordQueryInterceptorConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<VRRestAPIRecordQueryInterceptorConfig>(VRRestAPIRecordQueryInterceptorConfig.EXTENSION_TYPE);
+        }
+
         #endregion
 
         #region Private Methods
@@ -281,7 +305,7 @@ namespace Vanrise.GenericData.Business
 
         void UpdateStorage(DataRecordStorage dataRecordStorage)
         {
-            DataStore dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
+            DataStore dataStore = _dataStoreManager.GetDataStore(dataRecordStorage.DataStoreId);
             DataRecordStorage existingDataRecordStorage = GetDataRecordStorage(dataRecordStorage.DataRecordStorageId);
             if (dataStore != null && dataStore.Settings != null)
             {
@@ -300,7 +324,7 @@ namespace Vanrise.GenericData.Business
 
         IDataRecordDataManager GetStorageDataManager(DataRecordStorage dataRecordStorage)
         {
-            var dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
+            var dataStore = _dataStoreManager.GetDataStore(dataRecordStorage.DataStoreId);
             if (dataStore == null)
                 throw new NullReferenceException(String.Format("dataStore. dataStore Id '{0}' dataRecordStorage Id '{1}'", dataRecordStorage.DataStoreId, dataRecordStorage.DataRecordStorageId));
             if (dataStore.Settings == null)
@@ -340,7 +364,7 @@ namespace Vanrise.GenericData.Business
 
             private DataRecordType RecordType
             {
-                get 
+                get
                 {
                     if (_recordType == null)
                     {
@@ -473,11 +497,14 @@ namespace Vanrise.GenericData.Business
 
         DataRecordStorageInfo DataRecordStorageInfoMapper(DataRecordStorage dataRecordStorage)
         {
+            DataStore dataStore = _dataStoreManager.GetDataStore(dataRecordStorage.DataStoreId);
+
             return new DataRecordStorageInfo()
             {
                 DataRecordStorageId = dataRecordStorage.DataRecordStorageId,
                 Name = dataRecordStorage.Name,
-                DataRecordTypeId = dataRecordStorage.DataRecordTypeId
+                DataRecordTypeId = dataRecordStorage.DataRecordTypeId,
+                IsRemoteRecordStorage = dataStore != null && dataStore.Settings != null ? dataStore.Settings.IsRemoteDataStore : false
             };
         }
 

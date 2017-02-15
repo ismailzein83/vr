@@ -32,6 +32,14 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetRemoteDataRecordsStorageInfo")]
+        public IEnumerable<DataRecordStorageInfo> GetRemoteDataRecordsStorageInfo(Guid connectionId, string filter)
+        {
+            DataRecordStorageFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<DataRecordStorageFilter>(filter) : null;
+            return _manager.GetRemoteDataRecordsStorageInfo(connectionId, deserializedFilter);
+        }
+
+        [HttpGet]
         [Route("GetDataRecordStorage")]
         public DataRecordStorage GetDataRecordStorage(Guid dataRecordStorageId)
         {
@@ -57,6 +65,13 @@ namespace Vanrise.GenericData.Web.Controllers
         public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
         {
             return _manager.CheckRecordStoragesAccess(dataRecordStorages);
+        }
+
+        [HttpGet]
+        [Route("GetVRRestAPIRecordQueryInterceptorConfigs")]
+        public IEnumerable<VRRestAPIRecordQueryInterceptorConfig> GetVRRestAPIRecordQueryInterceptorConfigs()
+        {
+            return _manager.GetVRRestAPIRecordQueryInterceptorConfigs();
         }
     }
 }

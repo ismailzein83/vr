@@ -25,7 +25,7 @@ namespace Vanrise.GenericData.Business
                 if (_dataStore == null)
                 {
                     DataStoreManager manager = new DataStoreManager();
-                    _dataStore = manager.GeDataStore(this.DataRecordStorage.DataStoreId);
+                    _dataStore = manager.GetDataStore(this.DataRecordStorage.DataStoreId);
                     if (_dataStore == null)
                         throw new NullReferenceException("_dataStore");
                 }

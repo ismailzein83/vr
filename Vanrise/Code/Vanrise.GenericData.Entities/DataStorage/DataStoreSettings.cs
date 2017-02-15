@@ -12,7 +12,6 @@ namespace Vanrise.GenericData.Entities
 
         public abstract void UpdateRecordStorage(IUpdateRecordStorageContext context);
 
-
         public abstract IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context);
 
         public abstract ISummaryRecordDataManager GetSummaryDataRecordDataManager(IGetSummaryRecordStorageDataManagerContext context);
@@ -20,6 +19,11 @@ namespace Vanrise.GenericData.Entities
         public virtual IRemoteRecordDataManager GetRemoteRecordDataManager(IGetRemoteRecordStorageDataManagerContext context)
         {
             return null;
+        }
+
+        public virtual bool IsRemoteDataStore
+        {
+            get { return false; }
         }
     }
 }

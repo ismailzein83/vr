@@ -33,7 +33,7 @@ namespace Vanrise.GenericData.Business
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataStore.ToBigResult(input, filterExpression, DataStoreDetailMapper));
         }
 
-        public DataStore GeDataStore(Guid dataStoreId)
+        public DataStore GetDataStore(Guid dataStoreId)
         {
             var cachedDataStore = GetCachedDataStores();
             return cachedDataStore.FindRecord((dataStore) => dataStore.DataStoreId == dataStoreId);

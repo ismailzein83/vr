@@ -40,6 +40,7 @@ namespace Vanrise.GenericData.Business
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
             return cachedBEDefinitions.GetRecord(businessEntityDefinitionId);
         }
+
         public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
@@ -58,14 +59,15 @@ namespace Vanrise.GenericData.Business
 
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
-        //public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteBusinessEntityDefinitionsInfo(Guid connectionId, BusinessEntityDefinitionInfoFilter filter)
-        //{
-        //    VRConnectionManager connectionManager = new VRConnectionManager();
-        //    var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
-        //    VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+        public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteBusinessEntityDefinitionsInfo(Guid connectionId, BusinessEntityDefinitionInfoFilter filter)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-        //    return connectionSettings.Get<IEnumerable<BusinessEntityDefinitionInfo>>(string.Format("/api/VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinitionsInfo?filter={0}", filter));
-        //}
+            string serializedFilter = filter != null ? Vanrise.Common.Serializer.Serialize(filter) : string.Empty;
+            return connectionSettings.Get<IEnumerable<BusinessEntityDefinitionInfo>>(string.Format("/api/VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinitionsInfo?filter={0}", serializedFilter));
+        }
 
         private struct GetBusinessEntityManagerCacheName
         {

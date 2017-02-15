@@ -248,6 +248,7 @@
                         settingsDirectiveReadyDeferred = undefined;
                         var payload = dataRecordStorageEntity.Settings; // The Settings columns doesn't allow NULL values
                         payload.DataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId;
+                        payload.DataStoreId = dataRecordStorageEntity.DataStoreId;
                         VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, settingsDirectiveLoadDeferred);
                     });
                 });
@@ -275,7 +276,8 @@
             }
 
             var payload = {
-                DataRecordTypeId: selectedTypeId
+                DataRecordTypeId: selectedTypeId,
+                DataStoreId: selectedStoreId
             };
             var setLoader = function (value) { $scope.scopeModel.isLoading = value; };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, payload, setLoader, settingsDirectiveReadyDeferred);

@@ -11,7 +11,8 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -27,7 +28,7 @@
             this.initializeController = initializeController;
 
             var selectorAPI;
-
+             
             var directiveAPI;
             var directiveReadyDeferred;
 

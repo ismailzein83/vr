@@ -6,7 +6,6 @@
 
     function BusinessEntityDefinitionAPIService(BaseAPIService, UtilsService, SecurityService, VR_GenericData_ModuleConfig) {
 
-     
         var controllerName = "BusinessEntityDefinition";
 
         function GetFilteredBusinessEntityDefinitions(input) {
@@ -29,7 +28,7 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetRemoteBusinessEntityDefinitionsInfo'), {
                 connectionId: connectionId,
                 serializedFilter: serializedFilter
-            });
+            }); 
         }
 
         function AddBusinessEntityDefinition(businessEntityDefinition) {
@@ -45,7 +44,7 @@
         }
 
         function HasUpdateBusinessEntityDefinition() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "BusinessEntityDefinition", ['UpdateBusinessEntityDefinition']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, controllerName, ['UpdateBusinessEntityDefinition']));
         }
 
         function GetGenericBEDefinitionView(businessEntityDefinitionId) {
@@ -78,7 +77,6 @@
             GetBEDefinitionSettingConfigs: GetBEDefinitionSettingConfigs,
             GetBEDataRecordTypeIdIfGeneric: GetBEDataRecordTypeIdIfGeneric
         };
-
     }
 
     appControllers.service('VR_GenericData_BusinessEntityDefinitionAPIService', BusinessEntityDefinitionAPIService);

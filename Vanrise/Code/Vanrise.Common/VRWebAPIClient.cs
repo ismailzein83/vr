@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +12,7 @@ namespace Vanrise.Common
 {
     public static class VRWebAPIClient
     {
-        public static Q Post<T, Q>(string url, string actionPath, T request, Dictionary<string, string> headers = null)
+        public static Q Post<T, Q>(string url, string actionPath, T request, Dictionary<string, string> headers = null, bool serializeWithFullType = false)
         {
             using (var client = new HttpClient())
             {
@@ -18,7 +20,22 @@ namespace Vanrise.Common
                 client.BaseAddress = new Uri(url);
                 if (headers != null && headers.Count > 0)
                     AddHeaders(client, headers);
-                var responseTask = client.PostAsJsonAsync(actionPath, request);
+
+                Task<HttpResponseMessage> responseTask;
+                if (serializeWithFullType)
+                {
+                    var formatter = new JsonMediaTypeFormatter();
+                    formatter.SerializerSettings = new JsonSerializerSettings()
+                    {
+                        MissingMemberHandling = MissingMemberHandling.Ignore,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        TypeNameHandling = TypeNameHandling.All
+                    };
+                    responseTask = client.PostAsync(actionPath, request, formatter);
+                }
+                else
+                    responseTask = client.PostAsJsonAsync(actionPath, request);
+
                 responseTask.Wait();
                 if (responseTask.Exception != null)
                     throw responseTask.Exception;
@@ -71,7 +88,7 @@ namespace Vanrise.Common
                 // New code:
                 client.BaseAddress = new Uri(url);
                 if (headers != null && headers.Count > 0)
-                    AddHeaders(client, headers);     
+                    AddHeaders(client, headers);
                 var responseTask = client.GetAsync(actionPath);
                 responseTask.Wait();
                 if (responseTask.Exception != null)

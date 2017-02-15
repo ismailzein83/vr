@@ -14,5 +14,6 @@ namespace Vanrise.GenericData.Entities
 
         public Guid DataRecordTypeId { get; set; }
 
+        public bool IsRemoteRecordStorage { get; set; }
     }
 }

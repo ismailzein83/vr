@@ -18,8 +18,9 @@
                 </vr-columns>
 
                 <vr-columns width="1/4row" vr-loader="isRecordStorageLoading">
-                    <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" isrequired="true"
-                                                               selectedvalues="selectedDataRecordStorages" ismultipleselection>
+                    <vr-label>Data Storage Records</vr-label>
+                    <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" selectedvalues="selectedDataRecordStorages"
+                                                               isrequired="true" ismultipleselection="false" usevalidator hidelable>
                     </vr-genericdata-datarecordstorage-selector>
                 </vr-columns>
             </vr-row>

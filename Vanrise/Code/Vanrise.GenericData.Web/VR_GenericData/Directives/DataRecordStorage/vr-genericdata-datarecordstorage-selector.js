@@ -4,7 +4,7 @@
 
     DataRecordStorageSelectorDirective.$inject = ['VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataRecordStorageService', 'UtilsService', 'VRUIUtilsService'];
 
-    function DataRecordStorageSelectorDirective(VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataRecordStorageService , UtilsService, VRUIUtilsService) {
+    function DataRecordStorageSelectorDirective(VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataRecordStorageService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -16,6 +16,7 @@
                 ismultipleselection: "@",
                 isrequired: "=",
                 customlabel: "@",
+                usevalidator: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -43,9 +44,10 @@
             this.initializeController = initializeController;
 
             var selectorAPI;
-            
+
             function initializeController() {
                 var isReadyTrigged = false;
+
                 ctrl.onSelectorReady = function (api) {
                     if (isReadyTrigged)
                         return;
@@ -56,8 +58,20 @@
                         ctrl.onReady(getDirectiveAPI());
                     }
                 }
-            }
 
+                ctrl.validate = function () {
+                    if (attrs.usevalidator == undefined || ctrl.selectedvalues == undefined)
+                        return null;
+
+                    for (var index = 0; index < ctrl.selectedvalues.length; index++) {
+                        var currentItem = ctrl.selectedvalues[index];
+                        if (currentItem.IsRemoteRecordStorage && ctrl.selectedvalues.length > 1) {
+                            return "Remote Data Storage should be uniquely selected";
+                        }
+                    }
+                    return null;
+                }
+            }
             function getDirectiveAPI() {
                 var api = {};
 
@@ -98,6 +112,7 @@
 
                 return api;
             }
+
             function onAddDataStorageRecord() {
                 var onDataStorageRecordAdded = function (dataRecordStorageObj) {
                     ctrl.datasource.push(dataRecordStorageObj.Entity);
@@ -124,27 +139,32 @@
                 label = attrs.customlabel;
             }
 
+            var lableplace = "";
+            if (attrs.hidelable == undefined)
+                lableplace = ' label="' + label + '"';
+
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
             return '<div>'
-                + '<vr-select on-ready="ctrl.onSelectorReady"'
-                    + ' datasource="ctrl.datasource"'
-                    + ' selectedvalues="ctrl.selectedvalues"'
-                    + ' onselectionchanged="ctrl.onselectionchanged"'
-                    + ' onaddclicked="ctrl.onAddDataStorageRecord"'
-                    + ' onselectitem="ctrl.onselectitem"'
-                    + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="DataRecordStorageId"'
-                    + ' datatextfield="Name"'
-                    + ' ' + multipleselection
-                    + ' ' + hideselectedvaluessection
-                    + ' isrequired="ctrl.isrequired"'
-                    + ' ' + hideremoveicon
-                    + ' label="' + label + '"'
-                    + ' entityName="' + label + '"'
-                + '</vr-select>'
-            + '</div>';
+                         + '<vr-validator validate="ctrl.validate()">'
+                             + '<vr-select on-ready="ctrl.onSelectorReady"'
+                                 + ' datasource="ctrl.datasource"'
+                                 + ' selectedvalues="ctrl.selectedvalues"'
+                                 + ' onselectionchanged="ctrl.onselectionchanged"'
+                                 + ' onaddclicked="ctrl.onAddDataStorageRecord"'
+                                 + ' onselectitem="ctrl.onselectitem"'
+                                 + ' ondeselectitem="ctrl.ondeselectitem"'
+                                 + ' datavaluefield="DataRecordStorageId"'
+                                 + ' datatextfield="Name"'
+                                 + ' ' + multipleselection
+                                 + ' ' + hideselectedvaluessection
+                                 + ' isrequired="ctrl.isrequired"'
+                                 + ' ' + lableplace
+                                 + ' entityName="' + label + '"'
+                             + '</vr-select>'
+                         + '</vr-validator>'
+                 + '</div>';
         }
     }
 
