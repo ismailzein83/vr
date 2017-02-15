@@ -103,8 +103,14 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                         loadCarrierAccounts(attrs, setLoader,null,filter);
                 };
                 ctrl.onselectionchanged = function (selectedCarrier) {
-                    if (selectedCarrier != undefined && context != undefined && context.reloadBillingPeriod != undefined) {
-                        context.reloadBillingPeriod();
+                    if (selectedCarrier != undefined && context != undefined )
+                    {
+                        if(context.reloadBillingPeriod != undefined) {
+                            context.reloadBillingPeriod();
+                        }
+                        if(context.setTimeZone != undefined) {
+                            context.setTimeZone(selectedCarrier.TimeZoneId);
+                        }
                     }
                 };
                 ctrl.onSelectorReady = function (api) {
@@ -118,6 +124,8 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
                 var api = {};
 
                 api.load = function (payload) {
+                    selectorApi.clearDataSource();
+
                     if(payload != undefined)
                     {
                         context = payload.context;
