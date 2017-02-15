@@ -34,46 +34,51 @@ namespace Retail.Teles.Business
             get { return new Guid("772C0B47-A8C0-4F15-B2F1-AEBF52B3EF08"); }
         }
         public RoutingGroupFilterOperator Operator { get; set; }
-        public string RoutingGroupName { get; set; }
+        public List<string> RoutingGroupNames { get; set; }
 
         public override bool Evaluate(IRoutingGroupConditionContext context)
         {
             bool result = false;
-            switch(Operator)
+            if (context.RoutingGroupName != null)
             {
-                case RoutingGroupFilterOperator.Equals:
-                    if(context.RoutingGroupName == this.RoutingGroupName)
-                        result = true;
-                    break;
-                case RoutingGroupFilterOperator.NotEquals:
-                    if(context.RoutingGroupName != this.RoutingGroupName)
-                        result = true;
-                    break;
-                case RoutingGroupFilterOperator.StartsWith:
-                    if(context.RoutingGroupName.StartsWith(this.RoutingGroupName))
-                        result = true;
-                    break;
-                case RoutingGroupFilterOperator.NotStartsWith:
-                    if(!context.RoutingGroupName.StartsWith(this.RoutingGroupName))
-                        result = true;
-                    break;
-                case RoutingGroupFilterOperator.EndsWith:
-                    if(context.RoutingGroupName.EndsWith(this.RoutingGroupName))
-                        result = true;
-                    break;
-                case RoutingGroupFilterOperator.NotEndsWith:
-                    if (!context.RoutingGroupName.EndsWith(this.RoutingGroupName))
-                        result = true;
-                    break;
-                case RoutingGroupFilterOperator.Contains:
-                    if(context.RoutingGroupName.Contains(this.RoutingGroupName))
-                        result = true;
-                    break;
-                case RoutingGroupFilterOperator.NotContains:
-                    if (!context.RoutingGroupName.Contains(this.RoutingGroupName))
-                        result = true;
-                    break;
+                var routingGroupName = context.RoutingGroupName.ToLower();
+                switch (Operator)
+                {
+                    case RoutingGroupFilterOperator.Equals:
+                        if (RoutingGroupNames.Any(x=> x.ToLower() == routingGroupName))
+                            result = true;
+                        break;
+                    case RoutingGroupFilterOperator.NotEquals:
+                        if (!RoutingGroupNames.Any(x => x.ToLower() == routingGroupName))
+                            result = true;
+                        break;
+                    case RoutingGroupFilterOperator.StartsWith:
+                        if (RoutingGroupNames.Any(x => routingGroupName.StartsWith(x.ToLower())))
+                            result = true;
+                        break;
+                    case RoutingGroupFilterOperator.NotStartsWith:
+                        if (!RoutingGroupNames.Any(x => routingGroupName.StartsWith(x.ToLower())))
+                            result = true;
+                        break;
+                    case RoutingGroupFilterOperator.EndsWith:
+                        if (RoutingGroupNames.Any(x => routingGroupName.EndsWith(x.ToLower())))
+                            result = true;
+                        break;
+                    case RoutingGroupFilterOperator.NotEndsWith:
+                        if (!RoutingGroupNames.Any(x => routingGroupName.EndsWith(x.ToLower())))
+                            result = true;
+                        break;
+                    case RoutingGroupFilterOperator.Contains:
+                        if (RoutingGroupNames.Any(x => routingGroupName.Contains(x.ToLower())))
+                            result = true;
+                        break;
+                    case RoutingGroupFilterOperator.NotContains:
+                        if (!RoutingGroupNames.Any(x => routingGroupName.Contains(x.ToLower())))
+                            result = true;
+                        break;
+                }
             }
+            
             return result;
         }
     }

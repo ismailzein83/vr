@@ -30,6 +30,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.routingGroupNames = [];
                 $scope.scopeModel.routingGroupFilterOperators = UtilsService.getArrayEnum(Retail_Teles_RoutingGroupFilterOperatorEnum);
                 $scope.scopeModel.selectedRoutingGroupFilterOperator = $scope.scopeModel.routingGroupFilterOperators[0];
                 defineAPI();
@@ -47,7 +48,8 @@
                         routingGroupCondition = payload.routingGroupCondition;
                         if(routingGroupCondition != undefined)
                         {
-                            $scope.scopeModel.routingGroupName = routingGroupCondition.RoutingGroupName;
+                            if (routingGroupCondition.RoutingGroupNames != undefined)
+                             $scope.scopeModel.routingGroupNames = routingGroupCondition.RoutingGroupNames;
 
                             $scope.scopeModel.selectedRoutingGroupFilterOperator = UtilsService.getItemByVal($scope.scopeModel.routingGroupFilterOperators, routingGroupCondition.Operator, "value");
                         }
@@ -60,7 +62,7 @@
 
                     return {
                         $type: "Retail.Teles.Business.RoutingGroupFilter, Retail.Teles.Business",
-                        RoutingGroupName: $scope.scopeModel.routingGroupName,
+                        RoutingGroupNames: $scope.scopeModel.routingGroupNames,
                         Operator: $scope.scopeModel.selectedRoutingGroupFilterOperator.value
                     };
                 };
