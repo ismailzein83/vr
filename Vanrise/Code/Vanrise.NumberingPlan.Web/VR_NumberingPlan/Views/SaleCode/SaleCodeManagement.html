@@ -6,8 +6,7 @@
                 <vr-np-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" normal-col-num="2" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="true"></vr-np-sellingnumberplan-selector>
 
                 <vr-columns width="normal" ng-show="selectedSellingNumberPlan!=undefined" haschildcolumns>
-                    <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady">
-                    </vr-whs-be-salezone-selector>
+                    <vr-np-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady"> </vr-np-salezone-selector>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox type="Code" label="Code" value="code"></vr-textbox>
