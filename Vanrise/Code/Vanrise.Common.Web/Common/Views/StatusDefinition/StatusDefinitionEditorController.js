@@ -53,6 +53,13 @@
                 styleDefinitionAPI = api;
                 styleDefinitionSelectorReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.hasSaveStatusDefinitionPermission = function () {
+                if (isEditMode)
+                    return VR_Common_StatusDefinitionAPIService.HasUpdateStatusDefinitionPermission();
+                else
+                    return VR_Common_StatusDefinitionAPIService.HasAddStatusDefinitionPermission();
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;

@@ -33,7 +33,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formStatusDefinitionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formStatusDefinitionEditor" data-onclick="scopeModel.save" haspermission="scopeModel.hasSaveStatusDefinitionPermission"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
