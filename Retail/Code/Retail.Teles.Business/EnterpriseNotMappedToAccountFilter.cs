@@ -16,7 +16,7 @@ namespace Retail.Teles.Business
             var cachedAccountsByEnterprises = telesEnterpriseManager.GetCachedAccountsByEnterprises(context.AccountBEDefinitionId);
             if (this.EditedEnterpriseId != null && EditedEnterpriseId == context.EnterpriseId)
                 return false;
-            if (cachedAccountsByEnterprises.ContainsKey(context.EnterpriseId))
+            if (cachedAccountsByEnterprises != null && cachedAccountsByEnterprises.ContainsKey(context.EnterpriseId))
                return true;
            return false;
         }

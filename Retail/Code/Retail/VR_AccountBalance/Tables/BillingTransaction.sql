@@ -13,8 +13,11 @@
     [CreatedTime]       DATETIME         CONSTRAINT [DF_BillingTransaction_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]         ROWVERSION       NULL,
     [IsDeleted]         BIT              NULL,
+    [SourceID]          NVARCHAR (255)   NULL,
     CONSTRAINT [PK_BillingTransaction] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
