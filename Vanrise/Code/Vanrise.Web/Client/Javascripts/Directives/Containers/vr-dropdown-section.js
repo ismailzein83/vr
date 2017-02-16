@@ -30,7 +30,8 @@
                         ctrl.getSummaryText = function () {
                             return "Summary";
                         };
-                        ctrl.showmenu = false;
+                        ctrl.showmenu = true;
+                      
                         ctrl.pinned = false;
                         ctrl.toggelPinBody = function (e) {
                             ctrl.pinned = !ctrl.pinned;
@@ -44,25 +45,28 @@
 
                                 $('#' + ctrl.menuid).slideUp("slow", function () {
                                     $scope.$apply(function () {
+                                        ctrl.bodysectionheight = $('#' + ctrl.menuid).height();
                                         ctrl.showmenu = bool;
                                     });
                                 });
+                                return;
                             }
 
                             else {
                                 if (ctrl.showmenu == false) {
+                                   
                                     var self = angular.element(e.currentTarget);
                                     var selfHeight = $(self).parent().height();
                                     var selfOffset = $(self).offset();
                                     var dropDown = self.parent().find('ul');
                                     var top = 0;
-                                    var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                                    var basetop = selfOffset.top - $(window).scrollTop();
                                     var baseleft = selfOffset.left - $(window).scrollLeft();
-
-                                    var heigth = self.height() + 120;
-                                    if (innerHeight - basetop < heigth)
-                                        top = basetop - (heigth + (selfHeight * 2.7));
-                                    else
+                                    ctrl.showmenu = true;
+                                    var height = ctrl.bodysectionheight;
+                                    if (innerHeight - basetop < height + 100) 
+                                        top = basetop - (height + $('#' + ctrl.id).height());
+                                    else 
                                         top = selfOffset.top - $(window).scrollTop() + selfHeight;
 
                                     $(dropDown).css({ position: 'fixed', top: top, left: baseleft, width: self.parent().width() });
@@ -71,7 +75,7 @@
                                             ctrl.showmenu = true;
                                         });
                                         $('#' + ctrl.menuid).slideDown("slow");
-
+                                     
                                     })
                                    
 
@@ -84,6 +88,7 @@
 
                             }
                         };
+                        
                         $('#' + ctrl.id).parents('div').scroll(function () {
                             fixDropdownPosition();
                         });
@@ -96,7 +101,6 @@
 
                         var fixDropdownPosition = function () {
                             $('.vr-section-dropdown').find('.dropdown-menu').hide();
-                            $('#' + ctrl.id).removeClass("open");
 
                         };
                         $scope.$on('start-drag', function (event, args) {
@@ -106,7 +110,12 @@
 
                     },
                     post: function (scope, elem, attr, ctrl, transcludeFn) {
+                        
                         MultiTranscludeService.transclude(elem, transcludeFn);
+                        setTimeout(function(){                           
+                          ctrl.toggelSectionMenu(undefined, false);         
+                        },1000);
+                      
                     },
 
                 }
