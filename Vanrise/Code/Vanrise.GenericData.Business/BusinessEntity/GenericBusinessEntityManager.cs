@@ -12,6 +12,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+
 namespace Vanrise.GenericData.Business
 {
     public class GenericBusinessEntityManager : BaseBEManager, IBusinessEntityManager, IGenericBusinessEntityManager
