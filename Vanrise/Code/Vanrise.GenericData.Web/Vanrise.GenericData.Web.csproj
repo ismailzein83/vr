@@ -210,9 +210,10 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityViewEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-editor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-vieweditor.js" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\VRRestAPIBEDefinitionSettings\Templates\VRRestAPIBEDefinitionsEditorTemplate.html" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\VRRestAPIBEDefinitionSettings\vr-genericdata-restapibedefinitions-editor.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\VRRestAPIBusinessEntityDefinition\Templates\VRRestAPIBEDefinitionsEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\VRRestAPIBusinessEntityDefinition\vr-genericdata-restapibedefinitions-editor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\Templates\BusinessEntitySelectorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-remoteselector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-selector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-remoteselector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-selector.js" />
@@ -564,9 +565,7 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />
