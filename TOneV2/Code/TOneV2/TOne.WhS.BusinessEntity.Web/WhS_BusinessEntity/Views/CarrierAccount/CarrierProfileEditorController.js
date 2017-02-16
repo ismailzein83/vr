@@ -396,7 +396,6 @@
                     $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                     $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
                     $scope.scopeModal.customerInvoiceByProfile = carrierProfileEntity.Settings.CustomerInvoiceByProfile;
-                    $scope.scopeModal.cusotmerInvoiceTimeZone = carrierProfileEntity.Settings.CustomerInvoiceTimeZone;
                     if (carrierProfileEntity.Settings.CompanyLogo > 0)
                         $scope.scopeModal.companyLogo = {
                             fileId: carrierProfileEntity.Settings.CompanyLogo
@@ -483,7 +482,6 @@
                     Documents: documentsGridAPI.getData(),
                     DefaultCusotmerTimeZoneId: defaultCustomerTimeZoneDirectiveAPI.getSelectedIds(),
                     DefaultSupplierTimeZoneId: defaultSupplierTimeZoneDirectiveAPI.getSelectedIds(),
-                    CustomerInvoiceTimeZone: $scope.scopeModal.cusotmerInvoiceTimeZone
                 }
             };
 

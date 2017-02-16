@@ -76,15 +76,7 @@
                             </vr-datalist>
                         </vr-columns>
                     </vr-row>
-                    <vr-row removeline>
-                        <vr-common-timezone-selector on-ready="scopeModal.onDefaultCustomerTimeZoneSelectorReady" normal-col-num="6" label="Default Customer Time Zone" isrequired="true"></vr-common-timezone-selector>
-                        <vr-columns width="1/2row">
-                            <vr-switch value="scopeModal.cusotmerInvoiceTimeZone" label="Customer Invoice Time Zone"></vr-switch>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-common-timezone-selector on-ready="scopeModal.onDefaultSupplierTimeZoneSelectorReady" normal-col-num="6" label="Default Supplier Time Zone" isrequired="true"></vr-common-timezone-selector>
-                    </vr-row>
+                 
                     <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-fileupload extension="images" value="scopeModal.companyLogo" label="Company Logo"> </vr-fileupload>
@@ -108,7 +100,12 @@
                     <vr-row removeline>
                         <vr-common-currency-selector on-ready="scopeModal.onCurrencySelectorReady" isrequired="true" normal-col-num="6"></vr-common-currency-selector>
                     </vr-row>
-
+                    <vr-row removeline>
+                        <vr-common-timezone-selector on-ready="scopeModal.onDefaultCustomerTimeZoneSelectorReady" normal-col-num="6" label="Customer Time Zone" isrequired="true"></vr-common-timezone-selector>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-common-timezone-selector on-ready="scopeModal.onDefaultSupplierTimeZoneSelectorReady" normal-col-num="6" label="Supplier Time Zone" isrequired="true"></vr-common-timezone-selector>
+                    </vr-row>
                     <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.vatId" type="text" label="VAT ID"></vr-textbox>

@@ -46,8 +46,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long CompanyLogo { get; set; }
         public int DefaultCusotmerTimeZoneId { get; set; }
         public int DefaultSupplierTimeZoneId { get; set; }
-
-        public bool CustomerInvoiceTimeZone { get; set; }
         public int CurrencyId { get; set; }
         public Guid? InvoiceSettingId { get; set; }
         public Guid? CompanySettingId { get; set; }

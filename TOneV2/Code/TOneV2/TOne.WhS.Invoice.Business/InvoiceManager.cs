@@ -59,11 +59,9 @@ namespace TOne.WhS.Invoice.Business
                             {
                                 InvoiceCarrierId = invoiceCarrierId,
                                 Name = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId),
+                                TimeZoneId = carrierProfile.Settings.DefaultCusotmerTimeZoneId
                             };
-                            if (carrierProfile.Settings.CustomerInvoiceTimeZone)
-                            {
-                                invoiceCarrier.TimeZoneId = carrierProfile.Settings.DefaultCusotmerTimeZoneId;
-                            }
+                           
                             invoiceCarriers.Add(invoiceCarrier);
                         }
                     }
@@ -90,7 +88,7 @@ namespace TOne.WhS.Invoice.Business
                                     {
                                         invoiceCarrier.TimeZoneId = account.CustomerSettings.TimeZoneId.Value;
 
-                                    }else if(carrierProfile.Settings.CustomerInvoiceTimeZone)
+                                    }else
                                     {
                                        invoiceCarrier.TimeZoneId = carrierProfile.Settings.DefaultCusotmerTimeZoneId;
                                     }
