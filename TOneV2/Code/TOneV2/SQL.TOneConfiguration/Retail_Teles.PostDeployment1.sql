@@ -11,19 +11,20 @@ Post-Deployment Script Template
 */
 
 
---[common].[extensionconfiguration]-------------------------------------------------------------------
+--[common].[ExtensionConfiguration]-------------------------------------------------------------------
 BEGIN
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('A3D7F334-21A0-4875-8EA2-ED54B33F292C','TelesRestAPI','Teles Rest API','VRCommon_ConnectionConfig','{"Editor":"retail-teles-telesrestconnection-editor"}'),
-('772C0B47-A8C0-4F15-B2F1-AEBF52B3EF08','RoutingGroupCondition','Routing Group Condition','Retail_Teles_RoutingGroupCondition','{"Editor":"retail-teles-routinggroupcondition-routinggroupfilter"}'),
-('09A1029D-AFC0-48E4-B1B3-FD951462E267',' MappingTelesAccount',' Mapping Teles Account','Retail_BE_AccountActionDefinitionConfig','{"Editor":"retail-teles-accountactiondefinitionsettings-mappingtelesaccount"}'),
-('7ACEF5E4-0392-445F-97A9-C7251A66DFFC','ChangeUsersRGs','Change Users Routing Group','Retail_BE_ProvisionerDefinition','{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-changeusersrgs", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-changeusersrgs"}'),
-('F5AEB249-3D8A-4235-8C7B-2BA5B99D0B0D','RevertUsersRGs','Revert Users Routing Group','Retail_BE_ProvisionerDefinition','{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-revertusersrgs", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-revertusersrgs"}'),
-('DFFBF1F9-EF68-43FA-BE34-AD181031CDDA','Teles Enterprise Extra Field','Teles Enterprise Extra Field','Retail_BE_AccountExtraFieldDefinitionConfig','{"Editor":"retail-teles-accountextrafield-enterprise"}'),
-('E440C268-19B9-4D43-820B-C407604C7EF3','InternationalCallsBlocked','International Calls Blocked','Retail_BE_AccountExtraFieldDefinitionConfig','{"Editor":"retail-teles-accountextrafield-internationalcallsblocked"}')
+('A3D7F334-21A0-4875-8EA2-ED54B33F292C','TelesRestAPI','Teles Rest API','VRCommon_ConnectionConfig'														,'{"Editor":"retail-teles-telesrestconnection-editor"}'),
+('772C0B47-A8C0-4F15-B2F1-AEBF52B3EF08','RoutingGroupCondition','Routing Group Condition','Retail_Teles_RoutingGroupCondition'							,'{"Editor":"retail-teles-routinggroupcondition-routinggroupfilter"}'),
+('09A1029D-AFC0-48E4-B1B3-FD951462E267',' MappingTelesAccount',' Mapping Teles Account','Retail_BE_AccountActionDefinitionConfig'						,'{"Editor":"retail-teles-accountactiondefinitionsettings-mappingtelesaccount"}'),
+('7ACEF5E4-0392-445F-97A9-C7251A66DFFC','ChangeUsersRGs','Change Users Routing Group','Retail_BE_ProvisionerDefinition'									,'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-changeusersrgs", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-changeusersrgs"}'),
+('F5AEB249-3D8A-4235-8C7B-2BA5B99D0B0D','RevertUsersRGs','Revert Users Routing Group','Retail_BE_ProvisionerDefinition'									,'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-revertusersrgs", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-revertusersrgs"}'),
+('DFFBF1F9-EF68-43FA-BE34-AD181031CDDA','Teles Enterprise Extra Field','Teles Enterprise Extra Field','Retail_BE_AccountExtraFieldDefinitionConfig'		,'{"Editor":"retail-teles-accountextrafield-enterprise"}'),
+('E02E72EA-56BD-4F86-A404-F08BE3A2E619','Teles Enterprise Business Entity','Teles Enterprise BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"retail-teles-enterprisebedefinition-editor"}'),
+('E440C268-19B9-4D43-820B-C407604C7EF3','InternationalCallsBlocked','International Calls Blocked','Retail_BE_AccountExtraFieldDefinitionConfig'			,'{"Editor":"retail-teles-accountextrafield-internationalcallsblocked"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
