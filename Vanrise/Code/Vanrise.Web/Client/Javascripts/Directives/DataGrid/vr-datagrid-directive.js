@@ -1198,6 +1198,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 //defaultSortDirection = defaultSortDirection_local;
 
                 var retrieveDataOnPaging = function () {
+                    if (retrieveDataInput == undefined)
+                        return;
                     return retrieveData(false, false, false, DataGridRetrieveDataEventType.Paging);
                 };
                 switch (pagingType) {
@@ -1247,7 +1249,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     if (ctrl.showPager)
                         ctrl.pagerSettings.currentPage = 1;
                 }
-
+              
                 retrieveDataInput.SortByColumnName = sortColumn != undefined ? sortColumn.field : defaultSortByFieldName;
                 if (retrieveDataInput.SortByColumnName == undefined)
                     return;
