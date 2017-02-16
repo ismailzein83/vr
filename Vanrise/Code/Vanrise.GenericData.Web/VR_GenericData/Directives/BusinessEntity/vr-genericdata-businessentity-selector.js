@@ -21,7 +21,7 @@
             },
             controllerAs: "ctrlBE",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/Templates/BusinessEntitySelectorTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntity/Templates/BusinessEntitySelectorTemplate.html"
         };
 
         function BusinessEntitySelectorCtor($scope, ctrl, $attrs) {
