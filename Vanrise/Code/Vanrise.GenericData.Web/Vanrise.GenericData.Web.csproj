@@ -454,7 +454,6 @@
     <Content Include="VR_GenericData\Services\APIServices\BELookupRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationDefinitionAPIService.js" />
-    <Content Include="VR_GenericData\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldChoiceAPIService.js" />
