@@ -148,7 +148,7 @@
     <Compile Include="Controllers\GenericRuleTypeConfigController.cs" />
     <Compile Include="Controllers\RecordFilterController.cs" />
     <Compile Include="Controllers\SummaryTransformationDefinitionController.cs" />
-    <Compile Include="Controllers\VRRestAPIBEDefinitionController.cs" />
+    <Compile Include="Controllers\VRRestAPIBusinessEntityController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -474,7 +474,7 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\RecordFilterAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\SummaryTransformationDefinitionAPIService.js" />
-    <Content Include="VR_GenericData\Services\APIServices\VRRestAPIBEDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\VRRestAPIBusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\BELookupRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\BEParentChildRelationService.js" />
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
