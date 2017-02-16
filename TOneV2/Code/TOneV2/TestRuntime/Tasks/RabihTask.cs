@@ -141,74 +141,73 @@ namespace TestRuntime
 
                 switch (table)
                 {
-                    //case DBTableName.CarrierAccount:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-
-                    //case DBTableName.CarrierProfile:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-
-                    //case DBTableName.Currency:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.CurrencyExchangeRate:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.Switch:
-                    //    migrationTables.Add(table);
-                    //    break;
-                    //case DBTableName.Country:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.CodeGroup:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.SupplierCode:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.SupplierPriceList:
-                    //    migrationTables.Add(table);
-                    //    break;
-                    //case DBTableName.SupplierRate:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.SupplierZone:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.SaleCode:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.SalePriceList:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.SaleRate:
-                    //    migrationTables.Add(table);
-                    //    break;
-
-                    //case DBTableName.SaleZone:
-                    //    migrationTables.Add(table);
-                    //    break;
-                    //case DBTableName.File:
-                    //    migrationTables.Add(table);
-                    //    break;
-                    //case DBTableName.ZoneServiceConfig:
-                    //    migrationTables.Add(table);
-                    //    break;
-                    case DBTableName.Rule:
+                    case DBTableName.VRTimeZone:
                         migrationTables.Add(table);
                         break;
+                    case DBTableName.CarrierAccount:
+                        migrationTables.Add(table);
+                        break;
+                    case DBTableName.CarrierProfile:
+                        migrationTables.Add(table);
+                        break;
+                    case DBTableName.Currency:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.CurrencyExchangeRate:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.Switch:
+                        migrationTables.Add(table);
+                        break;
+                    case DBTableName.Country:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.CodeGroup:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.SupplierCode:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.SupplierPriceList:
+                        migrationTables.Add(table);
+                        break;
+                    case DBTableName.SupplierRate:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.SupplierZone:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.SaleCode:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.SalePriceList:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.SaleRate:
+                        migrationTables.Add(table);
+                        break;
+
+                    case DBTableName.SaleZone:
+                        migrationTables.Add(table);
+                        break;
+                    case DBTableName.File:
+                        migrationTables.Add(table);
+                        break;
+                    case DBTableName.ZoneServiceConfig:
+                        migrationTables.Add(table);
+                        break;
+                    //case DBTableName.Rule:
+                    //    migrationTables.Add(table);
+                    //    break;
                     default:
                         break;
                 }

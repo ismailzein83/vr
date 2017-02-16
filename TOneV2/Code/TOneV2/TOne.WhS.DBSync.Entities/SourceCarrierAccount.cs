@@ -41,4 +41,12 @@ namespace TOne.WhS.DBSync.Entities
         public bool IsDeleted { get; set; }
 
     }
+
+    public class TimeZonesByProfile
+    {
+        public int CarrierProfileId { get; set; }
+        public short CustomerTimeZoneId { get; set; }
+        public short SupplierTimeZoneId { get; set; }
+
+    }
 }

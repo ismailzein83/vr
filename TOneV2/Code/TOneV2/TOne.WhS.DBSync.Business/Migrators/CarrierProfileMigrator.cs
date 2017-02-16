@@ -11,6 +11,17 @@ using System.IO;
 
 namespace TOne.WhS.DBSync.Business
 {
+    class VRTimeZoneByProfile
+    {
+        public VRTimeZoneByProfile()
+        {
+            this.CustomerVRTimeZones = new List<VRTimeZone>();
+            this.SupplierVRTimeZones = new List<VRTimeZone>();
+        }
+        public int ProfileId { get; set; }
+        public List<VRTimeZone> CustomerVRTimeZones { get; set; }
+        public List<VRTimeZone> SupplierVRTimeZones { get; set; }
+    }
     public class CarrierProfileMigrator : Migrator<SourceCarrierProfile, CarrierProfile>
     {
         CarrierProfileDBSyncDataManager dbSyncDataManager;
@@ -19,7 +30,9 @@ namespace TOne.WhS.DBSync.Business
         FileDBSyncDataManager fileDataManager;
         Dictionary<string, Country> allCountries;
         Dictionary<string, Currency> allCurrencies;
+        Dictionary<string, VRTimeZone> allTimeZones;
         Dictionary<string, List<SourceCarrierDocument>> allCarrierDocumentsByProfileId;
+        Dictionary<string, VRTimeZoneByProfile> _timeZonesByProfile;
         BusinessEntityTechnicalSettingsData bETechnicalSettingsData;
 
         public CarrierProfileMigrator(MigrationContext context)
@@ -35,11 +48,27 @@ namespace TOne.WhS.DBSync.Business
             allCurrencies = (Dictionary<string, Currency>)dbTableCurrency.Records;
             carrierDocumentDataManager = new SourceCarrierDocumentDataManager(Context.ConnectionString);
 
+            var dbTableVRTimeZone = context.DBTables[DBTableName.VRTimeZone];
+            allTimeZones = (Dictionary<String, VRTimeZone>)dbTableVRTimeZone.Records;
+
+            _timeZonesByProfile = GetTimeZonesByProfile(new SourceCarrierAccountDataManager(Context.ConnectionString).GetTimeZonesByProfile());
+
             allCarrierDocumentsByProfileId = GetAccountDocumentsAndMigrateBETechnicalSettings();
         }
 
+        Dictionary<string, VRTimeZoneByProfile> GetTimeZonesByProfile(List<TimeZonesByProfile> list)
+        {
+            Dictionary<string, VRTimeZoneByProfile> result = new Dictionary<string, VRTimeZoneByProfile>();
 
+            foreach (var sourceTimeZone in list)
+            {
+                VRTimeZoneByProfile vrTimeZoneByProfile = result.GetOrCreateItem(sourceTimeZone.CarrierProfileId.ToString());
+                vrTimeZoneByProfile.CustomerVRTimeZones.Add(allTimeZones[sourceTimeZone.CustomerTimeZoneId.ToString()]);
+                vrTimeZoneByProfile.SupplierVRTimeZones.Add(allTimeZones[sourceTimeZone.SupplierTimeZoneId.ToString()]);
+            }
 
+            return result;
+        }
 
         public override void Migrate(MigrationInfoContext context)
         {
@@ -149,7 +178,17 @@ namespace TOne.WhS.DBSync.Business
             settings.Contacts = contacts;
             settings.Faxes = faxes;
             settings.PhoneNumbers = phoneNumbers;
-
+            VRTimeZoneByProfile vrTimeZoneByProfile;
+            if (!_timeZonesByProfile.TryGetValue(sourceItem.SourceId, out vrTimeZoneByProfile))
+            {
+                settings.DefaultCusotmerTimeZoneId = allTimeZones.First().Value.TimeZoneId;
+                settings.DefaultSupplierTimeZoneId = allTimeZones.First().Value.TimeZoneId;
+            }
+            else
+            {
+                settings.DefaultCusotmerTimeZoneId = vrTimeZoneByProfile.CustomerVRTimeZones.GroupBy(t => t.TimeZoneId).Select(t => new { VRTimeZoneId = t.Key, Count = t.Count() }).OrderByDescending(t => t.Count).First().VRTimeZoneId;
+                settings.DefaultSupplierTimeZoneId = vrTimeZoneByProfile.SupplierVRTimeZones.GroupBy(t => t.TimeZoneId).Select(t => new { VRTimeZoneId = t.Key, Count = t.Count() }).OrderByDescending(t => t.Count).First().VRTimeZoneId;
+            }
             if (sourceItem.CompanyLogo != null)
             {
                 string[] nameastab = sourceItem.CompanyLogoName.Split('.');

@@ -16,15 +16,16 @@ namespace TOne.WhS.DBSync.Entities
         [Description("CodeGroup")]
         CodeGroup,
 
+        [Description("VRTimeZone")]
+        VRTimeZone,
+
         [Description("CarrierProfile")]
         CarrierProfile,
 
         [Description("ZoneServiceConfig")]
         ZoneServiceConfig,
 
-        [Description("VRTimeZone")]
-        VRTimeZone,
-
+   
         [Description("CarrierAccount")]
         CarrierAccount,
 
