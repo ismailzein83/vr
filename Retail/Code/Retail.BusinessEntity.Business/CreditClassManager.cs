@@ -164,6 +164,12 @@ namespace Retail.BusinessEntity.Business
             return GetCreditClassName(Convert.ToInt32(context.EntityId));
         }
 
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var creditClass = context.Entity as CreditClass;
+            return creditClass.CreditClassId;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
@@ -178,6 +184,7 @@ namespace Retail.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
              throw new NotImplementedException();

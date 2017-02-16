@@ -415,6 +415,12 @@ namespace Retail.BusinessEntity.Business
             return GetAccountTypeName(Guid.Parse(context.EntityId.ToString()));
         }
 
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var accountType = context.Entity as AccountType;
+            return accountType.AccountTypeId;
+        }
+
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();

@@ -166,21 +166,6 @@ namespace Retail.BusinessEntity.Business
             return serviceType.Settings.ChargingPolicyDefinitionSettings;
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         #region Validation Methods
@@ -315,9 +300,30 @@ namespace Retail.BusinessEntity.Business
             return GetServiceTypeName(new Guid(context.EntityId.ToString()));
         }
 
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var serviceType = context.Entity as ServiceType;
+            return serviceType.ServiceTypeId;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

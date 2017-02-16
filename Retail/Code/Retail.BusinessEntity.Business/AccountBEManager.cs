@@ -800,6 +800,12 @@ namespace Retail.BusinessEntity.Business
             return GetAccountName(context.EntityDefinition.BusinessEntityDefinitionId, Convert.ToInt64(context.EntityId));
         }
 
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var account = context.Entity as Account;
+            return account.AccountId;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(context.EntityDefinitionId, ref lastCheckTime);

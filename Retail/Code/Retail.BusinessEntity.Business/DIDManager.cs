@@ -224,6 +224,12 @@ namespace Retail.BusinessEntity.Business
             return GetDIDNumber(Int32.Parse(context.EntityId.ToString()));
         }
 
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var did = context.Entity as DID;
+            return did.DIDId;
+        }
+
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();

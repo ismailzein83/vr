@@ -168,21 +168,6 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, package.Settings.Services.ToBigResult(input, null, PackageServiceDetailMapper));
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         #region Private Methods
@@ -279,9 +264,30 @@ namespace Retail.BusinessEntity.Business
             return GetPackageName(Convert.ToInt32(context.EntityId));
         }
 
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var package = context.Entity as Package;
+            return package.PackageId;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

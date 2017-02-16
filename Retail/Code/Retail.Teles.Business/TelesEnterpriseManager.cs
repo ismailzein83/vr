@@ -10,16 +10,19 @@ using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+
 namespace Retail.Teles.Business
 {
     public class TelesEnterpriseManager : IBusinessEntityManager
     {
+        #region Public Methods
+
         public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(Guid vrConnectionId, TelesEnterpriseFilter filter)
         {
             var cachedEnterprises = GetCachedEnterprises(vrConnectionId);
 
             Func<TelesEnterpriseInfo, bool> filterFunc = null;
-            if(filter != null)
+            if (filter != null)
             {
                 filterFunc = (telesEnterpriseInfo) =>
                 {
@@ -102,40 +105,39 @@ namespace Retail.Teles.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().SetCacheExpired(input.AccountBEDefinitionId);
-            } else
+            }
+            else
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
 
             return updateOperationOutput;
-           
+
         }
-
-
-        public Dictionary<dynamic,long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
+        public Dictionary<dynamic, long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedAccountsByEnterprises_{0}", accountBEDefinitionId),accountBEDefinitionId, () =>
-               {
-                   var accountBEManager = new AccountBEManager();
-                   var cashedAccounts = accountBEManager.GetAccounts(accountBEDefinitionId);
-                   Dictionary<dynamic, long> accountsByEnterprises = null;
-                   foreach(var item in cashedAccounts)
-                   {
-                       var enterpriseAccountMappingInfo = accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(item.Value);
-                       if (enterpriseAccountMappingInfo !=  null)
-                       {
-                           if (accountsByEnterprises == null)
-                               accountsByEnterprises = new Dictionary<dynamic, long>();
-                           accountsByEnterprises.Add(enterpriseAccountMappingInfo.TelesEnterpriseId,item.Key);
-                       }
-                   }
-                   return accountsByEnterprises;
-               });
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedAccountsByEnterprises_{0}", accountBEDefinitionId), accountBEDefinitionId, () =>
+            {
+                var accountBEManager = new AccountBEManager();
+                var cashedAccounts = accountBEManager.GetAccounts(accountBEDefinitionId);
+                Dictionary<dynamic, long> accountsByEnterprises = null;
+                foreach (var item in cashedAccounts)
+                {
+                    var enterpriseAccountMappingInfo = accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(item.Value);
+                    if (enterpriseAccountMappingInfo != null)
+                    {
+                        if (accountsByEnterprises == null)
+                            accountsByEnterprises = new Dictionary<dynamic, long>();
+                        accountsByEnterprises.Add(enterpriseAccountMappingInfo.TelesEnterpriseId, item.Key);
+                    }
+                }
+                return accountsByEnterprises;
+            });
         }
         public Dictionary<long, dynamic> GetCachedEnterprisesByAccounts(Guid accountBEDefinitionId)
         {
 
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedEnterprisesByAccounts_{0}", accountBEDefinitionId),accountBEDefinitionId, () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedEnterprisesByAccounts_{0}", accountBEDefinitionId), accountBEDefinitionId, () =>
             {
                 var accountBEManager = new AccountBEManager();
                 var cashedAccounts = accountBEManager.GetAccounts(accountBEDefinitionId);
@@ -147,12 +149,14 @@ namespace Retail.Teles.Business
                     {
                         if (enterprisesByAccounts == null)
                             enterprisesByAccounts = new Dictionary<long, dynamic>();
-                        enterprisesByAccounts.Add( item.Key , enterpriseAccountMappingInfo.TelesEnterpriseId);
+                        enterprisesByAccounts.Add(item.Key, enterpriseAccountMappingInfo.TelesEnterpriseId);
                     }
                 }
                 return enterprisesByAccounts;
             });
         }
+
+        #endregion
 
         #region Private Classes
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -204,6 +208,7 @@ namespace Retail.Teles.Business
         #endregion
 
         #region IBusinessEntityManager
+
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings as TelesEnterpriseBEDefinitionSettings;
@@ -214,6 +219,7 @@ namespace Retail.Teles.Business
             else
                 return null;
         }
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings as TelesEnterpriseBEDefinitionSettings;
@@ -224,6 +230,12 @@ namespace Retail.Teles.Business
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings as TelesEnterpriseBEDefinitionSettings;
             return GetEnterpriseName(telesBEDefinitionSettings.VRConnectionId, context.EntityId);
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var telesEnterpriseInfo = context.Entity as TelesEnterpriseInfo;
+            return telesEnterpriseInfo.TelesEnterpriseId;
         }
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)

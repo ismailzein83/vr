@@ -245,13 +245,16 @@ namespace Retail.BusinessEntity.Business
             return GetChargingPolicyName(Convert.ToInt32(context.EntityId));
         }
 
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var chargingPolicy = context.Entity as ChargingPolicy;
+            return chargingPolicy.ChargingPolicyId;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
-
-        #endregion
-
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
@@ -263,10 +266,11 @@ namespace Retail.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

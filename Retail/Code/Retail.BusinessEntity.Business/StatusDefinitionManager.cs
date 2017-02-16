@@ -13,7 +13,6 @@ namespace Retail.BusinessEntity.Business
 {
     public class StatusDefinitionManager : IBusinessEntityManager
     {
-
         #region Public Methods
 
         public Retail.BusinessEntity.Entities.StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
@@ -188,6 +187,12 @@ namespace Retail.BusinessEntity.Business
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetStatusDefinitionName(Guid.Parse(context.EntityId.ToString()));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var statusDefinition = context.Entity as Retail.BusinessEntity.Entities.StatusDefinition;
+            return statusDefinition.StatusDefinitionId;
         }
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)

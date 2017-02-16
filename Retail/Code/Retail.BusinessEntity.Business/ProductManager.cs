@@ -12,47 +12,8 @@ namespace Retail.BusinessEntity.Business
 {
     public class ProductManager : IBusinessEntityManager
     {
-
-
         #region Public Methods
-        #region IBusinessEntityManager
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetProductName(Convert.ToInt32(context.EntityId));
-        }
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
-        {
-            return GetProduct(context.EntityId);
-        }
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
-        {
-            throw new NotImplementedException();
-        }
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
-        {
-            return GetAllProducts().Select(itm => itm as dynamic).ToList();
-        }
-        public IEnumerable<Product> GetAllProducts()
-        {
-            Dictionary<int, Product> cachedProducts = this.GetCachedProducts();
-            return cachedProducts.Values;
 
-        }
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
-        {
-            throw new NotImplementedException();
-        }
-
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
         public Vanrise.Entities.IDataRetrievalResult<ProductDetail> GetFilteredProducts(Vanrise.Entities.DataRetrievalInput<ProductQuery> input)
         {
             var allProducts = GetCachedProducts();
@@ -71,6 +32,11 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allProducts.ToBigResult(input, filterExpression, ProductDetailMapper));
         }
 
+        public IEnumerable<Product> GetAllProducts()
+        {
+            Dictionary<int, Product> cachedProducts = this.GetCachedProducts();
+            return cachedProducts.Values;
+        }
         public Product GetProduct(int productId)
         {
             Dictionary<int, Product> cachedProducts = this.GetCachedProducts();
@@ -134,7 +100,6 @@ namespace Retail.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-
         public Vanrise.Entities.UpdateOperationOutput<ProductDetail> UpdateProduct(Product productItem)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ProductDetail>();
@@ -247,6 +212,51 @@ namespace Retail.BusinessEntity.Business
                 Name = product.Name
             };
             return productInfo;
+        }
+
+        #endregion
+
+        #region IBusinessEntityManager
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetProductName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetProduct(context.EntityId);
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var product = context.Entity as Product;
+            return product.ProductId;
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllProducts().Select(itm => itm as dynamic).ToList();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
