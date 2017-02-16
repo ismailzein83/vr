@@ -136,6 +136,8 @@
     <Compile Include="RoutingProduct\RoutingProductInfoFilter.cs" />
     <Compile Include="RoutingProduct\SaleEntityZoneRoutingProductDetail.cs" />
     <Compile Include="RoutingProduct\SaleZoneRoutingProduct.cs" />
+    <Compile Include="SalePricelistChanges\SalePricelistCodeChange.cs" />
+    <Compile Include="SalePricelistChanges\SalePricelistRateChange.cs" />
     <Compile Include="Settings\PurchaseAreaSettingsData.cs" />
     <Compile Include="Settings\SaleAreaSettingsData.cs" />
     <Compile Include="SaleCode\Query\SaleCodeQuery.cs" />
