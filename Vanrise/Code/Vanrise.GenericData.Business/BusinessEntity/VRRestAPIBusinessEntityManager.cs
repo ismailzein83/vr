@@ -8,17 +8,57 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
-    public class VRRestAPIBEDefinitionManager
+    public class VRRestAPIBusinessEntityManager
     {
+        #region Public Methods
+
+        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesInfo(Guid connectionID, Guid businessEntityDefinitionId)
+        {
+
+
+            return null;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private BusinessEntityDefinitionSettings GetBusinessEntityDefinitionSettings(BusinessEntityDefinition beDefinition)
+        {
+            if (beDefinition == null)
+                throw new NullReferenceException(string.Format("businessEntityDefinition {0}", beDefinition.BusinessEntityDefinitionId));
+
+            var businessEntityDefinitionSettings = beDefinition.Settings;
+            if (businessEntityDefinitionSettings == null)
+                throw new NullReferenceException(string.Format("businessEntityDefinition.Settings {0}", businessEntityDefinitionSettings));
+
+            return businessEntityDefinitionSettings;
+        }
+
+        private Guid GetConnectionId(BusinessEntityDefinition beDefinition)
+        {
+            var vrRestAPIBEDefinitionSettings = this.GetBusinessEntityDefinitionSettings(beDefinition) as VRRestAPIBEDefinitionSettings;
+            if (vrRestAPIBEDefinitionSettings == null)
+                throw new NullReferenceException("businessEntityDefinition should be of type VRRestAPIBEDefinitionSettings");
+            return vrRestAPIBEDefinitionSettings.ConnectionId;
+        }
+
+        private VRInterAppRestConnection GetVRInterAppRestConnection(Guid connectionId)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            return vrConnection.Settings as VRInterAppRestConnection;
+        }
+
+        #endregion
+
         #region IBusinessEntityManager
 
         //public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         //{
-        //    var cachedAccounts = GetCachedAccounts(context.EntityDefinitionId);
-        //    if (cachedAccounts != null)
-        //        return cachedAccounts.Values.Select(itm => itm as dynamic).ToList();
-        //    else
-        //        return null;
+        //    var connectionId = GetConnectionId(context.EntityDefinition);
+        //    VRInterAppRestConnection connectionSettings = GetVRInterAppRestConnection(connectionId);
+        //    return connectionSettings.Get<List<dynamic>>(string.Format("/api/VR_GenericData/BusinessEntity/GetAllEntities?businessEntityDefinitionId={0}", context.EntityDefinitionId));
         //}
 
         //public dynamic GetEntity(IBusinessEntityGetByIdContext context)
