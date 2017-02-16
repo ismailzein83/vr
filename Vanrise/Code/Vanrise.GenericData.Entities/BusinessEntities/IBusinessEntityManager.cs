@@ -8,13 +8,15 @@ namespace Vanrise.GenericData.Entities
 {
     public interface IBusinessEntityManager
     {
-        string GetEntityDescription(IBusinessEntityDescriptionContext context);
+        List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context);
 
         dynamic GetEntity(IBusinessEntityGetByIdContext context);
 
-        dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context);
+        dynamic GetEntityId(IBusinessEntityIdContext context);
 
-        List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context);
+        string GetEntityDescription(IBusinessEntityDescriptionContext context);
+
+        dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context);
 
         bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime);
 

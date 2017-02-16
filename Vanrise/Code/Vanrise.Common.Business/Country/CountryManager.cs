@@ -296,11 +296,6 @@ namespace Vanrise.Common.Business
 			return existingItemIds;
 		}
 
-		public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-		{
-			return GetCountryName(Convert.ToInt32(context.EntityId));
-		}
-
 		public int GetCountryTypeId()
 		{
 			return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetCountryType());
@@ -318,36 +313,6 @@ namespace Vanrise.Common.Business
 			return file.Content;
 		}
 
-		public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
-		{
-			return GetAllCountries().Select(itm => itm as dynamic).ToList();
-		}
-
-		public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
-		{
-			return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
-		}
-
-		public dynamic GetEntity(IBusinessEntityGetByIdContext context)
-		{
-			return GetCountry(context.EntityId);
-		}
-
-		public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
-		{
-			throw new NotImplementedException();
-		}
-
-		public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
-		{
-			throw new NotImplementedException();
-		}
-		
 		#endregion
 
 		#region Private Classes
@@ -421,5 +386,50 @@ namespace Vanrise.Common.Business
 		}
 
 		#endregion
-	}
+
+        #region IBusinessEntityManager
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetCountryName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var country = context.Entity as Country;
+            return country.CountryId;
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllCountries().Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetCountry(context.EntityId);
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
 }

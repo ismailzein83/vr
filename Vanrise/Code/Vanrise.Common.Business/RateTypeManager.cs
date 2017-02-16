@@ -133,13 +133,18 @@ namespace Vanrise.Common.Business
         }
         #endregion
 
+        #region IBusinessEntityManager
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetRateTypeName(Convert.ToInt32(context.EntityId));
         }
 
-
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var rateType = context.Entity as RateType;
+            return rateType.RateTypeId;
+        }
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
@@ -170,5 +175,7 @@ namespace Vanrise.Common.Business
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

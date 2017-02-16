@@ -46,7 +46,6 @@ namespace Vanrise.NumberingPlan.Business
             return allSaleZones.FindAllRecords(x => x.SellingNumberPlanId == sellingNumberPlanId);
         }
 
-
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, SaleZoneInfoFilter filter)
         {
             string zoneName = nameFilter != null ? nameFilter.ToLower() : null;
@@ -219,11 +218,6 @@ namespace Vanrise.NumberingPlan.Business
             return allSaleZones.FindAllRecords(item => item.SellingNumberPlanId == sellingNumberPlanId && (!item.EED.HasValue || (item.EED.Value > minimumDate && item.EED > item.BED)));
         }
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetSaleZoneName(Convert.ToInt64(context.EntityId));
-        }
-
         public int GetSaleZoneTypeId()
         {
             return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSaleZoneType());
@@ -234,7 +228,6 @@ namespace Vanrise.NumberingPlan.Business
             return this.GetType();
         }
 
-      
         #endregion
 
         #region Private Members
@@ -284,6 +277,19 @@ namespace Vanrise.NumberingPlan.Business
 
         #endregion
 
+        #region IBusinessEntityManager
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetSaleZoneName(Convert.ToInt64(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var saleZone = context.Entity as SaleZone;
+            return saleZone.SaleZoneId;
+        }
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetSaleZone(context.EntityId);
@@ -302,7 +308,6 @@ namespace Vanrise.NumberingPlan.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
-
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
@@ -329,10 +334,11 @@ namespace Vanrise.NumberingPlan.Business
             }
         }
 
-
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

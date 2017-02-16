@@ -11,7 +11,6 @@ namespace Vanrise.Common.Business
 {
     public class StatusDefinitionManager : IBusinessEntityManager
     {
-
         #region Public Methods
         public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
         {
@@ -138,38 +137,6 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-        #region IBusinessEntityManager
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetStatusDefinitionName(Guid.Parse(context.EntityId.ToString()));
-        }
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
-        {
-            return GetStatusDefinition(context.EntityId);
-        }
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
-        {
-            throw new NotImplementedException();
-        }
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
-        {
-            return GetAllStatusDefinitions().Select(itm => itm as dynamic).ToList();
-        }
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
-        {
-            throw new NotImplementedException();
-        }
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
-        {
-            throw new NotImplementedException();
-        }
-      
-        #endregion
-
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -220,6 +187,51 @@ namespace Vanrise.Common.Business
             };
             return statusDefinitionInfo;
         }
+        #endregion
+
+        #region IBusinessEntityManager
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetStatusDefinitionName(Guid.Parse(context.EntityId.ToString()));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var statusDefinition = context.Entity as StatusDefinition;
+            return statusDefinition.StatusDefinitionId;
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetStatusDefinition(context.EntityId);
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllStatusDefinitions().Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

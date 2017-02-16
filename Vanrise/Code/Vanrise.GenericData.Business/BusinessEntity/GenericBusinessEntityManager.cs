@@ -417,6 +417,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region IBusinessEntityManager
+
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var cachedEntities = GetCachedGenericBusinessEntities(context.EntityDefinitionId);
@@ -440,6 +441,12 @@ namespace Vanrise.GenericData.Business
             return entityDescription;
         }
 
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var genericBusinessEntity = context.Entity as GenericBusinessEntity;
+            return genericBusinessEntity.GenericBusinessEntityId;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(context.EntityDefinitionId, ref lastCheckTime);
@@ -455,14 +462,12 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
-
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
 
         #endregion
-
     }
     public class GenericBusinessEntityFilter
     {

@@ -6,13 +6,20 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
+    public interface IBusinessEntityIdContext
+    {
+        BusinessEntityDefinition EntityDefinition { get; }
+
+        dynamic Entity { get; }
+    }
+
     public interface IBusinessEntityDescriptionContext
     {
         BusinessEntityDefinition EntityDefinition { get; }
 
         object EntityId { get; }
     }
-
+     
     public interface IBusinessEntityGetByIdContext
     {
         dynamic EntityId { get; }
