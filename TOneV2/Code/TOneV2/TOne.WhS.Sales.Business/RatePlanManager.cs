@@ -676,10 +676,29 @@ namespace TOne.WhS.Sales.Business
             var result = new ImportedDataValidationResult();
             var validator = new ImportedRowValidator();
 
+            // Validate the data of the entire file
+            var importedFileValidationContext = new ImportedFileValidationContext()
+            {
+                ImportedRows = importedRows,
+                SaleZonesByZoneName = saleZonesByName
+            };
+
+            validator.ValidateImportedFile(importedFileValidationContext);
+
+            if (importedFileValidationContext.InvalidImportedRows != null)
+            {
+                foreach (InvalidImportedRow invalidImportedRow in importedFileValidationContext.InvalidImportedRows)
+                    result.InvalidDataByRowIndex.Add(invalidImportedRow.RowIndex, invalidImportedRow);
+            }
+
+            // Validate the data of each zone
             for (int i = 0; i < importedRows.Count(); i++)
             {
                 ImportedRow importedRow = importedRows.ElementAt(i);
                 string zoneName = (importedRow.Zone != null) ? importedRow.Zone.ToLower() : null;
+
+                if (zoneName != null && importedFileValidationContext.InvalidImportedRows.FindRecord(x => x.ImportedRow.Zone.ToLower() == zoneName) != null)
+                    continue;
 
                 var context = new IsImportedRowValidContext()
                 {

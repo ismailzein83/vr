@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
     public class ImportedRowValidator
     {
+        #region Fields / Constructors
+
         private IEnumerable<IImportedRowValidator> _validators;
 
         public ImportedRowValidator()
@@ -19,6 +23,65 @@ namespace TOne.WhS.Sales.Business
 				new RateValidator(),
 				new EffectiveDateValidator()
 			};
+        }
+
+        #endregion
+
+        public void ValidateImportedFile(ImportedFileValidationContext context)
+        {
+            if (context.ImportedRows == null || context.ImportedRows.Count() == 0)
+                return;
+
+            var importedZones = new Dictionary<string, ImportedZone>();
+            var duplicatedZones = new Dictionary<string, ImportedZone>();
+
+            for (int i = 0; i < context.ImportedRows.Count(); i++)
+            {
+                ImportedRow importedRow = context.ImportedRows.ElementAt(i);
+
+                if (importedRow.Zone == null)
+                    continue;
+
+                string zoneName = importedRow.Zone.ToLower();
+
+                ImportedZone importedZone;
+
+                if (!importedZones.TryGetValue(zoneName, out importedZone))
+                {
+                    importedZone = new ImportedZone() { ZoneName = zoneName };
+                    importedZones.Add(zoneName, importedZone);
+                }
+
+                importedZone.RowIndexes.Add(i);
+                importedZone.ImportedRows.Add(importedRow);
+
+                if (importedZone.RowIndexes.Count > 1)
+                {
+                    if (!duplicatedZones.ContainsKey(zoneName))
+                    {
+                        duplicatedZones.Add(zoneName, importedZone);
+                    }
+                }
+            }
+
+            var invalidImportedRows = new List<InvalidImportedRow>();
+
+            foreach (ImportedZone duplicatedZone in duplicatedZones.Values)
+            {
+                for (int i = 0; i < duplicatedZone.ImportedRows.Count; i++)
+                {
+                    ImportedRow importedRow = duplicatedZone.ImportedRows.ElementAt(i);
+                    invalidImportedRows.Add(new InvalidImportedRow()
+                    {
+                        RowIndex = duplicatedZone.RowIndexes.ElementAt(i),
+                        ZoneId = GetSaleZoneId(context.SaleZonesByZoneName, duplicatedZone.ZoneName),
+                        ImportedRow = importedRow,
+                        ErrorMessage = string.Format("Zone '{0}' is duplicated", importedRow.Zone)
+                    });
+                }
+            }
+
+            context.InvalidImportedRows = invalidImportedRows;
         }
 
         public bool IsImportedRowValid(IIsImportedRowValidContext context)
@@ -59,6 +122,44 @@ namespace TOne.WhS.Sales.Business
                 return false;
             }
         }
+
+        #region Private Members
+
+        private class ImportedZone
+        {
+            public ImportedZone()
+            {
+                RowIndexes = new List<int>();
+                ImportedRows = new List<ImportedRow>();
+            }
+
+            public string ZoneName { get; set; }
+
+            public List<int> RowIndexes { get; set; }
+
+            public List<ImportedRow> ImportedRows { get; set; }
+        }
+
+        private long? GetSaleZoneId(Dictionary<string, SaleZone> saleZonesByZoneName, string saleZoneName)
+        {
+            SaleZone saleZone = saleZonesByZoneName.GetRecord(saleZoneName);
+            if (saleZone == null)
+                return null;
+            return saleZone.SaleZoneId;
+        }
+
+        #endregion
+    }
+
+    #region Public Classes
+
+    public class ImportedFileValidationContext
+    {
+        public IEnumerable<ImportedRow> ImportedRows { get; set; }
+
+        public Dictionary<string, SaleZone> SaleZonesByZoneName { get; set; }
+
+        public IEnumerable<InvalidImportedRow> InvalidImportedRows { get; set; }
     }
 
     public class ZoneValidator : IImportedRowValidator
@@ -162,4 +263,6 @@ namespace TOne.WhS.Sales.Business
             return true;
         }
     }
+
+    #endregion
 }
