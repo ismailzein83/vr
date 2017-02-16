@@ -6,7 +6,7 @@
 
     function SupplierRateService(WhS_BE_SupplierZoneService) {
         var drillDownDefinitions = [];
-        
+
         return ({
             registerDrillDownToSupplierZone: registerDrillDownToSupplierZone
         });
@@ -19,14 +19,15 @@
 
             drillDownDefinition.loadDirective = function (directiveAPI, supplierZoneItem) {
                 supplierZoneItem.supplierRateGridAPI = directiveAPI;
-              
-
-                var query = {
-                    ZoneIds: [supplierZoneItem.Entity.SupplierZoneId],
-                    EffectiveOn: supplierZoneItem.EffectiveOn
+                var payload = {
+                    $type: "TOne.WhS.BusinessEntity.Business.SupplierRateQueryHandler,TOne.WhS.BusinessEntity.Business",
+                    Query: {
+                        ZoneIds: [supplierZoneItem.Entity.SupplierZoneId],
+                        EffectiveOn: supplierZoneItem.EffectiveOn,
+                        HideHistory: true
+                    }
                 };
-               
-                return supplierZoneItem.supplierRateGridAPI.loadGrid(query);
+                return supplierZoneItem.supplierRateGridAPI.loadGrid(payload);
             };
 
             WhS_BE_SupplierZoneService.addDrillDownDefinition(drillDownDefinition);
