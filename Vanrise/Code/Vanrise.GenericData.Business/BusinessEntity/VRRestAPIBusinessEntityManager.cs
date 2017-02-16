@@ -12,43 +12,41 @@ namespace Vanrise.GenericData.Business
     {
         #region Public Methods
 
-        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesInfo(Guid connectionID, Guid businessEntityDefinitionId)
-        {
+        //public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesInfo(Guid businessEntityDefinitionId)
+        //{
+        //    var businessEntityDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
+        //    if(businessEntityDefinition == null)
+        //        throw new NullReferenceException(string.Format("businessEntityDefinition {0}", businessEntityDefinitionId));
 
+        //    var vrRestAPIBEDefinitionSettings = GetVRRestAPIBEDefinitionSettings(businessEntityDefinition);
+        //    VRInterAppRestConnection connectionSettings = GetVRInterAppRestConnection(vrRestAPIBEDefinitionSettings.ConnectionId);
 
-            return null;
-        }
+        //    return connectionSettings.Get<IEnumerable<BusinessEntityInfo>>(string.Format("/api/VR_GenericData/BusinessEntity/GetBusinessEntitiesInfo?businessEntityDefinitionId={0}", vrRestAPIBEDefinitionSettings.RemoteBEDefinitionId));
+        //}
 
         #endregion
 
         #region Private Methods
 
-        private BusinessEntityDefinitionSettings GetBusinessEntityDefinitionSettings(BusinessEntityDefinition beDefinition)
-        {
-            if (beDefinition == null)
-                throw new NullReferenceException(string.Format("businessEntityDefinition {0}", beDefinition.BusinessEntityDefinitionId));
+        //private VRRestAPIBEDefinitionSettings GetVRRestAPIBEDefinitionSettings(BusinessEntityDefinition beDefinition)
+        //{
+        //    var businessEntityDefinitionSettings = beDefinition.Settings;
+        //    if (businessEntityDefinitionSettings == null)
+        //        throw new NullReferenceException(string.Format("businessEntityDefinition.Settings {0}", beDefinition.));
 
-            var businessEntityDefinitionSettings = beDefinition.Settings;
-            if (businessEntityDefinitionSettings == null)
-                throw new NullReferenceException(string.Format("businessEntityDefinition.Settings {0}", businessEntityDefinitionSettings));
+        //    var vrRestAPIBEDefinitionSettings = businessEntityDefinitionSettings as VRRestAPIBEDefinitionSettings;
+        //    if (vrRestAPIBEDefinitionSettings == null)
+        //        throw new NullReferenceException("businessEntityDefinition should be of type VRRestAPIBEDefinitionSettings");
 
-            return businessEntityDefinitionSettings;
-        }
+        //    return vrRestAPIBEDefinitionSettings;
+        //}
 
-        private Guid GetConnectionId(BusinessEntityDefinition beDefinition)
-        {
-            var vrRestAPIBEDefinitionSettings = this.GetBusinessEntityDefinitionSettings(beDefinition) as VRRestAPIBEDefinitionSettings;
-            if (vrRestAPIBEDefinitionSettings == null)
-                throw new NullReferenceException("businessEntityDefinition should be of type VRRestAPIBEDefinitionSettings");
-            return vrRestAPIBEDefinitionSettings.ConnectionId;
-        }
-
-        private VRInterAppRestConnection GetVRInterAppRestConnection(Guid connectionId)
-        {
-            VRConnectionManager connectionManager = new VRConnectionManager();
-            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
-            return vrConnection.Settings as VRInterAppRestConnection;
-        }
+        //private VRInterAppRestConnection GetVRInterAppRestConnection(Guid connectionId)
+        //{
+        //    VRConnectionManager connectionManager = new VRConnectionManager();
+        //    var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+        //    return vrConnection.Settings as VRInterAppRestConnection;
+        //}
 
         #endregion
 
