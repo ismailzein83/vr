@@ -1,1 +1,12 @@
-﻿
+﻿<vr-columns width="1/2row">
+    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountDefinitionSelectorReady"
+                                                      onselectionchanged="scopeModel.onAccountDefinitionSelectionChanged"
+                                                      customlabel="Account Definition"
+                                                      isrequired="true">
+    </vr-genericdata-businessentitydefinition-selector>
+</vr-columns>
+<retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                normal-col-num="6"
+                                customlabel="Account Type"
+                                isrequired="true">
+</retail-be-accounttype-selector>

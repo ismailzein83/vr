@@ -20,6 +20,8 @@ namespace Retail.Ringo.MainExtensions
                 return "Pont of Sales";
             }
         }
+        public Guid AccountBEDefinitionId { get; set; }
+        public Guid AccountTypeId { get; set; }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;
@@ -35,29 +37,29 @@ namespace Retail.Ringo.MainExtensions
                 };
                 while (true)
                 {
-                    string[] accountRecords = parser.ReadFields();
-                    if (accountRecords != null)
-                    {
-                        SourceAccountData posData = new SourceAccountData
-                        {
-                            Account = new Account()
-                        };
-                        accountRecords = accountRecords.Select(s => s.Trim('\'')).ToArray();
-
-                        var sourceId = accountRecords[30];
-                        if (string.IsNullOrEmpty(sourceId) || sourceId == "NA")
-                            continue;
-                        ITargetBE targetBe;
-                        if (!targetBes.TryGetValue(sourceId, out targetBe))
-                        {
-                            posData.Account.SourceId = sourceId;
-                            posData.Account.Name = accountRecords[31];
-                            posData.Account.TypeId = new Guid("2A4D4D3A-EC47-4CB0-9D72-23263A20BA71");
-                            targetBes.Add(sourceId, posData);
-                        }
-                    }
-                    else
+                    string line = parser.ReadLine();
+                    if (string.IsNullOrEmpty(line))
                         break;
+                    line = line.Replace(", ", " ");
+                    string[] accountRecords = line.Split(',');
+                    SourceAccountData posData = new SourceAccountData
+                    {
+                        Account = new Account()
+                    };
+                    accountRecords = accountRecords.Select(s => s.Trim('\'')).ToArray();
+
+                    var sourceId = accountRecords[30];
+                    if (string.IsNullOrEmpty(sourceId) || sourceId == "NA")
+                        continue;
+                    ITargetBE targetBe;
+                    if (!targetBes.TryGetValue(sourceId, out targetBe))
+                    {
+                        posData.Account.SourceId = sourceId;
+                        posData.Account.Name = accountRecords[31];
+                        posData.Account.TypeId = this.AccountTypeId;// new Guid("2A4D4D3A-EC47-4CB0-9D72-23263A20BA71");
+                        targetBes.Add(sourceId, posData);
+                    }
+
                 }
             }
             context.TargetBEs = targetBes.Values.ToList();

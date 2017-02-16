@@ -67,7 +67,8 @@ namespace Retail.BusinessEntity.Business
             foreach (var target in context.TargetBE)
             {
                 SourceAccountData accountData = target as SourceAccountData;
-
+                if (accountData.Account.AccountId == 0)
+                    continue;
                 AccountToEdit editAccount = new AccountToEdit
                 {
                     Settings = accountData.Account.Settings,

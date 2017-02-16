@@ -18,7 +18,7 @@ using Vanrise.GenericData.Transformation.Entities;
 namespace Retail.Ringo.MainExtensions
 {
     public class AccountConvertor : TargetBEConvertor
-    {     
+    {
 
         #region Properties
         public Guid AccountBEDefinitionId { get; set; }
@@ -33,7 +33,7 @@ namespace Retail.Ringo.MainExtensions
         public Guid FinancialPartDefinitionId { get; set; }
         public Guid ResidentialProfilePartDefinitionId { get; set; }
         public Guid PersonalInfoPartDefinitionId { get; set; }
-        
+
         public override string Name
         {
             get
@@ -46,7 +46,7 @@ namespace Retail.Ringo.MainExtensions
 
         #region Public Methods
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
-        {            
+        {
             FileSourceBatch fileBatch = context.SourceBEBatch as FileSourceBatch;
 
             List<ITargetBE> lstTargets = new List<ITargetBE>();
@@ -55,33 +55,34 @@ namespace Retail.Ringo.MainExtensions
                 TextFieldParser parser = new TextFieldParser(stream) { Delimiters = new string[] { "," } };
                 while (true)
                 {
-                    string[] accountRecords = parser.ReadFields();
-                    if (accountRecords != null)
+                    string line = parser.ReadLine();
+                    if (string.IsNullOrEmpty(line))
+                        break;
+                    line = line.Replace(", ", " ");
+                    string[] accountRecords = line.Split(',');
+
+                    accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
+                    var sourceId = accountRecords[22];
+                    if (sourceId == "NA")
+                        continue;
+                    string accountName = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
+                    SourceAccountData accountData = new SourceAccountData
                     {
-                        accountRecords = accountRecords.Select(s => s.Trim(new char[] { '\'' })).ToArray();
-                        var sourceId = accountRecords[22];
-                        if (sourceId == "NA")
-                            continue;
-                        string accountName = string.Format("{0} {1}", accountRecords[2], accountRecords[3]);
-                        SourceAccountData accountData = new SourceAccountData
-                        {
-                            Account = new Account(),
-                            IdentificationRulesToInsert = new List<MappingRule>
+                        Account = new Account(),
+                        IdentificationRulesToInsert = new List<MappingRule>
                             {
                                 GetMappingRule(accountRecords[22], accountName)
                             },
-                            IdentificationRulesToUpdate = new List<MappingRule>()
-                        };
+                        IdentificationRulesToUpdate = new List<MappingRule>()
+                    };
 
-                        accountData.Account.Name = accountName;
-                        accountData.Account.SourceId = sourceId;
-                        accountData.Account.TypeId = this.AccountTypeId;// new Guid("19A97F72-8C56-441E-A74D-AA185961B242");
-                        FillAccountSettings(accountData, accountRecords);
-                        accountData.Account.StatusId = this.InitialStatusId;// Guid.Parse("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B");
-                        lstTargets.Add(accountData);
-                    }
-                    else
-                        break;
+                    accountData.Account.Name = accountName;
+                    accountData.Account.SourceId = sourceId;
+                    accountData.Account.TypeId = this.AccountTypeId;// new Guid("19A97F72-8C56-441E-A74D-AA185961B242");
+                    FillAccountSettings(accountData, accountRecords);
+                    accountData.Account.StatusId = this.InitialStatusId;// Guid.Parse("DDB6A5B8-B9E5-4050-BEE8-0F030E801B8B");
+                    lstTargets.Add(accountData);
+
                 }
             }
             context.TargetBEs = lstTargets;
@@ -101,6 +102,7 @@ namespace Retail.Ringo.MainExtensions
             UpdateActivationInfoPart(finalBe, newBe);
             UpdateEntitiesPart(finalBe, newBe);
             finalBe.Account.TypeId = newBe.Account.TypeId;
+            finalBe.Account.AccountId = existingBe.Account.AccountId;
             context.FinalBE = finalBe;
         }
         public override bool CompareBeforeUpdate
