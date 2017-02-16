@@ -346,7 +346,8 @@
                                 partnerId: partnerObject != undefined ? partnerObject.selectedIds : undefined,
                                 fromDate: $scope.scopeModel.fromDate,
                                 toDate: $scope.scopeModel.toDate,
-                                issueDate: $scope.scopeModel.issueDate
+                                issueDate: $scope.scopeModel.issueDate,
+                                timeZoneId: timeZoneSelectorAPI != undefined ? timeZoneSelectorAPI.getSelectedIds() : undefined
                             },
                             invoiceAction: invoiceAction,
                             isPreGenerateAction: true

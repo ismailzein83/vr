@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 using Vanrise.Security.Business;
@@ -18,20 +20,31 @@ namespace Vanrise.Invoice.Business
         public DateTime IssueDate { get; set; }
         public dynamic CustomSectionPayload { get; set; }
         private bool IsLoaded { get; set; }
-
+        public int? TimeZoneId { get; set; }
         public void InitializeInvoiceActionContext()
         {
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(this.InvoiceTypeId);
-            var toDate = this.ToDate;
+            string offset = null;
+            if (this.TimeZoneId.HasValue)
+            {
+                VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(this.TimeZoneId.Value);
+                if (timeZone != null)
+                {
+                    offset = timeZone.Settings.Offset.ToString();
+                    this.FromDate = this.FromDate.Add(-timeZone.Settings.Offset);
+                    this.ToDate = this.ToDate.Add(-timeZone.Settings.Offset);
+                }
+            }
+
             InvoiceGenerationContext context = new InvoiceGenerationContext
             {
                 InvoiceTypeId = this.InvoiceTypeId,
                 CustomSectionPayload = CustomSectionPayload,
                 FromDate = this.FromDate,
                 PartnerId = this.PartnerId,
-                ToDate = toDate,
-                GeneratedToDate = toDate,
+                ToDate = this.ToDate,
+                GeneratedToDate = this.ToDate,
             };
             var invoiceGenerator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
             invoiceGenerator.GenerateInvoice(context);
@@ -52,6 +65,8 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeId = this.InvoiceTypeId,
                 IssueDate = this.IssueDate,
                 DueDate = this.IssueDate.AddDays(duePeriod),
+                TimeZoneId = this.TimeZoneId,
+                TimeZoneOffset = offset
             };
 
 

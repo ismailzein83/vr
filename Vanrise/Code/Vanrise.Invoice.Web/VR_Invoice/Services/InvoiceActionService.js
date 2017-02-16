@@ -80,7 +80,8 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                     PartnerId: payload.generatorEntity.partnerId,
                     FromDate: payload.generatorEntity.fromDate,
                     ToDate: payload.generatorEntity.toDate,
-                    IssueDate: payload.generatorEntity.issueDate
+                    IssueDate: payload.generatorEntity.issueDate,
+                    TimeZoneId: payload.generatorEntity.timeZoneId, 
                 };
             }else
             {
