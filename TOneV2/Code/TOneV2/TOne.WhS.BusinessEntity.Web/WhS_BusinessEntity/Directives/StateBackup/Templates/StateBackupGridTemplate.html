@@ -3,13 +3,13 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="onGridReady"
-             menuactions="gridMenuActions">
+             menuactions="gridMenuActions" defaultsortbyfieldname="'Entity.StateBackupId'" defaultsortdirection="'DESC'">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.StateBackupId'" widthfactor="2"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Type'" field="'Type'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Created By'" field="'BackupByUsername'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Created On'" field="'Entity.BackupDate'" type="'Datetime'"></vr-datagridcolumn>
-   
+
     <vr-datagridcolumn headertext="'Restored By'" field="'RestoredByUsername'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Restored On'" field="'Entity.RestoreDate'" type="'Datetime'"></vr-datagridcolumn>
 </vr-datagrid>
