@@ -8,7 +8,7 @@
         return {
             restrict: "E",
             scope: {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -22,16 +22,19 @@
         };
         function RecordSearchAnalyticReport($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var filterObj;
             var settings;
             var gridQuery;
-            var gridAPI;
             var autoSearch;
-            var timeRangeDirectiveAPI;
-            var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var itemActionSettings;
             var fields = [];
 
-            var itemActionSettings;
+            var gridAPI;
+
+            var timeRangeDirectiveAPI;
+            var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -39,13 +42,24 @@
                     timeRangeDirectiveAPI = api;
                     timeRangeReadyPromiseDeferred.resolve();
                 };
-
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     if (autoSearch) {
                         setGridQuery();
                         gridAPI.loadGrid(gridQuery);
                     }
+                };
+
+                $scope.onDRSearchPageStorageSourceChanged = function () {
+                    filterObj = null;
+                    $scope.expression = undefined;
+                    if ($scope.selectedDRSearchPageStorageSource != undefined) {
+                        $scope.isloadingFilter = true;
+                        loadFields().then(function () {
+                            $scope.isloadingFilter = false;
+                        });
+                    }
+
                 };
 
                 $scope.search = function () {
@@ -55,8 +69,7 @@
 
                 $scope.addFilter = function () {
                     if ($scope.selectedDRSearchPageStorageSource != undefined) {
-                        if (fields.length > 0)
-                        {
+                        if (fields.length > 0) {
                             var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
                                 filterObj = filter;
                                 $scope.expression = expression;
@@ -65,6 +78,7 @@
                         }
                     }
                 };
+
                 $scope.checkMaxNumberResords = function () {
                     if ($scope.limit <= $scope.maxNumberOfRecords || $scope.maxNumberOfRecords == undefined) {
                         return null;
@@ -72,19 +86,6 @@
                     else {
                         return "Max number can be entered is: " + $scope.maxNumberOfRecords;
                     }
-                };
-                $scope.onDRSearchPageStorageSourceChanged = function () {
-                    filterObj = null;
-                    $scope.expression = undefined;
-                    if ($scope.selectedDRSearchPageStorageSource != undefined) {
-                        $scope.isloadingFilter = true;
-                        loadFields().then(function () {
-
-                            $scope.isloadingFilter = false;
-
-                        });
-                    }
-
                 };
 
                 $scope.resetFilter = function () {
@@ -98,23 +99,20 @@
 
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     if (payload != undefined) {
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
                         itemActionSettings = payload.itemActionSettings;
                     }
+
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([setSourceSelector, setStaticData, loadTimeRangeDirective]).then(function () {
-                       
 
                         if (itemActionSettings != undefined) {
-                            
                             loadFields().then(function () {
                                 var input = {
                                     DimensionFilters: itemActionSettings.DimensionFilters,
@@ -144,26 +142,23 @@
                                     loadPromiseDeffer.reject(error);
                                 });
                             })
-                        } else
-                        {
+                        } else {
                             loadPromiseDeffer.resolve();
                         }
 
-                        if (autoSearch && gridAPI !=undefined)
-                        {
+                        if (autoSearch && gridAPI != undefined) {
                             gridAPI.loadGrid(gridQuery);
                         }
                     }).catch(function (error) {
                         loadPromiseDeffer.reject(error);
                     });
+
                     return loadPromiseDeffer.promise;
                 };
-
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
-
             }
 
             function loadFields() {
@@ -183,14 +178,13 @@
                     }
                 });
             }
-
             function loadTimeRangeDirective() {
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 timeRangeReadyPromiseDeferred.promise.then(function () {
                     var timeRangePeriod = {
                         period: PeriodEnum.Today.value,
                         fromDate: itemActionSettings != undefined ? itemActionSettings.FromDate : undefined,
-                        toDate:itemActionSettings !=undefined?itemActionSettings.ToDate:undefined
+                        toDate: itemActionSettings != undefined ? itemActionSettings.ToDate : undefined
                     };
 
                     VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
@@ -198,10 +192,9 @@
                 });
                 return loadTimeDimentionPromiseDeferred.promise;
             }
-
             function setSourceSelector() {
                 var tabids = [];
-                $scope.drSearchPageStorageSources =[];
+                $scope.drSearchPageStorageSources = [];
                 if (settings != undefined) {
                     // $scope.drSearchPageStorageSources = settings.Sources;
                     for (var i = 0; i < settings.Sources.length ; i++) {
@@ -212,10 +205,10 @@
                         }
                     }
 
-                   return VR_GenericData_DataRecordStorageAPIService.CheckRecordStoragesAccess(tabids).then(function (response) {
+                    return VR_GenericData_DataRecordStorageAPIService.CheckRecordStoragesAccess(tabids).then(function (response) {
                         for (var i = 0; i < settings.Sources.length ; i++) {
-                            var neededIds = settings.Sources[i].RecordStorageIds ;
-                            if(checkIfAllow(settings.Sources[i].RecordStorageIds,response))
+                            var neededIds = settings.Sources[i].RecordStorageIds;
+                            if (checkIfAllow(settings.Sources[i].RecordStorageIds, response))
                                 $scope.drSearchPageStorageSources[$scope.drSearchPageStorageSources.length] = settings.Sources[i]
                         }
                         if (itemActionSettings != undefined) {
@@ -223,16 +216,16 @@
                         }
                     });
                 }
-               
+
             }
             function setStaticData() {
                 $scope.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
                 $scope.selectedOrderDirection = $scope.orderDirectionList[0];
-             //   $scope.fromDate = new Date();
+                //   $scope.fromDate = new Date();
                 $scope.limit = settings != undefined ? settings.NumberOfRecords : 100;
                 $scope.maxNumberOfRecords = settings != undefined ? settings.MaxNumberOfRecords : undefined;
 
-               
+
             }
             function checkIfAllow(tab1, tab2) {
                 for (var i = 0; i < tab1.length; i++) {
@@ -258,5 +251,7 @@
             }
         }
     }
+
     app.directive('vrAnalyticAnalyticreportRecordsearchRuntime', RecordSearchAnalyticReportDirective);
+
 })(app);
