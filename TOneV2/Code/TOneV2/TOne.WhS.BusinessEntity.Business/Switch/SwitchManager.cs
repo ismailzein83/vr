@@ -51,30 +51,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
-        {
-            return GetSwitch(context.EntityId);
-        }
-
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
-        {
-            var switchConnectivities = GetCachedSwitches();
-            if (switchConnectivities == null)
-                return null;
-            else
-                return switchConnectivities.Select(itm => itm as dynamic).ToList();
-        }
-
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
-        }
-
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetSwitchName(Convert.ToInt32(context.EntityId));
-        }
-
         public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch whsSwitch)
         {
             ValidateSwitchToAdd(whsSwitch);
@@ -294,6 +270,38 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region IBusinessEntityManager
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetSwitch(context.EntityId);
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var switches = GetCachedSwitches();
+            if (switches == null)
+                return null;
+            else
+                return switches.Select(itm => itm as dynamic).ToList();
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetSwitchName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var _switch = context.Entity as Switch;
+            return _switch.SwitchId;
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
@@ -308,5 +316,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

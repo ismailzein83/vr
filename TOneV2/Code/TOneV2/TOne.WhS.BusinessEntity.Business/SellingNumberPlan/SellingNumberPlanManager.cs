@@ -101,14 +101,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return string.Empty;
         }
-
        
-
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetSellingNumberPlanName(Convert.ToInt32(context.EntityId));
-        }
-
         public SellingNumberPlan GetMasterSellingNumberPlan()
         {
             var allNumberPlans = GetCachedSellingNumberPlans();
@@ -116,25 +109,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return allNumberPlans.Values.FirstOrDefault();
             else
                 return null;
-        }
-
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
-        {
-            var allSellingNumberPlans = GetCachedSellingNumberPlans();
-            if (allSellingNumberPlans == null)
-                return null;
-            else
-                return allSellingNumberPlans.Values.Select(itm => itm as dynamic).ToList();
-        }
-
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
-        {
-            return GetSellingNumberPlan(context.EntityId);
-        }
-
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
         #endregion
@@ -221,6 +195,37 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var allSellingNumberPlans = GetCachedSellingNumberPlans();
+            if (allSellingNumberPlans == null)
+                return null;
+            else
+                return allSellingNumberPlans.Values.Select(itm => itm as dynamic).ToList();
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetSellingNumberPlan(context.EntityId);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetSellingNumberPlanName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var sellingNumberPlan = context.Entity as SellingNumberPlan;
+            return sellingNumberPlan.SellingNumberPlanId;
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
@@ -231,13 +236,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
-
-
-
-
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

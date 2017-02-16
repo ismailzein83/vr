@@ -302,11 +302,6 @@ namespace TOne.WhS.BusinessEntity.Business
 			return allSaleZones.FindAllRecords(item => item.SellingNumberPlanId == sellingNumberPlanId && (!item.EED.HasValue || (item.EED.Value > minimumDate && item.EED > item.BED)));
 		}
 
-		public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-		{
-			return GetSaleZoneName(Convert.ToInt64(context.EntityId));
-		}
-
 		public int GetSaleZoneTypeId()
 		{
 			return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSaleZoneType());
@@ -403,55 +398,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
 		#endregion
 
-		public dynamic GetEntity(IBusinessEntityGetByIdContext context)
-		{
-			return GetSaleZone(context.EntityId);
-		}
-
-		public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
-		{
-			var allZones = GetCachedSaleZones();
-			if (allZones == null)
-				return null;
-			else
-				return allZones.Values.Select(itm => itm as dynamic).ToList();
-		}
-
-		public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
-		{
-			return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
-		}
-
-		public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
-		{
-			Func<SaleZone, bool> filter;
-			switch (context.ParentEntityDefinition.Name)
-			{
-				case Vanrise.Entities.Country.BUSINESSENTITY_DEFINITION_NAME: filter = (zone) => zone.CountryId == context.ParentEntityId; break;
-				case SellingNumberPlan.BUSINESSENTITY_DEFINITION_NAME: filter = (zone) => zone.SellingNumberPlanId == context.ParentEntityId; break;
-				default: throw new NotImplementedException(String.Format("Business Entity Definition Name '{0}'", context.ParentEntityDefinition.Name));
-			}
-			return GetCachedSaleZones().FindAllRecords(filter).MapRecords(zone => zone.SaleZoneId as dynamic);
-		}
-
-		public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
-		{
-			var saleZone = context.Entity as SaleZone;
-			if (saleZone == null)
-				throw new NullReferenceException("saleZone");
-			switch (context.ParentEntityDefinition.Name)
-			{
-				case Vanrise.Entities.Country.BUSINESSENTITY_DEFINITION_NAME: return saleZone.CountryId;
-				case SellingNumberPlan.BUSINESSENTITY_DEFINITION_NAME: return saleZone.SellingNumberPlanId;
-				default: throw new NotImplementedException(String.Format("Business Entity Definition Name '{0}'", context.ParentEntityDefinition.Name));
-			}
-		}
-
-		public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
-		{
-			throw new NotImplementedException();
-		}
-
 		#region Private Classes
 
 		private class SaleZoneDetailExportExcelHandler : ExcelExportHandler<SaleZoneDetail>
@@ -491,5 +437,69 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
 		#endregion
+
+        #region IBusinessEntityManager
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetSaleZone(context.EntityId);
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var allZones = GetCachedSaleZones();
+            if (allZones == null)
+                return null;
+            else
+                return allZones.Values.Select(itm => itm as dynamic).ToList();
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetSaleZoneName(Convert.ToInt64(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var saleZone = context.Entity as SaleZone;
+            return saleZone.SaleZoneId;
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            Func<SaleZone, bool> filter;
+            switch (context.ParentEntityDefinition.Name)
+            {
+                case Vanrise.Entities.Country.BUSINESSENTITY_DEFINITION_NAME: filter = (zone) => zone.CountryId == context.ParentEntityId; break;
+                case SellingNumberPlan.BUSINESSENTITY_DEFINITION_NAME: filter = (zone) => zone.SellingNumberPlanId == context.ParentEntityId; break;
+                default: throw new NotImplementedException(String.Format("Business Entity Definition Name '{0}'", context.ParentEntityDefinition.Name));
+            }
+            return GetCachedSaleZones().FindAllRecords(filter).MapRecords(zone => zone.SaleZoneId as dynamic);
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            var saleZone = context.Entity as SaleZone;
+            if (saleZone == null)
+                throw new NullReferenceException("saleZone");
+            switch (context.ParentEntityDefinition.Name)
+            {
+                case Vanrise.Entities.Country.BUSINESSENTITY_DEFINITION_NAME: return saleZone.CountryId;
+                case SellingNumberPlan.BUSINESSENTITY_DEFINITION_NAME: return saleZone.SellingNumberPlanId;
+                default: throw new NotImplementedException(String.Format("Business Entity Definition Name '{0}'", context.ParentEntityDefinition.Name));
+            }
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 	}
 }

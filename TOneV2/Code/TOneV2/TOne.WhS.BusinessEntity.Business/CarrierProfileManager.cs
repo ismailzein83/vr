@@ -10,6 +10,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Entities;
+
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierProfileManager : IBusinessEntityManager
@@ -101,10 +102,6 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
-        }
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
         }
         public IEnumerable<CarrierProfile> GetCarrierProfiles()
         {
@@ -238,7 +235,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return setting.TaxesDefinition.ItemDefinitions;
         }
         #endregion
-
       
         #endregion
 
@@ -299,7 +295,6 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
-        
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICarrierProfileDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
@@ -341,8 +336,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-      
-       
+
+        private BusinessEntityTechnicalSettingsData GetBusinessEntitySettingData()
+        {
+            SettingManager settingManager = new SettingManager();
+            BusinessEntityTechnicalSettingsData setting = settingManager.GetSetting<BusinessEntityTechnicalSettingsData>(BusinessEntityTechnicalSettingsData.BusinessEntityTechnicalSettings);
+
+            if (setting == null)
+                throw new NullReferenceException("BusinessEntityTechnicalSettingsData");
+            return setting;
+        }
+
         #endregion
 
         #region  Mappers
@@ -367,21 +371,13 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
-        private BusinessEntityTechnicalSettingsData GetBusinessEntitySettingData()
-        {
-            SettingManager settingManager = new SettingManager();
-            BusinessEntityTechnicalSettingsData setting = settingManager.GetSetting<BusinessEntityTechnicalSettingsData>(BusinessEntityTechnicalSettingsData.BusinessEntityTechnicalSettings);
-
-            if (setting == null)
-                throw new NullReferenceException("BusinessEntityTechnicalSettingsData");
-            return setting;
-        }
+        #region IBusinessEntityManager
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetCarrierProfile(context.EntityId);
         }
-        
+
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var allCarrierProfiles = GetCachedCarrierProfiles();
@@ -391,11 +387,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 return allCarrierProfiles.Values.Select(itm => itm as dynamic).ToList();
         }
 
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var carrierProfile = context.Entity as CarrierProfile;
+            return carrierProfile.CarrierProfileId;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
-
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
@@ -407,10 +413,11 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

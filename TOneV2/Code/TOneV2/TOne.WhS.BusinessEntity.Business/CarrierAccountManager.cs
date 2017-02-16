@@ -288,11 +288,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         }
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetCarrierAccountName(Convert.ToInt32(context.EntityId));
-        }
-
         #endregion
 
         #region ExtensionConfiguration
@@ -825,6 +820,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region IBusinessEntityManager
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetCarrierAccount(context.EntityId);
@@ -839,11 +836,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 return allCarrierAccounts.Select(itm => itm as dynamic).ToList();
         }
 
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetCarrierAccountName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var carrierAccount = context.Entity as CarrierAccount;
+            return carrierAccount.CarrierAccountId;
+        }
+
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
-
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
@@ -868,10 +875,11 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-
         public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

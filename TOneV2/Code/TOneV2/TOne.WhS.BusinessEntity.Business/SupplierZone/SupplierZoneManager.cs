@@ -136,11 +136,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return this.GetType();
         }
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
-        {
-            return GetSupplierZoneName(Convert.ToInt64(context.EntityId));
-        }
-
         public string GetDescription(IEnumerable<long> supplierZoneIds)
         {
             IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;
@@ -218,6 +213,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region IBusinessEntityManager
+
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetSupplierZone(context.EntityId);
@@ -230,6 +227,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             else
                 return allZones.Values.Select(itm => itm as dynamic).ToList();
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetSupplierZoneName(Convert.ToInt64(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var supplierZone = context.Entity as SupplierZone;
+            return supplierZone.SupplierZoneId;
         }
 
         public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
@@ -264,5 +272,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }
