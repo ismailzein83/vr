@@ -230,6 +230,7 @@
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-settings.html" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart.html" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-dropdown-section.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-section-v2.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-preview-image-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-columns-directive.js" />
