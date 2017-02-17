@@ -36,15 +36,18 @@
                         ctrl.onReady(getDirectiveAPI());
                     }
                 };
+
                 ctrl.addColumn = function () {
                     addColumn();
                 };
+
                 ctrl.removeColumn = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal(ctrl.columns, dataItem.id, 'id');
                     if (index > -1) {
                         ctrl.columns.splice(index, 1);
                     }
                 };
+
                 ctrl.validateColumns = function () {
                     if (ctrl.columns.length == 0) {
                         return 'Please, one record must be added at least.';
@@ -76,7 +79,6 @@
                     }
                 };
             }
-
             function getDirectiveAPI() {
                 var api = {};
 
@@ -157,7 +159,6 @@
 
                 ctrl.columns.push(gridItem);
             }
-
             function setDataRecordTypeFields(gridItem) {
                 gridItem.dataRecordTypeFields = [];
                 for (var i = 0; i < dataRecordTypeFields.length; i++) {
