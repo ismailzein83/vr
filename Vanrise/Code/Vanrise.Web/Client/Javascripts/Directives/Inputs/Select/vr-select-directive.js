@@ -413,7 +413,7 @@
                 }
                 //Exports
                 setTimeout(function () {
-                    $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function () {
+                    $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function (event) {
 
                         vrSelectSharedObject.onOpenDropDown($attrs.id);
 
@@ -464,7 +464,7 @@
 
                         }
                         else
-                            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();                        
+                            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                    
                     });
 
@@ -484,7 +484,7 @@
                 setTimeout(function () {
                     // if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
 
-                    $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function () {
+                    $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
 
                         var self = $(this);
                         var selfHeight = $(this).parent().height();
@@ -513,6 +513,7 @@
 
 
                         $(dropDown).css({ position: 'fixed', top: top, left: baseleft });
+                       
                     });
 
                     $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
@@ -608,7 +609,7 @@
                         var noborder = attrs.noborder != undefined;
                         var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button" data-toggle="dropdown" '
                                             + ' aria-expanded="true"  ' + validateButtonClass + '>'
-                                            + '<span style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
+                                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
                                             + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
                                             + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);

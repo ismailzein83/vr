@@ -3015,13 +3015,13 @@ vr-validator[vr-input] > div:nth-child(1){
     top:5px
 }
 .vr-dropdown-section .drop-down-section{
-   width : 100% ;
+   z-index:500 !important;
 }
 .vr-dropdown-section .section-body{
    width : 100% ;
 }
-.vr-dropdown-section .pin-icon{
-  font-size: 17px;
+.vr-dropdown-section .remove-icon{
+  font-size: 13px;
   margin: 6px 4px;
   position: absolute;
   right: -1px;

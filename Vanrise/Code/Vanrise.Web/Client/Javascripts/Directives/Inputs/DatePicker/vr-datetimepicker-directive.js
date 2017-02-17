@@ -75,7 +75,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 format: format,
                 showClose: true,
                 useCurrent: false,
-                allowInputToggle: $attrs.disablefocus == undefined 
+                allowInputToggle: $attrs.disablefocus == undefined
             });
             divDatePicker
                 .on('dp.show', function (e) {
@@ -91,12 +91,12 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     $(dropDown).removeClass('pull-right');
                     $(dropDown).removeClass('dropdown-menu.top');
                     if (innerWidth - elleft < 228) {
-                        elleft = elleft - (228 - $(this).width() );
-                            $(dropDown).addClass('vr-datetime-pull-right');
+                        elleft = elleft - (228 - $(this).width());
+                        $(dropDown).addClass('vr-datetime-pull-right');
                     }
 
                     if (innerHeight - eltop < 284) {
-                        basetop = eltop - (284 + $(this).height()/2);
+                        basetop = eltop - (284 + $(this).height() / 2);
                         $(dropDown).addClass('vr-datetime-top');
                     }
                     else
@@ -110,7 +110,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
 
 
                 });
-        
+
             $(divDatePicker.parents('div')).scroll(function () {
                 fixDateTimePickerPosition();
             });
@@ -147,17 +147,17 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 //selectedDate.setSeconds(0);
                 //selectedDate.setMilliseconds(0);
                 var modelValue = $scope.ctrl.value;
-                    if (modelValue != undefined && !(modelValue instanceof Date))
-                        modelValue = UtilsService.createDateFromString(modelValue);
-                    
-                    if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
+                if (modelValue != undefined && !(modelValue instanceof Date))
+                    modelValue = UtilsService.createDateFromString(modelValue);
+
+                if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
                     isUserChange = true;
                     var unspecifiedHour = 0;
                     var unspecifiedMinute = 0;
                     var unspecifiedSecond = 0;
                     var unspecifiedMillisecond = 0;
                     if ($attrs.applytimemax != undefined) {
-                        
+
                         unspecifiedHour = 23;
                         unspecifiedMinute = 59;
                         unspecifiedSecond = 59;
@@ -272,7 +272,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         ctrl.value.Second = 0;
                     if (ctrl.value.Millisecond == undefined)
                         ctrl.value.Millisecond = 0;
-                   
+
                     initialDate.setHours(ctrl.value.Hour, ctrl.value.Minute, ctrl.value.Second, ctrl.value.Millisecond);
                     date = initialDate;
                     //var convertedDate = convertUTCDateToLocalDate(initialDate);
@@ -281,7 +281,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 else {
                     date = ctrl.value instanceof Date ? ctrl.value : (UtilsService.createDateFromString(ctrl.value));
                 }
-                if ((selectedDate == undefined || (date != undefined && selectedDate.toString() != date.toString())) &&  divDatePicker.data("DateTimePicker")) {
+                if ((selectedDate == undefined || (date != undefined && selectedDate.toString() != date.toString())) && divDatePicker.data("DateTimePicker")) {
                     divDatePicker.data("DateTimePicker").date(date);
                 }
                 else {
@@ -367,18 +367,18 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             var icontemplate = "";
             if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime') {
                 n++;
-                icontemplate += ' <span   class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>';
+                icontemplate += ' <span   class="input-group-addon vr-small-addon vanrise-inpute" ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>';
 
             }
             if (attrs.type == 'time' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime') {
                 n++;
-                icontemplate += ' <span   class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
+                icontemplate += ' <span   class="input-group-addon vr-small-addon vanrise-inpute" ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
 
             }
             else if (attrs.type == undefined) {
                 n = 2;
-                icontemplate = ' <span  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>'
-                             + ' <span  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
+                icontemplate = ' <span  class="input-group-addon vr-small-addon vanrise-inpute" ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>'
+                             + ' <span  class="input-group-addon vr-small-addon vanrise-inpute" ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
 
             }
 
@@ -386,8 +386,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             var dateTemplate =
                  '<div   >'
                   + '<vr-validator validate="ctrl.validate()" vr-input>'
-                  + '<div id="divDatePicker" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  ng-model="ctrl.value" class="input-group form-control vr-datetime-container" ng-style="ctrl.getInputeStyle()" >'
-                            + '<input tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" class="vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                  + '<div id="divDatePicker" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  ng-model="ctrl.value" class="input-group form-control vr-datetime-container vanrise-inpute" ng-style="ctrl.getInputeStyle()" >'
+                            + '<input tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" class="vr-date-input vanrise-inpute" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                             + '<div  ng-show="showtd && !ctrl.readOnly"  class="hand-cursor datetime-icon-container" style="max-width:' + 20 * n + 'px;right:-' + n * 10 + 'px;" >' + icontemplate + '</div>'
                       + '</div>'
                   + '</vr-validator>'

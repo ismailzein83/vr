@@ -76,7 +76,7 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (Security
                     offspan ='<span class="off">' + attrs.off + '</span>';
 
                 var template = '<vr-label ng-if="withLable">' + label + '</vr-label>'
-                               + '<div class="vr-switch">'
+                               + '<div class="vr-switch vanrise-inpute">'
                                    + '<span  class="switch green" ng-class="ctrl.value == true? \'checked\':\'\'" ng-click="ctrl.toogleCheck()">'
                                    + '<small></small>'
                                    + '<input type="checkbox" ng-model="ctrl.value" style="display:none;"/>'
