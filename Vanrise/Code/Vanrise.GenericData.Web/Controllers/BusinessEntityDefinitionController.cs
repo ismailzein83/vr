@@ -37,6 +37,14 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.GetBusinessEntityDefinitionsInfo(deserializedFilter);
         }
 
+        [HttpGet]
+        [Route("GetRemoteBusinessEntityDefinitionsInfo")]
+        public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteBusinessEntityDefinitionsInfo(Guid connectionId, string serializedFilter = null)
+        {
+            BusinessEntityDefinitionInfoFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<BusinessEntityDefinitionInfoFilter>(serializedFilter) : null;
+            return _manager.GetRemoteBusinessEntityDefinitionsInfo(connectionId, deserializedFilter);
+        }
+
         [HttpPost]
         [Route("AddBusinessEntityDefinition")]
         public Vanrise.Entities.InsertOperationOutput<BusinessEntityDefinitionDetail> AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)

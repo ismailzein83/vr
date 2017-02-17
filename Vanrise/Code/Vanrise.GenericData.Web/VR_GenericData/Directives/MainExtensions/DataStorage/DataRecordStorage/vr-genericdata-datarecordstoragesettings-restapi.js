@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageSettingsRestAPIDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataStoreAPIService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_DataRecordStorageAPIService'];
+    DataRecordStorageSettingsRestAPIDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataStoreAPIService', 'VR_GenericData_DataRecordStorageAPIService'];
 
-    function DataRecordStorageSettingsRestAPIDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataStoreAPIService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataRecordStorageAPIService) {
+    function DataRecordStorageSettingsRestAPIDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataStoreAPIService, VR_GenericData_DataRecordStorageAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -63,7 +63,7 @@
                     vrRestAPIRecordQueryInterceptorSelectiveReadyDeferred.resolve();
                 }
 
-                $scope.scopeModel.onDataRecordTypeChanged = function (selectedDataRecordType) {
+                $scope.scopeModel.onDataRecordTypeSelectionChanged = function (selectedDataRecordType) {
 
                     if (selectedDataRecordType != undefined) {
                         remoteDataRecordTypeId = selectedDataRecordType.DataRecordTypeId;
@@ -78,26 +78,19 @@
                                 $scope.scopeModel.showDataRecordStorageSelector = true;
                                 $scope.scopeModel.isDataRecordStorageSelectorLoading = true;
 
-                                var filter = {
-                                    DataRecordTypeId: remoteDataRecordTypeId
+                                var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                                var payload = {
+                                    filter: {
+                                        DataRecordTypeId: remoteDataRecordTypeId
+                                    },
+                                    connectionId: connectionId
                                 };
+                                VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, payload, dataRecordStorageSelectorLoadDeferred);
 
-                                VR_GenericData_DataRecordStorageAPIService.GetRemoteDataRecordsStorageInfo(connectionId, UtilsService.serializetoJson(filter)).then(function (response) {
-                                    var dataRecordStoragesInfos = response;
 
-                                    if (dataRecordStoragesInfos != undefined) {
-                                        dataRecordStorageSelectorAPI.clearDataSource();
-
-                                        for (var i = 0; i < dataRecordStoragesInfos.length; i++) {
-                                            var cunrrentDataRecordsStorage = dataRecordStoragesInfos[i];
-                                            $scope.scopeModel.dataRecordStorages.push({
-                                                DataRecordStorageId: cunrrentDataRecordsStorage.DataRecordStorageId,
-                                                Name: cunrrentDataRecordsStorage.Name
-                                            });
-                                        }
-
-                                        $scope.scopeModel.isDataRecordStorageSelectorLoading = false;
-                                    }
+                                return dataRecordStorageSelectorLoadDeferred.promise.then(function () {
+                                    $scope.scopeModel.isDataRecordStorageSelectorLoading = false;
                                 });
                             }
                         }
@@ -106,8 +99,8 @@
 
                 UtilsService.waitMultiplePromises([dataRecordTypeSelectorReadyDeferred.promise, dataRecordStorageSelectorReadyDeferred.promise,
                     vrRestAPIRecordQueryInterceptorSelectiveReadyDeferred.promise]).then(function () {
-                    defineAPI();
-                });
+                        defineAPI();
+                    });
             }
             function defineAPI() {
                 var api = {};
@@ -146,66 +139,47 @@
                         });
                     }
                     function getDataRecordTypeSelectorLoadPromise() {
-                        if (remoteDataRecordTypeId != undefined && dataRecordTypeSelectionChangedDeferred == undefined)
+                        if (remoteDataRecordTypeId != undefined)
                             dataRecordTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
-                        return VR_GenericData_DataRecordTypeAPIService.GetRemoteDataRecordTypeInfo(connectionId).then(function (response) {
-                            var dataRecordTypeInfos = response;
+                        var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                            if (dataRecordTypeInfos != undefined) {
-                                for (var i = 0; i < dataRecordTypeInfos.length; i++) {
-                                    var cunrrentDataRecordTypeInfo = dataRecordTypeInfos[i];
-                                    $scope.scopeModel.dataRecordTypes.push({
-                                        DataRecordTypeId: cunrrentDataRecordTypeInfo.DataRecordTypeId,
-                                        Name: cunrrentDataRecordTypeInfo.Name
-                                    });
-                                }
-                            }
-                            if (remoteDataRecordTypeId != undefined) {
-                                $scope.scopeModel.selectedDataRecordType = UtilsService.getItemByVal($scope.scopeModel.dataRecordTypes, remoteDataRecordTypeId, 'DataRecordTypeId');
-                            }
-                        });
+                        var payload = {
+                            connectionId: connectionId
+                        };
+                        if (remoteDataRecordTypeId != undefined) {
+                            payload.selectedIds = remoteDataRecordTypeId
+                        }
+                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, payload, dataRecordTypeSelectorLoadDeferred);
+
+                        return dataRecordTypeSelectorLoadDeferred.promise;
                     }
                     function getDataRecordStoragesSelectorLoadPromise() {
                         if (remoteDataRecordTypeId == undefined)
                             return;
 
-                        var loadDataRecordStoragesSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         dataRecordTypeSelectionChangedDeferred.promise.then(function () {
-                            var filter = {
-                                DataRecordTypeId: remoteDataRecordTypeId
+                            dataRecordTypeSelectionChangedDeferred = undefined;
+
+                            var payload = {
+                                filter: {
+                                    DataRecordTypeId: remoteDataRecordTypeId
+                                },
+                                connectionId: connectionId
                             };
-
-                            VR_GenericData_DataRecordStorageAPIService.GetRemoteDataRecordsStorageInfo(connectionId, UtilsService.serializetoJson(filter)).then(function (response) {
-                                dataRecordTypeSelectionChangedDeferred = undefined;
-                                var dataRecordStoragesInfos = response;
-
-                                if (dataRecordStoragesInfos != undefined) {
-                                    for (var i = 0; i < dataRecordStoragesInfos.length; i++) {
-                                        var cunrrentDataRecordsStorage = dataRecordStoragesInfos[i];
-                                        $scope.scopeModel.dataRecordStorages.push({
-                                            DataRecordStorageId: cunrrentDataRecordsStorage.DataRecordStorageId,
-                                            Name: cunrrentDataRecordsStorage.Name
-                                        });
-                                    }
-                                }
-                                if (remoteDataRecordStorageIds != undefined) {
-                                    for (var j = 0; j < remoteDataRecordStorageIds.length; j++) {
-                                        var currentDataRecordStorage = UtilsService.getItemByVal($scope.scopeModel.dataRecordStorages, remoteDataRecordStorageIds[j], 'DataRecordStorageId');
-                                        $scope.scopeModel.selectedDataRecordStorages.push(currentDataRecordStorage);
-                                    }
-                                }
-
-                                loadDataRecordStoragesSelectorPromiseDeferred.resolve();
-                                $scope.scopeModel.showDataRecordStorageSelector = true;
-                            });
+                            if (remoteDataRecordStorageIds != undefined) {
+                                payload.selectedIds = remoteDataRecordStorageIds
+                            }
+                            VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, payload, dataRecordStorageSelectorLoadDeferred);
                         });
 
-                        return loadDataRecordStoragesSelectorPromiseDeferred.promise;
+                        return dataRecordStorageSelectorLoadDeferred.promise.then(function () {
+                            $scope.scopeModel.showDataRecordStorageSelector = true;
+                        });
                     }
                     function getVRRestAPIRecordQueryInterceptorSelectiveLoadPromise() {
-
                         var loadVRRestAPIRecordQueryInterceptorSelectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
                         vrRestAPIRecordQueryInterceptorSelectiveReadyDeferred.promise.then(function () {

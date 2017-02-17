@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
+using Vanrise.Web.Base;
 
 namespace Vanrise.GenericData.Web.Controllers
 {
-    public class VRRestAPIBusinessEntityController
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "VRRestAPIBusinessEntity")]
+    public class VRRestAPIBusinessEntityController : BaseAPIController
     {
-        //[HttpGet]
-        //[Route("GetBusinessEntityDefinitionsInfo")]
-        //public IEnumerable<BusinessEntityDefinitionInfo> GetBusinessEntityDefinitionsInfo(string filter = null)
-        //{
-        //    BusinessEntityDefinitionInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<BusinessEntityDefinitionInfoFilter>(filter) : null;
-        //    return _manager.GetBusinessEntityDefinitionsInfo(deserializedFilter);
-        //}
+        VRRestAPIBusinessEntityManager _manager = new VRRestAPIBusinessEntityManager();
+
+        [HttpGet]
+        [Route("GetBusinessEntitiesInfo")]
+        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesInfo(Guid businessEntityDefinitionId)
+        {
+            return _manager.GetBusinessEntitiesInfo(businessEntityDefinitionId);
+        }
     }
 }

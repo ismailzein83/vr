@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.GenericData.Entities.BusinessEntities
+namespace Vanrise.GenericData.Entities
 {
-    class BusinessEntityIdContext
+    public class BusinessEntityIdContext : IBusinessEntityIdContext
     {
+        public BusinessEntityDefinition EntityDefinition { get; set; }
+
+        public dynamic Entity { get; set; }
     }
 }

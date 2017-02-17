@@ -86,8 +86,13 @@ app.directive("vrGenericdataRestapibedefinitionsEditor", ["UtilsService", "VRNot
                 api.load = function (payload) {
                     var promises = [];
 
+                    var singularTitle;
+                    var pluralTitle;
+
                     if (payload != undefined && payload.businessEntityDefinitionSettings != undefined) {
                         var beDefinitionSettings = payload.businessEntityDefinitionSettings;
+                        singularTitle = beDefinitionSettings.SingularTitle;
+                        pluralTitle = beDefinitionSettings.PluralTitle;
 
                         if (beDefinitionSettings != undefined) {
                             connectionId = beDefinitionSettings.ConnectionId;
@@ -102,6 +107,10 @@ app.directive("vrGenericdataRestapibedefinitionsEditor", ["UtilsService", "VRNot
                     //Loading BEDefinition RemoteSelector
                     var beDefinitionRemoteSelectorLoadPromise = getBEDefinitionRemoteSelectorLoadPromise();
                     promises.push(beDefinitionRemoteSelectorLoadPromise);
+
+                    //Loading Singular and Plural Title
+                    $scope.scopeModel.singularTitle = singularTitle;
+                    $scope.scopeModel.pluralTitle = pluralTitle;
 
                     function getConnectionSelectorLoadPromise() {
                         if (connectionId != undefined)
@@ -158,7 +167,9 @@ app.directive("vrGenericdataRestapibedefinitionsEditor", ["UtilsService", "VRNot
                     var obj = {
                         $type: "Vanrise.GenericData.Entities.VRRestAPIBEDefinitionSettings, Vanrise.GenericData.Entities",
                         ConnectionId: connectionSelectorAPI.getSelectedIds(),
-                        RemoteBEDefinitionId: beDefinitionRemoteSelectorAPI.getSelectedIds()
+                        RemoteBEDefinitionId: beDefinitionRemoteSelectorAPI.getSelectedIds(),
+                        SingularTitle: $scope.scopeModel.singularTitle,
+                        PluralTitle: $scope.scopeModel.pluralTitle
                     };
                     return obj;
                 };

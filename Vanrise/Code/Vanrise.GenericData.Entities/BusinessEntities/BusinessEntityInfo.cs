@@ -12,3 +12,4 @@ namespace Vanrise.GenericData.Entities
         public string Description { get; set; }
     }
 }
+ 

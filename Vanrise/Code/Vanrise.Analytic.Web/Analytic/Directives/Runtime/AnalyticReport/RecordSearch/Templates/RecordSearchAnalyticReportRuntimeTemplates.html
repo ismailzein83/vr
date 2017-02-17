@@ -1,4 +1,4 @@
-﻿
+﻿ 
 <vr-form validationcontext="formFilter">
     <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
         <vr-row removeline>
@@ -11,14 +11,14 @@
         </vr-row>
 
         <vr-row removeline>
-            <vr-columns width="normal">
+            <vr-columns width="normal" ng-show="showSourceSelector">
                 <vr-select datasource="drSearchPageStorageSources" selectedvalues="selectedDRSearchPageStorageSource" onselectionchanged="onDRSearchPageStorageSourceChanged"
-                           datavaluefield="Title" datatextfield="Title" isrequired="true" label="Source" hideremoveicon>
+                           datavaluefield="Name" datatextfield="Title" isrequired="true" label="Source" hideremoveicon>
                 </vr-select>
             </vr-columns>
 
             <vr-columns colnum="6" haschildcolumns>
-                <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="fromDate" to="toDate" period="selectedPeriod" isrequired="false"></vr-timerange>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="fromDate" to="toDate" period="selectedPeriod" isrequired="false"></vr-timerange>
             </vr-columns>
 
             <vr-columns width="normal">
@@ -57,7 +57,6 @@
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-
                 <vr-button type="Search" data-onclick="search" validationcontext="formFilter"></vr-button>
             </div>
         </vr-actionbar>

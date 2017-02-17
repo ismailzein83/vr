@@ -31,6 +31,13 @@ namespace Vanrise.GenericData.Business
             var beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
             return beManager.GetEntityDescription(new BusinessEntityDescriptionContext { EntityDefinition = beDefinition, EntityId = entityId });
         }
+
+        public dynamic GetEntityId(Guid businessEntityDefinitionId, dynamic entity)
+        {
+            var beManager = GetBEManager(businessEntityDefinitionId);
+            var beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
+            return beManager.GetEntityId(new BusinessEntityIdContext { EntityDefinition = beDefinition, Entity = entity });
+        }
          
         public dynamic GetEntityInfo(Guid businessEntityDefinitionId, string infoType, dynamic entityId)
         {
@@ -60,6 +67,24 @@ namespace Vanrise.GenericData.Business
                     childEntitiesIds.AddRange(currentChildEntitiesIds);
             }
             return childEntitiesIds.Distinct().ToList();            
+        }
+
+        public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesInfo(Guid businessEntityDefinitionId)
+        {
+            List<BusinessEntityInfo> results = new List<BusinessEntityInfo>();
+            var allBusinessEntities = this.GetAllEntities(businessEntityDefinitionId);
+
+            foreach (var businessEntity in allBusinessEntities)
+            {
+                object businessEntityId = this.GetEntityId(businessEntityDefinitionId, businessEntity);
+                results.Add(new BusinessEntityInfo()
+                {
+                    BusinessEntityId = businessEntityId,
+                    Description = this.GetEntityDescription(businessEntityDefinitionId, businessEntityId)
+                   
+                });
+            }
+            return results;
         }
 
         #endregion

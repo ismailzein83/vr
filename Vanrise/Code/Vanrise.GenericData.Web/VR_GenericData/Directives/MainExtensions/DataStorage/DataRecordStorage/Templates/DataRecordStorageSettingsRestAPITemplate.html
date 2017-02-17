@@ -1,26 +1,16 @@
 ﻿<div>
     <vr-row>
-        <vr-columns width="1/2row">
-            <vr-select on-ready="scopeModel.onDataRecordTypeSelectorReady"
-                       datasource="scopeModel.dataRecordTypes"
-                       datavaluefield="DataRecordTypeId"
-                       datatextfield="Name"
-                       selectedvalues="scopeModel.selectedDataRecordType"
-                       onselectionchanged="scopeModel.onDataRecordTypeChanged"
-                       label="Remote Type" isrequired="true" hideremoveicon>
-            </vr-select>
-        </vr-columns>
-        <vr-columns width="1/2row" ng-show="scopeModel.showDataRecordStorageSelector">
-            <span vr-loader="scopeModel.isDataRecordStorageSelectorLoading">
-                <vr-select on-ready="scopeModel.onDataRecordStorageSelectorReady"
-                           datasource="scopeModel.dataRecordStorages"
-                           datavaluefield="DataRecordStorageId"
-                           datatextfield="Name"
-                           selectedvalues="scopeModel.selectedDataRecordStorages"
-                           label="Remote Storages" isrequired="true" hideremoveicon ismultipleselection>
-                </vr-select>
-            </span>
-        </vr-columns>
+        <vr-genericdata-datarecordtype-remoteselector on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                      selectedvalues="scopeModel.selectedDataRecordType"
+                                                      onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
+                                                      normal-col-num="6" isrequired="true" hideremoveicon>
+        </vr-genericdata-datarecordtype-remoteselector>
+        <span ng-show="scopeModel.showDataRecordStorageSelector" vr-loader="scopeModel.isDataRecordStorageSelectorLoading">
+            <vr-genericdata-datarecordstorage-remoteselector on-ready="scopeModel.onDataRecordStorageSelectorReady"
+                                                             selectedvalues="scopeModel.selectedDataRecordStorages"
+                                                             normal-col-num="6" isrequired="true" ismultipleselection hideremoveicon>
+            </vr-genericdata-datarecordstorage-remoteselector>
+        </span>
     </vr-row>
     <vr-genericdata-restapirecordqueryinterceptor-selective on-ready="scopeModel.onVRRestAPIRecordQueryInterceptorSelectiveReady"
                                                             normal-col-num="6"
