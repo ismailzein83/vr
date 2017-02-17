@@ -224,6 +224,7 @@
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\vr-genericdata-datarecordfieldchoice-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-grid.js" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-remoteselector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\VRRestAPIRecordQueryInterceptorSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-restapirecordqueryinterceptor-selective.js" />
@@ -440,6 +441,7 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-groupfilter.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-remoteselector.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypeextrafields-template.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypefields-formula.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypeextrafields-selector.js" />
