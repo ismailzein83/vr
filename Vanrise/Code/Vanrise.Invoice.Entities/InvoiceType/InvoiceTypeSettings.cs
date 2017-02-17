@@ -83,6 +83,10 @@ namespace Vanrise.Invoice.Entities
     {
         public RequiredPermissionSettings ViewRequiredPermission { get; set; }
         public RequiredPermissionSettings GenerateRequiredPermission { get; set; }
+        public RequiredPermissionSettings ViewSettingsRequiredPermission { get; set; }
+        public RequiredPermissionSettings AddSettingsRequiredPermission { get; set; }
+        public RequiredPermissionSettings EditSettingsRequiredPermission { get; set; }
+        public RequiredPermissionSettings AssignPartnerRequiredPermission { get; set; }
 
     }
 
