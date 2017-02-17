@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\SalePriceListChangeController.cs" />
     <Compile Include="Controllers\TechnicalSettingsController.cs" />
     <Compile Include="Controllers\SalePricelistController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
@@ -203,6 +204,7 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CDPNIdentificationEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PeriodTypeEnum.js" />
@@ -298,6 +300,10 @@
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePriceListCodeChangeTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePriceListRateChangeTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistcodechange-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistratechange-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SaleAreaSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salearea-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\Templates\SaleCodeGridTemplate.html" />
@@ -408,6 +414,7 @@
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListChangeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListTemplateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\StateBackupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierOtherRateAPIService.js" />
@@ -424,6 +431,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneRoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SalePriceListChangeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListTemplateService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService_Service.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchConnectivityService.js" />
@@ -488,6 +496,8 @@
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelist.html" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePriceListChange.html" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePriceListChangeController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleService\SaleServiceManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleService\SaleServiceManagementController.js" />

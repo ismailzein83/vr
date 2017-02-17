@@ -126,6 +126,7 @@
     <Compile Include="SaleCode\QueryHandlers\SaleCodeQueryHandler.cs" />
     <Compile Include="SaleCode\SaleCodeExistingEntity.cs" />
     <Compile Include="SalePLNotification\NotificationManager.cs" />
+    <Compile Include="SalePriceListChange\SalePriceListChangeManager.cs" />
     <Compile Include="SalePriceListTemplate\Context\CodesByZoneMappedValueContext.cs" />
     <Compile Include="SalePriceListTemplate\Context\CodeOnEachRowMappedValueContext.cs" />
     <Compile Include="SalePriceListTemplate\Context\SalePriceListTemplateSettingsContext.cs" />

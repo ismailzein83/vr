@@ -1,7 +1,8 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService", "FileAPIService", "WhS_BE_SalePriceListOwnerTypeEnum",
-function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, FileAPIService, WhS_BE_SalePriceListOwnerTypeEnum) {
+app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService", "FileAPIService"
+                                            , "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_SalePriceListChangeService",
+function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, FileAPIService, WhS_BE_SalePriceListOwnerTypeEnum, whSBeSalePriceListPreviewService) {
 
     var directiveDefinitionObject = {
 
@@ -66,22 +67,28 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, F
 
         function defineMenuActions() {
             $scope.gridMenuActions = function (dataItem) {
-                var downloadPricelist = {
-                    name: "Download",
-                    clicked: downloadPriceList
-                };
-
-               
                 var menuActions = [];
-                if (dataItem.Entity.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                var salePriceListPreview =
+                {
+                    name: "Preview PriceList",
+                    clicked: PreviewPriceList
+                };
+                menuActions.push(salePriceListPreview);
+                if (dataItem.Entity.OwnerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                    var downloadPricelist = {
+                        name: "Download",
+                        clicked: downloadPriceList
+                    };
                     menuActions.push(downloadPricelist);
                 }
-               
                 return menuActions;
             };
-         
-        }
 
+        }
+        function PreviewPriceList(priceListObj) {
+            console.log(priceListObj);
+            whSBeSalePriceListPreviewService.previewPriceList(priceListObj.Entity.PriceListId);
+        }
         function downloadPriceList(priceListObj) {
             FileAPIService.DownloadFile(priceListObj.Entity.FileId)
                     .then(function (response) {

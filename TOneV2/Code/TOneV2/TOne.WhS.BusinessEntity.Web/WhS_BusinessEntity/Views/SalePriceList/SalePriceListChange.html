@@ -1,0 +1,56 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_SalePriceListPreviewController" vr-loader="isLoading" vr-modalcontent size="medium">
+    <vr-modalbody>
+        <vr-form name="formSalePriceListPreview">
+            <vr-tabs>
+                <vr-tab header="'Rates'">
+                    <vr-form name="formRateFilter">
+                        <div ng-hide="filterSectionCollapsed">
+                            <vr-row removeline>
+                                <vr-columns width="normal" haschildcolumns>
+                                    <vr-common-country-selector on-ready="onRateCountryReady" ismultipleselection></vr-common-country-selector>
+                                </vr-columns>
+                            </vr-row>
+                        </div>
+                        <vr-row removeline>
+                            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                                <div transclude-to="buttons">
+                                    <vr-button type="Search" formname="formRateFilter" data-onclick="searchRateClicked"></vr-button>
+                                </div>
+                            </vr-actionbar>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-whs-be-salepricelistratechange-grid on-ready="onRateChangeGridReady">
+                                </vr-whs-be-salepricelistratechange-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-form>
+                </vr-tab>
+                <vr-tab header="'Codes'" dontload="true">
+                    <vr-form name="formCodeFilter">
+                        <div ng-hide="filterSectionCollapsed">
+                            <vr-row removeline>
+                                <vr-columns width="normal" haschildcolumns>
+                                    <vr-common-country-selector on-ready="onCodeCountryReady" ismultipleselection></vr-common-country-selector>
+                                </vr-columns>
+                            </vr-row>
+                        </div>
+                        <vr-row removeline>
+                            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                                <div transclude-to="buttons">
+                                    <vr-button type="Search" formname="formCodeFilter" data-onclick="searchCodeClicked"></vr-button>
+                                </div>
+                            </vr-actionbar>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-whs-be-salepricelistcodechange-grid on-ready="onCodeChangeGridReady">
+                                </vr-whs-be-salepricelistcodechange-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-form>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+</div>

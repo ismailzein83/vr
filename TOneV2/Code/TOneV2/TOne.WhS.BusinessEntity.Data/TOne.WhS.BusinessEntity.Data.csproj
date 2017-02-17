@@ -63,6 +63,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="ISaleEntityRoutingProductDataManager.cs" />
     <Compile Include="ISaleEntityServiceDataManager.cs" />
+    <Compile Include="ISalePriceListChangeDataManager.cs" />
     <Compile Include="ISalePriceListDataManager.cs" />
     <Compile Include="ISalePriceListTemplateDataManager.cs" />
     <Compile Include="ISellingProductDataManager.cs" />

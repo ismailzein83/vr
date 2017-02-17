@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="RateChange"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'">
+    <vr-datagridcolumn headertext="'Zone Name'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'decimal'"></vr-datagridcolumn>
+    <vr-datagridcolumn fixedwidth="'35'">
+        <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIcon"
+                 tooltip="dataItem.RateChangeTypeIconTooltip" inline>
+        </vr-icon>
+    </vr-datagridcolumn>
+</vr-datagrid>

@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="CodeChange"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'">
+    <vr-datagridcolumn headertext="'ID'" field="'Code'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone Name'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn fixedwidth="'35'">
+        <vr-icon icontype="dataItem.CodeChangeTypeIconType" iconurl="dataItem.CodeChangeTypeIcon"
+                 tooltip="dataItem.CodeChangeTypeIconTooltip" inline>
+        </vr-icon>
+    </vr-datagridcolumn>
+</vr-datagrid>
