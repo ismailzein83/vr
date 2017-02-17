@@ -5,7 +5,7 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPInstanceQuery
     {
-        public List<int> DefinitionsId { get; set; }
+        public List<Guid> DefinitionsId { get; set; }
 
         public List<BPInstanceStatus> InstanceStatus { get; set; }
         public string EntityId { get; set; }
