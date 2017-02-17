@@ -963,7 +963,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         var sh = innerHeight;
                         var h = 28;
                         if (isInModal() == true)
-                            h += sh * 0.3;
+                            h += sh * 0.5;
                         else
                             h += sh - 400;
 

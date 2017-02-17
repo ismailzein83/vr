@@ -21,7 +21,7 @@
                     ctrl.showmenu = true;
                     setTimeout(function () {
                         calculatePosition(true);
-                    }, 300);
+                    }, 500);
                 };
                
                 ctrl.expandSection = function (e) {
