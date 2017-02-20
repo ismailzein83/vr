@@ -63,7 +63,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             var sellingRules = commissions.FindAllRecords(s => s.SupplierId.Equals("SYS"));
             var purchaseRules = commissions.FindAllRecords(s => !s.SupplierId.Equals("SYS"));
 
-            var rulesDictionary = GroupCommissionRules(sellingRules, "Sale");
+            var rulesDictionary = GroupCommissionRules(sellingRules, RuleType.Sale);
 
             foreach (var key in rulesDictionary.Keys)
             {
@@ -73,7 +73,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     result.Add(rule);
             }
 
-            rulesDictionary = GroupCommissionRules(purchaseRules, "Purchase");
+            rulesDictionary = GroupCommissionRules(purchaseRules, RuleType.Purchase);
             foreach (var key in rulesDictionary.Keys)
             {
                 var commissionRules = rulesDictionary[key];
@@ -108,7 +108,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
                 Settings = new PricingRuleExtraChargeSettings
                 {
-                    Actions = GetActions(defaultCommission),
+                    Actions = GetActions(defaultCommission, RuleType.Purchase),
                     CurrencyId = Context.CurrencyId
                 },
                 Criteria = new GenericRuleCriteria
@@ -162,7 +162,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             {
                 Settings = new PricingRuleExtraChargeSettings
                 {
-                    Actions = GetActions(defaultCommission),
+                    Actions = GetActions(defaultCommission, RuleType.Sale),
                     CurrencyId = Context.CurrencyId
                 },
                 Criteria = new GenericRuleCriteria
@@ -193,7 +193,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
             return GetSourceRule(extraChargeRule, defaultCommission);
         }
-        List<PricingRuleExtraChargeActionSettings> GetActions(SourceCommission commission)
+        List<PricingRuleExtraChargeActionSettings> GetActions(SourceCommission commission, RuleType type)
         {
             List<PricingRuleExtraChargeActionSettings> actions = new List<PricingRuleExtraChargeActionSettings>();
             if (commission.Percentage.HasValue)
@@ -201,14 +201,14 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 {
                     FromRate = commission.FromRate,
                     ToRate = commission.ToRate,
-                    ExtraPercentage = commission.Percentage.Value
+                    ExtraPercentage = type == RuleType.Sale && Context.MigrationContext.IsCustomerCommissionNegative ? -commission.Percentage.Value : commission.Percentage.Value
                 });
             else if (commission.Amount.HasValue)
                 actions.Add(new FixedExtraChargeSettings
                 {
                     FromRate = commission.FromRate,
                     ToRate = commission.ToRate,
-                    ExtraAmount = commission.Amount.Value
+                    ExtraAmount = type == RuleType.Sale && Context.MigrationContext.IsCustomerCommissionNegative ? -commission.Amount.Value : commission.Amount.Value
                 });
             return actions;
         }
@@ -225,13 +225,13 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 }
             };
         }
-        Dictionary<string, List<SourceCommission>> GroupCommissionRules(IEnumerable<SourceCommission> sellingRules, string keyType)
+        Dictionary<string, List<SourceCommission>> GroupCommissionRules(IEnumerable<SourceCommission> sellingRules, RuleType type)
         {
             Dictionary<string, List<SourceCommission>> commissions = new Dictionary<string, List<SourceCommission>>();
             List<SourceCommission> sourceCommissions;
             foreach (SourceCommission commission in sellingRules)
             {
-                string key = GetCommissionKey(commission, keyType);
+                string key = GetCommissionKey(commission, type);
                 if (!commissions.TryGetValue(key, out sourceCommissions))
                 {
                     sourceCommissions = new List<SourceCommission>();
@@ -242,15 +242,15 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
             return commissions;
         }
-        string GetCommissionKey(SourceCommission commission, string type)
+        string GetCommissionKey(SourceCommission commission, RuleType type)
         {
             switch (type)
             {
-                case "Sale":
+                case RuleType.Sale:
                     return string.Format("{0},{1},{2},{3},{4},{5}", commission.CustomerId,
                         commission.Amount ?? commission.Percentage.Value,
                         commission.FromRate, commission.ToRate, commission.BED, commission.EED);
-                case "Purchase":
+                case RuleType.Purchase:
                     return string.Format("{0},{1},{2},{3},{4},{5}", commission.SupplierId,
                         commission.Amount ?? commission.Percentage.Value,
                         commission.FromRate, commission.ToRate, commission.BED, commission.EED);

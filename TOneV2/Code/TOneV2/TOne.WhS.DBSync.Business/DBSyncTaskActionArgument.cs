@@ -17,6 +17,7 @@ namespace TOne.WhS.DBSync.Business
         public int HolidayRateTypeId { get; set; }
         public bool MigratePriceListData { get; set; }
         public bool OnlyEffective { get; set; }
+        public bool IsCustomerCommissionNegative { get; set; }
         public List<DBTableName> MigrationRequestedTables { get; set; }
     }
 }

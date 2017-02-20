@@ -134,6 +134,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction.WeekendRateTypeId = weekendRateTypeSelectorAPI.getSelectedIds();
                     schedulerTaskAction.HolidayRateTypeId = holidayRateTypeSelectorAPI.getSelectedIds();
                     schedulerTaskAction.MigratePriceListData = $scope.migratePriceListData;
+                    schedulerTaskAction.IsCustomerCommissionNegative = $scope.isCustomerCommissionNegative;
                     schedulerTaskAction.OnlyEffective = $scope.onlyEffective;
                     var selectedTables = [];
 
@@ -162,6 +163,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         weekendRateTypeId = payload.data.WeekendRateTypeId;
                         holidayRateTypeId = payload.data.HolidayRateTypeId;
                         $scope.migratePriceListData = payload.data.MigratePriceListData;
+                        $scope.isCustomerCommissionNegative = payload.data.IsCustomerCommissionNegative;
                         $scope.onlyEffective = payload.data.OnlyEffective;
                         $scope.migrationTablesSelectedValues = [];
 

@@ -15,7 +15,7 @@ namespace TOne.WhS.DBSync.Entities
         public int DefaultSellingNumberPlanId { get; set; }
 
         public int SellingProductId { get; set; }
-
+        public bool IsCustomerCommissionNegative { get; set; }
         public int OffPeakRateTypeId { get; set; }
         public int WeekendRateTypeId { get; set; }
         public int HolidayRateTypeId { get; set; }

@@ -34,6 +34,7 @@ namespace TOne.WhS.DBSync.Business
                 context.MigratePriceListData = dbSyncTaskActionArgument.MigratePriceListData;
                 context.OnlyEffective = dbSyncTaskActionArgument.OnlyEffective;
                 context.MigrationRequestedTables = dbSyncTaskActionArgument.MigrationRequestedTables;
+                context.IsCustomerCommissionNegative = dbSyncTaskActionArgument.IsCustomerCommissionNegative;
                 context.DBTables = FillDBTables(context);
                 migrationManager = ConstructMigrationManager(context);
                 PrepareBeforeApplyingRecords(context, migrationManager);
