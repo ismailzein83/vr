@@ -6,6 +6,8 @@
 
     function VRComponentTypeManagementController($scope, VRCommon_VRComponentTypeAPIService, VRCommon_VRComponentTypeService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
+        var selectedComponentType;
+
         var gridAPI;
 
         var componentTypeSelectorAPI;
@@ -14,22 +16,27 @@
         defineScope();
         load();
 
-
         function defineScope() {
-
             $scope.scopeModel = {};
-            $scope.scopeModel.selectedComponentType;
 
-            $scope.scopeModel.search = function () {
-                loadGrid();
+            $scope.scopeModel.onGridReady = function (api) {
+                gridAPI = api;
+                //gridAPI.load({});
             };
-
             $scope.scopeModel.onComponentTypeConfigSelectorReady = function (api) {
                 componentTypeSelectorAPI = api;
                 componentTypeSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onComponentTypeConfigSelectorChanged = function () {
+            $scope.scopeModel.onComponentTypeConfigSelectionChanged = function (selectedItem) {
+
+                if (selectedItem != undefined) {
+                    selectedComponentType = selectedItem;
+                    loadGrid();
+                }
+            };
+
+            $scope.scopeModel.search = function () {
                 loadGrid();
             };
 
@@ -37,21 +44,17 @@
                 var onVRObjectTypeDefinitionAdded = function (addedItem) {
                     gridAPI.onVRComponentTypeAdded(addedItem);
                 };
-                VRCommon_VRComponentTypeService.addVRComponentType($scope.scopeModel.selectedComponentType.ExtensionConfigurationId, onVRObjectTypeDefinitionAdded);
+
+                VRCommon_VRComponentTypeService.addVRComponentType(selectedComponentType.ExtensionConfigurationId, onVRObjectTypeDefinitionAdded);
             };
 
             $scope.scopeModel.hasAddVRComponentTypePermission = function () {
                 return VRCommon_VRComponentTypeAPIService.HasAddVRComponentTypePermission();
             };
-
-            $scope.scopeModel.onGridReady = function (api) {
-                gridAPI = api;
-                //gridAPI.load({});
-            };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
+
             return UtilsService.waitMultipleAsyncOperations([loadVRComponentTypes]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -70,17 +73,19 @@
         }
         function loadVRComponentTypes() {
             var loadComponentTypesPromiseDeferred = UtilsService.createPromiseDeferred();
+
             componentTypeSelectorReadyDeferred.promise.then(function () {
                 var payloadDirective;
                 VRUIUtilsService.callDirectiveLoad(componentTypeSelectorAPI, payloadDirective, loadComponentTypesPromiseDeferred);
             });
+
             return loadComponentTypesPromiseDeferred.promise;
         }
 
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
-                ExtensionConfigId: $scope.scopeModel.selectedComponentType == undefined ? undefined : $scope.scopeModel.selectedComponentType.ExtensionConfigurationId
+                ExtensionConfigId: selectedComponentType != undefined ? selectedComponentType.ExtensionConfigurationId : undefined
             };
         }
     }
