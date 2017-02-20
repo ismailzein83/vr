@@ -47,7 +47,7 @@ namespace TOne.WhS.Invoice.Business
             var carrierProfiles = carrierProfileManager.GetCarrierProfiles();
             foreach (var carrierProfile in carrierProfiles)
             {
-                if (carrierProfile.Settings.CustomerInvoiceByProfile)
+                if (!carrierProfile.IsDeleted && carrierProfile.Settings.CustomerInvoiceByProfile)
                 {
                     if (getProfiles)
                     {
@@ -76,8 +76,8 @@ namespace TOne.WhS.Invoice.Business
                         {
                             foreach (var account in accounts)
                             {
-                                var invoiceCarrierId = string.Format("Account_{0}", account.CarrierAccountId); 
-                                if (CheckIfPartnerMatched(filters, invoiceCarrierId))
+                                var invoiceCarrierId = string.Format("Account_{0}", account.CarrierAccountId);
+                                if (account.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && CheckIfPartnerMatched(filters, invoiceCarrierId))
                                 {
                                     var invoiceCarrier = new InvoiceCarrier
                                     {
