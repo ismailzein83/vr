@@ -92,7 +92,7 @@
                 }               
 
                 function addBackDrop() {
-                    console.log($('vr-form').last());
+                    console.log($('vr-modalbody').last());
                     if ($('.vr-backdrop').length == 0)
                         $('vr-modalbody').last().prepend("<div class='vr-backdrop'></div>");
                 }
