@@ -108,7 +108,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
-                name: "Download",
+                name: "Download PriceList",
                 clicked: downloadPriceList
             }];
         }
