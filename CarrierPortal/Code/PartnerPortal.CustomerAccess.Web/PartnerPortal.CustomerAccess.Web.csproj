@@ -114,6 +114,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
@@ -133,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountStatementController.cs" />
+    <Compile Include="Controllers\CPInvoiceController.cs" />
     <Compile Include="Controllers\RetailAccountUserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -160,10 +165,15 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Services\AccountStatementAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagement.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagementController.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Invoice\Services\InvoiceAPIService.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Invoice\Views\InvoiceManagement.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Invoice\Views\InvoiceManagementController.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountqueryinterceptor.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIRecordQueryInterceptorTemplate.html" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="PartnerPortal_CustomerAccess\Elements\Invoice\Directives\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

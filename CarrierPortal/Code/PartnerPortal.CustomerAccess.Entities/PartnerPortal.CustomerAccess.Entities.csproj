@@ -48,6 +48,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
@@ -58,6 +61,10 @@
     <Compile Include="AccountStatement\AccountStatementContextHandlerTemplate.cs" />
     <Compile Include="AccountStatement\AccountStatementViewSettings.cs" />
     <Compile Include="AccountStatement\AccountStatementContextHandlerContext.cs" />
+    <Compile Include="Invoice\InvoiceAppQuery.cs" />
+    <Compile Include="Invoice\InvoiceContextHandler.cs" />
+    <Compile Include="Invoice\InvoiceContextHandlerTemplate.cs" />
+    <Compile Include="Invoice\InvoiceViewSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailAccount.cs" />
   </ItemGroup>

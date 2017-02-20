@@ -126,7 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\VRInvoiceController.cs" />
     <Compile Include="Controllers\InvoiceItemController.cs" />
     <Compile Include="Controllers\InvoiceSettingController.cs" />
     <Compile Include="Controllers\InvoiceTypeConfigsController.cs" />

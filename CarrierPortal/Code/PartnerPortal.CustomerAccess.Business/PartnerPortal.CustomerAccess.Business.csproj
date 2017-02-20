@@ -55,6 +55,9 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
@@ -64,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountStatementManager.cs" />
+    <Compile Include="Extensions\InvoiceViewerTypeSettings.cs" />
+    <Compile Include="InvoiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailAccountUserManager.cs" />
   </ItemGroup>

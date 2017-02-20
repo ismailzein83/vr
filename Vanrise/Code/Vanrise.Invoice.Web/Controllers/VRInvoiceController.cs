@@ -17,7 +17,7 @@ namespace Vanrise.Invoice.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Invoice")]
 
-    public class InvoiceController : BaseAPIController
+    public class VRInvoiceController : BaseAPIController
     {
         InvoiceTypeManager _invoiceTypeManager = new InvoiceTypeManager();
 
