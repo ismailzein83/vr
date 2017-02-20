@@ -162,7 +162,6 @@
             var baseleft = selfOffset.left - $(window).scrollLeft();
 
             var height = ctrl.bodysectionheight;
-            console.log($(dropDown).height())
             if (innerHeight - basetop < height + 100)
                 top = basetop - (height);
             else
