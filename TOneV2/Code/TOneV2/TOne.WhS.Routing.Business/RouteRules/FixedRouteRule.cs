@@ -41,6 +41,31 @@ namespace TOne.WhS.Routing.Business
 
 
         #region SaleEntity Execution
+        public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
+        {
+            FixedRouteRule fixedRouteRule = new FixedRouteRule();
+
+            if (context.RouteOptions != null && context.RouteOptions.Count > 0)
+            {
+                fixedRouteRule.Options = new List<RouteOptionSettings>();
+                fixedRouteRule.Filters = new Dictionary<int, List<RouteOptionFilterSettings>>();
+
+                foreach (RouteOption routeOption in context.RouteOptions)
+                {
+                    RouteOptionSettings optionSettings = new RouteOptionSettings() { Percentage = routeOption.Percentage, SupplierId = routeOption.SupplierId };
+                    fixedRouteRule.Options.Add(optionSettings);
+
+                    List<RouteOptionFilterSettings> routeOptionFilterSettings;
+                    if (Filters != null && Filters.TryGetValue(routeOption.SupplierId, out routeOptionFilterSettings) && routeOptionFilterSettings != null)
+                    {
+                        fixedRouteRule.Filters.Add(routeOption.SupplierId, Vanrise.Common.Serializer.Deserialize<List<RouteOptionFilterSettings>>(Vanrise.Common.Serializer.Serialize(routeOptionFilterSettings)));
+                    }
+                }
+            }
+
+            return fixedRouteRule;
+        }
+
         public override int? GetMaxNumberOfOptions(ISaleEntityRouteRuleExecutionContext context)
         {
             return null;

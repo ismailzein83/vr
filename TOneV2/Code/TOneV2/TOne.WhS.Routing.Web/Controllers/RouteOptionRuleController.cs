@@ -58,6 +58,14 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpPost]
+        [Route("BuildLinkedRouteOptionRule")]
+        public RouteOptionRule BuildLinkedRouteOptionRule(LinkedRouteOptionRuleInput input)
+        {
+            RouteOptionRuleManager manager = new RouteOptionRuleManager();
+            return manager.BuildLinkedRouteOptionRule(input.RuleId, input.CustomerId, input.Code, input.SupplierId, input.SupplierZoneId);
+        }
+
+        [HttpPost]
         [Route("AddRule")]
         public new InsertOperationOutput<RouteOptionRuleDetail> AddRule(RouteOptionRule input)
         {
@@ -77,7 +85,18 @@ namespace TOne.WhS.Routing.Web.Controllers
         {
             return base.DeleteRule(ruleId);
         }
+    }
 
+    public class LinkedRouteOptionRuleInput
+    {
+        public int? RuleId { get; set; }
 
+        public string Code { get; set; }
+
+        public int? CustomerId { get; set; }
+
+        public int? SupplierId { get; set; }
+
+        public long? SupplierZoneId { get; set; }
     }
 }

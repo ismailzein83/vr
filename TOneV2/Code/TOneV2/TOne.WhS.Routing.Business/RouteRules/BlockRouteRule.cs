@@ -27,6 +27,11 @@ namespace TOne.WhS.Routing.Business
         public override void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options)
         {
         }
+
+        public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
+        {
+            return new BlockRouteRule();
+        }
     }
 
 

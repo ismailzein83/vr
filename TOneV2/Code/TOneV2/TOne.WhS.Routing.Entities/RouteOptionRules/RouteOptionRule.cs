@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteOptionRule : Vanrise.Rules.BaseRule, IRuleSupplierCriteria, IRuleSupplierZoneCriteria, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
+    public class RouteOptionRule : Vanrise.Rules.BaseRule, IRuleSupplierCriteria, IRuleSupplierZoneCriteria, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings
     {
         public string Name { get; set; }
 
@@ -192,5 +193,23 @@ namespace TOne.WhS.Routing.Entities
         {
             get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value } : null; }
         }
+
+        public DateTime BED
+        {
+            get { return BeginEffectiveTime; }
+        }
+
+        public DateTime? EED
+        {
+            get { return EndEffectiveTime; }
+        }
+    }
+
+    public interface ILinkedRouteOptionRuleContext
+    {
+    }
+
+    public class LinkedRouteOptionRuleContext : ILinkedRouteOptionRuleContext
+    {
     }
 }

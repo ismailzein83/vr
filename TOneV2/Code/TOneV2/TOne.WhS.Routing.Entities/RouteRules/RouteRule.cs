@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria
+    public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings
     {
         public string Name { get; set; }
 
@@ -13,7 +14,6 @@ namespace TOne.WhS.Routing.Entities
         public RouteRuleSettings Settings { get; set; }
 
         public string SourceId { get; set; }
-
 
         public CorrespondentType CorrespondentType { get { return Settings.CorrespondentType; } }
 
@@ -69,7 +69,6 @@ namespace TOne.WhS.Routing.Entities
             return context;
         }
 
-
         IEnumerable<CodeCriteria> IRuleCodeCriteria.CodeCriterias
         {
             get
@@ -115,5 +114,25 @@ namespace TOne.WhS.Routing.Entities
         {
             get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value } : null; }
         }
+
+        public DateTime BED
+        {
+            get { return BeginEffectiveTime; }
+        }
+
+        public DateTime? EED
+        {
+            get { return EndEffectiveTime; }
+        }
+    }
+
+    public interface ILinkedRouteRuleContext
+    {
+        List<RouteOption> RouteOptions { get; }
+    }
+
+    public class LinkedRouteRuleContext : ILinkedRouteRuleContext
+    {
+        public List<RouteOption> RouteOptions { get; set; }
     }
 }

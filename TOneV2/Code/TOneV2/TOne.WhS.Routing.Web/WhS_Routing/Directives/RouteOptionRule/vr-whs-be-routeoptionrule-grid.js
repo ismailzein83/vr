@@ -26,12 +26,15 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
 
     function routeOptionRuleGrid($scope, ctrl, $attrs) {
         var gridAPI;
+        var areRulesLinked = false;
+        var linkedCode = undefined;
 
         function initializeController() {
             $scope.routeOptionRules = [];
             $scope.hideCustomerColumn = true;
             $scope.hideSupplierColumn = true;
             $scope.hideIncludedCodesColumn = true;
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -41,6 +44,8 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
                         var query = payload;
+                        areRulesLinked = payload.areRulesLinked;
+                        linkedCode = payload.linkedCode;
                         if (query.loadedFromRoutingProduct) {
                             $scope.hideCustomerColumn = false;
                             $scope.hideSupplierColumn = false;
@@ -111,7 +116,11 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
             var onRouteOptionRuleUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            WhS_Routing_RouteOptionRuleService.editRouteOptionRule(routeOptionRule.Entity.RuleId, onRouteOptionRuleUpdated);
+
+            if (areRulesLinked)
+                WhS_Routing_RouteRuleService.editLinkedRouteOptionRule(routeOptionRule.Entity.RuleId, linkedCode, onRouteOptionRuleUpdated);
+            else
+                WhS_Routing_RouteOptionRuleService.editRouteOptionRule(routeOptionRule.Entity.RuleId, onRouteOptionRuleUpdated);
         }
 
         //function deleteRouteOptionRule(routeOptionRule) {

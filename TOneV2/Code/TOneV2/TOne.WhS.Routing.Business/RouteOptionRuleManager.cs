@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
+using TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups;
+using TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -22,21 +25,81 @@ namespace TOne.WhS.Routing.Business
         #endregion
 
         #region Public Methods
-        public override bool ValidateBeforeAdd(RouteOptionRule rule)
+        public IEnumerable<RouteOptionRule> GetEffectiveLinkedRouteOptionRules(int customerId, string code, int supplierId, long supplierZoneId, DateTime effectiveDate)
         {
-            Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
-            Func<RouteOptionRule, bool> filterExpression = (RouteOptionRule) => string.Compare(RouteOptionRule.Name, rule.Name, true) == 0;
-            IEnumerable<RouteOptionRule> result = cachedRules.FindAllRecords(filterExpression);
-            return result == null || result.Count() == 0 ? true : false;
+            string itemKey = string.Format("{0}@{1}@{2}@{3}", customerId, code, supplierId, supplierZoneId);
+            var linkedRules = GetCachedLinkedRouteOptionRules();
+            if (linkedRules == null)
+                return null;
+
+            List<RouteOptionRule> linkedRouteOptionRules = linkedRules.GetRecord(itemKey);
+            if (linkedRouteOptionRules == null)
+                return null;
+            return linkedRouteOptionRules.FindAllRecords(itm => itm.IsEffectiveOrFuture(effectiveDate));
         }
 
-        public override bool ValidateBeforeUpdate(RouteOptionRule rule)
+        public RouteOptionRule BuildLinkedRouteOptionRule(int? ruleId, int? customerId, string code, int? supplierId, long? supplierZoneId)
         {
-            Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
-            Func<RouteOptionRule, bool> filterExpression = (RouteOptionRule) => string.Compare(RouteOptionRule.Name, rule.Name, true) == 0 && RouteOptionRule.RuleId != rule.RuleId;
-            IEnumerable<RouteOptionRule> result = cachedRules.FindAllRecords(filterExpression);
-            return result == null || result.Count() == 0 ? true : false;
+            RouteOptionRule relatedRouteOptionRule;
+            if (ruleId.HasValue)
+                relatedRouteOptionRule = base.GetRule(ruleId.Value);
+            else
+                relatedRouteOptionRule = new RouteOptionRule() { Settings = new BlockRouteOptionRule() };
+
+            if (relatedRouteOptionRule == null)
+                throw new NullReferenceException(string.Format("relatedRouteOptionRule. RuleId: {0}", ruleId));
+
+            if (relatedRouteOptionRule.Settings == null)
+                throw new NullReferenceException(string.Format("relatedRouteOptionRule.Settings. RuleId: {0}", ruleId));
+
+            LinkedRouteOptionRuleContext context = new LinkedRouteOptionRuleContext();
+
+            RouteOptionRule linkedRouteOptionRule = new RouteOptionRule()
+            {
+                BeginEffectiveTime = DateTime.Now,
+                Settings = relatedRouteOptionRule.Settings.BuildLinkedRouteOptionRuleSettings(context),
+                Criteria = new RouteOptionRuleCriteria()
+            };
+
+            if (customerId.HasValue && customerId.Value > 0)
+                linkedRouteOptionRule.Criteria.CustomerGroupSettings = new SelectiveCustomerGroup() { CustomerIds = new List<int>() { customerId.Value } };
+
+            if (supplierId.HasValue && supplierId.Value > 0)
+            {
+                SupplierWithZones supplierWithZones = new SupplierWithZones() { SupplierId = supplierId.Value };
+
+                if (supplierZoneId.HasValue && supplierZoneId.Value > 0)
+                {
+                    supplierWithZones.SupplierZoneIds = new List<long>() { supplierZoneId.Value };
+                }
+                SelectiveSuppliersWithZonesGroup selectiveSuppliersWithZonesGroup = new SelectiveSuppliersWithZonesGroup() { SuppliersWithZones = new List<SupplierWithZones>() { supplierWithZones } };
+                linkedRouteOptionRule.Criteria.SuppliersWithZonesGroupSettings = selectiveSuppliersWithZonesGroup;
+            }
+
+            if (!string.IsNullOrEmpty(code))
+            {
+                CodeCriteria codeCriteria = new BusinessEntity.Entities.CodeCriteria() { Code = code };
+                linkedRouteOptionRule.Criteria.CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup() { Codes = new List<CodeCriteria>() { codeCriteria } };
+            }
+
+            return linkedRouteOptionRule;
         }
+
+        //public override bool ValidateBeforeAdd(RouteOptionRule rule)
+        //{
+        //    Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
+        //    Func<RouteOptionRule, bool> filterExpression = (RouteOptionRule) => string.Compare(RouteOptionRule.Name, rule.Name, true) == 0;
+        //    IEnumerable<RouteOptionRule> result = cachedRules.FindAllRecords(filterExpression);
+        //    return result == null || result.Count() == 0 ? true : false;
+        //}
+
+        //public override bool ValidateBeforeUpdate(RouteOptionRule rule)
+        //{
+        //    Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
+        //    Func<RouteOptionRule, bool> filterExpression = (RouteOptionRule) => string.Compare(RouteOptionRule.Name, rule.Name, true) == 0 && RouteOptionRule.RuleId != rule.RuleId;
+        //    IEnumerable<RouteOptionRule> result = cachedRules.FindAllRecords(filterExpression);
+        //    return result == null || result.Count() == 0 ? true : false;
+        //}
 
         public Vanrise.Entities.IDataRetrievalResult<RouteOptionRuleDetail> GetFilteredRouteOptionRules(Vanrise.Entities.DataRetrievalInput<RouteOptionRuleQuery> input)
         {
@@ -66,6 +129,9 @@ namespace TOne.WhS.Routing.Business
                     return false;
 
                 if (input.Query.EffectiveOn.HasValue && (routeOptionRule.BeginEffectiveTime > input.Query.EffectiveOn || (routeOptionRule.EndEffectiveTime.HasValue && routeOptionRule.EndEffectiveTime <= input.Query.EffectiveOn)))
+                    return false;
+
+                if (input.Query.LinkedRouteOptionRuleIds != null && !input.Query.LinkedRouteOptionRuleIds.Contains(routeOptionRule.RuleId))
                     return false;
 
                 return true;
@@ -298,13 +364,108 @@ namespace TOne.WhS.Routing.Business
             return false;
         }
 
+        private Dictionary<string, List<RouteOptionRule>> GetCachedLinkedRouteOptionRules()
+        {
+            return GetCachedOrCreate(string.Format("GetCachedLinkedRouteOptionRules"),
+                () =>
+                {
+                    Dictionary<string, List<RouteOptionRule>> linkedRouteOptionRules = new Dictionary<string, List<RouteOptionRule>>();
+                    Dictionary<int, RouteOptionRule> routeOptionRules = GetAllRules();
+
+                    if (routeOptionRules != null)
+                    {
+                        foreach (var routeOptionRule in routeOptionRules)
+                        {
+                            if (routeOptionRule.Value.Criteria != null)
+                            {
+                                RouteOptionRuleCriteria criteria = routeOptionRule.Value.Criteria;
+
+                                string code = CheckAndReturnValidCode(criteria);
+                                if (string.IsNullOrEmpty(code))
+                                    continue;
+
+                                int? customerId = CheckAndReturnValidCustomer(criteria);
+                                if (!customerId.HasValue)
+                                    continue;
+
+                                long? supplierZoneId;
+                                int? supplierId = CheckAndReturnValidSupplier(criteria, out supplierZoneId);
+                                if (!supplierId.HasValue || !supplierZoneId.HasValue)
+                                    continue;
+
+                                string itemKey = string.Format("{0}@{1}@{2}@{3}", customerId.Value, code, supplierId.Value, supplierZoneId.Value);
+                                List<RouteOptionRule> relatedRouteOptionRules = linkedRouteOptionRules.GetOrCreateItem(itemKey);
+                                relatedRouteOptionRules.Add(routeOptionRule.Value);
+                            }
+                        }
+                    }
+
+                    return linkedRouteOptionRules;
+                });
+        }
+
+        public int? CheckAndReturnValidCustomer(RouteOptionRuleCriteria criteria)
+        {
+            if (criteria.CustomerGroupSettings == null)
+                return null;
+
+            SelectiveCustomerGroup selectiveCustomerGroup = criteria.CustomerGroupSettings as SelectiveCustomerGroup;
+            if (selectiveCustomerGroup == null)
+                return null;
+
+            if (selectiveCustomerGroup.CustomerIds == null || selectiveCustomerGroup.CustomerIds.Count != 1)
+                return null;
+
+            return selectiveCustomerGroup.CustomerIds.First();
+        }
+
+        public string CheckAndReturnValidCode(RouteOptionRuleCriteria criteria)
+        {
+            if (criteria.CodeCriteriaGroupSettings == null)
+                return null;
+
+            SelectiveCodeCriteriaGroup selectiveCodeCriteriaGroup = criteria.CodeCriteriaGroupSettings as SelectiveCodeCriteriaGroup;
+            if (selectiveCodeCriteriaGroup == null)
+                return null;
+
+            if (selectiveCodeCriteriaGroup.Codes == null || selectiveCodeCriteriaGroup.Codes.Count != 1)
+                return null;
+            string code = selectiveCodeCriteriaGroup.Codes.First().Code;
+
+            if (criteria.ExcludedCodes != null && criteria.ExcludedCodes.Contains(code))
+                return null;
+
+            return code;
+        }
+
+        public int? CheckAndReturnValidSupplier(RouteOptionRuleCriteria criteria, out long? supplierZoneId)
+        {
+            supplierZoneId = null;
+
+            if (criteria.SuppliersWithZonesGroupSettings == null)
+                return null;
+
+            SelectiveSuppliersWithZonesGroup selectiveSuppliersWithZonesGroup = criteria.SuppliersWithZonesGroupSettings as SelectiveSuppliersWithZonesGroup;
+            if (selectiveSuppliersWithZonesGroup == null)
+                return null;
+
+            if (selectiveSuppliersWithZonesGroup.SuppliersWithZones == null || selectiveSuppliersWithZonesGroup.SuppliersWithZones.Count != 1)
+                return null;
+
+            SupplierWithZones supplierWithZones = selectiveSuppliersWithZonesGroup.SuppliersWithZones.First();
+            if (supplierWithZones.SupplierZoneIds == null || supplierWithZones.SupplierZoneIds.Count != 1)
+                return null;
+
+            supplierZoneId = supplierWithZones.SupplierZoneIds.First();
+            return supplierWithZones.SupplierId;
+        }
         #endregion
     }
 
     public class RouteOptionRuleCachingExpirationChecker : RuleCachingExpirationChecker
     {
         DateTime? _settingsCacheLastCheck;
-         
+
         public override bool IsRuleDependenciesCacheExpired()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _settingsCacheLastCheck);

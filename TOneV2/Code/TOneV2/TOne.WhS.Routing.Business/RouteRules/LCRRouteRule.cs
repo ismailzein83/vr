@@ -25,6 +25,29 @@ namespace TOne.WhS.Routing.Business
 
 
         #region SaleEntity Execution
+        public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
+        {
+            SpecialRequestRouteRule specialRequestRouteRule = new SpecialRequestRouteRule();
+            if (context.RouteOptions != null && context.RouteOptions.Count > 0)
+            {
+                specialRequestRouteRule.Options = new Dictionary<int, SpecialRequestRouteOptionSettings>();
+                int counter = 0;
+                foreach (RouteOption routeOption in context.RouteOptions)
+                {
+                    counter++;
+                    SpecialRequestRouteOptionSettings optionSettings = new SpecialRequestRouteOptionSettings()
+                    {
+                        ForceOption = false,
+                        NumberOfTries = 1,
+                        Percentage = routeOption.Percentage,
+                        Position = counter,
+                        SupplierId = routeOption.SupplierId
+                    };
+                    specialRequestRouteRule.Options.Add(routeOption.SupplierId, optionSettings);
+                }
+            }
+            return specialRequestRouteRule;
+        }
 
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {

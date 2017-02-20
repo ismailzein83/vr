@@ -166,7 +166,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     str.Append("|");
 
                 string supplierServiceIds = op.ExactSupplierServiceIds != null ? string.Join(",", op.ExactSupplierServiceIds) : null;
-                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}~{7}", op.SupplierId, op.SupplierCode, op.ExecutedRuleId, op.Percentage, op.SupplierRate, op.SupplierZoneId, supplierServiceIds, op.IsBlocked);
+                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}~{7}~{8}", op.SupplierId, op.SupplierCode, op.ExecutedRuleId, op.Percentage, op.SupplierRate, op.SupplierZoneId, supplierServiceIds, op.IsBlocked, op.NumberOfTries);
             }
             return str.ToString();
         }
@@ -196,6 +196,9 @@ namespace TOne.WhS.Routing.Data.SQL
                 bool isBlocked;
                 if (bool.TryParse(parts[7], out isBlocked))
                     option.IsBlocked = isBlocked;
+                int numberOfTries;
+                if (int.TryParse(parts[8], out numberOfTries))
+                    option.NumberOfTries = numberOfTries;
                 options.Add(option);
             }
 

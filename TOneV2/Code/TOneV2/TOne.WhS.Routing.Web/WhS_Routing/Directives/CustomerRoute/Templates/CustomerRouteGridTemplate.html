@@ -4,7 +4,8 @@
                  pagingtype="'PagingOnScroll'"
                  on-ready="onGridReady"
                  menuactions="gridMenuActions"
-                 getrowstyle="getRowStyle">
+                 getrowstyle="getRowStyle"
+                 idfield="CustomerRouteDetailId">
 
         <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" fixedwidth="100"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" disablesorting fixedwidth="200"></vr-datagridcolumn>
@@ -14,7 +15,7 @@
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Blocked'" field="'Entity.IsBlocked'" fixedwidth="50"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Route Options'"  disablesorting>
+        <vr-datagridcolumn headertext="'Route Options'" disablesorting>
             <div class="responsive-container" style="white-space: normal;">
                 <span ng-repeat="details in dataItem.RouteOptionDetails" ng-class="{'text-danger bold-label':details.IsBlocked}"
                       style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px;">

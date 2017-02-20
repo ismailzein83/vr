@@ -50,6 +50,14 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpPost]
+        [Route("BuildLinkedRouteRule")]
+        public RouteRule BuildLinkedRouteRule(LinkedRouteRuleInput input)
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            return manager.BuildLinkedRouteRule(input.RuleId, input.CustomerId, input.Code, input.RouteOptions);
+        }
+
+        [HttpPost]
         [Route("AddRule")]
         public new InsertOperationOutput<RouteRuleDetail> AddRule(RouteRule input)
         {
@@ -69,5 +77,16 @@ namespace TOne.WhS.Routing.Web.Controllers
         {
             return base.DeleteRule(ruleId);
         }
+    }
+
+    public class LinkedRouteRuleInput
+    {
+        public int RuleId { get; set; }
+
+        public string Code { get; set; }
+
+        public int? CustomerId { get; set; }
+
+        public List<RouteOption> RouteOptions { get; set; }
     }
 }

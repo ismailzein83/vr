@@ -58,6 +58,10 @@ namespace TOne.WhS.Routing.Business
 
         private CustomerRouteDetail CustomerRouteDetailMapper(CustomerRoute customerRoute)
         {
+            DateTime now = DateTime.Now;
+            RouteRuleManager routeRuleManager = new RouteRuleManager();
+            var linkedRouteRules = routeRuleManager.GetEffectiveLinkedRouteRules(customerRoute.CustomerId, customerRoute.Code, now);
+            
             List<CustomerRouteOptionDetail> optionDetails = this.GetRouteOptionDetails(customerRoute);
 
             return new CustomerRouteDetail()
@@ -65,7 +69,8 @@ namespace TOne.WhS.Routing.Business
                 Entity = customerRoute,
                 CustomerName = _carrierAccountManager.GetCarrierAccountName(customerRoute.CustomerId),
                 ZoneName = _saleZoneManager.GetSaleZoneName(customerRoute.SaleZoneId),
-                RouteOptionDetails = optionDetails
+                RouteOptionDetails = optionDetails,
+                LinkedRouteRuleIds = linkedRouteRules != null ? linkedRouteRules.Select(itm => itm.RuleId).ToList() : null
             };
         }
 
@@ -74,12 +79,17 @@ namespace TOne.WhS.Routing.Business
             if (customerRoute.Options == null)
                 return null;
 
+            DateTime now = DateTime.Now;
+            RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
+
             List<CustomerRouteOptionDetail> optionDetails = new List<CustomerRouteOptionDetail>();
 
             foreach (RouteOption item in customerRoute.Options)
             {
+                var linkedRouteOptionRules = routeOptionRuleManager.GetEffectiveLinkedRouteOptionRules(customerRoute.CustomerId, customerRoute.Code, item.SupplierId, item.SupplierZoneId, now);
                 optionDetails.Add(new CustomerRouteOptionDetail()
                 {
+                    Entity = item,
                     IsBlocked = item.IsBlocked,
                     Percentage = item.Percentage,
                     SupplierCode = item.SupplierCode,
@@ -87,7 +97,8 @@ namespace TOne.WhS.Routing.Business
                     SupplierRate = item.SupplierRate,
                     SupplierZoneName = _supplierZoneManager.GetSupplierZoneName(item.SupplierZoneId),
                     ExactSupplierServiceIds = item.ExactSupplierServiceIds.ToList(),
-                    ExecutedRuleId = item.ExecutedRuleId
+                    ExecutedRuleId = item.ExecutedRuleId,
+                    LinkedRouteOptionRuleIds = linkedRouteOptionRules != null ? linkedRouteOptionRules.Select(itm => itm.RuleId).ToList() : null
                 });
             }
 

@@ -26,11 +26,14 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
 
     function routeRuleGrid($scope, ctrl, $attrs) {
         var gridAPI;
+        var areRulesLinked = false;
+        var linkedCode = undefined;
 
         function initializeController() {
             $scope.routeRules = [];
             $scope.hideCustomerColumn = true;
             $scope.hideIncludedCodesColumn = true;
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -40,6 +43,8 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
                         var query = payload;
+                        areRulesLinked = payload.areRulesLinked;
+                        linkedCode = payload.linkedCode;
                         if (query.loadedFromRoutingProduct) {
                             $scope.hideCustomerColumn = false;
                             $scope.hideIncludedCodesColumn = false;
@@ -109,7 +114,10 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
             var onRouteRuleUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            WhS_Routing_RouteRuleService.editRouteRule(routeRule.Entity.RuleId, onRouteRuleUpdated);
+            if (areRulesLinked)
+                WhS_Routing_RouteRuleService.editLinkedRouteRule(routeRule.Entity.RuleId, linkedCode, onRouteRuleUpdated);
+            else
+                WhS_Routing_RouteRuleService.editRouteRule(routeRule.Entity.RuleId, onRouteRuleUpdated);
         }
 
         function deleteRouteRule(routeRule) {

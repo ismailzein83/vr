@@ -20,6 +20,8 @@ namespace TOne.WhS.Routing.Entities
         }
 
         public virtual void RefreshState(IRefreshRuleStateContext context) { }
+
+        public abstract RouteOptionRuleSettings BuildLinkedRouteOptionRuleSettings(ILinkedRouteOptionRuleContext context);
     }
 
     public abstract class RouteOptionRuleSettingsEditorRuntime

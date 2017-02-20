@@ -48,5 +48,7 @@ namespace TOne.WhS.Routing.Entities
         {
             return context.RouteOptions;
         }
+
+        public abstract RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context);
     }
 }

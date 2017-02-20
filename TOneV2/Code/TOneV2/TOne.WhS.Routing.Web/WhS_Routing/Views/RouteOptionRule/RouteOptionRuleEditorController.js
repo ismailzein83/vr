@@ -7,6 +7,9 @@
 
     function routeOptionRuleEditorController($scope, WhS_Routing_RouteOptionRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
         UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum, WhS_Routing_RouteRuleAPIService) {
+        var isLinkedRouteOptionRule;
+        var linkedRouteOptionRuleInput;
+        var linkedCode;
 
         var isEditMode;
 
@@ -47,12 +50,16 @@
                 routeRuleId = parameters.routeRuleId;
                 routingProductId = parameters.routingProductId;
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
+                linkedRouteOptionRuleInput = parameters.linkedRouteOptionRuleInput;
+                isLinkedRouteOptionRule = parameters.isLinkedRouteRule;
+                linkedCode = parameters.linkedCode;
             }
-            isEditMode = (routeRuleId != undefined);
+            isEditMode = routeRuleId != undefined && (linkedRouteOptionRuleInput == undefined);
         }
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.disableCriteria = isLinkedRouteOptionRule;
             $scope.scopeModel.showCriteriaSection = false;
             $scope.scopeModel.showSettingsSection = false;
             $scope.scopeModel.beginEffectiveDate = new Date();
@@ -116,6 +123,21 @@
                     $scope.scopeModel.showSaleZoneSection = false;
                 }
             };
+
+            $scope.scopeModel.validateExcludedCodes = function () {
+                if (isLinkedRouteOptionRule) {
+                    if ($scope.scopeModel.excludedCodes != null && $scope.scopeModel.excludedCodes.length > 0) {
+                        for (var x = 0; x < $scope.scopeModel.excludedCodes.length; x++) {
+                            var currentExcludedCode = $scope.scopeModel.excludedCodes[x];
+                            if (linkedCode == currentExcludedCode) {
+                                return linkedCode + ' cannot be excluded.';
+                            }
+                        }
+                    }
+                }
+                return null;
+            };
+
             $scope.scopeModel.onRouteOptionRuleSettingsTypeSelectionChanged = function () {
 
                 var _selectedItem = routeOptionRuleSettingsTypeSelectorAPI.getSelectedIds();
@@ -238,6 +260,18 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isLinkedRouteOptionRule) {
+                $scope.title = "New Route Option Rule";
+                buildLinkedRouteOptionRule().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            routeRuleEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
             else {
                 $scope.title = "New Route Option Rule";
                 loadAllControls();
@@ -251,6 +285,12 @@
 
                 $scope.scopeModel.routeOptionRuleName = routeOptionRuleEntity != null ? routeOptionRuleEntity.Name : '';
                 routingProductId = routeOptionRuleEntity.Criteria != null ? routeOptionRuleEntity.Criteria.RoutingProductId : undefined;
+            });
+        }
+
+        function buildLinkedRouteOptionRule() {
+            return WhS_Routing_RouteOptionRuleAPIService.BuildLinkedRouteOptionRule(linkedRouteOptionRuleInput).then(function (routeOptionRule) {
+                routeOptionRuleEntity = routeOptionRule;
             });
         }
 

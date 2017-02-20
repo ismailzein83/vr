@@ -48,7 +48,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                     };
 
                     return directiveAPI;
-                }
+                };
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -79,20 +79,18 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
             };
 
             $scope.getRowStyle = function (dataItem) {
-
                 var rowStyle;
 
                 if (dataItem.Entity.IsBlocked)
                     rowStyle = { CssClass: "bg-danger" };
 
-                return rowStyle
+                return rowStyle;
             };
 
             defineMenuActions();
-        }
+        };
 
-        function extendCutomerRouteObject(customerRoute)
-        {
+        function extendCutomerRouteObject(customerRoute) {
             customerRoute.cutomerRouteLoadDeferred = UtilsService.createPromiseDeferred();
             customerRoute.onServiceViewerReady = function (api) {
                 customerRoute.serviceViewerAPI = api;
@@ -100,32 +98,80 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                 var serviceViewerPayload;
                 if (customerRoute.Entity != undefined) {
                     serviceViewerPayload = {
-                        selectedIds: customerRoute.Entity.SaleZoneServiceIds 
+                        selectedIds: customerRoute.Entity.SaleZoneServiceIds
                     };
                 }
 
                 VRUIUtilsService.callDirectiveLoad(customerRoute.serviceViewerAPI, serviceViewerPayload, customerRoute.cutomerRouteLoadDeferred);
             };
-        }
+        };
 
         function defineMenuActions() {
             $scope.gridMenuActions = function (dataItem) {
                 var menu = [];
-                if (dataItem.Entity.ExecutedRuleId!=undefined)
+                if (dataItem.Entity.ExecutedRuleId != undefined) {
                     menu.push({
                         name: "Matching Rule",
-                        clicked: openRouteRuleEditor,
+                        clicked: viewRouteRuleEditor,
                     });
+                }
+                if (dataItem.LinkedRouteRuleIds != null && dataItem.LinkedRouteRuleIds.length > 0) {
+                    if (dataItem.LinkedRouteRuleIds.length == 1) {
+                        menu.push({
+                            name: "Edit Rule",
+                            clicked: editLinkedRouteRule,
+                        });
+                    }
+                    else {
+                        menu.push({
+                            name: "Linked Rules",
+                            clicked: viewLinkedRouteRules,
+                        });
+                    }
+                }
+                else {
+                    menu.push({
+                        name: "Add Rule",
+                        clicked: addRouteRuleEditor,
+                    });
+                }
                 return menu;
             }
-             
-        }
-        function openRouteRuleEditor(dataItem) {
-            WhS_Routing_RouteRuleService.viewRouteRule(dataItem.Entity.ExecutedRuleId);
-        }
+        };
+        function viewLinkedRouteRules(dataItem) {
+            WhS_Routing_RouteRuleService.viewLinkedRouteRules(dataItem.LinkedRouteRuleIds, dataItem.Entity.Code);
+        };
 
-        function initDrillDownDefinitions()
-        {
+        function editLinkedRouteRule(dataItem) {
+            WhS_Routing_RouteRuleService.editLinkedRouteRule(dataItem.LinkedRouteRuleIds[0], dataItem.Entity.Code);
+        };
+
+        function viewRouteRuleEditor(dataItem) {
+            WhS_Routing_RouteRuleService.viewRouteRule(dataItem.Entity.ExecutedRuleId);
+        };
+
+        function addRouteRuleEditor(dataItem) {
+            var onRouteRuleAdded = function (addedItem) {
+                var newDataItem =
+                    {
+                        CustomerRouteDetailId: dataItem.CustomerRouteDetailId,
+                        Entity: dataItem.Entity,
+                        CustomerName: dataItem.CustomerName,
+                        ZoneName: dataItem.ZoneName,
+                        RouteOptionDetails: dataItem.RouteOptionDetails,
+                        LinkedRouteRuleIds: []
+                    };
+                newDataItem.LinkedRouteRuleIds.push(addedItem.Entity.RuleId);
+                extendCutomerRouteObject(newDataItem);
+                gridDrillDownTabsObj.setDrillDownExtensionObject(newDataItem);
+                gridAPI.itemUpdated(newDataItem);
+            };
+
+            var linkedRouteRuleInput = { RuleId: dataItem.Entity.ExecutedRuleId, RouteOptions: dataItem.Entity.Options, CustomerId: dataItem.Entity.CustomerId, Code: dataItem.Entity.Code };
+            WhS_Routing_RouteRuleService.addLinkedRouteRule(linkedRouteRuleInput,dataItem.Entity.Code, onRouteRuleAdded);
+        };
+
+        function initDrillDownDefinitions() {
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Details";
@@ -138,13 +184,11 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
 
                 return directiveAPI.load(payload);
             };
-
             return [drillDownDefinition];
-        }
+        };
 
         this.initializeController = initializeController;
     }
 
     return directiveDefinitionObject;
-
 }]);

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Routing.Business.RouteRules.Filters;
-using TOne.WhS.Routing.Business.RouteRules.Orders;
+using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
@@ -13,8 +12,6 @@ namespace TOne.WhS.Routing.Business
     {
         #region Central Execution
 
-        //private CorrespondentType? _correspondentType;
-
         public override bool UseOrderedExecution
         {
             get
@@ -22,69 +19,36 @@ namespace TOne.WhS.Routing.Business
                 return true;
             }
         }
-
-        //public override CorrespondentType CorrespondentType
-        //{
-        //    get
-        //    {
-        //        if (!_correspondentType.HasValue)
-        //        {
-        //            if (AreOptionsExist() && !AreOptionsOrdered())
-        //                _correspondentType = CorrespondentType.Override;
-
-        //            else if (!AreOptionsExist() && AreOptionsOnlyOrderByType<OptionOrderByRate>() && AreOptionsFilteredByTypes<RateOptionFilter, ServiceOptionFilter>())
-        //                _correspondentType = CorrespondentType.LCR;
-
-        //            else _correspondentType = CorrespondentType.Other;
-        //        }
-        //        return _correspondentType.Value;
-        //    }
-        //}
-
-        //private bool AreOptionsExist()
-        //{
-        //    if (OptionsSettingsGroup != null)
-        //        return true;
-        //    return false;
-        //}
-
-        //private bool AreOptionsOrdered()
-        //{
-        //    if (OptionOrderSettings != null && OptionOrderSettings.Count > 0)
-        //        return true;
-        //    return false;
-        //}
-
-        //private bool AreOptionsOnlyOrderByType<T>()
-        //{
-        //    if (OptionOrderSettings != null && OptionOrderSettings.Count == 1 && OptionOrderSettings.First() is T)
-        //        return true;
-        //    return false;
-        //}
-
-        //private bool AreOptionsFilteredByTypes<T, Q>()
-        //{
-        //    bool isFilteredByT = false;
-        //    bool isFilteredByQ = false;
-        //    if (OptionFilters != null && OptionFilters.Count >= 2)
-        //    {
-        //        foreach (RouteOptionFilterSettings item in OptionFilters)
-        //        {
-        //            if (item is T)
-        //                isFilteredByT = true;
-        //            if (item is Q)
-        //                isFilteredByQ = true;
-        //            if (isFilteredByT && isFilteredByQ)
-        //                return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
         #endregion
 
 
         #region SaleEntity Execution
+        public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
+        {
+            RegularRouteRule regularRouteRule = new RegularRouteRule()
+            {
+                OrderType = this.OrderType,
+                OptionPercentageSettings = Vanrise.Common.Utilities.CloneObject<RouteOptionPercentageSettings>(this.OptionPercentageSettings),
+                OptionOrderSettings = Vanrise.Common.Utilities.CloneObject<List<RouteOptionOrderSettings>>(this.OptionOrderSettings),
+                OptionFilters = Vanrise.Common.Utilities.CloneObject<List<RouteOptionFilterSettings>>(this.OptionFilters),
+            };
+
+            if (context.RouteOptions != null && context.RouteOptions.Count > 0)
+            {
+                List<RouteOptionSettings> options = new List<RouteOptionSettings>();
+                foreach (RouteOption routeOption in context.RouteOptions)
+                {
+                    RouteOptionSettings optionSettings = new RouteOptionSettings() 
+                    {
+                        SupplierId = routeOption.SupplierId
+                    };
+                    options.Add(optionSettings);
+                }
+                regularRouteRule.OptionsSettingsGroup = new SelectiveOptions() { Options = options };
+            }
+
+            return regularRouteRule;
+        }
 
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
@@ -113,28 +77,6 @@ namespace TOne.WhS.Routing.Business
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             throw new NotSupportedException("ExecuteForSaleEntity is not supported for RegularRouteRule.");
-            //ConfigManager configManager = new ConfigManager();
-            //bool customerRouteAddBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
-
-            //var options = CreateOptions(context, target);
-            //if (options != null)
-            //{
-            //    options = ApplyOptionsOrder(options);
-            //    int optionsAdded = 0;
-            //    foreach (RouteOptionRuleTarget option in options)
-            //    {
-            //        if (!FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.CustomerServiceIdHashSet, target, option))
-            //        {
-            //            if (context.TryAddOption(option))
-            //            {
-            //                optionsAdded++;
-            //                if (context.NumberOfOptions.HasValue && context.NumberOfOptions.Value == optionsAdded)
-            //                    break;
-            //            }
-            //        }
-            //    }
-            //    ApplyOptionsPercentage(context.GetOptions().FindAllRecords(itm => !itm.BlockOption && !itm.FilterOption));
-            //}
         }
 
         #endregion

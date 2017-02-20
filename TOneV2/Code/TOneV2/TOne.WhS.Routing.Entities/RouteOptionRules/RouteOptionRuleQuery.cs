@@ -21,5 +21,7 @@ namespace TOne.WhS.Routing.Entities
         public DateTime? EffectiveOn { get; set; }
         
         public List<Guid> RouteOptionRuleSettingsConfigIds { get; set; }
+
+        public List<int> LinkedRouteOptionRuleIds { get; set; }
     }
 }

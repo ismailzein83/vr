@@ -5,7 +5,8 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onReady: '='
+                onReady: '=',
+                disableadding: '='
             },
             controller: function ($scope, $element, $attrs) {
 

@@ -29,7 +29,8 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
         function customerRouteDetailsCtor(ctrl, $scope) {
             this.initializeController = initializeController;
-
+            var customerRoute;
+            var gridAPI;
             function initializeController() {
                 $scope.routeOptionDetails = [];
 
@@ -46,20 +47,75 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
                     return rowStyle
                 };
-
+                $scope.onGridReady = function (api) {
+                    gridAPI = api;
+                }
                 $scope.getMenuActions = function (dataItem) {
                     var menuActions = [];
 
                     if (dataItem.ExecutedRuleId) {
                         menuActions.push({
-                            name: "Option Rule",
-                            clicked: openRouteOptionRuleEditor,
+                            name: "Matching Rule",
+                            clicked: viewRouteOptionRuleEditor,
                         })
                     }
 
-                    function openRouteOptionRuleEditor(dataItem) {
-                        WhS_Routing_RouteOptionRuleService.editRouteOptionRule(dataItem.ExecutedRuleId);
+                    if (dataItem.LinkedRouteOptionRuleIds != null && dataItem.LinkedRouteOptionRuleIds.length > 0) {
+                        if (dataItem.LinkedRouteOptionRuleIds.length == 1) {
+                            menuActions.push({
+                                name: "Edit Rule",
+                                clicked: editLinkedRouteOptionRule,
+                            });
+                        }
+                        else {
+                            menuActions.push({
+                                name: "Linked Rules",
+                                clicked: viewLinkedRouteOptionRules,
+                            });
+                        }
                     }
+                    else {
+                        menuActions.push({
+                            name: "Add Rule",
+                            clicked: addRouteOptionRuleEditor,
+                        });
+                    }
+
+                    function viewLinkedRouteOptionRules(dataItem) {
+                        WhS_Routing_RouteOptionRuleService.viewLinkedRouteOptionRules(dataItem.LinkedRouteOptionRuleIds, customerRoute.Entity.Code);
+                    };
+
+                    function editLinkedRouteOptionRule(dataItem) {
+                        WhS_Routing_RouteOptionRuleService.editLinkedRouteOptionRule(dataItem.LinkedRouteOptionRuleIds[0], customerRoute.Entity.Code);
+                    };
+
+                    function viewRouteOptionRuleEditor(dataItem) {
+                        WhS_Routing_RouteOptionRuleService.viewRouteOptionRule(dataItem.ExecutedRuleId);
+                    }
+
+                    function addRouteOptionRuleEditor(dataItem) {
+                        var onRouteOptionRuleAdded = function (addedItem) {
+                            var newDataItem =
+                                {
+                                    CustomerRouteOptionDetailId: dataItem.CustomerRouteOptionDetailId,
+                                    RouteOption: dataItem.RouteOption,
+                                    SupplierName: dataItem.SupplierName,
+                                    SupplierCode: dataItem.SupplierCode,
+                                    SupplierZoneName: dataItem.SupplierZoneName,
+                                    SupplierRate: dataItem.SupplierRate,
+                                    Percentage: dataItem.Percentage,
+                                    IsBlocked: dataItem.IsBlocked,
+                                    ExactSupplierServiceIds: dataItem.ExactSupplierServiceIds,
+                                    ExecutedRuleId: dataItem.ExecutedRuleId,
+                                    LinkedRouteOptionRuleIds: []
+                                };
+                            newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
+                            gridAPI.itemUpdated(newDataItem);
+                        };
+
+                        var linkedRouteOptionRuleInput = { RuleId: dataItem.Entity.ExecutedRuleId, CustomerId: customerRoute.Entity.CustomerId, Code: customerRoute.Entity.Code, SupplierId: dataItem.Entity.SupplierId, SupplierZoneId: dataItem.Entity.SupplierZoneId };
+                        WhS_Routing_RouteOptionRuleService.addLinkedRouteOptionRule(linkedRouteOptionRuleInput, customerRoute.Entity.Code, onRouteOptionRuleAdded);
+                    };
 
                     return menuActions;
                 };
@@ -70,8 +126,6 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                 var api = {};
 
                 api.load = function (payload) {
-
-                    var customerRoute;
                     var _routeOptionDetailServiceViewerPromises = [];
 
                     if (payload != undefined)

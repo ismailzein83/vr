@@ -169,7 +169,7 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.LCRRouteRule, TOne.WhS.Routing.Business",
+                        $type: "TOne.WhS.Routing.Business.SpecialRequestRouteRule, TOne.WhS.Routing.Business",
                         Options: getOptions()
                     };
 

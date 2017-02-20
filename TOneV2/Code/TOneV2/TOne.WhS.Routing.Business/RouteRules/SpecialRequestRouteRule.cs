@@ -34,10 +34,50 @@ namespace TOne.WhS.Routing.Business
 
 
         #region SaleEntity Execution
+        public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
+        {
+            SpecialRequestRouteRule specialRequestRouteRule = new SpecialRequestRouteRule();
+            if (context.RouteOptions != null && context.RouteOptions.Count > 0)
+            {
+                specialRequestRouteRule.Options = new Dictionary<int, SpecialRequestRouteOptionSettings>();
+                int counter = 0;
+                foreach (RouteOption routeOption in context.RouteOptions)
+                {
+                    counter++;
+                    SpecialRequestRouteOptionSettings optionSettings;
+                    SpecialRequestRouteOptionSettings relatedOption;
+                    if (Options != null && Options.TryGetValue(routeOption.SupplierId, out relatedOption))
+                    {
+                        optionSettings = new SpecialRequestRouteOptionSettings()
+                        {
+                            ForceOption = relatedOption.ForceOption,
+                            NumberOfTries = relatedOption.NumberOfTries,
+                            Percentage = routeOption.Percentage,
+                            Position = counter,
+                            SupplierId = routeOption.SupplierId
+                        };
+                    }
+                    else
+                    {
+                        optionSettings = new SpecialRequestRouteOptionSettings()
+                        {
+                            ForceOption = false,
+                            NumberOfTries = 1,
+                            Percentage = routeOption.Percentage,
+                            Position = counter,
+                            SupplierId = routeOption.SupplierId
+                        };
+                    }
+                    specialRequestRouteRule.Options.Add(routeOption.SupplierId, optionSettings);
+                }
+            }
+            return specialRequestRouteRule;
+        }
+
         public override int? GetMaxNumberOfOptions(ISaleEntityRouteRuleExecutionContext context)
         {
             int? numberOfOptions = base.GetMaxNumberOfOptions(context);
-            if(!numberOfOptions.HasValue)
+            if (!numberOfOptions.HasValue)
                 throw new NullReferenceException("numberOfOptions must have a value for Speical Request Route Rule");
 
             return Options != null ? Math.Max(numberOfOptions.Value, Options.Count) : numberOfOptions.Value;

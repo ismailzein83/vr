@@ -35,7 +35,7 @@ namespace TOne.WhS.Routing.Business
 
             if (MarketPrices.TryGetValue(context.SaleZoneServiceIds, out tempMarketPrice))
             {
-                if(target.SupplierRate < tempMarketPrice.ConvertedMinimum || target.SupplierRate > tempMarketPrice.ConvertedMaximum)
+                if (target.SupplierRate < tempMarketPrice.ConvertedMinimum || target.SupplierRate > tempMarketPrice.ConvertedMaximum)
                     target.FilterOption = true;
             }
         }
@@ -76,6 +76,15 @@ namespace TOne.WhS.Routing.Business
                 currentItem.ConvertedMinimum = currentItem.Minimum * exchangeRate;
                 currentItem.ConvertedMaximum = currentItem.Maximum * exchangeRate;
             }
+        }
+
+        public override RouteOptionRuleSettings BuildLinkedRouteOptionRuleSettings(ILinkedRouteOptionRuleContext context)
+        {
+            return new MarketPriceRouteOptionRule()
+            {
+                CurrencyId = this.CurrencyId,
+                MarketPrices = Vanrise.Common.Utilities.CloneObject<Dictionary<string, MarketPrice>>(this.MarketPrices)
+            };
         }
         #endregion
     }

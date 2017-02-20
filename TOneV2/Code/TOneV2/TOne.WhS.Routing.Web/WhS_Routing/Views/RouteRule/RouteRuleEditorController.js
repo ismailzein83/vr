@@ -7,7 +7,9 @@
 
     function routeRuleEditorController($scope, WhS_Routing_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
         UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum) {
-
+        var isLinkedRouteRule;
+        var linkedCode;
+        var linkedRouteRuleInput;
         var isEditMode;
 
         var routeRuleId;
@@ -44,12 +46,16 @@
                 routeRuleId = parameters.routeRuleId;
                 routingProductId = parameters.routingProductId;
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
+                linkedRouteRuleInput = parameters.linkedRouteRuleInput;
+                isLinkedRouteRule = parameters.isLinkedRouteRule;
+                linkedCode = parameters.linkedCode;
             }
-            isEditMode = (routeRuleId != undefined);
+            isEditMode = routeRuleId != undefined && (linkedRouteRuleInput == undefined);
         }
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.disableCriteria = isLinkedRouteRule;
             $scope.scopeModel.showCriteriaSection = false;
             $scope.scopeModel.showSettingsSection = false;
             $scope.scopeModel.beginEffectiveDate = new Date();
@@ -110,6 +116,21 @@
                     $scope.scopeModel.showSaleZoneSection = false;
                 }
             };
+
+            $scope.scopeModel.validateExcludedCodes = function () {
+                if (isLinkedRouteRule) {
+                    if ($scope.scopeModel.excludedCodes != null && $scope.scopeModel.excludedCodes.length > 0) {
+                        for (var x = 0; x < $scope.scopeModel.excludedCodes.length; x++) {
+                            var currentExcludedCode = $scope.scopeModel.excludedCodes[x];
+                            if (linkedCode == currentExcludedCode) {
+                                return linkedCode + ' cannot be excluded.';
+                            }
+                        }
+                    }
+                }
+                return null;
+            };
+
             $scope.scopeModel.onRouteRuleSettingsTypeSelectionChanged = function () {
 
                 var _selectedItem = routeRuleSettingsTypeSelectorAPI.getSelectedIds();
@@ -224,6 +245,18 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isLinkedRouteRule) {
+                $scope.title = "New Route Rule";
+                buildLinkedRouteRule().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            routeRuleEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
             else {
                 $scope.title = "New Route Rule";
                 loadAllControls();
@@ -237,6 +270,13 @@
                 routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
             });
         }
+
+        function buildLinkedRouteRule() {
+            return WhS_Routing_RouteRuleAPIService.BuildLinkedRouteRule(linkedRouteRuleInput).then(function (routeRule) {
+                routeRuleEntity = routeRule;
+            });
+        }
+
         function getProductRoute() {
             if (routingProductId != undefined)
                 return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (response) {
@@ -267,6 +307,7 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
+
         function loadData() {
             var loadDataPromiseDeferred = UtilsService.createPromiseDeferred();
 

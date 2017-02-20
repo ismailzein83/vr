@@ -1,0 +1,18 @@
+﻿<div vr-modalcontent ng-controller="WhS_Routing_LinkedRouteRuleEditorController" width="'75%'">
+    <vr-modalbody>
+        <vr-form name="formRouteRuleEditor">
+            <vr-row>
+                <vr-columns colnum="12" simplecol>
+                    <vr-whs-routing-routerule-grid on-ready="scopeModel.onGridReady"></vr-whs-routing-routerule-grid>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
