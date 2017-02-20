@@ -5,9 +5,12 @@
     [CurrencyID]        INT             NULL,
     [NormalRate]        DECIMAL (20, 8) NOT NULL,
     [RateTypeID]        INT             NULL,
+    [Change]            TINYINT         NULL,
     [BED]               DATETIME        NOT NULL,
     [EED]               DATETIME        NULL
 );
+
+
 
 
 

@@ -28,8 +28,8 @@ BEGIN
 	Select scnew.ID, scnew.Code, scnew.ZoneID, scnew.CodeGroupID, scnew.BED, scnew.EED
 	from TOneWhS_BE.SPL_SupplierCode_New scnew WITH(NOLOCK) Where scnew.ProcessInstanceID = @ProcessInstanceId
 	
-	Insert into TOnewhs_BE.SupplierRate (ID, PriceListID, ZoneID, CurrencyID, Rate, RateTypeID,BED, EED)
-	Select srnew.ID, @PriceListId, srnew.ZoneID, srnew.CurrencyID, srnew.NormalRate, srnew.RateTypeID, srnew.BED, srnew.EED
+	Insert into TOnewhs_BE.SupplierRate (ID, PriceListID, ZoneID, CurrencyID, Rate, RateTypeID,Change,BED, EED)
+	Select srnew.ID, @PriceListId, srnew.ZoneID, srnew.CurrencyID, srnew.NormalRate, srnew.RateTypeID,srnew.Change, srnew.BED, srnew.EED
 	from TOneWhS_BE.SPL_SupplierRate_New srnew WITH(NOLOCK) Where srnew.ProcessInstanceID = @ProcessInstanceId
 
 	Insert into TOnewhs_BE.SupplierZoneService(ID, PriceListID,ZoneID, SupplierID,ReceivedServicesFlag,EffectiveServiceFlag,BED,EED)

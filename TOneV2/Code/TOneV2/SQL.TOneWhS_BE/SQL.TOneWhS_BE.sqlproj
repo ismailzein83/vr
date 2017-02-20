@@ -102,6 +102,9 @@
     <Folder Include="TOneWhS_Deal\" />
     <Folder Include="TOneWhS_Deal\Tables\" />
     <Folder Include="TOneWhS_Deal\Stored Procedures\" />
+    <Folder Include="TOneWhS_AccBalance\" />
+    <Folder Include="TOneWhS_AccBalance\Tables\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -430,5 +433,14 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfterByOwnerAndZones.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistRateChange.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistCodeChange.sql" />
+    <Build Include="TOneWhS_AccBalance\Tables\CarrierFinancialAccount.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetZoneHistory.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetPending.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistRateChange_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistCodeChange_GetFiltered.sql" />
+    <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
+    <Build Include="Security\TOneWhS_AccBalance.sql" />
   </ItemGroup>
 </Project>
