@@ -57,8 +57,6 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                         }
                     }
 
-                    $scope.scopeModel.childFilterFQTN = beParentChildRelationDefinitionSettings.ChildFilterFQTN;
-
                     //Loading ParentBEDefinition selector
                     var parentBEDefinitionSelectorLoadPromise = getParentBEDefinitionSelectorLoadPromise();
                     promises.push(parentBEDefinitionSelectorLoadPromise);
@@ -66,6 +64,9 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                     //Loading ChildBEDefinition selector
                     var childBEDefinitionSelectorLoadPromise = getChildBEDefinitionSelectorLoadPromise();
                     promises.push(childBEDefinitionSelectorLoadPromise);
+
+                    //Loading ChildFilterFQTN
+                    $scope.scopeModel.childFilterFQTN = beParentChildRelationDefinitionSettings ? beParentChildRelationDefinitionSettings.ChildFilterFQTN : undefined;
 
 
                     function getParentBEDefinitionSelectorLoadPromise() {
