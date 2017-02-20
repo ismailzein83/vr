@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountStatement\RetailAccountUser.cs" />
+    <Compile Include="Invoice\InvoiceQueryContextHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRRestAPIRecordQueryInterceptor\RetailAccountVRRestAPIRecordQueryInterceptor.cs" />
   </ItemGroup>
