@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.SQLDataStorage
         public string TableSchema { get; set; }
 
         public List<SQLDataRecordStorageColumn> Columns { get; set; }
+
+        public List<NullableField> NullableFields { get; set; }
         
         /// <summary>
         /// this property is needed only in case the current storage (SQL table) is used to store Summary data (Statistic/Billing)
@@ -28,6 +30,11 @@ namespace Vanrise.GenericData.SQLDataStorage
         public string SQLDataType { get; set; }
 
         public string ValueExpression { get; set; }
+    }
+
+    public class NullableField
+    {
+        public string Name { get; set; }
     }
 
     //public class SQLDataRecordStorageSummarySettings

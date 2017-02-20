@@ -419,8 +419,9 @@ namespace Vanrise.GenericData.SQLDataStorage
             string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, input.Query.Direction == OrderDirection.Ascending ? "ASC" : "DESC");
             StringBuilder str = new StringBuilder(string.Format(@"  select Top {0} {1} from {2} WITH (NOLOCK)
                                                                     where ({3} >= @FromTime) 
-                                                                    and (@ToTime is null or {3} <= @ToTime) 
-                                                                    {4} {5}", input.Query.LimitResult, string.Join<string>(",", GetColumnNamesFromFieldNames(input.Query.Columns)), tableName, dateTimeColumn, recordFilterResult, orderResult));
+                                                                    and (@ToTime is null or {3} <= @ToTime) {4} {5}", 
+                                                                    input.Query.LimitResult, string.Join<string>(",", GetColumnNamesFromFieldNames(input.Query.Columns)), 
+                                                                    tableName, dateTimeColumn, recordFilterResult, orderResult));
             //input.SortByColumnName = dateTimeColumn;
             return str.ToString();
         }
@@ -452,8 +453,16 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             var column = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == fieldName);
             if (column == null)
-                throw new NullReferenceException(String.Format("column. RecordStorageId '{0}'. FieldName '{1}'", _dataRecordStorage.DataRecordStorageId, fieldName));
-            return column.ColumnName;
+            {
+                if(_dataRecordStorageSettings.NullableFields == null || !_dataRecordStorageSettings.NullableFields.Any(x => x.Name == fieldName))
+                    throw new NullReferenceException(String.Format("column. RecordStorageId '{0}'. FieldName '{1}'", _dataRecordStorage.DataRecordStorageId, fieldName));
+
+                return "null";
+            }
+            else
+            {
+                return column.ColumnName;
+            }
         }
 
         List<string> GetColumnNamesFromFieldNames(List<string> fieldNames)
@@ -463,7 +472,11 @@ namespace Vanrise.GenericData.SQLDataStorage
             List<string> result = new List<string>();
             foreach (string fieldName in fieldNames)
             {
-                result.Add(GetColumnNameFromFieldName(fieldName));
+                string columnName = GetColumnNameFromFieldName(fieldName);
+                if(string.Compare(columnName, "null", true) != 0)
+                {
+                    result.Add(columnName);
+                }
             }
             return result;
         }

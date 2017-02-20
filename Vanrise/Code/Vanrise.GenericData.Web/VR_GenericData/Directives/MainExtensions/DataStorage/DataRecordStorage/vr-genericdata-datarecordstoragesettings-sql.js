@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageSQLSettingsDirective.$inject = ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService'];
+    DataRecordStorageSQLSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService'];
 
-    function DataRecordStorageSQLSettingsDirective(VR_GenericData_DataRecordTypeAPIService, UtilsService) {
+    function DataRecordStorageSQLSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -28,6 +28,9 @@
 
             var dataRecordTypeFields;
 
+            var dataRecordTypeFieldsSelectorAPI;
+            var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 ctrl.columns = [];
 
@@ -35,6 +38,10 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
+                };
+                ctrl.onDataRecordTypeFieldsSelectorReady = function (api) {
+                    dataRecordTypeFieldsSelectorAPI = api;
+                    dataRecordTypeFieldsSelectorReadyDeferred.resolve();
                 };
 
                 ctrl.addColumn = function () {
@@ -69,7 +76,7 @@
                     }
 
                     return null;
-                    
+
                     function validateName(name, array) {
                         for (var j = 0; j < array.length; j++) {
                             if (array[j] == name)
@@ -78,19 +85,56 @@
                         return true;
                     }
                 };
+
+                ctrl.validateNullableFields = function () {
+                    if (ctrl.columns == undefined || ctrl.selectedDataRecordTypeField == undefined)
+                        return null;
+
+                    var duplicatedFields = [];
+                    for (var i = 0; i < ctrl.columns.length; i++) {
+                        var currentColumn = ctrl.columns[i];
+                        for (var j = 0; j < ctrl.selectedDataRecordTypeField.length; j++) {
+                            if (currentColumn.selectedDataRecordTypeField != undefined && currentColumn.selectedDataRecordTypeField.Name == ctrl.selectedDataRecordTypeField[j].Name)
+                                duplicatedFields.push(currentColumn.selectedDataRecordTypeField.Name);
+                        }
+                    }
+
+                    if (duplicatedFields.length == 1) {
+                        return duplicatedFields[0] + " is selected at Table Definition";
+                    }
+                    if (duplicatedFields.length > 1) {
+                        return duplicatedFields.join(", ") + " are selected at Table Definition";
+                    }
+
+                    return null;
+                };
             }
             function getDirectiveAPI() {
-                var api = {};
+                var api = {
+                };
 
                 api.load = function (payload) {
-                    if (payload == undefined) {
+                    if (payload == undefined)
                         return;
-                    }
+
+                    var promises = [];
+
                     if (payload.Columns != undefined) {
                         ctrl.tableName = payload.TableName;
                         ctrl.tableSchema = payload.TableSchema;
                     }
+
                     if (payload.DataRecordTypeId != undefined) {
+                        var getDataRecordTypeFieldsPromise = getDataRecordTypeFields();
+                        promises.push(getDataRecordTypeFieldsPromise);
+                    }
+
+                    //loading DataRecordType Selector
+                    var loadDataRecordTypeSelectorPromise = loadDataRecordTypeSelector();
+                    promises.push(loadDataRecordTypeSelectorPromise);
+
+
+                    function getDataRecordTypeFields() {
                         return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(payload.DataRecordTypeId).then(function (response) {
                             if (response != null && response.Fields != null) {
                                 dataRecordTypeFields = [];
@@ -101,7 +145,6 @@
                             }
                         });
                     }
-
                     function loadColumns() {
                         if (payload.Columns != undefined) {
                             for (var i = 0; i < payload.Columns.length; i++) {
@@ -114,14 +157,35 @@
                             }
                         }
                     }
+                    function loadDataRecordTypeSelector() {
+                        var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        dataRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
+
+                            var dataRecordTypeselectorPayload = {
+                                dataRecordTypeId: payload.DataRecordTypeId
+                            };
+                            if (payload.NullableFields != undefined) {
+                                dataRecordTypeselectorPayload.selectedIds = UtilsService.getPropValuesFromArray(payload.NullableFields, "Name");
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, dataRecordTypeselectorPayload, dataRecordTypeSelectorLoadDeferred);
+                        });
+
+                        return dataRecordTypeSelectorLoadDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
+
                     return {
                         $type: 'Vanrise.GenericData.SQLDataStorage.SQLDataRecordStorageSettings, Vanrise.GenericData.SQLDataStorage',
                         TableName: ctrl.tableName,
                         TableSchema: ctrl.tableSchema,
-                        Columns: ctrl.columns.length > 0 ? getColumns() : null
+                        Columns: ctrl.columns.length > 0 ? getColumns() : null,
+                        NullableFields: getNullableFields()
                     };
 
                     function getColumns() {
@@ -135,6 +199,17 @@
                             });
                         }
                         return columns;
+                    }
+                    function getNullableFields() {
+                        var nullableFields = [];
+
+                        var nullableFieldNames = dataRecordTypeFieldsSelectorAPI.getSelectedIds();
+                        if (nullableFieldNames != undefined) {
+                            for (var index = 0; index < nullableFieldNames.length; index++) {
+                                nullableFields.push({ Name: nullableFieldNames[index] });
+                            }
+                        }
+                        return nullableFields;
                     }
                 };
 

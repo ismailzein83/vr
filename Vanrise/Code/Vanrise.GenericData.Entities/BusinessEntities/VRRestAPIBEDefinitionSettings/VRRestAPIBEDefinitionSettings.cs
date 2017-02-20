@@ -16,11 +16,6 @@ namespace Vanrise.GenericData.Entities
             get { return "vr-genericdata-restapibedefinitions-editor"; }
         }
 
-        public override string IdType
-        {
-            get { return "System.Int64"; }
-        }
-
         public override string SelectorUIControl
         {
             get { return "vr-genericdata-businessentity-remoteselector"; }

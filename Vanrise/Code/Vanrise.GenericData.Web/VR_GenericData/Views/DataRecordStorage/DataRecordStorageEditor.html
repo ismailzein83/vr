@@ -33,9 +33,7 @@
                 <vr-tab header="'Setting'">
                     <vr-row>
                         <vr-columns width="fullrow" ng-show="scopeModel.selectedDataRecordType != undefined && scopeModel.selectedDataStore != undefined">
-                            <vr-section title="Settings">
-                                <vr-directivewrapper directive="scopeModel.settingsEditor" on-ready="scopeModel.onSettingsDirectiveReady"></vr-directivewrapper>
-                            </vr-section>
+                            <vr-directivewrapper directive="scopeModel.settingsEditor" on-ready="scopeModel.onSettingsDirectiveReady"></vr-directivewrapper>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

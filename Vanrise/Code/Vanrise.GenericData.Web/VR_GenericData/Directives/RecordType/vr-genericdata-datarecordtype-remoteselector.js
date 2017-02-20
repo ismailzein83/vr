@@ -54,12 +54,10 @@ app.directive('vrGenericdataDatarecordtypeRemoteselector', ['UtilsService', 'VRU
                     selectorAPI.clearDataSource();
 
                     var selectedIds;
-                    var filter;
                     var connectionId;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
-                        filter = payload.filter;
                         connectionId = payload.connectionId;
                     }
 
