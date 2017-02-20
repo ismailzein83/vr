@@ -16,11 +16,11 @@
 
         var bulkActionContext;
 
-        var actionStepAPI;
-        var actionStepReadyDeferred = UtilsService.createPromiseDeferred();
+        var bulkActionSelectiveAPI;
+        var bulkActionSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var filterStepAPI;
-        var filterStepReadyDeferred = UtilsService.createPromiseDeferred();
+        var zoneFilterSelectiveAPI;
+        var zoneFilterSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -55,14 +55,14 @@
             $scope.scopeModel = {};
             $scope.scopeModel.showInvalidTab = false;
 
-            $scope.scopeModel.onActionStepReady = function (api) {
-                actionStepAPI = api;
-                actionStepReadyDeferred.resolve();
+            $scope.scopeModel.onBulkActionSelectiveReady = function (api) {
+                bulkActionSelectiveAPI = api;
+                bulkActionSelectiveReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onFilterStepReady = function (api) {
-                filterStepAPI = api;
-                filterStepReadyDeferred.resolve();
+            $scope.scopeModel.onZoneFilterSelectiveReady = function (api) {
+                zoneFilterSelectiveAPI = api;
+                zoneFilterSelectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -95,29 +95,29 @@
             loadAllControls();
         }
         function loadAllControls() {
-            UtilsService.waitMultipleAsyncOperations([loadActionStep, loadFilterStep]).finally(function () {
+            UtilsService.waitMultipleAsyncOperations([loadBulkActionSelective, loadZoneFilterSelective]).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
-        function loadActionStep() {
-            var actionStepLoadDeferred = UtilsService.createPromiseDeferred();
-            actionStepReadyDeferred.promise.then(function () {
-                var actionStepPayload = {
+        function loadBulkActionSelective() {
+            var bulkActionSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            bulkActionSelectiveReadyDeferred.promise.then(function () {
+                var bulkActionSelectivePayload = {
                     bulkActionContext: bulkActionContext
                 };
-                VRUIUtilsService.callDirectiveLoad(actionStepAPI, actionStepPayload, actionStepLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(bulkActionSelectiveAPI, bulkActionSelectivePayload, bulkActionSelectiveLoadDeferred);
             });
-            return actionStepLoadDeferred.promise;
+            return bulkActionSelectiveLoadDeferred.promise;
         }
-        function loadFilterStep() {
-            var filterStepLoadDeferred = UtilsService.createPromiseDeferred();
-            filterStepReadyDeferred.promise.then(function () {
-                var filterStepPayload = {
+        function loadZoneFilterSelective() {
+            var zoneFilterSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            zoneFilterSelectiveReadyDeferred.promise.then(function () {
+                var zoneFilterSelectivePayload = {
                     bulkActionContext: bulkActionContext
                 };
-                VRUIUtilsService.callDirectiveLoad(filterStepAPI, filterStepPayload, filterStepLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(zoneFilterSelectiveAPI, zoneFilterSelectivePayload, zoneFilterSelectiveLoadDeferred);
             });
-            return filterStepLoadDeferred.promise;
+            return zoneFilterSelectiveLoadDeferred.promise;
         }
 
         function evaluate() {
@@ -143,10 +143,8 @@
             var loadGridDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadGridDeferred.promise);
 
-            validateBulkActionZonesPromise.then(function ()
-            {
-                if (invalidDataExists === true)
-                {
+            validateBulkActionZonesPromise.then(function () {
+                if (invalidDataExists === true) {
                     validationDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
                     $scope.scopeModel.showInvalidTab = true;
                     $scope.scopeModel.validationDirectiveName = validationDirectiveName;
@@ -169,15 +167,9 @@
             });
 
             function setBulkActionVariables() {
-                var actionStepData = actionStepAPI.getData();
-                if (actionStepData != undefined)
-                    bulkAction = actionStepData.bulkAction;
-
-                validationDirectiveName = actionStepAPI.getValidationDirectiveName();
-
-                var filterStepData = filterStepAPI.getData();
-                if (filterStepData != undefined)
-                    bulkActionZoneFilter = filterStepData.zoneFilter;
+                bulkAction = bulkActionSelectiveAPI.getData();
+                validationDirectiveName = bulkActionSelectiveAPI.getValidationDirectiveName();
+                bulkActionZoneFilter = zoneFilterSelectiveAPI.getData();
             }
             function validateBulkActionZones() {
                 var bulkActionZoneValidationInput =
@@ -252,6 +244,8 @@
             }
 
             return UtilsService.waitMultiplePromises(promises).finally(function () {
+                bulkActionSelectiveAPI.collapseSection();
+                zoneFilterSelectiveAPI.collapseSection();
                 $scope.scopeModel.isLoading = false;
             });
         }
@@ -292,8 +286,7 @@
             bulkActionContext.ownerId = ownerId;
             bulkActionContext.ownerSellingNumberPlanId = ownerSellingNumberPlanId;
             bulkActionContext.getSelectedBulkAction = function () {
-                var actionStepData = actionStepAPI.getData();
-                return (actionStepData != undefined) ? actionStepData.bulkAction : undefined;
+                return bulkActionSelectiveAPI.getData();
             };
             bulkActionContext.requireEvaluation = function () {
                 $scope.scopeModel.isApplyButtonDisabled = true;

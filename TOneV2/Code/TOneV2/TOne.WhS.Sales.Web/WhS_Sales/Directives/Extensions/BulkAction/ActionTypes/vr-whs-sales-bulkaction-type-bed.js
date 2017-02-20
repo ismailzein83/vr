@@ -57,6 +57,11 @@ app.directive('vrWhsSalesBulkactionTypeBed', ['WhS_Sales_BulkActionUtilsService'
 				};
 			};
 
+			api.getSummary = function () {
+			    var bedAsString = ($scope.scopeModel.beginEffectiveDate != undefined) ? UtilsService.getShortDate($scope.scopeModel.beginEffectiveDate) : 'None';
+			    return 'BED: ' + bedAsString;
+			};
+
 			if (ctrl.onReady != null) {
 				ctrl.onReady(api);
 			}

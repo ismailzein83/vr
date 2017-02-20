@@ -155,6 +155,12 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 				};
 			};
 
+			api.getSummary = function () {
+			    var rateCalculationMethodTitle = ($scope.scopeModel.selectedRateCalculationMethod != undefined) ? $scope.scopeModel.selectedRateCalculationMethod.Title : 'None';
+			    var bedAsString = ($scope.scopeModel.beginEffectiveDate != undefined) ? UtilsService.getShortDate($scope.scopeModel.beginEffectiveDate) : 'None';
+			    return 'Rate Calculation Method: ' + rateCalculationMethodTitle + ' | BED: ' + bedAsString;
+			};
+
 			if (rateBulkActionTypeCtrl.onReady != null) {
 				rateBulkActionTypeCtrl.onReady(api);
 			}

@@ -177,6 +177,10 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
                 return data;
             };
 
+            api.getSummary = function () {
+                return 'None';
+            };
+
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }
@@ -234,11 +238,22 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
 
             var ownerType;
             var ownerId;
+            var bulkAction;
 
             if (bulkActionContext != undefined) {
                 ownerType = bulkActionContext.ownerType;
                 ownerId = bulkActionContext.ownerId;
+                if (bulkActionContext.getSelectedBulkAction != undefined)
+                    bulkAction = bulkActionContext.getSelectedBulkAction();
             }
+
+            var bulkActionApplicableToCountryFilter = {
+                $type: 'TOne.WhS.Sales.Business.BulkActionApplicableToCountryFilter, TOne.WhS.Sales.Business',
+                OwnerType: ownerType,
+                OwnerId: ownerId,
+                BulkAction: bulkAction
+            };
+            countrySelectorFilters.push(bulkActionApplicableToCountryFilter);
 
             if (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                 var countrySoldToCustomerFilter = {
@@ -250,6 +265,7 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
                 countrySelectorFilters.push(countrySoldToCustomerFilter);
             }
 
+            console.log(countrySelectorFilters);
             return countrySelectorFilters;
         }
 

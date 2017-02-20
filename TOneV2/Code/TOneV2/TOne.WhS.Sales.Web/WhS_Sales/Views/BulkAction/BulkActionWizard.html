@@ -4,32 +4,42 @@
             <vr-row>
                 <vr-columns width="1/2row">
                     <vr-validation-group validationcontext="validationContext">
-                        <vr-whs-sales-bulkaction-step-action on-ready="scopeModel.onActionStepReady" normal-col-num="6" isrequired="true"></vr-whs-sales-bulkaction-step-action>
+                        <vr-whs-sales-bulkaction-type-selective on-ready="scopeModel.onBulkActionSelectiveReady"
+                                                                normal-col-num="6"
+                                                                isrequired="true"
+                                                                hideremoveicon="true">
+                        </vr-whs-sales-bulkaction-type-selective>
                     </vr-validation-group>
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <span vr-disabled="validationContext.validate() != null">
-                        <vr-whs-sales-bulkaction-step-filter on-ready="scopeModel.onFilterStepReady" normal-col-num="6" isrequired="true"></vr-whs-sales-bulkaction-step-filter>
+                        <vr-whs-sales-bulkaction-zonefilter-selective on-ready="scopeModel.onZoneFilterSelectiveReady"
+                                                                      normal-col-num="6"
+                                                                      isrequired="true"
+                                                                      hideremoveicon="true">
+                        </vr-whs-sales-bulkaction-zonefilter-selective>
                     </span>
                 </vr-columns>
             </vr-row>
-            <vr-tabs ng-show="scopeModel.showTabs">
-                <vr-tab header="'Applicable Zones'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Invalid Zones'" ng-if="scopeModel.showInvalidTab">
-                    <vr-row>
-                        <vr-directivewrapper directive="scopeModel.validationDirectiveName"
-                                             on-ready="scopeModel.onValidationDirectiveReady"
-                                             normal-col-num="4">
-                        </vr-directivewrapper>
-                    </vr-row>
-                </vr-tab>
-            </vr-tabs>
+            <div style="min-height: 260px;">
+                <vr-tabs ng-show="scopeModel.showTabs">
+                    <vr-tab header="'Applicable Zones'">
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-tab>
+                    <vr-tab header="'Invalid Zones'" ng-if="scopeModel.showInvalidTab">
+                        <vr-row>
+                            <vr-directivewrapper directive="scopeModel.validationDirectiveName"
+                                                 on-ready="scopeModel.onValidationDirectiveReady"
+                                                 normal-col-num="4">
+                            </vr-directivewrapper>
+                        </vr-row>
+                    </vr-tab>
+                </vr-tabs>
+            </div>
         </vr-form>
     </vr-modalbody>
     <div>

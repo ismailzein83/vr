@@ -1,130 +1,161 @@
 ﻿'use strict';
 
 app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
-	return {
-		restrict: "E",
-		scope: {
-			onReady: "=",
-			normalColNum: '@',
-			isrequired: '='
-		},
-		controller: function ($scope, $element, $attrs) {
-			var selectiveCtrl = this;
-			var bulkActionZoneFilterSelective = new BulkActionZoneFilterSelective($scope, selectiveCtrl, $attrs);
-			bulkActionZoneFilterSelective.initializeController();
-		},
-		controllerAs: "selectiveCtrl",
-		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_Sales/Directives/BulkAction/Templates/BulkActionZoneFilterSelectiveTemplate.html'
-	};
+    return {
+        restrict: "E",
+        scope: {
+            onReady: "=",
+            normalColNum: '@',
+            isrequired: '='
+        },
+        controller: function ($scope, $element, $attrs) {
+            var selectiveCtrl = this;
+            var bulkActionZoneFilterSelective = new BulkActionZoneFilterSelective($scope, selectiveCtrl, $attrs);
+            bulkActionZoneFilterSelective.initializeController();
+        },
+        controllerAs: "selectiveCtrl",
+        bindToController: true,
+        templateUrl: '/Client/Modules/WhS_Sales/Directives/BulkAction/Templates/BulkActionZoneFilterSelectiveTemplate.html'
+    };
 
-	function BulkActionZoneFilterSelective($scope, selectiveCtrl, $attrs) {
+    function BulkActionZoneFilterSelective($scope, selectiveCtrl, $attrs) {
 
-		this.initializeController = initializeController;
+        this.initializeController = initializeController;
 
-		var bulkActionContext;
+        var bulkActionContext;
 
-		var selectorAPI;
+        var dropdownSectionAPI;
+        var dropdownSectionReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var directiveAPI;
-		var directiveReadyDeferred;
+        var selectorAPI;
+        var selectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		function initializeController() {
+        var directiveAPI;
+        var directiveReadyDeferred;
 
-			$scope.scopeModel = {};
-			$scope.scopeModel.extensionConfigs = [];
-			$scope.scopeModel.selectedExtensionConfig;
+        function initializeController() {
 
-			$scope.scopeModel.onSelectorReady = function (api) {
-				selectorAPI = api;
-				defineAPI();
-			};
+            $scope.scopeModel = {};
+            $scope.scopeModel.extensionConfigs = [];
+            $scope.scopeModel.selectedExtensionConfig;
 
-			$scope.scopeModel.onZoneFilterSelected = function (selectedZoneFilter) {
-				if (bulkActionContext != undefined && bulkActionContext.requireEvaluation != undefined)
-					bulkActionContext.requireEvaluation();
-			};
+            $scope.scopeModel.onDropdownSelectorReady = function (api) {
+                dropdownSectionAPI = api;
+                dropdownSectionReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onDirectiveReady = function (api) {
-				directiveAPI = api;
-				var directivePayload = {
-					bulkActionContext: bulkActionContext
-				};
-				var setLoader = function (value) {
-					$scope.scopeModel.isLoadingDirective = value;
-				};
-				VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
-			};
-		}
+            $scope.scopeModel.onSelectorReady = function (api) {
+                selectorAPI = api;
+                selectorReadyDeferred.resolve();
+            };
 
-		function defineAPI() {
+            $scope.scopeModel.onZoneFilterSelected = function (selectedZoneFilter) {
+                if (bulkActionContext != undefined && bulkActionContext.requireEvaluation != undefined)
+                    bulkActionContext.requireEvaluation();
+            };
 
-			var api = {};
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                var directivePayload = {
+                    bulkActionContext: bulkActionContext
+                };
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+            };
 
-			api.load = function (payload) {
+            $scope.scopeModel.getDirectiveSummary = function () {
+                var bulkActionZoneFilterTitle = ($scope.scopeModel.selectedExtensionConfig != undefined) ? $scope.scopeModel.selectedExtensionConfig.Title : 'None';
+                var summary = 'Filter: ' + bulkActionZoneFilterTitle;
 
-				selectorAPI.clearDataSource();
+                if (directiveAPI != undefined && directiveAPI.getSummary != undefined) {
+                    var directiveSummary = directiveAPI.getSummary();
+                    if (directiveSummary != undefined)
+                        summary += ' | ' + directiveSummary;
+                }
 
-				var promises = [];
-				var zoneFilterType;
+                return summary;
+            };
 
-				if (payload != undefined) {
-					zoneFilterType = payload.zoneFilterType;
-					bulkActionContext = payload.bulkActionContext;
-				}
+            UtilsService.waitMultiplePromises([dropdownSectionReadyDeferred.promise, selectorReadyDeferred.promise]).then(function () {
+                defineAPI();
+            });
+        }
 
-				var loadDirectivePromise = loadDirective();
-				promises.push(loadDirectivePromise);
+        function defineAPI() {
 
-				var loadBulkActionZoneFilterTypeExtensionCofigsPromise = loadBulkActionZoneFilterTypeExtensionCofigs();
-				promises.push(loadBulkActionZoneFilterTypeExtensionCofigsPromise);
+            var api = {};
 
-				function loadBulkActionZoneFilterTypeExtensionCofigs() {
-					return WhS_Sales_RatePlanAPIService.GetBulkActionZoneFilterTypeExtensionConfigs().then(function (response) {
-						if (response != null) {
-							for (var i = 0; i < response.length; i++) {
-								$scope.scopeModel.extensionConfigs.push(response[i]);
-							}
-							if (zoneFilterType != undefined) {
-								$scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, zoneFilterType.ConfigId, 'ExtensionConfigurationId');
-							}
-							else if ($scope.scopeModel.extensionConfigs.length > 0) {
-								$scope.scopeModel.selectedExtensionConfig = $scope.scopeModel.extensionConfigs[0];
-							}
-						}
-					});
-				}
-				function loadDirective() {
-					directiveReadyDeferred = UtilsService.createPromiseDeferred();
+            api.load = function (payload) {
 
-					var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                selectorAPI.clearDataSource();
 
-					directiveReadyDeferred.promise.then(function () {
-						directiveReadyDeferred = undefined;
-						var directivePayload = {
-							zoneFilter: zoneFilterType,
-							bulkActionContext: bulkActionContext
-						};
-						VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-					});
+                var promises = [];
+                var zoneFilterType;
 
-					return directiveLoadDeferred.promise;
-				}
+                if (payload != undefined) {
+                    zoneFilterType = payload.zoneFilterType;
+                    bulkActionContext = payload.bulkActionContext;
+                }
 
-				return UtilsService.waitMultiplePromises(promises);
-			};
+                var loadDirectivePromise = loadDirective();
+                promises.push(loadDirectivePromise);
 
-			api.getData = function () {
-				var data;
-				if ($scope.scopeModel.selectedExtensionConfig != undefined && directiveAPI != undefined) {
-					data = directiveAPI.getData();
-				}
-				return data;
-			};
+                var loadBulkActionZoneFilterTypeExtensionCofigsPromise = loadBulkActionZoneFilterTypeExtensionCofigs();
+                promises.push(loadBulkActionZoneFilterTypeExtensionCofigsPromise);
 
-			if (selectiveCtrl.onReady != null) {
-				selectiveCtrl.onReady(api);
-			}
-		}
-	}
+                function loadBulkActionZoneFilterTypeExtensionCofigs() {
+                    return WhS_Sales_RatePlanAPIService.GetBulkActionZoneFilterTypeExtensionConfigs().then(function (response) {
+                        if (response != null) {
+                            for (var i = 0; i < response.length; i++) {
+                                $scope.scopeModel.extensionConfigs.push(response[i]);
+                            }
+                            if (zoneFilterType != undefined) {
+                                $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, zoneFilterType.ConfigId, 'ExtensionConfigurationId');
+                            }
+                            else if ($scope.scopeModel.extensionConfigs.length > 0) {
+                                $scope.scopeModel.selectedExtensionConfig = $scope.scopeModel.extensionConfigs[0];
+                            }
+                        }
+                    });
+                }
+                function loadDirective() {
+                    directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                    var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    directiveReadyDeferred.promise.then(function () {
+                        directiveReadyDeferred = undefined;
+                        var directivePayload = {
+                            zoneFilter: zoneFilterType,
+                            bulkActionContext: bulkActionContext
+                        };
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                    });
+
+                    return directiveLoadDeferred.promise;
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
+            };
+
+            api.getData = function () {
+                var data;
+                if ($scope.scopeModel.selectedExtensionConfig != undefined && directiveAPI != undefined) {
+                    data = directiveAPI.getData();
+                }
+                return data;
+            };
+
+            api.collapseSection = function () {
+                if (dropdownSectionAPI != undefined)
+                    dropdownSectionAPI.collapse();
+            };
+
+            if (selectiveCtrl.onReady != null) {
+                selectiveCtrl.onReady(api);
+            }
+        }
+    }
 }]);

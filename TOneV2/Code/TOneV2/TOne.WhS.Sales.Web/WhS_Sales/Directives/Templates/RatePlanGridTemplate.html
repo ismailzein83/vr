@@ -1,148 +1,150 @@
 ﻿<div vr-loader="isLoading" ng-show="showDirective">
-	<div style="min-height: 42px;">
-		<vr-row ng-show="showZoneLetters">
-			<vr-columns width="fullrow" ng-if="showZoneLetters">
-				<vr-choices selectedindex="scopeModel.selectedZoneLetterIndex" onselectionchanged="onZoneLetterSelectionChanged()" stopreadonly>
-					<vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
-				</vr-choices>
-			</vr-columns>
-		</vr-row>
-	</div>
-	<vr-row removeline="true">
-		<vr-columns width="fullrow">
-			<vr-datagrid on-ready="onGridReady"
-						 datasource="zoneItems"
-						 loadmoredata="loadMoreData"
-						 idfield="ZoneId"
-						 norowhighlightonclick="'true'"
-						 hidegridmenu
-						 getrowstyle="getRowStyle"
-						 isdynamicrowstyle="true">
+    <div style="min-height: 42px;">
+        <vr-row ng-show="showZoneLetters">
+            <vr-columns width="fullrow" ng-if="showZoneLetters">
+                <vr-choices selectedindex="scopeModel.selectedZoneLetterIndex" onselectionchanged="onZoneLetterSelectionChanged()" stopreadonly>
+                    <vr-choice ng-repeat="letter in zoneLetters">{{ letter | uppercase }}</vr-choice>
+                </vr-choices>
+            </vr-columns>
+        </vr-row>
+    </div>
+    <vr-row removeline="true">
+        <vr-columns width="fullrow">
+            <div style="min-height: 500px; max-height: 700px;">
+                <vr-datagrid on-ready="onGridReady"
+                             datasource="zoneItems"
+                             loadmoredata="loadMoreData"
+                             idfield="ZoneId"
+                             norowhighlightonclick="'true'"
+                             hidegridmenu
+                             getrowstyle="getRowStyle"
+                             isdynamicrowstyle="true">
 
-				<vr-datagridcolumn headertext="'Zone'" type="'Text'" widthfactor="19" disablesorting="true">
-					<vr-label isvalue="true" ellipsis><a href="" ng-click="viewScope.onZoneNameClicked(dataItem)" title="{{dataItem.ZoneName}}">{{dataItem.ZoneName}}</a></vr-label><span ng-if="dataItem.IsFutureZone">*</span>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Zone'" type="'Text'" widthfactor="19" disablesorting="true">
+                        <vr-label isvalue="true" ellipsis><a href="" ng-click="viewScope.onZoneNameClicked(dataItem)" title="{{dataItem.ZoneName}}">{{dataItem.ZoneName}}</a></vr-label><span ng-if="dataItem.IsFutureZone">*</span>
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'Product'"
-								   type="'Text'"
-								   isfielddynamic="true"
-								   widthfactor="8"
-								   disablesorting="true">
-					<span ng-click="viewScope.onEffectiveRPClicked(dataItem)">
-						<vr-label isvalue="true" ellipsis><span title="{{dataItem.EffectiveRoutingProductName}}">{{dataItem.EffectiveRoutingProductName}}</span></vr-label>
-					</span>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Product'"
+                                       type="'Text'"
+                                       isfielddynamic="true"
+                                       widthfactor="8"
+                                       disablesorting="true">
+                        <span ng-click="viewScope.onEffectiveRPClicked(dataItem)">
+                            <vr-label isvalue="true" ellipsis><span title="{{dataItem.EffectiveRoutingProductName}}">{{dataItem.EffectiveRoutingProductName}}</span></vr-label>
+                        </span>
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'Route Options'" widthfactor="35" disablesorting="true">
-					<div vr-loader="dataItem.isLoadingRouteOptions">
-						<vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
-					</div>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Route Options'" widthfactor="35" disablesorting="true">
+                        <div vr-loader="dataItem.isLoadingRouteOptions">
+                            <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
+                        </div>
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'Services'" disablesorting="true">
-					<vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Services'" disablesorting="true">
+                        <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn ng-repeat="method in costCalculationMethods"
-								   headertext="method.Title"
-								   field="'Costs[' + $index + ']'"
-								   type="'Number'"
-								   numberprecision="'LongPrecision'"
-								   isfielddynamic="true"
-								   columnindex="3 + $index"
-								   widthfactor="7"
-								   disablesorting="true">
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="method in costCalculationMethods"
+                                       headertext="method.Title"
+                                       field="'Costs[' + $index + ']'"
+                                       type="'Number'"
+                                       numberprecision="'LongPrecision'"
+                                       isfielddynamic="true"
+                                       columnindex="3 + $index"
+                                       widthfactor="7"
+                                       disablesorting="true">
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'Current Rate'"
-								   type="'Number'"
-								   numberprecision="'LongPrecision'"
-								   widthfactor="7"
-								   disablesorting="true">
-					<div style="text-align: right">
-						<vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
-						<span ng-if="dataItem.FutureNormalRate != null"
-							  style="cursor: pointer; text-decoration: underline"
-							  ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
-					</div>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Current Rate'"
+                                       type="'Number'"
+                                       numberprecision="'LongPrecision'"
+                                       widthfactor="7"
+                                       disablesorting="true">
+                        <div style="text-align: right">
+                            <vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
+                            <span ng-if="dataItem.FutureNormalRate != null"
+                                  style="cursor: pointer; text-decoration: underline"
+                                  ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
+                        </div>
+                    </vr-datagridcolumn>
 
-                <vr-datagridcolumn widthfactor="5">
-                    <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip"></vr-icon>
-                </vr-datagridcolumn>
+                    <vr-datagridcolumn widthfactor="5">
+                        <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip"></vr-icon>
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'Margin'" field="'Margin'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
-				<vr-datagridcolumn headertext="'Margin %'" field="'MarginPercentage'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Margin'" field="'Margin'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Margin %'" field="'MarginPercentage'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'Calculated Rate'"
-								   field="'CalculatedRate'"
-								   type="'Number'"
-								   numberprecision="'LongPrecision'"
-								   ng-show="rateCalculationMethod"
-								   isfielddynamic="true"
-								   disablesorting="true">
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Calculated Rate'"
+                                       field="'CalculatedRate'"
+                                       type="'Number'"
+                                       numberprecision="'LongPrecision'"
+                                       ng-show="rateCalculationMethod"
+                                       isfielddynamic="true"
+                                       disablesorting="true">
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'TQI'" type="'Text'" widthfactor="7" disablesorting="true">
-					<span vr-disabled="viewScope.scopeModel.isPreview">
-						<span ng-click="viewScope.onTQIClicked(dataItem)" style="cursor: pointer; text-decoration: underline">...</span>
-					</span>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'TQI'" type="'Text'" widthfactor="7" disablesorting="true">
+                        <span vr-disabled="viewScope.scopeModel.isPreview">
+                            <span ng-click="viewScope.onTQIClicked(dataItem)" style="cursor: pointer; text-decoration: underline">...</span>
+                        </span>
+                    </vr-datagridcolumn>
 
 
-				<vr-datagridcolumn headertext="'New Rate'" widthfactor="7" disablesorting="true">
-					<span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
-						<vr-textbox type="number"
-									value="dataItem.NewRate"
-									customvalidate="dataItem.validateNewRate()"
-									onvaluechanged="viewScope.onNewRateChanged(dataItem)"
-									onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
-									tonextinput>
-						</vr-textbox>
-					</span>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'New Rate'" widthfactor="7" disablesorting="true">
+                        <span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
+                            <vr-textbox type="number"
+                                        value="dataItem.NewRate"
+                                        customvalidate="dataItem.validateNewRate()"
+                                        onvaluechanged="viewScope.onNewRateChanged(dataItem)"
+                                        onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
+                                        tonextinput>
+                            </vr-textbox>
+                        </span>
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn isfielddynamic="true" widthfactor="3">
-					<div style="text-align: left">
-						<span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
-					</div>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn isfielddynamic="true" widthfactor="3">
+                        <div style="text-align: left">
+                            <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
+                        </div>
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'BED'" widthfactor="11" disablesorting="true">
-					<span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
-						<span vr-disabled="true">
-							<vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null" customvalidate="dataItem.validateRateChangeDates()" disablefocus></vr-datetimepicker>
-						</span>
-						<vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED" disablefocus></vr-datetimepicker>
-					</span>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'BED'" widthfactor="11" disablesorting="true">
+                        <span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
+                            <span vr-disabled="true">
+                                <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null" customvalidate="dataItem.validateRateChangeDates()" disablefocus></vr-datetimepicker>
+                            </span>
+                            <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED" disablefocus></vr-datetimepicker>
+                        </span>
+                    </vr-datagridcolumn>
 
-				<vr-datagridcolumn headertext="'EED'" widthfactor="11" disablesorting="true">
-					<span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
-						<span vr-disabled="dataItem.isSellingProductZone">
-							<span vr-disabled="!dataItem.IsCurrentRateEditable">
-								<vr-datetimepicker type="date"
-												   value="dataItem.CurrentRateEED"
-												   onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
-												   ng-hide="dataItem.NewRate != null"
-												   customvalidate="dataItem.validateRateChangeDates()" disablefocus>
-								</vr-datetimepicker>
-							</span>
-							<vr-datetimepicker type="date"
-											   value="dataItem.NewRateEED"
-											   ng-show="dataItem.NewRate != null"
-											   customvalidate="dataItem.validateNewRateDates()"
-											   disablefocus>
-							</vr-datetimepicker>
-						</span>
-					</span>
-				</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'EED'" widthfactor="11" disablesorting="true">
+                        <span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
+                            <span vr-disabled="dataItem.isSellingProductZone">
+                                <span vr-disabled="!dataItem.IsCurrentRateEditable">
+                                    <vr-datetimepicker type="date"
+                                                       value="dataItem.CurrentRateEED"
+                                                       onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
+                                                       ng-hide="dataItem.NewRate != null"
+                                                       customvalidate="dataItem.validateRateChangeDates()" disablefocus>
+                                    </vr-datetimepicker>
+                                </span>
+                                <vr-datetimepicker type="date"
+                                                   value="dataItem.NewRateEED"
+                                                   ng-show="dataItem.NewRate != null"
+                                                   customvalidate="dataItem.validateNewRateDates()"
+                                                   disablefocus>
+                                </vr-datetimepicker>
+                            </span>
+                        </span>
+                    </vr-datagridcolumn>
 
-				<vr-datagridexpandablerow>
-					<vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-				</vr-datagridexpandablerow>
+                    <vr-datagridexpandablerow>
+                        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+                    </vr-datagridexpandablerow>
 
-			</vr-datagrid>
-		</vr-columns>
-	</vr-row>
+                </vr-datagrid>
+            </div>
+        </vr-columns>
+    </vr-row>
 </div>

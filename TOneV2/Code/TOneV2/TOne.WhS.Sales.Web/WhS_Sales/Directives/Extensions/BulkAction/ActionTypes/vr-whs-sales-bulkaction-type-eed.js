@@ -57,6 +57,11 @@ app.directive('vrWhsSalesBulkactionTypeEed', ['WhS_Sales_BulkActionUtilsService'
 				};
 			};
 
+			api.getSummary = function () {
+			    var eedAsString = ($scope.scopeModel.endEffectiveDate != undefined) ? UtilsService.getShortDate($scope.scopeModel.endEffectiveDate) : 'None';
+			    return 'EED: ' + eedAsString;
+			};
+
 			if (ctrl.onReady != null) {
 				ctrl.onReady(api);
 			}

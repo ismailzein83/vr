@@ -43,6 +43,10 @@ app.directive('vrWhsSalesBulkactionZonefilterAll', ['UtilsService', 'VRUIUtilsSe
 				};
 			};
 
+			api.getSummary = function () {
+			    return 'None';
+			};
+
 			if (ctrl.onReady != null) {
 				ctrl.onReady(api);
 			}

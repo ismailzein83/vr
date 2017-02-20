@@ -72,6 +72,12 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                 return data;
             };
 
+            api.getSummary = function () {
+                var uploadedFileName = ($scope.scopeModel.file != undefined) ? $scope.scopeModel.file.fileName : 'None';
+                var headerRowExistsAsString = ($scope.scopeModel.headerRowExists === true) ? 'Header Exists' : 'Header Does Not Exist';
+                return 'Uploaded File: ' + uploadedFileName + ' | ' + headerRowExistsAsString;
+            };
+
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }

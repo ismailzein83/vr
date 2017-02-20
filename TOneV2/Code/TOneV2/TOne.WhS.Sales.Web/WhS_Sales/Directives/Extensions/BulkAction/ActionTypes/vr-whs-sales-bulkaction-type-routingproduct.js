@@ -85,6 +85,12 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 				};
 			};
 
+			api.getSummary = function () {
+			    var routingProductName = ($scope.scopeModel.selectedRoutingProduct != undefined) ? $scope.scopeModel.selectedRoutingProduct.Name : 'None';
+			    var followsRateDateAsString = ($scope.scopeModel.followRateDate === true) ? 'Follows Rate Date' : 'Does Not Follow Rate Date';
+			    return 'Routing Product: ' + routingProductName + ' | ' + followsRateDateAsString;
+			};
+
 			if (ctrl.onReady != null) {
 				ctrl.onReady(api);
 			}
