@@ -370,6 +370,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public int GetCarrierAccountCurrencyId(int carrierAccountId)
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            return GetCarrierAccountCurrencyId(carrierAccount);
+        }
+
+        public int GetCarrierAccountCurrencyId(CarrierAccount carrierAccount)
+        {
             if (carrierAccount == null)
                 throw new NullReferenceException("carrierAccount");
             if (carrierAccount.CarrierAccountSettings == null)
@@ -487,6 +492,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public string GetCarrierAccountName(int carrierAccountId)
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            return GetCarrierAccountName(carrierAccount);
+        }
+
+        public string GetCarrierAccountName(CarrierAccount carrierAccount)
+        {
             if (carrierAccount == null)
                 return null;
             string profileName = _carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId);

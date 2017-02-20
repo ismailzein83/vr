@@ -50,6 +50,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public string GetCarrierProfileName(int carrierProfileId)
         {
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
+            return GetCarrierProfileName(carrierProfile);
+        }
+
+        public string GetCarrierProfileName(CarrierProfile carrierProfile)
+        {
             return carrierProfile != null ? carrierProfile.Name : null;
         }
         public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
@@ -170,6 +175,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public int GetCarrierProfileCurrencyId(int carrierProfileId)
         {
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
+            return GetCarrierProfileCurrencyId(carrierProfile);
+        }
+
+        public int GetCarrierProfileCurrencyId(CarrierProfile carrierProfile)
+        {
             if (carrierProfile == null)
                 throw new NullReferenceException("carrierProfile");
             if (carrierProfile.Settings == null)
