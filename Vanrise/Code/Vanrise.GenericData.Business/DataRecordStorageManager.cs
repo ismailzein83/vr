@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Entities.DataStorage.DataRecordStorage;
@@ -481,6 +482,14 @@ namespace Vanrise.GenericData.Business
                 return dataManager.GetFilteredDataRecords(input);
             }
 
+            protected override ResultProcessingHandler<DataRecordDetail> GetResultProcessingHandler(DataRetrievalInput<DataRecordQuery> input, BigResult<DataRecordDetail> bigResult)
+            {
+                return new ResultProcessingHandler<DataRecordDetail>
+                {
+                    ExportExcelHandler = new DataRecordStorageExcelExportHandler(input.Query)
+                };
+            }
+
         }
 
         #endregion
@@ -509,5 +518,51 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
+
+        private class DataRecordStorageExcelExportHandler : ExcelExportHandler<DataRecordDetail>
+        {
+            DataRecordQuery _query;
+            public DataRecordStorageExcelExportHandler(DataRecordQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DataRecordDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+
+                if (_query.Columns != null)
+                {
+                    foreach (var dimName in _query.Columns)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = dimName });
+                    }
+                }
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    if (record.FieldValues != null)
+                    {
+                        foreach (var dimValue in _query.Columns)
+                        {
+                            DataRecordFieldValue dataRecordFieldValue;
+                            if (!record.FieldValues.TryGetValue(dimValue, out dataRecordFieldValue))
+                                throw new NullReferenceException(String.Format("dataRecordFieldValue. dimValue '{0}'", dataRecordFieldValue.Value));
+                            row.Cells.Add(new ExportExcelCell { Value = dataRecordFieldValue.Description });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
     }
 }

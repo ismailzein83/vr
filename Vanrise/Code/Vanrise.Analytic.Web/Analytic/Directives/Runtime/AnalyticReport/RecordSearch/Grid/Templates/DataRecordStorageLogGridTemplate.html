@@ -4,7 +4,7 @@
                  dataretrievalfunction="ctrl.dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
                  on-ready="ctrl.onGridReady"
-                 menuactions="ctrl.menuActions" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.sortDirection">
+                 menuactions="ctrl.menuActions" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.sortDirection" enableautoexport="true">
         <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" numberprecision="column.numberprecision" type="column.type"
                            field="column.Field"
                            tag="column" columnindex="$index" widthfactor="column.Widthfactor" fixedwidth="column.ColumnSettings.FixedWidth"></vr-datagridcolumn>
