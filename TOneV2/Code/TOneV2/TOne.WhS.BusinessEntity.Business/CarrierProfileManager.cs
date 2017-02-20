@@ -186,7 +186,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("carrierProfile.Settings");
             return carrierProfile.Settings.CurrencyId;
         }
-       
+        public int GetCustomerTimeZoneId(int carrierProfileId)
+        {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            if (carrierProfile == null)
+                throw new NullReferenceException("carrierProfile");
+            if (carrierProfile.Settings == null)
+                throw new NullReferenceException("carrierProfile.Settings");
+            return carrierProfile.Settings.DefaultCusotmerTimeZoneId;
+        }
         #endregion
 
         #region Settings

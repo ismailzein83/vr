@@ -21,5 +21,6 @@ namespace Vanrise.Invoice.Entities
     public abstract class InvoiceSettingPart
     {
         public abstract  Guid ConfigId { get;}
+
     }
 }

@@ -39,6 +39,31 @@ app.directive('vrInvoiceInvoicesettingRuntimeEditor', ['UtilsService', 'VRUIUtil
             var context;
             function initializeController() {
                 ctrl.sections = [];
+                ctrl.isSectionVisible = function (section) {
+                    if (section != undefined && section.tabobject != undefined)
+                    {
+                        for(var i=0;i<section.Rows.length;i++)
+                        {
+                            var row = section.Rows[i];
+                            if(row.Parts != undefined)
+                            {
+                                for(var k=0;k<row.Parts.length;k++)
+                                {
+                                    var part = row.Parts[k];
+                                    if (part.isVisible)
+                                    {
+
+                                        section.tabobject.showTab = true;
+                                        return true;
+                                    }
+                                      
+                                }
+                            }
+                        }
+                        section.tabobject.showTab = false;
+                    }
+                    return false;
+                };
                 defineAPI();
             }
 
@@ -60,6 +85,10 @@ app.directive('vrInvoiceInvoicesettingRuntimeEditor', ['UtilsService', 'VRUIUtil
                             var section = payload.sections[i];
                             section.readyPromiseDeferred = UtilsService.createPromiseDeferred();
                             section.loadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                            if (section.isVisible == undefined)
+                                section.isVisible = true;
+                            if (section.isVisible)
                             editorPromises.push(section.loadPromiseDeferred.promise);
                         }
 

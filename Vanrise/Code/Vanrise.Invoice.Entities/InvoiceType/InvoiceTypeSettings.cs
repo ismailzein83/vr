@@ -38,6 +38,7 @@ namespace Vanrise.Invoice.Entities
     {
         public Guid PartConfigId { get; set; }
         public Object PartDefinitionSetting { get; set; }
+        public bool IsOverridable { get; set; }
     }
 
     public class AutomaticInvoiceAction

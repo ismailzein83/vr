@@ -9,5 +9,6 @@ namespace Vanrise.Invoice.Entities
     public class EffectivePartnerInvoiceSetting
     {
         public InvoiceSetting InvoiceSetting { get; set; }
+        public PartnerInvoiceSetting PartnerInvoiceSetting { get; set; }
     }
 }

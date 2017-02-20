@@ -158,6 +158,22 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
             rdlcReportParameters.Add(key.ToString(), new VRRdlcReportParameter { Value = value, IsVisible = isVisible });
         }
+
+        public override int? GetPartnerTimeZoneId(IPartnerTimeZoneContext context)
+        {
+            string[] partnerId = context.PartnerId.Split('_');
+            if (partnerId[0].Equals("Profile"))
+            {
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                return carrierProfileManager.GetCustomerTimeZoneId(Convert.ToInt32(partnerId[1]));
+            }
+            else if (partnerId[0].Equals("Account"))
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                return carrierAccountManager.GetCustomerTimeZoneId(Convert.ToInt32(partnerId[1]));
+            }
+            return null;
+        }
     }
       
 }

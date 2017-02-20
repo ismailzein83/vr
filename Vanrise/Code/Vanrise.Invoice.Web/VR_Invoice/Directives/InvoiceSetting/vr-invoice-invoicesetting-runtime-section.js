@@ -52,6 +52,9 @@ app.directive('vrInvoiceInvoicesettingRuntimeSection', ['UtilsService', 'VRUIUti
                             var row = payload.rows[i];
                             row.readyPromiseDeferred = UtilsService.createPromiseDeferred();
                             row.loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            if (row.isVisible == undefined)
+                                row.isVisible = true;
+                            if (row.isVisible)
                             promises.push(row.loadPromiseDeferred.promise);
                             preparePartsObject(row);
                         }

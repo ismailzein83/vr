@@ -68,6 +68,17 @@ namespace TOne.WhS.BusinessEntity.Business
                    return dic;
                });
         }
+        public int GetCustomerTimeZoneId(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new NullReferenceException("carrierAccount");
+            if (carrierAccount.CustomerSettings == null)
+                throw new NullReferenceException("carrierProfile.CustomerSettings");
+            if (carrierAccount.CustomerSettings.InvoiceTimeZone && carrierAccount.CustomerSettings.TimeZoneId.HasValue)
+                return carrierAccount.CustomerSettings.TimeZoneId.Value;
+           return new CarrierProfileManager().GetCustomerTimeZoneId(carrierAccount.CarrierProfileId);
+        }
         public IEnumerable<CarrierAccount> GetCarriersByProfileId(int carrierProfileId, bool getCustomers, bool getSuppliers)
         {
             if (getCustomers)

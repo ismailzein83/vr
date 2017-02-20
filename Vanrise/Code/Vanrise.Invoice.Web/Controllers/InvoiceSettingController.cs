@@ -57,5 +57,12 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceSettingFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<InvoiceSettingFilter>(filter) : null;
             return _manager.GetInvoiceSettingsInfo(serializedFilter);
         }
+      
+        [HttpGet]
+        [Route("GetOverridableInvoiceSetting")]
+        public List<InvoiceSettingPartUISection> GetOverridableInvoiceSetting(Guid invoiceSettingId)
+        {
+            return _manager.GetOverridableInvoiceSetting(invoiceSettingId);
+        }
     }
 }

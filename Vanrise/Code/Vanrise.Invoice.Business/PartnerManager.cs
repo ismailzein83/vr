@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 
@@ -64,6 +66,12 @@ namespace Vanrise.Invoice.Business
                 return duePeriod.DuePeriod;
             return default(int);
         }
+        public int? GetPartnerTimeZone(Guid invoiceTypeId, string partnerId)
+        {
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
+            PartnerTimeZoneContext partnerTimeZoneContext = new PartnerTimeZoneContext { PartnerId = partnerId };
+            return invoicePartnerManager.GetPartnerTimeZoneId(partnerTimeZoneContext);
+        }
         public string GetPartnerSerialNumberPattern(Guid invoiceTypeId, string partnerId)
         {
             var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
@@ -74,7 +82,7 @@ namespace Vanrise.Invoice.Business
                 PartnerId = partnerId,
                 InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
             };
-            var serialNumberPartern = invoicePartnerManager.GetInvoicePartnerSettingPart<SerialNumberPatternInvoiceSettingPart>(invoicePartnerSettingPartContext);
+            var serialNumberPartern = invoicePartnerManager.GetInvoicePartnerSettingPart<SerialNumberPatternInvoiceSettingPart>(invoicePartnerSettingPartContext) as SerialNumberPatternInvoiceSettingPart;
             if (serialNumberPartern != null)
                 return serialNumberPartern.SerialNumberPattern;
             return null;

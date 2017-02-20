@@ -36,6 +36,15 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
             var invoiceTypeId;
             function initializeController() {
                 ctrl.parts = [];
+
+                ctrl.isValidate = function(part)
+                {
+                    if(context != undefined && context.setVisibility != undefined)
+                    {
+                        part.isVisible = context.setVisibility(part);
+                    }
+                }
+
                 defineAPI();
             }
 
@@ -51,7 +60,10 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
                             var part = payload.parts[i];
                             part.readyPromiseDeferred = UtilsService.createPromiseDeferred();
                             part.loadPromiseDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(part.loadPromiseDeferred.promise);
+                            if (part.isVisible == undefined)
+                                part.isVisible = true;
+                            if (part.isVisible)
+                              promises.push(part.loadPromiseDeferred.promise);
                             preparePartObject(part);
                         }
                         return UtilsService.waitMultiplePromises(promises);
@@ -63,6 +75,7 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
                     for (var i = 0; i < ctrl.parts.length; i++) {
                         var part = ctrl.parts[i];
                         if (part.partAPI != undefined)
+                            if(part.isVisible)
                             parts[part.PartConfigId] = part.partAPI.getData();
                     }
                     return parts;
@@ -76,15 +89,17 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
 
                 if (context != undefined)
                     part.runTimeEditor = context.getRuntimeEditor(part.PartConfigId);
-                part.onPartDirectiveReady = function (api) {
-                    part.partAPI = api;
-                    part.readyPromiseDeferred.resolve();
-                };
                 var payload = {
                     fieldValue: context != undefined ? context.getPartsPathValue(part.PartConfigId) : undefined,
                     invoiceTypeId: invoiceTypeId,
-                    context:getContext()
+                    context: getContext()
                 };
+                part.onPartDirectiveReady = function (api) {
+                    part.partAPI = api;
+                    var setLoader = function (value) { $scope.isLoading = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, part.partAPI, payload, setLoader, part.readyPromiseDeferred);
+                };
+               
                 if (part.readyPromiseDeferred != undefined) {
                     part.readyPromiseDeferred.promise.then(function () {
                         part.readyPromiseDeferred = undefined;

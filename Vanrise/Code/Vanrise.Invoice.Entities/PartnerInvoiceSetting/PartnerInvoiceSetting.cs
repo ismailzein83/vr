@@ -15,6 +15,6 @@ namespace Vanrise.Invoice.Entities
     }
     public class PartnerInvoiceSettingDetails
     {
-
+        public Dictionary<Guid, InvoiceSettingPart> InvoiceSettingParts { get; set; }
     }
 }

@@ -67,6 +67,13 @@
                     $scope.title = UtilsService.buildTitleForAddEditor('Part');
             }
 
+            function loadStaticData() {
+                if (rowEntity != undefined)
+                {
+                    $scope.scopeModel.isOverridable = rowEntity.IsOverridable;
+                }
+            }
+
             function loadDirective() {
                 if(rowEntity != undefined && rowEntity.PartDefinitionSetting != undefined)
                 {
@@ -95,7 +102,7 @@
                 });
             }
 
-            return UtilsService.waitMultipleAsyncOperations([loadDirective, setTitle, getInvoiceSettingDefinitionTemplateConfigs])
+            return UtilsService.waitMultipleAsyncOperations([loadDirective, setTitle,loadStaticData, getInvoiceSettingDefinitionTemplateConfigs])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -107,7 +114,8 @@
         function buildRowObjectFromScope() {
             var rowObject = {
                 PartConfigId: $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId,
-                PartDefinitionSetting: directiveAPI != undefined? directiveAPI.getData():undefined
+                PartDefinitionSetting: directiveAPI != undefined ? directiveAPI.getData() : undefined,
+                IsOverridable: $scope.scopeModel.isOverridable
             };
             return rowObject;
         }

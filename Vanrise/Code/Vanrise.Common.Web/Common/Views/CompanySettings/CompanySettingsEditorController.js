@@ -110,6 +110,7 @@
 
         function buildCompanySettingsObjFromScope() {
             var obj = {
+                CompanySettingId: companySettingEntity != undefined? companySettingEntity.CompanySettingId : UtilsService.guid(),
                 CompanyName: $scope.scopeModel.companyName,
                 ProfileName: $scope.scopeModel.profileName,
                 RegistrationNumber: $scope.scopeModel.registrationNumber,

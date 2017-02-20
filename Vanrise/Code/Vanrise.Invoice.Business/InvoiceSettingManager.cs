@@ -137,7 +137,65 @@ namespace Vanrise.Invoice.Business
              return  invoiceSettingPart as T;
             throw new NullReferenceException("invoiceSettingPart");
         }
+        public List<InvoiceSettingPartUISection> GetOverridableInvoiceSetting(Guid invoiceSettingId)
+        {
+            var invoiceSetting = GetInvoiceSetting(invoiceSettingId);
+            if(invoiceSetting == null)
+                throw new NullReferenceException("invoiceSetting");
 
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceSetting.InvoiceTypeId);
+            if (invoiceType == null)
+                throw new NullReferenceException("invoiceType");
+            if (invoiceType.Settings == null)
+                throw new NullReferenceException("invoiceType.Settings");
+
+            List<InvoiceSettingPartUISection> invoiceSettingPartUISections = null;
+            if (invoiceType.Settings.InvoiceSettingPartUISections != null)
+            {
+                invoiceSettingPartUISections = new List<InvoiceSettingPartUISection>();
+                foreach(var section in invoiceType.Settings.InvoiceSettingPartUISections)
+                {
+                    InvoiceSettingPartUISection invoiceSettingPartUISection = new InvoiceSettingPartUISection
+                    {
+                        SectionTitle = section.SectionTitle
+                    };
+                    if(section.Rows != null)
+                    {
+                        invoiceSettingPartUISection.Rows = new List<InvoiceSettingPartUIRow>();
+                        foreach(var row in section.Rows)
+                        {
+                            InvoiceSettingPartUIRow invoiceSettingPartUIRow = new InvoiceSettingPartUIRow();
+                            if(row.Parts != null)
+                            {
+                                invoiceSettingPartUIRow.Parts = new List<InvoiceSettingPartDefinition>();
+                                foreach(var part in row.Parts)
+                                {
+                                    if (part.IsOverridable)
+                                    {
+                                        InvoiceSettingPartDefinition invoiceSettingPartDefinition = new InvoiceSettingPartDefinition
+                                        {
+                                            IsOverridable = part.IsOverridable,
+                                            PartDefinitionSetting = part.PartDefinitionSetting,
+                                            PartConfigId = part.PartConfigId
+                                        };
+                                        invoiceSettingPartUIRow.Parts.Add(invoiceSettingPartDefinition);
+                                    }
+                                }
+                                if (invoiceSettingPartUIRow.Parts != null && invoiceSettingPartUIRow.Parts.Count >0 )
+                                {
+                                    invoiceSettingPartUISection.Rows.Add(invoiceSettingPartUIRow);
+                                }
+                            }
+                        }
+                    }
+                    if(invoiceSettingPartUISection.Rows != null && invoiceSettingPartUISection.Rows.Count > 0)
+                    {
+                        invoiceSettingPartUISections.Add(invoiceSettingPartUISection);
+                    }
+                }
+            }
+            return invoiceSettingPartUISections;
+        }
         #endregion
 
         #region Private Classes

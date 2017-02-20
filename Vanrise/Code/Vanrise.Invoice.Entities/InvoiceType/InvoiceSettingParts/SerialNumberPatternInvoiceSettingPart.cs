@@ -10,9 +10,11 @@ namespace Vanrise.Invoice.Entities
     public class SerialNumberPatternInvoiceSettingPart : InvoiceSettingPart
     {
         public string SerialNumberPattern { get; set; }
+        public static Guid s_configId = new Guid("BB32D601-A1F7-478E-A5D9-F554DE35C85C");
+        
         public override Guid ConfigId
         {
-            get { return new Guid("BB32D601-A1F7-478E-A5D9-F554DE35C85C"); }
+            get { return s_configId; }
         }
     }
 }

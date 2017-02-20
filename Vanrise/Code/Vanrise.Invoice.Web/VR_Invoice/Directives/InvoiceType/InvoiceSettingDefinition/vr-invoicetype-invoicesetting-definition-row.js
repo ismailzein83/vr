@@ -105,7 +105,8 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionRow', ['UtilsService', 'VRUI
             function editPart(dataItem) {
                 var onPartUpdated = function (part) {
                     var partIndex = ctrl.parts.indexOf(dataItem);
-                    ctrl.parts[partIndex] = { Entity: part };
+                    var partConfig = UtilsService.getItemByVal(invoiceSettingPartsConfigs, part.PartConfigId, "ExtensionConfigurationId");
+                    ctrl.parts[partIndex] = { Entity: part, partName: partConfig != undefined ? partConfig.Title : undefined };
 
                 };
                 VR_Invoice_InvoiceTypeService.editInvoiceSettingPart(onPartUpdated, dataItem.Entity);

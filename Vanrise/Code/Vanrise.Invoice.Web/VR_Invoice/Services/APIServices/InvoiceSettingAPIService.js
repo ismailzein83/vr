@@ -35,6 +35,11 @@
                 invoiceSettingId: invoiceSettingId
             });
         }
+        function GetOverridableInvoiceSetting(invoiceSettingId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetOverridableInvoiceSetting"), {
+                invoiceSettingId: invoiceSettingId,
+            });
+        }
         return ({
             GetInvoiceSetting: GetInvoiceSetting,
             GetFilteredInvoiceSettings: GetFilteredInvoiceSettings,
@@ -43,7 +48,9 @@
             UpdateInvoiceSetting: UpdateInvoiceSetting,
             HasUpdateInvoiceSettingPermission: HasUpdateInvoiceSettingPermission,
             GetInvoiceSettingsInfo: GetInvoiceSettingsInfo,
-            SetInvoiceSettingDefault: SetInvoiceSettingDefault
+            SetInvoiceSettingDefault: SetInvoiceSettingDefault,
+            GetOverridableInvoiceSetting: GetOverridableInvoiceSetting
+
         });
     }
 

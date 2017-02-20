@@ -36,10 +36,9 @@ namespace Vanrise.Invoice.BP.Activities
 
                 var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
                 var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
-
+                
                 PartnerManager partnerManager = new PartnerManager();
                 var partnerSetting = partnerManager.GetInvoicePartnerSetting(invoiceTypeId, partnerId);
-
                 AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceSettingManager.GetInvoiceSettingDetailByType<AutomaticInvoiceSettingPart>(partnerSetting.InvoiceSetting.InvoiceSettingId);
                 if (automaticInvoiceSettingPart.IsEnabled)
                 {
@@ -51,7 +50,11 @@ namespace Vanrise.Invoice.BP.Activities
                     var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
                     if (billingPeriod != null)
                     {
-
+                        int? timeZoneId = null;
+                        if (invoiceType.Settings.UseTimeZone)
+                        {
+                            timeZoneId = partnerManager.GetPartnerTimeZone(invoiceTypeId, partnerId);
+                        }
                         if (CheckIFShouldGenerateInvoice(billingPeriod.ToDate, endDateOffsetFromToday, issueDate))
                         {
                             var generatedInvoice = invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
@@ -60,7 +63,8 @@ namespace Vanrise.Invoice.BP.Activities
                                                       IssueDate = issueDate,
                                                       PartnerId = partnerId,
                                                       FromDate = billingPeriod.FromDate,
-                                                      ToDate = billingPeriod.ToDate
+                                                      ToDate = billingPeriod.ToDate,
+                                                      TimeZoneId = timeZoneId
                                                   });
                             PartnerNameManagerContext PartnerNameManagerContext = new PartnerNameManagerContext
                             {

@@ -12,22 +12,23 @@ namespace Vanrise.Invoice.Entities
         public virtual string PartnerFilterSelector { get; set; }
         public abstract string GetPartnerName(IPartnerNameManagerContext context);
         public abstract dynamic GetPartnerInfo(IPartnerManagerInfoContext context);
+        public abstract int? GetPartnerTimeZoneId(IPartnerTimeZoneContext context);
         public abstract dynamic GetActualPartnerId(IActualPartnerContext context);
         public virtual EffectivePartnerInvoiceSetting GetEffectivePartnerInvoiceSetting(IInvoicePartnerSettingsContext context)
         {
             IPartnerInvoiceSettingManager partnerInvoiceSettingManager = BusinessManagerFactory.GetManager<IPartnerInvoiceSettingManager>();
             IInvoiceSettingManager manager = BusinessManagerFactory.GetManager<IInvoiceSettingManager>();
-            var partnerInvoiceManager = partnerInvoiceSettingManager.GetPartnerInvoiceSettingByPartnerId(context.PartnerId);
+            var partnerInvoiceSetting = partnerInvoiceSettingManager.GetPartnerInvoiceSettingByPartnerId(context.PartnerId);
             InvoiceSetting invoiceSetting = null;
-            if (partnerInvoiceManager != null)
+            if (partnerInvoiceSetting != null)
             {
-                invoiceSetting = manager.GetInvoiceSetting(partnerInvoiceManager.InvoiceSettingID);
+                invoiceSetting = manager.GetInvoiceSetting(partnerInvoiceSetting.InvoiceSettingID);
             }
             else
             {
                 invoiceSetting = manager.GetDefaultInvoiceSetting(context.InvoiceTypeId);
             }
-            return new EffectivePartnerInvoiceSetting { InvoiceSetting = invoiceSetting };
+            return new EffectivePartnerInvoiceSetting { InvoiceSetting = invoiceSetting, PartnerInvoiceSetting = partnerInvoiceSetting };
         }
         public virtual T GetInvoicePartnerSettingPart<T>(IInvoicePartnerSettingPartContext context) where T : InvoiceSettingPart
         {
@@ -38,6 +39,14 @@ namespace Vanrise.Invoice.Entities
             };
             var invoiceSetting = GetEffectivePartnerInvoiceSetting(invoicePartnerSettingsContext);
             IInvoiceSettingManager manager = BusinessManagerFactory.GetManager<IInvoiceSettingManager>();
+            IPartnerInvoiceSettingManager partnerInvoiceSettingManager = BusinessManagerFactory.GetManager<IPartnerInvoiceSettingManager>();
+            if(invoiceSetting.PartnerInvoiceSetting !=null)
+            {
+                var invoicePartnerSettingPart = partnerInvoiceSettingManager.GetPartnerInvoiceSettingDetailByType<T>(invoiceSetting.PartnerInvoiceSetting.PartnerInvoiceSettingId);
+                if (invoicePartnerSettingPart != null)
+                    return invoicePartnerSettingPart;
+            }
+         
             return manager.GetInvoiceSettingDetailByType<T>(invoiceSetting.InvoiceSetting.InvoiceSettingId);
         }
     }
@@ -48,6 +57,10 @@ namespace Vanrise.Invoice.Entities
     public interface IInvoicePartnerSettingsContext : IBasePartnerManagerContext
     {
         Guid InvoiceTypeId { get;}
+    }
+    public interface IPartnerTimeZoneContext:IBasePartnerManagerContext
+    {
+
     }
     public class InvoicePartnerSettingsContext:IInvoicePartnerSettingsContext
     {
