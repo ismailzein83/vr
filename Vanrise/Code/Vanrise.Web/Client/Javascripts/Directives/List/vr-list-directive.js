@@ -7,7 +7,8 @@ app.directive('vrList', [ 'MultiTranscludeService', function ( MultiTranscludeSe
         transclude: true,
         restrict: 'E',
         scope: {
-            maxitemsperrow: '@'
+            maxitemsperrow: '@',
+            hideremoveicon: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

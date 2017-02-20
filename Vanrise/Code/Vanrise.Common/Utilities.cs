@@ -376,6 +376,14 @@ namespace Vanrise.Common
             Regex regularExpression = new Regex(validEmailPattern, RegexOptions.IgnoreCase);
             return regularExpression.IsMatch(email);
         }
+
+        public static T CloneObject<T>(T obj) where T : class
+        {
+            if (obj == null)
+                return null;
+
+            return Vanrise.Common.Serializer.Deserialize<T>(Vanrise.Common.Serializer.Serialize(obj));
+        }
     }
 
     public interface IPropValueReader

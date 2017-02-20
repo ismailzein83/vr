@@ -7,7 +7,7 @@ app.directive('vrListitem', ['UtilsService', function (UtilsService) {
         transclude: true,
         restrict: 'E',
         scope: {
-            onremove:'&'
+            onremove: '&'
         },
         require: '^^vrList',
         controller: function ($scope, $element, $attrs) {
@@ -20,7 +20,7 @@ app.directive('vrListitem', ['UtilsService', function (UtilsService) {
 
             var ctrl = $scope.listItemCtrl;
             var maxItemsPerRow = listCtrl.maxitemsperrow != undefined ? parseInt(listCtrl.maxitemsperrow) : 1;
-
+            ctrl.hideremoveicon = listCtrl.hideremoveicon;
             var colNumber;
             switch (maxItemsPerRow) {
                 case 1: colNumber = 12; break;
@@ -38,12 +38,12 @@ app.directive('vrListitem', ['UtilsService', function (UtilsService) {
             ctrl.colNumber = colNumber;
         },
         template: function (elem, attrs) {
-            
+
 
             var itemContentWidth = '100%';
             var removeItemTemplate = '';
             if (attrs.onremove != undefined) {
-                removeItemTemplate = '  <i  ng-if="!ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor" style="width:10px;position:absolute;top:10px;" ng-click="listItemCtrl.onremove()"></i>';
+                removeItemTemplate = '  <i  ng-if="!ctrl.readOnly && !listItemCtrl.hideremoveicon" class="glyphicon glyphicon-remove hand-cursor" style="width:10px;position:absolute;top:10px;" ng-click="listItemCtrl.onremove()"></i>';
                 itemContentWidth = 'calc(100% - 14px)';
             }
 

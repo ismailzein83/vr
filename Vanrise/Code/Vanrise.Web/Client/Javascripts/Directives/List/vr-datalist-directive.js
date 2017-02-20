@@ -10,13 +10,13 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
             datasource: '=',
             onremoveitem: '&',
             autoremoveitem: '=',
-            onitemclicked: '='
+            onitemclicked: '=',
+            hideremoveicon: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             if (ctrl.datasource == undefined)
                 ctrl.datasource = {};
-
             ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
 
             ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
@@ -71,7 +71,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
                 onRemoveAttr = 'onremove="VRDatalistCtrl.onInternalRemove(dataItem)"';
                 contentWidth += 14;
             }
-               
+
 
             var onItemClickedAttr = '';
             if (attrs.onitemclicked != undefined) {
@@ -80,7 +80,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
             var title='';
             if (attrs.enabletitle != undefined)
                 title = 'title="{{dataItem}}"';
-            var template = '<vr-list maxitemsperrow="{{VRDatalistCtrl.maxitemsperrow}}" iscollapsible="{{VRDatalistCtrl.collapsible}}">'
+            var template = '<vr-list maxitemsperrow="{{VRDatalistCtrl.maxitemsperrow}}" hideremoveicon="VRDatalistCtrl.hideremoveicon"  iscollapsible="{{VRDatalistCtrl.collapsible}}">'
                             + '<div ng-sortable="VRDatalistCtrl.itemsSortable">'
                              + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
                              + '<span style="left: 22px;top: 6px;position:absolute;z-index:200" class="hand-cursor glyphicon" ng-show="VRDatalistCtrl.collapsible" ng-init="expande=true" ng-click="expande=!expande" ng-class="expande?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'"></span>'

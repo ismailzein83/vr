@@ -570,8 +570,8 @@
         function validateDates(fromDate, toDate) {
             if (fromDate == undefined || toDate == undefined)
                 return null;
-            var from = new Date(fromDate);
-            var to = new Date(toDate);
+            var from = (fromDate instanceof Date ) ? fromDate : createDateFromString(fromDate);
+            var to = (toDate instanceof Date) ? toDate: createDateFromString(toDate);
             if (from.getTime() > to.getTime())
                 return "Start should be before end";
             else
