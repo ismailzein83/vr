@@ -144,12 +144,12 @@
                 if (_selectedItem != undefined) {
 
                     $scope.scopeModel.showCriteriaSection = $scope.scopeModel.showSettingsSection = true;
-                    $scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
-                    $scope.scopeModel.excludedCodes = [];
-                    reloadSuppliersWithZonesGroupSection();
-                    reloadFilterBySection();
-                    reloadSaleZoneGroupSection();
-                    reloadCustomerGroupSection();
+                    //$scope.scopeModel.selectedCodeCriteriaGroupTemplate = undefined;
+                    //$scope.scopeModel.excludedCodes = [];
+                    //reloadSuppliersWithZonesGroupSection();
+                    //reloadFilterBySection();
+                    //reloadSaleZoneGroupSection();
+                    //reloadCustomerGroupSection();
                 }
 
                 function reloadSuppliersWithZonesGroupSection() {
