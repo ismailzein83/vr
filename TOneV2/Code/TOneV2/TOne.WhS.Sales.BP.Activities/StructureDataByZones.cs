@@ -128,6 +128,10 @@ namespace TOne.WhS.Sales.BP.Activities
 			{
 				if (!dataByZoneName.TryGetValue(routingProductToAdd.ZoneName, out dataByZone))
 					AddEmptyDataByZone(dataByZoneName, routingProductToAdd.ZoneName, routingProductToAdd.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
+
+                if (dataByZone.ZoneRateGroup == null)
+                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, routingProductToAdd.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
+
 				dataByZone.SaleZoneRoutingProductToAdd = routingProductToAdd;
 			}
 
