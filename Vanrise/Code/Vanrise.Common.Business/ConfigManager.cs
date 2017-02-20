@@ -56,15 +56,20 @@ namespace Vanrise.Common.Business
         {
             SettingManager settingManager = new SettingManager();
             BankDetailsSettings bankDetailsSettings = settingManager.GetSetting<BankDetailsSettings>(BankDetailsSettings.SETTING_TYPE);
+            if (bankDetailsSettings == null)
+                return null;
+            if (bankDetailsSettings.BankDetails == null )
+                return null;
             IEnumerable<BankDetail> bankDetails = bankDetailsSettings.BankDetails;
-            if (bankDetails == null)
-                throw new NullReferenceException("BankDetailsSettings.BankDetails NullReferenceException");
             return bankDetails;
         }
 
         public IEnumerable<BankDetailsSettingsInfo> GetBankDetailsInfo()
         {
-            IEnumerable<BankDetail> bankDetails = GetBankDetails(); 
+            IEnumerable<BankDetail> bankDetails = GetBankDetails();
+            if (bankDetails == null)
+                return null;
+
             List<BankDetailsSettingsInfo> lstBankDetailsInfo = new List<BankDetailsSettingsInfo>();
             foreach (var bankDetail in bankDetails)
             {
@@ -72,6 +77,9 @@ namespace Vanrise.Common.Business
                 bankDetailsSettingsInfo = BankDetailInfoMapper(bankDetail);
                 lstBankDetailsInfo.Add(bankDetailsSettingsInfo);
             }
+
+            if (lstBankDetailsInfo == null)
+                return null;
 
             return lstBankDetailsInfo;
         }
