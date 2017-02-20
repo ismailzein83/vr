@@ -63,9 +63,9 @@
 
         function setTitle() {
             if (isEditMode && companySettingEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(companySettingEntity.CompanyName, "Company Setting");
+                $scope.title = UtilsService.buildTitleForUpdateEditor(companySettingEntity.CompanyName, "Company");
             else
-                $scope.title = UtilsService.buildTitleForAddEditor("Company Setting");
+                $scope.title = UtilsService.buildTitleForAddEditor("Company");
         }
 
 
