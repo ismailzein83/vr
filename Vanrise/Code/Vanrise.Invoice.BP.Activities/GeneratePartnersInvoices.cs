@@ -45,7 +45,7 @@ namespace Vanrise.Invoice.BP.Activities
 
                     int endDateOffsetFromToday = this.EndDateOffsetFromToday.Get(context.ActivityContext);
                     int issueDateOffsetFromToday = this.IssueDateOffsetFromToday.Get(context.ActivityContext);
-                    var issueDate = DateTime.Now.AddDays(-issueDateOffsetFromToday);
+                    var issueDate = DateTime.Today.AddDays(-issueDateOffsetFromToday);
 
                     var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
                     if (billingPeriod != null)
@@ -55,7 +55,7 @@ namespace Vanrise.Invoice.BP.Activities
                         {
                             timeZoneId = partnerManager.GetPartnerTimeZone(invoiceTypeId, partnerId);
                         }
-                        if (CheckIFShouldGenerateInvoice(billingPeriod.ToDate, endDateOffsetFromToday, issueDate))
+                        if (CheckIFShouldGenerateInvoice(billingPeriod.ToDate, endDateOffsetFromToday))
                         {
                             var generatedInvoice = invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
                                                   {
@@ -86,9 +86,9 @@ namespace Vanrise.Invoice.BP.Activities
             }
         }
 
-        private bool CheckIFShouldGenerateInvoice(DateTime toDate, int endDateOffsetFromToday, DateTime issueDate)
+        private bool CheckIFShouldGenerateInvoice(DateTime toDate, int endDateOffsetFromToday)
         {
-            return (toDate <= issueDate.AddDays(-endDateOffsetFromToday));
+            return (toDate <= DateTime.Today.AddDays(-endDateOffsetFromToday));
         }
     }
 }
