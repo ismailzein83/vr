@@ -2,16 +2,17 @@
 
     "use strict";
 
-    vrDropDownSection.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService', 'MultiTranscludeService'];
+    vrDropDownSection.$inject = ['$timeout', 'BaseDirService', 'VRValidationService', 'UtilsService', 'MultiTranscludeService'];
 
-    function vrDropDownSection(BaseDirService, VRValidationService, UtilsService, MultiTranscludeService) {
+    function vrDropDownSection($timeout, BaseDirService, VRValidationService, UtilsService, MultiTranscludeService) {
 
         return {
             restrict: 'E',
             transclude: true,
             scope: {
                 onReady: '=',
-                defaultstate:'='
+                defaultstate: '='
+
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -19,91 +20,89 @@
                 ctrl.menuid = BaseDirService.generateHTMLElementName();
                 ctrl.initializeSection =  function() {
                     ctrl.showmenu = true;
-                    setTimeout(function () {
-                        calculatePosition(true);
-                    }, 500);
+                    calculatePosition(ctrl,true);
+                    setTimeout(function () {                        
+                        addBackDrop();                        
+                        checkOnExpandMethode();
+                    });
+                    
                 };
                
                 ctrl.expandSection = function (e) {
                     if (e != undefined && $(e.target).hasClass('vanrise-inpute')) {
                         return;
                     }
-                    calculatePosition();
+                    
                     setTimeout(function () {                        
-                        $scope.$apply(function () {                          
-                            ctrl.showmenu = true;                           
+                        $scope.$apply(function () {
+                            ctrl.showmenu = true;
+                            calculatePosition(ctrl);
                         });
                         $('#' + ctrl.menuid).slideDown("slow");
+                        addBackDrop();
+                        checkOnExpandMethode();
                     });
                 };
                 ctrl.collapseSection = function () {
                     $('#' + ctrl.menuid).slideUp("slow", function () {
                         ctrl.showmenu = false;
+                        $('.vr-backdrop').remove();
+                        checkOnCollapseMethode();
                     });
                 };              
 
                 $('#' + ctrl.id).parents('div').scroll(function () {
-                    fixDropdownPosition();
+                    fixDropdownSectionPosition();
                 });
                 $(window).scroll(function () {
-                    fixDropdownPosition();
+                    fixDropdownSectionPosition();
                 });
                 $(window).resize(function () {
-                    fixDropdownPosition();
+                    fixDropdownSectionPosition();
                 });
-
-                var fixDropdownPosition = function () {
-                    ctrl.collapseSection(undefined);
-                };
+                $(document).resize(function () {
+                    fixDropdownSectionPosition();
+                });
+                $(document).scroll(function () {
+                    fixDropdownSectionPosition();
+                });
                 $scope.$on('start-drag', function (event, args) {
-                    fixDropdownPosition();
+                    fixDropdownSectionPosition();
                 });
-
-                function calculatePosition(forcedisplay) {
-                  //  setTimeout(function () {
-                        var self = $('#' + ctrl.id).find('.summary-container');
-
-                        var selfHeight = $(self).parent().height();
-                        var selfOffset = $(self).offset();
-                        var dropDown = $('#' + ctrl.menuid);
-                        var top = 0;
-                        var basetop = selfOffset.top - $(window).scrollTop();
-                        var baseleft = selfOffset.left - $(window).scrollLeft();
-
-                        var height = ctrl.bodysectionheight;
-                         console.log($(dropDown).height())
-                        if (innerHeight - basetop < height + 100)
-                            top = basetop - (height);
-                        else
-                            top = selfOffset.top - $(window).scrollTop() - 2;
-                        var style = {
-                            position: 'fixed',
-                            top: top,
-                            left: baseleft,
-                            width: self.parent().width()
-                        };
-                        if (forcedisplay == true)
-                            style.display = 'block';
-                        $(dropDown).css(style);
-                  //  }, 100);
+                var fixDropdownSectionPosition = function () {
+                    ctrl.showmenu = false;
+                    $('.vr-backdrop').remove();
                 };
                
+                function checkOnExpandMethode() {
+                    if ($attrs.onexpandsection != undefined) {
+                        var onExpandSectiondMethod = $scope.$parent.$eval($attrs.onexpandsection);
+                        if (onExpandSectiondMethod != undefined && typeof (onExpandSectiondMethod) == 'function') {
+                            onExpandSectiondMethod();
+                        }
+                    }
+                }
+                function checkOnCollapseMethode() {
+                    if ($attrs.oncollapsesection != undefined) {
+                        var onCollapseSectiondMethod = $scope.$parent.$eval($attrs.oncollapsesection);
+                        if (onCollapseSectiondMethod != undefined && typeof (onCollapseSectiondMethod) == 'function') {
+                            onCollapseSectiondMethod();
+                        }
+                    }
+                }               
+
+                function addBackDrop() {
+                   $('vr-form').last().prepend("<div class='vr-backdrop'></div>");
+                }
+               
             },
+
             compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs) {
-                        var ctrl = $scope.ctrl;
-
-
-                        
-
-                    },
-                    post: function (scope, elem, attr, ctrl, transcludeFn) {
+                return {                   
+                    post: function postLink(scope, elem, attr, ctrl, transcludeFn) {
 
                         MultiTranscludeService.transclude(elem, transcludeFn);
-                        if (ctrl.defaultstate == true)
-                            ctrl.initializeSection();
-                        //ctrl.collapseSection();
+                                                 
                         var api = {};
                         api.collapse = function () {
                             ctrl.collapseSection();
@@ -113,10 +112,16 @@
                         };
                         if (ctrl.onReady != null)
                             ctrl.onReady(api);
-                    },
+
+                        $timeout(function () {
+                            if (scope.ctrl.defaultstate == true) {
+                                ctrl.initializeSection();
+                            }
+                        }, 1000);
+                    }
                 }
             },
-
+            
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
@@ -146,7 +151,32 @@
             }
 
         };
+        function calculatePosition(ctrl,forcedisplay) {
+            var self = $('#' + ctrl.id).find('.summary-container');
 
+            var selfHeight = $(self).parent().height();
+            var selfOffset = $(self).offset();
+            var dropDown = $('#' + ctrl.menuid);
+            var top = 0;
+            var basetop = selfOffset.top - $(window).scrollTop();
+            var baseleft = selfOffset.left - $(window).scrollLeft();
+
+            var height = ctrl.bodysectionheight;
+            console.log($(dropDown).height())
+            if (innerHeight - basetop < height + 100)
+                top = basetop - (height);
+            else
+                top = selfOffset.top - $(window).scrollTop() - 2;
+            var style = {
+                position: 'fixed',
+                top: top,
+                left: baseleft,
+                width: self.parent().width()
+            };
+            if (forcedisplay == true)
+                style.display = 'block';
+            $(dropDown).css(style);
+        };
     }
 
     app.directive('vrDropdownSection', vrDropDownSection);
