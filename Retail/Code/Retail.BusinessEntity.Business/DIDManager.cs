@@ -30,7 +30,55 @@ namespace Retail.BusinessEntity.Business
         {
             var allDIDs = GetCachedDIDs();
             Func<DID, bool> filterExpression = (did) => (input.Query.Number == null || did.Number.ToLower().Contains(input.Query.Number.ToLower()));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDIDs.ToBigResult(input, filterExpression, DIDDetailMapper));
+
+            DIDExcelExportHandler dIDExcel = new DIDExcelExportHandler(input.Query);
+            ResultProcessingHandler<DIDDetail> handler = new ResultProcessingHandler<DIDDetail>()
+            {
+                ExportExcelHandler = dIDExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDIDs.ToBigResult(input, filterExpression, DIDDetailMapper), handler);
+        }
+
+        private class DIDExcelExportHandler : ExcelExportHandler<DIDDetail>
+        {
+            private DIDQuery _query;
+            public DIDExcelExportHandler(DIDQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DIDDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Number of channels" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Number" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "International" });
+
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    DIDSettings settings = (DIDSettings)record.Entity.Settings;
+                    if (settings != null)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        row.Cells.Add(new ExportExcelCell { Value = record.AccountName });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.NumberOfChannels });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Number });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.IsInternational });
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         public DID GetDID(int didId)
