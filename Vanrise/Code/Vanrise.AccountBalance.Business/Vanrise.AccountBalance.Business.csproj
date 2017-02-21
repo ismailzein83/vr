@@ -59,6 +59,7 @@
     <Compile Include="Extensions\AccountBalanceAlertRuleTypeSettings.cs" />
     <Compile Include="Extensions\AlertRuleEntityBalanceInfo.cs" />
     <Compile Include="LiveBalanceManager.cs" />
+    <Compile Include="QueueActivators\UpdateAccountBalancesBaseQueueActivator.cs" />
     <Compile Include="UsageBalanceManager.cs" />
     <Compile Include="BillingTransactionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
