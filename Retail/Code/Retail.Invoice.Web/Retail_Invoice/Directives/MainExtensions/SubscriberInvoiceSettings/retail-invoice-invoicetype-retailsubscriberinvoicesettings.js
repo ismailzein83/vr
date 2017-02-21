@@ -46,10 +46,7 @@ app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["Utils
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var promises = [];
-
-                    //Loading BusinessEntityDefinition Selector
                     var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
                     promises.push(businessEntityDefinitionSelectorLoadPromise);
 
