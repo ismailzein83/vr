@@ -20,12 +20,20 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
     public class UpdateAccountBalancesQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
         public Guid AccountTypeId { get; set; }
+        public Guid TransactionTypeId { get; set; }
         public string AccountId { get; set; }
         public string EffectiveOn { get; set; }
         public string Amount { get; set; }
         public string CurrencyId { get; set; }
-        public Guid TransactionTypeId { get; set; }
+        public static UpdateUsageBalanceItem usageBalanceItem { get; set; }
 
+
+        public override void OnDisposed()
+        {
+        }
+        public override void ProcessItem(Queueing.Entities.PersistentQueueItem item, Queueing.Entities.ItemsToEnqueue outputItems)
+        {
+        }
         public override void ProcessItem(Queueing.Entities.IQueueActivatorExecutionContext context)
         {
             DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
@@ -59,14 +67,6 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
                 UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
                 usageBalanceManager.UpdateUsageBalance(this.AccountTypeId, balanceUsageDetail);
             }
-        }
-
-        public override void ProcessItem(Queueing.Entities.PersistentQueueItem item, Queueing.Entities.ItemsToEnqueue outputItems)
-        {
-        }
-
-        public override void OnDisposed()
-        {
         }
 
 
@@ -348,7 +348,5 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
             }
             return stageBatchRecords;
         }
-
-        public static UpdateUsageBalanceItem usageBalanceItem { get; set; }
     }
 }
