@@ -21,12 +21,13 @@
                 ctrl.initializeSection =  function() {
                     ctrl.showmenu = true;
                     calculatePosition(ctrl, true);
+                    addBackDrop();
                     setTimeout(function () {                        
-                        addBackDrop();                        
+                                            
                         checkOnExpandMethode();
 
                         $('#' + ctrl.menuid).slideDown("slow");
-                    });
+                    },1000);
                     
                 };
 
