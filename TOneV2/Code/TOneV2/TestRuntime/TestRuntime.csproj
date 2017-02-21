@@ -444,6 +444,9 @@
     <Reference Include="Vanrise.Integration.Adapters.SFTPReceiveAdapter">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SFTPReceiveAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
     </Reference>
