@@ -50,15 +50,6 @@
                             </vr-section>
                         </vr-columns>
                     </vr-row>
-                    <vr-row ng-show="scopeModel.showCustomerSection">
-                        <vr-columns width="fullrow">
-                            <vr-section title="Customers">
-                                <span vr-disabled="scopeModel.disableCriteria">
-                                    <vr-whs-be-customergroup on-ready="scopeModel.onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
-                                </span>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
                     <vr-row ng-show="scopeModel.showExcludedCodeSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Excluded Codes">
@@ -85,6 +76,15 @@
                                         </vr-columns>
                                     </vr-row>
                                 </vr-validator>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row ng-show="scopeModel.showCustomerSection">
+                        <vr-columns width="fullrow">
+                            <vr-section title="Customers">
+                                <span vr-disabled="scopeModel.disableCriteria">
+                                    <vr-whs-be-customergroup on-ready="scopeModel.onCustomerGroupSettingsDirectiveReady"></vr-whs-be-customergroup>
+                                </span>
                             </vr-section>
                         </vr-columns>
                     </vr-row>

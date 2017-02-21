@@ -107,7 +107,8 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                                     IsBlocked: dataItem.IsBlocked,
                                     ExactSupplierServiceIds: dataItem.ExactSupplierServiceIds,
                                     ExecutedRuleId: dataItem.ExecutedRuleId,
-                                    LinkedRouteOptionRuleIds: []
+                                    LinkedRouteOptionRuleIds: [],
+                                    LinkedRouteOptionRuleCount: 1
                                 };
                             newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
                             gridAPI.itemUpdated(newDataItem);

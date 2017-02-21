@@ -33,7 +33,7 @@
             };
         }
         function load() {
-            $scope.title = "Linked Route Option Rules";
+            $scope.title = "Linked Route Rules";
         }
 
         function getFilterObject() {

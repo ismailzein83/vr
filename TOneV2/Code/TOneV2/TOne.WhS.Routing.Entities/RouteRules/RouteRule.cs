@@ -5,6 +5,12 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
+    public struct RouteRuleIdentifier
+    {
+        public int CustomerId { get; set; }
+        public string Code { get; set; }
+    }
+
     public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings
     {
         public string Name { get; set; }

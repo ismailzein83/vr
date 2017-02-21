@@ -62,7 +62,7 @@
             $scope.scopeModel.disableCriteria = isLinkedRouteOptionRule;
             $scope.scopeModel.showCriteriaSection = false;
             $scope.scopeModel.showSettingsSection = false;
-            $scope.scopeModel.beginEffectiveDate = new Date();
+            $scope.scopeModel.beginEffectiveDate = UtilsService.getCurrentDateWitoutMilliseconds();
             $scope.scopeModel.endEffectiveDate = undefined;
 
             $scope.scopeModel.saleZoneGroupTemplates = [];

@@ -159,7 +159,8 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                         CustomerName: dataItem.CustomerName,
                         ZoneName: dataItem.ZoneName,
                         RouteOptionDetails: dataItem.RouteOptionDetails,
-                        LinkedRouteRuleIds: []
+                        LinkedRouteRuleIds: [],
+                        LinkedRouteRuleCount: 1
                     };
                 newDataItem.LinkedRouteRuleIds.push(addedItem.Entity.RuleId);
                 extendCutomerRouteObject(newDataItem);
@@ -168,7 +169,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
             };
 
             var linkedRouteRuleInput = { RuleId: dataItem.Entity.ExecutedRuleId, RouteOptions: dataItem.Entity.Options, CustomerId: dataItem.Entity.CustomerId, Code: dataItem.Entity.Code };
-            WhS_Routing_RouteRuleService.addLinkedRouteRule(linkedRouteRuleInput,dataItem.Entity.Code, onRouteRuleAdded);
+            WhS_Routing_RouteRuleService.addLinkedRouteRule(linkedRouteRuleInput, dataItem.Entity.Code, onRouteRuleAdded);
         };
 
         function initDrillDownDefinitions() {

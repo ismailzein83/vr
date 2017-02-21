@@ -8,6 +8,17 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
+    public struct RouteOptionRuleIdentifier
+    {
+        public int CustomerId { get; set; }
+        
+        public string Code { get; set; }
+        
+        public int SupplierId { get; set; }
+     
+        public long SupplierZoneId { get; set; }
+    }
+
     public class RouteOptionRule : Vanrise.Rules.BaseRule, IRuleSupplierCriteria, IRuleSupplierZoneCriteria, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings
     {
         public string Name { get; set; }

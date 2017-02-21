@@ -20,12 +20,13 @@ namespace TOne.WhS.Routing.Entities
 
         public List<int> LinkedRouteRuleIds { get; set; }
 
+        public int LinkedRouteRuleCount { get { return LinkedRouteRuleIds != null ? LinkedRouteRuleIds.Count : 0; } }
     }
 
     public class CustomerRouteOptionDetail
     {
         public int CustomerRouteOptionDetailId { get { return Entity.SupplierId; } }
-        
+
         public RouteOption Entity { get; set; }
 
         public string SupplierName { get; set; }
@@ -45,5 +46,7 @@ namespace TOne.WhS.Routing.Entities
         public int? ExecutedRuleId { get; set; }
 
         public List<int> LinkedRouteOptionRuleIds { get; set; }
+
+        public int LinkedRouteOptionRuleCount { get { return LinkedRouteOptionRuleIds != null ? LinkedRouteOptionRuleIds.Count : 0; } }
     }
 }

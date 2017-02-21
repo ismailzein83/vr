@@ -27,12 +27,12 @@ namespace TOne.WhS.Routing.Business
         #region Public Methods
         public IEnumerable<RouteOptionRule> GetEffectiveLinkedRouteOptionRules(int customerId, string code, int supplierId, long supplierZoneId, DateTime effectiveDate)
         {
-            string itemKey = string.Format("{0}@{1}@{2}@{3}", customerId, code, supplierId, supplierZoneId);
+            RouteOptionRuleIdentifier routeOptionRuleIdentifier = new Entities.RouteOptionRuleIdentifier() { Code = code, CustomerId = customerId, SupplierId = supplierId, SupplierZoneId = supplierZoneId };
             var linkedRules = GetCachedLinkedRouteOptionRules();
             if (linkedRules == null)
                 return null;
 
-            List<RouteOptionRule> linkedRouteOptionRules = linkedRules.GetRecord(itemKey);
+            List<RouteOptionRule> linkedRouteOptionRules = linkedRules.GetRecord(routeOptionRuleIdentifier);
             if (linkedRouteOptionRules == null)
                 return null;
             return linkedRouteOptionRules.FindAllRecords(itm => itm.IsEffectiveOrFuture(effectiveDate));
@@ -53,10 +53,10 @@ namespace TOne.WhS.Routing.Business
                 throw new NullReferenceException(string.Format("relatedRouteOptionRule.Settings. RuleId: {0}", ruleId));
 
             LinkedRouteOptionRuleContext context = new LinkedRouteOptionRuleContext();
-
+            DateTime now = DateTime.Now;
             RouteOptionRule linkedRouteOptionRule = new RouteOptionRule()
             {
-                BeginEffectiveTime = DateTime.Now,
+                BeginEffectiveTime = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second),
                 Settings = relatedRouteOptionRule.Settings.BuildLinkedRouteOptionRuleSettings(context),
                 Criteria = new RouteOptionRuleCriteria()
             };
@@ -84,22 +84,6 @@ namespace TOne.WhS.Routing.Business
 
             return linkedRouteOptionRule;
         }
-
-        //public override bool ValidateBeforeAdd(RouteOptionRule rule)
-        //{
-        //    Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
-        //    Func<RouteOptionRule, bool> filterExpression = (RouteOptionRule) => string.Compare(RouteOptionRule.Name, rule.Name, true) == 0;
-        //    IEnumerable<RouteOptionRule> result = cachedRules.FindAllRecords(filterExpression);
-        //    return result == null || result.Count() == 0 ? true : false;
-        //}
-
-        //public override bool ValidateBeforeUpdate(RouteOptionRule rule)
-        //{
-        //    Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
-        //    Func<RouteOptionRule, bool> filterExpression = (RouteOptionRule) => string.Compare(RouteOptionRule.Name, rule.Name, true) == 0 && RouteOptionRule.RuleId != rule.RuleId;
-        //    IEnumerable<RouteOptionRule> result = cachedRules.FindAllRecords(filterExpression);
-        //    return result == null || result.Count() == 0 ? true : false;
-        //}
 
         public Vanrise.Entities.IDataRetrievalResult<RouteOptionRuleDetail> GetFilteredRouteOptionRules(Vanrise.Entities.DataRetrievalInput<RouteOptionRuleQuery> input)
         {
@@ -364,12 +348,12 @@ namespace TOne.WhS.Routing.Business
             return false;
         }
 
-        private Dictionary<string, List<RouteOptionRule>> GetCachedLinkedRouteOptionRules()
+        private Dictionary<RouteOptionRuleIdentifier, List<RouteOptionRule>> GetCachedLinkedRouteOptionRules()
         {
             return GetCachedOrCreate(string.Format("GetCachedLinkedRouteOptionRules"),
                 () =>
                 {
-                    Dictionary<string, List<RouteOptionRule>> linkedRouteOptionRules = new Dictionary<string, List<RouteOptionRule>>();
+                    Dictionary<RouteOptionRuleIdentifier, List<RouteOptionRule>> linkedRouteOptionRules = new Dictionary<RouteOptionRuleIdentifier, List<RouteOptionRule>>();
                     Dictionary<int, RouteOptionRule> routeOptionRules = GetAllRules();
 
                     if (routeOptionRules != null)
@@ -393,8 +377,8 @@ namespace TOne.WhS.Routing.Business
                                 if (!supplierId.HasValue || !supplierZoneId.HasValue)
                                     continue;
 
-                                string itemKey = string.Format("{0}@{1}@{2}@{3}", customerId.Value, code, supplierId.Value, supplierZoneId.Value);
-                                List<RouteOptionRule> relatedRouteOptionRules = linkedRouteOptionRules.GetOrCreateItem(itemKey);
+                                RouteOptionRuleIdentifier routeOptionRuleIdentifier = new Entities.RouteOptionRuleIdentifier() { Code = code, CustomerId = customerId.Value, SupplierId = supplierId.Value, SupplierZoneId = supplierZoneId.Value };
+                                List<RouteOptionRule> relatedRouteOptionRules = linkedRouteOptionRules.GetOrCreateItem(routeOptionRuleIdentifier);
                                 relatedRouteOptionRules.Add(routeOptionRule.Value);
                             }
                         }
