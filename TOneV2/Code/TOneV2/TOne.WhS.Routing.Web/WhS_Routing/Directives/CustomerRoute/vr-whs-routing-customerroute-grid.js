@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService',
-function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService) {
+app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService',
+function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -120,12 +120,13 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                         menu.push({
                             name: "Edit Rule",
                             clicked: editLinkedRouteRule,
+                            haspermission: hasUpdateRulePermission
                         });
                     }
                     else {
                         menu.push({
                             name: "Linked Rules",
-                            clicked: viewLinkedRouteRules,
+                            clicked: viewLinkedRouteRules
                         });
                     }
                 }
@@ -133,11 +134,21 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                     menu.push({
                         name: "Add Rule",
                         clicked: addRouteRuleEditor,
+                        haspermission: hasAddRulePermission
                     });
                 }
                 return menu;
             }
         };
+
+        function hasUpdateRulePermission() {
+            return WhS_Routing_RouteRuleAPIService.HasUpdateRulePermission();
+        };
+
+        function hasAddRulePermission() {
+            return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
+        };
+
         function viewLinkedRouteRules(dataItem) {
             WhS_Routing_RouteRuleService.viewLinkedRouteRules(dataItem.LinkedRouteRuleIds, dataItem.Entity.Code);
         };
