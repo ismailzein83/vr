@@ -49,8 +49,6 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            console.log(parameters);
-
             if (parameters != undefined) {
                 visibilityAccountDefinitionEntity = parameters.visibilityAccountDefinition;
                 retailBEVisibilityEditorRuntime = parameters.retailBEVisibilityEditorRuntime;
@@ -250,7 +248,7 @@
                         Filters: [{
                             $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
                         }],
-                        ExcludedIds: excludedAccountBEDefinitionIds
+                        //ExcludedIds: excludedAccountBEDefinitionIds
                     },
                     selectedIds: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.AccountBEDefinitionId : undefined
                 };
