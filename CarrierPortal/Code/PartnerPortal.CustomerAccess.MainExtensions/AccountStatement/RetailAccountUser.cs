@@ -11,13 +11,9 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.AccountStatement
 
         public override void PrepareQuery(IAccountStatementContextHandlerContext context)
         {
-            AccountStatementContextHandlerContext retailAccountUserHandlerContext = context as AccountStatementContextHandlerContext;
-            if (retailAccountUserHandlerContext == null)
-                throw new Exception("retailAccountUserHandlerContext is not of type RetailAccountUserHandlerContext.");
-
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
-            retailAccountUserHandlerContext.Query.AccountId = manager.GetRetailAccountId(userId).ToString();
+            context.Query.AccountId = manager.GetRetailAccountId(userId).ToString();
         }
     }
 }
