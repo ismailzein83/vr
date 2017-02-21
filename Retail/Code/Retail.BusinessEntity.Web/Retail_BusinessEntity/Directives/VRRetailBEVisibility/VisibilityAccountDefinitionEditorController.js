@@ -56,6 +56,11 @@
             }
 
             isEditMode = (visibilityAccountDefinitionEntity != undefined);
+
+            if (isEditMode) {
+                var index = excludedAccountBEDefinitionIds.indexOf(visibilityAccountDefinitionEntity.AccountBEDefinitionId);
+                excludedAccountBEDefinitionIds.splice(index, 1);
+            }
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -243,12 +248,13 @@
             var accountBEDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
 
             accountBEDefinitionSelectorDeferred.promise.then(function () {
+
                 var accountActionDefinitionPayload = {
                     filter: {
                         Filters: [{
                             $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
                         }],
-                        //ExcludedIds: excludedAccountBEDefinitionIds
+                        ExcludedIds: excludedAccountBEDefinitionIds
                     },
                     selectedIds: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.AccountBEDefinitionId : undefined
                 };
