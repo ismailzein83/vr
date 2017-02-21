@@ -60,14 +60,18 @@
                     var promises = [];
                     var vrModuleVisibility;
                     var vrModuleVisibilityEditorRuntime;
+                    var excludedVRModuleVisibilityConfigTitles;
 
                     if (payload != undefined) {
                         vrModuleVisibility = payload.vrModuleVisibility;
                         vrModuleVisibilityEditorRuntime = payload.vrModuleVisibilityEditorRuntime;
+                        excludedVRModuleVisibilityConfigTitles = payload.excludedVRModuleVisibilityConfigTitles;
                     }
 
                     var getVRModuleVisibilityExtensionConfigsPromise = getVRModuleVisibilityExtensionConfigs();
                     promises.push(getVRModuleVisibilityExtensionConfigsPromise);
+
+
 
                     if (vrModuleVisibility != undefined) {
                         var loadDirectivePromise = loadDirective();
@@ -77,9 +81,14 @@
 
                     function getVRModuleVisibilityExtensionConfigs() {
                         return VRCommon_VRApplicationVisibilityAPIService.GetVRModuleVisibilityExtensionConfigs().then(function (response) {
+
                             if (response != undefined) {
                                 for (var i = 0; i < response.length; i++) {
-                                    $scope.scopeModel.templateConfigs.push(response[i]);
+                                    if ((vrModuleVisibility != undefined && vrModuleVisibility.Title == response[i].Title)
+                                        || excludedVRModuleVisibilityConfigTitles == undefined
+                                        || !UtilsService.contains(excludedVRModuleVisibilityConfigTitles, response[i].Title)) {
+                                        $scope.scopeModel.templateConfigs.push(response[i]);
+                                    }
                                 }
                                 if (vrModuleVisibility != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =

@@ -50,9 +50,9 @@
             };
             $scope.scopeModel.hasSaveVRApplicationVisibilityPermission = function () {
                 if (isEditMode)
-                    return Retail_BE_DIDAPIService.HasEditVRApplicationVisibilityPermission();
+                    return VRCommon_VRApplicationVisibilityAPIService.HasEditVRApplicationVisibilityPermission();
                 else
-                    return Retail_BE_DIDAPIService.HasAddVRApplicationVisibilityPermission();
+                    return VRCommon_VRApplicationVisibilityAPIService.HasAddVRApplicationVisibilityPermission();
             };
         }
         function load() {

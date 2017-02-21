@@ -54,7 +54,16 @@ namespace Vanrise.GenericData.Business
 
             if (filter != null)
             {
-                filterExpression = (item) => (filter.Filters != null && CheckIfFilterIsMatch(item, filter.Filters));
+                filterExpression = (item) =>
+                {
+                    if (filter.ExcludedIds != null && filter.ExcludedIds.Contains(item.BusinessEntityDefinitionId))
+                        return false;
+
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(item, filter.Filters))
+                        return false;
+
+                    return true;
+                }; 
             }
 
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);

@@ -50,7 +50,7 @@
                         ctrl.vrModuleVisibilities.push({ Entity: addedVRModuleVisibility });
                     };
 
-                    VRCommon_VRApplicationVisibilityService.addVRModuleVisibility(onVRModuleVisibilityAdded);
+                    VRCommon_VRApplicationVisibilityService.addVRModuleVisibility(getExcludedVRModuleVisibilityConfigTitles(), onVRModuleVisibilityAdded);
                 };
                 ctrl.onDeleteVRModuleVisibility = function (vrModuleVisibility) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
@@ -67,7 +67,7 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    ctrl.vrModuleVisibilities.length = 0;
+                    ctrl.vrModuleVisibilities = [];
 
                     var modulesVisibility;
 
@@ -140,7 +140,7 @@
                     ctrl.vrModuleVisibilities[index] = { Entity: updatedVRModuleVisibility };
                 };
 
-                VRCommon_VRApplicationVisibilityService.editVRModuleVisibility(vrModuleVisibility.Entity, modulesVisibilityEditorRuntime[vrModuleVisibility.Entity.ConfigId], onVRModuleVisibilityUpdated);
+                VRCommon_VRApplicationVisibilityService.editVRModuleVisibility(vrModuleVisibility.Entity, modulesVisibilityEditorRuntime[vrModuleVisibility.Entity.ConfigId], getExcludedVRModuleVisibilityConfigTitles(), onVRModuleVisibilityUpdated);
             }
 
             function extendVRModuleVisibility(extendModuleVisibility) {
@@ -150,6 +150,19 @@
                     if (extendModuleVisibility.ConfigId == currentVRModuleVisibilityExtensionConfigs.ExtensionConfigurationId)
                         extendModuleVisibility.Title = currentVRModuleVisibilityExtensionConfigs.Title;
                 }
+            }
+            function getExcludedVRModuleVisibilityConfigTitles() {
+                if (ctrl.vrModuleVisibilities == undefined)
+                    return;
+
+                var titles = [];
+                for (var i = 0; i < ctrl.vrModuleVisibilities.length; i++) {
+                    var entity = ctrl.vrModuleVisibilities[i].Entity;
+                    if (entity != undefined) {
+                        titles.push(entity.Title);
+                    }
+                }
+                return titles;
             }
         }
     }

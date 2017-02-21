@@ -27,21 +27,29 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRApplicationVisibility/VRApplicationVisibilityEditor.html', parameters, settings);
         }
 
-        function addVRModuleVisibility(onVRModuleVisibilityAdded) {
+        function addVRModuleVisibility(excludedVRModuleVisibilityConfigTitles, onVRModuleVisibilityAdded) {
+
+            var parameters = {
+                excludedVRModuleVisibilityConfigTitles: excludedVRModuleVisibilityConfigTitles
+            };
+
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRModuleVisibilityAdded = onVRModuleVisibilityAdded
             };
-            VRModalService.showModal('/Client/Modules/Common/Directives/VRApplicationVisibility/Templates/VRModuleVisibilityEditor.html', null, settings);
+
+            VRModalService.showModal('/Client/Modules/Common/Directives/VRApplicationVisibility/Templates/VRModuleVisibilityEditor.html', parameters, settings);
         };
-        function editVRModuleVisibility(vrModuleVisibility, vrModuleVisibilityEditorRuntime, onVRModuleVisibilityUpdated) {
-            var settings = {};
+        function editVRModuleVisibility(vrModuleVisibility, vrModuleVisibilityEditorRuntime, excludedVRModuleVisibilityConfigTitles, onVRModuleVisibilityUpdated) {
 
             var parameters = {
                 vrModuleVisibility: vrModuleVisibility,
-                vrModuleVisibilityEditorRuntime: vrModuleVisibilityEditorRuntime
+                vrModuleVisibilityEditorRuntime: vrModuleVisibilityEditorRuntime,
+                excludedVRModuleVisibilityConfigTitles: excludedVRModuleVisibilityConfigTitles
             };
+
+            var settings = {};
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRModuleVisibilityUpdated = onVRModuleVisibilityUpdated;

@@ -10,6 +10,7 @@
 
         var vrModuleVisibilityEntity;
         var vrModuleVisibilityEditorRuntime;
+        var excludedVRModuleVisibilityConfigTitles;
 
         var vrModuleVisibilitySelectiveAPI;
         var vrModuleVisibilitySelectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -24,6 +25,7 @@
             if (parameters != undefined) {
                 vrModuleVisibilityEntity = parameters.vrModuleVisibility;
                 vrModuleVisibilityEditorRuntime = parameters.vrModuleVisibilityEditorRuntime;
+                excludedVRModuleVisibilityConfigTitles = parameters.excludedVRModuleVisibilityConfigTitles;
             }
 
             isEditMode = (vrModuleVisibilityEntity != undefined);
@@ -72,12 +74,12 @@
 
             vrModuleVisibilitySelectiveReadyDeferred.promise.then(function () {
 
-                var payload;
+                var payload = {
+                    excludedVRModuleVisibilityConfigTitles: excludedVRModuleVisibilityConfigTitles
+                };
                 if (vrModuleVisibilityEntity != undefined) {
-                    payload = {
-                        vrModuleVisibility: vrModuleVisibilityEntity,
-                        vrModuleVisibilityEditorRuntime: vrModuleVisibilityEditorRuntime
-                    };
+                    payload.vrModuleVisibility = vrModuleVisibilityEntity,
+                    payload.vrModuleVisibilityEditorRuntime = vrModuleVisibilityEditorRuntime
                 }
                 VRUIUtilsService.callDirectiveLoad(vrModuleVisibilitySelectiveAPI, payload, vrModuleVisibilitySelectiveLoadDeferred);
             });
