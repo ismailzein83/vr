@@ -3038,4 +3038,13 @@ vr-validator[vr-input] > div:nth-child(1){
     opacity: 0.5;
     margin: -15px;
 }
+.vr-backdrop-modal{
+    height: calc(100% - 25px);
+    width: 100% ;
+    overflow: hidden;
+    position: absolute;
+    z-index: 200;
+    background-color: #ddd;
+    opacity: 0.5;
+}
 /* end vr-dropdown-section*/

@@ -20,14 +20,19 @@
                 ctrl.menuid = BaseDirService.generateHTMLElementName();
                 ctrl.initializeSection =  function() {
                     ctrl.showmenu = true;
-                    calculatePosition(ctrl,true);
+                    calculatePosition(ctrl, true);
                     setTimeout(function () {                        
                         addBackDrop();                        
                         checkOnExpandMethode();
+
+                        $('#' + ctrl.menuid).slideDown("slow");
                     });
                     
                 };
-               
+
+                $element.on('$destroy', function () {
+                    fixDropdownSectionPosition();
+                });
                 ctrl.expandSection = function (e) {
                     if (e != undefined && $(e.target).hasClass('vanrise-inpute')) {
                         return;
@@ -45,12 +50,17 @@
                 };
                 ctrl.collapseSection = function () {
                     $('#' + ctrl.menuid).slideUp("slow", function () {
-                        ctrl.showmenu = false;
-                        $('.vr-backdrop').remove();
+                        fixDropdownSectionPosition();
                         checkOnCollapseMethode();
                     });
-                };              
-
+                };
+                ctrl.loadSection = function () {
+                    $timeout(function () {
+                        if (ctrl.defaultstate == true) {
+                             ctrl.initializeSection();
+                        }
+                    },1000)
+                };
                 $('#' + ctrl.id).parents('div').scroll(function () {
                     fixDropdownSectionPosition();
                 });
@@ -72,6 +82,7 @@
                 var fixDropdownSectionPosition = function () {
                     ctrl.showmenu = false;
                     $('.vr-backdrop').remove();
+                    $('.vr-backdrop-modal').remove();
                 };
                
                 function checkOnExpandMethode() {
@@ -92,8 +103,11 @@
                 }               
 
                 function addBackDrop() {
-                        if ($('.vr-backdrop').length == 0)
-                            $($("vr-form")).prepend("<div class='vr-backdrop'></div>");
+                    if ($element.parents().find('.modal-dialog').length > 0)
+                        $('vr-modalbody').last().prepend("<div class='vr-backdrop-modal'></div>");
+                    else {
+                        $($element.parents().find("vr-form")).prepend("<div class='vr-backdrop'></div>");
+                    }
                 }
                
             },
@@ -114,11 +128,6 @@
                         if (ctrl.onReady != null)
                             ctrl.onReady(api);
 
-                        $timeout(function () {
-                            if (scope.ctrl.defaultstate == true) {
-                                ctrl.initializeSection();
-                            }
-                        }, 1000);
                     }
                 }
             },
@@ -132,9 +141,9 @@
                 var sectionTemplate = '<div style="position: relative;" >'
                             + '<vr-validation-group validationcontext="ctrl.validationContext">'
                             + '<div class="vr-dropdown-section" id="{{ctrl.id}}" >'
-                                + '<div class="summary-container hand-cursor" ng-click="ctrl.expandSection($event)" ng-class="ctrl.validationContext.validate() != null  ? \'invalid-section\':\'\' " >'
+                                + '<div class="summary-container hand-cursor"  ng-click="ctrl.expandSection($event)" ng-class="ctrl.validationContext.validate() != null  ? \'invalid-section\':\'\' " >'
                                     + '<div transclude-id="summary" class="summary-main"></div>'
-                                    + '<span  class="glyphicon  glyphicon-sort-by-attributes  toogle-icon"></span>'
+                                    + '<span  class="glyphicon  glyphicon-sort-by-attributes  toogle-icon" ng-init="ctrl.loadSection()"></span>'
                                     + '<span ng-if="ctrl.validationContext.validate() != null" class="validation-sign"  title="has validation errors!">*</span>'
                               + '</div>'
                                 + '<ul class="dropdown-menu drop-down-section"   id="{{ctrl.menuid}}" ng-show="ctrl.showmenu" ng-class="ctrl.validationContext.validate() != null  ? \'invalid-section\':\'\' "  >'
