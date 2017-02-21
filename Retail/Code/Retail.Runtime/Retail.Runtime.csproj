@@ -89,6 +89,9 @@
     <Reference Include="Rebex.Net.Ftp">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Net.Sftp">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Rebex.Net.Sftp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
