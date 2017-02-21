@@ -30,6 +30,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var accountGridDefinitionDirectiveAPI;
             var accountGridDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
 
+            var accountGridDefinitionExportExcelDirectiveAPI;
+            var accountGridDefinitionExportExcelDirectiveDeferred = UtilsService.createPromiseDeferred();
+
             var accountViewDefinitionDirectiveAPI;
             var accountViewDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
 
@@ -49,6 +52,10 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                 $scope.scopeModel.onAccountGridDefinitionReady = function (api) {
                     accountGridDefinitionDirectiveAPI = api;
                     accountGridDefinitionDirectiveDeferred.resolve();
+                };
+                $scope.scopeModel.onAccountGridDefinitionExportExcelReady = function (api) {
+                    accountGridDefinitionExportExcelDirectiveAPI = api;
+                    accountGridDefinitionExportExcelDirectiveDeferred.resolve();
                 };
                 $scope.scopeModel.onAccountViewDefinitionsReady = function (api) {
                     accountViewDefinitionDirectiveAPI = api;
@@ -75,6 +82,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountBEDefinitionId;
                     var statusBEDefinitionId;
                     var accountGridDefinition;
+                    var accountGridDefinitionExportExcel;
                     var accountViewDefinitions;
                     var accountActionDefinitions;
                     var accountExtraFieldDefinitions;
@@ -84,7 +92,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                         if (payload.businessEntityDefinitionSettings != undefined) {
                             statusBEDefinitionId = payload.businessEntityDefinitionSettings.StatusBEDefinitionId;
-                            accountGridDefinition = payload.businessEntityDefinitionSettings.GridDefinition;
+                            accountGridDefinition = payload.businessEntityDefinitionSettings.GridDefinition.ColumnDefinitions;
+                            accountGridDefinitionExportExcel = payload.businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions;
                             accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
                             accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
@@ -98,6 +107,10 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     //Loading AccountGridDefinition Directive
                     var accountGridDefinitionLoadPromise = getAccountGridDefinitionLoadPromise();
                     promises.push(accountGridDefinitionLoadPromise);
+
+                    //Loading AccountGridDefinitionExportExcel Directive
+                    var accountGridDefinitionExportExcelLoadPromise = getAccountGridDefinitionExportExcelLoadPromise();
+                    promises.push(accountGridDefinitionExportExcelLoadPromise);
 
                     //Loading AccountViewDefinition Directive
                     var accountViewDefinitionLoadPromise = getAccountViewDefinitionLoadPromise();
@@ -140,6 +153,21 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                         return accountGridDefitnionLoadDeferred.promise;
                     }
+
+                    function getAccountGridDefinitionExportExcelLoadPromise() {
+                        var accountGridDefitnionExportExcelLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        accountGridDefinitionExportExcelDirectiveDeferred.promise.then(function () {
+                            var accountGridDefinitionExportExcelPayload = {
+                                accountBEDefinitionId: accountBEDefinitionId,
+                                accountGridDefinitionExportExcel: accountGridDefinitionExportExcel
+                            };
+                            VRUIUtilsService.callDirectiveLoad(accountGridDefinitionExportExcelDirectiveAPI, accountGridDefinitionExportExcelPayload, accountGridDefitnionExportExcelLoadDeferred);
+                        });
+
+                        return accountGridDefitnionExportExcelLoadDeferred.promise;
+                    }
+
                     function getAccountViewDefinitionLoadPromise() {
                         var accountViewDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -183,10 +211,15 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                 };
 
                 api.getData = function () {
+                    var gridDefinition = {
+                        ColumnDefinitions: accountGridDefinitionDirectiveAPI.getData(),
+                        ExportColumnDefinitions: accountGridDefinitionExportExcelDirectiveAPI.getData()
+                    }
+
                     var obj = {
                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionSettings, Retail.BusinessEntity.Entities",
                         StatusBEDefinitionId: statusBEDefinitionSelectorAPI.getSelectedIds(),
-                        GridDefinition: accountGridDefinitionDirectiveAPI.getData(),
+                        GridDefinition: gridDefinition,
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
                         AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData()

@@ -1,0 +1,24 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_GridColumnDefinitionExportExcelEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formVRObjectTypePropertyDefinitionEditor">
+
+            <vr-row>
+                <retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onAccountGenericFieldDefinitionSelectorReady"
+                                                                   normal-col-num="6"
+                                                                   isrequired="true">
+                </retail-be-account-genericfielddefinition-selector>
+                <vr-columns width="1/2row">
+                    <vr-textbox type="text" value="scopeModel.header" label="Header"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formVRObjectTypePropertyDefinitionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -36,6 +36,36 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/GridColumnDefinitionEditor.html', parameters, modalSettings);
         }
 
+        function addGridColumnExportExcelDefinition(accountBEDefinitionId, onColumnDefinitionAdded) {
+
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onColumnDefinitionAdded = onColumnDefinitionAdded
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/GridColumnDefinitionExportExcelEditor.html', parameters, modalSettings);
+        };
+        function editGridColumnExportExcelDefinition(columnDefinition, accountBEDefinitionId, onColumnDefinitionUpdated) {
+
+            var parameters = {
+                columnDefinition: columnDefinition,
+                accountBEDefinitionId: accountBEDefinitionId
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onColumnDefinitionUpdated = onColumnDefinitionUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/GridColumnDefinitionExportExcelEditor.html', parameters, modalSettings);
+        }
+
         function addAccountViewDefinition(accountBEDefinitionId, onAccountViewDefinitionAdded) {
 
             var parameters = {
@@ -132,6 +162,8 @@
         return {
             addGridColumnDefinition: addGridColumnDefinition,
             editGridColumnDefinition: editGridColumnDefinition,
+            addGridColumnExportExcelDefinition: addGridColumnExportExcelDefinition,
+            editGridColumnExportExcelDefinition: editGridColumnExportExcelDefinition,
             addAccountViewDefinition: addAccountViewDefinition,
             editAccountViewDefinition: editAccountViewDefinition,
             addAccountActionDefinition: addAccountActionDefinition,

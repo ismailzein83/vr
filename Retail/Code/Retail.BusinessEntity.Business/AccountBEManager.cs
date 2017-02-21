@@ -60,7 +60,81 @@ namespace Retail.BusinessEntity.Business
                 }
             }
 
-            return DataRetrievalManager.Instance.ProcessResult(input, bigResult);
+            AccountExcelExportHandler accountExcel = new AccountExcelExportHandler(input.Query);
+            ResultProcessingHandler<AccountDetail> handler = new ResultProcessingHandler<AccountDetail>()
+            {
+                ExportExcelHandler = accountExcel
+            };
+
+            return DataRetrievalManager.Instance.ProcessResult(input, bigResult, handler);
+        }
+
+        private class AccountExcelExportHandler : ExcelExportHandler<AccountDetail>
+        {
+            private AccountQuery _query;
+            public AccountExcelExportHandler(AccountQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                var accountBEDefinitionSettings = new AccountBEDefinitionManager().GetAccountBEDefinitionSettings(_query.AccountBEDefinitionId);
+                if (accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions != null)
+                {
+                    foreach (AccountGridExportColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = exportColumn.Header });
+                    }
+                    sheet.Rows = new List<ExportExcelRow>();
+
+                    foreach (var accountDetail in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+
+                        foreach (AccountGridExportColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions)
+                        {
+                            AccountFieldValue accountValue;
+                            if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (AccountGridColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ColumnDefinitions)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = exportColumn.Header });
+                    }
+                    sheet.Rows = new List<ExportExcelRow>();
+
+                    foreach (var accountDetail in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+
+                        foreach (AccountGridColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ColumnDefinitions)
+                        {
+                            AccountFieldValue accountValue;
+                            if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
+                            }
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         public Account GetAccount(Guid accountBEDefinitionId, long accountId)

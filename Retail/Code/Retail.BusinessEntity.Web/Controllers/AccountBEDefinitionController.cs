@@ -45,6 +45,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetAccountGridColumnAttributesExportExcel")]
+        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributesExportExcel(Guid accountBEDefinitionId, long? parentAccountId = null)
+        {
+            return _manager.GetAccountGridColumnAttributesExportExcel(accountBEDefinitionId);
+        }
+
+        [HttpGet]
         [Route("GetAccountViewDefinitions")]
         public List<AccountViewDefinition> GetAccountViewDefinitions(Guid accountBEDefinitionId)
         {

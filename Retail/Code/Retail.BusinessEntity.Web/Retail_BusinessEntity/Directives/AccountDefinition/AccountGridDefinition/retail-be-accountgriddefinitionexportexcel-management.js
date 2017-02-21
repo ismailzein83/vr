@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountGridDefinitionManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountBEDefinitionService', 'Retail_BE_AccountTypeAPIService'];
+    AccountGridDefinitionExportExcelManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountBEDefinitionService', 'Retail_BE_AccountTypeAPIService'];
 
-    function AccountGridDefinitionManagementDirective(UtilsService, VRNotificationService, Retail_BE_AccountBEDefinitionService, Retail_BE_AccountTypeAPIService) {
+    function AccountGridDefinitionExportExcelManagementDirective(UtilsService, VRNotificationService, Retail_BE_AccountBEDefinitionService, Retail_BE_AccountTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,7 +12,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new AccountGridDefinitionManagementCtor($scope, ctrl);
+                var ctor = new AccountGridDefinitionManagementExportExcelCtor($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -24,10 +24,10 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/AccountGridDefinitionManagementTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountGridDefinition/Templates/AccountGridDefinitionExportExcelManagementTemplate.html'
         };
 
-        function AccountGridDefinitionManagementCtor($scope, ctrl) {
+        function AccountGridDefinitionManagementExportExcelCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
             var accountBEDefinitionId;
@@ -37,7 +37,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.columnDefinitions = [];
+                $scope.scopeModel.exportColumnDefinitions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -47,16 +47,16 @@
                 $scope.scopeModel.onAddColumnDefinition = function () {
                     var onColumnDefinitionAdded = function (addedColumnDefinition) {
                         extendColumnDefinitionObj(addedColumnDefinition);
-                        $scope.scopeModel.columnDefinitions.push({ Entity: addedColumnDefinition });
+                        $scope.scopeModel.exportColumnDefinitions.push({ Entity: addedColumnDefinition });
                     };
 
-                    Retail_BE_AccountBEDefinitionService.addGridColumnDefinition(accountBEDefinitionId, onColumnDefinitionAdded);
+                    Retail_BE_AccountBEDefinitionService.addGridColumnExportExcelDefinition(accountBEDefinitionId, onColumnDefinitionAdded);
                 };
                 $scope.scopeModel.onDeleteColumnDefinition = function (columnDefinition) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.columnDefinitions, columnDefinition.Entity.FieldName, 'Entity.FieldName');
-                            $scope.scopeModel.columnDefinitions.splice(index, 1);
+                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.exportColumnDefinitions, columnDefinition.Entity.FieldName, 'Entity.FieldName');
+                            $scope.scopeModel.exportColumnDefinitions.splice(index, 1);
                         }
                     });
                 };
@@ -73,7 +73,7 @@
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
-                        accountGridDefinition = payload.accountGridDefinition;
+                        accountGridDefinition = payload.accountGridDefinitionExportExcel;
                     }
 
                     var loadAccountFieldsPromise = loadAccountFields();
@@ -87,7 +87,7 @@
                                 if (index != "$type") {
                                     var columnDefinition = accountGridDefinition[index];
                                     extendColumnDefinitionObj(columnDefinition);
-                                    $scope.scopeModel.columnDefinitions.push({ Entity: columnDefinition });
+                                    $scope.scopeModel.exportColumnDefinitions.push({ Entity: columnDefinition });
                                 }
                             }
                         }
@@ -104,16 +104,17 @@
 
                 api.getData = function () {
 
-                    var columnDefinitions;
-                    if ($scope.scopeModel.columnDefinitions.length > 0) {
-                        columnDefinitions = [];
-                        for (var i = 0; i < $scope.scopeModel.columnDefinitions.length; i++) {
-                            var columnDefinition = $scope.scopeModel.columnDefinitions[i].Entity;
-                            columnDefinitions.push(columnDefinition);
+                    var exportColumnDefinitions;
+                    if ($scope.scopeModel.exportColumnDefinitions.length > 0) {
+                        exportColumnDefinitions = [];
+                        for (var i = 0; i < $scope.scopeModel.exportColumnDefinitions.length; i++) {
+                            var columnDefinition = $scope.scopeModel.exportColumnDefinitions[i].Entity;
+                            exportColumnDefinitions.push(columnDefinition);
                         }
                     }
 
-                    return columnDefinitions;
+
+                    return exportColumnDefinitions;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -129,12 +130,12 @@
             }
             function editColumnDefinitionDefinition(columnDefinition) {
                 var onColumnDefinitionUpdated = function (updatedColumnDefinition) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.columnDefinitions, columnDefinition.Entity.FieldName, 'Entity.FieldName');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.exportColumnDefinitions, columnDefinition.Entity.FieldName, 'Entity.FieldName');
                     extendColumnDefinitionObj(updatedColumnDefinition);
-                    $scope.scopeModel.columnDefinitions[index] = { Entity: updatedColumnDefinition };
+                    $scope.scopeModel.exportColumnDefinitions[index] = { Entity: updatedColumnDefinition };
                 };
 
-                Retail_BE_AccountBEDefinitionService.editGridColumnDefinition(columnDefinition.Entity, accountBEDefinitionId, onColumnDefinitionUpdated);
+                Retail_BE_AccountBEDefinitionService.editGridColumnExportExcelDefinition(columnDefinition.Entity, accountBEDefinitionId, onColumnDefinitionUpdated);
             }
 
             function extendColumnDefinitionObj(columnDefinition) {
@@ -152,6 +153,6 @@
         }
     }
 
-    app.directive('retailBeAccountgriddefinitionManagement', AccountGridDefinitionManagementDirective);
+    app.directive('retailBeAccountgriddefinitionexportexcelManagement', AccountGridDefinitionExportExcelManagementDirective);
 
 })(app);

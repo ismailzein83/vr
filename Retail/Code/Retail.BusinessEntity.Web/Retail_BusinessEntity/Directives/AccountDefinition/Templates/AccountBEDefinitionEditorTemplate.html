@@ -10,8 +10,13 @@
 <vr-tab header="'Extra Fields'">
     <retail-be-accountextrafielddefinitions-management on-ready="scopeModel.onAccountExtraFieldDefinitionsReady" isrequired="true" normal-col-num="6"></retail-be-accountextrafielddefinitions-management>
 </vr-tab>
-<vr-tab header="'Grid Columns'">
-    <retail-be-accountgriddefinition-management on-ready="scopeModel.onAccountGridDefinitionReady" isrequired="true" normal-col-num="6"></retail-be-accountgriddefinition-management>
+<vr-tab header="'Grid'">
+    <vr-section title="Columns">
+        <retail-be-accountgriddefinition-management on-ready="scopeModel.onAccountGridDefinitionReady" isrequired="true" normal-col-num="6"></retail-be-accountgriddefinition-management>
+    </vr-section>
+    <vr-section title="Export Columns">
+        <retail-be-accountgriddefinitionexportexcel-management on-ready="scopeModel.onAccountGridDefinitionExportExcelReady" isrequired="true" normal-col-num="6"></retail-be-accountgriddefinitionexportexcel-management>
+    </vr-section>
 </vr-tab>
 <vr-tab header="'Views'">
     <retail-be-accountviewdefinitions-management on-ready="scopeModel.onAccountViewDefinitionsReady" isrequired="true" normal-col-num="6"></retail-be-accountviewdefinitions-management>

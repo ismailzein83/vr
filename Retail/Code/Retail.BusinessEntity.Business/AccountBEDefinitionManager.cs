@@ -124,9 +124,17 @@ namespace Retail.BusinessEntity.Business
                 }
 
                 //Extra Fields
-               // Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleExtraFieldsById;
+                // Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleExtraFieldsById;
 
                 accountBEDefinitionSettings.AccountExtraFieldDefinitions = businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
+
+
+                //GridColumnsExportExcel
+                if (businessEntityDefinitionSettings.GridDefinition != null && businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions != null)
+                {
+                    accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions = businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions;
+                }
+
 
                 return accountBEDefinitionSettings;
             });
@@ -194,6 +202,42 @@ namespace Retail.BusinessEntity.Business
             {
                 if (!IsColumnAvailable(accountBEDefinitionId, parentAccountId, itm))
                     continue;
+
+                GenericFieldDefinitionInfo genericFieldDefinitionInfo = genericFieldDefinitionInfos.FindRecord(x => x.Name == itm.FieldName);
+                if (genericFieldDefinitionInfo == null)
+                    continue; // throw new NullReferenceException("genericFieldDefinitionInfo");
+
+                FieldTypeGetGridColumnAttributeContext context = new FieldTypeGetGridColumnAttributeContext();
+                context.ValueFieldPath = "FieldValues." + itm.FieldName + ".Value";
+                context.DescriptionFieldPath = "FieldValues." + itm.FieldName + ".Description";
+
+                DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute()
+                {
+                    Attribute = genericFieldDefinitionInfo.FieldType.GetGridColumnAttribute(context),
+                    Name = itm.FieldName
+                };
+                attribute.Attribute.HeaderText = itm.Header;
+
+                results.Add(attribute);
+            }
+            return results;
+        }
+
+        public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributesExportExcel(Guid accountBEDefinitionId)
+        {
+            List<DataRecordGridColumnAttribute> results = new List<DataRecordGridColumnAttribute>();
+
+            AccountGridDefinition accountGridDefinition = this.GetAccountGridDefinition(accountBEDefinitionId);
+            if (accountGridDefinition.ExportColumnDefinitions == null)
+                throw new NullReferenceException("accountGridDefinition.ExportColumnDefinitions");
+
+            AccountTypeManager accountTypeManager = new AccountTypeManager();
+            IEnumerable<GenericFieldDefinitionInfo> genericFieldDefinitionInfos = accountTypeManager.GetGenericFieldDefinitionsInfo(accountBEDefinitionId);
+            if (genericFieldDefinitionInfos == null)
+                throw new NullReferenceException("genericFieldDefinitionInfos");
+
+            foreach (AccountGridExportColumnDefinition itm in accountGridDefinition.ExportColumnDefinitions)
+            {
 
                 GenericFieldDefinitionInfo genericFieldDefinitionInfo = genericFieldDefinitionInfos.FindRecord(x => x.Name == itm.FieldName);
                 if (genericFieldDefinitionInfo == null)

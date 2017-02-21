@@ -241,6 +241,10 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\retail-be-accountextrafielddefinitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\Templates\AccountExtraFieldDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\Templates\AccountExtraFieldDefinitionsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\GridColumnDefinitionExportExcelEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\retail-be-accountgriddefinitionexportexcel-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\Templates\AccountGridDefinitionExportExcelManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\Templates\GridColumnDefinitionExportExcelEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-actions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-childberelation.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-financialtransactions.js" />
