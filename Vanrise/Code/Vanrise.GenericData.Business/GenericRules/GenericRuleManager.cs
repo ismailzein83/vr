@@ -35,7 +35,70 @@ namespace Vanrise.GenericData.Business
                 && (input.Query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, input.Query.SettingsFilterValue));
 
             var allRules = GetAllRules();
-            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, filterExpression, (rule) => MapToDetails(rule)));
+
+            GenericRuleExcelExportHandler genericRuleExcel = new GenericRuleExcelExportHandler(input.Query);
+            ResultProcessingHandler<GenericRuleDetail> handler = new ResultProcessingHandler<GenericRuleDetail>()
+            {
+                ExportExcelHandler = genericRuleExcel
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, filterExpression, (rule) => MapToDetails(rule)), handler);
+        }
+
+        private class GenericRuleExcelExportHandler : ExcelExportHandler<GenericRuleDetail>
+        {
+            private GenericRuleQuery _query;
+            public GenericRuleExcelExportHandler(GenericRuleQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<GenericRuleDetail> context)
+            {
+                GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
+                var genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(_query.RuleDefinitionId);
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+
+                foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = field.Title });
+                }
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Settings" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
+
+                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                    {
+                        GenericRuleCriteriaFieldValues fieldValues = null;
+                        string value = null;
+                        if (record.Entity.Criteria != null && record.Entity.Criteria.FieldsValues.TryGetValue(field.FieldName, out fieldValues))
+                        {
+                            value = field.FieldType.GetDescription(fieldValues);
+                        }
+                        row.Cells.Add(new ExportExcelCell { Value = value });
+                    }
+
+                    row.Cells.Add(new ExportExcelCell { Value = record.SettingsDescription });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.BeginEffectiveTime });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.EndEffectiveTime });
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         public GenericRule GetGenericRule(int ruleId)
@@ -219,9 +282,9 @@ namespace Vanrise.GenericData.Business
                         throw new NullReferenceException(String.Format("vrObjectTypeDefinition.Settings.ObjectType: '{0}'", criteriaField.ValueObjectName));
 
                     VRObjectTypePropertyDefinition vrObjectTypePropertyDefinition;
-                    if(!vrObjectTypeDefinition.Settings.Properties.TryGetValue(criteriaField.ValuePropertyName,out vrObjectTypePropertyDefinition))
+                    if (!vrObjectTypeDefinition.Settings.Properties.TryGetValue(criteriaField.ValuePropertyName, out vrObjectTypePropertyDefinition))
                         throw new NullReferenceException(String.Format("vrObjectTypeDefinition.Settings.Properties: '{0}'", criteriaField.ValuePropertyName));
-                   
+
                     ruleCriteriaEvaluationInfos.Add(new CriteriaEvaluationInfo
                     {
                         CriteriaName = criteriaField.FieldName,

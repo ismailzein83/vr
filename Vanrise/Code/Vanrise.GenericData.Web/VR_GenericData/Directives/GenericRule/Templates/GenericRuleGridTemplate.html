@@ -3,7 +3,7 @@
              pagingtype="'PagingOnScroll'"
              on-ready="onGridReady"
              menuactions="gridMenuActions"
-             idfield="Entity.RuleId">
+             idfield="Entity.RuleId" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.RuleId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" type="'Text'" field="'Entity.Description'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="field in ctrl.criteriaFields" headertext="field.Title" type="'Text'" field="'FieldValueDescriptions[' + field.fieldValueIndex + ']'" columnindex="2 + $index" disablesorting></vr-datagridcolumn>
