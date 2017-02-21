@@ -6,9 +6,10 @@
 
     function VisibilityAccountDefinition(VRModalService) {
 
-        function addVisibilityAccountDefinition(onVisibilityAccountDefinitionAdded) {
+        function addVisibilityAccountDefinition(excludedAccountBEDefinitionIds, onVisibilityAccountDefinitionAdded) {
 
             var parameters = {
+                excludedAccountBEDefinitionIds: excludedAccountBEDefinitionIds
             };
 
             var modalSettings = {};
@@ -19,11 +20,12 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/VRRetailBEVisibility/Templates/VisibilityAccountDefinitionEditor.html', parameters, modalSettings);
         };
-        function editVisibilityAccountDefinition(visibilityAccountDefinition, retailBEVisibilityEditorRuntime, onVisibilityAccountDefinitionUpdated) {
+        function editVisibilityAccountDefinition(visibilityAccountDefinition, retailBEVisibilityEditorRuntime, excludedAccountBEDefinitionIds, onVisibilityAccountDefinitionUpdated) {
 
             var parameters = {
                 visibilityAccountDefinition: visibilityAccountDefinition,
-                retailBEVisibilityEditorRuntime: retailBEVisibilityEditorRuntime
+                retailBEVisibilityEditorRuntime: retailBEVisibilityEditorRuntime,
+                excludedAccountBEDefinitionIds: excludedAccountBEDefinitionIds
             };
 
             var modalSettings = {};

@@ -10,6 +10,7 @@
 
         var visibilityAccountDefinitionEntity;
         var retailBEVisibilityEditorRuntime;
+        var excludedAccountBEDefinitionIds;
         var accountTypeTitlesById;
 
         var accountBEDefinitionId;
@@ -48,9 +49,12 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
+            console.log(parameters);
+
             if (parameters != undefined) {
                 visibilityAccountDefinitionEntity = parameters.visibilityAccountDefinition;
                 retailBEVisibilityEditorRuntime = parameters.retailBEVisibilityEditorRuntime;
+                excludedAccountBEDefinitionIds = parameters.excludedAccountBEDefinitionIds;
             }
 
             isEditMode = (visibilityAccountDefinitionEntity != undefined);
@@ -245,7 +249,8 @@
                     filter: {
                         Filters: [{
                             $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
-                        }]
+                        }],
+                        ExcludedIds: excludedAccountBEDefinitionIds
                     },
                     selectedIds: visibilityAccountDefinitionEntity != undefined ? visibilityAccountDefinitionEntity.AccountBEDefinitionId : undefined
                 };
