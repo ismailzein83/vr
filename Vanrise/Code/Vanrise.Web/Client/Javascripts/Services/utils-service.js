@@ -98,7 +98,7 @@
             longTime: "h:MM:ss TT Z",
             isoDate: "yyyy-mm-dd",
             isoTime: "HH:MM:ss",
-            isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",            
+            isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",
             isoFullDateTime: "yyyy-mm-dd'T'HH:MM:ss.l",
             isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
         };
@@ -570,8 +570,8 @@
         function validateDates(fromDate, toDate) {
             if (fromDate == undefined || toDate == undefined)
                 return null;
-            var from = (fromDate instanceof Date ) ? fromDate : createDateFromString(fromDate);
-            var to = (toDate instanceof Date) ? toDate: createDateFromString(toDate);
+            var from = (fromDate instanceof Date) ? fromDate : createDateFromString(fromDate);
+            var to = (toDate instanceof Date) ? toDate : createDateFromString(toDate);
             if (from.getTime() > to.getTime())
                 return "Start should be before end";
             else
@@ -810,6 +810,13 @@
             date.setHours(0, 0, 0, 0);
             return date;
         }
+
+        function getCurrentDateWithoutMilliseconds() {
+            var date = new Date();
+            date.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), 0);
+            return date;
+        }
+
         function parseDateToString(date) {
             var dateAsString = '';
             if (date) {
@@ -932,7 +939,8 @@
             isNumericValue: isNumericValue,
             isIntegerValue: isIntegerValue,
             addFloats: addFloats,
-            getBaseUrlPrefix: getBaseUrlPrefix
+            getBaseUrlPrefix: getBaseUrlPrefix,
+            getCurrentDateWithoutMilliseconds: getCurrentDateWithoutMilliseconds
         });
     }
 

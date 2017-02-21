@@ -63,7 +63,7 @@
             };
 
 
-            $scope.scopeModel.beginEffectiveDate = new Date();
+            $scope.scopeModel.beginEffectiveDate = UtilsService.getCurrentDateWitoutMilliseconds();
             $scope.scopeModel.endEffectiveDate = undefined;
 
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
