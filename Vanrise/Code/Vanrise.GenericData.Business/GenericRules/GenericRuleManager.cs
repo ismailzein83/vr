@@ -82,15 +82,19 @@ namespace Vanrise.GenericData.Business
                     sheet.Rows.Add(row);
                     row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
 
-                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                    if (record.FieldValueDescriptions == null || record.FieldValueDescriptions.Count == 0)
                     {
-                        GenericRuleCriteriaFieldValues fieldValues = null;
-                        string value = null;
-                        if (record.Entity.Criteria != null && record.Entity.Criteria.FieldsValues.TryGetValue(field.FieldName, out fieldValues))
+                        foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
                         {
-                            value = field.FieldType.GetDescription(fieldValues);
+                            row.Cells.Add(new ExportExcelCell { Value = null });
                         }
-                        row.Cells.Add(new ExportExcelCell { Value = value });
+                    }
+                    else
+                    {
+                        foreach (var field in record.FieldValueDescriptions)
+                        {
+                            row.Cells.Add(new ExportExcelCell { Value = field });
+                        }
                     }
 
                     row.Cells.Add(new ExportExcelCell { Value = record.SettingsDescription });
