@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [Retail_CDR].[BillingCDR_Main] (
     [CDRID]                  BIGINT           NULL,
     [IDonSwitch]             VARCHAR (100)    NULL,
+    [AttemptDateTime]        DATETIME         NULL,
     [ConnectDateTime]        DATETIME         NULL,
     [DisconnectDateTime]     DATETIME         NULL,
     [DurationInSeconds]      DECIMAL (20, 4)  NULL,
@@ -20,9 +21,10 @@
     [Rate]                   DECIMAL (20, 8)  NULL,
     [Amount]                 DECIMAL (22, 6)  NULL,
     [RateTypeId]             INT              NULL,
-    [CurrencyId]             INT              NULL,
-    [AttemptDateTime]        DATETIME         NULL
+    [CurrencyId]             INT              NULL
 );
+
+
 
 
 

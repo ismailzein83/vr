@@ -1,6 +1,7 @@
 ﻿CREATE TYPE [Retail_CDR].[BillingCDR_InvalidType] AS TABLE (
     [CDRID]                  BIGINT           NULL,
     [IDonSwitch]             VARCHAR (100)    NULL,
+    [AttemptDateTime]        DATETIME         NULL,
     [ConnectDateTime]        DATETIME         NULL,
     [DisconnectDateTime]     DATETIME         NULL,
     [DurationInSeconds]      DECIMAL (20, 4)  NULL,
@@ -15,8 +16,9 @@
     [OtherPartyNumber]       VARCHAR (100)    NULL,
     [InterconnectOperatorId] BIGINT           NULL,
     [Zone]                   BIGINT           NULL,
-    [PackageId]              INT              NULL,
-    [AttemptDateTime]        DATETIME         NULL);
+    [PackageId]              INT              NULL);
+
+
 
 
 
