@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [VRNotification].[VRNotification] (
-    [ID]                  UNIQUEIDENTIFIER NOT NULL,
+    [ID]                  BIGINT           IDENTITY (1, 1) NOT NULL,
     [UserID]              INT              NOT NULL,
     [TypeID]              UNIQUEIDENTIFIER NOT NULL,
     [ParentType1]         VARCHAR (255)    NULL,
@@ -15,6 +15,8 @@
     [timestamp]           ROWVERSION       NULL,
     CONSTRAINT [PK_VRActiveNotification_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

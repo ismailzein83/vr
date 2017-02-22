@@ -1,5 +1,4 @@
 ﻿CREATE Procedure [VRNotification].[sp_VRNotification_Insert]
-	@VRNotificationId uniqueIdentifier,
 	@UserId int,
 	@TypeId uniqueidentifier,
 	@ParentType1 nvarchar(255),
@@ -10,11 +9,12 @@
 	@AlertLevelID uniqueidentifier,
 	@Description nvarchar(900),
 	@ErrorMessage nvarchar(max),
-	@Data nvarchar(max)
+	@Data nvarchar(max),
+	@ID bigint out
 AS
 BEGIN
 	
-		insert into [VRNotification].[VRNotification] ([ID] ,[UserID] ,[TypeID],[ParentType1],[ParentType2],[EventKey],[BPProcessInstanceID],[Status], [AlertLevelID],[Description],[ErrorMessage],[Data])
-		values(@VRNotificationId, @UserId, @TypeId,@ParentType1,@ParentType2,@EventKey,@BPProcessInstanceID,@Status, @AlertLevelID, @Description, @ErrorMessage, @Data)
-	
+		insert into [VRNotification].[VRNotification] ([UserID] ,[TypeID],[ParentType1],[ParentType2],[EventKey],[BPProcessInstanceID],[Status], [AlertLevelID],[Description],[ErrorMessage],[Data])
+		values(@UserId, @TypeId,@ParentType1,@ParentType2,@EventKey,@BPProcessInstanceID,@Status, @AlertLevelID, @Description, @ErrorMessage, @Data)
+	    SET @ID = SCOPE_IDENTITY()
 END

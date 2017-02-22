@@ -1,5 +1,5 @@
-﻿Create Procedure [VRNotification].[sp_VRNotification_UpdateStatus]
-	@VRNotificationId uniqueIdentifier,
+﻿CREATE Procedure [VRNotification].[sp_VRNotification_UpdateStatus]
+	@VRNotificationId bigint,
 	@Status tinyint
 AS
 BEGIN

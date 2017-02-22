@@ -215,6 +215,8 @@
     <Build Include="runtime\Stored Procedures\sp_TransactionLock_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_TransactionLock_Delete.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetFiltered.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetUpdated.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetBeforeID.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

@@ -1,8 +1,8 @@
 ﻿
 
 
-Create Procedure [VRNotification].[sp_VRNotification_GetById]
-	@NotificationID uniqueidentifier
+CREATE Procedure [VRNotification].[sp_VRNotification_GetById]
+	@NotificationID bigint
 AS
 BEGIN
 
