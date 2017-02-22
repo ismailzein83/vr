@@ -1,7 +1,7 @@
-﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceTypeEditorController" vr-loader="scopeModel.isLoading" size="'90%'">
+﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceTypeEditorController" vr-loader="scopeModel.isLoading" size="large" >
     <vr-modalbody>
         <vr-form name="formInvoiceTypeEditor">
-            <vr-tabs >
+            <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
                         <vr-columns width="1/3row">
@@ -11,7 +11,7 @@
                             <vr-genericdata-datarecordtype-selector isrequired="true" on-ready="scopeModel.onDataRecordTypeSelectorReady" label="Invoice Record Type" onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"></vr-genericdata-datarecordtype-selector>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-switch label="Use Time Zone" value="scopeModel.useTimeZone" ></vr-switch>
+                            <vr-switch label="Use Time Zone" value="scopeModel.useTimeZone"></vr-switch>
                         </vr-columns>
                     </vr-row>
                     <vr-invoice-startdatecalculationmethod on-ready="scopeModel.onStartCalculationMethodDirectiveReady" normal-col-num="4"></vr-invoice-startdatecalculationmethod>
@@ -57,7 +57,8 @@
                 <vr-tab header="'Invoice Setting Parts Definitions'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-invoicetype-invoicesetting-definition-editor on-ready="scopeModel.onInvoiceSettingDefinitionReady"></vr-invoicetype-invoicesetting-definition-editor></vr-columns>
+                            <vr-invoicetype-invoicesetting-definition-editor on-ready="scopeModel.onInvoiceSettingDefinitionReady"></vr-invoicetype-invoicesetting-definition-editor>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Grid Settings'">
