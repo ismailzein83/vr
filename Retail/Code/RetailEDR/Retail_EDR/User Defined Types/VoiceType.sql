@@ -15,7 +15,6 @@
     [DestinationArea]     VARCHAR (256)    NULL,
     [Duration]            DECIMAL (20, 10) NULL,
     [DurationUnit]        VARCHAR (24)     NULL,
-    [Amount]              DECIMAL (20, 10) NULL,
     [TypeConsumed]        VARCHAR (32)     NULL,
     [Bag]                 VARCHAR (256)    NULL,
     [PricePlan]           VARCHAR (64)     NULL,
@@ -35,7 +34,12 @@
     [AirtimeRate]         DECIMAL (20, 10) NULL,
     [AirtimeAmount]       DECIMAL (20, 10) NULL,
     [TerminationRate]     DECIMAL (20, 10) NULL,
-    [TerminationAmount]   DECIMAL (20, 10) NULL);
+    [TerminationAmount]   DECIMAL (20, 10) NULL,
+    [OriginalAmount]      DECIMAL (20, 10) NULL,
+    [SaleRate]            DECIMAL (20, 10) NULL,
+    [SaleAmount]          DECIMAL (20, 10) NULL);
+
+
 
 
 
