@@ -13,5 +13,6 @@ namespace Retail.Ringo.Data
         IEnumerable<RingoMessageCountEntity> GetRingoMessageCountEntityByRecipient(RingoMessageFilter filter);
         IEnumerable<RingoMessageCountEntity> GetRingoMessageCountEntityBySender(RingoMessageFilter filter);
         IEnumerable<RingoMessageCountEntity> GetRingoMessageCountEntityByRecipient_CTE(RingoMessageFilter filter);
+        IEnumerable<RingoMessageCountEntity> GetRingoMessageCountEntityBySender_LastDay(RingoMessageFilter filter);
     }
 }

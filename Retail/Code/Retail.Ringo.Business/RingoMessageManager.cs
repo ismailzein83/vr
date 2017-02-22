@@ -33,6 +33,10 @@ namespace Retail.Ringo.Business
             IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
             return dataManager.GetRingoMessageCountEntityByRecipient(filter).ToDictionary(k => k.Name, v => v);
         }
-
+        public Dictionary<string, RingoMessageCountEntity> GetRingoMessageCountEntityBySender_LastDay(RingoMessageFilter filter)
+        {
+            IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
+            return dataManager.GetRingoMessageCountEntityBySender_LastDay(filter).ToDictionary(k => k.Name, v => v);
+        }
     }
 }

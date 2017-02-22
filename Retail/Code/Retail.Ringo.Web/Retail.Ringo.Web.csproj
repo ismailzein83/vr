@@ -109,7 +109,6 @@
     <Compile Include="Controllers\RingoReportSheetController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Retail_Ringo\Constant\ModuleConfig.js" />
     <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-entitiesinfo.js" />

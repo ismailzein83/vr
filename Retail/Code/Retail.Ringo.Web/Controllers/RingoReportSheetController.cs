@@ -22,7 +22,7 @@ namespace Retail.Ringo.Web.Controllers
         public object DownloadMNPReport(RingoReportFilter filter)
         {
             RingoReportSheetManager manager = new RingoReportSheetManager();
-            return GetExcelResponse(manager.GenerateMNPReport(filter), "MNP Report.xls");
+            return GetExcelResponse(manager.GenerateMNPReport(filter), string.Format("MNP Report{0}.xls", filter.FromDate.ToString("MMyy")));
         }
     }
 }

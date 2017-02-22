@@ -46,12 +46,12 @@ namespace Retail.Ringo.Business
                 To = filter.ToDate
             }), wbk, 2, 13, 1, 170, 168);
             //2r
-            UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            UpdateWorkSheetByColumn(ringoMessageManager.GetRingoMessageCountEntityBySender_LastDay(new RingoMessageFilter
             {
                 MessageTypes = new List<int>() { 1 },
                 Recipient = "ICSI",
-                From = filter.FromDate.AddMonths(-1),
-                To = filter.ToDate.AddMonths(-1)
+                From = filter.FromDate,
+                To = filter.ToDate
             }), wbk, sheetIndex: 3, rowIndex: 13, columnIndex: 1, valueColumn: 170, count: 168);
 
             //3r

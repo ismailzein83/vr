@@ -36,6 +36,10 @@ namespace Retail.Ringo.Data.SQL
         {
             return GetItemsText(string.Format(query_RingoMessage_GetCountRecipient_CTE, BuildConditionClause(filter)), RingoMessageCountMapper, GetCommandAction(filter));
         }
+        public IEnumerable<RingoMessageCountEntity> GetRingoMessageCountEntityBySender_LastDay(RingoMessageFilter filter)
+        {
+            return GetItemsText(string.Format(query_RingoMessage_LastDayWithData, BuildConditionClause(filter)), RingoMessageCountMapper, GetCommandAction(filter));
+        }
 
         private static Action<System.Data.Common.DbCommand> GetCommandAction(RingoMessageFilter filter)
         {
@@ -56,6 +60,8 @@ namespace Retail.Ringo.Data.SQL
             StringBuilder condition = new StringBuilder();
             if (!string.IsNullOrEmpty(filter.RecipientNetwork))
                 condition.AppendFormat(" and RecipientNetwork= '{0}' ", filter.RecipientNetwork);
+            if (!string.IsNullOrEmpty(filter.Recipient))
+                condition.AppendFormat(" and Recipient= '{0}' ", filter.Recipient);
             if (!string.IsNullOrEmpty(filter.SenderNetwork))
                 condition.AppendFormat(" and SenderNetwork= '{0}' ", filter.SenderNetwork);
             if (filter.StateRequests != null && filter.StateRequests.Count > 0)
@@ -123,7 +129,16 @@ namespace Retail.Ringo.Data.SQL
                                                             )
                                                             select distinct(recipient) Name, count(*) Total from cte
                                                             group by recipient";
-
+        const string query_RingoMessage_LastDayWithData = @"
+                                                            ;with maxDate as (
+                                                            select  Max(CONVERT(date, MessageDate)) as MaxMessageDate
+                                                            from [Retail_EDR].[RingoMessage]
+                                                            where 1=1 {0}
+                                                            )
+                                                            SELECT distinct(Sender) as Name, count(*) Total  from maxDate, [Retail_EDR].[RingoMessage]
+                                                            where MessageDate>=MaxMessageDate and MessageDate<dateadd(day,1, MaxMessageDate)
+                                                            {0}
+                                                            group by (Sender)";
         #endregion
     }
 }
