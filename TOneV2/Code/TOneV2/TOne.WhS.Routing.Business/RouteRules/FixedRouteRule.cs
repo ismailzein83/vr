@@ -58,7 +58,7 @@ namespace TOne.WhS.Routing.Business
                     List<RouteOptionFilterSettings> routeOptionFilterSettings;
                     if (Filters != null && Filters.TryGetValue(routeOption.SupplierId, out routeOptionFilterSettings) && routeOptionFilterSettings != null)
                     {
-                        fixedRouteRule.Filters.Add(routeOption.SupplierId, Vanrise.Common.Serializer.Deserialize<List<RouteOptionFilterSettings>>(Vanrise.Common.Serializer.Serialize(routeOptionFilterSettings)));
+                        fixedRouteRule.Filters.Add(routeOption.SupplierId, Vanrise.Common.Utilities.CloneObject<List<RouteOptionFilterSettings>>(routeOptionFilterSettings));
                     }
                 }
             }
