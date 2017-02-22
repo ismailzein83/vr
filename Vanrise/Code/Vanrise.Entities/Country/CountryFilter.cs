@@ -21,10 +21,14 @@ namespace Vanrise.Entities
 	public interface ICountryFilterContext
 	{
 		Country Country { get; }
+
+        object CustomObject { get; set; }
 	}
 
 	public class CountryFilterContext : ICountryFilterContext
 	{
 		public Country Country { get; set; }
+
+        public object CustomObject { get; set; }
 	}
 }
