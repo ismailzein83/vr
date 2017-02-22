@@ -133,9 +133,9 @@
                     $scope.scopeModel.visibilityAccountDefinitions[index] = { Entity: updatedVisibilityAccountDefinition };
                 };
 
-                Retail_BE_VisibilityAccountDefinitionService.editVisibilityAccountDefinition(visibilityAccountDefinition.Entity, retailBEVisibilityEditorRuntime, getExcludedAccountBEDefinitionIds(), onVisibilityAccountDefinitionUpdated);
+                Retail_BE_VisibilityAccountDefinitionService.editVisibilityAccountDefinition(visibilityAccountDefinition.Entity, retailBEVisibilityEditorRuntime, getExcludedAccountBEDefinitionIds(visibilityAccountDefinition), onVisibilityAccountDefinitionUpdated);
             }
-            function getExcludedAccountBEDefinitionIds() {
+            function getExcludedAccountBEDefinitionIds(visibilityAccountDefinition) {
                 if ($scope.scopeModel.visibilityAccountDefinitions == undefined)
                     return;
 
@@ -146,6 +146,13 @@
                         accountBEDefinitionIds.push(entity.AccountBEDefinitionId);
                     }
                 }
+
+                //for EditMode
+                if (visibilityAccountDefinition != undefined && visibilityAccountDefinition.Entity != undefined) {
+                    var index = accountBEDefinitionIds.indexOf(visibilityAccountDefinition.Entity.AccountBEDefinitionId);
+                    accountBEDefinitionIds.splice(index, 1);
+                }
+
                 return accountBEDefinitionIds;
             }
         }

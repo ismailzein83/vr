@@ -56,11 +56,6 @@
             }
 
             isEditMode = (visibilityAccountDefinitionEntity != undefined);
-
-            if (isEditMode) {
-                var index = excludedAccountBEDefinitionIds.indexOf(visibilityAccountDefinitionEntity.AccountBEDefinitionId);
-                excludedAccountBEDefinitionIds.splice(index, 1);
-            }
         }
         function defineScope() {
             $scope.scopeModel = {};
