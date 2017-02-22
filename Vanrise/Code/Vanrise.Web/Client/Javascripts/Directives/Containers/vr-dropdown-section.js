@@ -12,23 +12,22 @@
             scope: {
                 onReady: '=',
                 defaultstate: '='
-
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.id = BaseDirService.generateHTMLElementName();
                 ctrl.menuid = BaseDirService.generateHTMLElementName();
-                ctrl.initializeSection =  function() {
+                ctrl.initializeSection = function () {
                     ctrl.showmenu = true;
                     calculatePosition(ctrl, true);
                     addBackDrop();
-                    setTimeout(function () {                        
-                                            
+                    setTimeout(function () {
+
                         checkOnExpandMethode();
 
                         $('#' + ctrl.menuid).slideDown("slow");
-                    },1000);
-                    
+                    }, 1000);
+
                 };
 
                 $element.on('$destroy', function () {
@@ -36,31 +35,33 @@
                 });
                 ctrl.expandSection = function (e) {
                     if (e != undefined && $(e.target).hasClass('vanrise-inpute')) {
-                        return;
+                        return UtilsService.convertToPromiseIfUndefined(undefined);
                     }
-                    
-                    setTimeout(function () {                        
+                    var expandSectionDeferred = UtilsService.createPromiseDeferred();
+                    setTimeout(function () {
                         $scope.$apply(function () {
                             ctrl.showmenu = true;
                             calculatePosition(ctrl);
                         });
                         $('#' + ctrl.menuid).slideDown("slow");
                         addBackDrop();
+                        expandSectionDeferred.resolve();
                         checkOnExpandMethode();
-                    });
+                    }, 1000);
+                    return expandSectionDeferred.promise;
                 };
                 ctrl.collapseSection = function () {
+                    checkOnCollapseMethode();
                     $('#' + ctrl.menuid).slideUp("slow", function () {
                         fixDropdownSectionPosition();
-                        checkOnCollapseMethode();
                     });
                 };
                 ctrl.loadSection = function () {
                     $timeout(function () {
                         if (ctrl.defaultstate == true) {
-                             ctrl.initializeSection();
+                            ctrl.initializeSection();
                         }
-                    },1000)
+                    }, 1000)
                 };
                 $('#' + ctrl.id).parents('div').scroll(function () {
                     fixDropdownSectionPosition();
@@ -85,7 +86,7 @@
                     $('.vr-backdrop').remove();
                     $('.vr-backdrop-modal').remove();
                 };
-               
+
                 function checkOnExpandMethode() {
                     if ($attrs.onexpandsection != undefined) {
                         var onExpandSectiondMethod = $scope.$parent.$eval($attrs.onexpandsection);
@@ -101,7 +102,7 @@
                             onCollapseSectiondMethod();
                         }
                     }
-                }               
+                }
 
                 function addBackDrop() {
                     if ($element.parents().find('.modal-dialog').length > 0)
@@ -110,29 +111,31 @@
                         $($element.parents().find("vr-form")).prepend("<div class='vr-backdrop'></div>");
                     }
                 }
-               
+
             },
 
             compile: function (element, attrs) {
-                return {                   
+                return {
                     post: function postLink(scope, elem, attr, ctrl, transcludeFn) {
 
                         MultiTranscludeService.transclude(elem, transcludeFn);
-                                                 
+
                         var api = {};
+
                         api.collapse = function () {
                             ctrl.collapseSection();
                         };
+
                         api.expand = function () {
-                            ctrl.expandSection(undefined);
+                            return ctrl.expandSection(undefined);
                         };
+
                         if (ctrl.onReady != null)
                             ctrl.onReady(api);
-
                     }
                 }
             },
-            
+
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
@@ -162,7 +165,7 @@
             }
 
         };
-        function calculatePosition(ctrl,forcedisplay) {
+        function calculatePosition(ctrl, forcedisplay) {
             var self = $('#' + ctrl.id).find('.summary-container');
 
             var selfHeight = $(self).parent().height();
@@ -192,6 +195,3 @@
     app.directive('vrDropdownSection', vrDropDownSection);
 
 })(app);
-
-
-
