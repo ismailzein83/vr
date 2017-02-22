@@ -9,7 +9,7 @@ namespace Vanrise.BusinessProcess.Data
     {
         List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, string entityId);
         List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input);
-        BigResult<BPInstanceDetail> GetFilteredBPInstances(DataRetrievalInput<BPInstanceQuery> input);
+        List<BPInstance> GetAllBPInstances(BPInstanceQuery query);
 
         List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId);
 

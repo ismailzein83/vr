@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -43,8 +45,7 @@ namespace Vanrise.BusinessProcess.Business
 
         public Vanrise.Entities.IDataRetrievalResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
         {
-            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBPInstances(input));
+            return BigDataManager.Instance.RetrieveData(input, new BPInstanceRequestHandler());
         }
 
         public BPInstance GetBPInstance(long bpInstanceId)
@@ -97,11 +98,38 @@ namespace Vanrise.BusinessProcess.Business
         {
             if (bpInstance == null)
                 return null;
+            string bpDefinitionTitle = null;
+            string userName = new UserManager().GetUserName(bpInstance.InitiatorUserId);
+            var bpDefinition = new BPDefinitionManager().GetBPDefinition(bpInstance.DefinitionID);
+            if (bpDefinition != null)
+                bpDefinitionTitle = bpDefinition.Title;
             return new BPInstanceDetail()
             {
-                Entity = bpInstance
+                Entity = bpInstance,
+                DefinitionTitle = bpDefinitionTitle,
+                UserName = userName
             };
         }
+        #endregion
+
+
+        #region Private Classes
+
+        private class BPInstanceRequestHandler : BigDataRequestHandler<BPInstanceQuery, BPInstance, BPInstanceDetail>
+        {
+            public override BPInstanceDetail EntityDetailMapper(BPInstance entity)
+            {
+                BPInstanceManager manager = new BPInstanceManager();
+                return manager.BPInstanceDetailMapper(entity);
+            }
+
+            public override IEnumerable<BPInstance> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
+            {
+                IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+                return dataManager.GetAllBPInstances(input.Query);
+            }
+        }
+
         #endregion
     }
 }

@@ -54,17 +54,15 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString, ToDBNullIfDefault(input.ParentId),input.EntityId);
         }
 
-        public Vanrise.Entities.BigResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
+        public List<BPInstance> GetAllBPInstances(BPInstanceQuery query)
         {
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-
-            return RetrieveData(input, (tempTableName) =>
-            {
-                ExecuteNonQuerySP("bp.sp_BPInstance_CreateTempForFiltered", tempTableName, input.Query.DefinitionsId == null ? null : string.Join(",", input.Query.DefinitionsId.Select(n => n.ToString()).ToArray()),
-                    input.Query.InstanceStatus == null ? null : string.Join(",", input.Query.InstanceStatus.Select(n => ((int)n).ToString()).ToArray()),input.Query.EntityId, input.Query.DateFrom, input.Query.DateTo);
-
-            }, BPInstanceDetailMapper, _mapper);
+            return GetItemsSP("[bp].[sp_BPInstance_GetFiltered]", BPInstanceMapper,
+                       query.DefinitionsId == null ? null : string.Join(",", query.DefinitionsId.Select(n => n.ToString()).ToArray()),
+                       query.InstanceStatus == null ? null : string.Join(",", query.InstanceStatus.Select(n => ((int)n).ToString()).ToArray()),
+                       query.EntityId,
+                       query.DateFrom,
+                       query.DateTo
+                  );
         }
 
         public List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId)
@@ -145,14 +143,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 instance.CompletionNotifier = Serializer.Deserialize(completionNotifier) as ProcessCompletionNotifier;
             return instance;
         }
-
-        private BPInstanceDetail BPInstanceDetailMapper(IDataReader reader)
-        {
-            return new BPInstanceDetail()
-            {
-                Entity = BPInstanceMapper(reader)
-            };
-        }
+           
         #endregion
         
         public void SetServiceInstancesOfBPInstances(List<BPPendingInstanceInfo> pendingInstancesToUpdate)
