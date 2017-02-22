@@ -98,7 +98,9 @@
     <Compile Include="BusinessRules\BusinessRuleUtilities.cs" />
     <Compile Include="BusinessRules\Conditions\Country\ChangedCountryEEDIsLessThanToday.cs" />
     <Compile Include="BusinessRules\Conditions\Country\NewCountryBEDIsLessThanRetroactiveDateCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\CustomerZoneHavingPendingClosedRateIsModified.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateHasInvalidEEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\DraftNewRateIsClosed.cs" />
     <Compile Include="BusinessRules\Conditions\MissingSellingProductDefaultServiceCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductNormalRateDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
@@ -110,7 +112,10 @@
     <Compile Include="BusinessRules\Conditions\ServiceEEDGreaterThanZoneEED.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneIsPendingClosedAndChangedCondition.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="Context\RatePlanContext.cs" />
+    <Compile Include="Country\BulkActionApplicableToCountryContext.cs" />
+    <Compile Include="Country\BulkActionApplicableToCountryFilter.cs" />
     <Compile Include="Country\CountrySoldToCustomerFilter.cs" />
     <Compile Include="DefaultItemManager.cs" />
     <Compile Include="ImportRatePlan\ImportBulkActionValidationCacheManager.cs" />
