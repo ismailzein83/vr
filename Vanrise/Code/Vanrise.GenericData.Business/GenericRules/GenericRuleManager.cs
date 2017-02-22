@@ -65,9 +65,12 @@ namespace Vanrise.GenericData.Business
                 sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
 
-                foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
-                {
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = field.Title });
+                if (genericRuleDefinition.CriteriaDefinition!= null)
+                {               
+                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = field.Title });
+                    }
                 }
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Settings" });
@@ -84,9 +87,13 @@ namespace Vanrise.GenericData.Business
 
                     if (record.FieldValueDescriptions == null || record.FieldValueDescriptions.Count == 0)
                     {
-                        foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                        if (genericRuleDefinition.CriteriaDefinition != null)
                         {
-                            row.Cells.Add(new ExportExcelCell { Value = null });
+                            foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = null });
+                            }
+
                         }
                     }
                     else
