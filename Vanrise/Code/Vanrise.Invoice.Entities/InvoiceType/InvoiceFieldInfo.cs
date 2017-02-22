@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public class InvoiceTypeFilter
+    public class InvoiceFieldInfo
     {
+        public InvoiceField InvoiceFieldId { get; set; }
+        public string Name { get; set; }
     }
 }

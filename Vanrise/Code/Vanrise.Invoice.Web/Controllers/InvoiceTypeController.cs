@@ -65,7 +65,7 @@ namespace Vanrise.Invoice.Web.Controllers
         [Route("GetInvoiceTypesInfo")]
         public IEnumerable<InvoiceTypeInfo> GetInvoiceTypesInfo(string filter = null)
         {
-            InvoiceTypeFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<InvoiceTypeFilter>(filter) : null;
+            InvoiceTypeInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<InvoiceTypeInfoFilter>(filter) : null;
             return _manager.GetInvoiceTypesInfo(serializedFilter);
         }
         [HttpPost]
@@ -85,6 +85,18 @@ namespace Vanrise.Invoice.Web.Controllers
         public InvoiceAction GetInvoiceAction(Guid invoiceTypeId, Guid invoiceActionId)
         {
             return _manager.GetInvoiceAction(invoiceTypeId, invoiceActionId);
+        }
+        [HttpGet]
+        [Route("GetRemoteInvoiceFieldsInfo")]
+        public IEnumerable<InvoiceFieldInfo> GetRemoteInvoiceFieldsInfo(string filter = null)
+        {
+            return _manager.GetRemoteInvoiceFieldsInfo();
+        }
+        [HttpGet]
+        [Route("GetRemoteInvoiceTypeCustomFieldsInfo")]
+        public IEnumerable<string> GetRemoteInvoiceTypeCustomFieldsInfo(Guid invoiceTypeId)
+        {
+            return _manager.GetRemoteInvoiceTypeCustomFieldsInfo(invoiceTypeId);
         }
     }
 }

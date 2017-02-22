@@ -159,7 +159,7 @@ namespace Vanrise.Invoice.Business
             return gridColumnAttributes;
 
         }
-        public IEnumerable<InvoiceTypeInfo> GetInvoiceTypesInfo(InvoiceTypeFilter filter)
+        public IEnumerable<InvoiceTypeInfo> GetInvoiceTypesInfo(InvoiceTypeInfoFilter filter)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
             Func<InvoiceType, bool> filterExpression = (x) =>
@@ -175,6 +175,7 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceTypes.FindAllRecords(filterExpression).MapRecords(InvoiceTypeInfoMapper);
         }
+      
         public bool DoesUserHaveViewAccess(Guid invoiceTypeId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
@@ -255,6 +256,32 @@ namespace Vanrise.Invoice.Business
             if (invoiceAction == null)
                 throw new NullReferenceException("invoiceAction");
             return invoiceAction;
+        }
+
+        public IEnumerable<InvoiceFieldInfo> GetRemoteInvoiceFieldsInfo()
+        {
+            List<InvoiceFieldInfo> invoiceFields = new List<InvoiceFieldInfo>();
+            Type enumType = typeof(InvoiceField);
+            var enumFields = enumType.GetEnumValues();
+            foreach (var item in enumFields)
+            {
+                InvoiceField field = (InvoiceField)item;
+                invoiceFields.Add(new InvoiceFieldInfo
+                {
+                    InvoiceFieldId = field,
+                    Name = Utilities.GetEnumDescription<InvoiceField>(field)
+                });
+            }
+            return invoiceFields;
+        }
+        public IEnumerable<string> GetRemoteInvoiceTypeCustomFieldsInfo(Guid invoiceTypeId)
+        {
+            var invoiceType = this.GetInvoiceType(invoiceTypeId);
+            var dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            List<string> invoiceCustomFields = new List<string>();
+            if (dataRecordFields == null)
+                return null;
+            return dataRecordFields.Select(x=>x.Key);
         }
         #endregion
 

@@ -85,6 +85,7 @@
     <Compile Include="InvoiceType\InvoiceDataSource.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridActionSettingsConfig.cs" />
+    <Compile Include="InvoiceType\InvoiceFieldInfo.cs" />
     <Compile Include="InvoiceType\InvoiceFileConverter.cs" />
     <Compile Include="InvoiceType\EffectivePartnerInvoiceSetting.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\AutomaticInvoiceSettingPart.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="InvoiceType\SendEmailActionInput.cs" />
     <Compile Include="InvoiceType\SubSections\InvoiceSubSection.cs" />
     <Compile Include="InvoiceType\ExtendedSettings\InvoiceTypeExtendedSettings.cs" />
-    <Compile Include="InvoiceType\InvoiceTypeFilter.cs" />
+    <Compile Include="InvoiceType\InvoiceTypeInfoFilter.cs" />
     <Compile Include="InvoiceType\InvoiceTypeInfo.cs" />
     <Compile Include="InvoiceType\InvoiceTypeQuery.cs" />
     <Compile Include="InvoiceType\InvoiceTypeRuntime.cs" />
