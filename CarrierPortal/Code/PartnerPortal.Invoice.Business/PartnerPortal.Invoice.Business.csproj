@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C4AC9650-72A5-4470-A2D4-2D22C504BF0F}</ProjectGuid>
+    <ProjectGuid>{6E8B5CCF-9BA8-4F47-BC21-E7F13F770B5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PartnerPortal.CustomerAccess.Business</RootNamespace>
-    <AssemblyName>PartnerPortal.CustomerAccess.Business</AssemblyName>
+    <RootNamespace>PartnerPortal.Invoice.Business</RootNamespace>
+    <AssemblyName>PartnerPortal.Invoice.Business</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -36,20 +36,12 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.AccountBalance.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Common">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities">
@@ -58,22 +50,17 @@
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Security.Business">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Security.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountStatementManager.cs" />
+    <Compile Include="Extensions\InvoiceViewerTypeSettings.cs" />
+    <Compile Include="InvoiceManager.cs" />
+    <Compile Include="InvoiceTypeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RetailAccountUserManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PartnerPortal.CustomerAccess.Entities\PartnerPortal.CustomerAccess.Entities.csproj">
-      <Project>{3f63f33b-1977-4593-8d79-f5bfbf84cb19}</Project>
-      <Name>PartnerPortal.CustomerAccess.Entities</Name>
+    <ProjectReference Include="..\PartnerPortal.Invoice.Entities\PartnerPortal.Invoice.Entities.csproj">
+      <Project>{50261e8c-7f79-437b-9eb2-8423d8eb7080}</Project>
+      <Name>PartnerPortal.Invoice.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

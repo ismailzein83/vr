@@ -350,6 +350,22 @@
       <Project>{dec75d5a-5e36-4c1c-a431-9456a9d4f4b9}</Project>
       <Name>PartnerPortal.CustomerAccess.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PartnerPortal.Invoice.Business\PartnerPortal.Invoice.Business.csproj">
+      <Project>{6e8b5ccf-9ba8-4f47-bc21-e7f13f770b5a}</Project>
+      <Name>PartnerPortal.Invoice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PartnerPortal.Invoice.Entities\PartnerPortal.Invoice.Entities.csproj">
+      <Project>{50261e8c-7f79-437b-9eb2-8423d8eb7080}</Project>
+      <Name>PartnerPortal.Invoice.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PartnerPortal.Invoice.MainExtensions\PartnerPortal.Invoice.MainExtensions.csproj">
+      <Project>{9bde9944-b0a4-4a1f-a4ef-c0004e06c296}</Project>
+      <Name>PartnerPortal.Invoice.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PartnerPortal.Invoice.Web\PartnerPortal.Invoice.Web.csproj">
+      <Project>{5dafc981-130c-4507-99c3-6f54ee303e5c}</Project>
+      <Name>PartnerPortal.Invoice.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />

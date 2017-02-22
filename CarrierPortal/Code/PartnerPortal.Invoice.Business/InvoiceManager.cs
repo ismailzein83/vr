@@ -1,5 +1,5 @@
-﻿using PartnerPortal.CustomerAccess.Business.Extensions;
-using PartnerPortal.CustomerAccess.Entities;
+﻿using PartnerPortal.Invoice.Business.Extensions;
+using PartnerPortal.Invoice.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 
-namespace PartnerPortal.CustomerAccess.Business
+namespace PartnerPortal.Invoice.Business
 {
     public class InvoiceManager
     {
@@ -18,21 +18,21 @@ namespace PartnerPortal.CustomerAccess.Business
             VRComponentTypeManager vrComponentTypeManager = new VRComponentTypeManager();
             InvoiceViewerTypeSettings invoiceViewerTypeSettings = vrComponentTypeManager.GetComponentTypeSettings<InvoiceViewerTypeSettings>(input.Query.InvoiceViewerTypeId);
 
-            if (invoiceViewerTypeSettings.InvoiceContextHandler == null)
+            if (invoiceViewerTypeSettings.InvoiceQueryInterceptor == null)
                 throw new NullReferenceException("invoiceViewerTypeSettings.InvoiceContextHandler");
-
-            InvoiceContextHandlerContext context = new InvoiceContextHandlerContext {Query = input.Query };
-            invoiceViewerTypeSettings.InvoiceContextHandler.PrepareQuery(context);
+            input.Query.InvoiceTypeId = invoiceViewerTypeSettings.InvoiceTypeId;
+            InvoiceQueryInterceptorContext context = new InvoiceQueryInterceptorContext { Query = input.Query };
+            invoiceViewerTypeSettings.InvoiceQueryInterceptor.PrepareQuery(context);
 
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(invoiceViewerTypeSettings.VRConnectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
             return connectionSettings.Post<DataRetrievalInput<InvoiceAppQuery>, IDataRetrievalResult<InvoiceDetail>>("/api/VR_Invoice/Invoice/GetFilteredInvoices", input);
         }
-        public IEnumerable<InvoiceContextHandlerTemplate> GetInvoiceContextHandlerTemplates()
+        public IEnumerable<InvoiceQueryInterceptorTemplate> GetInvoiceQueryInterceptorTemplates()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<InvoiceContextHandlerTemplate>(InvoiceContextHandlerTemplate.EXTENSION_TYPE);
+            return templateConfigManager.GetExtensionConfigurations<InvoiceQueryInterceptorTemplate>(InvoiceQueryInterceptorTemplate.EXTENSION_TYPE);
         }
     }
 }

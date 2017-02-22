@@ -61,10 +61,6 @@
     <Compile Include="AccountStatement\AccountStatementContextHandlerTemplate.cs" />
     <Compile Include="AccountStatement\AccountStatementViewSettings.cs" />
     <Compile Include="AccountStatement\AccountStatementContextHandlerContext.cs" />
-    <Compile Include="Invoice\InvoiceAppQuery.cs" />
-    <Compile Include="Invoice\InvoiceContextHandler.cs" />
-    <Compile Include="Invoice\InvoiceContextHandlerTemplate.cs" />
-    <Compile Include="Invoice\InvoiceViewSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailAccount.cs" />
   </ItemGroup>

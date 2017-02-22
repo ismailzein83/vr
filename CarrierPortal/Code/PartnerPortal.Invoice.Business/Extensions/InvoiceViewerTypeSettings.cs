@@ -1,4 +1,4 @@
-﻿using PartnerPortal.CustomerAccess.Entities;
+﻿using PartnerPortal.Invoice.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
 
-namespace PartnerPortal.CustomerAccess.Business.Extensions
+namespace PartnerPortal.Invoice.Business.Extensions
 {
     public class InvoiceViewerTypeSettings : Vanrise.Entities.VRComponentTypeSettings
     {
@@ -17,7 +17,7 @@ namespace PartnerPortal.CustomerAccess.Business.Extensions
         public Guid VRConnectionId { get; set; }
         public Guid InvoiceTypeId { get; set; }
         public InvoiceViewerTypeGridSettings GridSettings { get; set; }
-        public InvoiceContextHandler InvoiceContextHandler { get; set; }
+        public InvoiceQueryInterceptor InvoiceQueryInterceptor { get; set; }
 
     }
     public class InvoiceViewerTypeGridSettings

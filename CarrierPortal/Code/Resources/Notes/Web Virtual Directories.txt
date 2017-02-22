@@ -10,3 +10,4 @@ Runtime							C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 PartnerPortal_CustomerAccess	C:\TFS\CarrierPortal\Code\PartnerPortal.CustomerAccess.Web\PartnerPortal_CustomerAccess
 VR_GenericData					C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
 Analytic						C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
+PartnerPortal_Invoice			C:\TFS\CarrierPortal\Code\PartnerPortal.Invoice.Web\PartnerPortal_Invoice

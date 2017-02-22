@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{9AA83DCF-FB38-45AA-9944-B92CA1B13B94}"
 EndProject
@@ -51,9 +51,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.CustomerAcces
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.CustomerAccess.MainExtensions", "PartnerPortal.CustomerAccess.MainExtensions\PartnerPortal.CustomerAccess.MainExtensions.csproj", "{918841CC-444D-4C23-A4E5-C957EF071F4D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PartnerPortal.Invoice", "PartnerPortal.Invoice", "{66BDAFB6-19E9-4D46-8D7C-B0A3CB14A508}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.Invoice.Business", "PartnerPortal.Invoice.Business\PartnerPortal.Invoice.Business.csproj", "{6E8B5CCF-9BA8-4F47-BC21-E7F13F770B5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.Invoice.Entities", "PartnerPortal.Invoice.Entities\PartnerPortal.Invoice.Entities.csproj", "{50261E8C-7F79-437B-9EB2-8423D8EB7080}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.Invoice.MainExtensions", "PartnerPortal.Invoice.MainExtensions\PartnerPortal.Invoice.MainExtensions.csproj", "{9BDE9944-B0A4-4A1F-A4EF-C0004E06C296}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartnerPortal.Invoice.Web", "PartnerPortal.Invoice.Web\PartnerPortal.Invoice.Web.csproj", "{5DAFC981-130C-4507-99C3-6F54EE303E5C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 22
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -125,6 +135,22 @@ Global
 		SccProjectTopLevelParentUniqueName17 = CarrierPortal.sln
 		SccProjectName17 = PartnerPortal.CustomerAccess.MainExtensions
 		SccLocalPath17 = PartnerPortal.CustomerAccess.MainExtensions
+		SccProjectUniqueName18 = PartnerPortal.Invoice.Business\\PartnerPortal.Invoice.Business.csproj
+		SccProjectTopLevelParentUniqueName18 = CarrierPortal.sln
+		SccProjectName18 = PartnerPortal.Invoice.Business
+		SccLocalPath18 = PartnerPortal.Invoice.Business
+		SccProjectUniqueName19 = PartnerPortal.Invoice.Entities\\PartnerPortal.Invoice.Entities.csproj
+		SccProjectTopLevelParentUniqueName19 = CarrierPortal.sln
+		SccProjectName19 = PartnerPortal.Invoice.Entities
+		SccLocalPath19 = PartnerPortal.Invoice.Entities
+		SccProjectUniqueName20 = PartnerPortal.Invoice.MainExtensions\\PartnerPortal.Invoice.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName20 = CarrierPortal.sln
+		SccProjectName20 = PartnerPortal.Invoice.MainExtensions
+		SccLocalPath20 = PartnerPortal.Invoice.MainExtensions
+		SccProjectUniqueName21 = PartnerPortal.Invoice.Web\\PartnerPortal.Invoice.Web.csproj
+		SccProjectTopLevelParentUniqueName21 = CarrierPortal.sln
+		SccProjectName21 = PartnerPortal.Invoice.Web
+		SccLocalPath21 = PartnerPortal.Invoice.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,29 +227,50 @@ Global
 		{918841CC-444D-4C23-A4E5-C957EF071F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{918841CC-444D-4C23-A4E5-C957EF071F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{918841CC-444D-4C23-A4E5-C957EF071F4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E8B5CCF-9BA8-4F47-BC21-E7F13F770B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E8B5CCF-9BA8-4F47-BC21-E7F13F770B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E8B5CCF-9BA8-4F47-BC21-E7F13F770B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E8B5CCF-9BA8-4F47-BC21-E7F13F770B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50261E8C-7F79-437B-9EB2-8423D8EB7080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50261E8C-7F79-437B-9EB2-8423D8EB7080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50261E8C-7F79-437B-9EB2-8423D8EB7080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50261E8C-7F79-437B-9EB2-8423D8EB7080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BDE9944-B0A4-4A1F-A4EF-C0004E06C296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BDE9944-B0A4-4A1F-A4EF-C0004E06C296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BDE9944-B0A4-4A1F-A4EF-C0004E06C296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BDE9944-B0A4-4A1F-A4EF-C0004E06C296}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DAFC981-130C-4507-99C3-6F54EE303E5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DAFC981-130C-4507-99C3-6F54EE303E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DAFC981-130C-4507-99C3-6F54EE303E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DAFC981-130C-4507-99C3-6F54EE303E5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{CB556A40-1CAB-4915-88E5-F5E04BA4F4EE} = {9AA83DCF-FB38-45AA-9944-B92CA1B13B94}
+		{73B89280-7691-435A-98E3-F5F84801BE36} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
+		{062656B4-F251-4342-9853-7B2448326EB8} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
+		{66BDAFB6-19E9-4D46-8D7C-B0A3CB14A508} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
+		{FEF565A8-7254-4428-8BD4-A72B6F761496} = {1B9F0944-5170-4C05-8834-D247C7CA18C1}
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {EE2A4347-9EB6-462A-BB25-36D47EFD502A}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {EE2A4347-9EB6-462A-BB25-36D47EFD502A}
 		{FE2CC43B-8AAA-4D6A-87F0-67E85A5DAEC9} = {EE2A4347-9EB6-462A-BB25-36D47EFD502A}
-		{73B89280-7691-435A-98E3-F5F84801BE36} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
-		{CB556A40-1CAB-4915-88E5-F5E04BA4F4EE} = {9AA83DCF-FB38-45AA-9944-B92CA1B13B94}
-		{FEF565A8-7254-4428-8BD4-A72B6F761496} = {1B9F0944-5170-4C05-8834-D247C7CA18C1}
 		{07C7EF2D-23B5-4EB1-BE56-BC5232CA7D72} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{20CF0936-036A-416C-A5CE-4B59024F8F45} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{45737C32-8ADD-4C04-AF8D-9A370077791E} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{168D3BEA-BDE1-47E2-8A35-ED3ED9E65547} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{862ACF40-050C-423F-BAE1-66CDD06E5EB0} = {73B89280-7691-435A-98E3-F5F84801BE36}
-		{197126C1-BC0D-4BD0-8016-811FC8DD41D5} = {48718904-3FAE-427C-8D91-693120859DDC}
 		{031E385D-9222-4E25-9C0E-3ECB12675667} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F} = {73B89280-7691-435A-98E3-F5F84801BE36}
-		{062656B4-F251-4342-9853-7B2448326EB8} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
+		{197126C1-BC0D-4BD0-8016-811FC8DD41D5} = {48718904-3FAE-427C-8D91-693120859DDC}
 		{DEC75D5A-5E36-4C1C-A431-9456A9D4F4B9} = {062656B4-F251-4342-9853-7B2448326EB8}
 		{3F63F33B-1977-4593-8D79-F5BFBF84CB19} = {062656B4-F251-4342-9853-7B2448326EB8}
 		{C4AC9650-72A5-4470-A2D4-2D22C504BF0F} = {062656B4-F251-4342-9853-7B2448326EB8}
 		{918841CC-444D-4C23-A4E5-C957EF071F4D} = {062656B4-F251-4342-9853-7B2448326EB8}
+		{6E8B5CCF-9BA8-4F47-BC21-E7F13F770B5A} = {66BDAFB6-19E9-4D46-8D7C-B0A3CB14A508}
+		{50261E8C-7F79-437B-9EB2-8423D8EB7080} = {66BDAFB6-19E9-4D46-8D7C-B0A3CB14A508}
+		{9BDE9944-B0A4-4A1F-A4EF-C0004E06C296} = {66BDAFB6-19E9-4D46-8D7C-B0A3CB14A508}
+		{5DAFC981-130C-4507-99C3-6F54EE303E5C} = {66BDAFB6-19E9-4D46-8D7C-B0A3CB14A508}
 	EndGlobalSection
 EndGlobal

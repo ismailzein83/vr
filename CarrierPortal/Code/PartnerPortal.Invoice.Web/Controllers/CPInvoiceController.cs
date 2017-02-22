@@ -1,5 +1,5 @@
-﻿using PartnerPortal.CustomerAccess.Business;
-using PartnerPortal.CustomerAccess.Entities;
+﻿using PartnerPortal.Invoice.Business;
+using PartnerPortal.Invoice.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Web.Base;
 
-namespace PartnerPortal.CustomerAccess.Web.Controllers
+namespace PartnerPortal.Invoice.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Invoice")]
     [JSONWithTypeAttribute]
@@ -21,11 +21,11 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredInvoices(input));
         }
         [HttpGet]
-        [Route("GetInvoiceContextHandlerTemplates")]
-        public IEnumerable<InvoiceContextHandlerTemplate> GetInvoiceContextHandlerTemplates()
+        [Route("GetInvoiceQueryInterceptorTemplates")]
+        public IEnumerable<InvoiceQueryInterceptorTemplate> GetInvoiceQueryInterceptorTemplates()
         {
             InvoiceManager manager = new InvoiceManager();
-            return manager.GetInvoiceContextHandlerTemplates();
+            return manager.GetInvoiceQueryInterceptorTemplates();
         }
     }
 }

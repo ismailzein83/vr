@@ -51,6 +51,9 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
@@ -60,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountStatement\RetailAccountUser.cs" />
-    <Compile Include="Invoice\InvoiceQueryContextHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRRestAPIRecordQueryInterceptor\RetailAccountVRRestAPIRecordQueryInterceptor.cs" />
   </ItemGroup>
