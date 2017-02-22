@@ -68,13 +68,12 @@ namespace Vanrise.GenericData.Business
 
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
-        public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteBusinessEntityDefinitionsInfo(Guid connectionId, BusinessEntityDefinitionInfoFilter filter)
+        public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteBusinessEntityDefinitionsInfo(Guid connectionId, string serializedFilter)
         {
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-            string serializedFilter = filter != null ? Vanrise.Common.Serializer.Serialize(filter) : string.Empty;
             return connectionSettings.Get<IEnumerable<BusinessEntityDefinitionInfo>>(string.Format("/api/VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinitionsInfo?filter={0}", serializedFilter));
         }
 

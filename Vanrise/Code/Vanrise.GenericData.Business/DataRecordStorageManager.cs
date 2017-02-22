@@ -167,13 +167,12 @@ namespace Vanrise.GenericData.Business
             return this.GetCachedDataRecordStorages().MapRecords(DataRecordStorageInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
-        public IEnumerable<DataRecordStorageInfo> GetRemoteDataRecordsStorageInfo(Guid connectionId, DataRecordStorageFilter filter)
+        public IEnumerable<DataRecordStorageInfo> GetRemoteDataRecordsStorageInfo(Guid connectionId, string serializedFilter)
         {
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-            string serializedFilter = filter != null ? Vanrise.Common.Serializer.Serialize(filter) : string.Empty;
             return connectionSettings.Get<IEnumerable<DataRecordStorageInfo>>(string.Format("/api/VR_GenericData/DataRecordStorage/GetDataRecordsStorageInfo?filter={0}", serializedFilter));
         }
 

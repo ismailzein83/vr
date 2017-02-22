@@ -16,10 +16,10 @@
             });
         }
 
-        function GetRemoteDataRecordsStorageInfo(connectionId, filter) {
+        function GetRemoteDataRecordsStorageInfo(connectionId, serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetRemoteDataRecordsStorageInfo'), {
                 connectionId: connectionId,
-                filter: filter
+                serializedFilter: serializedFilter
             });
         }
 

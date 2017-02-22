@@ -33,10 +33,9 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetRemoteDataRecordsStorageInfo")]
-        public IEnumerable<DataRecordStorageInfo> GetRemoteDataRecordsStorageInfo(Guid connectionId, string filter)
+        public IEnumerable<DataRecordStorageInfo> GetRemoteDataRecordsStorageInfo(Guid connectionId, string serializedFilter)
         {
-            DataRecordStorageFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<DataRecordStorageFilter>(filter) : null;
-            return _manager.GetRemoteDataRecordsStorageInfo(connectionId, deserializedFilter);
+            return _manager.GetRemoteDataRecordsStorageInfo(connectionId, serializedFilter);
         }
 
         [HttpGet]

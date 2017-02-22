@@ -41,8 +41,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetRemoteBusinessEntityDefinitionsInfo")]
         public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteBusinessEntityDefinitionsInfo(Guid connectionId, string serializedFilter = null)
         {
-            BusinessEntityDefinitionInfoFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<BusinessEntityDefinitionInfoFilter>(serializedFilter) : null;
-            return _manager.GetRemoteBusinessEntityDefinitionsInfo(connectionId, deserializedFilter);
+            return _manager.GetRemoteBusinessEntityDefinitionsInfo(connectionId, serializedFilter);
         }
 
         [HttpPost]

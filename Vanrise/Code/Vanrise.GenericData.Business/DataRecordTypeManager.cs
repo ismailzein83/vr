@@ -115,13 +115,12 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        public IEnumerable<DataRecordTypeInfo> GetRemoteDataRecordTypeInfo(Guid connectionId, DataRecordTypeInfoFilter filter)
+        public IEnumerable<DataRecordTypeInfo> GetRemoteDataRecordTypeInfo(Guid connectionId, string serializedFilter)
         {
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-            string serializedFilter = filter != null ? Vanrise.Common.Serializer.Serialize(filter) : string.Empty;
             return connectionSettings.Get<IEnumerable<DataRecordTypeInfo>>(string.Format("/api/VR_GenericData/DataRecordType/GetDataRecordTypeInfo?serializedFilter={0}", serializedFilter));
         }
 

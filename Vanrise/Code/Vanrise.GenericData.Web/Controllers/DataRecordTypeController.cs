@@ -65,9 +65,8 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetRemoteDataRecordTypeInfo")]
         public IEnumerable<DataRecordTypeInfo> GetRemoteDataRecordTypeInfo(Guid connectionId, string serializedFilter = null)
         {
-            DataRecordTypeInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeInfoFilter>(serializedFilter) : null;
             DataRecordTypeManager manager = new DataRecordTypeManager();
-            return manager.GetRemoteDataRecordTypeInfo(connectionId, filter);
+            return manager.GetRemoteDataRecordTypeInfo(connectionId, serializedFilter);
         }
 
         [HttpGet]
