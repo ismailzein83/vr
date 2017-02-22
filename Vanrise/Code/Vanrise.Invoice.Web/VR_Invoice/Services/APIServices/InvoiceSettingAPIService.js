@@ -18,15 +18,25 @@
         function AddInvoiceSetting(invoiceSetting) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "AddInvoiceSetting"), invoiceSetting);
         }
-        function HasAddInvoiceSettingPermission() {
+        function HasAddInvoiceSettingPermission(invoiceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "DoesUserHaveAddSettingsAccess"), {
+                invoiceTypeId: invoiceTypeId
+            }, {
+                useCache: true
+            });
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Invoice_ModuleConfig.moduleName, controllerName, ['AddInvoiceSetting']));
         }
         function UpdateInvoiceSetting(invoiceSetting) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "UpdateInvoiceSetting"), invoiceSetting);
         }
-        function HasUpdateInvoiceSettingPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Invoice_ModuleConfig.moduleName, controllerName, ['UpdateInvoiceSetting']));
+        function HasUpdateInvoiceSettingPermission(invoiceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "DoesUserHaveEditSettingsAccess"), {
+                invoiceTypeId: invoiceTypeId
+            }, {
+                useCache: true
+            });
         }
+       
         function GetInvoiceSettingsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceSettingsInfo"), { filter: filter });
         }
@@ -35,9 +45,10 @@
                 invoiceSettingId: invoiceSettingId
             });
         }
-        function GetOverridableInvoiceSetting(invoiceSettingId) {
+        function GetOverridableInvoiceSetting(invoiceSettingId, invoiceTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetOverridableInvoiceSetting"), {
                 invoiceSettingId: invoiceSettingId,
+                invoiceTypeId: invoiceTypeId
             });
         }
         return ({
@@ -50,7 +61,6 @@
             GetInvoiceSettingsInfo: GetInvoiceSettingsInfo,
             SetInvoiceSettingDefault: SetInvoiceSettingDefault,
             GetOverridableInvoiceSetting: GetOverridableInvoiceSetting
-
         });
     }
 

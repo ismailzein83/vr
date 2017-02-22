@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService","VR_Invoice_PartnerInvoiceSettingService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService) {
+app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService","VR_Invoice_PartnerInvoiceSettingService","VR_Invoice_PartnerInvoiceSettingAPIService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService, VR_Invoice_PartnerInvoiceSettingAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -48,12 +48,15 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
                     drillDownDefinition.loadDirective = function (directiveAPI, invoiceSettingItem) {
                         invoiceSettingItem.partnerInvoiceSettingGridAPI = directiveAPI;
                         var query = {
-                            InvoiceSettingId: invoiceSettingItem.Entity.InvoiceSettingId,
+                            InvoiceSettingId: invoiceSettingItem.Entity.InvoiceSettingId
                         };
                         return invoiceSettingItem.partnerInvoiceSettingGridAPI.loadGrid(query);
                     };
                     drillDownDefinition.parentMenuActions = [{
                         name: "Add Partner Invoice Setting",
+                        haspermission: function(dataItem){
+                            return VR_Invoice_PartnerInvoiceSettingAPIService.HasAssignPartnerAccess(dataItem.Entity.InvoiceSettingId);
+                        },
                         clicked: function (invoiceSettingItem) {
                             if (drillDownDefinition.setTabSelected != undefined)
                                 drillDownDefinition.setTabSelected(invoiceSettingItem);
@@ -119,6 +122,7 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
                 }, {
                     name: "Set Default",
                     clicked: setInvoiceSettingDefault,
+                    haspermission: hasUpdateInvoiceSettingPermission
                 }];
                
                 $scope.gridMenuActions = function (dataItem) {
@@ -138,8 +142,8 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
                     return menuActions;
                 };
             }
-            function hasUpdateInvoiceSettingPermission() {
-                return VR_Invoice_InvoiceSettingAPIService.HasUpdateInvoiceSettingPermission();
+            function hasUpdateInvoiceSettingPermission(dataItem) {
+                return VR_Invoice_InvoiceSettingAPIService.HasUpdateInvoiceSettingPermission(dataItem.Entity.InvoiceTypeId);
             }
             function editInvoiceSetting(dataItem) {
                 var onInvoiceSettingUpdated = function (invoiceSetting) {
@@ -152,7 +156,7 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
             function setInvoiceSettingDefault(dataItem) {
                 VRNotificationService.showConfirmation().then(function (response) {
                     if (response) {
-                        return VR_Invoice_InvoiceSettingAPIService.SetInvoiceSettingDefault(dataItem.Entity.InvoiceSettingId).then(function (response) {
+                        return VR_Invoice_InvoiceSettingAPIService.SetInvoiceSettingDefault(dataItem.Entity.InvoiceSettingId,dataItem.Entity.InvoiceTypeId).then(function (response) {
                             return gridAPI.retrieveData(gridQuery);
                         });
                     }

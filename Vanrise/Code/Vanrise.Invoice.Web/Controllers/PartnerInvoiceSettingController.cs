@@ -15,6 +15,7 @@ namespace Vanrise.Invoice.Web.Controllers
     public class PartnerInvoiceSettingController:BaseAPIController
     {
         PartnerInvoiceSettingManager _manager = new PartnerInvoiceSettingManager();
+        InvoiceSettingManager _settingsManager = new InvoiceSettingManager();
 
         [HttpGet]
         [Route("GetPartnerInvoiceSetting")]
@@ -28,22 +29,34 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredPartnerInvoiceSettings(input));
         }
+        [HttpGet]
+        [Route("DoesUserHaveAssignPartnerAccess")]
+        public bool DoesUserHaveAssignPartnerAccess(Guid invoiceSettingId)
+        {
+            return _settingsManager.DoesUserHaveAssignPartnerAccess(invoiceSettingId);
+        }
         [HttpPost]
         [Route("AddPartnerInvoiceSetting")]
-        public Vanrise.Entities.InsertOperationOutput<PartnerInvoiceSettingDetail> AddPartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
+        public object AddPartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
         {
+            if (!DoesUserHaveAssignPartnerAccess(partnerInvoiceSetting.InvoiceSettingID))
+                return GetUnauthorizedResponse();
             return _manager.AddPartnerInvoiceSetting(partnerInvoiceSetting);
         }
         [HttpPost]
         [Route("UpdatePartnerInvoiceSetting")]
-        public Vanrise.Entities.UpdateOperationOutput<PartnerInvoiceSettingDetail> UpdatePartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
+        public object UpdatePartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
         {
+            if (!DoesUserHaveAssignPartnerAccess(partnerInvoiceSetting.InvoiceSettingID))
+                return GetUnauthorizedResponse();
             return _manager.UpdatePartnerInvoiceSetting(partnerInvoiceSetting);
         }
         [HttpGet]
         [Route("DeletePartnerInvoiceSetting")]
-        public Vanrise.Entities.DeleteOperationOutput<object> DeletePartnerInvoiceSetting(Guid partnerInvoiceSettingId)
+        public object DeletePartnerInvoiceSetting(Guid partnerInvoiceSettingId , Guid invoiceSettingID)
         {
+            if (!DoesUserHaveAssignPartnerAccess(invoiceSettingID))
+                return GetUnauthorizedResponse();
             return _manager.DeletePartnerInvoiceSetting(partnerInvoiceSettingId);
         }
     }

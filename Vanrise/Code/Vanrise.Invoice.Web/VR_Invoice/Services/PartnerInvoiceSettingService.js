@@ -27,11 +27,11 @@ app.service('VR_Invoice_PartnerInvoiceSettingService', ['VRModalService', 'Utils
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/PartnerInvoiceSettingEditor.html', parameters, settings);
         }
-        function deletePartnerInvoiceSetting(scope, partnerInvoiceSettingId, onPartnerInvoiceSettingDeleted) {
+        function deletePartnerInvoiceSetting(scope, partnerInvoiceSettingId, invoiceSettingId, onPartnerInvoiceSettingDeleted) {
             VRNotificationService.showConfirmation().then(function (confirmed) {
                 if (confirmed) {
                   
-                    return VR_Invoice_PartnerInvoiceSettingAPIService.DeletePartnerInvoiceSetting(partnerInvoiceSettingId).then(function (deletionResponse) {
+                    return VR_Invoice_PartnerInvoiceSettingAPIService.DeletePartnerInvoiceSetting(partnerInvoiceSettingId, invoiceSettingId).then(function (deletionResponse) {
                         var deleted = VRNotificationService.notifyOnItemDeleted("Partner Invoice Setting", deletionResponse);
                         if (deleted && onPartnerInvoiceSettingDeleted != undefined) {
                             onPartnerInvoiceSettingDeleted();

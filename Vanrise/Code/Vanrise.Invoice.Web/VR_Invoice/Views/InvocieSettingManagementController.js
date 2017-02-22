@@ -21,6 +21,7 @@
             }
         }
         function defineScope() {
+            $scope.hasAddAccess = false;
             $scope.onInvoiceTypeSelectorReady = function (api) {
                 invoiceTypeSelectorAPI = api;
                 invoiceTypeSelectorReadyDeferred.resolve();
@@ -32,12 +33,16 @@
                 return gridAPI.loadGrid(getFilterObject());
             };
             $scope.hasAddInvoiceSettingPermission = function () {
-                return VR_Invoice_InvoiceSettingAPIService.HasAddInvoiceSettingPermission();
+               
             };
             $scope.onInvoiceTypeSelectionChanged = function () {
                 if( invoiceTypeSelectorAPI.getSelectedIds() != undefined)
                 {
                     gridAPI.loadGrid(getFilterObject());
+                    checkHasAddInvoiceSettingPermission();
+                }
+                else {
+                    $scope.hasAddAccess = false;
                 }
             };
             $scope.addInvoiceSetting = addInvoiceSetting;
@@ -52,6 +57,11 @@
                 InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds()
             };
             return query;
+        }
+        function checkHasAddInvoiceSettingPermission() {
+            return VR_Invoice_InvoiceSettingAPIService.HasAddInvoiceSettingPermission(invoiceTypeSelectorAPI.getSelectedIds()).then(function (response) {
+                $scope.hasAddAccess = response;
+            });
         }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([loadInvoiceTypeSelectorDirective])

@@ -28,6 +28,7 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
         function PartnerInvoiceSettingGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var gridAPI;
+            var invoiceSettingId;
             function initializeController() {
 
                 $scope.datastore = [];
@@ -41,6 +42,7 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                     function getDirectiveAPI() {
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
+                            invoiceSettingId = query.InvoiceSettingId;
                             return gridAPI.retrieveData(query);
                         };
                         directiveAPI.onPartnerInvoiceSettingAdded = function (item) {
@@ -69,9 +71,16 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                 var defaultMenuAction = [{
                     name: "Edit",
                     clicked: editPartnerInvoiceSetting,
+                    haspermission: function () {
+                        return VR_Invoice_PartnerInvoiceSettingAPIService.HasAssignPartnerAccess(invoiceSettingId);
+                    }
+
                 }, {
                     name: "Delete",
                     clicked: deletePartnerInvoiceSetting,
+                    haspermission: function () {
+                        return VR_Invoice_PartnerInvoiceSettingAPIService.HasAssignPartnerAccess(invoiceSettingId);
+                    }
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -88,7 +97,7 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                 var onPartnerInvoiceSettingDeleted = function () {
                     gridAPI.itemDeleted(dataItem);
                 };
-                VR_Invoice_PartnerInvoiceSettingService.deletePartnerInvoiceSetting($scope, dataItem.Entity.PartnerInvoiceSettingId, onPartnerInvoiceSettingDeleted);
+                VR_Invoice_PartnerInvoiceSettingService.deletePartnerInvoiceSetting($scope, dataItem.Entity.PartnerInvoiceSettingId, dataItem.Entity.InvoiceSettingId, onPartnerInvoiceSettingDeleted);
             }
         }
 

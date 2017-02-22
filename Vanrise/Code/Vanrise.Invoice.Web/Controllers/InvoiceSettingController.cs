@@ -14,6 +14,7 @@ namespace Vanrise.Invoice.Web.Controllers
     public class VR_Invoice_InvoiceSettingController : BaseAPIController
     {
         InvoiceSettingManager _manager = new InvoiceSettingManager();
+        InvoiceTypeManager _typeManager = new InvoiceTypeManager();
 
         [HttpGet]
         [Route("GetInvoiceSetting")]
@@ -26,30 +27,50 @@ namespace Vanrise.Invoice.Web.Controllers
         [Route("GetFilteredInvoiceSettings")]
         public object GetFilteredInvoiceSettings(Vanrise.Entities.DataRetrievalInput<InvoiceSettingQuery> input)
         {
+            if (!_typeManager.DoesUserHaveViewSettingsAccess(input.Query.InvoiceTypeId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredInvoiceSettings(input));
+        }
+        [HttpGet]
+        [Route("DoesUserHaveAddSettingsAccess")]
+        public bool DoesUserHaveAddSettingsAccess(Guid invoiceTypeId)
+        {
+            return _typeManager.DoesUserHaveAddSettingsAccess(invoiceTypeId);
         }
 
         [HttpPost]
         [Route("AddInvoiceSetting")]
-        public Vanrise.Entities.InsertOperationOutput<InvoiceSettingDetail> AddInvoiceSetting(InvoiceSetting invoiceSetting)
+        public object AddInvoiceSetting(InvoiceSetting invoiceSetting)
         {
+            if (!DoesUserHaveAddSettingsAccess(invoiceSetting.InvoiceTypeId))
+                return GetUnauthorizedResponse();
             return _manager.AddInvoiceSetting(invoiceSetting);
+        }
+
+        [HttpGet]
+        [Route("DoesUserHaveEditSettingsAccess")]
+        public bool DoesUserHaveEditSettingsAccess(Guid invoiceTypeId)
+        {
+            return _typeManager.DoesUserHaveEditSettingsAccess(invoiceTypeId);
         }
 
         [HttpPost]
         [Route("UpdateInvoiceSetting")]
-        public Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail> UpdateInvoiceSetting(InvoiceSetting invoiceSetting)
+        public object UpdateInvoiceSetting(InvoiceSetting invoiceSetting)
         {
+            if (!DoesUserHaveEditSettingsAccess(invoiceSetting.InvoiceTypeId))
+                return GetUnauthorizedResponse();
             return _manager.UpdateInvoiceSetting(invoiceSetting);
         }
-
         [HttpGet]
         [Route("SetInvoiceSettingDefault")]
-        public Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail> SetInvoiceSettingDefault(Guid invoiceSettingId)
+        public object SetInvoiceSettingDefault(Guid invoiceSettingId, Guid invoiceTypeId)
         {
+            if (!DoesUserHaveEditSettingsAccess(invoiceTypeId))
+                return GetUnauthorizedResponse();
             return _manager.SetInvoiceSettingDefault(invoiceSettingId);
         }
-       
+             
         [HttpGet]
         [Route("GetInvoiceSettingsInfo")]
         public IEnumerable<InvoiceSettingInfo> GetInvoiceSettingsInfo(string filter = null)

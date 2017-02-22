@@ -10,5 +10,8 @@ namespace Vanrise.Invoice.Entities
     {
         bool DoesUserHaveViewAccess(int userId, Guid invoiceTypeId);
 
+        bool DoesUserHaveViewSettingsAccess(int userId);
+        
+
     }
 }

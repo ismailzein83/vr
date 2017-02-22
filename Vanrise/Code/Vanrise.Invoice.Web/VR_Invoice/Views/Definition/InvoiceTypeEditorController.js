@@ -43,6 +43,18 @@
         var generatePermissionAPI;
         var generatePermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var viewSettingsPermissionAPI;
+        var viewSettingsPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var addSettingsPermissionAPI;
+        var addSettingsPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var editSettingsPermissionAPI;
+        var editSettingsPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var assignPartnerPermissionAPI;
+        var assignPartnerPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
         var startCalculationMethodAPI;
         var startCalculationMethodPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -144,6 +156,24 @@
                 generatePermissionReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onViewSettingsRequiredPermissionReady = function (api) {
+                viewSettingsPermissionAPI = api;
+                viewSettingsPermissionReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onAddSettingsRequiredPermissionReady = function (api) {
+                addSettingsPermissionAPI = api;
+                addSettingsPermissionReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onEditSettingsRequiredPermissionReady = function (api) {
+                editSettingsPermissionAPI = api;
+                editSettingsPermissionReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onAssignPartnerRequiredPermissionReady = function (api) {
+                assignPartnerPermissionAPI = api;
+                assignPartnerPermissionReadyDeferred.resolve();
+            };
             $scope.scopeModel.saveInvoiceType = function () {
                 $scope.scopeModel.isLoading = true;
                 if (isEditMode) {
@@ -186,7 +216,11 @@
                         SubSections: subSectionsAPI.getData(),
                         Security: {
                             ViewRequiredPermission: viewPermissionAPI.getData(),
-                            GenerateRequiredPermission: generatePermissionAPI.getData()
+                            GenerateRequiredPermission: generatePermissionAPI.getData(),
+                            ViewSettingsRequiredPermission:viewSettingsPermissionAPI.getData(),
+                            AddSettingsRequiredPermission:addSettingsPermissionAPI.getData(),
+                            EditSettingsRequiredPermission: editSettingsPermissionAPI.getData(),
+                            AssignPartnerRequiredPermission: assignPartnerPermissionAPI.getData()
                         },
                         ItemGroupings: itemGroupingsDirectiveAPI.getData(),
                         StartDateCalculationMethod:startCalculationMethodAPI.getData(),
@@ -401,6 +435,66 @@
                     return generatePermissionLoadDeferred.promise;
                 }
 
+                function loadViewSettingsRequiredPermission() {
+                    var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                   viewSettingsPermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.Security != undefined && invoiceTypeEntity.Settings.Security.ViewSettingsRequiredPermission != null) {
+                            payload = {
+                                data: invoiceTypeEntity.Settings.Security.ViewSettingsRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(viewSettingsPermissionAPI, payload, viewSettingPermissionLoadDeferred);
+                    });
+                    return viewSettingPermissionLoadDeferred.promise;
+                }
+                function loadAddSettingsRequiredPermission() {
+                    var addSettingsPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                    addSettingsPermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.Security != undefined && invoiceTypeEntity.Settings.Security.AddSettingsRequiredPermission != null) {
+                            payload = {
+                                data: invoiceTypeEntity.Settings.Security.AddSettingsRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(addSettingsPermissionAPI, payload, addSettingsPermissionLoadDeferred);
+                    });
+                    return addSettingsPermissionLoadDeferred.promise;
+                }
+                function loadEditSettingsRequiredPermission() {
+                    var editSettingsPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                    editSettingsPermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.Security != undefined && invoiceTypeEntity.Settings.Security.EditSettingsRequiredPermission != null) {
+                            payload = {
+                                data: invoiceTypeEntity.Settings.Security.EditSettingsRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(editSettingsPermissionAPI, payload, editSettingsPermissionLoadDeferred);
+                    });
+                    return editSettingsPermissionLoadDeferred.promise;
+                }
+                function loadAssignPartnerRequiredPermission() {
+                    var assignPartnerPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                    assignPartnerPermissionReadyDeferred.promise.then(function () {
+                        var payload;
+
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.Security != undefined && invoiceTypeEntity.Settings.Security.AssignPartnerRequiredPermission != null) {
+                            payload = {
+                                data: invoiceTypeEntity.Settings.Security.AssignPartnerRequiredPermission
+                            };
+                        }
+
+                        VRUIUtilsService.callDirectiveLoad(assignPartnerPermissionAPI, payload, assignPartnerPermissionLoadDeferred);
+                    });
+                    return assignPartnerPermissionLoadDeferred.promise;
+                }
                 function loadItemGroupingsDirective() {
                     var itemGroupingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -442,7 +536,7 @@
                     return invoiceSettingDefinitionLoadPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid])
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission,loadViewSettingsRequiredPermission,loadAddSettingsRequiredPermission,loadEditSettingsRequiredPermission,loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

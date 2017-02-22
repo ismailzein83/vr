@@ -9,6 +9,7 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Data;
 using Vanrise.Caching;
 using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 namespace Vanrise.Invoice.Business
 {
     public class InvoiceSettingManager : IInvoiceSettingManager
@@ -28,6 +29,15 @@ namespace Vanrise.Invoice.Business
                  && (input.Query.InvoiceTypeId == itemObject.InvoiceTypeId);
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, InvoiceSettingDetailMapper));
+        }
+        public bool DoesUserHaveAssignPartnerAccess(Guid invoiceSettingsId)
+        {
+            var settings = GetInvoiceSetting(invoiceSettingsId);            
+            var invoiceType = (settings != null) ? new InvoiceTypeManager().GetInvoiceType(settings.InvoiceTypeId):null;
+            if ( invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.AssignPartnerRequiredPermission != null)
+                return DoesUserHaveAccess(invoiceType.Settings.Security.AssignPartnerRequiredPermission);
+           
+            return true;
         }
         public Vanrise.Entities.InsertOperationOutput<InvoiceSettingDetail> AddInvoiceSetting(InvoiceSetting invoiceSetting)
         {
@@ -54,6 +64,7 @@ namespace Vanrise.Invoice.Business
 
             return insertOperationOutput;
         }
+    
         public Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail> UpdateInvoiceSetting(InvoiceSetting invoiceSetting)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail>();
@@ -224,7 +235,15 @@ namespace Vanrise.Invoice.Business
                   return invoiceSettings.ToDictionary(c => c.InvoiceSettingId, c => c);
               });
         }
-     
+        private bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
+        }
         #endregion
 
         #region Mappers

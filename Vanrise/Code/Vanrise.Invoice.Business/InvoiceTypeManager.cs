@@ -162,10 +162,18 @@ namespace Vanrise.Invoice.Business
         public IEnumerable<InvoiceTypeInfo> GetInvoiceTypesInfo(InvoiceTypeFilter filter)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
+            Func<InvoiceType, bool> filterExpression = (x) =>
+            {
+
+                if (!DoesUserHaveViewSettingsAccess(SecurityContext.Current.GetLoggedInUserId(), x))
+                    return false;
+
+                return true;
+            };
             if (filter != null)
             {
             }
-            return invoiceTypes.MapRecords(InvoiceTypeInfoMapper);
+            return invoiceTypes.FindAllRecords(filterExpression).MapRecords(InvoiceTypeInfoMapper);
         }
         public bool DoesUserHaveViewAccess(Guid invoiceTypeId)
         {
@@ -187,6 +195,43 @@ namespace Vanrise.Invoice.Business
                 return DoesUserHaveAccess(invoiceType.Settings.Security.GenerateRequiredPermission);
             return true;
         }
+        public bool DoesUserHaveViewSettingsAccess(int userId)
+        {
+            var allItems = GetInvoiceTypes();
+            foreach (var invoice in allItems)
+            {
+                if (DoesUserHaveViewSettingsAccess(userId, invoice))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveViewSettingsAccess(Guid invoiceTypeId)
+        {
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveViewSettingsAccess(userId, invoiceType);
+        }
+        public bool DoesUserHaveViewSettingsAccess(int userId,InvoiceType invoiceType)
+        {
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.ViewSettingsRequiredPermission != null)
+                return DoesUserHaveAccess(invoiceType.Settings.Security.ViewSettingsRequiredPermission);
+            return true;
+        }
+
+        public bool DoesUserHaveAddSettingsAccess(Guid invoiceTypeId)
+        {
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.AddSettingsRequiredPermission != null)
+                return DoesUserHaveAccess(invoiceType.Settings.Security.AddSettingsRequiredPermission);
+            return true;
+        }
+        public bool DoesUserHaveEditSettingsAccess(Guid invoiceTypeId)
+        {
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.EditSettingsRequiredPermission != null)
+                return DoesUserHaveAccess(invoiceType.Settings.Security.EditSettingsRequiredPermission);
+            return true;
+        }       
         public IEnumerable<InvoiceType> GetInvoiceTypes()
         {
             return GetCachedInvoiceTypes().Values;
