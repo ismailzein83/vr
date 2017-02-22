@@ -9,7 +9,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.ExtraCharge
 {
     public class FixedExtraChargeSettings : PricingRuleExtraChargeActionSettings
     {
-        public override Guid ConfigId { get { return  new Guid("9b441d3f-1a1d-4060-8bb1-740cef377e0d"); } }
+        public override Guid ConfigId { get { return new Guid("9b441d3f-1a1d-4060-8bb1-740cef377e0d"); } }
 
         public Decimal FromRate { get; set; }
 
@@ -40,8 +40,11 @@ namespace Vanrise.Rules.Pricing.MainExtensions.ExtraCharge
 
             if (context.Rate >= convertedFromRate && context.Rate < convertedToRate)
             {
-                context.Rate += convertedExtraAmount;
-                context.IsExtraChargeApplied = true;
+                if (convertedExtraAmount >= 0 || Math.Abs(convertedExtraAmount) <= context.Rate)
+                {
+                    context.Rate += convertedExtraAmount;
+                    context.IsExtraChargeApplied = true;
+                }
             }
         }
 
