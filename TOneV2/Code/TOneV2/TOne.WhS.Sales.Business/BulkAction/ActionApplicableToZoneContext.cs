@@ -15,10 +15,13 @@ namespace TOne.WhS.Sales.Business
 
 		private Func<int, int, long, bool, SaleEntityZoneRate> _getCustomerZoneRate;
 
-		public ActionApplicableToZoneContext(Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate)
+        private Func<decimal?, decimal, DateTime> _getRateBED;
+
+		public ActionApplicableToZoneContext(Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED)
 		{
 			_getSellingProductZoneRate = getSellingProductZoneRate;
 			_getCustomerZoneRate = getCustomerZoneRate;
+            _getRateBED = getRateBED;
 		}
 
 		public SalePriceListOwnerType OwnerType { get; set; }
@@ -38,5 +41,10 @@ namespace TOne.WhS.Sales.Business
 		{
 			return _getCustomerZoneRate(customerId, sellingProductId, zoneId, getFutureRate);
 		}
+
+        public DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue)
+        {
+            return _getRateBED(currentRateValue, newRateValue);
+        }
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
@@ -17,7 +18,7 @@ namespace TOne.WhS.Sales.MainExtensions
         private Dictionary<int, DateTime> _datesByCountry;
 
         private int? _sellingProductId;
-        
+
         #endregion
 
         public override Guid ConfigId
@@ -30,6 +31,23 @@ namespace TOne.WhS.Sales.MainExtensions
         public override void ValidateZone(IZoneValidationContext context)
         {
 
+        }
+
+        public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
+        {
+            var bulkActionApplicableToAnyCountryZoneInput = new BulkActionApplicableToAnyCountryZoneInput()
+            {
+                CountryId = context.Country.CountryId,
+                OwnerSellingNumberPlanId = context.OwnerSellingNumberPlanId,
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                ZoneDraftsByZoneId = context.ZoneDraftsByZoneId,
+                GetSellingProductZoneRate = context.GetSellingProductZoneRate,
+                GetCustomerZoneRate = context.GetCustomerZoneRate,
+                GetRateBED = context.GetRateBED,
+                IsBulkActionApplicableToZone = IsApplicableToZone
+            };
+            return UtilitiesManager.IsBulkActionApplicableToAnyCountryZone(bulkActionApplicableToAnyCountryZoneInput);
         }
 
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)

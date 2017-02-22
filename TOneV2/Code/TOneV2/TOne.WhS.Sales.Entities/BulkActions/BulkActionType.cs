@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
@@ -14,11 +15,32 @@ namespace TOne.WhS.Sales.Entities
 
         public abstract void ValidateZone(IZoneValidationContext context);
 
+        public abstract bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context);
+
         public abstract bool IsApplicableToZone(IActionApplicableToZoneContext context);
 
         public abstract void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context);
 
         public abstract void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context);
+    }
+
+    public interface IBulkActionApplicableToCountryContext
+    {
+        Country Country { get; }
+
+        int OwnerSellingNumberPlanId { get; }
+
+        SalePriceListOwnerType OwnerType { get; }
+
+        int OwnerId { get; }
+
+        Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; }
+
+        SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
+
+        SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
+
+        DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue);
     }
 
     public interface IZoneValidationContext
@@ -45,6 +67,8 @@ namespace TOne.WhS.Sales.Entities
         SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
 
         SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
+
+        DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue);
     }
 
     public interface IApplyBulkActionToZoneItemContext

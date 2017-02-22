@@ -31,6 +31,23 @@ namespace TOne.WhS.Sales.MainExtensions
 
         }
 
+        public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
+        {
+            var bulkActionApplicableToAnyCountryZoneInput = new BulkActionApplicableToAnyCountryZoneInput()
+            {
+                CountryId = context.Country.CountryId,
+                OwnerSellingNumberPlanId = context.OwnerSellingNumberPlanId,
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                ZoneDraftsByZoneId = context.ZoneDraftsByZoneId,
+                GetSellingProductZoneRate = context.GetSellingProductZoneRate,
+                GetCustomerZoneRate = context.GetCustomerZoneRate,
+                GetRateBED = context.GetRateBED,
+                IsBulkActionApplicableToZone = IsApplicableToZone
+            };
+            return UtilitiesManager.IsBulkActionApplicableToAnyCountryZone(bulkActionApplicableToAnyCountryZoneInput);
+        }
+
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
             if (context.OwnerType == SalePriceListOwnerType.SellingProduct)

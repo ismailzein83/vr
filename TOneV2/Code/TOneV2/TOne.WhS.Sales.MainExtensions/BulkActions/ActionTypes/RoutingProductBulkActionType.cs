@@ -31,6 +31,11 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public bool ApplyNewNormalRateBED { get; set; }
 
+        public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
+        {
+            return true;
+        }
+
         public override void ValidateZone(IZoneValidationContext context)
         {
 

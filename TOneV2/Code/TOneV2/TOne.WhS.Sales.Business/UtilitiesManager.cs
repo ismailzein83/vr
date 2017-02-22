@@ -63,22 +63,22 @@ namespace TOne.WhS.Sales.Business
             return dateTime.ToShortDateString();
         }
 
-        public static bool IsActionApplicableToZone(IsActionApplicableToZoneInput context)
+        public static bool IsActionApplicableToZone(IsActionApplicableToZoneInput input)
         {
             ZoneChanges zoneDraft = null;
 
-            if (context.Draft != null && context.Draft.ZoneChanges != null)
-                zoneDraft = context.Draft.ZoneChanges.FindRecord(x => x.ZoneId == context.SaleZone.SaleZoneId);
+            if (input.Draft != null && input.Draft.ZoneChanges != null)
+                zoneDraft = input.Draft.ZoneChanges.FindRecord(x => x.ZoneId == input.SaleZone.SaleZoneId);
 
-            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(context.GetSellingProductZoneRate, context.GetCustomerZoneRate)
+            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED)
             {
-                OwnerType = context.OwnerType,
-                OwnerId = context.OwnerId,
-                SaleZone = context.SaleZone,
+                OwnerType = input.OwnerType,
+                OwnerId = input.OwnerId,
+                SaleZone = input.SaleZone,
                 ZoneDraft = zoneDraft
             };
 
-            return context.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
+            return input.BulkAction.IsApplicableToZone(actionApplicableToZoneContext);
         }
 
         public static Dictionary<int, DateTime> GetDatesByCountry(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
@@ -138,6 +138,51 @@ namespace TOne.WhS.Sales.Business
             return null;
         }
 
+        public static bool IsBulkActionApplicableToAnyCountryZone(BulkActionApplicableToAnyCountryZoneInput input)
+        {
+            var saleZoneManager = new SaleZoneManager();
+            IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesByCountryId(input.OwnerSellingNumberPlanId, input.CountryId, DateTime.Today);
+
+            if (saleZones == null || saleZones.Count() == 0)
+                return false;
+
+            foreach (SaleZone saleZone in saleZones)
+            {
+                var bulkActionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED)
+                {
+                    OwnerType = input.OwnerType,
+                    OwnerId = input.OwnerId,
+                    SaleZone = saleZone,
+                    ZoneDraft = input.ZoneDraftsByZoneId.GetRecord(saleZone.SaleZoneId)
+                };
+
+                if (input.IsBulkActionApplicableToZone(bulkActionApplicableToZoneContext))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static void SetDraftRateBEDs(out DateTime newRateBED, out DateTime increasedRateBED, out DateTime decreasedRateBED)
+        {
+            var configManager = new ConfigManager();
+            newRateBED = DateTime.Today.AddDays(configManager.GetNewRateDayOffset());
+            increasedRateBED = DateTime.Today.AddDays(configManager.GetIncreasedRateDayOffset());
+            decreasedRateBED = DateTime.Today.AddDays(configManager.GetDecreasedRateDayOffset());
+        }
+
+        public static DateTime GetDraftRateBED(decimal? currentRateValue, decimal newRateValue, DateTime newRateBED, DateTime increasedRateBED, DateTime decreasedRateBED)
+        {
+            if (!currentRateValue.HasValue)
+                return newRateBED;
+            else if (currentRateValue.Value > newRateValue)
+                return increasedRateBED;
+            else if (currentRateValue.Value < newRateValue)
+                return decreasedRateBED;
+            else
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The current Rate '{0}' is the same as the new Rate", currentRateValue.Value));
+        }
+
         #region Private Methods
         private static DateTime? GetFirstDate(IEnumerable<DateTime?> dates, out int count)
         {
@@ -151,6 +196,27 @@ namespace TOne.WhS.Sales.Business
             return dates.ElementAt(0);
         }
         #endregion
+    }
+
+    public class BulkActionApplicableToAnyCountryZoneInput
+    {
+        public int CountryId { get; set; }
+
+        public int OwnerSellingNumberPlanId { get; set; }
+
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; set; }
+
+        public Func<int, long, bool, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
+
+        public Func<int, int, long, bool, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
+
+        public Func<decimal?, decimal, DateTime> GetRateBED { get; set; }
+
+        public Func<IActionApplicableToZoneContext, bool> IsBulkActionApplicableToZone { get; set; }
     }
 
     public class IsActionApplicableToZoneInput
@@ -168,5 +234,7 @@ namespace TOne.WhS.Sales.Business
         public Func<int, long, bool, SaleEntityZoneRate> GetSellingProductZoneRate { get; set; }
 
         public Func<int, int, long, bool, SaleEntityZoneRate> GetCustomerZoneRate { get; set; }
+
+        public Func<decimal?, decimal, DateTime> GetRateBED { get; set; }
     }
 }

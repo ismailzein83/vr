@@ -112,6 +112,11 @@ namespace TOne.WhS.Sales.MainExtensions
             context.ValidationResult = validationResult;
         }
 
+        public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
+        {
+            return true;
+        }
+
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
             if (context.SaleZone.BED > BED)

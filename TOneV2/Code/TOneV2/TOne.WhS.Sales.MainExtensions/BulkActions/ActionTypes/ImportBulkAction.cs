@@ -120,5 +120,10 @@ namespace TOne.WhS.Sales.MainExtensions
                 });
             });
         }
+
+        public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
+        {
+            return true;
+        }
     }
 }

@@ -165,7 +165,7 @@ namespace TOne.WhS.BusinessEntity.Business
 					IEnumerable<SalePLZoneChange> countryZoneChanges = zoneChangesByCountryId.GetRecord(soldCountry.CountryId);
 					IEnumerable<ExistingSaleZone> plCountryZoneWrappers = GetPLCountryZoneWrappers(customerId, countryZoneWrappers, countryZoneChanges, isCustomerAToZ, context.ChangeType);
 
-					AddCustomerCountryZoneNotifications(customerZoneNotifications, plCountryZoneWrappers, customerId, sellingProductId, futureRateLocator, baseRatesByZone, soldCountry.CountryId, context.EndedCountryIds, context.CountriesEndedOn, rateLocator);
+					AddCustomerCountryZoneNotifications(customerZoneNotifications, plCountryZoneWrappers, customerId, sellingProductId, futureRateLocator, baseRatesByZone, soldCountry.CountryId, soldCountry.EED, context.EndedCountryIds, context.CountriesEndedOn, rateLocator);
 				}
 
 				if (customerZoneNotifications.Count > 0)
@@ -244,7 +244,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			return salePriceListsByCustomer;
 		}
 
-		private void AddCustomerCountryZoneNotifications(List<SalePLZoneNotification> zoneNotifications, IEnumerable<ExistingSaleZone> zonesWrappers, int customerId, int sellingProductId, SaleEntityZoneRateLocator futureRateLocator, BaseRatesByZone baseRatesByZone, int countryId, IEnumerable<int> endedCountryIds, DateTime? countriesEndedOn, SaleEntityZoneRateLocator rateLocator)
+		private void AddCustomerCountryZoneNotifications(List<SalePLZoneNotification> zoneNotifications, IEnumerable<ExistingSaleZone> zonesWrappers, int customerId, int sellingProductId, SaleEntityZoneRateLocator futureRateLocator, BaseRatesByZone baseRatesByZone, int countryId, DateTime? countryEED, IEnumerable<int> endedCountryIds, DateTime? countriesEndedOn, SaleEntityZoneRateLocator rateLocator)
 		{
 			if (zonesWrappers == null)
 				return;
@@ -269,7 +269,7 @@ namespace TOne.WhS.BusinessEntity.Business
 					ZoneId = zoneWrapper.ZoneId
 				};
 
-				zoneNotification.Rate = SalePLRateNotificationMapper(zoneRate);
+                zoneNotification.Rate = SalePLRateNotificationMapper(zoneRate, countryEED);
 				zoneNotification.Codes.AddRange(zoneWrapper.Codes.MapRecords(SalePLCodeNotificationMapper));
 
 				zoneNotifications.Add(zoneNotification);
@@ -607,13 +607,22 @@ namespace TOne.WhS.BusinessEntity.Business
 			};
 		}
 
-		private SalePLRateNotification SalePLRateNotificationMapper(SaleEntityZoneRate saleEntityZoneRate)
+        private SalePLRateNotification SalePLRateNotificationMapper(SaleEntityZoneRate rate, DateTime? countryEED)
 		{
+            DateTime? rateEED = null;
+
+            if (rate.Rate.EED.HasValue && countryEED.HasValue)
+                rateEED = Vanrise.Common.Utilities.Max(rate.Rate.EED.Value, countryEED.Value);
+            else if (rate.Rate.EED.HasValue)
+                rateEED = rate.Rate.EED.Value;
+            else if (countryEED.HasValue)
+                rateEED = countryEED.Value;
+
 			return new SalePLRateNotification()
 			{
-				Rate = saleEntityZoneRate.Rate.Rate,
-				BED = saleEntityZoneRate.Rate.BED,
-				EED = saleEntityZoneRate.Rate.EED
+				Rate = rate.Rate.Rate,
+				BED = rate.Rate.BED,
+                EED = rateEED
 			};
 		}
 
