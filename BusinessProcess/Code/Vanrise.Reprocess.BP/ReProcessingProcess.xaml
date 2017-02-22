@@ -135,7 +135,7 @@
           <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
             <vbw:WriteTrackingMessage.Message>
               <InArgument x:TypeArguments="x:String">
-                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Starting Range From {0}, To {1}",item.From,item.To)</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Starting Range From {0}, To {1}", item.From.ToString("yyyy-MM-dd HH:mm:ss"), item.To.ToString("yyyy-MM-dd HH:mm:ss"))</mca:CSharpValue>
               </InArgument>
             </vbw:WriteTrackingMessage.Message>
             <vbw:WriteTrackingMessage.Severity>
@@ -231,7 +231,7 @@
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished Range From {0}, To {1}. Remaining Ranges: {2}. Range Event Count : {3}. Total Event Count: {4}.", item.From, item.To, TotalRangesCount - ProcessedRangesCount, RangeEventCount, TotalEventCount)</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished Range From {0}, To {1}. Remaining Ranges: {2}. Range Event Count : {3}. Total Event Count: {4}.", item.From.ToString("yyyy-MM-dd HH:mm:ss"), item.To.ToString("yyyy-MM-dd HH:mm:ss"), TotalRangesCount - ProcessedRangesCount, RangeEventCount, TotalEventCount)</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                   <vbw:WriteTrackingMessage.Severity>
@@ -450,7 +450,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXkQDxgMOAgEBSDNINgIBA0kzSTYCAQJOBVQgAwHyBFUFaiIDAc0EawV2DgMBugR3BfgBFwMB1AL5AQW9AwoCAQ++AwXEAyACAQRRC1GFAQMB9AROYE6AAQMB8wRnC2dXAwHpBF0LXVkDAeAEWAtYeAMB1wRiC2LYAQMBzgRzC3NeAwHEBG4LbmADAbsEegt6egMBsQSBAQn2ARQDAdUC/AEL/AFgAgEQgAIJuwMUAgEZwQMLwQOFAQIBBr4DYL4DgAECAQWHAQuSASYDAZYEkwELpQEcAwH6A6YBC7EBFAMB3wOyAQv1ARADAdYCgQILjAIqAwHBAo0CC5gCFAMBrgKZAgu6Ax0CARqPARGPAYsBAwGkBIoBEYoBkQEDAZcElgERnQEgAwGJBKIBEaIBhAEDAfwDkwF8kwGCAQMB+wOuARGuAWQDAe0DqQERqQFqAwHgA7UBEbUBsQEDAdcCuQEPvwEjAwHRA8IBD/MBGgMB5AKJAhGJAmgDAcsChAIRhAJ4AwHCApUCEZUCfQMBuAKQAhGQAm0DAa8CnAIRnAKQAQMBpQKjAg+4AxoCARu8ARW8AdwBAwHSA8MBEc4BGgMBtgPPARHaARoDAZsD2wER5gEaAwGAA+cBEfIBLAMB5QKmAj+mAkICARyoAhGzAiwDAYwCtAIRyQIuAwHbAcoCEdUCLAMBwgHWAhG3AxYCAR3LARfLAbABAwHEA8YBF8YBkgEDAbcD1wEX1wF7AwGpA9IBF9IBawMBnAPjARfjAXUDAY4D3gEX3gFrAwGBA+8BF+8BkQEDAfMC6gEX6gGtAgMB5gKwAhewApEBAwGZAqsCF6sCnwEDAY0CwQIXwQKGAQMBgALGAhfGAmMDAfQBvAIXvAJmAwHoAbcCF7cCZQMB3AHSAhfSApEBAwHPAc0CF80CnwEDAcMB2QIX2QJtAgEe3QIVtQMnAgEq4AIb4AKMAQMBtgHnAhmzAyQCASvoAhvzAjYDAZsB9AIbhgMsAgF/hwMbsgMgAgEs8AIh8AKbAQMBqQHrAiHrAroBAwGcAfcCIf4CIAMBjgGDAyGDA5wBAwGBAfQCjAH0ApIBAwGAAYoDIYoDywECAS2OAx+UAzMCAXGXAx+wAyoCATqRAyWRA4MCAgFymAMhowMqAgFWpAMhrwM8AgE7oAMnoAN9AgFkmwMnmwOBAQIBV6wDJ6wDoQECAUmnAyenA4sCAgE8</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXkQDxgMOAgEBSDNINgIBA0kzSTYCAQJOBVQgAwHyBFUFaiIDAc0EawV2DgMBugR3BfgBFwMB1AL5AQW9AwoCAQ++AwXEAyACAQRRC1GFAQMB9AROYE6AAQMB8wRnC2dXAwHpBF0LXVkDAeAEWAtYeAMB1wRiC2LYAQMBzgRzC3NeAwHEBG4LbmADAbsEegt6egMBsQSBAQn2ARQDAdUC/AEL/AFgAgEQgAIJuwMUAgEZwQMLwQOFAQIBBr4DYL4DgAECAQWHAQuSASYDAZYEkwELpQEcAwH6A6YBC7EBFAMB3wOyAQv1ARADAdYCgQILjAIqAwHBAo0CC5gCFAMBrgKZAgu6Ax0CARqPARGPAYsBAwGkBIoBEYoB0wEDAZcElgERnQEgAwGJBKIBEaIBhAEDAfwDkwF8kwGCAQMB+wOuARGuAWQDAe0DqQERqQFqAwHgA7UBEbUBsQEDAdcCuQEPvwEjAwHRA8IBD/MBGgMB5AKJAhGJAmgDAcsChAIRhAJ4AwHCApUCEZUCfQMBuAKQAhGQAm0DAa8CnAIRnAKQAQMBpQKjAg+4AxoCARu8ARW8AdwBAwHSA8MBEc4BGgMBtgPPARHaARoDAZsD2wER5gEaAwGAA+cBEfIBLAMB5QKmAj+mAkICARyoAhGzAiwDAYwCtAIRyQIuAwHbAcoCEdUCLAMBwgHWAhG3AxYCAR3LARfLAbABAwHEA8YBF8YBkgEDAbcD1wEX1wF7AwGpA9IBF9IBawMBnAPjARfjAXUDAY4D3gEX3gFrAwGBA+8BF+8BkQEDAfMC6gEX6gHtAgMB5gKwAhewApEBAwGZAqsCF6sCnwEDAY0CwQIXwQKGAQMBgALGAhfGAmMDAfQBvAIXvAJmAwHoAbcCF7cCZQMB3AHSAhfSApEBAwHPAc0CF80CnwEDAcMB2QIX2QJtAgEe3QIVtQMnAgEq4AIb4AKMAQMBtgHnAhmzAyQCASvoAhvzAjYDAZsB9AIbhgMsAgF/hwMbsgMgAgEs8AIh8AKbAQMBqQHrAiHrAroBAwGcAfcCIf4CIAMBjgGDAyGDA5wBAwGBAfQCjAH0ApIBAwGAAYoDIYoDywECAS2OAx+UAzMCAXGXAx+wAyoCATqRAyWRA4MCAgFymAMhowMqAgFWpAMhrwM8AgE7oAMnoAN9AgFkmwMnmwOBAQIBV6wDJ6wDoQECAUmnAyenA4sCAgE8</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

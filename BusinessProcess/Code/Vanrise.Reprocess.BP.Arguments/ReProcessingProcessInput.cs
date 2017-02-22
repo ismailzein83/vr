@@ -16,7 +16,7 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Reprocess from {0} to {1}", FromTime, ToTime);
+            return String.Format("Reprocess from {0} to {1}", FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
