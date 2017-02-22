@@ -636,6 +636,10 @@ namespace Retail.BusinessEntity.Business
                             {
                                 row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
                             }
+                            else
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                            }
                         }
                     }
                 }
@@ -658,6 +662,10 @@ namespace Retail.BusinessEntity.Business
                             if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
                             {
                                 row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
+                            }
+                            else
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = "" });
                             }
                         }
                     }
