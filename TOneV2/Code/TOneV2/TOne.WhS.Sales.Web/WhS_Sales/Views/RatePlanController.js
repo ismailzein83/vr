@@ -613,11 +613,6 @@
                         defaultItem = response;
                         defaultItem.OwnerType = ownerTypeValue;
                         defaultItem.OwnerId = getOwnerId();
-                        for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
-                            var tab = $scope.defaultItemTabs[i];
-                            if (tab.directiveAPI)
-                                tab.loadDirective(tab.directiveAPI);
-                        }
                     }
                 });
             }
