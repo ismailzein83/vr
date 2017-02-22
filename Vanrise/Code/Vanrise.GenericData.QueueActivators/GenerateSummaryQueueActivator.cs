@@ -318,7 +318,7 @@ namespace Vanrise.GenericData.QueueActivators
         public bool IsEmptyBatch { get; set; }
         public override string GetBatchTitle()
         {
-            return string.Format("Batch Start: {0}, Batch End : {1}", BatchStart, BatchEnd);
+            return string.Format("Batch Start: {0}, Batch End : {1}", BatchStart.ToString("yyyy-MM-dd HH:mm:ss"), BatchEnd.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
 }
