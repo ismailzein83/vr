@@ -19,7 +19,10 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("#BPDefinitionTitle# for Effective Time {0}", EffectiveOn);
+            if (EffectiveOn.HasValue)
+                return String.Format("#BPDefinitionTitle# for Effective Time {0}", EffectiveOn.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+            else
+                return String.Format("#BPDefinitionTitle#");
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
