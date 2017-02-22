@@ -6,5 +6,7 @@
     OneHour: { value: 4, description: '1 Hour' },
     TwoHours: { value: 5, description: '2 Hours' },
     ThreeHours: { value: 6, description: '3 Hours' },
-    SixHours: { value: 7, description: '6 Hours' }
+    SixHours: { value: 7, description: '6 Hours' },
+    TwelveHours: { value: 8, description: '12 Hours' },
+    OneDay: { value: 9, description: '1 Day' }
 });

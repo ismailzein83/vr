@@ -19,7 +19,11 @@ namespace Vanrise.Reprocess.Entities
         [ReprocessChunkTimeAttribute(180)]
         ThreeHours = 6,
         [ReprocessChunkTimeAttribute(360)]
-        SixHours = 7
+        SixHours = 7,
+        [ReprocessChunkTimeAttribute(720)]
+        TwelveHours = 8,
+        [ReprocessChunkTimeAttribute(1440)]
+        OneDay = 9
     }
 
     public class ReprocessChunkTimeAttribute : Attribute
