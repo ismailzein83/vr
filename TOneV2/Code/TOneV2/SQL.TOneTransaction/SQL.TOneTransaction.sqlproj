@@ -124,7 +124,6 @@
     <Build Include="bp\User Defined Types\IDBigIntType.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
     <Build Include="Security\integration.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_CreateTempForFiltered.sql" />
     <Build Include="runtime\User Defined Types\IDIntType.sql" />
     <Build Include="bp\Tables\BPTask.sql" />
     <Build Include="integration\Tables\DataSourceState.sql" />
@@ -215,6 +214,7 @@
     <Build Include="runtime\Stored Procedures\sp_TransactionLock_GetForNotRunningProcesses.sql" />
     <Build Include="runtime\Stored Procedures\sp_TransactionLock_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_TransactionLock_Delete.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
