@@ -32,7 +32,6 @@ app.directive("vrWhsSalesMarginpercentageratecalculation", ['WhS_Sales_BulkActio
 
         	defineAPI();
         }
-
         function defineAPI() {
             var api = {};
 
@@ -59,6 +58,10 @@ app.directive("vrWhsSalesMarginpercentageratecalculation", ['WhS_Sales_BulkActio
 
             api.isCostColumnRequired = function () {
                 return true;
+            };
+
+            api.getDescription = function () {
+                return ctrl.marginPercentage;
             };
 
             if (ctrl.onReady != null)

@@ -39,7 +39,6 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
 
         	defineAPI();
         }
-
         function defineAPI() {
             var api = {};
 
@@ -66,6 +65,10 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
 
             api.isCostColumnRequired = function () {
                 return false;
+            };
+
+            api.getDescription = function () {
+                return ctrl.fixedRate;
             };
 
             if (ctrl.onReady != null)

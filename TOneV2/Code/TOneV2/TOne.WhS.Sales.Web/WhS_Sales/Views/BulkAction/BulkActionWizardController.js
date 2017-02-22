@@ -16,6 +16,9 @@
 
         var bulkActionContext;
 
+        var dropdownSectionAPI;
+        var dropdownSectionReadyDeferred = UtilsService.createPromiseDeferred();
+
         var bulkActionSelectiveAPI;
         var bulkActionSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -55,9 +58,28 @@
             $scope.scopeModel = {};
             $scope.scopeModel.showInvalidTab = false;
 
+            $scope.scopeModel.onDropdownSectionReady = function (api) {
+                dropdownSectionAPI = api;
+                dropdownSectionReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onBulkActionSelectiveReady = function (api) {
                 bulkActionSelectiveAPI = api;
                 bulkActionSelectiveReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onDropdownSectionCollapsed = function () {
+                var actionSummary = bulkActionSelectiveAPI.getSummary();
+                if (actionSummary != undefined) {
+                    $scope.scopeModel.actionSummaryTitle = actionSummary.title;
+                    $scope.scopeModel.actionSummaryBody = actionSummary.body;
+                }
+
+                var filterSummary = zoneFilterSelectiveAPI.getSummary();
+                if (filterSummary != undefined) {
+                    $scope.scopeModel.filterSummaryTitle = filterSummary.title;
+                    $scope.scopeModel.filterSummaryBody = filterSummary.body;
+                }
             };
 
             $scope.scopeModel.onZoneFilterSelectiveReady = function (api) {
@@ -95,9 +117,22 @@
             loadAllControls();
         }
         function loadAllControls() {
-            UtilsService.waitMultipleAsyncOperations([loadBulkActionSelective, loadZoneFilterSelective]).finally(function () {
+            UtilsService.waitMultipleAsyncOperations([expandDropdownSection, loadBulkActionSelective, loadZoneFilterSelective]).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+        }
+        function expandDropdownSection() {
+            var expandDropdownSectionDeferred = UtilsService.createPromiseDeferred();
+
+            dropdownSectionReadyDeferred.promise.then(function () {
+                dropdownSectionAPI.expand().then(function () {
+                    expandDropdownSectionDeferred.resolve();
+                }).catch(function (error) {
+                    expandDropdownSectionDeferred.reject(error);
+                });
+            });
+
+            return expandDropdownSectionDeferred.promise;
         }
         function loadBulkActionSelective() {
             var bulkActionSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -244,8 +279,9 @@
             }
 
             return UtilsService.waitMultiplePromises(promises).finally(function () {
-                bulkActionSelectiveAPI.collapseSection();
-                zoneFilterSelectiveAPI.collapseSection();
+                dropdownSectionAPI.collapse();
+                if (invalidDataExists === true)
+                    VRNotificationService.showWarning("Invalid data exists. Please check the 'Invalid Zones' tab");
                 $scope.scopeModel.isLoading = false;
             });
         }
@@ -285,14 +321,14 @@
             bulkActionContext.ownerType = ownerType;
             bulkActionContext.ownerId = ownerId;
             bulkActionContext.ownerSellingNumberPlanId = ownerSellingNumberPlanId;
+            if (gridQuery != undefined)
+                bulkActionContext.costCalculationMethods = gridQuery.CostCalculationMethods;
             bulkActionContext.getSelectedBulkAction = function () {
                 return bulkActionSelectiveAPI.getData();
             };
             bulkActionContext.requireEvaluation = function () {
                 $scope.scopeModel.isApplyButtonDisabled = true;
             };
-            if (gridQuery != undefined)
-                bulkActionContext.costCalculationMethods = gridQuery.CostCalculationMethods;
         }
     }
 

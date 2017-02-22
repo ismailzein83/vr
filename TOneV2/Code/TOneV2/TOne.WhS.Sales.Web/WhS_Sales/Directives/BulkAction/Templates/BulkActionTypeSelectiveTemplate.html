@@ -1,30 +1,22 @@
-﻿<vr-label><span style="font-size: 12px;">Action Settings</span></vr-label>
-<vr-dropdown-section on-ready="scopeModel.onDropdownSelectorReady" defaultstate="true">
-    <div transclude-to="summary">
-        <vr-label isvalue>{{scopeModel.getDirectiveSummary()}}</vr-label>
-    </div>
-    <div transclude-to="body">
-        <vr-row>
-            <vr-columns colnum="{{selectiveCtrl.normalColNum}}">
-                <vr-select label="Action"
-                           on-ready="scopeModel.onSelectorReady"
-                           datasource="scopeModel.extensionConfigs"
-                           selectedvalues="scopeModel.selectedExtensionConfig"
-                           datavaluefield="ExtensionConfigurationId"
-                           datatextfield="Title"
-                           onselectitem="scopeModel.onBulkActionSelected"
-                           isrequired="selectiveCtrl.isrequired"
-                           hideremoveicon="selectiveCtrl.isrequired">
-                </vr-select>
-            </vr-columns>
-        </vr-row>
-        <vr-row vr-loader="scopeModel.isLoadingDirective" removeline>
-            <vr-directivewrapper ng-if="scopeModel.selectedExtensionConfig != undefined"
-                                 directive="scopeModel.selectedExtensionConfig.Editor"
-                                 on-ready="scopeModel.onDirectiveReady"
-                                 normal-col-num="{{selectiveCtrl.normalColNum}}"
-                                 isrequired="selectiveCtrl.isrequired">
-            </vr-directivewrapper>
-        </vr-row>
-    </div>
-</vr-dropdown-section>
+﻿<vr-row>
+    <vr-columns colnum="{{selectiveCtrl.normalColNum}}">
+        <vr-select label="Action"
+                   on-ready="scopeModel.onSelectorReady"
+                   datasource="scopeModel.extensionConfigs"
+                   selectedvalues="scopeModel.selectedExtensionConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   onselectitem="scopeModel.onBulkActionSelected"
+                   isrequired="selectiveCtrl.isrequired"
+                   hideremoveicon="selectiveCtrl.isrequired">
+        </vr-select>
+    </vr-columns>
+</vr-row>
+<vr-row vr-loader="scopeModel.isLoadingDirective" removeline>
+    <vr-directivewrapper ng-if="scopeModel.selectedExtensionConfig != undefined"
+                         directive="scopeModel.selectedExtensionConfig.Editor"
+                         on-ready="scopeModel.onDirectiveReady"
+                         normal-col-num="{{selectiveCtrl.normalColNum}}"
+                         isrequired="selectiveCtrl.isrequired">
+    </vr-directivewrapper>
+</vr-row>

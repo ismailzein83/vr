@@ -2,26 +2,50 @@
     <vr-modalbody>
         <vr-form name="formBulkActionWizard">
             <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-validation-group validationcontext="validationContext">
-                        <vr-whs-sales-bulkaction-type-selective on-ready="scopeModel.onBulkActionSelectiveReady"
-                                                                normal-col-num="6"
-                                                                isrequired="true"
-                                                                hideremoveicon="true">
-                        </vr-whs-sales-bulkaction-type-selective>
-                    </vr-validation-group>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <span vr-disabled="validationContext.validate() != null">
-                        <vr-whs-sales-bulkaction-zonefilter-selective on-ready="scopeModel.onZoneFilterSelectiveReady"
-                                                                      normal-col-num="6"
-                                                                      isrequired="true"
-                                                                      hideremoveicon="true">
-                        </vr-whs-sales-bulkaction-zonefilter-selective>
-                    </span>
+                <vr-columns width="fullrow">
+                    <vr-dropdown-section on-ready="scopeModel.onDropdownSectionReady" oncollapsesection="scopeModel.onDropdownSectionCollapsed">
+                        <div transclude-to="summary">
+                            <vr-row>
+                                <vr-columns width="1/2row">
+                                    <vr-label>{{scopeModel.actionSummaryTitle}}</vr-label>
+                                    <span ng-hide="scopeModel.actionSummaryBody == undefined"><br /><vr-label isvalue>{{scopeModel.actionSummaryBody}}</vr-label></span>
+                                </vr-columns>
+                                <vr-columns width="1/2row">
+                                    <vr-label>{{scopeModel.filterSummaryTitle}}</vr-label>
+                                    <span ng-hide="scopeModel.filterSummaryBody == undefined"><br /><vr-label isvalue>{{scopeModel.filterSummaryBody}}</vr-label></span>
+                                </vr-columns>
+                            </vr-row>
+                        </div>
+                        <div transclude-to="body">
+                            <vr-row>
+                                <vr-columns width="1/2row">
+                                    <vr-section title="Action Settings">
+                                        <vr-validation-group validationcontext="validationContext">
+                                            <vr-whs-sales-bulkaction-type-selective on-ready="scopeModel.onBulkActionSelectiveReady"
+                                                                                    normal-col-num="6"
+                                                                                    isrequired="true"
+                                                                                    hideremoveicon="true">
+                                            </vr-whs-sales-bulkaction-type-selective>
+                                        </vr-validation-group>
+                                    </vr-section>
+                                </vr-columns>
+                                <vr-columns width="1/2row">
+                                    <vr-section title="Applicable Zones">
+                                        <span vr-disabled="validationContext.validate() != null">
+                                            <vr-whs-sales-bulkaction-zonefilter-selective on-ready="scopeModel.onZoneFilterSelectiveReady"
+                                                                                          normal-col-num="6"
+                                                                                          isrequired="true"
+                                                                                          hideremoveicon="true">
+                                            </vr-whs-sales-bulkaction-zonefilter-selective>
+                                        </span>
+                                    </vr-section>
+                                </vr-columns>
+                            </vr-row>
+                        </div>
+                    </vr-dropdown-section>
                 </vr-columns>
             </vr-row>
-            <div style="min-height: 260px;">
+            <div style="min-height: 335px;">
                 <vr-tabs ng-show="scopeModel.showTabs">
                     <vr-tab header="'Applicable Zones'">
                         <vr-row>

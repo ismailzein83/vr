@@ -24,11 +24,7 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
 
         var bulkActionContext;
 
-        var dropdownSectionAPI;
-        var dropdownSectionReadyDeferred = UtilsService.createPromiseDeferred();
-
         var selectorAPI;
-        var selectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var directiveAPI;
         var directiveReadyDeferred;
@@ -39,14 +35,9 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
             $scope.scopeModel.extensionConfigs = [];
             $scope.scopeModel.selectedExtensionConfig;
 
-            $scope.scopeModel.onDropdownSelectorReady = function (api) {
-                dropdownSectionAPI = api;
-                dropdownSectionReadyDeferred.resolve();
-            };
-
             $scope.scopeModel.onSelectorReady = function (api) {
                 selectorAPI = api;
-                selectorReadyDeferred.resolve();
+                defineAPI();
             };
 
             $scope.scopeModel.onZoneFilterSelected = function (selectedZoneFilter) {
@@ -64,25 +55,7 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
-
-            $scope.scopeModel.getDirectiveSummary = function () {
-                var bulkActionZoneFilterTitle = ($scope.scopeModel.selectedExtensionConfig != undefined) ? $scope.scopeModel.selectedExtensionConfig.Title : 'None';
-                var summary = 'Filter: ' + bulkActionZoneFilterTitle;
-
-                if (directiveAPI != undefined && directiveAPI.getSummary != undefined) {
-                    var directiveSummary = directiveAPI.getSummary();
-                    if (directiveSummary != undefined)
-                        summary += ' | ' + directiveSummary;
-                }
-
-                return summary;
-            };
-
-            UtilsService.waitMultiplePromises([dropdownSectionReadyDeferred.promise, selectorReadyDeferred.promise]).then(function () {
-                defineAPI();
-            });
         }
-
         function defineAPI() {
 
             var api = {};
@@ -148,9 +121,16 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
                 return data;
             };
 
-            api.collapseSection = function () {
-                if (dropdownSectionAPI != undefined)
-                    dropdownSectionAPI.collapse();
+            api.getSummary = function () {
+                var summary = {};
+
+                var filterTitle = ($scope.scopeModel.selectedExtensionConfig != undefined) ? $scope.scopeModel.selectedExtensionConfig.Title : 'None';
+                summary.title = 'Filter: ' + filterTitle;
+
+                if (directiveAPI != undefined && directiveAPI.getSummary != undefined)
+                    summary.body = directiveAPI.getSummary();
+
+                return summary;
             };
 
             if (selectiveCtrl.onReady != null) {

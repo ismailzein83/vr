@@ -178,7 +178,19 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
             };
 
             api.getSummary = function () {
-                return 'None';
+                var numberOfCountries = 0;
+                var numberOfZones = 0;
+
+                for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
+                    var entity = $scope.scopeModel.gridDataSource[i].Entity;
+
+                    if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value)
+                        numberOfCountries++;
+                    else
+                        numberOfZones++;
+                }
+
+                return 'Countries: ' + numberOfCountries + ' | Zones: ' + numberOfZones;
             };
 
             if (ctrl.onReady != null) {
@@ -265,7 +277,6 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
                 countrySelectorFilters.push(countrySoldToCustomerFilter);
             }
 
-            console.log(countrySelectorFilters);
             return countrySelectorFilters;
         }
 

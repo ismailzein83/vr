@@ -24,11 +24,7 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
 
         var bulkActionContext;
 
-        var dropdownSectionAPI;
-        var dropdownSectionReadyDeferred = UtilsService.createPromiseDeferred();
-
         var selectorAPI;
-        var selectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var directiveAPI;
         var directiveReadyDeferred;
@@ -39,14 +35,9 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
             $scope.scopeModel.extensionConfigs = [];
             $scope.scopeModel.selectedExtensionConfig;
 
-            $scope.scopeModel.onDropdownSelectorReady = function (api) {
-                dropdownSectionAPI = api;
-                dropdownSectionReadyDeferred.resolve();
-            };
-
             $scope.scopeModel.onSelectorReady = function (api) {
                 selectorAPI = api;
-                selectorReadyDeferred.resolve();
+                defineAPI();
             };
 
             $scope.scopeModel.onBulkActionSelected = function (selectedBulkAction) {
@@ -64,25 +55,7 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
-
-            $scope.scopeModel.getDirectiveSummary = function () {
-                var bulkActionTitle = ($scope.scopeModel.selectedExtensionConfig != undefined) ? $scope.scopeModel.selectedExtensionConfig.Title : 'None';
-                var summary = 'Bulk Action: ' + bulkActionTitle;
-
-                if (directiveAPI != undefined && directiveAPI.getSummary != undefined) {
-                    var directiveSummary = directiveAPI.getSummary();
-                    if (directiveSummary != undefined)
-                        summary += ' | ' + directiveSummary;
-                }
-
-                return summary;
-            };
-
-            UtilsService.waitMultiplePromises([dropdownSectionReadyDeferred.promise, selectorReadyDeferred.promise]).then(function () {
-                defineAPI();
-            });
         }
-
         function defineAPI() {
 
             var api = {};
@@ -152,9 +125,16 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
                 return ($scope.scopeModel.selectedExtensionConfig != null) ? $scope.scopeModel.selectedExtensionConfig.ValidationResultDirective : undefined;
             };
 
-            api.collapseSection = function () {
-                if (dropdownSectionAPI != undefined)
-                    dropdownSectionAPI.collapse();
+            api.getSummary = function () {
+                var summary = {};
+
+                var bulkActionTitle = ($scope.scopeModel.selectedExtensionConfig != undefined) ? $scope.scopeModel.selectedExtensionConfig.Title : 'None';
+                summary.title = 'Bulk Action: ' + bulkActionTitle;
+
+                if (directiveAPI != undefined && directiveAPI.getSummary != undefined)
+                    summary.body = directiveAPI.getSummary();
+
+                return summary;
             };
 
             if (selectiveCtrl.onReady != null) {
