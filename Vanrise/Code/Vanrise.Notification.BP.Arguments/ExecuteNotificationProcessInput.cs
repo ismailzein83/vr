@@ -16,6 +16,6 @@ namespace Vanrise.Notification.BP.Arguments
 
         public string ProcessTitle { get; set; }
 
-        public Guid NotificationId { get; set; }
+        public long NotificationId { get; set; }
     }
 }

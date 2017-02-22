@@ -66,8 +66,8 @@
         </OutArgument>
       </vnba1:GetVRNotification.VRNotification>
       <vnba1:GetVRNotification.VRNotificationId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">Input.NotificationId</mca:CSharpValue>
+        <InArgument x:TypeArguments="x:Int64">
+          <mca:CSharpValue x:TypeArguments="x:Int64">Input.NotificationId</mca:CSharpValue>
         </InArgument>
       </vnba1:GetVRNotification.VRNotificationId>
     </vnba1:GetVRNotification>
@@ -78,8 +78,8 @@
         </InArgument>
       </vnba1:UpdateNotificationStatus.Status>
       <vnba1:UpdateNotificationStatus.VRNotificationId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">vrNotification.VRNotificationId</mca:CSharpValue>
+        <InArgument x:TypeArguments="x:Int64">
+          <mca:CSharpValue x:TypeArguments="x:Int64">vrNotification.VRNotificationId</mca:CSharpValue>
         </InArgument>
       </vnba1:UpdateNotificationStatus.VRNotificationId>
     </vnba1:UpdateNotificationStatus>
@@ -115,8 +115,8 @@
         </InArgument>
       </vnba1:UpdateNotificationStatus.Status>
       <vnba1:UpdateNotificationStatus.VRNotificationId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">vrNotification.VRNotificationId</mca:CSharpValue>
+        <InArgument x:TypeArguments="x:Int64">
+          <mca:CSharpValue x:TypeArguments="x:Int64">vrNotification.VRNotificationId</mca:CSharpValue>
         </InArgument>
       </vnba1:UpdateNotificationStatus.VRNotificationId>
     </vnba1:UpdateNotificationStatus>

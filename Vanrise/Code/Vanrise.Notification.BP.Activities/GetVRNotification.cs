@@ -9,7 +9,7 @@ namespace Vanrise.Notification.BP.Activities
     public sealed class GetVRNotification : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<Guid> VRNotificationId { get; set; }
+        public InArgument<long> VRNotificationId { get; set; }
         [RequiredArgument]
         public OutArgument<VRNotification> VRNotification { get; set; }
 

@@ -7,6 +7,7 @@ using Vanrise.Notification.BP.Arguments;
 using Vanrise.Notification.Data;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.Notification.Business
 {
@@ -15,9 +16,10 @@ namespace Vanrise.Notification.Business
         Vanrise.BusinessProcess.Business.BPInstanceManager _bpInstanceManager = new Vanrise.BusinessProcess.Business.BPInstanceManager();
         public CreateVRNotificationOutput CreateNotification(CreateVRNotificationInput input)
         {
+            long notificationId = 0;
             var notification = new VRNotification
             {
-                VRNotificationId = Guid.NewGuid(),
+
                 UserId = input.UserId,
                 TypeId = input.NotificationTypeId,
                 ParentTypes = input.ParentTypes,
@@ -34,10 +36,10 @@ namespace Vanrise.Notification.Business
                 }
             };
             var notificationDataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
-            notificationDataManager.Insert(notification);
+            notificationDataManager.Insert(notification, out notificationId);
             var executeNotificationProcessInput = new ExecuteNotificationProcessInput
             {
-                NotificationId = notification.VRNotificationId,
+                NotificationId = notificationId,
                 ProcessTitle = input.Description != null ? input.Description : null,
                 UserId = input.UserId
             };
@@ -52,7 +54,7 @@ namespace Vanrise.Notification.Business
             };
         }
 
-        public VRNotification GetVRNotificationById(Guid vrNotificationId)
+        public VRNotification GetVRNotificationById(long vrNotificationId)
         {
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
             return dataManager.GetVRNotificationById(vrNotificationId);
@@ -80,10 +82,29 @@ namespace Vanrise.Notification.Business
             throw new NotImplementedException();
         }
 
-        public void UpdateNotificationStatus(Guid notificationId, VRNotificationStatus vrNotificationStatus)
+        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus)
         {
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
             dataManager.UpdateNotificationStatus(notificationId, vrNotificationStatus);
+        }
+
+        public List<VRNotificationDetail> GetUpdatedVRNotifications(VRNotificationUpdateQuery input)
+        {
+            IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
+            return dataManager.GetUpdateVRNotifications(input).Select(VRNotificationDetailMapper).ToList();
+        }
+        public List<VRNotificationDetail> GetBeforeIdVRNotifications(VRNotificationBeforeIdQuery input)
+        {
+            IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
+            return dataManager.GetBeforeIdVRNotifications(input).Select(VRNotificationDetailMapper).ToList();
+        }
+        VRNotificationDetail VRNotificationDetailMapper(VRNotification vrNotification)
+        {
+            VRNotificationDetail vrNotificationDetail = new VRNotificationDetail()
+            {
+                Entity = vrNotification
+            };
+            return vrNotificationDetail;
         }
     }
 }

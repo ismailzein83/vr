@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRNotificationController.cs" />
     <Compile Include="Controllers\VRActionController.cs" />
     <Compile Include="Controllers\VRAlertRuleController.cs" />
     <Compile Include="Controllers\VRAlertRuleTypeController.cs" />
@@ -172,6 +173,7 @@
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleTypeAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRBalanceAlertRuleAPIService.js" />
+    <Content Include="VR_Notification\Services\APIServices\VRNotificationsAPIService.js" />
     <Content Include="VR_Notification\Services\VRActionService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleSettingsService.js" />

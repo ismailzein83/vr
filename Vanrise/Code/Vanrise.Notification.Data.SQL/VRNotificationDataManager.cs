@@ -22,35 +22,44 @@ namespace Vanrise.Notification.Data.SQL
         #endregion
 
         #region Public Methods
-        public VRNotification GetVRNotificationById(Guid notificationId)
+        public VRNotification GetVRNotificationById(long notificationId)
         {
             return GetItemSP("[VRNotification].[sp_VRNotification_GetById]", VRNotificationMapper, notificationId);
         }
-        public bool Insert(VRNotification notification)
+        public bool Insert(VRNotification notification, out long notificationId)
         {
-            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRNotification_Insert", notification.VRNotificationId,
-                                                                                            notification.UserId,
-                                                                                            notification.TypeId,
-                                                                                            notification.ParentTypes.ParentType1,
-                                                                                            notification.ParentTypes.ParentType2,
-                                                                                            notification.EventKey,
-                                                                                            notification.BPProcessInstanceId,
-                                                                                            notification.Status,
-                                                                                            notification.AlertLevelId,
-                                                                                            notification.Description,
-                                                                                            notification.ErrorMessage,
-                                                                                            notification.Data != null ? Serializer.Serialize(notification.Data) : null);
-
+            object insertedId;
+            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRNotification_Insert", out insertedId,
+                                                                                                notification.UserId,
+                                                                                                notification.TypeId,
+                                                                                                notification.ParentTypes.ParentType1,
+                                                                                                notification.ParentTypes.ParentType2,
+                                                                                                notification.EventKey,
+                                                                                                notification.BPProcessInstanceId,
+                                                                                                notification.Status,
+                                                                                                notification.AlertLevelId,
+                                                                                                notification.Description,
+                                                                                                notification.ErrorMessage,
+                                                                                                notification.Data != null ? Serializer.Serialize(notification.Data) : null);
+            notificationId = (long)insertedId;
             return (affectedRecords > 0);
         }
-
         public List<VRNotification> GetVRNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, string eventKey)
         {
             return GetItemsSP("VRNotification.sp_VRNotification_GetByNotificationType", VRNotificationMapper, notificationTypeId, parentTypes.ParentType1, parentTypes.ParentType2, eventKey);
         }
-        public void UpdateNotificationStatus(Guid notificationId, VRNotificationStatus vrNotificationStatus)
+        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus)
         {
             ExecuteNonQuerySP("[VRNotification].[sp_VRNotification_UpdateStatus]", notificationId, vrNotificationStatus);
+        }
+        public List<VRNotification> GetUpdateVRNotifications(VRNotificationUpdateQuery input)
+        {
+            return GetItemsSP("[VRNotification].[sp_VRNotifications_GetUpdated]", VRNotificationMapper, input.NotificationTypeId, input.NbOfRows, input.GreaterThanID);
+        }
+
+        public List<VRNotification> GetBeforeIdVRNotifications(VRNotificationBeforeIdQuery input)
+        {
+            return GetItemsSP("[VRNotification].[sp_VRNotifications_GetBeforeID]", VRNotificationMapper, input.NotificationTypeId, input.NbOfRows, input.LessThanID);
         }
 
         #endregion
@@ -61,7 +70,7 @@ namespace Vanrise.Notification.Data.SQL
 
             return new VRNotification
             {
-                VRNotificationId = GetReaderValue<Guid>(reader, "ID"),
+                VRNotificationId = (long)reader["ID"],
                 UserId = (int)reader["UserID"],
                 ParentTypes = new VRNotificationParentTypes
                 {
@@ -80,6 +89,5 @@ namespace Vanrise.Notification.Data.SQL
         }
 
         #endregion
-
     }
 }

@@ -10,7 +10,7 @@ namespace Vanrise.Notification.Entities
 
     public class VRNotification
     {
-        public Guid VRNotificationId { get; set; }
+        public long VRNotificationId { get; set; }
 
         public int UserId { get; set; }
 

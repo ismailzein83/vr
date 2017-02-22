@@ -8,7 +8,7 @@ namespace Vanrise.Notification.BP.Activities
 
     public sealed class UpdateNotificationStatus : CodeActivity
     {
-        public InArgument<Guid> VRNotificationId { get; set; }
+        public InArgument<long> VRNotificationId { get; set; }
         public InArgument<VRNotificationStatus> Status { get; set; }
 
         protected override void Execute(CodeActivityContext context)
