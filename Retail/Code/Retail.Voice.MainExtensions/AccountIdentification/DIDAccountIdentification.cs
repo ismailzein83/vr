@@ -19,8 +19,8 @@ namespace Retail.Voice.MainExtensions
 
             BEParentChildRelationManager beParentChildRelationManager = new BEParentChildRelationManager();
              
-            context.CallingAccountId = GetAccountId(context.CallingNumber, accountDIDRelationDefinitionID, context.RawCDR.ConnectDateTime, didManager, beParentChildRelationManager);
-            context.CalledAccountId = GetAccountId(context.CalledNumber, accountDIDRelationDefinitionID, context.RawCDR.ConnectDateTime, didManager, beParentChildRelationManager);
+            context.CallingAccountId = GetAccountId(context.CallingNumber, accountDIDRelationDefinitionID, context.RawCDR.AttemptDateTime, didManager, beParentChildRelationManager);
+            context.CalledAccountId = GetAccountId(context.CalledNumber, accountDIDRelationDefinitionID, context.RawCDR.AttemptDateTime, didManager, beParentChildRelationManager);
         }
 
         private long? GetAccountId(string number, Guid accountDIDRelationDefinitionID, DateTime? effectiveOn, DIDManager didManager, BEParentChildRelationManager beParentChildRelationManager)
