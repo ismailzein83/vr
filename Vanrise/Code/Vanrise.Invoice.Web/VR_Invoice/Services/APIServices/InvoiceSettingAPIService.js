@@ -24,7 +24,6 @@
             }, {
                 useCache: true
             });
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Invoice_ModuleConfig.moduleName, controllerName, ['AddInvoiceSetting']));
         }
         function UpdateInvoiceSetting(invoiceSetting) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "UpdateInvoiceSetting"), invoiceSetting);
