@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Business
 {
-    public class UpdateAccountBalancesBaseQueueActivator
+    public interface IConvertToBalanceUpdateContext
     {
+        dynamic Record { get; }
+
+        void SubmitBalanceUpdate(BalanceUpdatePayload accountBalanceInfo);
     }
 }

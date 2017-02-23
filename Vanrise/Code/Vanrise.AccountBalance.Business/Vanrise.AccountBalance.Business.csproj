@@ -41,6 +41,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManager.cs" />
@@ -59,7 +71,12 @@
     <Compile Include="Extensions\AccountBalanceAlertRuleTypeSettings.cs" />
     <Compile Include="Extensions\AlertRuleEntityBalanceInfo.cs" />
     <Compile Include="LiveBalanceManager.cs" />
-    <Compile Include="QueueActivators\UpdateAccountBalancesBaseQueueActivator.cs" />
+    <Compile Include="QueueActivators\BalanceUpdatePayload.cs" />
+    <Compile Include="QueueActivators\BaseUpdateAccountBalancesQueueActivator.cs" />
+    <Compile Include="QueueActivators\ConvertToBalanceUpdateContext.cs" />
+    <Compile Include="QueueActivators\FinalizeEmptyBatchesContext.cs" />
+    <Compile Include="QueueActivators\IConvertToBalanceUpdateContext.cs" />
+    <Compile Include="QueueActivators\IFinalizeEmptyBatchesContext.cs" />
     <Compile Include="UsageBalanceManager.cs" />
     <Compile Include="BillingTransactionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,6 +102,10 @@
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
@@ -93,9 +114,21 @@
       <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
       <Name>Vanrise.GenericData.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data\Vanrise.GenericData.Data.csproj">
+      <Project>{2c487e04-e583-411a-b116-f4485c78a572}</Project>
+      <Name>Vanrise.GenericData.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.QueueActivators\Vanrise.GenericData.QueueActivators.csproj">
+      <Project>{8fc8aa0b-5ae5-4745-be9c-0e37f8a07ff9}</Project>
+      <Name>Vanrise.GenericData.QueueActivators</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
+      <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
+      <Name>Vanrise.Integration.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Business\Vanrise.Notification.Business.csproj">
       <Project>{918ce99a-576c-49f0-897e-07817959e79c}</Project>
