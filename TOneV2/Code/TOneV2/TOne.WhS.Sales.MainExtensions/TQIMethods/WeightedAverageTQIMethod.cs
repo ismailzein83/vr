@@ -14,8 +14,11 @@ namespace TOne.WhS.Sales.MainExtensions
     public class WeightedAverageTQIMethod : TQIMethod
     {
         public override Guid ConfigId { get { return new Guid("C75EA417-7D46-48C2-93DE-1B575373AAD2"); } }
+
         public decimal PeriodValue { get; set; }
+
         public PeriodTypes PeriodType { get; set; }
+
         public override void CalculateRate(ITQIMethodContext context)
         {
             if (context.Route == null || context.Route.RouteOptionsDetails == null)
@@ -43,6 +46,7 @@ namespace TOne.WhS.Sales.MainExtensions
                 context.Rate = sumOfRatesMultipliedByDuration / sumOfDuration;
         }
 
+        #region Private Methods
 
         private DurationByZone GetDurationByZone(long saleZoneId)
         {
@@ -72,31 +76,33 @@ namespace TOne.WhS.Sales.MainExtensions
 
             DurationByZone durationByZone = new DurationByZone();
 
-            foreach (var analyticRecord in analyticResult.Data)
+            if (analyticResult != null)
             {
-                DimensionValue supplierDimension = analyticRecord.DimensionValues.ElementAt(0);
-                DimensionValue zoneDimension = analyticRecord.DimensionValues.ElementAt(1);
-
-                long zoneId = (long)zoneDimension.Value;
-                int? supplierId = supplierDimension.Value != null ? (int?)supplierDimension.Value : null;
-
-                DurationBySupplier durationBySupplier = null;
-                if (!durationByZone.TryGetValue(zoneId, out durationBySupplier))
+                foreach (var analyticRecord in analyticResult.Data)
                 {
-                    durationBySupplier = new DurationBySupplier();
-                    durationByZone.Add(zoneId, durationBySupplier);
+                    DimensionValue supplierDimension = analyticRecord.DimensionValues.ElementAt(0);
+                    DimensionValue zoneDimension = analyticRecord.DimensionValues.ElementAt(1);
+
+                    long zoneId = (long)zoneDimension.Value;
+                    int? supplierId = supplierDimension.Value != null ? (int?)supplierDimension.Value : null;
+
+                    DurationBySupplier durationBySupplier = null;
+                    if (!durationByZone.TryGetValue(zoneId, out durationBySupplier))
+                    {
+                        durationBySupplier = new DurationBySupplier();
+                        durationByZone.Add(zoneId, durationBySupplier);
+                    }
+
+                    MeasureValue durationInMinutes = GetMeasureValue(analyticRecord, "DurationInMinutes");
+                    decimal durationInMinutesValue = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
+
+                    if (supplierId.HasValue)
+                        durationBySupplier.Add(supplierId.Value, durationInMinutesValue);
                 }
-
-                MeasureValue durationInMinutes = GetMeasureValue(analyticRecord, "DurationInMinutes");
-                decimal durationInMinutesValue = Convert.ToDecimal(durationInMinutes.Value ?? 0.0);
-
-                if (supplierId.HasValue)
-                    durationBySupplier.Add(supplierId.Value, durationInMinutesValue);
             }
 
             return durationByZone;
         }
-
 
         private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, long saleZoneId, DateTime fromDate, DateTime toDate)
         {
@@ -119,7 +125,7 @@ namespace TOne.WhS.Sales.MainExtensions
             DimensionFilter dimensionFilter = new DimensionFilter()
             {
                 Dimension = "SaleZone",
-                FilterValues = new List<object>(){ saleZoneId }
+                FilterValues = new List<object>() { saleZoneId }
             };
 
             analyticQuery.Query.Filters.Add(dimensionFilter);
@@ -133,6 +139,9 @@ namespace TOne.WhS.Sales.MainExtensions
             return measureValue;
         }
 
+        #endregion
+
+        #region Private Classes
 
         class DurationBySupplier : Dictionary<int, decimal>
         {
@@ -143,5 +152,7 @@ namespace TOne.WhS.Sales.MainExtensions
         {
 
         }
+
+        #endregion
     }
 }

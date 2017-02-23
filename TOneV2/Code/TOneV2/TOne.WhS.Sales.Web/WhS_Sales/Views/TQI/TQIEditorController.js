@@ -248,8 +248,8 @@
 
                     var period = periodSelectorAPI.getData();
                     if (period != undefined) {
-                        duration.periodValue = period.PeriodValue;
-                        duration.periodType = period.PeriodType;
+                        duration.periodValue = period.periodValue;
+                        duration.periodType = period.periodType;
                     }
 
                     return duration;
