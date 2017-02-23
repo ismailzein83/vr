@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -94,7 +95,55 @@ namespace TOne.WhS.Routing.Business
                     return true;
                 };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails));
+            RouteRuleExcelExportHandler routeRuleExcel = new RouteRuleExcelExportHandler(input.Query);
+            ResultProcessingHandler<RouteRuleDetail> handler = new ResultProcessingHandler<RouteRuleDetail>()
+            {
+                ExportExcelHandler = routeRuleExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails), handler);
+        }
+
+        private class RouteRuleExcelExportHandler : ExcelExportHandler<RouteRuleDetail>
+        {
+            private RouteRuleQuery _query;
+            public RouteRuleExcelExportHandler(RouteRuleQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RouteRuleDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rule Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                    row.Cells.Add(new ExportExcelCell { Value = record.IncludedCodes });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Customers });
+                    row.Cells.Add(new ExportExcelCell { Value = record.SaleZones });
+                    row.Cells.Add(new ExportExcelCell { Value = record.RouteRuleSettingsTypeName });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         public RouteRule GetMatchRule(RouteRuleTarget target, int? routingProductId)
