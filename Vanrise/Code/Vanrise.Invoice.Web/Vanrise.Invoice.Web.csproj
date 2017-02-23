@@ -256,6 +256,10 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\Templates\InvoiceActionsGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\vr-invoicetype-invoiceactions-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\vr-invoicetype-invoiceactions.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\InvoiceAttachmentEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\Templates\InvoiceAttachmentsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\Templates\InvoiceAttachmentEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\vr-invoicetype-invoiceattachments.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\ItemGroupingDataSourceSettings.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\TaxesDataSourceSettings.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\vr-invoicetype-datasourcesettings-taxes.js" />
@@ -372,6 +376,7 @@
     <Content Include="VR_Invoice\Services\APIServices\ItemGroupingSectionAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\PartnerInvoiceSettingAPIService.js" />
     <Content Include="VR_Invoice\Services\AutomaticInvoiceActionService.js" />
+    <Content Include="VR_Invoice\Services\InvoiceAttachmentService.js" />
     <Content Include="VR_Invoice\Services\InvoiceActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGeneratorActionService.js" />
     <Content Include="VR_Invoice\Services\InvoiceGridSettingService.js" />

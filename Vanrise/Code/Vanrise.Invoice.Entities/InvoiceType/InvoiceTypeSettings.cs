@@ -23,6 +23,16 @@ namespace Vanrise.Invoice.Entities
         public List<AutomaticInvoiceAction> AutomaticInvoiceActions { get; set; }
         public List<InvoiceSettingPartUISection> InvoiceSettingPartUISections { get; set; }
         public bool UseTimeZone { get; set; }
+        public List<InvoiceAttachment> InvoiceAttachments { get; set; }
+
+    }
+
+
+    public class InvoiceAttachment
+    {
+        public Guid InvoiceAttachmentId { get; set; }
+        public string Title { get; set; }
+        public InvoiceFileConverter InvoiceFileConverter { get; set; }
     }
 
     public class InvoiceSettingPartUISection
@@ -40,7 +50,6 @@ namespace Vanrise.Invoice.Entities
         public Object PartDefinitionSetting { get; set; }
         public bool IsOverridable { get; set; }
     }
-
     public class AutomaticInvoiceAction
     {
         public Guid AutomaticInvoiceActionId { get; set; }
@@ -56,7 +65,6 @@ namespace Vanrise.Invoice.Entities
     {
 
     }
-
     public class ItemGrouping
     {
         public Guid ItemGroupingId { get; set; }
