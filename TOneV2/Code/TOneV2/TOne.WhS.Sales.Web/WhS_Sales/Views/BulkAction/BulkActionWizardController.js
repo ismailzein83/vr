@@ -272,6 +272,8 @@
                     gridQuery.context.showBulkActionTabs = function (value) {
                         $scope.scopeModel.showTabs = value;
                         $scope.scopeModel.isApplyButtonDisabled = !value;
+                        if (value === true && invalidDataExists === true)
+                            VRNotificationService.showWarning("Invalid data exists. Please check the 'Invalid Zones' tab");
                     };
                 }
 
@@ -280,8 +282,6 @@
 
             return UtilsService.waitMultiplePromises(promises).finally(function () {
                 dropdownSectionAPI.collapse();
-                if (invalidDataExists === true)
-                    VRNotificationService.showWarning("Invalid data exists. Please check the 'Invalid Zones' tab");
                 $scope.scopeModel.isLoading = false;
             });
         }
