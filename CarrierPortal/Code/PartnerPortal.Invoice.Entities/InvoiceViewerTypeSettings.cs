@@ -1,12 +1,11 @@
-﻿using PartnerPortal.Invoice.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
 
-namespace PartnerPortal.Invoice.Business.Extensions
+namespace PartnerPortal.Invoice.Entities
 {
     public class InvoiceViewerTypeSettings : Vanrise.Entities.VRComponentTypeSettings
     {

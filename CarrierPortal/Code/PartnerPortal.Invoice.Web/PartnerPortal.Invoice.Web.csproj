@@ -45,6 +45,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -63,9 +67,6 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
@@ -107,6 +108,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -127,11 +132,14 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Views\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CPInvoiceController.cs" />
     <Compile Include="Controllers\CPInvoiceTypeController.cs" />
+    <Compile Include="Controllers\InvoiceViewerTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -140,15 +148,21 @@
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceType\Directives\partnerportal-invoice-invoicefield-remoteselector.js" />
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceType\Directives\partnerportal-invoice-invoicetype-remoteselector.js" />
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceType\Services\InvoiceTypeAPIService.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Directives\partnerportal-invoice-invoiceviewertype-selector.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Services\APIServices\InvoiceViewerTypeAPIService.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\GridColumnsEditorController.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\MainExtensions\partnerportal-invoice-partnerinvoicequeryinterceptor.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\MainExtensions\Templates\PartnerInvoiceQueryInterceptor.html" />
+    <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\partnerportal-invoice-grid.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\partnerportal-invoice-vieweditor.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\partnerportal-invoice-gridcolumns.js" />
-    <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\partnerportal-invoice-invoice-viewertypesettings.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Directives\partnerportal-invoice-viewertypesettings.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\partnerportal-invoice-invoicequeryinterceptor.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\Templates\GridColumnsEditor.html" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\Templates\GridColumnsManagement.html" />
-    <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\Templates\InvoiceViewerTypeSettings.html" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Directives\Templates\InvoiceViewerTypeSettings.html" />
+    <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\Templates\InvoiceGridTemplate.html" />
+    <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\Templates\InvoiceViewEditor.html" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Services\APIServices\InvoiceAPIService.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Services\InvoiceService.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Views\InvoiceManagement.html" />

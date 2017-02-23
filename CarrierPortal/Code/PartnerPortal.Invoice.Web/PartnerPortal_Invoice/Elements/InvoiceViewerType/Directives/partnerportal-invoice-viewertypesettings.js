@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("partnerportalInvoiceInvoiceViewertypesettings", ["UtilsService", "VRUIUtilsService",
+app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUtilsService",
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -19,7 +19,7 @@ app.directive("partnerportalInvoiceInvoiceViewertypesettings", ["UtilsService", 
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/PartnerPortal_Invoice/Elements/Invoice/Directives/Templates/InvoiceViewerTypeSettings.html"
+            templateUrl: "/Client/Modules/PartnerPortal_Invoice/Elements/InvoiceViewerType/Directives/Templates/InvoiceViewerTypeSettings.html"
         };
         function InvoiceViewerTypeSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -169,7 +169,7 @@ app.directive("partnerportalInvoiceInvoiceViewertypesettings", ["UtilsService", 
                     return {
                         Name: $scope.scopeModel.name,
                         Settings: {
-                            $type: "PartnerPortal.Invoice.Business.Extensions.InvoiceViewerTypeSettings, PartnerPortal.Invoice.Business",
+                            $type: "PartnerPortal.Invoice.Entities.InvoiceViewerTypeSettings, PartnerPortal.Invoice.Entities",
                             VRConnectionId: connectionSelectorApi.getSelectedIds(),
                             InvoiceTypeId: invoiceTypeSelectorApi.getSelectedIds(),
                             InvoiceQueryInterceptor: invoiceQueryInterceptorApi.getData(),

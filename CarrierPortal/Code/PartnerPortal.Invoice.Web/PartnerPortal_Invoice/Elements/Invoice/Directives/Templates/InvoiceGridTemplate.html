@@ -1,0 +1,14 @@
+﻿<span vr-loader="ctrl.isLodingGrid">
+    <vr-datagrid datasource="datastore"
+                 on-ready="onGridReady"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'Pager'"
+                 menuactions="menuActions"
+                 idfield="Entity.InvoiceId"
+                 defaultsortbyfieldname="'Entity.InvoiceId'">
+        <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceId'"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">
+        </vr-datagridcolumn>
+    </vr-datagrid>
+
+</span>

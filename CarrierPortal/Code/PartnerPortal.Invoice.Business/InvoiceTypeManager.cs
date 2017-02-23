@@ -25,7 +25,11 @@ namespace PartnerPortal.Invoice.Business
             VRInterAppRestConnection connectionSettings = GetVRInterAppRestConnection(connectionId);
             return connectionSettings.Get<IEnumerable<string>>(string.Format("/api/VR_Invoice/InvoiceType/GetRemoteInvoiceTypeCustomFieldsInfo?invoiceTypeId={0}", invoiceTypeId));
         }
-
+        public IEnumerable<InvoiceUIGridColumnRunTime> GetInvoiceTypeGridColumns(Guid connectionId, Guid invoiceTypeId)
+        {
+            VRInterAppRestConnection connectionSettings = GetVRInterAppRestConnection(connectionId);
+            return connectionSettings.Get<IEnumerable<InvoiceUIGridColumnRunTime>>(string.Format("/api/VR_Invoice/InvoiceType/GetInvoiceTypeGridColumns?invoiceTypeId={0}", invoiceTypeId));
+        }
         private VRInterAppRestConnection GetVRInterAppRestConnection(Guid connectionId)
         {
             VRConnectionManager connectionManager = new VRConnectionManager();

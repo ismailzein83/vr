@@ -52,6 +52,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IInvoiceViewerTypeInfoFilter.cs" />
+    <Compile Include="InvoiceViewerType.cs" />
+    <Compile Include="InvoiceViewerTypeInfo.cs" />
+    <Compile Include="InvoiceViewerTypeInfoFilter.cs" />
+    <Compile Include="InvoiceViewerTypeRuntime.cs" />
+    <Compile Include="InvoiceViewerTypeSettings.cs" />
     <Compile Include="Invoice\InvoiceAppQuery.cs" />
     <Compile Include="Invoice\InvoiceQueryInterceptor.cs" />
     <Compile Include="Invoice\InvoiceQueryInterceptorTemplate.cs" />
