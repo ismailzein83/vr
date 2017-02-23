@@ -23,8 +23,47 @@ namespace Vanrise.Common.Business
         {
             var allRateTypes = GetCachedRateTypes();
             Func<Vanrise.Entities.RateType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression, RateTypeDetailMapper));
 
+            RateTypeExcelExportHandler rateTypeExcel = new RateTypeExcelExportHandler(input.Query);
+            ResultProcessingHandler<RateTypeDetail> handler = new ResultProcessingHandler<RateTypeDetail>()
+            {
+                ExportExcelHandler = rateTypeExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression, RateTypeDetailMapper), handler);
+
+        }
+
+        private class RateTypeExcelExportHandler : ExcelExportHandler<RateTypeDetail>
+        {
+            private RateTypeQuery _query;
+            public RateTypeExcelExportHandler(RateTypeQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RateTypeDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.RateTypeId });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                }
+                context.MainSheet = sheet;
+            }
         }
         public IEnumerable<Vanrise.Entities.RateTypeInfo> GetAllRateTypes()
         {

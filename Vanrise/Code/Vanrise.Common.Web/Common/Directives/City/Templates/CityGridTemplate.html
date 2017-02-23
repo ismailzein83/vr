@@ -1,9 +1,9 @@
 ﻿<vr-datagrid datasource="cities"
-                on-ready="onGridReady"
-                dataretrievalfunction="dataRetrievalFunction"
-                pagingtype="'PagingOnScroll'"
-                menuactions="gridMenuActions"
-                idfield="Entity.CityId">
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.CityId" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.CityId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'City Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>

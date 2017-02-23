@@ -21,9 +21,48 @@ namespace Vanrise.Common.Business
                  &&
                  (input.Query.CountryIds == null || input.Query.CountryIds.Contains(prod.CountryId));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCities.ToBigResult(input, filterExpression, CityDetailMapper));
+            CityExcelExportHandler cityExcel = new CityExcelExportHandler(input.Query);
+            ResultProcessingHandler<CityDetail> handler = new ResultProcessingHandler<CityDetail>()
+            {
+                ExportExcelHandler = cityExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCities.ToBigResult(input, filterExpression, CityDetailMapper), handler);
         }
 
+        private class CityExcelExportHandler : ExcelExportHandler<CityDetail>
+        {
+            private CityQuery _query;
+            public CityExcelExportHandler(CityQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CityDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "City Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
+                
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.CityId });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                    row.Cells.Add(new ExportExcelCell { Value = record.CountryName });
+                }
+                context.MainSheet = sheet;
+            }
+        }
         public IEnumerable<CityInfo> GetCitiesInfo(int countryId)
         {
             return this.GetCachedCities().MapRecords(CityInfoMapper, city => city.CountryId == countryId).OrderBy(city => city.Name);

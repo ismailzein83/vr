@@ -91,7 +91,54 @@ namespace Vanrise.Common.Business
                 filteredExchangeRates = filteredExchangeRatesWithDistinctCurrencies;
             }
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, filteredExchangeRates.ToBigResult(input, null, CurrencyExchangeRateDetailMapper));
+            CurrencyExchangeRateExcelExportHandler currencyExchangeRateExcel = new CurrencyExchangeRateExcelExportHandler(input.Query);
+            ResultProcessingHandler<CurrencyExchangeRateDetail> handler = new ResultProcessingHandler<CurrencyExchangeRateDetail>()
+            {
+                ExportExcelHandler = currencyExchangeRateExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, filteredExchangeRates.ToBigResult(input, null, CurrencyExchangeRateDetailMapper), handler);
+        }
+
+        private class CurrencyExchangeRateExcelExportHandler : ExcelExportHandler<CurrencyExchangeRateDetail>
+        {
+            private CurrencyExchangeRateQuery _query;
+            public CurrencyExchangeRateExcelExportHandler(CurrencyExchangeRateQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CurrencyExchangeRateDetail> context)
+            {
+                if (context.BigResult == null)
+                    throw new ArgumentNullException("context.BigResult");
+                if (context.BigResult.Data == null)
+                    throw new ArgumentNullException("context.BigResult.Data");
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Exchange Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Main Currency" });
+
+
+                sheet.Rows = new List<ExportExcelRow>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.CurrencyExchangeRateId });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.ExchangeDate });
+                    row.Cells.Add(new ExportExcelCell { Value = record.CurrencySymbol });
+                    row.Cells.Add(new ExportExcelCell { Value = record.CurrencyName });
+                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Rate });
+                    row.Cells.Add(new ExportExcelCell { Value = record.IsMain });
+                }
+                context.MainSheet = sheet;
+            }
         }
         public Dictionary<string, ExchangeRateInfo> GetLastExchangeRate()
         {
