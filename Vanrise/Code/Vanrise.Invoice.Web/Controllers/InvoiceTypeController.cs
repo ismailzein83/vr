@@ -98,5 +98,12 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetRemoteInvoiceTypeCustomFieldsInfo(invoiceTypeId);
         }
+        [HttpGet]
+        [Route("GetInvoiceTypeGridColumns")]
+        public List<InvoiceUIGridColumnRunTime> GetInvoiceTypeGridColumns(Guid invoiceTypeId)
+        {
+            return _manager.GetInvoiceTypeGridColumns(invoiceTypeId);
+        }
+
     }
 }
