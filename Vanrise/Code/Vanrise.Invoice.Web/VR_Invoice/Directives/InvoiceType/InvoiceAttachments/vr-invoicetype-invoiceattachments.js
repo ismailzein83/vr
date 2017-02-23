@@ -56,15 +56,12 @@ app.directive("vrInvoicetypeInvoiceattachments", ["UtilsService", "VRNotificatio
                     if (payload != undefined) {
                         invoiceAttachmentsEntity = payload.invoiceAttachments;
                         context = payload.context;
-                        console.log(context);
                         if (invoiceAttachmentsEntity != undefined) {
                             for (var i = 0; i < invoiceAttachmentsEntity.length; i++) {
                                 var attachment = invoiceAttachmentsEntity[i];
                                 ctrl.datasource.push({ Entity: attachment });
                             }
                         }
-                        if (invoiceActionEntity != undefined)
-                            $scope.infoType = invoiceActionEntity.InfoType;
                     }
 
                     var promises = [];
