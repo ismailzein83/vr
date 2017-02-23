@@ -170,8 +170,8 @@
 
                 var period = periodSelectorAPI.getData();
                 if (period != undefined) {
-                    tqiGridPayload.periodValue = period.PeriodValue;
-                    tqiGridPayload.periodType = period.PeriodType;
+                    tqiGridPayload.periodValue = period.periodValue;
+                    tqiGridPayload.periodType = period.periodType;
                 }
 
                 VRUIUtilsService.callDirectiveLoad(tqiGridAPI, tqiGridPayload, loadTQIGridPromiseDeferred);
