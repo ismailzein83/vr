@@ -5,13 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
-namespace TOne.WhS.AccountBalance.Business
+namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
-    public class BlockSupplierBalAlertAction : VRAction
+    public class SendCustomerEmailBalAlertAction : VRAction
     {
         public override Guid ConfigId
         {
             get { throw new NotImplementedException(); }
         }
+
+        public Guid AccountMailTemplateId { get; set; }
+
+        public Guid ProfileMailTemplateId { get; set; }
     }
 }

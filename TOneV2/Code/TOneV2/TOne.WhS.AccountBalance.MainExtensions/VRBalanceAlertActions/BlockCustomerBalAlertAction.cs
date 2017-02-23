@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
-namespace TOne.WhS.AccountBalance.Business
+namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
     public class BlockCustomerBalAlertAction : VRAction
     {

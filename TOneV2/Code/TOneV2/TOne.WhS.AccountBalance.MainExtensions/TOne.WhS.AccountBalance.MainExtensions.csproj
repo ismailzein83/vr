@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5A8FE576-BF07-498C-A27F-2100FC828BCE}</ProjectGuid>
+    <ProjectGuid>{7947D71A-4077-4559-9614-3628201AC795}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TOne.WhS.AccountBalance.Business</RootNamespace>
-    <AssemblyName>TOne.WhS.AccountBalance.Business</AssemblyName>
+    <RootNamespace>TOne.WhS.AccountBalance.MainExtensions</RootNamespace>
+    <AssemblyName>TOne.WhS.AccountBalance.MainExtensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -44,48 +44,41 @@
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountBalanceManager.cs" />
-    <Compile Include="AccountBalanceSettings.cs" />
-    <Compile Include="FinancialAccountDefinitionManager.cs" />
-    <Compile Include="FinancialAccountManager.cs" />
+    <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidSettings.cs" />
+    <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidDefinitionSettings.cs" />
+    <Compile Include="FinancialAccountTypes\CustomerPrepaid\CustomerPrepaidSettings.cs" />
+    <Compile Include="FinancialAccountTypes\CustomerPrepaid\CustomerPrepaidDefinitionSettings.cs" />
+    <Compile Include="FinancialAccountTypes\Netting\NettingSettings.cs" />
+    <Compile Include="FinancialAccountTypes\Netting\NettingDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FinancialAccountTypes\SupplierPostpaid\SupplierPostpaidSettings.cs" />
+    <Compile Include="FinancialAccountTypes\SupplierPostpaid\SupplierPostpaidDefinitionSettings.cs" />
+    <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidSettings.cs" />
+    <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidDefinitionSettings.cs" />
+    <Compile Include="VRBalanceAlertActions\BlockCustomerBalAlertAction.cs" />
+    <Compile Include="VRBalanceAlertActions\SendCustomerEmailBalAlertAction.cs" />
+    <Compile Include="VRBalanceAlertThresholds\CustFixedBalAlertThreshold.cs" />
+    <Compile Include="VRBalanceAlertThresholds\CustTolerancePercBalAlertThreshold.cs" />
+    <Compile Include="VRBalanceAlertThresholds\SuppTolerancePercBalAlertThreshold.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Business\TOne.WhS.AccountBalance.Business.csproj">
+      <Project>{5a8fe576-bf07-498c-a27f-2100fc828bce}</Project>
+      <Name>TOne.WhS.AccountBalance.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.AccountBalance.Entities\TOne.WhS.AccountBalance.Entities.csproj">
       <Project>{6463e524-5b13-453f-bd95-6974ed0c7b86}</Project>
       <Name>TOne.WhS.AccountBalance.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
-      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
-      <Name>TOne.WhS.BusinessEntity.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
-      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
-      <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

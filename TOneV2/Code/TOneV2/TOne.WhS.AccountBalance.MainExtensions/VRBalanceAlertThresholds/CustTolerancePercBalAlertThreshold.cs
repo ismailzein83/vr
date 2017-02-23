@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.AccountBalance.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
 
-namespace TOne.WhS.AccountBalance.Business
+namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds
 {
     /// <summary>
     /// only applicable for PostPaid Customer AccountType
