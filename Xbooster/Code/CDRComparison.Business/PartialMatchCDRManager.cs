@@ -35,7 +35,8 @@ namespace CDRComparison.Business
             {
                 decimal durationDifference = cdr.PartnerDurationInSec - cdr.SystemDurationInSec;
                 cdr.DurationDifferenceInSec = Math.Abs(durationDifference);
-                cdr.DurationDifferencePercentageOfPartner = (durationDifference * 100) / cdr.SystemDurationInSec;
+                if (cdr.SystemDurationInSec > 0)
+                    cdr.DurationDifferencePercentageOfPartner = (durationDifference * 100) / cdr.SystemDurationInSec;
 
                 partialMatchCDRBigResult.Summary.SystemDurationInSec += cdr.SystemDurationInSec;
                 partialMatchCDRBigResult.Summary.PartnerDurationInSec += cdr.PartnerDurationInSec;

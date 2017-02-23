@@ -21,6 +21,6 @@ namespace CDRComparison.Entities
         public Decimal SystemDurationInSec { get; set; }
         public Decimal PartnerDurationInSec { get; set; }
         public decimal DurationDifferenceInSec { get; set; }
-        public decimal DurationDifferencePercentageOfPartner { get; set; }
+        public decimal? DurationDifferencePercentageOfPartner { get; set; }
     }
 }
