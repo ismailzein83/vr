@@ -23,7 +23,7 @@ namespace Retail.BusinessEntity.Business
 
         public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo(PackageDefinitionFilter filter)
         {
-            IEnumerable<PackageDefinition> cachedPackageDefinitions = null;
+            Dictionary<Guid, PackageDefinition> cachedPackageDefinitions = null;
 
             Func<PackageDefinition, bool> filterExpression = null;
             if (filter != null)
@@ -65,42 +65,42 @@ namespace Retail.BusinessEntity.Business
             return packageDefinition.Settings.AccountBEDefinitionId;
         }
 
+        #endregion
+
         #region Private Methods
 
-        public IEnumerable<PackageDefinition> GetCachedPackageDefinitionswithHidden()
+        public Dictionary<Guid, PackageDefinition> GetCachedPackageDefinitionswithHidden()
         {
             VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-            return vrComponentTypeManager.GetComponentTypes<PackageDefinitionSettings, PackageDefinition>();
+            return vrComponentTypeManager.GetCachedComponentTypes<PackageDefinitionSettings, PackageDefinition>();
         }
 
-        private IEnumerable<PackageDefinition> GetCachedPackageDefinitions()
+        private Dictionary<Guid, PackageDefinition> GetCachedPackageDefinitions()
         {
             return new VRComponentTypeManager().GetCachedOrCreate("GetCachedProductDefinitions", () =>
             {
+                var includedProductDefinitions = new Dictionary<Guid, PackageDefinition>();
                 VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
                 Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionPackageDefinition> visiblePackageDefinitionsById;
-                List<PackageDefinition> includedProductDefinitions = new List<PackageDefinition>();
-                
+
                 var allPackageDefinitions = this.GetCachedPackageDefinitionswithHidden();
 
                 if (retailBEVisibilityManager.ShouldApplyPackageDefinitionsVisibility(out visiblePackageDefinitionsById))
                 {
-                    foreach (var productDefinition in allPackageDefinitions)
+                    foreach (var packageDefinition in allPackageDefinitions)
                     {
-                        if (visiblePackageDefinitionsById.ContainsKey(productDefinition.VRComponentTypeId))
-                            includedProductDefinitions.Add(productDefinition);
+                        if (visiblePackageDefinitionsById.ContainsKey(packageDefinition.Key))
+                            includedProductDefinitions.Add(packageDefinition.Key, packageDefinition.Value);
                     }
                 }
                 else
                 {
-                    includedProductDefinitions = allPackageDefinitions.ToList();
+                    includedProductDefinitions = allPackageDefinitions;
                 }
 
                 return includedProductDefinitions;
             });
         }
-
-        #endregion
 
         #endregion
 
