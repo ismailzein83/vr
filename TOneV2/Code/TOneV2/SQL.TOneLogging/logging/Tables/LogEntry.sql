@@ -6,10 +6,16 @@
     [TypeNameId]        INT            NOT NULL,
     [MethodNameId]      INT            NOT NULL,
     [EntryType]         INT            NOT NULL,
+    [EventType]         INT            NULL,
     [Message]           NVARCHAR (MAX) NULL,
+    [ExceptionDetail]   NVARCHAR (MAX) NULL,
     [EventTime]         DATETIME       NULL,
     CONSTRAINT [IX_LogEntry_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
 
 
 
