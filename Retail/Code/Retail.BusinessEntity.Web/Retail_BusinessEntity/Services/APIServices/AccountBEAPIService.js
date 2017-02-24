@@ -93,6 +93,7 @@
             GetAccountsInfo: GetAccountsInfo,
             GetAccountsInfoByIds: GetAccountsInfoByIds,
             GetAccountEditorRuntime: GetAccountEditorRuntime,
+            DoesUserHaveAddAccess: DoesUserHaveAddAccess
             //HasViewAccountsPermission: HasViewAccountsPermission,
             //HasAddAccountPermission: HasAddAccountPermission,
             //HasUpdateAccountPermission: HasUpdateAccountPermission,
