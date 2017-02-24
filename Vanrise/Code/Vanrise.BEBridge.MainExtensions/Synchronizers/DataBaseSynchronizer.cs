@@ -13,10 +13,8 @@ namespace Vanrise.BEBridge.MainExtensions.Synchronizers
         public VRExpression InsertQueryTemplate { get; set; }
         public VRExpression LoggingMessageTemplate { get; set; }
         public VRObjectVariableCollection Objects { get; set; }
-        public string LoggingEventType { get; set; }
 
         static VRRazorEvaluator s_evaluator;
-
 
         #region Public Methods
         public override void Initialize(ITargetBESynchronizerInitializeContext context)
