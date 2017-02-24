@@ -72,7 +72,6 @@
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\BusinessEntityDefinitionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\StaticBEDefinitionSettings.cs" />
-    <Compile Include="BusinessEntities\VRRestAPIBEDefinitionSettings\VRRestAPIBEDefinitionSettings.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordStorageManager.cs" />

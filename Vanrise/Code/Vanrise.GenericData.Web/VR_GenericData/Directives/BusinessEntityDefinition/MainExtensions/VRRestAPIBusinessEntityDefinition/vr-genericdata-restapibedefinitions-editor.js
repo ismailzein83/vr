@@ -165,7 +165,7 @@ app.directive("vrGenericdataRestapibedefinitionsEditor", ["UtilsService", "VRNot
 
                 api.getData = function () {
                     var obj = {
-                        $type: "Vanrise.GenericData.Entities.VRRestAPIBEDefinitionSettings, Vanrise.GenericData.Entities",
+                        $type: "Vanrise.GenericData.Business.VRRestAPIBEDefinitionSettings, Vanrise.GenericData.Business",
                         ConnectionId: connectionSelectorAPI.getSelectedIds(),
                         RemoteBEDefinitionId: beDefinitionRemoteSelectorAPI.getSelectedIds(),
                         SingularTitle: $scope.scopeModel.singularTitle,

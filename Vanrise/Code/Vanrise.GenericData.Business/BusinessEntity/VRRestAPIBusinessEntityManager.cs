@@ -12,6 +12,16 @@ namespace Vanrise.GenericData.Business
     {
         #region Public Methods
 
+        public string GetBusinessEntityIdType(Guid remoteBEDefinitionId, Guid connectionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Caching.PermanentCacheManager<Guid>>().GetOrCreateObject("GetBusinessEntityIdType", remoteBEDefinitionId,
+                () =>
+                {
+                    VRInterAppRestConnection connectionSettings = GetVRInterAppRestConnection(connectionId);
+                    return connectionSettings.Get<string>(string.Format("/api/VR_GenericData/BusinessEntityDefinition/GetBusinessEntityIdType?remoteBEDefinitionId={0}", remoteBEDefinitionId));
+                });
+        }
+
         public IEnumerable<BusinessEntityInfo> GetBusinessEntitiesInfo(Guid businessEntityDefinitionId)
         {
             return GetCachedBusinessEntitiesInfo(businessEntityDefinitionId).Values;

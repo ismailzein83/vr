@@ -186,6 +186,18 @@ namespace Vanrise.GenericData.Business
             return beDefinition != null && beDefinition.Settings != null ? beDefinition.Settings.NullDisplayText : null;
         }
 
+        public string GetBusinessEntityIdType(Guid remoteBEDefinitionId)
+        {
+            var businessEntityDefinition = GetBusinessEntityDefinition(remoteBEDefinitionId);
+            if (businessEntityDefinition == null)
+                throw new NullReferenceException(string.Format("businessEntityDefinition of businessEntityDefinitionId: {0}", remoteBEDefinitionId));
+
+            if (businessEntityDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("businessEntityDefinition.Settings of businessEntityDefinitionId: {0}", remoteBEDefinitionId));
+
+            return businessEntityDefinition.Settings.IdType;
+        }
+
         #endregion
 
         #region Private Methods

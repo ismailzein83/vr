@@ -3,13 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
-namespace Vanrise.GenericData.Entities
+namespace Vanrise.GenericData.Business
 {
     public class VRRestAPIBEDefinitionSettings : BusinessEntityDefinitionSettings
     {
         public static Guid s_configId = new Guid("B4F22FFB-B663-4F5F-AF53-ACBEF7224DFB");
         public override Guid ConfigId { get { return s_configId; } }
+
+        public override string IdType
+        {
+            get
+            {
+                return new VRRestAPIBusinessEntityManager().GetBusinessEntityIdType(this.RemoteBEDefinitionId, this.ConnectionId);
+            }
+        }
 
         public override string DefinitionEditor
         {
