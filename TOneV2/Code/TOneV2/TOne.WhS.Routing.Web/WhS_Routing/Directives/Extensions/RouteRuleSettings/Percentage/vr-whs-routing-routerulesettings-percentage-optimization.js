@@ -32,6 +32,12 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
 
         function percentageOptimizationCtor(ctrl, $scope) {
 
+            var selectorAPI;
+            var selectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var gridAPI;
+            var gridReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 ctrl.dataSource = [];
                 ctrl.routingOptimizers = [];
@@ -52,7 +58,20 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
                     ctrl.dataSource.splice(ctrl.dataSource.indexOf(routingOptimizer), 1);
                     ctrl.selectedRoutingOptimizers.splice(UtilsService.getItemIndexByVal(ctrl.selectedRoutingOptimizers, routingOptimizer.ID, "ExtensionConfigurationId"), 1);
                 };
-                defineAPI();
+
+                ctrl.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    selectorReadyDeferred.resolve();
+                };
+
+                ctrl.onGridReady = function (api) {
+                    gridAPI = api;
+                    gridReadyDeferred.resolve();
+                };
+
+                UtilsService.waitMultiplePromises([selectorReadyDeferred.promise, gridReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
@@ -63,7 +82,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
 
                     }
 
-                    WhS_Routing_RoutRuleSettingsAPIService.GetRoutingOptimizerSettingsConfigs().then(function (response) {
+                    return WhS_Routing_RoutRuleSettingsAPIService.GetRoutingOptimizerSettingsConfigs().then(function (response) {
                         if (response) {
                             for (var i = 0; i < response.length ; i++) {
                                 var item = response[i];
@@ -101,7 +120,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageOptimization', ['UtilsServ
                     }
                     return {
                         $type: "TOne.WhS.Routing.Business.RoutingOptimizationOptionPercentage, TOne.WhS.Routing.Business",
-                        Items: items,
+                        Items: items
                     };
                 };
 

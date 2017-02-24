@@ -49,7 +49,7 @@ namespace TOne.WhS.Routing.Business
 
     public class RoutingOptimizationOptionPercentageItem
     {
-        public int RoutingOptimizerItemConfigId { get; set; }
+        public Guid RoutingOptimizerItemConfigId { get; set; }
 
         public int PercentageFactor { get; set; }
     }

@@ -1,20 +1,20 @@
 ﻿<vr-row removeline>
     <vr-columns colnum="2">
-        <vr-textbox label="Title" value="title" isrequired="true"></vr-textbox>
+        <vr-textbox label="Title" value="title" isrequired="customPercentageCtrl.isrequired"></vr-textbox>
     </vr-columns>
 
     <vr-columns colnum="2">
-        <vr-select label="Percentage Type"
-                   text="None"
-                   datasource="templates"
-                   selectedvalues="selectedTemplate"
-                   datavaluefield="TemplateConfigID"
-                   datatextfield="Name"
-                   isrequired="true">
+        <vr-select on-ready="onSelectorReady"
+                   label="Percentage Type"
+                   datasource="extensionConfigs"
+                   selectedvalues="selectedExtensionConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   isrequired="customPercentageCtrl.isrequired">
         </vr-select>
     </vr-columns>
 
-    <vr-columns colnum="8" ng-show="selectedTemplate" vr-loader="isLoadingDirective">
-        <vr-directivewrapper directive="selectedTemplate.Editor" on-ready="onDirectiveReady"></vr-directivewrapper>
+    <vr-columns colnum="8" ng-show="selectedExtensionConfig" vr-loader="isLoadingDirective">
+        <vr-directivewrapper directive="selectedExtensionConfig.Editor" on-ready="onDirectiveReady" isrequired="customPercentageCtrl.isrequired"></vr-directivewrapper>
     </vr-columns>
 </vr-row>
