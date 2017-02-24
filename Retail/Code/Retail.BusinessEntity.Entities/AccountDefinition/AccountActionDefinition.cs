@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -41,8 +42,19 @@ namespace Retail.BusinessEntity.Entities
                 return null;
             }
         }
+
+        public virtual bool DoesUserHaveAccess(IAccountActionDefinitionCheckAccessContext context)
+        {
+            return true;
+        }
+    }
+    public interface IAccountActionDefinitionCheckAccessContext
+    {
+        Guid AccountBEDefinitionId { get; }
+        int UserId { get; }
     }
 
+   
     public abstract class AccountActionBackendExecutor
     {
         public Guid ActionDefinitionId { get; set; }

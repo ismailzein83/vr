@@ -8,6 +8,7 @@ using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
+using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -17,8 +18,10 @@ namespace Retail.BusinessEntity.Business
 
         static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
 
+        static SecurityManager s_securityManager = new SecurityManager();
+
         #endregion
-         
+
         #region Public Methods
 
         public AccountBEDefinitionSettings GetAccountBEDefinitionSettingsWithHidden(Guid accountBEDefinitionId)
@@ -59,7 +62,7 @@ namespace Retail.BusinessEntity.Business
 
                 //GridColumns
                 Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> visibleGridColumnsByFieldName;
-                
+
                 if (businessEntityDefinitionSettings.GridDefinition != null && businessEntityDefinitionSettings.GridDefinition.ColumnDefinitions != null)
                 {
                     if (retailBEVisibilityManager.ShouldApplyGridColumnsVisibility(out visibleGridColumnsByFieldName))
@@ -85,7 +88,7 @@ namespace Retail.BusinessEntity.Business
 
                 if (businessEntityDefinitionSettings.AccountViewDefinitions != null)
                 {
-                    if(retailBEVisibilityManager.ShouldApplyViewsVisibility(out visibleViewsById))
+                    if (retailBEVisibilityManager.ShouldApplyViewsVisibility(out visibleViewsById))
                     {
                         accountBEDefinitionSettings.AccountViewDefinitions = new List<AccountViewDefinition>();
 
@@ -107,20 +110,18 @@ namespace Retail.BusinessEntity.Business
 
                 if (businessEntityDefinitionSettings.ActionDefinitions != null)
                 {
+                    accountBEDefinitionSettings.ActionDefinitions = new List<AccountActionDefinition>();
                     if (retailBEVisibilityManager.ShouldApplyActionsVisibility(out visibleActionsById))
                     {
-                        accountBEDefinitionSettings.ActionDefinitions = new List<AccountActionDefinition>();
-
                         foreach (var action in businessEntityDefinitionSettings.ActionDefinitions)
                         {
+
                             if (IsActionVisible(visibleActionsById, action))
                                 accountBEDefinitionSettings.ActionDefinitions.Add(action);
                         }
                     }
                     else
-                    {
                         accountBEDefinitionSettings.ActionDefinitions = businessEntityDefinitionSettings.ActionDefinitions;
-                    }
                 }
 
                 //Extra Fields
@@ -135,7 +136,8 @@ namespace Retail.BusinessEntity.Business
                     accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions = businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions;
                 }
 
-
+                if (businessEntityDefinitionSettings.Security != null)
+                    accountBEDefinitionSettings.Security = businessEntityDefinitionSettings.Security;
                 return accountBEDefinitionSettings;
             });
         }
@@ -332,6 +334,75 @@ namespace Retail.BusinessEntity.Business
             return accountBEActions.MapRecords(AccountActionDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
+        public bool DoesUserHaveViewAccess(int userId, List<Guid> accountBeDefinitionIds)
+        {
+            foreach (var a in accountBeDefinitionIds)
+            {
+                if (DoesUserHaveViewAccess(userId, a))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveViewAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            return DoesUserHaveViewAccess(userId, accountBEDefinitionSettings);
+        }
+        public bool DoesUserHaveViewAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            return DoesUserHaveViewAccess(userId, accountBEDefinitionSettings);
+        }
+        public bool DoesUserHaveViewAccess(int userId, AccountBEDefinitionSettings accountBEDefinitionSettings)
+        {
+            if (accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.ViewRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.ViewRequiredPermission, userId);
+            else
+                return true;
+        }
+
+        public bool DoesUserHaveAddAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAddAccess(userId, accountBeDefinitionId);
+        }
+        public bool DoesUserHaveAddAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.AddRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.AddRequiredPermission, userId);
+            else
+                return true;
+        }
+        public bool DoesUserHaveEditAccess( Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveEditAccess(userId, accountBeDefinitionId);
+        }
+        public bool DoesUserHaveEditAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.EditRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.EditRequiredPermission, userId);
+            else
+                return true;
+        }
+
+        public HashSet<Guid> GetLoggedInUserAllowedActionIds(Guid accountBeDefinitionId)
+        {
+            HashSet<Guid> ids = new HashSet<Guid>();
+            var ActionIds = GetAccountActionDefinitions(accountBeDefinitionId);
+            IAccountActionDefinitionCheckAccessContext context = new AccountActionDefinitionCheckAccessContext { UserId = SecurityContext.Current.GetLoggedInUserId(), AccountBEDefinitionId = accountBeDefinitionId };
+            foreach (var id in ActionIds)
+            {
+                if (id.ActionDefinitionSettings.DoesUserHaveAccess(context))
+                    ids.Add(id.AccountActionDefinitionId);
+            }
+
+            return ids;
+        }
+       
         #endregion
 
         #region Private Methods
@@ -388,6 +459,7 @@ namespace Retail.BusinessEntity.Business
             return true;
         }
 
+
         #endregion
 
         #region Private Mappers
@@ -400,5 +472,6 @@ namespace Retail.BusinessEntity.Business
             };
         }
         #endregion
+            
     }
 }

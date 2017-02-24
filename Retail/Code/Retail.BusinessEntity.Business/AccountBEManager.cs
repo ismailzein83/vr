@@ -12,6 +12,7 @@ using Retail.BusinessEntity.Data;
 using Vanrise.Caching;
 using Vanrise.Common.Business;
 using System.Collections.Concurrent;
+using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -52,11 +53,13 @@ namespace Retail.BusinessEntity.Business
             }
 
             var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(input.Query.AccountBEDefinitionId, account, input.Query.Columns));
+            var filtredActionIds = new AccountBEDefinitionManager().GetLoggedInUserAllowedActionIds(input.Query.AccountBEDefinitionId);
+           
             if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 foreach (var accountDetail in bigResult.Data)
                 {
-                    AccountDetailMapperStep2(input.Query.AccountBEDefinitionId, accountDetail, accountDetail.Entity);
+                    AccountDetailMapperStep2(input.Query.AccountBEDefinitionId, accountDetail, accountDetail.Entity, filtredActionIds);
                 }
             }
 
@@ -757,7 +760,8 @@ namespace Retail.BusinessEntity.Business
         {
             AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
             var accountDetail = AccountDetailMapperStep1(accountType.AccountBEDefinitionId, account, null);
-            AccountDetailMapperStep2(accountType.AccountBEDefinitionId, accountDetail, account);
+            var filtredActionIds = new  AccountBEDefinitionManager().GetLoggedInUserAllowedActionIds(accountType.AccountBEDefinitionId);
+            AccountDetailMapperStep2(accountType.AccountBEDefinitionId, accountDetail, account, filtredActionIds);
             return accountDetail;
         }
         private AccountDetail AccountDetailMapperStep1(Guid accountBEDefinitionId, Account account, List<string> columns)
@@ -798,7 +802,7 @@ namespace Retail.BusinessEntity.Business
                 FieldValues = fieldValues
             };
         }
-        private void AccountDetailMapperStep2(Guid accountBEDefinitionId, AccountDetail accountDetail, Account account)
+        private void AccountDetailMapperStep2(Guid accountBEDefinitionId, AccountDetail accountDetail, Account account ,HashSet<Guid> ActionDefinitionIds)
         {
             IEnumerable<AccountTypeInfo> accountTypeInfoEntities = new AccountTypeManager().GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
 
@@ -808,7 +812,8 @@ namespace Retail.BusinessEntity.Business
 
             accountDetail.CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0);
             accountDetail.AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null;
-            accountDetail.AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Select(itm => itm.AccountActionDefinitionId).ToList() : null;
+
+            accountDetail.AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Where(x => ActionDefinitionIds.Contains(x.AccountActionDefinitionId)).Select(itm => itm.AccountActionDefinitionId).ToList() : null;
             accountDetail.Style = GetStatuStyle(account.StatusId);
         }
         private StyleFormatingSettings GetStatuStyle(Guid statusID)
@@ -833,6 +838,8 @@ namespace Retail.BusinessEntity.Business
                 Name = GetAccountName(account, accountType)
             };
         }
+
+
         private string BuildAccountFullName(Guid accountBEDefinitionId, long accountId, string name)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);

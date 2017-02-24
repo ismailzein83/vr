@@ -20,9 +20,12 @@ namespace Retail.BusinessEntity.Business
             {
                 ViewManager viewManager = new ViewManager();
                 var accountBEDefinitionViewSettings = viewManager.GetView(this.ViewId).Settings as AccountBEDefinitionViewSettings;
-                BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+                AccountBEDefinitionManager accountBEDefinitionManager= new AccountBEDefinitionManager();
 
                 if (!accountBEDefinitionViewSettings.Settings.Any(x => x.BusinessEntityId == context.entityDefinition.BusinessEntityDefinitionId))
+                    return false;
+                 
+                if (!accountBEDefinitionManager.DoesUserHaveViewAccess(context.entityDefinition.BusinessEntityDefinitionId))
                     return false;
             }
             return true;

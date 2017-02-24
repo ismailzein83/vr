@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         public override string ClientActionName
         {
             get { return "Edit"; }
+        }
+
+        public override bool DoesUserHaveAccess(IAccountActionDefinitionCheckAccessContext context)
+        {
+            return new AccountBEDefinitionManager().DoesUserHaveEditAccess(context.UserId, context.AccountBEDefinitionId);
         }
     }
 }

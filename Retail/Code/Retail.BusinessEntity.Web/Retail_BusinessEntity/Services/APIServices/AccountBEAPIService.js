@@ -62,10 +62,13 @@
             });
         }
 
-        //function HasAddAccountPermission() {
-        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddAccount']));
-        //}
-
+        function DoesUserHaveAddAccess(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "DoesUserHaveAddAccess"), {
+                accountBEDefinitionId: accountBEDefinitionId
+            }, {
+                useCache: true
+            });
+        }
         //function HasViewAccountsPermission() {
         //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['GetFilteredAccounts']));
         //}

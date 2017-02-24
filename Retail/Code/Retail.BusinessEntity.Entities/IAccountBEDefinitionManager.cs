@@ -9,5 +9,8 @@ namespace Retail.BusinessEntity.Entities
     public interface IAccountBEDefinitionManager : IBEManager
     {
         AccountActionDefinition GetAccountActionDefinition(Guid accountBEDefinitionId, Guid actionDefinitionId);
+
+        bool DoesUserHaveViewAccess(int UserId, List<Guid> AccountBEDefinitionIds);
+
     }
 }

@@ -14,6 +14,7 @@ namespace Retail.BusinessEntity.Web.Controllers
     public class AccountBEController : BaseAPIController
     {
         AccountBEManager _manager = new AccountBEManager();
+        AccountBEDefinitionManager _beManager = new AccountBEDefinitionManager();
 
         [HttpPost]
         [Route("GetFilteredAccounts")]
@@ -42,18 +43,28 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountDetail(accountBEDefinitionId, accountId);
         }
+        [HttpGet]
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess(Guid accountBEDefinitionId)
+        {
+            return _beManager.DoesUserHaveAddAccess(accountBEDefinitionId);
+        }
 
         [HttpPost]
         [Route("AddAccount")]
-        public Vanrise.Entities.InsertOperationOutput<AccountDetail> AddAccount(AccountToInsert accountToInsert)
+        public object AddAccount(AccountToInsert accountToInsert)
         {
+            if (!DoesUserHaveAddAccess(accountToInsert.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.AddAccount(accountToInsert);
         }
 
         [HttpPost]
         [Route("UpdateAccount")]
-        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> UpdateAccount(AccountToEdit accountToEdit)
+        public object UpdateAccount(AccountToEdit accountToEdit)
         {
+            if (!_beManager.DoesUserHaveEditAccess(accountToEdit.AccountBEDefinitionId))
+                return  GetUnauthorizedResponse();
             return _manager.UpdateAccount(accountToEdit);
         }
 

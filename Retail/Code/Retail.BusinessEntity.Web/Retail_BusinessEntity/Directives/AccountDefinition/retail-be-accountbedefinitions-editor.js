@@ -42,6 +42,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var accountExtraFieldDefinitionsDirectiveAPI;
             var accountExtraFieldDefinitionsDirectiveDeferred = UtilsService.createPromiseDeferred();
 
+            var securityDefinitionsDirectiveAPI;
+            var securityDefinitionsDirectiveDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -69,6 +72,10 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     accountExtraFieldDefinitionsDirectiveAPI = api;
                     accountExtraFieldDefinitionsDirectiveDeferred.resolve();
                 }
+                $scope.scopeModel.onAccountSecurityDefinitionsReady = function (api) {
+                    securityDefinitionsDirectiveAPI = api;
+                    securityDefinitionsDirectiveDeferred.resolve();
+                }
                 UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 });
@@ -86,6 +93,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountViewDefinitions;
                     var accountActionDefinitions;
                     var accountExtraFieldDefinitions;
+                    var securityDefinition;
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.businessEntityDefinitionId;
@@ -97,6 +105,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
                             accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
+                            securityDefinition = payload.businessEntityDefinitionSettings.Security;
                         }
                     }
 
@@ -122,6 +131,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                     var accountExtraFieldDefinitionsLoadPromise = getAccountExtraFieldDefinitionsLoadPromise();
                     promises.push(accountExtraFieldDefinitionsLoadPromise);
+
+                    var accountSecurityDefinitionsLoadPromise = getAccountSecurityDefinitionsLoadPromise();
+                    promises.push(accountSecurityDefinitionsLoadPromise);
 
                     function getStatusDefinitionSelectorLoadPromise() {
                         var statusBEDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
@@ -207,6 +219,15 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                         return accountExtraFieldDefinitionsLoadDeferred.promise;
                     }
+                    function getAccountSecurityDefinitionsLoadPromise() {
+                        var securityDefinitionsLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        securityDefinitionsDirectiveDeferred.promise.then(function () {
+                            VRUIUtilsService.callDirectiveLoad(securityDefinitionsDirectiveAPI, securityDefinition, securityDefinitionsLoadDeferred);
+                        });
+
+                        return securityDefinitionsLoadDeferred.promise;
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -222,7 +243,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         GridDefinition: gridDefinition,
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
-                        AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData()
+                        AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData(),
+                        Security: securityDefinitionsDirectiveAPI.getData()
                     };
                     return obj;
                 };

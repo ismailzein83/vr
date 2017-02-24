@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -42,6 +43,7 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountViewDefinition> AccountViewDefinitions { get; set; }
         public List<AccountActionDefinition> ActionDefinitions { get; set; }
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
+        public AccountBEDefinitionSecurity Security { get; set; }
     }
 
     public class AccountExtraFieldDefinition
@@ -69,5 +71,13 @@ namespace Retail.BusinessEntity.Entities
     public interface IAccountBEDefinitionConditionContext
     {
         AccountBEDefinitionSettings AccountBEDefinitionSettings { get; }
+    }
+
+    public class AccountBEDefinitionSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { get; set; }
+        public RequiredPermissionSettings AddRequiredPermission { get; set; }
+        public RequiredPermissionSettings EditRequiredPermission { get; set; }
+
     }
 }

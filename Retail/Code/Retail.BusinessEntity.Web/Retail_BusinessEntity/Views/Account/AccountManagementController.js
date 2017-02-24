@@ -37,6 +37,7 @@
             $scope.scopeModel.isGridLoaded = false;
             $scope.scopeModel.isAccountBEDefinitionSelected = false;
             $scope.scopeModel.showBusinessEntityDefinitionSelector = false;
+            $scope.scopeModel.showAddAccount = false;
 
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 businessEntityDefinitionSelectorAPI = api;
@@ -67,6 +68,9 @@
 
                     accountBEDefinitionId = selectedBusinessEntityDefinition.BusinessEntityDefinitionId;
 
+                    Retail_BE_AccountBEAPIService.DoesUserHaveAddAccess(accountBEDefinitionId).then(function (response) {
+                        $scope.scopeModel.showAddAccount = response;
+                    });
                     loadAllControls().then(function () {
                         $scope.scopeModel.isGridLoaded = true;
                     })

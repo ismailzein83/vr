@@ -36,7 +36,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons" ng-show="scopeModel.isAccountBEDefinitionSelected">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddAccountPermission"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.add" ng-show="scopeModel.showAddAccount"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
