@@ -91,6 +91,12 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetBPDefinitions().FirstOrDefault(itm => itm.Name == processName);
         }
+
+        public string GetDefinitionTitle(string processName)
+        {
+            var definition = GetDefinition(processName);
+            return definition != null ? definition.Title : null;
+        }
         public bool DoesUserHaveViewAccess(int userId)
         {
             var allPB = GetCachedBPDefinitions().Select(x=>x.Value).Where(x=>!x.Configuration.NotVisibleInManagementScreen);

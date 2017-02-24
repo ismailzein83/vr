@@ -190,6 +190,7 @@ namespace Vanrise.BusinessProcess
                         runningInstance.IsIdle = true;
                     }
                 };
+                       
 
             //wfApp.InstanceStore = s_InstanceStore;
             //wfApp.PersistableIdle = delegate(WorkflowApplicationIdleEventArgs e)
@@ -200,22 +201,31 @@ namespace Vanrise.BusinessProcess
             bpInstance.Status = BPInstanceStatus.Running;
             UpdateProcessStatus(bpInstance, wfApp.Id);
             wfApp.Run();
+            string logEventType = bpInstance.InputArgument.GetDefinitionTitle();
+            string processTitle = bpInstance.InputArgument.GetTitle();
+            LoggerFactory.GetLogger().WriteEntry(logEventType, LogEntryType.Information, "Process '{0}' started", processTitle);
         }
                 
         void OnWorkflowCompleted(BPInstance bpInstance, WorkflowApplicationCompletedEventArgs e)
         {
             BPRunningInstance dummy;
             _runningInstances.TryRemove(bpInstance.ProcessInstanceID, out dummy);
+            string logEventType = bpInstance.InputArgument.GetDefinitionTitle();
+            string processTitle = bpInstance.InputArgument.GetTitle();
             if (e.CompletionState == ActivityInstanceState.Closed)
             {
                 bpInstance.Status = BPInstanceStatus.Completed;
                 UpdateProcessStatus(bpInstance);
+                LoggerFactory.GetLogger().WriteEntry(logEventType, LogEntryType.Information, "Process '{0}' completed", processTitle);
             }
             else
             {
                 bpInstance.LastMessage = String.Format("Workflow Finished Unsuccessfully. Status: {0}. Error: {1}", e.CompletionState, e.TerminationException);                
                 bpInstance.Status = BPInstanceStatus.Aborted;
                 UpdateProcessStatus(bpInstance);
+                
+                Exception finalException = Utilities.WrapException(e.TerminationException, String.Format("Process '{0}' failed", processTitle));
+                LoggerFactory.GetExceptionLogger().WriteException(logEventType, finalException);
                 Console.WriteLine("{0}: {1}", DateTime.Now, bpInstance.LastMessage);
             }
 

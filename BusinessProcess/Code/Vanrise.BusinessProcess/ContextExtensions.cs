@@ -21,6 +21,16 @@ namespace Vanrise.BusinessProcess
 
         public static void WriteTrackingMessage(this ActivityContext context, LogEntryType severity, string messageFormat, params object[] args)
         {
+            WriteTrackingMessages(false, context, severity, messageFormat, args);
+        }
+
+        public static void WriteBusinessTrackingMsg(this ActivityContext context, LogEntryType severity, string messageFormat, params object[] args)
+        {
+            WriteTrackingMessages(true, context, severity, messageFormat, args);
+        }
+
+        static void WriteTrackingMessages(bool writeBusinessTracking, ActivityContext context, LogEntryType severity, string messageFormat, params object[] args)
+        {
             BPSharedInstanceData instanceData = context.GetSharedInstanceData();
             BPTrackingMessage trackingMessage = new BPTrackingMessage
             {
@@ -31,6 +41,8 @@ namespace Vanrise.BusinessProcess
                 Severity = severity
             };
             BPTrackingChannel.Current.WriteTrackingMessage(trackingMessage);
+            if (writeBusinessTracking)
+                LoggerFactory.GetLogger().WriteEntry(instanceData.InstanceInfo.InputArgument.GetDefinitionTitle(), severity, messageFormat, args);
         }
     }
 }
