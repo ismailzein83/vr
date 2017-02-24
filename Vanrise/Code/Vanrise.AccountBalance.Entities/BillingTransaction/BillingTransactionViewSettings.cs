@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
@@ -16,6 +17,15 @@ namespace Vanrise.AccountBalance.Entities
         public List<Guid> GetAccountTypeIds()
         {
             return  this.Items.Select(x=>x.AccountTypeId).ToList();
+        }
+
+        public override bool DoesUserHaveAccess(IViewUserAccessContext context)
+        {
+            if (this.GetAccountTypeIds() != null)
+                return BusinessManagerFactory.GetManager<IAccountTypeManager>().DoesUserHaveViewAccess(context.UserId, GetAccountTypeIds());
+            else
+                return false;
+
         }
     }
 

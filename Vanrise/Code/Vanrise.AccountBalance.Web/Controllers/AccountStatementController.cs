@@ -14,10 +14,13 @@ namespace Vanrise.AccountBalance.Web.Controllers
     public class AccountStatementController:BaseAPIController
     {
         AccountStatementManager _accountStatementManager = new AccountStatementManager();
+        AccountTypeManager _accountTypeManager = new AccountTypeManager();
         [HttpPost]
         [Route("GetFilteredAccountStatments")]
         public object GetFilteredAccountStatments(Vanrise.Entities.DataRetrievalInput<AccountStatementQuery> input)
         {
+            if (!_accountTypeManager.DoesUserHaveViewAccess(input.Query.AccountTypeId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _accountStatementManager.GetFilteredAccountStatments(input));
         }
     }

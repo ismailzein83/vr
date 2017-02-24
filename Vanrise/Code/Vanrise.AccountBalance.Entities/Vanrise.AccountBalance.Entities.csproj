@@ -77,6 +77,9 @@
     <Compile Include="BillingTransaction\BillingTransactionDetail.cs" />
     <Compile Include="BillingTransaction\BillingTransactionQuery.cs" />
     <Compile Include="BillingTransaction\SourceBillingTransaction.cs" />
+    <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
+    <Compile Include="BusinessManagers\IAccountTypeManager.cs" />
+    <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="Config\AccountBalanceConfig.cs" />
     <Compile Include="BalancePeriod\BalancePeriodSettings.cs" />
     <Compile Include="IAccountBalanceViewSettings.cs" />

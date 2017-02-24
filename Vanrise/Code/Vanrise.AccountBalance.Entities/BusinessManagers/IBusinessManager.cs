@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public interface IAccountBalanceViewSettings
+    public interface IBusinessManager
     {
-        List<Guid> GetAccountTypeIds();
-
     }
 }

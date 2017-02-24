@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public interface IAccountBalanceViewSettings
+    public interface IAccountTypeManager : IBusinessManager
     {
-        List<Guid> GetAccountTypeIds();
-
+       bool DoesUserHaveViewAccess(int UserId, List<Guid> AccountTypeIds);
     }
 }

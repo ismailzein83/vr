@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
@@ -18,6 +19,8 @@ namespace Vanrise.AccountBalance.Entities
         public BalancePeriodSettings BalancePeriodSettings { get; set; }
         public AccountUsagePeriodSettings AccountUsagePeriodSettings { get; set; }
         public AccountTypeExtendedSettings ExtendedSettings { get; set; }
+
+        public AccountTypeSecurity Security { get; set; }
         public TimeSpan TimeOffset { get; set; }
     }
     public abstract class AccountTypeExtendedSettings
@@ -38,5 +41,13 @@ namespace Vanrise.AccountBalance.Entities
     public interface IAccountInfoContext
     {
         String AccountId { get; }
+    }
+
+    public class AccountTypeSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { get; set; }
+
+        public RequiredPermissionSettings AddRequiredPermission { get; set; }
+
     }
 }

@@ -21,7 +21,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons" ng-show="scopeModel.accountType">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="scopeModel.addClicked" haspermission="scopeModel.hasAddBillingTransactionPermission"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addClicked" ng-show="scopeModel.showAddButton"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

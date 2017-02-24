@@ -12,6 +12,8 @@ namespace Vanrise.AccountBalance.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "LiveBalance")]
     public class LiveBalanceController : BaseAPIController
     {
+        AccountTypeManager _accountTypeManager = new AccountTypeManager();
+
         [HttpGet]
         [Route("GetCurrentAccountBalance")]
         public CurrentAccountBalance GetCurrentAccountBalance(String accountId, Guid accountTypeId)
@@ -24,6 +26,8 @@ namespace Vanrise.AccountBalance.Web.Controllers
         [Route("GetFilteredAccountBalances")]
         public object GetFilteredAccountBalances(Vanrise.Entities.DataRetrievalInput<AccountBalanceQuery> input)
         {
+            if (!_accountTypeManager.DoesUserHaveViewAccess(input.Query.AccountTypeId))
+                return GetUnauthorizedResponse();
             LiveBalanceManager manager = new LiveBalanceManager();
             return manager.GetFilteredAccountBalances(input);
         }

@@ -16,8 +16,11 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, 'AddBillingTransaction'), billingTransaction);
         }
 
-        function HasAddBillingTransactionPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_AccountBalance_ModuleConfig.moduleName, controllerName, ['AddBillingTransaction']));
+        function HasAddBillingTransactionPermission(accountTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'),
+                {
+                    accountTypeId : accountTypeId
+                });
 
         }
         return {

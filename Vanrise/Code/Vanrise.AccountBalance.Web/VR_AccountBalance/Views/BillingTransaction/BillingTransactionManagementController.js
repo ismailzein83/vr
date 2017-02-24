@@ -34,6 +34,7 @@
         
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.showAddButton = false;
             var today = new Date();
             today.setMonth(today.getMonth() - 1);
             today.setHours(0, 0, 0, 0);
@@ -49,6 +50,7 @@
                     loadAllControls().then(function () {
                         $scope.scopeModel.gridloadded = true;
                     });
+                    checkHasAddBillingTransactionPermission(accountTypeAPI.getSelectedIds())
                 }
             };
             $scope.scopeModel.onGridReady = function (api) {
@@ -80,9 +82,6 @@
                 transactionTypeDirectiveAPI = api;
                 transactionTypeDirectiveReadyDeferred.resolve();
             };
-            $scope.scopeModel.hasAddBillingTransactionPermission = function () {
-                return VR_AccountBalance_BillingTransactionAPIService.HasAddBillingTransactionPermission();
-            };
 
         }
 
@@ -95,6 +94,11 @@
             });
         }
 
+        function checkHasAddBillingTransactionPermission(accountTypeId) {
+            VR_AccountBalance_BillingTransactionAPIService.HasAddBillingTransactionPermission(accountTypeId).then(function (response) {
+                $scope.scopeModel.showAddButton = response;
+            });
+        }
 
         function loadAccountType() {
             var loadAccountTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();

@@ -30,6 +30,12 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
             var billingTransactionTypeSelectorAPI;
             var billingTransactionTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var viewPermissionAPI;
+            var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var addPermissionAPI;
+            var addPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -42,6 +48,16 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                 $scope.scopeModel.accountUsagePeriodSettingsReady = function (api) {
                     accountUsagePeriodSettingsAPI = api;
                     accountUsagePeriodSettingsReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                    viewPermissionAPI = api;
+                    viewPermissionReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onAddRequiredPermissionReady = function (api) {
+                    addPermissionAPI = api;
+                    addPermissionReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -58,7 +74,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                         }
 
                     }
-                    return UtilsService.waitMultipleAsyncOperations([ loadAccountTypeSettings, loadAllControls, loadAccountUsagePeriodSettings]).catch(function (error) {
+                    return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSettings, loadAllControls, loadAccountUsagePeriodSettings, loadViewRequiredPermission, loadAddRequiredPermission]).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
                         $scope.scopeModel.isLoading = false;
@@ -82,7 +98,11 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     ExtendedSettings: accountTypeSettingsAPI.getData(),
                     BalancePeriodSettings: getBalancePeriodSettings(),
                     AccountUsagePeriodSettings: accountUsagePeriodSettingsAPI.getData(),
-                    TimeOffset:$scope.scopeModel.timeOffset
+                    TimeOffset: $scope.scopeModel.timeOffset,
+                    Security: {
+                        ViewRequiredPermission: viewPermissionAPI.getData(),
+                        AddRequiredPermission: addPermissionAPI.getData(),
+                    }
                 };
             }
 
@@ -117,11 +137,36 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                 return accountUsagePeriodSettingsDeferred.promises;
             }
 
+            function loadViewRequiredPermission() {
+                var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                viewPermissionReadyDeferred.promise.then(function () {
+                    var dataPayload = {
+                        data: accountTypeEntity &&  accountTypeEntity.Settings && accountTypeEntity.Settings.Security && accountTypeEntity.Settings.Security.ViewRequiredPermission || undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, dataPayload, viewSettingPermissionLoadDeferred);
+                });
+                return viewSettingPermissionLoadDeferred.promise;
+            }
+
+
+            function loadAddRequiredPermission() {
+                var addPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                addPermissionReadyDeferred.promise.then(function () {
+                    var dataPayload = {
+                        data: accountTypeEntity && accountTypeEntity.Settings && accountTypeEntity.Settings.Security && accountTypeEntity.Settings.Security.AddRequiredPermission || undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(addPermissionAPI, dataPayload, addPermissionLoadDeferred);
+                });
+                return addPermissionLoadDeferred.promise;
+            }
+
             function getBalancePeriodSettings() {
                 return {
                     $type: " Vanrise.AccountBalance.MainExtensions.BalancePeriod.MonthlyBalancePeriodSettings,  Vanrise.AccountBalance.MainExtensions",
                     DayOfMonth: 1
                 };
             }
+
+
         }
     }]);

@@ -7,12 +7,14 @@ using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.AccountBalance.Business
 {
-    public class AccountTypeManager
+    public class AccountTypeManager : IAccountTypeManager
     {
         Vanrise.Common.Business.VRComponentTypeManager _vrComponentTypeManager = new Common.Business.VRComponentTypeManager();
+        static SecurityManager s_securityManager = new SecurityManager();
 
 
         public string GetAccountSelector(Guid accountTypeId)
@@ -80,6 +82,49 @@ namespace Vanrise.AccountBalance.Business
         public AccountTypeSettings GetAccountTypeSettings(Guid accountTypeId)
         {
             return _vrComponentTypeManager.GetComponentTypeSettings<AccountTypeSettings>(accountTypeId);
+        }
+
+        public bool DoesUserHaveViewAccess(int userId, List<Guid> AccountTypeIds)
+        {
+            foreach (var a in AccountTypeIds)
+            {
+                if (DoesUserHaveViewAccess(userId, a))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveViewAccess(Guid accountTypeId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            return DoesUserHaveViewAccess(userId, accountTypeSettings);
+        }
+        public bool DoesUserHaveViewAccess(int userId, Guid accountTypeId)
+        {
+            var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            return DoesUserHaveViewAccess(userId, accountTypeSettings);
+        }
+        public bool DoesUserHaveViewAccess(int userId, AccountTypeSettings accountTypeSettings)
+        {
+            if (accountTypeSettings.Security != null && accountTypeSettings.Security.ViewRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountTypeSettings.Security.ViewRequiredPermission, userId);
+            else
+                return true;
+        }
+
+        public bool DoesUserHaveAddAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAddAccess(userId, accountBeDefinitionId);
+        }
+        public bool DoesUserHaveAddAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountTypeSettings(accountBeDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.AddRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.AddRequiredPermission, userId);
+            else
+                return true;
         }
         private BalanceAccountTypeInfo AccountTypeInfoMapper(AccountType accountType)
         {
