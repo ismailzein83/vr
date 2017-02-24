@@ -11,7 +11,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.BEBridge.Business
 {
-    public class BEReceiveDefinitionManager
+    public class BEReceiveDefinitionManager : IBEReceiveDefinitionManager
     {
         #region Public Methods
         public BEReceiveDefinition GetBEReceiveDefinition(Guid id)
@@ -34,6 +34,13 @@ namespace Vanrise.BEBridge.Business
         {
             return GetCachedBEReceiveDefinitions().GetRecord(receiveDefinitionId);
         }
+
+        public string GetReceiveDefinitionName(Guid receiveDefinitionId)
+        {
+            BEReceiveDefinition receiveDefinition = GetReceiveDefinition(receiveDefinitionId);
+            return receiveDefinition != null ? receiveDefinition.Name : null;
+        }
+
         public InsertOperationOutput<BEReceiveDefinitionDetail> AddReceiveDefinition(BEReceiveDefinition beReceiveDefinition)
         {
             var insertOperationOutput = new InsertOperationOutput<BEReceiveDefinitionDetail>
@@ -138,4 +145,6 @@ namespace Vanrise.BEBridge.Business
         }
         #endregion
     }
+
+    
 }

@@ -32,7 +32,8 @@ namespace Vanrise.BEBridge.BP.Activities
                 {
                     hasItem = inputArgument.BatchProcessingContextQueue.TryDequeue((batchProcessingContext) =>
                     {
-                        TargetSynchronizerInsertContext insertContext = new TargetSynchronizerInsertContext { InitializationData = inputArgument.SynchronizerInitializeContext.InitializationData };
+                        TargetSynchronizerInsertContext insertContext = new TargetSynchronizerInsertContext(handle);
+                        insertContext.InitializationData = inputArgument.SynchronizerInitializeContext.InitializationData;
                         TargetSynchronizerUpdateContext updateContext = new TargetSynchronizerUpdateContext();
                         batchProcessingContext.SaveTargetBEs((targetsToInsert) =>
                         {
@@ -71,6 +72,15 @@ namespace Vanrise.BEBridge.BP.Activities
 
         private class TargetSynchronizerInsertContext : ITargetBESynchronizerInsertBEsContext
         {
+            AsyncActivityHandle _handle;
+
+            public TargetSynchronizerInsertContext(AsyncActivityHandle handle)
+            {
+                if (handle == null)
+                    throw new ArgumentNullException("handle");
+                _handle = handle;
+            }
+
             public List<ITargetBE> TargetBE
             {
                 get;
@@ -82,6 +92,17 @@ namespace Vanrise.BEBridge.BP.Activities
             {
                 get;
                 set;
+            }
+
+
+            public void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteTrackingMessage(severity, messageFormat, args);
+            }
+
+            public void WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteBusinessTrackingMsg(severity, messageFormat, args);
             }
         }
         private class TargetSynchronizerUpdateContext : ITargetBESynchronizerUpdateBEsContext

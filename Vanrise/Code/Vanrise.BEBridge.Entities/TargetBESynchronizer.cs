@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.BEBridge.Entities
 {
@@ -41,6 +42,11 @@ namespace Vanrise.BEBridge.Entities
     {
         List<ITargetBE> TargetBE { get; }
         Object InitializationData { get; }
+        
+        void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
+
     }
 
     public interface ITargetBESynchronizerUpdateBEsContext

@@ -45,7 +45,7 @@ namespace Vanrise.BEBridge.MainExtensions.Synchronizers
             {
                 VRObjectsTargetBE vrObject = targetObject as VRObjectsTargetBE;
                 queryBuilder.AppendLine(s_evaluator.EvaluateExpression(expressionTemplate.InsertQueryCompilationOutput, Objects, vrObject.TargetObjects));
-                logger.WriteEntry(this.LoggingEventType, LogEntryType.Information, s_evaluator.EvaluateExpression(expressionTemplate.MessageCompilationOutput, Objects, vrObject.TargetObjects));
+                context.WriteBusinessTrackingMsg(LogEntryType.Information, s_evaluator.EvaluateExpression(expressionTemplate.MessageCompilationOutput, Objects, vrObject.TargetObjects));
             }
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {

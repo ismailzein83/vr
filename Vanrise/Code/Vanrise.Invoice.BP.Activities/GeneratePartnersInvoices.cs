@@ -74,11 +74,11 @@ namespace Vanrise.Invoice.BP.Activities
                             if (generatedInvoice.Result == InsertOperationResult.Succeeded)
                             {
 
-                                context.ActivityContext.WriteTrackingMessage(LogEntryType.Information, "Invoice generated for {0} from period {1} to  period {2}", partnerName, billingPeriod.FromDate.ToShortDateString(), billingPeriod.ToDate.ToShortDateString());
+                                context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Information, "Invoice generated for '{0}' from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}", partnerName, billingPeriod.FromDate, billingPeriod.ToDate);
                             }
                             else
                             {
-                                context.ActivityContext.WriteTrackingMessage(LogEntryType.Warning, "Invoice not generated for {0} from period {1} to  period {2} :{3}", partnerName, billingPeriod.FromDate.Date.ToShortDateString(), billingPeriod.ToDate.ToShortDateString(), generatedInvoice.Message);
+                                context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Warning, "Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : {3}", partnerName, billingPeriod.FromDate.Date, billingPeriod.ToDate, generatedInvoice.Message);
                             }
                         }
                     }

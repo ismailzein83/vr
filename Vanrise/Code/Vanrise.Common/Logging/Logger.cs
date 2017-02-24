@@ -154,7 +154,7 @@ namespace Vanrise.Common
 
         public void WriteEntry(string eventType, LogEntryType entryType, string messageFormat, params object[] args)
         {
-            PrivateWriteEntry(null, eventType, entryType, messageFormat, args);
+            PrivateWriteEntry(eventType, null, entryType, messageFormat, args);
         }
 
         public void WriteVerbose(string messageFormat, params object[] args)
@@ -184,7 +184,7 @@ namespace Vanrise.Common
             if (businessException != null)
                 message = businessException.Message;
             else
-                message = "Unexpected error occured. Please consult technical support. Click to see error details";
+                message = Utilities.TECHNICAL_EXCEPTION_MESSAGE;
             PrivateWriteEntry(eventType, ex.ToString(), LogEntryType.Error, message);
         }
 

@@ -50,13 +50,22 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             context.TargetBE.ThrowIfNull("context.TargetBE", "");
+            var accountManager  =new AccountManager();
+            var billingTransactionTypeManager = new BillingTransactionTypeManager();
+            var currencyManager = new Vanrise.Common.Business.CurrencyManager();
             BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
             foreach (var targetBillingTransaction in context.TargetBE)
             {
                 long billingTransactionId = -1;
                 SourceBillingTransaction sourceTransaction = targetBillingTransaction as SourceBillingTransaction;
+                var billingTransaction = sourceTransaction.BillingTransaction;
                 sourceTransaction.BillingTransaction.AccountTypeId = this.BalanceAccountTypeId;
                 billingTransactionManager.TryAddBillingTransaction(sourceTransaction.BillingTransaction, out billingTransactionId);
+                string accountName = accountManager.GetAccountName(billingTransaction.AccountTypeId, billingTransaction.AccountId);
+                string transactionType = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId);
+                string currencyName = currencyManager.GetCurrencySymbol(billingTransaction.CurrencyId);
+                context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "New {0} Transaction imported for '{1}'. Transaction Amount is {2} {3}",
+                    transactionType, accountName, billingTransaction.Amount, currencyName);
             }
         }
 

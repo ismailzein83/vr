@@ -508,6 +508,16 @@ namespace Vanrise.Common
 
             return inputString;
         }
+
+        public static Exception WrapException(Exception originalException, string message)
+        {
+            VRBusinessException origExceptionAsBusinessException = originalException as VRBusinessException;
+            string innerMessage = origExceptionAsBusinessException != null ? originalException.Message : TECHNICAL_EXCEPTION_MESSAGE;
+            string finalMessage = string.Format("{0}. Error: {1}", message, innerMessage);
+            return new VRBusinessException(finalMessage, originalException);
+        }
+
+        public const string TECHNICAL_EXCEPTION_MESSAGE = "Unexpected error occured. Please consult technical support. Click to see technical details";
     }
 
     public interface IPropValueReader
