@@ -25,10 +25,17 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
+        function GetRemoteInvoiceAttachmentsInfo(connectionId, invoiceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetRemoteInvoiceAttachmentsInfo"), {
+                connectionId: connectionId,
+                invoiceTypeId: invoiceTypeId
+            });
+        }
         return ({
             GetRemoteInvoiceTypeInfo: GetRemoteInvoiceTypeInfo,
             GetRemoteInvoiceFieldsInfo: GetRemoteInvoiceFieldsInfo,
-            GetRemoteInvoiceTypeCustomFieldsInfo: GetRemoteInvoiceTypeCustomFieldsInfo
+            GetRemoteInvoiceTypeCustomFieldsInfo: GetRemoteInvoiceTypeCustomFieldsInfo,
+            GetRemoteInvoiceAttachmentsInfo: GetRemoteInvoiceAttachmentsInfo
         });
     }
 

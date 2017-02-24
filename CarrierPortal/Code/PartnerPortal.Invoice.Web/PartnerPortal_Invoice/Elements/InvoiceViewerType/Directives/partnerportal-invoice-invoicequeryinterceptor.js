@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InvoiceQueryInterceptorDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'PartnerPortal_Invoice_InvoiceAPIService'];
+    InvoiceQueryInterceptorDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'PartnerPortal_Invoice_InvoiceViewerTypeAPIService'];
 
-    function InvoiceQueryInterceptorDirective(UtilsService, VRUIUtilsService, PartnerPortal_Invoice_InvoiceAPIService) {
+    function InvoiceQueryInterceptorDirective(UtilsService, VRUIUtilsService, PartnerPortal_Invoice_InvoiceViewerTypeAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -77,7 +77,7 @@
                     promises.push(getInvoiceQueryInterceptorTemplatesConfigsPromise);
 
                     function getInvoiceQueryInterceptorTemplatesConfigs() {
-                        return PartnerPortal_Invoice_InvoiceAPIService.GetInvoiceQueryInterceptorTemplates().then(function (response) {
+                        return PartnerPortal_Invoice_InvoiceViewerTypeAPIService.GetInvoiceQueryInterceptorTemplates().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

@@ -38,6 +38,9 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
             var gridColumnsAPI;
             var gridColumnsSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var gridActionsAPI;
+            var gridActionsSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -50,6 +53,10 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                     gridColumnsAPI = api;
                     gridColumnsSectionReadyPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.onGridActionsReady = function (api) {
+                    gridActionsAPI = api;
+                    gridActionsSectionReadyPromiseDeferred.resolve();
+                };
                 $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
                     invoiceTypeSelectorApi = api;
                     invoiceTypeSelectorPromiseDeferred.resolve();
@@ -59,6 +66,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                     invoiceQueryInterceptorApi = api;
                     invoiceQueryInterceptorPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onConnectionSelectionChanged = function (value) {
                     if(value != undefined)
                     {
@@ -77,6 +85,12 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                             };
                             var payload = { context: getContext() };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridColumnsAPI, payload, setLoader);
+
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isLoadingDirective = value;
+                            };
+                            var payload = { context: getContext() };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridActionsAPI, payload, setLoader);
                         }
                         
                     }
@@ -96,14 +110,15 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                         {
                             $scope.scopeModel.name = invoiceViewerTypeSettings.Name;
                             selectedConnectionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
                         }
                     }
 
                     promises.push(loadConnectionSelector());
                     if (invoiceViewerTypeSettings != undefined && invoiceViewerTypeSettings.Settings != undefined) {
                         promises.push(loadInvoiceTypeSelector());
-                        promises.push(loadGridSettingsSection());
+                        promises.push(loadGridColumnsSection());
+                        promises.push(loadGridActions());
+
                     }
                     promises.push(loadInvoiceQueryInterceptor());
                  
@@ -148,7 +163,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                         });
                         return invoiceQueryInterceptorLoadDeferred.promise;
                     }
-                    function loadGridSettingsSection() {
+                    function loadGridColumnsSection() {
                         var gridColumnsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         UtilsService.waitMultiplePromises([selectedConnectionSelectorPromiseDeferred.promise, gridColumnsSectionReadyPromiseDeferred.promise]).then(function () {
@@ -159,6 +174,18 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                             VRUIUtilsService.callDirectiveLoad(gridColumnsAPI, gridColumnsPayload, gridColumnsSectionLoadPromiseDeferred);
                         });
                         return gridColumnsSectionLoadPromiseDeferred.promise;
+                    }
+                    function loadGridActions() {
+                        var gridActionsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        UtilsService.waitMultiplePromises([selectedConnectionSelectorPromiseDeferred.promise, gridActionsSectionReadyPromiseDeferred.promise]).then(function () {
+                            var gridActionsPayload = { context: getContext() };
+                            if (invoiceViewerTypeSettings != undefined && invoiceViewerTypeSettings.Settings && invoiceViewerTypeSettings.Settings.GridSettings != undefined) {
+                                gridActionsPayload.gridActions = invoiceViewerTypeSettings.Settings.GridSettings.InvoiceGridActions;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(gridActionsAPI, gridActionsPayload, gridActionsSectionLoadPromiseDeferred);
+                        });
+                        return gridActionsSectionLoadPromiseDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         selectedConnectionSelectorPromiseDeferred = undefined;
@@ -175,6 +202,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                             InvoiceQueryInterceptor: invoiceQueryInterceptorApi.getData(),
                             GridSettings:{
                                 InvoiceGridFields: gridColumnsAPI.getData(),
+                                InvoiceGridActions: gridActionsAPI.getData()
                             }
                         }
                     };

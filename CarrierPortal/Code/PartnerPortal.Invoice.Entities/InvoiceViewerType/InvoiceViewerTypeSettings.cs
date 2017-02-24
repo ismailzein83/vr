@@ -22,6 +22,19 @@ namespace PartnerPortal.Invoice.Entities
     public class InvoiceViewerTypeGridSettings
     {
         public List<InvoiceViewerTypeGridField> InvoiceGridFields { get; set; }
+        public List<InvoiceViewerTypeGridAction> InvoiceGridActions { get; set; }
+
+    }
+    public class InvoiceViewerTypeGridAction
+    {
+        public string Title { get; set; }
+        public Guid InvoiceViewerTypeGridActionId { get; set; }
+        public InvoiceViewerTypeGridActionSettings Settings { get; set; }
+    }
+    public abstract class InvoiceViewerTypeGridActionSettings
+    {
+        public virtual string ActionTypeName { get; set; }
+        public abstract Guid ConfigId { get; }
     }
     public class InvoiceViewerTypeGridField
     {

@@ -19,7 +19,7 @@ function (UtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/PartnerPortal_Invoice/Elements/Invoice/Directives/MainExtensions/Templates/PartnerInvoiceQueryInterceptor.html'
+        templateUrl: '/Client/Modules/PartnerPortal_Invoice/Elements/InvoiceViewerType/Directives/MainExtensions/InvoiceQueryInterceptor/Templates/PartnerInvoiceQueryInterceptor.html'
     };
 
 

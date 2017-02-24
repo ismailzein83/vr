@@ -34,5 +34,19 @@ namespace PartnerPortal.Invoice.Web.Controllers
         {
             return _manager.GetInvoiceViewerTypeRuntime(invoiceViewerTypeId);
         }
+        [HttpGet]
+        [Route("GetInvoiceQueryInterceptorTemplates")]
+        public IEnumerable<InvoiceQueryInterceptorTemplate> GetInvoiceQueryInterceptorTemplates()
+        {
+            return _manager.GetInvoiceQueryInterceptorTemplates();
+        }
+        [HttpGet]
+        [Route("GetInvoiceGridActionSettingsConfigs")]
+        public IEnumerable<Entities.InvoiceGridActionSettingsConfig> GetInvoiceGridActionSettingsConfigs()
+        {
+            return _manager.GetInvoiceGridActionSettingsConfigs();
+        }
+
+        
     }
 }

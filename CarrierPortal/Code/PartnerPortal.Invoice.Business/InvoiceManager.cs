@@ -42,12 +42,8 @@ namespace PartnerPortal.Invoice.Business
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(invoiceViewerTypeSettings.VRConnectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-            return connectionSettings.Post<DataRetrievalInput<InvoiceQuery>, BigResult<InvoiceDetail>>("/api/VR_Invoice/Invoice/GetFilteredInvoices", query);
+            return connectionSettings.Post<DataRetrievalInput<InvoiceQuery>, BigResult<InvoiceDetail>>("/api/VR_Invoice/Invoice/GetFilteredClientInvoices", query);
         }
-        public IEnumerable<InvoiceQueryInterceptorTemplate> GetInvoiceQueryInterceptorTemplates()
-        {
-            var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<InvoiceQueryInterceptorTemplate>(InvoiceQueryInterceptorTemplate.EXTENSION_TYPE);
-        }
+       
     }
 }

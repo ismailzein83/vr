@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("partnerportalInvoiceGridcolumns", ["UtilsService", "VRNotificationService", "PartnerPortal_Invoice_InvoiceService", "PartnerPortal_Invoice_InvoiceTypeAPIService",
-    function (UtilsService, VRNotificationService, PartnerPortal_Invoice_InvoiceService, PartnerPortal_Invoice_InvoiceTypeAPIService) {
+app.directive("partnerportalInvoiceGridcolumns", ["UtilsService", "VRNotificationService", "PartnerPortal_Invoice_InvoiceViewerTypeService", "PartnerPortal_Invoice_InvoiceTypeAPIService",
+    function (UtilsService, VRNotificationService, PartnerPortal_Invoice_InvoiceViewerTypeService, PartnerPortal_Invoice_InvoiceTypeAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -21,7 +21,7 @@ app.directive("partnerportalInvoiceGridcolumns", ["UtilsService", "VRNotificatio
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/PartnerPortal_Invoice/Elements/Invoice/Directives/Templates/GridColumnsManagement.html"
+            templateUrl: "/Client/Modules/PartnerPortal_Invoice/Elements/InvoiceViewerType/Directives/Templates/GridColumnsManagement.html"
 
         };
 
@@ -47,7 +47,7 @@ app.directive("partnerportalInvoiceGridcolumns", ["UtilsService", "VRNotificatio
                         ctrl.datasource.push(addNeededFields({ Entity: gridColumn }));
                     };
 
-                    PartnerPortal_Invoice_InvoiceService.addGridColumn(onGridColumnAdded, getContext());
+                    PartnerPortal_Invoice_InvoiceViewerTypeService.addGridColumn(onGridColumnAdded, getContext());
                 };
 
                 ctrl.removeColumn = function (dataItem) {
@@ -137,7 +137,7 @@ app.directive("partnerportalInvoiceGridcolumns", ["UtilsService", "VRNotificatio
                     ctrl.datasource[index] = addNeededFields({ Entity: column });
                 };
 
-                PartnerPortal_Invoice_InvoiceService.editGridColumn(columnObj.Entity, onGridColumnUpdated, getContext());
+                PartnerPortal_Invoice_InvoiceViewerTypeService.editGridColumn(columnObj.Entity, onGridColumnUpdated, getContext());
             }
             function getContext() {
                 var currentContext = context;

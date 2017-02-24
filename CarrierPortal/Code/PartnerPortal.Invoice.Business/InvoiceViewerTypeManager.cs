@@ -72,8 +72,16 @@ namespace PartnerPortal.Invoice.Business
             }
             return invoiceViewerTypeRuntime;
         }
-      
-
+        public IEnumerable<InvoiceQueryInterceptorTemplate> GetInvoiceQueryInterceptorTemplates()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<InvoiceQueryInterceptorTemplate>(InvoiceQueryInterceptorTemplate.EXTENSION_TYPE);
+        }
+        public IEnumerable<Entities.InvoiceGridActionSettingsConfig> GetInvoiceGridActionSettingsConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<Entities.InvoiceGridActionSettingsConfig>(Entities.InvoiceGridActionSettingsConfig.EXTENSION_TYPE);
+        }
         private InvoiceViewerTypeInfo InvoiceViewerTypeInfoMapper(InvoiceViewerType invoiceViewerType)
         {
             return new InvoiceViewerTypeInfo

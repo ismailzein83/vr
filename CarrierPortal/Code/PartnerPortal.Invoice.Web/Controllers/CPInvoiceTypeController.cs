@@ -32,5 +32,12 @@ namespace PartnerPortal.Invoice.Web.Controllers
         {
             return _manager.GetRemoteInvoiceTypeCustomFieldsInfo(connectionId, invoiceTypeId);
         }
+        [HttpGet]
+        [Route("GetRemoteInvoiceAttachmentsInfo")]
+        public IEnumerable<InvoiceAttachmentInfo> GetRemoteInvoiceAttachmentsInfo(Guid connectionId, Guid invoiceTypeId)
+        {
+            return _manager.GetRemoteInvoiceAttachmentsInfo(connectionId, invoiceTypeId);
+        }
+        
     }
 }

@@ -11,13 +11,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetFilteredInvoices"), input);
         };
 
-        function GetInvoiceQueryInterceptorTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceQueryInterceptorTemplates"));
-        };
-
         return {
             GetFilteredInvoices: GetFilteredInvoices,
-            GetInvoiceQueryInterceptorTemplates: GetInvoiceQueryInterceptorTemplates
         };
     }
 

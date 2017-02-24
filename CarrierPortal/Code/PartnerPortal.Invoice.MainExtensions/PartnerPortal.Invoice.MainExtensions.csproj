@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvoiceViewerTypeGridAction\DownloadAttachmentAction.cs" />
     <Compile Include="Invoice\PartnerInvoiceQueryInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -20,12 +20,6 @@ namespace PartnerPortal.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return GetWebResponse(input, manager.GetFilteredInvoices(input));
         }
-        [HttpGet]
-        [Route("GetInvoiceQueryInterceptorTemplates")]
-        public IEnumerable<InvoiceQueryInterceptorTemplate> GetInvoiceQueryInterceptorTemplates()
-        {
-            InvoiceManager manager = new InvoiceManager();
-            return manager.GetInvoiceQueryInterceptorTemplates();
-        }
+       
     }
 }

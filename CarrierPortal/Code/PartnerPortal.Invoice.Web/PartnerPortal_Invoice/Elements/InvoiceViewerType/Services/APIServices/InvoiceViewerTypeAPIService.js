@@ -22,10 +22,18 @@
                 invoiceViewerTypeId: invoiceViewerTypeId
             });
         };
+        function GetInvoiceQueryInterceptorTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceQueryInterceptorTemplates"));
+        };
+        function GetInvoiceGridActionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGridActionSettingsConfigs"));
+        };
         return {
             GetInvoiceViewerTypeInfo: GetInvoiceViewerTypeInfo,
             GetInvoiceViewerType: GetInvoiceViewerType,
-            GetInvoiceViewerTypeRuntime: GetInvoiceViewerTypeRuntime
+            GetInvoiceViewerTypeRuntime: GetInvoiceViewerTypeRuntime,
+            GetInvoiceQueryInterceptorTemplates: GetInvoiceQueryInterceptorTemplates,
+            GetInvoiceGridActionSettingsConfigs:GetInvoiceGridActionSettingsConfigs
         };
     }
 
