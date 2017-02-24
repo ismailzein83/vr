@@ -234,12 +234,12 @@ set identity_insert [queue].[QueueActivatorConfig] on;
 ;with cte_data([ID],[Name],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Store Batch Queue Activator','{ "QueueActivatorConfigId": "2" , "Name": "Store Batch Queue Activator" ,"Title" : "Store Batch Queue Activator"									, "Editor" :"vr-genericdata-queueactivator-storebatch"}'),
+(1,'Store Batch Queue Activator','{ "QueueActivatorConfigId": "1" , "Name": "Store Batch Queue Activator" ,"Title" : "Store Batch Queue Activator"									, "Editor" :"vr-genericdata-queueactivator-storebatch"}'),
 (2,'Transform Batch Queue Activator','{ "QueueActivatorConfigId": "2" , "Name": "Transform  Batch Queue Activator" ,"Title" : "Transform  Batch Queue Activator"					, "Editor" :"vr-genericdata-queueactivator-transformbatch"}'),
-(3,'Custom Activator','{ "QueueActivatorConfigId": "7" , "Name": "Custom Activator" ,"Title" : "Custom Activator"																	, "Editor" :"vr-queueing-queueactivator-customactivator"}'),
-(4,'Update Summary Queue Activator','{ "QueueActivatorConfigId": "3" , "Name": "Update Summary Queue Activator" ,"Title" : "Update Summary Queue Activator"							, "Editor" :"vr-genericdata-queueactivator-updatesummary"}'),
-(5,'Generate Summary Queue Activator','{ "QueueActivatorConfigId": "4" , "Name": "Generate Summary Queue Activator" ,"Title" : "Generate Summary Queue Activator"					, "Editor" :"vr-genericdata-queueactivator-generatesummary"}'),
-(6,'Update Account Balances Queue Activator','{"QueueActivatorConfigId": "5" ,"Name": "Update Account Balances Queue Activator","Title": "Update Account Balances Queue Activator"  ,"Editor" :"vr-accountbalance-queueactivator-updateaccountbalances"}')
+(3,'Custom Activator','{ "QueueActivatorConfigId": "3" , "Name": "Custom Activator" ,"Title" : "Custom Activator"																	, "Editor" :"vr-queueing-queueactivator-customactivator"}'),
+(4,'Update Summary Queue Activator','{ "QueueActivatorConfigId": "4" , "Name": "Update Summary Queue Activator" ,"Title" : "Update Summary Queue Activator"							, "Editor" :"vr-genericdata-queueactivator-updatesummary"}'),
+(5,'Generate Summary Queue Activator','{ "QueueActivatorConfigId": "5" , "Name": "Generate Summary Queue Activator" ,"Title" : "Generate Summary Queue Activator"					, "Editor" :"vr-genericdata-queueactivator-generatesummary"}'),
+(6,'Update Account Balances Queue Activator','{"QueueActivatorConfigId": "6" ,"Name": "Update Account Balances Queue Activator","Title": "Update Account Balances Queue Activator"  ,"Editor" :"vr-accountbalance-queueactivator-updateaccountbalances"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Details]))
 merge	[queue].[QueueActivatorConfig] as t
