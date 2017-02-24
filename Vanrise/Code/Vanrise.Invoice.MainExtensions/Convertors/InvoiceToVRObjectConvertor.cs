@@ -26,7 +26,7 @@ namespace Vanrise.Invoice.MainExtensions.Convertors
             List<ITargetBE> targetBEs = new List<ITargetBE>();
             foreach (Entities.Invoice invoice in invoiceBatch.Invoices)
             {
-                InvoiceTargetBE targetBe = new InvoiceTargetBE();
+                VRObjectsTargetBE targetBe = new VRObjectsTargetBE();
                 targetBe.TargetObjects.Add("Invoice", invoice);
                 foreach (var infoObject in PartnerInfoObjects)
                 {
