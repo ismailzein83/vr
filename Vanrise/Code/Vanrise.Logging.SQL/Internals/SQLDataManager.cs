@@ -27,6 +27,7 @@ namespace Vanrise.Logging.SQL
             _columnMapper.Add("TypeName", "TypeNameId");
             _columnMapper.Add("EntryTypeName", "EntryType");
             _columnMapper.Add("MethodName", "MethodNameId");
+            _columnMapper.Add("EventTypeName", "EventType");
         }
 
         LogAttributesByType _logAttributes;
@@ -111,10 +112,7 @@ namespace Vanrise.Logging.SQL
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                //string zoneIds = null;
-                //if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
-                //    zoneIds = string.Join<int>(",", input.Query.ZoneIds);
-
+              
                 string machineIds = null;
                 if (input.Query.MachineIds != null && input.Query.MachineIds.Count() > 0)
                     machineIds = string.Join<int>(",", input.Query.MachineIds);
