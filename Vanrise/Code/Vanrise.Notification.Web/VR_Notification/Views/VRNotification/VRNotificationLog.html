@@ -1,0 +1,30 @@
+﻿<vr-panel ng-controller="VR_Notification_VRNotificationLogController" vr-loader="isLoading">
+
+    <vr-form name="formFilter">
+
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
+                                                                  isrequired="true"
+                                                                  normal-col-num="2"
+                                                                  selectedvalues="scopeModel.selectedNotificationType">
+                </vr-notification-notificationtypesetting-selector>
+            </vr-row>
+            <vr-directivewrapper directive="scopeModel.selectedNotificationType.SearchDirective" title="Test" on-ready="scopeModel.onSearchDirectiveReady"></vr-directivewrapper>
+
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+        <vr-row>
+            <vr-directivewrapper directive="scopeModel.selectedNotificationType.BodyDirective" title="Test" on-ready="scopeModel.onBodyDirectiveReady"></vr-directivewrapper>
+        </vr-row>
+
+    </vr-form>
+</vr-panel>

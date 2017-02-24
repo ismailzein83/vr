@@ -156,6 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_AccountBalance\Constants\BalanceOrderByEnum.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationGridTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notifications-grid.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\Templates\AccountBalancesGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\Templates\AccountBalancesViewEditor.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\vr-accountbalance-accountbalances-grid.js" />
@@ -176,6 +178,12 @@
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTransactionSearch.html" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-vieweditor.js" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-search.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationBodyEditor.html" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationSearchEditor.html" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\Templates\AccountBalanceNotificationTypeSettingsTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notification-bodyeditor.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notification-searcheditor.js" />
+    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\vr-accountbalance-notificationtype-settings.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\Templates\VRAccountTypeSettings.html" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\Templates\BillingTransactionGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-grid.js" />
@@ -206,6 +214,8 @@
     <Content Include="VR_AccountBalance\Services\APIServices\LiveBalanceAPIService.js" />
     <Content Include="VR_AccountBalance\Services\BalanceAlertService.js" />
     <Content Include="VR_AccountBalance\Services\BillingTransactionService.js" />
+    <Content Include="VR_AccountBalance\Views\AccountBalanceNotifications\AccountBalanceNotificationsManagement.html" />
+    <Content Include="VR_AccountBalance\Views\AccountBalanceNotifications\AccountBalanceNotificationsManagementController.js" />
     <Content Include="VR_AccountBalance\Views\AccountBalances\AccountBalancesManagement.html" />
     <Content Include="VR_AccountBalance\Views\AccountBalances\AccountBalancesManagementController.js" />
     <Content Include="VR_AccountBalance\Views\AccountStatement\AccountStatementManagement.html" />

@@ -1,0 +1,16 @@
+﻿<vr-tabs>
+    <vr-tab header="'Definition'">
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-notification-vrnotifivationtype-settings on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
+                                                         isrequired="true"
+                                                         normal-col-num="6"
+                                                         ismultipleselection>
+            </vr-notification-vrnotifivationtype-settings>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>

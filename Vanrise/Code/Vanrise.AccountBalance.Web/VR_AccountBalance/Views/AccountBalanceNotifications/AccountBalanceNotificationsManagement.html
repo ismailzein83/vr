@@ -1,0 +1,21 @@
+﻿<vr-panel ng-controller="VR_AccountBalance_AccountBalanceNotificationsManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+            <vr-row removeline>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons" ng-show="scopeModel.accountType">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-accountbalance-notifications-grid on-ready="scopeModel.onGridReady"></vr-accountbalance-notifications-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

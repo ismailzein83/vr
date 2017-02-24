@@ -122,6 +122,8 @@
     <Compile Include="Controllers\VRAlertRuleController.cs" />
     <Compile Include="Controllers\VRAlertRuleTypeController.cs" />
     <Compile Include="Controllers\VRBalanceAlertRuleController.cs" />
+    <Compile Include="Controllers\VRNotificationViewController.cs" />
+    <Compile Include="Controllers\VRNotificationTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_Notification\Constants\ModuleConfig.js" />
+    <Content Include="VR_Notification\Directives\MainExtensions\VRNotificationType\vr-notification-vrnotifivationtype-settings.js" />
     <Content Include="VR_Notification\Directives\VRActions\Templates\VRActionsManagementTemplate.html" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction-management.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction.js" />
@@ -169,11 +172,18 @@
     <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Scheduled\vr-notification-balancealertrule-alertthresholdprocess-scheduled.js" />
     <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Scheduled\vr-notification-balancealertrule-alertcheckerprocess-scheduled.js" />
     <Content Include="VR_Notification\Directives\VRBalanceAlertRule\vr-notification-balancealertrule-threshold-selector.js" />
+    <Content Include="VR_Notification\Directives\VRNotificationType\vr-notification-notificationtypesetting-selector.js" />
+    <Content Include="VR_Notification\Directives\VRNotificationViewDefinition\vr-notification-notification-vieweditor.js" />
+    <Content Include="VR_Notification\Directives\VRNotificationViewDefinition\Templates\VRNotificationViewEditor.html" />
+    <Content Include="VR_Notification\Directives\VRNotification\Templates\VRNotificationComponentTypeSettingsTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRNotification\vr-notification-vrnotification-componentsettings.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleTypeAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRBalanceAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRNotificationsAPIService.js" />
+    <Content Include="VR_Notification\Services\APIServices\VRNotificationTypeAPIService.js" />
+    <Content Include="VR_Notification\Services\APIServices\VRNotificationViewAPIService.js" />
     <Content Include="VR_Notification\Services\VRActionService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleSettingsService.js" />
@@ -190,9 +200,13 @@
     <Content Include="VR_Notification\Views\VRAlertRule\VRAlertRuleEditorController.js" />
     <Content Include="VR_Notification\Views\VRAlertRule\VRAlertRuleManagement.html" />
     <Content Include="VR_Notification\Views\VRAlertRule\VRAlertRuleManagementController.js" />
+    <Content Include="VR_Notification\Views\VRNotification\VRNotificationLog.html" />
+    <Content Include="VR_Notification\Views\VRNotification\VRNotificationLogController.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="VR_Notification\Directives\MainExtensions\VRNotificationType\Templates\" />
     <Folder Include="VR_Notification\Directives\VRBalanceAlertRule\Templates\" />
+    <Folder Include="VR_Notification\Directives\VRNotificationType\Templates\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

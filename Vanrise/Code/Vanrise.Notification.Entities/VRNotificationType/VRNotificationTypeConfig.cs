@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Notification.Entities
 {
-    public class VRNotificationTypeDefinitionConfig : ExtensionConfiguration
+    public class VRNotificationTypeConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VR_Notification_VRNotificationTypeSettings";
 
