@@ -69,6 +69,8 @@ namespace PartnerPortal.Invoice.Business
                         });
                     }
                 }
+                invoiceViewerTypeRuntime.InvoiceGridActions = invoiceViewerType.Settings.GridSettings.InvoiceGridActions;
+
             }
             return invoiceViewerTypeRuntime;
         }

@@ -35,7 +35,7 @@ namespace PartnerPortal.Invoice.Business
             VRInterAppRestConnection connectionSettings = GetVRInterAppRestConnection(connectionId);
             return connectionSettings.Get<IEnumerable<InvoiceAttachmentInfo>>(string.Format("/api/VR_Invoice/InvoiceType/GetRemoteInvoiceTypeAttachmentsInfo?invoiceTypeId={0}", invoiceTypeId));
         }
-        private VRInterAppRestConnection GetVRInterAppRestConnection(Guid connectionId)
+        public VRInterAppRestConnection GetVRInterAppRestConnection(Guid connectionId)
         {
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);

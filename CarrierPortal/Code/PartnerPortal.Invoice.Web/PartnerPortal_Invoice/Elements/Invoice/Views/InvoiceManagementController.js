@@ -59,6 +59,9 @@
             var invoiceViewerTypeId = invoiceViewerTypeSelectorAPI.getSelectedIds();
             var filter = {
                 gridColumns: invoiceViewerTypeRuntimeEntity.RuntimeGridColumns,
+                gridActions: invoiceViewerTypeRuntimeEntity.InvoiceGridActions,
+                invoiceTypeId: invoiceViewerTypeRuntimeEntity.InvoiceTypeId,
+                invoiceViewerTypeId: invoiceViewerTypeId,
                 query: {
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,

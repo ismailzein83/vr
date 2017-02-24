@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("partnerportalInvoiceGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "PartnerPortal_Invoice_InvoiceAPIService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, PartnerPortal_Invoice_InvoiceAPIService) {
+app.directive("partnerportalInvoiceGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "PartnerPortal_Invoice_InvoiceAPIService","PartnerPortal_Invoice_InvoiceService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, PartnerPortal_Invoice_InvoiceAPIService, PartnerPortal_Invoice_InvoiceService) {
 
         var directiveDefinitionObject = {
 
@@ -29,6 +29,9 @@ app.directive("partnerportalInvoiceGrid", ["UtilsService", "VRNotificationServic
             this.initializeController = initializeController;
             var gridAPI;
             var gridColumns = [];
+            var gridActions = [];
+            var invoiceTypeId;
+            var invoiceViewerTypeId;
             function initializeController() {
 
                 $scope.datastore = [];
@@ -56,6 +59,9 @@ app.directive("partnerportalInvoiceGrid", ["UtilsService", "VRNotificationServic
                             var query;
                             if (payload != undefined) {
                                 gridColumns = payload.gridColumns;
+                                gridActions = payload.gridActions;
+                                invoiceTypeId = payload.invoiceTypeId;
+                                invoiceViewerTypeId = payload.invoiceViewerTypeId;
                                 query = payload.query;
                             }
                             gridAPI.retrieveData(query);
@@ -71,6 +77,7 @@ app.directive("partnerportalInvoiceGrid", ["UtilsService", "VRNotificationServic
                                     var dataItem = response.Data[i];
                                     if ($scope.gridFields == undefined || $scope.gridFields.length == 0)
                                         buildGridFields(dataItem);
+                                    PartnerPortal_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, invoiceTypeId,invoiceViewerTypeId, gridActions);
                                 }
                             }
                             onResponseReady(response);

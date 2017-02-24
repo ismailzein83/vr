@@ -36,11 +36,25 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
@@ -52,14 +66,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="InvoiceViewerTypeGridAction\DownloadAttachmentAction.cs" />
+    <Compile Include="InvoiceViewerTypeGridAction\DownloadAttachmentActionController.cs" />
+    <Compile Include="InvoiceViewerTypeGridAction\DownloadAttachmentActionManager.cs" />
     <Compile Include="Invoice\PartnerInvoiceQueryInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PartnerPortal.CustomerAccess.Business\PartnerPortal.CustomerAccess.Business.csproj">
       <Project>{c4ac9650-72a5-4470-a2d4-2d22c504bf0f}</Project>
       <Name>PartnerPortal.CustomerAccess.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PartnerPortal.Invoice.Business\PartnerPortal.Invoice.Business.csproj">
+      <Project>{6e8b5ccf-9ba8-4f47-bc21-e7f13f770b5a}</Project>
+      <Name>PartnerPortal.Invoice.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\PartnerPortal.Invoice.Entities\PartnerPortal.Invoice.Entities.csproj">
       <Project>{50261e8c-7f79-437b-9eb2-8423d8eb7080}</Project>

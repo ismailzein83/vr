@@ -20,6 +20,6 @@ namespace PartnerPortal.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return GetWebResponse(input, manager.GetFilteredInvoices(input));
         }
-       
+      
     }
 }

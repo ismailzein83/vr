@@ -59,6 +59,7 @@
     <Compile Include="InvoiceViewerType\InvoiceViewerTypeInfoFilter.cs" />
     <Compile Include="InvoiceViewerType\InvoiceViewerTypeRuntime.cs" />
     <Compile Include="InvoiceViewerType\InvoiceViewerTypeSettings.cs" />
+    <Compile Include="Invoice\InvoiceAppDetail.cs" />
     <Compile Include="Invoice\InvoiceAppQuery.cs" />
     <Compile Include="InvoiceViewerType\InvoiceQueryInterceptor.cs" />
     <Compile Include="InvoiceViewerType\InvoiceQueryInterceptorTemplate.cs" />

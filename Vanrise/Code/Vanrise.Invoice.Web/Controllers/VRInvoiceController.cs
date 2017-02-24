@@ -127,6 +127,12 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
         }
-      
+        [HttpGet]
+        [Route("DownloadAttachment")]
+        public byte[] DownloadAttachment(Guid invoiceTypeId, Guid invoiceAttachmentId, long invoiceId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.DownloadAttachment(invoiceTypeId, invoiceAttachmentId, invoiceId);
+        }
     }
 }

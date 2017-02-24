@@ -11,6 +11,7 @@ namespace PartnerPortal.Invoice.Entities
     public class InvoiceViewerTypeRuntime
     {
         public List<RuntimeGridColumn> RuntimeGridColumns { get; set; }
+        public List<InvoiceViewerTypeGridAction> InvoiceGridActions { get; set; }
     }
     public class RuntimeGridColumn
     {

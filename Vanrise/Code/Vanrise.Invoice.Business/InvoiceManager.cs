@@ -316,7 +316,24 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceEditorRuntime;
         }
-
+        public byte[] DownloadAttachment(Guid invoiceTypeId,Guid invoiceAttachmentId,long invoiceId)
+        {
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            if(invoiceType.Settings.InvoiceAttachments != null)
+            {
+                var invoiceAttachment = invoiceType.Settings.InvoiceAttachments.FirstOrDefault(x => x.InvoiceAttachmentId == invoiceAttachmentId);
+                if(invoiceAttachment != null)
+                {
+                    InvoiceRDLCFileConverterContext context = new InvoiceRDLCFileConverterContext
+                    {
+                        InvoiceId = invoiceId
+                    };
+                  var invoiceFile = invoiceAttachment.InvoiceFileConverter.ConvertToInvoiceFile(context);
+                  return invoiceFile.Content;
+                }
+            }
+            return null;
+        }
         #endregion
 
         #region Mappers

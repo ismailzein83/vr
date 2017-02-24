@@ -161,6 +161,7 @@
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Directives\GridColumnsEditorController.js" />
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Directives\MainExtensions\InvoiceQueryInterceptor\partnerportal-invoice-partnerinvoicequeryinterceptor.js" />
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Directives\MainExtensions\InvoiceQueryInterceptor\Templates\PartnerInvoiceQueryInterceptor.html" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Services\InvoiceViewerTypeGridActionService.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\partnerportal-invoice-grid.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\partnerportal-invoice-vieweditor.js" />
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Directives\partnerportal-invoice-gridcolumns.js" />
@@ -171,10 +172,13 @@
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Directives\Templates\InvoiceViewerTypeSettings.html" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\Templates\InvoiceGridTemplate.html" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Directives\Templates\InvoiceViewEditor.html" />
+    <Content Include="PartnerPortal_Invoice\Elements\Invoice\Services\APIServices\DownloadAttachmentActionAPIService.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Services\APIServices\InvoiceAPIService.js" />
-    <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Services\InvoiceService.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceViewerType\Services\InvoiceViewerTypeService.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\Invoice\Services\InvoiceService.js" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Views\InvoiceManagement.html" />
     <Content Include="PartnerPortal_Invoice\Elements\Invoice\Views\InvoiceManagementController.js" />
+    <Content Include="PartnerPortal_Invoice\ModuleInitialization.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
