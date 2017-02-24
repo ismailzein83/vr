@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.Rules.Normalization.MainExtensions
 {
@@ -29,7 +30,7 @@ namespace Vanrise.Rules.Normalization.MainExtensions
                 this.NewString = String.Empty;
 
             target.PhoneNumber = (this.IgnoreCase) ?
-                Regex.Replace(target.PhoneNumber, this.StringToReplace, this.NewString, RegexOptions.IgnoreCase) :
+                Utilities.ReplaceString(target.PhoneNumber, this.StringToReplace, this.NewString, StringComparison.OrdinalIgnoreCase) :
                 target.PhoneNumber.Replace(this.StringToReplace, this.NewString);
         }
     }
