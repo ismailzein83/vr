@@ -2,12 +2,24 @@
   
     <vr-modalbody  >
         <div style="max-height:600px; overflow-y:auto;margin:0px -15px;padding:0px 15px">
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-label isvalue breakline> {{value}}</vr-label>
-                </vr-columns>
-            </vr-row>
-        </div>
-        
+            <div style="max-height:600px; overflow-y:auto;margin:0px -15px;padding:0px 15px">
+                <vr-row ng-if="messageTitle">
+                    <vr-columns width="normal">
+                        <vr-label>Message</vr-label>
+                    </vr-columns>
+                    <vr-columns width="fullrow">
+                        <vr-label isvalue breakline> {{messageTitle}}</vr-label>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="normal" ng-if="messageTitle">
+                        <vr-label>Details</vr-label>
+                    </vr-columns>
+                    <vr-columns width="fullrow">
+                        <vr-label isvalue breakline> {{value}}</vr-label>
+                    </vr-columns>
+                </vr-row>
+            </div>           
+        </div>        
     </vr-modalbody>
 </div>

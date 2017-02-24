@@ -207,6 +207,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     rotateHeader: ctrl.rotateHeader,
                     nonHiddable: col.nonHiddable,
                     expendableColumn: col.expendableColumn,
+                    expendableColumnTitle: col.expendableColumnTitle,
+                    expendableColumnDescription: col.expendableColumnDescription,
                     fixedWidth: col.fixedWidth
 
 
@@ -456,8 +458,19 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     };
 
                     modalSettings.onScopeReady = function (modalScope) {
+                        if (colDef.expendableColumnTitle != undefined)
+                            modalScope.messageTitle = eval('dataItem.' + colDef.expendableColumnTitle);
 
-                        modalScope.value = ctrl.getCellValue(dataItem, colDef);
+                        if (colDef.expendableColumnDescription != undefined)
+                            modalScope.value = eval('dataItem.' + colDef.expendableColumnDescription);
+                        else                            
+                            modalScope.value = ctrl.getCellValue(dataItem, colDef);
+
+                        if (modalScope.messageTitle != "" && (modalScope.value == "" || modalScope.value ==null)) {
+                            modalScope.messageTitle = undefined;
+                            modalScope.value = eval('dataItem.' + colDef.expendableColumnTitle);
+                        }
+
                     };
 
                     VRModalService.showModal("/Client/Javascripts/Directives/DataGrid/ExpendableColumnPopup.html", null, modalSettings);

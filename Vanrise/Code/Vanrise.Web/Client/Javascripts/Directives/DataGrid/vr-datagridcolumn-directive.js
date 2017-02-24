@@ -54,6 +54,11 @@ app.directive('vrDatagridcolumn', ['$parse', function ($parse) {
                         col.isClickable = $scope.$eval(iAttrs.isclickable);
                     if (iAttrs.expendablecolumn != undefined)
                         col.expendableColumn = true;
+                   
+                    if (iAttrs.expendablecolumntitle != undefined)
+                        col.expendableColumnTitle = $scope.$eval(iAttrs.expendablecolumntitle);
+                    if (iAttrs.expendablecolumndescription != undefined)
+                        col.expendableColumnDescription = $scope.$eval(iAttrs.expendablecolumndescription);
                     if (iAttrs.onclicked != undefined)
                         col.onClicked = $scope.$eval(iAttrs.onclicked);
                     if (iAttrs.type != undefined)

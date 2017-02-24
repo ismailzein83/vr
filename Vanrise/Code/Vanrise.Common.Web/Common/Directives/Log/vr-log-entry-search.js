@@ -208,7 +208,7 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
         function loadEventTypeSelector() {
             var eventTypeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             var payload = {
-                attribute: VRCommon_LogAttributeEnum.MethodName.value
+                attribute: VRCommon_LogAttributeEnum.EventType.value
             };
             eventTypeReadyPromiseDeferred.promise
                 .then(function () {
