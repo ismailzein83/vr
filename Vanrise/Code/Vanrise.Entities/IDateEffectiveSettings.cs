@@ -12,4 +12,11 @@ namespace Vanrise.Entities
 
         DateTime? EED { get; }
     }
+
+    public interface IDateEffectiveSettingsEditable
+    {
+        DateTime BED { get; set; }
+
+        DateTime? EED { get; set; }
+    }
 }

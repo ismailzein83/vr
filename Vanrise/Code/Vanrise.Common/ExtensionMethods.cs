@@ -330,6 +330,28 @@ namespace Vanrise.Common
             return dates.OrderBy(itm => itm.HasValue ? itm.Value : DateTime.MaxValue).Last();
         }
 
+        public static DateTime? MaxDate(this DateTime? date1, DateTime? date2)
+        {
+            if (date1 == null)
+                return date1;
+
+            if (date2 == null)
+                return date2;
+
+            return new DateTime(Math.Max(date1.Value.Ticks, date2.Value.Ticks));
+        }
+
+        public static DateTime? MinDate(this DateTime? date1, DateTime? date2)
+        {
+            if (date1 == null)
+                return date2;
+
+            if (date2 == null)
+                return date1;
+
+            return new DateTime(Math.Min(date1.Value.Ticks, date2.Value.Ticks));
+        }
+
         #endregion
 
         #region Date Effective Settings

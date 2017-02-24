@@ -384,6 +384,107 @@ namespace Vanrise.Common
 
             return Vanrise.Common.Serializer.Deserialize<T>(Vanrise.Common.Serializer.Serialize(obj));
         }
+
+        public static IEnumerable<R> MergeUnionWithQForce<T, Q, R>(List<T> Tlist, List<Q> Qlist, Action<T, R> mapTtoR, Action<Q, R> mapQtoR)
+            where T : class, IDateEffectiveSettingsEditable
+            where Q : class, IDateEffectiveSettingsEditable
+            where R : class, IDateEffectiveSettingsEditable
+        {
+            int Tindex = 0;
+            int Qindex = 0;
+
+            R lastRecord = default(R);
+            List<R> totalRecords = new List<R>();
+
+            int TlistCount = Tlist.Count;
+            int QlistCount = Qlist.Count;
+
+            while (Tindex < TlistCount || Qindex < QlistCount)
+            {
+                Q Qitem = Qindex < QlistCount ? Qlist[Qindex] : null;
+                T Titem = Tindex < TlistCount ? Tlist[Tindex] : null;
+
+                if (Qitem != null && (Titem == null || Qitem.BED <= Titem.BED || (lastRecord != null && lastRecord.EED.HasValue && lastRecord.EED.Value == Qitem.BED)))
+                {
+                    lastRecord = Activator.CreateInstance<R>();
+                    lastRecord.BED = Qitem.BED;
+                    lastRecord.EED = Qitem.EED;
+
+                    mapQtoR(Qitem, lastRecord);
+                    totalRecords.Add(lastRecord);
+
+                    Qindex++;
+                }
+                else
+                {
+                    lastRecord = Activator.CreateInstance<R>();
+                    lastRecord.BED = lastRecord == null || !lastRecord.EED.HasValue ? Titem.BED : Utilities.Max(lastRecord.EED.Value, Titem.BED);
+                    lastRecord.EED = Qitem == null ? Titem.EED : Titem.EED.MinDate(Qitem.BED);
+
+                    mapTtoR(Titem, lastRecord);
+                    totalRecords.Add(lastRecord);
+                }
+
+                while (Titem != null && Tindex < TlistCount && Titem.EED.VRLessThanOrEqual(lastRecord.EED))
+                {
+                    Tindex++;
+                    Titem = Tindex < TlistCount ? Tlist[Tindex] : null;
+                }
+            }
+
+            return totalRecords;
+        }
+
+        public static IEnumerable<R> GetQIntersectT<T, Q, R>(List<T> Tlist, List<Q> Qlist, Action<Q, R> mapQtoR)
+            where T : class, IDateEffectiveSettingsEditable
+            where Q : class, IDateEffectiveSettingsEditable
+            where R : class, IDateEffectiveSettingsEditable
+        {
+            int Tindex = 0;
+            int Qindex = 0;
+
+            R lastRecord = default(R);
+            List<R> totalRecords = new List<R>();
+
+            int TlistCount = Tlist.Count;
+            int QlistCount = Qlist.Count;
+
+            while (Tindex < TlistCount && Qindex < QlistCount)
+            {
+                Q Qitem = Qindex < QlistCount ? Qlist[Qindex] : null;
+                T Titem = Tindex < TlistCount ? Tlist[Tindex] : null;
+
+                if (Qitem.EED.VRGreaterThan(Titem.BED) && Titem.EED.VRGreaterThan(Qitem.BED))
+                {
+                    lastRecord = Activator.CreateInstance<R>();
+                    lastRecord.BED = Utilities.Max(Titem.BED, Qitem.BED);
+                    lastRecord.EED = Titem.EED.MinDate(Qitem.EED);
+
+                    mapQtoR(Qitem, lastRecord);
+                    totalRecords.Add(lastRecord);
+
+                    if (Qitem.EED.VRLessThanOrEqual(lastRecord.EED))
+                        Qindex++;
+
+                    if (Titem.EED.VRLessThanOrEqual(lastRecord.EED))
+                        Tindex++;
+                }
+
+                while (Qindex < QlistCount && Qitem.EED.VRLessThanOrEqual(Titem.BED))
+                {
+                    Qindex++;
+                    Qitem = Qindex < QlistCount ? Qlist[Qindex] : null;
+                }
+
+                while (Tindex < TlistCount && Titem.EED.VRLessThanOrEqual(Qitem.BED))
+                {
+                    Tindex++;
+                    Titem = Tindex < TlistCount ? Tlist[Tindex] : null;
+                }
+            }
+
+            return totalRecords;
+        }
     }
 
     public interface IPropValueReader
