@@ -150,22 +150,23 @@ END
 GO
 --delete useless views from TOne product such 'My Scheduler Service', 'Organizational Charts'
 delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','DCF8CA21-852C-41B9-9101-6990E545509D')
---delete views for WhS_BusinessEntity
-delete from [sec].[View] where [Id] in ('EDB49F55-E9E7-4779-9C77-44E89571A792','893CDCE3-209D-4F45-838B-7D732BF14562','4DC9F2F1-2D59-4402-899F-AFD8C6EB113A', '4BDF2F4E-4CFB-487F-84F4-B5B7E74B8DC5')
-Delete from [sec].[View] where [Id]='00B7C78E-1486-4D71-B4C9-26A8C0C3725F'--'Accounts'
 --[sec].[View]--------------------------------------------------------------------------------------
 BEGIN
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('9F5B379C-1576-4078-9999-3218B329FEAC','Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement','66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/Package/GetFilteredPackages',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,3,null),
+('9F5B379C-1576-4078-9999-3218B329FEAC','Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement'									,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/Package/GetFilteredPackages',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,3,null),
+('E68EFF9C-879E-4A6C-B412-8E225A966571','Charging Policies','Charging Policies Management','#/view/Retail_BusinessEntity/Views/ChargingPolicy/ChargingPolicyManagement'	,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/ChargingPolicy/GetFilteredChargingPolicies',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
+('D3799B4D-5B86-4665-BF03-94AFF7F00E21','Product Families','Product Families','#/view/Retail_BusinessEntity/Views/ProductFamily/ProductFamilyManagement'				,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/ProductFamily/GetFilteredProductFamilies',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
+
 ('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":[{"PermissionName":"VRCommon_System_Log: View","Directive":"vr-log-entry-search","Title":"General"},{"PermissionName":"VR_Integration_DataSource: Log","Directive":"vr-integration-log-search","Title":"Data Source"},{"PermissionName":"VR_Integration_DataSource: ImportedBatch","Directive":"vr-integration-importedbatch-search","Title":"Imported Batch"},{"PermissionName":"BusinessProcess_BP_BPInstance_Log: Log","Directive":"bp-instance-log-search","Title":"Business Process"},{"PermissionName":"VRCommon_UserActionAudit: View","Directive":"vr-useractionaudit-search","Title":"User Action Audit"}]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5,null),
-('E68EFF9C-879E-4A6C-B412-8E225A966571','Charging Policies','Charging Policies Management','#/view/Retail_BusinessEntity/Views/ChargingPolicy/ChargingPolicyManagement','66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/ChargingPolicy/GetFilteredChargingPolicies',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
-('D4385711-5F67-4EC4-BBEC-B5B1BF767188','Account Parts','Account Parts','#/view/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionManagement','A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,5,null),
-('296B2785-172C-4332-9846-D32FE3166C62','Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement','A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/ServiceType/GetFilteredServiceTypes',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,3,null),
-('9C3BE71A-81D8-4A02-A1F7-FBBE6536BBBB','Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement','A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountType/GetFilteredAccountTypes',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
-('D3799B4D-5B86-4665-BF03-94AFF7F00E21','Product Families','Product Families','#/view/Retail_BusinessEntity/Views/ProductFamily/ProductFamilyManagement','66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/ProductFamily/GetFilteredProductFamilies',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
+
+('D4385711-5F67-4EC4-BBEC-B5B1BF767188','Account Parts','Account Parts','#/view/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionManagement'	,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,5,null),
+('296B2785-172C-4332-9846-D32FE3166C62','Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement'			,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/ServiceType/GetFilteredServiceTypes',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,3,null),
+('9C3BE71A-81D8-4A02-A1F7-FBBE6536BBBB','Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement'						,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountType/GetFilteredAccountTypes',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
+
+--should be remove to common in a later stage
 ('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',null,26,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank],[IsDeleted]))
