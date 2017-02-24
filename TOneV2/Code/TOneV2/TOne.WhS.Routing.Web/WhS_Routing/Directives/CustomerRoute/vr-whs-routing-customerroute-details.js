@@ -168,11 +168,6 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     var serviceViewerPayload = {
                         selectedIds: routeOptionDetail.ExactSupplierServiceIds
                     };
-                    if (routeOptionDetail.Entity != undefined) {
-                        serviceViewerPayload = {
-                            selectedIds: customerRoute.Entity.CustomerServiceIds
-                        };
-                    }
 
                     VRUIUtilsService.callDirectiveLoad(routeOptionDetail.serviceViewerAPI, serviceViewerPayload, routeOptionDetail.routeOptionDetailLoadDeferred);
                 };
