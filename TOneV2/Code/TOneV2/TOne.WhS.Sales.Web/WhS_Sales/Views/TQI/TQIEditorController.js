@@ -210,6 +210,8 @@
                 $scope.calculatedRate = undefined;
             }
 
+            $scope.calculatedRate = $scope.evaluatedRate;
+
             if ($scope.selectedMarginType != undefined && $scope.evaluatedRate != undefined && !isMarginEmpty) {
                 if ($scope.selectedMarginType.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
                     $scope.marginPercentage = (parseFloat($scope.margin) * 100 / parseFloat($scope.evaluatedRate)).toFixed(2) + "%";
