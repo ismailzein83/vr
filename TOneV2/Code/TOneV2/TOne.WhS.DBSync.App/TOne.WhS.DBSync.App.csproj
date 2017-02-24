@@ -97,6 +97,9 @@
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
     </Reference>
