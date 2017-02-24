@@ -82,6 +82,7 @@
     <Compile Include="InvoiceType\GeneratorInvoiceTypeRuntime.cs" />
     <Compile Include="InvoiceType\IInvoiceRDLCFileConverterContext.cs" />
     <Compile Include="InvoiceType\InvoiceActions\InvoiceAction.cs" />
+    <Compile Include="InvoiceType\InvoiceAttachmentInfo.cs" />
     <Compile Include="InvoiceType\InvoiceDataSource.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridActionSettingsConfig.cs" />

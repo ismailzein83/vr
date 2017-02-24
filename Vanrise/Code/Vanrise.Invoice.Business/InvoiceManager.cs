@@ -22,11 +22,20 @@ namespace Vanrise.Invoice.Business
         #region Public Methods 
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
+            return  GetFilteredInvoices(input,false);
+        }
+
+        public IDataRetrievalResult<InvoiceDetail> GetFilteredClientInvoices(DataRetrievalInput<InvoiceQuery> input)
+        {
+            return  GetFilteredInvoices(input,true);
+        }
+        private IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input, bool getClientInvoices)
+        {
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
 
             var bigResult = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
-            if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
+            if (!getClientInvoices && bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 foreach (var accountDetail in bigResult.Data)
                 {

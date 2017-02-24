@@ -39,9 +39,10 @@
         function GetInvoiceSettingsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceSettingsInfo"), { filter: filter });
         }
-        function SetInvoiceSettingDefault(invoiceSettingId) {
+        function SetInvoiceSettingDefault(invoiceSettingId, invoiceTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "SetInvoiceSettingDefault"), {
-                invoiceSettingId: invoiceSettingId
+                invoiceSettingId: invoiceSettingId,
+                invoiceTypeId: invoiceTypeId
             });
         }
         function GetOverridableInvoiceSetting(invoiceSettingId, invoiceTypeId) {

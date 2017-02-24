@@ -253,6 +253,7 @@ namespace Vanrise.Invoice.Business
             return invoiceTypes.FindAllRecords(filterExpression).MapRecords(InvoiceTypeInfoMapper);
         }
       
+
         public bool DoesUserHaveViewAccess(Guid invoiceTypeId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
@@ -359,6 +360,26 @@ namespace Vanrise.Invoice.Business
             if (dataRecordFields == null)
                 return null;
             return dataRecordFields.Select(x=>x.Key);
+        }
+        public IEnumerable<InvoiceAttachmentInfo> GetRemoteInvoiceTypeAttachmentsInfo(Guid invoiceTypeId)
+        {
+            var invoiceTypes = GetCachedInvoiceTypes();
+            var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
+            if(invoiceType == null)
+                throw new NullReferenceException(string.Format("invoiceType:{0}",invoiceTypeId));
+            List<InvoiceAttachmentInfo> invoiceAttachmentsInfo = new List<InvoiceAttachmentInfo>();
+            if (invoiceType.Settings.InvoiceAttachments != null && invoiceType.Settings.InvoiceAttachments.Count > 0)
+            {
+                foreach (var attachment in invoiceType.Settings.InvoiceAttachments)
+                {
+                    invoiceAttachmentsInfo.Add(new InvoiceAttachmentInfo
+                    {
+                        InvoiceAttachmentId = attachment.InvoiceAttachmentId,
+                        Title = attachment.Title
+                    });
+                }
+            }
+            return invoiceAttachmentsInfo;
         }
         #endregion
 

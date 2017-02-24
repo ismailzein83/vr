@@ -83,6 +83,15 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return GetWebResponse(input, manager.GetFilteredInvoices(input));
         }
+        [HttpPost]
+        [Route("GetFilteredClientInvoices")]
+        public object GetFilteredClientInvoices(Vanrise.Entities.DataRetrievalInput<InvoiceQuery> input)
+        {
+            if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.Query.InvoiceTypeId))
+                return GetUnauthorizedResponse();
+            InvoiceManager manager = new InvoiceManager();
+            return GetWebResponse(input, manager.GetFilteredClientInvoices(input));
+        }
         [HttpGet]
         [Route("SetInvoicePaid")]
         public bool SetInvoicePaid(long invoiceId, bool isInvoicePaid)

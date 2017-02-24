@@ -105,5 +105,11 @@ namespace Vanrise.Invoice.Web.Controllers
             return _manager.GetInvoiceTypeGridColumns(invoiceTypeId);
         }
 
+        [HttpGet]
+        [Route("GetRemoteInvoiceTypeAttachmentsInfo")]
+        public IEnumerable<InvoiceAttachmentInfo> GetRemoteInvoiceTypeAttachmentsInfo(Guid invoiceTypeId)
+        {
+            return _manager.GetRemoteInvoiceTypeAttachmentsInfo(invoiceTypeId);
+        }
     }
 }
