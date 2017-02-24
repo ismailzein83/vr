@@ -210,7 +210,10 @@ set nocount on;
 ;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('0B08F2E1-6518-46FF-B669-0256CF9BB7D4',5404,'Retail_BE_Account','Account'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+('0B08F2E1-6518-46FF-B669-0256CF9BB7D4',null,'Retail_BE_Subscriber','Subscriber'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+('A2DE8C67-B8AE-4520-BB48-448EE98B7251',null,'Retail_BE_Dealer','Dealer'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+('0E89CCF7-9240-4D1B-8A01-F91957ECA321',null,'Retail_BE_Operator','Operator'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+
 ('4218FCD0-466A-47A9-80DC-3BA20BCF56C4',5405,'Retail_BE_AccountPackage','Account Package'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
 ('2045E39B-B9AA-4720-AD1E-7DEF11985335',5406,'Retail_BE_ChargingPolicy','Charging Policy'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
 ('BE4E62AA-CCE6-48AD-94ED-87D54A605D35',5403,'Retail_BE_Package','Retail_BE_Package'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
