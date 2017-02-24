@@ -47,6 +47,9 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
         var methodDirectiveApi;
         var methodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var eventTypeDirectiveApi;
+        var eventTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
 
 
@@ -107,6 +110,10 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
                 methodDirectiveApi = api;
                 methodReadyPromiseDeferred.resolve();
             };
+            $scope.onEventTypeDirectiveReady = function (api) {
+               eventTypeDirectiveApi = api;
+               eventTypeReadyPromiseDeferred.resolve();
+            };
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
             };
@@ -121,7 +128,7 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadEntryTypeSelector, loadMachineSelector, loadApplicationSelector, loadAssemblySelector, loadTypeSelector, loadMethodSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadEntryTypeSelector, loadMachineSelector, loadApplicationSelector, loadAssemblySelector, loadTypeSelector, loadMethodSelector, loadEventTypeSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -198,7 +205,17 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
                 });
             return methodLoadPromiseDeferred.promise;
         }
-
+        function loadEventTypeSelector() {
+            var eventTypeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            var payload = {
+                attribute: VRCommon_LogAttributeEnum.MethodName.value
+            };
+            eventTypeReadyPromiseDeferred.promise
+                .then(function () {
+                    VRUIUtilsService.callDirectiveLoad(eventTypeDirectiveApi, payload, eventTypeLoadPromiseDeferred);
+                });
+            return eventTypeLoadPromiseDeferred.promise;
+        }
         function setFilterObject() {
             filter = {
                 MachineIds: machineDirectiveApi.getSelectedIds(),
@@ -207,6 +224,7 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
                 MethodIds: methodDirectiveApi.getSelectedIds(),
                 AssemblyIds: assemblyDirectiveApi.getSelectedIds(),
                 EntryType: entryTypeDirectiveApi.getSelectedIds(),
+                EventType: eventTypeDirectiveApi.getSelectedIds(),
                 Message: $scope.Message,
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate

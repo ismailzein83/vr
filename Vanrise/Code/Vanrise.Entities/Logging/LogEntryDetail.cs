@@ -22,5 +22,7 @@ namespace Vanrise.Entities
         public string MethodName { get; set; }
 
         public string EntryTypeName { get; set; }
+
+        public string EventTypeName { get; set; }
     }
 }

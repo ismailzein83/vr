@@ -25,6 +25,11 @@ namespace Vanrise.Entities
 
         public string Message { get; set; }
 
+        public string ExceptionDetail { get; set; }
+
         public DateTime EventTime { get; set; }
+
+        public int? EventType { get; set; }
+
     }
 }

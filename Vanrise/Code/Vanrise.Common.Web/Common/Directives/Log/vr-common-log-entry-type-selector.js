@@ -43,15 +43,15 @@ app.directive('vrCommonLogEntryTypeSelector', [ 'VRCommon_LogEntryTypeEnum', 'Ut
         function getTypeTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Entry Type";
+            var label = "Level";
             if (attrs.ismultipleselection != undefined) {
-                label = "Entry Types";
+                label = "Levels";
                 multipleselection = "ismultipleselection";
             }
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" '
-                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Entry Type" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Level" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>';
         }
         function TypeSelector(ctrl, $scope, attrs) {

@@ -139,7 +139,11 @@ namespace Vanrise.Logging.SQL
                 if (input.Query.EntryType != null && input.Query.EntryType.Count() > 0)
                     entryTypeIds = string.Join<int>(",", input.Query.EntryType);
 
-                ExecuteNonQuerySP("[logging].[sp_LogEntry_CreateTempByFiltered]", tempTableName, entryTypeIds, input.Query.Message, input.Query.FromDate, input.Query.ToDate, machineIds, applicationIds, assemblyIds, typeIds, methodIds);
+                string eventTypeIds = null;
+                if (input.Query.EventType != null && input.Query.EventType.Count() > 0)
+                    eventTypeIds = string.Join<int>(",", input.Query.EventType);
+
+                ExecuteNonQuerySP("[logging].[sp_LogEntry_CreateTempByFiltered]", tempTableName, entryTypeIds, input.Query.Message, input.Query.FromDate, input.Query.ToDate, machineIds, applicationIds, assemblyIds, typeIds, methodIds, eventTypeIds);
             };
 
             if (input.SortByColumnName != null)
@@ -160,7 +164,9 @@ namespace Vanrise.Logging.SQL
                 MethodId = (int)reader["MethodNameId"],
                 EntryType = (LogEntryType)reader["EntryType"],
                 Message = reader["Message"] as string,
-                EventTime = GetReaderValue<DateTime>(reader, "EventTime")
+                ExceptionDetail = reader["ExceptionDetail"] as string,
+                EventTime = GetReaderValue<DateTime>(reader, "EventTime"),
+                EventType = GetReaderValue<int?>(reader,"EventType")
 
             };
             return logEntry;

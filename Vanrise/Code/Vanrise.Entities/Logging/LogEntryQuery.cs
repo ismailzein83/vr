@@ -21,6 +21,8 @@ namespace Vanrise.Entities
 
         public List<int> EntryType { get; set; }
 
+        public List<int> EventType { get; set; }
+
         public string Message { get; set; }
 
         public DateTime? FromDate { get; set; }
