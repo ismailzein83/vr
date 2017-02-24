@@ -20,6 +20,9 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredAccounts")]
         public object GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
         {
+
+            if (!_beManager.DoesUserHaveViewAccess(input.Query.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredAccounts(input));
         }
 
