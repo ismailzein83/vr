@@ -49,7 +49,9 @@ namespace Vanrise.Logging.SQL
             dt.Columns.Add("TypeNameId", typeof(int));
             dt.Columns.Add("MethodNameId", typeof(int));
             dt.Columns.Add("EntryType", typeof(int));
+            dt.Columns.Add("EventType", typeof(int));
             dt.Columns.Add("Message", typeof(string));
+            dt.Columns.Add("ExceptionDetail", typeof(string));
             dt.Columns.Add("EventTime", typeof(DateTime));
             dt.BeginLoadData();
             foreach (var e in entries)
@@ -61,7 +63,9 @@ namespace Vanrise.Logging.SQL
                 dr["TypeNameId"] = GetAttributeId(LogAttributeType.TypeName, e.TypeName);
                 dr["MethodNameId"] = GetAttributeId(LogAttributeType.MethodName, e.MethodName);
                 dr["EntryType"] = (int)e.EntryType;
+                dr["EventType"] = GetAttributeId(LogAttributeType.EventType, e.EventType);
                 dr["Message"] = e.Message;
+                dr["ExceptionDetail"] = e.ExceptionDetail;
                 dr["EventTime"] = e.EventTime;
                 dt.Rows.Add(dr);
             }

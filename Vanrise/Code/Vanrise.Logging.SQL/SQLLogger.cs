@@ -84,7 +84,7 @@ namespace Vanrise.Logging.SQL
             }
         }
 
-        protected override void WriteEntry(LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
+         protected override void WriteEntry(string eventType, string exceptionDetail, LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
         {
             _qLogEntries.Enqueue(new LogEntry
             {
@@ -92,7 +92,9 @@ namespace Vanrise.Logging.SQL
                 TypeName = callingType,
                 MethodName = callingMethod,
                 EntryType = entryType,
+                EventType = eventType,
                 Message = message,
+                ExceptionDetail = exceptionDetail,
                 EventTime = DateTime.Now
             });
         }

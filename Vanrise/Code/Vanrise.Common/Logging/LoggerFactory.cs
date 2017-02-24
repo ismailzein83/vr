@@ -41,7 +41,7 @@ namespace Vanrise.Common
 
     public class ConsoleLogger : LogHandler
     {
-        protected internal override void WriteEntry(LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
+        protected internal override void WriteEntry(string eventType, string exceptionDetail, LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
         {
             Console.WriteLine("{0} - {1}: {2}", entryType, DateTime.Now, message);
         }
@@ -49,7 +49,7 @@ namespace Vanrise.Common
 
     public class ConsoleExceptionLogger : ExceptionLogger
     {
-        protected override void OnWriteException(Exception ex)
+        protected override void OnWriteException(string eventType, Exception ex)
         {
             Console.WriteLine(ex.ToString());
         }
@@ -57,9 +57,9 @@ namespace Vanrise.Common
 
     public class DefaultExceptionLogger : ExceptionLogger
     {
-        protected override void OnWriteException(Exception ex)
+        protected override void OnWriteException(string eventType, Exception ex)
         {
-            LoggerFactory.GetLogger().WriteError(ex.ToString());
+            LoggerFactory.GetLogger().WriteException(eventType, ex);
         }
     }
 

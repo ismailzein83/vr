@@ -90,12 +90,14 @@ namespace Vanrise.Common
 
         #region Private Methods
         
-        void PrivateWriteEntry(LogEntryType entryType, string messageFormat, params object[] args)
+        void PrivateWriteEntry(string eventType, string exceptionDetail, LogEntryType entryType, string messageFormat, params object[] args)
         {
             if (entryType <= _maxLogLevel)
             {
                 if (_handlers != null && _handlers.Count > 0)
                 {
+                    if (eventType == null)
+                        eventType = "Technical";
                     StackFrame frame = new StackFrame(2);
                     var method = frame.GetMethod();
                     var type = method.DeclaringType;
@@ -105,7 +107,7 @@ namespace Vanrise.Common
                         {
                             try
                             {
-                                handler.WriteEntry(entryType, String.Format(messageFormat, args), type.Assembly.GetName().Name, type.FullName, method.Name);
+                                handler.WriteEntry(eventType, exceptionDetail, entryType, String.Format(messageFormat, args), type.Assembly.GetName().Name, type.FullName, method.Name);
                             }
                             catch(Exception ex)
                             {
@@ -117,7 +119,7 @@ namespace Vanrise.Common
             }
         }
 
-        protected override void OnWriteException(Exception e)
+        protected override void OnWriteException(string eventType, Exception e)
         {
             if (_exceptionLoggers != null && _exceptionLoggers.Count > 0)
             {
@@ -125,7 +127,7 @@ namespace Vanrise.Common
                 {
                     try
                     {
-                        exceptionLogger.WriteException(e);
+                        exceptionLogger.WriteException(eventType, e);
                     }
                     catch(Exception ex)
                     {
@@ -147,27 +149,43 @@ namespace Vanrise.Common
 
         public void WriteEntry(LogEntryType entryType, string messageFormat, params object[] args)
         {
-            PrivateWriteEntry(entryType, messageFormat, args);
+            WriteEntry(null, entryType, messageFormat, args);
+        }
+
+        public void WriteEntry(string eventType, LogEntryType entryType, string messageFormat, params object[] args)
+        {
+            PrivateWriteEntry(null, eventType, entryType, messageFormat, args);
         }
 
         public void WriteVerbose(string messageFormat, params object[] args)
         {
-            PrivateWriteEntry(LogEntryType.Verbose, messageFormat, args);
+            WriteEntry(LogEntryType.Verbose, messageFormat, args);
         }
 
         public void WriteInformation(string messageFormat, params object[] args)
         {
-            PrivateWriteEntry(LogEntryType.Information, messageFormat, args);
+            WriteEntry(LogEntryType.Information, messageFormat, args);
         }
 
         public void WriteWarning(string messageFormat, params object[] args)
         {
-            PrivateWriteEntry(LogEntryType.Warning, messageFormat, args);
+            WriteEntry(LogEntryType.Warning, messageFormat, args);
         }
 
         public void WriteError(string messageFormat, params object[] args)
         {
-            PrivateWriteEntry(LogEntryType.Error, messageFormat, args);
+            WriteEntry(LogEntryType.Error, messageFormat, args);
+        }
+
+        internal void WriteException(string eventType, Exception ex)
+        {
+            string message;
+            VRBusinessException businessException = ex as VRBusinessException;
+            if (businessException != null)
+                message = businessException.Message;
+            else
+                message = "Unexpected error occured. Please consult technical support. Click to see error details";
+            PrivateWriteEntry(eventType, ex.ToString(), LogEntryType.Error, message);
         }
 
         #endregion

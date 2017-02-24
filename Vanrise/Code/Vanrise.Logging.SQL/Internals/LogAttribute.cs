@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Logging.SQL
 {
-    public enum LogAttributeType { MachineName = 1, ApplicationName = 2, AssemblyName = 3, TypeName = 4, MethodName = 5 }
+    public enum LogAttributeType { MachineName = 1, ApplicationName = 2, AssemblyName = 3, TypeName = 4, MethodName = 5, EventType = 6 }
 
     internal class LogAttributesByType : ConcurrentDictionary<LogAttributeType, LogAttributesByDescription>
     {

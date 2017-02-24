@@ -11,6 +11,6 @@ namespace Vanrise.Common
     {
         internal LogEntryType? LogLevel { get; set; }
 
-        internal protected abstract void WriteEntry(LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod);
+        internal protected abstract void WriteEntry(string eventType, string exceptionDetail, LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod);
     }
 }
