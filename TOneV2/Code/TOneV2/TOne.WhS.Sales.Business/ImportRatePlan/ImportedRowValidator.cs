@@ -200,7 +200,18 @@ namespace TOne.WhS.Sales.Business
             decimal rateAsDecimal;
             if (!decimal.TryParse(rateValue, out rateAsDecimal))
             {
-                context.ErrorMessage = "Rate is invalid";
+                context.ErrorMessage = "Rate is an invalid number";
+                return false;
+            }
+
+            if (rateAsDecimal == 0)
+            {
+                context.ErrorMessage = "Rate is zero";
+                return false;
+            }
+            else if (rateAsDecimal < 0)
+            {
+                context.ErrorMessage = "Rate is negative";
                 return false;
             }
 
@@ -224,7 +235,7 @@ namespace TOne.WhS.Sales.Business
             DateTime effectiveDateAsDateTime;
             if (!DateTime.TryParse(effectiveDate, out effectiveDateAsDateTime))
             {
-                context.ErrorMessage = "Effective date is invalid";
+                context.ErrorMessage = "Effective date is an invalid date";
                 return false;
             }
 
