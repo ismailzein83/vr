@@ -485,6 +485,29 @@ namespace Vanrise.Common
 
             return totalRecords;
         }
+
+        public static string ReplaceString(string inputString, string stringToReplace, string newStringValue, StringComparison comparisonType)
+        {
+            if (string.IsNullOrEmpty(inputString))
+                return null;
+
+            if (string.IsNullOrEmpty(stringToReplace))
+                return inputString;
+
+            int startIndex = 0;
+            while (true)
+            {
+                startIndex = inputString.IndexOf(stringToReplace, startIndex, comparisonType);
+                if (startIndex == -1)
+                    break;
+
+                inputString = inputString.Substring(0, startIndex) + newStringValue + inputString.Substring(startIndex + stringToReplace.Length);
+
+                startIndex += newStringValue.Length;
+            }
+
+            return inputString;
+        }
     }
 
     public interface IPropValueReader
