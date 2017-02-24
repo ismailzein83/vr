@@ -49,7 +49,7 @@
     <Compile Include="BEReceiveDefinition\BEReceiveDefinitionQuery.cs" />
     <Compile Include="BEReceiveDefinition\BEReceiveDefinitionSettings.cs" />
     <Compile Include="BEReceiveDefinition\EntitySyncDefinition.cs" />
-    <Compile Include="InvoiceTargetBE.cs" />
+    <Compile Include="VRObjectsTargetBE.cs" />
     <Compile Include="SourceBatch\CRMSourceBatch.cs" />
     <Compile Include="ITargetBE.cs" />
     <Compile Include="SourceBatch\FileSourceBatch.cs" />

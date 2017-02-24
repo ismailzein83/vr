@@ -11,13 +11,24 @@ namespace Vanrise.BEBridge.MainExtensions.Synchronizers
     {
         public string ConnectionString { get; set; }
         public VRExpression InsertQueryTemplate { get; set; }
+        public VRExpression LoggingMessageTemplate { get; set; }
         public VRObjectVariableCollection Objects { get; set; }
+        public string LoggingEventType { get; set; }
+
         static VRRazorEvaluator s_evaluator;
+
+
         #region Public Methods
         public override void Initialize(ITargetBESynchronizerInitializeContext context)
         {
             s_evaluator = new VRRazorEvaluator();
-            context.InitializationData = s_evaluator.CompileExpression(this.InsertQueryTemplate);
+            ExpressionTemplate expressionTemplate = new ExpressionTemplate
+            {
+                InsertQueryCompilationOutput = s_evaluator.CompileExpression(this.InsertQueryTemplate),
+                MessageCompilationOutput = s_evaluator.CompileExpression(this.LoggingMessageTemplate)
+
+            };
+            context.InitializationData = expressionTemplate;
         }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
@@ -25,13 +36,16 @@ namespace Vanrise.BEBridge.MainExtensions.Synchronizers
         }
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
-            VRRazorCompilationOutput output = context.InitializationData as VRRazorCompilationOutput;
+            Logger logger = LoggerFactory.GetLogger();
+
+            ExpressionTemplate expressionTemplate = context.InitializationData as ExpressionTemplate;
             context.TargetBE.ThrowIfNull("context.TargetBE", "");
             StringBuilder queryBuilder = new StringBuilder();
-            foreach (var targetInvoice in context.TargetBE)
+            foreach (var targetObject in context.TargetBE)
             {
-                InvoiceTargetBE targetBe = targetInvoice as InvoiceTargetBE;
-                queryBuilder.AppendLine(s_evaluator.EvaluateExpression(output.CompiledExpressionKey, Objects, targetBe.TargetObjects));
+                VRObjectsTargetBE vrObject = targetObject as VRObjectsTargetBE;
+                queryBuilder.AppendLine(s_evaluator.EvaluateExpression(expressionTemplate.InsertQueryCompilationOutput, Objects, vrObject.TargetObjects));
+                logger.WriteEntry(this.LoggingEventType, LogEntryType.Information, s_evaluator.EvaluateExpression(expressionTemplate.MessageCompilationOutput, Objects, vrObject.TargetObjects));
             }
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -51,5 +65,11 @@ namespace Vanrise.BEBridge.MainExtensions.Synchronizers
 
         #endregion
 
+    }
+
+    class ExpressionTemplate
+    {
+        public VRRazorCompilationOutput InsertQueryCompilationOutput { get; set; }
+        public VRRazorCompilationOutput MessageCompilationOutput { get; set; }
     }
 }

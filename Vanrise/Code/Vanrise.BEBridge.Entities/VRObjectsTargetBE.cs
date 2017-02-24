@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BEBridge.Entities
 {
-    public class InvoiceTargetBE : ITargetBE
+    public class VRObjectsTargetBE : ITargetBE
     {
-        public InvoiceTargetBE()
+        public VRObjectsTargetBE()
         {
             TargetObjects = new Dictionary<string, object>();
 

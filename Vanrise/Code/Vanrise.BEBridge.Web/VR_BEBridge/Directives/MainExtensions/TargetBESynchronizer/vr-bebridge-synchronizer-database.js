@@ -49,6 +49,8 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
                     if (payload != undefined) {
                         $scope.scopeModel.insertQueryTemplate = payload.InsertQueryTemplate.ExpressionString;
                         $scope.scopeModel.connectionString = payload.ConnectionString;
+                        $scope.scopeModel.loggingEventType = payload.LoggingEventType;
+                        $scope.scopeModel.loggingMessageTemplate = payload.LoggingMessageTemplate.ExpressionString;
                         objectVariables = payload.Objects;
                     }
 
@@ -65,8 +67,10 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
                         $type: "Vanrise.BEBridge.MainExtensions.Synchronizers.DatabaseSynchronizer, Vanrise.BEBridge.MainExtensions",
                         Name: "Database Synchronizer",
                         InsertQueryTemplate: { ExpressionString: $scope.scopeModel.insertQueryTemplate },
-                        ConnectionString:  $scope.scopeModel.connectionString,
-                        Objects: gridAPI.getData()
+                        ConnectionString: $scope.scopeModel.connectionString,
+                        Objects: gridAPI.getData(),
+                        LoggingEventType: $scope.scopeModel.loggingEventType,
+                        LoggingMessageTemplate: { ExpressionString: $scope.scopeModel.loggingMessageTemplate }
                     };
                     return data;
                 };
