@@ -1,5 +1,5 @@
 ﻿<vr-tabs>
-    <vr-tab header="'Empty Rates'">
+    <vr-tab header="'Empty Rates'" ng-if="scopeModel.showEmptyRateGrid">
         <vr-row>
             <vr-columns colnum="{{rateValidationResultCtrl.normalColNum}}">
                 <vr-datagrid on-ready="scopeModel.onEmptyRateGridReady"
@@ -10,12 +10,11 @@
                              maxheight="100px"
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" disablesorting></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
     </vr-tab>
-    <vr-tab header="'Zero Rates'">
+    <vr-tab header="'Zero Rates'" ng-if="scopeModel.showZeroRateGrid">
         <vr-row>
             <vr-columns colnum="{{rateValidationResultCtrl.normalColNum}}">
                 <vr-datagrid on-ready="scopeModel.onZeroRateGridReady"
@@ -26,12 +25,11 @@
                              maxheight="100px"
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" disablesorting></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
     </vr-tab>
-    <vr-tab header="'Negative Rates'">
+    <vr-tab header="'Negative Rates'" ng-if="scopeModel.showNegativeRateGrid">
         <vr-row>
             <vr-columns colnum="{{rateValidationResultCtrl.normalColNum}}">
                 <vr-datagrid on-ready="scopeModel.onNegativeRateGridReady"
@@ -43,11 +41,12 @@
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn widthfactor="5" disablesorting></vr-datagridcolumn><!-- Added to create padding between the Rate column and the edge of the grid -->
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
     </vr-tab>
-    <vr-tab header="'Duplicate Rates'">
+    <vr-tab header="'Duplicate Rates'" ng-if="scopeModel.showDuplicateRateGrid">
         <vr-row>
             <vr-columns colnum="{{rateValidationResultCtrl.normalColNum}}">
                 <vr-datagrid on-ready="scopeModel.onDuplicateRateGridReady"
@@ -59,6 +58,7 @@
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn widthfactor="5" disablesorting></vr-datagridcolumn><!-- Added to create padding between the Rate column and the edge of the grid -->
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

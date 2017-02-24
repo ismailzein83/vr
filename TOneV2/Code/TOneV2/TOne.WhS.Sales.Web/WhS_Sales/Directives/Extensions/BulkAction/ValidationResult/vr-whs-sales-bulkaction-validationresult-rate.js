@@ -69,9 +69,7 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
                 loadMoreGridData($scope.scopeModel.duplicateRates, duplicateRates);
             };
 
-            UtilsService.waitMultiplePromises([emptyRateGridReadyDeferred.promise, zeroRateGridReadyDeferred.promise, negativeRateGridReadyDeferred.promise, duplicateRateGridReadyDeferred.promise]).then(function () {
-                defineAPI();
-            });
+            defineAPI();
         }
         function defineAPI() {
 
@@ -91,10 +89,33 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
                     duplicateRates = bulkActionValidationResult.DuplicateRates;
                 }
 
-                loadMoreGridData($scope.scopeModel.emptyRates, emptyRates);
-                loadMoreGridData($scope.scopeModel.zeroRates, zeroRates);
-                loadMoreGridData($scope.scopeModel.negativeRates, negativeRates);
-                loadMoreGridData($scope.scopeModel.duplicateRates, duplicateRates);
+                var gridReadyPromises = [];
+
+                if (emptyRates != undefined && emptyRates.length > 0) {
+                    $scope.scopeModel.showEmptyRateGrid = true;
+                    gridReadyPromises.push(emptyRateGridReadyDeferred.promise);
+                    loadMoreGridData($scope.scopeModel.emptyRates, emptyRates);
+                }
+
+                if (zeroRates != undefined && zeroRates.length > 0) {
+                    $scope.scopeModel.showZeroRateGrid = true;
+                    gridReadyPromises.push(zeroRateGridReadyDeferred.promise);
+                    loadMoreGridData($scope.scopeModel.zeroRates, zeroRates);
+                }
+
+                if (negativeRates != undefined && negativeRates.length > 0) {
+                    $scope.scopeModel.showNegativeRateGrid = true;
+                    gridReadyPromises.push(negativeRateGridReadyDeferred.promise);
+                    loadMoreGridData($scope.scopeModel.negativeRates, negativeRates);
+                }
+
+                if (duplicateRates != undefined && duplicateRates.length > 0) {
+                    $scope.scopeModel.showDuplicateRateGrid = true;
+                    gridReadyPromises.push(duplicateRateGridReadyDeferred.promise);
+                    loadMoreGridData($scope.scopeModel.duplicateRates, duplicateRates);
+                }
+
+                return UtilsService.waitMultiplePromises(gridReadyPromises);
             };
 
             if (ctrl.onReady != null) {
