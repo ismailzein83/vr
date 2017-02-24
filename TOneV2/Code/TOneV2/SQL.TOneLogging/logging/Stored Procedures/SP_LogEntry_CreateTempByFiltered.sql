@@ -13,7 +13,8 @@ CREATE PROCEDURE [logging].[SP_LogEntry_CreateTempByFiltered]
 @ApplicationIds VARCHAR(500) = NULL,
 @AssemblyIds VARCHAR(500) = NULL,
 @TypeIds VARCHAR(500) = NULL,
-@MethodIds VARCHAR(500) = NULL
+@MethodIds VARCHAR(500) = NULL,
+@EventIds  VARCHAR(500) = NULL
 
 AS
 BEGIN
@@ -48,6 +49,10 @@ BEGIN
 			INSERT INTO @MethodTable (MethodId)
 			SELECT CONVERT(INT, ParsedString) FROM [bp].[ParseStringList](@MethodIds)
 
+			DECLARE @EventTable TABLE (EventTypeId INT)
+			INSERT INTO @EventTable (EventTypeId)
+			SELECT CONVERT(INT, ParsedString) FROM [bp].[ParseStringList](@EventIds)
+
 			SELECT [ID]
 				  ,[MachineNameId]
 				  ,[ApplicationNameId]
@@ -56,7 +61,9 @@ BEGIN
 				  ,[MethodNameId]
 				  ,[EntryType]
 				  ,[Message]
+				  ,[ExceptionDetail]
 				  ,[EventTime]
+				  ,[EventType]
 				  INTO #RESULT
 			  FROM [logging].[LogEntry] WITH(NOLOCK) 
 			  WHERE
@@ -66,6 +73,7 @@ BEGIN
 				  (@AssemblyIds IS NULL OR AssemblyNameId IN (SELECT AssemblyId FROM @AssemblyTable)) AND
 				  (@TypeIds IS NULL OR TypeNameId IN (SELECT TypeId FROM @TypeTable)) AND
 				  (@MethodIds IS NULL OR MethodNameId IN (SELECT MethodId FROM @MethodTable)) AND
+				  (@EventIds IS NULL OR EventType IN (SELECT EventTypeId FROM @EventTable)) AND
 				  (@FromDate IS NULL OR EventTime >= @FromDate) AND
 				  (@ToDate IS NULL OR EventTime <= @ToDate) AND
 				  (@Message IS NULL OR [Message] LIKE '%'+@Message+'%')
