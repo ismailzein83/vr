@@ -19,7 +19,7 @@
                         <div transclude-to="body">
                             <vr-row>
                                 <vr-columns width="1/2row">
-                                    <vr-section title="Action Settings">
+                                    <vr-section header="Action Settings">
                                         <vr-validation-group validationcontext="validationContext">
                                             <vr-whs-sales-bulkaction-type-selective on-ready="scopeModel.onBulkActionSelectiveReady"
                                                                                     normal-col-num="6"
@@ -30,7 +30,7 @@
                                     </vr-section>
                                 </vr-columns>
                                 <vr-columns width="1/2row">
-                                    <vr-section title="Applicable Zones">
+                                    <vr-section header="Applicable Zones">
                                         <span vr-disabled="validationContext.validate() != null">
                                             <vr-whs-sales-bulkaction-zonefilter-selective on-ready="scopeModel.onZoneFilterSelectiveReady"
                                                                                           normal-col-num="6"
