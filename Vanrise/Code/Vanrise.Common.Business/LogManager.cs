@@ -76,7 +76,8 @@ namespace Vanrise.Common.Business
                 AssemblyName = this.GetAttributeName(logEntry.AssemblyId),
                 TypeName = this.GetAttributeName(logEntry.TypeId),
                 MethodName = this.GetAttributeName(logEntry.MethodId),
-                EntryTypeName = Vanrise.Common.Utilities.GetEnumDescription(logEntry.EntryType)
+                EventTypeName = (logEntry.EventType.HasValue)?this.GetAttributeName(logEntry.EventType.Value):null,
+                EntryTypeName = Vanrise.Common.Utilities.GetEnumDescription(logEntry.EntryType),
             };
         }
 
