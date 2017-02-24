@@ -13,7 +13,13 @@ namespace Vanrise.Common.Business
 {
     public class VRComponentTypeManager
     {
+        #region Ctor/Variables
+
         static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+
+        #endregion
+
+        #region Public Methods
 
         public IDataRetrievalResult<VRComponentTypeDetail> GetFilteredVRComponentTypes(DataRetrievalInput<VRComponentTypeQuery> input)
         {
@@ -146,6 +152,24 @@ namespace Vanrise.Common.Business
                 }).ToList();
         }
 
+        public Dictionary<Guid, Q> GetCachedComponentTypes<T, Q>()
+            where T : VRComponentTypeSettings
+            where Q : VRComponentType<T>
+        {
+            return s_cacheManager.GetOrCreateObject(string.Format("GetCachedComponentTypes_{0}", typeof(T).AssemblyQualifiedName), () =>
+            {
+                return GetCachedComponentTypes().FindAllRecords(itm => itm.Settings is T).Select(
+                   itm =>
+                   {
+                       var componentTypeAsQ = Activator.CreateInstance<Q>();
+                       componentTypeAsQ.VRComponentTypeId = itm.VRComponentTypeId;
+                       componentTypeAsQ.Name = itm.Name;
+                       componentTypeAsQ.Settings = itm.Settings as T;
+                       return componentTypeAsQ;
+                   }).ToDictionary(itm => itm.VRComponentTypeId, itm => itm);
+            });
+        }
+
         public T GetComponentTypeSettings<T>(Guid componentTypeId) where T : VRComponentTypeSettings
         {
             var componentType = GetComponentType<T, VRComponentType<T>>(componentTypeId);
@@ -153,6 +177,10 @@ namespace Vanrise.Common.Business
                 throw new NullReferenceException(String.Format("componentType '{0}'", componentTypeId));
             return componentType.Settings;
         }
+
+        #endregion
+
+        #region Private Methods
 
         public T GetCachedOrCreate<T>(Object cacheName, Func<T> createObject)
         {
@@ -169,6 +197,8 @@ namespace Vanrise.Common.Business
                 return componentTypes.ToDictionary(ct => ct.VRComponentTypeId, ct => ct);
             });
         }
+
+        #endregion
 
         #region Private Classes
 
