@@ -118,7 +118,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
             };
 
             if (areRulesLinked)
-                WhS_Routing_RouteRuleService.editLinkedRouteOptionRule(routeOptionRule.Entity.RuleId, linkedCode, onRouteOptionRuleUpdated);
+                WhS_Routing_RouteOptionRuleService.editLinkedRouteOptionRule(routeOptionRule.Entity.RuleId, linkedCode, onRouteOptionRuleUpdated);
             else
                 WhS_Routing_RouteOptionRuleService.editRouteOptionRule(routeOptionRule.Entity.RuleId, onRouteOptionRuleUpdated);
         }
