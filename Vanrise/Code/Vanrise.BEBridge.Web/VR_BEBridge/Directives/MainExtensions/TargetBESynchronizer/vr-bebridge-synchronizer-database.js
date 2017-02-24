@@ -47,10 +47,10 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.scopeModel.insertQueryTemplate = payload.InsertQueryTemplate.ExpressionString;
+                        $scope.scopeModel.insertQueryTemplate = payload.InsertQueryTemplate != undefined ? payload.InsertQueryTemplate.ExpressionString : undefined;
                         $scope.scopeModel.connectionString = payload.ConnectionString;
                         $scope.scopeModel.loggingEventType = payload.LoggingEventType;
-                        $scope.scopeModel.loggingMessageTemplate = payload.LoggingMessageTemplate.ExpressionString;
+                        $scope.scopeModel.loggingMessageTemplate = payload.LoggingMessageTemplate != undefined ? payload.LoggingMessageTemplate.ExpressionString : undefined;
                         objectVariables = payload.Objects;
                     }
 
