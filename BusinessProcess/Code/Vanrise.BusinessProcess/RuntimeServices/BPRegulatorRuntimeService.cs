@@ -14,9 +14,10 @@ namespace Vanrise.BusinessProcess
 {
     public class BPRegulatorRuntimeService : RuntimeService
     {
-        static int s_maxWorkflowsPerServiceInstance = 5;
-        static int s_maxConcurrentWorkflowsPerDefinition = 5;
+        static int s_maxWorkflowsPerServiceInstance = 10;
+        static int s_maxConcurrentWorkflowsPerDefinition = 10;
         static int s_moreAssignableItemsToMaxConcurrentPerBPDefinition = 0;
+        static int s_minimumPendingInstancesToRetrieve = 900;
 
         BPDefinitionManager _bpDefinitionManager = new BPDefinitionManager();
         IBPInstanceDataManager _bpInstanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
@@ -48,7 +49,7 @@ namespace Vanrise.BusinessProcess
 
         private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances, out List<BPPendingInstanceInfo> runningInstances)
         {
-            int nbOfInstancesToRetrieve = bpServiceInstances.Count * s_maxWorkflowsPerServiceInstance;
+            int nbOfInstancesToRetrieve = s_minimumPendingInstancesToRetrieve + (bpServiceInstances.Count * s_maxWorkflowsPerServiceInstance);
             var pendingInstancesInfo = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses, nbOfInstancesToRetrieve);
             if (pendingInstancesInfo != null && pendingInstancesInfo.Count > 0)
             {

@@ -14,6 +14,9 @@ namespace Vanrise.BusinessProcess.Entities
         public long? ParentProcessId { get; set; }
         public LogEntryType  Severity { get; set; }
         public string TrackingMessage { get; set; }
+
+        public string ExceptionDetail { get; set; }
+
         public DateTime EventTime { get; set; }
     }
 }

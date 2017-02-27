@@ -50,6 +50,32 @@ namespace Vanrise.BusinessProcess
             WriteTrackingMessages(true, severity, messageFormat, args);
         }
 
+        public void WriteHandledException(Exception ex)
+        {
+            WriteHandledExceptionMessages(false, ex);
+        }
+
+        public void WriteBusinessHandledException(Exception ex)
+        {
+            WriteHandledExceptionMessages(true, ex);
+        }
+
+        void WriteHandledExceptionMessages(bool writeBusinessTracking, Exception ex)
+        {
+            BPTrackingMessage trackingMessage = new BPTrackingMessage
+            {
+                TrackingMessage = Utilities.GetExceptionBusinessMessage(ex),
+                ExceptionDetail = ex.ToString(),
+                EventTime = DateTime.Now,
+                ProcessInstanceId = this.InstanceInfo.ProcessInstanceID,
+                ParentProcessId = this.InstanceInfo.ParentProcessID,
+                Severity = LogEntryType.Warning
+            };
+            BPTrackingChannel.Current.WriteTrackingMessage(trackingMessage);
+            if (writeBusinessTracking)
+                LoggerFactory.GetExceptionLogger().WriteException(this.InstanceInfo.InputArgument.GetDefinitionTitle(), ex);
+        }
+
         void WriteTrackingMessages(bool writeBusinessTracking, LogEntryType severity, string messageFormat, params object[] args)
         {
             BPTrackingMessage trackingMessage = new BPTrackingMessage
