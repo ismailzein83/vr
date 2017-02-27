@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAccountbalanceNotificationsGrid', ['VR_Notification_VRNotificationsAPIService', 'VRTimerService',
-    function (VR_Notification_VRNotificationsAPIService, VRTimerService) {
+app.directive('vrAccountbalanceNotificationsGrid', ['VR_Notification_VRNotificationsAPIService', 'VRTimerService', 'BusinessProcess_GridMaxSize',
+    function (VR_Notification_VRNotificationsAPIService, VRTimerService, BusinessProcess_GridMaxSize) {
         return {
             restrict: 'E',
             scope: {
@@ -53,7 +53,7 @@ app.directive('vrAccountbalanceNotificationsGrid', ['VR_Notification_VRNotificat
             function defineAPI() {
                 var directiveAPI = {};
                 directiveAPI.loadGrid = function (query) {
-                    input.vrNotificationTypeId = query.NotificationTypeId;
+                    input.NotificationTypeId = query.NotificationTypeId;
 
                     onInit();
                 };
@@ -78,10 +78,10 @@ app.directive('vrAccountbalanceNotificationsGrid', ['VR_Notification_VRNotificat
 
                         }
                         $scope.scopeModel.vrNotifications.sort(function (a, b) {
-                            return b.Entity.Id - a.Entity.Id;
+                            return b.Entity.VRNotificationId - a.Entity.VRNotificationId;
                         });
-                        input.LessThanID = $scope.scopeModel.vrNotifications[$scope.scopeModel.vrNotifications.length - 1].Entity.Id;
-                        input.GreaterThanID = $scope.scopeModel.vrNotifications[0].Entity.Id;
+                        input.LessThanID = $scope.scopeModel.vrNotifications[$scope.scopeModel.vrNotifications.length - 1].Entity.VRNotificationId;
+                        input.GreaterThanID = $scope.scopeModel.vrNotifications[0].Entity.VRNotificationId;
                     }
                 });
             }
@@ -109,14 +109,14 @@ app.directive('vrAccountbalanceNotificationsGrid', ['VR_Notification_VRNotificat
                     if (itemAddedOrUpdatedInThisCall) {
                         if ($scope.scopeModel.vrNotifications.length > 0) {
                             $scope.scopeModel.vrNotifications.sort(function (a, b) {
-                                return b.Entity.Id - a.Entity.Id;
+                                return b.Entity.VRNotificationId - a.Entity.VRNotificationId;
                             });
 
                             if ($scope.scopeModel.vrNotifications.length > BusinessProcess_GridMaxSize.maximumCount) {
                                 $scope.scopeModel.vrNotifications.length = BusinessProcess_GridMaxSize.maximumCount;
                             }
-                            input.LessThanID = $scope.scopeModel.vrNotifications[$scope.scopeModel.vrNotifications.length - 1].Entity.Id;
-                            input.GreaterThanID = $scope.scopeModel.vrNotifications[0].Entity.Id;
+                            input.LessThanID = $scope.scopeModel.vrNotifications[$scope.scopeModel.vrNotifications.length - 1].Entity.VRNotificationId;
+                            input.GreaterThanID = $scope.scopeModel.vrNotifications[0].Entity.VRNotificationId;
                         }
                     }
                 }
