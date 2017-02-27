@@ -49,24 +49,26 @@ namespace Retail.Zajil.MainExtensions
             {
                 ITargetBE targetZajilAccount;
                 var sourceId = row["CRM_Company_ID"] as string;
-                if (zajilAccounts.TryGetValue(sourceId, out targetZajilAccount))
-                {
-                    ((targetZajilAccount as SourceAccountData).Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings as AccountPartOrderDetail).OrderDetailItems.Add(GetOrderDetailItem(row));
-                    continue;
-                }
                 string accountName = row["Company_Name"] as string;
-                SourceAccountData accountData = new SourceAccountData
+                try
                 {
-                    Account = new Account()
-                };
+                    if (zajilAccounts.TryGetValue(sourceId, out targetZajilAccount))
+                    {
+                        ((targetZajilAccount as SourceAccountData).Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings as AccountPartOrderDetail).OrderDetailItems.Add(GetOrderDetailItem(row));
+                        continue;
+                    }
+                    SourceAccountData accountData = new SourceAccountData
+                    {
+                        Account = new Account()
+                    };
 
-                accountData.Account.Name = accountName;
-                accountData.Account.CreatedTime = row["CreateDate"] != DBNull.Value ? (DateTime)row["CreateDate"] : default(DateTime);
-                accountData.Account.SourceId = sourceId;
-                accountData.Account.TypeId = this.AccountTypeId;
-                FillAccountSettings(accountData, row);
-                accountData.Account.StatusId = this.InitialStatusId;
-                accountData.ChildrenAccounts = new List<SourceAccountData>()
+                    accountData.Account.Name = accountName;
+                    accountData.Account.CreatedTime = row["CreateDate"] != DBNull.Value ? (DateTime)row["CreateDate"] : default(DateTime);
+                    accountData.Account.SourceId = sourceId;
+                    accountData.Account.TypeId = this.AccountTypeId;
+                    FillAccountSettings(accountData, row);
+                    accountData.Account.StatusId = this.InitialStatusId;
+                    accountData.ChildrenAccounts = new List<SourceAccountData>()
                 {
                     new SourceAccountData{
                      Account = new Account{
@@ -76,10 +78,17 @@ namespace Retail.Zajil.MainExtensions
                      }
                     }
                 };
-                zajilAccounts.Add(sourceId, accountData);
+                    zajilAccounts.Add(sourceId, accountData);
+                }
+                catch (Exception ex)
+                {
+                    var finalException = Utilities.WrapException(ex, String.Format("Failed to import Account (Id: '{0}' Name: '{1}') due to conversion error", sourceId, accountName));
+                    context.WriteBusinessHandledException(finalException);
+                }
             }
             context.TargetBEs = zajilAccounts.Values.ToList();
         }
+
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
             SourceAccountData existingBe = context.ExistingBE as SourceAccountData;

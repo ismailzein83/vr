@@ -8,6 +8,7 @@ using Retail.BusinessEntity.Business;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Common;
 
 namespace Retail.Zajil.MainExtensions.Convertors
 {
@@ -33,28 +34,37 @@ namespace Retail.Zajil.MainExtensions.Convertors
             List<ITargetBE> transactionTargetBEs = new List<ITargetBE>();
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
-                AccountBEManager accountBeManager = new AccountBEManager();
-                var account = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row[this.SourceAccountIdColumn].ToString());
-                SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
+                string sourceId = row[this.SourceIdColumn] as string;
+                try
                 {
-                    BillingTransaction = new BillingTransaction
+                    AccountBEManager accountBeManager = new AccountBEManager();
+                    var account = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row[this.SourceAccountIdColumn].ToString());
+                    SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
                     {
-                        TransactionTypeId = TransactionTypeId,
-                        SourceId = row[this.SourceIdColumn] as string,
-                        CurrencyId = this.CurrencyId,
-                        AccountId = account.AccountId.ToString(),
-                        TransactionTime = (DateTime)row[this.TimeColumn],
-                        Amount = (decimal)row[this.AmountColumn],
-                        AccountTypeId = account.TypeId,
-                        Reference = row["Applied_to_Doc_Number"] as string,
-                        Notes = string.Format("Description: {0}, Document_Type_and_Number: {1}, PONUMBER: {2}, Invoive Description: {3}",
-                                                row["trx_desc"] as string,
-                                                row["Document_Type_and_Number"] as string,
-                                                row["PONUMBER"] as string,
-                                                row["Description"] as string)
-                    }
-                };
-                transactionTargetBEs.Add(sourceTransaction);
+                        BillingTransaction = new BillingTransaction
+                        {
+                            TransactionTypeId = TransactionTypeId,
+                            SourceId = sourceId,
+                            CurrencyId = this.CurrencyId,
+                            AccountId = account.AccountId.ToString(),
+                            TransactionTime = (DateTime)row[this.TimeColumn],
+                            Amount = (decimal)row[this.AmountColumn],
+                            AccountTypeId = account.TypeId,
+                            Reference = row["Applied_to_Doc_Number"] as string,
+                            Notes = string.Format("Description: {0}, Document_Type_and_Number: {1}, PONUMBER: {2}, Invoive Description: {3}",
+                                                    row["trx_desc"] as string,
+                                                    row["Document_Type_and_Number"] as string,
+                                                    row["PONUMBER"] as string,
+                                                    row["Description"] as string)
+                        }
+                    };
+                    transactionTargetBEs.Add(sourceTransaction);
+                }
+                catch(Exception ex)
+                {
+                    var finalException = Utilities.WrapException(ex, String.Format("Failed to import Payment (SourceId: '{0}') due to conversion error", sourceId));
+                    context.WriteBusinessHandledException(finalException);
+                }
             }
             context.TargetBEs = transactionTargetBEs;
         }

@@ -16,7 +16,7 @@ using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountBEManager : IBusinessEntityManager
+    public class AccountBEManager : IBusinessEntityManager, IAccountBEManager
     {
         #region Public Methods
 

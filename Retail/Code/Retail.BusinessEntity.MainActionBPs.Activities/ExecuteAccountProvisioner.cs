@@ -72,6 +72,12 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             {
                 _context.WriteTrackingMessage(severity, messageFormat, args);
             }
+
+
+            public void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _context.WriteBusinessTrackingMsg(severity, messageFormat, args);
+            }
         }
     }
 }

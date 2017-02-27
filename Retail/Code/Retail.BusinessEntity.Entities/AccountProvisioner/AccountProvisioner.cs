@@ -17,6 +17,8 @@ namespace Retail.BusinessEntity.Entities
         long AccountId { get; }
         Guid AccountBEDefinitionId { get; }
         void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);
+        
+        void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
     }
 
    

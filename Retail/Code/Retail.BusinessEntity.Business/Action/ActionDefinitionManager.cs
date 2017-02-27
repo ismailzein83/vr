@@ -11,7 +11,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace Retail.BusinessEntity.Business
 {
-    public class ActionDefinitionManager : IActionDefinitionManager
+    public class ActionDefinitionManager
     {
 
         #region Public Methods

@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Transformation.Entities;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -22,7 +23,7 @@ namespace Retail.BusinessEntity.Business
                 return "Accounts";
             }
         }
-
+         
         public List<AccountSynchronizerInsertHandler> InsertHandlers { get; set; }
 
         #region Public Methods
@@ -39,6 +40,7 @@ namespace Retail.BusinessEntity.Business
             {
                 SourceAccountData accountData = targetAccount as SourceAccountData;
                 AddAccount(accountData, null);
+                context.WriteBusinessTrackingMsg(LogEntryType.Information, "New Account '{0}' imported", accountData.Account.Name);
             }
         }
 
@@ -62,8 +64,7 @@ namespace Retail.BusinessEntity.Business
         {
             if (context.TargetBE == null)
                 throw new NullReferenceException("context.TargetBE");
-            AccountBEManager accountManager = new AccountBEManager();
-
+            AccountBEManager accountManager = new AccountBEManager();           
             foreach (var target in context.TargetBE)
             {
                 SourceAccountData accountData = target as SourceAccountData;
@@ -79,6 +80,7 @@ namespace Retail.BusinessEntity.Business
                     AccountBEDefinitionId = this.AccountBEDefinitionId
                 };
                 accountManager.TryUpdateAccount(editAccount);
+                context.WriteBusinessTrackingMsg(LogEntryType.Information, "Account '{0}' updated", accountData.Account.Name);
             }
         }
 

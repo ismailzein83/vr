@@ -35,8 +35,20 @@ namespace Retail.BusinessEntity.Entities
                 return String.Format("Retail_BE_ActionBPInputArgument_{0}", accountActionDefinition.ActionDefinitionSettings.ConfigId);
             }
         }
-
+        
         public override string GetTitle()
+        {
+            string actionName = GetActionName();
+            string accountName = BEManagerFactory.GetManager<IAccountBEManager>().GetAccountName(this.AccountBEDefinitionId, this.AccountId);
+            return String.Format("{0} for Account: {1}", actionName, accountName);
+        }
+
+        public override string GetDefinitionTitle()
+        {
+            return GetActionName();
+        }
+
+        private string GetActionName()
         {
             var accountActionDefinition = BEManagerFactory.GetManager<IAccountBEDefinitionManager>().GetAccountActionDefinition(this.AccountBEDefinitionId, this.ActionDefinitionId);
             if (accountActionDefinition == null)

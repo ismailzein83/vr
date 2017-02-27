@@ -90,6 +90,7 @@
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandler.cs" />
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandlerConfig.cs" />
     <Compile Include="Account\ExtendedSettings\PortalAccountSettings.cs" />
+    <Compile Include="BusinessManagers\IAccountBEManager.cs" />
     <Compile Include="DID\DID.cs" />
     <Compile Include="DID\DIDDetail.cs" />
     <Compile Include="DID\DIDFilter.cs" />
@@ -179,7 +180,6 @@
     <Compile Include="Agent\AgentSetting.cs" />
     <Compile Include="Agent\SourceAgent.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
-    <Compile Include="BusinessManagers\IActionDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyDetail.cs" />
     <Compile Include="ChargingPolicy\ChargingPolicyInfo.cs" />
