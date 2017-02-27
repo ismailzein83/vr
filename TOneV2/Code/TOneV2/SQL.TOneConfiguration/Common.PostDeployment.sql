@@ -149,7 +149,7 @@ set nocount on;
 ('CFCF02C6-0C70-443D-A91E-B8D291F5263E','Object Type Definitions','Object Type Definitions','#/view/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRObjectTypeDefinition/GetFilteredVRObjectTypeDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,30),
 ('33AC6A20-F8BE-4D6F-A659-F643DADE1065','Mail Message Types','Mail Message Types','#/view/Common/Views/VRMail/VRMailMessageTypeManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRMailMessageType/GetFilteredMailMessageTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,35),
 
-('A20E826F-FB18-4A40-ADAC-7D257399A1CA','Connections','Connections Management','#/view/Common/Views/VRConnection/VRConnectionManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRConnection/GetFilteredVRConnections',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,40),
+('A20E826F-FB18-4A40-ADAC-7D257399A1CA','Connections','Connections Management','#/view/Common/Views/VRConnection/VRConnectionManagement','baaf681e-ab1c-4a64-9a35-3f3951398881','VRCommon/VRConnection/GetFilteredVRConnections',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,40),
 
 ('8AC4B99E-01A0-41D1-AE54-09E679309086','Status Definitions','Status Definitions','#/view/Common/Views/StatusDefinition/StatusDefinitionManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/StatusDefinition/GetFilteredStatusDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,14),
 
