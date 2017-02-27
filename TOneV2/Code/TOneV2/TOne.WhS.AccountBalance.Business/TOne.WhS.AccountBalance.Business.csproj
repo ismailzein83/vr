@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.AccountBalance.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>

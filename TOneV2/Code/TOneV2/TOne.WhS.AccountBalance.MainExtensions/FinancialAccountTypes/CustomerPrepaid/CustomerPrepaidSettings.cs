@@ -13,7 +13,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerP
         public override bool IsCustomerAccount(IFinancialAccountIsCustomerAccountContext context)
         {
             CustomerPrepaidDefinitionSettings definitionSetting = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<CustomerPrepaidDefinitionSettings>(context.DefinitionId);
-            context.AccountTypeId = definitionSetting.AccountTypeId;
             context.UsageTransactionTypeId = definitionSetting.UsageTransactionTypeId;
             return true;
         }

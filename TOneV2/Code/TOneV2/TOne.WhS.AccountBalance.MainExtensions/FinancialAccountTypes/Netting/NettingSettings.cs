@@ -17,7 +17,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.Netting
         public override bool IsCustomerAccount(IFinancialAccountIsCustomerAccountContext context)
         {
             NettingDefinitionSettings definitionSetting = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<NettingDefinitionSettings>(context.DefinitionId);
-            context.AccountTypeId = definitionSetting.AccountTypeId;
             context.UsageTransactionTypeId = definitionSetting.CustomerUsageTransactionTypeId;
             context.CreditLimit = this.CustomerCreditLimit;
             return true;
@@ -27,7 +26,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.Netting
         {
 
             NettingDefinitionSettings definitionSetting = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<NettingDefinitionSettings>(context.DefinitionId);
-            context.AccountTypeId = definitionSetting.AccountTypeId;
             context.UsageTransactionTypeId = definitionSetting.SupplierUsageTransactionTypeId;
             context.CreditLimit = this.SupplierCreditLimit;
             return true;

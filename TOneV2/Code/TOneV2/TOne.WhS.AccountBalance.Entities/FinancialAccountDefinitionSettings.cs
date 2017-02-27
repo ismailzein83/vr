@@ -6,17 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.AccountBalance.Entities
 {
-    public class FinancialAccountDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
-    {
-        public override Guid VRComponentTypeConfigId
-        {
-            get { return new Guid("0144FF10-50C7-4B62-9C3A-62E7B0F2364C"); }
-        }
-
-        public FinancialAccountDefinitionExtendedSettings ExtendedSettings { get; set; }
-    }
-
-    public abstract class FinancialAccountDefinitionExtendedSettings
+    public abstract class FinancialAccountDefinitionSettings
     {
         public abstract Guid ConfigId { get; }
 

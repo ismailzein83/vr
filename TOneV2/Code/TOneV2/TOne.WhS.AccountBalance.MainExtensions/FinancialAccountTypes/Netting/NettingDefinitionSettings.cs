@@ -7,7 +7,7 @@ using TOne.WhS.AccountBalance.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.Netting
 {
-    public class NettingDefinitionSettings : FinancialAccountDefinitionExtendedSettings
+    public class NettingDefinitionSettings : FinancialAccountDefinitionSettings
     {
         public override Guid ConfigId
         {
@@ -29,8 +29,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.Netting
                 return true;
             }
         }
-
-        public Guid AccountTypeId { get; set; }
 
         public Guid CustomerUsageTransactionTypeId { get; set; }
 

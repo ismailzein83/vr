@@ -10,18 +10,13 @@ namespace TOne.WhS.AccountBalance.Business
 {
     public class FinancialAccountDefinitionManager
     {
-        static Vanrise.Common.Business.VRComponentTypeManager s_componentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-        public T GetFinancialAccountDefinitionExtendedSettings<T>(Guid financialAccountDefinitionId) where T : FinancialAccountDefinitionExtendedSettings
+        static Vanrise.AccountBalance.Business.AccountTypeManager s_accountTypeManager = new Vanrise.AccountBalance.Business.AccountTypeManager();
+        public T GetFinancialAccountDefinitionExtendedSettings<T>(Guid accountTypeId) where T : FinancialAccountDefinitionSettings
         {
-            FinancialAccountDefinitionSettings definitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
-            return definitionSettings.ExtendedSettings.CastWithValidate<T>("definitionSettings.ExtendedSettings", financialAccountDefinitionId);
-        }
-
-        public FinancialAccountDefinitionSettings GetFinancialAccountDefinitionSettings(Guid financialAccountDefinitionId)
-        {
-            FinancialAccountDefinitionSettings definitionSettings = s_componentTypeManager.GetComponentTypeSettings<FinancialAccountDefinitionSettings>(financialAccountDefinitionId);
-            definitionSettings.ThrowIfNull("definitionSettings", financialAccountDefinitionId);
-            return definitionSettings;
+            var accountTypeSettings = s_accountTypeManager.GetAccountTypeSettings(accountTypeId);
+            accountTypeSettings.ThrowIfNull("accountType", accountTypeId);
+            AccountBalanceSettings accountBalanceSettings = accountTypeSettings.ExtendedSettings.CastWithValidate<AccountBalanceSettings>("accountTypeSettings.ExtendedSettings", accountTypeId);
+            return accountBalanceSettings.DefinitionSettings.CastWithValidate<T>("accountBalanceSettings.DefinitionSettings", accountTypeId);
         }
     }
 }

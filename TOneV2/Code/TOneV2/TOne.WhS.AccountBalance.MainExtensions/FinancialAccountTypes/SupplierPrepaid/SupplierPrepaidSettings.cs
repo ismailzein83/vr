@@ -18,7 +18,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierP
         public override bool IsSupplierAccount(IFinancialAccountIsSupplierAccountContext context)
         {
             SupplierPrepaidDefinitionSettings definitionSetting = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<SupplierPrepaidDefinitionSettings>(context.DefinitionId);
-            context.AccountTypeId = definitionSetting.AccountTypeId;
             context.UsageTransactionTypeId = definitionSetting.UsageTransactionTypeId;
             return true;
         }

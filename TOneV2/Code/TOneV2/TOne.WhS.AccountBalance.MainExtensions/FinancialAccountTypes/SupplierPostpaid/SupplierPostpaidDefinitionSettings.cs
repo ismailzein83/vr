@@ -7,7 +7,7 @@ using TOne.WhS.AccountBalance.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierPostpaid
 {
-    public class SupplierPostpaidDefinitionSettings : FinancialAccountDefinitionExtendedSettings
+    public class SupplierPostpaidDefinitionSettings : FinancialAccountDefinitionSettings
     {
         public override Guid ConfigId
         {
@@ -29,8 +29,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierP
                 return true;
             }
         }
-
-        public Guid AccountTypeId { get; set; }
 
         public Guid UsageTransactionTypeId { get; set; }
     }

@@ -7,7 +7,7 @@ using TOne.WhS.AccountBalance.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerPrepaid
 {
-    public class CustomerPrepaidDefinitionSettings : FinancialAccountDefinitionExtendedSettings
+    public class CustomerPrepaidDefinitionSettings : FinancialAccountDefinitionSettings
     {
         public override Guid ConfigId
         {
@@ -26,8 +26,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerP
         {
             get { return false; }
         }
-
-        public Guid AccountTypeId { get; set; }
 
         public Guid UsageTransactionTypeId { get; set; }
     }

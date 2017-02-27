@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarrierFinancialAccountData.cs" />
-    <Compile Include="FinancialAccountDefinition.cs" />
     <Compile Include="FinancialAccount.cs" />
     <Compile Include="FinancialAccountDefinitionSettings.cs" />
     <Compile Include="FinancialAccountTypeConfig.cs" />

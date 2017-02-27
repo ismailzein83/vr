@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.AccountBalance.Entities;
 using Vanrise.AccountBalance.Entities;
 
 namespace TOne.WhS.AccountBalance.Business
@@ -23,5 +24,7 @@ namespace TOne.WhS.AccountBalance.Business
         {
             return new AccountBalanceManager();
         }
+        public FinancialAccountDefinitionSettings DefinitionSettings { get; set; }
+
     }
 }

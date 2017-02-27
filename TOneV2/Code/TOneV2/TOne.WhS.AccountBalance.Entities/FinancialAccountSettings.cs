@@ -8,7 +8,7 @@ namespace TOne.WhS.AccountBalance.Entities
 {
     public abstract class FinancialAccountSettings
     {
-        public Guid DefinitionId { get; set; }
+        public Guid AccountTypeId { get; set; }
 
         public FinancialAccountExtendedSettings ExtendedSettings { get; set; }
     }
@@ -26,8 +26,6 @@ namespace TOne.WhS.AccountBalance.Entities
     {
         Guid DefinitionId { get; }
 
-        Guid AccountTypeId { set; }
-
         Guid UsageTransactionTypeId { set; }
 
         Decimal? CreditLimit { set; }
@@ -36,8 +34,6 @@ namespace TOne.WhS.AccountBalance.Entities
     public interface IFinancialAccountIsSupplierAccountContext
     {
         Guid DefinitionId { get; }
-
-        Guid AccountTypeId { set; }
 
         Guid UsageTransactionTypeId { set; }
 
