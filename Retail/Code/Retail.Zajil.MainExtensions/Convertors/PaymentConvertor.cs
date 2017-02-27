@@ -24,6 +24,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
         public Guid AccountBEDefinitionId { get; set; }
         public string SourceAccountIdColumn { get; set; }
         public string AmountColumn { get; set; }
+        public string SourceIdColumn { get; set; }
         public string TimeColumn { get; set; }
         public int CurrencyId { get; set; }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
@@ -39,7 +40,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
                     BillingTransaction = new BillingTransaction
                     {
                         TransactionTypeId = TransactionTypeId,
-                        SourceId = row["Document_Number"] as string,
+                        SourceId = row[this.SourceIdColumn] as string,
                         CurrencyId = this.CurrencyId,
                         AccountId = account.AccountId.ToString(),
                         TransactionTime = (DateTime)row[this.TimeColumn],
