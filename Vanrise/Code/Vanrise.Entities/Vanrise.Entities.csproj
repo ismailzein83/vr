@@ -74,6 +74,7 @@
     <Compile Include="VRApplicationVisibility\VRModuleVisibility.cs" />
     <Compile Include="VRApplicationVisibility\VRModuleVisibilityConfig.cs" />
     <Compile Include="VRBusinessException.cs" />
+    <Compile Include="VRConnectionException.cs" />
     <Compile Include="VRConnection\VRConnectionConfig.cs" />
     <Compile Include="VRConnection\VRConnectionQuery.cs" />
     <Compile Include="VRConnection\VRConnectionDetail.cs" />

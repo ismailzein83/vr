@@ -50,6 +50,7 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
                         $scope.scopeModel.insertQueryTemplate = payload.InsertQueryTemplate != undefined ? payload.InsertQueryTemplate.ExpressionString : undefined;
                         $scope.scopeModel.connectionString = payload.ConnectionString;
                         $scope.scopeModel.loggingMessageTemplate = payload.LoggingMessageTemplate != undefined ? payload.LoggingMessageTemplate.ExpressionString : undefined;
+                        $scope.scopeModel.exceptionMessageTemplate = payload.ExceptionMessageTemplate != undefined ? payload.ExceptionMessageTemplate.ExpressionString : undefined;
                         objectVariables = payload.Objects;
                     }
 
@@ -68,7 +69,8 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
                         InsertQueryTemplate: { ExpressionString: $scope.scopeModel.insertQueryTemplate },
                         ConnectionString: $scope.scopeModel.connectionString,
                         Objects: gridAPI.getData(),
-                        LoggingMessageTemplate: { ExpressionString: $scope.scopeModel.loggingMessageTemplate }
+                        LoggingMessageTemplate: { ExpressionString: $scope.scopeModel.loggingMessageTemplate },
+                        ExceptionMessageTemplate: { ExpressionString: $scope.scopeModel.exceptionMessageTemplate }
                     };
                     return data;
                 };

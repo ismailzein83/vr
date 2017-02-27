@@ -52,7 +52,7 @@ namespace Vanrise.BEBridge.BP.Activities
                         List<ITargetBE> targetsToInsert = new List<ITargetBE>();
                         List<ITargetBE> targetsToUpdate = new List<ITargetBE>();
                         TargetBEConvertorConvertSourceBEsContext targetBeConvertorContext =
-                            new TargetBEConvertorConvertSourceBEsContext();
+                            new TargetBEConvertorConvertSourceBEsContext(handle);
 
                         targetBeConvertorContext.SourceBEBatch = batchProcessingContextQueue.SourceBEBatch;
                         inputArgument.TargetConverter.ConvertSourceBEs(targetBeConvertorContext);
@@ -63,22 +63,19 @@ namespace Vanrise.BEBridge.BP.Activities
                             ITargetBE existingBE = null;
                             if (targetBe.SourceBEId != null && !existingTargetBEsBySourceId.TryGetValue(targetBe.SourceBEId, out existingBE))
                             {
-                                TargetBETryGetExistingContext tryGetExistingContext = new TargetBETryGetExistingContext
-                                {
-                                    InitializationData = inputArgument.SynchronizerInitializeContext.InitializationData,
-                                    SourceBEId = targetBe.SourceBEId
-                                };
+                                TargetBETryGetExistingContext tryGetExistingContext = new TargetBETryGetExistingContext(handle);
+
+                                tryGetExistingContext.InitializationData = inputArgument.SynchronizerInitializeContext.InitializationData;
+                                tryGetExistingContext.SourceBEId = targetBe.SourceBEId;
                                 if (inputArgument.TargetBeSynchronizer.TryGetExistingBE(tryGetExistingContext))
                                     existingBE = tryGetExistingContext.TargetBE;
                             }
 
                             if (existingBE != null)
                             {
-                                MergeTargetBEsContext mergeContext = new MergeTargetBEsContext
-                                {
-                                    ExistingBE = existingBE,
-                                    NewBE = targetBe
-                                };
+                                MergeTargetBEsContext mergeContext = new MergeTargetBEsContext(handle);
+                                mergeContext.ExistingBE = existingBE;
+                                mergeContext.NewBE = targetBe;
                                 inputArgument.TargetConverter.MergeTargetBEs(mergeContext);
                                 if (!inputArgument.TargetConverter.CompareBeforeUpdate ||
                                     String.CompareOrdinal(Serializer.Serialize(mergeContext.FinalBE),
@@ -137,6 +134,15 @@ namespace Vanrise.BEBridge.BP.Activities
         #region Context Implementation
         private class TargetBEConvertorConvertSourceBEsContext : ITargetBEConvertorConvertSourceBEsContext
         {
+            AsyncActivityHandle _handle;
+
+            public TargetBEConvertorConvertSourceBEsContext(AsyncActivityHandle handle)
+            {
+                if (handle == null)
+                    throw new ArgumentNullException("handle");
+                _handle = handle;
+            }
+
             public SourceBEBatch SourceBEBatch
             {
                 set;
@@ -148,6 +154,28 @@ namespace Vanrise.BEBridge.BP.Activities
                 set;
                 get;
             }
+
+
+            public void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteTrackingMessage(severity, messageFormat, args);
+            }
+
+            public void WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteBusinessTrackingMsg(severity, messageFormat, args);
+            }
+
+
+            public void WriteHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteHandledException(ex);
+            }
+
+            public void WriteBusinessHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteBusinessHandledException(ex);
+            }
         }
 
 
@@ -155,6 +183,15 @@ namespace Vanrise.BEBridge.BP.Activities
 
         private class TargetBETryGetExistingContext : ITargetBESynchronizerTryGetExistingBEContext
         {
+            AsyncActivityHandle _handle;
+
+            public TargetBETryGetExistingContext(AsyncActivityHandle handle)
+            {
+                if (handle == null)
+                    throw new ArgumentNullException("handle");
+                _handle = handle;
+            }
+
             public object InitializationData
             {
                 set;
@@ -172,10 +209,41 @@ namespace Vanrise.BEBridge.BP.Activities
                 set;
                 get;
             }
+
+
+            public void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteTrackingMessage(severity, messageFormat, args);
+            }
+
+            public void WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteBusinessTrackingMsg(severity, messageFormat, args);
+            }
+
+
+            public void WriteHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteHandledException(ex);
+            }
+
+            public void WriteBusinessHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteBusinessHandledException(ex);
+            }
         }
 
         private class MergeTargetBEsContext : ITargetBEConvertorMergeTargetBEsContext
         {
+            AsyncActivityHandle _handle;
+
+            public MergeTargetBEsContext(AsyncActivityHandle handle)
+            {
+                if (handle == null)
+                    throw new ArgumentNullException("handle");
+                _handle = handle;
+            }
+
             public ITargetBE ExistingBE
             {
                 get;
@@ -192,6 +260,28 @@ namespace Vanrise.BEBridge.BP.Activities
             {
                 get;
                 set;
+            }
+
+
+            public void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteTrackingMessage(severity, messageFormat, args);
+            }
+
+            public void WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteBusinessTrackingMsg(severity, messageFormat, args);
+            }
+
+
+            public void WriteHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteHandledException(ex);
+            }
+
+            public void WriteBusinessHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteBusinessHandledException(ex);
             }
         }
         #endregion

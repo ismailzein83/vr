@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BEBridge.Entities;
+using Vanrise.Common;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
 
@@ -26,15 +27,23 @@ namespace Vanrise.Invoice.MainExtensions.Convertors
             List<ITargetBE> targetBEs = new List<ITargetBE>();
             foreach (Entities.Invoice invoice in invoiceBatch.Invoices)
             {
-                VRObjectsTargetBE targetBe = new VRObjectsTargetBE();
-                targetBe.TargetObjects.Add("Invoice", invoice);
-                foreach (var infoObject in PartnerInfoObjects)
+                try
                 {
-                    PartnerManager partnerManager = new PartnerManager();
-                    dynamic partner = partnerManager.GetPartnerInfo(invoice.InvoiceTypeId, invoice.PartnerId, infoObject.InfoType);
-                    targetBe.TargetObjects.Add(infoObject.ObjectName, partner);
+                    VRObjectsTargetBE targetBe = new VRObjectsTargetBE();
+                    targetBe.TargetObjects.Add("Invoice", invoice);
+                    foreach (var infoObject in PartnerInfoObjects)
+                    {
+                        PartnerManager partnerManager = new PartnerManager();
+                        dynamic partner = partnerManager.GetPartnerInfo(invoice.InvoiceTypeId, invoice.PartnerId, infoObject.InfoType);
+                        targetBe.TargetObjects.Add(infoObject.ObjectName, partner);
+                    }
+                    targetBEs.Add(targetBe);
                 }
-                targetBEs.Add(targetBe);
+                catch(Exception ex)
+                {
+                    var finalException = Utilities.WrapException(ex, String.Format("Failed to send Invoice '{0}' due to conversion error", invoice.SerialNumber));
+                    context.WriteBusinessHandledException(finalException);
+                }
             }
             context.TargetBEs = targetBEs;
         }

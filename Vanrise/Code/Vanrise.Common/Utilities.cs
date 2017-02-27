@@ -517,7 +517,13 @@ namespace Vanrise.Common
             return new VRBusinessException(finalMessage, originalException);
         }
 
-        public const string TECHNICAL_EXCEPTION_MESSAGE = "Unexpected error occured. Please consult technical support. Click to see technical details";
+        public static string GetExceptionBusinessMessage(Exception ex)
+        {
+            VRBusinessException businessException = ex as VRBusinessException;
+            return businessException != null ? businessException.Message : TECHNICAL_EXCEPTION_MESSAGE;
+        }
+
+        private const string TECHNICAL_EXCEPTION_MESSAGE = "Unexpected error occured. Please consult technical support. Click to see technical details";
     }
 
     public interface IPropValueReader

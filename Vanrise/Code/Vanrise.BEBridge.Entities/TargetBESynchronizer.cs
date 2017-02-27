@@ -36,6 +36,14 @@ namespace Vanrise.BEBridge.Entities
         ITargetBE TargetBE { set; }
 
         Object InitializationData { get; }
+
+        void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteHandledException(Exception ex);
+
+        void WriteBusinessHandledException(Exception ex);
     }
 
     public interface ITargetBESynchronizerInsertBEsContext
@@ -47,10 +55,21 @@ namespace Vanrise.BEBridge.Entities
 
         void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
 
+        void WriteHandledException(Exception ex);
+
+        void WriteBusinessHandledException(Exception ex);
     }
 
     public interface ITargetBESynchronizerUpdateBEsContext
     {
         List<ITargetBE> TargetBE { get; }
+
+        void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteHandledException(Exception ex);
+
+        void WriteBusinessHandledException(Exception ex);
     }
 }

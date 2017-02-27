@@ -34,7 +34,7 @@ namespace Vanrise.BEBridge.BP.Activities
                     {
                         TargetSynchronizerInsertContext insertContext = new TargetSynchronizerInsertContext(handle);
                         insertContext.InitializationData = inputArgument.SynchronizerInitializeContext.InitializationData;
-                        TargetSynchronizerUpdateContext updateContext = new TargetSynchronizerUpdateContext();
+                        TargetSynchronizerUpdateContext updateContext = new TargetSynchronizerUpdateContext(handle);
                         batchProcessingContext.SaveTargetBEs((targetsToInsert) =>
                         {
                             insertContext.TargetBE = targetsToInsert;
@@ -104,13 +104,55 @@ namespace Vanrise.BEBridge.BP.Activities
             {
                 _handle.SharedInstanceData.WriteBusinessTrackingMsg(severity, messageFormat, args);
             }
+
+
+            public void WriteHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteHandledException(ex);
+            }
+
+            public void WriteBusinessHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteBusinessHandledException(ex);
+            }
         }
         private class TargetSynchronizerUpdateContext : ITargetBESynchronizerUpdateBEsContext
-        {
+        { 
+            AsyncActivityHandle _handle;
+
+            public TargetSynchronizerUpdateContext(AsyncActivityHandle handle)
+            {
+                if (handle == null)
+                    throw new ArgumentNullException("handle");
+                _handle = handle;
+            }
+
             public List<ITargetBE> TargetBE
             {
                 get;
                 set;
+            }
+
+
+            public void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteTrackingMessage(severity, messageFormat, args);
+            }
+
+            public void WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
+            {
+                _handle.SharedInstanceData.WriteBusinessTrackingMsg(severity, messageFormat, args);
+            }
+
+
+            public void WriteHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteHandledException(ex);
+            }
+
+            public void WriteBusinessHandledException(Exception ex)
+            {
+                _handle.SharedInstanceData.WriteBusinessHandledException(ex);
             }
         }
 

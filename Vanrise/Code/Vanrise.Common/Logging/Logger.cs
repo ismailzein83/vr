@@ -179,12 +179,7 @@ namespace Vanrise.Common
 
         internal void WriteException(string eventType, Exception ex)
         {
-            string message;
-            VRBusinessException businessException = ex as VRBusinessException;
-            if (businessException != null)
-                message = businessException.Message;
-            else
-                message = Utilities.TECHNICAL_EXCEPTION_MESSAGE;
+            string message = Utilities.GetExceptionBusinessMessage(ex);
             PrivateWriteEntry(eventType, ex.ToString(), LogEntryType.Error, message);
         }
 

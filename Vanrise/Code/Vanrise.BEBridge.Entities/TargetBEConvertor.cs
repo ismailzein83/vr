@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.BEBridge.Entities
 {
@@ -23,6 +24,14 @@ namespace Vanrise.BEBridge.Entities
         SourceBEBatch SourceBEBatch { get; }
 
         List<ITargetBE> TargetBEs { set; }
+
+        void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteHandledException(Exception ex);
+
+        void WriteBusinessHandledException(Exception ex);
     }
 
     public interface ITargetBEConvertorMergeTargetBEsContext
@@ -32,5 +41,13 @@ namespace Vanrise.BEBridge.Entities
         ITargetBE NewBE { get; }
 
         ITargetBE FinalBE { set; }
+
+        void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
+
+        void WriteHandledException(Exception ex);
+
+        void WriteBusinessHandledException(Exception ex);
     }
 }
