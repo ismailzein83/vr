@@ -9,13 +9,37 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+
+--[sec].[Module]------------------------------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('94E29C06-8B09-4460-B495-5A7413C52C8C','Notifications'	,null,null,null,30,1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
+merge	[sec].[Module] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
+when not matched by target then
+	insert([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+	values(s.[ID],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
+----------------------------------------------------------------------------------------------------
+END
+
 --[common].[ExtensionConfiguration]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('57033E80-65CB-4359-95F6-22A57084D027','VR_Notification_VRAlertRuleTypeSettings_DAProfCalcAlertRuleTypeSettings','Profiling and Calculation Alert Rule Type','VR_Notification_VRAlertRuleTypeSettings','{"Editor":"vr-analytic-daprofcalc-alertruletypesettings"}')
+('57033E80-65CB-4359-95F6-22A57084D027','VR_Notification_VRAlertRuleTypeSettings_DAProfCalcAlertRuleTypeSettings','Profiling and Calculation Alert Rule Type','VR_Notification_VRAlertRuleTypeSettings'	,'{"Editor":"vr-analytic-daprofcalc-alertruletypesettings"}'),
+('FDD73530-067F-4160-AB71-7852303C785C','VR_Notification_NotificationComponentType_Settings','Notification Component Type','VR_Common_VRComponentType'													,'{"Editor":"vr-notification-vrnotification-componentsettings"}'),
+('A196C40A-30B5-4297-B7B0-4344C41CE5A2','VR_Notification_NotificationDefinition','Notification','VR_Security_ViewTypeConfig'																			,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-notification-notification-vieweditor"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
