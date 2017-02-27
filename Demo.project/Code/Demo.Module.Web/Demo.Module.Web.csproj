@@ -127,157 +127,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Demo_Module\Constant\DataServiceSubTypeEnum.js" />
-    <Content Include="Demo_Module\Constant\VoiceServiceSubTypeEnum.js" />
-    <Content Include="Demo_Module\Constant\CDRTypeEnum.js" />
-    <Content Include="Demo_Module\Constant\CDRDirectionEnum.js" />
-    <Content Include="Demo_Module\Constant\GenericAnalyticDimensionEnum.js" />
-    <Content Include="Demo_Module\Constant\GenericAnalyticMeasureEnum.js" />
-    <Content Include="Demo_Module\Directives\DestinationGroup\Templates\DestinationGroupGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\DestinationGroup\vr-demo-destinationgroup-selector.js" />
-    <Content Include="Demo_Module\Directives\DestinationGroup\vr-demo-destinationgroup-grid.js" />
-    <Content Include="Demo_Module\Directives\Generic\GenericAnalyticGridSettingsController.js" />
-    <Content Include="Demo_Module\Directives\Generic\Templates\GenericAnalyticGridSettings.html" />
-    <Content Include="Demo_Module\Directives\Generic\Templates\GenericChartTemplate.html" />
-    <Content Include="Demo_Module\Directives\Generic\Templates\GenericFilterTemplate.html" />
-    <Content Include="Demo_Module\Directives\Generic\Templates\GenericGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\Generic\Templates\GenericSettingsTemplate.html" />
-    <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericchart.js" />
-    <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericfilter.js" />
-    <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericgrid.js" />
-    <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericsettings.js" />
-    <Content Include="Demo_Module\Directives\MainExtensions\GroupTypes\demo-grouptype-coderange.js" />
-    <Content Include="Demo_Module\Directives\MainExtensions\GroupTypes\demo-grouptype-zone.js" />
-    <Content Include="Demo_Module\Directives\MainExtensions\GroupTypes\Templates\GroupTypeCodeRange.html" />
-    <Content Include="Demo_Module\Directives\MainExtensions\GroupTypes\Templates\GroupTypeZone.html" />
-    <Content Include="Demo_Module\Directives\MainExtensions\GroupTypes\Templates\GroupTypeCountry.html" />
-    <Content Include="Demo_Module\Directives\MainExtensions\GroupTypes\demo-grouptype-country.js" />
-    <Content Include="Demo_Module\Directives\MainExtensions\ServiceSubTypes\demo-servicesubtype-data.js" />
-    <Content Include="Demo_Module\Directives\MainExtensions\ServiceSubTypes\demo-servicesubtype-voice.js" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatoraccount-selector.js" />
-    <Content Include="Demo_Module\Directives\OperatorConfiguration\Templates\OperatorConfigurationGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\OperatorConfiguration\vr-demo-operatorconfiguration-grid.js" />
-    <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\Templates\OperatorDeclaredInformationGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\vr-demo-operatordeclaredinformation-grid.js" />
-    <Content Include="Demo_Module\Directives\CDR\Templates\CDRLogGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\CDR\vr-whs-analytics-cdrlog-grid.js" />
-    <Content Include="Demo_Module\Directives\Pop\Templates\PopGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\Pop\vr-demo-pop-grid.js" />
-    <Content Include="Demo_Module\Directives\RawCDR\cdrtype-selector.js" />
-    <Content Include="Demo_Module\Directives\RawCDR\servicetype-selector.js" />
-    <Content Include="Demo_Module\Directives\RawCDR\cdrdirection-selector.js" />
-    <Content Include="Demo_Module\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
-    <Content Include="Demo_Module\Directives\UnitType\unittype-selector.js" />
-    <Content Include="Demo_Module\Services\APIServices\CDRLogAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\GenericAnalyticAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\DestinationGroupAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\OperatorConfigurationAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\PopAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\UnitTypeAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\ServiceTypeAPIService.js" />
-    <Content Include="Demo_Module\Services\GenericAnalyticService.js" />
-    <Content Include="Demo_Module\Services\DestinationGroupService.js" />
-    <Content Include="Demo_Module\Services\PopService.js" />
-    <Content Include="Demo_Module\Services\OperatorConfigurationService.js" />
-    <Content Include="Demo_Module\Services\OperatorDeclaredInformationService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\CodeGroupController.cs" />
-    <Compile Include="Controllers\GenericAnalyticController.cs" />
-    <Compile Include="Controllers\DestinationGroupController.cs" />
-    <Compile Include="Controllers\PopController.cs" />
-    <Compile Include="Controllers\OperatorConfigurationController.cs" />
-    <Compile Include="Controllers\OperatorDeclaredInformationController.cs" />
-    <Compile Include="Controllers\OperatorAccountController.cs" />
-    <Compile Include="Controllers\NationalNumberingPlanController.cs" />
-    <Compile Include="Controllers\OperatorProfileController.cs" />
-    <Compile Include="Controllers\CDRLogController.cs" />
-    <Compile Include="Controllers\RawCDRController.cs" />
-    <Compile Include="Controllers\ServiceTypeController.cs" />
-    <Compile Include="Controllers\SaleCodeController.cs" />
-    <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\UnitTypeController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Demo_Module\Constant\ContactTypeEnum.js" />
-    <Content Include="Demo_Module\Constant\ModuleConfig.js" />
-    <Content Include="Demo_Module\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
-    <Content Include="Demo_Module\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />
-    <Content Include="Demo_Module\Directives\NationalNumberingPlan\Templates\NationalNumberingPlanGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\NationalNumberingPlan\vr-demo-nationalnumberingplan-grid.js" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\Templates\OperatorAccountGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\Templates\OperatorProfileGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatoraccount-grid.js" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatorprofile-grid.js" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatorprofile-selector.js" />
-    <Content Include="Demo_Module\Directives\Code\Templates\SaleCodeGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\Code\vr-whs-be-salecode-grid.js" />
-    <Content Include="Demo_Module\Directives\Zone\Templates\SaleZoneGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\Zone\vr-whs-be-salezone-grid.js" />
-    <Content Include="Demo_Module\Directives\Zone\vr-whs-be-salezone-selector.js" />
     <Content Include="Demo_Module\ModuleInitialization.js" />
-    <Content Include="Demo_Module\Services\APIServices\CodeGroupAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\OperatorAccountAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\NationalNumberingPlanAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\OperatorProfileAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\SaleCodeAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\SaleZoneAPIService.js" />
-    <Content Include="Demo_Module\Services\CodeGroupService.js" />
-    <Content Include="Demo_Module\Services\OperatorAccountService.js" />
-    <Content Include="Demo_Module\Services\NationalNumberingPlanService.js" />
-    <Content Include="Demo_Module\Services\OperatorProfileService.js" />
-    <Content Include="Demo_Module\Services\SaleZoneService.js" />
-    <Content Include="Demo_Module\Views\CodeGroup\CodeGroupEditor.html" />
-    <Content Include="Demo_Module\Views\CodeGroup\CodeGroupEditorController.js" />
-    <Content Include="Demo_Module\Views\CodeGroup\CodeGroupManagement.html" />
-    <Content Include="Demo_Module\Views\CodeGroup\CodeGroupManagementController.js" />
-    <Content Include="Demo_Module\Views\CodeGroup\CodeGroupUploadEditor.html" />
-    <Content Include="Demo_Module\Views\CodeGroup\CodeGroupUploadEditorController.js" />
-    <Content Include="Demo_Module\Views\DestinationGroup\DestinationGroupEditor.html" />
-    <Content Include="Demo_Module\Views\DestinationGroup\DestinationGroupEditorController.js" />
-    <Content Include="Demo_Module\Views\DestinationGroup\DestinationGroupManagement.html" />
-    <Content Include="Demo_Module\Views\DestinationGroup\DestinationGroupManagementController.js" />
-    <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanEditor.html" />
-    <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanEditorController.js" />
-    <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanManagement.html" />
-    <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanManagementController.js" />
-    <Content Include="Demo_Module\Views\OperatorAccount\OperatorAccountEditor.html" />
-    <Content Include="Demo_Module\Views\OperatorAccount\OperatorAccountEditorController.js" />
-    <Content Include="Demo_Module\Views\OperatorAccount\OperatorAccountManagement.html" />
-    <Content Include="Demo_Module\Views\OperatorAccount\OperatorAccountManagementController.js" />
-    <Content Include="Demo_Module\Views\OperatorAccount\OperatorProfileEditor.html" />
-    <Content Include="Demo_Module\Views\OperatorAccount\OperatorProfileEditorController.js" />
-    <Content Include="Demo_Module\Views\OperatorAccount\OperatorProfileManagement.html" />
-    <Content Include="Demo_Module\Views\OperatorAccount\OperatorProfileManagementController.js" />
-    <Content Include="Demo_Module\Views\Code\CodeManagement.html" />
-    <Content Include="Demo_Module\Views\Code\CodeManagementController.js" />
-    <Content Include="Demo_Module\Views\OperatorConfiguration\OperatorConfigurationEditor.html" />
-    <Content Include="Demo_Module\Views\OperatorConfiguration\OperatorConfigurationEditorController.js" />
-    <Content Include="Demo_Module\Views\OperatorConfiguration\OperatorConfigurationManagement.html" />
-    <Content Include="Demo_Module\Views\OperatorConfiguration\OperatorConfigurationManagementController.js" />
-    <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationEditor.html" />
-    <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationEditorController.js" />
-    <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationManagement.html" />
-    <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationManagementController.js" />
-    <Content Include="Demo_Module\Views\CDR\CDRLog.html" />
-    <Content Include="Demo_Module\Views\CDR\CDRLogController.js" />
-    <Content Include="Demo_Module\Views\Pop\PopEditor.html" />
-    <Content Include="Demo_Module\Views\Pop\PopEditorController.js" />
-    <Content Include="Demo_Module\Views\Pop\PopManagement.html" />
-    <Content Include="Demo_Module\Views\Pop\PopManagementController.js" />
-    <Content Include="Demo_Module\Views\RawCDR\RawCDRLog.html" />
-    <Content Include="Demo_Module\Views\RawCDR\RawCDRLogController.js" />
-    <Content Include="Demo_Module\Views\TrafficMonitor\TrafficMonitor.html" />
-    <Content Include="Demo_Module\Views\TrafficMonitor\TrafficMonitorController.js" />
-    <Content Include="Demo_Module\Views\Zone\ZoneManagement.html" />
-    <Content Include="Demo_Module\Views\Zone\ZoneManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Business\Demo.Module.Business.csproj">
@@ -293,7 +150,13 @@
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Demo_Module\Constant\" />
+    <Folder Include="Demo_Module\Directives\" />
+    <Folder Include="Demo_Module\Services\APIServices\" />
+    <Folder Include="Demo_Module\Views\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

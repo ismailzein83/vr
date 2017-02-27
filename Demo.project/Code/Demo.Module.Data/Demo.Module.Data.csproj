@@ -49,23 +49,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeGroup\ICodeGroupDataManager.cs" />
-    <Compile Include="DemoModuleDataManagerFactory.cs" />
-    <Compile Include="Generic\IGenericAnalyticDataManager.cs" />
-    <Compile Include="IUnitTypeDataManager.cs" />
-    <Compile Include="NationalNumberingPlan\INationalNumberingPlanDataManager.cs" />
-    <Compile Include="DestinationGroup\IDestinationGroupDataManager.cs" />
-    <Compile Include="OperatorConfiguration\IOperatorConfigurationDataManager.cs" />
-    <Compile Include="OperatorDeclaredInformation\IOperatorDeclaredInformationDataManager.cs" />
-    <Compile Include="Operator\IOperatorAccountDataManager.cs" />
-    <Compile Include="Operator\IOperatorProfileDataManager.cs" />
-    <Compile Include="IDataManager.cs" />
-    <Compile Include="Code\ISaleCodeDataManager.cs" />
-    <Compile Include="CDRLog\ICDRLogDataManager.cs" />
-    <Compile Include="Pop\IPopDataManager.cs" />
-    <Compile Include="RawCDRLog\IRawCDRDataManager.cs" />
-    <Compile Include="RawCDRLog\IServiceTypeDataManager.cs" />
-    <Compile Include="Zone\ISaleZoneDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

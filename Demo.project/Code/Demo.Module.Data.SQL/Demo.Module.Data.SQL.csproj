@@ -55,25 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeGroup\CodeGroupDataManager.cs" />
-    <Compile Include="DestinationGroup\DestinationGroupDataManager.cs" />
-    <Compile Include="GenericAnalytic\GenericAnalyticDataManager.cs" />
-    <Compile Include="Generic\AnalyticDimensionConfig.cs" />
-    <Compile Include="Generic\AnalyticMeasureFieldConfig.cs" />
-    <Compile Include="Generic\GenericAnalyticConfigManager.cs" />
-    <Compile Include="NationalNumberingPlan\NationalNumberingPlanDataManager.cs" />
-    <Compile Include="OperatorConfiguration\OperatorConfigurationDataManager.cs" />
-    <Compile Include="OperatorDeclaredInformation\OperatorDeclaredInformationDataManager.cs" />
-    <Compile Include="Operator\OperatorAccountDataManager.cs" />
-    <Compile Include="Operator\OperatorProfileDataManager.cs" />
-    <Compile Include="Pop\PopDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Code\SaleCodeDataManager.cs" />
-    <Compile Include="CDRLog\CDRLogDataManager.cs" />
-    <Compile Include="RawCDRLog\RawCDRDataManager.cs" />
-    <Compile Include="RawCDRLog\ServiceTypeDataManager.cs" />
-    <Compile Include="UnitTypeDataManager.cs" />
-    <Compile Include="Zone\SaleZoneDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Data\Demo.Module.Data.csproj">
