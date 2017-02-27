@@ -239,17 +239,20 @@ namespace TOne.WhS.Sales.Business
                 return false;
             }
 
+            // Convert ImportedRow.EffectiveDate to a string in a format that the grid's date column expects
+            context.ImportedRow.EffectiveDate = effectiveDateAsDateTime.ToString("yyyy-MM-ddTHH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+
             if (context.ExistingZone != null)
             {
                 if (context.ExistingZone.BED > effectiveDateAsDateTime)
                 {
-                    context.ErrorMessage = string.Format("Effective date is smaller than the Zone's BED '{0}'", context.ExistingZone.BED);
+                    context.ErrorMessage = string.Format("Effective date is smaller than the Zone's BED '{0}'", UtilitiesManager.GetDateTimeAsString(context.ExistingZone.BED));
                     return false;
                 }
 
                 if (context.ExistingZone.EED.HasValue)
                 {
-                    context.ErrorMessage = string.Format("Zone '{0}' will be closed on '{1}'. Cannot define new Rates for pending closed Zones", context.ExistingZone.SaleZoneId, context.ExistingZone.EED);
+                    context.ErrorMessage = string.Format("Zone '{0}' will be closed on '{1}'. Cannot define new Rates for pending closed Zones", context.ExistingZone.SaleZoneId, UtilitiesManager.GetDateTimeAsString(context.ExistingZone.EED.Value));
                     return false;
                 }
 
@@ -264,7 +267,7 @@ namespace TOne.WhS.Sales.Business
 
                     if (countryBED > effectiveDateAsDateTime)
                     {
-                        context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is greater than the effective date '{2}'", context.ExistingZone.CountryId, countryBED, effectiveDateAsDateTime);
+                        context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is greater than the effective date '{2}'", context.ExistingZone.CountryId, UtilitiesManager.GetDateTimeAsString(countryBED), UtilitiesManager.GetDateTimeAsString(effectiveDateAsDateTime));
                         return false;
                     }
                 }
