@@ -35,7 +35,6 @@ app.directive('vrBebridgeSourcebereadersSqlDirective', ['VRNotificationService',
                 var api = {};
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.scopeModel.connectionString = payload.Setting.ConnectionString;
                         $scope.scopeModel.query = payload.Setting.Query;
                         $scope.scopeModel.timeoutInSec = payload.Setting.CommandTimeout;
                         $scope.scopeModel.basedOnId = payload.Setting.BasedOnId;

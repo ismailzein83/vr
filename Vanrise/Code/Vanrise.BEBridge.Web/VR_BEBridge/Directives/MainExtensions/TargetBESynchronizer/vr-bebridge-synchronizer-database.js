@@ -24,6 +24,9 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
         function databaseSynchronizerEditor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
+            var connectionSelectorAPI;
+            var connectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var VRObjectTypeDefinitionsInfo;
 
             var gridAPI;
@@ -32,6 +35,10 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
             var drillDownManager;
             var objectVariables;
             $scope.scopeModel = {};
+            $scope.scopeModel.onConnectionSelectorReady = function (api) {
+                connectionSelectorAPI = api;
+                connectionSelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.objectVariables = [];
 
             $scope.scopeModel.onObjectDirectiveReady = function (api) {
@@ -46,6 +53,7 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
                 var api = {};
 
                 api.load = function (payload) {
+                    var vrConnectionId = payload && payload.VRConnectionId || undefined;
                     if (payload != undefined) {
                         $scope.scopeModel.insertQueryTemplate = payload.InsertQueryTemplate != undefined ? payload.InsertQueryTemplate.ExpressionString : undefined;
                         $scope.scopeModel.connectionString = payload.ConnectionString;
@@ -59,6 +67,9 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
                     var loadObjectDirectivePromise = loadObjectDirective();
                     promises.push(loadObjectDirectivePromise);
 
+                    var loadVRConnectionPromise = loadVRConnectionSelector(vrConnectionId);
+                    promises.push(loadVRConnectionPromise);
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -67,7 +78,7 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
                         $type: "Vanrise.BEBridge.MainExtensions.Synchronizers.DatabaseSynchronizer, Vanrise.BEBridge.MainExtensions",
                         Name: "Database Synchronizer",
                         InsertQueryTemplate: { ExpressionString: $scope.scopeModel.insertQueryTemplate },
-                        ConnectionString: $scope.scopeModel.connectionString,
+                        VRConnectionId: connectionSelectorAPI.getSelectedIds(),
                         Objects: gridAPI.getData(),
                         LoggingMessageTemplate: { ExpressionString: $scope.scopeModel.loggingMessageTemplate },
                         ExceptionMessageTemplate: { ExpressionString: $scope.scopeModel.exceptionMessageTemplate }
@@ -94,6 +105,23 @@ app.directive('vrBebridgeSynchronizerDatabase', ['UtilsService', 'VRUIUtilsServi
                 });
 
                 return objectDirectiveLoadDeferred.promise;
+            }
+
+            function loadVRConnectionSelector(vrConnectionId) {
+                var connectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                connectionSelectorReadyDeferred.promise.then(function () {
+                    var selectorPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Vanrise.Common.Business.SQLConnectionFilter ,Vanrise.Common.Business"
+                            }]
+                        },
+                        selectedIds: vrConnectionId
+                    };
+                    VRUIUtilsService.callDirectiveLoad(connectionSelectorAPI, selectorPayload, connectionSelectorLoadDeferred);
+                });
+
+                return connectionSelectorLoadDeferred.promise;
             }
         }
 

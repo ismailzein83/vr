@@ -10,7 +10,7 @@ namespace Vanrise.BEBridge.MainExtensions.Synchronizers
 {
     public class DatabaseSynchronizer : TargetBESynchronizer
     {
-        public string ConnectionString { get; set; }
+        public Guid VRConnectionId { get; set; }
         public VRExpression InsertQueryTemplate { get; set; }
         public VRExpression LoggingMessageTemplate { get; set; }
 
@@ -42,9 +42,13 @@ namespace Vanrise.BEBridge.MainExtensions.Synchronizers
 
             ExpressionTemplate expressionTemplate = context.InitializationData as ExpressionTemplate;
             context.TargetBE.ThrowIfNull("context.TargetBE", "");
+            SQLConnection settings = new VRConnectionManager().GetVRConnection(VRConnectionId).Settings as SQLConnection;
+            string connectionString = (settings != null) ? settings.ConnectionString : null;
+            if (String.IsNullOrEmpty(connectionString))
+                throw new NullReferenceException(String.Format("connection string is null or empty"));
             foreach (var targetObject in context.TargetBE)
             {
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     if (connection.State == System.Data.ConnectionState.Closed)
                         connection.Open();
