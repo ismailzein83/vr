@@ -123,6 +123,11 @@
     <Folder Include="VR_Invoice\Functions\" />
     <Folder Include="VR_Invoice\Stored Procedures\" />
     <Folder Include="VR_Invoice\User Defined Types\" />
+    <Folder Include="VR_AccountBalance\" />
+    <Folder Include="VR_AccountBalance\Tables\" />
+    <Folder Include="VR_AccountBalance\Functions\" />
+    <Folder Include="VR_AccountBalance\Stored Procedures\" />
+    <Folder Include="VR_AccountBalance\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -503,6 +508,50 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_Insert.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_GetAll.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_Delete.sql" />
+    <Build Include="VR_AccountBalance\Tables\BillingTransaction.sql" />
+    <Build Include="VR_AccountBalance\Tables\AccountUsage.sql" />
+    <Build Include="VR_AccountBalance\Tables\BalanceUsageQueue.sql" />
+    <Build Include="VR_AccountBalance\Tables\BillingTransactionType.sql" />
+    <Build Include="VR_AccountBalance\Tables\LiveBalance.sql" />
+    <Build Include="VR_AccountBalance\Tables\BalanceHistory.sql" />
+    <Build Include="VR_AccountBalance\Tables\BalanceClosingPeriod.sql" />
+    <Build Include="VR_AccountBalance\Functions\ParseStringList.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetForSynchronizerProcess.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetBalanceNotUpdated.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetFiltered.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_Insert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_GetByQueueType.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetForSpecificPeriodByAccountIds.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetErrorData.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_TryAddAndGet.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetBalancesToClearAlert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_InsertFromAccountUsageAndUpdate.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_UpdateBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_TryAddAndGet.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByPeriod.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetAccountPendingUsage.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalanceLastThreshold.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalanceThresholdAndRule.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_InsertIfNotExists.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_Update.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_GetAll.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_Delete.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetBalancesForAlert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetAll.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_SetBalanceUpdated.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceClosingPeriod_Insert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceClosingPeriod_GetLastClosingPeriod.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateFromBillingTransaction.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateFromBalanceUsageQueue.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetById.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetAccountsInfo.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransactionType_GetAll.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceLastThresholdUpdateTable.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\BalanceTableType.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceThresholdUpdateTable.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceTableType.sql" />
+    <Build Include="Security\VR_AccountBalance.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
