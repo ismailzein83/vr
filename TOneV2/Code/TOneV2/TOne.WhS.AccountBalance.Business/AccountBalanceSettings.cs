@@ -8,23 +8,24 @@ using Vanrise.AccountBalance.Entities;
 
 namespace TOne.WhS.AccountBalance.Business
 {
-    public class AccountBalanceSettings : AccountTypeExtendedSettings
+    public abstract class AccountBalanceSettings : AccountTypeExtendedSettings
     {
-        public override Guid ConfigId
-        {
-            get { throw new NotImplementedException(); }
-        }
-
         public override string AccountSelector
         {
-            get { throw new NotImplementedException(); }
+            get { return ""; }
         }
 
         public override IAccountManager GetAccountManager()
         {
             return new AccountBalanceManager();
         }
-        public FinancialAccountDefinitionSettings DefinitionSettings { get; set; }
+        public abstract bool IsApplicableToCustomer { get; }
 
+        public abstract bool IsApplicableToSupplier { get; }
+
+        public virtual string RuntimeEditor { get; set; }
+
+
+        
     }
 }

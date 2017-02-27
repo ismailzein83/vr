@@ -7,6 +7,7 @@ using TOne.WhS.AccountBalance.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.AccountBalance.Business
 {

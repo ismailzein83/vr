@@ -108,6 +108,14 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountBalance.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -118,17 +126,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\" />
-    <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Services\APIServices\" />
+    <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\MainExtensions\" />
+    <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\" />
     <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountBalanceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_AccountBalance\Constant\ModuleConfig.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidDefinitionSettings.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\whs-accountbalance-customerpostpaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPrepaid\Templates\CustomerPrepaidDefinitionSettings.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPrepaid\whs-accountbalance-customerprepaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\Netting\Templates\NettingDefinitionSettings.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\Netting\whs-accountbalance-netting.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPostpaid\Templates\SupplierPostpaidDefinitionSettings.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPostpaid\whs-accountbalance-supplierpostpaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\Templates\SupplierPrepaidDefinitionSettings.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\whs-accountbalance-supplierprepaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Services\APIServices\AccountBalanceAPIService.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Business\TOne.WhS.AccountBalance.Business.csproj">
+      <Project>{5a8fe576-bf07-498c-a27f-2100fc828bce}</Project>
+      <Name>TOne.WhS.AccountBalance.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Entities\TOne.WhS.AccountBalance.Entities.csproj">
+      <Project>{6463e524-5b13-453f-bd95-6974ed0c7b86}</Project>
+      <Name>TOne.WhS.AccountBalance.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

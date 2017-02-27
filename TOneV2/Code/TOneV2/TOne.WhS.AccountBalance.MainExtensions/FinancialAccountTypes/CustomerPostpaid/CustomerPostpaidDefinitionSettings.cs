@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.AccountBalance.Entities;
+using TOne.WhS.AccountBalance.Business;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerPostpaid
 {
-    public class CustomerPostpaidDefinitionSettings : FinancialAccountDefinitionSettings
+    public class CustomerPostpaidDefinitionSettings : AccountBalanceSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("5A65D5B0-0D85-40C3-B51A-3F6CE2E08E64"); }
+            get { return new Guid("86C0AA84-3477-4206-B2BA-8B104CEFEF5C"); }
         }
 
         public override bool IsApplicableToCustomer

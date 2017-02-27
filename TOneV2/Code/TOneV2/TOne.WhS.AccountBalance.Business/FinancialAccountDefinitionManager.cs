@@ -11,12 +11,11 @@ namespace TOne.WhS.AccountBalance.Business
     public class FinancialAccountDefinitionManager
     {
         static Vanrise.AccountBalance.Business.AccountTypeManager s_accountTypeManager = new Vanrise.AccountBalance.Business.AccountTypeManager();
-        public T GetFinancialAccountDefinitionExtendedSettings<T>(Guid accountTypeId) where T : FinancialAccountDefinitionSettings
+        public T GetFinancialAccountDefinitionExtendedSettings<T>(Guid accountTypeId) where T : AccountBalanceSettings
         {
             var accountTypeSettings = s_accountTypeManager.GetAccountTypeSettings(accountTypeId);
             accountTypeSettings.ThrowIfNull("accountType", accountTypeId);
-            AccountBalanceSettings accountBalanceSettings = accountTypeSettings.ExtendedSettings.CastWithValidate<AccountBalanceSettings>("accountTypeSettings.ExtendedSettings", accountTypeId);
-            return accountBalanceSettings.DefinitionSettings.CastWithValidate<T>("accountBalanceSettings.DefinitionSettings", accountTypeId);
+            return accountTypeSettings.ExtendedSettings.CastWithValidate<T>("accountTypeSettings.ExtendedSettings", accountTypeId);
         }
     }
 }

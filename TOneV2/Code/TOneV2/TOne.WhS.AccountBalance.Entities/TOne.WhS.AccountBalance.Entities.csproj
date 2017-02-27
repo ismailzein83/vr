@@ -48,8 +48,6 @@
   <ItemGroup>
     <Compile Include="CarrierFinancialAccountData.cs" />
     <Compile Include="FinancialAccount.cs" />
-    <Compile Include="FinancialAccountDefinitionSettings.cs" />
-    <Compile Include="FinancialAccountTypeConfig.cs" />
     <Compile Include="FinancialAccountSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -142,6 +142,36 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP.Activities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.BP.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.BP.Arguments">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.Arguments.dll</HintPath>
     </Reference>
@@ -382,6 +412,12 @@
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.BP">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.BP.Activities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.Activities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Notification.BP.Arguments">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.Arguments.dll</HintPath>
@@ -748,6 +784,22 @@
     <ProjectReference Include="..\TOne.Main.Web\TOne.Main.Web.csproj">
       <Project>{afd16f53-67b6-4484-927a-78848377aaf9}</Project>
       <Name>TOne.Main.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Business\TOne.WhS.AccountBalance.Business.csproj">
+      <Project>{5a8fe576-bf07-498c-a27f-2100fc828bce}</Project>
+      <Name>TOne.WhS.AccountBalance.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Entities\TOne.WhS.AccountBalance.Entities.csproj">
+      <Project>{6463e524-5b13-453f-bd95-6974ed0c7b86}</Project>
+      <Name>TOne.WhS.AccountBalance.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.MainExtensions\TOne.WhS.AccountBalance.MainExtensions.csproj">
+      <Project>{7947d71a-4077-4559-9614-3628201ac795}</Project>
+      <Name>TOne.WhS.AccountBalance.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Web\TOne.WhS.AccountBalance.Web.csproj">
+      <Project>{4d623062-fd08-47bd-a86f-5036b4b653eb}</Project>
+      <Name>TOne.WhS.AccountBalance.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Analytics.Business\TOne.WhS.Analytics.Business.csproj">
       <Project>{ed3ad820-6c97-440e-a309-0ec0391b732a}</Project>
