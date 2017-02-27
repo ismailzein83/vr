@@ -14,7 +14,7 @@ namespace TOne.WhS.AccountBalance.Entities
 
         public int? CarrierAccountId { get; set; }
 
-        public FinancialAccountExtendedSettings Settings { get; set; }
+        public FinancialAccountSettings Settings { get; set; }
 
         public DateTime BED { get; set; }
 
