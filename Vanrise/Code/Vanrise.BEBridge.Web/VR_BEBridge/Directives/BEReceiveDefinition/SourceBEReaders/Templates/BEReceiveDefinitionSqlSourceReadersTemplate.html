@@ -1,7 +1,5 @@
 ﻿<vr-row>
-    <vr-columns width="fullrow">
-        <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired />
-    </vr-columns>
+    <vr-common-connection-selector normal-col-num="6" on-ready="scopeModel.onConnectionSelectorReady"></vr-common-connection-selector>
     <vr-columns width="fullrow">
         <vr-textarea value="scopeModel.query" rows="10" label="Query" isrequired />
     </vr-columns>
