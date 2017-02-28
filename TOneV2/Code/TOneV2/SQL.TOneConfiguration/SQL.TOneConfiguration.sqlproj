@@ -594,6 +594,8 @@
     <None Include="TOne_Spactron.PostDeployment.sql" />
     <None Include="RetailPortal.PostDeployment.sql" />
     <None Include="RetailPortal_Centrex.PostDeployment.sql" />
+    <None Include="CarrierPortal.PartnerPortal.PostDeployment.sql" />
+    <None Include="CarrierPortal.SupplierPricelist.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
