@@ -113,7 +113,6 @@
                         });
 
                         return accountTypeLoadDeferred.promise.then(function () {
-
                             $scope.scopeModel.isAccountTypeSelectorLoading = false;
                         });;
                     }
@@ -122,6 +121,7 @@
                         var billingTransactionTypeLoadDeferred = UtilsService.createPromiseDeferred();
 
                         billingTransactionTypeSelectorReadyDeferred.promise.then(function () {
+
                             var billingTransactionTypeSelectorPayload;
                             if (transactionTypeId != undefined) {
                                 billingTransactionTypeSelectorPayload = {
@@ -153,7 +153,6 @@
                         }
 
                         return UtilsService.waitMultiplePromises(promises).then(function () {
-
                             $scope.scopeModel.isGridLoading = false;
                         });
                     }
@@ -194,11 +193,11 @@
                     return {
                         $type: 'Vanrise.AccountBalance.MainExtensions.QueueActivators.UpdateAccountBalancesQueueActivator, Vanrise.AccountBalance.MainExtensions',
                         AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
+                        TransactionTypeId: $scope.scopeModel.selectedBillingTransactionType.Id,
                         AccountId: accountId,
                         EffectiveOn: effeciveOn,
                         Amount: amount,
-                        CurrencyId: currencyId,
-                        TransactionTypeId: $scope.scopeModel.selectedBillingTransactionType.Id
+                        CurrencyId: currencyId
                     };
                 };
 
