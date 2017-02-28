@@ -102,6 +102,26 @@ when not matched by target then
 	insert([ID],[OldID],[UserID],[Name],[AccessType],[Settings])
 	values(s.[ID],s.[OldID],s.[UserID],s.[Name],s.[AccessType],s.[Settings]);
 
+--[sec].[Module]------------------------------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing'				,null,null,'/images/menu-icons/billing.png',9,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
+merge	[sec].[Module] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
+when not matched by target then
+	insert([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+	values(s.[ID],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
+----------------------------------------------------------------------------------------------------
+END
 
 --[sec].[View]--------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
