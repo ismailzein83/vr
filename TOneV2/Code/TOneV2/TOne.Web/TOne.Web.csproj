@@ -64,6 +64,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NP.IVSwitch.Business">
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="NP.IVSwitch.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NP.IVSwitch.Data.Postgres">
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Data.Postgres.dll</HintPath>
+    </Reference>
     <Reference Include="NP.IVSwitch.Entities">
       <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Entities.dll</HintPath>
     </Reference>
