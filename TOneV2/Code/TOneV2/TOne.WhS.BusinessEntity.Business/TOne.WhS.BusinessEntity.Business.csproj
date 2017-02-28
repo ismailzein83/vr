@@ -138,9 +138,7 @@
     <Compile Include="SalePriceListTemplate\Context\SalePriceListTemplateSettingsContext.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateManager.cs" />
     <Compile Include="SaleRate\FutureSaleRateReadWithCache.cs" />
-    <Compile Include="SaleRate\History\QueryHandler\CustomerZoneRateHistoryQueryHandler.cs" />
-    <Compile Include="SaleRate\History\SaleRateHistoryManager.cs" />
-    <Compile Include="SaleRate\History\QueryHandler\SellingProductZoneRateHistoryQueryHandler.cs" />
+    <Compile Include="SaleRate\SaleRateHistoryManager.cs" />
     <Compile Include="SaleRate\ISaleRateReader.cs" />
     <Compile Include="SaleCode\SaleCodeCacheManager.cs" />
     <Compile Include="SaleRate\SaleRateCachedObjectCreationHandler.cs" />
@@ -236,7 +234,9 @@
       <Name>TOne.WhS.Sales.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SaleRate\History\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
