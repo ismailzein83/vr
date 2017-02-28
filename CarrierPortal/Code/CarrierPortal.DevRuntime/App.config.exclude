@@ -17,6 +17,14 @@
           <runtimeService name="Scheduler Service" type="Vanrise.Runtime.SchedulerService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
+
+      <!-- Used to cache Data Result in Memory in order to handle Paging and sorting on the UI grids. nbOfRuntimeInstances depended on available resources.-->
+      <runtimeServiceGroup name="group7" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Big Data Runtime Service" type="Vanrise.Common.Business.BigDataRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      
     </runtimeServiceGroups>
   </vanriseRuntime>
   
