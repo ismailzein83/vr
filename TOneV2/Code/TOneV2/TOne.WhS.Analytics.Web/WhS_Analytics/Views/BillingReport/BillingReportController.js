@@ -145,13 +145,13 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             $scope.selectedPeriod = $scope.periods[6];
 
             if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true) {
-                setTimeout(function () {
+                setTimeout(function() {
                     $scope.selectedPeriod = $scope.periods[1];
-                })
+                });
 
             }
             else {
-                $scope.selectedPeriod = $scope.periods[6];
+                $scope.selectedPeriod = $scope.periods[1];
             }
             $scope.params = {
                 groupByCustomer: false,
