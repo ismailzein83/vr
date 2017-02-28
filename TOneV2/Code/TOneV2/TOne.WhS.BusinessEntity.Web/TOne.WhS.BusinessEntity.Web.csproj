@@ -146,6 +146,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\SalePriceListChangeController.cs" />
+    <Compile Include="Controllers\SaleRateHistoryController.cs" />
     <Compile Include="Controllers\TechnicalSettingsController.cs" />
     <Compile Include="Controllers\SalePricelistController.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
@@ -304,6 +305,10 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePriceListRateChangeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistcodechange-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistratechange-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleRate\History\Template\CustomerZoneRateHistoryGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleRate\History\Template\SellingProductZoneRateHistoryGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleRate\History\vr-whs-be-salerate-history-customer-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleRate\History\vr-whs-be-salerate-history-sellingproduct-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SaleAreaSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salearea-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleCode\Templates\SaleCodeGridTemplate.html" />
@@ -416,6 +421,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListChangeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListTemplateAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateHistoryAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\StateBackupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierOtherRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneServiceAPIService.js" />

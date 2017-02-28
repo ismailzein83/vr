@@ -214,6 +214,25 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        public IEnumerable<SaleRate> GetSaleRatesBySellingProduct(IEnumerable<long> saleZoneIds, int sellingProductId)
+        {
+            if (saleZoneIds == null || saleZoneIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds");
+
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<int, IEnumerable<SaleRate>> GetSaleRatesBySellingProducts(IEnumerable<long> saleZoneIds, IEnumerable<int> sellingProductIds)
+        {
+            if (saleZoneIds == null || saleZoneIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds");
+
+            if (sellingProductIds == null || sellingProductIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("sellingProductIds");
+
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Private Classes
