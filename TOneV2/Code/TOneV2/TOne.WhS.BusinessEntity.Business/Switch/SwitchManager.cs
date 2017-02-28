@@ -7,6 +7,8 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Normalization;
+using Vanrise.Rules.Normalization;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -118,9 +120,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = GetCachedMappingSwitchCDPNs(switchId);
 
-            string customerCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.CustomerCDPN), inputCDPN, cdpnIn, cdpnOut);
-            string supplierCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.SupplierCDPN), inputCDPN, cdpnIn, cdpnOut);
-            string outputCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.CDPN), inputCDPN, cdpnIn, cdpnOut);
+            string customerCDPN = GetCDPNValueForIdentification(mappingResults.GetRecord(SwitchCDPN.CustomerCDPN), inputCDPN, cdpnIn, cdpnOut);
+            string supplierCDPN = GetCDPNValueForIdentification(mappingResults.GetRecord(SwitchCDPN.SupplierCDPN), inputCDPN, cdpnIn, cdpnOut);
+            string outputCDPN = GetCDPNValueForIdentification(mappingResults.GetRecord(SwitchCDPN.CDPN), inputCDPN, cdpnIn, cdpnOut);
 
             return new SwitchCDPNsForIdentification
             {
@@ -130,12 +132,12 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        public SwitchCDPNsForZoneMatch GetSwitchCDPNsForZoneMatch(int switchId, string inputCDPN, string cdpnIn, string cdpnOut)
+        public SwitchCDPNsForZoneMatch GetSwitchCDPNsForZoneMatch(int switchId, string cdpn, string cdpnIn, string cdpnOut, Guid normalizationRuleDefinitionId, DateTime effectiveTime)
         {
             Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = GetCachedMappingSwitchCDPNs(switchId);
 
-            string saleZoneCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.SaleZoneCDPN), inputCDPN, cdpnIn, cdpnOut);
-            string supplierZoneCDPN = GetCDPNPropertyValue(mappingResults.GetRecord(SwitchCDPN.SupplierZoneCDPN), inputCDPN, cdpnIn, cdpnOut);
+            string saleZoneCDPN = GetCDPNValueForZoneMatch(mappingResults.GetRecord(SwitchCDPN.SaleZoneCDPN), cdpn, cdpnIn, cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId);
+            string supplierZoneCDPN = GetCDPNValueForZoneMatch(mappingResults.GetRecord(SwitchCDPN.SupplierZoneCDPN), cdpn, cdpnIn, cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId);
 
             return new SwitchCDPNsForZoneMatch
             {
@@ -176,6 +178,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     return mappingResults;
                 });
         }
+
         #endregion
 
         #region Validation Methods
@@ -238,16 +241,56 @@ namespace TOne.WhS.BusinessEntity.Business
             return defaultCDPNIdentification;
         }
 
-        private string GetCDPNPropertyValue(CDPNIdentification cdpnIdentification, string inputCDPN, string cdpnIn, string cdpnOut)
+        private string GetCDPNValueForIdentification(CDPNIdentification cdpnIdentification, string cdpn, string cdpnIn, string cdpnOut)
         {
             switch (cdpnIdentification)
             {
-                case CDPNIdentification.CDPN: return inputCDPN;
+                case CDPNIdentification.CDPN: return cdpn;
                 case CDPNIdentification.CDPNIn: return cdpnIn;
                 case CDPNIdentification.CDPNOut: return cdpnOut;
                 default: throw new NotSupportedException("cdpnIdentification");
             }
         }
+
+        private string GetCDPNValueForZoneMatch(CDPNIdentification cdpnIdentification, string cdpn, string cdpnIn, string cdpnOut, Guid normalizationRuleDefinitionId,
+            DateTime effectiveTime, int switchId)
+        {
+            switch (cdpnIdentification)
+            {
+                case CDPNIdentification.CDPN: return cdpn;
+                case CDPNIdentification.CDPNIn: return cdpnIn;
+                case CDPNIdentification.CDPNOut: return cdpnOut;
+                case CDPNIdentification.NormalizedCDPN: return GetCDPNNormalizedValue(cdpn, normalizationRuleDefinitionId, effectiveTime, switchId);
+                case CDPNIdentification.NormalizedCDPNIn: return GetCDPNNormalizedValue(cdpnIn, normalizationRuleDefinitionId, effectiveTime, switchId);
+                case CDPNIdentification.NormalizedCDPNOut: return GetCDPNNormalizedValue(cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId);
+                default: throw new NotSupportedException("cdpnIdentification");
+            }
+        }
+
+        private string GetCDPNNormalizedValue(string cdpn, Guid normalizationRuleDefinitionId, DateTime effectiveTime, int switchId)
+        {
+            int cdpnChoiceValue = 1;
+
+            var normalizeRuleContext = new Vanrise.GenericData.Normalization.NormalizeRuleContext();
+            normalizeRuleContext.Value = cdpn;
+
+            var genericRuleTarget = new Vanrise.GenericData.Entities.GenericRuleTarget();
+            genericRuleTarget.EffectiveOn = effectiveTime;
+            genericRuleTarget.TargetFieldValues = new Dictionary<string, object>();
+            genericRuleTarget.TargetFieldValues.Add("NumberType", cdpnChoiceValue);
+            genericRuleTarget.TargetFieldValues.Add("Switch", switchId);
+            if (!string.IsNullOrEmpty(cdpn))
+            {
+                genericRuleTarget.TargetFieldValues.Add("NumberPrefix", cdpn);
+                genericRuleTarget.TargetFieldValues.Add("NumberLength", cdpn.Length);
+            }
+
+            var normalizationRuleManager = new Vanrise.GenericData.Normalization.NormalizationRuleManager();
+            normalizationRuleManager.ApplyNormalizationRule(normalizeRuleContext, normalizationRuleDefinitionId, genericRuleTarget);
+
+            return normalizeRuleContext.NormalizedValue;
+        }
+
         #endregion
 
         #region Mappers

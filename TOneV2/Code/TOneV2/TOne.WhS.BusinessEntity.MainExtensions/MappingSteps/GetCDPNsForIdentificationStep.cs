@@ -29,8 +29,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.MappingSteps
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new TOne.WhS.BusinessEntity.Business.SwitchManager();", switchManagerVariableName);
 
             var switchCDPNsForIdentificationVariableName = context.GenerateUniqueMemberName("switchCDPNsForIdentification");
-            context.AddCodeToCurrentInstanceExecutionBlock("TOne.WhS.BusinessEntity.Entities.SwitchCDPNsForIdentification {0} = {1}.GetSwitchCDPNsForIdentification({2},{3},{4},{5});", switchCDPNsForIdentificationVariableName, switchManagerVariableName,
-                this.SwitchId, this.InputCDPN, this.CDPNIn, this.CDPNOut);
+            context.AddCodeToCurrentInstanceExecutionBlock("TOne.WhS.BusinessEntity.Entities.SwitchCDPNsForIdentification {0} = {1}.GetSwitchCDPNsForIdentification({2},{3},{4},{5});",
+                switchCDPNsForIdentificationVariableName, switchManagerVariableName, this.SwitchId, this.InputCDPN, this.CDPNIn, this.CDPNOut);
 
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.CustomerCDPN;", this.CustomerCDPN, switchCDPNsForIdentificationVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SupplierCDPN;", this.SupplierCDPN, switchCDPNsForIdentificationVariableName);

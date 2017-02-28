@@ -52,11 +52,9 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
 
                             fillInputFieldsArray(payload.stepDetails, ctrl.inputFields);
                             fillOutputFieldsArray(payload.stepDetails, ctrl.outputFields);
-
                         }
                         checkValidation();
                     }
-
                 };
 
                 api.applyChanges = function (changes) {
@@ -70,7 +68,6 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
                 };
 
                 api.checkValidation = function () {
-
                     return checkValidation();
                 };
 
@@ -109,12 +106,16 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
             function fillInputFieldsArray(data, array) {
 
                 array.push({
+                    FieldName: "Efective Time",
+                    Value: data.EffectiveTime
+                });
+                array.push({
                     FieldName: "SwitchId",
                     Value: data.SwitchId
                 });
                 array.push({
-                    FieldName: "CDPN Normalized",
-                    Value: data.CDPNNormalized
+                    FieldName: "CDPN",
+                    Value: data.CDPN
                 });
                 array.push({
                     FieldName: "CDPN In",

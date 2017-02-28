@@ -7,13 +7,12 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum CDPNIdentification { CDPN = 0, CDPNIn = 1, CDPNOut = 2 }
+    public enum CDPNIdentification { CDPN = 0, CDPNIn = 1, CDPNOut = 2, NormalizedCDPN = 3, NormalizedCDPNIn = 4, NormalizedCDPNOut = 5 }
 
     public class CDRImportSettings : SettingData
     {
         public SwitchCDRMappingConfiguration SwitchCDRMappingConfiguration { get; set; }
     }
-
 
     public class SwitchCDRMappingConfiguration
     {

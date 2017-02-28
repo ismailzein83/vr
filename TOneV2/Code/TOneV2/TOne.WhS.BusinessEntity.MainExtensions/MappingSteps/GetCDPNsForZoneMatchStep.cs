@@ -11,8 +11,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.MappingSteps
     {
         public override Guid ConfigId { get { return new Guid("C29BD6EC-35FB-4EDA-8CF0-E889E6F4C000"); } }
 
+        public Guid NormalizationRuleDefinitionId { get; set; }
+        public string EffectiveTime { get; set; }
         public string SwitchId { get; set; }
-        public string CDPNNormalized { get; set; }
+        public string CDPN { get; set; }
         public string CDPNIn { get; set; }
         public string CDPNOut { get; set; }
 
@@ -26,8 +28,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.MappingSteps
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new TOne.WhS.BusinessEntity.Business.SwitchManager();", switchManagerVariableName);
 
             var switchCDPNsForZoneMatchVariableName = context.GenerateUniqueMemberName("switchCDPNsForZoneMatch");
-            context.AddCodeToCurrentInstanceExecutionBlock("TOne.WhS.BusinessEntity.Entities.SwitchCDPNsForZoneMatch {0} = {1}.GetSwitchCDPNsForZoneMatch({2},{3},{4},{5});", switchCDPNsForZoneMatchVariableName, switchManagerVariableName,
-                this.SwitchId, this.CDPNNormalized, this.CDPNIn, this.CDPNOut);
+            context.AddCodeToCurrentInstanceExecutionBlock("TOne.WhS.BusinessEntity.Entities.SwitchCDPNsForZoneMatch {0} = {1}.GetSwitchCDPNsForZoneMatch({2},{3},{4},{5},new Guid(\"{6}\"),{7});",
+                switchCDPNsForZoneMatchVariableName, switchManagerVariableName, this.SwitchId, this.CDPN, this.CDPNIn, this.CDPNOut, this.NormalizationRuleDefinitionId, this.EffectiveTime);
 
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleZoneCDPN;", this.SaleZoneCDPN, switchCDPNsForZoneMatchVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SupplierZoneCDPN;", this.SupplierZoneCDPN, switchCDPNsForZoneMatchVariableName);

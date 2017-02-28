@@ -12,7 +12,8 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
                 isrequired: '=',
                 normalColNum: '@',
                 customvalidate: '=',
-                label: '@'
+                label: '@',
+                withoutnormalization: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -25,7 +26,6 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
 
                 var cdpnSelector = new CDPNSelectorCtor(ctrl, $scope, $attrs);
                 cdpnSelector.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -79,18 +79,26 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
                         selectedIds = payload.selectedIds;
                     }
 
-                    ctrl.datasource = UtilsService.getArrayEnum(WhS_BE_CDPNIdentificationEnum);
+                    var cdpnIdentifications = UtilsService.getArrayEnum(WhS_BE_CDPNIdentificationEnum);
 
-                    if (selectedIds != undefined) {
-                        ctrl.selectedvalues = UtilsService.getEnum(WhS_BE_CDPNIdentificationEnum, 'value', selectedIds);
+                    if (attrs.withoutnormalization == undefined) {
+                        ctrl.datasource = cdpnIdentifications;
                     }
+                    else {
+                        for (var index = 0; index < cdpnIdentifications.length; index++) {
+                            var currentCDPNIdentification = cdpnIdentifications[index];
+                            if (!currentCDPNIdentification.isNormalized)
+                                ctrl.datasource.push(currentCDPNIdentification);
+                        }
+                    }
+
+                    if (selectedIds != undefined) 
+                        ctrl.selectedvalues = UtilsService.getEnum(WhS_BE_CDPNIdentificationEnum, 'value', selectedIds);
                 };
 
                 api.getSelectedIds = function () {
-
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 };
-
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -98,5 +106,4 @@ app.directive('vrWhsBeCdpnSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_B
 
             this.initializeController = initializeController;
         }
-
     }]);
