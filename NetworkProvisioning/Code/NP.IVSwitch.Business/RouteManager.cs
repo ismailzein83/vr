@@ -78,6 +78,11 @@ namespace NP.IVSwitch.Business
             return insertOperationOutput;
         }
 
+        public int GetRouteCarrierAccountId(int routeId)
+        {
+            return GetCarrierAccountIdsByRouteId().GetRecord(routeId);
+        }
+
         private bool Insert(RouteToAdd routeItem, out int routeId, out string mssg)
         {
             routeId = 0;
@@ -261,30 +266,30 @@ namespace NP.IVSwitch.Business
             }
             return routes;
         }
-        public Dictionary<int, int> GetRouteAndSupplierIds()
+        public Dictionary<int, int> GetCarrierAccountIdsByRouteId()
         {
-            Dictionary<int, int> mappeDictionary = new Dictionary<int, int>();
-            IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
-            Helper.SetSwitchConfig(dataManager);
-            Dictionary<int, Route> routes = dataManager.GetRoutes().ToDictionary(x => x.RouteId, x => x);
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var suppliers = carrierAccountManager.GetAllSuppliers();
-
-            foreach (var supplierItem in suppliers)
-            {
-                RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(supplierItem);
-                if (extendedSettingsObject == null) continue;
-                foreach (var routeInfo in extendedSettingsObject.RouteInfo)
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOne.WhS.BusinessEntity.Business.CarrierAccountManager.CacheManager>().GetOrCreateObject("IVSwitch_GetCarrierAccountIdsByRouteId",
+                () =>
                 {
-                    Route tempRoute;
-                    if (routes.TryGetValue(routeInfo.RouteId, out tempRoute))
-                    {
-                        mappeDictionary[routeInfo.RouteId] = supplierItem.CarrierAccountId;
-                    }
-                }
+                    Dictionary<int, int> mappeDictionary = new Dictionary<int, int>();                    
+                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                    var suppliers = carrierAccountManager.GetAllSuppliers();
 
-            }
-            return mappeDictionary;
+                    foreach (var supplierItem in suppliers)
+                    {
+                        RouteCarrierAccountExtension extendedSettingsObject = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(supplierItem);
+                        if (extendedSettingsObject == null) continue;
+                        foreach (var routeInfo in extendedSettingsObject.RouteInfo)
+                        {
+                            if (!mappeDictionary.ContainsKey(routeInfo.RouteId))
+                            {
+                                mappeDictionary[routeInfo.RouteId] = supplierItem.CarrierAccountId;
+                            }
+                        }
+
+                    }
+                    return mappeDictionary;
+                });
         }
         #endregion
 

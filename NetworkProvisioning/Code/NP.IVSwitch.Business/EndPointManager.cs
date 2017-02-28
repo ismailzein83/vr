@@ -116,6 +116,11 @@ namespace NP.IVSwitch.Business
             return updateOperationOutput;
         }
 
+        public int GetEndPointCarrierAccountId(int endPointId)
+        {
+            return GetCarrierAccountIdsByEndPointId().GetRecord(endPointId);
+        }
+
         #endregion
 
         #region Private Classes
@@ -131,7 +136,7 @@ namespace NP.IVSwitch.Business
         #region Private Methods
         private void GetValue(EndPointToAdd endPointItem)
         {
-            var ids = GetCachedIds();
+            var ids = GetCarrierAccountIdsByEndPointId();
             int carrierId;
             if (ids.TryGetValue(endPointItem.Entity.EndPointId, out carrierId))
             {
@@ -288,33 +293,28 @@ namespace NP.IVSwitch.Business
                     return dataManager.GetEndPoints().ToDictionary(x => x.EndPointId, x => x);
                 });
         }
-        Dictionary<int, int> GetCachedIds()
+        
+        public Dictionary<int, int> GetCarrierAccountIdsByEndPointId()
         {
-            return
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
-                    .GetOrCreateObject("GetEndPointWithCarrierId",
-                        GetEndPointWithCarrierId);
-        }
-
-        public Dictionary<int, int> GetEndPointWithCarrierId()
-        {
-            Dictionary<int, int> result = new Dictionary<int, int>();
-            IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
-            Helper.SetSwitchConfig(dataManager);
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var customers = carrierAccountManager.GetAllCustomers();
-            foreach (var customerItem in customers)
-            {
-                EndPointCarrierAccountExtension extendedSettingsObject =
-                    carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(customerItem);
-                if (extendedSettingsObject == null || extendedSettingsObject.AclEndPointInfo == null) continue;
-                foreach (var aclInfo in extendedSettingsObject.AclEndPointInfo)
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOne.WhS.BusinessEntity.Business.CarrierAccountManager.CacheManager>().GetOrCreateObject("IVSwitch_GetCarrierAccountIdsByEndPointId", 
+                () =>
                 {
-                    if (!result.ContainsKey(aclInfo.EndPointId))
-                        result[aclInfo.EndPointId] = customerItem.CarrierAccountId;
-                }
-            }
-            return result;
+                    Dictionary<int, int> result = new Dictionary<int, int>();                   
+                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                    var customers = carrierAccountManager.GetAllCustomers();
+                    foreach (var customerItem in customers)
+                    {
+                        EndPointCarrierAccountExtension extendedSettingsObject =
+                            carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(customerItem);
+                        if (extendedSettingsObject == null || extendedSettingsObject.AclEndPointInfo == null) continue;
+                        foreach (var aclInfo in extendedSettingsObject.AclEndPointInfo)
+                        {
+                            if (!result.ContainsKey(aclInfo.EndPointId))
+                                result[aclInfo.EndPointId] = customerItem.CarrierAccountId;
+                        }
+                    }
+                    return result;
+                });            
         }
 
         #endregion

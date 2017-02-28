@@ -12,7 +12,7 @@ namespace NP.IVSwitch.Business
         public IpAddressHelper()
         {
             EndPointManager manager = new EndPointManager();
-            _endPointIds = manager.GetEndPointWithCarrierId();
+            _endPointIds = manager.GetCarrierAccountIdsByEndPointId();
         }
         public bool IsInSameSubnet(Dictionary<int, Entities.EndPoint> endPoints, string originalHost, out string message)
         {

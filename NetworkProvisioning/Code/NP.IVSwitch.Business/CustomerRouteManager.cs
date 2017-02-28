@@ -85,7 +85,7 @@ namespace NP.IVSwitch.Business
         {
             RouteManager routeManager = new RouteManager();
             CarrierAccountManager accountManager = new CarrierAccountManager();
-            Dictionary<int, int> mappedSupplierRouteIds = routeManager.GetRouteAndSupplierIds();
+            Dictionary<int, int> mappedSupplierRouteIds = routeManager.GetCarrierAccountIdsByRouteId();
             int supplierId;
             if (!mappedSupplierRouteIds.TryGetValue(route.RouteId, out supplierId)) return null;
             return new CustomerRouteOption
