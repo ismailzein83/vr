@@ -17,6 +17,17 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_AccountBalance/Elements/FinancialAccount/Views/FinancialAccountEditor.html', parameters, settings);
         };
+        function editFinancialAccount(onFinancialAccountUpdated, financialAccountId) {
+            var parameters = {
+                financialAccountId: financialAccountId,
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onFinancialAccountUpdated = onFinancialAccountUpdated
+            };
+            VRModalService.showModal('/Client/Modules/WhS_AccountBalance/Elements/FinancialAccount/Views/FinancialAccountEditor.html', parameters, settings);
+        };
         function registerDrillDownToCarrierAccount() {
             var drillDownDefinition = {};
 
@@ -59,6 +70,7 @@
         }
         return {
             addFinancialAccount: addFinancialAccount,
+            editFinancialAccount:editFinancialAccount,
             registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount,
             registerDrillDownToCarrierProfile: registerDrillDownToCarrierProfile
         };

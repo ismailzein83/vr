@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_FinancialAccountAPIService', 'VRNotificationService',
-    function (WhS_AccountBalance_FinancialAccountAPIService, VRNotificationService) {
+app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_FinancialAccountAPIService', 'VRNotificationService','VR_AccountBalance_FinancialAccountService',
+    function (WhS_AccountBalance_FinancialAccountAPIService, VRNotificationService, VR_AccountBalance_FinancialAccountService) {
         return {
             restrict: 'E',
             scope: {
@@ -59,6 +59,16 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
 
 
             function defineMenuActions() {
+                $scope.scopeModel.gridMenuActions = [{
+                    name: "Edit",
+                    clicked: editFinancialAccount,
+                }];
+            }
+            function editFinancialAccount(dataItem) {
+                var onFinancialAccountUpdated = function (financialAccount) {
+                    gridAPI.itemUpdated(financialAccount);
+                };
+                VR_AccountBalance_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated, dataItem.Entity.FinancialAccountId);
             }
 
         }
