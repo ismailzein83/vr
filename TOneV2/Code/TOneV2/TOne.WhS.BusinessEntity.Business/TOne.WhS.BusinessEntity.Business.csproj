@@ -77,6 +77,9 @@
     <Reference Include="Vanrise.GenericData.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Normalization">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
@@ -86,6 +89,9 @@
     </Reference>
     <Reference Include="Vanrise.Rules.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Normalization">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
