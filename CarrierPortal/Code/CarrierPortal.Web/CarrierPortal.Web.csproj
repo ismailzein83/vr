@@ -436,9 +436,11 @@
     <None Include="Web.config.Debug.exclude">
       <DependentUpon>Web.config.exclude</DependentUpon>
     </None>
+    <Content Include="Web.config.PartnerPortal.exclude" />
     <None Include="Web.config.Release.exclude">
       <DependentUpon>Web.config.exclude</DependentUpon>
     </None>
+    <Content Include="Web.config.SupplierPricelist.exclude" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
