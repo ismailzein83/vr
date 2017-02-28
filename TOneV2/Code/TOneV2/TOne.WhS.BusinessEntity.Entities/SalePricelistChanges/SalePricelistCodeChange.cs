@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Code { get; set; }
         public CodeChange ChangeType { get; set; }
         public int PricelistId { get; set; }
+        public long BatchId { get; set; }
     }
     public enum CodeChange
     {
