@@ -51,7 +51,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             var api = {};
 
             api.load = function (payload) {
-                return gridAPI.loadGrid(payload.query);
+                if (payload != undefined)
+                {
+                    carrierAccountId = payload.carrierAccountId;
+                    carrierProfileId = payload.carrierProfileId;
+                }
+                return gridAPI.loadGrid(payload);
             };
             api.onFnancialAccountAdded = function (financialAccount) {
                 return gridAPI.itemAdded(financialAccount);

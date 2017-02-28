@@ -56,7 +56,7 @@ namespace TOne.WhS.AccountBalance.Data.SQL
             FinancialAccount financialAccount = new FinancialAccount();
             financialAccount.FinancialAccountId = (int)reader["ID"];
             financialAccount.CarrierAccountId = GetReaderValue<int?>(reader, "CarrierAccountId");
-            financialAccount.CarrierProfileId = GetReaderValue<int?>(reader, "CarrierAccountId");
+            financialAccount.CarrierProfileId = GetReaderValue<int?>(reader, "CarrierProfileId");
             financialAccount.Settings = Vanrise.Common.Serializer.Deserialize<FinancialAccountSettings>(reader["FinancialAccountSettings"] as string);
             financialAccount.BED = GetReaderValue<DateTime>(reader, "BED");
             financialAccount.EED = GetReaderValue<DateTime?>(reader, "EED");

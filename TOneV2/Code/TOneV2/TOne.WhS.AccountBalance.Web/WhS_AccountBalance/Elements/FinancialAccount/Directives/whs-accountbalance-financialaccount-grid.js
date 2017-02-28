@@ -42,7 +42,7 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
                 };
 
                 defineMenuActions();
-            }
+            }   
 
             function defineAPI() {
                 var api = {};
@@ -50,7 +50,7 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
                 api.loadGrid = function (payload) {
                     return gridAPI.retrieveData(payload.query);
                 };
-                api.onFnancialAccountAdded = function (financialAccount) {
+                api.onFinancialAccountAdded = function (financialAccount) {
                     return gridAPI.itemAdded(financialAccount);
                 };
                 if (ctrl.onReady != null)

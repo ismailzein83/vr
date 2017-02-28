@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("whsAccountbalanceCustomerpostpaid", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("whsAccountbalanceDefinitionSupplierprepaid", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("whsAccountbalanceCustomerpostpaid", ["UtilsService", "VRNotificat
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new CustomerPostPaid($scope, ctrl, $attrs);
+                var ctor = new SupplierPostPaid($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("whsAccountbalanceCustomerpostpaid", ["UtilsService", "VRNotificat
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_AccountBalance/Elements/FinancialAccount/Directives/FinancialAccountTypes/CustomerPostpaid/Templates/CustomerPostpaidDefinitionSettings.html"
+            templateUrl: "/Client/Modules/WhS_AccountBalance/Elements/FinancialAccount/Directives/FinancialAccountTypes/SupplierPrepaid/Templates/SupplierPrepaidDefinitionSettings.html"
 
         };
 
-        function CustomerPostPaid($scope, ctrl, $attrs) {
+        function SupplierPostPaid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var usageTransactionTypeApi;
             var usageTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -70,7 +70,7 @@ app.directive("whsAccountbalanceCustomerpostpaid", ["UtilsService", "VRNotificat
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerPostpaid.CustomerPostpaidDefinitionSettings ,TOne.WhS.AccountBalance.MainExtensions",
+                        $type: "TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierPrepaid.SupplierPrepaidDefinitionSettings ,TOne.WhS.AccountBalance.MainExtensions",
                         UsageTransactionTypeId: usageTransactionTypeApi.getSelectedIds()
                     };
                 };

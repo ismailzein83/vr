@@ -26,7 +26,13 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerP
         {
             get { return false; }
         }
-
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "whs-accountbalance-runtime-customerpostpaid";
+            }
+        }
         public Guid UsageTransactionTypeId { get; set; }
     }
 }

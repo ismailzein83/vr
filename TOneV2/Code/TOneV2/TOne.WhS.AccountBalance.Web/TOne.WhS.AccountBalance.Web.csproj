@@ -136,16 +136,26 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_AccountBalance\Constant\ModuleConfig.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidDefinitionSettings.html" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\whs-accountbalance-customerpostpaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\whs-accountbalance-runtime-customerpostpaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\whs-accountbalance-definition-customerpostpaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPrepaid\Templates\CustomerPrepaidSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPrepaid\Templates\CustomerPrepaidDefinitionSettings.html" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPrepaid\whs-accountbalance-customerprepaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPrepaid\whs-accountbalance-runtime-customerprepaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPrepaid\whs-accountbalance-definition-customerprepaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\Netting\Templates\NettingSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\Netting\Templates\NettingDefinitionSettings.html" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\Netting\whs-accountbalance-netting.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\Netting\whs-accountbalance-runtime-netting.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\Netting\whs-accountbalance-definition-netting.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPostpaid\Templates\SupplierPostpaidSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPostpaid\Templates\SupplierPostpaidDefinitionSettings.html" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPostpaid\whs-accountbalance-supplierpostpaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPostpaid\whs-accountbalance-runtime-supplierpostpaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPostpaid\whs-accountbalance-definition-supplierpostpaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\Templates\SupplierPrepaidSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\Templates\SupplierPrepaidDefinitionSettings.html" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\whs-accountbalance-supplierprepaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\whs-accountbalance-runtime-supplierprepaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\whs-accountbalance-definition-supplierprepaid.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\FinancialAccountGridTemplate.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\FinancialAccountSearch.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\whs-accountbalance-financialaccount-grid.js" />

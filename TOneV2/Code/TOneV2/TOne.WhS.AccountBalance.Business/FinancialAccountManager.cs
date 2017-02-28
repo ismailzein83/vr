@@ -19,10 +19,19 @@ namespace TOne.WhS.AccountBalance.Business
             var allFinancialAccounts = GetCachedFinancialAccounts();
 
             Func<FinancialAccount, bool> filterExpression = (prod) =>
-                 (input.Query.CarrierAccountId.HasValue || prod.CarrierAccountId.Value == prod.CarrierAccountId)
-                 &&
-                 (input.Query.CarrierProfileId.HasValue || input.Query.CarrierProfileId.Value == prod.CarrierProfileId);
-
+                {
+                    if(input.Query.CarrierAccountId.HasValue && prod.CarrierAccountId.HasValue)
+                    {
+                        if (input.Query.CarrierAccountId.Value != prod.CarrierAccountId.Value)
+                            return false;
+                    }
+                    if (input.Query.CarrierProfileId.HasValue && prod.CarrierProfileId.HasValue)
+                    {
+                        if (input.Query.CarrierProfileId.Value != prod.CarrierProfileId.Value)
+                            return false;
+                    }
+                    return true;
+                };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allFinancialAccounts.ToBigResult(input, filterExpression, FinancialAccountDetailMapper));
         }
 

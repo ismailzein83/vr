@@ -29,7 +29,7 @@
                     query: {
                         CarrierAccountId: carrierAccountItem.Entity.CarrierAccountId
                     },
-                    CarrierAccountId: carrierAccountItem.Entity.CarrierAccountId
+                    carrierAccountId: carrierAccountItem.Entity.CarrierAccountId
                 };
 
                 return carrierAccountItem.financialAccountGridAPI.load(payload);

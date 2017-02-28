@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.AccountBalance.Entities
 {
-    public abstract class FinancialAccountSettings
+    public class FinancialAccountSettings
     {
         public Guid AccountTypeId { get; set; }
 

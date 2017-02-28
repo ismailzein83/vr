@@ -2,14 +2,18 @@
 
     'use strict';
 
-    financialAccountEditorController.$inject = ['$scope', 'WhS_AccountBalance_FinancialAccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    financialAccountEditorController.$inject = ['$scope', 'WhS_AccountBalance_FinancialAccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','VR_AccountBalance_AccountTypeAPIService'];
 
-    function financialAccountEditorController($scope, WhS_AccountBalance_FinancialAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function financialAccountEditorController($scope, WhS_AccountBalance_FinancialAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService) {
         var carrierAccountId;
         var carrierProfileId;
 
         var financialAccountTypeSelectorDirectiveAPI;
         var financialAccountTypeSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+
+        var directiveAPI;
+        var directiveReadyDeferred;
 
         loadParameters();
         defineScope();
@@ -30,6 +34,25 @@
             $scope.scopeModel.onFinancialAccountTypeSelectorReady = function (api) {
                 financialAccountTypeSelectorDirectiveAPI = api;
                 financialAccountTypeSelectorDirectiveReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onFinancialAccountTypeSelectionChanged = function (value) {
+                if(value != undefined)
+                {
+                    $scope.scopeModel.isLoading = true;
+                    getFinancialAccountTypeSetting().finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
+                }else
+                {
+                    $scope.scopeModel.financialAccountTypeRuntimeDirective = undefined;
+                }
+            };
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
             };
 
             $scope.scopeModel.save = function () {
@@ -69,6 +92,20 @@
                 return loadFinancialAccountTypeSelectorPromiseDeferred.promise;
             }
 
+            function loadDirective() {
+                directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                directiveReadyDeferred.promise.then(function () {
+                    directiveReadyDeferred = undefined;
+                    var directivePayload = {};
+                    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                });
+
+                return directiveLoadDeferred.promise;
+            }
+
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFinancialAccountTypeSelectorSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -76,6 +113,15 @@
             });
         }
     
+        function getFinancialAccountTypeSetting()
+        {
+            var selectedfinancialAccountTypeId = financialAccountTypeSelectorDirectiveAPI.getSelectedIds();
+            return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSettings(selectedfinancialAccountTypeId).then(function (response) {
+                if (response != undefined && response.ExtendedSettings != undefined)
+                    $scope.scopeModel.financialAccountTypeRuntimeDirective = response.ExtendedSettings.RuntimeEditor;
+            });
+        }
+
         function insertFinancialAccount() {
             $scope.scopeModel.isLoading = true;
 
@@ -98,7 +144,10 @@
             var obj = {
                 CarrierAccountId: carrierAccountId,
                 CarrierProfileId: carrierProfileId,
-                Settings: financialAccountTypeSelectorDirectiveAPI.getData(),
+                Settings: {
+                    AccountTypeId: financialAccountTypeSelectorDirectiveAPI.getSelectedIds(),
+                    ExtendedSettings: directiveAPI.getData()
+                },
                 BED: $scope.scopeModel.beginEffectiveDate,
                 EED: $scope.scopeModel.endEffectiveDate
             };

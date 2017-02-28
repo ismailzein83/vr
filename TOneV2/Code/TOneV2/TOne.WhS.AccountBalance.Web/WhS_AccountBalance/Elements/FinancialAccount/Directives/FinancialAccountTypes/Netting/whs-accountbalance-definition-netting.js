@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("whsAccountbalanceNetting", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("whsAccountbalanceDefinitionNetting", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {

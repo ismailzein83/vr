@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.directive("whsAccountbalanceCustomerprepaid", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("whsAccountbalanceDefinitionCustomerprepaid", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {

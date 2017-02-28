@@ -29,7 +29,13 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierP
                 return true;
             }
         }
-
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "whs-accountbalance-runtime-supplierpostpaid";
+            }
+        }
         public Guid UsageTransactionTypeId { get; set; }
     }
 }

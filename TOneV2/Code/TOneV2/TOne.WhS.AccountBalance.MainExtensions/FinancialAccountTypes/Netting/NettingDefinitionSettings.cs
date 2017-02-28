@@ -29,6 +29,13 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.Netting
                 return true;
             }
         }
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "whs-accountbalance-runtime-netting";
+            }
+        }
 
         public Guid CustomerUsageTransactionTypeId { get; set; }
 
