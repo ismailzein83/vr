@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6463E524-5B13-453F-BD95-6974ED0C7B86}</ProjectGuid>
+    <ProjectGuid>{DDA303D7-61BB-4A64-9E56-94821BB4BC45}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TOne.WhS.AccountBalance.Entities</RootNamespace>
-    <AssemblyName>TOne.WhS.AccountBalance.Entities</AssemblyName>
+    <RootNamespace>TOne.WhS.AccountBalance.Data</RootNamespace>
+    <AssemblyName>TOne.WhS.AccountBalance.Data</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,17 +41,21 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CarrierFinancialAccountData.cs" />
-    <Compile Include="FinancialAccount.cs" />
-    <Compile Include="FinancialAccountDetail.cs" />
-    <Compile Include="FinancialAccountQuery.cs" />
-    <Compile Include="FinancialAccountSettings.cs" />
+    <Compile Include="AccountBalanceManagerFactory.cs" />
+    <Compile Include="IDataManager.cs" />
+    <Compile Include="IFinancialAccountDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Entities\TOne.WhS.AccountBalance.Entities.csproj">
+      <Project>{6463e524-5b13-453f-bd95-6974ed0c7b86}</Project>
+      <Name>TOne.WhS.AccountBalance.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

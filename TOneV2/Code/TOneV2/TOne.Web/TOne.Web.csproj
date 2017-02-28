@@ -789,6 +789,14 @@
       <Project>{5a8fe576-bf07-498c-a27f-2100fc828bce}</Project>
       <Name>TOne.WhS.AccountBalance.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Data.SQL\TOne.WhS.AccountBalance.Data.SQL.csproj">
+      <Project>{a6a5fe20-e968-483c-a6e3-171b3648a67e}</Project>
+      <Name>TOne.WhS.AccountBalance.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Data\TOne.WhS.AccountBalance.Data.csproj">
+      <Project>{dda303d7-61bb-4a64-9e56-94821bb4bc45}</Project>
+      <Name>TOne.WhS.AccountBalance.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.AccountBalance.Entities\TOne.WhS.AccountBalance.Entities.csproj">
       <Project>{6463e524-5b13-453f-bd95-6974ed0c7b86}</Project>
       <Name>TOne.WhS.AccountBalance.Entities</Name>

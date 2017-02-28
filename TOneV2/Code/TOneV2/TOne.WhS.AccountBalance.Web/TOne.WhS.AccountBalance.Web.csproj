@@ -127,12 +127,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\MainExtensions\" />
-    <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\" />
-    <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountBalanceController.cs" />
+    <Compile Include="Controllers\FinancialAccountController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +146,15 @@
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPostpaid\whs-accountbalance-supplierpostpaid.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\Templates\SupplierPrepaidDefinitionSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\whs-accountbalance-supplierprepaid.js" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Services\APIServices\AccountBalanceAPIService.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\FinancialAccountGridTemplate.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\FinancialAccountSearch.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\whs-accountbalance-financialaccount-grid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\whs-accountbalance-financialaccount-search.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Services\APIServices\FinancialAccountAPIService.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Services\FinancialAccountService.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Views\FinancialAccountEditor.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Views\FinancialAccountEditorController.js" />
+    <Content Include="WhS_AccountBalance\ModuleInitialization.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
