@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    class SellingProductZoneRateHistoryRecord
+    public class SellingProductZoneRateHistoryRecord
     {
+        public decimal Rate { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+    }
+
+    public class SellingProductZoneRateHistoryRecordDetail
+    {
+        public SellingProductZoneRateHistoryRecord Entity { get; set; }
     }
 }

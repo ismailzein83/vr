@@ -141,10 +141,10 @@
     <Compile Include="SalePricelistChanges\SalePricelistCodeChange.cs" />
     <Compile Include="SalePricelistChanges\SalePriceListCustomerChange.cs" />
     <Compile Include="SalePricelistChanges\SalePricelistRateChange.cs" />
-    <Compile Include="SaleRate\History\Record\CustomerZoneRateHistoryRecord.cs" />
-    <Compile Include="SaleRate\History\SaleRateHistoryQueryHandler.cs" />
-    <Compile Include="SaleRate\History\Record\SaleRateHistoryRecord.cs" />
-    <Compile Include="SaleRate\History\Record\SellingProductZoneRateHistoryRecord.cs" />
+    <Compile Include="SaleRate\History\CustomerZoneRateHistoryQuery.cs" />
+    <Compile Include="SaleRate\History\CustomerZoneRateHistoryRecord.cs" />
+    <Compile Include="SaleRate\History\SellingProductZoneRateHistoryQuery.cs" />
+    <Compile Include="SaleRate\History\SellingProductZoneRateHistoryRecord.cs" />
     <Compile Include="Settings\PurchaseAreaSettingsData.cs" />
     <Compile Include="Settings\SaleAreaSettingsData.cs" />
     <Compile Include="SaleCode\Query\SaleCodeQuery.cs" />

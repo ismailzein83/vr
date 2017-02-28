@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    class SellingProductZoneRateHistoryQuery
+    public class SellingProductZoneRateHistoryQuery
     {
     }
 }
