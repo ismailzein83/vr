@@ -116,7 +116,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             selectColumnBuilder.Append(String.Format(@"    SwitchId,
                                                             ReleaseCode,
                                                             ReleaseSource,
-                                                            Count(*)  Attempt,
+                                                            SUM(Attempt)  Attempt,
                                                             SUM(SuccessfulAttempts) SuccessfulAttempts,
 			                                                Min(FirstAttempt) FirstAttempt,	
 			                                                Max(LastAttempt) LastAttempt,
@@ -153,11 +153,11 @@ namespace TOne.WhS.Analytics.Data.SQL
             groupByBuilder.Append(String.Format(@"{0}.SwitchId, {0}.ReleaseCode,{0}.ReleaseSource", alias));
             selectQueryPart.Append(String.Format(@"         {0}.SwitchId,
                                                             {0}.ReleaseCode,{0}.ReleaseSource,
-                                                            Count(*)  Attempt,
+                                                            SUM(Attempt)  Attempt,
                                                             SUM( CASE WHEN {0}.DurationInSeconds > 0 THEN 1 ELSE 0 END) SuccessfulAttempts,
 			                                                Min({0}.AttemptDateTime) FirstAttempt,	
 			                                                Max({0}.AttemptDateTime) LastAttempt,
-                                                            CONVERT(DECIMAL,SUM({0}.DurationInSeconds)/60.) AS DurationsInMinutes  ", alias, tableIndex));
+                                                            SUM({0}.DurationInSeconds)/60. AS DurationsInMinutes  ", alias, tableIndex));
             AddSelectColumnToQuery(selectQueryPart, alias);
             AddGroupingToQuery(groupByBuilder, alias);
             queryBuilder.Replace("#SELECTPART#", selectQueryPart.ToString());
