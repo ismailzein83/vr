@@ -31,7 +31,7 @@ app.directive("whsAccountbalanceRuntimeNetting", ["UtilsService", "VRNotificatio
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.customerCreditLimit = 0;
-                $scope.scopeModel.creditLimit = 0;
+                $scope.scopeModel.supplierCreditLimit = 0;
 
                
                 defineAPI();

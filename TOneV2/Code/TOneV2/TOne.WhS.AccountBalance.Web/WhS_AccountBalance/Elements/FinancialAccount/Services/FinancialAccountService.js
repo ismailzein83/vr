@@ -2,9 +2,9 @@
 
     'use stict';
 
-    FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService','WhS_BE_CarrierAccountService'];
+    FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService','WhS_BE_CarrierAccountService','WhS_BE_CarrierProfileService'];
 
-    function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService) {
+    function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService) {
         function addFinancialAccount(carrierAccountId, carrierProfileId, onFinancialAccountAdded) {
             var parameters = {
                 carrierAccountId: carrierAccountId,
@@ -37,9 +37,30 @@
 
             WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
         }
+        function registerDrillDownToCarrierProfile() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Financial Accounts";
+            drillDownDefinition.directive = "whs-accountbalance-financialaccount-search";
+
+            drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
+                carrierProfileItem.financialAccountGridAPI = directiveAPI;
+                var payload = {
+                    query: {
+                        CarrierProfileId: carrierProfileItem.Entity.CarrierProfileId
+                    },
+                    carrierProfileId: carrierProfileItem.Entity.CarrierProfileId
+                };
+
+                return carrierProfileItem.financialAccountGridAPI.load(payload);
+            };
+
+            WhS_BE_CarrierProfileService.addDrillDownDefinition(drillDownDefinition);
+        }
         return {
             addFinancialAccount: addFinancialAccount,
-            registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount
+            registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount,
+            registerDrillDownToCarrierProfile: registerDrillDownToCarrierProfile
         };
     }
 

@@ -24,7 +24,12 @@ namespace Vanrise.AccountBalance.Business
                 throw new NullReferenceException("accountTypeSettings.ExtendedSettings");
             return accountTypeSettings.ExtendedSettings.AccountSelector;
         }
-
+        public string GetAccountTypeName(Guid accountTypeId)
+        {
+            var accountType = _vrComponentTypeManager.GetComponentType<AccountTypeSettings,AccountType>(accountTypeId);
+            accountType.ThrowIfNull("accountType", accountTypeId);
+            return accountType.Name;
+        }
         
         public IEnumerable<AccountTypeExtendedSettingsConfig> GetAccountBalanceExtendedSettingsConfigs()
         {

@@ -38,7 +38,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                var drillDownDefinitions = [];
+                var drillDownDefinitions = WhS_BE_CarrierProfileService.getDrillDownDefinition();
+
                 var drillDownDefinition = {};
 
                 drillDownDefinition.title = "Carrier Account";
@@ -55,6 +56,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                     return carrierProfileItem.carrierAccountGridAPI.loadGrid(payload);
                 };
                 drillDownDefinitions.push(drillDownDefinition);
+
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")

@@ -5,9 +5,13 @@
     CarrierProfileService.$inject = ['VRModalService'];
 
     function CarrierProfileService(VRModalService) {
+        var drillDownDefinitions = [];
+
         return ({
             addCarrierProfile: addCarrierProfile,
-            editCarrierProfile: editCarrierProfile
+            editCarrierProfile: editCarrierProfile,
+            addDrillDownDefinition: addDrillDownDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addCarrierProfile(onCarrierProfileAdded) {
@@ -33,6 +37,13 @@
                 modalScope.onCarrierProfileUpdated = onCarrierProfileUpdated;
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
     }
 

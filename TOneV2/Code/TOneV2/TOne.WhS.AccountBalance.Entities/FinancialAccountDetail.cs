@@ -9,5 +9,6 @@ namespace TOne.WhS.AccountBalance.Entities
     public class FinancialAccountDetail
     {
         public  FinancialAccount Entity { get; set; }
+        public string AccountTypeDescription { get; set; }
     }
 }

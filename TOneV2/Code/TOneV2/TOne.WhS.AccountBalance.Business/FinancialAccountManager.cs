@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Data;
 using TOne.WhS.AccountBalance.Entities;
+using Vanrise.AccountBalance.Business;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -20,13 +21,17 @@ namespace TOne.WhS.AccountBalance.Business
 
             Func<FinancialAccount, bool> filterExpression = (prod) =>
                 {
-                    if(input.Query.CarrierAccountId.HasValue && prod.CarrierAccountId.HasValue)
+                    if(input.Query.CarrierAccountId.HasValue)
                     {
+                        if (!prod.CarrierAccountId.HasValue)
+                            return false;
                         if (input.Query.CarrierAccountId.Value != prod.CarrierAccountId.Value)
                             return false;
                     }
-                    if (input.Query.CarrierProfileId.HasValue && prod.CarrierProfileId.HasValue)
+                    if (input.Query.CarrierProfileId.HasValue)
                     {
+                        if (!prod.CarrierProfileId.HasValue)
+                            return false;
                         if (input.Query.CarrierProfileId.Value != prod.CarrierProfileId.Value)
                             return false;
                     }
@@ -209,7 +214,8 @@ namespace TOne.WhS.AccountBalance.Business
         {
             return new FinancialAccountDetail
             {
-                Entity = financialAccount
+                Entity = financialAccount,
+                AccountTypeDescription = new AccountTypeManager().GetAccountTypeName(financialAccount.Settings.AccountTypeId)
             };
         }
         #endregion
