@@ -44,6 +44,11 @@ namespace Vanrise.Security.Business
 
             return forgotPasswordId;
         }
+
+        public bool ShouldSendEmailOnNewUser()
+        {
+            return GetSecuritySettings().SendEmailNewUser;
+        }
         #endregion
 
 

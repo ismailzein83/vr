@@ -69,6 +69,7 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
                         newUserId = payload.NewUserId;
                         resetPasswordId = payload.ResetPasswordId;
                         forgotPasswordId = payload.ForgotPasswordId;
+                        $scope.scopeModel.sendEmailNewUser = payload.SendEmailNewUser;
                     }
 
 
@@ -106,10 +107,12 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
                     return {
                         NewUserId: addUserSelectorReadyAPI.getSelectedIds(),
                         ResetPasswordId: resetPasswordSelectorReadyAPI.getSelectedIds(),
-                        ForgotPasswordId: forgotPasswordSelectorReadyAPI.getSelectedIds(),
+                        ForgotPasswordId: forgotPasswordSelectorReadyAPI.getSelectedIds()
                     };
                 };
-
+                api.getSendEmailNewUser = function () {
+                    return $scope.scopeModel.sendEmailNewUser;
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

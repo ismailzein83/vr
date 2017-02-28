@@ -12,6 +12,8 @@ namespace Vanrise.Security.Entities
 
         public Guid ResetPasswordId { get; set; }
 
-        public Guid ForgotPasswordId { get; set; } 
+        public Guid ForgotPasswordId { get; set; }
+
+      
     }
 }

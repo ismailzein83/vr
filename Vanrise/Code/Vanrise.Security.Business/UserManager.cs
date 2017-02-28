@@ -184,14 +184,18 @@ namespace Vanrise.Security.Business
                     //PasswordEmailContext context = new PasswordEmailContext() { Name = userObject.Name, Password = pwd };
                     //emailTemplateManager.SendEmail(userObject.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
 
-                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("User", userObject);
-                    objects.Add("Password", pwd);
-
-                    Guid newUserId = new ConfigManager().GetNewUserId();
-
-                    VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(newUserId, objects);
+                   
+                    ConfigManager cManager = new ConfigManager();
+                    Guid newUserId = cManager.GetNewUserId();
+                    if (cManager.ShouldSendEmailOnNewUser())
+                    {
+                        Task sendMailTask = new Task(() =>
+                        {
+                            StartSendMailTask(newUserId, userObject, pwd);
+                        });
+                        sendMailTask.Start();
+                    }
+                   
                 }
             }
 
@@ -210,6 +214,8 @@ namespace Vanrise.Security.Business
             return insertOperationOutput;
         }
 
+
+        
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
         {
             UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
@@ -676,6 +682,21 @@ namespace Vanrise.Security.Business
                 return new CloudServiceProxy(authServer);
             else
                 return null;
+        }
+        private static void StartSendMailTask(Guid newUserID,object user , string pwd)
+        {
+            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+            objects.Add("User", user);
+            objects.Add("Password", pwd);
+            VRMailManager vrMailManager = new VRMailManager();
+            try
+            {               
+                vrMailManager.SendMail(newUserID, objects);
+            }
+            catch(Exception ex)
+            {
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
+            }
         }
 
 

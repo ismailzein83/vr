@@ -45,6 +45,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     var mailMessageTemplateSettingsPayload;
                     if (payload != undefined && payload.data != undefined) {
                         mailMessageTemplateSettingsPayload = payload.data.MailMessageTemplateSettings;
+                        mailMessageTemplateSettingsPayload.SendEmailNewUser = payload.data.SendEmailNewUser
                     }
 
 
@@ -61,9 +62,12 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Security.Entities.SecuritySettings, Vanrise.Security.Entities",
-                        MailMessageTemplateSettings: mailMessageTemplateSettingsAPI.getData()
+                        MailMessageTemplateSettings: mailMessageTemplateSettingsAPI.getData(),
+                        SendEmailNewUser: mailMessageTemplateSettingsAPI.getSendEmailNewUser()
                     };
                 };
+              
+
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
