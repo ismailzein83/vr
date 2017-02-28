@@ -41,6 +41,7 @@
                         elem.on('$destroy', function () {
                             fixDropdownSectionPosition();
                         });
+                        var ft;
                         ctrl.expandSection = function (e) {                          
                             var expandSectionDeferred = UtilsService.createPromiseDeferred();
                             $timeout(function () {
@@ -49,6 +50,7 @@
                                     return UtilsService.convertToPromiseIfUndefined(undefined);
                                 }
                                 $timeout(function () {
+                                    ft = true;
                                     scope.$apply(function () {
                                         ctrl.showmenu = true;
                                         calculatePosition(ctrl);
@@ -57,9 +59,9 @@
                                     addBackDrop();
                                     expandSectionDeferred.resolve();
                                     checkOnExpandMethode();
-                                },0);
+                                }, 0);
                                    
-                            }, 0);
+                            }, ft ? 0 :1000);
                             return expandSectionDeferred.promise;
                         };
 
