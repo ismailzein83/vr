@@ -16,22 +16,24 @@
     [MasterPlanOriginatingZoneId] BIGINT          NULL,
     [SupplierID]                  INT             NULL,
     [SupplierZoneID]              BIGINT          NULL,
-    [CDPN]                        VARCHAR (50)    NULL,
     [CGPN]                        VARCHAR (50)    NULL,
-    [SupplierCode]                VARCHAR (20)    NULL,
+    [CDPN]                        VARCHAR (50)    NULL,
+    [CDPNIn]                      VARCHAR (50)    NULL,
     [CDPNOut]                     VARCHAR (50)    NULL,
+    [SupplierCode]                VARCHAR (20)    NULL,
     [IDonSwitch]                  BIGINT          NULL,
     [Tag]                         VARCHAR (100)   NULL,
     [SIP]                         VARCHAR (100)   NULL,
     [IsRerouted]                  BIT             NULL,
+    [SaleRateId]                  BIGINT          NULL,
+    [CostRateId]                  BIGINT          NULL,
     [ReleaseCode]                 VARCHAR (50)    NULL,
     [ReleaseSource]               VARCHAR (10)    NULL,
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
-    [CostRateId]                  BIGINT          NULL,
-    [SaleRateId]                  BIGINT          NULL,
-    [CDPNIn]                      VARCHAR (50)    NULL,
     [CountryId]                   INT             NULL);
+
+
 
 
 

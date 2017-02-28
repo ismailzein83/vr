@@ -16,10 +16,11 @@
     [MasterPlanOriginatingZoneId] BIGINT          NULL,
     [SupplierID]                  INT             NULL,
     [SupplierZoneID]              BIGINT          NULL,
-    [CDPN]                        VARCHAR (50)    NULL,
     [CGPN]                        VARCHAR (50)    NULL,
-    [SupplierCode]                VARCHAR (20)    NULL,
+    [CDPN]                        VARCHAR (50)    NULL,
+    [CDPNIn]                      VARCHAR (50)    NULL,
     [CDPNOut]                     VARCHAR (50)    NULL,
+    [SupplierCode]                VARCHAR (20)    NULL,
     [IDonSwitch]                  BIGINT          NULL,
     [Tag]                         VARCHAR (100)   NULL,
     [SIP]                         VARCHAR (100)   NULL,
@@ -48,10 +49,11 @@
     [SaleExtraChargeRuleId]       INT             NULL,
     [CostExtraChargeValue]        DECIMAL (22, 6) NULL,
     [SaleExtraChargeValue]        DECIMAL (22, 6) NULL,
-    [CDPNIn]                      VARCHAR (50)    NULL,
     [CountryId]                   INT             NULL,
     [SaleExtraChargeRateValue]    DECIMAL (20, 8) NULL,
     [CostExtraChargeRateValue]    DECIMAL (20, 8) NULL);
+
+
 
 
 

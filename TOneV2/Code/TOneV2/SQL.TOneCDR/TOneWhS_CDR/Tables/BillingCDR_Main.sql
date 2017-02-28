@@ -10,12 +10,12 @@
     [OriginatingZoneID]           BIGINT          NULL,
     [SupplierID]                  INT             NULL,
     [SupplierZoneID]              BIGINT          NULL,
-    [CDPN]                        VARCHAR (50)    NULL,
     [CGPN]                        VARCHAR (50)    NULL,
+    [CDPN]                        VARCHAR (50)    NULL,
+    [CDPNIn]                      VARCHAR (50)    NULL,
+    [CDPNOut]                     VARCHAR (50)    NULL,
     [SaleCode]                    VARCHAR (20)    NULL,
     [SupplierCode]                VARCHAR (20)    NULL,
-    [CDPNOut]                     VARCHAR (50)    NULL,
-    [CDPNIn]                      VARCHAR (50)    NULL,
     [IDonSwitch]                  BIGINT          NULL,
     [Tag]                         VARCHAR (100)   NULL,
     [SIP]                         VARCHAR (100)   NULL,
@@ -53,6 +53,8 @@
     [SaleExtraChargeRateValue]    DECIMAL (20, 8) NULL,
     [CostExtraChargeRateValue]    DECIMAL (20, 8) NULL
 );
+
+
 
 
 
