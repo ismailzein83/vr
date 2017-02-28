@@ -256,11 +256,11 @@ namespace Vanrise.Analytic.Data.Postgres
                 string timeSQLFormula = null;
                 switch (timeGroupingUnit)
                 {
-                    case TimeGroupingUnit.Hour: timeSQLFormula = String.Format(" CONVERT(varchar(13), {0}, 121)", GetTable().Settings.TimeColumnName); break;
-                    case TimeGroupingUnit.Day: timeSQLFormula = String.Format(" CONVERT(varchar(10), {0}, 121)", GetTable().Settings.TimeColumnName); break;
+                    case TimeGroupingUnit.Hour: timeSQLFormula = String.Format(" to_char({0}, 'YYYY-MM-DD HH24')", GetTable().Settings.TimeColumnName); break;
+                    case TimeGroupingUnit.Day: timeSQLFormula = String.Format(" to_char({0}, 'YYYY-MM-DD')", GetTable().Settings.TimeColumnName); break;
                 }
                 AddColumnToStringBuilder(groupByPartBuilder, timeSQLFormula);
-                AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS [Date]", timeSQLFormula));
+                AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS Date", timeSQLFormula));
             }
 
             return groupByPartBuilder.ToString();
