@@ -596,6 +596,7 @@
     <None Include="RetailPortal_Centrex.PostDeployment.sql" />
     <None Include="CarrierPortal.PartnerPortal.PostDeployment.sql" />
     <None Include="CarrierPortal.SupplierPricelist.PostDeployment.sql" />
+    <None Include="WhS_AccountBalance.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
