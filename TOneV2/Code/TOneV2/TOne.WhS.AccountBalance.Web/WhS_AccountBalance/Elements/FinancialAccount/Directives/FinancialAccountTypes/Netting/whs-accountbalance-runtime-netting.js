@@ -41,9 +41,14 @@ app.directive("whsAccountbalanceRuntimeNetting", ["UtilsService", "VRNotificatio
                 var api = {};
 
                 api.load = function (payload) {
-                    var extendedSettingsEntity;
+                    var extendedSettings;
                     if (payload != undefined) {
-                        extendedSettingsEntity = payload.extendedSettingsEntity;
+                        extendedSettings = payload.extendedSettings;
+                        if(extendedSettings != undefined)
+                        {
+                            $scope.scopeModel.customerCreditLimit = extendedSettings.CustomerCreditLimit;
+                            $scope.scopeModel.supplierCreditLimit = extendedSettings.SupplierCreditLimit;
+                        }
                     }
                     var promises = [];
                    

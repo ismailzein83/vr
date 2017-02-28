@@ -39,9 +39,10 @@ app.directive("whsAccountbalanceRuntimeSupplierprepaid", ["UtilsService", "VRNot
                 var api = {};
 
                 api.load = function (payload) {
-                    var extendedSettingsEntity;
+                    var extendedSettings;
                     if (payload != undefined) {
-                        extendedSettingsEntity = payload.extendedSettingsEntity;
+                        extendedSettings = payload.extendedSettings;
+                     
                     }
                     var promises = [];
 

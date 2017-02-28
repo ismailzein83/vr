@@ -39,10 +39,12 @@ app.directive("whsAccountbalanceRuntimeCustomerpostpaid", ["UtilsService", "VRNo
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
-                    var extendedSettingsEntity;
+                    var extendedSettings;
                     if (payload != undefined) {
-                        extendedSettingsEntity = payload.extendedSettingsEntity;
+                        extendedSettings = payload.extendedSettings;
+                        if (extendedSettings != undefined) {
+                            $scope.scopeModel.creditLimit = extendedSettings.CreditLimit;
+                        }
                     }
                     var promises = [];
                   

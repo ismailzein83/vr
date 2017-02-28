@@ -33,5 +33,11 @@ namespace TOne.WhS.AccountBalance.Web.Controllers
         {
             return _manager.UpdateFinancialAccount(financialAccount);
         }
+        [HttpGet]
+        [Route("GetFinancialAccount")]
+        public FinancialAccount GetFinancialAccount(int financialAccountId)
+        {
+            return _manager.GetFinancialAccount(financialAccountId);
+        }
     }
 }

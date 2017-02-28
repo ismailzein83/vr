@@ -17,10 +17,16 @@
         function UpdateFinancialAccount(financialAccountObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "UpdateFinancialAccount"), financialAccountObject);
         }
+        function GetFinancialAccount(financialAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "GetFinancialAccount"), {
+                financialAccountId: financialAccountId
+            });
+        }
         return {
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,
-            UpdateFinancialAccount: UpdateFinancialAccount
+            UpdateFinancialAccount: UpdateFinancialAccount,
+            GetFinancialAccount: GetFinancialAccount
         };
     }
 
