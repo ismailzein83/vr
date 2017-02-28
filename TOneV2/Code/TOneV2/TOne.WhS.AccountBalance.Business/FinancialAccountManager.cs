@@ -91,7 +91,8 @@ namespace TOne.WhS.AccountBalance.Business
 
         public FinancialAccount GetFinancialAccount(int financialAccountId)
         {
-            throw new NotImplementedException();
+            var allFinancialAccounts = GetCachedFinancialAccounts();
+            return allFinancialAccounts.GetRecord(financialAccountId);
         }
 
         public CarrierFinancialAccountData GetCustCarrierFinancialByFinAccId(int financialAccountId)
