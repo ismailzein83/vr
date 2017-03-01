@@ -17,8 +17,8 @@ BEGIN
 				  ,[ParentProcessID]
 				  ,[TrackingMessage]
 				  ,[Severity]
-				  ,[EventTime]
-		
+				  ,[EventTime]					
+				  ,[ExceptionDetail]
 			INTO #RESULT
 			FROM [bp].[BPTracking] WITH(NOLOCK)
 			WHERE (@ArrSeverityID is NULL or Severity in (SELECT ParsedString FROM ParseStringList(@ArrSeverityID))) 

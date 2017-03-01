@@ -23,7 +23,8 @@ BEGIN
 				  ,[ParentProcessID]
 				  ,[TrackingMessage]
 				  ,bpt.[Severity]
-				  ,[EventTime]
+				  ,[EventTime]				  
+				  ,[ExceptionDetail]
 		FROM [bp].[BPTracking] as bpt WITH(NOLOCK) 
 		LEFT JOIN @SeveritiesTable as sv on (sv.Severity = bpt.Severity )  
 		where ( sv.Severity is not null OR (@Severities is null or @Severities = '') )

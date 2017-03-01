@@ -14,7 +14,8 @@ BEGIN
 				  ,[ParentProcessID]
 				  ,[TrackingMessage]
 				  ,[Severity]
-				  ,[EventTime]
+				  ,[EventTime]				  
+				  ,[ExceptionDetail]
 	FROM [bp].[BPTracking] WITH(NOLOCK) 
 	WHERE ID < @LessThanID 
 	AND  ProcessInstanceID = @BPInstanceID

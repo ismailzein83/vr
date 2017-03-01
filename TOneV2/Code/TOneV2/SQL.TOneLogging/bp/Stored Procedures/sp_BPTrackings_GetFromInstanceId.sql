@@ -13,7 +13,8 @@ BEGIN
 				  ,[ParentProcessID]
 				  ,[TrackingMessage]
 				  ,[Severity]
-				  ,[EventTime]
+				  ,[EventTime]				  
+				  ,[ExceptionDetail]
 		FROM [bp].[BPTracking] as bpt WITH(NOLOCK) 
 		where bpt.ProcessInstanceID = @ProcessInstanceID 
 			  AND bpt.ID > @FromTrackingId
