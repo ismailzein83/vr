@@ -320,8 +320,6 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-portalaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\PortalAccountInsertHandlerTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Account\ExtendedSettings\retail-be-portalaccount-grid.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Account\ExtendedSettings\Templates\PortalAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\retail-be-balancealertrule-threshold-percentage.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\Templates\PercentageBalanceAlertThresholdTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\ProductFamilyPackageItemEditorController.js" />
