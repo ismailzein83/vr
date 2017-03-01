@@ -310,7 +310,7 @@ namespace Vanrise.Data.SQL
                     bulkCopy.ColumnMappings.Add(column.ColumnName, column.ColumnName);
                 bulkCopy.BulkCopyTimeout = 10 * 60; // 10 minutes
                 if (withBatchSize)
-                    bulkCopy.BatchSize = 10000;
+                    bulkCopy.BatchSize = 1000;
 
                 bulkCopy.WriteToServer(table);
                 conn.Close();
