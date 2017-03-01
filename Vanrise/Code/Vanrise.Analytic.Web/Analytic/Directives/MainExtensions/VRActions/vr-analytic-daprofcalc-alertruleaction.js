@@ -59,7 +59,7 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                     var mailMessageTemplateSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     var mailMessageTemplatePayload = {
                         selectedIds: mailMessageTemplate,
-                        filter: { VRMailMessageTypeId: 'aeb40529-8a7d-41f8-bd13-9cdfafdda314' }
+                        filter: { VRMailMessageTypeId: '570B33AF-C33F-4143-ACFA-8A34E2CB71BA' }
                     };
                     VRUIUtilsService.callDirectiveLoad(mailMessageTemplateSelectorReadyAPI, mailMessageTemplatePayload, mailMessageTemplateSelectorLoadPromiseDeferred);
 

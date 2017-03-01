@@ -16,5 +16,9 @@ namespace Vanrise.Analytic.Entities
         public string GroupingKey { get; set; }
 
         public int UserId { get; set; }
+
+        public Guid DataRecordTypeId { get; set; }
+
+        public Dictionary<string, dynamic> OutputRecords { get; set; }
     }
 }

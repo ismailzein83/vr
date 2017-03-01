@@ -27,17 +27,33 @@ namespace Vanrise.Analytic.Business
             {
                 VRAlertRuleManager alertRuleManager = new VRAlertRuleManager();
                 RecordFilterManager recordFilterManager = new RecordFilterManager();
-                DAProfCalcOutputSettingsManager daProfCalcOutputSettingsManager = new DAProfCalcOutputSettingsManager();
 
                 VRAlertRuleNotificationManager alertRuleNotificationManager = new VRAlertRuleNotificationManager();
+
+                DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
+
                 foreach (DAProfCalcOutputRecord outputRecord in context.OutputRecords)
                 {
+                    Guid dataAnalysisItemDefinitionId = outputRecord.DAProfCalcExecInput.OutputItemDefinitionId;
+
+                    DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
+                    if (dataAnalysisItemDefinition == null)
+                        throw new NullReferenceException(string.Format("dataAnalysisItemDefinition. OutputItemDefinitionId: {0}", dataAnalysisItemDefinitionId));
+
+                    if (dataAnalysisItemDefinition.Settings == null)
+                        throw new NullReferenceException(string.Format("dataAnalysisItemDefinition.Settings. OutputItemDefinitionId: {0}", dataAnalysisItemDefinitionId));
+
+                    DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinition.Settings as DAProfCalcOutputSettings;
+                    if (daProfCalcOutputSettings == null)
+                        throw new Exception(String.Format("dataAnalysisItemDefinition.Settings is not of type DAProfCalcOutputSettings. it is of type {0}", dataAnalysisItemDefinition.Settings.GetType()));
+
                     DAProfCalcAlertRuleExecPayload payload = outputRecord.DAProfCalcExecInput.DAProfCalcPayload as DAProfCalcAlertRuleExecPayload;
                     long alertRuleId = payload.AlertRuleId;
                     VRAlertRule alertRule = alertRuleManager.GetVRAlertRule(alertRuleId);
 
                     DAProfCalcAlertRuleSettings daProfCalcAlertRuleSettings = alertRule.Settings.ExtendedSettings as DAProfCalcAlertRuleSettings;
-                    List<DataRecordField> dataRecordFields = daProfCalcOutputSettingsManager.GetOutputFields(outputRecord.DAProfCalcExecInput.OutputItemDefinitionId);
+
+                    List<DataRecordField> dataRecordFields = daProfCalcOutputSettings.GetOutputFields(null);
 
                     if (recordFilterManager.IsFilterGroupMatch(daProfCalcAlertRuleSettings.FilterGroup, new DAProfCalcRecordFilterGenericFieldMatchContext(outputRecord.Records, dataRecordFields)))
                     {
@@ -48,7 +64,15 @@ namespace Vanrise.Analytic.Business
                             AlertRuleTypeId = alertRule.RuleTypeId,
                             Description = "This is the description",
                             EventKey = outputRecord.GroupingKey,
-                            EventPayload = new DAProfCalcAlertRuleActionEventPayload() { AlertRuleId = alertRuleId, AlertRuleTypeId = alertRule.RuleTypeId, GroupingKey = outputRecord.GroupingKey, UserId = UserId },
+                            EventPayload = new DAProfCalcAlertRuleActionEventPayload()
+                            {
+                                AlertRuleId = alertRuleId,
+                                AlertRuleTypeId = alertRule.RuleTypeId,
+                                GroupingKey = outputRecord.GroupingKey,
+                                UserId = UserId,
+                                DataRecordTypeId = daProfCalcOutputSettings.RecordTypeId,
+                                OutputRecords = outputRecord.Records
+                            },
                             UserId = UserId
                         };
                         alertRuleNotificationManager.CreateNotification(notificationInput);
