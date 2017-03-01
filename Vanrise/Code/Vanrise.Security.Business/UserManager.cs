@@ -371,17 +371,31 @@ namespace Vanrise.Security.Business
                     //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.ForgotPasswordType);
                     //PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
                     //emailTemplateManager.SendEmail(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
+                    var configManager = new ConfigManager();
+                    if (configManager.ShouldSendEmailOnResetPasswordByAdmin())
+                    {
+                        Task taskSendMail = new Task(() =>
+                        {
+                            try
+                            {
+                                User user = GetUserbyId(userId);
 
-                    User user = GetUserbyId(userId);
+                                Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                                objects.Add("User", user);
+                                objects.Add("Password", password);
 
-                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("User", user);
-                    objects.Add("Password", password);
+                                Guid resetPasswordId = configManager.GetResetPasswordId();
 
-                    Guid resetPasswordId = new ConfigManager().GetResetPasswordId();
-
-                    VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(resetPasswordId, objects);
+                                VRMailManager vrMailManager = new VRMailManager();
+                                vrMailManager.SendMail(resetPasswordId, objects);
+                            }
+                            catch(Exception ex)
+                            {
+                                LoggerFactory.GetExceptionLogger().WriteException(ex);
+                            }
+                        });
+                        taskSendMail.Start();
+                    }
                 }
             }
 

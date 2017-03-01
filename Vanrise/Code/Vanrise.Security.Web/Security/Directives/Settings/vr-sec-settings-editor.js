@@ -45,7 +45,8 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     var mailMessageTemplateSettingsPayload;
                     if (payload != undefined && payload.data != undefined) {
                         mailMessageTemplateSettingsPayload = payload.data.MailMessageTemplateSettings;
-                        mailMessageTemplateSettingsPayload.SendEmailNewUser = payload.data.SendEmailNewUser
+                        mailMessageTemplateSettingsPayload.SendEmailNewUser = payload.data.SendEmailNewUser;
+                        mailMessageTemplateSettingsPayload.SendEmailOnResetPasswordByAdmin = payload.data.SendEmailOnResetPasswordByAdmin;
                     }
 
 
@@ -63,7 +64,8 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     return {
                         $type: "Vanrise.Security.Entities.SecuritySettings, Vanrise.Security.Entities",
                         MailMessageTemplateSettings: mailMessageTemplateSettingsAPI.getData(),
-                        SendEmailNewUser: mailMessageTemplateSettingsAPI.getSendEmailNewUser()
+                        SendEmailNewUser: mailMessageTemplateSettingsAPI.getSendEmailNewUser(),
+                        SendEmailOnResetPasswordByAdmin: mailMessageTemplateSettingsAPI.getSendEmailOnResetPasswordByAdmin()
                     };
                 };
               

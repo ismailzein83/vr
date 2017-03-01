@@ -70,6 +70,7 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
                         resetPasswordId = payload.ResetPasswordId;
                         forgotPasswordId = payload.ForgotPasswordId;
                         $scope.scopeModel.sendEmailNewUser = payload.SendEmailNewUser;
+                        $scope.scopeModel.sendEmailResetPasswordByAdmin = payload.SendEmailOnResetPasswordByAdmin;
                     }
 
 
@@ -112,6 +113,10 @@ app.directive('vrSecMailmessagetemplatesettings', ['VR_Sec_MailMessageTemplateSe
                 };
                 api.getSendEmailNewUser = function () {
                     return $scope.scopeModel.sendEmailNewUser;
+                };
+
+                api.getSendEmailOnResetPasswordByAdmin = function () {
+                    return $scope.scopeModel.sendEmailResetPasswordByAdmin;
                 };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

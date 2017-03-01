@@ -13,5 +13,7 @@ namespace Vanrise.Security.Entities
 
         public MailMessageTemplateSettings MailMessageTemplateSettings { get; set; }
         public bool SendEmailNewUser { get; set; }
+
+        public bool SendEmailOnResetPasswordByAdmin { get; set; }
     }
 }

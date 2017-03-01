@@ -49,6 +49,12 @@ namespace Vanrise.Security.Business
         {
             return GetSecuritySettings().SendEmailNewUser;
         }
+
+        public bool ShouldSendEmailOnResetPasswordByAdmin()
+        {
+            return GetSecuritySettings().SendEmailOnResetPasswordByAdmin;
+        }
+
         #endregion
 
 
