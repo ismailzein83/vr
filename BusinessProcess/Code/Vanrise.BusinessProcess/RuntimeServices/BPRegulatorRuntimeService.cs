@@ -164,6 +164,14 @@ namespace Vanrise.BusinessProcess
         {
             if (errorMessage == null)
                 errorMessage = "Runtime is no longer available";
+            BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
+                {
+                    ProcessInstanceId = pendingInstanceInfo.ProcessInstanceId,
+                    ParentProcessId = pendingInstanceInfo.ParentProcessInstanceId,
+                    Severity = Vanrise.Entities.LogEntryType.Error,
+                    TrackingMessage = errorMessage,
+                    EventTime = DateTime.Now
+                });
             var status = BPInstanceStatus.Suspended;
             BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId, status, errorMessage, null);
             terminatedPendingInstances.Add(pendingInstanceInfo);
@@ -173,7 +181,7 @@ namespace Vanrise.BusinessProcess
                 if (parentInstanceInfo != null && parentInstanceInfo.Status == BPInstanceStatus.Running && !terminatedPendingInstances.Contains(parentInstanceInfo))
                 {
                     BPDefinitionInitiator.NotifyParentBPChildCompleted(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId.Value,
-                        status, errorMessage, null);
+                        status, errorMessage, null, null);
                 }
             }
             if (pendingInstanceInfo.CompletionNotifier != null)

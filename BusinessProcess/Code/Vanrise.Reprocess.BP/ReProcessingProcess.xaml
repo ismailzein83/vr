@@ -144,7 +144,7 @@
               </InArgument>
             </vbw:WriteTrackingMessage.Severity>
           </vbw:WriteTrackingMessage>
-          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" TerminateIfFailed="True" WaitProcessCompleted="True">
             <vbw:RunProcess.Input>
               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                 <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new ReProcessingSubProcessInput()
@@ -162,6 +162,11 @@
                 <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
               </OutArgument>
             </vbw:RunProcess.ProcessCompletedEventPayload>
+            <vbw:RunProcess.TerminationMessage>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Range From {0} To {1} failed", item.From, item.To)</mca:CSharpValue>
+              </InArgument>
+            </vbw:RunProcess.TerminationMessage>
           </vbw:RunProcess>
           <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
             <Assign.To>
@@ -181,15 +186,6 @@
                 <mca:CSharpValue x:TypeArguments="x:Boolean">subProcessEventPayload.ProcessStatus!=Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
               </InArgument>
             </If.Condition>
-            <If.Then>
-              <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
-                <TerminateWorkflow.Reason>
-                  <InArgument x:TypeArguments="x:String">
-                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Range From {0}, To {1} failed due to error: {2}", item.From,item.To, subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
-                  </InArgument>
-                </TerminateWorkflow.Reason>
-              </TerminateWorkflow>
-            </If.Then>
             <If.Else>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
                 <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
@@ -369,7 +365,7 @@
                               </InArgument>
                             </vbw:WriteTrackingMessage.Severity>
                           </vbw:WriteTrackingMessage>
-                          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_2" WaitProcessCompleted="True">
+                          <vbw:RunProcess ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_2" WaitProcessCompleted="True">
                             <vbw:RunProcess.Input>
                               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                                 <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new ReProcessingFinalizeProcessInput()
@@ -450,17 +446,16 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXkQDxgMOAgEBSDNINgIBA0kzSTYCAQJOBVQgAwHyBFUFaiIDAc0EawV2DgMBugR3BfgBFwMB1AL5AQW9AwoCAQ++AwXEAyACAQRRC1GFAQMB9AROYE6AAQMB8wRnC2dXAwHpBF0LXVkDAeAEWAtYeAMB1wRiC2LYAQMBzgRzC3NeAwHEBG4LbmADAbsEegt6egMBsQSBAQn2ARQDAdUC/AEL/AFgAgEQgAIJuwMUAgEZwQMLwQOFAQIBBr4DYL4DgAECAQWHAQuSASYDAZYEkwELpQEcAwH6A6YBC7EBFAMB3wOyAQv1ARADAdYCgQILjAIqAwHBAo0CC5gCFAMBrgKZAgu6Ax0CARqPARGPAYsBAwGkBIoBEYoB0wEDAZcElgERnQEgAwGJBKIBEaIBhAEDAfwDkwF8kwGCAQMB+wOuARGuAWQDAe0DqQERqQFqAwHgA7UBEbUBsQEDAdcCuQEPvwEjAwHRA8IBD/MBGgMB5AKJAhGJAmgDAcsChAIRhAJ4AwHCApUCEZUCfQMBuAKQAhGQAm0DAa8CnAIRnAKQAQMBpQKjAg+4AxoCARu8ARW8AdwBAwHSA8MBEc4BGgMBtgPPARHaARoDAZsD2wER5gEaAwGAA+cBEfIBLAMB5QKmAj+mAkICARyoAhGzAiwDAYwCtAIRyQIuAwHbAcoCEdUCLAMBwgHWAhG3AxYCAR3LARfLAbABAwHEA8YBF8YBkgEDAbcD1wEX1wF7AwGpA9IBF9IBawMBnAPjARfjAXUDAY4D3gEX3gFrAwGBA+8BF+8BkQEDAfMC6gEX6gHtAgMB5gKwAhewApEBAwGZAqsCF6sCnwEDAY0CwQIXwQKGAQMBgALGAhfGAmMDAfQBvAIXvAJmAwHoAbcCF7cCZQMB3AHSAhfSApEBAwHPAc0CF80CnwEDAcMB2QIX2QJtAgEe3QIVtQMnAgEq4AIb4AKMAQMBtgHnAhmzAyQCASvoAhvzAjYDAZsB9AIbhgMsAgF/hwMbsgMgAgEs8AIh8AKbAQMBqQHrAiHrAroBAwGcAfcCIf4CIAMBjgGDAyGDA5wBAwGBAfQCjAH0ApIBAwGAAYoDIYoDywECAS2OAx+UAzMCAXGXAx+wAyoCATqRAyWRA4MCAgFymAMhowMqAgFWpAMhrwM8AgE7oAMnoAN9AgFkmwMnmwOBAQIBV6wDJ6wDoQECAUmnAyenA4sCAgE8</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sXkQDwgMOAgEBSDNINgIBA0kzSTYCAQJOBVQgAwHyBFUFaiIDAc0EawV2DgMBugR3BfQBFwMB1AL1AQW5AwoCAQ+6AwXAAyACAQRRC1GFAQMB9AROYE6AAQMB8wRnC2dXAwHpBF0LXVkDAeAEWAtYeAMB1wRiC2LYAQMBzgRzC3NeAwHEBG4LbmADAbsEegt6egMBsQSBAQnyARQDAdUC+AEL+AFgAgEQ/AEJtwMUAgEZvQMLvQOFAQIBBroDYLoDgAECAQWHAQuSASYDAZYEkwELqgEcAwHsA6sBC7YBFAMB0QO3AQvxARADAdYC/QELiAIqAwHBAokCC5QCFAMBrgKVAgu2Ax0CARqPARGPAYsBAwGkBIoBEYoB0wEDAZcEkwF5kwF/AwGVBJYBEZ0BIAMBiASnARGnAZsBAwH7A6IBEaIBhAEDAe4DkwGVAZMBmwEDAe0DswERswFkAwHfA64BEa4BagMB0gO6ARG6AbEBAwHXAr4BD+8BGgMB5AKFAhGFAmgDAcsCgAIRgAJ4AwHCApECEZECfQMBuAKMAhGMAm0DAa8CmAIRmAKQAQMBpQKfAg+0AxoCARu/ARHKARoDAbYDywER1gEaAwGbA9cBEeIBGgMBgAPjARHuASwDAeUCogI/ogJCAgEcpAIRrwIsAwGMArACEcUCLgMB2wHGAhHRAiwDAcIB0gIRswMWAgEdxwEXxwGwAQMBxAPCARfCAZIBAwG3A9MBF9MBewMBqQPOARfOAWsDAZwD3wEX3wF1AwGOA9oBF9oBawMBgQPrARfrAZEBAwHzAuYBF+YB7QIDAeYCrAIXrAKRAQMBmQKnAhenAp8BAwGNAr0CF70ChgEDAYACwgIXwgJjAwH0AbgCF7gCZgMB6AGzAhezAmUDAdwBzgIXzgKRAQMBzwHJAhfJAp8BAwHDAdUCF9UCbQIBHtkCFbEDJwIBKtwCG9wCjAEDAbYB4wIZrwMkAgEr5AIb7wI2AwGbAfACG4IDLAIBf4MDG64DIAIBLOwCIewCmwEDAakB5wIh5wK6AQMBnAHzAiH6AiADAY4B/wIh/wKcAQMBgQHwAscB8ALNAQMBgAGGAyGGA8sBAgEtigMfkAMzAgFxkwMfrAMqAgE6jQMljQODAgIBcpQDIZ8DKgIBVqADIasDPAIBO5wDJ5wDfQIBZJcDJ5cDgQECAVeoAyeoA6EBAgFJowMnowOLAgIBPA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="865,22" />
       <sap2010:ViewStateData Id="GenerateDateTimeRanges_1" sap:VirtualizedContainerService.HintSize="865,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="865,62" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="489,22" />
-      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="489,62" />
-      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -472,8 +467,8 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,602" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,952">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,602" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,952">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>

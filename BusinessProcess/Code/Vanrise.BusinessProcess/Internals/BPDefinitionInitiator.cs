@@ -212,6 +212,7 @@ namespace Vanrise.BusinessProcess
             _runningInstances.TryRemove(bpInstance.ProcessInstanceID, out dummy);
             string logEventType = bpInstance.InputArgument.GetDefinitionTitle();
             string processTitle = bpInstance.InputArgument.GetTitle();
+            Exception terminationException = null;
             if (e.CompletionState == ActivityInstanceState.Closed)
             {
                 bpInstance.Status = BPInstanceStatus.Completed;
@@ -220,6 +221,8 @@ namespace Vanrise.BusinessProcess
             }
             else
             {
+                terminationException = e.TerminationException;
+                BPTrackingChannel.Current.WriteException(bpInstance.ProcessInstanceID, bpInstance.ParentProcessID, e.TerminationException);
                 bpInstance.LastMessage = String.Format("Workflow Finished Unsuccessfully. Status: {0}. Error: {1}", e.CompletionState, e.TerminationException);                
                 bpInstance.Status = BPInstanceStatus.Aborted;
                 UpdateProcessStatus(bpInstance);
@@ -236,7 +239,7 @@ namespace Vanrise.BusinessProcess
                     e.Outputs.TryGetValue("Output", out processOutput);
 
                 if (bpInstance.ParentProcessID.HasValue)
-                    NotifyParentBPChildCompleted(bpInstance.ProcessInstanceID, bpInstance.ParentProcessID.Value, bpInstance.Status, bpInstance.LastMessage, processOutput);
+                    NotifyParentBPChildCompleted(bpInstance.ProcessInstanceID, bpInstance.ParentProcessID.Value, bpInstance.Status, bpInstance.LastMessage, terminationException, processOutput);
                 if (bpInstance.CompletionNotifier != null)
                     NotifyBPCompleted(bpInstance.ProcessInstanceID, bpInstance.CompletionNotifier, bpInstance.Status, bpInstance.LastMessage, processOutput);
             }
@@ -246,12 +249,14 @@ namespace Vanrise.BusinessProcess
             GC.Collect();
         }
 
-        internal static void NotifyParentBPChildCompleted(long bpInstanceId, long parentBPInstanecId, BPInstanceStatus status, string errorMessage, object processOutput)
+        internal static void NotifyParentBPChildCompleted(long bpInstanceId, long parentBPInstanecId, BPInstanceStatus status, string errorMessage, Exception exception, object processOutput)
         {
             var eventData = new ProcessCompletedEventPayload
             {
                 ProcessStatus = status,
                 LastProcessMessage = errorMessage,
+                ErrorBusinessMessage = exception != null ? Utilities.GetExceptionBusinessMessage(exception) : errorMessage,
+                ExceptionDetail = exception != null ? exception.ToString() : null,
                 ProcessOutput = processOutput
             };
             s_eventDataManager.InsertEvent(parentBPInstanecId, bpInstanceId.ToString(), eventData);
@@ -299,7 +304,7 @@ namespace Vanrise.BusinessProcess
             {
                 ProcessInstanceId = processInstanceId,
                 ParentProcessId = parentProcessId,
-                TrackingMessage = String.Format("Status changed to '{0}'. {1}", status, statusChangedTrackingSeverity == LogEntryType.Error || statusChangedTrackingSeverity == LogEntryType.Warning ? errorMessage : null),
+                TrackingMessage = String.Format("Status changed to '{0}'", status),
                 Severity = statusChangedTrackingSeverity,
                 EventTime = DateTime.Now
             });

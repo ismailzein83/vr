@@ -7,6 +7,7 @@ using System.Timers;
 using System.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Data;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess
 {
@@ -91,6 +92,19 @@ namespace Vanrise.BusinessProcess
         {
             Console.WriteLine("{0}: {1}", trackingMessage.EventTime, trackingMessage.TrackingMessage);
             _qPendingTrackingMessages.Enqueue(trackingMessage);
+        }
+
+        public void WriteException(long processInstanceId, long? parentProcessId, Exception ex, bool isWorkflowAborted = true)
+        {
+            WriteTrackingMessage(new BPTrackingMessage
+                {
+                    ProcessInstanceId = processInstanceId,
+                    ParentProcessId = parentProcessId,
+                    Severity = isWorkflowAborted ? LogEntryType.Error : LogEntryType.Warning,
+                    TrackingMessage = Common.Utilities.GetExceptionBusinessMessage(ex),
+                    ExceptionDetail = ex.ToString(),
+                    EventTime = DateTime.Now
+                });
         }
     }
 }

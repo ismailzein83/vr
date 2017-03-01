@@ -10,6 +10,11 @@ namespace Vanrise.BusinessProcess
     {
         public BPInstanceStatus ProcessStatus { get; set; }
         public string LastProcessMessage { get; set; }
+
+        public string ErrorBusinessMessage { get; set; }
+
+        public string ExceptionDetail { get; set; }
+
         public object ProcessOutput { get; set; }
     }
 }

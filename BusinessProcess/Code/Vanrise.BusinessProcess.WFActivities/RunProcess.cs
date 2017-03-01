@@ -6,6 +6,7 @@ using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -18,6 +19,10 @@ namespace Vanrise.BusinessProcess.WFActivities
         public InArgument<bool> WaitProcessCompleted { get; set; }
         public OutArgument<long> ProcessInstanceId { get; set; }
         public OutArgument<ProcessCompletedEventPayload> ProcessCompletedEventPayload { get; set; }
+
+        public InArgument<bool> TerminateIfFailed { get; set; }
+
+        public InArgument<string> TerminationMessage { get; set; }
 
         protected override bool CanInduceIdle
         {
@@ -49,7 +54,16 @@ namespace Vanrise.BusinessProcess.WFActivities
               Bookmark bookmark,
               object value)
         {
-            context.SetValue(this.ProcessCompletedEventPayload, value as ProcessCompletedEventPayload);
+            ProcessCompletedEventPayload processCompletedEventPayload = value as ProcessCompletedEventPayload;
+            context.SetValue(this.ProcessCompletedEventPayload, processCompletedEventPayload);
+            if(processCompletedEventPayload != null && processCompletedEventPayload.ProcessStatus != BPInstanceStatus.Completed && this.TerminateIfFailed.Get(context))
+            {
+                string errorMessage = string.Format("{0}. Error: {1}", this.TerminationMessage.Get(context), processCompletedEventPayload.ErrorBusinessMessage);
+                if (processCompletedEventPayload.ExceptionDetail != null)
+                    throw new VRBusinessException(errorMessage, new Exception(processCompletedEventPayload.ExceptionDetail));
+                else
+                    throw new VRBusinessException(errorMessage);
+            }
         }
     }
 }

@@ -42,16 +42,7 @@ namespace Vanrise.BusinessProcess
         static void WriteHandledExceptionMessages(bool writeBusinessTracking, ActivityContext context, Exception ex)
         {
             BPSharedInstanceData instanceData = context.GetSharedInstanceData();
-            BPTrackingMessage trackingMessage = new BPTrackingMessage
-            {
-                TrackingMessage = Utilities.GetExceptionBusinessMessage(ex),
-                ExceptionDetail = ex.ToString(),
-                EventTime = DateTime.Now,
-                ProcessInstanceId = instanceData.InstanceInfo.ProcessInstanceID,
-                ParentProcessId = instanceData.InstanceInfo.ParentProcessID,
-                Severity = LogEntryType.Warning
-            }; 
-            BPTrackingChannel.Current.WriteTrackingMessage(trackingMessage);
+            BPTrackingChannel.Current.WriteException(instanceData.InstanceInfo.ProcessInstanceID, instanceData.InstanceInfo.ParentProcessID, ex, false);
             if (writeBusinessTracking)
                 LoggerFactory.GetExceptionLogger().WriteException(instanceData.InstanceInfo.InputArgument.GetDefinitionTitle(), ex);
         }
