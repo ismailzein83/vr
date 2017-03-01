@@ -127,10 +127,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Demo_Module\Constant\ModuleConfig.js" />
+    <Content Include="Demo_Module\Services\APIServices\CityAPIService.js" />
+    <Content Include="Demo_Module\Services\CityService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
+    <Content Include="Demo_Module\Views\CityManagement.html" />
+    <Content Include="Demo_Module\Views\CityManagementController.js" />
+    <Content Include="Demo_Module\Views\CityEditor.html" />
+    <Content Include="Demo_Module\Views\CityEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -151,11 +159,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Demo_Module\Constant\" />
     <Folder Include="Demo_Module\Directives\" />
-    <Folder Include="Demo_Module\Services\APIServices\" />
-    <Folder Include="Demo_Module\Views\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
