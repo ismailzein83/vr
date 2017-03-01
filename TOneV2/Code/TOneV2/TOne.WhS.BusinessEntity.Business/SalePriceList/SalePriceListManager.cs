@@ -100,22 +100,31 @@ namespace TOne.WhS.BusinessEntity.Business
             return processSalePricelists.FindRecord(itm => itm.OwnerId == customerId);
         }
 
-        public IEnumerable<SalePriceList> GetSalePriceListsBySellingProductIds(IEnumerable<int> sellingProductIds)
+        public Dictionary<int, List<SalePriceList>> GetSalePriceListsBySellingProductId(IEnumerable<int> sellingProductIds)
         {
             if (sellingProductIds == null || sellingProductIds.Count() == 0)
                 return null;
 
-            var salePriceLists = new List<SalePriceList>();
+            var salePriceListsBySellingProductId = new Dictionary<int, List<SalePriceList>>();
             Dictionary<int, SalePriceList> cachedSalePriceLists = GetCachedSalePriceLists();
 
-            foreach (int sellingProductId in sellingProductIds)
+            foreach (SalePriceList salePriceList in cachedSalePriceLists.Values)
             {
-                SalePriceList salePriceList = cachedSalePriceLists.GetRecord(sellingProductId);
-                if (salePriceList != null)
-                    salePriceLists.Add(salePriceList);
+                if (salePriceList.OwnerType == SalePriceListOwnerType.SellingProduct && sellingProductIds.Contains(salePriceList.OwnerId))
+                {
+                    List<SalePriceList> sellingProductPriceLists;
+                    
+                    if (!salePriceListsBySellingProductId.TryGetValue(salePriceList.OwnerId, out sellingProductPriceLists))
+                    {
+                        sellingProductPriceLists = new List<SalePriceList>();
+                        salePriceListsBySellingProductId.Add(salePriceList.OwnerId, sellingProductPriceLists);
+                    }
+
+                    sellingProductPriceLists.Add(salePriceList);
+                }
             }
 
-            return salePriceLists;
+            return salePriceListsBySellingProductId;
         }
 
         #endregion
