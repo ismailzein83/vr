@@ -118,5 +118,54 @@ namespace NP.IVSwitch.Data.Postgres
         }
 
 
+
+
+        public Dictionary<int, string> GetSwitchAccountNamesByEndPointId()
+        {
+            string query = @"select u.user_id,a.log_alias,a.company_name from access_list u
+JOIN accounts a on u.account_id = a.account_id;";
+            Dictionary<int, string> rslt = new Dictionary<int, string>();
+            ExecuteReaderText(query, (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        int? userId = GetReaderValue<int?>(reader, "user_id");
+                        if (userId.HasValue && !rslt.ContainsKey(userId.Value))
+                        {
+                            rslt.Add(userId.Value, GetAccountName(reader));
+                        }
+                    }
+                }, null);
+            return rslt;
+        }
+
+        public Dictionary<int, string> GetSwitchAccountNamesByRouteId()
+        {
+            string query = @"select r.route_id,a.log_alias,a.company_name from routes r
+JOIN accounts a on r.account_id = a.account_id;";
+            Dictionary<int, string> rslt = new Dictionary<int, string>();
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    int? routeId = GetReaderValue<int?>(reader, "route_id");
+                    if (routeId.HasValue && !rslt.ContainsKey(routeId.Value))
+                    {
+                        rslt.Add(routeId.Value, GetAccountName(reader));
+                    }
+                }
+            }, null);
+            return rslt;
+        }
+
+        private string GetAccountName(IDataReader reader)
+        {
+            string logAlias = reader["log_alias"] as string;
+            if (!String.IsNullOrEmpty(logAlias))
+                return logAlias;
+            else
+                return reader["company_name"] as string;
+        }
+
     }
 }

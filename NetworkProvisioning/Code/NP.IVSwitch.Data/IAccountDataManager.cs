@@ -11,5 +11,8 @@ namespace NP.IVSwitch.Data
     {
         bool Insert(Account account, out int insertedId);
         void UpdateCustomerChannelLimit(int accountId);
+
+        Dictionary<int, string> GetSwitchAccountNamesByEndPointId();
+        Dictionary<int, string> GetSwitchAccountNamesByRouteId();
     }
 }

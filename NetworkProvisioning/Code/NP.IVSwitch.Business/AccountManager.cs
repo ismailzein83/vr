@@ -63,8 +63,49 @@ namespace NP.IVSwitch.Business
 
             return accountId;
         }
+
+        public string GetEndPointSwitchAccountName(int endPointId)
+        {
+            return GetSwitchAccountNamesByEndPointId().GetRecord(endPointId);
+        }
+
+
+        public string GetRouteSwitchAccountName(int routeId)
+        {
+            return GetSwitchAccountNamesByRouteId().GetRecord(routeId);
+        }
+
+
         #endregion
 
+        #region Private
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            protected override bool IsTimeExpirable { get { return true; } }
+        }
+
+        private Dictionary<int,string> GetSwitchAccountNamesByEndPointId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchAccountNamesByEndPointId", () =>
+                {
+                    IAccountDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IAccountDataManager>();
+                    Helper.SetSwitchConfig(dataManager);
+                    return dataManager.GetSwitchAccountNamesByEndPointId();
+                });
+        }
+
+        private Dictionary<int, string> GetSwitchAccountNamesByRouteId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchAccountNamesByRouteId", () =>
+            {
+                IAccountDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IAccountDataManager>();
+                Helper.SetSwitchConfig(dataManager);
+                return dataManager.GetSwitchAccountNamesByRouteId();
+            });
+        }
+
+        #endregion
 
     }
 }
