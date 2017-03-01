@@ -9,6 +9,7 @@ using Vanrise.AccountBalance.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.Zajil.MainExtensions.Convertors
 {
@@ -37,8 +38,15 @@ namespace Retail.Zajil.MainExtensions.Convertors
                 string sourceId = row[this.SourceIdColumn] as string;
                 try
                 {
+                    string accountId = row[this.SourceAccountIdColumn] as string;
+                    accountId = string.IsNullOrEmpty(accountId) ? "" : accountId.Trim();
                     AccountBEManager accountBeManager = new AccountBEManager();
-                    var account = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, row[this.SourceAccountIdColumn].ToString());
+                    var account = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, accountId);
+                    if (account == null)
+                    {
+                        context.WriteBusinessTrackingMsg(LogEntryType.Error, "Failed to import Payment (SourceId: '{0}', SourceAccountId: '{1}') due to unavailable account.", sourceId, accountId);
+                        continue;
+                    }
                     SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
                     {
                         BillingTransaction = new BillingTransaction
@@ -48,7 +56,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
                             CurrencyId = this.CurrencyId,
                             AccountId = account.AccountId.ToString(),
                             TransactionTime = (DateTime)row[this.TimeColumn],
-                            Amount = (decimal)row[this.AmountColumn],
+                            Amount = row[this.AmountColumn] != DBNull.Value ? (decimal)row[this.AmountColumn] : 0,
                             AccountTypeId = account.TypeId,
                             Reference = row["Applied_to_Doc_Number"] as string,
                             Notes = string.Format("Description: {0}, Document_Type_and_Number: {1}, PONUMBER: {2}, Invoive Description: {3}",
@@ -60,7 +68,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
                     };
                     transactionTargetBEs.Add(sourceTransaction);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     var finalException = Utilities.WrapException(ex, String.Format("Failed to import Payment (SourceId: '{0}') due to conversion error", sourceId));
                     context.WriteBusinessHandledException(finalException);
