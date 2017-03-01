@@ -59,9 +59,11 @@
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountType.cs" />
     <Compile Include="Account\AccountTypeExtendedSettingsConfig.cs" />
+    <Compile Include="Account\AccountTypeFilter.cs" />
     <Compile Include="Account\AccountTypeInfoFilter.cs" />
     <Compile Include="Account\AccountTypeInfo.cs" />
     <Compile Include="Account\AccountTypeSettings.cs" />
+    <Compile Include="Account\IAccountTypeExtendedSettingsFilter.cs" />
     <Compile Include="Account\IAccountTypeInfoFilter.cs" />
     <Compile Include="BalanceClosingPeriod\BalanceClosingPeriod.cs" />
     <Compile Include="BalanceUsageQueue\UpdateUsageBalancePayload.cs" />

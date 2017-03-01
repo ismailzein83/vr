@@ -70,6 +70,7 @@
     <Compile Include="Extensions\AccountBalanceAlertRuleBehavior.cs" />
     <Compile Include="Extensions\AccountBalanceAlertRuleTypeSettings.cs" />
     <Compile Include="Extensions\AlertRuleEntityBalanceInfo.cs" />
+    <Compile Include="Filters\IAccountFilter\AccountTypeExtendedSettingsFilter.cs" />
     <Compile Include="LiveBalanceManager.cs" />
     <Compile Include="QueueActivators\BalanceUpdatePayload.cs" />
     <Compile Include="QueueActivators\BaseUpdateAccountBalancesQueueActivator.cs" />

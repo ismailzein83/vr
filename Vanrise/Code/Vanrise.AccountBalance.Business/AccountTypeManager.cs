@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-using Vanrise.Entities;
 using Vanrise.Security.Business;
 
 namespace Vanrise.AccountBalance.Business
 {
     public class AccountTypeManager : IAccountTypeManager
     {
+        #region Ctor/Properties
+
         Vanrise.Common.Business.VRComponentTypeManager _vrComponentTypeManager = new Common.Business.VRComponentTypeManager();
         static SecurityManager s_securityManager = new SecurityManager();
 
+        #endregion
+
+        #region Public Methods
 
         public string GetAccountSelector(Guid accountTypeId)
         {
@@ -26,11 +28,11 @@ namespace Vanrise.AccountBalance.Business
         }
         public string GetAccountTypeName(Guid accountTypeId)
         {
-            var accountType = _vrComponentTypeManager.GetComponentType<AccountTypeSettings,AccountType>(accountTypeId);
+            var accountType = _vrComponentTypeManager.GetComponentType<AccountTypeSettings, AccountType>(accountTypeId);
             accountType.ThrowIfNull("accountType", accountTypeId);
             return accountType.Name;
         }
-        
+
         public IEnumerable<AccountTypeExtendedSettingsConfig> GetAccountBalanceExtendedSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
@@ -44,8 +46,6 @@ namespace Vanrise.AccountBalance.Business
             return accountTypeSettings.ExtendedSettings.GetAccountManager();
         }
 
-
-
         public IEnumerable<BalanceAccountTypeInfo> GetAccountTypeInfo(AccountTypeInfoFilter filter)
         {
             Func<AccountType, bool> filterExpression = null;
@@ -57,18 +57,22 @@ namespace Vanrise.AccountBalance.Business
             return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings, AccountType>().MapRecords(AccountTypeInfoMapper, filterExpression);
         }
 
-
-
-        public bool CheckIfFilterIsMatch(AccountType accountType, List<IAccountTypeInfoFilter> filters)
+        public IEnumerable<AccountType> GetAccountTypes(AccountTypeFilter accountTypeFilter)
         {
-            AccountTypeInfoFilterContext context = new AccountTypeInfoFilterContext { AccountType = accountType };
-            foreach (var filter in filters)
-            {
-                if (!filter.IsMatched(context))
-                    return false;
-            }
-            return true;
+            Func<AccountType, bool> filterExpression = (accountType) =>
+                {
+                    if (accountTypeFilter == null)
+                        return true;
+
+                    if (accountTypeFilter.Filters != null && !CheckIfFiltersAreMatched(accountType, accountTypeFilter.Filters))
+                        return false;
+
+                    return true;
+                };
+
+            return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings, AccountType>().Where(filterExpression);
         }
+
         public BalancePeriodSettings GetBalancePeriodSettings(Guid accountTypeId)
         {
             var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
@@ -98,7 +102,6 @@ namespace Vanrise.AccountBalance.Business
             }
             return false;
         }
-
         public bool DoesUserHaveViewAccess(Guid accountTypeId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
@@ -117,7 +120,6 @@ namespace Vanrise.AccountBalance.Business
             else
                 return true;
         }
-
         public bool DoesUserHaveAddAccess(Guid accountBeDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
@@ -131,6 +133,37 @@ namespace Vanrise.AccountBalance.Business
             else
                 return true;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private bool CheckIfFilterIsMatch(AccountType accountType, List<IAccountTypeInfoFilter> filters)
+        {
+            AccountTypeInfoFilterContext context = new AccountTypeInfoFilterContext { AccountType = accountType };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
+
+        private bool CheckIfFiltersAreMatched(AccountType accountType, List<IAccountTypeExtendedSettingsFilter> filters)
+        {
+            AccountTypeExtendedSettingsFilterContext context = new AccountTypeExtendedSettingsFilterContext { AccountType = accountType };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
+
+        #endregion
+
+        #region Mappers
+
         private BalanceAccountTypeInfo AccountTypeInfoMapper(AccountType accountType)
         {
             string editor = null;
@@ -144,6 +177,6 @@ namespace Vanrise.AccountBalance.Business
             };
         }
 
-      
+        #endregion
     }
 }
