@@ -14,7 +14,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerP
 
         public override bool IsCustomerAccount(IFinancialAccountIsCustomerAccountContext context)
         {
-            CustomerPostpaidDefinitionSettings definitionSetting = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<CustomerPostpaidDefinitionSettings>(context.DefinitionId);
+            CustomerPostpaidDefinitionSettings definitionSetting = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<CustomerPostpaidDefinitionSettings>(context.AccountTypeId);
             context.UsageTransactionTypeId = definitionSetting.UsageTransactionTypeId;
             context.CreditLimit = this.CreditLimit;
             return true;

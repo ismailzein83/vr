@@ -10,22 +10,16 @@ namespace TOne.WhS.AccountBalance.Business
 {
     public abstract class AccountBalanceSettings : AccountTypeExtendedSettings
     {
-        public override string AccountSelector
-        {
-            get { return ""; }
-        }
+        public override string AccountSelector { get { return ""; } }
 
-        public override IAccountManager GetAccountManager()
-        {
-            return new AccountBalanceManager();
-        }
         public abstract bool IsApplicableToCustomer { get; }
 
         public abstract bool IsApplicableToSupplier { get; }
 
         public virtual string RuntimeEditor { get; set; }
 
+        public override IAccountManager GetAccountManager() { return new AccountBalanceManager(); }
 
-        
+        public abstract List<Guid> GetUsageTransactionTypes(IGetUsageTransactionTypesContext context);        
     }
 }

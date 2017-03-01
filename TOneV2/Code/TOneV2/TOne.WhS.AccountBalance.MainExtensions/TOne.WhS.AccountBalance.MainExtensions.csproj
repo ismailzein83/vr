@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.AccountBalance.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
@@ -48,9 +52,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +78,7 @@
     <Compile Include="FinancialAccountTypes\SupplierPostpaid\SupplierPostpaidDefinitionSettings.cs" />
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidSettings.cs" />
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidDefinitionSettings.cs" />
+    <Compile Include="QueueActivators\UpdateWhSBalancesQueueActivator.cs" />
     <Compile Include="VRBalanceAlertActions\BlockCustomerBalAlertAction.cs" />
     <Compile Include="VRBalanceAlertActions\SendCustomerEmailBalAlertAction.cs" />
     <Compile Include="VRBalanceAlertThresholds\CustFixedBalAlertThreshold.cs" />

@@ -164,6 +164,8 @@
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Services\FinancialAccountService.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Views\FinancialAccountEditor.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Views\FinancialAccountEditorController.js" />
+    <Content Include="WhS_AccountBalance\Elements\QueueActivators\Directives\Templates\QueueActivatorUpdateWhSBalancesTemplate.html" />
+    <Content Include="WhS_AccountBalance\Elements\QueueActivators\Directives\whs-accountbalance-queueactivator-updatewhsbalances.js" />
     <Content Include="WhS_AccountBalance\ModuleInitialization.js" />
   </ItemGroup>
   <ItemGroup>

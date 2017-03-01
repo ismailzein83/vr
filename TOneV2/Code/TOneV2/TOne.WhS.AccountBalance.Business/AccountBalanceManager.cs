@@ -68,52 +68,6 @@ namespace TOne.WhS.AccountBalance.Business
             return financialAccountData.CreditLimit.Value;
         }
 
-        public void ConvertCDRToBalanceUpdatePayloads(dynamic mainCDR, Action<BalanceUpdatePayload> createBalanceUpdatePayload)
-        {
-            DateTime attemptTime = mainCDR.AttemptDateTime;
-            int? customerId = mainCDR.CustomerId;
-            if (customerId.HasValue)
-            {
-                Decimal? saleAmount = mainCDR.SaleNet;
-                if (saleAmount.HasValue && saleAmount.Value > 0)
-                {
-                    CarrierFinancialAccountData financialAccountData;
-                    if (s_financialAccountManager.TryGetCustAccFinancialAccountData(customerId.Value, attemptTime, out financialAccountData))
-                    {
-                        createBalanceUpdatePayload(new BalanceUpdatePayload
-                            {
-                                AccountTypeId = financialAccountData.AccountTypeId,
-                                TransactionTypeId = financialAccountData.UsageTransactionTypeId,
-                                AccountId = financialAccountData.FinancialAccountId.ToString(),
-                                Value = saleAmount.Value,
-                                EffectiveOn = attemptTime,
-                                CurrencyId = mainCDR.SaleCurrencyId.Value
-                            });
-                    }
-                }
-            }
-            int? supplierId = mainCDR.SupplierId;
-            if (supplierId.HasValue)
-            {
-                Decimal? costAmount = mainCDR.CostNet;
-                if (costAmount.HasValue && costAmount.Value > 0)
-                {
-                    CarrierFinancialAccountData financialAccountData;
-                    if (s_financialAccountManager.TryGetSuppAccFinancialAccountData(customerId.Value, attemptTime, out financialAccountData))
-                    {
-                        createBalanceUpdatePayload(new BalanceUpdatePayload
-                        {
-                            AccountTypeId = financialAccountData.AccountTypeId,
-                            TransactionTypeId = financialAccountData.UsageTransactionTypeId,
-                            AccountId = financialAccountData.FinancialAccountId.ToString(),
-                            Value = costAmount.Value,
-                            EffectiveOn = attemptTime,
-                            CurrencyId = mainCDR.CostCurrencyId.Value
-                        });
-                    }
-                }
-            }
-        }
 
         #endregion
 
@@ -168,20 +122,5 @@ namespace TOne.WhS.AccountBalance.Business
         }
 
         #endregion
-
     }
-        public class BalanceUpdatePayload
-        {
-            public Guid AccountTypeId { get; set; }
-
-            public Guid TransactionTypeId { get; set; }
-
-            public string AccountId { get; set; }
-
-            public DateTime EffectiveOn { get; set; }
-
-            public Decimal Value { get; set; }
-
-            public int CurrencyId { get; set; }
-        }
 }

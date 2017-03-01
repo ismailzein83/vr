@@ -9,33 +9,20 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierP
 {
     public class SupplierPrepaidDefinitionSettings : AccountBalanceSettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("A892CBF2-AF5F-41B2-959F-742723D3B856"); }
-        }
+        public override Guid ConfigId { get { return new Guid("A892CBF2-AF5F-41B2-959F-742723D3B856"); } }
 
-        public override bool IsApplicableToCustomer
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool IsApplicableToCustomer { get { return false; } }
 
-        public override bool IsApplicableToSupplier
-        {
-            get
-            {
-                return true;
-            }
-        }
-        public override string RuntimeEditor
-        {
-            get
-            {
-                return "whs-accountbalance-runtime-supplierprepaid";
-            }
-        }
+        public override bool IsApplicableToSupplier { get { return true; } }
+
+        public override string RuntimeEditor { get { return "whs-accountbalance-runtime-supplierprepaid"; } }
+
         public Guid UsageTransactionTypeId { get; set; }
+
+
+        public override List<Guid> GetUsageTransactionTypes(IGetUsageTransactionTypesContext context)
+        {
+            return new List<Guid>() { this.UsageTransactionTypeId };
+        }
     }
 }

@@ -47,6 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarrierFinancialAccountData.cs" />
+    <Compile Include="FinancialAccountIsCustomerAccountContext.cs" />
+    <Compile Include="FinancialAccountIsSupplierAccountContext.cs" />
+    <Compile Include="GetUsageTransactionTypesContext.cs" />
     <Compile Include="FinancialAccount.cs" />
     <Compile Include="FinancialAccountDetail.cs" />
     <Compile Include="FinancialAccountQuery.cs" />

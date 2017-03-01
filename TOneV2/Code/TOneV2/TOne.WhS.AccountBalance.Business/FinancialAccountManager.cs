@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Data;
 using TOne.WhS.AccountBalance.Entities;
+using TOne.WhS.BusinessEntity.Business;
 using Vanrise.AccountBalance.Business;
 using Vanrise.Common;
 using Vanrise.Entities;
@@ -21,7 +22,7 @@ namespace TOne.WhS.AccountBalance.Business
 
             Func<FinancialAccount, bool> filterExpression = (prod) =>
                 {
-                    if(input.Query.CarrierAccountId.HasValue)
+                    if (input.Query.CarrierAccountId.HasValue)
                     {
                         if (!prod.CarrierAccountId.HasValue)
                             return false;
@@ -112,11 +113,11 @@ namespace TOne.WhS.AccountBalance.Business
         public bool TryGetCustAccFinancialAccountData(int customerAccountId, DateTime effectiveOn, out CarrierFinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<CarrierFinancialAccountData> carrierFinancialAccounts = GetCachedCustCarrierFinancialsByCarrAccId().GetRecord(customerAccountId);
-            if(carrierFinancialAccounts != null)
+            if (carrierFinancialAccounts != null)
             {
-                foreach(var acc in carrierFinancialAccounts)
+                foreach (var acc in carrierFinancialAccounts)
                 {
-                    if(acc.BED <= effectiveOn && acc.EED.VRGreaterThan(effectiveOn))
+                    if (acc.BED <= effectiveOn && acc.EED.VRGreaterThan(effectiveOn))
                     {
                         financialAccountData = acc;
                         return true;
@@ -196,7 +197,50 @@ namespace TOne.WhS.AccountBalance.Business
         /// <returns></returns>
         Dictionary<int, IOrderedEnumerable<CarrierFinancialAccountData>> GetCachedCustCarrierFinancialsByCarrAccId()
         {
-            throw new NotImplementedException();
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierFinancialsByCarrAccId",
+            () =>
+            {
+                List<CarrierFinancialAccountData> customerFinancialAccountsData;
+                Dictionary<int, List<CarrierFinancialAccountData>> customerFinancialAccountsDataDict = new Dictionary<int, List<CarrierFinancialAccountData>>();
+                Dictionary<int, FinancialAccount> financialAccounts = GetCachedFinancialAccounts();
+
+                foreach (var financialAccount in financialAccounts.Values)
+                {
+                    if (financialAccount.Settings == null)
+                        throw new NullReferenceException(string.Format("financialAccount.Settings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    if (financialAccount.Settings.ExtendedSettings == null)
+                        throw new NullReferenceException(string.Format("financialAccount.Settings.ExtendedSettings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    FinancialAccountIsCustomerAccountContext context = new FinancialAccountIsCustomerAccountContext() { AccountTypeId = financialAccount.Settings.AccountTypeId };
+
+                    if (!financialAccount.Settings.ExtendedSettings.IsCustomerAccount(context))// IsCustomerAccount will set UsageTransactionTypeId on context
+                        continue;
+
+                    if (!financialAccount.CarrierAccountId.HasValue && !financialAccount.CarrierProfileId.HasValue)
+                        throw new NullReferenceException(string.Format("financialAccount.CarrierAccountId & financialAccount.CarrierProfileId for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    if (financialAccount.CarrierAccountId.HasValue)
+                    {
+                        customerFinancialAccountsData = customerFinancialAccountsDataDict.GetOrCreateItem(financialAccount.CarrierAccountId.Value);
+                        customerFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId));
+                    }
+                    else // so financialAccount.CarrierProfileId.HasValue = true
+                    {
+                        var customerAccounts = new CarrierAccountManager().GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
+                        if (customerAccounts != null)
+                        {
+                            foreach (var customerAccount in customerAccounts)
+                            {
+                                customerFinancialAccountsData = customerFinancialAccountsDataDict.GetOrCreateItem(customerAccount.CarrierAccountId);
+                                customerFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId));
+                            }
+                        }
+                    }
+                }
+
+                return customerFinancialAccountsDataDict.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(financialAccount => financialAccount.BED));
+            });
         }
 
         /// <summary>
@@ -205,7 +249,59 @@ namespace TOne.WhS.AccountBalance.Business
         /// <returns></returns>
         Dictionary<int, IOrderedEnumerable<CarrierFinancialAccountData>> GetCachedSuppCarrierFinancialsByCarrAccId()
         {
-            throw new NotImplementedException();
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSuppCarrierFinancialsByCarrAccId",
+            () =>
+            {
+                List<CarrierFinancialAccountData> supplierFinancialAccountsData;
+                Dictionary<int, List<CarrierFinancialAccountData>> supplierFinancialAccountsDataDict = new Dictionary<int, List<CarrierFinancialAccountData>>();
+                Dictionary<int, FinancialAccount> financialAccounts = GetCachedFinancialAccounts();
+
+                foreach (var financialAccount in financialAccounts.Values)
+                {
+                    if (financialAccount.Settings == null)
+                        throw new NullReferenceException(string.Format("financialAccount.Settings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    if (financialAccount.Settings.ExtendedSettings == null)
+                        throw new NullReferenceException(string.Format("financialAccount.Settings.ExtendedSettings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    FinancialAccountIsSupplierAccountContext context = new FinancialAccountIsSupplierAccountContext() { AccountTypeId = financialAccount.Settings.AccountTypeId };
+
+                    if (!financialAccount.Settings.ExtendedSettings.IsSupplierAccount(context))// IsSupplierAccount will set UsageTransactionTypeId on context
+                        continue;
+
+                    if (!financialAccount.CarrierAccountId.HasValue && !financialAccount.CarrierProfileId.HasValue)
+                        throw new NullReferenceException(string.Format("financialAccount.CarrierAccountId & financialAccount.CarrierProfileId for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    if (financialAccount.CarrierAccountId.HasValue)
+                    {
+                        supplierFinancialAccountsData = supplierFinancialAccountsDataDict.GetOrCreateItem(financialAccount.CarrierAccountId.Value);
+                        supplierFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId));
+                    }
+                    else // so financialAccount.CarrierProfileId.HasValue = true
+                    {
+                        var supplierAccounts = new CarrierAccountManager().GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, false, true);
+                        foreach (var supplierAccount in supplierAccounts)
+                        {
+                            supplierFinancialAccountsData = supplierFinancialAccountsDataDict.GetOrCreateItem(supplierAccount.CarrierAccountId);
+                            supplierFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId));
+                        }
+                    }
+                }
+
+                return supplierFinancialAccountsDataDict.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(financialAccount => financialAccount.BED));
+            });
+        }
+
+        private CarrierFinancialAccountData CreateCarrierFinancialAccountData(FinancialAccount financialAccount, Guid usageTransactionTypeId)
+        {
+            return new CarrierFinancialAccountData()
+            {
+                AccountTypeId = financialAccount.Settings.AccountTypeId,
+                FinancialAccountId = financialAccount.FinancialAccountId,
+                UsageTransactionTypeId = usageTransactionTypeId,
+                BED = financialAccount.BED,
+                EED = financialAccount.EED
+            };
         }
 
         #endregion
@@ -220,6 +316,5 @@ namespace TOne.WhS.AccountBalance.Business
             };
         }
         #endregion
-
     }
 }
