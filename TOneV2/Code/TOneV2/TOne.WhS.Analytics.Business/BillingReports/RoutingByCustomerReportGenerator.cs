@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 Query = new AnalyticQuery()
                 {
-                    DimensionFields = new List<string> {"Customer", "Supplier", "SaleZone", "SaleRate", "CostRate" },
+                    DimensionFields = new List<string>(),
                     MeasureFields = new List<string> { "SaleDuration", "CostDuration", "SaleNetNotNULL", "CostNetNotNULL", "ProfitNotNULL" },
                     TableId = 8,
                     FromTime = parameters.FromTime,
@@ -30,6 +30,21 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
+
+            if (parameters.GroupByProfile)
+                analyticQuery.Query.DimensionFields.Add("CustomerProfile");
+            else
+                analyticQuery.Query.DimensionFields.Add("Customer");
+
+            if (parameters.GroupByProfile)
+                analyticQuery.Query.DimensionFields.Add("SupplierProfile");
+            else
+                analyticQuery.Query.DimensionFields.Add("Supplier");
+
+            analyticQuery.Query.DimensionFields.Add("SaleZone");
+            analyticQuery.Query.DimensionFields.Add("SaleRate");
+            analyticQuery.Query.DimensionFields.Add("CostRate");
+
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
                 DimensionFilter dimensionFilter = new DimensionFilter
