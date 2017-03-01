@@ -1,0 +1,69 @@
+﻿<vr-panel ng-controller="NP_IVSwitch_SwitchDashboardManagementController" vr-loader="scopeModel.isLoading">
+    <vr-form name="formFilter">
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-section title="Top Customers (More Details)" ng-if="scopeModel.showCharts">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-chart on-ready="scopeModel.customerChartReady"></vr-chart>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-datagrid on-ready="scopeModel.onGridReady"
+                                         datasource="scopeModel.topCustomers">
+                                <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'% Connected'" field="'PercConnected'" type="'Number'" numberprecision="2" getcolor="scopeModel.getPercConnectedColor"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'ACD'" field="'ACD'" type="'Number'" numberprecision="2" getcolor="scopeModel.getACDColor"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Total Dur (M)'" field="'TotalDuration'" type="'Number'" numberprecision="2"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'PDD (S)'" field="'PDDInSec'" type="'Number'" numberprecision="2" getcolor="scopeModel.getPDDColor"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-section>
+            </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-section title="Top Suppliers (More Details)" ng-if="scopeModel.showCharts">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-chart on-ready="scopeModel.supplierChartReady"></vr-chart>
+
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-datagrid on-ready="scopeModel.onGridReady"
+                                         datasource="scopeModel.topSuppliers">
+                                <vr-datagridcolumn headertext="'Supplier Name'" field="'SupplierName'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'% Connected'" field="'PercConnected'" type="'Number'" numberprecision="2" getcolor="scopeModel.getPercConnectedColor"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'ACD'" field="'ACD'" type="'Number'" numberprecision="2" getcolor="scopeModel.getColor"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Total Dur (M)'" field="'TotalDuration'" type="'Number'" numberprecision="2"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'PDD (S)'" field="'PDDInSec'" type="'Number'" numberprecision="2" getcolor="scopeModel.getPDDColor"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-section>
+            </vr-columns>
+
+          
+        </vr-row>
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-section title="Last Dist." ng-if="scopeModel.showCharts">
+                    <vr-chart on-ready="scopeModel.lastDistributionChartReady"></vr-chart>
+                </vr-section>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-section title="Top Destinations" ng-if="scopeModel.showCharts">
+                    <vr-chart on-ready="scopeModel.destinationChartReady"></vr-chart>
+                </vr-section>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-section title="Top Destinations" ng-if="scopeModel.showCharts">
+                    <vr-gauge-chart on-ready="scopeModel.guageChartReady"></vr-gauge-chart>
+                </vr-section>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-section title="Top Destinations" ng-if="scopeModel.showCharts">
+                    <vr-solidgauge-chart on-ready="scopeModel.solidguageChartReady"></vr-solidgauge-chart>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

@@ -131,6 +131,7 @@
     <Compile Include="Controllers\FirewallController.cs" />
     <Compile Include="Controllers\RouteController.cs" />
     <Compile Include="Controllers\CustomerRouteController.cs" />
+    <Compile Include="Controllers\SwitchDashboardController.cs" />
     <Compile Include="Controllers\TranslationRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -183,6 +184,7 @@
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\SwitchDashboardAPIService.js" />
     <Content Include="NP_IVSwitch\Services\CustomerRouteService.js" />
     <Content Include="NP_IVSwitch\Services\EndPointService.js" />
     <Content Include="NP_IVSwitch\Services\FirewallService.js" />
@@ -211,6 +213,8 @@
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagementController.js" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditor.html" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\SwitchDashboard\SwitchDashboard.html" />
+    <Content Include="NP_IVSwitch\Views\SwitchDashboard\SwitchDashboardController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditor.html" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditorController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleManagement.html" />

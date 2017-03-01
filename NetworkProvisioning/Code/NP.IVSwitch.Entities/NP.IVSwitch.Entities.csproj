@@ -68,6 +68,7 @@
     <Compile Include="Firewall\Firewall.cs" />
     <Compile Include="Firewall\FirewallDetail.cs" />
     <Compile Include="Firewall\FirewallQuery.cs" />
+    <Compile Include="LiveDashboardResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomerRoute\CustomerRoute.cs" />
     <Compile Include="CustomerRoute\CustomerRouteDetail.cs" />
