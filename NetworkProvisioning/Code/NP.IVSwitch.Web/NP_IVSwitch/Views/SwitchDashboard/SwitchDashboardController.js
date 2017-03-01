@@ -258,7 +258,7 @@
                     mid: liveSummaryResult.PercConnected,
                     title: '%'
                 };
-                items = [{
+                var items = [{
                     label :"Connected",
                     value:liveSummaryResult.CountConnected,
                     },{
