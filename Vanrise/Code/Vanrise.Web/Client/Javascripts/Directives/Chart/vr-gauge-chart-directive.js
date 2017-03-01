@@ -197,14 +197,13 @@ app.directive('vrGaugeChart', ['ChartDirService', 'VRModalService', 'UtilsServic
         }
 
         function defineAPI() {
-            api.renderChart = function (chartData, chartDefinition, seriesDefinitions, xAxisDefinition,yAxisDefinition, pane,items) {
+            api.renderChart = function (chartData, chartDefinition, seriesDefinitions, xAxisDefinition,yAxisDefinition,items) {
                 currentChartSource = {
                     chartData: chartData,
                     chartDefinition: chartDefinition,
                     seriesDefinitions: seriesDefinitions,
                     xAxisDefinition: xAxisDefinition,
                     yAxisDefinition: yAxisDefinition,
-                    pane: pane,
                     items: items
                 };
                 initializeChartSettings();

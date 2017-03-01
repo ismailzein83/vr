@@ -258,8 +258,14 @@
                     mid: liveSummaryResult.PercConnected,
                     title: '%'
                 };
-                items
-                guageChartAPI.renderChart(liveSummaryResult.PercConnected, chartDefinition, seriesDefinitions, xAxisDefinition, yAxisDefinition);
+                items = [{
+                    label :"Connected",
+                    value:liveSummaryResult.CountConnected,
+                    },{
+                        label :"Attempts",
+                        value:liveSummaryResult.Attempts,
+                        }];
+                guageChartAPI.renderChart(liveSummaryResult.PercConnected, chartDefinition, seriesDefinitions, xAxisDefinition, yAxisDefinition,items);
             });
 
             console.log(Highcharts);
