@@ -152,7 +152,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 ParentProcessId = GetReaderValue<long?>(reader, "ParentProcessId"),
                 TrackingMessage = reader["TrackingMessage"] as string,
                 Severity = (LogEntryType)((int)reader["Severity"]),
-                EventTime = (DateTime)reader["EventTime"]
+                EventTime = (DateTime)reader["EventTime"],
+                ExceptionDetail = reader["ExceptionDetail"] as string
             };
 
             return bpTrackingMessage;

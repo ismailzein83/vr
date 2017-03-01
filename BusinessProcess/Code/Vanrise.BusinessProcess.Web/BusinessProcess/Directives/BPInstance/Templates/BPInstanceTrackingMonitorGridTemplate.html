@@ -18,7 +18,7 @@
     <vr-columns width="fullrow">
         <vr-datagrid datasource="::bpInstanceTracking" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady" hidepaginginfo loadmoredata="loadMoreData">
             <vr-datagridcolumn headertext="'ID'" field="'Entity.Id'" disablesorting="true"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Message'" field="'Entity.TrackingMessage'" widthfactor="80" disablesorting="true" expendablecolumn></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Message'" field="'Entity.TrackingMessage'" widthfactor="80" disablesorting="true" expendablecolumn expendablecolumntitle="'Entity.TrackingMessage'" expendablecolumndescription="'Entity.ExceptionDetail'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" getcolor="getSeverityColor" widthfactor="10" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Event Time'" field="'Entity.EventTime'" fixedwidth="'120'" type="'LongDatetime'" disablesorting="true"></vr-datagridcolumn>
         </vr-datagrid>
