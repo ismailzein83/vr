@@ -8,6 +8,12 @@ namespace Vanrise.Entities
 {
     public class VRBusinessException : Exception
     {
+        public VRBusinessException(string message)
+            : base(message)
+        {
+
+        }
+
         public VRBusinessException(string message, Exception innerException) :base(message, innerException)
         {
 
