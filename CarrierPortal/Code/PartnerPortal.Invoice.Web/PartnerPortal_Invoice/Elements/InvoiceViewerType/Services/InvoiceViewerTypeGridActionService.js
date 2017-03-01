@@ -20,9 +20,7 @@ app.service('PartnerPortal_Invoice_InvoiceViewerTypeGridActionService', ['VRModa
                 ActionTypeName: "DownloadAttachment",
                 actionMethod: function (payload) {
                     return PartnerPortal_Invoice_DownloadAttachmentActionAPIService.DownloadAttachment(payload.invoiceViewerTypeId, payload.invoiceAction.InvoiceViewerTypeGridActionId, payload.invoice.Entity.InvoiceId).then(function (response) {
-                        console.log(response);
                         UtilsService.downloadFile(response.data, response.headers);
-                        promiseDeffered.resolve(response);
                     });
                 }
             };
