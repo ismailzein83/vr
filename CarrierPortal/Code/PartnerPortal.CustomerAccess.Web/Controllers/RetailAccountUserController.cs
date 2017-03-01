@@ -13,6 +13,7 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
     {
         [HttpPost]
         [Route("AddRetailAccountUser")]
+        [VRSecurityActionAttribute("VR_Sec/Users/AddUser")]
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
         {
             RetailAccountUserManager _manager = new RetailAccountUserManager();
@@ -21,6 +22,7 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
 
         [HttpPost]
         [Route("ResetPassword")]
+        [VRSecurityActionAttribute("VR_Sec/Users/ResetPassword")]
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(Vanrise.Security.Entities.ResetPasswordInput resetPasswordInput)
         {
             RetailAccountUserManager _manager = new RetailAccountUserManager();
