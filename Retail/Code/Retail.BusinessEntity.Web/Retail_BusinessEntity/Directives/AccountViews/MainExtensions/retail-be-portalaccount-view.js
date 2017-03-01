@@ -8,7 +8,7 @@
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -39,11 +39,19 @@
                 $scope.scopeModel.sectionMenuActions = [];
                 $scope.scopeModel.isPortalUserAccountCreated = false;
 
-                $scope.scopeModel.onPortalAccountAdded = function () {
+                $scope.scopeModel.addPortalAccount = function () {
                     var onPortalAccountAdded = function (addedPortalAccount) {
                         $scope.scopeModel.isPortalUserAccountCreated = true;
                         $scope.scopeModel.name = addedPortalAccount.Name;
                         $scope.scopeModel.email = addedPortalAccount.Email;
+
+                        $scope.scopeModel.sectionMenuActions.length = 0;
+                        $scope.scopeModel.sectionMenuActions.push({
+                            name: 'Reset Password',
+                            clicked: function () {
+                                Retail_BE_PortalAccountService.resetPassword(addedPortalAccount.UserId, buildContext());
+                            }
+                        });
                     };
 
                     Retail_BE_PortalAccountService.addPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, buildContext());
@@ -77,14 +85,13 @@
                                 clicked: function () {
                                     Retail_BE_PortalAccountService.resetPassword(portalAccountSettings.UserId, buildContext());
                                 }
-                            })
+                            });
                         }
                         else {
                             $scope.scopeModel.sectionMenuActions.push({
                                 name: 'Add Portal Account',
-                                clicked: $scope.scopeModel.onPortalAccountAdded
-                                //haspermission: hasEditDIDPermission
-                            })
+                                clicked: $scope.scopeModel.addPortalAccount
+                            });
                         }
                     });
                 };

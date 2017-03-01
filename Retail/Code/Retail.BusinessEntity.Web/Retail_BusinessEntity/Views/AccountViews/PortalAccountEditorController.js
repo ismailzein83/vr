@@ -111,8 +111,8 @@
             var obj = {
                 AccountBEDefinitionId: accountBEDefinitionId,
                 AccountId: parentAccountId,
-                Name: accountGenericFieldValuesByName ? accountGenericFieldValuesByName[name] : undefined,
-                Email: accountGenericFieldValuesByName ? accountGenericFieldValuesByName[email] : undefined,
+                Name: $scope.scopeModel.name,
+                Email: $scope.scopeModel.email,
                 ConnectionId: connectionId,
                 TenantId: tenantId
             };
