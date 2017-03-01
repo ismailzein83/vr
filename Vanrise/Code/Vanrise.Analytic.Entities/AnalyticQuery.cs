@@ -30,12 +30,28 @@ namespace Vanrise.Analytic.Entities
 
         public List<MeasureStyleRule> MeasureStyleRules { get; set; }
 
-        public Object AdvancedOrderOptions { get; set; }
+        public AnalyticQueryAdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
     }
 
-    public class AnalyticQueryAdvancedMeasureOrderOptions
+    public abstract class AnalyticQueryAdvancedOrderOptionsBase
+    {
+        public virtual List<string> GetAdditionalMeasureNames()
+        {
+            return null;
+        }
+    }
+
+    public class AnalyticQueryAdvancedMeasureOrderOptions : AnalyticQueryAdvancedOrderOptionsBase
     {
         public List<AnalyticQueryAdvancedMeasureOrderItem> MeasureOrders { get; set; }
+
+        public override List<string> GetAdditionalMeasureNames()
+        {
+            if (this.MeasureOrders != null)
+                return this.MeasureOrders.Select(itm => itm.MeasureName).ToList();
+            else
+                return null;
+        }
     }
 
     public class AnalyticQueryAdvancedMeasureOrderItem

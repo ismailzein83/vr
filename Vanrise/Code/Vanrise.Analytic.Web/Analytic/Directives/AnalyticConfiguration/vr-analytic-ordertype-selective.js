@@ -132,6 +132,7 @@ app.directive('vrAnalyticOrdertypeSelective', ['VR_Analytic_OrderTypeEnum', 'Uti
                             + ' selectedvalues="scopeModel.selectedValue"'
                             + ' datavaluefield="value"'
                             + ' datatextfield="description"'
+                            + 'isrequired="true"'
             + 'onselectionchanged="scopeModel.onSelectionChanged"'
                             + 'label="Order Type" '
                             + ' >'

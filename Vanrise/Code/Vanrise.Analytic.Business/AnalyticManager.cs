@@ -32,7 +32,16 @@ namespace Vanrise.Analytic.Business
                 string[] measureProperty = input.SortByColumnName.Split('.');
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
             }
-
+            if(input.Query.AdvancedOrderOptions != null)
+            {
+                input.Query.MeasureFields.ThrowIfNull("input.Query.MeasureFields");
+                List<string> additionalMeasureNames = input.Query.AdvancedOrderOptions.GetAdditionalMeasureNames();
+                foreach(var m in additionalMeasureNames)
+                {
+                    if (!input.Query.MeasureFields.Contains(m))
+                        input.Query.MeasureFields.Add(m);
+                }
+            }
             return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler());
         }
         public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)

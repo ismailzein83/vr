@@ -119,6 +119,7 @@
     <Compile Include="View\ViewSettings.cs" />
     <Compile Include="View\ViewToAdd.cs" />
     <Compile Include="View\ViewType.cs" />
+    <Compile Include="VRSecurityActionAttribute.cs" />
     <Compile Include="Widget\Widget.cs" />
     <Compile Include="Widget\WidgetDefinition.cs" />
     <Compile Include="Widget\WidgetDefinitionSetting.cs" />
