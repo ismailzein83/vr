@@ -78,7 +78,7 @@ namespace Vanrise.NumberingPlan.Data.SQL
             return new StreamBulkInsertInfo
             {
                 ColumnNames = columns,
-                TableName = "[TOneWhS_BE].[CodeGroup]",
+                TableName = "[VR_NumberingPlan].[CodeGroup]",
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,
