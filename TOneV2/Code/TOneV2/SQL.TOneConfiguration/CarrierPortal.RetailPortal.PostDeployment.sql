@@ -6,7 +6,11 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('A8085279-37BF-40C5-941B-A1E46F83DFAB','PartnerPortal_CustomerAccess_RetailAccountUser','Retail Account User','PartnerPortal_CustomerAccess_AccountStatementContextHandler','{"Editor":"partnerportal-customeraccess-retailaccountuser"}'),
 ('A0709FCC-0344-4B64-BC0D-50471D052D0F','PartnerPortal_CustomerAccess_AccountStatementView','Portal Account Statement','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"partnerportal-customeraccess-accountstatement-vieweditor"}'),
-('B3A94A20-92ED-47BF-86D6-1034B720BE73','Retail Account Query Interceptor','Retail Account Query Interceptor','VR_GenericData_RestAPIRecordQueryInterceptorConfig','{"Editor":"partnerportal-customeraccess-retailaccountqueryinterceptor"}')
+('B3A94A20-92ED-47BF-86D6-1034B720BE73','Retail Account Query Interceptor','Retail Account Query Interceptor','VR_GenericData_RestAPIRecordQueryInterceptorConfig','{"Editor":"partnerportal-customeraccess-retailaccountqueryinterceptor"}'),
+('3a02eeea-6f38-4277-bac4-9d8f88f71851','Invoice Viewer Type','Invoice Viewer Type','VR_Common_VRComponentType','{"Editor":"partnerportal-invoice-viewertypesettings"}'),
+('12371BE0-CF2C-4CDD-9F4C-E809D912A716','Partner Invoice Query','Partner Invoice Query','PartnerPortal_Invoice_InvoiceQueryInterceptor','{"Editor":"partnerportal-invoice-partnerinvoicequeryinterceptor"}'),
+('BBEF1C92-DCEC-441B-86A2-7FC0C67716F5','PartnerPortal_Invoice_InvoiceView','Portal Invoice','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"partnerportal-invoice-vieweditor"}'),
+('609A37C4-466A-40A9-8140-F23F5D80D3C3','DownloadAttachmentAction','Download Attachment','PartnerPortal_Invoice_InvoiceGridActionSettings','{"Editor":"partnerportal-invoice-gridaction-downloadattachment"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
