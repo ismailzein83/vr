@@ -35,6 +35,7 @@ IF (@GreaterThanID IS NULL)
 				  ,[TrackingMessage]
 				  ,[Severity]
 				  ,[EventTime]
+				  ,[ExceptionDetail]
             INTO #temp2_table
             FROM [bp].[BPTracking] WITH(NOLOCK) 
 			WHERE ProcessInstanceID  = @BPInstanceID 
