@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("demoModuleCityGrid", ["UtilsService", "VRNotificationService", "Demo_Module_CityAPIService", "Demo_Module_CityService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, Demo_Module_CityAPIService, Demo_Module_CityService, VRUIUtilsService) {
+app.directive("demoModuleUserGrid", ["UtilsService", "VRNotificationService", "Demo_Module_UserAPIService", "Demo_Module_UserService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, Demo_Module_UserAPIService, Demo_Module_UserService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -11,26 +11,26 @@ function (UtilsService, VRNotificationService, Demo_Module_CityAPIService, Demo_
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var cityGrid = new CityGrid($scope, ctrl, $attrs);
-            cityGrid.initializeController();
+            var userGrid = new UserGrid($scope, ctrl, $attrs);
+            userGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Demo_Module/Directives/City/Templates/CityGridTemplate.html"
+        templateUrl: "/Client/Modules/Demo_Module/Directives/User/templates/UserGridTemplate.html"
 
     };
 
-    function CityGrid($scope, ctrl, $attrs) {
+    function UserGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         this.initializeController = initializeController;
 
         function initializeController() {
 
-            $scope.cities = [];
+            $scope.users = [];
             $scope.onGridReady = function (api) {
 
                 gridAPI = api;
@@ -43,14 +43,14 @@ function (UtilsService, VRNotificationService, Demo_Module_CityAPIService, Demo_
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
                     };
-                    directiveAPI.onCityAdded = function (cityObject) {
-                        gridAPI.itemAdded(cityObject);
+                    directiveAPI.onUserAdded = function (userObject) {
+                        gridAPI.itemAdded(userObject);
                     };
                     return directiveAPI;
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return Demo_Module_CityAPIService.GetFilteredCities(dataRetrievalInput)
+                return Demo_Module_UserAPIService.GetFilteredUsers(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
@@ -64,19 +64,19 @@ function (UtilsService, VRNotificationService, Demo_Module_CityAPIService, Demo_
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editCity,
-                
+                clicked: editUser,
+
             }];
         }
 
-       
 
-        function editCity(cityObj) {
-            var onCityUpdated = function (cityObj) {
-                gridAPI.itemUpdated(cityObj);
+
+        function editUser(userObj) {
+            var onUserUpdated = function (userObj) {
+                gridAPI.itemUpdated(userObj);
             };
 
-            Demo_Module_CityService.editCity(cityObj.Entity.Id, onCityUpdated);
+            Demo_Module_UserService.editUser(userObj.Entity.Id, onUserUpdated);
         }
 
     }

@@ -130,17 +130,27 @@
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
     <Content Include="Demo_Module\Directives\City\Templates\CityGridTemplate.html" />
     <Content Include="Demo_Module\Directives\City\Templates\demo-module-city-grid.js" />
+    <Content Include="Demo_Module\Directives\User\templates\demo-module-user-grid.js" />
+    <Content Include="Demo_Module\Directives\User\templates\demo-module-user-selector.js" />
+    <Content Include="Demo_Module\Directives\User\templates\UserGridTemplate.html" />
     <Content Include="Demo_Module\Services\APIServices\CityAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\UserAPIService.js" />
     <Content Include="Demo_Module\Services\CityService.js" />
+    <Content Include="Demo_Module\Services\UserService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
     <Content Include="Demo_Module\Views\CityManagement.html" />
     <Content Include="Demo_Module\Views\CityManagementController.js" />
     <Content Include="Demo_Module\Views\CityEditor.html" />
     <Content Include="Demo_Module\Views\CityEditorController.js" />
+    <Content Include="Demo_Module\Views\UserEditor.html" />
+    <Content Include="Demo_Module\Views\UserEditorController.js" />
+    <Content Include="Demo_Module\Views\UserManagement.html" />
+    <Content Include="Demo_Module\Views\UserManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

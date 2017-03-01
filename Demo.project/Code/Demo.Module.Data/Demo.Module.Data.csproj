@@ -49,9 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CityFactory.cs" />
+    <Compile Include="DemoModuleFactory.cs" />
     <Compile Include="ICityDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IUserDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

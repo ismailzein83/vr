@@ -12,7 +12,7 @@ namespace Demo.Module.Data
         List<City> GetCities();
         bool Update(City city);
         bool Insert(City city, out int insertedId);
-        bool GetCitie(int Id, out string Name);
+        City GetCitie(int Id);
      
     }
 }

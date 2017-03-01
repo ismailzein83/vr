@@ -56,6 +56,9 @@
     <Compile Include="CityDetails.cs" />
     <Compile Include="CityQ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="UserDetails.cs" />
+    <Compile Include="UserQ.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

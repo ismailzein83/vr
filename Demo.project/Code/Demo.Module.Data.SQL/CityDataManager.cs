@@ -36,12 +36,11 @@ namespace Demo.Module.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public bool GetCitie(int Id, out string Name)
+        public City GetCitie(int Id)
         {
-            object CityName;
-            int recordsEffected = ExecuteNonQuerySP("[dbo].[sp_City_GetCity]", out CityName, Id);
-            Name = (string)CityName;
-            return (recordsEffected > 0);
+            
+          
+            return GetItemSP("[dbo].[sp_City_GetCity]", CityMapper,Id);
         }
 
 

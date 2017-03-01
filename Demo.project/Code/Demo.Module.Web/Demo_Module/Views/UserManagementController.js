@@ -2,9 +2,9 @@
 
     "use strict";
 
-    cityManagementController.$inject = ['$scope', 'VRNotificationService', 'Demo_Module_CityAPIService', 'UtilsService', 'VRUIUtilsService', 'Demo_Module_CityService'];
+    userManagementController.$inject = ['$scope', 'VRNotificationService', 'Demo_Module_UserAPIService', 'UtilsService', 'VRUIUtilsService', 'Demo_Module_UserService'];
 
-    function cityManagementController($scope, VRNotificationService, Demo_Module_CityAPIService, UtilsService, VRUIUtilsService, Demo_Module_CityService) {
+    function userManagementController($scope, VRNotificationService, Demo_Module_UserAPIService, UtilsService, VRUIUtilsService, Demo_Module_UserService) {
 
 
 
@@ -15,13 +15,14 @@
         load();
 
 
-        
-        
-       
+
+
+
         function defineScope() {
-            $scope.cities = [];
+            $scope.users = [];
 
             $scope.searchClicked = function () {
+                getfilterdobject()
                 getfilterdobject()
                 gridAPI.loadGrid(query);
             };
@@ -35,27 +36,27 @@
                 gridAPI = api;
                 api.loadGrid(query);
             };
-            $scope.addNewCity = addNewCity;
+            $scope.addNewUser = addNewUser;
         }
         function load() {
-           
+
             loadAllControls();
         }
 
         function loadAllControls() {
-           
+
         }
-        function addNewCity() {
-           var onCityAdded = function (cityObj) {
-               gridAPI.onCityAdded(cityObj);
+        function addNewUser() {
+            var onUserAdded = function (UserObj) {
+                gridAPI.onUserAdded(UserObj);
             };
 
-            Demo_Module_CityService.addCity(onCityAdded);
+            Demo_Module_UserService.addUser(onUserAdded);
         }
     }
-       
-    
-       
 
-    appControllers.controller('Demo_Module_CityManagementController', cityManagementController);
+
+
+
+    appControllers.controller('Demo_Module_UserManagementController', userManagementController);
 })(appControllers);

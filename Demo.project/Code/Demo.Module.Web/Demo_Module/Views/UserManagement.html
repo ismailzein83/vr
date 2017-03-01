@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Demo_Module_CityManagementController">
+﻿<vr-panel ng-controller="Demo_Module_UserManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
@@ -11,13 +11,13 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="addNewCity" ></vr-button>
+                    <vr-button type="Add" data-onclick="addNewUser"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <demo-module-city-grid on-ready="onGridReady"></demo-module-city-grid>
+                <demo-module-user-grid on-ready="onGridReady"></demo-module-user-grid>
             </vr-columns>
         </vr-row>
 

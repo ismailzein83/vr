@@ -14,7 +14,7 @@ namespace Demo.Module.Business
     {
       public IDataRetrievalResult<CityDetails> GetFilteredCities(Vanrise.Entities.DataRetrievalInput<CityQ> input)
       {
-          ICityDataManager dataManager = CityFactory.GetDataManager<ICityDataManager>();
+          ICityDataManager dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
           IEnumerable<Demo.Module.Entities.City> cities = dataManager.GetCities();
           var allCities = cities.ToDictionary(c => c.Id, c => c);
 
@@ -42,7 +42,7 @@ namespace Demo.Module.Business
 
           int cityId = -1;
 
-          ICityDataManager dataManager = CityFactory.GetDataManager<ICityDataManager>();
+          ICityDataManager dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
           bool insertActionSucc = dataManager.Insert(city, out cityId);
           if (insertActionSucc)
           {
@@ -61,22 +61,17 @@ namespace Demo.Module.Business
 
       public Demo.Module.Entities.City GetCity(int Id)
       {
-          ICityDataManager dataManager = CityFactory.GetDataManager<ICityDataManager>();
-          string CityName;
-          bool selectedName= dataManager.GetCitie(Id,out CityName);
-          Demo.Module.Entities.City c = new Demo.Module.Entities.City()
-          {
-              Id=Id,
-              Name=CityName
-                
-          };
-
+          ICityDataManager dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
+         
+      
+          Demo.Module.Entities.City c=dataManager.GetCitie(Id);
+         
 
           return c;
       }
       public Vanrise.Entities.UpdateOperationOutput<CityDetails> UpdateCity(Demo.Module.Entities.City city)
       {
-          ICityDataManager dataManager = CityFactory.GetDataManager<ICityDataManager>();
+          ICityDataManager dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
 
           bool updateActionSucc = dataManager.Update(city);
           Vanrise.Entities.UpdateOperationOutput<CityDetails> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CityDetails>();
