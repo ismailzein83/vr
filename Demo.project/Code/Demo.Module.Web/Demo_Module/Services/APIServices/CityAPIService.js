@@ -22,7 +22,7 @@
         function AddCity(cityObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "AddCity"), cityObject);
         }
-        function UpdateCity(cityObject) {
+        function UpdateCity(cityObject) { 
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "UpdateCity"), cityObject);
         }
         return ({
