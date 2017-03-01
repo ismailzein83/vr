@@ -9,12 +9,18 @@ namespace Vanrise.BusinessProcess.Data.SQL
 {
     public class BPBusinessRuleDefinitionDataManager : BaseSQLDataManager, IBPBusinessRuleDefinitionDataManager
     {
+        #region Fields / Constructors
+
         public BPBusinessRuleDefinitionDataManager()
             : base(GetConnectionStringName("BusinessProcessConfigDBConnStringKey", "ConfigurationDBConnString"))
         {
 
         }
-        #region public methods
+
+        #endregion
+
+        #region Public Methods
+
         public List<BPBusinessRuleDefinition> GetBPBusinessRuleDefinitions()
         {
             return GetItemsSP("bp.sp_BPBusinessRuleDefinition_GetAll", BPBusinessRuleDefintionMapper);
@@ -24,6 +30,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return base.IsDataUpdated("[bp].[BPBusinessRuleDefinition]", ref updateHandle);
         }
+
         #endregion
 
         #region Mappers
@@ -32,14 +39,16 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             var businessRuleDefinition = new BPBusinessRuleDefinition
             {
-                BPBusinessRuleDefinitionId = GetReaderValue<Guid>(reader,"ID"),
+                BPBusinessRuleDefinitionId = GetReaderValue<Guid>(reader, "ID"),
                 Settings = Serializer.Deserialize<BPBusinessRuleSettings>(reader["Settings"] as string),
-                BPDefintionId = GetReaderValue<Guid>(reader,"BPDefintionId"),
-                Name = reader["Name"] as string
+                BPDefintionId = GetReaderValue<Guid>(reader, "BPDefintionId"),
+                Name = reader["Name"] as string,
+                Rank = (int)reader["Rank"]
             };
 
             return businessRuleDefinition;
         }
+
         #endregion
     }
 }

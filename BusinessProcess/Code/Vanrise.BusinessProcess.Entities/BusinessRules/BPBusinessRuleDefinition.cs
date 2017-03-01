@@ -12,6 +12,8 @@ namespace Vanrise.BusinessProcess.Entities
         public string Name { get; set; }
 
         public BPBusinessRuleSettings Settings { get; set; }
+
+        public int Rank { get; set; }
     }
 
     public class BPBusinessRuleSettings
