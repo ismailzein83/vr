@@ -3,10 +3,13 @@
     [ProcessInstanceID] BIGINT         NOT NULL,
     [ParentProcessID]   BIGINT         NULL,
     [TrackingMessage]   NVARCHAR (MAX) NULL,
+    [ExceptionDetail]   NVARCHAR (MAX) NULL,
     [Severity]          INT            NULL,
     [EventTime]         DATETIME       NULL,
     CONSTRAINT [IX_BPTracking_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 
