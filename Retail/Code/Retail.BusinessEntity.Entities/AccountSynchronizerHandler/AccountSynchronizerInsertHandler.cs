@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BEBridge.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -33,6 +34,8 @@ namespace Retail.BusinessEntity.Entities
 
     public interface IAccountSynchronizerInsertHandlerPreInsertContext
     {
+        ITargetBESynchronizerInsertBEsContext SynchronizerInsertBEContext { get; }
+
         Guid AccountBEDefinitionId { get; }
 
         Account Account { get; }
@@ -40,6 +43,8 @@ namespace Retail.BusinessEntity.Entities
 
     public interface IAccountSynchronizerInsertHandlerPostInsertContext
     {
+        ITargetBESynchronizerInsertBEsContext SynchronizerInsertBEContext { get; }
+
         Guid AccountBEDefinitionId { get; }
 
         Account Account { get; }

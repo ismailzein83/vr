@@ -39,8 +39,7 @@ namespace Retail.BusinessEntity.Business
             foreach (var targetAccount in context.TargetBE)
             {
                 SourceAccountData accountData = targetAccount as SourceAccountData;
-                AddAccount(accountData, null);
-                context.WriteBusinessTrackingMsg(LogEntryType.Information, "New Account '{0}' imported", accountData.Account.Name);
+                AddAccount(context, accountData, null);              
             }
         }
 
@@ -88,10 +87,13 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
         static AccountBEManager s_accountManager = new AccountBEManager();
-        void AddAccount(SourceAccountData accountData, long? parentAccountId)
+        void AddAccount(ITargetBESynchronizerInsertBEsContext context, SourceAccountData accountData, long? parentAccountId)
         {
             List<AccountSynchronizerInsertHandler> handlersToExecute = GetHandlersToExecute(accountData.Account);
-            ApplyHandlersPreInsert(accountData.Account, handlersToExecute);
+            if (!parentAccountId.HasValue)
+            {
+                ApplyHandlersPreInsert(context, accountData.Account, handlersToExecute);
+            }
             long accountId;
             s_accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId, true);
             if (accountId > 0)
@@ -114,41 +116,47 @@ namespace Retail.BusinessEntity.Business
                     foreach (var childAccount in accountData.ChildrenAccounts)
                     {
                         childAccount.Account.ParentAccountId = accountId;
-                        AddAccount(childAccount, accountId);
+                        AddAccount(context, childAccount, accountId);
                     }
                 }
-                ApplyHandlersPostInsert(accountData.Account, handlersToExecute);
-            }
-        }
-
-        private void ApplyHandlersPreInsert(Account account, List<AccountSynchronizerInsertHandler> handlersToExecute)
-        {
-            if (handlersToExecute != null)
-            {
-                foreach (var handler in handlersToExecute)
+                if (!parentAccountId.HasValue)
                 {
-                    var context = new AccountSynchronizerInsertHandlerPreInsertContext
-                    {
-                        AccountBEDefinitionId = this.AccountBEDefinitionId,
-                        Account = account
-                    };
-                    handler.Settings.OnPreInsert(context);
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "New Account '{0}' imported", accountData.Account.Name);
+                    ApplyHandlersPostInsert(context, accountData.Account, handlersToExecute);
                 }
             }
         }
 
-        private void ApplyHandlersPostInsert(Account account, List<AccountSynchronizerInsertHandler> handlersToExecute)
+        private void ApplyHandlersPreInsert(ITargetBESynchronizerInsertBEsContext context, Account account, List<AccountSynchronizerInsertHandler> handlersToExecute)
         {
             if (handlersToExecute != null)
             {
                 foreach (var handler in handlersToExecute)
                 {
-                    var context = new AccountSynchronizerInsertHandlerPostInsertContext
+                    var handlerContext = new AccountSynchronizerInsertHandlerPreInsertContext
                     {
+                        SynchronizerInsertBEContext = context,
                         AccountBEDefinitionId = this.AccountBEDefinitionId,
                         Account = account
                     };
-                    handler.Settings.OnPostInsert(context);
+                    handler.Settings.OnPreInsert(handlerContext);
+                }
+            }
+        }
+
+        private void ApplyHandlersPostInsert(ITargetBESynchronizerInsertBEsContext context, Account account, List<AccountSynchronizerInsertHandler> handlersToExecute)
+        {
+            if (handlersToExecute != null)
+            {
+                foreach (var handler in handlersToExecute)
+                {
+                    var handlerContext = new AccountSynchronizerInsertHandlerPostInsertContext
+                    {
+                        SynchronizerInsertBEContext = context,
+                        AccountBEDefinitionId = this.AccountBEDefinitionId,
+                        Account = account
+                    };
+                    handler.Settings.OnPostInsert(handlerContext);
                 }
             }
         }
@@ -204,6 +212,12 @@ namespace Retail.BusinessEntity.Business
 
         private class AccountSynchronizerInsertHandlerPreInsertContext : IAccountSynchronizerInsertHandlerPreInsertContext
         {
+            public ITargetBESynchronizerInsertBEsContext SynchronizerInsertBEContext
+            {
+                get;
+                set;
+            }
+
             public Guid AccountBEDefinitionId
             {
                 get;
@@ -219,6 +233,12 @@ namespace Retail.BusinessEntity.Business
 
         private class AccountSynchronizerInsertHandlerPostInsertContext : IAccountSynchronizerInsertHandlerPostInsertContext
         {
+            public ITargetBESynchronizerInsertBEsContext SynchronizerInsertBEContext
+            {
+                get;
+                set;
+            }
+
             public Guid AccountBEDefinitionId
             {
                 get;
