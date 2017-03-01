@@ -2,7 +2,7 @@
 	@ID int,
 	@Name Nvarchar(255),
 	@Email Nvarchar(255),
-	@Description ntext,
+	@Description Nvarchar(1000),
 	@TenantId int,
 	@EnabledTill datetime
 AS
