@@ -34,6 +34,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             s_trackingMessagesSchemaTable.Columns.Add("ProcessInstanceID", typeof(long));
             s_trackingMessagesSchemaTable.Columns.Add("ParentProcessID", typeof(long));
             s_trackingMessagesSchemaTable.Columns.Add("TrackingMessage", typeof(string));
+            s_trackingMessagesSchemaTable.Columns.Add("ExceptionDetail", typeof(string));
             s_trackingMessagesSchemaTable.Columns.Add("Severity", typeof(int));
             s_trackingMessagesSchemaTable.Columns.Add("EventTime", typeof(DateTime));
         }
@@ -68,12 +69,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             foreach (var msg in lstTrackingMsgs)
             {
                 DataRow row = dt.NewRow();
-                int index = 0;
-                row[index++] = msg.ProcessInstanceId;
-                row[index++] = msg.ParentProcessId.HasValue ? (object)msg.ParentProcessId.Value : DBNull.Value;
-                row[index++] = msg.TrackingMessage;
-                row[index++] = (int)msg.Severity;
-                row[index] = msg.EventTime;
+                row["ProcessInstanceID"] = msg.ProcessInstanceId;
+                row["ParentProcessID"] = msg.ParentProcessId.HasValue ? (object)msg.ParentProcessId.Value : DBNull.Value;
+                row["TrackingMessage"] = msg.TrackingMessage;
+                row["ExceptionDetail"] = msg.ExceptionDetail;
+                row["Severity"] = (int)msg.Severity;
+                row["EventTime"] = msg.EventTime;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
