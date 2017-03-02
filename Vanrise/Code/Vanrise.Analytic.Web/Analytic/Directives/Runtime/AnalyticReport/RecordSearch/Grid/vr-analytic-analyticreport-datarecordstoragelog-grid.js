@@ -93,7 +93,8 @@
                             Columns: getColumnsName(query.GridColumns, query.ItemDetails),
                             FilterGroup: query.FilterGroup,
                             LimitResult: query.LimitResult,
-                            Direction: query.Direction
+                            Direction: query.Direction,
+                            ColumnTitles: getColumnsTitle(query.GridColumns, query.ItemDetails)
                         };
 
                         if (query.SortColumns && query.SortColumns.length > 0) {
@@ -183,8 +184,28 @@
                         columns.push(currentDetail.FieldName);
                     }
                 }
+                console.log(columns);
                 return columns;
             }
+
+            function getColumnsTitle(gridColumns, itemDetails) {
+                var columnTitles = [];
+
+                for (var x = 0; x < gridColumns.length; x++) {
+                    var currentColumn = gridColumns[x];
+                    columnTitles.push(currentColumn.FieldTitle);
+                }
+
+                if (itemDetails != undefined && itemDetails != null && itemDetails.length > 0) {
+                    for (var y = 0; y < itemDetails.length; y++) {
+                        var currentDetail = itemDetails[y];
+                        columnTitles.push(currentDetail.FieldTitle);
+                    }
+                }
+                console.log(columnTitles)
+                return columnTitles;
+            }
+
 
             function buildItemDetails(itemDetails) {
                 if (itemDetails) {

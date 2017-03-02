@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.Entities
 
         public List<string> Columns { get; set; }
 
+        public List<string> ColumnTitles { get; set; }
+
         public RecordFilterGroup FilterGroup { get; set; }
 
         public int LimitResult { get; set; }

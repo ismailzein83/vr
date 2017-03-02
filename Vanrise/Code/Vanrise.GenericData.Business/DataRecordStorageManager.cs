@@ -51,6 +51,11 @@ namespace Vanrise.GenericData.Business
 
                 input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
 
+                if (input.Query.ColumnTitles == null)
+                    throw new NullReferenceException("input.Query.ColumnTitles");
+
+                input.Query.ColumnTitles = new HashSet<string>(input.Query.ColumnTitles).ToList();
+
                 var recordTypeManager = new DataRecordTypeManager();
                 DataRecordType recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
                 if (recordType == null)
