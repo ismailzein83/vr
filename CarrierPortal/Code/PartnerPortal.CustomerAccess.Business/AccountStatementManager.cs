@@ -35,7 +35,15 @@ namespace PartnerPortal.CustomerAccess.Business
 
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-            return connectionSettings.Post<DataRetrievalInput<AccountStatementAppQuery>, AccountStatementResult>("/api/VR_AccountBalance/AccountStatement/GetFilteredAccountStatments", input);
+            var clonedInput = Vanrise.Common.Utilities.CloneObject<DataRetrievalInput<AccountStatementAppQuery>>(input);
+            clonedInput.IsAPICall = true;
+
+            if(input.DataRetrievalResultType == DataRetrievalResultType.Excel)
+            {
+                return connectionSettings.Post<DataRetrievalInput<AccountStatementAppQuery>, RemoteExcelResult<AccountStatementItem>>("/api/VR_AccountBalance/AccountStatement/GetFilteredAccountStatments", clonedInput);
+            }
+            else
+                return connectionSettings.Post<DataRetrievalInput<AccountStatementAppQuery>, AccountStatementResult>("/api/VR_AccountBalance/AccountStatement/GetFilteredAccountStatments", clonedInput);
         }
 
         public IEnumerable<AccountStatementContextHandlerTemplate> GetAccountStatementContextHandlerTemplates()
