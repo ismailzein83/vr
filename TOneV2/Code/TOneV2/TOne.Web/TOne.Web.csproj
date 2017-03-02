@@ -1010,6 +1010,18 @@
       <Project>{31916b09-a29f-4d55-9669-efb6b0d9635b}</Project>
       <Name>TOne.WhS.SupplierPriceList.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.Business\TOne.WhS.TOneV1Transition.Business.csproj">
+      <Project>{421018ba-cefc-42ea-8490-41e7933650eb}</Project>
+      <Name>TOne.WhS.TOneV1Transition.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.Entities\TOne.WhS.TOneV1Transition.Entities.csproj">
+      <Project>{63f67a7e-5cd0-4620-b785-326fe7e90e9d}</Project>
+      <Name>TOne.WhS.TOneV1Transition.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition\TOne.WhS.TOneV1Transition.Web.csproj">
+      <Project>{8f4c6634-4713-4455-b252-eafc8f79ef5f}</Project>
+      <Name>TOne.WhS.TOneV1Transition.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
