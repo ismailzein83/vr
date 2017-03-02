@@ -37,7 +37,11 @@
     [TerminationAmount]   DECIMAL (20, 10) NULL,
     [OriginalAmount]      DECIMAL (20, 10) NULL,
     [SaleRate]            DECIMAL (20, 10) NULL,
-    [SaleAmount]          DECIMAL (20, 10) NULL);
+    [SaleAmount]          DECIMAL (20, 10) NULL,
+    [Credit]              DECIMAL (20, 10) NULL,
+    [OneShot]             DECIMAL (20, 10) NULL);
+
+
 
 
 
