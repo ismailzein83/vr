@@ -49,19 +49,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             WriteTrackingMessagesToDB(new List<BPTrackingMessage> { trackingMessage });
         }
 
-        public void InsertValidationMessages(IEnumerable<BPValidationMessage> messages)
-        {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (BPValidationMessage msg in messages)
-            {
-                WriteRecordToStream(msg, dbApplyStream);
-            }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
-        }
-
         public void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs)
         {
             DataTable dt = s_trackingMessagesSchemaTable.Clone();
@@ -162,57 +149,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
         BPTrackingMessageDetail BPTrackingDetailMapper(IDataReader reader)
         {
             return new BPTrackingMessageDetail() { Entity = BPTrackingMapper(reader) };
-        }
-
-        private LogEntryType MapSeverity(ActionSeverity actionSeverity)
-        {
-            switch (actionSeverity)
-            {
-                case ActionSeverity.Information:
-                    return LogEntryType.Information;
-                case ActionSeverity.Warning:
-                    return LogEntryType.Warning;
-                case ActionSeverity.Error:
-                    return LogEntryType.Error;
-                default:
-                    return LogEntryType.Verbose;
-            }
-        }
-
-        private object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        private void WriteRecordToStream(BPValidationMessage record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
-                       record.ProcessInstanceId,
-                       record.ParentProcessId,
-                       record.Message,
-                       (int)MapSeverity(record.Severity),
-                       DateTime.Now);
-        }
-
-        private object FinishDBApplyStream(object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.Close();
-            return new StreamBulkInsertInfo
-            {
-                ColumnNames = _columns,
-                TableName = "bp.BPTracking",
-                Stream = streamForBulkInsert,
-                TabLock = false,
-                KeepIdentity = false,
-                FieldSeparator = '^',
-            };
-        }
-
-        private void ApplyForDB(object preparedObject)
-        {
-            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
         }
 
         #endregion

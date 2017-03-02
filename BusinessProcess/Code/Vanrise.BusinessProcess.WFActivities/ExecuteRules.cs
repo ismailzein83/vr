@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -26,10 +27,10 @@ namespace Vanrise.BusinessProcess.WFActivities
 
             IEnumerable<BusinessRule> rules = BuildBusinessRules(bpBusinessRules);
             ExecuteValidation(rules, importedDataToValidate, context, violatedBusinessRulesByTarget, out stopExecutionFlag);
-            AppendValidationMessages(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, context.GetSharedInstanceData().InstanceInfo.ParentProcessID, violatedBusinessRulesByTarget);
+            AppendValidationMessages(context, violatedBusinessRulesByTarget);
 
             if (stopExecutionFlag)
-                throw new InvalidWorkflowException("One or more business rules were not satisfied and led to stop the execution of the worklfow");
+                throw new VRBusinessException("One or more business rules were not satisfied and led to stop the execution of the worklfow");
         }
 
         private IEnumerable<BusinessRule> BuildBusinessRules(List<BPBusinessRuleDefinition> bpBusinessRules)
@@ -75,8 +76,11 @@ namespace Vanrise.BusinessProcess.WFActivities
             }
         }
 
-        private void AppendValidationMessages(long processIntanceId, long? parentProcessId, List<BPViolatedRule> violatedBusinessRulesByTarget)
+        private void AppendValidationMessages(CodeActivityContext context, List<BPViolatedRule> violatedBusinessRulesByTarget)
         {
+            long processIntanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            long? parentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID;
+
             List<BPValidationMessage> messages = new List<BPValidationMessage>();
             foreach (BPViolatedRule violatedRule in violatedBusinessRulesByTarget)
             {
@@ -91,12 +95,26 @@ namespace Vanrise.BusinessProcess.WFActivities
                 };
 
                 messages.Add(msg);
+                context.WriteTrackingMessage(MapSeverity(msg.Severity), msg.Message);
             }
 
             BPValidationMessageManager manager = new BPValidationMessageManager();
-            manager.InsertIntoTrackingTable(messages);
             manager.Insert(messages);
+        }
 
+        private LogEntryType MapSeverity(ActionSeverity actionSeverity)
+        {
+            switch (actionSeverity)
+            {
+                case ActionSeverity.Information:
+                    return LogEntryType.Information;
+                case ActionSeverity.Warning:
+                    return LogEntryType.Warning;
+                case ActionSeverity.Error:
+                    return LogEntryType.Error;
+                default:
+                    return LogEntryType.Verbose;
+            }
         }
     }
 }

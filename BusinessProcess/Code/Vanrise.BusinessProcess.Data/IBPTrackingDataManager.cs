@@ -9,8 +9,6 @@ namespace Vanrise.BusinessProcess.Data
     {
         void Insert(BPTrackingMessage trackingMessage);
 
-        void InsertValidationMessages(IEnumerable<BPValidationMessage> messages);
-
         void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs);
 
         BigResult<BPTrackingMessageDetail> GetFilteredBPInstanceTracking(Vanrise.Entities.DataRetrievalInput<BPTrackingQuery> input);

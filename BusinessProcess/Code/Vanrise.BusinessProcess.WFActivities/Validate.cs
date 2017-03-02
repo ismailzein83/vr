@@ -78,7 +78,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             }
 
             BPValidationMessageManager manager = new BPValidationMessageManager();
-            manager.InsertIntoTrackingTable(messages);
+            //manager.InsertIntoTrackingTable(messages);
             manager.Insert(messages);
 
         }

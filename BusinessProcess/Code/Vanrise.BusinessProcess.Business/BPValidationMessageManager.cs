@@ -16,12 +16,6 @@ namespace Vanrise.BusinessProcess
             dataManager.Insert(messages);
         }
 
-        public void InsertIntoTrackingTable(IEnumerable<BPValidationMessage> messages)
-        {
-            IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
-            dataManager.InsertValidationMessages(messages);
-        }
-
         public List<BPValidationMessageDetail> GetBeforeId(BPValidationMessageBeforeIdInput input)
         {
             IBPValidationMessageDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPValidationMessageDataManager>();
