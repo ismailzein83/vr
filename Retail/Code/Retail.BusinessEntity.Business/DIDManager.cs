@@ -51,10 +51,6 @@ namespace Retail.BusinessEntity.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DIDDetail> context)
             {
-                if (context.BigResult == null)
-                    throw new ArgumentNullException("context.BigResult");
-                if (context.BigResult.Data == null)
-                    throw new ArgumentNullException("context.BigResult.Data");
                 ExportExcelSheet sheet = new ExportExcelSheet();
                 sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account" });
@@ -62,19 +58,24 @@ namespace Retail.BusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Number" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "International" });
 
-
                 sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    DIDSettings settings = (DIDSettings)record.Entity.Settings;
-                    if (settings != null)
+                    foreach (var record in context.BigResult.Data)
                     {
-                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                        sheet.Rows.Add(row);
-                        row.Cells.Add(new ExportExcelCell { Value = record.AccountName });
-                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.NumberOfChannels });
-                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Number });
-                        row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.IsInternational });
+                        if (record.Entity != null && record.Entity.Settings != null)
+                        {
+                            DIDSettings settings = (DIDSettings)record.Entity.Settings;
+                            if (settings != null)
+                            {
+                                var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                                sheet.Rows.Add(row);
+                                row.Cells.Add(new ExportExcelCell { Value = record.AccountName });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.NumberOfChannels });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.Number });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.IsInternational });
+                            }
+                        }
                     }
                 }
                 context.MainSheet = sheet;

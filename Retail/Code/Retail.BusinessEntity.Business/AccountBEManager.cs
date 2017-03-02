@@ -612,10 +612,6 @@ namespace Retail.BusinessEntity.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountDetail> context)
             {
-                if (context.BigResult == null)
-                    throw new ArgumentNullException("context.BigResult");
-                if (context.BigResult.Data == null)
-                    throw new ArgumentNullException("context.BigResult.Data");
                 ExportExcelSheet sheet = new ExportExcelSheet();
                 sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
                 var accountBEDefinitionSettings = new AccountBEDefinitionManager().GetAccountBEDefinitionSettings(_query.AccountBEDefinitionId);
@@ -627,21 +623,24 @@ namespace Retail.BusinessEntity.Business
                     }
                     sheet.Rows = new List<ExportExcelRow>();
 
-                    foreach (var accountDetail in context.BigResult.Data)
+                    if (context.BigResult != null && context.BigResult.Data != null)
                     {
-                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                        sheet.Rows.Add(row);
-
-                        foreach (AccountGridExportColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions)
+                        foreach (var accountDetail in context.BigResult.Data)
                         {
-                            AccountFieldValue accountValue;
-                            if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+
+                            foreach (AccountGridExportColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions)
                             {
-                                row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
-                            }
-                            else
-                            {
-                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                                AccountFieldValue accountValue;
+                                if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
+                                }
+                                else
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = "" });
+                                }
                             }
                         }
                     }
@@ -654,21 +653,24 @@ namespace Retail.BusinessEntity.Business
                     }
                     sheet.Rows = new List<ExportExcelRow>();
 
-                    foreach (var accountDetail in context.BigResult.Data)
+                    if (context.BigResult != null && context.BigResult.Data != null)
                     {
-                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                        sheet.Rows.Add(row);
-
-                        foreach (AccountGridColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ColumnDefinitions)
+                        foreach (var accountDetail in context.BigResult.Data)
                         {
-                            AccountFieldValue accountValue;
-                            if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+
+                            foreach (AccountGridColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ColumnDefinitions)
                             {
-                                row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
-                            }
-                            else
-                            {
-                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                                AccountFieldValue accountValue;
+                                if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
+                                }
+                                else
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = "" });
+                                }
                             }
                         }
                     }
