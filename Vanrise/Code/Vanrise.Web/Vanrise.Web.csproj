@@ -228,8 +228,11 @@
     <Content Include="Client\Javascripts\Directives\Button\vr-buttontype-selector.js" />
     <Content Include="Client\Javascripts\Directives\Chart\chart-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-gauge-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-settings.html" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart.html" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-guage-chart-template.html" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-solidgauge-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-dropdown-section.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-section-v2.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-preview-image-directive.js" />
