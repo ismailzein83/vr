@@ -184,7 +184,6 @@
                         columns.push(currentDetail.FieldName);
                     }
                 }
-                console.log(columns);
                 return columns;
             }
 
@@ -202,7 +201,6 @@
                         columnTitles.push(currentDetail.FieldTitle);
                     }
                 }
-                console.log(columnTitles)
                 return columnTitles;
             }
 

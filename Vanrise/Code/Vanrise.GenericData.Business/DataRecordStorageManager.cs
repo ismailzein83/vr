@@ -535,33 +535,39 @@ namespace Vanrise.GenericData.Business
 
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DataRecordDetail> context)
             {
-                if (context.BigResult == null)
-                    throw new ArgumentNullException("context.BigResult");
-                if (context.BigResult.Data == null)
-                    throw new ArgumentNullException("context.BigResult.Data");
+                if (_query.Columns.Count != _query.ColumnTitles.Count)
+                {
+                    throw new ArgumentNullException("Count of columns titles different then count of columns");   
+                }
+
                 ExportExcelSheet sheet = new ExportExcelSheet();
                 sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
 
+
                 if (_query.Columns != null)
                 {
-                    foreach (var dimName in _query.Columns)
+                    foreach (var dimName in _query.ColumnTitles)
                     {
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = dimName });
                     }
                 }
                 sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                    sheet.Rows.Add(row);
-                    if (record.FieldValues != null)
+                    foreach (var record in context.BigResult.Data)
                     {
-                        foreach (var dimValue in _query.Columns)
+                        var row = new ExportExcelRow {Cells = new List<ExportExcelCell>()};
+                        sheet.Rows.Add(row);
+                        if (record.FieldValues != null)
                         {
-                            DataRecordFieldValue dataRecordFieldValue;
-                            if (!record.FieldValues.TryGetValue(dimValue, out dataRecordFieldValue))
-                                throw new NullReferenceException(String.Format("dataRecordFieldValue. dimValue '{0}'", dataRecordFieldValue.Value));
-                            row.Cells.Add(new ExportExcelCell { Value = dataRecordFieldValue.Description });
+                            foreach (var dimValue in _query.Columns)
+                            {
+                                DataRecordFieldValue dataRecordFieldValue;
+                                if (!record.FieldValues.TryGetValue(dimValue, out dataRecordFieldValue))
+                                    throw new NullReferenceException(
+                                        String.Format("dataRecordFieldValue. dimValue '{0}'", dataRecordFieldValue.Value));
+                                row.Cells.Add(new ExportExcelCell {Value = dataRecordFieldValue.Description});
+                            }
                         }
                     }
                 }
