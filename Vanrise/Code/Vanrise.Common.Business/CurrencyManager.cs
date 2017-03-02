@@ -42,10 +42,6 @@ namespace Vanrise.Common.Business
                     }
                     public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CurrencyDetail> context)
                     {
-                        if (context.BigResult == null)
-                            throw new ArgumentNullException("context.BigResult");
-                        if (context.BigResult.Data == null)
-                            throw new ArgumentNullException("context.BigResult.Data");
                         ExportExcelSheet sheet = new ExportExcelSheet();
                         sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
@@ -53,16 +49,21 @@ namespace Vanrise.Common.Business
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Main Currency" });
 
-
                         sheet.Rows = new List<ExportExcelRow>();
-                        foreach (var record in context.BigResult.Data)
+                        if (context.BigResult != null && context.BigResult.Data != null)
                         {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CurrencyId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Symbol });
-                            row.Cells.Add(new ExportExcelCell { Value = record.IsMain });
+                            foreach (var record in context.BigResult.Data)
+                            {
+                                if (record.Entity != null)
+                                {
+                                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                                    sheet.Rows.Add(row);
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.CurrencyId });
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Symbol });
+                                    row.Cells.Add(new ExportExcelCell { Value = record.IsMain });
+                                }
+                            }                            
                         }
                         context.MainSheet = sheet;
                     }

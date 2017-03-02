@@ -683,10 +683,6 @@ namespace Vanrise.Analytic.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AnalyticRecord> context)
             {
-                if (context.BigResult == null)
-                    throw new ArgumentNullException("context.BigResult");
-                if (context.BigResult.Data == null)
-                    throw new ArgumentNullException("context.BigResult.Data");
                 ExportExcelSheet sheet = new ExportExcelSheet();
                 sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
                 if (_query.DimensionFields != null)
@@ -704,28 +700,33 @@ namespace Vanrise.Analytic.Business
                     }
                 }
                 sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                    sheet.Rows.Add(row);
-                    if (record.DimensionValues != null)
+                    foreach (var record in context.BigResult.Data)
                     {
-                        foreach (var dimValue in record.DimensionValues)
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        if (record.DimensionValues != null)
                         {
-                            row.Cells.Add(new ExportExcelCell { Value = dimValue.Name });
+                            foreach (var dimValue in record.DimensionValues)
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = dimValue.Name });
+                            }
                         }
-                    }
-                    if (_query.MeasureFields != null)
-                    {
-                        foreach (var measureName in _query.MeasureFields)
+                        if (_query.MeasureFields != null)
                         {
-                            MeasureValue measureValue;
-                            if (!record.MeasureValues.TryGetValue(measureName, out measureValue))
-                                throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
-                            row.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
+                            foreach (var measureName in _query.MeasureFields)
+                            {
+                                MeasureValue measureValue;
+                                if (!record.MeasureValues.TryGetValue(measureName, out measureValue))
+                                    throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
+                                row.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
+                            }
                         }
                     }
                 }
+                
                 context.MainSheet = sheet;
             }
         }

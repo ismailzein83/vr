@@ -57,10 +57,7 @@ namespace Vanrise.GenericData.Business
             {
                 GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
                 var genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(_query.RuleDefinitionId);
-                if (context.BigResult == null)
-                    throw new ArgumentNullException("context.BigResult");
-                if (context.BigResult.Data == null)
-                    throw new ArgumentNullException("context.BigResult.Data");
+                
                 ExportExcelSheet sheet = new ExportExcelSheet();
                 sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
@@ -77,36 +74,41 @@ namespace Vanrise.GenericData.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
 
-
                 sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                    sheet.Rows.Add(row);
-                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
-
-                    if (record.FieldValueDescriptions == null || record.FieldValueDescriptions.Count == 0)
+                    foreach (var record in context.BigResult.Data)
                     {
-                        if (genericRuleDefinition.CriteriaDefinition != null)
+                        if (record.Entity != null)
                         {
-                            foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
+
+                            if (record.FieldValueDescriptions == null || record.FieldValueDescriptions.Count == 0)
                             {
-                                row.Cells.Add(new ExportExcelCell { Value = null });
+                                if (genericRuleDefinition.CriteriaDefinition != null)
+                                {
+                                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                                    {
+                                        row.Cells.Add(new ExportExcelCell { Value = null });
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                foreach (var field in record.FieldValueDescriptions)
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = field });
+                                }
                             }
 
+                            row.Cells.Add(new ExportExcelCell { Value = record.SettingsDescription });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BeginEffectiveTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EndEffectiveTime });
                         }
                     }
-                    else
-                    {
-                        foreach (var field in record.FieldValueDescriptions)
-                        {
-                            row.Cells.Add(new ExportExcelCell { Value = field });
-                        }
-                    }
-
-                    row.Cells.Add(new ExportExcelCell { Value = record.SettingsDescription });
-                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.BeginEffectiveTime });
-                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.EndEffectiveTime });
                 }
                 context.MainSheet = sheet;
             }
