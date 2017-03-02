@@ -3060,10 +3060,7 @@ vr-overall-widget  .list-group-item {
 }
 .overallwidget {
     height:100px;
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#4377c5);
-    background: -o-linear-gradient(bottom,#BCBCBC, #4377c5);
-    background: -moz-linear-gradient(bottom,#BCBCBC,#4377c5);
-    background: linear-gradient(to bottom, #e0e0e0, #4377c5);    
+    background-color: #4377c5;    
     text-align:center;
     color:#fff;
     font-weight:bold;
