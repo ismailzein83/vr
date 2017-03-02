@@ -32,7 +32,7 @@ app.directive('vrGaugeChart', ['ChartDirService', 'VRModalService', 'UtilsServic
             };
         },
         templateUrl: function (element, attrs) {
-            return "/Client/Javascripts/Directives/Chart/vr-guage-chart-template.html";
+            return "/Client/Javascripts/Directives/Chart/vr-gauge-chart-template.html";
         }
 
     };
@@ -81,6 +81,7 @@ app.directive('vrGaugeChart', ['ChartDirService', 'VRModalService', 'UtilsServic
             var seriesDefinitions = chartSource.seriesDefinitions;
             var yAxisDefinition = chartSource.yAxisDefinition;
             var items = chartSource.items;
+            $scope.items = items;
 
             var series = [];
             angular.forEach(seriesDefinitions, function (sDef) {
