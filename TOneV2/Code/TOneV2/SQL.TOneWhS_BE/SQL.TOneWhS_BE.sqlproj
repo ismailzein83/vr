@@ -105,6 +105,7 @@
     <Folder Include="TOneWhS_AccBalance\" />
     <Folder Include="TOneWhS_AccBalance\Tables\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="TOneWhS_AccBalance\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -442,5 +443,12 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistCodeChange_GetFiltered.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
     <Build Include="Security\TOneWhS_AccBalance.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistCustomerChange_1.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SalePriceList_1.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetBySellingProducts_1.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwner_1.sql" />
+    <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_Update_1.sql" />
+    <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_Insert_1.sql" />
+    <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_GetAll_1.sql" />
   </ItemGroup>
 </Project>
