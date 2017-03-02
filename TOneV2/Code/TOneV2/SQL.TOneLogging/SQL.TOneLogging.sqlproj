@@ -111,6 +111,11 @@
     <Build Include="logging\Tables\UserActionAudit.sql" />
     <Build Include="logging\Stored Procedures\sp_UserActionAudit_Insert.sql" />
     <Build Include="logging\Stored Procedures\sp_UserActionAudit_GetFiltered.sql" />
+    <Build Include="logging\Tables\ActionAuditLKUP.sql" />
+    <Build Include="logging\Tables\ActionAudit.sql" />
+    <Build Include="logging\Stored Procedures\sp_ActionAuditLKUP_InsertIfNotExists.sql" />
+    <Build Include="logging\Stored Procedures\sp_ActionAuditLKUP_GetAll.sql" />
+    <Build Include="logging\Stored Procedures\sp_ActionAudit_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
