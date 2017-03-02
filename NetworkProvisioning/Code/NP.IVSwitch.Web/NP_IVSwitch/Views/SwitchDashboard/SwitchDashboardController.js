@@ -20,9 +20,17 @@
        var guageChartAPI;
        var guageChartReadyDeferred = UtilsService.createPromiseDeferred();
 
-       var solidguageChartAPI;
-       var solidguageChartReadyDeferred = UtilsService.createPromiseDeferred();
+       var liveChartAPI;
+       var liveChartReadyDeferred = UtilsService.createPromiseDeferred();
 
+       var acdGuageChartAPI;
+       var acdGuageChartReadyDeferred = UtilsService.createPromiseDeferred();
+
+       var acdLiveChartAPI;
+       var acdLiveChartReadyDeferred = UtilsService.createPromiseDeferred();
+
+
+       var liveObject;
         defineScope();
         load();
 
@@ -79,16 +87,25 @@
                 guageChartAPI = api;
                 guageChartReadyDeferred.resolve();
             }
-            $scope.scopeModel.solidguageChartReady = function (api) {
-                solidguageChartAPI = api;
-                solidguageChartReadyDeferred.resolve();
+            $scope.scopeModel.liveChartReady = function (api) {
+                liveChartAPI = api;
+                liveChartReadyDeferred.resolve();
+            }
+
+            $scope.scopeModel.acdGuageChartReady = function (api) {
+                acdGuageChartAPI = api;
+                acdGuageChartReadyDeferred.resolve();
+            }
+            $scope.scopeModel.acdLiveChartReady = function (api) {
+                acdLiveChartAPI = api;
+                acdLiveChartReadyDeferred.resolve();
             }
 
         }
         function load()
         {
             $scope.scopeModel.isLoading = true;
-            VRTimerService.registerJob(loadDashboarResult, $scope, 10);
+            VRTimerService.registerJob(loadDashboarResult, $scope, 3);
         }
         function loadDashboarResult()
         {
@@ -128,7 +145,21 @@
                     renderDestinationCharts(response.TopZonesResult);
                     renderLastDistributionCharts(response.LastDistributionResult);
                     loadGauge(response.LiveSummaryResult);
-                    loadSolidGauge(response.LiveSummaryResult);
+                    if (!$scope.scopeModel.showCharts)
+                        loadLiveChart(response.LiveSummaryResult);
+                    else
+                        chartDataFunction(response.LiveSummaryResult);
+
+                    if (!$scope.scopeModel.showCharts)
+                    loadACDGauge(response.LiveSummaryResult);
+                    else
+                        guageACDLiveFunction(response.LiveSummaryResult);
+                    if (!$scope.scopeModel.showCharts)
+                        loadACDLiveChart(response.LiveSummaryResult);
+                    else
+                        chartACDLiveFunction(response.LiveSummaryResult);
+                    $scope.scopeModel.totalDuration = response.LiveSummaryResult.TotalDuration;
+                    $scope.scopeModel.pDDInSec = response.LiveSummaryResult.PDDInSec;
 
                 }
                 $scope.scopeModel.showCharts = true;
@@ -212,7 +243,7 @@
         function renderLastDistributionCharts(lastDistributionResult) {
             lastDistributionChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
-                    type: "column",
+                    type: "pie",
                     yAxisTitle: "Value"
                 };
                 var xAxisDefinition = {
@@ -222,14 +253,14 @@
                 var seriesDefinitions = [];
                 seriesDefinitions.push({
                     title: "Connected",
-                    valuePath: "CountConnected"
+                    valuePath: "CountConnected",
+                    titlePath: "DurationRange"
                 });
 
-                lastDistributionChartAPI.renderChart(lastDistributionResult.DistributionResults, chartDefinition, seriesDefinitions, xAxisDefinition);
+                lastDistributionChartAPI.renderSingleDimensionChart(lastDistributionResult.DistributionResults, chartDefinition, seriesDefinitions);
             });
 
         }
-
 
 
         function loadGauge(liveSummaryResult)
@@ -237,7 +268,12 @@
 
             guageChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
-                    type: "gauge",
+                    type: "solidgauge",
+                    ranges: [
+                            [0, '#DF5353'], // red/
+                            [50, '#DDDF0D'], // yellow
+                            [80, '#55BF3B'] //green
+                    ]
                 };
                 var xAxisDefinition = {
                     titlePath: "DurationRange"
@@ -245,17 +281,17 @@
 
                 var seriesDefinitions = [];
                 seriesDefinitions.push({
-                    title: "Connected",
-                    valuePath: "CountConnected",
+                    title: "Perc Connected",
+                    valuePath: "PercConnected",
                     tooltip: {
                         valueSuffix: ' %'
                     },
                 });
 
                 var yAxisDefinition = {
-                    min: liveSummaryResult.CountConnected,
-                    max: liveSummaryResult.Attempts,
-                    mid: liveSummaryResult.PercConnected,
+                    min: 0,
+                    max: 100,
+                   // mid: liveSummaryResult.PercConnected,
                     title: '%'
                 };
                 var items = [{
@@ -267,70 +303,107 @@
                         }];
                 guageChartAPI.renderChart(liveSummaryResult.PercConnected, chartDefinition, seriesDefinitions, xAxisDefinition, yAxisDefinition,items);
             });
-
-            console.log(Highcharts);
-
-            //Highcharts.chart('container', {
-
-            //    // the value axis
-                
-
-            //    series: [{
-            //        name: 'Speed',
-            //        data: [80],
-            //        tooltip: {
-            //            valueSuffix: ' km/h'
-            //        }
-            //    }]
-
-            //},
-            //// Add some life
-            //function (chart) {
-            //    if (!chart.renderer.forExport) {
-            //        setInterval(function () {
-            //            var point = chart.series[0].points[0],
-            //                newVal,
-            //                inc = Math.round((Math.random() - 0.5) * 20);
-
-            //            newVal = point.y + inc;
-            //            if (newVal < 0 || newVal > 200) {
-            //                newVal = point.y - inc;
-            //            }
-
-            //            point.update(newVal);
-
-            //        }, 3000);
-            //    }
-            //});
         }
-
-        function loadSolidGauge(liveSummaryResult) {
-            solidguageChartReadyDeferred.promise.then(function () {
+        function loadLiveChart(liveSummaryResult) {
+            liveChartReadyDeferred.promise.then(function () {
 
                 var chartDefinition = {
-                    type: "solidgauge",
+                    type: "areaspline",
+                    yAxisTitle: "Value",
+                    numberOfPoints:20
                 };
                 var xAxisDefinition = {
-                    titlePath: "DurationRange"
+                    titlePath: "ResponseDate",
+                    isTime: true,
                 };
 
                 var seriesDefinitions = [];
                 seriesDefinitions.push({
                     title: "Connected",
-                    tooltip: {
-                        valueSuffix: ' %'
-                    },
+                    valuePath: "CountConnected"
                 });
-                var yAxisDefinition = {
-                    min: liveSummaryResult.CountConnected,
-                    max: liveSummaryResult.Attempts,
-                    title: '%'
-                };
-             
+                seriesDefinitions.push({
+                    title: "Attempts",
+                    valuePath: "Attempts"
+                });
+               
 
-                solidguageChartAPI.renderChart(liveSummaryResult.PercConnected, chartDefinition, seriesDefinitions, xAxisDefinition, yAxisDefinition);
+                liveChartAPI.renderChart([{ ResponseDate: UtilsService.createDateFromString(liveSummaryResult.ResponseDate), CountConnected: liveSummaryResult.CountConnected, Attempts: liveSummaryResult.Attempts }], chartDefinition, seriesDefinitions, xAxisDefinition);
             });
         }
+        function chartDataFunction(liveSummaryResult)
+        {
+            liveChartAPI.addItem({ ResponseDate: UtilsService.createDateFromString(liveSummaryResult.ResponseDate), CountConnected: liveSummaryResult.CountConnected, Attempts: liveSummaryResult.Attempts });
+        }
+
+        function loadACDGauge(liveSummaryResult) {
+
+            acdGuageChartReadyDeferred.promise.then(function () {
+                var chartDefinition = {
+                    type: "solidgauge",
+                    ranges: [
+                            [0.0, '#DF5353'],// red 
+                            [0.1, '#DDDF0D'], // yellow
+                            [0.4, '#55BF3B'], //green
+                        ]
+                };
+                var xAxisDefinition = {
+                    titlePath: "ACD"
+                };
+
+                var seriesDefinitions = [];
+                seriesDefinitions.push({
+                    title: "ACD",
+                    valuePath: "ACD",
+                    tooltip: {
+                        valueSuffix: ' '
+                    },
+                });
+
+                var yAxisDefinition = {
+                    min: 0,
+                    max: 50,
+                  //  mid: liveSummaryResult.ACD,
+                    title: ' '
+                };
+                var items = [{
+                    label: "ACD",
+                    value: liveSummaryResult.ACD,
+                }];
+                acdGuageChartAPI.renderChart( { ACD : liveSummaryResult.ACD }, chartDefinition, seriesDefinitions, xAxisDefinition, yAxisDefinition, items);
+            });
+        }
+        function guageACDLiveFunction(liveSummaryResult) {
+            acdGuageChartAPI.updateValue(liveSummaryResult.ACD);
+        }
+
+        function loadACDLiveChart(liveSummaryResult) {
+            acdLiveChartReadyDeferred.promise.then(function () {
+
+                var chartDefinition = {
+                    type: "areaspline",
+                    yAxisTitle: "Value",
+                    numberOfPoints: 20
+                };
+                var xAxisDefinition = {
+                    titlePath: "Date",
+                    isTime: true,
+                };
+
+                var seriesDefinitions = [];
+                seriesDefinitions.push({
+                    title: "ACD",
+                    valuePath: "ACD"
+                });
+
+
+                acdLiveChartAPI.renderChart([{ Date: UtilsService.createDateFromString(liveSummaryResult.ResponseDate), ACD: liveSummaryResult.ACD }], chartDefinition, seriesDefinitions, xAxisDefinition);
+            });
+        }
+        function chartACDLiveFunction(liveSummaryResult) {
+            acdLiveChartAPI.addItem({ Date: UtilsService.createDateFromString(liveSummaryResult.ResponseDate), ACD: liveSummaryResult.ACD });
+        }
+
     }
     appControllers.controller('NP_IVSwitch_SwitchDashboardManagementController', SwitchDashboardManagementController);
 

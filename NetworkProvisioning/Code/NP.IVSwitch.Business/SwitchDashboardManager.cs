@@ -54,22 +54,17 @@ namespace NP.IVSwitch.Business
                     MeasureValue acd = GetMeasureValue(analyticRecord, "ACD");
                     MeasureValue pDDInSec = GetMeasureValue(analyticRecord, "PDDInSec");
                     MeasureValue totalDuration = GetMeasureValue(analyticRecord, "TotalDuration");
-                    if (durationRange.Name != "Not Connected")
+                    liveDashboardResult.LastDistributionResult.DistributionResults.Add(new DistributionResult
                     {
-
-                        liveDashboardResult.LastDistributionResult.DistributionResults.Add(new DistributionResult
-                        {
-                            CountConnected = Convert.ToInt32(countConnected.Value),
-                            DurationRange = durationRange.Value.ToString(),
-                            Attempts = Convert.ToInt32(attempts.Value),
-                            PercConnected = Convert.ToDecimal(percConnected.Value),
-                            ACD = Convert.ToDecimal(acd.Value),
-                            PDDInSec = Convert.ToDecimal(pDDInSec.Value),
-                            TotalDuration = Convert.ToDecimal(totalDuration.Value),
-
-                        });
-                    }
-
+                        DurationRange = durationRange.Value.ToString(),
+                        CountConnected = Convert.ToInt32(countConnected.Value),
+                        Attempts = Convert.ToInt32(attempts.Value),
+                        PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
+                        ACD = Convert.ToDecimal(acd == null ? 0.0 : acd.Value ?? 0.0),
+                        PDDInSec = Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0),
+                        TotalDuration = Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0),
+                        ResponseDate = DateTime.Now
+                    });
                     #endregion
                 }
             }
@@ -98,10 +93,11 @@ namespace NP.IVSwitch.Business
                 {
                     CountConnected = Convert.ToInt32(countConnected.Value),
                     Attempts = Convert.ToInt32(attempts.Value),
-                    PercConnected = Convert.ToDecimal(percConnected.Value),
-                    ACD = Convert.ToDecimal(acd.Value),
-                    PDDInSec = Convert.ToDecimal(pDDInSec.Value),
-                    TotalDuration = Convert.ToDecimal(totalDuration.Value),
+                    PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
+                    ACD = Decimal.Round(Convert.ToDecimal(acd == null ? 0.0 : acd.Value), 2),
+                    PDDInSec = Decimal.Round(Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0), 2),
+                    TotalDuration = Decimal.Round(Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0), 2),
+                    ResponseDate = DateTime.Now
                 };
 
             }
@@ -127,13 +123,14 @@ namespace NP.IVSwitch.Business
 
                     liveDashboardResult.TopCustomersResult.CustomerResults.Add(new CustomerResult
                     {
-                        CountConnected = Convert.ToInt32(countConnected.Value),
                         CustomerName = customer.Name !=null?customer.Name:"Null",
+                        CountConnected = Convert.ToInt32(countConnected.Value),
                         Attempts = Convert.ToInt32(attempts.Value),
-                        PercConnected = Convert.ToDecimal(percConnected.Value),
-                        ACD = Convert.ToDecimal(acd.Value),
-                        PDDInSec = Convert.ToDecimal(pDDInSec.Value),
-                        TotalDuration = Convert.ToDecimal(totalDuration.Value),
+                        PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
+                        ACD = Convert.ToDecimal(acd == null ? 0.0 : acd.Value ?? 0.0),
+                        PDDInSec = Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0),
+                        TotalDuration = Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0),
+                        ResponseDate = DateTime.Now
                     });
 
                     #endregion
@@ -173,13 +170,14 @@ namespace NP.IVSwitch.Business
 
                     liveDashboardResult.TopSuppliersResult.SupplierResults.Add(new SupplierResult
                     {
-                        CountConnected = Convert.ToInt32(countConnected.Value),
                         SupplierName = supplier.Name != null ? supplier.Name : "Null",
+                        CountConnected = Convert.ToInt32(countConnected.Value),
                         Attempts = Convert.ToInt32(attempts.Value),
-                        PercConnected = Convert.ToDecimal(percConnected.Value),
-                        ACD = Convert.ToDecimal(acd.Value),
-                        PDDInSec = Convert.ToDecimal(pDDInSec.Value),
-                        TotalDuration = Convert.ToDecimal(totalDuration.Value),
+                        PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
+                        ACD = Convert.ToDecimal(acd == null ? 0.0 : acd.Value ?? 0.0),
+                        PDDInSec = Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0),
+                        TotalDuration = Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0),
+                        ResponseDate = DateTime.Now
                     });
 
                     #endregion
@@ -221,13 +219,14 @@ namespace NP.IVSwitch.Business
 
                     liveDashboardResult.TopZonesResult.ZoneResults.Add(new ZoneResult
                     {
-                        CountConnected = Convert.ToInt32(countConnected.Value),
                         ZoneName = zone.Name != null ? zone.Name : "Null",
+                        CountConnected = Convert.ToInt32(countConnected.Value),
                         Attempts = Convert.ToInt32(attempts.Value),
-                        PercConnected = Convert.ToDecimal(percConnected.Value),
-                        ACD = Convert.ToDecimal(acd.Value),
-                        PDDInSec = Convert.ToDecimal(pDDInSec.Value),
-                        TotalDuration = Convert.ToDecimal(totalDuration.Value),
+                        PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
+                        ACD = Convert.ToDecimal(acd == null ? 0.0 : acd.Value ?? 0.0),
+                        PDDInSec = Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0),
+                        TotalDuration = Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0),
+                        ResponseDate = DateTime.Now
                     });
 
                     #endregion

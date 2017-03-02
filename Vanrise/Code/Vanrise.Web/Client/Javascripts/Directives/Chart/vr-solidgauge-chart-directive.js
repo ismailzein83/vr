@@ -31,7 +31,7 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
             };
         },
         templateUrl: function (element, attrs) {
-            return ChartDirService.dTemplate;
+            return "/Client/Javascripts/Directives/Chart/vr-guage-chart-template.html";
         }
 
     };
@@ -44,7 +44,7 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
         var selectedDataItem;
         var menuActionsAttribute;
         var api = {};
-
+        var newValue;
         function initializeController() {
         }
 
@@ -71,6 +71,7 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
             var seriesDefinitions = chartSource.seriesDefinitions;
             var yAxisDefinition = chartSource.yAxisDefinition;
             var series = [];
+           
             angular.forEach(seriesDefinitions, function (sDef) {
                 var serie = {
                     name: sDef.title,
@@ -90,16 +91,38 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                 };
                 series.push(serie);
             });
-            for (var i = 0; i < series.length; i++) {
-                series[i].data.push(yAxisDefinition.max);
-                series[i].data.push(yAxisDefinition.min);
-            }
+            angular.forEach(chartData, function (dataItem) {
+                for (var i = 0; i < series.length; i++) {
+                    var sDef = seriesDefinitions[i];
+                    var tooltip = sDef.tooltip;
+                    series[i].data.push(dataItem);
+                }
+            });
+
 
             setTimeout(function () {
-                console.log(yAxisDefinition.max);
                 chartElement.highcharts({
                     chart: {
                         type: chartDefinition.type,
+                        events: {
+                            load: function () {
+                                var series = this.series;
+                                setInterval(function () {
+                                    if (newValue != undefined) {
+
+                                        for (var i = 0; i < series.length; i++) {
+                                            var serie = series[i];
+                                            //for (var j = 0;j < serie.points.length; j++)
+                                            //{
+                                            //    var point = serie.points[j];
+                                            //    point.update(newValue,false,true);
+                                            //}
+                                            series[i].addPoint(newValue, true, true);
+                                        }
+                                    }
+                                });
+                            }
+                        }
                     },
                     title: {
                         text: chartDefinition.title
@@ -114,22 +137,16 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                         }
                     },
                     yAxis: {
-                        min: 0,
+                        min: yAxisDefinition.min,
                         max: yAxisDefinition.max,
-                    //    maxColor:'#55BF3B',
                         title: {
                             text: yAxisDefinition.title
                         },
-                        stops: [
-                            [0.1, '#55BF3B'], // green
-                            [0.5, '#DDDF0D'], // yellow
-                            [0.9, '#DF5353'] // red
-                        ],
+                        stops: chartDefinition.ranges,
                         lineWidth: 0,
                         minorTickInterval: null,
-                        tickAmount: 2,
-                        showFirstLabel: false,
-                        showLastLabel:true,
+                        tickLength: 0,
+                       // tickAmount: 2,
                         labels: {
                             y: 16
                         }
@@ -168,7 +185,10 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                 initializeChartSettings();
                 renderChart(currentChartSource);
             };
-
+            api.updateValue = function(value)
+            {
+                newValue = value;
+            }
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);
         }

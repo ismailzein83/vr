@@ -31,6 +31,8 @@ namespace NP.IVSwitch.Entities
         public decimal ACD { get; set; }
         public decimal PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
+        public DateTime ResponseDate { get; set; }
+
     }
     public class TopCustomersResult
     {
@@ -46,6 +48,8 @@ namespace NP.IVSwitch.Entities
         public decimal ACD { get; set; }
         public decimal PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
+        public DateTime ResponseDate { get; set; }
+
     }
     public class TopSuppliersResult
     {
@@ -62,6 +66,7 @@ namespace NP.IVSwitch.Entities
         public decimal ACD { get; set; }
         public decimal PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
+        public DateTime ResponseDate { get; set; }
 
     }
     public class LastDistributionResult
@@ -77,6 +82,7 @@ namespace NP.IVSwitch.Entities
         public decimal ACD { get; set; }
         public decimal PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
+        public DateTime ResponseDate { get; set; }
 
     }
     public class TotalDurationResult
@@ -91,6 +97,7 @@ namespace NP.IVSwitch.Entities
         public decimal ACD { get; set; }
         public decimal PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
+        public DateTime ResponseDate { get; set; }
     }
 
 }
