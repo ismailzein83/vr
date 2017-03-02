@@ -5,9 +5,12 @@
     [BPDefintionId]    UNIQUEIDENTIFIER NOT NULL,
     [OldBPDefintionId] INT              NULL,
     [Settings]         NVARCHAR (MAX)   NOT NULL,
+    [Rank]             INT              NOT NULL,
     [timestamp]        ROWVERSION       NOT NULL,
     CONSTRAINT [pk_BPBusinessRuleDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

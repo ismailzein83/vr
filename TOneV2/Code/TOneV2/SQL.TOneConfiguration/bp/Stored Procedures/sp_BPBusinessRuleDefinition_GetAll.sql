@@ -1,9 +1,7 @@
 ﻿CREATE PROCEDURE  [bp].[sp_BPBusinessRuleDefinition_GetAll]
 AS
 BEGIN
-   SELECT [ID]
-	  ,[Name]
-	  ,[BPDefintionId] 
-	  ,[Settings]
-  FROM [bp].[BPBusinessRuleDefinition] WITH(NOLOCK)
+	select [ID], [Name], [BPDefintionId], [Settings], [Rank]
+	from [bp].[BPBusinessRuleDefinition] with(nolock)
+	order by [Rank]
 END
