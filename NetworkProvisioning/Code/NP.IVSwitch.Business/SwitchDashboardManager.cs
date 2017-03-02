@@ -60,7 +60,7 @@ namespace NP.IVSwitch.Business
                         liveDashboardResult.LastDistributionResult.DistributionResults.Add(new DistributionResult
                         {
                             CountConnected = Convert.ToInt32(countConnected.Value),
-                            DurationRange = durationRange.Name,
+                            DurationRange = durationRange.Value.ToString(),
                             Attempts = Convert.ToInt32(attempts.Value),
                             PercConnected = Convert.ToDecimal(percConnected.Value),
                             ACD = Convert.ToDecimal(acd.Value),
@@ -128,8 +128,7 @@ namespace NP.IVSwitch.Business
                     liveDashboardResult.TopCustomersResult.CustomerResults.Add(new CustomerResult
                     {
                         CountConnected = Convert.ToInt32(countConnected.Value),
-                        CustomerId = Convert.ToInt32(customer.Value),
-                        CustomerName = customer.Name,
+                        CustomerName = customer.Name !=null?customer.Name:"Null",
                         Attempts = Convert.ToInt32(attempts.Value),
                         PercConnected = Convert.ToDecimal(percConnected.Value),
                         ACD = Convert.ToDecimal(acd.Value),
@@ -175,8 +174,7 @@ namespace NP.IVSwitch.Business
                     liveDashboardResult.TopSuppliersResult.SupplierResults.Add(new SupplierResult
                     {
                         CountConnected = Convert.ToInt32(countConnected.Value),
-                        SupplierId = Convert.ToInt32(supplier.Value),
-                        SupplierName = supplier.Name,
+                        SupplierName = supplier.Name != null ? supplier.Name : "Null",
                         Attempts = Convert.ToInt32(attempts.Value),
                         PercConnected = Convert.ToDecimal(percConnected.Value),
                         ACD = Convert.ToDecimal(acd.Value),
@@ -224,7 +222,7 @@ namespace NP.IVSwitch.Business
                     liveDashboardResult.TopZonesResult.ZoneResults.Add(new ZoneResult
                     {
                         CountConnected = Convert.ToInt32(countConnected.Value),
-                        ZoneName = zone.Name,
+                        ZoneName = zone.Name != null ? zone.Name : "Null",
                         Attempts = Convert.ToInt32(attempts.Value),
                         PercConnected = Convert.ToDecimal(percConnected.Value),
                         ACD = Convert.ToDecimal(acd.Value),
