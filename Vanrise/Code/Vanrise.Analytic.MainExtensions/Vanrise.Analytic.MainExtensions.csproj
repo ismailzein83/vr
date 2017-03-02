@@ -48,6 +48,8 @@
     <Compile Include="DARecordAggregates\DistinctCountAggregate.cs" />
     <Compile Include="DARecordAggregates\SumAggregate.cs" />
     <Compile Include="DataAnalysisAggregates\WhSFilters.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcSendEmailExtendedSettings.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DAProfCalcSendEmailDefinitionSettings.cs" />
     <Compile Include="StyleRuleConditions\CompareCondition.cs" />
     <Compile Include="StyleRuleConditions\RangeCondition.cs" />
     <Compile Include="History\Widgets\AnalyticPieChartWidget.cs" />
@@ -60,7 +62,7 @@
     <Compile Include="RealTimeReport\Widgets\TimeVariationChartWidget.cs" />
     <Compile Include="TimeRangeFilters\LastPeriodFilter.cs" />
     <Compile Include="TimeRangeFilters\PreviousPeriodFilter.cs" />
-    <Compile Include="VRActions\DAProfCalcAlertRuleAction.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\VRActions\DAProfCalcAlertRuleSendEmailAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.Entities\Vanrise.Analytic.Entities.csproj">
@@ -140,7 +142,9 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VRActions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
