@@ -2,9 +2,9 @@
 
     'use strict';
 
-    genericRule.$inject = ['VRModalService', 'VRNotificationService', 'VR_GenericData_GenericRuleAPIService'];
+    genericRule.$inject = ['VRModalService', 'VRNotificationService', 'VR_GenericData_GenericRuleAPIService', 'UtilsService'];
 
-    function genericRule(VRModalService, VRNotificationService, VR_GenericData_GenericRuleAPIService) {
+    function genericRule(VRModalService, VRNotificationService, VR_GenericData_GenericRuleAPIService, UtilsService) {
         return ({
             addGenericRule: addGenericRule,
             editGenericRule: editGenericRule,
@@ -15,7 +15,8 @@
             var modalParameters = {
                 genericRuleDefinitionId: genericRuleDefinitionId,
                 preDefinedData: preDefinedData,
-                accessibility: accessibility
+                accessibility: accessibility,
+                viewGenericRule: viewGenericRule
             };
 
             var modalSettings = {};
@@ -42,7 +43,21 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRule/GenericRuleEditor.html', modalParameters, modalSettings);
         }
+        function viewGenericRule(genericRuleId, genericRuleDefinitionId, accessibility) {
+            var modalParameters = {
+                genericRuleId: genericRuleId,
+                genericRuleDefinitionId: genericRuleDefinitionId,
+                accessibility: accessibility
+            };
 
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRule/GenericRuleEditor.html', modalParameters, modalSettings);
+        }
         function deleteGenericRule(scope, genericRule, onGenericRuleDeleted) {
             var message = 'Are you sure you want to delete the rule ?';
             VRNotificationService.showConfirmation(message).then(function (confirmed) {

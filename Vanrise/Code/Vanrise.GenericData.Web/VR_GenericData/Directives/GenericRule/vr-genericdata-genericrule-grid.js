@@ -108,12 +108,22 @@
                     name: 'Edit',
                     clicked: editGenericRule,
                     haspermission: hasEditGenericRulePermission
-                }];
+                }, {
+                    name: 'View',
+                    clicked: viewGenericRule,
+                    haspermission: hasViewGenericRulePermission
+                }
+                ];
             };
             //  }
 
             function hasEditGenericRulePermission(genericRule) {
                 return VR_GenericData_GenericRuleAPIService.DoesUserHaveEditAccess(genericRule.Entity.DefinitionId);
+            }
+            function hasViewGenericRulePermission(genericRule) {
+                return VR_GenericData_GenericRuleAPIService.DoesUserHaveEditAccess(genericRule.Entity.DefinitionId).then(function (response) {
+                    return !response;
+                });
             }
 
             function editGenericRule(genericRule) {
@@ -121,6 +131,10 @@
                     gridAPI.itemUpdated(updatedGenericRule);
                 };
                 VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated, accessibility);
+            }
+
+            function viewGenericRule(genericRule) {                
+                VR_GenericData_GenericRule.viewGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, accessibility);
             }
 
 
