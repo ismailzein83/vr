@@ -1262,7 +1262,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     if (ctrl.showPager)
                         ctrl.pagerSettings.currentPage = 1;
                 }
-                if (retrieveDataInput == undefined)
+                ctrl.exportIsClickable = retrieveDataInput != undefined;
+                if (retrieveDataInput == undefined)                
                     return;
                 retrieveDataInput.SortByColumnName = sortColumn != undefined ? sortColumn.field : defaultSortByFieldName;
 
