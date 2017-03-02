@@ -8,15 +8,15 @@
         return ({
             addGenericRule: addGenericRule,
             editGenericRule: editGenericRule,
-            deleteGenericRule: deleteGenericRule
+            deleteGenericRule: deleteGenericRule,            
+            viewGenericRule: viewGenericRule
         });
 
         function addGenericRule(genericRuleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility) {
             var modalParameters = {
                 genericRuleDefinitionId: genericRuleDefinitionId,
                 preDefinedData: preDefinedData,
-                accessibility: accessibility,
-                viewGenericRule: viewGenericRule
+                accessibility: accessibility
             };
 
             var modalSettings = {};
