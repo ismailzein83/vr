@@ -85,12 +85,17 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
             }
             function defineMenuActions() {
-                var defaultMenuActions = [
-                {
+                var defaultMenuActions =[{
                     name: "Edit",
-                    clicked: editBankDetail,
+                    clicked: editBankDetail
                 }];
-
+                if (UtilsService.isContextReadOnly($scope)) {
+                    defaultMenuActions.length = 0;
+                    defaultMenuActions = [{
+                        name: "View",
+                        clicked: viewBankDetail
+                    }];
+                }
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
                 };
@@ -101,6 +106,10 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     ctrl.datasource[index] = { Entity: bankDetail };
                 };
                 VRCommon_BankDetailService.editBankDetail(bankDetailObj.Entity, onBankDetailUpdated, ctrl.datasource);
+            }
+
+            function viewBankDetail(bankDetailObj) {                
+                 VRCommon_BankDetailService.viewBankDetail(bankDetailObj.Entity);
             }
         }
     }]);

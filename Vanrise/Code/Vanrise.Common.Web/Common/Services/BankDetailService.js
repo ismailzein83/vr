@@ -2,12 +2,13 @@
 
     'use strict';
 
-    BankDetailService.$inject = ['VRModalService'];
+    BankDetailService.$inject = ['VRModalService', 'UtilsService'];
 
-    function BankDetailService(VRModalService) {
+    function BankDetailService(VRModalService, UtilsService) {
         return {
             addBankDetail: addBankDetail,
-            editBankDetail: editBankDetail
+            editBankDetail: editBankDetail,
+            viewBankDetail: viewBankDetail
         };
 
         function addBankDetail(onBankDetailsAdded) {
@@ -31,6 +32,19 @@
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onBankDetailsUpdated = onBankDetailsUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Common/Views/BankDetails/BankDetailsEditor.html', modalParameters, modalSettings);
+        }
+
+        function viewBankDetail(bankDetailEntity) {
+            var modalParameters = {
+                bankDetailEntity: bankDetailEntity
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/BankDetails/BankDetailsEditor.html', modalParameters, modalSettings);

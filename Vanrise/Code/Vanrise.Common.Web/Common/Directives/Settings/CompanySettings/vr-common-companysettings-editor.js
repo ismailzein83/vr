@@ -96,9 +96,15 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editCompanySetting,
+                    clicked: editCompanySetting
                 }];
-
+                if (UtilsService.isContextReadOnly($scope)) {
+                    defaultMenuActions.length = 0;
+                    defaultMenuActions = [{
+                        name: "View",
+                        clicked: viewCompanySetting
+                    }];
+                }
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
                 };
@@ -109,6 +115,9 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     ctrl.datasource[index] = { Entity: companySetting };
                 };
                 VRCommon_CompanySettingService.editCompanySetting(companySettingObj.Entity, onCompanySettingUpdated, ctrl.datasource);
+            }
+            function viewCompanySetting(companySettingObj) {
+                 VRCommon_CompanySettingService.viewCompanySetting(companySettingObj.Entity);
             }
         }
     }]);
