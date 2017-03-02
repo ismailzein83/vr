@@ -6,11 +6,10 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 using Vanrise.GenericData.Business;
-using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.VRActions
 {
-    public class DAProfCalcAlertRuleAction : VRAction
+    public class DAProfCalcAlertRuleSendEmailAction : VRAction
     {
         public override Guid ConfigId { get { return new Guid("EED64841-21FE-4AA1-996F-0415C9412427"); } }
         public Guid MailMessageTemplateId { get; set; }
