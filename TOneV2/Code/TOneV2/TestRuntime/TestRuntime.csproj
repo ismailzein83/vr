@@ -999,6 +999,26 @@
       <Project>{0940dc86-5421-4324-87cd-3f3ad458f4f6}</Project>
       <Name>TOne.WhS.SupplierPriceList.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.Arguments\TOne.WhS.TOneV1Transition.BP.Arguments.csproj">
+      <Project>{a522f8b1-8653-4033-a1f5-ae0ba9669061}</Project>
+      <Name>TOne.WhS.TOneV1Transition.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.BP.Activities\TOne.WhS.TOneV1Transition.BP.Activities.csproj">
+      <Project>{5470290c-192a-420c-b1be-19df9466bd27}</Project>
+      <Name>TOne.WhS.TOneV1Transition.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.BP\TOne.WhS.TOneV1Transition.BP.csproj">
+      <Project>{2f0aab05-2fe8-4f82-b014-561c54040164}</Project>
+      <Name>TOne.WhS.TOneV1Transition.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.Business\TOne.WhS.TOneV1Transition.Business.csproj">
+      <Project>{421018ba-cefc-42ea-8490-41e7933650eb}</Project>
+      <Name>TOne.WhS.TOneV1Transition.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.Entities\TOne.WhS.TOneV1Transition.Entities.csproj">
+      <Project>{63f67a7e-5cd0-4620-b785-326fe7e90e9d}</Project>
+      <Name>TOne.WhS.TOneV1Transition.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
