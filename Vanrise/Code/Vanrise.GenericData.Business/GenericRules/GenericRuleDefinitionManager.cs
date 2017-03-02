@@ -116,6 +116,12 @@ namespace Vanrise.GenericData.Business
             return GetCachedGenericRuleDefinitions().FindAllRecords(filterExpression);
         }
 
+        public string GetGenericRuleDefinitionName(Guid genericRuleDefinitionId)
+        {
+            var genericRuleDefinition = GetGenericRuleDefinition(genericRuleDefinitionId);
+            return genericRuleDefinition != null ? genericRuleDefinition.Title : null;
+        }
+
         public bool DoesUserHaveViewAccess(Guid genericRuleDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();

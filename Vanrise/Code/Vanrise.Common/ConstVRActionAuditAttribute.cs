@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Entities;
+
+namespace Vanrise.Common
+{
+    public class ConstVRActionAuditAttribute : VRActionAuditAttribute
+    {
+        public ConstVRActionAuditAttribute(string moduleName, string entityName, string actionName)
+        {
+            this.ModuleName = moduleName;
+            this.EntityName = entityName;
+            this.ActionName = actionName;
+        }
+
+        public ConstVRActionAuditAttribute(string moduleName, string entityName)
+            : this(moduleName, entityName, null)
+        {
+        }
+
+        public ConstVRActionAuditAttribute(string actionName)
+            : this(null, null, actionName)
+        {
+        }
+
+        public string ModuleName { get; set; }
+
+        public string EntityName { get; set; }
+
+        public string ActionName { get; set; }
+
+        public string ObjectIdArgName { get; set; }
+
+        public string ObjectIdPropPath { get; set; }
+
+        public string ObjectId { get; set; }
+
+        public string ActionDescription { get; set; }
+
+        public override void GetAuditDetails(IVRActionAuditAttributeContext context)
+        {
+            if (this.ModuleName != null)
+                context.ModuleName = this.ModuleName;
+            if (this.EntityName != null)
+                context.EntityName = this.EntityName;
+            if (this.ActionName != null)
+                context.ActionName = this.ActionName;
+            if (this.ObjectId != null)
+                context.ObjectId = this.ObjectId;
+            if (this.ActionDescription != null)
+                context.ActionDescription = this.ActionDescription;
+
+            if (this.ObjectIdArgName != null)
+            {
+                dynamic obj = context.GetActionArgument<dynamic>(this.ObjectIdArgName);
+                if (obj != null)
+                {
+                    if (this.ObjectIdPropPath != null)
+                    {
+                        var objId = Utilities.GetPropValueReader(this.ObjectIdPropPath).GetPropertyValue(obj);
+                        if (objId != null)
+                            context.ObjectId = objId.ToString();
+                    }
+                    else
+                    {
+                        context.ObjectId = obj.ToString();
+                    }
+                }
+            }
+        }
+    }
+}
