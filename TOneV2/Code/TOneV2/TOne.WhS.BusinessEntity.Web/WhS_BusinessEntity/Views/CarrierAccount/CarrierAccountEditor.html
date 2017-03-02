@@ -24,10 +24,10 @@
                         </span>
                         <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" normal-col-num="6"></vr-common-currency-selector>
                         <vr-common-company-setting-selector on-ready="scopeModel.onCompanySettingSelectorReady" normal-col-num="6"></vr-common-company-setting-selector>
-                        
-                            <vr-columns width="1/2row">
-                                <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
-                            </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Pricelist Settings'">
@@ -56,7 +56,7 @@
                 </vr-tab>
                 <vr-tab header="'Customer Settings'" ng-if="scopeModel.showSellingNumberPlan">
                     <vr-row>
-                            <vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" normal-col-num="6"></vr-common-timezone-selector>
+                        <vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" normal-col-num="6"></vr-common-timezone-selector>
                         <vr-columns width="1/2row">
                             <vr-switch value="scopeModel.customerInvoiceTimeZone" label="Invoice Time Zone"></vr-switch>
                         </vr-columns>
@@ -77,7 +77,7 @@
                 </vr-tab>
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
                     <vr-row>
-                            <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" isrequired="true" normal-col-num="6"></vr-common-timezone-selector>
+                        <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" isrequired="true" normal-col-num="6"></vr-common-timezone-selector>
                         <span ng-show="scopeModel.showZoneServiceConfig" vr-loader="scopeModel.isLoadingZoneServiceConfig">
                             <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceConfigSelectorReady"
                                                                     selectedvalues="scopeModel.zoneServiceConfigSelectedValues"
@@ -86,9 +86,7 @@
                                                                     ismultipleselection="true">
                             </vr-whs-be-zone-service-config-selector>
                         </span>
-                        <vr-columns width="1/2row">
-                            <vr-whs-be-routingstatus-selector hideremoveicon="true" isrequired on-ready="scopeModel.onSupplierRoutingStatusDirectiveReady"></vr-whs-be-routingstatus-selector>
-                        </vr-columns>
+                        <vr-whs-be-routingstatus-selector normal-col-num="6" hideremoveicon="true" isrequired on-ready="scopeModel.onSupplierRoutingStatusDirectiveReady"></vr-whs-be-routingstatus-selector>
                         <vr-columns width="1/2row">
                             <vr-switch value="scopeModel.supIncludeProcessingTimeZone" label="Processing Time Zone" />
                         </vr-columns>
