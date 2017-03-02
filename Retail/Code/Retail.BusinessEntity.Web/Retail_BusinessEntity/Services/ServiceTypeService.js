@@ -2,9 +2,9 @@
 
     'use stict';
 
-    ServiceTypeService.$inject = ['VRModalService', 'VRNotificationService', 'VRUIUtilsService', 'VR_GenericData_GenericRule'];
+    ServiceTypeService.$inject = ['VRModalService', 'VRNotificationService', 'VRUIUtilsService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService'];
 
-    function ServiceTypeService(VRModalService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericRule) {
+    function ServiceTypeService(VRModalService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService) {
 
         function editServiceType(serviceTypeId, parentServiceTypeId, onServiceTypeUpdated) {
             var parameters = {
@@ -124,6 +124,9 @@
                     var accessibility = buildAccessibilityObj();
 
                     VR_GenericData_GenericRule.addGenericRule(ruleDefinition.RuleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility);
+                };
+                menuAction.haspermission = function () {
+                    return VR_GenericData_GenericRuleAPIService.DoesUserHaveAddAccess(ruleDefinition.RuleDefinitionId);
                 };
                 menuActions.push(menuAction);
             }
