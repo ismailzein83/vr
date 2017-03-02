@@ -61,11 +61,16 @@
     <Compile Include="BalanceAlertRule\IVREntityBalanceInfo.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateLastAlertInfoPayload.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateRuleInfoPayload.cs" />
+    <Compile Include="VRAction\VRActionDefinitionConfig.cs" />
     <Compile Include="VRAction\CreateVRActionInput.cs" />
     <Compile Include="VRAction\IVRActionEventPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRAction\VRAction.cs" />
     <Compile Include="VRAction\VRActionConfig.cs" />
+    <Compile Include="VRAction\VRActionDefinition.cs" />
+    <Compile Include="VRAction\VRActionDefinitionSettings.cs" />
+    <Compile Include="VRAction\VRActionSettings.cs" />
+    <Compile Include="VRAction\VRActionTargetType.cs" />
     <Compile Include="VRAlertRuleType\IVRAlertRuleTypeFilter.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeConfig.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeFilter.cs" />
