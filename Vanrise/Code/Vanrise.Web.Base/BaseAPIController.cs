@@ -19,7 +19,17 @@ namespace Vanrise.Web.Base
             if (excelResult != null)
                 return GetExcelResponse(excelResult);
 
+            RemoteExcelResult<T> remoteExcelResult = result as RemoteExcelResult<T>;
+            if (remoteExcelResult != null && !dataRetrievalInput.IsAPICall)
+                return GetExcelResponseFromRemote(remoteExcelResult);
+
             return result;
+        }
+
+        protected object GetExcelResponseFromRemote(RemoteExcelResult remoteExcelResult)
+        {
+            MemoryStream ms = new MemoryStream(remoteExcelResult.Data);
+            return GetExcelResponse(new ExcelResult() { ExcelFileStream = ms });
         }
 
         protected object GetExcelResponse(ExcelResult excelResult)
@@ -29,7 +39,6 @@ namespace Vanrise.Web.Base
 
         protected object GetExcelResponse(Stream stream, string fileName)
         {
-
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             stream.Position = 0;
             response.Content = new StreamContent(stream);
@@ -43,7 +52,7 @@ namespace Vanrise.Web.Base
 
         protected object GetExcelResponse(byte[] bytes, string fileName)
         {
-           
+
             MemoryStream stream = new System.IO.MemoryStream();
             stream.Write(bytes, 0, bytes.Length);
             stream.Seek(0, System.IO.SeekOrigin.Begin);
@@ -57,7 +66,7 @@ namespace Vanrise.Web.Base
             response.Content.Headers.Add("ExceptionMessage", ex.Message);
             return response;
         }
-      
+
         protected HttpResponseMessage GetUnauthorizedResponse()
         {
             HttpResponseMessage msg = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);

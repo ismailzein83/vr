@@ -39,7 +39,15 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages.DataStore
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(_connectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-            return connectionSettings.Post<DataRetrievalInput<DataRecordQuery>, DataRecordDetailBigResult<DataRecordDetail>>("/api/VR_GenericData/DataRecordStorageLog/GetFilteredDataRecordStorageLogs", input, true);
+            var clonedInput = Vanrise.Common.Utilities.CloneObject<DataRetrievalInput<DataRecordQuery>>(input);
+            clonedInput.IsAPICall = true;
+
+            if (input.DataRetrievalResultType == DataRetrievalResultType.Excel)
+            {
+                return connectionSettings.Post<DataRetrievalInput<DataRecordQuery>, RemoteExcelResult<DataRecordDetail>>("/api/VR_GenericData/DataRecordStorageLog/GetFilteredDataRecordStorageLogs", clonedInput, true);
+            }
+            else
+                return connectionSettings.Post<DataRetrievalInput<DataRecordQuery>, DataRecordDetailBigResult<DataRecordDetail>>("/api/VR_GenericData/DataRecordStorageLog/GetFilteredDataRecordStorageLogs", clonedInput, true);
         }
     }
 }

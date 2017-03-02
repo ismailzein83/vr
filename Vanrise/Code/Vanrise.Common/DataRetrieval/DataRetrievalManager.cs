@@ -27,7 +27,7 @@ namespace Vanrise.Common
         }
 
         ExcelManager _excelManager = new ExcelManager();
-
+        RemoteExcelManager _remoteExcelManager = new RemoteExcelManager();
         #endregion
 
         public IDataRetrievalResult<T> ProcessResult<T>(DataRetrievalInput dataRetrievalInput, BigResult<T> result)
@@ -41,12 +41,17 @@ namespace Vanrise.Common
                 return null;
             switch (dataRetrievalInput.DataRetrievalResultType)
             {
-                case DataRetrievalResultType.Excel: return _excelManager.ExportExcel(result, handler != null ? handler.ExportExcelHandler : null);
+                case DataRetrievalResultType.Excel:
+                    var excelResult = _excelManager.ExportExcel(result, handler != null ? handler.ExportExcelHandler : null);
+
+                    if (dataRetrievalInput.IsAPICall)
+                        return _remoteExcelManager.ExportExcel(excelResult);
+
+                    return excelResult;
+
                 case DataRetrievalResultType.Normal: return result;
             }
             return null;
         }
-
-       
     }
 }

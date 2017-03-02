@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public enum DataRetrievalResultType { Normal = 0, Excel = 1}
+    public enum DataRetrievalResultType { Normal = 0, Excel = 1 }
     public class DataRetrievalInput<T> : DataRetrievalInput
-    {       
+    {
         public T Query { get; set; }
     }
 
@@ -27,5 +27,7 @@ namespace Vanrise.Entities
         public bool IsSortDescending { get; set; }
 
         public bool GetSummary { get; set; }
+
+        public bool IsAPICall { get; set; }
     }
 }

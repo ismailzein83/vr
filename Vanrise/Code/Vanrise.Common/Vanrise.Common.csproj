@@ -81,6 +81,7 @@
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\ITypeManager.cs" />
     <Compile Include="DataRetrieval\ConvertResultToExcelDataContext.cs" />
+    <Compile Include="DataRetrieval\RemoteExcelManager.cs" />
     <Compile Include="DataRetrieval\ExcelManager.cs" />
     <Compile Include="PasswordGenerator.cs" />
     <Compile Include="PathResolver.cs" />
