@@ -11,8 +11,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
 {
     internal class BPTrackingDataManager : BaseSQLDataManager, IBPTrackingDataManager
     {
-        readonly string[] _columns = { "ProcessInstanceID", "ParentProcessID", "TrackingMessage", "Severity", "EventTime" };
-
         private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
         public BPTrackingDataManager()
             : base(GetConnectionStringName("BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString"))
