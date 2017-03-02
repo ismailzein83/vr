@@ -19,4 +19,13 @@ namespace Vanrise.Entities
 
         }
     }
+
+    public class DataIntegrityValidationException : VRBusinessException
+    {
+        public DataIntegrityValidationException(string message)
+            : base(message)
+        {
+
+        }
+    }
 }

@@ -23,14 +23,5 @@ namespace Vanrise.Entities
 
         }
     }
-    
-    public class DataIntegrityValidationException : ValidationException
-    {
-        public DataIntegrityValidationException(string message)
-            : base(message)
-        {
-
-        }
-    }
 
 }
