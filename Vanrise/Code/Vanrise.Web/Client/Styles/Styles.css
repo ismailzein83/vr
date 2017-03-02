@@ -3064,7 +3064,7 @@ vr-overall-widget  .list-group-item {
     text-align:center;
     color:#fff;
     font-weight:bold;
-   
+    border-radius: 4px;
 }
 .overallwidget-value{
     height:75px;
