@@ -4,7 +4,11 @@
   http://go.microsoft.com/fwlink/?LinkId=301879
   -->
 <configuration>
+  <connectionStrings>
+    <add name="IVSwitchCDRDBConnString" connectionString="Server=localhost;Database=IVSwitchPostGresCDRDB;Userid=;Password=;" />
+  </connectionStrings>
   <appSettings>
     <add key="Web_ExtendedModulesNames" value="NP_IVSwitch"/>    <!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
+    <add key="ExposedConnectionStringNames" value="IVSwitchCDRDBConnString"/>
   </appSettings>
 </configuration>
