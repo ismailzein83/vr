@@ -5,17 +5,17 @@
                  pagingtype="'PagingOnScroll'"
                  menuactions="gridMenuActions"
                  defaultsortbyfieldname="'Entity.Attempt'"
-                 defaultsortdirection="'DESC'">
+                 defaultsortdirection="'DESC'" enableautoexport="true">
         <vr-datagridcolumn headertext="'Master Zone'" field="'ZoneName'" type="'Text'" ng-show="ctrl.showDimessionCol(0)"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'" ng-show="ctrl.showDimessionCol(1)"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Port In'" field="'Entity.PortIn'" type="'Text'" ng-show="ctrl.showDimessionCol(4)"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Port out'" field="'Entity.PortOut'" type="'Text'" ng-show="ctrl.showDimessionCol(5)"></vr-datagridcolumn>
 
-        
+
         <vr-datagridcolumn headertext="'Release Code'" field="'Entity.ReleaseCode'" type="'Text'" tooltipfield="'ReleaseCodeDescription'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Release Source'" field="'Entity.ReleaseSource'" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Switch'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
-     
+
 
         <vr-datagridcolumn headertext="'Attempts'" field="'Entity.Attempt'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Failed Attempts'" field="'Entity.FailedAttempt'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>

@@ -59,6 +59,56 @@ namespace TOne.WhS.Analytics.Business
                 IRepeatedNumberDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IRepeatedNumberDataManager>();
                 return dataManager.GetAllFilteredRepeatedNumbers(input);
             }
+
+            protected override ResultProcessingHandler<RepeatedNumberDetail> GetResultProcessingHandler(DataRetrievalInput<RepeatedNumberQuery> input, BigResult<RepeatedNumberDetail> bigResult)
+            {
+                return new ResultProcessingHandler<RepeatedNumberDetail>
+                {
+                    ExportExcelHandler = new RepeatedNumberExcelExportHandler(input.Query)
+                };
+            }
+        }
+
+        private class RepeatedNumberExcelExportHandler : ExcelExportHandler<RepeatedNumberDetail>
+        {
+            RepeatedNumberQuery _query;
+            public RepeatedNumberExcelExportHandler(RepeatedNumberQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RepeatedNumberDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Phone Number" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.DurationInMinutes });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.PhoneNumber });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         #endregion
