@@ -1544,6 +1544,8 @@ loader .outer-loader {
 
 .panel-vr.panel-vr-child.light > .panel-heading {  
     border-color: #ddd;
+    padding: 0px 6px 0px 0px;
+    margin-top: -27px
 }
 .panel-vr.panel-vr-child.light > .panel-heading label {  
     padding: 0px 5px 0px 10px;
