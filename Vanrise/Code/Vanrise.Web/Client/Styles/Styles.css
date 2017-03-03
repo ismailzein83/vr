@@ -3071,12 +3071,19 @@ vr-validator[vr-input] > div:nth-child(1){
 vr-overall-widget .list-custom {
     padding: 0px !important;
 }
-
+vr-overall-widget vr-listitem div[class^="col"] {
+    padding: 0px !important;    
+    left:5px;
+}
+vr-overall-widget > vr-listitem div[class^="col"] {
+    padding: 0px !important;
+}
 vr-overall-widget  .list-group-item {    
     border: 0px solid #dddddd;
 }
 .overallwidget {
-    height:100px;
+    height:120px;
+    width:120px;
     background-color: #7CB5EC;    
     text-align:center;
     color:#fff;
@@ -3084,9 +3091,9 @@ vr-overall-widget  .list-group-item {
     border-radius: 4px;
 }
 .overallwidget-value{
-    height:60px;
+    height:75%;
     font-size:28px;
-     position:relative;
+    position:relative;
 }
 .widget-center-text {
     position:absolute;
@@ -3096,8 +3103,83 @@ vr-overall-widget  .list-group-item {
 }
 .overallwidget-label{    
     position:relative;
-    height:18px;
+    height:25%;
     font-size:12px;
+}
+
+@media (min-width: 768px) {
+   .overallwidget {
+        height:60px;
+        width:60px;
+   }
+   .overallwidget-value{   
+        font-size:12px;
+    }    
+    .overallwidget-label{    
+        font-size:8px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .overallwidget {
+        height:80px;
+        width:80px;
+   }
+   .overallwidget-value{   
+        font-size:16px;
+    }    
+    .overallwidget-label{    
+        font-size:10px;
+    }
+}
+@media (min-width: 1440px) {
+   .overallwidget {
+        height:100px;
+        width:100px;
+   }
+   .overallwidget-value{   
+        font-size:22px;
+    }    
+    .overallwidget-label{    
+        font-size:14px;
+    }
+}
+
+@media (min-width: 1920px) {
+    .overallwidget {
+        height:120px;
+        width:120px;
+   }
+   .overallwidget-value{   
+        font-size:24px;
+    }    
+    .overallwidget-label{    
+        font-size:16px;
+    }
+}
+@media (min-width: 2240px) {
+   .overallwidget {
+        height:140px;
+        width:140px;
+   }
+   .overallwidget-value{   
+        font-size:26px;
+    }    
+    .overallwidget-label{    
+        font-size:18px;
+    }
+}
+@media (min-width: 2560px) {
+   .overallwidget {
+        height:160px;
+        width:160px;
+   }
+   .overallwidget-value{   
+        font-size:28px;
+    }    
+    .overallwidget-label{    
+        font-size:20px;
+    }
 }
 /* end vr-overall-widget*/
 
