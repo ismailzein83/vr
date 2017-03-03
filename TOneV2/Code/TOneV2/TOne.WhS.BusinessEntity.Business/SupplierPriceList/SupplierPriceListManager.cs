@@ -28,7 +28,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 (input.Query.SupplierIds == null || input.Query.SupplierIds.Contains(item.SupplierId))
                 && (input.Query.FromDate == null || item.CreateTime >= input.Query.FromDate)
                 && (!input.Query.ToDate.HasValue || item.CreateTime <= input.Query.ToDate);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPriceLists.ToBigResult(input, filterExpression, SupplierPriceListDetailMapper));
+
+            SupplierPriceListExcelExportHandler supplierPriceListExcel = new SupplierPriceListExcelExportHandler(input.Query);
+            ResultProcessingHandler<SupplierPriceListDetail> handler = new ResultProcessingHandler<SupplierPriceListDetail>()
+            {
+                ExportExcelHandler = supplierPriceListExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPriceLists.ToBigResult(input, filterExpression, SupplierPriceListDetailMapper), handler);
         }
 
         public long ReserveIDRange(int numberOfIDs)
@@ -52,6 +59,42 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
+
+        private class SupplierPriceListExcelExportHandler : ExcelExportHandler<SupplierPriceListDetail>
+        {
+            private SupplierPricelistQuery _query;
+            public SupplierPriceListExcelExportHandler(SupplierPricelistQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierPriceListDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreateTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Currency });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISupplierPriceListDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();

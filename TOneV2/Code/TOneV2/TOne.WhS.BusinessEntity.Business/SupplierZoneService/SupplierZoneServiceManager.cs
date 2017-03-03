@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -113,7 +114,56 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 return supplierEntityServicesDetail;
             }
+
+            protected override ResultProcessingHandler<SupplierEntityServiceDetail> GetResultProcessingHandler(DataRetrievalInput<SupplierZoneServiceQuery> input, BigResult<SupplierEntityServiceDetail> bigResult)
+            {
+                return new ResultProcessingHandler<SupplierEntityServiceDetail>
+                {
+                    ExportExcelHandler = new SupplierEntityServiceExcelExportHandler(input.Query)
+                };
+            }
         }
+
+        private class SupplierEntityServiceExcelExportHandler : ExcelExportHandler<SupplierEntityServiceDetail>
+{
+            SupplierZoneServiceQuery _query;
+            public SupplierEntityServiceExcelExportHandler(SupplierZoneServiceQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierEntityServiceDetail> context)
+            {
+                ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Services == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.Services) });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+        
 
         private SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
         {

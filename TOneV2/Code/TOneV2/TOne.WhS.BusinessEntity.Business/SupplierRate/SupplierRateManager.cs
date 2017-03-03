@@ -166,6 +166,57 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return input.Query.GetFilteredSupplierRates();
             }
+            protected override ResultProcessingHandler<SupplierRateDetail> GetResultProcessingHandler(DataRetrievalInput<BaseSupplierRateQueryHandler> input, BigResult<SupplierRateDetail> bigResult)
+            {
+                return new ResultProcessingHandler<SupplierRateDetail>
+                {
+                    ExportExcelHandler = new SupplierRateExcelExportHandler(input.Query)
+                };
+            }
+        }
+
+        private class SupplierRateExcelExportHandler : ExcelExportHandler<SupplierRateDetail>
+        {
+            BaseSupplierRateQueryHandler _query;
+            public SupplierRateExcelExportHandler(BaseSupplierRateQueryHandler query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierRateDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SupplierRateId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SupplierZoneName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Rate });
+                            row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
+                            row.Cells.Add(new ExportExcelCell { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         #endregion
