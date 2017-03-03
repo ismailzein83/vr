@@ -202,7 +202,7 @@ namespace Vanrise.BusinessProcess
             UpdateProcessStatus(bpInstance, wfApp.Id);
             wfApp.Run();
             string logEventType = bpInstance.InputArgument.GetDefinitionTitle();
-            string processTitle = bpInstance.InputArgument.GetTitle();
+            string processTitle = bpInstance.Title;
             LoggerFactory.GetLogger().WriteEntry(logEventType, LogEntryType.Information, "Process '{0}' started", processTitle);
         }
                 
@@ -211,7 +211,7 @@ namespace Vanrise.BusinessProcess
             BPRunningInstance dummy;
             _runningInstances.TryRemove(bpInstance.ProcessInstanceID, out dummy);
             string logEventType = bpInstance.InputArgument.GetDefinitionTitle();
-            string processTitle = bpInstance.InputArgument.GetTitle();
+            string processTitle = bpInstance.Title;
             Exception terminationException = null;
             if (e.CompletionState == ActivityInstanceState.Closed)
             {
