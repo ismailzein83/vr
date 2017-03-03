@@ -17,10 +17,12 @@ namespace Demo.Module.Business
             IUserDataManager dataManager = DemoModuleFactory.GetDataManager<IUserDataManager>();
             IEnumerable<Demo.Module.Entities.User> users = dataManager.GetUsers();
             var allUsers = users.ToDictionary(u => u.Id, u => u);
-
+            
             Func<Demo.Module.Entities.User, bool> filterExpression = (prod) =>
             {
-                if (input.Query.Name != null && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                if ((input.Query.Name != null && !prod.Name.ToLower().Contains(input.Query.Name.ToLower())) ||
+                 (input.Query.CityId != null && !input.Query.CityId.Contains(prod.CityId)))
+
                     return false;
                 return true;
             };
@@ -92,7 +94,45 @@ namespace Demo.Module.Business
             return updateOperationOutput;
         }
 
+        public Vanrise.Entities.DeleteOperationOutput<UserDetails> DeleteView(int Id)
+        {
+            DeleteOperationOutput<UserDetails> deleteOperationOutput = new DeleteOperationOutput<UserDetails>();
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+            IUserDataManager dataManager = DemoModuleFactory.GetDataManager<IUserDataManager>();
+            bool deleteActionSucc = dataManager.DeleteView(Id);
 
+            if (deleteActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
+
+            return deleteOperationOutput;
+        }
+
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IUserDataManager _dataManager = DemoModuleFactory.GetDataManager<IUserDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreUsersUpdated(ref _updateHandle);
+            }
+        }
+
+
+        private Dictionary<int, Demo.Module.Entities.User> GetCachedCities()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",
+              () =>
+              {
+                  IUserDataManager dataManager = DemoModuleFactory.GetDataManager<IUserDataManager>();
+                  IEnumerable<Demo.Module.Entities.User> users = dataManager.GetUsers();
+                  return users.ToDictionary(u => u.Id, u => u);
+              });
+        }
         public UserDetails UserDetailMapper(Demo.Module.Entities.User user)
         {
             UserDetails userDetail = new UserDetails();

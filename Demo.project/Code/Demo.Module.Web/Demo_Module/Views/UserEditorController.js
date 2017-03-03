@@ -2,14 +2,17 @@
 
     "use strict";
 
-    userEditorController.$inject = ['$scope', 'Demo_Module_UserAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+    userEditorController.$inject = ['$scope', 'Demo_Module_UserAPIService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-    function userEditorController($scope, Demo_Module_UserAPIService, VRNotificationService, VRNavigationService, UtilsService) {
+    function userEditorController($scope, Demo_Module_UserAPIService,VRUIUtilsService, VRNotificationService, VRNavigationService, UtilsService) {
 
         var Id;
-
+        var CityId;
         var editMode;
         var userEntity;
+        var CityDirectiveApi;
+        var CityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var disableCity;
 
         loadParameters();
         defineScope();
@@ -19,21 +22,28 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 Id = parameters.Id;
-
+                CityId = parameters.CityId;
+                disableCity = parameters.disableCity
             }
             editMode = (Id != undefined);
+            $scope.disableCity = editMode || disableCity;
         }
 
 
 
         function defineScope() {
-
+            $scope.onCityDirectiveReady = function (api) {
+               CityDirectiveApi = api;
+               CityReadyPromiseDeferred.resolve();
+            };
 
             $scope.saveUser = function () {
                 if (editMode)
                     return updateUser();
-                else
+                else {
+                 
                     return insertUser();
+                }
             };
 
             $scope.close = function () {
@@ -71,7 +81,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCitySelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -86,7 +96,18 @@
             else
                 $scope.title = UtilsService.buildTitleForAddEditor("User");
         }
-
+        function loadCitySelector() {
+            var CityLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+           CityReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: userEntity != undefined ? userEntity.CityId : (CityId != undefined) ? CityId : undefined
+                    };
+                    
+                    VRUIUtilsService.callDirectiveLoad(CityDirectiveApi, directivePayload, CityLoadPromiseDeferred);
+                });
+            return CityLoadPromiseDeferred.promise;
+        }
         function loadStaticData() {
 
             if (userEntity == undefined)
@@ -101,8 +122,10 @@
             var obj = {
                 Id: (Id != null) ? Id : 0,
                 Name: $scope.name,
+                CityId: CityDirectiveApi.getSelectedIds()
 
             };
+           
             return obj;
         }
 

@@ -14,9 +14,9 @@ namespace Demo.Module.Business
     {
       public IDataRetrievalResult<CityDetails> GetFilteredCities(Vanrise.Entities.DataRetrievalInput<CityQ> input)
       {
-          ICityDataManager dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
-          IEnumerable<Demo.Module.Entities.City> cities = dataManager.GetCities();
-          var allCities = cities.ToDictionary(c => c.Id, c => c);
+
+          var cities = GetCachedCities();
+          
 
           Func<Demo.Module.Entities.City, bool> filterExpression = (prod) =>
               {
@@ -29,7 +29,7 @@ namespace Demo.Module.Business
 
 
 
-          return DataRetrievalManager.Instance.ProcessResult(input, allCities.ToBigResult(input, filterExpression, CityDetailMapper));
+          return DataRetrievalManager.Instance.ProcessResult(input, cities.ToBigResult(input, filterExpression, CityDetailMapper));
       }
 
 
@@ -46,7 +46,7 @@ namespace Demo.Module.Business
           bool insertActionSucc = dataManager.Insert(city, out cityId);
           if (insertActionSucc)
           {
-            
+              Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
               insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
               city.Id = cityId;
               insertOperationOutput.InsertedObject = CityDetailMapper(city);
@@ -61,13 +61,8 @@ namespace Demo.Module.Business
 
       public Demo.Module.Entities.City GetCity(int Id)
       {
-          ICityDataManager dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
-         
-      
-          Demo.Module.Entities.City c=dataManager.GetCitie(Id);
-         
-
-          return c;
+          var cities = GetCachedCities();
+          return cities.GetRecord(Id);
       }
       public Vanrise.Entities.UpdateOperationOutput<CityDetails> UpdateCity(Demo.Module.Entities.City city)
       {
@@ -81,7 +76,7 @@ namespace Demo.Module.Business
 
           if (updateActionSucc)
           {
-              
+              Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
               updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
               updateOperationOutput.UpdatedObject = CityDetailMapper(city);
           }
@@ -91,6 +86,57 @@ namespace Demo.Module.Business
           }
           return updateOperationOutput;
       }
+
+      public IEnumerable<Demo.Module.Entities.CityInfo> GetCitiesInfo(CityFilter filter)
+      {
+          ICityDataManager dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
+          IEnumerable<Demo.Module.Entities.City> cities = dataManager.GetCities();
+          cities.ToDictionary(c => c.Id, c => c);
+          Func<Demo.Module.Entities.City, bool> filterFunc = null;
+          if (filter != null)
+          {
+              filterFunc = (city) =>
+              {
+                  if (filter.ExcludedCityIds != null && filter.ExcludedCityIds.Contains(city.Id))
+                      return false;
+
+                  if (filter.Filters != null)
+                  {
+                      var context = new CityFilterContext() { city = city };
+                      if (filter.Filters.Any(x => x.IsExcluded(context)))
+                          return false;
+                  }
+
+                  return true;
+              };
+          }
+          IEnumerable<Demo.Module.Entities.City> filteredCities = (filterFunc != null) ? cities.FindAllRecords(filterFunc) : cities;
+          return filteredCities.MapRecords(CityInfoMapper).OrderBy(x => x.Name);
+      }
+
+      private class CacheManager : Vanrise.Caching.BaseCacheManager
+      {
+          ICityDataManager _dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
+          object _updateHandle;
+
+          protected override bool ShouldSetCacheExpired(object parameter)
+          {
+              return _dataManager.AreCitiesUpdated(ref _updateHandle);
+          }
+      }
+
+
+      private Dictionary<int, Demo.Module.Entities.City> GetCachedCities()
+      {
+          return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCities",
+            () =>
+            {
+                ICityDataManager dataManager = DemoModuleFactory.GetDataManager<ICityDataManager>();
+                IEnumerable<Demo.Module.Entities.City> cities = dataManager.GetCities();
+                return cities.ToDictionary(c => c.Id, c => c);
+            });
+      }
+
 
 
       public CityDetails CityDetailMapper(Demo.Module.Entities.City city)
@@ -105,7 +151,14 @@ namespace Demo.Module.Business
           return cityDetail;
       }
 
+      private Demo.Module.Entities.CityInfo CityInfoMapper(Demo.Module.Entities.City city)
+      {
+          Demo.Module.Entities.CityInfo cityInfo = new Demo.Module.Entities.CityInfo();
 
+          cityInfo.Id = city.Id;
+          cityInfo.Name = city.Name;
+          return cityInfo;
+      }
 
 
 

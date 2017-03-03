@@ -14,7 +14,11 @@
                 {Id:Id}
                 );
         }
-
+        function GetCitiesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "GetCitiesInfo"), {
+                filter: filter
+            });
+        }
         function GetFilteredCities(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, 'GetFilteredCities'), input);
         }
@@ -29,7 +33,8 @@
             GetFilteredCities: GetFilteredCities,
             UpdateCity:UpdateCity,
             AddCity: AddCity,
-            GetCity: GetCity
+            GetCitiesInfo:GetCitiesInfo,
+            GetCity:GetCity
         });
     }
 

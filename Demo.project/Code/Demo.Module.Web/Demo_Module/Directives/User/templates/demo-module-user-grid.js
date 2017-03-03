@@ -41,7 +41,9 @@ function (UtilsService, VRNotificationService, Demo_Module_UserAPIService, Demo_
 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                       
                         return gridAPI.retrieveData(query);
+
                     };
                     directiveAPI.onUserAdded = function (userObject) {
                         gridAPI.itemAdded(userObject);
@@ -66,6 +68,9 @@ function (UtilsService, VRNotificationService, Demo_Module_UserAPIService, Demo_
                 name: "Edit",
                 clicked: editUser,
 
+            }, {
+                name: "Delete",
+                clicked: deleteUser,
             }];
         }
 
@@ -77,6 +82,14 @@ function (UtilsService, VRNotificationService, Demo_Module_UserAPIService, Demo_
             };
 
             Demo_Module_UserService.editUser(userObj.Entity.Id, onUserUpdated);
+        }
+
+        function deleteUser(userObj) {
+            var onUserDeleted = function (deletedItem) {
+                gridAPI.itemDeleted(deletedItem);
+            };
+
+            Demo_Module_UserService.deleteUser($scope, userObj, onUserDeleted);
         }
 
     }

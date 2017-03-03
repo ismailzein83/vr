@@ -21,7 +21,7 @@ namespace Demo.Module.Data.SQL
         {
             return GetItemsSP("[dbo].[sp_City_GetAll]", CityMapper);
         }
-
+      
         public bool Update(Entities.City city)
         {
             int recordsEffected = ExecuteNonQuerySP("[dbo].[sp_City_Update]", city.Id, city.Name);
@@ -43,7 +43,10 @@ namespace Demo.Module.Data.SQL
             return GetItemSP("[dbo].[sp_City_GetCity]", CityMapper,Id);
         }
 
-
+        public bool AreCitiesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[dbo].[City_Table]", ref updateHandle);
+        }
         City CityMapper(IDataReader reader)
         {
             City city = new City();
@@ -53,7 +56,14 @@ namespace Demo.Module.Data.SQL
             return city;
         }
 
+        CityInfo CityInfoMapper(IDataReader reader)
+        {
+            CityInfo city = new CityInfo();
+            city.Id = (int)reader["ID"];
+            city.Name = reader["Name"] as string;
 
+            return city;
+        }
         
     }
 }

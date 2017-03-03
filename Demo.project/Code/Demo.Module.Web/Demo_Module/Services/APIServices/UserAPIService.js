@@ -16,6 +16,7 @@
         }
 
         function GetFilteredUsers(input) {
+           
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, 'GetFilteredUsers'), input);
         }
 
@@ -25,11 +26,22 @@
         function UpdateUser(userObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "UpdateUser"), userObject);
         }
+        function DeleteUser(Id) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, 'DeleteUser'), {
+                Id: Id
+            });
+        }
+        function GetDemoModuleCityInfos(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "GetDemoModuleCityInfos"), {
+                filter: filter
+            });
+        };
         return ({
             GetFilteredUsers: GetFilteredUsers,
             UpdateUser: UpdateUser,
             AddUser: AddUser,
-            GetUser: GetUser
+            GetUser: GetUser,
+            DeleteUser: DeleteUser
         });
     }
 

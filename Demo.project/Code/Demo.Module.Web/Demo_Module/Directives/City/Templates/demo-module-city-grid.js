@@ -41,6 +41,8 @@ function (UtilsService, VRNotificationService, Demo_Module_CityAPIService, Demo_
 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                       
+                        
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onCityAdded = function (cityObject) {

@@ -44,5 +44,12 @@ namespace Demo.Module.Web.Controllers
             return manager.UpdateUser(user);
         }
 
+        [HttpGet]
+        [Route("DeleteUser")]
+        public Vanrise.Entities.DeleteOperationOutput<UserDetails> DeleteUser(int Id)
+        {
+            UserManager manager = new UserManager();
+            return manager.DeleteView(Id);
+        }
     }
 }

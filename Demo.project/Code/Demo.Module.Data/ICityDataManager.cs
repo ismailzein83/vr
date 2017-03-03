@@ -13,6 +13,7 @@ namespace Demo.Module.Data
         bool Update(City city);
         bool Insert(City city, out int insertedId);
         City GetCitie(int Id);
+        bool AreCitiesUpdated(ref object updateHandle);
      
     }
 }

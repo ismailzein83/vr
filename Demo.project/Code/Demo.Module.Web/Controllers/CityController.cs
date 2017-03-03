@@ -43,6 +43,15 @@ namespace Demo.Module.Web.Controllers
             CityManager manager = new CityManager();
             return manager.UpdateCity(city);
         }
+
+        [HttpGet]
+        [Route("GetCitiesInfo")]
+        public IEnumerable<CityInfo> GetCountriesInfo(string filter = null)
+        {
+            CityManager manager = new CityManager();
+            CityFilter cityFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<CityFilter>(filter) : null;
+            return manager.GetCitiesInfo(cityFilter);
+        }
     
     }
 }

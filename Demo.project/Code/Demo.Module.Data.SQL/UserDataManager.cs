@@ -31,7 +31,7 @@ namespace Demo.Module.Data.SQL
         public bool Insert(Entities.User user, out int insertedId)
         {
             object Id;
-            int recordsEffected = ExecuteNonQuerySP("[dbo].[sp_User_Insert]", out Id, user.Name);
+            int recordsEffected = ExecuteNonQuerySP("[dbo].[sp_User_Insert]", out Id, user.Name,user.CityId);
             insertedId = (int)Id;
             return (recordsEffected > 0);
         }
@@ -40,14 +40,21 @@ namespace Demo.Module.Data.SQL
         {
             return GetItemSP("[dbo].[sp_User_GetUser]", UserMapper, Id);
         }
-
-
+        public bool DeleteView(int Id)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[dbo].[sp_User_Delete]", Id);
+            return (recordsEffected > 0);
+        }
+        public bool AreUsersUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[dbo].[User_Table]", ref updateHandle);
+        }
       User UserMapper(IDataReader reader)
         {
            User user = new User();
             user.Id = (int)reader["ID"];
            user.Name = reader["Name"] as string;
-
+           user.CityId = (int)reader["CityId"];
             return user;
         }
 
