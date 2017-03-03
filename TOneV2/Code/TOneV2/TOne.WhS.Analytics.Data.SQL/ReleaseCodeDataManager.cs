@@ -153,7 +153,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             groupByBuilder.Append(String.Format(@"{0}.SwitchId, {0}.ReleaseCode,{0}.ReleaseSource", alias));
             selectQueryPart.Append(String.Format(@"         {0}.SwitchId,
                                                             {0}.ReleaseCode,{0}.ReleaseSource,
-                                                            SUM(Attempt)  Attempt,
+                                                            COUNT(*)  Attempt,
                                                             SUM( CASE WHEN {0}.DurationInSeconds > 0 THEN 1 ELSE 0 END) SuccessfulAttempts,
 			                                                Min({0}.AttemptDateTime) FirstAttempt,	
 			                                                Max({0}.AttemptDateTime) LastAttempt,
