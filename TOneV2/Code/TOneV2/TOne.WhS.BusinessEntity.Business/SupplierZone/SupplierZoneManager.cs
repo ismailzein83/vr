@@ -9,6 +9,7 @@ using Vanrise.Caching;
 using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -37,7 +38,13 @@ namespace TOne.WhS.BusinessEntity.Business
                   && ((prod.BED <= input.Query.EffectiveOn))
                   && ((!prod.EED.HasValue || (prod.EED > input.Query.EffectiveOn)));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper));
+            SupplierZoneExcelExportHandler supplierZoneExcel = new SupplierZoneExcelExportHandler(input.Query);
+            ResultProcessingHandler<SupplierZoneDetails> handler = new ResultProcessingHandler<SupplierZoneDetails>()
+            {
+                ExportExcelHandler = supplierZoneExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper), handler);
         }
         
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, int supplierId, string searchValue)
@@ -157,6 +164,46 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
+        private class SupplierZoneExcelExportHandler : ExcelExportHandler<SupplierZoneDetails>
+        {
+            private SupplierZoneQuery _query;
+            public SupplierZoneExcelExportHandler(SupplierZoneQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierZoneDetails> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null )
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SupplierZoneId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.CountryName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISupplierZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();

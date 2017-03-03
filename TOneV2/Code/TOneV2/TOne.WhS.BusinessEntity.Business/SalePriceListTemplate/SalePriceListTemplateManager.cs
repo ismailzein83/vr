@@ -22,7 +22,14 @@ namespace TOne.WhS.BusinessEntity.Business
 		{
 			Dictionary<int, SalePriceListTemplate> cachedSalePriceListTemplates = GetCachedSalePriceListTemplates();
 			Func<SalePriceListTemplate, bool> filterFunc = (salePriceListTemplate) => (input.Query.Name == null || salePriceListTemplate.Name.ToLower().Contains(input.Query.Name.ToLower()));
-			return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceListTemplates.ToBigResult(input, filterFunc, SalePriceListTemplateDetailMapper));
+
+            SalePriceListTemplateExcelExportHandler salePriceListTemplateExcel = new SalePriceListTemplateExcelExportHandler(input.Query);
+            ResultProcessingHandler<SalePriceListTemplateDetail> handler = new ResultProcessingHandler<SalePriceListTemplateDetail>()
+            {
+                ExportExcelHandler = salePriceListTemplateExcel
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceListTemplates.ToBigResult(input, filterFunc, SalePriceListTemplateDetailMapper), handler);
 		}
 
 		public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId)
@@ -101,6 +108,38 @@ namespace TOne.WhS.BusinessEntity.Business
 		#endregion
 
 		#region Private Classes
+
+        private class SalePriceListTemplateExcelExportHandler : ExcelExportHandler<SalePriceListTemplateDetail>
+        {
+            private SalePriceListTemplateQuery _query;
+            public SalePriceListTemplateExcelExportHandler(SalePriceListTemplateQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SalePriceListTemplateDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null )
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
 
 		private class CacheManager : Vanrise.Caching.BaseCacheManager
 		{

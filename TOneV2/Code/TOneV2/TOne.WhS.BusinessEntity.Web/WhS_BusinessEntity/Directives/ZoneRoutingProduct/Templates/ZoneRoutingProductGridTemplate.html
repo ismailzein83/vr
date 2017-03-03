@@ -3,16 +3,16 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Entity.ZoneRoutingProductId">
+             idfield="Entity.ZoneRoutingProductId" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.ZoneRoutingProductId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" type="'Text'" fixedwidth="'100'"></vr-datagridcolumn>
     <vr-datagridcolumn fixedwidth="'30'">
         <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip"></vr-icon>
     </vr-datagridcolumn>
- <vr-datagridcolumn headertext="'Services'">
+    <vr-datagridcolumn headertext="'Services'">
         <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
     </vr-datagridcolumn>
-    <vr-datagridcolumn  headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn  headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>
