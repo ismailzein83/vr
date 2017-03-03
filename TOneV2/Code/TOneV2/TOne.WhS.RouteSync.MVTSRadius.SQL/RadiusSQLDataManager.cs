@@ -328,13 +328,13 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 	                            (
 	                            Customer,
 	                            Code
-	                            ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	                            ) WITH(STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON ,MAXDOP=6) ON [PRIMARY]
 
                            CREATE  NonCLUSTERED INDEX CustomerCode ON dbo.RadiusRoutePercentage_Temp
 	                            (
 	                            Customer,
 	                            Code
-	                            ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]";
+	                            ) WITH(STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON,MAXDOP=6) ON [PRIMARY]";
 
         #endregion
 
