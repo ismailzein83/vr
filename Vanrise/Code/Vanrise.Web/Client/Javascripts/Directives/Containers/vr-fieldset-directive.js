@@ -6,7 +6,8 @@ app.directive('vrFieldset', [function () {
         restrict: 'E',
         scope: false,
         compile: function (tElement, tAttrs) {
-            var newElement = '<div class="panel-primary fieldset-vr"><div class="panel-heading"><span class="title">' + tAttrs.title + '</span></div><div class="panel-body">' + tElement.context.innerHTML + '</div></div>';
+            var title = tAttrs.header || tAttrs.title;
+            var newElement = '<div class="panel-primary fieldset-vr"><div class="panel-heading"><span class="title">' + title + '</span></div><div class="panel-body">' + tElement.context.innerHTML + '</div></div>';
             tElement.html(newElement);
         }
 
