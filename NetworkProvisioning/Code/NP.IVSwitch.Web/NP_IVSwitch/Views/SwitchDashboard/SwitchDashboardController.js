@@ -298,8 +298,8 @@
 
                 var seriesDefinitions = [];
                 seriesDefinitions.push({
-                    title: "Connected",
-                    valuePath: "CountConnected",
+                    title: "Attempts",
+                    valuePath: "Attempts",
                     titlePath: "DurationRange"
                 });
 
@@ -372,7 +372,7 @@
                 var chartDefinition = {
                     type: "spline",
                     yAxisTitle: "Value",
-                    numberOfPoints: 20,
+                    numberOfPoints: 30,
                     enablePoints:false
                 };
                 var xAxisDefinition = {
@@ -392,9 +392,9 @@
                 var data = [];
                 var i = 0;
                 var date = UtilsService.createDateFromString(liveSummaryResult.ResponseDate);
-                while (i < 20) {
+                while (i < 30) {
                     i++;
-                    date = new Date(date.setSeconds(date.getSeconds() - 10));
+                    date = new Date(date.setSeconds(date.getSeconds() - 5));
                     data.unshift({
                         ResponseDate: date,
                         CountConnected: null,
@@ -478,7 +478,7 @@
                 var chartDefinition = {
                     type: "spline",
                     yAxisTitle: "Value",
-                    numberOfPoints: 20,
+                    numberOfPoints: 30,
                     enablePoints: false
 
                 };
@@ -495,10 +495,10 @@
                 var data = [];
                 var i = 0;
                 var date = UtilsService.createDateFromString(liveSummaryResult.ResponseDate);
-                while (i < 20)
+                while (i < 30)
                 {
                     i++;
-                    date = new Date(date.setSeconds(date.getSeconds() - 10));
+                    date = new Date(date.setSeconds(date.getSeconds() - 5));
                     data.unshift({
                         Date: date,
                         ACD: null
