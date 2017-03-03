@@ -51,14 +51,14 @@
                     </vr-row>
                     <vr-row removeline>
                         <vr-columns width="1/4row">
-                            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModal.onPhoneValueChange" value="scopeModal.phoneNumberValue"></vr-textbox>
+                            <vr-textbox label="Phone" onvaluechanged="scopeModal.onPhoneValueChange" value="scopeModal.phoneNumberValue"></vr-textbox>
                         </vr-columns>
                         <vr-columns withemptyline width="1/4row">
                             <vr-button type="Add" data-onclick="addPhoneNumberOption" vr-disabled="scopeModal.disabledphone" standalone></vr-button>
                         </vr-columns>
 
                         <vr-columns width="1/4row">
-                            <vr-textbox value="scopeModal.faxvalue" type="number" onvaluechanged="scopeModal.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
+                            <vr-textbox value="scopeModal.faxvalue" onvaluechanged="scopeModal.onFaxValueChange" label="Fax"></vr-textbox>
                         </vr-columns>
                         <vr-columns withemptyline width="1/4row">
                             <vr-button type="Add" data-onclick="addFaxOption" vr-disabled="scopeModal.disabledfax" standalone></vr-button>
