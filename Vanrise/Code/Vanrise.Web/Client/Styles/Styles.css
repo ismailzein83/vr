@@ -2619,6 +2619,10 @@ vr-tab vr-columns[tabs="true"] > div[class^="col"] {
     padding: 5px 9px;
 }
 
+vr-columns[grouped] > div[class^="col"] {   
+    margin: 0px -12px;
+}
+
 @media (max-width: 992px ) {
     vr-tabs div[class^="col"] {
         margin-bottom: -1px !important;
