@@ -50,32 +50,33 @@
                 destinationChartAPI = api;
                 destinationChartReadyDeferred.resolve();
             }
-            $scope.scopeModel.getACDColor = function(dataItem)
-            {
-                if(dataItem.ACD > 0 && dataItem.ACD <= 5)
-                {
+            $scope.scopeModel.getACDColor = function (dataItem) {
+                if (dataItem.ACD <= 5) {
                     return LabelColorsEnum.Error.color;
-                } else if (dataItem.ACD > 5 && dataItem.ACD <= 30)
-                {
+                } else if (dataItem.ACD <= 30) {
                     return LabelColorsEnum.Warning.color;
-                } else if (dataItem.ACD > 30 && dataItem.ACD <= 60) {
+                } else {
                     return LabelColorsEnum.Processed.color;
                 }
             }
             $scope.scopeModel.getPDDColor = function (dataItem) {
-                if (dataItem.PDDInSec > 3) {
+                if (dataItem.PDDInSec >= 5) {
                     return LabelColorsEnum.Error.color;
+                }
+                else if (dataItem.PDDInSec >= 3) {
+                    return LabelColorsEnum.Warning.color;
                 }
             }
             $scope.scopeModel.getPercConnectedColor = function (dataItem) {
-                if (dataItem.PercConnected > 0 && dataItem.PercConnected <= 50) {
+                if (dataItem.PercConnected <= 50) {
                     return LabelColorsEnum.Error.color;
-                } else if (dataItem.PercConnected > 50 && dataItem.PercConnected <= 80) {
+                } else if (dataItem.PercConnected <= 80) {
                     return LabelColorsEnum.Warning.color;
-                } else if (dataItem.PercConnected > 80 && dataItem.PercConnected <= 100) {
+                } else {
                     return LabelColorsEnum.Processed.color;
                 }
             }
+
             $scope.scopeModel.lastDistributionChartReady = function (api) {
                 lastDistributionChartAPI = api;
                 lastDistributionChartReadyDeferred.resolve();
