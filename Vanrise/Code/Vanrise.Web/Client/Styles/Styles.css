@@ -3126,7 +3126,7 @@ vr-overall-widget  .list-group-item {
         width:80px;
    }
    .overallwidget-value{   
-        font-size:16px;
+        font-size:14px;
     }    
     .overallwidget-label{    
         font-size:10px;
@@ -3134,27 +3134,27 @@ vr-overall-widget  .list-group-item {
 }
 @media (min-width: 1440px) {
    .overallwidget {
-        height:100px;
-        width:100px;
+        height:80px;
+        width:80px;
    }
    .overallwidget-value{   
-        font-size:22px;
+        font-size:16px;
     }    
     .overallwidget-label{    
-        font-size:14px;
+        font-size:12px;
     }
 }
 
 @media (min-width: 1920px) {
     .overallwidget {
-        height:120px;
-        width:120px;
+        height:90px;
+        width:90px;
    }
    .overallwidget-value{   
-        font-size:24px;
+        font-size:18px;
     }    
     .overallwidget-label{    
-        font-size:16px;
+        font-size:12px;
     }
 }
 @media (min-width: 2240px) {
