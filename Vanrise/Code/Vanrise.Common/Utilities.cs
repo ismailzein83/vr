@@ -417,9 +417,12 @@ namespace Vanrise.Common
                 }
                 else
                 {
+                    DateTime lastRecordBED = lastRecord == null || !lastRecord.EED.HasValue ? Titem.BED : Utilities.Max(lastRecord.EED.Value, Titem.BED);
+                    DateTime? lastRecordEED = Qitem == null ? Titem.EED : Titem.EED.MinDate(Qitem.BED);
+
                     lastRecord = Activator.CreateInstance<R>();
-                    lastRecord.BED = lastRecord == null || !lastRecord.EED.HasValue ? Titem.BED : Utilities.Max(lastRecord.EED.Value, Titem.BED);
-                    lastRecord.EED = Qitem == null ? Titem.EED : Titem.EED.MinDate(Qitem.BED);
+                    lastRecord.BED = lastRecordBED;
+                    lastRecord.EED = lastRecordEED;
 
                     mapTtoR(Titem, lastRecord);
                     totalRecords.Add(lastRecord);
