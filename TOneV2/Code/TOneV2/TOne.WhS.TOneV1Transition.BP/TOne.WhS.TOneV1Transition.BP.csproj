@@ -79,6 +79,16 @@
       <Project>{a522f8b1-8653-4033-a1f5-ae0ba9669061}</Project>
       <Name>TOne.WhS.TOneV1Transition.BP.Arguments</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.BP.Activities\TOne.WhS.TOneV1Transition.BP.Activities.csproj">
+      <Project>{5470290C-192A-420C-B1BE-19DF9466BD27}</Project>
+      <Name>TOne.WhS.TOneV1Transition.BP.Activities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="MigrateAndRouteBuild.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

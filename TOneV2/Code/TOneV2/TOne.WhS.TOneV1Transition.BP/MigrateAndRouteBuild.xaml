@@ -1,0 +1,105 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.TOneV1Transition.BP.MigrateAndRouteBuild"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twdb="clr-namespace:TOne.WhS.DBSync.Business;assembly=TOne.WhS.DBSync.Business"
+ xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
+ xmlns:twta="clr-namespace:TOne.WhS.TOneV1Transition.Arguments;assembly=TOne.WhS.TOneV1Transition.Arguments"
+ xmlns:twtba="clr-namespace:TOne.WhS.TOneV1Transition.BP.Activities;assembly=TOne.WhS.TOneV1Transition.BP.Activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Inout" Type="InArgument(twta:MigrateAndRouteBuildInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.TOneV1Transition.BP.MigrateAndRouteBuild_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.TOneV1Transition.Arguments</x:String>
+      <x:String>TOne.WhS.DBSync.Business</x:String>
+      <x:String>TOne.WhS.Routing.BP.Arguments</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.DBSync.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
+      <AssemblyReference>TOne.WhS.TOneV1Transition.Arguments</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.TOneV1Transition.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.TOneV1Transition.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="twdb:DBSyncTaskActionArgument" Name="DBSyncTaskActionArgument" />
+      <Variable x:TypeArguments="twrba:RoutingProcessInput" Name="RoutingProcessInput" />
+      <Variable x:TypeArguments="x:Int32" Name="RoutingMigrationOffsetInMinutes" />
+    </Sequence.Variables>
+    <twtba:LoadProcessesInput sap2010:WorkflowViewState.IdRef="LoadProcessesInput_1">
+      <twtba:LoadProcessesInput.DBSyncTaskActionArgument>
+        <OutArgument x:TypeArguments="twdb:DBSyncTaskActionArgument">
+          <mca:CSharpReference x:TypeArguments="twdb:DBSyncTaskActionArgument">DBSyncTaskActionArgument</mca:CSharpReference>
+        </OutArgument>
+      </twtba:LoadProcessesInput.DBSyncTaskActionArgument>
+      <twtba:LoadProcessesInput.RoutingMigrationOffsetInMinutes>
+        <OutArgument x:TypeArguments="x:Int32">
+          <mca:CSharpReference x:TypeArguments="x:Int32">RoutingMigrationOffsetInMinutes</mca:CSharpReference>
+        </OutArgument>
+      </twtba:LoadProcessesInput.RoutingMigrationOffsetInMinutes>
+      <twtba:LoadProcessesInput.RoutingProcessInput>
+        <OutArgument x:TypeArguments="twrba:RoutingProcessInput">
+          <mca:CSharpReference x:TypeArguments="twrba:RoutingProcessInput">RoutingProcessInput</mca:CSharpReference>
+        </OutArgument>
+      </twtba:LoadProcessesInput.RoutingProcessInput>
+    </twtba:LoadProcessesInput>
+    <twtba:ExecuteMigration sap2010:WorkflowViewState.IdRef="ExecuteMigration_1">
+      <twtba:ExecuteMigration.DBSyncTaskActionArgument>
+        <InArgument x:TypeArguments="twdb:DBSyncTaskActionArgument">
+          <mca:CSharpValue x:TypeArguments="twdb:DBSyncTaskActionArgument">DBSyncTaskActionArgument</mca:CSharpValue>
+        </InArgument>
+      </twtba:ExecuteMigration.DBSyncTaskActionArgument>
+    </twtba:ExecuteMigration>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlRPbmVWMVRyYW5zaXRpb24uQlBcTWlncmF0ZUFuZFJvdXRlQnVpbGQueGFtbAc7A1oOAgEBQQVRIAIBCFIFWB4CAQJEC0R+AgETTgtOdQIBDkkLSW8CAQlVC1V2AgED</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LoadProcessesInput_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ExecuteMigration_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.TOneV1Transition.BP.MigrateAndRouteBuild_1" sap:VirtualizedContainerService.HintSize="262,288" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
