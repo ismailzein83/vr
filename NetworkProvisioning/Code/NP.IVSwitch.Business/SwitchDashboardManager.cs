@@ -16,7 +16,7 @@ namespace NP.IVSwitch.Business
         public LiveDashboardResult GetSwitchDashboardManagerResult()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchDashboardManagerResult", 
-                new Vanrise.Caching.TimeExpirableCacheExpirationChecker(TimeSpan.FromSeconds(5)),
+                new Vanrise.Caching.TimeExpirableCacheExpirationChecker(TimeSpan.FromSeconds(2)),
                 () =>
             {
                 List<Action> actions = new List<Action>();

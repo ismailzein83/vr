@@ -107,7 +107,7 @@
         function load()
         {
             $scope.scopeModel.isLoading = true;
-            VRTimerService.registerJob(loadDashboarResult, $scope, 1);
+            VRTimerService.registerJob(loadDashboarResult, $scope, 2);
         }
         function loadDashboarResult()
         {
