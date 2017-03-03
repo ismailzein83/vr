@@ -142,7 +142,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="WhS_TOneV1Transition\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WhS_TOneV1Transition\Constant\ModuleConfig.js" />
+    <Content Include="WhS_TOneV1Transition\Elements\ProcessInput\Directives\Templates\MigrateAndRouteBuildProcessTemplate.html" />
+    <Content Include="WhS_TOneV1Transition\Elements\ProcessInput\vr-whs-migrateandroutebuild-process.js" />
+    <Content Include="WhS_TOneV1Transition\Elements\Settings\Directives\Templates\TOneV1TransitionSettingsEditorTemplate.html" />
+    <Content Include="WhS_TOneV1Transition\Elements\Settings\Directives\vr-whs-tonev1transition-settings-editor.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

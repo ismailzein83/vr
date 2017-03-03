@@ -41,9 +41,38 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.DBSync.Business\TOne.WhS.DBSync.Business.csproj">
+      <Project>{66a454c0-d24c-4378-942f-4b7bc0f1e05a}</Project>
+      <Name>TOne.WhS.DBSync.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.BP.Arguments\TOne.WhS.Routing.BP.Arguments.csproj">
+      <Project>{7b185135-b5a8-4416-8b8a-66a261d7dd31}</Project>
+      <Name>TOne.WhS.Routing.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.Entities\TOne.WhS.TOneV1Transition.Entities.csproj">
+      <Project>{63f67a7e-5cd0-4620-b785-326fe7e90e9d}</Project>
+      <Name>TOne.WhS.TOneV1Transition.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

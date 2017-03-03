@@ -34,16 +34,51 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activities" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TOne.WhS.Routing.Entities">
+      <HintPath>..\Output\TOne.WhS.Routing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.DBSync.Business\TOne.WhS.DBSync.Business.csproj">
+      <Project>{66a454c0-d24c-4378-942f-4b7bc0f1e05a}</Project>
+      <Name>TOne.WhS.DBSync.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.BP.Arguments\TOne.WhS.Routing.BP.Arguments.csproj">
+      <Project>{7b185135-b5a8-4416-8b8a-66a261d7dd31}</Project>
+      <Name>TOne.WhS.Routing.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.BP\TOne.WhS.Routing.BP.csproj">
+      <Project>{84F18EF5-4751-4202-9584-C27399C920A7}</Project>
+      <Name>TOne.WhS.Routing.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.TOneV1Transition.Arguments\TOne.WhS.TOneV1Transition.BP.Arguments.csproj">
+      <Project>{a522f8b1-8653-4033-a1f5-ae0ba9669061}</Project>
+      <Name>TOne.WhS.TOneV1Transition.BP.Arguments</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

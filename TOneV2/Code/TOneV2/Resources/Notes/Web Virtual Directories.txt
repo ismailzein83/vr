@@ -38,3 +38,4 @@
 	VR_AccountBalance		C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
 	WhS_AccountBalance      C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.AccountBalance.Web\WhS_AccountBalance
 	NP_IVSwitch				C:\TFS\NetworkProvisioning\Code\NP.IVSwitch.Web\NP_IVSwitch
+	WhS_TOneV1Transition	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.TOneV1Transition\WhS_TOneV1Transition
