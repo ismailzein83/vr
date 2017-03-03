@@ -732,14 +732,21 @@ namespace TOne.WhS.Sales.Business
             var zoneItems = new List<ZoneItem>();
 
             var zoneDraftsByZone = new Dictionary<long, ZoneChanges>();
+            IEnumerable<int> newCountryIds = new List<int>();
             var changedCountryIds = new List<int>();
 
             if (draft != null)
             {
                 zoneDraftsByZone = SturctureZoneDraftsByZone(draft.ZoneChanges);
 
-                if (draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
-                    changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+                if (draft.CountryChanges != null)
+                {
+                    if (draft.CountryChanges.NewCountries != null)
+                        newCountryIds = draft.CountryChanges.NewCountries.MapRecords(x => x.CountryId);
+
+                    if (draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
+                        changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+                }
             }
 
             int? sellingProductId = GetSellingProductId(ownerType, ownerId, DateTime.Now, false);
@@ -822,7 +829,9 @@ namespace TOne.WhS.Sales.Business
                     rpManager.SetCustomerZoneRP(zoneItem, ownerId, sellingProductId.Value, zoneDraft);
                 }
 
+                zoneItem.IsCountryNew = newCountryIds.Contains(zoneItem.CountryId);
                 zoneItem.IsCountryEnded = changedCountryIds.Contains(zoneItem.CountryId);
+
                 zoneItems.Add(zoneItem);
             }
 

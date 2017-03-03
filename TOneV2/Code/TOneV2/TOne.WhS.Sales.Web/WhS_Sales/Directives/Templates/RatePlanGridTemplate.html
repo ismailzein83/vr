@@ -21,7 +21,11 @@
                              isdynamicrowstyle="true">
 
                     <vr-datagridcolumn headertext="'Zone'" type="'Text'" widthfactor="19" disablesorting="true">
-                        <vr-label isvalue="true" ellipsis><a href="" ng-click="viewScope.onZoneNameClicked(dataItem)" title="{{dataItem.ZoneName}}">{{dataItem.ZoneName}}</a></vr-label><span ng-if="dataItem.IsFutureZone">*</span>
+                        <vr-label isvalue="true" ellipsis>
+                            <a ng-if="dataItem.IsCountryNew === false" href="" ng-click="viewScope.onZoneNameClicked(dataItem)" title="{{dataItem.ZoneName}}">{{dataItem.ZoneName}}</a>
+                            <span ng-if="dataItem.IsCountryNew === true">{{dataItem.ZoneName}}</span>
+                            <span ng-if="dataItem.IsFutureZone">*</span>
+                        </vr-label>
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'Product'"
