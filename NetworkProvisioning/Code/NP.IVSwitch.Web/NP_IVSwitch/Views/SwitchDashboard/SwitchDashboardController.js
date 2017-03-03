@@ -374,11 +374,13 @@
                     type: "spline",
                     yAxisTitle: "Value",
                     numberOfPoints: 30,
-                    enablePoints:false
+                    enablePoints: false,
+                    useAnimation:true
                 };
                 var xAxisDefinition = {
                     titlePath: "ResponseDate",
                     isTime: true,
+                    hideAxes: true
                 };
 
                 var seriesDefinitions = [];
@@ -480,12 +482,14 @@
                     type: "spline",
                     yAxisTitle: "Value",
                     numberOfPoints: 30,
-                    enablePoints: false
+                    enablePoints: false,
+                    useAnimation:true
 
                 };
                 var xAxisDefinition = {
                     titlePath: "Date",
                     isTime: true,
+                    hideAxes: true
                 };
 
                 var seriesDefinitions = [];

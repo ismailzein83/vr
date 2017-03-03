@@ -144,6 +144,9 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                     load: function () {
                         chartAPI = this;
                     }
+                }, animation: {
+                    duration: 1500,
+                    easing: "jswing"
                 }
             };
 
@@ -159,8 +162,18 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                         radius: 70, // this is how tall the needle goes (%)
                         borderColor: '#fff',
                         borderWidth: 0,
-                    }
-                }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'jswing'
+                    },
+                },
+                series: {
+                    animation: {
+                        duration: 1500,
+                        easing: 'jswing'
+                    },
+                },
             };
 
             //yAxis
