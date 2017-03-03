@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\SaleEntityZoneRoutingProductHistoryController.cs" />
     <Compile Include="Controllers\SalePriceListChangeController.cs" />
     <Compile Include="Controllers\SaleRateHistoryController.cs" />
     <Compile Include="Controllers\TechnicalSettingsController.cs" />
@@ -299,6 +300,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerobjecttype.js" />
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\History\Template\SaleEntityZoneRoutingProductHistoryGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\History\vr-whs-be-saleentityzoneroutingproduct-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\vr-whs-be-routingproduct-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePriceListCodeChangeTemplate.html" />
@@ -419,6 +422,7 @@
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneRoutingProductHistoryAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListChangeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListTemplateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateHistoryAPIService.js" />

@@ -121,6 +121,7 @@
     <Compile Include="Helper.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="ReleaseCodeManager.cs" />
+    <Compile Include="RoutingProducts\SaleEntityZoneRoutingProductHistoryManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityZoneRoutingProductLocator.cs" />
     <Compile Include="RoutingProducts\ISaleEntityRoutingProductReader.cs" />
@@ -234,9 +235,7 @@
       <Name>TOne.WhS.Sales.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SaleRate\History\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
