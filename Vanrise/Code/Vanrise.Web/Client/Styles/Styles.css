@@ -3067,8 +3067,8 @@ vr-overall-widget  .list-group-item {
     border-radius: 4px;
 }
 .overallwidget-value{
-    height:75px;
-    font-size:35px;
+    height:60px;
+    font-size:28px;
      position:relative;
 }
 .widget-center-text {
@@ -3079,8 +3079,8 @@ vr-overall-widget  .list-group-item {
 }
 .overallwidget-label{    
     position:relative;
-    height:25px;
-    font-size:15px;
+    height:18px;
+    font-size:12px;
 }
 /* end vr-overall-widget*/
 
