@@ -29,6 +29,7 @@
        var acdLiveChartAPI;
        var acdLiveChartReadyDeferred = UtilsService.createPromiseDeferred();
 
+       var lastACD;
 
        var liveObject;
         defineScope();
@@ -81,7 +82,8 @@
             }
             $scope.scopeModel.topCustomers = [];
             $scope.scopeModel.topSuppliers = [];
-
+            $scope.scopeModel.overAllResult = [];
+            $scope.scopeModel.overAllDuration = [];
             $scope.scopeModel.guageChartReady = function(api)
             {
                 guageChartAPI = api;
@@ -105,7 +107,7 @@
         function load()
         {
             $scope.scopeModel.isLoading = true;
-            VRTimerService.registerJob(loadDashboarResult, $scope, 3);
+            VRTimerService.registerJob(loadDashboarResult, $scope, 1);
         }
         function loadDashboarResult()
         {
@@ -140,27 +142,59 @@
                             });
                         }
                     }
-                    renderCustomerCharts(response.TopCustomersResult);
-                    renderSupplierCharts(response.TopSuppliersResult);
-                    renderDestinationCharts(response.TopZonesResult);
-                    renderLastDistributionCharts(response.LastDistributionResult);
-                    loadGauge(response.LiveSummaryResult);
+                 
+
+
+
+
                     if (!$scope.scopeModel.showCharts)
+                    {
+                        renderLastDistributionCharts(response.LastDistributionResult);
+                        renderDestinationCharts(response.TopZonesResult);
+                        renderSupplierCharts(response.TopSuppliersResult);
+                        renderCustomerCharts(response.TopCustomersResult);
                         loadLiveChart(response.LiveSummaryResult);
-                    else
-                        chartDataFunction(response.LiveSummaryResult);
-
-                    if (!$scope.scopeModel.showCharts)
-                    loadACDGauge(response.LiveSummaryResult);
-                    else
-                        guageACDLiveFunction(response.LiveSummaryResult);
-                    if (!$scope.scopeModel.showCharts)
                         loadACDLiveChart(response.LiveSummaryResult);
+                        loadGauge(response.LiveSummaryResult);
+                    }
                     else
+                    {
+                        updateLastDistributionChart(response.LastDistributionResult);
+                        updateDestinationChart(response.TopZonesResult)
+                        updateSupplierChart(response.TopSuppliersResult)
+                        updateCustomerChart(response.TopCustomersResult)
+                        chartDataFunction(response.LiveSummaryResult);
                         chartACDLiveFunction(response.LiveSummaryResult);
-                    $scope.scopeModel.totalDuration = response.LiveSummaryResult.TotalDuration;
-                    $scope.scopeModel.pDDInSec = response.LiveSummaryResult.PDDInSec;
+                        guageLiveFunction(response.LiveSummaryResult);
+                    }
+                    if (lastACD == undefined || lastACD != calculateMaxACD(response.LiveSummaryResult.ACD))
+                    {
+                        loadACDGauge(response.LiveSummaryResult);
+                    } else
+                    {
+                        guageACDLiveFunction(response.LiveSummaryResult);
+                    }
 
+                    $scope.scopeModel.overAllResult.length = 0;
+
+                    $scope.scopeModel.overAllResult.push({
+                        label: "Attempts",
+                        value: response.LiveSummaryResult.Attempts
+                    });
+                    $scope.scopeModel.overAllResult.push({
+                        label: "Connected",
+                        value: response.LiveSummaryResult.CountConnected
+                    });
+
+                    $scope.scopeModel.overAllDuration.length = 0;
+                    $scope.scopeModel.overAllDuration.push({
+                        label: "Total Dur. (m)",
+                        value: response.LiveSummaryResult.TotalDuration
+                    });
+                    $scope.scopeModel.overAllDuration.push({
+                        label: "PDD (s)",
+                        value:response.LiveSummaryResult.PDDInSec
+                        });
                 }
                 $scope.scopeModel.showCharts = true;
                 $scope.scopeModel.isLoading = false;
@@ -192,6 +226,10 @@
             });
             
         }
+        function updateCustomerChart(topCustomersResult) {
+            customerChartAPI.updateValues(topCustomersResult.CustomerResults);
+        }
+
         function renderSupplierCharts(topSuppliersResult) {
             supplierChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
@@ -216,6 +254,10 @@
             });
 
         }
+        function updateSupplierChart(topSuppliersResult) {
+            supplierChartAPI.updateValues(topSuppliersResult.SupplierResults);
+        }
+
         function renderDestinationCharts(topDestinationsResult) {
             destinationChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
@@ -240,6 +282,10 @@
             });
 
         }
+        function updateDestinationChart(topDestinationsResult) {
+            destinationChartAPI.updateValues(topDestinationsResult.ZoneResults);
+        }
+
         function renderLastDistributionCharts(lastDistributionResult) {
             lastDistributionChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
@@ -261,18 +307,30 @@
             });
 
         }
-
+        function updateLastDistributionChart(lastDistributionResult) {
+            lastDistributionChartAPI.updateValues(lastDistributionResult.DistributionResults);
+        }
 
         function loadGauge(liveSummaryResult)
         {
 
             guageChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
-                    type: "solidgauge",
-                    ranges: [
-                            [0, '#DF5353'], // red/
-                            [50, '#DDDF0D'], // yellow
-                            [80, '#55BF3B'] //green
+                    type: "gauge",
+                    title: "% Connected",
+                    ranges: [{
+                        from: 0,
+                        to: 50,
+                        color: '#DF5353',
+                    }, {
+                        from: 50,
+                        to: 80,
+                        color: '#DDDF0D',
+                    }, {
+                        from: 80,
+                        to: 100,
+                        color: '#55BF3B',
+                    }
                     ]
                 };
                 var xAxisDefinition = {
@@ -284,14 +342,14 @@
                     title: "Perc Connected",
                     valuePath: "PercConnected",
                     tooltip: {
-                        valueSuffix: ' %'
+                        valueSuffix: ' '
                     },
                 });
 
                 var yAxisDefinition = {
                     min: 0,
                     max: 100,
-                   // mid: liveSummaryResult.PercConnected,
+                    interval: 50,
                     title: '%'
                 };
                 var items = [{
@@ -300,17 +358,22 @@
                     },{
                         label :"Attempts",
                         value:liveSummaryResult.Attempts,
-                        }];
-                guageChartAPI.renderChart(liveSummaryResult.PercConnected, chartDefinition, seriesDefinitions, xAxisDefinition, yAxisDefinition,items);
+                    }];
+
+                guageChartAPI.renderChart({PercConnected: liveSummaryResult.PercConnected}, chartDefinition, seriesDefinitions, xAxisDefinition, yAxisDefinition,items);
             });
+        }
+        function guageLiveFunction(liveSummaryResult) {
+            guageChartAPI.updateValue(liveSummaryResult.PercConnected);
         }
         function loadLiveChart(liveSummaryResult) {
             liveChartReadyDeferred.promise.then(function () {
 
                 var chartDefinition = {
-                    type: "areaspline",
+                    type: "spline",
                     yAxisTitle: "Value",
-                    numberOfPoints:20
+                    numberOfPoints: 20,
+                    enablePoints:false
                 };
                 var xAxisDefinition = {
                     titlePath: "ResponseDate",
@@ -319,16 +382,32 @@
 
                 var seriesDefinitions = [];
                 seriesDefinitions.push({
-                    title: "Connected",
-                    valuePath: "CountConnected"
-                });
-                seriesDefinitions.push({
                     title: "Attempts",
                     valuePath: "Attempts"
                 });
-               
+                seriesDefinitions.push({
+                    title: "Connected",
+                    valuePath: "CountConnected"
+                });
+                var data = [];
+                var i = 0;
+                var date = UtilsService.createDateFromString(liveSummaryResult.ResponseDate);
+                while (i < 20) {
+                    i++;
+                    date = new Date(date.setSeconds(date.getSeconds() - 10));
+                    data.unshift({
+                        ResponseDate: date,
+                        CountConnected: null,
+                        Attempts:null
+                    });
+                }
+                data.push({
+                    ResponseDate: UtilsService.createDateFromString(liveSummaryResult.ResponseDate),
+                    CountConnected: liveSummaryResult.CountConnected,
+                    Attempts: liveSummaryResult.Attempts
+                });
 
-                liveChartAPI.renderChart([{ ResponseDate: UtilsService.createDateFromString(liveSummaryResult.ResponseDate), CountConnected: liveSummaryResult.CountConnected, Attempts: liveSummaryResult.Attempts }], chartDefinition, seriesDefinitions, xAxisDefinition);
+                liveChartAPI.renderChart(data, chartDefinition, seriesDefinitions, xAxisDefinition);
             });
         }
         function chartDataFunction(liveSummaryResult)
@@ -336,16 +415,32 @@
             liveChartAPI.addItem({ ResponseDate: UtilsService.createDateFromString(liveSummaryResult.ResponseDate), CountConnected: liveSummaryResult.CountConnected, Attempts: liveSummaryResult.Attempts });
         }
 
+        function calculateMaxACD(acdValue)
+        {
+            return acdValue <= 50 ? 50 : (Math.round(acdValue) + Math.round(acdValue) % 2);
+        }
+
         function loadACDGauge(liveSummaryResult) {
 
             acdGuageChartReadyDeferred.promise.then(function () {
+                lastACD = calculateMaxACD(liveSummaryResult.ACD);
                 var chartDefinition = {
-                    type: "solidgauge",
-                    ranges: [
-                            [0.0, '#DF5353'],// red 
-                            [0.1, '#DDDF0D'], // yellow
-                            [0.4, '#55BF3B'], //green
-                        ]
+                    type: "gauge",
+                    title:"ACD",
+                    ranges: [{
+                        from: 0,
+                        to: 5,
+                        color: '#DF5353',
+                    }, {
+                        from: 5,
+                        to: 20,
+                        color: '#DDDF0D',
+                    }, {
+                        from: 20,
+                        to: lastACD,
+                        color: '#55BF3B',
+                    }
+                    ]
                 };
                 var xAxisDefinition = {
                     titlePath: "ACD"
@@ -356,15 +451,15 @@
                     title: "ACD",
                     valuePath: "ACD",
                     tooltip: {
-                        valueSuffix: ' '
+                        valueSuffix: ''
                     },
-                });
-
+                }); 
+                
                 var yAxisDefinition = {
                     min: 0,
-                    max: 50,
-                  //  mid: liveSummaryResult.ACD,
-                    title: ' '
+                    max: lastACD,
+                    title: ' ',
+                    interval: Math.round(lastACD / 2)
                 };
                 var items = [{
                     label: "ACD",
@@ -381,9 +476,11 @@
             acdLiveChartReadyDeferred.promise.then(function () {
 
                 var chartDefinition = {
-                    type: "areaspline",
+                    type: "spline",
                     yAxisTitle: "Value",
-                    numberOfPoints: 20
+                    numberOfPoints: 20,
+                    enablePoints: false
+
                 };
                 var xAxisDefinition = {
                     titlePath: "Date",
@@ -395,9 +492,23 @@
                     title: "ACD",
                     valuePath: "ACD"
                 });
-
-
-                acdLiveChartAPI.renderChart([{ Date: UtilsService.createDateFromString(liveSummaryResult.ResponseDate), ACD: liveSummaryResult.ACD }], chartDefinition, seriesDefinitions, xAxisDefinition);
+                var data = [];
+                var i = 0;
+                var date = UtilsService.createDateFromString(liveSummaryResult.ResponseDate);
+                while (i < 20)
+                {
+                    i++;
+                    date = new Date(date.setSeconds(date.getSeconds() - 10));
+                    data.unshift({
+                        Date: date,
+                        ACD: null
+                    });
+                }
+                data.push({
+                    Date: UtilsService.createDateFromString(liveSummaryResult.ResponseDate),
+                    ACD: liveSummaryResult.ACD
+                });
+                acdLiveChartAPI.renderChart(data, chartDefinition, seriesDefinitions, xAxisDefinition);
             });
         }
         function chartACDLiveFunction(liveSummaryResult) {

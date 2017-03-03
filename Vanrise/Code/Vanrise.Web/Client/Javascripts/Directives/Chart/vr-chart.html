@@ -16,7 +16,7 @@
     <div ng-show="ctrl.isSettingsVisible()" style="z-index: 90; position: relative; ">
         <div style="position: absolute; bottom: -32px;right:35px;cursor:pointer"><span class="glyphicon  glyphicon-cog" ng-click="ctrl.changeSettings()"></span></div>
     </div>
-    <div id="divChart" style="height:300px" />
+    <div id="divChart" ng-style="ctrl.chartStyle"/>
 
 </div>
 

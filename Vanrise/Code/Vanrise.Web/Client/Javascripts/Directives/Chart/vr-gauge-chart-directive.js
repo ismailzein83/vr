@@ -32,7 +32,7 @@ app.directive('vrGaugeChart', ['ChartDirService', 'VRModalService', 'UtilsServic
             };
         },
         templateUrl: function (element, attrs) {
-            return "/Client/Javascripts/Directives/Chart/vr-gauge-chart-template.html";
+            return "/Client/Javascripts/Directives/Chart/vr-guage-chart-template.html";
         }
 
     };

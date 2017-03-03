@@ -228,6 +228,8 @@
     <Content Include="Client\Javascripts\Directives\Button\vr-buttontype-selector.js" />
     <Content Include="Client\Javascripts\Directives\Chart\chart-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-customgauge-chart-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-customgauge-chart.html" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-gauge-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-settings.html" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart.html" />

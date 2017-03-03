@@ -31,7 +31,7 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
             };
         },
         templateUrl: function (element, attrs) {
-            return "/Client/Javascripts/Directives/Chart/vr-guage-chart-template.html";
+            return "/Client/Javascripts/Directives/Chart/vr-gauge-chart-template.html";
         }
 
     };
@@ -83,11 +83,6 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                         click: function (e) {
                         }
                     },
-                    //dataLabels: {
-                    //    format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-                    //        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
-                    //           '<span style="font-size:12px;color:silver">' + chartData + '</span></div>'
-                    //},
                 };
                 series.push(serie);
             });
@@ -109,7 +104,6 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                                 var series = this.series;
                                 setInterval(function () {
                                     if (newValue != undefined) {
-
                                         for (var i = 0; i < series.length; i++) {
                                             var serie = series[i];
                                             //for (var j = 0;j < serie.points.length; j++)
@@ -131,9 +125,9 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                         solidgauge: {
                             dataLabels: {
                                 y: 5,
-                                borderWidth: 0,
+                                borderWidth: 1,
                                 useHTML: true
-                            }
+                            },
                         }
                     },
                     yAxis: {
@@ -146,7 +140,7 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                         lineWidth: 0,
                         minorTickInterval: null,
                         tickLength: 0,
-                       // tickAmount: 2,
+                        tickInterval: yAxisDefinition.interval,
                         labels: {
                             y: 16
                         }
@@ -157,7 +151,7 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                     },
                     pane: {
                         center: ['50%', '85%'],
-                        size: '140%',
+                        size: '140%', 
                         startAngle: -90,
                         endAngle: 90,
                         background: {
