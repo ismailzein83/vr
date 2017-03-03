@@ -195,7 +195,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                 plotBands: plotBands
             }];
 
-            setTimeout(function () {
+           // setTimeout(function () {
                 chartElement.highcharts({
                     chart: chartSettings,
                     title: {
@@ -214,7 +214,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                     }
                 });
                 isChartAvailable = true;
-            }, 1)
+         //   }, 1)
 
         }
 

@@ -464,7 +464,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             };
 
             api.hideChart();
-            setTimeout(function () {
+          //  setTimeout(function () {
                 chartObj = chartElement.highcharts({
                     chart: chartSettings,
                     title: titleSettings,
@@ -478,7 +478,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     }
                 });
                 isChartAvailable = true;
-            });
+          //  });
         }
 
         function getXValue(dataItem) {
