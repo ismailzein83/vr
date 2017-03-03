@@ -3070,9 +3070,9 @@ vr-validator[vr-input] > div:nth-child(1){
     background-color: #ddd;
     opacity: 0.5;
 }
-.highcharts-container svg > text {
+/*.highcharts-container svg > text {
     display :none;
-}
+}*/
 /* end vr-dropdown-section*/
 
 /* start vr-overall-widget*/

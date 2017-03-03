@@ -29,7 +29,7 @@ namespace NP.IVSwitch.Entities
         public int CountConnected { get; set; }
         public decimal PercConnected { get; set; }
         public decimal ACD { get; set; }
-        public decimal PDDInSec { get; set; }
+        public decimal? PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
         public DateTime ResponseDate { get; set; }
 
@@ -46,7 +46,7 @@ namespace NP.IVSwitch.Entities
         public int CountConnected { get; set; }
         public decimal PercConnected { get; set; }
         public decimal ACD { get; set; }
-        public decimal PDDInSec { get; set; }
+        public decimal? PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
         public DateTime ResponseDate { get; set; }
 
@@ -64,7 +64,7 @@ namespace NP.IVSwitch.Entities
         public int CountConnected { get; set; }
         public decimal PercConnected { get; set; }
         public decimal ACD { get; set; }
-        public decimal PDDInSec { get; set; }
+        public decimal? PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
         public DateTime ResponseDate { get; set; }
 
@@ -80,7 +80,7 @@ namespace NP.IVSwitch.Entities
         public int CountConnected { get; set; }
         public decimal PercConnected { get; set; }
         public decimal ACD { get; set; }
-        public decimal PDDInSec { get; set; }
+        public decimal? PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
         public DateTime ResponseDate { get; set; }
 
@@ -95,7 +95,7 @@ namespace NP.IVSwitch.Entities
         public int CountConnected { get; set; }
         public decimal PercConnected { get; set; }
         public decimal ACD { get; set; }
-        public decimal PDDInSec { get; set; }
+        public decimal? PDDInSec { get; set; }
         public decimal TotalDuration { get; set; }
         public DateTime ResponseDate { get; set; }
     }

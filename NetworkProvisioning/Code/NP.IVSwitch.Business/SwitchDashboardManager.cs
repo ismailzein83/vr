@@ -8,6 +8,7 @@ using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace NP.IVSwitch.Business
 {
@@ -58,15 +59,17 @@ namespace NP.IVSwitch.Business
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate, false);
             return analyticResult;
         }
+
         private void ConvertAnalyticDataToLastDitributionResult(LiveDashboardResult liveDashboardResult, IEnumerable<AnalyticRecord> analyticRecords)
         {
             if (analyticRecords != null)
             {
                 liveDashboardResult.LastDistributionResult = new LastDistributionResult();
                 liveDashboardResult.LastDistributionResult.DistributionResults = new List<DistributionResult>();
+                var durationChoices = GetDurationRangeChoices();
+                Dictionary<Object, DistributionResult> distributionResults = new Dictionary<Object, DistributionResult>();
                 foreach (var analyticRecord in analyticRecords)
-                {
-
+                {                    
                     #region ReadDataFromAnalyticResult
                     DimensionValue durationRange = analyticRecord.DimensionValues.ElementAtOrDefault(0);
                     MeasureValue attempts = GetMeasureValue(analyticRecord, "Attempts");
@@ -75,18 +78,32 @@ namespace NP.IVSwitch.Business
                     MeasureValue acd = GetMeasureValue(analyticRecord, "ACD");
                     MeasureValue pDDInSec = GetMeasureValue(analyticRecord, "PDDInSec");
                     MeasureValue totalDuration = GetMeasureValue(analyticRecord, "TotalDuration");
-                    liveDashboardResult.LastDistributionResult.DistributionResults.Add(new DistributionResult
+                    distributionResults.Add(durationRange.Value,
+                        new DistributionResult
                     {
-                        DurationRange = durationRange.Value.ToString(),
+                        DurationRange = durationRange.Name,
                         CountConnected = Convert.ToInt32(countConnected.Value),
                         Attempts = Convert.ToInt32(attempts.Value),
                         PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
                         ACD = Convert.ToDecimal(acd == null ? 0.0 : acd.Value ?? 0.0),
-                        PDDInSec = Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0),
+                        PDDInSec = (decimal?)pDDInSec.Value,
                         TotalDuration = Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0),
                         ResponseDate = DateTime.Now
                     });
                     #endregion
+                }
+                foreach (var durationChoice in durationChoices.OrderByDescending(itm => itm.Value))
+                {
+                    if (durationChoice.Value == 0)//Not Connected calls
+                        continue;
+                    DistributionResult matchItem;
+                    if (distributionResults.TryGetValue(durationChoice.Value, out matchItem))
+                        liveDashboardResult.LastDistributionResult.DistributionResults.Add(matchItem);
+                    else
+                        liveDashboardResult.LastDistributionResult.DistributionResults.Add(new DistributionResult
+                            {
+                                 DurationRange = durationChoice.Text                                  
+                            });
                 }
             }
         }
@@ -111,7 +128,7 @@ namespace NP.IVSwitch.Business
                     Attempts = Convert.ToInt32(attempts.Value),
                     PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
                     ACD = Decimal.Round(Convert.ToDecimal(acd == null ? 0.0 : acd.Value), 2),
-                    PDDInSec = Decimal.Round(Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0), 2),
+                    PDDInSec = (decimal?)pDDInSec.Value,
                     TotalDuration = Decimal.Round(Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0), 2),
                     ResponseDate = DateTime.Now
                 };
@@ -155,7 +172,7 @@ namespace NP.IVSwitch.Business
                         Attempts = Convert.ToInt32(attempts.Value),
                         PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
                         ACD = Convert.ToDecimal(acd == null ? 0.0 : acd.Value ?? 0.0),
-                        PDDInSec = Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0),
+                        PDDInSec = (decimal?)pDDInSec.Value,
                         TotalDuration = Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0),
                         ResponseDate = DateTime.Now
                     });
@@ -207,7 +224,7 @@ namespace NP.IVSwitch.Business
                         Attempts = Convert.ToInt32(attempts.Value),
                         PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
                         ACD = Convert.ToDecimal(acd == null ? 0.0 : acd.Value ?? 0.0),
-                        PDDInSec = Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0),
+                        PDDInSec = (decimal?)pDDInSec.Value,
                         TotalDuration = Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0),
                         ResponseDate = DateTime.Now
                     });
@@ -261,7 +278,7 @@ namespace NP.IVSwitch.Business
                         Attempts = Convert.ToInt32(attempts.Value),
                         PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
                         ACD = Convert.ToDecimal(acd == null ? 0.0 : acd.Value ?? 0.0),
-                        PDDInSec = Convert.ToDecimal(pDDInSec == null ? 0.0 : pDDInSec.Value ?? 0.0),
+                        PDDInSec = (decimal?)pDDInSec.Value,
                         TotalDuration = Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0),
                         ResponseDate = DateTime.Now
                     });
@@ -280,7 +297,7 @@ namespace NP.IVSwitch.Business
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = 10,
+                    TableId = GetAnalyticTableId(),
                     FromTime = fromDate,
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),
@@ -292,6 +309,21 @@ namespace NP.IVSwitch.Business
                 SortByColumnName = "DimensionValues[0].Name"
             };
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+        }
+
+        private static int GetAnalyticTableId()
+        {
+            return 10;
+        }
+        
+        public List<Vanrise.GenericData.MainExtensions.DataRecordFields.Choice> GetDurationRangeChoices()
+        {
+            Vanrise.Analytic.Business.AnalyticItemConfigManager itemConfig = new AnalyticItemConfigManager();
+            AnalyticDimension durationRecordDimension = itemConfig.GetDimensions(GetAnalyticTableId()).GetRecord("DurationRange");
+            durationRecordDimension.ThrowIfNull("durationRecordDimension", "DurationRange");
+            durationRecordDimension.Config.ThrowIfNull("durationRecordDimension.Config", "DurationRange");
+            var fldChoiceType = durationRecordDimension.Config.FieldType.CastWithValidate<Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType>("durationRecordDimension.Config.FieldType", "DurationRange");
+            return fldChoiceType.Choices;
         }
 
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
