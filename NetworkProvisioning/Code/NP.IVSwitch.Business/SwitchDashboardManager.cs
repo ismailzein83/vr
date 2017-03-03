@@ -15,27 +15,48 @@ namespace NP.IVSwitch.Business
     {
         public LiveDashboardResult GetSwitchDashboardManagerResult()
         {
-         
-            LiveDashboardResult liveDashboardResult = new LiveDashboardResult();
-            BuildTopCustomersResult(liveDashboardResult);
-            BuildTopSuppliersResult(liveDashboardResult);
-            BuildTopZonesResult(liveDashboardResult);
-            BuildLastDistributionResult(liveDashboardResult);
-             return liveDashboardResult;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchDashboardManagerResult", 
+                new Vanrise.Caching.TimeExpirableCacheExpirationChecker(TimeSpan.FromSeconds(5)),
+                () =>
+            {
+                List<Action> actions = new List<Action>();
+
+                AnalyticSummaryBigResult<AnalyticRecord> lastDistributionRecords = null;
+                AnalyticSummaryBigResult<AnalyticRecord> topCustomersRecords = null;
+                AnalyticSummaryBigResult<AnalyticRecord> topSuppliersRecords = null;
+                AnalyticSummaryBigResult<AnalyticRecord> topZonesRecords = null;
+                actions.Add(() => lastDistributionRecords = QueryLastDistribution());
+                actions.Add(() => topCustomersRecords = QueryTopCustomers());
+                actions.Add(() => topSuppliersRecords = QueryTopSuppliers());
+                actions.Add(() => topZonesRecords = QueryTopZones());
+                Parallel.ForEach(actions, (a) => a());
+                LiveDashboardResult liveDashboardResult = new LiveDashboardResult();
+                BuildTopCustomersResult(liveDashboardResult, topCustomersRecords);
+                BuildTopSuppliersResult(liveDashboardResult, topSuppliersRecords);
+                BuildTopZonesResult(liveDashboardResult, topZonesRecords);
+                BuildLastDistributionResult(liveDashboardResult, lastDistributionRecords);
+                return liveDashboardResult;
+                });
+            
         }
 
-        private void BuildLastDistributionResult(LiveDashboardResult liveDashboardResult)
+        private void BuildLastDistributionResult(LiveDashboardResult liveDashboardResult, AnalyticSummaryBigResult<AnalyticRecord> lastDistributionRecords)
+        {
+            if (lastDistributionRecords.Data != null)
+            {
+                ConvertAnalyticDataToLastDitributionResult(liveDashboardResult, lastDistributionRecords.Data);
+            }
+        }
+
+        private AnalyticSummaryBigResult<AnalyticRecord> QueryLastDistribution()
         {
             List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
             List<string> listDimensions = new List<string> { "DurationRange" };
-            var fromDate = DateTime.Parse("09/23/1990");
-            var toDate = DateTime.Now.AddYears(2);
+            var fromDate = DateTime.Today.AddYears(-1);
+            var toDate = DateTime.Now.AddYears(1);
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate,false);
-            if (analyticResult.Data != null)
-            {
-                ConvertAnalyticDataToLastDitributionResult(liveDashboardResult, analyticResult.Data);
-            }
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate, false);
+            return analyticResult;
         }
         private void ConvertAnalyticDataToLastDitributionResult(LiveDashboardResult liveDashboardResult, IEnumerable<AnalyticRecord> analyticRecords)
         {
@@ -70,24 +91,19 @@ namespace NP.IVSwitch.Business
             }
         }
 
-        private void BuildTopCustomersResult(LiveDashboardResult liveDashboardResult)
+        private void BuildTopCustomersResult(LiveDashboardResult liveDashboardResult, AnalyticSummaryBigResult<AnalyticRecord> topCustomersRecords)
         {
-            List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
-            List<string> listDimensions = new List<string> { "Customer" };
-            var fromDate = DateTime.Parse("09/23/1990");
-            var toDate = DateTime.Now.AddYears(2);
-
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate,true);
-            if (analyticResult.Data != null)
+            
+            if (topCustomersRecords.Data != null)
             {
-                ConvertAnalyticDataToTopCustomersResult(liveDashboardResult, analyticResult.Data);
+                ConvertAnalyticDataToTopCustomersResult(liveDashboardResult, topCustomersRecords.Data);
 
-                MeasureValue attempts = GetMeasureValue(analyticResult.Summary, "Attempts");
-                MeasureValue countConnected = GetMeasureValue(analyticResult.Summary, "CountConnected");
-                MeasureValue percConnected = GetMeasureValue(analyticResult.Summary, "PercConnected");
-                MeasureValue acd = GetMeasureValue(analyticResult.Summary, "ACD");
-                MeasureValue pDDInSec = GetMeasureValue(analyticResult.Summary, "PDDInSec");
-                MeasureValue totalDuration = GetMeasureValue(analyticResult.Summary, "TotalDuration");
+                MeasureValue attempts = GetMeasureValue(topCustomersRecords.Summary, "Attempts");
+                MeasureValue countConnected = GetMeasureValue(topCustomersRecords.Summary, "CountConnected");
+                MeasureValue percConnected = GetMeasureValue(topCustomersRecords.Summary, "PercConnected");
+                MeasureValue acd = GetMeasureValue(topCustomersRecords.Summary, "ACD");
+                MeasureValue pDDInSec = GetMeasureValue(topCustomersRecords.Summary, "PDDInSec");
+                MeasureValue totalDuration = GetMeasureValue(topCustomersRecords.Summary, "TotalDuration");
 
                 liveDashboardResult.LiveSummaryResult = new LiveSummaryResult
                 {
@@ -101,6 +117,17 @@ namespace NP.IVSwitch.Business
                 };
 
             }
+        }
+
+        private AnalyticSummaryBigResult<AnalyticRecord> QueryTopCustomers()
+        {
+            List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
+            List<string> listDimensions = new List<string> { "Customer" };
+            var fromDate = DateTime.Today.AddYears(-1);
+            var toDate = DateTime.Now.AddYears(1);
+
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate, true);
+            return analyticResult;
         }
         private void ConvertAnalyticDataToTopCustomersResult(LiveDashboardResult liveDashboardResult, IEnumerable<AnalyticRecord> analyticRecords)
         {
@@ -137,18 +164,23 @@ namespace NP.IVSwitch.Business
                 }
             }
         }
-        private void BuildTopSuppliersResult(LiveDashboardResult liveDashboardResult)
+        private void BuildTopSuppliersResult(LiveDashboardResult liveDashboardResult, AnalyticSummaryBigResult<AnalyticRecord> topSuppliersRecords)
+        {
+            if (topSuppliersRecords.Data != null)
+            {
+                ConvertAnalyticDataToTopSuppliersResult(liveDashboardResult, topSuppliersRecords.Data);
+            }
+        }
+
+        private AnalyticSummaryBigResult<AnalyticRecord> QueryTopSuppliers()
         {
             List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
             List<string> listDimensions = new List<string> { "Supplier" };
-            var fromDate = DateTime.Parse("09/23/1990");
-            var toDate = DateTime.Now.AddYears(2);
+            var fromDate = DateTime.Today.AddYears(-1);
+            var toDate = DateTime.Now.AddYears(1);
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate,false);
-            if (analyticResult.Data != null)
-            {
-                ConvertAnalyticDataToTopSuppliersResult(liveDashboardResult, analyticResult.Data);
-            }
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate, false);
+            return analyticResult;
         }
         private void ConvertAnalyticDataToTopSuppliersResult(LiveDashboardResult liveDashboardResult, IEnumerable<AnalyticRecord> analyticRecords)
         {
@@ -185,18 +217,23 @@ namespace NP.IVSwitch.Business
             }
         }
 
-        private void BuildTopZonesResult(LiveDashboardResult liveDashboardResult)
+        private void BuildTopZonesResult(LiveDashboardResult liveDashboardResult, AnalyticSummaryBigResult<AnalyticRecord> topZonesRecords)
+        {
+            if (topZonesRecords.Data != null)
+            {
+                ConvertAnalyticDataToTopZonesResult(liveDashboardResult, topZonesRecords.Data);
+            }
+        }
+
+        private AnalyticSummaryBigResult<AnalyticRecord> QueryTopZones()
         {
             List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
             List<string> listDimensions = new List<string> { "Zone" };
-            var fromDate = DateTime.Parse("09/23/1990");
-            var toDate = DateTime.Now.AddYears(2);
+            var fromDate = DateTime.Today.AddYears(-1);
+            var toDate = DateTime.Now.AddYears(1);
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate,false);
-            if (analyticResult.Data != null)
-            {
-                ConvertAnalyticDataToTopZonesResult(liveDashboardResult, analyticResult.Data);
-            }
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, fromDate, toDate, false);
+            return analyticResult;
         }
         private void ConvertAnalyticDataToTopZonesResult(LiveDashboardResult liveDashboardResult, IEnumerable<AnalyticRecord> analyticRecords)
         {
@@ -262,6 +299,11 @@ namespace NP.IVSwitch.Business
             MeasureValue measureValue;
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+
         }
 
     }
