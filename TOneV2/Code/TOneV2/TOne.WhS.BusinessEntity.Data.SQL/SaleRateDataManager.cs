@@ -13,8 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleRateDataManager : BaseSQLDataManager, ISaleRateDataManager
     {
-
-        #region ctor/Local Variables
+        #region Fields / Constructors
         public SaleRateDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -28,6 +27,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemSP("TOneWhS_BE.sp_SaleRate_GetByID", SaleRateMapper, rateId);
         }
+
         public IEnumerable<SaleRate> GetFilteredSaleRates(SaleRateQuery query)
         {
             string zonesids = null;
@@ -69,10 +69,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
             });
         }
+
         public bool AreSaleRatesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
         }
+
         public IEnumerable<SaleRate> GetExistingRatesByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED)
         {
             string zoneIdsParameter = string.Join(",", zoneIds);
@@ -103,6 +105,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             dtRoutingInfos.EndLoadData();
             return dtRoutingInfos;
         }
+
         private static DataTable GetRoutingOwnerInfoTable()
         {
             DataTable dtRoutingInfos = new DataTable();
@@ -116,13 +119,32 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFutureByOwner", SaleRateMapper, ownerType, ownerId);
         }
 
-		public IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnerAndZones(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime effectiveOn)
-		{
-			if (zoneIds == null)
-				throw new Vanrise.Entities.MissingArgumentValidationException("zoneIds");
-			string zoneIdsAsString = string.Join(",", zoneIds);
-			return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetEffectiveAfterByOwnerAndZones", SaleRateMapper, ownerType, ownerId, zoneIdsAsString, effectiveOn);
-		}
+        public IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnerAndZones(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime effectiveOn)
+        {
+            if (zoneIds == null)
+                throw new Vanrise.Entities.MissingArgumentValidationException("zoneIds");
+            string zoneIdsAsString = string.Join(",", zoneIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetEffectiveAfterByOwnerAndZones", SaleRateMapper, ownerType, ownerId, zoneIdsAsString, effectiveOn);
+        }
+
+        public IEnumerable<SaleRate> GetZoneRatesBySellingProduct(int sellingProductId, IEnumerable<long> saleZoneIds)
+        {
+            string saleZoneIdsAsString = (saleZoneIds != null) ? string.Join(",", saleZoneIds) : null;
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetBySellingProduct", SaleRateMapper, sellingProductId, saleZoneIdsAsString);
+        }
+
+        public IEnumerable<SaleRate> GetZoneRatesBySellingProducts(IEnumerable<int> sellingProductIds, IEnumerable<long> saleZoneIds)
+        {
+            string sellingProductIdsAsString = (sellingProductIds != null) ? string.Join(",", sellingProductIds) : null;
+            string saleZoneIdsAsString = (saleZoneIds != null) ? string.Join(",", saleZoneIds) : null;
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetBySellingProducts", SaleRateMapper, sellingProductIdsAsString, saleZoneIdsAsString);
+        }
+
+        public IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds)
+        {
+            string saleZoneIdsAsString = (saleZoneIds != null) ? string.Join(",", saleZoneIds) : null;
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllByOwner", SaleRateMapper, ownerType, ownerId, saleZoneIdsAsString);
+        }
 
         #endregion
 
@@ -141,14 +163,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             saleRate.BED = (DateTime)reader["BED"];
             saleRate.EED = GetReaderValue<DateTime?>(reader, "EED");
-            
+
             saleRate.RateChange = (Entities.RateChangeType)GetReaderValue<byte>(reader, "Change");
             saleRate.CurrencyId = GetReaderValue<int?>(reader, "CurrencyId");
             return saleRate;
         }
 
         #endregion
-
 
         #region State Backup Methods
 
@@ -160,7 +181,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
         }
 
-
         public string BackupAllDataByOwner(long stateBackupId, string backupDatabase, int ownerId, int ownerType)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleRate] WITH (TABLOCK)
@@ -168,7 +188,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                            sr WITH (NOLOCK) Inner Join [TOneWhS_BE].[SalePriceList] pl WITH (NOLOCK) on sr.PriceListID = pl.ID
                                            Where pl.OwnerId = {2} and pl.OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
         }
-
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {

@@ -2,10 +2,9 @@
 
     'use strict';
 
-    ZoneInfoController.$inject = ['$scope', 'UtilsService', 'VRNavigationService'];
+    ZoneInfoController.$inject = ['$scope', 'WhS_BE_SalePriceListOwnerTypeEnum', 'UtilsService', 'VRNavigationService'];
 
-    function ZoneInfoController($scope, UtilsService, VRNavigationService)
-    {
+    function ZoneInfoController($scope, WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRNavigationService) {
         var ownerType;
         var ownerId;
         var zoneId;
@@ -13,6 +12,7 @@
         var zoneBED;
         var zoneEED;
         var currencyId;
+        var countryId;
 
         loadParameters();
         defineScope();
@@ -20,7 +20,6 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined) {
                 ownerType = parameters.ownerType;
                 ownerId = parameters.ownerId;
@@ -29,33 +28,37 @@
                 zoneBED = parameters.zoneBED;
                 zoneEED = parameters.zoneEED;
                 currencyId = parameters.currencyId;
+                countryId = parameters.countryId;
             }
         }
-        function defineScope()
-        {
+        function defineScope() {
             $scope.title = 'Zone Info';
             if (zoneName != undefined)
                 $scope.title += ': ' + zoneName;
 
             $scope.scopeModel = {};
-            
+
             if (zoneBED != undefined)
                 $scope.scopeModel.zoneBED = UtilsService.getShortDate(new Date(zoneBED));
 
             $scope.scopeModel.zoneEED = (zoneEED != undefined) ? UtilsService.getShortDate(new Date(zoneEED)) : 'NULL';
 
+            var saleRateHistoryGridDirectiveName = (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ?
+                'vr-whs-be-salerate-history-sellingproduct-grid' : 'vr-whs-be-salerate-history-customer-grid';
+
             $scope.scopeModel.directiveTabs = [{
-                title: 'Rates',
-                directive: 'vr-whs-be-salerate-grid',
+                title: 'Rate History',
+                directive: saleRateHistoryGridDirectiveName,
                 loadDirective: function (directiveAPI) {
-                    var rateGridPayload = {
-                        OwnerType: ownerType,
-                        OwnerId: ownerId,
-                        ZonesIds: [zoneId],
-                        EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
-                        CurrencyId: currencyId
+                    var payload = {
+                        ZoneName: zoneName,
+                        CountryId: countryId
                     };
-                    return directiveAPI.loadGrid(rateGridPayload);
+
+                    var ownerIdPropertyName = (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? 'SellingProductId' : 'CustomerId';
+                    payload[ownerIdPropertyName] = ownerId;
+
+                    return directiveAPI.load(payload);
                 }
             }, {
                 title: 'Codes',
@@ -82,7 +85,7 @@
             };
         }
         function load() {
-            
+
         }
     }
 

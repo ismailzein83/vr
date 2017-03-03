@@ -96,7 +96,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             $scope.onZoneNameClicked = function (dataItem) {
-                WhS_Sales_RatePlanService.viewZoneInfo(gridQuery.OwnerType, gridQuery.OwnerId, dataItem.ZoneId, dataItem.ZoneName, dataItem.ZoneBED, dataItem.ZoneEED, gridQuery.CurrencyId);
+                WhS_Sales_RatePlanService.viewZoneInfo(gridQuery.OwnerType, gridQuery.OwnerId, dataItem.ZoneId, dataItem.ZoneName, dataItem.ZoneBED, dataItem.ZoneEED, gridQuery.CurrencyId, dataItem.CountryId);
             };
 
             $scope.onCurrentRateClicked = function (dataItem) {

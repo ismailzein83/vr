@@ -1,161 +1,161 @@
 ﻿(function (appControllers) {
 
-	'use strict';
+    'use strict';
 
-	RatePlanService.$inject = ['VRModalService'];
+    RatePlanService.$inject = ['VRModalService'];
 
-	function RatePlanService(VRModalService) {
-		return {
-			sellNewCountries: sellNewCountries,
-			editSettings: editSettings,
-			editPricingSettings: editPricingSettings,
-			viewFutureRate: viewFutureRate,
-			viewInvalidRates: viewInvalidRates,
-			viewZoneInfo: viewZoneInfo,
-			openBulkActionWizard: openBulkActionWizard,
-			openTQIEditor: openTQIEditor,
-			importRatePlan: importRatePlan
-		};
+    function RatePlanService(VRModalService) {
+        return {
+            sellNewCountries: sellNewCountries,
+            editSettings: editSettings,
+            editPricingSettings: editPricingSettings,
+            viewFutureRate: viewFutureRate,
+            viewInvalidRates: viewInvalidRates,
+            viewZoneInfo: viewZoneInfo,
+            openBulkActionWizard: openBulkActionWizard,
+            openTQIEditor: openTQIEditor,
+            importRatePlan: importRatePlan
+        };
 
-		function sellNewCountries(customerId, countryChanges, saleAreaSettings, ratePlanSettings, onCountryChangesUpdated) {
+        function sellNewCountries(customerId, countryChanges, saleAreaSettings, ratePlanSettings, onCountryChangesUpdated) {
 
-			var parameters = {
-				customerId: customerId,
-				countryChanges: countryChanges,
-				saleAreaSettings: saleAreaSettings,
-				ratePlanSettings: ratePlanSettings
-			};
+            var parameters = {
+                customerId: customerId,
+                countryChanges: countryChanges,
+                saleAreaSettings: saleAreaSettings,
+                ratePlanSettings: ratePlanSettings
+            };
 
-			var settings = {};
-			settings.onScopeReady = function (modalScope) {
-				modalScope.onCountryChangesUpdated = onCountryChangesUpdated;
-			};
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onCountryChangesUpdated = onCountryChangesUpdated;
+            };
 
-			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewCountries.html", parameters, settings);
-		}
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewCountries.html", parameters, settings);
+        }
 
-		function editSettings(settings, onSettingsUpdated) {
-			var parameters = {
-				settings: settings
-			};
+        function editSettings(settings, onSettingsUpdated) {
+            var parameters = {
+                settings: settings
+            };
 
-			var modalSettings = {};
+            var modalSettings = {};
 
-			modalSettings.onScopeReady = function (modalScope) {
-				modalScope.onSettingsUpdated = onSettingsUpdated;
-			};
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onSettingsUpdated = onSettingsUpdated;
+            };
 
-			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanSettings.html", parameters, modalSettings);
-		}
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanSettings.html", parameters, modalSettings);
+        }
 
-		function editPricingSettings(ratePlanSettings, pricingSettings, onPricingSettingsUpdated) {
-			var parameters = {
-				ratePlanSettings: ratePlanSettings,
-				pricingSettings: pricingSettings
-			};
+        function editPricingSettings(ratePlanSettings, pricingSettings, onPricingSettingsUpdated) {
+            var parameters = {
+                ratePlanSettings: ratePlanSettings,
+                pricingSettings: pricingSettings
+            };
 
-			var modalSettings = {};
+            var modalSettings = {};
 
-			modalSettings.onScopeReady = function (modalScope) {
-				modalScope.onPricingSettingsUpdated = onPricingSettingsUpdated;
-			};
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onPricingSettingsUpdated = onPricingSettingsUpdated;
+            };
 
-			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanPricingSettings.html", parameters, modalSettings);
-		}
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/RatePlanPricingSettings.html", parameters, modalSettings);
+        }
 
-		function openTQIEditor(context, onTQIEvaluated) {
-		    var parameters = {
-		        context: context
-		    };
+        function openTQIEditor(context, onTQIEvaluated) {
+            var parameters = {
+                context: context
+            };
 
-		    var settings = {};
+            var settings = {};
 
-		    settings.onScopeReady = function (modalScope) {
-		        modalScope.onTQIEvaluated = onTQIEvaluated;
-		    };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onTQIEvaluated = onTQIEvaluated;
+            };
 
-		    VRModalService.showModal("/Client/Modules/WhS_Sales/Views/TQI/TQIEditor.html", parameters, settings);
-		}
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/TQI/TQIEditor.html", parameters, settings);
+        }
 
-		function viewFutureRate(zoneName, futureRate) {
-			var parameters = {
-				zoneName: zoneName,
-				futureRate: futureRate
-			};
+        function viewFutureRate(zoneName, futureRate) {
+            var parameters = {
+                zoneName: zoneName,
+                futureRate: futureRate
+            };
 
-			var settings = {};
+            var settings = {};
 
-			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/FutureRate.html", parameters, settings);
-		}
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/FutureRate.html", parameters, settings);
+        }
 
-		function viewInvalidRates(calculatedRates, onSaved) {
-			var parameters = {
-				calculatedRates: calculatedRates
-			};
+        function viewInvalidRates(calculatedRates, onSaved) {
+            var parameters = {
+                calculatedRates: calculatedRates
+            };
 
-			var settings = {
-				onScopeReady: function (modalScope) {
-					modalScope.onSaved = onSaved;
-				}
-			};
+            var settings = {
+                onScopeReady: function (modalScope) {
+                    modalScope.onSaved = onSaved;
+                }
+            };
 
-			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/InvalidRate.html", parameters, settings);
-		}
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/InvalidRate.html", parameters, settings);
+        }
 
-		function viewZoneInfo(ownerType, ownerId, zoneId, zoneName, zoneBED, zoneEED, currencyId) {
-			var parameters = {
-				ownerType: ownerType,
-				ownerId: ownerId,
-				zoneId: zoneId,
-				zoneName: zoneName,
-				zoneBED: zoneBED,
-				zoneEED: zoneEED,
-				currencyId: currencyId
-			};
+        function viewZoneInfo(ownerType, ownerId, zoneId, zoneName, zoneBED, zoneEED, currencyId, countryId) {
+            var parameters = {
+                ownerType: ownerType,
+                ownerId: ownerId,
+                zoneId: zoneId,
+                zoneName: zoneName,
+                zoneBED: zoneBED,
+                zoneEED: zoneEED,
+                currencyId: currencyId,
+                countryId: countryId
+            };
 
-			var settings;
+            var settings;
 
-			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ZoneInfo.html", parameters, settings);
-		}
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ZoneInfo.html", parameters, settings);
+        }
 
-		function openBulkActionWizard(ownerType, ownerId, ownerSellingNumberPlanId, gridQuery, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, currencyId, onBulkActionAppliedToDraft) {
+        function openBulkActionWizard(ownerType, ownerId, ownerSellingNumberPlanId, gridQuery, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, currencyId, onBulkActionAppliedToDraft) {
 
-			var parameters = {
-				ownerType: ownerType,
-				ownerId: ownerId,
-				ownerSellingNumberPlanId: ownerSellingNumberPlanId,
-				gridQuery: gridQuery,
-				routingDatabaseId: routingDatabaseId,
-				policyConfigId: policyConfigId,
-				numberOfOptions: numberOfOptions,
-				currencyId: currencyId
-			};
+            var parameters = {
+                ownerType: ownerType,
+                ownerId: ownerId,
+                ownerSellingNumberPlanId: ownerSellingNumberPlanId,
+                gridQuery: gridQuery,
+                routingDatabaseId: routingDatabaseId,
+                policyConfigId: policyConfigId,
+                numberOfOptions: numberOfOptions,
+                currencyId: currencyId
+            };
 
-			var modalSettings = {};
+            var modalSettings = {};
 
-			modalSettings.onScopeReady = function (modalScope) {
-				modalScope.onBulkActionAppliedToDraft = onBulkActionAppliedToDraft;
-			};
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onBulkActionAppliedToDraft = onBulkActionAppliedToDraft;
+            };
 
-			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/BulkAction/BulkActionWizard.html", parameters, modalSettings);
-		}
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/BulkAction/BulkActionWizard.html", parameters, modalSettings);
+        }
 
-		function importRatePlan(ownerType, ownerId, onRatePlanImported)
-		{
-			var parameters = {
-				ownerType: ownerType,
-				ownerId: ownerId
-			};
+        function importRatePlan(ownerType, ownerId, onRatePlanImported) {
+            var parameters = {
+                ownerType: ownerType,
+                ownerId: ownerId
+            };
 
-			var modalSettings = {
-				onScopeReady: function (modalScope) {
-					modalScope.onRatePlanImported = onRatePlanImported;
-				}
-			};
-			VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ImportRatePlan/ImportRatePlan.html", parameters, modalSettings);
-		}
-	}
+            var modalSettings = {
+                onScopeReady: function (modalScope) {
+                    modalScope.onRatePlanImported = onRatePlanImported;
+                }
+            };
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ImportRatePlan/ImportRatePlan.html", parameters, modalSettings);
+        }
+    }
 
-	appControllers.service('WhS_Sales_RatePlanService', RatePlanService);
+    appControllers.service('WhS_Sales_RatePlanService', RatePlanService);
 
 })(appControllers);

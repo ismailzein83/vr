@@ -358,8 +358,8 @@ namespace TOne.WhS.BusinessEntity.Business
             if (cachedSaleZones == null || cachedSaleZones.Count() == 0)
                 return null;
             
-            string lowercasedZoneName = saleZoneName.ToLower();
-            return cachedSaleZones.MapRecords(x => x.SaleZoneId, x => x.CountryId == countryId && (x.Name != null && x.Name.ToLower() == lowercasedZoneName));
+            string targetZoneName = saleZoneName.Trim().ToLower();
+            return cachedSaleZones.MapRecords(x => x.SaleZoneId, x => x.CountryId == countryId && (x.Name != null && x.Name.ToLower() == targetZoneName));
         }
 
         #endregion

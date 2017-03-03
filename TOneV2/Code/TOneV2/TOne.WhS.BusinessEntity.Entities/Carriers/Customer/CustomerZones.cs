@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? EndEffectiveTime { get; set; }
     }
 
-    public class CustomerCountry2 : Vanrise.Entities.IDateEffectiveSettings
+    public class CustomerCountry2 : Vanrise.Entities.IDateEffectiveSettings, Vanrise.Entities.IDateEffectiveSettingsEditable
     {
         public int CustomerCountryId { get; set; }
 

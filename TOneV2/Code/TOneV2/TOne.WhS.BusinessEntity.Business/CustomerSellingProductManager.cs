@@ -318,6 +318,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return sellingProductId;
         }
 
+        public IEnumerable<ProcessedCustomerSellingProduct> GetProcessedCustomerSellingProducts(int customerId)
+        {
+            Dictionary<int, List<ProcessedCustomerSellingProduct>> entitiesByCustomerId = GetCachedProcessedCustomerSellingProductsByCustomerId();
+            return entitiesByCustomerId.GetRecord(customerId);
+        }
+
         #endregion
 
         #region Validation Methods
@@ -375,6 +381,50 @@ namespace TOne.WhS.BusinessEntity.Business
                    }
                    return dic;
                });
+        }
+
+        private Dictionary<int, List<ProcessedCustomerSellingProduct>> GetCachedProcessedCustomerSellingProductsByCustomerId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedProcessedCustomerSellingProductsByCustomerId", () =>
+            {
+                ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
+                IEnumerable<CustomerSellingProduct> customerSellingProducts = dataManager.GetCustomerSellingProducts();
+
+                var entitiesByCustomerId = new Dictionary<int, List<ProcessedCustomerSellingProduct>>();
+
+                if (customerSellingProducts != null)
+                {
+                    var carrierAccountManager = new CarrierAccountManager();
+
+                    foreach (CustomerSellingProduct customerSellingProduct in customerSellingProducts.OrderBy(x => x.BED))
+                    {
+                        if (carrierAccountManager.IsCarrierAccountDeleted(customerSellingProduct.CustomerId))
+                            continue;
+
+                        List<ProcessedCustomerSellingProduct> customerEntities;
+
+                        if (!entitiesByCustomerId.TryGetValue(customerSellingProduct.CustomerId, out customerEntities))
+                        {
+                            customerEntities = new List<ProcessedCustomerSellingProduct>();
+                            entitiesByCustomerId.Add(customerSellingProduct.CustomerId, customerEntities);
+                        }
+
+                        var customerEntity = new ProcessedCustomerSellingProduct()
+                        {
+                            CustomerId = customerSellingProduct.CustomerId,
+                            SellingProductId = customerSellingProduct.SellingProductId,
+                            BED = customerSellingProduct.BED
+                        };
+
+                        if (customerEntities.Count > 0)
+                            customerEntities.Last().EED = customerEntity.BED;
+
+                        customerEntities.Add(customerEntity);
+                    }
+                }
+
+                return entitiesByCustomerId;
+            });
         }
 
         private Dictionary<int, List<CustomerSellingProduct>> GetCachedCustomerSellingProductsBySellingProductId()

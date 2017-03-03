@@ -1,9 +1,16 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             datasource="scopeModel.records"
+             defaultsortbyfieldname="'Entity.BED'"
+             defaultsortdirection="'DESC'"
+             pagingtype="'PagingOnScroll'"
+             hidegridmenu>
+    <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+    <vr-datagridcolumn widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Change Type'">
+        <vr-icon icontype="dataItem.iconType" iconurl="dataItem.iconUrl"></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
+</vr-datagrid>

@@ -8,5 +8,10 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CustomerZoneRateHistoryQuery
     {
+        public int CustomerId { get; set; }
+
+        public string ZoneName { get; set; }
+
+        public int CountryId { get; set; }
     }
 }

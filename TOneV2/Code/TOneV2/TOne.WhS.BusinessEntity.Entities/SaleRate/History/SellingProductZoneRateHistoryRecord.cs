@@ -10,6 +10,10 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public decimal Rate { get; set; }
 
+        public int CurrencyId { get; set; }
+
+        public RateChangeType ChangeType { get; set; }
+
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
@@ -18,5 +22,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SellingProductZoneRateHistoryRecordDetail
     {
         public SellingProductZoneRateHistoryRecord Entity { get; set; }
+
+        public string CurrencySymbol { get; set; }
     }
 }

@@ -214,7 +214,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        public IEnumerable<SaleRate> GetSaleRatesBySellingProduct(IEnumerable<long> saleZoneIds, int sellingProductId)
+        public IEnumerable<SaleRate> GetZoneRatesBySellingProduct(IEnumerable<long> saleZoneIds, int sellingProductId)
         {
             if (saleZoneIds == null || saleZoneIds.Count() == 0)
                 throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds");
@@ -222,7 +222,7 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-        public Dictionary<int, IEnumerable<SaleRate>> GetSaleRatesBySellingProducts(IEnumerable<long> saleZoneIds, IEnumerable<int> sellingProductIds)
+        public Dictionary<int, List<SaleRate>> GetZoneRatesBySellingProducts(IEnumerable<long> saleZoneIds, IEnumerable<int> sellingProductIds)
         {
             if (saleZoneIds == null || saleZoneIds.Count() == 0)
                 throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds");
@@ -230,7 +230,45 @@ namespace TOne.WhS.BusinessEntity.Business
             if (sellingProductIds == null || sellingProductIds.Count() == 0)
                 throw new Vanrise.Entities.MissingArgumentValidationException("sellingProductIds");
 
-            throw new NotImplementedException();
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            IEnumerable<SaleRate> saleRates = dataManager.GetZoneRatesBySellingProducts(sellingProductIds, saleZoneIds);
+            
+            if (saleRates == null || saleRates.Count() == 0)
+                return null;
+
+            var saleRatesBySellingProductId = new Dictionary<int, List<SaleRate>>();
+            Dictionary<int, SalePriceList> salePriceListsById = new SalePriceListManager().GetCachedSalePriceLists();
+
+            foreach (SaleRate saleRate in saleRates.OrderBy(x => x.BED))
+            {
+                SalePriceList salePriceList = salePriceListsById.GetRecord(saleRate.PriceListId);
+
+                if (salePriceList == null || salePriceList.OwnerType != SalePriceListOwnerType.SellingProduct || !sellingProductIds.Contains(salePriceList.OwnerId))
+                    continue;
+
+                List<SaleRate> sellingProductSaleRates;
+
+                if (!saleRatesBySellingProductId.TryGetValue(salePriceList.OwnerId, out sellingProductSaleRates))
+                {
+                    sellingProductSaleRates = new List<SaleRate>();
+                    saleRatesBySellingProductId.Add(salePriceList.OwnerId, sellingProductSaleRates);
+                }
+
+                sellingProductSaleRates.Add(saleRate);
+            }
+
+            return saleRatesBySellingProductId;
+        }
+
+        /// <summary>
+        /// Returns the sale rates of all, or some, of the sale zones of the owner
+        /// </summary>
+        /// <param name="saleZoneIds">This parameter is optional. The sale rates of all sale zones will be fetched in case it's null</param>
+        /// <returns></returns>
+        public IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetAllSaleRatesByOwner(ownerType, ownerId, saleZoneIds);
         }
 
         #endregion

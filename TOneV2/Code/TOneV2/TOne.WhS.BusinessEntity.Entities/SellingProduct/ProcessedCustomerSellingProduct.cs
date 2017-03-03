@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SellingProductZoneRateHistoryQuery
+    public class ProcessedCustomerSellingProduct : Vanrise.Entities.IDateEffectiveSettingsEditable
     {
+        public int CustomerId { get; set; }
+
         public int SellingProductId { get; set; }
 
-        public string ZoneName { get; set; }
+        public DateTime BED { get; set; }
 
-        public int CountryId { get; set; }
+        public DateTime? EED { get; set; }
     }
 }
