@@ -87,10 +87,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CodeGroupDetail> context)
             {
-                if (context.BigResult == null)
-                    throw new ArgumentNullException("context.BigResult");
-                if (context.BigResult.Data == null)
-                    throw new ArgumentNullException("context.BigResult.Data");
                 ExportExcelSheet sheet = new ExportExcelSheet();
                 sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
@@ -98,13 +94,19 @@ namespace TOne.WhS.BusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
 
                 sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                    sheet.Rows.Add(row);
-                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.CodeGroupId });
-                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Code });
-                    row.Cells.Add(new ExportExcelCell { Value = record.CountryName });
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CodeGroupId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Code });
+                            row.Cells.Add(new ExportExcelCell { Value = record.CountryName });
+                        }
+                    }
                 }
                 context.MainSheet = sheet;
             }

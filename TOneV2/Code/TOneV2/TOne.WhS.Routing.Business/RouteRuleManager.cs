@@ -115,10 +115,6 @@ namespace TOne.WhS.Routing.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RouteRuleDetail> context)
             {
-                if (context.BigResult == null)
-                    throw new ArgumentNullException("context.BigResult");
-                if (context.BigResult.Data == null)
-                    throw new ArgumentNullException("context.BigResult.Data");
                 ExportExcelSheet sheet = new ExportExcelSheet();
                 sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
@@ -130,17 +126,23 @@ namespace TOne.WhS.Routing.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 
                 sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                    sheet.Rows.Add(row);
-                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                    row.Cells.Add(new ExportExcelCell { Value = record.IncludedCodes });
-                    row.Cells.Add(new ExportExcelCell { Value = record.Customers });
-                    row.Cells.Add(new ExportExcelCell { Value = record.SaleZones });
-                    row.Cells.Add(new ExportExcelCell { Value = record.RouteRuleSettingsTypeName });
-                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
-                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.IncludedCodes });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Customers });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SaleZones });
+                            row.Cells.Add(new ExportExcelCell { Value = record.RouteRuleSettingsTypeName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                        }
+                    }
                 }
                 context.MainSheet = sheet;
             }

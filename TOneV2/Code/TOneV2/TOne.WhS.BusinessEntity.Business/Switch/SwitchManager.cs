@@ -23,9 +23,47 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<Switch, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper));
-        }
+            SwitchExcelExportHandler switchExcel = new SwitchExcelExportHandler(input.Query);
+            ResultProcessingHandler<SwitchDetail> handler = new ResultProcessingHandler<SwitchDetail>()
+            {
+                ExportExcelHandler = switchExcel
+            };
 
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper), handler);
+        }
+        private class SwitchExcelExportHandler : ExcelExportHandler<SwitchDetail>
+        {
+            private SwitchQuery _query;
+            public SwitchExcelExportHandler(SwitchQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SwitchDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet();
+                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch Name" });
+                
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SwitchId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
         public Switch GetSwitch(int switchId)
         {
             var switchs = GetCachedSwitches();
