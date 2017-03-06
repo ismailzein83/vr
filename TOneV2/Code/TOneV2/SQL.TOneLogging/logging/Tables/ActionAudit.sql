@@ -6,12 +6,15 @@
     [EntityID]          INT            NULL,
     [ActionID]          INT            NULL,
     [ObjectID]          VARCHAR (255)  NULL,
+    [ObjectName]        NVARCHAR (900) NULL,
     [ActionDescription] NVARCHAR (MAX) NULL,
     [LogTime]           DATETIME       NULL,
     [CreatedTime]       DATETIME       CONSTRAINT [DF_ActionAudit_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]         ROWVERSION     NULL,
     CONSTRAINT [IX_ActionAudit_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO

@@ -3,13 +3,14 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE logging.sp_ActionAudit_Insert
+CREATE PROCEDURE [logging].[sp_ActionAudit_Insert]
 	@UserID int,
 	@URLID int,
 	@ModuleID int,
 	@EntityID int,
 	@ActionID int,
-	@ObjectID int,
+	@ObjectID varchar(255),
+	@ObjectName nvarchar(900),
 	@ActionDescription nvarchar(max)
 AS
 BEGIN
@@ -20,6 +21,7 @@ BEGIN
            ,[EntityID]
            ,[ActionID]
            ,[ObjectID]
+		   ,[ObjectName]
            ,[ActionDescription]
            ,[LogTime])
 	VALUES (@UserID
@@ -28,6 +30,7 @@ BEGIN
 			,@EntityID
 			,@ActionID
 			,@ObjectID
+			,@ObjectName
 			,@ActionDescription
 			,GETDATE())
 END
