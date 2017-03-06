@@ -14,20 +14,18 @@ namespace TOne.WhS.TOneV1Transition.BP.Activities
         [RequiredArgument]
         public OutArgument<RoutingProcessInput> RoutingProcessInput { get; set; }
 
-        [RequiredArgument]
-        public OutArgument<int> RoutingMigrationOffsetInMinutes { get; set; }
-
-
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
+            context.ActivityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Loading Process Input");
+
             ConfigManager configManager = new ConfigManager();
             DBSyncTaskActionArgument dbSyncTaskActionArgument = configManager.GetDBSyncTaskActionArgument();
             RoutingProcessInput routingProcessInput = configManager.GetRoutingProcessInput();
-            int routingMigrationOffsetInMinutes = configManager.GetRoutingMigrationOffsetInMinutes();
 
             this.DBSyncTaskActionArgument.Set(context.ActivityContext, dbSyncTaskActionArgument);
             this.RoutingProcessInput.Set(context.ActivityContext, routingProcessInput);
-            this.RoutingMigrationOffsetInMinutes.Set(context.ActivityContext, routingMigrationOffsetInMinutes);
+
+            context.ActivityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Loading Process Input");
         }
     }
 }

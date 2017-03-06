@@ -15,41 +15,46 @@ namespace TOne.WhS.DBSync.Business
     {
         List<IDManagerEntity> _idManagerEntities = new List<IDManagerEntity>();
 
+        MigrationContext _context;
+
+        public DBSyncTaskAction()
+        {
+        }
+
+        public DBSyncTaskAction(MigrationContext migrationContext)
+        {
+            _context = migrationContext;
+        }
+
+
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
-            MigrationContext context = new MigrationContext();
-            try
-            {
-                //Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(task.OwnerId);
-                context.WriteInformation("Database Sync Task Action Started");
-                DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
-                MigrationManager migrationManager;
-                context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
-                context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
-                context.DefaultSellingNumberPlanId = dbSyncTaskActionArgument.DefaultSellingNumberPlanId;
-                context.SellingProductId = dbSyncTaskActionArgument.SellingProductId;
-                context.OffPeakRateTypeId = dbSyncTaskActionArgument.OffPeakRateTypeId;
-                context.WeekendRateTypeId = dbSyncTaskActionArgument.WeekendRateTypeId;
-                context.HolidayRateTypeId = dbSyncTaskActionArgument.HolidayRateTypeId;
-                context.MigratePriceListData = dbSyncTaskActionArgument.MigratePriceListData;
-                context.OnlyEffective = dbSyncTaskActionArgument.OnlyEffective;
-                context.MigrationRequestedTables = dbSyncTaskActionArgument.MigrationRequestedTables;
-                context.IsCustomerCommissionNegative = dbSyncTaskActionArgument.IsCustomerCommissionNegative;
-                context.DBTables = FillDBTables(context);
-                migrationManager = ConstructMigrationManager(context);
-                PrepareBeforeApplyingRecords(context, migrationManager);
-                //TruncateTables(context, migrationManager);
-                TransferData(context);
-                //CreateForeignKeys(context, migrationManager);
-                FinalizeMigration(context, migrationManager);
-                context.WriteInformation("Database Sync Task Action Executed");
+            if (_context == null)
+                _context = new MigrationContext();
 
-            }
-
-            catch (Exception ex)
-            {
-                context.WriteException(ex);
-            }
+            //Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(task.OwnerId);
+            _context.WriteInformation("Database Sync Task Action Started");
+            DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
+            MigrationManager migrationManager;
+            _context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
+            _context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
+            _context.DefaultSellingNumberPlanId = dbSyncTaskActionArgument.DefaultSellingNumberPlanId;
+            _context.SellingProductId = dbSyncTaskActionArgument.SellingProductId;
+            _context.OffPeakRateTypeId = dbSyncTaskActionArgument.OffPeakRateTypeId;
+            _context.WeekendRateTypeId = dbSyncTaskActionArgument.WeekendRateTypeId;
+            _context.HolidayRateTypeId = dbSyncTaskActionArgument.HolidayRateTypeId;
+            _context.MigratePriceListData = dbSyncTaskActionArgument.MigratePriceListData;
+            _context.OnlyEffective = dbSyncTaskActionArgument.OnlyEffective;
+            _context.MigrationRequestedTables = dbSyncTaskActionArgument.MigrationRequestedTables;
+            _context.IsCustomerCommissionNegative = dbSyncTaskActionArgument.IsCustomerCommissionNegative;
+            _context.DBTables = FillDBTables(_context);
+            migrationManager = ConstructMigrationManager(_context);
+            PrepareBeforeApplyingRecords(_context, migrationManager);
+            //TruncateTables(context, migrationManager);
+            TransferData(_context);
+            //CreateForeignKeys(context, migrationManager);
+            FinalizeMigration(_context, migrationManager);
+            _context.WriteInformation("Database Sync Task Action Executed");
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {

@@ -20,34 +20,35 @@ namespace TOne.WhS.DBSync.Entities
         public int WeekendRateTypeId { get; set; }
         public int HolidayRateTypeId { get; set; }
         public bool MigratePriceListData { get; set; }
-
         public bool OnlyEffective { get; set; }
-        public void WriteException(Exception ex)
+
+
+        public virtual void WriteException(Exception ex)
         {
             LoggerFactory.GetExceptionLogger().WriteException(ex);
         }
 
-        public void WriteInformation(string message)
+        public virtual void WriteInformation(string message)
         {
             LoggerFactory.GetLogger().WriteInformation(message);
         }
 
-        public void WriteEntry(Vanrise.Entities.LogEntryType logEntryType, string message)
+        public virtual void WriteEntry(Vanrise.Entities.LogEntryType logEntryType, string message)
         {
             LoggerFactory.GetLogger().WriteEntry(logEntryType, message);
         }
 
-        public void WriteVerbose(string message)
+        public virtual void WriteVerbose(string message)
         {
             LoggerFactory.GetLogger().WriteVerbose(message);
         }
 
-        public void WriteError(string message)
+        public virtual void WriteError(string message)
         {
             LoggerFactory.GetLogger().WriteError(message);
         }
 
-        public void WriteWarning(string message)
+        public virtual void WriteWarning(string message)
         {
             LoggerFactory.GetLogger().WriteWarning(message);
         }

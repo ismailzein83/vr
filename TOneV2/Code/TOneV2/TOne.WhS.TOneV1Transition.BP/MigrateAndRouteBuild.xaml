@@ -11,13 +11,13 @@
  xmlns:twdb="clr-namespace:TOne.WhS.DBSync.Business;assembly=TOne.WhS.DBSync.Business"
  xmlns:twrb="clr-namespace:TOne.WhS.Routing.BP;assembly=TOne.WhS.Routing.BP"
  xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
- xmlns:twta="clr-namespace:TOne.WhS.TOneV1Transition.Arguments;assembly=TOne.WhS.TOneV1Transition.Arguments"
- xmlns:twtba="clr-namespace:TOne.WhS.TOneV1Transition.BP.Activities;assembly=TOne.WhS.TOneV1Transition.BP.Activities"
+ xmlns:twtba="clr-namespace:TOne.WhS.TOneV1Transition.BP.Arguments;assembly=TOne.WhS.TOneV1Transition.BP.Arguments"
+ xmlns:twtba1="clr-namespace:TOne.WhS.TOneV1Transition.BP.Activities;assembly=TOne.WhS.TOneV1Transition.BP.Activities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Inout" Type="InArgument(twta:MigrateAndRouteBuildInput)" />
+    <x:Property Name="Input" Type="InArgument(twtba:MigrateAndRouteBuildInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.TOneV1Transition.BP.MigrateAndRouteBuild_1</sap2010:WorkflowViewState.IdRef>
@@ -28,9 +28,9 @@
       <x:String>System.Data</x:String>
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
-      <x:String>TOne.WhS.TOneV1Transition.Arguments</x:String>
       <x:String>TOne.WhS.DBSync.Business</x:String>
       <x:String>TOne.WhS.Routing.BP.Arguments</x:String>
+      <x:String>TOne.WhS.TOneV1Transition.BP.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -50,15 +50,15 @@
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.DBSync.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
-      <AssemblyReference>TOne.WhS.TOneV1Transition.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.TOneV1Transition.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.TOneV1Transition.BP.Activities</AssemblyReference>
-      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>TOne.WhS.TOneV1Transition.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -66,86 +66,79 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="twdb:DBSyncTaskActionArgument" Name="DBSyncTaskActionArgument" />
       <Variable x:TypeArguments="twrba:RoutingProcessInput" Name="RoutingProcessInput" />
-      <Variable x:TypeArguments="x:Int32" Name="RoutingMigrationOffsetInMinutes" />
+      <Variable x:TypeArguments="s:DateTime" Name="ProcessStartDate">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="RoutingProcessEffectiveDate" />
     </Sequence.Variables>
-    <vbw:WriteTrackingMessage Message="Start Loading Processes Input">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_1</sap2010:WorkflowViewState.IdRef>
-    </vbw:WriteTrackingMessage>
-    <twtba:LoadProcessesInput sap2010:WorkflowViewState.IdRef="LoadProcessesInput_1">
-      <twtba:LoadProcessesInput.DBSyncTaskActionArgument>
+    <twtba1:LoadProcessesInput sap2010:WorkflowViewState.IdRef="LoadProcessesInput_1">
+      <twtba1:LoadProcessesInput.DBSyncTaskActionArgument>
         <OutArgument x:TypeArguments="twdb:DBSyncTaskActionArgument">
           <mca:CSharpReference x:TypeArguments="twdb:DBSyncTaskActionArgument">DBSyncTaskActionArgument</mca:CSharpReference>
         </OutArgument>
-      </twtba:LoadProcessesInput.DBSyncTaskActionArgument>
-      <twtba:LoadProcessesInput.RoutingMigrationOffsetInMinutes>
-        <OutArgument x:TypeArguments="x:Int32">
-          <mca:CSharpReference x:TypeArguments="x:Int32">RoutingMigrationOffsetInMinutes</mca:CSharpReference>
-        </OutArgument>
-      </twtba:LoadProcessesInput.RoutingMigrationOffsetInMinutes>
-      <twtba:LoadProcessesInput.RoutingProcessInput>
+      </twtba1:LoadProcessesInput.DBSyncTaskActionArgument>
+      <twtba1:LoadProcessesInput.RoutingProcessInput>
         <OutArgument x:TypeArguments="twrba:RoutingProcessInput">
           <mca:CSharpReference x:TypeArguments="twrba:RoutingProcessInput">RoutingProcessInput</mca:CSharpReference>
         </OutArgument>
-      </twtba:LoadProcessesInput.RoutingProcessInput>
-    </twtba:LoadProcessesInput>
-    <vbw:WriteTrackingMessage DisplayName="WriteTrackingMessage" Message="Finished Loading Processes Input">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_2</sap2010:WorkflowViewState.IdRef>
-    </vbw:WriteTrackingMessage>
-    <vbw:WriteTrackingMessage Message="Start Executing Migration">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_3</sap2010:WorkflowViewState.IdRef>
-    </vbw:WriteTrackingMessage>
-    <twtba:ExecuteMigration sap2010:WorkflowViewState.IdRef="ExecuteMigration_1">
-      <twtba:ExecuteMigration.DBSyncTaskActionArgument>
+      </twtba1:LoadProcessesInput.RoutingProcessInput>
+    </twtba1:LoadProcessesInput>
+    <twtba1:ExecuteMigration sap2010:WorkflowViewState.IdRef="ExecuteMigration_1">
+      <twtba1:ExecuteMigration.DBSyncTaskActionArgument>
         <InArgument x:TypeArguments="twdb:DBSyncTaskActionArgument">
           <mca:CSharpValue x:TypeArguments="twdb:DBSyncTaskActionArgument">DBSyncTaskActionArgument</mca:CSharpValue>
         </InArgument>
-      </twtba:ExecuteMigration.DBSyncTaskActionArgument>
-    </twtba:ExecuteMigration>
-    <vbw:WriteTrackingMessage Message="Finished Executing Migration">
+      </twtba1:ExecuteMigration.DBSyncTaskActionArgument>
+    </twtba1:ExecuteMigration>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">!RoutingProcessInput.IsFuture</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+          <Assign.To>
+            <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
+              <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">RoutingProcessEffectiveDate</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">ProcessStartDate.AddMinutes(RoutingProcessInput.EffectiveAfterInMinutes)</mca:CSharpValue>
+            </InArgument>
+          </Assign.Value>
+        </Assign>
+      </If.Then>
+    </If>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
+      <vbw:WriteTrackingMessage.Message>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">RoutingProcessEffectiveDate.HasValue ? string.Format("Starting Route Build Process for Effective Time {0}",RoutingProcessEffectiveDate.Value) : "Starting Route Build Process"</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Message>
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_4</sap2010:WorkflowViewState.IdRef>
-    </vbw:WriteTrackingMessage>
-    <vbw:WriteTrackingMessage Message="Start Executing Routing Process">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_5</sap2010:WorkflowViewState.IdRef>
     </vbw:WriteTrackingMessage>
     <twrb:RoutingProcess sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.RoutingProcess_1">
       <twrb:RoutingProcess.Input>
         <InArgument x:TypeArguments="twrba:RoutingProcessInput">
           <mca:CSharpValue x:TypeArguments="twrba:RoutingProcessInput" xml:space="preserve">new TOne.WhS.Routing.BP.Arguments.RoutingProcessInput()
 {
-DivideProcessIntoSubProcesses = RoutingProcessInput.DivideProcessIntoSubProcesses,
-EffectiveTime = DateTime.Now.AddMinutes(RoutingMigrationOffsetInMinutes),
-EntityId = RoutingProcessInput.EntityId,
-IsFuture = RoutingProcessInput.IsFuture,
-RoutingDatabaseType = RoutingProcessInput.RoutingDatabaseType,
-RoutingProcessType = RoutingProcessInput.RoutingProcessType,
-StoreCodeMatches = RoutingProcessInput.StoreCodeMatches,
-Switches = RoutingProcessInput.Switches,
-UserId = RoutingProcessInput.UserId
+    DivideProcessIntoSubProcesses = RoutingProcessInput.DivideProcessIntoSubProcesses,
+    EffectiveTime = RoutingProcessEffectiveDate,
+    EntityId = RoutingProcessInput.EntityId,
+    IsFuture = RoutingProcessInput.IsFuture,
+    RoutingDatabaseType = RoutingProcessInput.RoutingDatabaseType,
+    RoutingProcessType = RoutingProcessInput.RoutingProcessType,
+    StoreCodeMatches = RoutingProcessInput.StoreCodeMatches,
+    Switches = RoutingProcessInput.Switches,
+    UserId = RoutingProcessInput.UserId
 }</mca:CSharpValue>
         </InArgument>
       </twrb:RoutingProcess.Input>
@@ -231,25 +224,22 @@ UserId = RoutingProcessInput.UserId
         </sap2010:ViewStateManager>
       </sap2010:WorkflowViewState.ViewStateManager>
     </twrb:RoutingProcess>
-    <vbw:WriteTrackingMessage Message="Finished Executing Routing Process">
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finishing Route Build Process">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_6</sap2010:WorkflowViewState.IdRef>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlRPbmVWMVRyYW5zaXRpb24uQlBcTWlncmF0ZUFuZFJvdXRlQnVpbGQueGFtbAlBA/MBDgIBAU8FXyACARNwBXYeAgELhwEF6QEbAgEDUgtSfgIBHlwLXHUCARlXC1dvAgEUcwtzdgIBDIoBC5UBFAIBBA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlRPbmVWMVRyYW5zaXRpb24uQlBcTWlncmF0ZUFuZFJvdXRlQnVpbGQueGFtbBRBA+sBDgIBAUcLR1cCAQJMBVchAgE/WAVeHwIBOF8FcwoCASR0BX8gAgEXgAEF4gEbAgEQ4wEF6QEgAgEITwtPfgIBRlQLVHUCAUBbC1t2AgE5YgtiZwIBJWYJcRICASt8C3yFAQIBHncLd/cBAgEYgwELjgEUAgER5gEL5gGFAQIBCuMBYOMBfwIBCW4PbqMBAgEyaQ9pfgIBLA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="LoadProcessesInput_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ExecuteMigration_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="LoadProcessesInput_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="ExecuteMigration_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,212" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="1157,62" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="1157,22" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="1157,22" />
@@ -399,16 +389,16 @@ UserId = RoutingProcessInput.UserId
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_77" sap:VirtualizedContainerService.HintSize="1219,3440" />
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,642">
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,646">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.TOneV1Transition.BP.MigrateAndRouteBuild_1" sap:VirtualizedContainerService.HintSize="262,722" />
+      <sap2010:ViewStateData Id="TOne.WhS.TOneV1Transition.BP.MigrateAndRouteBuild_1" sap:VirtualizedContainerService.HintSize="526,726" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

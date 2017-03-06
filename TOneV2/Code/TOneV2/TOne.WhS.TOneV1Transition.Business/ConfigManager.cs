@@ -34,16 +34,6 @@ namespace TOne.WhS.TOneV1Transition.Business
             return tOneV1TransitionSettingsData.RoutingProcessInput;
         }
 
-        public int GetRoutingMigrationOffsetInMinutes()
-        {
-            var tOneV1TransitionSettingsData = GetTOneV1TransitionSettingsData();
-
-            if (tOneV1TransitionSettingsData.Settings == null)
-                throw new NullReferenceException("tOneV1TransitionSettingsData.Settings");
-
-            return tOneV1TransitionSettingsData.Settings.RoutingMigrationOffsetInMin;
-        }
-
         #endregion
 
         #region private methods

@@ -40,8 +40,11 @@ app.directive("vrWhsMigrateandroutebuildProcess", ['UtilsService', 'VRUIUtilsSer
                 };
 
                 api.getData = function () {
+
                     return {
-                        $type: "TOne.WhS.TOneV1Transition.Arguments.MigrateAndRouteBuildInput, TOne.WhS.TOneV1Transition.Arguments"
+                        InputArguments: {
+                            $type: "TOne.WhS.TOneV1Transition.BP.Arguments.MigrateAndRouteBuildInput, TOne.WhS.TOneV1Transition.BP.Arguments"
+                        }
                     };
                 };
 

@@ -9,12 +9,5 @@ namespace TOne.WhS.TOneV1Transition.Entities
         public DBSyncTaskActionArgument DBSyncTaskActionArgument { get; set; }
 
         public RoutingProcessInput RoutingProcessInput { get; set; }
-
-        public Settings Settings { get; set; }
-    }
-
-    public class Settings
-    {
-        public int RoutingMigrationOffsetInMin { get; set; }
     }
 }

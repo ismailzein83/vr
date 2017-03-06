@@ -57,10 +57,6 @@ app.directive('vrWhsTonev1transitionSettingsEditor', ['UtilsService', 'VRUIUtils
                     if (payload != undefined && payload.data != undefined) {
                         dbSyncTaskActionArgument = payload.data.DBSyncTaskActionArgument;
                         routingProcessInput = payload.data.RoutingProcessInput
-
-                        if (payload.data.Settings) {
-                            $scope.scopeModel.routingMigrationOffsetInMin = payload.data.Settings.RoutingMigrationOffsetInMin;
-                        }
                     }
 
                     //Loading Source Migration Reader Directive
@@ -112,10 +108,7 @@ app.directive('vrWhsTonev1transitionSettingsEditor', ['UtilsService', 'VRUIUtils
                     return {
                         $type: "TOne.WhS.TOneV1Transition.Entities.TOneV1TransitionSettingsData, TOne.WhS.TOneV1Transition.Entities",
                         DBSyncTaskActionArgument: sourceMigrationReaderDirectiveAPI.getData(),
-                        RoutingProcessInput: buildRouteTaskDirectiveAPI.getData(),
-                        Settings: {
-                            RoutingMigrationOffsetInMin: $scope.scopeModel.routingMigrationOffsetInMin
-                        }
+                        RoutingProcessInput: buildRouteTaskDirectiveAPI.getData()
                     };
                 };
 

@@ -20,6 +20,9 @@ namespace TOne.WhS.Routing.BP.Arguments
 
         public bool StoreCodeMatches { get; set; }
 
+        public int EffectiveAfterInMinutes { get; set; }
+         
+
         public override string GetTitle()
         {
             if (EffectiveTime.HasValue)
@@ -32,7 +35,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         {
             if (!IsFuture && evaluatedExpressions.ContainsKey("ScheduleTime"))
             {
-                EffectiveTime = (DateTime)evaluatedExpressions["ScheduleTime"];
+                EffectiveTime = DateTime.Now.AddMinutes(EffectiveAfterInMinutes);
             }
         }
     }
