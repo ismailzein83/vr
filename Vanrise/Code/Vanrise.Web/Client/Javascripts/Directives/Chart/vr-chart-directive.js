@@ -49,7 +49,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         var api = {};
         var chartAPI;
         var counter = 0;
-       
+        var xAxisValues = [];
         var enablePoints = null;
         function initializeController() {
             ctrl.isSettingsVisible = function () {
@@ -310,7 +310,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             var chartDefinition = chartSource.chartDefinition;
             var seriesDefinitions = chartSource.seriesDefinitions;
             var xAxisDefinition = chartSource.xAxisDefinition;
-            var xAxis = [];
+            xAxisValues = [];
             var series = [];
 
             // define Series
@@ -337,16 +337,15 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
 
             // define data and categories
             angular.forEach(chartData, function (dataItem) {
-
                 var xValue = getXValue(dataItem);
                 if (xAxisDefinition.groupNamePath != 'undefined' && xAxisDefinition.groupNamePath != null) {
                     var groupName = eval('dataItem.' + xAxisDefinition.groupNamePath);
                     if (groupName == null) {
-                        xAxis.push(xValue);
+                        xAxisValues.push(xValue);
                     }
                     else {
                         var group = null;
-                        angular.forEach(xAxis, function (grp) {
+                        angular.forEach(xAxisValues, function (grp) {
                             if (grp.name == groupName)
                                 group = grp;
                         });
@@ -355,13 +354,13 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                                 name: groupName,
                                 categories: []
                             };
-                            xAxis.push(group);
+                            xAxisValues.push(group);
                         }
                         group.categories.push(xValue);
                     }
                 }
                 else {
-                    xAxis.push(xValue);
+                    xAxisValues.push(xValue);
                 }
 
                 for (var i = 0; i < series.length; i++) {
@@ -443,7 +442,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
 
             //xAxisSettings
             var xAxisSettings = {
-                categories: xAxis,
+                categories: xAxisValues,
                 visible: xAxisDefinition.hideAxes == undefined ? true : false,
                 tickWidth: xAxisDefinition.hideAxes != undefined ? 0 : 1,
                 lineWidth: xAxisDefinition.hideAxes != undefined ? 0 : 1,
@@ -466,7 +465,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             //tooltipSettings
             var tooltipSettings = {
                 formatter: function () {
-                    var s = '<b>' + this.x + '</b>';
+                     var s = '<b>' + this.x + '</b>';
                     $.each(this.points, function (i, point) {
                         s += '<br/><span style="color:' + point.series.color + '">\u25CF</span> ' + point.series.name + ': ' + formatValue(point.y);
                     });
@@ -535,17 +534,20 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 isChartAvailable = false;
             };
             api.addItem = function (item) {
-                var axis = chartAPI.axes;
+                var axes = chartAPI.xAxis;
                 var series = chartAPI.series;
                 for (var i = 0; i < series.length; i++) {
                     var serie = series[i];
                     var sDef = currentChartSource.seriesDefinitions[i];
                     var xValue = getXValue(item);
                     var yValue = getYValue(sDef, item);
+                    xAxisValues.push(xValue);
+                    axes[0].setCategories(xAxisValues);
                     series[i].addPoint([xValue,yValue], true, true, {
                         duration: 2000,
                         easing: "jswing"
                     });
+                    
                 }
             };
             api.updateValues = function(items)

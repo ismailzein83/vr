@@ -207,7 +207,7 @@
             customerChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
                     type: "column",
-                    yAxisTitle: "Value"
+                    yAxisTitle: " ",
                 };
                 var xAxisDefinition = {
                     titlePath: "CustomerName"
@@ -235,7 +235,7 @@
             supplierChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
                     type: "column",
-                    yAxisTitle: "Value"
+                    yAxisTitle: " ",
                 };
                 var xAxisDefinition = {
                     titlePath: "SupplierName"
@@ -263,7 +263,7 @@
             destinationChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
                     type: "column",
-                    yAxisTitle: "Value"
+                    yAxisTitle: " "
                 };
                 var xAxisDefinition = {
                     titlePath: "ZoneName"
@@ -291,7 +291,7 @@
             lastDistributionChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
                     type: "pie",
-                    yAxisTitle: "Value"
+                    yAxisTitle: " "
                 };
                 var xAxisDefinition = {
                     titlePath: "DurationRange"
@@ -340,7 +340,7 @@
 
                 var seriesDefinitions = [];
                 seriesDefinitions.push({
-                    title: "Perc Connected",
+                    title: "% Connected",
                     valuePath: "PercConnected",
                     tooltip: {
                         valueSuffix: ' '
@@ -372,7 +372,7 @@
 
                 var chartDefinition = {
                     type: "spline",
-                    yAxisTitle: "Value",
+                    yAxisTitle: " ",
                     numberOfPoints: 30,
                     enablePoints: false,
                     useAnimation:true
@@ -480,7 +480,7 @@
 
                 var chartDefinition = {
                     type: "spline",
-                    yAxisTitle: "Value",
+                    yAxisTitle: " ",
                     numberOfPoints: 30,
                     enablePoints: false,
                     useAnimation:true
