@@ -127,6 +127,8 @@
     <Compile Include="Controllers\MasterLogController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
     <Compile Include="Controllers\UserActionAuditController.cs" />
+    <Compile Include="Controllers\VRActionAuditController.cs" />
+    <Compile Include="Controllers\VRActionAuditLKUPController.cs" />
     <Compile Include="Controllers\VRApplicationVisibilityController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRConnectionController.cs" />
@@ -182,6 +184,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\ActionAuditLKUPEnum.js" />
     <Content Include="Common\Constant\GridWidthFactorEnum.js" />
     <Content Include="Common\Constant\LogEntryTypeEnum.js" />
     <Content Include="Common\Constant\LogAttributeEnum.js" />
@@ -189,6 +192,12 @@
     <Content Include="Common\Constant\ModuleConfig.js" />
     <Content Include="Common\Constant\ProductInfoPropertyEnum.js" />
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
+    <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditGridTemplate.html" />
+    <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditLKUPSelector.html" />
+    <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditSearch.html" />
+    <Content Include="Common\Directives\ActionAudit\vr-common-actionaudit-grid.js" />
+    <Content Include="Common\Directives\ActionAudit\vr-common-actionaudit-search.js" />
+    <Content Include="Common\Directives\ActionAudit\vr-common-actionauditlkup-selector.js" />
     <Content Include="Common\Directives\BankDetail\vr-common-bank-detail-selector.js" />
     <Content Include="Common\Directives\City\Templates\CityGridTemplate.html" />
     <Content Include="Common\Directives\City\Templates\citySelectorTemplate.html" />
@@ -332,6 +341,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
+    <Content Include="Common\Services\APIServices\ActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
@@ -387,6 +397,8 @@
     <Content Include="Common\Services\VRObjectTypeDefinitionService.js" />
     <Content Include="Common\Services\VRObjectTypePropertyDefinitionService.js" />
     <Content Include="Common\Services\VRObjectVariableService.js" />
+    <Content Include="Common\Views\ActionAudit\ActionAuditManagement.html" />
+    <Content Include="Common\Views\ActionAudit\ActionAuditManagementController.js" />
     <Content Include="Common\Views\CompanySettings\CompanySettingsEditor.html" />
     <Content Include="Common\Views\CompanySettings\CompanySettingsEditorController.js" />
     <Content Include="Common\Views\BankDetails\BankDetailsEditor.html" />
