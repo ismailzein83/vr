@@ -42,9 +42,11 @@ namespace Vanrise.Common
 
         public string ActionName { get; set; }
 
-        public string ObjectIdArgName { get; set; }
+        public string ObjectArgName { get; set; }
 
         public string ObjectIdPropPath { get; set; }
+
+        public string ObjectNamePropPath { get; set; }
 
         public string ObjectId { get; set; }
 
@@ -63,9 +65,9 @@ namespace Vanrise.Common
             if (this.ActionDescription != null)
                 context.ActionDescription = this.ActionDescription;
 
-            if (this.ObjectIdArgName != null)
+            if (this.ObjectArgName != null)
             {
-                dynamic obj = context.GetActionArgument<dynamic>(this.ObjectIdArgName);
+                dynamic obj = context.GetActionArgument<dynamic>(this.ObjectArgName);
                 if (obj != null)
                 {
                     if (this.ObjectIdPropPath != null)
@@ -77,6 +79,10 @@ namespace Vanrise.Common
                     else
                     {
                         context.ObjectId = obj.ToString();
+                    }
+                    if(this.ObjectNamePropPath != null)
+                    {
+                        context.ObjectName = Utilities.GetPropValueReader(this.ObjectNamePropPath).GetPropertyValue(obj);
                     }
                 }
             }

@@ -24,24 +24,52 @@ namespace Vanrise.Web.App_Start
                 VRActionAuditAttribute methodAuditAttribute = actionExecutedContext.ActionContext.ActionDescriptor.GetCustomAttributes<VRActionAuditAttribute>().FirstOrDefault();
                 if (methodAuditAttribute != null)
                 {
-                    var context = new VRActionAuditAttributeContext
+                    var actionAttributecontext = new VRActionAuditAttributeContext
                         {
                             ActionURL = url,
                             ActionArguments = actionExecutedContext.ActionContext.ActionArguments
                         };
-                    methodAuditAttribute.GetAuditDetails(context);
-                    context.ActionName.ThrowIfNull("context.ActionName", actionExecutedContext.ActionContext.ActionDescriptor.ActionName);
-                    if (context.ModuleName == null || context.EntityName == null)
+                    methodAuditAttribute.GetAuditDetails(actionAttributecontext);
+                    string moduleName = actionAttributecontext.ModuleName;
+                    string entityName = actionAttributecontext.EntityName;
+                    string actionName = actionAttributecontext.ActionName;
+                    string objectId = actionAttributecontext.ObjectId;
+                    string objectName = actionAttributecontext.ObjectName;
+                    string actionDescription = actionAttributecontext.ActionDescription;
+                    Type objectNameResolverType = methodAuditAttribute.ObjectNameResolverType;
+                    actionName.ThrowIfNull("actionName", actionExecutedContext.ActionContext.ActionDescriptor.ActionName);
+                    if (moduleName == null || entityName == null)
                     {
                         VRActionAuditAttribute controllerAuditAttribute = actionExecutedContext.ActionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<VRActionAuditAttribute>().FirstOrDefault();
                         controllerAuditAttribute.ThrowIfNull("controllerAuditAttribute");
-                        controllerAuditAttribute.GetAuditDetails(context);
-                        context.ModuleName.ThrowIfNull("context.ModuleName", actionExecutedContext.ActionContext.ActionDescriptor.ActionName);
-                        context.EntityName.ThrowIfNull("context.EntityName", actionExecutedContext.ActionContext.ActionDescriptor.ActionName);
+                        var controllerAttributecontext = new VRActionAuditAttributeContext
+                        {
+                            ActionURL = url,
+                            ActionArguments = actionExecutedContext.ActionContext.ActionArguments
+                        };
+                        controllerAuditAttribute.GetAuditDetails(controllerAttributecontext);
+                        if (moduleName == null) moduleName = controllerAttributecontext.ModuleName;
+                        if (entityName == null) entityName = controllerAttributecontext.EntityName;
+                        if (objectNameResolverType == null) objectNameResolverType = controllerAuditAttribute.ObjectNameResolverType;
+                        moduleName.ThrowIfNull("moduleName", actionExecutedContext.ActionContext.ActionDescriptor.ActionName);
+                        entityName.ThrowIfNull("entityName", actionExecutedContext.ActionContext.ActionDescriptor.ActionName);
+                    }
+                    if (objectName == null && objectId != null)
+                    {
+                        if (objectNameResolverType != null)
+                        {
+                            Object objectNameResolverAsObj = Activator.CreateInstance(objectNameResolverType);
+                            IVRActionObjectNameResolver objectNameResolver = objectNameResolverAsObj.CastWithValidate<IVRActionObjectNameResolver>("objectNameResolverAsObj", actionExecutedContext.ActionContext.ActionDescriptor.ActionName);
+                            var objectNameResolverContext = new VRActionObjectNameResolverContext { ObjectId = objectId };
+                            objectName = objectNameResolver.GetObjectName(objectNameResolverContext);
+                        }
+                        else
+                        {
+                            objectName = objectId;
+                        }
                     }
                     //LoggerFactory.GetLogger().WriteInformation("Action Audit: Module '{0}' Entity '{1}' Action '{2}' ObjectId '{3}'", context.ModuleName, context.EntityName, context.ActionName, context.ObjectId);
-                    s_manager.AuditAction(host, context.ModuleName, context.EntityName, context.ActionName, context.ObjectId, context.ActionDescription);
-                    //new UserActionAuditManager().AddUserActionAudit(url, host);
+                    s_manager.AuditAction(host, moduleName, entityName, actionName, objectId, objectName, actionDescription);
                 }
             }
             catch (Exception ex)
@@ -88,6 +116,12 @@ namespace Vanrise.Web.App_Start
                 set;
                 get;
             }
+            
+            public string ObjectName
+            {
+                set;
+                get;
+            }
 
             public Dictionary<string, Object> ActionArguments { get; set; }
 
@@ -110,6 +144,16 @@ namespace Vanrise.Web.App_Start
                     return default(T);
             }
         }
+
+        public class VRActionObjectNameResolverContext : IVRActionObjectNameResolverContext
+        {
+            public string ObjectId
+            {
+                get;
+                set;
+            }
+        }
+
 
     }
 }

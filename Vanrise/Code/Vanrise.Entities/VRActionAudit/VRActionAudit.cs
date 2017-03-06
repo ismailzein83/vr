@@ -22,6 +22,8 @@ namespace Vanrise.Entities
 
         public string ObjectId { get; set; }
 
+        public string ObjectName { get; set; }
+
         public string ActionDescription { get; set; }
 
         public DateTime LogTime { get; set; }

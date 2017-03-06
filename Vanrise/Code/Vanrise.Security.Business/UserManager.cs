@@ -763,4 +763,17 @@ namespace Vanrise.Security.Business
 
         #endregion
     }
+
+    public class UserVRActionObjectNameResolver : IVRActionObjectNameResolver
+    {
+        static UserManager s_userManager = new UserManager();
+        public string GetObjectName(IVRActionObjectNameResolverContext context)
+        {
+            int userId;
+            if (!int.TryParse(context.ObjectId, out userId))
+                throw new Exception(String.Format("Cannot parse context.ObjectId '{0}' to int", context.ObjectId));
+            return s_userManager.GetUserName(userId);
+        }
+    }
+
 }
