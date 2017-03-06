@@ -21,7 +21,8 @@ namespace NP.IVSwitch.Business
                 () =>
             {
                 List<Action> actions = new List<Action>();
-
+                int? currentUserId;
+                Vanrise.Security.Entities.ContextFactory.GetContext().TryGetLoggedInUserId(out currentUserId);
                 AnalyticSummaryBigResult<AnalyticRecord> lastDistributionRecords = null;
                 AnalyticSummaryBigResult<AnalyticRecord> topCustomersRecords = null;
                 AnalyticSummaryBigResult<AnalyticRecord> topSuppliersRecords = null;
@@ -30,7 +31,12 @@ namespace NP.IVSwitch.Business
                 actions.Add(() => topCustomersRecords = QueryTopCustomers());
                 actions.Add(() => topSuppliersRecords = QueryTopSuppliers());
                 actions.Add(() => topZonesRecords = QueryTopZones());
-                Parallel.ForEach(actions, (a) => a());
+                Parallel.ForEach(actions, (a) =>
+                {
+                    if (currentUserId.HasValue)
+                        Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(currentUserId.Value);
+                    a();
+                });
                 LiveDashboardResult liveDashboardResult = new LiveDashboardResult();
                 BuildTopCustomersResult(liveDashboardResult, topCustomersRecords);
                 BuildTopSuppliersResult(liveDashboardResult, topSuppliersRecords);
