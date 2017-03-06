@@ -46,12 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBAdapterRangesState.cs" />
-    <Compile Include="DbBaseReceiveAdapter.cs" />
     <Compile Include="PostgresReceiveAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Integration.Adapters.DBBaseReceiveAdapter\Vanrise.Integration.Adapters.DBBaseReceiveAdapter.csproj">
+      <Project>{0f3ae743-a034-406d-a341-021029b8ef1b}</Project>
+      <Name>Vanrise.Integration.Adapters.DBBaseReceiveAdapter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments\Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments.csproj">
       <Project>{f3eaa11e-1f77-4e0a-84e8-2bebefaf0a13}</Project>
       <Name>Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments</Name>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
-namespace Vanrise.Integration.Adapters
+namespace Vanrise.Integration.Adapters.DBBaseReceiveAdapter
 {
     public class DbBaseAdapterArgument : BaseAdapterArgument
     {

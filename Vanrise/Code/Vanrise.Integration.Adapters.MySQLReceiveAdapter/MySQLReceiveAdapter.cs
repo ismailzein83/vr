@@ -1,62 +1,110 @@
-﻿//using MySql.Data.MySqlClient;
-//using System;
-//using Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments;
-//using Vanrise.Integration.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Integration.Entities;
+using System.Data.Common;
+using Vanrise.Runtime;
+using Vanrise.Integration.Adapters.DBBaseReceiveAdapter;
+using Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments;
+using MySql.Data.MySqlClient;
 
-//namespace Vanrise.Integration.Adapters.MSQLReceiveAdapter
-//{
+namespace Vanrise.Integration.Adapters.MySQLReceiveAdapter
+{
+    public class MySQLReceiveAdapter : DbBaseReceiveAdapter
+    {
+        public override void ImportData(IAdapterImportDataContext context)
+        {
+            MySQLAdapterArgument mySQLAdapterArgument = context.AdapterArgument as MySQLAdapterArgument;
+            if (mySQLAdapterArgument == null)
+                throw new NullReferenceException("mySQLAdapterArgument");
 
-//    public class MySQLReceiveAdapter : BaseReceiveAdapter
-//    {
-//        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData)
-//        {
-//            DBAdapterArgument dbAdapterArgument = argument as DBAdapterArgument;
-//            DBAdapterState dbAdapterState = adapterState as DBAdapterState;
+            RunInParallelMode(context, mySQLAdapterArgument);
+        }
 
-//            DBReaderImportedData data = null;
+        public void RunInParallelMode(IAdapterImportDataContext context, DbBaseAdapterArgument dbAdapterArgument)
+        {
+            bool isLastRange;
+            DbAdapterRangeState rangeToRead = GetAndLockNextRangeToRead(context, null, dbAdapterArgument, out isLastRange);
 
-//            try
-//            {
+            if (rangeToRead == null)
+            {
+                LogInformation("No More Ranges to read");
+                return;
+            }
 
-//                //dbAdapterArgument.Query = dbAdapterArgument.Query.ToLower().Replace("{lastimportedid}", dbAdapterState.LastImportedId);
+            string queryWithTop1 = dbAdapterArgument.Query.Replace("#TopRows#", "Limit 1");
+            string queryWithNoTop = dbAdapterArgument.Query.Replace("#TopRows#", "");
 
-//                //using (var connection = new MySqlConnection(dbAdapterArgument.ConnectionString))
-//                //{
-//                //    connection.Open();
-//                //    var command = new MySqlCommand(dbAdapterArgument.Query, connection);
-//                //    data = new DBReaderImportedData();
-//                //    while ((data.Reader = command.ExecuteReader()).HasRows)
-//                //    {
-//                //        data.LastImportedId = dbAdapterState.LastImportedId;
-                        
-//                //        receiveData(data);
+            DBReaderImportedData data = null;
+            DbConnection connection = null;
 
-//                //        dbAdapterState.LastImportedId = data.LastImportedId;
-//                //        base.UpdateAdapterState(dataSourceId, dbAdapterState);
-//                //    }
-//                //}
-//            }
-//            catch (Exception ex)
-//            {
-//                LogError("An error occurred in My SQL Adapter while importing data. Exception Details: {0}", ex.Message);
-//            }
-//        }
+            try
+            {
+                DbCommand command = null;
 
-//        public bool IsConnectionAvailable(string connectionString)
-//        {
-//            try
-//            {
-//                MySqlConnection connection = new MySqlConnection();
-//                connection.ConnectionString = connectionString;
-//                connection.Open();
-//                connection.Close();
-//            }
-//            catch (MySqlException)
-//            {
-//                return false;
-//            }
 
-//            return true;
-//        }
-//    }
-//}
+                connection = new MySqlConnection(dbAdapterArgument.ConnectionString);
+                connection.Open();
+                command = new MySqlCommand(queryWithNoTop, connection as MySqlConnection);
+                command.CommandTimeout = dbAdapterArgument.CommandTimeoutInSeconds != default(int) ? dbAdapterArgument.CommandTimeoutInSeconds : 600;
+                DefineParameters(command, dbAdapterArgument);
+
+                do
+                {
+                    try
+                    {
+                        Console.WriteLine("{0}: Reading Range {1} - {2}", DateTime.Now, rangeToRead.RangeStart, rangeToRead.RangeEnd);
+                        ReadRange(context, dbAdapterArgument, isLastRange, rangeToRead, queryWithTop1, queryWithNoTop, ref data, command);
+                    }
+                    finally
+                    {
+                        ReleaseRange(context, rangeToRead);
+                    }
+
+                    rangeToRead = GetAndLockNextRangeToRead(context, rangeToRead, dbAdapterArgument, out isLastRange);
+                    if (rangeToRead == null)
+                        LogInformation("No More Ranges to read");
+                }
+                while (rangeToRead != null);
+            }
+            catch (Exception ex)
+            {
+                LogError("An error occurred in SQL Adapter while importing data. Exception Details: {0}", ex.ToString());
+            }
+            finally
+            {
+                if (data != null)
+                    data.OnDisposed();
+                if (connection != null)
+                {
+                    if (connection.State != System.Data.ConnectionState.Closed)
+                        connection.Close();
+                    connection.Dispose();
+                }
+            }
+        }
+
+        public override void DefineParameters(DbCommand command, DbBaseAdapterArgument dbAdapterArgument)
+        {
+            MySqlCommand npgCommand = command as MySqlCommand;
+            npgCommand.Parameters.Add("@RangeStart", GetRangePrmPostgresType(dbAdapterArgument));
+            npgCommand.Parameters.Add("@RangeEnd", GetRangePrmPostgresType(dbAdapterArgument));
+        }
+
+        #region Private Methods
+
+        private MySqlDbType GetRangePrmPostgresType(DbBaseAdapterArgument dbAdapterArgument)
+        {
+            if (dbAdapterArgument.NumberOffSet.HasValue)
+                return MySqlDbType.Int64;
+            else if (dbAdapterArgument.TimeOffset.HasValue)
+                return MySqlDbType.Date;
+            else
+                throw new Exception("MySQLAdapterArgument doesnt have any Offset defined");
+        }
+
+        #endregion
+    }
+}

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
-namespace Vanrise.Integration.Adapters.DBReceiveAdapter
+namespace Vanrise.Integration.Adapters.DBBaseReceiveAdapter
 {
     public class DbAdapterRangesState : BaseAdapterState
     {

@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Integration.Entities;
-using Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments;
 using System.Data.Common;
 using Npgsql;
-using Vanrise.Integration.Adapters.DBReceiveAdapter;
 using NpgsqlTypes;
-using Vanrise.Runtime;
+using Vanrise.Integration.Adapters.DBBaseReceiveAdapter;
+using Vanrise.Integration.Adapters.PostgresReceiveAdapter.Arguments;
+using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.PostgresReceiveAdapter
 {
