@@ -14,7 +14,7 @@
 
         var timeZoneSelectorAPI;
         var timeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var selectedTimeZoneSelectorPayloadLoadDeferred;
         var invoiceGeneratorActions;
         var invoiceEntity;
         var validateResult = false;
@@ -214,6 +214,13 @@
             function loadTimeZoneSelector() {
                 if ($scope.scopeModel.invoiceTypeEntity != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.UseTimeZone)
                 {
+                    var promises = [];
+
+                    if ($scope.scopeModel.isEditMode)
+                    {
+                        selectedTimeZoneSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(selectedTimeZoneSelectorPayloadLoadDeferred.promise);
+                    }
                     var timeZoneSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                     timeZoneSelectorReadyDeferred.promise.then(function () {
                         var timeZoneSelectorPayload;
@@ -224,7 +231,9 @@
                         }
                         VRUIUtilsService.callDirectiveLoad(timeZoneSelectorAPI, timeZoneSelectorPayload, timeZoneSelectorPayloadLoadDeferred);
                     });
-                    return timeZoneSelectorPayloadLoadDeferred.promise;
+                    promises.push(timeZoneSelectorPayloadLoadDeferred.promise);
+
+                    return UtilsService.waitMultiplePromises(promises);
                 }
             }
             
@@ -421,7 +430,7 @@
                     var payload = {
                         selectedIds: timeZoneId,
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timeZoneSelectorAPI, payload, setLoader);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timeZoneSelectorAPI, payload, setLoader, selectedTimeZoneSelectorPayloadLoadDeferred);
                 }
 
             };
