@@ -76,7 +76,7 @@
                     return LabelColorsEnum.Processed.color;
                 }
             }
-
+          
             $scope.scopeModel.lastDistributionChartReady = function (api) {
                 lastDistributionChartAPI = api;
                 lastDistributionChartReadyDeferred.resolve();
@@ -337,7 +337,7 @@
                     }, {
                         from: 50,
                         to: 80,
-                        color: '#DDDF0D',
+                        color: '#f0ad4e',
                     }, {
                         from: 80,
                         to: 100,
@@ -449,7 +449,7 @@
                     }, {
                         from: 5,
                         to: 20,
-                        color: '#DDDF0D',
+                        color: '#f0ad4e',
                     }, {
                         from: 20,
                         to: lastACD,
@@ -495,7 +495,21 @@
                     yAxisTitle: " ",
                     numberOfPoints: 30,
                     enablePoints: false,
-                    useAnimation:true
+                    useAnimation: true,
+                    //lines: [ {
+                    //    width: 3,
+                    //    value: 0,
+                    //    color: '#DF5353',
+                    //},{
+                    //    width: 3,
+                    //    value: 5,
+                    //    color: '#DDDF0D',
+                    //}, {
+                    //    width: 3,
+                    //    value: 20,
+                    //    color: '#55BF3B',
+                    //}
+                    //]
 
                 };
                 var xAxisDefinition = {
@@ -508,14 +522,6 @@
                 seriesDefinitions.push({
                     title: "ACD",
                     valuePath: "ACD",
-                    //color: {
-                    //    linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-                    //    stops: [
-                    //           [0, '#55BF3B'],
-                    //           [0.20, '#DDDF0D'],
-                    //           [1, '#DF5353'],
-                    //    ]
-                    //}
                 });
 
 

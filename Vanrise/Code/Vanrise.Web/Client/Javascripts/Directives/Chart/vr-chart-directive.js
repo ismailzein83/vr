@@ -452,12 +452,30 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     enabled: xAxisDefinition.hideAxes == undefined ? true : false
                 }
             };
+      
+            var plotLines = [];
+            if (chartDefinition.lines != undefined) {
+                for (var i = 0; i < chartDefinition.lines.length ; i++) {
+                    var line = chartDefinition.lines[i];
+                    plotLines.push({
+                        value: line.value,
+                        width: line.width,
+                        color: line.color,
+                        label: {
+                            text: line.label
+                        },
+                        dashStyle: 'shortdash',
+                    });
+                }
+            }
 
             //yAxisSettings
             var yAxisSettings = {
                 title: {
                     text: chartDefinition.yAxisTitle
                 },
+                plotLines: plotLines
+
             };
             var seriesSettings = series;
 
