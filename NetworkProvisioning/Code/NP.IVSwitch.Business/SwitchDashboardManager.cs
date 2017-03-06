@@ -304,7 +304,7 @@ namespace NP.IVSwitch.Business
                     Filters = new List<DimensionFilter>(),
                     OrderType = AnalyticQueryOrderType.ByAllMeasures,
                     WithSummary = withSummary,
-                    TopRecords = 10
+                    TopRecords = 7
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };

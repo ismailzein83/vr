@@ -142,8 +142,8 @@
                                 ACD: supplierResult.ACD,
                                 PDDInSec: supplierResult.PDDInSec,
                                 TotalDuration: supplierResult.TotalDuration,
-                                Attempts: customerResult.Attempts,
-                                CountConnected: customerResult.CountConnected
+                                Attempts: supplierResult.Attempts,
+                                CountConnected: supplierResult.CountConnected
 
                             });
                         }
@@ -199,7 +199,8 @@
                     });
                     $scope.scopeModel.overAllDuration.push({
                         label: "PDD (s)",
-                        value:response.LiveSummaryResult.PDDInSec
+                        value: response.LiveSummaryResult.PDDInSec,
+                     //   color: $scope.scopeModel.getPDDColor(response.LiveSummaryResult)
                         });
                 }
                 $scope.scopeModel.showCharts = true;
@@ -225,7 +226,8 @@
                 });
                 seriesDefinitions.push({
                     title: "Connected",
-                    valuePath: "CountConnected"
+                    valuePath: "CountConnected",
+                    color: '#55BF3B'
                 });
 
                 customerChartAPI.renderChart(topCustomersResult.CustomerResults, chartDefinition, seriesDefinitions, xAxisDefinition);
@@ -253,7 +255,8 @@
                 });
                 seriesDefinitions.push({
                     title: "Connected",
-                    valuePath: "CountConnected"
+                    valuePath: "CountConnected",
+                    color: '#55BF3B'
                 });
 
                 supplierChartAPI.renderChart(topSuppliersResult.SupplierResults, chartDefinition, seriesDefinitions, xAxisDefinition);
@@ -281,7 +284,8 @@
                 });
                 seriesDefinitions.push({
                     title: "Connected",
-                    valuePath: "CountConnected"
+                    valuePath: "CountConnected",
+                    color: '#55BF3B'
                 });
 
                 destinationChartAPI.renderChart(topDestinationsResult.ZoneResults, chartDefinition, seriesDefinitions, xAxisDefinition);
@@ -395,7 +399,8 @@
                 });
                 seriesDefinitions.push({
                     title: "Connected",
-                    valuePath: "CountConnected"
+                    valuePath: "CountConnected",
+                    color: '#55BF3B'
                 });
                 var data = [];
                 var i = 0;
@@ -501,7 +506,19 @@
                 seriesDefinitions.push({
                     title: "ACD",
                     valuePath: "ACD"
+                    //color: {
+                    //    linearGradient: { x1: 0, x2: 1, y1: 0, y2: 1 },
+                    //    stops: [
+                    //          [1, '#55BF3B'],
+                    //          [0.25, '#DDDF0D'],
+                    //          [0, '#DF5353'],
+                    //    ]
+                    //}
                 });
+
+
+
+
                 var data = [];
                 var i = 0;
                 var date = UtilsService.createDateFromString(liveSummaryResult.ResponseDate);
