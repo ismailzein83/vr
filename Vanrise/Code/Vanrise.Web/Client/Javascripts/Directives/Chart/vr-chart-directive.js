@@ -322,6 +322,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     var serie = {
                         name: sDef.title,
                         serieDefinition: sDef,
+                        color: sDef.color,
                         data: [],
                         events:
                         {
@@ -457,9 +458,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 title: {
                     text: chartDefinition.yAxisTitle
                 },
-
             };
-
             var seriesSettings = series;
 
             //tooltipSettings

@@ -51,7 +51,7 @@ namespace NP.IVSwitch.Business
 
         private AnalyticSummaryBigResult<AnalyticRecord> QueryLastDistribution()
         {
-            List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
+            List<string> listMeasures = new List<string> { "Attempts", "CountConnected", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
             List<string> listDimensions = new List<string> { "DurationRange" };
             var fromDate = DateTime.Today.AddYears(-1);
             var toDate = DateTime.Now.AddYears(1);
@@ -138,7 +138,7 @@ namespace NP.IVSwitch.Business
 
         private AnalyticSummaryBigResult<AnalyticRecord> QueryTopCustomers()
         {
-            List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
+            List<string> listMeasures = new List<string> { "Attempts", "CountConnected", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
             List<string> listDimensions = new List<string> { "Customer" };
             var fromDate = DateTime.Today.AddYears(-1);
             var toDate = DateTime.Now.AddYears(1);
@@ -191,7 +191,7 @@ namespace NP.IVSwitch.Business
 
         private AnalyticSummaryBigResult<AnalyticRecord> QueryTopSuppliers()
         {
-            List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
+            List<string> listMeasures = new List<string> { "Attempts", "CountConnected", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
             List<string> listDimensions = new List<string> { "Supplier" };
             var fromDate = DateTime.Today.AddYears(-1);
             var toDate = DateTime.Now.AddYears(1);
@@ -244,7 +244,7 @@ namespace NP.IVSwitch.Business
 
         private AnalyticSummaryBigResult<AnalyticRecord> QueryTopZones()
         {
-            List<string> listMeasures = new List<string> { "CountConnected", "Attempts", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
+            List<string> listMeasures = new List<string> { "Attempts", "CountConnected", "PercConnected", "ACD", "PDDInSec", "TotalDuration" };
             List<string> listDimensions = new List<string> { "Zone" };
             var fromDate = DateTime.Today.AddYears(-1);
             var toDate = DateTime.Now.AddYears(1);

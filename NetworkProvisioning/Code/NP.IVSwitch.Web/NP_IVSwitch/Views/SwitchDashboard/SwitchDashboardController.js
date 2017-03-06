@@ -189,7 +189,9 @@
                     });
                     $scope.scopeModel.overAllResult.push({
                         label: "Connected",
-                        value: response.LiveSummaryResult.CountConnected
+                        value: response.LiveSummaryResult.CountConnected,
+                        color: $scope.scopeModel.getPercConnectedColor(response.LiveSummaryResult)
+
                     });
 
                     $scope.scopeModel.overAllDuration.length = 0;
@@ -200,7 +202,7 @@
                     $scope.scopeModel.overAllDuration.push({
                         label: "PDD (s)",
                         value: response.LiveSummaryResult.PDDInSec,
-                     //   color: $scope.scopeModel.getPDDColor(response.LiveSummaryResult)
+                        color: $scope.scopeModel.getPDDColor(response.LiveSummaryResult)
                         });
                 }
                 $scope.scopeModel.showCharts = true;
@@ -505,13 +507,13 @@
                 var seriesDefinitions = [];
                 seriesDefinitions.push({
                     title: "ACD",
-                    valuePath: "ACD"
+                    valuePath: "ACD",
                     //color: {
-                    //    linearGradient: { x1: 0, x2: 1, y1: 0, y2: 1 },
+                    //    linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                     //    stops: [
-                    //          [1, '#55BF3B'],
-                    //          [0.25, '#DDDF0D'],
-                    //          [0, '#DF5353'],
+                    //           [0, '#55BF3B'],
+                    //           [0.20, '#DDDF0D'],
+                    //           [1, '#DF5353'],
                     //    ]
                     //}
                 });
