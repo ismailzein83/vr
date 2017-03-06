@@ -13,13 +13,13 @@
                 maxitemperrow: '@'
             },
             controller: function ($scope, $element, $attrs) {
-                var ctrl = this;                
+                var ctrl = this;
             },
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
                 return '<vr-datalist maxitemsperrow="{{ctrl.maxitemperrow}}" datasource="ctrl.datasource">'
-                       + '<div class="overallwidget">'
+                       + '<div class="overallwidget" ng-class="dataItem.color || \'default\'">'
                         + '<div class="overallwidget-value"><div class="widget-center-text">{{dataItem.value}}</div></div>'
                         + '<div class="overallwidget-label"><div class="widget-center-text">{{dataItem.label}}</div></div>'
                        +'</div>'
