@@ -208,10 +208,11 @@
         <Source>Database</Source>
         <Value>=Parameters!Image.Value</Value>
         <MIMEType>image/png</MIMEType>
+        <Sizing>FitProportional</Sizing>
         <Top>0.19097in</Top>
         <Left>0.1425in</Left>
         <Height>0.79514in</Height>
-        <Width>3.12123in</Width>
+        <Width>3.15875in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>

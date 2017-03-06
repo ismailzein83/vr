@@ -1029,7 +1029,7 @@
         <Source>Database</Source>
         <Value>=Parameters!Image.Value</Value>
         <MIMEType>image/png</MIMEType>
-        <Sizing>Fit</Sizing>
+        <Sizing>FitProportional</Sizing>
         <Top>0.23146in</Top>
         <Left>0.07396in</Left>
         <Height>0.79514in</Height>
