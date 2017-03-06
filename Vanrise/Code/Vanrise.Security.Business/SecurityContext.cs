@@ -95,7 +95,12 @@ namespace Vanrise.Security.Business
         {
             SecurityToken securityToken;
             if (TryGetSecurityToken(out securityToken))
-                throw new InvalidOperationException("Current context has already a security token. It is not possible to set User Id");
+            {
+                if (securityToken.UserId == userId)
+                    return;
+                else
+                    throw new InvalidOperationException("Current context has already a security token. It is not possible to set User Id");
+            }
             s_currentContextUserId = userId;
         }
 
