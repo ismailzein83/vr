@@ -26,7 +26,7 @@
                 disableCity = parameters.disableCity
             }
             editMode = (Id != undefined);
-            $scope.disableCity = editMode || disableCity;
+            $scope.disableCity = false;
         }
 
 

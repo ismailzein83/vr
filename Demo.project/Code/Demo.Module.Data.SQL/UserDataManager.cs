@@ -24,7 +24,7 @@ namespace Demo.Module.Data.SQL
 
         public bool Update(Entities.User user)
         {
-            int recordsEffected = ExecuteNonQuerySP("[dbo].[sp_User_Update]", user.Id, user.Name);
+            int recordsEffected = ExecuteNonQuerySP("[dbo].[sp_User_Update]", user.Id, user.Name,user.CityId);
             return (recordsEffected > 0);
         }
 
