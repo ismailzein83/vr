@@ -17,11 +17,14 @@ namespace TONEAPI
 {
     public partial class WebForm1 : System.Web.UI.Page
     {
+        public int waittime;
+       
+
         protected string gotomenu(string menuitem)
           {
               string ret = "";
         connect con = new connect();
-        string cons = "";
+        string cons = "Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=no@cce$$dev";
         DataSet ds = con.getdatatesting("select [values] as vv from menuurl where item='" + menuitem + "'",cons);
          foreach ( DataRow _r in ds.Tables[0].Rows)
          {
@@ -31,17 +34,23 @@ namespace TONEAPI
           }
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            DropDownList1.Items.Insert(0, new ListItem("Login", "Login"));
+            DropDownList1.Items.Insert(0, new ListItem("Countries", "Countries"));
+            DropDownList1.Items.Insert(0, new ListItem("Cities", "Cities"));
+            DropDownList1.Items.Insert(0, new ListItem("Carrier profile", "Carrierprofiles"));
+            DropDownList1.Items.Insert(0, new ListItem("Carrier account", "Carrieraccounts"));
+            DropDownList1.Items.Insert(0, new ListItem("Code Groups", "Code Groups"));
         }
         protected void Button1_Click(object sender, EventArgs e)
         {
-            rest();
+           // rest();
+            Response.Redirect("webform2.aspx");
             bindgrid();
         }
 
         public void bindgrid()
         {
-            string cons = "";
+            string cons = "Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=no@cce$$dev";
             connect con = new connect();
             DataSet ds = con.getdatas(" select * from [ToneV2testing].[dbo].[logging]   where eventdate > dateadd(hh,-1,getdate()) order   by eventdate desc",cons);
             GridView1.DataSource = ds.Tables[0];
@@ -376,14 +385,18 @@ namespace TONEAPI
         }
         protected void Button2_Click(object sender, EventArgs e)
         {
-            login();
-           GUIcountry();
-           GUICities();
-           codegroup();
+            waittime = 2000;
+
+            login();   //Done
+            codegroup();  //done
+            GUIcountry();  //done
+            GUICities();     //done
+            carrierprofile(); //done
+            //  carrieraccount();
          //   currencies();
         //   ratetypes();
-           carrierprofile();
-           carrieraccount();
+         //  carrierprofile();
+         //  carrieraccount();
             bindgrid();
         }
 
@@ -391,313 +404,411 @@ namespace TONEAPI
 
         public void GUIcountry()
         {
+            string pagemenu = "Countries";
+            string parentmenuitem = "";
+            string childmenuitem = "";
+            string submenuitem = "";
             connect con = new connect();
 
 
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized");
             ChromeDriver driver = new ChromeDriver(options);
-            driver.Navigate().GoToUrl("http://192.168.110.195:8103");
-             System.Threading.Thread.Sleep(1000);
+            driver.Navigate().GoToUrl(TextBox1.Text);
+            System.Threading.Thread.Sleep(waittime);
             // Login
             try
             {
-                driver.FindElement(By.CssSelector("#mainInput")).SendKeys("admin@vanrise.com");
-                driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
+                driver.FindElement(By.CssSelector("#mainInput")).SendKeys(TextBox2.Text);
+                driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys(TextBox3.Text);
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                 System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
             catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
             try
             {
-                driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                //driver.FindElement(By.XPath("//*[@id=\"accordion\"]/div[3]/div[1]/span/span[2]")).Click();
-                 System.Threading.Thread.Sleep(1000);
-
-
-                driver.FindElement(By.CssSelector("#collapse-101 > div > div:nth-child(1) > div > div")).Click();
-                 System.Threading.Thread.Sleep(1000);
-
-                driver.FindElement(By.XPath("//*[@id=\"collapse-101\"]/div/div[1]/div/ul/li[1]/a")).Click();
-              
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
-                //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
-            }
-
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Fail','navigation failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-                driver.Close();
-            }
-            // search if zone exists
-            try
-            {
-                var element = driver.FindElement(By.XPath("//*[@id=\"rowSection1\"]/div[1]/div[2]/div/div[2]/div/div/div/span"));
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','page browsing','Success','browsing success',getdate(),'GUI'");
-                var element2 = driver.FindElement(By.XPath("//div[starts-with(@title, 'Afghanistan')]"));
-                string x = element.Text.ToString();
-                var count = driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[2]/div/vr-columns/div/vr-common-country-grid/vr-datagrid/vr-datagridrows/div[3]/div"));
-                if (count.Text.Equals("Total count (262)"))
+                DataSet ds1 = con.getdatas("select * from menu where page='" + pagemenu + "'", "Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=no@cce$$dev");
+                foreach (DataRow _r in ds1.Tables[0].Rows)
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count','Success','navigation success',getdate(),'GUI'");
+                    parentmenuitem = _r["parent"].ToString();
+                    childmenuitem = _r["child"].ToString();
+                    submenuitem = _r["sub"].ToString();
+                }
+                System.Threading.Thread.Sleep(waittime);
+                System.Threading.Thread.Sleep(waittime);
+                List<IWebElement> mainmenu = driver.FindElements(By.XPath("//span[@class='vr-module-name ng-binding']")).ToList();
+                List<IWebElement> submenu = new List<IWebElement>();
+                List<IWebElement> childmenu = new List<IWebElement>();
+                List<IWebElement> submenus = new List<IWebElement>();
+                List<IWebElement> submenusnotnull = new List<IWebElement>();
+                List<IWebElement> childmenuss = new List<IWebElement>();
+                List<IWebElement> childmenunotnull = new List<IWebElement>();
+                List<IWebElement> childmenunotnull2 = new List<IWebElement>();
 
+
+                try
+                {
+                    foreach (IWebElement element in mainmenu)
+                    {
+                        if (element.Text == parentmenuitem)
+                        {
+                            element.Click();
+
+                            if (childmenuitem != "")
+                            {
+                                System.Threading.Thread.Sleep(waittime);
+                                submenus = driver.FindElements(By.XPath("//div[@class='menulink waves-effect waves-block ng-binding']")).ToList();
+                                submenusnotnull = submenus.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                                foreach (IWebElement childelement in submenusnotnull)
+                                {
+                                    if (childelement.Text == childmenuitem)
+                                    {
+                                        childelement.Click();
+                                        System.Threading.Thread.Sleep(waittime);
+                                        childmenuss = driver.FindElements(By.XPath("//a[@class='menulink ng-binding']")).ToList();
+                                        childmenunotnull = childmenuss.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                                        foreach (IWebElement subelement in childmenunotnull)
+                                        {
+                                            if (subelement.Text == submenuitem)
+                                            {
+                                                subelement.Click();
+                                                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','navigate to Countries','Success','navigation success',getdate(),'GUI'");
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            //  con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure exception:failed to go to menu',getdate(),'GUI'");
+                        }
+
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','navigate to Countries','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                }
+
+                // search if zone exists
+                try
+                {
+                    var element = driver.FindElement(By.XPath(gotomenu("CountriesGrid")));
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','page browsing','Success','browsing success',getdate(),'GUI'");
+                    var element2 = driver.FindElement(By.XPath(gotomenu("CountriesGrid")));
+                    string x = element.Text.ToString();
+                    var count = driver.FindElement(By.XPath(gotomenu("CountriesGridcount")));
+                    if (count.Text.Equals("Total count (255)"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count','Success','navigation success',getdate(),'GUI'");
+
+
+                    }
+                    else
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count in correct','Success','navigation success',getdate(),'GUI'");
+
+
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
                 }
-                else
+                try
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count in correct','Success','navigation success',getdate(),'GUI'");
+                    // search for a specific zone
+                    driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Calgary");
+                    driver.FindElement(By.XPath(gotomenu("Countriessearch"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var elementg = driver.FindElement(By.XPath(gotomenu("Countriessearchvalue")));
+                    System.Threading.Thread.Sleep(waittime);
+                    if (elementg.Text.Equals("Calgary"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Success','search success',getdate(),'GUI'");
 
-
+                    }
+                    else
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Fail','search failed no item found',getdate(),'GUI'");
+                    }
+                    //  string currentHandle = driver.CurrentWindowHandle;
                 }
-            }
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-
-            }
-            try
-            {
-                // search for a specific zone
-                driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Calgary");
-                driver.FindElement(By.CssSelector("#page-content-wrapper > div > div > div > vr-panel > div > div > vr-form > div > vr-validation-group > vr-row:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button")).Click();
-                 System.Threading.Thread.Sleep(1000);
-                var elementg = driver.FindElement(By.XPath("//*[@id=\"rowSection1\"]/div[1]/div[2]/div/div[2]/div/div/div/span"));
-                 System.Threading.Thread.Sleep(1000);
-                if (elementg.Text.Equals("Calgary"))
+                catch (Exception Ex)
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Success','search success',getdate(),'GUI'");
-
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Fail','search failed no item foundexception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 }
-                else
+                try
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Fail','search failed no item found',getdate(),'GUI'");
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("Countriesadd"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+
+
+                    // add a new zone
+                    var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                    var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
+                    textinput.SendKeys("Calgary");
+                    System.Threading.Thread.Sleep(waittime);
+                    var textsave = modaldiag.FindElement(By.XPath(gotomenu("Countriessave")));
+                    
+                    textsave.Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
+                   // driver.FindElement(By.XPath(gotomenu("Countriessave"))).Click();
+                    try
+                    {
+                        if (!driver.FindElement(By.XPath(gotomenu("Countryexists"))).Displayed)
+                        {
+                            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','Countries add','Success','adding Countries success already exists',getdate(),'GUI'");
+                        }
+                        else
+                        {
+                            driver.FindElement(By.XPath(gotomenu("codegroupcloseadd"))).Click();
+                        }
+                      //  driver.FindElement(By.XPath(gotomenu("codegroupcloseadd"))).Click();
+                    }
+                    catch (Exception Ex)
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','Countries add','Success','adding Countries success',getdate(),'GUI'");
+                        driver.FindElement(By.XPath(gotomenu("codegroupcloseadd"))).Click();
+                    }
+                 
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Success','adding country success',getdate(),'GUI'");
                 }
-                //  string currentHandle = driver.CurrentWindowHandle;
-            }
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries search','Fail','search failed no item foundexception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-            }
-            try
-            {
-                driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[1]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[2]/div/button")).Click();
-                 System.Threading.Thread.Sleep(1000);
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Fail','adding country failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                    //   driver.Close();
+                }
 
-
-
-
-                //   Get the current window handle so you can switch back later.
-                // Find the element that triggers the popup when clicked on.
-
-
-                // The Click method of the PopupWindowFinder class will click
-                // the desired element, wait for the popup to appear, and return
-
-                // the window handle to the popped-up browser window. Note that
-                // you still need to switch to the window to manipulate the page
-                // displayed by the popup window.
-                // PopupWindowFinder finder = new PopupWindowFinder(driver);
-                //   string popupWindowHandle = finder.
-                //    driver.SwitchTo().Window(popupWindowHandle);
-                // Do whatever you need to on the popup browser, then...
-
-                //  driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Calgary");
-                //  driver.FindElement(By.CssSelector("//div[contains(@class,'modal-dialog' and text() ='#mainInput']")).SendKeys("Calgary");
-
-                // add a new zone
-                var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
-                var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
-                textinput.SendKeys("Calgary");
-                 System.Threading.Thread.Sleep(1000);
-                var textsave = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button"));
-                 System.Threading.Thread.Sleep(1000);
-                textsave.Click();
-                // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
-                driver.FindElement(By.XPath("/html/body/div[4]/div/div/div[2]/div[2]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[1]/div/button")).Click();
-
-                driver.Close();
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Success','adding country success',getdate(),'GUI'");
             }
             catch(Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Fail','adding country failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-             //   driver.Close();
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','countries add','Fail','adding country failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
             }
-
+            driver.Close();
         }
 
         public void GUICities()
         {
+            string pagemenu = "Cities";
+            string parentmenuitem = "";
+            string childmenuitem = "";
+            string submenuitem = "";
             connect con = new connect();
 
 
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized");
             ChromeDriver driver = new ChromeDriver(options);
-            driver.Navigate().GoToUrl("http://192.168.110.195:8103");
-             System.Threading.Thread.Sleep(1000);
+            driver.Navigate().GoToUrl(TextBox1.Text);
+            System.Threading.Thread.Sleep(waittime);
             // Login
             try
             {
-                driver.FindElement(By.CssSelector("#mainInput")).SendKeys("admin@vanrise.com");
-                driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
+                driver.FindElement(By.CssSelector("#mainInput")).SendKeys(TextBox2.Text);
+                driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys(TextBox3.Text);
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                 System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
-            catch(Exception Ex)
+            catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
             try
             {
-                driver.FindElement(By.XPath("//*[@id=\"accordion\"]/div[3]/div[1]/span/span[2]")).Click();
-                 System.Threading.Thread.Sleep(1000);
-
-                driver.FindElement(By.CssSelector("#collapse-101 > div > div:nth-child(1) > div > div")).Click();
-                 System.Threading.Thread.Sleep(1000);
-
-               // driver.FindElement(By.XPath("//*[@id=\"collapse-101\"]/div/div[1]/div/ul/li[1]/a")).Click();
-                 driver.FindElement(By.XPath("//*[@id=\"collapse-101\"]/div/div[1]/div/ul/li[2]/a")).Click();
-                 System.Threading.Thread.Sleep(1000);
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to lookups','Success','navigation success',getdate(),'GUI'");
-            }
-
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to lookups','Fail','navigation failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-                driver.Close();
-            }
-            // search if zone exists
-            try
-            {
-                var element = driver.FindElement(By.XPath("//*[@id=\"rowSection1\"]/div[1]/div/div/div[2]/div/div/div/span"));
-                 System.Threading.Thread.Sleep(1000);
-                var element2 = driver.FindElement(By.XPath("//div[starts-with(@title, 'Albania Fixed')]"));
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','City found','Success','Find city success',getdate(),'GUI'");
-            }
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','City not found','Fail','Find city Fail exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-
-            }
-            
-            try { 
-            var count = driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[2]/div/vr-columns/div/vr-common-city-grid/vr-datagrid/vr-datagridrows/div[3]/div"));
-            if (count.Text.Equals("Total count (284)"))
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count','Success','navigation success',getdate(),'GUI'");
-
-
-            }
-            else
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count in correct','Success','navigation success',getdate(),'GUI'");
-
-
-            }
-                }
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-            }
-            // search for a specific zone
-            try
-            {
-                driver.FindElement(By.CssSelector("#mainInput")).SendKeys("leban");
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.CssSelector("#page-content-wrapper > div > div > div > vr-panel > div > div > vr-form > div > vr-validation-group > vr-row:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button")).Click();
-                 System.Threading.Thread.Sleep(1000);
-                var elementg = driver.FindElement(By.XPath("//*[@id=\"rowSection1\"]/div[1]/div/div/div[2]/div/div/div/span"));
-
-                if (elementg.Text.Equals("Lebanon-Mobile Alfa"))
+                DataSet ds1 = con.getdatas("select * from menu where page='" + pagemenu + "'", "Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=no@cce$$dev");
+                foreach (DataRow _r in ds1.Tables[0].Rows)
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities search','Success','search success',getdate(),'GUI'");
-
+                    parentmenuitem = _r["parent"].ToString();
+                    childmenuitem = _r["child"].ToString();
+                    submenuitem = _r["sub"].ToString();
                 }
-                else
+                System.Threading.Thread.Sleep(waittime);
+                System.Threading.Thread.Sleep(waittime);
+                List<IWebElement> mainmenu = driver.FindElements(By.XPath("//span[@class='vr-module-name ng-binding']")).ToList();
+                List<IWebElement> submenu = new List<IWebElement>();
+                List<IWebElement> childmenu = new List<IWebElement>();
+                List<IWebElement> submenus = new List<IWebElement>();
+                List<IWebElement> submenusnotnull = new List<IWebElement>();
+                List<IWebElement> childmenuss = new List<IWebElement>();
+                List<IWebElement> childmenunotnull = new List<IWebElement>();
+                List<IWebElement> childmenunotnull2 = new List<IWebElement>();
+
+
+                try
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities search','Fail','search failed no item found',getdate(),'GUI'");
+                    foreach (IWebElement element in mainmenu)
+                    {
+                        if (element.Text == parentmenuitem)
+                        {
+                            element.Click();
+
+                            if (childmenuitem != "")
+                            {
+                                System.Threading.Thread.Sleep(waittime);
+                                submenus = driver.FindElements(By.XPath("//div[@class='menulink waves-effect waves-block ng-binding']")).ToList();
+                                submenusnotnull = submenus.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                                foreach (IWebElement childelement in submenusnotnull)
+                                {
+                                    if (childelement.Text == childmenuitem)
+                                    {
+                                        childelement.Click();
+                                        System.Threading.Thread.Sleep(waittime);
+                                        childmenuss = driver.FindElements(By.XPath("//a[@class='menulink ng-binding']")).ToList();
+                                        childmenunotnull = childmenuss.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                                        foreach (IWebElement subelement in childmenunotnull)
+                                        {
+                                            if (subelement.Text == submenuitem)
+                                            {
+                                                subelement.Click();
+                                                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','navigate to Cities','Success','navigation success',getdate(),'GUI'");
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            //  con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure exception:failed to go to menu',getdate(),'GUI'");
+                        }
+
+                    }
                 }
-                //  string currentHandle = driver.CurrentWindowHandle;
-            }
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities search','Fail','search failed no item found exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-
-            }
-            try
-            {
-                driver.FindElement(By.XPath("//*[@id=\"page-content-wrapper\"]/div/div/div/vr-panel/div/div/vr-form/div/vr-validation-group/vr-row[1]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[2]/div/button")).Click();
-                 System.Threading.Thread.Sleep(1000);
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','navigate to Cities','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                }
 
 
+                // search if zone exists
+                try
+                {
+                    var element = driver.FindElement(By.XPath(gotomenu("Citiesgrid")));
+                    System.Threading.Thread.Sleep(waittime);
+                    var element2 = driver.FindElement(By.XPath(gotomenu("Citiesgrid")));
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','City found','Success','Find city success',getdate(),'GUI'");
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','City not found','Fail','Find city Fail exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+
+                }
+
+                try
+                {
+                    var count = driver.FindElement(By.XPath(gotomenu("Citiesgridcount")));
+                    if (count.Text.Equals("Total count (2)"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count','Success','navigation success',getdate(),'GUI'");
 
 
-                //   Get the current window handle so you can switch back later.
-                // Find the element that triggers the popup when clicked on.
+                    }
+                    else
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count in correct','Success','navigation success',getdate(),'GUI'");
 
 
-                // The Click method of the PopupWindowFinder class will click
-                // the desired element, wait for the popup to appear, and return
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                }
+                // search for a specific zone
+                try
+                {
+                    driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Beir");
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("Citiessearch"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var elementg = driver.FindElement(By.XPath(gotomenu("Citiesgrid")));
 
-                // the window handle to the popped-up browser window. Note that
-                // you still need to switch to the window to manipulate the page
-                // displayed by the popup window.
-                // PopupWindowFinder finder = new PopupWindowFinder(driver);
-                //   string popupWindowHandle = finder.
-                //    driver.SwitchTo().Window(popupWindowHandle);
-                // Do whatever you need to on the popup browser, then...
+                    if (elementg.Text.Equals("Beirut"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities search','Success','search success',getdate(),'GUI'");
 
-                //  driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Calgary");
-                //  driver.FindElement(By.CssSelector("//div[contains(@class,'modal-dialog' and text() ='#mainInput']")).SendKeys("Calgary");
+                    }
+                    else
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities search','Fail','search failed no item found',getdate(),'GUI'");
+                    }
+                    //  string currentHandle = driver.CurrentWindowHandle;
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities search','Fail','search failed no item found exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
-                // add a new zone
-                var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
-                 System.Threading.Thread.Sleep(1000);
-                var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
-                 System.Threading.Thread.Sleep(1000);
-                textinput.SendKeys("Albania New");
-                 System.Threading.Thread.Sleep(1000);
-                var textsave = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button"));
-                 System.Threading.Thread.Sleep(1000);
-                textsave.Click();
-                 System.Threading.Thread.Sleep(1000);
-                var count = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > vr-modalbody > div > vr-form > div > vr-validation-group > vr-row > div > span > vr-columns > div > vr-common-country-selector > vr-columns > div > vr-select > div > div > vr-validator > div > div:nth-child(1) > div > button"));
-                 System.Threading.Thread.Sleep(1000);
-                count.Click();
-                 System.Threading.Thread.Sleep(1000);
-                // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
-                //driver.FindElement(By.XPath("/html/body/div[4]/div/div/div[2]/div[2]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[1]/div/button")).Click();
-                var selelement = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > vr-modalbody > div > vr-form > div > vr-validation-group > vr-row > div > span > vr-columns > div > vr-common-country-selector > vr-columns > div > vr-select > div > div > vr-validator > div > div:nth-child(1) > div > ul > li > div > div.vr-select-height > a:nth-child(2)"));
-                 System.Threading.Thread.Sleep(1000);
-                selelement.Click();
-                 System.Threading.Thread.Sleep(1000);
-                var save = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button"));
-                 System.Threading.Thread.Sleep(1000);
-                save.Click();
+                }
+                try
+                {
+                    driver.FindElement(By.XPath(gotomenu("CitiesAdd"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+
+
+
+
+                    // add a new zone
+                    var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                    System.Threading.Thread.Sleep(waittime);
+                    var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
+                    System.Threading.Thread.Sleep(waittime);
+                    textinput.SendKeys("Albania New");
+                    System.Threading.Thread.Sleep(waittime);
+                    var textsave = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > div > vr-actionbar > div > div:nth-child(2) > div > div > div > vr-button:nth-child(1) > div > button"));
+                    System.Threading.Thread.Sleep(waittime);
+                    textsave.Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var count = modaldiag.FindElement(By.CssSelector("body > div.modal.ng-scope.top.am-fade-and-scale > div > div > div:nth-child(2) > div:nth-child(2) > vr-modalbody > div > vr-form > div > vr-validation-group > vr-row > div > span > vr-columns > div > vr-common-country-selector > vr-columns > div > vr-select > div > div > vr-validator > div > div:nth-child(1) > div > button"));
+                    System.Threading.Thread.Sleep(waittime);
+                    count.Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
+                    //driver.FindElement(By.XPath("/html/body/div[4]/div/div/div[2]/div[2]/div/vr-actionbar/div/div[2]/div/div/div/vr-button[1]/div/button")).Click();
+                    var selelement = modaldiag.FindElement(By.XPath(gotomenu("Citiesselectcountry")));
+                    System.Threading.Thread.Sleep(waittime);
+                    selelement.Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var save = modaldiag.FindElement(By.XPath(gotomenu("Citiessave")));
+                    System.Threading.Thread.Sleep(waittime);
+                    save.Click();
+
+
+                    driver.Close();
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities add','Success','adding Cities success',getdate(),'GUI'");
+                }
                 
 
-                driver.Close();
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities add','Success','adding Cities success',getdate(),'GUI'");
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities add','Fail','adding Cities failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+
+                }
             }
             catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities add','Fail','adding Cities failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Cities','Cities add','Fail','adding Cities failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
-
-
         }
 
         public void login()
@@ -712,6 +823,7 @@ namespace TONEAPI
                 ChromeDriver driver = new ChromeDriver(options);
                 string x = "";
                 driver.Navigate().GoToUrl("http://192.168.110.195:8103");
+                System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("admin@vanrise.com");
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("11");
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
@@ -748,6 +860,7 @@ namespace TONEAPI
             {
                 ChromeDriver driver = new ChromeDriver();
                 driver.Navigate().GoToUrl("http://192.168.110.195:8103");
+                System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("admin@vanrise.com");
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
@@ -765,150 +878,228 @@ namespace TONEAPI
         // to be written
         public void codegroup()
         {
-
+            string pagemenu = "codegroups";
+            string parentmenuitem = "";
+            string childmenuitem = "";
+            string submenuitem = "";
             connect con = new connect();
 
 
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized");
             ChromeDriver driver = new ChromeDriver(options);
-            driver.Navigate().GoToUrl("http://192.168.110.195:8103");
-             System.Threading.Thread.Sleep(1000);
+            driver.Navigate().GoToUrl(TextBox1.Text);
+            System.Threading.Thread.Sleep(waittime);
             // Login
             try
             {
-                driver.FindElement(By.CssSelector("#mainInput")).SendKeys("admin@vanrise.com");
-                driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
+                driver.FindElement(By.CssSelector("#mainInput")).SendKeys(TextBox2.Text);
+                driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys(TextBox3.Text);
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                 System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
             catch (Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 driver.Close();
             }
             // go to look ups 
             try
             {
-                driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.XPath(gotomenu("Lookups"))).Click();
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.XPath(gotomenu("Codegroups"))).Click();
-                 System.Threading.Thread.Sleep(1000);
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Success','navigation success',getdate(),'GUI'");
-                //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
-            }
-
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-                //driver.Close();
-            }
-            // search if zone exists
-            try
-            {
-                var element = driver.FindElement(By.XPath(gotomenu("codegroupgriditem")));
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','page browsing','Success','browsing success',getdate(),'GUI'");
-                var element2 = driver.FindElement(By.XPath(gotomenu("codegroupafghcodegroup")));
-                string x = element.Text.ToString();
-                var count = driver.FindElement(By.XPath(gotomenu("codegroupgridcount")));
-                if (count.Text.Equals("Total count (270)"))
+                DataSet ds1 = con.getdatas("select * from menu where page='" + pagemenu + "'", "Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=no@cce$$dev");
+                foreach (DataRow _r in ds1.Tables[0].Rows)
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count','Success','navigation success',getdate(),'GUI'");
+                    parentmenuitem = _r["parent"].ToString();
+                    childmenuitem = _r["child"].ToString();
+                    submenuitem = _r["sub"].ToString();
+                }
+                System.Threading.Thread.Sleep(waittime);
+                System.Threading.Thread.Sleep(waittime);
+                List<IWebElement> mainmenu = driver.FindElements(By.XPath("//span[@class='vr-module-name ng-binding']")).ToList();
+                List<IWebElement> submenu = new List<IWebElement>();
+                List<IWebElement> childmenu = new List<IWebElement>();
+                List<IWebElement> submenus = new List<IWebElement>();
+                List<IWebElement> submenusnotnull = new List<IWebElement>();
+                List<IWebElement> childmenuss = new List<IWebElement>();
+                List<IWebElement> childmenunotnull = new List<IWebElement>();
+                List<IWebElement> childmenunotnull2 = new List<IWebElement>();
 
+
+                try
+                {
+                    foreach (IWebElement element in mainmenu)
+                    {
+                        if (element.Text == parentmenuitem)
+                        {
+                            element.Click();
+                           
+                            if (childmenuitem != "")
+                            {
+                                System.Threading.Thread.Sleep(waittime);
+                                submenus = driver.FindElements(By.XPath("//div[@class='menulink waves-effect waves-block ng-binding']")).ToList();
+                                submenusnotnull = submenus.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                                foreach (IWebElement childelement in submenusnotnull)
+                                {
+                                    if (childelement.Text == childmenuitem)
+                                    {
+                                        childelement.Click();
+                                        System.Threading.Thread.Sleep(waittime);
+                                        childmenuss = driver.FindElements(By.XPath("//a[@class='menulink ng-binding']")).ToList();
+                                        childmenunotnull = childmenuss.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                                        foreach (IWebElement subelement in childmenunotnull)
+                                        {
+                                            if (subelement.Text == submenuitem)
+                                            {
+                                                subelement.Click();
+                                                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Success','navigation success',getdate(),'GUI'");
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                          //  con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure exception:failed to go to menu',getdate(),'GUI'");
+                        }
+
+                    }
+                }
+                catch(Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                }
+
+
+                // search if zone exists
+                try
+                {
+                    var element = driver.FindElement(By.XPath(gotomenu("codegroupgriditem")));
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','page browsing','Success','browsing success',getdate(),'GUI'");
+                    var element2 = driver.FindElement(By.XPath(gotomenu("codegroupafghcodegroup")));
+                    string x = element.Text.ToString();
+                    var count = driver.FindElement(By.XPath(gotomenu("codegroupgridcount")));
+                    if (count.Text.Equals("Total count (261)"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count','Success','navigation success',getdate(),'GUI'");
+
+
+                    }
+                    else
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count in correct','Success','navigation success',getdate(),'GUI'");
+
+
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
                 }
-                else
+                try
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count in correct','Success','navigation success',getdate(),'GUI'");
+                    // search for a specific zone
+                    driver.FindElement(By.CssSelector("#mainInput")).SendKeys("961");
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("codegroupsearchitem"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var elementg = driver.FindElement(By.XPath(gotomenu("codegroupgetitem")));
+                    System.Threading.Thread.Sleep(waittime);
+                    if (elementg.Text.Equals("961"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Success','search success',getdate(),'GUI'");
 
-
+                    }
+                    else
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Fail','search failed no item found',getdate(),'GUI'");
+                    }
+                    //  string currentHandle = driver.CurrentWindowHandle;
                 }
-            }
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-
-            }
-            try
-            {
-                // search for a specific zone
-                driver.FindElement(By.CssSelector("#mainInput")).SendKeys("961");
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.CssSelector(gotomenu("codegroupsearchitem"))).Click();
-                 System.Threading.Thread.Sleep(1000);
-                var elementg = driver.FindElement(By.XPath(gotomenu("codegroupgetitem")));
-                 System.Threading.Thread.Sleep(1000);
-                if (elementg.Text.Equals("Lebanon"))
+                catch (Exception Ex)
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Success','search success',getdate(),'GUI'");
-
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Fail','search failed no item found exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
                 }
-                else
+                try
                 {
-                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Fail','search failed no item found',getdate(),'GUI'");
+                     driver.FindElement(By.XPath(gotomenu("codegroupaddpopup"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+
+                    // add a new zone
+                    var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                    System.Threading.Thread.Sleep(waittime);
+                    var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
+                    textinput.SendKeys("93222");
+                    System.Threading.Thread.Sleep(waittime);
+                    var textsave = modaldiag.FindElement(By.CssSelector(gotomenu("codegroupaddcountrydropdown")));
+                    textsave.Click();
+                    // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("codegroupaddcountryclickcontrol"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("codegroupaddsavebutton"))).Click();
+                    System.Threading.Thread.Sleep(500);
+                    // driver.Close();
+                    try
+                    {
+                        if(!driver.FindElement(By.XPath(gotomenu("Codegroupalreadyexists"))).Displayed)
+                        {
+                            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup success already exists',getdate(),'GUI'");
+                        }
+                        else
+                        {
+                            driver.FindElement(By.XPath(gotomenu("codegroupcloseadd"))).Click();
+                        }
+                        driver.FindElement(By.XPath(gotomenu("codegroupcloseadd"))).Click();
+                    }
+                    catch (Exception Ex)
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup success',getdate(),'GUI'");
+                        driver.FindElement(By.XPath(gotomenu("codegroupcloseadd"))).Click();
+                    }
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup success',getdate(),'GUI'");
                 }
-                //  string currentHandle = driver.CurrentWindowHandle;
-            }
-            catch ( Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Fail','search failed no item found exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-            }
-            try
-            {
-                driver.FindElement(By.XPath(gotomenu("codegroupaddpopup"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Fail','adding CodeGroup failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                    //  driver.Close();
+                }
 
-                // add a new zone
-                var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
-                 System.Threading.Thread.Sleep(1000);
-                var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
-                textinput.SendKeys("93222");
-                 System.Threading.Thread.Sleep(1000);
-                var textsave = modaldiag.FindElement(By.CssSelector(gotomenu("codegroupaddcountrydropdown")));
-                textsave.Click();
-                // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.XPath(gotomenu("codegroupaddcountryclickcontrol"))).Click();
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.XPath(gotomenu("codegroupaddsavebutton"))).Click();
-               // driver.Close();
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup success',getdate(),'GUI'");
-            }
-            catch (Exception Ex)
-            {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Fail','adding CodeGroup failure exception:" + Ex.ToString().Replace('"',' ')  + "',getdate(),'GUI'");
-              //  driver.Close();
-            }
+                try
+                {
+                    //edit code group
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("codegroupeditpressgrid"))).Click();
 
-            try
-            {
-                //edit code group
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("codegrouoeditpopup"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                    System.Threading.Thread.Sleep(waittime);
+                    var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
+                    System.Threading.Thread.Sleep(waittime);
+                    var savebutton = modaldiag.FindElement(By.XPath(gotomenu("codegroupeditpopupsave")));
+                    System.Threading.Thread.Sleep(waittime);
+                    savebutton.Click();
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup Edit','Success','Editting CodeGroup Success',getdate(),'GUI'");
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup Edit','Fail','Editing CodeGroup failure exception:" + Ex.ToString().Replace('"', ' ').Replace('"', ' ') + "',getdate(),'GUI'");
+                }
+                driver.Close();
 
-                driver.FindElement(By.XPath(gotomenu("codegroupeditpressgrid"))).Click();
 
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.XPath(gotomenu("codegrouoeditpopup"))).Click();
-                 System.Threading.Thread.Sleep(1000);
-                var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
-                 System.Threading.Thread.Sleep(1000);
-                var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
-                 System.Threading.Thread.Sleep(1000);
-                var savebutton = modaldiag.FindElement(By.XPath(gotomenu("codegroupeditpopupsave")));
-                 System.Threading.Thread.Sleep(1000);
-                savebutton.Click();
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup Success',getdate(),'GUI'");
             }
             catch(Exception Ex)
             {
-                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup Edit','Fail','Editing CodeGroup failure exception:" + Ex.ToString().Replace('"',' ') .Replace('"',' ') + "',getdate(),'GUI'");
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup Edit','Fail','Editing CodeGroup failure exception:" + Ex.ToString().Replace('"', ' ').Replace('"', ' ') + "',getdate(),'GUI'");
             }
-            driver.Close();
-
-
         }
 
         // to be written
@@ -921,7 +1112,7 @@ namespace TONEAPI
             options.AddArgument("--start-maximized");
             ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8103");
-             System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(waittime);
             // Login
             try
             {
@@ -929,7 +1120,7 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
             catch (Exception Ex)
@@ -941,11 +1132,11 @@ namespace TONEAPI
             try
             {
                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("Lookups"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("Currencies"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Currencies','navigate to Currencies','Success','navigation success',getdate(),'GUI'");
                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
             }
@@ -1048,11 +1239,11 @@ namespace TONEAPI
             try
             {
                 driver.FindElement(By.XPath(gotomenu("Currenciesadd"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 var mainfilter = modaldiag.FindElements(By.XPath("//*[@id=\"mainInput\"]")).ToList();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 mainfilter[2].SendKeys("Nabil National Currency");
                 mainfilter[3].SendKeys("NAB");
                 modaldiag.FindElement(By.XPath("Currenciessavebutton")).Click();
@@ -1076,7 +1267,7 @@ namespace TONEAPI
                    options.AddArgument("--start-maximized");
                    ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8103");
-             System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(waittime);
             // Login
             try
             {
@@ -1084,7 +1275,7 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
             catch (Exception Ex)
@@ -1096,11 +1287,11 @@ namespace TONEAPI
             try
             {
                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("Lookups"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("ratetypes"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','navigate to ratetypes','Success','navigation success',getdate(),'GUI'");
                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
             }
@@ -1139,9 +1330,9 @@ namespace TONEAPI
             //search
             driver.FindElement(By.CssSelector("#mainInput")).SendKeys("On-net");
             driver.FindElement(By.CssSelector(gotomenu("ratetypeseachbutton"))).Click();
-             System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(waittime);
             var elementg = driver.FindElement(By.XPath(gotomenu("ratetypegriditem")));
-             System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(waittime);
             if (elementg.Text.Equals("On-net"))
             {
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'ratetypes','ratetypes search','Success','search success',getdate(),'GUI'");
@@ -1173,270 +1364,351 @@ namespace TONEAPI
         }
         // to be written
         public void carrierprofile()
-         {
-             connect con = new connect();
+        {
+            waittime = 2000;
+            string pagemenu = "Carrierprofiles";
+            string parentmenuitem = "";
+            string childmenuitem = "";
+            string submenuitem = "";
+            connect con = new connect();
 
 
-             ChromeOptions options = new ChromeOptions();
-             options.AddArgument("--start-maximized");
-             ChromeDriver driver = new ChromeDriver(options);
-             driver.Navigate().GoToUrl("http://192.168.110.195:8103");
-              System.Threading.Thread.Sleep(1000);
-             // Login
-             try
-             {
-                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("admin@vanrise.com");
-                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
-
-                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
-             }
-             catch (Exception Ex)
-             {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
-                 driver.Close();
-             }
-             // go to look ups 
-             try
-             {
-                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 driver.FindElement(By.XPath(gotomenu("Carriers"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 driver.FindElement(By.XPath(gotomenu("carrierprofile"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','navigate to carrier profile','Success','navigation success',getdate(),'GUI'");
-                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
-             }
-
-             catch (Exception Ex)
-             {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','navigate to carrier profile','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
-                 //driver.Close();
-             }
-             // search if zone exists
-             try
-             {
-                 var element = driver.FindElement(By.XPath(gotomenu("carrierprofilegriditem")));
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','page browsing','Success','browsing success',getdate(),'GUI'");
-                 //    var element2 = driver.FindElement(By.XPath(gotomenu("codegroupafghcodegroup")));
-                 string x = element.Text.ToString();
-                 var count = driver.FindElement(By.XPath(gotomenu("carrierprofilecount")));
-                 if (count.Text.Equals("Total count (245)"))
-                 {
-                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile count','Success','data validation success',getdate(),'GUI'");
-
-
-                 }
-                 else
-                 {
-                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile count in correct','Fail','validation failure',getdate(),'GUI'");
-
-
-                 }
-             }
-             catch (Exception Ex)
-             {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile count in correct','Success','validation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
-
-             }
-             //search by name 
-             try
-             {
-                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Spactron");
-                 driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 var elementg = driver.FindElement(By.XPath(gotomenu("carrierprofilenamegriditem")));
-                  System.Threading.Thread.Sleep(1000);
-                 if (elementg.Text.Equals("Spactron"))
-                 {
-                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Success','search success',getdate(),'GUI'");
-
-                 }
-                 else
-                 {
-                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Fail','search failed no item found',getdate(),'GUI'");
-                 }
-             }
-             catch (Exception Ex)
-             {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
-
-             }
-
-
-             // search by company
-             try
-             {
-
-                 var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
-                 profilefilter[0].Clear();
-                 profilefilter[1].SendKeys("Spactron");
-                 driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 var elementprof = driver.FindElement(By.XPath(gotomenu("carrierprofilenamegriditem")));
-                  System.Threading.Thread.Sleep(1000);
-                 if (elementprof.Text.Equals("Spactron"))
-                 {
-                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search by company','Success','search success',getdate(),'GUI'");
-
-                 }
-                 else
-                 {
-                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by company','Fail','search failed no item found',getdate(),'GUI'");
-                 }
-
-             }
-             catch (Exception Ex)
-             {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by company','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
-
-             }
-             // search by country
-
-             try
-             {
-
-                 var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
-                 profilefilter[0].Clear();
-                 profilefilter[1].Clear();
-
-                 driver.FindElement(By.XPath(gotomenu("carrierprofilesearchcombo"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 driver.FindElement(By.XPath(gotomenu("carrierprofileselectcountry"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 var elementprof = driver.FindElement(By.XPath(gotomenu("carrierprofilenamegriditem")));
-                  System.Threading.Thread.Sleep(1000);
-                 if (elementprof.Text.Equals("arbinet"))
-                 {
-                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search by country','Success','search success',getdate(),'GUI'");
-
-                 }
-                 else
-                 {
-                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by country','Fail','search failed no item found',getdate(),'GUI'");
-                 }
-
-             }
-             catch (Exception Ex)
-             {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by country','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
-
-             }
-            // reset filter start with grid validation
-
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            ChromeDriver driver = new ChromeDriver(options);
+            driver.Navigate().GoToUrl(TextBox1.Text);
+            System.Threading.Thread.Sleep(waittime);
+            // Login
             try
             {
-                var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
-                profilefilter[0].Clear();
-                profilefilter[1].Clear();
-                
-                driver.FindElement(By.XPath(gotomenu("carrierprofilesearchcombo"))).Click();
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.XPath(gotomenu("carrierprofilecleardropdown"))).Click();
+                driver.FindElement(By.CssSelector("#mainInput")).SendKeys(TextBox2.Text);
+                driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys(TextBox3.Text);
 
-                 System.Threading.Thread.Sleep(1000);
-                driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
+                System.Threading.Thread.Sleep(waittime);
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
+            }
+            catch (Exception Ex)
+            {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                driver.Close();
+            }
+            // go to look ups 
+            try
+            {
+                DataSet ds1 = con.getdatas("select * from menu where page='" + pagemenu + "'", "Server=192.168.110.195;Database=ToneV2testing;User ID=sa;Password=no@cce$$dev");
+                foreach (DataRow _r in ds1.Tables[0].Rows)
+                {
+                    parentmenuitem = _r["parent"].ToString();
+                    childmenuitem = _r["child"].ToString();
+                    submenuitem = _r["sub"].ToString();
+                }
+                System.Threading.Thread.Sleep(waittime);
+                System.Threading.Thread.Sleep(waittime);
+                List<IWebElement> mainmenu = driver.FindElements(By.XPath("//span[@class='vr-module-name ng-binding']")).ToList();
+                List<IWebElement> submenu = new List<IWebElement>();
+                List<IWebElement> childmenu = new List<IWebElement>();
+                List<IWebElement> submenus = new List<IWebElement>();
+                List<IWebElement> submenusnotnull = new List<IWebElement>();
+                List<IWebElement> childmenuss = new List<IWebElement>();
+                List<IWebElement> childmenunotnull = new List<IWebElement>();
+                List<IWebElement> childmenunotnull2 = new List<IWebElement>();
+
 
                 try
-
                 {
-                    var gridgrids = driver.FindElements(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
-                    gridgrids[3].Click();
-                     System.Threading.Thread.Sleep(1000);
-                    var gridgrids2 = driver.FindElements(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
-                  
-                    gridgrids2[4].Click();
-                     System.Threading.Thread.Sleep(1000);
-                 //  driver.FindElement(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).Click();
-                    
-                    var grid3 = driver.FindElements(By.CssSelector("#rowSection1 > div:nth-child(1) > div > div > div:nth-child(2) > div > div > div > span")).ToList();
-                    var product = grid3[5];
-                    if(product.Text.Equals("WholeSale"))
+                    foreach (IWebElement element in mainmenu)
                     {
-                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product','Success','correct prouct',getdate(),'GUI'");
+                        if (element.Text == parentmenuitem)
+                        {
+                            element.Click();
+
+                            if (childmenuitem != "")
+                            {
+                                System.Threading.Thread.Sleep(waittime);
+                                submenus = driver.FindElements(By.XPath("//div[@class='menulink waves-effect waves-block ng-binding']")).ToList();
+                                submenusnotnull = submenus.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                                foreach (IWebElement childelement in submenusnotnull)
+                                {
+                                    if (childelement.Text == childmenuitem)
+                                    {
+                                        childelement.Click();
+                                        System.Threading.Thread.Sleep(waittime);
+                                        childmenuss = driver.FindElements(By.XPath("//a[@class='menulink ng-binding']")).ToList();
+                                        childmenunotnull = childmenuss.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                                        foreach (IWebElement subelement in childmenunotnull)
+                                        {
+                                            if (subelement.Text == submenuitem)
+                                            {
+                                                subelement.Click();
+                                                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrierprofiles','navigate to Carrierprofiles','Success','navigation success',getdate(),'GUI'");
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            //  con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure exception:failed to go to menu',getdate(),'GUI'");
+                        }
+
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Carrierprofiles','navigate to Carrierprofiles','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                }
+
+                // search if zone exists
+                try
+                {
+                    var element = driver.FindElement(By.XPath(gotomenu("carrierprofilegriditem")));
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','page browsing','Success','browsing success',getdate(),'GUI'");
+                    //    var element2 = driver.FindElement(By.XPath(gotomenu("codegroupafghcodegroup")));
+                    string x = element.Text.ToString();
+                    var count = driver.FindElement(By.XPath(gotomenu("carrierprofilecount")));
+                    if (count.Text.Equals("Total count (315)"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile count','Success','data validation success',getdate(),'GUI'");
+
+
                     }
                     else
                     {
-                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product','Fail','wrong prouct',getdate(),'GUI'");
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile count in correct','Fail','validation failure',getdate(),'GUI'");
+
+
                     }
-                    var grid4 = driver.FindElements(By.CssSelector("#rowSection1 > div:nth-child(1) > div > div > div:nth-child(3) > div > div > div > span")).ToList();
-                    var productdate = grid4[5];
-                    if (productdate.Text.Equals("2016-07-01"))
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile count in correct','Success','validation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+
+                }
+                //search by name 
+                try
+                {
+                    driver.FindElement(By.CssSelector("#mainInput")).SendKeys("Spactron");
+                    driver.FindElement(By.XPath(gotomenu("carrierprofilesearchbutton"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var elementg = driver.FindElement(By.XPath(gotomenu("carrierprofilenamegriditem")));
+                    System.Threading.Thread.Sleep(waittime);
+                    if (elementg.Text.Equals("Spactron"))
                     {
-                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product date','Success','correct prouct date',getdate(),'GUI'");
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Success','search success',getdate(),'GUI'");
+
                     }
                     else
                     {
-                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product date','Fail','wrong prouct date',getdate(),'GUI'");
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Fail','search failed no item found',getdate(),'GUI'");
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+
+                }
+
+
+                // search by company
+                try
+                {
+
+                    var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
+                    profilefilter[0].Clear();
+                    profilefilter[1].SendKeys("Spactron");
+                    driver.FindElement(By.XPath(gotomenu("carrierprofilesearchbutton"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var elementprof = driver.FindElement(By.XPath(gotomenu("carrierprofilenamegriditem")));
+                    System.Threading.Thread.Sleep(waittime);
+                    if (elementprof.Text.Equals("Spactron"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search by company','Success','search success',getdate(),'GUI'");
+
+                    }
+                    else
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by company','Fail','search failed no item found',getdate(),'GUI'");
+                    }
+
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by company','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+
+                }
+                // search by country
+
+                try
+                {
+
+                    var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
+                    profilefilter[0].Clear();
+                    profilefilter[1].Clear();
+
+                //    driver.FindElement(By.XPath(gotomenu("carrierprofilesearchcomboempty"))).Click();
+                  //  System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("carrierprofileselectcountry"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                  //  driver.FindElement(By.XPath(gotomenu("carrierprofilepresscountry"))).Click();
+                    driver.FindElement(By.CssSelector("#\\31  > a:nth-child(1) > div:nth-child(1)")).Click();
+                    driver.FindElement(By.XPath(gotomenu("carrierprofilesearchbutton"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var elementprof = driver.FindElement(By.XPath(gotomenu("carrierprofilecountrygriditem")));
+                    System.Threading.Thread.Sleep(waittime);
+                    if (elementprof.Text.ToLower().Equals("arbinet"))
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search by country','Success','search success',getdate(),'GUI'");
+
+                    }
+                    else
+                    {
+                        con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by country','Fail','search failed no item found',getdate(),'GUI'");
+                    }
+
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile search  by country','Fail','search failed - page error exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+
+                }
+                // reset filter start with grid validation
+
+                try
+                {
+                    var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
+                    profilefilter[0].Clear();
+                    profilefilter[1].Clear();
+
+                    driver.FindElement(By.XPath(gotomenu("carrierprofilesearchcombo"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("carrierprofilecleardropdown"))).Click();
+
+                    System.Threading.Thread.Sleep(waittime);
+                    driver.FindElement(By.XPath(gotomenu("carrierprofilesearchbutton"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+
+                    try
+                    {
+                        var gridgrids = driver.FindElements(By.XPath(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
+                        
+                        gridgrids[5].Click();
+                        System.Threading.Thread.Sleep(waittime);
+                        var gridgrids2 = driver.FindElements(By.CssSelector(gotomenu("carrierprofiledripdowntoproduct"))).ToList();
+
+                        gridgrids2[4].Click();
+                        System.Threading.Thread.Sleep(waittime);
+                        //  driver.FindElement(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).Click();
+
+                        var grid3 = driver.FindElements(By.CssSelector("#rowSection1 > div:nth-child(1) > div > div > div:nth-child(2) > div > div > div > span")).ToList();
+                        var product = grid3[5];
+                        if (product.Text.Equals("WholeSale"))
+                        {
+                            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product','Success','correct prouct',getdate(),'GUI'");
+                        }
+                        else
+                        {
+                            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product','Fail','wrong prouct',getdate(),'GUI'");
+                        }
+                        var grid4 = driver.FindElements(By.CssSelector("#rowSection1 > div:nth-child(1) > div > div > div:nth-child(3) > div > div > div > span")).ToList();
+                        var productdate = grid4[5];
+                        if (productdate.Text.Equals("2016-07-01"))
+                        {
+                            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product date','Success','correct prouct date',getdate(),'GUI'");
+                        }
+                        else
+                        {
+                            con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','carrier profile assigned product date','Fail','wrong prouct date',getdate(),'GUI'");
+                        }
+                    }
+                    catch (Exception Ex)
+                    {
+
                     }
                 }
                 catch (Exception Ex)
                 {
 
                 }
+
+                // Add carrier profile
+                try
+                {
+                    driver.FindElement(By.XPath(gotomenu("carrierprofileadd"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                    var profileelements = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
+                    profileelements[0].SendKeys("ZTEL");
+                    profileelements[1].SendKeys("Zimbabway telecom");
+                    profileelements[2].SendKeys("ZTEL");
+                    profileelements[3].SendKeys("Zimbabway telecom");
+                    profileelements[4].SendKeys("test");
+                    profileelements[5].SendKeys("test");
+                    profileelements[6].SendKeys("test");
+                    profileelements[7].SendKeys("test");
+                    profileelements[8].SendKeys("test");
+                    profileelements[9].SendKeys("test");
+
+
+
+                    modaldiag.FindElement(By.XPath(gotomenu("carrierprofilecontacttab"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    var tab = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
+
+                    //tab[25].SendKeys("test@test.com");
+                    //tab[24].SendKeys("123123");
+                    //tab[23].SendKeys("test@test.com");
+                    //tab[22].SendKeys("test");
+                    //tab[21].SendKeys("test@test.com");
+                    //tab[20].SendKeys("test");
+                    //tab[19].SendKeys("test@test.com");
+                    //tab[18].SendKeys("test");
+                    //tab[17].SendKeys("test@test.com");
+                    //tab[16].SendKeys("test");
+                    //tab[15].SendKeys("test@test.com");
+                    //tab[14].SendKeys("test");
+                    //tab[13].SendKeys("test@test.com");
+                    //tab[12].SendKeys("test");
+                    modaldiag.FindElement(By.XPath(gotomenu("carrierprofilefinincialtab"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    modaldiag.FindElement(By.XPath(gotomenu("carrierprofiletabcurrency"))).Click();
+                    System.Threading.Thread.Sleep(waittime);
+                    modaldiag.FindElement(By.XPath(gotomenu("carrierprofileselectcurrency"))).Click();
+                    var tabs = modaldiag.FindElements(By.XPath("//input[@id='mainInput']")).ToList();
+
+                    //tab[25].SendKeys("test@test.com");
+                    //tab[24].SendKeys("123123");
+                    //tab[23].SendKeys("test@test.com");
+                    //tab[22].SendKeys("test");
+                    //tab[21].SendKeys("test@test.com");
+                    //tab[20].SendKeys("test");
+                    tabs[24].SendKeys("15");
+                    tabs[26].SendKeys("15");
+                    tabs[27].SendKeys("15");
+      
+                   // modaldiag.FindElement(By.XPath(gotomenu("carrierprofiledueinput"))).SendKeys("10");
+                    modaldiag.FindElement(By.XPath(gotomenu("carrierprofileSave"))).Click();
+
+
+
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','save new carrier profile','success','success: adding new carrier profile',getdate(),'GUI'");
+                }
+                catch (Exception Ex)
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','Failed to save new carrier profile','Fail','Fail adding new carrier profile exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+
+                }
+                driver.Close();
             }
             catch (Exception Ex)
             {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','Failed to save new carrier profile','Fail','Fail adding new carrier profile exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
 
             }
-
-            // Add carrier profile
-             try
-             {
-                 driver.FindElement(By.XPath(gotomenu("carrierprofileadd"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
-                 var profileelements = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
-                 profileelements[0].SendKeys("ZTEL");
-                 profileelements[1].SendKeys("Zimbabway telecom");
-                 profileelements[2].SendKeys("ZTEL");
-                 profileelements[3].SendKeys("Zimbabway telecom");
-                 profileelements[4].SendKeys("test");
-                 profileelements[5].SendKeys("test");
-                 profileelements[6].SendKeys("test");
-                 profileelements[7].SendKeys("test");
-                 profileelements[8].SendKeys("test");
-                 profileelements[9].SendKeys("test");
-            
-       
-   
-                 modaldiag.FindElement(By.XPath(gotomenu("carrierprofileaddtab"))).Click();
-                  System.Threading.Thread.Sleep(1000);
-                 var tab = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
-        
-                 tab[25].SendKeys("test@test.com");
-                 tab[24].SendKeys("123123");
-                 tab[23].SendKeys("test@test.com");
-                 tab[22].SendKeys("test");
-                 tab[21].SendKeys("test@test.com");
-                 tab[20].SendKeys("test");
-                 tab[19].SendKeys("test@test.com");
-                 tab[18].SendKeys("test");
-                 tab[17].SendKeys("test@test.com");
-                 tab[16].SendKeys("test");
-                 tab[15].SendKeys("test@test.com");
-                 tab[14].SendKeys("test");
-                 tab[13].SendKeys("test@test.com");
-                 tab[12].SendKeys("test");
-         
-                 modaldiag.FindElement(By.XPath(gotomenu("carrierprofileSave"))).Click();
-
-
-
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','save new carrier profile','success','success: adding new carrier profile',getdate(),'GUI'");
-             }
-             catch (Exception Ex)
-             {
-                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier profile','Failed to save new carrier profile','Fail','Fail adding new carrier profile exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
-
-             }
-             driver.Close();
-         }
+        }
         // to be written
         public void carrieraccount()
         {
@@ -1448,7 +1720,7 @@ namespace TONEAPI
             ChromeDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("http://192.168.110.195:8103");
            
-             System.Threading.Thread.Sleep(1000);
+             System.Threading.Thread.Sleep(waittime);
             // Login
             try
             {
@@ -1456,7 +1728,7 @@ namespace TONEAPI
                 driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
 
                 driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
             }
             catch (Exception Ex)
@@ -1467,13 +1739,13 @@ namespace TONEAPI
             // go to look ups 
             try
             {
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("Carriers"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccount"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','navigate to carrier account','Success','navigation success',getdate(),'GUI'");
                 //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
             }
@@ -1514,9 +1786,9 @@ namespace TONEAPI
             {
                 driver.FindElement(By.CssSelector("#mainInput")).SendKeys("spactron");
                 driver.FindElement(By.CssSelector(gotomenu("carrieraccountsearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 var elementg = driver.FindElement(By.XPath(gotomenu("carrieraccountnamegriditem")));
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 if (elementg.Text.ToLower().Equals("spactron"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search','Success','search success',getdate(),'GUI'");
@@ -1541,13 +1813,13 @@ namespace TONEAPI
                 var profilefilter = driver.FindElements(By.XPath(gotomenu("carrierprofilesearchtextbox"))).ToList();
                 profilefilter[0].Clear();
                 driver.FindElement(By.XPath(gotomenu("carrieraccountsearchcombo"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountselectprofile"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.CssSelector(gotomenu("carrieraccountsearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 var elementprof = driver.FindElement(By.XPath(gotomenu("carrieraccountnamegriditem")));
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 if (elementprof.Text.ToLower().Equals("arbinet"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search by profile','Success','search success',getdate(),'GUI'");
@@ -1573,17 +1845,17 @@ namespace TONEAPI
                 profilefilter[0].Clear();
                // profilefilter[1].Clear();
                 driver.FindElement(By.XPath(gotomenu("carrieraccountsearchcombo"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountclearprofile"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountstatuscombo"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountactivedropdown"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.CssSelector(gotomenu("carrieraccountsearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 var elementprof = driver.FindElement(By.XPath(gotomenu("carrieraccountnamegriditem")));
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 if (elementprof.Text.Equals("Blocked Account"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search by status','Success','search success',getdate(),'GUI'");
@@ -1610,19 +1882,19 @@ namespace TONEAPI
                 //driver.FindElement(By.XPath(gotomenu("carrieraccountsearchcombo"))).Click();
                 //System.Threading.Thread.Sleep(1000);
                 //driver.FindElement(By.XPath(gotomenu("carrieraccountclearprofile"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountstatuscombo"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountclearstatus"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccounttype"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrieraccountexchangetype"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.CssSelector(gotomenu("carrieraccountsearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 var elementprof = driver.FindElement(By.XPath(gotomenu("carrieraccountnamegriditem")));
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 if (elementprof.Text.Equals("VoiceKings"))
                 {
                     con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'carrier account','carrier account search by type','Success','search success',getdate(),'GUI'");
@@ -1648,22 +1920,22 @@ namespace TONEAPI
                 profilefilter[1].Clear();
 
                 driver.FindElement(By.XPath(gotomenu("carrierprofilesearchcombo"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.XPath(gotomenu("carrierprofilecleardropdown"))).Click();
 
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 driver.FindElement(By.CssSelector(gotomenu("carrierprofilesearchbutton"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
 
                 try
                 {
                     var gridgrids = driver.FindElements(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
                     gridgrids[3].Click();
-                     System.Threading.Thread.Sleep(1000);
+                     System.Threading.Thread.Sleep(waittime);
                     var gridgrids2 = driver.FindElements(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).ToList();
 
                     gridgrids2[4].Click();
-                     System.Threading.Thread.Sleep(1000);
+                     System.Threading.Thread.Sleep(waittime);
                     //  driver.FindElement(By.CssSelector(gotomenu("carrierprofilegriddrildownaccount"))).Click();
 
                     var grid3 = driver.FindElements(By.CssSelector("#rowSection1 > div:nth-child(1) > div > div > div:nth-child(2) > div > div > div > span")).ToList();
@@ -1701,7 +1973,7 @@ namespace TONEAPI
             try
             {
                 driver.FindElement(By.XPath(gotomenu("carrierprofileadd"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
                 var profileelements = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
                 profileelements[0].SendKeys("ZTEL");
@@ -1718,7 +1990,7 @@ namespace TONEAPI
 
 
                 modaldiag.FindElement(By.XPath(gotomenu("carrierprofileaddtab"))).Click();
-                 System.Threading.Thread.Sleep(1000);
+                 System.Threading.Thread.Sleep(waittime);
                 var tab = modaldiag.FindElements(By.XPath(gotomenu("carrierprofileadditems"))).ToList();
 
                 tab[25].SendKeys("test@test.com");
@@ -1773,5 +2045,455 @@ namespace TONEAPI
             }
             bindgrid();
         }
+
+        protected void Button4_Click(object sender, EventArgs e)
+        {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            ChromeDriver driver = new ChromeDriver(options);
+            //string x = "";
+            driver.Navigate().GoToUrl("http://192.168.110.195:8103");
+            System.Threading.Thread.Sleep(1000);
+            driver.FindElement(By.CssSelector("#mainInput")).SendKeys("admin@vanrise.com");
+            driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys("1");
+            driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
+            System.Threading.Thread.Sleep(6000);
+            List<IWebElement> mainmenu = driver.FindElements(By.XPath("//span[@class='vr-module-name ng-binding']")).ToList();
+            List<IWebElement> submenu=new List<IWebElement>();
+            List<IWebElement> childmenu = new List<IWebElement>();
+            List<IWebElement> submenus = new List<IWebElement>();
+            List<IWebElement> submenusnotnull = new List<IWebElement>();
+            List<IWebElement> childmenuss = new List<IWebElement>() ;
+            List<IWebElement> childmenunotnull = new List<IWebElement>();
+            List<IWebElement> childmenunotnull2 = new List<IWebElement>();
+           
+            string parentmenuitem = "";
+            string childmenuitem = "";
+            string submenuitem = "";
+            string pagemenuitem = "";
+            connect con = new connect();
+            con.updatedata("delete from menu");
+            foreach (IWebElement element in mainmenu)
+            {
+                parentmenuitem = element.Text.ToString();
+                try
+                {
+                    element.Click();
+                    try
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        submenus = driver.FindElements(By.XPath("//div[@class='menulink waves-effect waves-block ng-binding']")).ToList();
+                        submenusnotnull = submenus.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                    
+                    }
+                    catch { }
+
+                    try
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        childmenuss = driver.FindElements(By.XPath("//a[@class='menulink  ng-binding']")).ToList();
+                        childmenunotnull = childmenuss.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                        System.Threading.Thread.Sleep(1000);
+                        if (childmenunotnull.Count() > 0)
+                        {
+                            childmenuitem = "";
+                            foreach (IWebElement ch in childmenunotnull)
+                            {
+                                submenuitem = ch.Text.ToString();
+                                con.updatedata("INSERT INTO [dbo].[menu]([parent],[child],[sub],[page]) VALUES ('" + parentmenuitem + "' ,'" + childmenuitem + "','" + submenuitem + "','" + submenuitem.Replace(" ","") + "')");
+                            }
+
+                          
+                           // ProcessGUI(childmenuss);
+                        }
+                    }
+                    catch { }
+
+                    foreach (IWebElement subelemet in submenusnotnull)
+                    {
+                        try
+                        {
+                            subelemet.Click();
+                            childmenuitem = subelemet.Text.ToString();
+                            List<IWebElement> childmenus = driver.FindElements(By.XPath("//a[@class='menulink ng-binding']")).ToList();
+                            childmenunotnull2 = childmenus.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                            System.Threading.Thread.Sleep(1000);
+                            if (childmenunotnull2.Count() > 0)
+                            {
+                                System.Threading.Thread.Sleep(1000);
+                        
+                                foreach (IWebElement El in childmenunotnull2)
+                                {
+                                   // ProcessGUI(El);
+                                    submenuitem = El.Text.ToString();
+                                    con.updatedata("INSERT INTO [dbo].[menu]([parent],[child],[sub],[page]) VALUES ('" + parentmenuitem + "' ,'" + childmenuitem + "','" + submenuitem + "','" + submenuitem.Replace(" ", "") + "')");
+                                }
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
+            
+            System.Threading.Thread.Sleep(1000);
+
+            List<IWebElement> submenufinal = new List<IWebElement>();
+            List<IWebElement> childmenufinal = new List<IWebElement>();
+            submenufinal = submenu.Where(x =>!string.IsNullOrEmpty(x.Text)).ToList();
+            childmenufinal = childmenu.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+            driver.Close();
+        }
+
+        private void ProcessGUI(IWebElement El)
+        {
+            El.Click();
+            if (El.Text == "Code Groups")
+            {
+                codegroups();
+            }
+            if (El.Text == "Countries")
+            {
+                GUIcountry();
+            }
+            if (El.Text == "Switches")
+            {
+                switches();
+            }
+            if (El.Text == "Carrier Accounts")
+            {
+                carrieraccount();
+            }
+            if (El.Text == "Carrier Profiles")
+            {
+                carrierprofile();
+            }
+            if (El.Text == "Cities")
+            {
+                GUICities();
+            }
+            //if (El.Text == "")
+            //{
+
+            //}
+            //if (El.Text == "")
+            //{
+
+            //}
+            //if (El.Text == "")
+            //{
+
+            //}
+            //if (El.Text == "")
+            //{
+
+            //}
+
+            throw new NotImplementedException();
+        }
+
+        public void codegroups()
+        {
+            connect con = new connect();
+
+
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--start-maximized");
+            ChromeDriver driver = new ChromeDriver(options);
+            driver.Navigate().GoToUrl(TextBox1.Text);
+            System.Threading.Thread.Sleep(waittime);
+            // Login
+            try
+            {
+                driver.FindElement(By.CssSelector("#mainInput")).SendKeys(TextBox2.Text);
+                driver.FindElement(By.XPath("//input[@placeholder=\"Password\"]")).SendKeys(TextBox3.Text);
+
+                driver.FindElement(By.CssSelector("body > div > div > div > div > div > vr-form > div > vr-validation-group > div:nth-child(3) > div > vr-button > div > button")).Click();
+                System.Threading.Thread.Sleep(waittime);
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Success','login in success',getdate(),'GUI'");
+            }
+            catch (Exception Ex)
+            {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','login','Fail','login in failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                driver.Close();
+            }
+            // go to look ups 
+            try
+            {
+                //driver.FindElement(By.XPath(gotomenu("BusinessEntities"))).Click();
+                // System.Threading.Thread.Sleep(waittime);
+                //driver.FindElement(By.XPath(gotomenu("Lookups"))).Click();
+                // System.Threading.Thread.Sleep(waittime);
+                //driver.FindElement(By.XPath(gotomenu("Codegroups"))).Click();
+                // System.Threading.Thread.Sleep(waittime);
+
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Success','navigation success',getdate(),'GUI'");
+                //con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'security','navigate to Countries','Success','navigation success',getdate(),'GUI'");
+            }
+
+            catch (Exception Ex)
+            {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','navigate to CodeGroup','Fail','navigation failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                //driver.Close();
+            }
+            // search if zone exists
+            try
+            {
+                var element = driver.FindElement(By.XPath(gotomenu("codegroupgriditem")));
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','page browsing','Success','browsing success',getdate(),'GUI'");
+                var element2 = driver.FindElement(By.XPath(gotomenu("codegroupafghcodegroup")));
+                string x = element.Text.ToString();
+                var count = driver.FindElement(By.XPath(gotomenu("codegroupgridcount")));
+                if (count.Text.Equals("Total count (270)"))
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count','Success','navigation success',getdate(),'GUI'");
+
+
+                }
+                else
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count in correct','Success','navigation success',getdate(),'GUI'");
+
+
+                }
+            }
+            catch (Exception Ex)
+            {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup count in correct','Success','navigation success exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+
+            }
+            try
+            {
+                // search for a specific zone
+                driver.FindElement(By.CssSelector("#mainInput")).SendKeys("961");
+                System.Threading.Thread.Sleep(waittime);
+                driver.FindElement(By.CssSelector(gotomenu("codegroupsearchitem"))).Click();
+                System.Threading.Thread.Sleep(waittime);
+                var elementg = driver.FindElement(By.XPath(gotomenu("codegroupgetitem")));
+                System.Threading.Thread.Sleep(waittime);
+                if (elementg.Text.Equals("Lebanon"))
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Success','search success',getdate(),'GUI'");
+
+                }
+                else
+                {
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Fail','search failed no item found',getdate(),'GUI'");
+                }
+                //  string currentHandle = driver.CurrentWindowHandle;
+            }
+            catch (Exception Ex)
+            {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup search','Fail','search failed no item found exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+            }
+            try
+            {
+                driver.FindElement(By.XPath(gotomenu("codegroupaddpopup"))).Click();
+                System.Threading.Thread.Sleep(waittime);
+
+                // add a new zone
+                var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                System.Threading.Thread.Sleep(waittime);
+                var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
+                textinput.SendKeys("93222");
+                System.Threading.Thread.Sleep(waittime);
+                var textsave = modaldiag.FindElement(By.CssSelector(gotomenu("codegroupaddcountrydropdown")));
+                textsave.Click();
+                // driver.FindElement(By.XPath("[@class,'modal-dialog'][@id='mainInput']")).SendKeys("Calgary");
+                System.Threading.Thread.Sleep(waittime);
+                driver.FindElement(By.XPath(gotomenu("codegroupaddcountryclickcontrol"))).Click();
+                System.Threading.Thread.Sleep(waittime);
+                driver.FindElement(By.XPath(gotomenu("codegroupaddsavebutton"))).Click();
+                // driver.Close();
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup success',getdate(),'GUI'");
+            }
+            catch (Exception Ex)
+            {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Fail','adding CodeGroup failure exception:" + Ex.ToString().Replace('"', ' ') + "',getdate(),'GUI'");
+                //  driver.Close();
+            }
+
+            try
+            {
+                //edit code group
+
+                driver.FindElement(By.XPath(gotomenu("codegroupeditpressgrid"))).Click();
+
+                System.Threading.Thread.Sleep(waittime);
+                driver.FindElement(By.XPath(gotomenu("codegrouoeditpopup"))).Click();
+                System.Threading.Thread.Sleep(waittime);
+                var modaldiag = driver.FindElement(By.ClassName("modal-dialog"));
+                System.Threading.Thread.Sleep(waittime);
+                var textinput = modaldiag.FindElement(By.CssSelector("#mainInput"));
+                System.Threading.Thread.Sleep(waittime);
+                var savebutton = modaldiag.FindElement(By.XPath(gotomenu("codegroupeditpopupsave")));
+                System.Threading.Thread.Sleep(waittime);
+                savebutton.Click();
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup add','Success','adding CodeGroup Success',getdate(),'GUI'");
+            }
+            catch (Exception Ex)
+            {
+                con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','CodeGroup Edit','Fail','Editing CodeGroup failure exception:" + Ex.ToString().Replace('"', ' ').Replace('"', ' ') + "',getdate(),'GUI'");
+            }
+            driver.Close();
+
+
+        }
+
+        private void findpage(string p, ChromeDriver driver)
+        {
+            System.Threading.Thread.Sleep(4000);
+        
+
+            List<IWebElement> mainmenu = driver.FindElements(By.XPath("//span[@class='vr-module-name ng-binding']")).ToList();
+            List<IWebElement> submenu = new List<IWebElement>();
+            List<IWebElement> childmenu = new List<IWebElement>();
+            List<IWebElement> submenus = new List<IWebElement>();
+            List<IWebElement> submenusnotnull = new List<IWebElement>();
+            List<IWebElement> childmenuss = new List<IWebElement>();
+            List<IWebElement> childmenunotnull = new List<IWebElement>();
+            List<IWebElement> childmenunotnull2 = new List<IWebElement>();
+            System.Threading.Thread.Sleep(1000);
+
+            foreach (IWebElement element in mainmenu)
+            {
+                try
+                {
+                    element.Click();
+                    try
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        submenus = driver.FindElements(By.XPath("//div[@class='menulink waves-effect waves-block ng-binding']")).ToList();
+                        System.Threading.Thread.Sleep(1000);
+                        submenusnotnull = submenus.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                        if (submenusnotnull.Count() > 0)
+                        {
+                            submenu.AddRange(submenusnotnull);
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        childmenuss = driver.FindElements(By.XPath("//div[@class='menulink ng-binding']")).ToList();
+                        childmenunotnull = childmenuss.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                        System.Threading.Thread.Sleep(1000);
+                        if (childmenunotnull.Count() > 0)
+                        {
+                            childmenu.AddRange(childmenunotnull);
+                            // ProcessGUI(childmenuss);
+                        }
+                    }
+                    catch { }
+
+                    foreach (IWebElement subelemet in submenusnotnull)
+                    {
+                        try
+                        {
+
+                            subelemet.Click();
+                            System.Threading.Thread.Sleep(1000);
+                            List<IWebElement> childmenus = driver.FindElements(By.XPath("//a[@class='menulink ng-binding']")).ToList();
+                            childmenunotnull2 = childmenus.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
+                            System.Threading.Thread.Sleep(1000);
+                            if (childmenunotnull2.Count() > 0)
+                            {
+                                System.Threading.Thread.Sleep(1000);
+                                childmenu.AddRange(childmenunotnull2);
+                                foreach (IWebElement El in childmenunotnull2)
+                                {
+                                    if(El.Text==p)
+                                    {
+                                        El.Click();
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
+            throw new NotImplementedException();
+        }
+       
+
+        private void gotopagemenu(ChromeDriver driver, string parent, string child, string sub)
+        {
+
+
+        }
+
+        protected void Button5_Click(object sender, EventArgs e)
+        {
+            string x = "";
+            x = DropDownList1.SelectedItem.Value.ToString();
+            if(x.ToLower().Equals("login"))
+            {
+                login();   //Done
+            }
+            if (x.ToLower().Equals("Countries"))
+            {
+                //  GUIcountry();  //done
+            }
+            if (x.ToLower().Equals("cities"))
+            {
+                // GUICities();     //done
+            }
+            if (x.ToLower().Equals("carrieraccounts"))
+            {
+                carrieraccount();
+            }
+            if (x.ToLower().Equals("carrierprofiles"))
+            {
+                carrierprofile();
+            }
+            if (x.ToLower().Equals("codegroups"))
+            {
+                // codegroup();  //done
+            }
+            if (x.ToLower().Equals("switches"))
+            {
+               
+                                          
+                //  carrieraccount();
+                //   currencies();
+                //   ratetypes();
+                //  
+                // 
+
+            }
+            bindgrid();
+        }
+
+        protected void Button6_Click(object sender, EventArgs e)
+        {
+            DateTime? d;
+          
+           // d = string.IsNullOrEmpty(x.Trim('"')) ? default(DateTime?) :DateTime.ParseExact(x.Trim('"'), "yyyyMMddHHmmss:fff", System.Globalization.CultureInfo.InvariantCulture);
+          
+
+        }
+
+
+    
     }
     }
