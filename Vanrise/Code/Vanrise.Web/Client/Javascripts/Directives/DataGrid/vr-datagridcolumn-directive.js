@@ -82,9 +82,11 @@ app.directive('vrDatagridcolumn', ['$parse', function ($parse) {
 
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
 
+                    var show = (iAttrs.initiallyhidden != undefined) != undefined ? !$scope.$eval(iAttrs.initiallyhidden) : true;
 
-                    var show = iAttrs.ngShow != undefined ? $scope.$eval(iAttrs.ngShow) : true;
-
+                    if(iAttrs.ngShow != undefined)
+                    show =  $scope.$eval(iAttrs.ngShow);
+                   
                     var colDef = dataGridCtrl.addColumn(col, columnIndex);
 
 

@@ -127,6 +127,8 @@
                                 ACD: customerResult.ACD,
                                 PDDInSec: customerResult.PDDInSec,
                                 TotalDuration: customerResult.TotalDuration,
+                                Attempts: customerResult.Attempts,
+                                CountConnected: customerResult.CountConnected
                             });
                         }
                     }
@@ -140,6 +142,9 @@
                                 ACD: supplierResult.ACD,
                                 PDDInSec: supplierResult.PDDInSec,
                                 TotalDuration: supplierResult.TotalDuration,
+                                Attempts: customerResult.Attempts,
+                                CountConnected: customerResult.CountConnected
+
                             });
                         }
                     }

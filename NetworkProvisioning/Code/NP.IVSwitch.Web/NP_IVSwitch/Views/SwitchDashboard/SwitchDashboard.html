@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="NP_IVSwitch_SwitchDashboardManagementController" vr-loader="scopeModel.isLoading">
+﻿<vr-panel ng-controller="NP_IVSwitch_SwitchDashboardManagementController" vr-loader="scopeModel.isLoading" fullscreen>
     <vr-form name="formFilter">
         <vr-row removeline>
             <vr-columns colnum="6" grouped>
@@ -44,7 +44,10 @@
                         <vr-columns colnum="6">
                             <vr-datagrid on-ready="scopeModel.onGridReady"
                                          datasource="scopeModel.topCustomers">
-                                <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" ></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Attempts'" field="'Attempts'" initiallyhidden="true" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Connected'" field="'CountConnected'" initiallyhidden="true" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+
                                 <vr-datagridcolumn headertext="'% Connected'" field="'PercConnected'" type="'Number'" numberprecision="'NoDecimal'" getcolor="scopeModel.getPercConnectedColor"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'ACD'" field="'ACD'" type="'Number'" getcolor="scopeModel.getACDColor"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Total Dur (M)'" field="'TotalDuration'" type="'Number'"></vr-datagridcolumn>
@@ -76,7 +79,10 @@
                         <vr-columns colnum="6">
                             <vr-datagrid on-ready="scopeModel.onGridReady"
                                          datasource="scopeModel.topSuppliers">
+                               
                                 <vr-datagridcolumn headertext="'Supplier Name'" field="'SupplierName'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Attempts'" field="'Attempts'" initiallyhidden="true" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Connected'" field="'CountConnected'" initiallyhidden="true" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'% Connected'" field="'PercConnected'" type="'Number'" numberprecision="'NoDecimal'" getcolor="scopeModel.getPercConnectedColor"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'ACD'" field="'ACD'" type="'Number'" getcolor="scopeModel.getACDColor"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Total Dur (M)'" field="'TotalDuration'" type="'Number'"></vr-datagridcolumn>
