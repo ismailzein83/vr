@@ -99,11 +99,13 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\..\..\..\TFS\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver">
-      <HintPath>..\packages\Selenium.WebDriver.2.53.0\lib\net40\WebDriver.dll</HintPath>
+    <Reference Include="WebDriver, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2.Tests\UnitTests\TOneV2.UnitTests\packages\Selenium.WebDriver.3.0.1\lib\net40\WebDriver.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Support">
-      <HintPath>..\packages\Selenium.Support.2.53.0\lib\net40\WebDriver.Support.dll</HintPath>
+    <Reference Include="WebDriver.Support, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\TFS\TOneV2.Tests\UnitTests\TOneV2.UnitTests\packages\Selenium.Support.3.0.1\lib\net40\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +137,8 @@
     <Compile Include="ClassCode\connect.cs" />
     <Compile Include="ClassCode\countries.cs" />
     <Compile Include="ClassCode\Countryclass.cs" />
+    <Compile Include="ClassCode\currencies.cs" />
+    <Compile Include="ClassCode\Currency.cs" />
     <Compile Include="ClassCode\RestClient.cs" />
     <Compile Include="ClassCode\SaleZone.cs" />
     <Compile Include="ClassCode\SaleZoneProcess.cs" />
@@ -190,6 +194,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.2.22.0.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.22.0.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <Import Project="..\..\..\..\..\..\..\TFS\TOneV2.Tests\UnitTests\TOneV2.UnitTests\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\..\..\..\..\..\..\TFS\TOneV2.Tests\UnitTests\TOneV2.UnitTests\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
