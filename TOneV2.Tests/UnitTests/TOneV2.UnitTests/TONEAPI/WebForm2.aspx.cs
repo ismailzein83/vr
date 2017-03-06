@@ -119,18 +119,48 @@ namespace TONEAPI
                    /* Carrier Profiles */
                    testresults = testresults + "\n ---------------------------------------------\n";
                    TextBox4.Text = TextBox4.Text + "Carrier Profiles \n|";
-                   CarrierProfiles cp = new CarrierProfiles();
+                   currencies cr = new currencies();
                    try
                    {
-                       x = cp.getprofiles(client, new Uri(url + "/api/WhS_BE/CarrierProfile/GetFilteredCarrierProfiles "), TextBox7.Text);
+                       x = cr.getcurrencies(client, new Uri(url + "/api/VRCommon/Currency/GetFilteredCurrencies"), TextBox7.Text, connectionstringwhs);
 
                        testresults = testresults + x;
                    }
                    catch
                    {
 
-                       testresults = testresults + "Failed: Get Carrier Profile Data|";
+                       testresults = testresults + "Failed: Get Currencies Data|";
                    }
+
+
+                   // currencies
+
+                   testresults = testresults + "\n --------------------------------------------- |\n|";
+                   TextBox4.Text = TextBox4.Text + "Currencies \n";
+
+                   countries couns = new countries();
+
+                   x = couns.getcountires(client, new Uri(url + "/api/VRCommon/Country/GetCountriesInfo"), TextBox7.Text, connectionstringwhs);
+
+                   testresults = testresults + x;
+                   try
+                   {
+                       x = couns.createcountry(client, new Uri(url + "/api/VRCommon/Country/AddCountry"), TextBox7.Text, "{\"CountryId\":\"0\",  \"Name\":\"Batatasf\"}");
+                       testresults = testresults + "Success: Create new Country " + x + "\n|";
+                       con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','create Country','success','" + x + "',getdate(),'API'");
+                   }
+                   catch
+                   {
+                       con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','create Country','Fail','" + x + "',getdate(),'API'");
+                       testresults = testresults + "Failed: Create Country|";
+                   }
+
+                   string currencyquery ="{\"Query\":{},\"SortByColumnName\":\"Entity.Name\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":40}";
+
+
+
+
+
 
                    // create profile
 
@@ -363,6 +393,77 @@ namespace TONEAPI
               {
                   rest();
                   bindgrid();
+              }
+
+              protected void Button2_Click(object sender, EventArgs e)
+              {
+                  string connectionstringconf = "Server=" + TextBox11.Text + ";Database=" + TextBox8.Text + ";User ID=" + TextBox12.Text + ";Password=" + TextBox13.Text;
+                  string connectionstringwhs = "Server=" + TextBox11.Text + ";Database=" + TextBox9.Text + ";User ID=" + TextBox12.Text + ";Password=" + TextBox13.Text;
+                  string connectionstringana = "Server=" + TextBox11.Text + ";Database=" + TextBox10.Text + ";User ID=" + TextBox12.Text + ";Password=" + TextBox13.Text;
+                  connect con = new connect();
+                  string testresults = "";
+                  /* Authentication */
+                  TextBox4.Text = TextBox4.Text + "Authentication \n";
+                  string url = TextBox1.Text;
+                  string data = "{\"Email\":\"" + TextBox2.Text.Trim() + "\",  \"Password\":\"" + TextBox3.Text.Trim() + "\"}";
+                  string data2 = "{\"Email\":\"" + TextBox2.Text + "ss\",  \"Password\":\"" + TextBox3.Text + "\"}";
+                  string data3 = "{\"Email\":\"" + TextBox2.Text + "\",  \"Password\":\"" + TextBox3.Text + "ss\"}";
+                  string endPoint = url + @"/api/VR_Sec/Security/Authenticate";
+
+
+                  var client = new RestClient(endpoint: endPoint,
+                                  method: HttpVerb.POST,
+                                  contenttype: "application/json;charset=UTF-8",
+                                  postData: data);
+
+
+                  authenticateclass lg = new authenticateclass();
+                  string res = lg.Testauthentication(client, url, data, data2, data3);
+                  TextBox7.Text = lg.getauthenticationtoken(client, url, data);
+
+                  testresults = testresults + res;
+                  string x = "";
+
+
+
+                  var clients = new RestClient(endpoint: endPoint,
+                       method: HttpVerb.POST,
+                       contenttype: "application/json;charset=UTF-8",
+                       postData: "{\"Query\":{},\"SortByColumnName\":\"Entity.Name\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":4000}");
+                  string parameters = "{\"Query\":{},\"SortByColumnName\":\"Entity.Name\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":4000}";
+                  string profiles = clients.MakeRequested(parameters, TextBox7.Text);
+
+              
+                  testresults = testresults + "\n --------------------------------------------- |\n|";
+                  TextBox4.Text = TextBox4.Text + "Currencies \n";
+
+                  currencies coun = new currencies();
+
+                  x = coun.getcurrencies(clients, new Uri("http://192.168.110.195:8103/api/VRCommon/Currency/GetFilteredCurrencies"), TextBox7.Text, connectionstringwhs);
+
+                  testresults = testresults + x;
+                  try
+                  {
+                    //  x = coun.createcountry(client, new Uri(url + "/api/VRCommon/Country/AddCountry"), TextBox7.Text, "{\"CountryId\":\"0\",  \"Name\":\"Batatasf\"}");
+                      testresults = testresults + "Success: Create new Country " + x + "\n|";
+                      con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','create Country','success','" + x + "',getdate(),'API'");
+                  }
+                  catch
+                  {
+                      con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'Countries','create Country','Fail','" + x + "',getdate(),'API'");
+                      testresults = testresults + "Failed: Create Country|";
+                  }
+
+                  string currencyquery = "{\"Query\":{},\"SortByColumnName\":\"Entity.Name\",\"IsSortDescending\":false,\"ResultKey\":null,\"DataRetrievalResultType\":0,\"FromRow\":1,\"ToRow\":40}";
+
+
+
+              }
+
+              protected void Button3_Click(object sender, EventArgs e)
+              {
+                  TextBox14.Text = Math.Round(0.585, 2).ToString();
+                  TextBox15.Text = Math.Round(0.584, 2, MidpointRounding.AwayFromZero).ToString();
               }
     }
 }

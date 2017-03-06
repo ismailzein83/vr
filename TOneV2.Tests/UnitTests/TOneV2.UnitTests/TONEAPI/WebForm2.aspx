@@ -57,6 +57,36 @@
         <span class="auto-style3">Token </span>:&nbsp;&nbsp;&nbsp; <asp:TextBox ID="TextBox7" runat="server" Width="180px"></asp:TextBox>
         <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Start API Test" Width="116px" />
         <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:DropDownList ID="DropDownList1" runat="server" Height="18px" Width="186px">
+            <asp:ListItem>Authentication</asp:ListItem>
+            <asp:ListItem>Business Entity</asp:ListItem>
+            <asp:ListItem>Carrier Profile</asp:ListItem>
+            <asp:ListItem>Carrier Account</asp:ListItem>
+            <asp:ListItem>Code Group</asp:ListItem>
+            <asp:ListItem>Country</asp:ListItem>
+            <asp:ListItem>Cities</asp:ListItem>
+            <asp:ListItem>Currencies</asp:ListItem>
+            <asp:ListItem>Switches</asp:ListItem>
+            <asp:ListItem>Data Source</asp:ListItem>
+            <asp:ListItem>Time Zones</asp:ListItem>
+            <asp:ListItem>selling Number Plan</asp:ListItem>
+            <asp:ListItem>Selling products</asp:ListItem>
+            <asp:ListItem>Routing Products</asp:ListItem>
+            <asp:ListItem>Sale Zones</asp:ListItem>
+            <asp:ListItem>Sale Codes</asp:ListItem>
+            <asp:ListItem>Sale Rates</asp:ListItem>
+            <asp:ListItem>Sale Pricelist</asp:ListItem>
+            <asp:ListItem>Purchase Zone</asp:ListItem>
+            <asp:ListItem>Purchase Code</asp:ListItem>
+            <asp:ListItem>Purchase Rate</asp:ListItem>
+            <asp:ListItem>Purchase Pricelist</asp:ListItem>
+        </asp:DropDownList>
+&nbsp;<asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Start Selected " Width="116px" />
+        <asp:Button ID="Button3" runat="server" OnClick="Button3_Click" Text="Button" />
+        <asp:TextBox ID="TextBox14" runat="server"></asp:TextBox>
+        <asp:TextBox ID="TextBox15" runat="server"></asp:TextBox>
+        <br />
         <br />
         <hr />
         <br />
