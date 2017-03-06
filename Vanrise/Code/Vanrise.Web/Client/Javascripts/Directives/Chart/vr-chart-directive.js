@@ -482,9 +482,15 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             //tooltipSettings
             var tooltipSettings = {
                 formatter: function () {
-                     var s = '<b>' + this.x + '</b>';
+                    var s = '<b>' + this.x + '</b>';
+                    if (xAxisDefinition.hideAxesTitle)
+                        s = undefined;
                     $.each(this.points, function (i, point) {
-                        s += '<br/><span style="color:' + point.series.color + '">\u25CF</span> ' + point.series.name + ': ' + formatValue(point.y);
+                        if (s == undefined)
+                            s = '';
+                        else
+                            s += '<br/>'
+                        s += '<span style="color:' + point.series.color + '">\u25CF</span> ' + point.series.name + ': ' + formatValue(point.y);
                     });
 
                     return s;
@@ -558,8 +564,8 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     var sDef = currentChartSource.seriesDefinitions[i];
                     var xValue = getXValue(item);
                     var yValue = getYValue(sDef, item);
-                    xAxisValues.push(xValue);
-                    axes[0].setCategories(xAxisValues);
+                  //  xAxisValues.push(xValue);
+                  //  axes[0].setCategories(xAxisValues);
                     series[i].addPoint([xValue,yValue], true, true, {
                         duration: 2000,
                         easing: "jswing"

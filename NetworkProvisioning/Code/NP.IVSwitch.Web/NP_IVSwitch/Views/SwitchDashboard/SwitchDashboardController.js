@@ -391,7 +391,8 @@
                 var xAxisDefinition = {
                     titlePath: "ResponseDate",
                     isTime: true,
-                    hideAxes: true
+                    hideAxes: true,
+                    hideAxesTitle:true
                 };
 
                 var seriesDefinitions = [];
@@ -515,7 +516,8 @@
                 var xAxisDefinition = {
                     titlePath: "Date",
                     isTime: true,
-                    hideAxes: true
+                    hideAxes: true,
+                    hideAxesTitle:true
                 };
 
                 var seriesDefinitions = [];
