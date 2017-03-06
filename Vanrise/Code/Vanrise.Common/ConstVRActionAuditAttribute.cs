@@ -7,6 +7,16 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common
 {
+    public class ConstVRActionAuditActionTypes
+    {
+        public const string ADD = "Add";
+        public const string UPDATE = "Update";
+        public const string GETFILTERED = "Search";
+        public const string GETITEM = "View Item Detail";
+        public const string DELETE = "Delete";
+        public const string ENABLE = "Enable";
+        public const string DISABLE = "Disable";
+    }
     public class ConstVRActionAuditAttribute : VRActionAuditAttribute
     {
         public ConstVRActionAuditAttribute(string moduleName, string entityName, string actionName)

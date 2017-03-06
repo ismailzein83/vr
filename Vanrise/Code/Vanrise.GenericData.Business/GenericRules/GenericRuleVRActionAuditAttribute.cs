@@ -12,15 +12,15 @@ namespace Vanrise.GenericData.Business
 {
     public enum GenericRuleVRActionAuditActionType
     {
-        [Description("Search {0}")]
+        [Description(ConstVRActionAuditActionTypes.GETFILTERED)]
         GetFiltered,
-        [Description("View {0} Item Detail")]
+        [Description(ConstVRActionAuditActionTypes.GETITEM)]
         GetItem,
-        [Description("Add {0}")]
+        [Description(ConstVRActionAuditActionTypes.ADD)]
         Add,
-        [Description("Update {0} Item")]
+        [Description(ConstVRActionAuditActionTypes.UPDATE)]
         Update,
-        [Description("Delete {0} Item")]
+        [Description(ConstVRActionAuditActionTypes.DELETE)]
         Delete
     }
     public class GenericRuleVRActionAuditAttribute : VRActionAuditAttribute
@@ -44,7 +44,7 @@ namespace Vanrise.GenericData.Business
             if (!ruleName.Contains("Rules"))
                 ruleName = String.Format("{0} Rules", ruleName);
             context.EntityName = ruleName;
-            context.ActionName = String.Format(Utilities.GetEnumDescription<GenericRuleVRActionAuditActionType>(this.ActionType), ruleName);
+            context.ActionName = Utilities.GetEnumDescription<GenericRuleVRActionAuditActionType>(this.ActionType);
             if (ruleId.HasValue)
             {
                 context.ObjectId = ruleId.Value.ToString();
