@@ -97,7 +97,7 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                 var onPartnerInvoiceSettingDeleted = function () {
                     gridAPI.itemDeleted(dataItem);
                 };
-                VR_Invoice_PartnerInvoiceSettingService.deletePartnerInvoiceSetting($scope, dataItem.Entity.PartnerInvoiceSettingId, dataItem.Entity.InvoiceSettingId, onPartnerInvoiceSettingDeleted);
+                VR_Invoice_PartnerInvoiceSettingService.deletePartnerInvoiceSetting($scope, dataItem.Entity.PartnerInvoiceSettingId, dataItem.Entity.InvoiceSettingID, onPartnerInvoiceSettingDeleted);
             }
         }
 
