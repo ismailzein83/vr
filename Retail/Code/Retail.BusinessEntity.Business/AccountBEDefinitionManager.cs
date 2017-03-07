@@ -104,7 +104,6 @@ namespace Retail.BusinessEntity.Business
                     }
                 }
 
-
                 //Actions
                 Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleActionsById;
 
@@ -125,10 +124,7 @@ namespace Retail.BusinessEntity.Business
                 }
 
                 //Extra Fields
-                // Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleExtraFieldsById;
-
                 accountBEDefinitionSettings.AccountExtraFieldDefinitions = businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
-
 
                 //GridColumnsExportExcel
                 if (businessEntityDefinitionSettings.GridDefinition != null && businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions != null)
@@ -136,17 +132,12 @@ namespace Retail.BusinessEntity.Business
                     accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions = businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions;
                 }
 
+                //Security
                 if (businessEntityDefinitionSettings.Security != null)
                     accountBEDefinitionSettings.Security = businessEntityDefinitionSettings.Security;
+
                 return accountBEDefinitionSettings;
             });
-        }
-
-        public List<AccountExtraFieldDefinition> GetAccountExtraFieldDefinitions(Guid accountBEDefinitionId)
-        {
-            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
-
-            return accountBEDefinitionSettings.AccountExtraFieldDefinitions;
         }
 
         public AccountGridDefinition GetAccountGridDefinition(Guid accountBEDefinitionId)
@@ -159,34 +150,6 @@ namespace Retail.BusinessEntity.Business
 
             return accountGridDefinition;
         }
-        public List<AccountViewDefinition> GetAccountViewDefinitions(Guid accountBEDefinitionId)
-        {
-            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
-
-            List<AccountViewDefinition> accountViewDefinitions = accountBEDefinitionSettings.AccountViewDefinitions;
-            if (accountViewDefinitions == null)
-                throw new NullReferenceException(string.Format("accountViewDefinitions for BusinessEntityDefinition Id : {0}", accountBEDefinitionId));
-
-            return accountViewDefinitions;
-        }
-        public List<AccountActionDefinition> GetAccountActionDefinitions(Guid accountBEDefinitionId)
-        {
-            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
-
-            List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionSettings.ActionDefinitions;
-            if (accountActionDefinitions == null)
-                throw new NullReferenceException(string.Format("accountActionDefinitions for BusinessEntityDefinition Id : {0}", accountBEDefinitionId));
-
-            return accountActionDefinitions;
-        }
-        public AccountActionDefinitionSettings GetAccountActionDefinitionSettings(Guid accountBEDefinitionId, Guid actionDefinitionId)
-        {
-            var accountActionDefinition = GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
-            if (accountActionDefinition == null)
-                throw new NullReferenceException(string.Format("accountActionDefinition of accountBEDefinitionId {0} nad actionDefinitionId {1}", accountBEDefinitionId, actionDefinitionId));
-            return accountActionDefinition.ActionDefinitionSettings;
-        }
-
         public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributes(Guid accountBEDefinitionId, long? parentAccountId)
         {
             List<DataRecordGridColumnAttribute> results = new List<DataRecordGridColumnAttribute>();
@@ -224,7 +187,6 @@ namespace Retail.BusinessEntity.Business
             }
             return results;
         }
-
         public List<DataRecordGridColumnAttribute> GetAccountGridColumnAttributesExportExcel(Guid accountBEDefinitionId)
         {
             List<DataRecordGridColumnAttribute> results = new List<DataRecordGridColumnAttribute>();
@@ -261,6 +223,16 @@ namespace Retail.BusinessEntity.Business
             return results;
         }
 
+        public List<AccountViewDefinition> GetAccountViewDefinitions(Guid accountBEDefinitionId)
+        {
+            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+
+            List<AccountViewDefinition> accountViewDefinitions = accountBEDefinitionSettings.AccountViewDefinitions;
+            if (accountViewDefinitions == null)
+                throw new NullReferenceException(string.Format("accountViewDefinitions for BusinessEntityDefinition Id : {0}", accountBEDefinitionId));
+
+            return accountViewDefinitions;
+        }
         public List<AccountViewDefinition> GetAccountViewDefinitionsByAccount(Guid accountBEDefinitionId, Account account)
         {
             List<AccountViewDefinition> results = new List<AccountViewDefinition>();
@@ -281,6 +253,31 @@ namespace Retail.BusinessEntity.Business
             return GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
         }
 
+        public List<AccountActionDefinition> GetAccountActionDefinitions(Guid accountBEDefinitionId)
+        {
+            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+
+            List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionSettings.ActionDefinitions;
+            if (accountActionDefinitions == null)
+                throw new NullReferenceException(string.Format("accountActionDefinitions for BusinessEntityDefinition Id : {0}", accountBEDefinitionId));
+
+            return accountActionDefinitions;
+        }
+        public AccountActionDefinition GetAccountActionDefinition(Guid accountBEDefinitionId, Guid actionDefinitionId)
+        {
+            var accountActionDefinitions = GetAccountActionDefinitions(accountBEDefinitionId);
+            if (accountActionDefinitions == null)
+                throw new NullReferenceException(String.Format("accountActionDefinitions AccountBEDefinitionId '{0}'", accountBEDefinitionId));
+
+            return accountActionDefinitions.FirstOrDefault(x => x.AccountActionDefinitionId == actionDefinitionId);
+        }
+        public AccountActionDefinitionSettings GetAccountActionDefinitionSettings(Guid accountBEDefinitionId, Guid actionDefinitionId)
+        {
+            var accountActionDefinition = GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
+            if (accountActionDefinition == null)
+                throw new NullReferenceException(string.Format("accountActionDefinition of accountBEDefinitionId {0} nad actionDefinitionId {1}", accountBEDefinitionId, actionDefinitionId));
+            return accountActionDefinition.ActionDefinitionSettings;
+        }
         public List<AccountActionDefinition> GetAccountActionDefinitionsByAccount(Guid accountBEDefinitionId, Account account)
         {
             List<AccountActionDefinition> results = new List<AccountActionDefinition>();
@@ -292,30 +289,6 @@ namespace Retail.BusinessEntity.Business
                     results.Add(itm);
             }
             return results;
-        }
-        public AccountActionDefinition GetAccountActionDefinition(Guid accountBEDefinitionId, Guid actionDefinitionId)
-        {
-            var accountActionDefinitions = GetAccountActionDefinitions(accountBEDefinitionId);
-            if (accountActionDefinitions == null)
-                throw new NullReferenceException(String.Format("accountActionDefinitions AccountBEDefinitionId '{0}'", accountBEDefinitionId));
-
-            return accountActionDefinitions.FirstOrDefault(x => x.AccountActionDefinitionId == actionDefinitionId);
-        }
-
-        public IEnumerable<AccountViewDefinitionConfig> GetAccountViewDefinitionSettingsConfigs()
-        {
-            var extensionConfigurationManager = new ExtensionConfigurationManager();
-            return extensionConfigurationManager.GetExtensionConfigurations<AccountViewDefinitionConfig>(AccountViewDefinitionConfig.EXTENSION_TYPE);
-        }
-        public IEnumerable<AccountActionDefinitionConfig> GetAccountActionDefinitionSettingsConfigs()
-        {
-            var extensionConfigurationManager = new ExtensionConfigurationManager();
-            return extensionConfigurationManager.GetExtensionConfigurations<AccountActionDefinitionConfig>(AccountActionDefinitionConfig.EXTENSION_TYPE);
-        }
-        public IEnumerable<AccountExtraFieldDefinitionConfig> GetAccountExtraFieldDefinitionSettingsConfigs()
-        {
-            var extensionConfigurationManager = new ExtensionConfigurationManager();
-            return extensionConfigurationManager.GetExtensionConfigurations<AccountExtraFieldDefinitionConfig>(AccountExtraFieldDefinitionConfig.EXTENSION_TYPE);
         }
         public IEnumerable<AccountActionDefinitionInfo> GetAccountActionDefinitionsInfo(Guid accountBEDefinitionId, AccountActionDefinitionInfoFilter filter)
         {
@@ -333,105 +306,33 @@ namespace Retail.BusinessEntity.Business
             return accountBEActions.MapRecords(AccountActionDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
+        public List<AccountExtraFieldDefinition> GetAccountExtraFieldDefinitions(Guid accountBEDefinitionId)
+        {
+            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
 
-    
+            return accountBEDefinitionSettings.AccountExtraFieldDefinitions;
+        }
 
-        #endregion
-
-        #region Security
-        public bool DoesUserHaveViewAccess(int userId, List<Guid> accountBeDefinitionIds)
+        public IEnumerable<AccountViewDefinitionConfig> GetAccountViewDefinitionSettingsConfigs()
         {
-            foreach (var a in accountBeDefinitionIds)
-            {
-                if (DoesUserHaveViewAccess(userId, a))
-                    return true;
-            }
-            return false;
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountViewDefinitionConfig>(AccountViewDefinitionConfig.EXTENSION_TYPE);
         }
-        public bool DoesUserHaveViewAccess(Guid accountBeDefinitionId)
+        public IEnumerable<AccountActionDefinitionConfig> GetAccountActionDefinitionSettingsConfigs()
         {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewRequiredPermission);
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountActionDefinitionConfig>(AccountActionDefinitionConfig.EXTENSION_TYPE);
         }
-        public bool DoesUserHaveViewAccess(int userId, Guid accountBeDefinitionId)
+        public IEnumerable<AccountExtraFieldDefinitionConfig> GetAccountExtraFieldDefinitionSettingsConfigs()
         {
-            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewRequiredPermission);
-        }
-        public bool DoesUserHaveAddAccess(Guid accountBeDefinitionId)
-        {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddRequiredPermission);
-
-        }
-        public bool DoesUserHaveEditAccess(Guid accountBeDefinitionId)
-        {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            return DoesUserHaveEditAccess(userId, accountBeDefinitionId);
-        }
-        public bool DoesUserHaveEditAccess(int userId, Guid accountBeDefinitionId)
-        {
-            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditRequiredPermission);
-        }
-        public bool DoesUserHaveViewPackageAccess(int userId, Guid accountBeDefinitionId)
-        {
-            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewPackageRequiredPermission);
-
-        }
-        public bool DoesUserHaveAddPackageAccess(int userId, Guid accountBeDefinitionId)
-        {
-            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddPackageRequiredPermission);
-        }
-        public bool DoesUserHaveEditPackageAccess(int userId, Guid accountBeDefinitionId)
-        {
-            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditPackageRequiredPermission);
-
-        }
-        public bool DoesUserHaveViewAccountPackageAccess(int userId, Guid accountBeDefinitionId)
-        {
-            return  DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewAccountPackageRequiredPermission);
-        }
-        public bool DoesUserHaveAddAccountPackageAccess(int userId, Guid accountBeDefinitionId)
-        {
-            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddAccountPackageRequiredPermission);
-        }
-        public HashSet<Guid> GetLoggedInUserAllowedActionIds(Guid accountBeDefinitionId)
-        {
-            HashSet<Guid> ids = new HashSet<Guid>();
-            var ActionIds = GetAccountActionDefinitions(accountBeDefinitionId);
-            IAccountActionDefinitionCheckAccessContext context = new AccountActionDefinitionCheckAccessContext { UserId = SecurityContext.Current.GetLoggedInUserId(), AccountBEDefinitionId = accountBeDefinitionId };
-            foreach (var id in ActionIds)
-            {
-                if (id.ActionDefinitionSettings.DoesUserHaveAccess(context))
-                    ids.Add(id.AccountActionDefinitionId);
-            }
-
-            return ids;
-        }
-        public HashSet<Guid> GetLoggedInUserAllowedViewIds(Guid accountBeDefinitionId)
-        {
-            HashSet<Guid> ids = new HashSet<Guid>();
-            var ActionIds = GetAccountViewDefinitions(accountBeDefinitionId);
-            IAccountViewDefinitionCheckAccessContext context = new AccountViewDefinitionCheckAccessContext { UserId = SecurityContext.Current.GetLoggedInUserId(), AccountBEDefinitionId = accountBeDefinitionId };
-            foreach (var view in ActionIds)
-            {
-                if (view.Settings.DoesUserHaveAccess(context))
-                    ids.Add(view.AccountViewDefinitionId);
-            }
-
-            return ids;
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountExtraFieldDefinitionConfig>(AccountExtraFieldDefinitionConfig.EXTENSION_TYPE);
         }
 
         #endregion
 
         #region Private Methods
-        private bool DoesUserHaveAccess(int userId, Guid accountBEDefinitionId, Func<AccountBEDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
-        {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && getRequiredPermissionSetting(accountBEDefinitionSettings.Security) != null)
-                return s_securityManager.IsAllowed(getRequiredPermissionSetting(accountBEDefinitionSettings.Security), userId);
-            else
-                return true;
-        }
+
         private bool IsColumnVisible(Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> visibleGridColumns, AccountGridColumnDefinition accountGridColumnDefinition)
         {
             if (!visibleGridColumns.ContainsKey(accountGridColumnDefinition.FieldName))
@@ -484,10 +385,19 @@ namespace Retail.BusinessEntity.Business
             return true;
         }
 
+        private bool DoesUserHaveAccess(int userId, Guid accountBEDefinitionId, Func<AccountBEDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && getRequiredPermissionSetting(accountBEDefinitionSettings.Security) != null)
+                return s_securityManager.IsAllowed(getRequiredPermissionSetting(accountBEDefinitionSettings.Security), userId);
+            else
+                return true;
+        }
 
         #endregion
 
         #region Private Mappers
+
         AccountActionDefinitionInfo AccountActionDefinitionInfoMapper(AccountActionDefinition accountActionDefinition)
         {
             return new AccountActionDefinitionInfo
@@ -496,7 +406,93 @@ namespace Retail.BusinessEntity.Business
                 Name = accountActionDefinition.Name,
             };
         }
+
         #endregion
 
+        #region Security
+
+        public bool DoesUserHaveViewAccess(int userId, List<Guid> accountBeDefinitionIds)
+        {
+            foreach (var a in accountBeDefinitionIds)
+            {
+                if (DoesUserHaveViewAccess(userId, a))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveViewAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewRequiredPermission);
+        }
+        public bool DoesUserHaveViewAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewRequiredPermission);
+        }
+        public bool DoesUserHaveAddAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddRequiredPermission);
+
+        }
+        public bool DoesUserHaveEditAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveEditAccess(userId, accountBeDefinitionId);
+        }
+        public bool DoesUserHaveEditAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditRequiredPermission);
+        }
+        public bool DoesUserHaveViewPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewPackageRequiredPermission);
+
+        }
+        public bool DoesUserHaveAddPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddPackageRequiredPermission);
+        }
+        public bool DoesUserHaveEditPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditPackageRequiredPermission);
+
+        }
+        public bool DoesUserHaveViewAccountPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewAccountPackageRequiredPermission);
+        }
+        public bool DoesUserHaveAddAccountPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddAccountPackageRequiredPermission);
+        }
+        public HashSet<Guid> GetLoggedInUserAllowedActionIds(Guid accountBeDefinitionId)
+        {
+            HashSet<Guid> ids = new HashSet<Guid>();
+            var ActionIds = GetAccountActionDefinitions(accountBeDefinitionId);
+            IAccountActionDefinitionCheckAccessContext context = new AccountActionDefinitionCheckAccessContext { UserId = SecurityContext.Current.GetLoggedInUserId(), AccountBEDefinitionId = accountBeDefinitionId };
+            foreach (var id in ActionIds)
+            {
+                if (id.ActionDefinitionSettings.DoesUserHaveAccess(context))
+                    ids.Add(id.AccountActionDefinitionId);
+            }
+
+            return ids;
+        }
+        public HashSet<Guid> GetLoggedInUserAllowedViewIds(Guid accountBeDefinitionId)
+        {
+            HashSet<Guid> ids = new HashSet<Guid>();
+            var ActionIds = GetAccountViewDefinitions(accountBeDefinitionId);
+            IAccountViewDefinitionCheckAccessContext context = new AccountViewDefinitionCheckAccessContext { UserId = SecurityContext.Current.GetLoggedInUserId(), AccountBEDefinitionId = accountBeDefinitionId };
+            foreach (var view in ActionIds)
+            {
+                if (view.Settings.DoesUserHaveAccess(context))
+                    ids.Add(view.AccountViewDefinitionId);
+            }
+
+            return ids;
+        }
+
+        #endregion
     }
 }

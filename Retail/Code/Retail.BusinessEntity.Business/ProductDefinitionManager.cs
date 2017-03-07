@@ -18,6 +18,7 @@ namespace Retail.BusinessEntity.Business
             var productDefinitions = GetCachedProductDefinitionsWithHidden();
             return productDefinitions.FindRecord(x => x.VRComponentTypeId == productDefinitionId);
         }
+
         public ProductDefinitionSettings GetProductDefinitionSettings(Guid productDefinitionId)
         {
             var productDefinition = GetProductDefinition(productDefinitionId);
