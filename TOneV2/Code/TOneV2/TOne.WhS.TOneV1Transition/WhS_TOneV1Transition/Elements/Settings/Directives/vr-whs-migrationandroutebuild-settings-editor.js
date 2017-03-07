@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsTonev1transitionSettingsEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrWhsMigrationandroutebuildSettingsEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -10,7 +10,7 @@ app.directive('vrWhsTonev1transitionSettingsEditor', ['UtilsService', 'VRUIUtils
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new settingEditorCtor(ctrl, $scope, $attrs);
+                var ctor = new migrationAndRouteBuildEditorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -18,10 +18,10 @@ app.directive('vrWhsTonev1transitionSettingsEditor', ['UtilsService', 'VRUIUtils
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_TOneV1Transition/Elements/Settings/Directives/Templates/TOneV1TransitionSettingsEditorTemplate.html"
+            templateUrl: "/Client/Modules/WhS_TOneV1Transition/Elements/Settings/Directives/Templates/MigrationAndRouteBuildSettingsEditorTemplate.html"
         };
 
-        function settingEditorCtor(ctrl, $scope, $attrs) {
+        function migrationAndRouteBuildEditorCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             var sourceMigrationReaderDirectiveAPI;
@@ -106,7 +106,7 @@ app.directive('vrWhsTonev1transitionSettingsEditor', ['UtilsService', 'VRUIUtils
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.TOneV1Transition.Entities.TOneV1TransitionSettingsData, TOne.WhS.TOneV1Transition.Entities",
+                        $type: "TOne.WhS.TOneV1Transition.Entities.MigrationAndRouteBuildSettingsData, TOne.WhS.TOneV1Transition.Entities",
                         DBSyncTaskActionArgument: sourceMigrationReaderDirectiveAPI.getData(),
                         RoutingProcessInput: buildRouteTaskDirectiveAPI.getData()
                     };
