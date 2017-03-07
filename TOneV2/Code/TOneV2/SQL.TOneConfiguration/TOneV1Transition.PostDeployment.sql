@@ -10,14 +10,14 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
---[common].[Setting]---------------------------------------101 to 200----------------------------------------
---override technical settings
+--[common].[Setting]------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 begin
 set nocount on;
 ;with cte_data([ID],[OldId],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('3F9416EC-ED12-45E8-86FD-CE578CAB8DC3',null,'TOne V1 Transition','WhS_TOneV1Transition_Settings','General','{"Editor":"vr-whs-tonev1transition-settings-editor"}',NULL,0)
+('3F9416EC-ED12-45E8-86FD-CE578CAB8DC3',null,'TOne V1 Migration and Route Build','WhS_TOneV1MigrationAndRouteBuild_Settings','General','{"Editor":"vr-whs-migrationandroutebuild-settings-editor"}',null,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[OldId],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
@@ -32,7 +32,9 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
---[bp].[BPDefinition]----------------------1 to 1000------------------------------------------------
+
+--[bp].[BPDefinition]-----------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 begin
 set nocount on;
 ;with cte_data([ID],[OldID],[Name],[Title],[FQTN],[Config])
@@ -52,3 +54,4 @@ when not matched by target then
 	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 ----------------------------------------------------------------------------------------------------
 end
+
