@@ -9,5 +9,6 @@ namespace Vanrise.Invoice.Business.Context
 {
     public class ExtendedSettingsPartnerIdsContext : IExtendedSettingsPartnerIdsContext
     {
+        public PartnerRetrievalType PartnerRetrievalType { get; set; }
     }
 }
