@@ -122,59 +122,13 @@ namespace TOne.WhS.Routing.Business
                 return true;
             };
 
-            RouteOptionRuleExcelExportHandler routeOptionRuleExcel = new RouteOptionRuleExcelExportHandler(input.Query);
+            
             ResultProcessingHandler<RouteOptionRuleDetail> handler = new ResultProcessingHandler<RouteOptionRuleDetail>()
             {
-                ExportExcelHandler = routeOptionRuleExcel
+                ExportExcelHandler = new RouteOptionRuleExcelExportHandler()
             };
             VRActionLogger.Current.LogGetFilteredAction(RouteOptionRuleLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeOptionRules.ToBigResult(input, filterExpression, MapToDetails), handler);
-        }
-
-        private class RouteOptionRuleExcelExportHandler : ExcelExportHandler<RouteOptionRuleDetail>
-        {
-            private RouteOptionRuleQuery _query;
-            public RouteOptionRuleExcelExportHandler(RouteOptionRuleQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RouteOptionRuleDetail> context)
-            {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Suppliers" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rule Type" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record.Entity != null)
-                        {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                            row.Cells.Add(new ExportExcelCell { Value = record.IncludedCodes });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Customers });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Suppliers });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SaleZones });
-                            row.Cells.Add(new ExportExcelCell { Value = record.RouteOptionRuleSettingsTypeName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BeginEffectiveTime });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EndEffectiveTime });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
         }
 
         public RouteOptionRuleEditorRuntime GetRuleEditorRuntime(int ruleId)
@@ -504,6 +458,48 @@ namespace TOne.WhS.Routing.Business
         #endregion
 
         #region Private Classes
+
+        private class RouteOptionRuleExcelExportHandler : ExcelExportHandler<RouteOptionRuleDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RouteOptionRuleDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Suppliers" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rule Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.IncludedCodes });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Customers });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Suppliers });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SaleZones });
+                            row.Cells.Add(new ExportExcelCell { Value = record.RouteOptionRuleSettingsTypeName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BeginEffectiveTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EndEffectiveTime });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
 
         private class RouteOptionRuleLoggableEntity : Vanrise.Rules.RuleLoggableEntity
         {
