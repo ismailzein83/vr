@@ -229,7 +229,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.54931in</Height>
+              <Height>1.73681in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -256,7 +256,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>0.14931in</Top>
                           <Left>1.4293in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
@@ -291,7 +290,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>0.34931in</Top>
+                          <Top>0.2in</Top>
                           <Left>1.4293in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
@@ -327,7 +326,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>0.54931in</Top>
+                          <Top>0.4in</Top>
                           <Left>1.4293in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
@@ -363,7 +362,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>0.74931in</Top>
+                          <Top>0.6in</Top>
                           <Left>1.4293in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
@@ -399,7 +398,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>0.94931in</Top>
+                          <Top>0.8in</Top>
                           <Left>1.4293in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
@@ -421,7 +420,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!AccountCode.Value</Value>
+                                  <Value>=Fields!IBAN.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -435,7 +434,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>1.14931in</Top>
+                          <Top>1in</Top>
                           <Left>1.4293in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
@@ -469,7 +468,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.14931in</Top>
                           <Left>0.15402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
@@ -491,7 +489,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!IBAN.Value</Value>
+                                  <Value>=Fields!SwiftCode.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -505,7 +503,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>1.34931in</Top>
+                          <Top>1.2in</Top>
                           <Left>1.4293in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
@@ -539,7 +537,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.34931in</Top>
+                          <Top>0.2in</Top>
                           <Left>0.15402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
@@ -573,7 +571,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.54931in</Top>
+                          <Top>0.4in</Top>
                           <Left>0.15402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
@@ -607,7 +605,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.74931in</Top>
+                          <Top>0.6in</Top>
                           <Left>0.15402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
@@ -641,7 +639,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.94931in</Top>
+                          <Top>0.8in</Top>
                           <Left>0.15402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
@@ -675,7 +673,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>1.14931in</Top>
+                          <Top>1in</Top>
                           <Left>0.15402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
@@ -709,11 +707,81 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>1.34931in</Top>
+                          <Top>1.2in</Top>
                           <Left>0.15402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>13</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount9">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!SortCode.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>1.41944in</Top>
+                          <Left>1.4293in</Left>
+                          <Height>0.2in</Height>
+                          <Width>2.38859in</Width>
+                          <ZIndex>14</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox80">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Sort Code:</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox73</rd:DefaultName>
+                          <Top>1.41944in</Top>
+                          <Left>0.15402in</Left>
+                          <Height>0.2in</Height>
+                          <Width>1.15in</Width>
+                          <ZIndex>15</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -753,7 +821,7 @@
         <DataSetName>BankDetails</DataSetName>
         <Top>7.10778in</Top>
         <Left>0.1425in</Left>
-        <Height>1.54931in</Height>
+        <Height>1.73681in</Height>
         <Width>4.1629in</Width>
         <ZIndex>7</ZIndex>
         <Style>
