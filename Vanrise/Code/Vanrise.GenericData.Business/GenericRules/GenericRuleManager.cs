@@ -36,83 +36,12 @@ namespace Vanrise.GenericData.Business
 
             var allRules = GetAllRules();
 
-            GenericRuleExcelExportHandler genericRuleExcel = new GenericRuleExcelExportHandler(input.Query);
             ResultProcessingHandler<GenericRuleDetail> handler = new ResultProcessingHandler<GenericRuleDetail>()
             {
-                ExportExcelHandler = genericRuleExcel
+                ExportExcelHandler = new GenericRuleExcelExportHandler(input.Query)
             };
             VRActionLogger.Current.LogGetFilteredAction(new GenericRuleLoggableEntity(input.Query.RuleDefinitionId), input);
             return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, filterExpression, (rule) => MapToDetails(rule)), handler);
-        }
-
-        private class GenericRuleExcelExportHandler : ExcelExportHandler<GenericRuleDetail>
-        {
-            private GenericRuleQuery _query;
-            public GenericRuleExcelExportHandler(GenericRuleQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<GenericRuleDetail> context)
-            {
-                GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
-                var genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(_query.RuleDefinitionId);
-                
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
-
-                if (genericRuleDefinition.CriteriaDefinition!= null)
-                {               
-                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
-                    {
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = field.Title });
-                    }
-                }
-
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Settings" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record.Entity != null)
-                        {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
-
-                            if (record.FieldValueDescriptions == null || record.FieldValueDescriptions.Count == 0)
-                            {
-                                if (genericRuleDefinition.CriteriaDefinition != null)
-                                {
-                                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
-                                    {
-                                        row.Cells.Add(new ExportExcelCell { Value = null });
-                                    }
-
-                                }
-                            }
-                            else
-                            {
-                                foreach (var field in record.FieldValueDescriptions)
-                                {
-                                    row.Cells.Add(new ExportExcelCell { Value = field });
-                                }
-                            }
-
-                            row.Cells.Add(new ExportExcelCell { Value = record.SettingsDescription });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BeginEffectiveTime });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EndEffectiveTime });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
         }
 
         public GenericRule GetGenericRule(int ruleId, bool isViewedFromUI)
@@ -468,6 +397,79 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Classes
+
+        private class GenericRuleExcelExportHandler : ExcelExportHandler<GenericRuleDetail>
+        {
+            private GenericRuleQuery _query;
+            public GenericRuleExcelExportHandler(GenericRuleQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<GenericRuleDetail> context)
+            {
+                GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
+                var genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(_query.RuleDefinitionId);
+
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+
+                if (genericRuleDefinition.CriteriaDefinition != null)
+                {
+                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = field.Title });
+                    }
+                }
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Settings" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
+
+                            if (record.FieldValueDescriptions == null || record.FieldValueDescriptions.Count == 0)
+                            {
+                                if (genericRuleDefinition.CriteriaDefinition != null)
+                                {
+                                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                                    {
+                                        row.Cells.Add(new ExportExcelCell { Value = null });
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                foreach (var field in record.FieldValueDescriptions)
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = field });
+                                }
+                            }
+
+                            row.Cells.Add(new ExportExcelCell { Value = record.SettingsDescription });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BeginEffectiveTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EndEffectiveTime });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
 
         private class GenericRuleLoggableEntity : RuleLoggableEntity
         {

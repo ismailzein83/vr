@@ -22,47 +22,13 @@ namespace Vanrise.Common.Business
 			Func<Country, bool> filterExpression = (prod) =>
 				 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
-            CountryExcelExportHandler countryExcel = new CountryExcelExportHandler(input.Query);
             ResultProcessingHandler<CountryDetail> handler = new ResultProcessingHandler<CountryDetail>()
             {
-                ExportExcelHandler = countryExcel
+                ExportExcelHandler = new CountryExcelExportHandler()
             };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression, CountryDetailMapper), handler);
 		}
 
-        private class CountryExcelExportHandler : ExcelExportHandler<CountryDetail>
-        {
-            private CountryQuery _query;
-            public CountryExcelExportHandler(CountryQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CountryDetail> context)
-            {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country Name" });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record.Entity != null)
-                        {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CountryId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
-        }
 		public IEnumerable<CountryInfo> GeCountriesInfo(CountryFilter filter)
 		{
 			IEnumerable<Country> allCountries = GetCachedCountries().Values;
@@ -354,7 +320,35 @@ namespace Vanrise.Common.Business
 		#endregion
 
 		#region Private Classes
+        private class CountryExcelExportHandler : ExcelExportHandler<CountryDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CountryDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country Name" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CountryId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
 		private class CacheManager : Vanrise.Caching.BaseCacheManager
 		{
 			ICountrytDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();

@@ -23,48 +23,12 @@ namespace Vanrise.Common.Business
                 return true;
             };
 
-            VRTimeZoneExcelExportHandler vRTimeZoneExcel = new VRTimeZoneExcelExportHandler(input.Query);
             ResultProcessingHandler<VRTimeZoneDetail> handler = new ResultProcessingHandler<VRTimeZoneDetail>()
             {
-                ExportExcelHandler = vRTimeZoneExcel
+                ExportExcelHandler = new VRTimeZoneExcelExportHandler()
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTimeZones.ToBigResult(input, filterExpression, VRTimeZoneDetailMapper), handler);
-        }
-        private class VRTimeZoneExcelExportHandler : ExcelExportHandler<VRTimeZoneDetail>
-        {
-            private VRTimeZoneQuery _query;
-            public VRTimeZoneExcelExportHandler(VRTimeZoneQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<VRTimeZoneDetail> context)
-            {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time Shift" });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record.Entity != null)
-                        {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.TimeZoneId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Offset });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
         }
 
         public IEnumerable<VRTimeZoneInfo> GetVRTimeZonesInfo()
@@ -142,7 +106,37 @@ namespace Vanrise.Common.Business
         #endregion
 
         #region Private Classes
+        private class VRTimeZoneExcelExportHandler : ExcelExportHandler<VRTimeZoneDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<VRTimeZoneDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time Shift" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.TimeZoneId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Offset });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRTimeZoneDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRTimeZoneDataManager>();

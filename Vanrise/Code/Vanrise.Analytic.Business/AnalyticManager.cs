@@ -683,8 +683,11 @@ namespace Vanrise.Analytic.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AnalyticRecord> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 if (_query.DimensionFields != null)
                 {
                     foreach (var dimName in _query.DimensionFields)

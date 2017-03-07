@@ -22,51 +22,12 @@ namespace Vanrise.Common.Business
                           &&
                          (input.Query.Symbol == null || prod.Symbol.ToLower().Contains(input.Query.Symbol.ToLower()));
 
-                    CurrencyExcelExportHandler currencyExcel = new CurrencyExcelExportHandler(input.Query);
                     ResultProcessingHandler<CurrencyDetail> handler = new ResultProcessingHandler<CurrencyDetail>()
                     {
-                        ExportExcelHandler = currencyExcel
+                        ExportExcelHandler = new CurrencyExcelExportHandler()
                     };
 
                     return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCurrencies.ToBigResult(input, filterExpression, CurrencyDetailMapper), handler);
-                }
-
-                private class CurrencyExcelExportHandler : ExcelExportHandler<CurrencyDetail>
-                {
-                    private CurrencyQuery _query;
-                    public CurrencyExcelExportHandler(CurrencyQuery query)
-                    {
-                        if (query == null)
-                            throw new ArgumentNullException("query");
-                        _query = query;
-                    }
-                    public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CurrencyDetail> context)
-                    {
-                        ExportExcelSheet sheet = new ExportExcelSheet();
-                        sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency Name" });
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Main Currency" });
-
-                        sheet.Rows = new List<ExportExcelRow>();
-                        if (context.BigResult != null && context.BigResult.Data != null)
-                        {
-                            foreach (var record in context.BigResult.Data)
-                            {
-                                if (record.Entity != null)
-                                {
-                                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                                    sheet.Rows.Add(row);
-                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.CurrencyId });
-                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Symbol });
-                                    row.Cells.Add(new ExportExcelCell { Value = record.IsMain });
-                                }
-                            }                            
-                        }
-                        context.MainSheet = sheet;
-                    }
                 }
 
                 public IEnumerable<Currency> GetAllCurrencies()
@@ -170,6 +131,39 @@ namespace Vanrise.Common.Business
 
         #region Private Members
 
+        private class CurrencyExcelExportHandler : ExcelExportHandler<CurrencyDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CurrencyDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Main Currency" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CurrencyId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Symbol });
+                            row.Cells.Add(new ExportExcelCell { Value = record.IsMain });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICurrencyDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();

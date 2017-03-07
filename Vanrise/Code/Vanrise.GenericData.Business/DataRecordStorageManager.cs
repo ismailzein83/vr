@@ -495,7 +495,7 @@ namespace Vanrise.GenericData.Business
             }
 
         }
-
+     
         #endregion
 
         #region Mappers
@@ -537,12 +537,13 @@ namespace Vanrise.GenericData.Business
             {
                 if (_query.Columns.Count != _query.ColumnTitles.Count)
                 {
-                    throw new ArgumentNullException("Count of columns titles different then count of columns");   
+                    throw new ArgumentNullException("Count of columns titles different then count of columns");
                 }
 
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
                 if (_query.Columns != null)
                 {
@@ -556,7 +557,7 @@ namespace Vanrise.GenericData.Business
                 {
                     foreach (var record in context.BigResult.Data)
                     {
-                        var row = new ExportExcelRow {Cells = new List<ExportExcelCell>()};
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                         sheet.Rows.Add(row);
                         if (record.FieldValues != null)
                         {
@@ -566,7 +567,7 @@ namespace Vanrise.GenericData.Business
                                 if (!record.FieldValues.TryGetValue(dimValue, out dataRecordFieldValue))
                                     throw new NullReferenceException(
                                         String.Format("dataRecordFieldValue. dimValue '{0}'", dataRecordFieldValue.Value));
-                                row.Cells.Add(new ExportExcelCell {Value = dataRecordFieldValue.Description});
+                                row.Cells.Add(new ExportExcelCell { Value = dataRecordFieldValue.Description });
                             }
                         }
                     }
