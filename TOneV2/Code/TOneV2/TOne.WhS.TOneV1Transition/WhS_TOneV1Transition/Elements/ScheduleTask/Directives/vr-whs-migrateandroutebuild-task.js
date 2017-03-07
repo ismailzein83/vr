@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsMigrateandroutebuildProcess", ['UtilsService', 'VRUIUtilsService',
+app.directive("vrWhsMigrateandroutebuildTask", ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         var directiveDefinitionObject = {
             restrict: "E",
@@ -10,7 +10,7 @@ app.directive("vrWhsMigrateandroutebuildProcess", ['UtilsService', 'VRUIUtilsSer
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new MigrateAndRouteBuildProcessDirectiveConstructor($scope, ctrl);
+                var ctor = new MigrateAndRouteBuildTaskDirectiveConstructor($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -22,10 +22,10 @@ app.directive("vrWhsMigrateandroutebuildProcess", ['UtilsService', 'VRUIUtilsSer
                     }
                 };
             },
-            templateUrl: "/Client/Modules/WhS_TOneV1Transition/Elements/ProcessInput/Directives/Templates/MigrateAndRouteBuildProcessTemplate.html"
+            templateUrl: "/Client/Modules/WhS_TOneV1Transition/Elements/ScheduleTask/Directives/Templates/MigrateAndRouteBuildTaskTemplate.html"
         };
 
-        function MigrateAndRouteBuildProcessDirectiveConstructor($scope, ctrl) {
+        function MigrateAndRouteBuildTaskDirectiveConstructor($scope, ctrl) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -42,9 +42,7 @@ app.directive("vrWhsMigrateandroutebuildProcess", ['UtilsService', 'VRUIUtilsSer
                 api.getData = function () {
 
                     return {
-                        InputArguments: {
-                            $type: "TOne.WhS.TOneV1Transition.BP.Arguments.MigrateAndRouteBuildInput, TOne.WhS.TOneV1Transition.BP.Arguments"
-                        }
+                        $type: "TOne.WhS.TOneV1Transition.BP.Arguments.MigrateAndRouteBuildInput, TOne.WhS.TOneV1Transition.BP.Arguments"
                     };
                 };
 

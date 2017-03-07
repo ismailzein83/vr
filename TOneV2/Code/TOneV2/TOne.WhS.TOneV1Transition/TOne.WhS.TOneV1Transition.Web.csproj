@@ -147,6 +147,8 @@
     <Content Include="WhS_TOneV1Transition\Constant\ModuleConfig.js" />
     <Content Include="WhS_TOneV1Transition\Elements\ProcessInput\Directives\Templates\MigrateAndRouteBuildProcessTemplate.html" />
     <Content Include="WhS_TOneV1Transition\Elements\ProcessInput\Directives\vr-whs-migrateandroutebuild-process.js" />
+    <Content Include="WhS_TOneV1Transition\Elements\ScheduleTask\Directives\Templates\MigrateAndRouteBuildTaskTemplate.html" />
+    <Content Include="WhS_TOneV1Transition\Elements\ScheduleTask\Directives\vr-whs-migrateandroutebuild-task.js" />
     <Content Include="WhS_TOneV1Transition\Elements\Settings\Directives\Templates\MigrationAndRouteBuildSettingsEditorTemplate.html" />
     <Content Include="WhS_TOneV1Transition\Elements\Settings\Directives\vr-whs-migrationandroutebuild-settings-editor.js" />
   </ItemGroup>
