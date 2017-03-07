@@ -72,6 +72,10 @@
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.Unity.Interception.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
@@ -300,6 +304,10 @@
     <Reference Include="Vanrise.GenericData.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.DBBaseReceiveAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBBaseReceiveAdapter.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.dll</HintPath>
     </Reference>
@@ -317,6 +325,10 @@
     </Reference>
     <Reference Include="Vanrise.Integration.Adapters.MySQLReceiveAdapter">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.MySQLReceiveAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.Adapters.PostgresReceiveAdapter">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.PostgresReceiveAdapter.dll</HintPath>
