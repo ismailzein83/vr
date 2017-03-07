@@ -13,15 +13,9 @@ namespace Vanrise.GenericData.Business
     {
         #region Public Methods
 
-        public IEnumerable<BEParentChildRelationDefinition> GetBEParentChildRelationDefinitions()
-        {
-            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-            return vrComponentTypeManager.GetComponentTypes<BEParentChildRelationDefinitionSettings, BEParentChildRelationDefinition>();
-        }
-
         public BEParentChildRelationDefinition GetBEParentChildRelationDefinition(Guid beParentChildRelationDefinitionId)
         {
-            var packageDefinitions = GetBEParentChildRelationDefinitions();
+            var packageDefinitions = this.GetCachedBEParentChildRelationDefinitions();
             return packageDefinitions.FindRecord(x => x.VRComponentTypeId == beParentChildRelationDefinitionId);
         }
 
@@ -42,7 +36,7 @@ namespace Vanrise.GenericData.Business
                     };
             }
 
-            var beParentChildRelationDefinitions = GetBEParentChildRelationDefinitions();
+            var beParentChildRelationDefinitions = this.GetCachedBEParentChildRelationDefinitions();
             return beParentChildRelationDefinitions.MapRecords(BEParentChildRelationDefinitionInfoMapper, filterExpression);
         }
 
@@ -62,6 +56,16 @@ namespace Vanrise.GenericData.Business
             beParentChildRelationGridColumnNames.Add(businessEntityDefinitionManager.GetBusinessEntityDefinitionName(beParentChildRelationDefinition.Settings.ChildBEDefinitionId));
 
             return beParentChildRelationGridColumnNames;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private Dictionary<Guid, BEParentChildRelationDefinition> GetCachedBEParentChildRelationDefinitions()
+        {
+            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
+            return vrComponentTypeManager.GetCachedComponentTypes<BEParentChildRelationDefinitionSettings, BEParentChildRelationDefinition>();
         }
 
         #endregion
