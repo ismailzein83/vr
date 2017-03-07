@@ -56,7 +56,7 @@
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.BusinessProcess.WFActivities">
-      <HintPath>..\..\..\..\BusinessProcess\Code\Vanrise.BusinessProcess.WFActivities\bin\Debug\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
