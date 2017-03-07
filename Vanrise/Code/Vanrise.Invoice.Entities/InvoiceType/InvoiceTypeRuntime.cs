@@ -16,9 +16,9 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceUIGridColumnRunTime
     {
         public string Header { get; set; }
-
+        public int? WidthFactor { get; set; }
+        public int? FixedWidth { get; set; }
         public InvoiceField Field { get; set; }
-
         public string CustomFieldName { get; set; }
         public GridColumnAttribute Attribute { get; set; }
     }

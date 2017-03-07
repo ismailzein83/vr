@@ -13,6 +13,7 @@ namespace Vanrise.Entities
         public Object Field { get; set; }
         public bool? IsFieldDynamic { get; set; }
         public int? WidthFactor { get; set; }
+        public int? FixedWidth { get; set; }
         public bool? IsClickable { get; set; }
         public string OnClicked { get; set; }
         public string Tag { get; set; }

@@ -7,6 +7,7 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
             restrict: 'E',
             scope: {
                 onReady: '=',
+
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -18,7 +19,9 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Common/Directives/GridColumnWidth/Templates/GridColumnWidthEditorTemplate.html"
+            template:  function (element, attrs) {
+                return getDirectiveTemplate(attrs);
+            }
         };
 
         function GridColumnWidthEditor(ctrl, $scope, $attrs) {
@@ -81,6 +84,26 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
 
 
             }
+            
            
+        }
+        function getDirectiveTemplate(attrs) {
+            var label = attrs.label ? attrs.label : 'Width';
+           
+            var hidelabel = ' ';
+            var fixedLabel = ' label ="Fixed Width"';
+            if (attrs.hidelabel != undefined) {
+                hidelabel = "hidelabel";
+                fixedLabel = " ";
+            }
+
+            return '<vr-common-gridwidthfactor-selector normal-col-num="8" on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
+                   + hidelabel 
+                   + ' ></vr-common-gridwidthfactor-selector>'
+                   + '<vr-columns width="1/3row" >'
+                   + '<vr-textbox type="number" '
+                    + fixedLabel +
+                   ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue" value="scopeModel.fixedWidth" decimalprecision="0" isrequired="scopeModel.widthOption.value == scopeModel.fixedWidthValue "></vr-textbox>'
+                   + '</vr-columns>';
         }
  }]);

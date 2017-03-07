@@ -67,11 +67,7 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
                         columns = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            columns.push({
-                                Header: currentItem.Entity.Header,
-                                Field: currentItem.Entity.Field,
-                                CustomFieldName: currentItem.Entity.CustomFieldName,
-                            });
+                            columns.push(currentItem.Entity);
                         }
                     }
                     return columns;

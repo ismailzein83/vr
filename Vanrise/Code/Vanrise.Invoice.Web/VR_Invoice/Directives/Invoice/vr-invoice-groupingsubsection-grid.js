@@ -87,7 +87,7 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                                                 ID: dimension.DimensionId,
                                                 Header: dimension.Header,
                                                 FieldName: dimensionItem.FieldName,
-                                                WidthFactor: dimension.WidthFactor,
+                                                GridColumnSettings: dimension.GridColumnSettings,
                                                 FieldType: dimensionItem.FieldType,
                                                 Type: "Dimension"
                                             });
@@ -103,7 +103,7 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                                                 ID:measure.MeasureId,
                                                 Header:measure.Header,
                                                 FieldName:measureItem.FieldName,
-                                                WidthFactor:measure.WidthFactor,
+                                                GridColumnSettings: measure.GridColumnSettings,
                                                 FieldType:measureItem.FieldType,
                                                 Type:"Measure"
                                             });
@@ -169,9 +169,9 @@ app.directive("vrInvoiceGroupingsubsectionGrid", ["UtilsService", "VRNotificatio
                                 gridAttribute.Field = "MeasureValues." + gridColumn.FieldName + ".Value";
                             }
                       
-                            var gridWidthFactor = UtilsService.getItemByVal(gridWidthFactors, gridColumn.WidthFactor, "value");
-                            if (gridWidthFactor != undefined)
-                                gridAttribute.WidthFactor = gridWidthFactor.widthFactor;
+                            //var gridWidthFactor = UtilsService.getItemByVal(gridWidthFactors, gridColumn.WidthFactor, "value");
+                            //if (gridWidthFactor != undefined)
+                            //    gridAttribute.WidthFactor = gridWidthFactor.widthFactor;
                             $scope.gridFields.push(gridAttribute);
                         }
                     }

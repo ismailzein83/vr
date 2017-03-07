@@ -36,22 +36,34 @@ namespace Vanrise.Invoice.Business
             var recordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
             if (recordType == null)
                 throw new NullReferenceException(String.Format("Record Type {0} Not Found.", invoiceType.Settings.InvoiceDetailsRecordTypeId));
-            foreach(var gridColumn in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
+            foreach (var gridColumn in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
             {
                 GridColumnAttribute attribute = null;
-                if(gridColumn.CustomFieldName != null)
+                if (gridColumn.CustomFieldName != null)
                 {
-                      var fieldType = recordType.Fields.FirstOrDefault(x=>x.Name == gridColumn.CustomFieldName);
-                      if (fieldType != null)
-                          attribute = fieldType.Type.GetGridColumnAttribute(null);
-                }
+                    var fieldType = recordType.Fields.FirstOrDefault(x => x.Name == gridColumn.CustomFieldName);
+                    if (fieldType != null)
+                    {
+                        attribute = fieldType.Type.GetGridColumnAttribute(null);
+                    }
 
+                }
+                int? widthFactor = null;
+                int? fixedWidth = null;
+                if(gridColumn.GridColumnSettings != null)
+                {
+                   widthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(gridColumn.GridColumnSettings);
+                   if (!widthFactor.HasValue)
+                       fixedWidth = gridColumn.GridColumnSettings.FixedWidth;
+                }
                 invoiceTypeRuntime.MainGridRuntimeColumns.Add(new InvoiceUIGridColumnRunTime
                 {
                     CustomFieldName = gridColumn.CustomFieldName,
                     Attribute = attribute,
                     Field = gridColumn.Field,
-                    Header = gridColumn.Header
+                    Header = gridColumn.Header,
+                    WidthFactor = widthFactor,
+                    FixedWidth = fixedWidth
                 });
             }
             invoiceTypeRuntime.InvoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
@@ -230,6 +242,13 @@ namespace Vanrise.Invoice.Business
                     gridAttribute.HeaderText = column.Header;
                     gridAttribute.Field = column.FieldName;
                     gridAttribute.Tag = column.FieldName;
+
+                    if (column.GridColumnSettings != null)
+                    {
+                        gridAttribute.WidthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(column.GridColumnSettings);
+                        if (!gridAttribute.WidthFactor.HasValue)
+                            gridAttribute.FixedWidth = column.GridColumnSettings.FixedWidth;
+                    }
                     gridColumnAttributes.Add(gridAttribute);
                 }
             }

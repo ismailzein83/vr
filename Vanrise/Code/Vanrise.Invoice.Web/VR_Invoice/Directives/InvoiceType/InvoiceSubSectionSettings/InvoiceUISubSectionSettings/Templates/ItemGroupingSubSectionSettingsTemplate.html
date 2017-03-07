@@ -26,6 +26,9 @@
                         <vr-datagridcolumn headertext="'Title'" widthfactor="8" disablesorting="true">
                             <vr-textbox value="dataItem.FieldDescription" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
+                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onDimensionGridWidthFactorEditorReady" hidelabel></vr-common-gridcolumnwidth-editor>
+                        </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>
             </vr-columns>
@@ -58,6 +61,9 @@
                         <vr-datagridcolumn headertext="'Measure Name'" field="'FieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
                             <vr-textbox value="dataItem.FieldDescription" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
+                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onMeasureGridWidthFactorEditorReady" hidelabel></vr-common-gridcolumnwidth-editor>
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>

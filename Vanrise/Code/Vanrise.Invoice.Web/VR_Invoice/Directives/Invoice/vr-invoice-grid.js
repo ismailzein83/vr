@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VR_Invoice_InvoiceService", "VR_Invoice_InvoiceTypeConfigsAPIService","VR_Invoice_InvoiceActionService",
+app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VR_Invoice_InvoiceService", "VR_Invoice_InvoiceTypeConfigsAPIService", "VR_Invoice_InvoiceActionService",
     function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VR_Invoice_InvoiceService, VR_Invoice_InvoiceTypeConfigsAPIService, VR_Invoice_InvoiceActionService) {
 
         var directiveDefinitionObject = {
@@ -126,6 +126,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                             type: undefined,
                             numberprecision: undefined,
                         };
+
                         var invoiceField = UtilsService.getEnum(VR_Invoice_InvoiceFieldEnum, "value", mainGridColumn.Field);
                         if (invoiceField != undefined)
                         {
@@ -148,7 +149,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                 field = invoiceField.fieldName;
                                 attribute.type = invoiceField.type;
                             }
-                            $scope.gridFields.push({ HeaderText: mainGridColumn.Header, Field: field, Type: attribute.type, NumberPrecision: attribute.numberprecision });
+                            $scope.gridFields.push({ HeaderText: mainGridColumn.Header, Field: field, Type: attribute.type, WidthFactor: mainGridColumn.WidthFactor, FixedWidth: mainGridColumn.FixedWidth, NumberPrecision: attribute.numberprecision });
                         }
                     }
                 }

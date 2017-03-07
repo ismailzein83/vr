@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
@@ -13,5 +14,6 @@ namespace Vanrise.Invoice.Entities
         public InvoiceField Field { get; set; }
 
         public string CustomFieldName { get; set; }
+        public GridColumnSettings GridColumnSettings { get; set; }
     }
 }

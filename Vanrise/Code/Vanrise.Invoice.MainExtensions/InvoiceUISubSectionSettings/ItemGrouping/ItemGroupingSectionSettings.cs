@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
@@ -24,12 +25,12 @@ namespace Vanrise.Invoice.MainExtensions
     {
         public Guid DimensionId { get; set; }
         public string Header { get; set; }
-        public string WidthFactor { get; set; }
+        public GridColumnSettings GridColumnSettings { get; set; }
     }
     public class GridMeasureItemGrouping
     {
         public Guid MeasureId { get; set; }
         public string Header { get; set; }
-        public string WidthFactor { get; set; }
+        public GridColumnSettings GridColumnSettings { get; set; }
     }
 }

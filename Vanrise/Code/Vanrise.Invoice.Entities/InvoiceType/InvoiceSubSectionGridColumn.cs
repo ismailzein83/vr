@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 namespace Vanrise.Invoice.Entities
 {
@@ -10,7 +11,7 @@ namespace Vanrise.Invoice.Entities
     {
         public string Header { get; set; }
         public string FieldName { get; set; }
-        public string WidthFactor { get; set; }
+        public GridColumnSettings GridColumnSettings { get; set; }
         public DataRecordFieldType FieldType { get; set; }
     }
 }
