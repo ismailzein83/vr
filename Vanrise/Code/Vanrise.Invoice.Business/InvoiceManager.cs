@@ -269,22 +269,22 @@ namespace Vanrise.Invoice.Business
                 };
                 billingInterval = billingperiod.GetPeriod(billingPeriodContext);
 
-                if(invoiceType.Settings.StartDateCalculationMethod != null)
-                {
-                    InitialPeriodInfoContext initialPeriodInfoContext = new Context.InitialPeriodInfoContext
-                    {
-                        PartnerId = partnerId
-                    };
-                    invoiceType.Settings.ExtendedSettings.GetInitialPeriodInfo(initialPeriodInfoContext);
-                    StartDateCalculationMethodContext startDateCalculationMethodContext = new StartDateCalculationMethodContext
-                    {
-                        //InitialStartDate = initialPeriodInfoContext.InitialStartDate,
-                        PartnerCreatedDate = initialPeriodInfoContext.PartnerCreationDate,
-                    };
-                    invoiceType.Settings.StartDateCalculationMethod.CalculateDate(startDateCalculationMethodContext);
-                    if (startDateCalculationMethodContext.StartDate > billingInterval.FromDate && startDateCalculationMethodContext.StartDate < billingInterval.ToDate)
-                        billingInterval.FromDate = startDateCalculationMethodContext.StartDate;
-                }
+                //if(invoiceType.Settings.StartDateCalculationMethod != null)
+                //{
+                //    InitialPeriodInfoContext initialPeriodInfoContext = new Context.InitialPeriodInfoContext
+                //    {
+                //        PartnerId = partnerId
+                //    };
+                //    invoiceType.Settings.ExtendedSettings.GetInitialPeriodInfo(initialPeriodInfoContext);
+                //    //StartDateCalculationMethodContext startDateCalculationMethodContext = new StartDateCalculationMethodContext
+                //    //{
+                //    //    //InitialStartDate = initialPeriodInfoContext.InitialStartDate,
+                //    //    PartnerCreatedDate = initialPeriodInfoContext.PartnerCreationDate,
+                //    //};
+                //    //invoiceType.Settings.StartDateCalculationMethod.CalculateDate(startDateCalculationMethodContext);
+                //    //if (startDateCalculationMethodContext.StartDate > billingInterval.FromDate && startDateCalculationMethodContext.StartDate < billingInterval.ToDate)
+                //    //    billingInterval.FromDate = startDateCalculationMethodContext.StartDate;
+                //}
               
                
             }
