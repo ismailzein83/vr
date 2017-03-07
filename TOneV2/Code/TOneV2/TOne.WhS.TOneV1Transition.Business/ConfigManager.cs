@@ -19,7 +19,7 @@ namespace TOne.WhS.TOneV1Transition.Business
             var migrationAndRouteBuildSettingsData = GetMigrationAndRouteBuildSettingsData();
 
             if (migrationAndRouteBuildSettingsData.DBSyncTaskActionArgument == null)
-                throw new NullReferenceException("tOneV1TransitionSettingsData.DBSyncTaskActionArgument");
+                throw new NullReferenceException("migrationAndRouteBuildSettingsData.DBSyncTaskActionArgument");
 
             return migrationAndRouteBuildSettingsData.DBSyncTaskActionArgument;
         }
@@ -29,7 +29,7 @@ namespace TOne.WhS.TOneV1Transition.Business
             var migrationAndRouteBuildSettingsData = GetMigrationAndRouteBuildSettingsData();
 
             if (migrationAndRouteBuildSettingsData.RoutingProcessInput == null)
-                throw new NullReferenceException("tOneV1TransitionSettingsData.RoutingProcessInput");
+                throw new NullReferenceException("migrationAndRouteBuildSettingsData.RoutingProcessInput");
 
             return migrationAndRouteBuildSettingsData.RoutingProcessInput;
         }
