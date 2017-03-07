@@ -16,7 +16,7 @@ namespace TOne.WhS.TOneV1Transition.Business
 
         public DBSyncTaskActionArgument GetDBSyncTaskActionArgument()
         {
-            var tOneV1TransitionSettingsData = GetTOneV1TransitionSettingsData();
+            var tOneV1TransitionSettingsData = GetMigrationAndRouteBuildSettingsData();
 
             if (tOneV1TransitionSettingsData.DBSyncTaskActionArgument == null)
                 throw new NullReferenceException("tOneV1TransitionSettingsData.DBSyncTaskActionArgument");
@@ -26,7 +26,7 @@ namespace TOne.WhS.TOneV1Transition.Business
 
         public RoutingProcessInput GetRoutingProcessInput()
         {
-            var tOneV1TransitionSettingsData = GetTOneV1TransitionSettingsData();
+            var tOneV1TransitionSettingsData = GetMigrationAndRouteBuildSettingsData();
 
             if (tOneV1TransitionSettingsData.RoutingProcessInput == null)
                 throw new NullReferenceException("tOneV1TransitionSettingsData.RoutingProcessInput");
@@ -38,15 +38,15 @@ namespace TOne.WhS.TOneV1Transition.Business
 
         #region private methods
 
-        private TOneV1TransitionSettingsData GetTOneV1TransitionSettingsData()
+        private MigrationAndRouteBuildSettingsData GetMigrationAndRouteBuildSettingsData()
         {
             SettingManager settingManager = new SettingManager();
-            TOneV1TransitionSettingsData tOneV1TransitionSettingsData = settingManager.GetSetting<TOneV1TransitionSettingsData>(Constants.TOneV1TransitionSettingsData);
+            MigrationAndRouteBuildSettingsData migrationAndRouteBuildSettingsData = settingManager.GetSetting<MigrationAndRouteBuildSettingsData>(Constants.MigrationAndRouteBuildSettingsData);
 
-            if (tOneV1TransitionSettingsData == null)
-                throw new NullReferenceException("tOneV1TransitionSettingsData");
+            if (migrationAndRouteBuildSettingsData == null)
+                throw new NullReferenceException("migrationAndRouteBuildSettingsData");
 
-            return tOneV1TransitionSettingsData;
+            return migrationAndRouteBuildSettingsData;
         }
 
         #endregion
