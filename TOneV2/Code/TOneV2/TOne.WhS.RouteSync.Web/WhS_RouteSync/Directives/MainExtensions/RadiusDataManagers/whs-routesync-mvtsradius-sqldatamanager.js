@@ -40,7 +40,9 @@
 
                     if (payload != undefined) {
                         $scope.scopeModel.connectionString = payload.radiusDataManagersSettings.ConnectionString.ConnectionString;
+                        $scope.scopeModel.maxDoP = payload.radiusDataManagersSettings.ConnectionString.MaxDoP;
                         $scope.scopeModel.redundantConnectionString = payload.radiusDataManagersSettings.RedundantConnectionStrings != undefined ? payload.radiusDataManagersSettings.RedundantConnectionStrings[0].ConnectionString : null;
+                        $scope.scopeModel.redundantMaxDoP = payload.radiusDataManagersSettings.RedundantConnectionStrings != undefined ? payload.radiusDataManagersSettings.RedundantConnectionStrings[0].MaxDoP : null;
                     }
                 };
 
@@ -50,12 +52,12 @@
                     var redundantConnectionStrings;
                     if ($scope.scopeModel.redundantConnectionString != undefined) {
                         redundantConnectionStrings = [];
-                        redundantConnectionStrings.push({ ConnectionString: $scope.scopeModel.redundantConnectionString });
+                        redundantConnectionStrings.push({ ConnectionString: $scope.scopeModel.redundantConnectionString, MaxDoP: $scope.scopeModel.redundantMaxDoP });
                     }
 
                     var data = {
                         $type: "TOne.WhS.RouteSync.MVTSRadius.SQL.RadiusSQLDataManager, TOne.WhS.RouteSync.MVTSRadius.SQL",
-                        ConnectionString: { ConnectionString: $scope.scopeModel.connectionString },
+                        ConnectionString: { ConnectionString: $scope.scopeModel.connectionString, MaxDoP: $scope.scopeModel.maxDoP },
                         RedundantConnectionStrings: redundantConnectionStrings
                     };
                     return data;

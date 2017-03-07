@@ -9,5 +9,8 @@ namespace TOne.WhS.RouteSync.Radius
     public class RadiusConnectionString
     {
         public string ConnectionString { get; set; }
+
+        public int? MaxDoP { get; set; }
+
     }
 }

@@ -13,7 +13,7 @@ namespace TOne.WhS.DBSync.Entities
         public List<DBTableName> MigrationRequestedTables { get; set; }
         public MigrationCredentials MigrationCredentials { get; set; }
         public int DefaultSellingNumberPlanId { get; set; }
-
+        public Dictionary<string, ParameterValue> ParameterDefinitions { get; set; }
         public int SellingProductId { get; set; }
         public bool IsCustomerCommissionNegative { get; set; }
         public int OffPeakRateTypeId { get; set; }

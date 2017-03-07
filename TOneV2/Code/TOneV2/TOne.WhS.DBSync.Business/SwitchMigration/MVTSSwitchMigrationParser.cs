@@ -9,6 +9,7 @@ using TOne.WhS.DBSync.Entities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.MVTSRadius;
 using TOne.WhS.RouteSync.MVTSRadius.SQL;
+using TOne.WhS.RouteSync.Radius;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -45,12 +46,30 @@ namespace TOne.WhS.DBSync.Business
 
             GetConnectionStrings(parametersNode, out connectionString, out redundantConnectionString);
             if (!string.IsNullOrEmpty(connectionString))
+            {
                 synchroniser.DataManager = new RadiusSQLDataManager()
                 {
-                    ConnectionString = new RouteSync.Radius.RadiusConnectionString() { ConnectionString = connectionString },
-                    RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<RouteSync.Radius.RadiusConnectionString> { new RouteSync.Radius.RadiusConnectionString() { ConnectionString = redundantConnectionString } } : null
+                    ConnectionString = GetRadiusConnection(context, connectionString, "MVTSMaxDoP"),
+                    RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<RouteSync.Radius.RadiusConnectionString> { GetRadiusConnection(context, redundantConnectionString, "MVTSMaxDoP_Redundant") } : null
                 };
+            }
             return synchroniser;
+        }
+
+        RadiusConnectionString GetRadiusConnection(MigrationContext context, string connectionString, string maxDopKey)
+        {
+            var connection = new RadiusConnectionString() { ConnectionString = connectionString };
+            ParameterValue maxDOPValue;
+            if (context.ParameterDefinitions.TryGetValue(maxDopKey, out maxDOPValue))
+                connection.MaxDoP = GetMaxDoP(maxDOPValue);
+            return connection;
+        }
+
+        int? GetMaxDoP(ParameterValue maxDOPValue)
+        {
+            int maxDOP = 0;
+            int.TryParse(maxDOPValue.Value, out maxDOP);
+            return maxDOP > 0 ? maxDOP : default(int?);
         }
 
         private void GetConnectionStrings(XmlNode parametersNode, out string connectionString, out string redundantConnectionString)

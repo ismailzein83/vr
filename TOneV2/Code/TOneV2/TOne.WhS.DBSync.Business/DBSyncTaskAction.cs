@@ -47,6 +47,7 @@ namespace TOne.WhS.DBSync.Business
             _context.OnlyEffective = dbSyncTaskActionArgument.OnlyEffective;
             _context.MigrationRequestedTables = dbSyncTaskActionArgument.MigrationRequestedTables;
             _context.IsCustomerCommissionNegative = dbSyncTaskActionArgument.IsCustomerCommissionNegative;
+            _context.ParameterDefinitions = dbSyncTaskActionArgument.ParameterDefinitions == null ? new Dictionary<string, ParameterValue>() : dbSyncTaskActionArgument.ParameterDefinitions;
             _context.DBTables = FillDBTables(_context);
             migrationManager = ConstructMigrationManager(_context);
             PrepareBeforeApplyingRecords(_context, migrationManager);

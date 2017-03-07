@@ -19,5 +19,6 @@ namespace TOne.WhS.DBSync.Business
         public bool OnlyEffective { get; set; }
         public bool IsCustomerCommissionNegative { get; set; }
         public List<DBTableName> MigrationRequestedTables { get; set; }
+        public Dictionary<string, ParameterValue> ParameterDefinitions { get; set; }
     }
 }

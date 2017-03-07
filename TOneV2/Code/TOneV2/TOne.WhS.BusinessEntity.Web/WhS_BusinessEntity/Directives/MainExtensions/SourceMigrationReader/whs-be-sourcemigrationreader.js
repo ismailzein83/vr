@@ -33,6 +33,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             var weekendRateTypeId;
             var holidayRateTypeId;
 
+
             var sellingNumberPlanDirectiveAPI;
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -51,6 +52,10 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 $scope.useTempTables = true;
                 $scope.onlyEffective = false;
                 $scope.migrationTables = [];
+                $scope.selectedParameterDefinitions = [];
+                $scope.selectedItems = [];
+                $scope.parameterDefinitions = loadParameterDefinitions();
+
                 angular.forEach(UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum), function (dbTable) {
                     if (dbTable.defaultMigrate)
                         $scope.migrationTables.push(dbTable);
@@ -66,7 +71,6 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     sellingProductDirectiveAPI = api;
                 };
 
-
                 $scope.onOffPeakRateTypeSelectorReady = function (api) {
                     offPeakRateTypeSelectorAPI = api;
                     offPeakRateTypeSelectorReadyPrmoiseDeferred.resolve();
@@ -81,7 +85,6 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     holidayRateTypeSelectorAPI = api;
                     holidayRateTypeSelectorReadyPrmoiseDeferred.resolve();
                 };
-
 
                 $scope.validateOffPeakAndWeekendRate = function () {
                     if (weekendRateTypeSelectorAPI != undefined
@@ -110,6 +113,19 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     }
                     else if (sellingProductDirectiveAPI != undefined)
                         sellingProductDirectiveAPI.clearDataSource();
+                };
+
+                $scope.onSelectParameterDefinition = function (item) {
+                    var gridItem = {
+                        DisplayName: item.DisplayName,
+                        Name: item.Name
+                    };
+                    $scope.selectedParameterDefinitions.push(gridItem);
+
+                };
+                $scope.onDeselectParameterDefinition = function (item) {
+                    var index = UtilsService.getItemIndexByVal($scope.selectedParameterDefinitions, item.Name, "Name");
+                    $scope.selectedParameterDefinitions.splice(index, 1);
                 };
 
                 UtilsService.waitMultiplePromises([sellingNumberPlanReadyPromiseDeferred.promise, offPeakRateTypeSelectorReadyPrmoiseDeferred.promise, weekendRateTypeSelectorReadyPrmoiseDeferred.promise]).then(function () {
@@ -146,7 +162,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     selectedTables.push(WhS_BE_DBTableNameEnum.CustomerSellingProduct.value);
                     selectedTables.push(WhS_BE_DBTableNameEnum.File.value);
                     schedulerTaskAction.MigrationRequestedTables = selectedTables;
-
+                    schedulerTaskAction.ParameterDefinitions = getParameterDefinitions();
                     return schedulerTaskAction;
                 };
 
@@ -155,6 +171,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     $scope.migratePriceListData = true;
 
                     if (payload != undefined && payload.data != undefined) {
+
                         $scope.connectionString = payload.data.ConnectionString;
                         $scope.useTempTables = payload.data.UseTempTables;
                         sellingNumberPlanId = payload.data.DefaultSellingNumberPlanId;
@@ -166,7 +183,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         $scope.isCustomerCommissionNegative = payload.data.IsCustomerCommissionNegative;
                         $scope.onlyEffective = payload.data.OnlyEffective;
                         $scope.migrationTablesSelectedValues = [];
-
+                        fillParameterDefinitions(payload.data.ParameterDefinitions);
 
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
                             if (x != WhS_BE_DBTableNameEnum.CustomerCountry.value && x != WhS_BE_DBTableNameEnum.CustomerSellingProduct.value && x != WhS_BE_DBTableNameEnum.File.value)
@@ -200,7 +217,6 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
                 return loadSellingNumberPlanPromiseDeferred.promise;
             }
-
 
             function loadOffPeakRateTypeSelector() {
                 var loadOffPeakRateTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -241,7 +257,48 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 return loadHolidayRateTypeSelectorPromiseDeferred.promise;
             }
 
+            function loadParameterDefinitions() {
+                var parameterDefinitions = [];
+                parameterDefinitions.push({
+                    Name: 'MVTSMaxDoP',
+                    DisplayName: 'MVTS Max Degree of Parallelism'
+                });
+                parameterDefinitions.push({
+                    Name: 'MVTSMaxDoP_Redundant',
+                    DisplayName: 'MVTS Redundant Max Degree of Parallelism'
+                });
+                return parameterDefinitions;
+            }
 
+            function getParameterDefinitions() {
+                var definitions;
+                if ($scope.selectedParameterDefinitions.length > 0) {
+                    definitions = {};
+                    for (var i = 0; i < $scope.selectedParameterDefinitions.length; i++) {
+                        var currentItem = $scope.selectedParameterDefinitions[i];
+                        definitions[currentItem.Name] = {
+                            Value: currentItem.Value
+                        };
+                    }
+                }
+                return definitions;
+            }
+
+            function fillParameterDefinitions(parameterDefinitions) {
+                if (parameterDefinitions != undefined) {
+                    for (var key in parameterDefinitions) {
+                        var selectedItem = UtilsService.getItemByVal($scope.parameterDefinitions, key, "Name");
+                        if (selectedItem != undefined) {
+                            $scope.selectedItems.push(selectedItem);
+                            $scope.selectedParameterDefinitions.push({
+                                DisplayName: selectedItem.DisplayName,
+                                Name: selectedItem.Name,
+                                Value: parameterDefinitions[key].Value
+                            });
+                        }
+                    }
+                }
+            }
             this.initializeController = initializeController;
         }
 

@@ -84,6 +84,8 @@
     <Compile Include="Common\GeneratedIDsInfoContext.cs" />
     <Compile Include="Common\MigrationContext.cs" />
     <Compile Include="Common\MigrationCredentials.cs" />
+    <Compile Include="Common\ParameterDefinition.cs" />
+    <Compile Include="Common\ParameterValue.cs" />
     <Compile Include="IDManagerEntity.cs" />
     <Compile Include="Rules\RuleEntitiesEnum.cs" />
     <Compile Include="Rules\RuleMigratorContext.cs" />

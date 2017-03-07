@@ -244,7 +244,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         {
             StringBuilder query = new StringBuilder();
 
-            query.AppendLine(query_CreateIndexes);
+            query.AppendLine(string.Format(query_CreateIndexes, _radiusConnectionString.MaxDoP.HasValue ? string.Format(",MAXDOP={0}", _radiusConnectionString.MaxDoP.Value) : ""));
             query.AppendLine(query_SwapRadiusRouteTable);
             query.AppendLine(query_SwapRadiusRoutePercentageTable);
 
@@ -324,17 +324,17 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
                                                           end";
 
         const string query_CreateIndexes = @"
-                            CREATE  nonCLUSTERED INDEX customercode ON dbo.RadiusRoute_Temp
+                            CREATE CLUSTERED INDEX customercode ON dbo.RadiusRoute_Temp
 	                            (
 	                            Customer,
 	                            Code
-	                            ) WITH(STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON ,MAXDOP=6) ON [PRIMARY]
+	                            ) WITH(STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON {0}) ON [PRIMARY]
 
-                           CREATE  NonCLUSTERED INDEX CustomerCode ON dbo.RadiusRoutePercentage_Temp
+                           CREATE CLUSTERED INDEX CustomerCode ON dbo.RadiusRoutePercentage_Temp
 	                            (
 	                            Customer,
 	                            Code
-	                            ) WITH(STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON,MAXDOP=6) ON [PRIMARY]";
+	                            ) WITH(STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON {0}) ON [PRIMARY]";
 
         #endregion
 
