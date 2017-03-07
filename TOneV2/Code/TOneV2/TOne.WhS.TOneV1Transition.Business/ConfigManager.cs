@@ -16,22 +16,22 @@ namespace TOne.WhS.TOneV1Transition.Business
 
         public DBSyncTaskActionArgument GetDBSyncTaskActionArgument()
         {
-            var tOneV1TransitionSettingsData = GetMigrationAndRouteBuildSettingsData();
+            var migrationAndRouteBuildSettingsData = GetMigrationAndRouteBuildSettingsData();
 
-            if (tOneV1TransitionSettingsData.DBSyncTaskActionArgument == null)
+            if (migrationAndRouteBuildSettingsData.DBSyncTaskActionArgument == null)
                 throw new NullReferenceException("tOneV1TransitionSettingsData.DBSyncTaskActionArgument");
 
-            return tOneV1TransitionSettingsData.DBSyncTaskActionArgument;
+            return migrationAndRouteBuildSettingsData.DBSyncTaskActionArgument;
         }
 
         public RoutingProcessInput GetRoutingProcessInput()
         {
-            var tOneV1TransitionSettingsData = GetMigrationAndRouteBuildSettingsData();
+            var migrationAndRouteBuildSettingsData = GetMigrationAndRouteBuildSettingsData();
 
-            if (tOneV1TransitionSettingsData.RoutingProcessInput == null)
+            if (migrationAndRouteBuildSettingsData.RoutingProcessInput == null)
                 throw new NullReferenceException("tOneV1TransitionSettingsData.RoutingProcessInput");
 
-            return tOneV1TransitionSettingsData.RoutingProcessInput;
+            return migrationAndRouteBuildSettingsData.RoutingProcessInput;
         }
 
         #endregion
