@@ -28,7 +28,7 @@
             $scope.effectiveOn = new Date();
             $scope.searchClicked = function () {
                 setFilterObject();
-                return gridApi.loadGrid(filter);
+                return gridApi.load(filter);
             };
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveApi = api;

@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class DefaultRoutingProduct : Vanrise.Entities.IDateEffectiveSettingsEditable
+    public class SaleEntityZoneRoutingProductHistoryQuery
     {
-        public long SaleEntityRoutingProductId { get; set; }
-
         public SalePriceListOwnerType OwnerType { get; set; }
 
         public int OwnerId { get; set; }
 
-        public int RoutingProductId { get; set; }
+        public int? SellingNumberPlanId { get; set; }
 
-        public DateTime BED { get; set; }
+        public string ZoneName { get; set; }
 
-        public DateTime? EED { get; set; }
+        public int CountryId { get; set; }
     }
 }

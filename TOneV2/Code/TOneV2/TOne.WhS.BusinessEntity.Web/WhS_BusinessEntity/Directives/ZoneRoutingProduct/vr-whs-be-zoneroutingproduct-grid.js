@@ -22,44 +22,86 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
     };
 
     function ZoneRoutingProuductGrid($scope, ctrl, $attrs) {
+        this.initializeController = initializeController;
+
         var gridApi;
         var gridQuery;
-        this.initializeController = initializeController;
+        var gridDrillDownTabs;
 
         function initializeController() {
             $scope.zoneRoutingProduct = [];
+
             $scope.onGridReady = function (api) {
                 gridApi = api;
-
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-
-                function getDirectiveAPI() {
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                        return gridApi.retrieveData(query);
-                    };
-                    return directiveAPI;
-                }
+                var gridDrillDownDefinitions = getGridDrillDownDefinitions();
+                gridDrillDownTabs = vruiUtilsService.defineGridDrillDownTabs(gridDrillDownDefinitions, gridApi);
+                defineAPI();
             };
-
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                gridQuery = dataRetrievalInput.Query;
-                return whSBeZoneRoutingProductApiService.GetFilteredZoneRoutingProducts(dataRetrievalInput)
-                    .then(function (response) {
-                        if (response && response.Data) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                                var item = response.Data[i];
-                                setRateIconProperties(item);
-                                setService(item);
-                            }
+                var promises = [];
+
+                var getFilteredZoneRoutingProductsPromise = whSBeZoneRoutingProductApiService.GetFilteredZoneRoutingProducts(dataRetrievalInput);
+                promises.push(getFilteredZoneRoutingProductsPromise);
+
+                var serviceViewersLoadedDeferred = utilsService.createPromiseDeferred();
+                promises.push(serviceViewersLoadedDeferred.promise);
+
+                getFilteredZoneRoutingProductsPromise.then(function (response) {
+                    var serviceViewerLoadPromises = [];
+
+                    if (response != undefined && response.Data != null) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            var item = response.Data[i];
+
+                            gridDrillDownTabs.setDrillDownExtensionObject(item);
+                            setRateIconProperties(item);
+
+                            setService(item);
+                            serviceViewerLoadPromises.push(item.serviceViewerLoadDeferred.promise);
                         }
-                        onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        vrNotificationService.notifyExceptionWithClose(error, $scope);
+                    }
+
+                    utilsService.waitMultiplePromises(serviceViewerLoadPromises).then(function () {
+                        serviceViewersLoadedDeferred.resolve();
+                    }).catch(function (error) {
+                        serviceViewersLoadedDeferred.reject(error);
                     });
+
+                    onResponseReady(response);
+                }).catch(function (error) {
+                    vrNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+
+                return utilsService.waitMultiplePromises(promises);
             };
+        }
+        function defineAPI() {
+            var api = {};
+
+            api.load = function (query) {
+                gridQuery = query;
+                return gridApi.retrieveData(query);
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
+
+        function getGridDrillDownDefinitions() {
+            return [{
+                title: "History",
+                directive: "vr-whs-be-saleentityzoneroutingproduct-history-grid",
+                loadDirective: function (directiveAPI, dataItem) {
+                    var directivePayload = {
+                        OwnerType: gridQuery.OwnerType,
+                        OwnerId: gridQuery.OwnerId,
+                        SellingNumberPlanId: gridQuery.SellingNumberPlanId,
+                        ZoneName: dataItem.ZoneName,
+                        CountryId: dataItem.Entity.CountryId
+                    };
+                    return directiveAPI.load(directivePayload);
+                }
+            }];
         }
         function setService(item) {
             item.serviceViewerLoadDeferred = utilsService.createPromiseDeferred();

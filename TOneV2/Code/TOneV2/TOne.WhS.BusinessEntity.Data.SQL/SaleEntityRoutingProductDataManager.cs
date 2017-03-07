@@ -71,11 +71,43 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProductsEffectiveAfter", SaleZoneRoutingProductMapper, ownerType, ownerId, minimumDate);
         }
+        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsBySellingProducts(IEnumerable<int> sellingProductIds)
+        {
+            if (sellingProductIds == null || sellingProductIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("sellingProductIds were not passed");
+
+            string sellingProductIdsAsString = string.Join(",", sellingProductIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllDefaultsBySellingProducts", DefaultRoutingProductMapper, sellingProductIdsAsString);
+        }
+        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsBySellingProducts(IEnumerable<int> sellingProductIds, IEnumerable<long> saleZoneIds)
+        {
+            if (sellingProductIds == null || sellingProductIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("sellingProductIds were not passed");
+
+            if (saleZoneIds == null || saleZoneIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds were not passed");
+
+            string sellingProductIdsAsString = string.Join(",", sellingProductIds);
+            string saleZoneIdsAsString = string.Join(",", saleZoneIds);
+
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllZoneRPsBySellingProducts", SaleZoneRoutingProductMapper, sellingProductIdsAsString, saleZoneIdsAsString);
+        }
+        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwner", DefaultRoutingProductMapper, ownerType, ownerId);
+        }
+        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds)
+        {
+            if (saleZoneIds == null || saleZoneIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds were not passed");
+            string saleZoneIdsAsString = string.Join(",", saleZoneIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwner", SaleZoneRoutingProductMapper, ownerType, ownerId, saleZoneIdsAsString);
+        }
         #endregion
 
         #region Private Methods
         #endregion
-     
+
         #region Mappers
 
         private DefaultRoutingProduct DefaultRoutingProductMapper(IDataReader reader)

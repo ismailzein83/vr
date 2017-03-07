@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public long ZoneId { get; set; }
         public int ZoneRoutingProductId { get; set; }
+        public int CountryId { get; set; }
         public List<int> ServiceIds { get; set; }
         public bool IsInherited { get; set; }
         public DateTime BED { get; set; }
