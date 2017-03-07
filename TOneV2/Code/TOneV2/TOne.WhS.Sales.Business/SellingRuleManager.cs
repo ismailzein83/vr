@@ -13,7 +13,6 @@ namespace TOne.WhS.Sales.Business
 {
     public class SellingRuleManager : Vanrise.Rules.RuleManager<SellingRule, SellingRuleDetail>
     {
-
         public override SellingRuleDetail MapToDetails(SellingRule rule)
         {
             return new SellingRuleDetail()
@@ -29,7 +28,7 @@ namespace TOne.WhS.Sales.Business
                 (input.Query.SellingProductId == null || sellingRule.Criteria.SellingProductId == input.Query.SellingProductId)
                  && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(sellingRule, input.Query.CustomerIds))
                  && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(sellingRule, input.Query.SaleZoneIds));
-
+            VRActionLogger.Current.LogGetFilteredAction(SellingRuleLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, sellingRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
@@ -62,5 +61,41 @@ namespace TOne.WhS.Sales.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<SellingRuleSettingsConfig>(SellingRuleSettingsConfig.EXTENSION_TYPE);
         }
+
+        public override Vanrise.Rules.RuleLoggableEntity GetLoggableEntity(SellingRule rule)
+        {
+            return SellingRuleLoggableEntity.Instance;
+        }
+
+        #region Private Classes
+
+        private class SellingRuleLoggableEntity : Vanrise.Rules.RuleLoggableEntity
+        {
+            static SellingRuleLoggableEntity s_instance = new SellingRuleLoggableEntity();
+            public static SellingRuleLoggableEntity Instance
+            {
+                get
+                {
+                    return s_instance;
+                }
+            }
+            public override string EntityDisplayName
+            {
+                get { return "Selling Rules"; }
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_Sales_SellingRules"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_Sales_SellingRules_ViewHistoryItem"; }
+            }
+        }
+
+
+        #endregion
     }
 }

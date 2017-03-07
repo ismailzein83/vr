@@ -127,7 +127,7 @@ namespace TOne.WhS.Routing.Business
             {
                 ExportExcelHandler = routeOptionRuleExcel
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(RouteOptionRuleLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeOptionRules.ToBigResult(input, filterExpression, MapToDetails), handler);
         }
 
@@ -339,6 +339,11 @@ namespace TOne.WhS.Routing.Business
             return results;
         }
 
+        public override Vanrise.Rules.RuleLoggableEntity GetLoggableEntity(RouteOptionRule rule)
+        {
+            return RouteOptionRuleLoggableEntity.Instance;
+        }
+
         #endregion
 
         #region Private Methods
@@ -496,6 +501,37 @@ namespace TOne.WhS.Routing.Business
             supplierZoneId = supplierWithZones.SupplierZoneIds.First();
             return supplierWithZones.SupplierId;
         }
+        #endregion
+
+        #region Private Classes
+
+        private class RouteOptionRuleLoggableEntity : Vanrise.Rules.RuleLoggableEntity
+        {
+            static RouteOptionRuleLoggableEntity s_instance = new RouteOptionRuleLoggableEntity();
+            public static RouteOptionRuleLoggableEntity Instance
+            {
+                get
+                {
+                    return s_instance;
+                }
+            }
+            public override string EntityDisplayName
+            {
+                get { return "Route Option Rules"; }
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_Routing_RouteOptionRules"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_Routing_RouteOptionRules_ViewHistoryItem"; }
+            }
+        }
+
+
         #endregion
     }
 

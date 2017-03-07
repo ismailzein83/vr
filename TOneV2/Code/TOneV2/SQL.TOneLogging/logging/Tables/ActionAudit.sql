@@ -7,6 +7,7 @@
     [ActionID]          INT            NULL,
     [ObjectID]          VARCHAR (255)  NULL,
     [ObjectName]        NVARCHAR (900) NULL,
+    [ObjectTrackingID]  BIGINT         NULL,
     [ActionDescription] NVARCHAR (MAX) NULL,
     [LogTime]           DATETIME       NULL,
     [CreatedTime]       DATETIME       CONSTRAINT [DF_ActionAudit_CreatedTime] DEFAULT (getdate()) NULL,
@@ -17,7 +18,14 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_ActionAudit_LogTime]
     ON [logging].[ActionAudit]([LogTime] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionAudit_UserID]
+    ON [logging].[ActionAudit]([UserID] ASC);
 

@@ -11,6 +11,7 @@ CREATE PROCEDURE [logging].[sp_ActionAudit_Insert]
 	@ActionID int,
 	@ObjectID varchar(255),
 	@ObjectName nvarchar(900),
+	@ObjectTrackingID bigint,
 	@ActionDescription nvarchar(max)
 AS
 BEGIN
@@ -23,6 +24,7 @@ BEGIN
            ,[ObjectID]
 		   ,[ObjectName]
            ,[ActionDescription]
+		   ,[ObjectTrackingID]
            ,[LogTime])
 	VALUES (@UserID
 			,@URLID
@@ -32,5 +34,6 @@ BEGIN
 			,@ObjectID
 			,@ObjectName
 			,@ActionDescription
+			,@ObjectTrackingID
 			,GETDATE())
 END
