@@ -4,7 +4,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.TOneV1Transition.Entities
 {
-    public class TOneV1TransitionSettingsData : SettingData
+    public class MigrationAndRouteBuildSettingsData : SettingData
     {
         public DBSyncTaskActionArgument DBSyncTaskActionArgument { get; set; }
 
