@@ -20,7 +20,6 @@ namespace TOne.WhS.Invoice.Entities
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public Decimal TotalAmount { get; set; }
-        public string BillingTime { get; set; }
         public CustomerInvoiceDetails() { }
         public IEnumerable<CustomerInvoiceDetails> GetCustomerInvoiceDetailsRDLCSchema()
         {
