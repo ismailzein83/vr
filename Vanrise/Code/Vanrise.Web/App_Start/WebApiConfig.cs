@@ -19,12 +19,10 @@ namespace Vanrise.Web
             // Web API configuration and services
 
             //Web API Filters
-            config.Filters.Add(new ActionAuditFilter());
-            config.Filters.Add(new ExceptionFilter());
             config.Filters.Add(new AuthenticationFilter());
             config.Filters.Add(new AuthorizationFilter());
-            config.Filters.Add(new InfoAppenderFilter());
-
+            config.Filters.Add(new PostActionExecutionFilter());
+            
             var json = config.Formatters.JsonFormatter;
             json.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
 
