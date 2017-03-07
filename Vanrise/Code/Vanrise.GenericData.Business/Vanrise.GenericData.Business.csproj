@@ -83,7 +83,6 @@
     <Compile Include="GenericRules\GenericRuleDefinitionManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />
     <Compile Include="GenericRules\GenericRuleTypeConfigManager.cs" />
-    <Compile Include="GenericRules\GenericRuleVRActionAuditAttribute.cs" />
     <Compile Include="GenericRules\IGenericRuleManager.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByKey.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByPrefix.cs" />

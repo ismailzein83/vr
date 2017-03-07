@@ -34,7 +34,7 @@ namespace Vanrise.Security.Business
                  (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
                  (input.Query.Email == null || itemObject.Email.ToLower().Contains(input.Query.Email.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(UserLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, UserDetailMapper));
         }
 
@@ -97,10 +97,18 @@ namespace Vanrise.Security.Business
             return validUsers.Count > 0 ? validUsers : null;
         }
 
-        public User GetUserbyId(int userId)
+        public User GetUserbyId(int userId, bool isViewedFromUI)
         {
             var users = GetCachedUsers();
-            return users.GetRecord(userId);
+            var user = users.GetRecord(userId);
+            if (user != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(UserLoggableEntity.Instance, user);
+            return user;
+        }
+
+        public User GetUserbyId(int userId)
+        {
+            return GetUserbyId(userId, false);
         }
 
         public User GetUserbyEmail(string email)
@@ -202,8 +210,9 @@ namespace Vanrise.Security.Business
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 userObject.UserId = userId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(UserLoggableEntity.Instance, userObject);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = UserDetailMapper(userObject);
             }
             else
@@ -252,6 +261,7 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(UserLoggableEntity.Instance, userObject);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = UserDetailMapper(userObject);
             }
@@ -285,8 +295,9 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 var user = GetUserbyId(userObject.UserId);
+                VRActionLogger.Current.LogObjectCustomAction(UserLoggableEntity.Instance, "Disable", true, user, null);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = UserDetailMapper(user);
             }
             else
@@ -323,8 +334,9 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 var user = GetUserbyId(userObject.UserId);
+                VRActionLogger.Current.LogObjectCustomAction(UserLoggableEntity.Instance, "Enable", true, user, null);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = UserDetailMapper(user);
             }
             else
@@ -340,7 +352,8 @@ namespace Vanrise.Security.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
+            User user = GetUserbyId(userId);
+                                
             bool updateActionSucc;
             var cloudServiceProxy = GetCloudServiceProxy();
             if (cloudServiceProxy != null)
@@ -378,8 +391,6 @@ namespace Vanrise.Security.Business
                         {
                             try
                             {
-                                User user = GetUserbyId(userId);
-
                                 Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                                 objects.Add("User", user);
                                 objects.Add("Password", password);
@@ -401,6 +412,7 @@ namespace Vanrise.Security.Business
 
             if (updateActionSucc)
             {
+                VRActionLogger.Current.LogObjectCustomAction(UserLoggableEntity.Instance, "Reset Password", true, user, null);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
             }
             else
@@ -575,6 +587,11 @@ namespace Vanrise.Security.Business
         public string GetUserName(int userId)
         {
             User user = GetUserbyId(userId);
+            return GetUserName(user);
+        }
+
+        public string GetUserName(User user)
+        {
             return user != null ? user.Name : null;
         }
 
@@ -738,6 +755,50 @@ namespace Vanrise.Security.Business
             }
         }
 
+        private class UserLoggableEntity : VRLoggableEntityBase
+        {
+            public static UserLoggableEntity Instance = new UserLoggableEntity();
+
+            private UserLoggableEntity()
+            {
+
+            }
+
+            static UserManager s_userManager = new UserManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Security_User"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Security"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "User"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Security_User_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                User user = context.Object.CastWithValidate<User>("context.Object");
+                return user.UserId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                User user = context.Object.CastWithValidate<User>("context.Object");
+                return s_userManager.GetUserName(user);
+            }
+        }
+
 
         #endregion
 
@@ -763,17 +824,4 @@ namespace Vanrise.Security.Business
 
         #endregion
     }
-
-    public class UserVRActionObjectNameResolver : IVRActionObjectNameResolver
-    {
-        static UserManager s_userManager = new UserManager();
-        public string GetObjectName(IVRActionObjectNameResolverContext context)
-        {
-            int userId;
-            if (!int.TryParse(context.ObjectId, out userId))
-                throw new Exception(String.Format("Cannot parse context.ObjectId '{0}' to int", context.ObjectId));
-            return s_userManager.GetUserName(userId);
-        }
-    }
-
 }

@@ -41,6 +41,7 @@ namespace Vanrise.GenericData.Business
             {
                 ExportExcelHandler = genericRuleExcel
             };
+            VRActionLogger.Current.LogGetFilteredAction(new GenericRuleLoggableEntity(input.Query.RuleDefinitionId), input);
             return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, filterExpression, (rule) => MapToDetails(rule)), handler);
         }
 
@@ -114,9 +115,17 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        public GenericRule GetGenericRule(int ruleId, bool isViewedFromUI)
+        {
+            var rule = GetAllRules().GetRecord(ruleId);
+            if (rule != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(new GenericRuleLoggableEntity(rule.DefinitionId), rule);
+            return rule;
+        }
+
         public GenericRule GetGenericRule(int ruleId)
         {
-            return GetAllRules().GetRecord(ruleId);
+            return GetGenericRule(ruleId, false);
         }
 
         private struct GetGenericRulesByDefinitionIdCacheName
@@ -193,6 +202,11 @@ namespace Vanrise.GenericData.Business
         public DeleteOperationOutput<GenericRuleDetail> DeleteGenericRule(int ruleId)
         {
             return this.DeleteRule(ruleId) as Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail>;
+        }
+
+        public override RuleLoggableEntity GetLoggableEntity(T rule)
+        {
+            return new GenericRuleLoggableEntity(rule.DefinitionId);
         }
 
         #endregion
@@ -449,6 +463,36 @@ namespace Vanrise.GenericData.Business
                 FieldValueDescriptions = descriptions,
                 SettingsDescription = rule.GetSettingsDescription(new GenericRuleSettingsDescriptionContext() { RuleDefinitionSettings = ruleDefinition.SettingsDefinition })
             };
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class GenericRuleLoggableEntity : RuleLoggableEntity
+        {
+            Guid _ruleDefinitionId;
+            static GenericRuleDefinitionManager s_ruleDefinitionManager = new GenericRuleDefinitionManager();
+
+            public GenericRuleLoggableEntity(Guid ruleDefinitionId)
+            {
+                _ruleDefinitionId = ruleDefinitionId;
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return String.Format("VR_GenericData_GenericRule_{0}", _ruleDefinitionId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return  s_ruleDefinitionManager.GetGenericRuleDefinitionName(_ruleDefinitionId); }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_GenericRule_ViewHistoryItem"; }
+            }
         }
 
         #endregion

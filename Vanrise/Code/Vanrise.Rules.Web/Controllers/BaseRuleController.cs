@@ -48,7 +48,7 @@ namespace Vanrise.Rules.Web.Controllers
         public T GetRule(int ruleId)
         {
             R manager = Activator.CreateInstance<R>();
-            return manager.GetRule(ruleId);
+            return manager.GetRule(ruleId, true);
         }
     }
 }

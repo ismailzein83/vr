@@ -67,11 +67,14 @@
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
     <Compile Include="UISettingData.cs" />
+    <Compile Include="VRActionAudit\VRLoggableEntity.cs" />
     <Compile Include="VRActionAudit\VRActionAudit.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUP.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPInfoFilter.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPInfo.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPType.cs" />
+    <Compile Include="VRActionAudit\VRLoggableEntityBase.cs" />
+    <Compile Include="VRActionAudit\VRObjectTracking.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibility.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityDetail.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityFilter.cs" />
@@ -221,7 +224,6 @@
     <Compile Include="VRObject\VRObjectTypeDefinitionQuery.cs" />
     <Compile Include="VRObject\VRObjectVariable.cs" />
     <Compile Include="VRRdlcReportParameter.cs" />
-    <Compile Include="VRActionAudit\VRActionAuditAttribute.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

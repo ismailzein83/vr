@@ -80,7 +80,7 @@
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\ITypeManager.cs" />
-    <Compile Include="ConstVRActionAuditAttribute.cs" />
+    <Compile Include="BusinessManagers\IVRActionLogger.cs" />
     <Compile Include="DataRetrieval\ConvertResultToExcelDataContext.cs" />
     <Compile Include="DataRetrieval\RemoteExcelManager.cs" />
     <Compile Include="DataRetrieval\ExcelManager.cs" />

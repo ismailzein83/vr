@@ -19,7 +19,6 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredGenericRules")]
-        [GenericRuleVRActionAudit(GenericRuleVRActionAuditActionType.GetFiltered)]
         public object GetFilteredGenericRules(Vanrise.Entities.DataRetrievalInput<GenericRuleQuery> input)
         {
             if (!_manager.DoesUserHaveViewAccess(input.Query.RuleDefinitionId))
@@ -31,16 +30,14 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericRule")]
-        [GenericRuleVRActionAudit(GenericRuleVRActionAuditActionType.GetItem)]
         public GenericRule GetGenericRule(Guid ruleDefinitionId, int ruleId)
         {
             var manager = GetManager(ruleDefinitionId);
-            return manager.GetGenericRule(ruleId);
+            return manager.GetGenericRule(ruleId, true);
         }
 
         [HttpPost]
         [Route("AddGenericRule")]
-        [GenericRuleVRActionAudit(GenericRuleVRActionAuditActionType.Add)]
         public object AddGenericRule(GenericRule rule)
         {
             if (!DoesUserHaveAddAccess(rule.DefinitionId))
@@ -59,7 +56,6 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpPost]
         [Route("UpdateGenericRule")]
-        [GenericRuleVRActionAudit(GenericRuleVRActionAuditActionType.Update)]
         public object UpdateGenericRule(GenericRule rule)
         {
             if (!DoesUserHaveEditAccess(rule.DefinitionId))
@@ -79,7 +75,6 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpPost]
         [Route("DeleteGenericRule")]
-        [GenericRuleVRActionAudit(GenericRuleVRActionAuditActionType.Delete)]
         public Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail> DeleteGenericRule(GenericRule rule)
         {
             var manager = GetManager(rule.DefinitionId);

@@ -14,15 +14,17 @@ namespace Vanrise.Common.Business
         static VRActionAuditLKUPManager s_lkupManager = new VRActionAuditLKUPManager();
         static IVRActionAuditDataManager s_dataManager = CommonDataManagerFactory.GetDataManager<IVRActionAuditDataManager>();
 
-        public void AuditAction(string url, string module, string entity, string action, string objectId, string objectName, string actionDescription)
+        public void AuditAction(string url, string module, string entity, string action, string objectId, string objectName, string actionDescription, long? objectTrackingId)
         {
             int? userId;
             ContextFactory.GetContext().TryGetLoggedInUserId(out userId);
-            int urlId = s_lkupManager.GetLKUPId(VRActionAuditLKUPType.URL, url);
+            int? urlId = null;
+            if(url != null )
+                urlId = s_lkupManager.GetLKUPId(VRActionAuditLKUPType.URL, url);
             int moduleId = s_lkupManager.GetLKUPId(VRActionAuditLKUPType.Module, module);
             int entityId = s_lkupManager.GetLKUPId(VRActionAuditLKUPType.Entity, entity);
             int actionId = s_lkupManager.GetLKUPId(VRActionAuditLKUPType.Action, action);
-            s_dataManager.Insert(userId, urlId, moduleId, entityId, actionId, objectId, objectName, actionDescription);
+            s_dataManager.Insert(userId, urlId, moduleId, entityId, actionId, objectId, objectName, objectTrackingId, actionDescription);
         }
     }
 }

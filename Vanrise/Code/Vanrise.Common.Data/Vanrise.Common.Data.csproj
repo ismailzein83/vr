@@ -52,6 +52,8 @@
     <Compile Include="IStatusDefinitionDataManager.cs" />
     <Compile Include="IUserActionAuditDataManager.cs" />
     <Compile Include="IVRComponentTypeDataManager.cs" />
+    <Compile Include="IVRLoggableEntityDataManager.cs" />
+    <Compile Include="IVRObjectTrackingDataManager.cs" />
     <Compile Include="IZoneTimeDataManager.cs" />
     <Compile Include="IDataGroupingAnalysisInfoDataManager.cs" />
     <Compile Include="IStyleDefinitionDataManager.cs" />

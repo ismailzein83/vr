@@ -53,6 +53,8 @@
     <Compile Include="VRConnectionDataManager.cs" />
     <Compile Include="UserActionAuditDataManager.cs" />
     <Compile Include="VRComponentTypeDataManager.cs" />
+    <Compile Include="VRLoggableEntityDataManager.cs" />
+    <Compile Include="VRObjectTrackingDataManager.cs" />
     <Compile Include="VRZoneTimeDataManager.cs" />
     <Compile Include="DataGroupingAnalysisInfoDataManager.cs" />
     <Compile Include="StyleDefinitionDataManager.cs" />

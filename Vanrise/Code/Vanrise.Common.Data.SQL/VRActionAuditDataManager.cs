@@ -15,9 +15,9 @@ namespace Vanrise.Common.Data.SQL
 
         }
 
-        public void Insert(int? userId, int urlId, int moduleId, int entityId, int actionId, string objectId, string objectName, string actionDescription)
+        public void Insert(int? userId, int? urlId, int moduleId, int entityId, int actionId, string objectId, string objectName, long? objectTrackingId, string actionDescription)
         {
-            ExecuteNonQuerySP("[logging].[sp_ActionAudit_Insert]", userId, urlId, moduleId, entityId, actionId, objectId, objectName, actionDescription);
+            ExecuteNonQuerySP("[logging].[sp_ActionAudit_Insert]", userId, urlId, moduleId, entityId, actionId, objectId, objectName, objectTrackingId, actionDescription);
         }
     }
 }

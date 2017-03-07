@@ -13,7 +13,6 @@ namespace Vanrise.Security.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "Users")]
-    [ConstVRActionAuditAttribute("Security", "User", ObjectNameResolverType=typeof(UserVRActionObjectNameResolver))]
     public class UsersController : Vanrise.Web.Base.BaseAPIController
     {
         private UserManager _manager = new UserManager();
@@ -25,7 +24,6 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredUsers")]
-        [ConstVRActionAuditAttribute(ConstVRActionAuditActionTypes.GETFILTERED)]
         public object GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredUsers(input));
@@ -49,15 +47,13 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("GetUserbyId")]
-        [ConstVRActionAudit(ConstVRActionAuditActionTypes.GETITEM, ObjectArgName = "userId")]
         public User GetUserbyId(int userId)
         {
-            return _manager.GetUserbyId(userId);
+            return _manager.GetUserbyId(userId, true);
         }
 
         [HttpPost]
         [Route("UpdateUser")]
-        [ConstVRActionAudit(ConstVRActionAuditActionTypes.UPDATE, ObjectArgName = "userObject", ObjectIdPropPath = "UserId", ObjectNamePropPath = "Name")]
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
         {
             return _manager.UpdateUser(userObject);
@@ -65,7 +61,6 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("DisableUser")]
-        [ConstVRActionAudit(ConstVRActionAuditActionTypes.DISABLE, ObjectArgName = "userObject", ObjectIdPropPath = "UserId")]
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> DisableUser(User userObject)
         {
             return _manager.DisableUser(userObject);
@@ -73,14 +68,12 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("EnableUser")]
-        [ConstVRActionAudit(ConstVRActionAuditActionTypes.ENABLE, ObjectArgName = "userObject", ObjectIdPropPath = "UserId")]
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(User userObject)
         {
             return _manager.EnableUser(userObject);
         }
         [HttpPost]
         [Route("AddUser")]
-        [ConstVRActionAudit(ConstVRActionAuditActionTypes.ADD, ObjectArgName = "userObject", ObjectIdPropPath = "UserId", ObjectNamePropPath = "Name")]
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
         {
             return _manager.AddUser(userObject);
@@ -95,7 +88,6 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("ResetPassword")]
-        [ConstVRActionAudit("Reset Password", ObjectArgName = "user", ObjectIdPropPath = "UserId")]
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(ResetPasswordInput user)
         {
             return _manager.ResetPassword(user.UserId, user.Password);

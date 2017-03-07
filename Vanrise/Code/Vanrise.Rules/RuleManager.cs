@@ -33,14 +33,19 @@ namespace Vanrise.Rules
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 GetCacheManager().SetCacheExpired(GetRuleTypeId());
+                TrackAndLogRuleAdded(rule);
                 insertOperationOutput.InsertedObject = MapToDetails(rule);
-
             }
             else
             {
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
             }
             return insertOperationOutput;
+        }
+
+        protected virtual void TrackAndLogRuleAdded(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectAdded(GetLoggableEntity(rule), rule);
         }
 
         public bool TryAdd(T rule)
@@ -75,6 +80,7 @@ namespace Vanrise.Rules
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 GetCacheManager().SetCacheExpired(GetRuleTypeId());
+                TrackAndLogRuleUpdated(rule);
                 updateOperationOutput.UpdatedObject = MapToDetails(rule);
             }
             else
@@ -82,6 +88,11 @@ namespace Vanrise.Rules
                 updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
             return updateOperationOutput;
+        }
+
+        protected virtual void TrackAndLogRuleUpdated(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectUpdated(GetLoggableEntity(rule), rule);
         }
 
         public bool TryUpdateRule(T rule)
@@ -110,17 +121,25 @@ namespace Vanrise.Rules
         {
             DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-
+            T rule = GetRule(ruleId);
+           
             if (ruleDataManager.DeleteRule(ruleId))
             {
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 int ruleTypeId = GetRuleTypeId();
                 GetCacheManager().SetCacheExpired(ruleTypeId);
+                if (rule != null)
+                    TrackAndLogRuleDeleted(rule);
+                
             }
 
             return deleteOperationOutput;
         }
 
+        protected virtual void TrackAndLogRuleDeleted(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectDeleted(GetLoggableEntity(rule), rule);
+        }
 
         public IEnumerable<T> GetFilteredRules(Func<T, bool> filter)
         {
@@ -153,14 +172,28 @@ namespace Vanrise.Rules
                });
         }
 
-        public T GetRule(int ruleId)
+        public T GetRule(int ruleId, bool isViewedFromUI)
         {
             var allRules = GetAllRules();
             T rule;
             if (allRules != null && allRules.TryGetValue(ruleId, out rule))
+            {
+                if (isViewedFromUI)
+                    LogRuleViewed(rule);
                 return rule;
+            }
             else
                 return null;
+        }
+
+        protected virtual void LogRuleViewed(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().LogObjectViewed(GetLoggableEntity(rule), rule);
+        }
+
+        public T GetRule(int ruleId)
+        {
+            return GetRule(ruleId, false);
         }
 
         public Q GetRuleDetail(int ruleId)
@@ -173,6 +206,8 @@ namespace Vanrise.Rules
         }
 
         public abstract Q MapToDetails(T rule);
+
+        public abstract RuleLoggableEntity GetLoggableEntity(T rule);
 
         #endregion
 
@@ -232,6 +267,26 @@ namespace Vanrise.Rules
         #region Private Classes
 
         #endregion
+    }
+
+    public abstract class RuleLoggableEntity :  VRLoggableEntityBase
+    {
+        public override string ModuleName
+        {
+            get { return "Rules"; }
+        }
+
+        public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+        {
+            BaseRule rule = context.Object.CastWithValidate<BaseRule>("context.Object");
+            return rule.RuleId;
+        }
+
+        public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+        {
+            BaseRule rule = context.Object.CastWithValidate<BaseRule>("context.Object");
+            return !String.IsNullOrWhiteSpace(rule.Description) ? rule.Description : rule.RuleId.ToString();
+        }
     }
 
     public class CacheManager : Vanrise.Caching.BaseCacheManager<int>
