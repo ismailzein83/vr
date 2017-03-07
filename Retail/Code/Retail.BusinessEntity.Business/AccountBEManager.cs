@@ -69,10 +69,9 @@ namespace Retail.BusinessEntity.Business
                 }
             }
 
-            AccountExcelExportHandler accountExcel = new AccountExcelExportHandler(input.Query);
             ResultProcessingHandler<AccountDetail> handler = new ResultProcessingHandler<AccountDetail>()
             {
-                ExportExcelHandler = accountExcel
+                ExportExcelHandler = new AccountExcelExportHandler(input.Query)
             };
 
             return DataRetrievalManager.Instance.ProcessResult(input, bigResult, handler);
@@ -618,8 +617,11 @@ namespace Retail.BusinessEntity.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 var accountBEDefinitionSettings = new AccountBEDefinitionManager().GetAccountBEDefinitionSettings(_query.AccountBEDefinitionId);
                 if (accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions != null)
                 {
@@ -631,7 +633,7 @@ namespace Retail.BusinessEntity.Business
 
                     if (context.BigResult != null && context.BigResult.Data != null)
                     {
-                        foreach (var accountDetail in context.BigResult.Data)
+                        foreach (AccountDetail accountDetail in context.BigResult.Data)
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
@@ -639,7 +641,7 @@ namespace Retail.BusinessEntity.Business
                             foreach (AccountGridExportColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions)
                             {
                                 AccountFieldValue accountValue;
-                                if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                                if (accountDetail.FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
                                 {
                                     row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
                                 }
@@ -661,7 +663,7 @@ namespace Retail.BusinessEntity.Business
 
                     if (context.BigResult != null && context.BigResult.Data != null)
                     {
-                        foreach (var accountDetail in context.BigResult.Data)
+                        foreach (AccountDetail accountDetail in context.BigResult.Data)
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
@@ -669,7 +671,8 @@ namespace Retail.BusinessEntity.Business
                             foreach (AccountGridColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ColumnDefinitions)
                             {
                                 AccountFieldValue accountValue;
-                                if (((AccountDetail)accountDetail).FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+
+                                if (accountDetail.FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
                                 {
                                     row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
                                 }
