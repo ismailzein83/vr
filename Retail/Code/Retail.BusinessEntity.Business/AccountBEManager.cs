@@ -19,7 +19,11 @@ namespace Retail.BusinessEntity.Business
     public class AccountBEManager : IBusinessEntityManager, IAccountBEManager
     {
         #region Public Methods
-
+        static AccountBEDefinitionManager _accountBEDefinitionManager;
+        public AccountBEManager()
+        {
+            _accountBEDefinitionManager = new AccountBEDefinitionManager();
+        }
         public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
             var recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
@@ -53,13 +57,15 @@ namespace Retail.BusinessEntity.Business
             }
 
             var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(input.Query.AccountBEDefinitionId, account, input.Query.Columns));
-            var filtredActionIds = new AccountBEDefinitionManager().GetLoggedInUserAllowedActionIds(input.Query.AccountBEDefinitionId);
-           
+
+            var filtredActionIds = _accountBEDefinitionManager.GetLoggedInUserAllowedActionIds(input.Query.AccountBEDefinitionId);
+            var filterdViewIds = _accountBEDefinitionManager.GetLoggedInUserAllowedViewIds(input.Query.AccountBEDefinitionId);
+
             if (bigResult != null && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 foreach (var accountDetail in bigResult.Data)
                 {
-                    AccountDetailMapperStep2(input.Query.AccountBEDefinitionId, accountDetail, accountDetail.Entity, filtredActionIds);
+                    AccountDetailMapperStep2(input.Query.AccountBEDefinitionId, accountDetail, accountDetail.Entity, filtredActionIds, filterdViewIds);
                 }
             }
 
@@ -762,8 +768,9 @@ namespace Retail.BusinessEntity.Business
         {
             AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
             var accountDetail = AccountDetailMapperStep1(accountType.AccountBEDefinitionId, account, null);
-            var filtredActionIds = new  AccountBEDefinitionManager().GetLoggedInUserAllowedActionIds(accountType.AccountBEDefinitionId);
-            AccountDetailMapperStep2(accountType.AccountBEDefinitionId, accountDetail, account, filtredActionIds);
+            var filtredActionIds = _accountBEDefinitionManager.GetLoggedInUserAllowedActionIds(accountType.AccountBEDefinitionId);
+            var filtredViewIds = _accountBEDefinitionManager.GetLoggedInUserAllowedViewIds(accountType.AccountBEDefinitionId);
+            AccountDetailMapperStep2(accountType.AccountBEDefinitionId, accountDetail, account, filtredActionIds, filtredViewIds);
             return accountDetail;
         }
         private AccountDetail AccountDetailMapperStep1(Guid accountBEDefinitionId, Account account, List<string> columns)
@@ -804,7 +811,7 @@ namespace Retail.BusinessEntity.Business
                 FieldValues = fieldValues
             };
         }
-        private void AccountDetailMapperStep2(Guid accountBEDefinitionId, AccountDetail accountDetail, Account account ,HashSet<Guid> ActionDefinitionIds)
+        private void AccountDetailMapperStep2(Guid accountBEDefinitionId, AccountDetail accountDetail, Account account, HashSet<Guid> ActionDefinitionIds, HashSet<Guid> ViewDefinitionIds)
         {
             IEnumerable<AccountTypeInfo> accountTypeInfoEntities = new AccountTypeManager().GetAccountTypesInfo(new AccountTypeFilter() { ParentAccountId = account.AccountId });
 
@@ -813,7 +820,8 @@ namespace Retail.BusinessEntity.Business
             List<AccountActionDefinition> accountActionDefinitions = accountBEDefinitionManager.GetAccountActionDefinitionsByAccount(accountBEDefinitionId, account);
 
             accountDetail.CanAddSubAccounts = (accountTypeInfoEntities != null && accountTypeInfoEntities.Count() > 0);
-            accountDetail.AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Select(itm => itm.AccountViewDefinitionId).ToList() : null;
+
+            accountDetail.AvailableAccountViews = accountViewDefinitions != null ? accountViewDefinitions.Where(x => ViewDefinitionIds.Contains(x.AccountViewDefinitionId)).Select(itm => itm.AccountViewDefinitionId).ToList() : null;
 
             accountDetail.AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Where(x => ActionDefinitionIds.Contains(x.AccountActionDefinitionId)).Select(itm => itm.AccountActionDefinitionId).ToList() : null;
             accountDetail.Style = GetStatuStyle(account.StatusId);

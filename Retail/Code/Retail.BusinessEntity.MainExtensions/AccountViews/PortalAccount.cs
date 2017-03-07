@@ -22,6 +22,11 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
             }
         }
 
+        public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
+        {
+            return base.DoesUserHaveAccess(context);
+        }
+
         public string AccountNameMappingField { get; set; }
         public string AccountEmailMappingField { get; set; }
         public Guid ConnectionId { get; set; }

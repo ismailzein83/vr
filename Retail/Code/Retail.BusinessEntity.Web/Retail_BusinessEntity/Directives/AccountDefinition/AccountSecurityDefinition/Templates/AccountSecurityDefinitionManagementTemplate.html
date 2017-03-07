@@ -1,21 +1,84 @@
 ﻿<vr-row>
     <vr-columns width="fullrow">
-        <vr-section title="View">
+        <vr-section header="View" collapsible collapsed>
             <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
         </vr-section>
     </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns width="fullrow">
-        <vr-section title="Add">
+        <vr-section header="Add" collapsible collapsed>
             <vr-sec-requiredpermission-grid on-ready="scopeModel.onAddRequiredPermissionReady"></vr-sec-requiredpermission-grid>
         </vr-section>
     </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns width="fullrow">
-        <vr-section title="Edit">
+        <vr-section header="Edit" collapsible collapsed>
             <vr-sec-requiredpermission-grid on-ready="scopeModel.onEditRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+
+<!-- package and account package security -->
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="View Package" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewPackageRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="Add Package" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onAddPackageRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="Edit Package" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onEditPackageRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+
+
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="View Account Package" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewAccountPackageRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="Assign Account Package" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onAddAccountPackageRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+
+<!-- product security -->
+
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="View Product" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewProductRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="Add Product" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onAddProductRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="Edit Product" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onEditProductRequiredPermissionReady"></vr-sec-requiredpermission-grid>
         </vr-section>
     </vr-columns>
 </vr-row>

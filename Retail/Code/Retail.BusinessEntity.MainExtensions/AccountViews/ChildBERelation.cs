@@ -23,5 +23,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
         }
 
         public Guid BEParentChildRelationDefinitionId { get; set; }
+
+        public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
+        {
+            return base.DoesUserHaveAccess(context);
+        }
     }
 }

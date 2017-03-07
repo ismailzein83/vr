@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class PackageDetail
     {
         public Package Entity { get; set; }
+
+        public bool AllowEdit { get; set; }
     }
 }

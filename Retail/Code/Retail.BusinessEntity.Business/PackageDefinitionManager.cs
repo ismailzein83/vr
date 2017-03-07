@@ -8,6 +8,7 @@ using Vanrise.Common.Business;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Retail.BusinessEntity.Data;
+using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -36,6 +37,10 @@ namespace Retail.BusinessEntity.Business
                     if (filter.AccountBEDefinitionId.HasValue && packageDefinition.Settings != null &&
                         filter.AccountBEDefinitionId.Value != packageDefinition.Settings.AccountBEDefinitionId)
                         return false;
+
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(packageDefinition, filter.Filters))
+                        return false;
+
                     return true;
                 };
             }
@@ -45,7 +50,82 @@ namespace Retail.BusinessEntity.Business
 
             return cachedPackageDefinitions.MapRecords(PackageDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
+        public bool DoesUserHaveViewPackageDefinitions()
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return GetViewAllowedPackageDefinitions(userId).Count > 0;
+        }
+        public bool DoesUserHaveViewPackageDefinitions(int userId)
+        {
+            return GetViewAllowedPackageDefinitions(userId).Count > 0;
+        }
+        public HashSet<Guid> GetViewAllowedPackageDefinitions()
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return GetViewAllowedPackageDefinitions(userId);
+        }
 
+        public HashSet<Guid> GetViewAllowedPackageDefinitions(int userId)
+        {
+            HashSet<Guid> ids = new HashSet<Guid>();
+            var allPackages = this.GetCachedPackageDefinitions();
+            foreach (var p in allPackages)
+            {
+                if (DoesUserHaveViewAccess(userId, p.Key))
+                    ids.Add(p.Key);
+            }
+            return ids;
+        }
+        public bool DoesUserHaveViewAccess(int UserId, Guid PackageDefinitionId)
+        {
+            var package = GetPackageDefinitionById(PackageDefinitionId);
+            if (package != null && package.Settings != null && package.Settings.AccountBEDefinitionId != null)
+                return new AccountBEDefinitionManager().DoesUserHaveViewPackageAccess(UserId, package.Settings.AccountBEDefinitionId);
+            return true;
+        }
+        public bool DoesUserHaveAddPackageDefinitions()
+        {
+            return GetdAddAllowedPackageDefinitions().Count > 0;
+        }
+        public HashSet<Guid> GetdAddAllowedPackageDefinitions()
+        {
+            HashSet<Guid> ids = new HashSet<Guid>();
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var allPackages = this.GetCachedPackageDefinitions();
+            foreach (var p in allPackages)
+            {
+                if (DoesUserHaveAddPackageDefinitions(p.Key,userId))
+                    ids.Add(p.Key);
+            }
+            return ids;
+        }
+        public bool DoesUserHaveAddPackageDefinitions(Guid packageDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAddPackageDefinitions(packageDefinitionId, userId);
+        }
+
+        public bool DoesUserHaveAddPackageDefinitions(Guid packageDefinitionId ,int userId)
+        {
+            var package = GetPackageDefinitionById(packageDefinitionId);
+            if (package != null && package.Settings != null && package.Settings.AccountBEDefinitionId != null)
+                return new AccountBEDefinitionManager().DoesUserHaveAddPackageAccess(userId, package.Settings.AccountBEDefinitionId);
+            return true;
+        }
+        public bool DoesUserHaveEditPackageDefinitions(Guid packageDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveEditPackageDefinitions(packageDefinitionId, userId);
+        }
+
+        public bool DoesUserHaveEditPackageDefinitions(Guid packageDefinitionId, int userId)
+        {
+            var package = GetPackageDefinitionById(packageDefinitionId);
+            if (package != null && package.Settings != null && package.Settings.AccountBEDefinitionId != null)
+                return new AccountBEDefinitionManager().DoesUserHaveEditPackageAccess(userId, package.Settings.AccountBEDefinitionId);
+            return true;
+        }
+        
         public IEnumerable<PackageDefinitionConfig> GetPackageDefinitionExtendedSettingsConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
@@ -66,6 +146,17 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+
+        private bool CheckIfFilterIsMatch(PackageDefinition packageDefinition, List<IPackageDefinitionFilter> filters)
+        {
+            var context = new PackageDefinitionFilterContext { PakageDefinitionId = packageDefinition.VRComponentTypeId};
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
 
         #region Private Methods
 

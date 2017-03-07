@@ -50,12 +50,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredPackageServices"), input);
         }
 
-        function HasUpdatePackagePermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdatePackage']));
-        }
-
         function HasAddPackagePermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddPackage']));
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "DoesUserHaveAddAccess"));
         }
 
 
@@ -69,7 +65,6 @@
             GetServicePackageItemConfigs: GetServicePackageItemConfigs,
             GetPackagesInfo: GetPackagesInfo,
             GetFilteredPackageServices: GetFilteredPackageServices,
-            HasUpdatePackagePermission: HasUpdatePackagePermission,
             HasAddPackagePermission: HasAddPackagePermission
         });
     }

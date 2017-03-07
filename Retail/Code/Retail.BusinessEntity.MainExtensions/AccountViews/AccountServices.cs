@@ -25,5 +25,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
                 
             }
         }
+        public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
+        {
+            return base.DoesUserHaveAccess(context);
+        }
+
     }
 }

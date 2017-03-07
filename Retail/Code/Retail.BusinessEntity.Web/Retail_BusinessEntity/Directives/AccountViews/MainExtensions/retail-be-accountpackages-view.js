@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountPackagesViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountPackageService'];
+    AccountPackagesViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountPackageService', 'Retail_BE_AccountPackageAPIService'];
 
-    function AccountPackagesViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountPackageService) {
+    function AccountPackagesViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountPackageService, Retail_BE_AccountPackageAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -42,7 +42,9 @@
                     gridAPI = api;
                     defineAPI();
                 };
-
+                $scope.scopeModel.hasAssignAccountPackagePermission = function () {
+                    return Retail_BE_AccountPackageAPIService.HasAddAccountPackagePermission();
+                };
                 $scope.scopeModel.onAccountPackageAdded = function () {
                     var onAccountPackageAdded = function (addedPackage) {
                         gridAPI.onAccountPackageAdded(addedPackage);

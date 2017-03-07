@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
             {
 
             }
+        }
+        public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
+        {
+            Vanrise.AccountBalance.Business.AccountTypeManager _vAccountTypeManger = new Vanrise.AccountBalance.Business.AccountTypeManager();
+            var accountTypeId = new AccountBalanceManager().GetAccountBalanceTypeId(context.AccountBEDefinitionId);
+            return _vAccountTypeManger.DoesUserHaveViewAccess(context.UserId,accountTypeId);
         }
     }
 }

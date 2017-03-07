@@ -59,11 +59,20 @@ app.directive('retailBePackageGrid', ['VRNotificationService', 'Retail_BE_Packag
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.menuActions.push({
-                    name: 'Edit',
-                    clicked: editPackage,
-                    //haspermission: hasEditPackagePermission
-                });
+
+                $scope.scopeModel.menuActions = function (dataItem) {
+
+                    var menuActions = [];
+
+                    if (dataItem.AllowEdit == true)
+                        menuActions.push({
+                            name: 'Edit',
+                            clicked: editPackage
+                        });
+
+                    return menuActions;
+                };
+               
             }
             function editPackage(packageItem) {
                 var onPackageUpdated = function (updatedPackage) {

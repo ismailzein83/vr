@@ -32,5 +32,17 @@ namespace Retail.BusinessEntity.Entities
         public abstract Guid ConfigId { get; }
 
         public virtual string RuntimeEditor { get; set; }
+
+        public virtual bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
+        {
+            return true;
+        }
+
+    }
+
+    public interface IAccountViewDefinitionCheckAccessContext
+    {
+        Guid AccountBEDefinitionId { get; }
+        int UserId { get; }
     }
 }

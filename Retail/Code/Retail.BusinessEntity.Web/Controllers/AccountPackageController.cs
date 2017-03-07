@@ -19,7 +19,15 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredAccountPackages")]
         public object GetFilteredAccountPackages(Vanrise.Entities.DataRetrievalInput<AccountPackageQuery> input)
         {
+            if (!_manager.DoesUserHaveViewAccountPackageAccess(input.Query.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredAccountPackages(input));
+        }
+        [HttpGet]
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess(Guid accountBEDefinitionId)
+        {
+            return _manager.DoesUserHaveAddAccountPackageAccess(accountBEDefinitionId);
         }
 
         [HttpGet]
@@ -31,8 +39,10 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddAccountPackage")]
-        public Vanrise.Entities.InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackageToAdd accountPackageToAdd)
+        public object AddAccountPackage(AccountPackageToAdd accountPackageToAdd)
         {
+            if (!DoesUserHaveAddAccess(accountPackageToAdd.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.AddAccountPackage(accountPackageToAdd);
         }
     }

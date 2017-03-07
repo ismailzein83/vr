@@ -79,5 +79,20 @@ namespace Retail.BusinessEntity.Entities
         public RequiredPermissionSettings AddRequiredPermission { get; set; }
         public RequiredPermissionSettings EditRequiredPermission { get; set; }
 
+        public RequiredPermissionSettings ViewPackageRequiredPermission { get; set; }
+        public RequiredPermissionSettings AddPackageRequiredPermission { get; set; }
+        public RequiredPermissionSettings EditPackageRequiredPermission { get; set; }
+
+        public RequiredPermissionSettings ViewAccountPackageRequiredPermission { get; set; }
+        public RequiredPermissionSettings AddAccountPackageRequiredPermission { get; set; }
+
+
+        public RequiredPermissionSettings ViewProductRequiredPermission { get; set; }
+        public RequiredPermissionSettings AddProductRequiredPermission { get; set; }
+        public RequiredPermissionSettings EditProductRequiredPermission { get; set; }
+
+
+
+
     }
 }

@@ -47,9 +47,6 @@
                     var onAccountIdentificationRuleAdded = function (addedService) {
                         gridAPI.onAccountIdentificationRuleAdded(addedService);
                     };
-
-                    console.log("here wer go")
-
                     Retail_BE_AccountIdentificationService.assignIdentificationRuleToAccount(accountBEDefinitionId, parentAccountId, onAccountIdentificationRuleAdded);
                 };
             }

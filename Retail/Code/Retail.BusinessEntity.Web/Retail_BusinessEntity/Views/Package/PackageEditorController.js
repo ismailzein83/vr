@@ -68,13 +68,6 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-            $scope.scopeModel.hasSavePackagePermission = function () {
-                if ($scope.scopeModel.isEditMode)
-                    return Retail_BE_PackageAPIService.HasUpdatePackagePermission();
-                else
-                    return Retail_BE_PackageAPIService.HasAddPackagePermission();
-            };
         }
         function load() {
             $scope.isLoading = true;
@@ -129,7 +122,14 @@
             var packageDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             packageDefinitionSelectorReadyDeferred.promise.then(function () {
-                var packageDefinitionPayload = { context: getContext() };
+                var packageDefinitionPayload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Retail.BusinessEntity.Business.PackageDefinitionAddOrEditFilter, Retail.BusinessEntity.Business",
+                            EditMode: isEditMode
+                        }]
+                    }
+                };
                 if (packageEntity != undefined && packageEntity.Settings != undefined) {
                     packageDefinitionPayload.selectedIds = packageEntity.Settings.PackageDefinitionId;
                 }

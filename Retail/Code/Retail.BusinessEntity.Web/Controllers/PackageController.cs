@@ -14,10 +14,14 @@ namespace Retail.BusinessEntity.Web.Controllers
     [JSONWithTypeAttribute]
     public class PackageController : BaseAPIController
     {
+        PackageDefinitionManager _packageDefinitionManager = new PackageDefinitionManager();
+
         [HttpPost]
         [Route("GetFilteredPackages")]
         public object GetFilteredPackages(Vanrise.Entities.DataRetrievalInput<PackageQuery> input)
-        {
+        {          
+            if (!_packageDefinitionManager.DoesUserHaveViewPackageDefinitions())
+                return GetUnauthorizedResponse();
             PackageManager manager = new PackageManager();
             return GetWebResponse(input, manager.GetFilteredPackages(input));
         }
@@ -29,19 +33,29 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageManager manager = new PackageManager();
             return manager.GetPackageEditorRuntime(packageId);
         }
-
-        [HttpPost]
-        [Route("AddPackage")]
-        public InsertOperationOutput<PackageDetail> AddPackage(Package package)
+        [HttpGet]
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess()
         {
-            PackageManager manager = new PackageManager();
-            return manager.AddPackage(package);
+            return _packageDefinitionManager.DoesUserHaveAddPackageDefinitions();
         }
 
         [HttpPost]
-        [Route("UpdatePackage")]
-        public UpdateOperationOutput<PackageDetail> UpdatePackage(Package package)
+        [Route("AddPackage")]
+        public object AddPackage(Package package)
         {
+            if (!_packageDefinitionManager.DoesUserHaveAddPackageDefinitions(package.Settings.PackageDefinitionId))
+                return GetUnauthorizedResponse();
+
+            PackageManager manager = new PackageManager();
+            return manager.AddPackage(package);
+        }
+        [HttpPost]
+        [Route("UpdatePackage")]
+        public object UpdatePackage(Package package)
+        {
+            if (!_packageDefinitionManager.DoesUserHaveEditPackageDefinitions(package.Settings.PackageDefinitionId))
+                return GetUnauthorizedResponse();
             PackageManager manager = new PackageManager();
             return manager.UpdatePackage(package);
         }

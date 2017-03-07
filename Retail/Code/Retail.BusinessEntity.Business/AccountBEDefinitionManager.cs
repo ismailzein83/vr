@@ -265,7 +265,6 @@ namespace Retail.BusinessEntity.Business
         {
             List<AccountViewDefinition> results = new List<AccountViewDefinition>();
             List<AccountViewDefinition> accoutViewDefinitions = this.GetAccountViewDefinitions(accountBEDefinitionId);
-
             foreach (var itm in accoutViewDefinitions)
             {
                 if (IsViewAvailable(itm, account))
@@ -389,6 +388,50 @@ namespace Retail.BusinessEntity.Business
                 return true;
         }
 
+        public bool DoesUserHaveViewPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.ViewPackageRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.ViewPackageRequiredPermission, userId);
+            else
+                return true;
+        }
+
+        public bool DoesUserHaveAddPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.AddPackageRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.AddPackageRequiredPermission, userId);
+            else
+                return true;
+        }
+        public bool DoesUserHaveEditPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.EditPackageRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.EditPackageRequiredPermission, userId);
+            else
+                return true;
+        }
+       
+        public bool DoesUserHaveViewAccountPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.ViewAccountPackageRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.ViewAccountPackageRequiredPermission, userId);
+            else
+                return true;
+        }
+
+        public bool DoesUserHaveAddAccountPackageAccess(int userId, Guid accountBeDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.AddAccountPackageRequiredPermission != null)
+                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.AddAccountPackageRequiredPermission, userId);
+            else
+                return true;
+        }
+
         public HashSet<Guid> GetLoggedInUserAllowedActionIds(Guid accountBeDefinitionId)
         {
             HashSet<Guid> ids = new HashSet<Guid>();
@@ -402,6 +445,21 @@ namespace Retail.BusinessEntity.Business
 
             return ids;
         }
+
+        public HashSet<Guid> GetLoggedInUserAllowedViewIds(Guid accountBeDefinitionId)
+        {
+            HashSet<Guid> ids = new HashSet<Guid>();
+            var ActionIds = GetAccountViewDefinitions(accountBeDefinitionId);
+            IAccountViewDefinitionCheckAccessContext context = new AccountViewDefinitionCheckAccessContext { UserId = SecurityContext.Current.GetLoggedInUserId(), AccountBEDefinitionId = accountBeDefinitionId };
+            foreach (var view in ActionIds)
+            {
+                if (view.Settings.DoesUserHaveAccess(context))
+                    ids.Add(view.AccountViewDefinitionId);
+            }
+
+            return ids;
+        }
+       
        
         #endregion
 

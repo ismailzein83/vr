@@ -9,20 +9,35 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
     public class PackageManager : IBusinessEntityManager
     {
         #region ctor/Local Variables
+        static PackageDefinitionManager _packageDefinitionManager;
+        public PackageManager()
+        {
+            _packageDefinitionManager = new PackageDefinitionManager();
+        }
 
         #endregion
 
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<PackageDetail> GetFilteredPackages(Vanrise.Entities.DataRetrievalInput<PackageQuery> input)
-        {
+        {            
             var allPackages = GetCachedPackages();
-            Func<Package, bool> filterExpression = (package) => (input.Query.Name == null || package.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            var allowedViewPackages =_packageDefinitionManager.GetViewAllowedPackageDefinitions();
+            Func<Package, bool> filterExpression = (package) =>
+            {
+                if (input.Query.Name != null && !package.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (allowedViewPackages.Count > 0 && !allowedViewPackages.Contains(package.Settings.PackageDefinitionId))
+                    return false;
+                return true;
+            };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPackages.ToBigResult(input, filterExpression, PackageDetailMapper));
         }
 
@@ -118,7 +133,7 @@ namespace Retail.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-
+       
         public IEnumerable<PackageExtendedSettingsConfig> GetPackageExtendedSettingsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
@@ -226,6 +241,7 @@ namespace Retail.BusinessEntity.Business
         {
             PackageDetail packageDetail = new PackageDetail();
             packageDetail.Entity = package;
+            packageDetail.AllowEdit = _packageDefinitionManager.DoesUserHaveEditPackageDefinitions(package.Settings.PackageDefinitionId);
             return packageDetail;
         }
 

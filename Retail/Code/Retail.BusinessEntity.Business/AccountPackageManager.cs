@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -94,6 +95,18 @@ namespace Retail.BusinessEntity.Business
             return insertOperationOutput;
         }
 
+        public bool DoesUserHaveViewAccountPackageAccess(Guid accountBEDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return new AccountBEDefinitionManager().DoesUserHaveViewAccountPackageAccess(userId, accountBEDefinitionId);
+        }
+
+        public bool DoesUserHaveAddAccountPackageAccess(Guid accountBEDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return new AccountBEDefinitionManager().DoesUserHaveAddAccountPackageAccess(userId, accountBEDefinitionId);
+        }
+
         #endregion
 
         #region Private Classes
@@ -153,6 +166,8 @@ namespace Retail.BusinessEntity.Business
                   return accountInfos;
               });
         }
+
+
 
         #endregion
 
