@@ -101,10 +101,15 @@ namespace Vanrise.AccountBalance.Business
         {
             Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate = new Dictionary<long, LiveBalanceToUpdate>();
             Dictionary<long, AccountUsageToUpdate> accountsUsageToUpdate = new Dictionary<long, AccountUsageToUpdate>();
+            var transactionType = billingTransactionTypeManager.GetBillingTransactionType(transactionTypeId);
+
             foreach (var usageBalanceUpdate in usageBalanceUpdates)
             {
                 var liveBalanceInfo = GetLiveBalanceInfo(usageBalanceUpdate.AccountId);
-                GroupLiveBalanceToUpdateById(liveBalnacesToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId, -usageBalanceUpdate.Value, liveBalanceInfo);
+                decimal value = usageBalanceUpdate.Value;
+                if (!transactionType.IsCredit)
+                    value = -value;
+                GroupLiveBalanceToUpdateById(liveBalnacesToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId, value, liveBalanceInfo);
                 AccountUsagePeriodEvaluationContext context = new AccountUsagePeriodEvaluationContext
                 {
                     UsageTime = usageBalanceUpdate.EffectiveOn
