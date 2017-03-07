@@ -36,9 +36,9 @@ namespace TOne.WhS.Invoice.Business
                     }
                 }
             }
-            return LoadInvoiceCarrier(getProfiles, getAccounts,filter.GetCustomers,filter.GetSuppliers,filter.Filters);
+            return LoadInvoiceCarrier(getProfiles, getAccounts, filter.GetCustomers, filter.GetSuppliers, filter.Filters, filter.ActivationStatus);
         }
-        public List<InvoiceCarrier> LoadInvoiceCarrier(bool getProfiles, bool getAccounts, bool getCustomers, bool getSuppliers,List<IInvoicePartnerFilter> filters)
+        public List<InvoiceCarrier> LoadInvoiceCarrier(bool getProfiles, bool getAccounts, bool getCustomers, bool getSuppliers, List<IInvoicePartnerFilter> filters, ActivationStatus? activationStatus)
         {
             List<InvoiceCarrier> invoiceCarriers = new List<InvoiceCarrier>();
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
@@ -77,7 +77,7 @@ namespace TOne.WhS.Invoice.Business
                             foreach (var account in accounts)
                             {
                                 var invoiceCarrierId = string.Format("Account_{0}", account.CarrierAccountId);
-                                if (account.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active && CheckIfPartnerMatched(filters, invoiceCarrierId))
+                                if ((activationStatus == null || activationStatus == account.CarrierAccountSettings.ActivationStatus) && CheckIfPartnerMatched(filters, invoiceCarrierId))
                                 {
                                     var invoiceCarrier = new InvoiceCarrier
                                     {

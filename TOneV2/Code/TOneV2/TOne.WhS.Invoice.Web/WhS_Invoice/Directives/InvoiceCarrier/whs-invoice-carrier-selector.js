@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'UtilsService', 'VRUIUtilsService','$filter',
-    function (WhS_Invoice_InvoiceAPIService, UtilsService, VRUIUtilsService, $filter) {
+app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'UtilsService', 'VRUIUtilsService','$filter','WhS_BE_CarrierAccountActivationStatusEnum',
+    function (WhS_Invoice_InvoiceAPIService, UtilsService, VRUIUtilsService, $filter,WhS_BE_CarrierAccountActivationStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -184,6 +184,7 @@ app.directive('whsInvoiceCarrierSelector', ['WhS_Invoice_InvoiceAPIService', 'Ut
 
                 filter.GetCustomers = attrs.getcustomers != undefined;
                 filter.GetSuppliers = attrs.getsuppliers != undefined;
+                filter.ActivationStatus = WhS_BE_CarrierAccountActivationStatusEnum.Active.value;
                 var serializedFilter = {};
                 if (filter != undefined) {
                     serializedFilter = UtilsService.serializetoJson(filter);

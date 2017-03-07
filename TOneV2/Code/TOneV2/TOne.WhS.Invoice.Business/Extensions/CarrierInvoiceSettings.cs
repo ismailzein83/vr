@@ -115,13 +115,24 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
-            var carriers = new InvoiceManager().GetInvoiceCarriers(new InvoiceCarrierFilter
+            InvoiceCarrierFilter invoiceCarrierFilter = new InvoiceCarrierFilter{ GetCustomers = true};
+            switch (context.PartnerRetrievalType)
             {
-                GetCustomers = true
-            });
-            if (carriers == null)
-                return null;
+                case PartnerRetrievalType.GetAll:
+                  break;
+                case PartnerRetrievalType.GetActive:
+                  invoiceCarrierFilter.ActivationStatus = ActivationStatus.Active;
+                  break;
+                case PartnerRetrievalType.GetInactive:
+                  invoiceCarrierFilter.ActivationStatus = ActivationStatus.Inactive;
+                    break;
+                default : throw new NotSupportedException(string.Format("PartnerRetrievalType {0} not supported.",context.PartnerRetrievalType));
+            }
+             var carriers = new InvoiceManager().GetInvoiceCarriers(invoiceCarrierFilter);
+             if (carriers == null)
+                        return null;
             return carriers.Select(x => x.InvoiceCarrierId);
         }
+
     }
 }

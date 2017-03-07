@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Invoice.Entities;
 namespace TOne.WhS.Invoice.Entities
 {
@@ -13,5 +14,6 @@ namespace TOne.WhS.Invoice.Entities
         public List<IInvoicePartnerFilter> Filters { get; set; }
         public bool GetCustomers { get; set; }
         public bool GetSuppliers { get; set; }
+        public ActivationStatus? ActivationStatus { get; set; }
     }
 }
