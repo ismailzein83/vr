@@ -367,30 +367,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private Dictionary<int, CustomerSellingProduct> GetCachedCustomerSellingProducts()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedOrderedCustomerSellingProducts",
-               () =>
-               {
-                   ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
-                   IEnumerable<CustomerSellingProduct> customerSellingProducts = dataManager.GetCustomerSellingProducts();
-                   Dictionary<int, CustomerSellingProduct> dic = new Dictionary<int, CustomerSellingProduct>();
-                   CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                   foreach (CustomerSellingProduct item in customerSellingProducts)
-                   {
-                       if (!carrierAccountManager.IsCarrierAccountDeleted(item.CustomerId))
-                           dic.Add(item.CustomerSellingProductId, item);
-                   }
-                   return dic;
-               });
-        }
-
-        private Dictionary<int, List<ProcessedCustomerSellingProduct>> GetCachedProcessedCustomerSellingProductsByCustomerId()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedProcessedCustomerSellingProductsByCustomerId", () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedOrderedCustomerSellingProducts", () =>
             {
                 ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
                 IEnumerable<CustomerSellingProduct> customerSellingProducts = dataManager.GetCustomerSellingProducts();
 
-                var entitiesByCustomerId = new Dictionary<int, List<ProcessedCustomerSellingProduct>>();
+                var customerSellingProductsById = new Dictionary<int, CustomerSellingProduct>();
 
                 if (customerSellingProducts != null)
                 {
@@ -398,9 +380,29 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     foreach (CustomerSellingProduct customerSellingProduct in customerSellingProducts.OrderBy(x => x.BED))
                     {
-                        if (carrierAccountManager.IsCarrierAccountDeleted(customerSellingProduct.CustomerId))
-                            continue;
+                        if (!carrierAccountManager.IsCarrierAccountDeleted(customerSellingProduct.CustomerId))
+                            customerSellingProductsById.Add(customerSellingProduct.CustomerSellingProductId, customerSellingProduct);
+                    }
+                }
 
+                return customerSellingProductsById;
+            });
+        }
+
+        private Dictionary<int, List<ProcessedCustomerSellingProduct>> GetCachedProcessedCustomerSellingProductsByCustomerId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedProcessedCustomerSellingProductsByCustomerId", () =>
+            {
+                var entitiesByCustomerId = new Dictionary<int, List<ProcessedCustomerSellingProduct>>();
+
+                Dictionary<int, CustomerSellingProduct> cachedCustomerSellingProducts = GetCachedCustomerSellingProducts();
+
+                if (cachedCustomerSellingProducts != null)
+                {
+                    var carrierAccountManager = new CarrierAccountManager();
+
+                    foreach (CustomerSellingProduct customerSellingProduct in cachedCustomerSellingProducts.Values.OrderBy(x => x.BED))
+                    {
                         List<ProcessedCustomerSellingProduct> customerEntities;
 
                         if (!entitiesByCustomerId.TryGetValue(customerSellingProduct.CustomerId, out customerEntities))
