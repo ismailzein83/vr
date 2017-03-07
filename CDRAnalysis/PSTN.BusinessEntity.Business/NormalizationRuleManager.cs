@@ -191,7 +191,7 @@ namespace PSTN.BusinessEntity.Business
                     input.Query.Description == null ||
                     (item.Description != null && item.Description.Contains(input.Query.Description))
                 );
-
+            VRActionLogger.Current.LogGetFilteredAction(NormalizationRuleLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, normalizationRules.ToBigResult(input, filterExpression, MapToDetails));
         }
 
@@ -260,5 +260,41 @@ namespace PSTN.BusinessEntity.Business
         }
 
         #endregion
+
+        #region Private Classes
+
+        private class NormalizationRuleLoggableEntity : Vanrise.Rules.RuleLoggableEntity
+        {
+            static NormalizationRuleLoggableEntity s_instance = new NormalizationRuleLoggableEntity();
+            public static NormalizationRuleLoggableEntity Instance
+            {
+                get
+                {
+                    return s_instance;
+                }
+            }
+            public override string EntityDisplayName
+            {
+                get { return "Normalization Rules"; }
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return "PSTN_BE_NormalizationRules"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "PSTN_BE_NormalizationRules_ViewHistoryItem"; }
+            }
+        }
+
+
+        #endregion
+
+        public override RuleLoggableEntity GetLoggableEntity(NormalizationRule rule)
+        {
+            return NormalizationRuleLoggableEntity.Instance;
+        }
     }
 }
