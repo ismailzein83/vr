@@ -719,6 +719,48 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
+
+        private class CarrierAccountDetailExportExcelHandler : ExcelExportHandler<CarrierAccountDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CarrierAccountDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Carrier Accounts",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Profile Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Activation Status" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Services" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CarrierAccountId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CarrierAccountName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CarrierProfileName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.AccountTypeDescription });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.ActivationStatusDescription });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.SellingNumberPlanName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.ServicesNames });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
         #endregion
 
         #region  Mappers
@@ -798,45 +840,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
             return carrierAccountDetail;
-        }
-
-
-        private class CarrierAccountDetailExportExcelHandler : ExcelExportHandler<CarrierAccountDetail>
-        {
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CarrierAccountDetail> context)
-            {
-                if (context.BigResult == null || context.BigResult.Data == null)
-                    return;
-
-                var sheet = new ExportExcelSheet();
-                sheet.SheetName = "Carrier Accounts";
-
-                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Profile Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Type" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Activation Status" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Services" });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
-                {
-                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CarrierAccountId });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.CarrierAccountName });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.CarrierProfileName });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.AccountTypeDescription });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.ActivationStatusDescription });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.SellingNumberPlanName });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.ServicesNames });
-
-                    sheet.Rows.Add(row);
-                }
-
-                context.MainSheet = sheet;
-            }
         }
 
         #endregion
