@@ -368,12 +368,18 @@ namespace Retail.BusinessEntity.Business
         }
         public bool DoesUserHaveAddAccess(int userId, Guid accountBeDefinitionId)
         {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.AddRequiredPermission != null)
-                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.AddRequiredPermission, userId);
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddRequiredPermission);
+        }
+
+        private bool DoesUserHaveAccess(int userId, Guid accountBEDefinitionId, Func<AccountBEDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && getRequiredPermissionSetting(accountBEDefinitionSettings.Security) != null)
+                return s_securityManager.IsAllowed(getRequiredPermissionSetting(accountBEDefinitionSettings.Security), userId);
             else
                 return true;
         }
+
         public bool DoesUserHaveEditAccess( Guid accountBeDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();

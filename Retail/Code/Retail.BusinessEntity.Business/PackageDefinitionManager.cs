@@ -120,12 +120,18 @@ namespace Retail.BusinessEntity.Business
 
         public bool DoesUserHaveEditPackageDefinitions(Guid packageDefinitionId, int userId)
         {
+            return DoesUserHaveAccessToPackageDef(packageDefinitionId, userId, new AccountBEDefinitionManager().DoesUserHaveEditPackageAccess);
+        }
+
+
+        public bool DoesUserHaveAccessToPackageDef(Guid packageDefinitionId, int userId, Func<int, Guid, bool> doesUserHavePackageAccessOnAccDef)
+        {
             var package = GetPackageDefinitionById(packageDefinitionId);
             if (package != null && package.Settings != null && package.Settings.AccountBEDefinitionId != null)
-                return new AccountBEDefinitionManager().DoesUserHaveEditPackageAccess(userId, package.Settings.AccountBEDefinitionId);
+                return doesUserHavePackageAccessOnAccDef(userId, package.Settings.AccountBEDefinitionId);
             return true;
         }
-        
+
         public IEnumerable<PackageDefinitionConfig> GetPackageDefinitionExtendedSettingsConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
