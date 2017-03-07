@@ -53,10 +53,6 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-            $scope.scopeModel.hasSaveAccountPackagePermission = function () {
-                return (isEditMode) ? Retail_BE_AccountPackageAPIService.HasUpdateAccountPackagePermission() : Retail_BE_AccountPackageAPIService.HasAddAccountPackagePermission();
-            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;

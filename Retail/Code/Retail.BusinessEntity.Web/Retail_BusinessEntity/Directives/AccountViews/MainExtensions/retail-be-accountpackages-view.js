@@ -37,14 +37,13 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.hasAddPermission = false;
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
                 };
-                $scope.scopeModel.hasAssignAccountPackagePermission = function () {
-                    return Retail_BE_AccountPackageAPIService.HasAddAccountPackagePermission();
-                };
+             
                 $scope.scopeModel.onAccountPackageAdded = function () {
                     var onAccountPackageAdded = function (addedPackage) {
                         gridAPI.onAccountPackageAdded(addedPackage);
@@ -63,8 +62,10 @@
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
+                       
                     }
-
+                    if (accountBEDefinitionId != undefined)
+                        checkHasAddPermissionAccess(accountBEDefinitionId);
                     return gridAPI.load(buildGridPayload()).then(function () {
                         $scope.scopeModel.isGridLoading = false;
                     });
@@ -83,6 +84,13 @@
                 };
                 return accountPackageGridPayload;
             }
+            function checkHasAddPermissionAccess(accountBEDefinitionId) {
+                Retail_BE_AccountPackageAPIService.DoesUserHaveAddAccess(accountBEDefinitionId).then(function (response) {
+                    $scope.scopeModel.hasAddPermission = response;
+                })
+              
+            }
+
         }
     }
 

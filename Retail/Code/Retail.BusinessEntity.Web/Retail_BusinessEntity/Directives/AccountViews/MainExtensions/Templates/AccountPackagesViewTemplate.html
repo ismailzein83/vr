@@ -1,7 +1,7 @@
 ﻿<div>
     <vr-row removeline>
         <vr-columns width="fullrow" simplecol>
-            <vr-button type="Add" data-onclick="scopeModel.onAccountPackageAdded" standalone haspermission="scopeModel.hasAssignAccountPackagePermission"></vr-button>
+            <vr-button type="Add" data-onclick="scopeModel.onAccountPackageAdded" standalone ng-show="scopeModel.hasAddPermission"></vr-button>
         </vr-columns>
     </vr-row>
     <vr-row vr-loader="scopeModel.isGridLoading">

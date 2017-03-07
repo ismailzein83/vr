@@ -333,6 +333,12 @@ namespace Retail.BusinessEntity.Business
             return accountBEActions.MapRecords(AccountActionDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
+
+    
+
+        #endregion
+
+        #region Security
         public bool DoesUserHaveViewAccess(int userId, List<Guid> accountBeDefinitionIds)
         {
             foreach (var a in accountBeDefinitionIds)
@@ -345,99 +351,49 @@ namespace Retail.BusinessEntity.Business
         public bool DoesUserHaveViewAccess(Guid accountBeDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            return DoesUserHaveViewAccess(userId, accountBEDefinitionSettings);
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewRequiredPermission);
         }
         public bool DoesUserHaveViewAccess(int userId, Guid accountBeDefinitionId)
         {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            return DoesUserHaveViewAccess(userId, accountBEDefinitionSettings);
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewRequiredPermission);
         }
-        public bool DoesUserHaveViewAccess(int userId, AccountBEDefinitionSettings accountBEDefinitionSettings)
-        {
-            if (accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.ViewRequiredPermission != null)
-                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.ViewRequiredPermission, userId);
-            else
-                return true;
-        }
-
         public bool DoesUserHaveAddAccess(Guid accountBeDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
-            return DoesUserHaveAddAccess(userId, accountBeDefinitionId);
-        }
-        public bool DoesUserHaveAddAccess(int userId, Guid accountBeDefinitionId)
-        {
             return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddRequiredPermission);
-        }
 
-        private bool DoesUserHaveAccess(int userId, Guid accountBEDefinitionId, Func<AccountBEDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
-        {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && getRequiredPermissionSetting(accountBEDefinitionSettings.Security) != null)
-                return s_securityManager.IsAllowed(getRequiredPermissionSetting(accountBEDefinitionSettings.Security), userId);
-            else
-                return true;
         }
-
-        public bool DoesUserHaveEditAccess( Guid accountBeDefinitionId)
+        public bool DoesUserHaveEditAccess(Guid accountBeDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return DoesUserHaveEditAccess(userId, accountBeDefinitionId);
         }
         public bool DoesUserHaveEditAccess(int userId, Guid accountBeDefinitionId)
         {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.EditRequiredPermission != null)
-                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.EditRequiredPermission, userId);
-            else
-                return true;
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditRequiredPermission);
         }
-
         public bool DoesUserHaveViewPackageAccess(int userId, Guid accountBeDefinitionId)
         {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.ViewPackageRequiredPermission != null)
-                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.ViewPackageRequiredPermission, userId);
-            else
-                return true;
-        }
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewPackageRequiredPermission);
 
+        }
         public bool DoesUserHaveAddPackageAccess(int userId, Guid accountBeDefinitionId)
         {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.AddPackageRequiredPermission != null)
-                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.AddPackageRequiredPermission, userId);
-            else
-                return true;
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddPackageRequiredPermission);
         }
         public bool DoesUserHaveEditPackageAccess(int userId, Guid accountBeDefinitionId)
         {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.EditPackageRequiredPermission != null)
-                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.EditPackageRequiredPermission, userId);
-            else
-                return true;
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditPackageRequiredPermission);
+
         }
-       
         public bool DoesUserHaveViewAccountPackageAccess(int userId, Guid accountBeDefinitionId)
         {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.ViewAccountPackageRequiredPermission != null)
-                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.ViewAccountPackageRequiredPermission, userId);
-            else
-                return true;
+            return  DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewAccountPackageRequiredPermission);
         }
-
         public bool DoesUserHaveAddAccountPackageAccess(int userId, Guid accountBeDefinitionId)
         {
-            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBeDefinitionId);
-            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && accountBEDefinitionSettings.Security.AddAccountPackageRequiredPermission != null)
-                return s_securityManager.IsAllowed(accountBEDefinitionSettings.Security.AddAccountPackageRequiredPermission, userId);
-            else
-                return true;
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddAccountPackageRequiredPermission);
         }
-
         public HashSet<Guid> GetLoggedInUserAllowedActionIds(Guid accountBeDefinitionId)
         {
             HashSet<Guid> ids = new HashSet<Guid>();
@@ -451,7 +407,6 @@ namespace Retail.BusinessEntity.Business
 
             return ids;
         }
-
         public HashSet<Guid> GetLoggedInUserAllowedViewIds(Guid accountBeDefinitionId)
         {
             HashSet<Guid> ids = new HashSet<Guid>();
@@ -465,12 +420,18 @@ namespace Retail.BusinessEntity.Business
 
             return ids;
         }
-       
-       
+
         #endregion
 
         #region Private Methods
-
+        private bool DoesUserHaveAccess(int userId, Guid accountBEDefinitionId, Func<AccountBEDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && getRequiredPermissionSetting(accountBEDefinitionSettings.Security) != null)
+                return s_securityManager.IsAllowed(getRequiredPermissionSetting(accountBEDefinitionSettings.Security), userId);
+            else
+                return true;
+        }
         private bool IsColumnVisible(Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> visibleGridColumns, AccountGridColumnDefinition accountGridColumnDefinition)
         {
             if (!visibleGridColumns.ContainsKey(accountGridColumnDefinition.FieldName))
@@ -536,6 +497,6 @@ namespace Retail.BusinessEntity.Business
             };
         }
         #endregion
-            
+
     }
 }
