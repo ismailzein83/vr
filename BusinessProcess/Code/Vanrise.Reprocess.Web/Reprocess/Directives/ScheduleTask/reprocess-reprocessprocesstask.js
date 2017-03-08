@@ -66,7 +66,6 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                 };
 
                 api.load = function (payload) {
-                    console.log(payload);
                     $scope.chunkTimes = UtilsService.getArrayEnum(ReprocessChunkTimeEnum);
 
                     if (payload != undefined) {
