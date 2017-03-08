@@ -7,7 +7,7 @@
     </vr-columns>
     <vr-columns width="normal" withemptyline>
         <vr-button type="Search" standalone data-onclick="searchClicked" vr-disabled="fromTime==undefined || fromTime== null ||  validateDateTime()!=null"></vr-button>
-        <vr-button type="Add" standalone data-onclick="addTransaction" ></vr-button>
+        <vr-button type="Add" standalone data-onclick="addTransaction" ng-show="hasAddTransaction"></vr-button>
     </vr-columns>
     <vr-columns width="1/2row" withemptyline>
         <div class="pull-right">
