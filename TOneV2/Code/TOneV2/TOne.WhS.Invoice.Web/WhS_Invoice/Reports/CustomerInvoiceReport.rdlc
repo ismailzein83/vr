@@ -1850,7 +1850,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2610,14 +2609,6 @@
         <Field Name="OriginalSaleCurrency">
           <DataField>OriginalSaleCurrency</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FromDate">
-          <DataField>FromDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ToDate">
-          <DataField>ToDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="TotalAmount">
           <DataField>TotalAmount</DataField>
