@@ -9,7 +9,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
     public class SummaryByCarrier
     {
         public string Day { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public string CarrierID { get; set; }
         public string Carrier { get; set; }
         public int? Attempts { get; set; }

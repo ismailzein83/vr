@@ -13,30 +13,21 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
-            List<string> listGrouping = new List<string>();
-            listGrouping.Add("Day");
 
-            List<string> listMeasures = new List<string>();
-            listMeasures.Add("NumberOfCalls");
-            listMeasures.Add("DurationNet");
-
-
+            var listGrouping = new List<string> { "Day" };
+            var listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
 
             if (parameters.IsCost)
             {
-
                 listGrouping.Add("Supplier");
                 listMeasures.Add("CostDuration");
                 listMeasures.Add("CostNet");
-
             }
-
             else
             {
                 listGrouping.Add("Customer");
                 listMeasures.Add("SaleDuration");
                 listMeasures.Add("SaleNet");
-
             }
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -85,26 +76,29 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     var dayValue = analyticRecord.DimensionValues[0];
                     if (dayValue != null)
-                        carrierSummary.Day = dayValue.Name;
+                    {
+                        DateTime outputDateTimeValue;
+                        DateTime.TryParseExact(dayValue.Name, "MMM d yyyy",
+                            System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None,
+                            out outputDateTimeValue);
 
+                        carrierSummary.Date = outputDateTimeValue;
+                        carrierSummary.Day = dayValue.Name;
+                    }
 
                     var carrierValue = analyticRecord.DimensionValues[1];
                     if (carrierValue != null)
                         carrierSummary.Carrier = carrierValue.Name;
 
                     MeasureValue calls;
-
                     analyticRecord.MeasureValues.TryGetValue("NumberOfCalls", out calls);
                     carrierSummary.Attempts = Convert.ToInt32(calls.Value ?? 0.0);
-
                     carrierSummary.AttemptsFormatted = ReportHelpers.FormatNumber(carrierSummary.Attempts);
-
 
                     MeasureValue durationNet;
                     analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
                     carrierSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
                     carrierSummary.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.DurationNet);
-
 
                     MeasureValue duration;
                     analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostDuration" : "SaleDuration", out duration);
@@ -116,14 +110,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
                     carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Net);
 
-
-
-
                     listCarrierSummary.Add(carrierSummary);
                 }
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add("CarrierSummary", listCarrierSummary.OrderBy(x => x.Carrier));
+            dataSources.Add("CarrierSummary", listCarrierSummary.OrderBy(x => x.Date));
             return dataSources;
         }
 
