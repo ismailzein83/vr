@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class ProductFamilyDetail
     {
         public ProductFamily Entity { get; set; }
+
+        public bool AllowEdit { get; set; }
     }
 }

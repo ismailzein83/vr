@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -41,19 +42,32 @@ namespace Retail.BusinessEntity.Business
 
                 filterExpression = (productDefinition) =>
                     {
-                        if (filter.AccountBEDefinitionId.HasValue && productDefinition.Settings != null && 
+                        if (filter.AccountBEDefinitionId.HasValue && productDefinition.Settings != null &&
                             filter.AccountBEDefinitionId.Value != productDefinition.Settings.AccountBEDefinitionId)
                             return false;
+
+                        if (filter.Filters != null && !CheckIfFilterIsMatch(productDefinition, filter.Filters))
+                            return false;
+
                         return true;
                     };
             }
-            
+
             if (cachedProductDefinitions == null)
                 cachedProductDefinitions = this.GetCachedProductDefinitions();
 
             return cachedProductDefinitions.MapRecords(ProductDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
-
+        private bool CheckIfFilterIsMatch(ProductDefinition productDefinition, List<IProductDefinitionFilter> filters)
+        {
+            var context = new ProductDefinitionFilterContext { ProductDefinitionId = productDefinition.VRComponentTypeId };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
         public IEnumerable<ProductDefinitionConfig> GetProductDefinitionExtendedSettingsConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
@@ -75,6 +89,85 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
+        #region Security
+        
+        public bool DoesUserHaveViewProductDefinitions(int userId)
+        {
+            return GetViewAllowedProductDefinitions(userId).Count > 0;
+        }
+        public bool DoesUserHaveViewProductDefinitions()
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return GetViewAllowedProductDefinitions(userId).Count > 0;
+        }
+        public HashSet<Guid> GetViewAllowedProductDefinitions()
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return GetViewAllowedProductDefinitions(userId);
+        }
+        public HashSet<Guid> GetViewAllowedProductDefinitions(int userId)
+        {
+            HashSet<Guid> ids = new HashSet<Guid>();
+            var allProducts = this.GetCachedProductDefinitions();
+            foreach (var p in allProducts)
+            {
+                if (DoesUserHaveViewProductDefinition( p.Key ,userId))
+                    ids.Add(p.Key);
+            }
+            return ids;
+        }
+      
+        public bool DoesUserHaveViewProductDefinition(Guid productDefinitionId, int userId)
+        {
+            return DoesUserHaveAccessToProductDef(productDefinitionId, userId, new AccountBEDefinitionManager().DoesUserHaveViewProductAccess);
+        }
+        public bool DoesUserHaveAddProductDefinitions()
+        {
+            return GetdAddAllowedProductDefinitions().Count > 0;
+        }
+        public HashSet<Guid> GetdAddAllowedProductDefinitions()
+        {
+            HashSet<Guid> ids = new HashSet<Guid>();
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var allProducts = this.GetCachedProductDefinitions();
+            foreach (var p in allProducts)
+            {
+                if (DoesUserHaveAddProductDefinitions(p.Key, userId))
+                    ids.Add(p.Key);
+            }
+            return ids;
+        }
+        public bool DoesUserHaveAddProductDefinitions(Guid productDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAddProductDefinitions(productDefinitionId, userId);
+        }
+
+        public bool DoesUserHaveAddProductDefinitions(Guid productDefinitionId, int userId)
+        {
+            return DoesUserHaveAccessToProductDef(productDefinitionId, userId, new AccountBEDefinitionManager().DoesUserHaveAddProductAccess);
+        }
+        public bool DoesUserHaveEditProductDefinitions(Guid productDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveEditProductDefinitions(productDefinitionId, userId);
+        }
+
+        public bool DoesUserHaveEditProductDefinitions(Guid productDefinitionId, int userId)
+        {
+            return DoesUserHaveAccessToProductDef(productDefinitionId, userId, new AccountBEDefinitionManager().DoesUserHaveEditProductAccess);
+        }
+
+        public bool DoesUserHaveAccessToProductDef(Guid productDefinitionId, int userId, Func<int, Guid, bool> doesUserHaveProductAccessOnAccDef)
+        {
+            var product = GetProductDefinition(productDefinitionId);
+            if (product != null && product.Settings != null && product.Settings.AccountBEDefinitionId != null)
+                return doesUserHaveProductAccessOnAccDef(userId, product.Settings.AccountBEDefinitionId);
+            return true;
+        }
+
+        #endregion
+
         #region Private Methods
 
         private Dictionary<Guid, ProductDefinition> GetCachedProductDefinitionsWithHidden()
@@ -90,7 +183,7 @@ namespace Retail.BusinessEntity.Business
                 var includedProductDefinitions = new Dictionary<Guid, ProductDefinition>();
                 VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
                 Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionProductDefinition> visibleProductDefinitionsById;
-                
+
                 var allProductDefinitions = this.GetCachedProductDefinitionsWithHidden();
 
                 if (retailBEVisibilityManager.ShouldApplyProductDefinitionsVisibility(out visibleProductDefinitionsById))

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsService', 'Retail_BE_ProductFamilyAPIService', 'Retail_BE_ProductFamilyService', 'Retail_BE_ProductService',
-    function (VRNotificationService, VRUIUtilsService, Retail_BE_ProductFamilyAPIService, Retail_BE_ProductFamilyService, Retail_BE_ProductService) {
+app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsService', 'Retail_BE_ProductFamilyAPIService', 'Retail_BE_ProductFamilyService', 'Retail_BE_ProductService','Retail_BE_ProductAPIService','UtilsService',
+    function (VRNotificationService, VRUIUtilsService, Retail_BE_ProductFamilyAPIService, Retail_BE_ProductFamilyService, Retail_BE_ProductService, Retail_BE_ProductAPIService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -27,7 +27,7 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.productFamily = [];
-                $scope.scopeModel.menuActions = [];
+               // $scope.scopeModel.menuActions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -94,6 +94,9 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
                             };
 
                             Retail_BE_ProductService.addProduct(onProductAdded, productFamily.Entity.ProductFamilyId);
+                        },
+                        haspermission: function () {
+                            return Retail_BE_ProductAPIService.HasAddProductPermission();
                         }
                     }];
 
@@ -104,11 +107,15 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.menuActions.push({
+                $scope.scopeModel.menuActions = [{
                     name: 'Edit',
                     clicked: editProductFamily,
-                    haspermission: hasEditProductFamilyPermission
-                });
+                    haspermission: function (dataItem) {
+                        var hasPermissionDummyDeferred = UtilsService.createPromiseDeferred();
+                        hasPermissionDummyDeferred.resolve(dataItem.AllowEdit);
+                        return hasPermissionDummyDeferred.promise;
+                    }
+                }]
             }
             function editProductFamily(productFamilyItem) {
                 var onProductFamilyUpdated = function (updatedProductFamily) {
@@ -118,8 +125,6 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
 
                 Retail_BE_ProductFamilyService.editProductFamily(productFamilyItem.Entity.ProductFamilyId, onProductFamilyUpdated);
             }
-            function hasEditProductFamilyPermission() {
-                return Retail_BE_ProductFamilyAPIService.HasUpdateProductFamilyPermission()
-            }
+          
         }
     }]);

@@ -6,20 +6,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
     public class ProductFamilyManager
     {
+      
+        #region Ctor/Fields
+
+        static ProductDefinitionManager _productDefinitionManager;
+        public ProductFamilyManager()
+        {
+            _productDefinitionManager = new ProductDefinitionManager();
+        }
+
+        #endregion
+
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<ProductFamilyDetail> GetFilteredProductFamilies(Vanrise.Entities.DataRetrievalInput<ProductFamilyQuery> input)
         {
             var allProductFamilies = GetCachedProductFamilies();
+            var allowedProduct = _productDefinitionManager.GetViewAllowedProductDefinitions();
+
             Func<ProductFamily, bool> filterExpression =
                 (x) =>
                 {
                     if (input.Query != null && input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                        return false;
+                    if (allowedProduct.Count > 0 && !allowedProduct.Contains(x.Settings.ProductDefinitionId))
                         return false;
 
                     return true;
@@ -109,14 +125,19 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<ProductFamilyInfo> GetProductFamiliesInfo(ProductFamilyFilter filter)
         {
             Func<ProductFamily, bool> filterExpression = null;
-            //if (filter != null)
-            //{
-            //    filterExpression = (productFamily) =>
-            //    {
+            if (filter != null)
+            {
+              
 
-            //        return true;
-            //    };
-            //}
+                filterExpression = (productFamily) =>
+                {
+
+
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(productFamily, filter.Filters))
+                        return false;
+                    return true;
+                };
+            }
 
             return this.GetCachedProductFamilies().MapRecords(ProductFamilyInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
@@ -130,7 +151,7 @@ namespace Retail.BusinessEntity.Business
 
         //    return productFamily.Settings.Packages.Values.Select(itm => itm.PackageId);
         //}
-
+        
         #endregion
 
         #region Private Classes
@@ -160,6 +181,18 @@ namespace Retail.BusinessEntity.Business
                });
         }
 
+        private bool CheckIfFilterIsMatch(ProductFamily productFamily, List<IProductFamilyFilter> filters)
+        {
+            var context = new ProductFamilyFilterContext { ProductFamilyId = productFamily.ProductFamilyId };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
+
+
         #endregion
 
         #region Mappers
@@ -170,6 +203,7 @@ namespace Retail.BusinessEntity.Business
             {
                 Entity = productFamily
             };
+            productFamilyDetail.AllowEdit = _productDefinitionManager.DoesUserHaveEditProductDefinitions(productFamily.Settings.ProductDefinitionId);
             return productFamilyDetail;
         }
 
@@ -186,7 +220,58 @@ namespace Retail.BusinessEntity.Business
             };
             return productFamilyInfo;
         }
-
+    
         #endregion
+
+        #region Security
+        public HashSet<int> GetViewAllowedProductFamilies()
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return GetViewAllowedProductFamilies(userId);
+        }
+        public HashSet<int> GetViewAllowedProductFamilies(int userId)
+        {
+            HashSet<int> ids = new HashSet<int>();
+            var allProducts = this.GetCachedProductFamilies();
+            foreach (var p in allProducts)
+            {
+                if (DoesUserHaveViewAccess(userId, p.Key))
+                    ids.Add(p.Key);
+            }
+            return ids;
+        }
+        public bool DoesUserHaveViewAccess(int UserId, int ProductFamilyId)
+        {            
+            return DoesUserHaveAccessToProductDef(ProductFamilyId, UserId, new ProductDefinitionManager().DoesUserHaveViewProductDefinition);
+        }
+
+        public bool DoesUserHaveAddProductDefinitions(int productFamilyId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAddProductDefinitions(productFamilyId, userId);
+        }
+        public bool DoesUserHaveAddProductDefinitions(int productFamilyId, int userId)
+        {
+            return DoesUserHaveAccessToProductDef(productFamilyId, userId, new ProductDefinitionManager().DoesUserHaveAddProductDefinitions);
+        }
+
+        public bool DoesUserHaveEditProductDefinitions(int productFamilyId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveEditProductDefinitions(productFamilyId, userId);
+        }
+        public bool DoesUserHaveEditProductDefinitions(int productFamilyId, int userId)
+        {
+            return DoesUserHaveAccessToProductDef(productFamilyId, userId, new ProductDefinitionManager().DoesUserHaveEditProductDefinitions);
+        }
+        public bool DoesUserHaveAccessToProductDef(int productFamilyId, int userId, Func<Guid, int, bool> doesUserHaveProductAccessOnAccDef)
+        {
+            var product = GetProductFamily(productFamilyId);
+            if (product != null && product.Settings != null && product.Settings.ProductDefinitionId != null)
+                return doesUserHaveProductAccessOnAccDef(product.Settings.ProductDefinitionId, userId);
+            return true;
+        }
+        #endregion
+
     }
 }

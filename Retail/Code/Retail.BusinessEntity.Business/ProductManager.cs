@@ -7,25 +7,37 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
- 
+
 namespace Retail.BusinessEntity.Business
 {
     public class ProductManager : IBusinessEntityManager
     {
+        #region Ctor/Fields
+
+        static ProductFamilyManager _productFamilyManager;
+        public ProductManager()
+        {
+            _productFamilyManager = new ProductFamilyManager();
+        }
+
+        #endregion
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<ProductDetail> GetFilteredProducts(Vanrise.Entities.DataRetrievalInput<ProductQuery> input)
         {
             var allProducts = GetCachedProducts();
+            var allowedProduct = _productFamilyManager.GetViewAllowedProductFamilies();
+
             Func<Product, bool> filterExpression = (product) =>
                 {
                     if (input.Query != null && input.Query.Name != null && !product.Name.ToLower().Contains(input.Query.Name.ToLower()))
                         return false;
 
-                    if (input.Query != null && input.Query.ProductFamilyId.HasValue && product.Settings != null 
+                    if (input.Query != null && input.Query.ProductFamilyId.HasValue && product.Settings != null
                         && input.Query.ProductFamilyId.Value != product.Settings.ProductFamilyId)
                         return false;
-
+                    if (allowedProduct.Count > 0 && !allowedProduct.Contains(product.Settings.ProductFamilyId))
+                        return false;
                     return true;
                 };
 
@@ -72,7 +84,7 @@ namespace Retail.BusinessEntity.Business
 
             ProductEditorRuntime editorRuntime = new ProductEditorRuntime();
             editorRuntime.Entity = GetProduct(productId);
- 
+
             return editorRuntime;
         }
 
@@ -201,6 +213,10 @@ namespace Retail.BusinessEntity.Business
             {
                 Entity = product
             };
+            bool allowEdit = true;
+            if (product != null && product.Settings != null)
+                allowEdit = _productFamilyManager.DoesUserHaveEditProductDefinitions(product.Settings.ProductFamilyId);
+            productDetail.AllowEdit = allowEdit;
             return productDetail;
         }
 
@@ -262,4 +278,3 @@ namespace Retail.BusinessEntity.Business
         #endregion
     }
 }
- 

@@ -132,7 +132,10 @@
   <ItemGroup>
     <Compile Include="AccountActionManager.cs" />
     <Compile Include="AccountBalanceManager.cs" />
+    <Compile Include="ProductFamilyAddOrEditFilter.cs" />
+    <Compile Include="ProductDefinitionAddOrEditFilter.cs" />
     <Compile Include="PackageDefinitionAddOrEditFilter.cs" />
+    <Compile Include="ProductViewSettings.cs" />
     <Compile Include="PackageViewSettings.cs" />
     <Compile Include="AccountGenericFields\AccountSourceIdGenericField.cs" />
     <Compile Include="AccountGenericFields\AccountCreatedTimeGenericField.cs" />

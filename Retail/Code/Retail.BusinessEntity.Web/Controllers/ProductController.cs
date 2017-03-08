@@ -15,11 +15,15 @@ namespace Retail.BusinessEntity.Web.Controllers
     public class ProductController : BaseAPIController
     {
         ProductManager _manager = new ProductManager();
+        ProductDefinitionManager _defManager = new ProductDefinitionManager();
+        ProductFamilyManager _familyManager = new ProductFamilyManager();
 
         [HttpPost]
         [Route("GetFilteredProducts")]
         public object GetFilteredProducts(Vanrise.Entities.DataRetrievalInput<ProductQuery> input)
         {
+            if (!_defManager.DoesUserHaveViewProductDefinitions())
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredProducts(input));
         }
 
@@ -29,18 +33,27 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetProductEditorRuntime(productId);
         }
-
+        [HttpGet]
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess()
+        {
+            return _defManager.DoesUserHaveAddProductDefinitions();
+        }
         [HttpPost]
         [Route("AddProduct")]
-        public Vanrise.Entities.InsertOperationOutput<ProductDetail> AddProduct(Product product)
+        public object AddProduct(Product product)
         {
+            if (!_familyManager.DoesUserHaveAddProductDefinitions(product.Settings.ProductFamilyId))
+                return GetUnauthorizedResponse();
             return _manager.AddProduct(product);
         }
 
         [HttpPost]
         [Route("UpdateProduct")]
-        public Vanrise.Entities.UpdateOperationOutput<ProductDetail> UpdateProduct(Product product)
+        public object UpdateProduct(Product product)
         {
+            if (!_familyManager.DoesUserHaveEditProductDefinitions(product.Settings.ProductFamilyId))
+                return GetUnauthorizedResponse();
             return _manager.UpdateProduct(product);
         }
 

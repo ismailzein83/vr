@@ -241,7 +241,14 @@
 
             productFamilySelectorReadyDeferred.promise.then(function () {
 
-                var productFamilyPayload = {};
+                var productFamilyPayload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Retail.BusinessEntity.Business.ProductFamilyAddOrEditFilter, Retail.BusinessEntity.Business",
+                            EditMode: isEditMode
+                        }]
+                    }
+                };
                 if (productFamilyId != undefined) {
                     productFamilyPayload.selectedIds = productFamilyId;
                 }

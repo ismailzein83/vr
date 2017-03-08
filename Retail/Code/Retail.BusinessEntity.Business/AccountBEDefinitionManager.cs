@@ -502,6 +502,20 @@ namespace Retail.BusinessEntity.Business
 
             return ids;
         }
+        public bool DoesUserHaveViewProductAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewProductRequiredPermission);
+
+        }
+        public bool DoesUserHaveAddProductAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddProductRequiredPermission);
+        }
+        public bool DoesUserHaveEditProductAccess(int userId, Guid accountBeDefinitionId)
+        {
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditProductRequiredPermission);
+
+        }
 
         #endregion
     }

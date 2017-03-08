@@ -27,7 +27,7 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.product = [];
-                $scope.scopeModel.menuActions = [];
+                //$scope.scopeModel.menuActions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -78,11 +78,15 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.menuActions.push({
-                    name: 'Edit',
-                    clicked: editProduct
-                    //haspermission: hasEditProductPermission
-                });
+                $scope.scopeModel.menuActions = function (dataItem) {
+                    var menuActions = [];
+                    if (dataItem.AllowEdit == true)
+                        menuActions.push({
+                            name: 'Edit',
+                            clicked: editProduct
+                        });
+                    return menuActions;
+                }
             }
             function editProduct(productItem) {
                 var onProductUpdated = function (updatedProduct) {
@@ -91,8 +95,5 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
 
                 Retail_BE_ProductService.editProduct(productItem.Entity.ProductId, onProductUpdated, productFamilyId);
             }
-            //function hasEditProductPermission() {
-            //    return Retail_BE_ProductAPIService.HasUpdateProductPermission()
-            //}
         }
     }]);

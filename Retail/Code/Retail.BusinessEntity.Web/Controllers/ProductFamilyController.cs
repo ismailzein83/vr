@@ -14,11 +14,14 @@ namespace Retail.BusinessEntity.Web.Controllers
     public class ProductFamilyFamilyController : BaseAPIController
     {
         ProductFamilyManager _manager = new ProductFamilyManager();
+        ProductDefinitionManager _defManager = new ProductDefinitionManager();
 
         [HttpPost]
         [Route("GetFilteredProductFamilies")]
         public object GetFilteredProductFamilies(Vanrise.Entities.DataRetrievalInput<ProductFamilyQuery> input)
         {
+            if (!_defManager.DoesUserHaveViewProductDefinitions())
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredProductFamilies(input));
         }
 
@@ -29,17 +32,29 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetProductFamilyEditorRuntime(productFamilyId);
         }
 
+        [HttpGet]
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess()
+        {
+            return _defManager.DoesUserHaveAddProductDefinitions();
+        }
+
         [HttpPost]
         [Route("AddProductFamily")]
-        public Vanrise.Entities.InsertOperationOutput<ProductFamilyDetail> AddProductFamily(ProductFamily productFamily)
+        public object AddProductFamily(ProductFamily productFamily)
         {
+            if (!_defManager.DoesUserHaveAddProductDefinitions(productFamily.Settings.ProductDefinitionId))
+                return GetUnauthorizedResponse();
+
             return _manager.AddProductFamily(productFamily);
         }
 
         [HttpPost]
         [Route("UpdateProductFamily")]
-        public Vanrise.Entities.UpdateOperationOutput<ProductFamilyDetail> UpdateProductFamily(ProductFamily productFamily)
+        public object UpdateProductFamily(ProductFamily productFamily)
         {
+            if (!_defManager.DoesUserHaveEditProductDefinitions(productFamily.Settings.ProductDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.UpdateProductFamily(productFamily);
         }
 

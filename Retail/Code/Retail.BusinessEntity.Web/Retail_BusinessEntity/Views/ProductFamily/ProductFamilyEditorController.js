@@ -98,12 +98,7 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.scopeModel.hasSaveProductFamilyPermission = function () {
-                if (isEditMode)
-                    return Retail_BE_ProductFamilyAPIService.HasUpdateProductFamilyPermission();
-                else
-                    return Retail_BE_ProductFamilyAPIService.HasAddProductFamilyPermission();
-            };
+            
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -159,7 +154,14 @@
 
             productDefinitionSelectorReadyDeferred.promise.then(function () {
 
-                var productDefinitionPayload = {};
+                var productDefinitionPayload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Retail.BusinessEntity.Business.ProductDefinitionAddOrEditFilter, Retail.BusinessEntity.Business",
+                            EditMode: isEditMode
+                        }]
+                    }
+                };
                 if (productFamilyEntity != undefined && productFamilyEntity.Settings != undefined) {
                     productDefinitionPayload.selectedIds = productFamilyEntity.Settings.ProductDefinitionId;
                 }

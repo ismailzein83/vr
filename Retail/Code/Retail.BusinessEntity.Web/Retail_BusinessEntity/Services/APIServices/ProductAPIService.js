@@ -23,8 +23,7 @@
         }
 
         function HasAddProductPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddProduct']));
-
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'));
         }
 
         function UpdateProduct(product) {

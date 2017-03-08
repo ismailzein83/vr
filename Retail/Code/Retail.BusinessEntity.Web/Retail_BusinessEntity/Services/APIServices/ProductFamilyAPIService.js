@@ -23,7 +23,7 @@
         }
 
         function HasAddProductFamilyPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['AddProductFamily']));
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'));
 
         }
 
@@ -31,9 +31,6 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateProductFamily'), product);
         }
 
-        function HasUpdateProductFamilyPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_BE_ModuleConfig.moduleName, controllerName, ['UpdateProductFamily']));
-        }
 
         function GetProductFamiliesInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetProductFamiliesInfo"), {
@@ -47,7 +44,6 @@
             AddProductFamily: AddProductFamily,
             HasAddProductFamilyPermission: HasAddProductFamilyPermission,
             UpdateProductFamily: UpdateProductFamily,
-            HasUpdateProductFamilyPermission: HasUpdateProductFamilyPermission,
             GetProductFamiliesInfo: GetProductFamiliesInfo
         });
     }
