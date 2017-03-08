@@ -92,9 +92,7 @@ app.directive('vrCommonActionauditlkupSelector', ['VRCommon_ActionAuditLKUPAPISe
             };
 
             api.getSelectedIds = function () {
-                var id = VRUIUtilsService.getIdSelectedIds('VRActionAuditLKUPId', attrs, ctrl);
-                alert(id);
-                return id;
+                return VRUIUtilsService.getIdSelectedIds('VRActionAuditLKUPId', attrs, ctrl);
             };
 
             if (ctrl.onReady != null)
