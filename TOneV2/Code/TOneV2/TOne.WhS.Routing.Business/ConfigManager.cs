@@ -8,6 +8,17 @@ namespace TOne.WhS.Routing.Business
     public class ConfigManager
     {
         #region public methods
+
+        public int? GetCustomerRouteMaxDOP()
+        {
+            return GetCustomerRouteBuildConfiguration().MaxDOP;
+        }
+
+        public int? GetProductRouteMaxDOP()
+        {
+            return GetProductRouteBuildConfiguration().MaxDOP;
+        }
+
         public int GetCustomerRouteIndexesCommandTimeoutInSeconds()
         {
             return GetCustomerRouteBuildConfiguration().IndexesCommandTimeoutInMinutes * 60;

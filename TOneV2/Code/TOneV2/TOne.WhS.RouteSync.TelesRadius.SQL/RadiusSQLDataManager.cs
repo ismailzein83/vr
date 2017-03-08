@@ -87,7 +87,7 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
             ApplyRadiusRoutesForDB(preparedItemsForApply);
         }
 
-        public void SwapTables()
+        public void SwapTables(ISwapTableContext context)
         {
             ExecuteNonQueryText("sp_RadiusRoute_SwapTables", null);
         }

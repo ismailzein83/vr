@@ -16,10 +16,13 @@
         <vr-columns colnum="2">
             <vr-switch value="ctrl.customerRouteAddBlockedOptions" label="Add Blocked Options"></vr-switch>
         </vr-columns>
-        <vr-columns colnum="2">
+        <vr-columns colnum="3">
             <vr-textbox value="ctrl.customerRouteNumberOfOptions" type="number" label="Number Of Options" isrequired minvalue="1" decimalprecision="0"></vr-textbox>
         </vr-columns>
-        <vr-columns colnum="2">
+        <vr-columns colnum="3">
+            <vr-textbox value="ctrl.customerRouteMaxDOP" type="number" label="Maximum Degree Of Parallelism" minvalue="1" decimalprecision="0"></vr-textbox>
+        </vr-columns>
+        <vr-columns colnum="3">
             <vr-textbox value="ctrl.customerRouteIndexCommandTimeout" type="number" label="DB Indexes Timeout(Mins)" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
         </vr-columns>
         <vr-columns colnum="1" withemptyline haschildcolumns>
@@ -32,7 +35,10 @@
         <vr-columns colnum="2">
             <vr-switch value="ctrl.productRouteAddBlockedOptions" label="Add Blocked Options"></vr-switch>
         </vr-columns>
-        <vr-columns colnum="2">
+        <vr-columns colnum="3">
+            <vr-textbox value="ctrl.productRouteMaxDOP" type="number" label="Maximum Degree Of Parallelism" minvalue="1" decimalprecision="0"></vr-textbox>
+        </vr-columns>
+        <vr-columns colnum="3">
             <vr-textbox value="ctrl.productRouteIndexCommandTimeout" type="number" label="DB Indexes Timeout(Mins)" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
         </vr-columns>
         <vr-columns colnum="1" withemptyline haschildcolumns>

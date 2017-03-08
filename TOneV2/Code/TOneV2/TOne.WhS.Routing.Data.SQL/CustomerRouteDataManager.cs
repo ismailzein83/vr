@@ -127,36 +127,41 @@ namespace TOne.WhS.Routing.Data.SQL
                 });
         }
 
-        public void FinalizeCurstomerRoute(Action<string> trackStep, int commandTimeoutInSeconds)
+        public void FinalizeCurstomerRoute(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP)
         {
+            string maxDOPSyntax = maxDOP.HasValue ? string.Format(",MAXDOP={0}", maxDOP.Value) : "";
             string query;
 
             trackStep("Starting create Index on CustomerRoute table (CustomerId).");
-            query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_CustomerId] ON dbo.CustomerRoute
-                    (
-                          CustomerID ASC
-                    )";
+            query = string.Format(query_CreateIX_CustomerRoute_CustomerId, maxDOPSyntax);
             ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Index on CustomerRoute table (CustomerId).");
 
             trackStep("Starting create Index on CustomerRoute table (Code).");
-            query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_Code] ON dbo.CustomerRoute
-                    (
-                          Code ASC
-                    )";
+            query = string.Format(query_CreateIX_CustomerRoute_Code, maxDOPSyntax);
             ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Index on CustomerRoute table (Code).");
 
             trackStep("Starting create Index on CustomerRoute table (SaleZoneId).");
-            query = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_SaleZone] ON dbo.CustomerRoute
-                    (
-                          SaleZoneId ASC
-                    )";
+            query = string.Format(query_CreateIX_CustomerRoute_SaleZone, maxDOPSyntax);
             ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Index on CustomerRoute table (SaleZoneId).");
         }
 
+        const string query_CreateIX_CustomerRoute_CustomerId = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_CustomerId] ON dbo.CustomerRoute
+                                                                (
+                                                                      CustomerID ASC
+                                                                )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
 
+        const string query_CreateIX_CustomerRoute_Code = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_Code] ON dbo.CustomerRoute
+                                                              (
+                                                                      Code ASC
+                                                              )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
+
+        const string query_CreateIX_CustomerRoute_SaleZone = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_SaleZone] ON dbo.CustomerRoute
+                                                                (
+                                                                      SaleZoneId ASC
+                                                                )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
         private string SerializeOptions(List<RouteOption> options)
         {
             StringBuilder str = new StringBuilder();

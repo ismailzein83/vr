@@ -22,12 +22,13 @@ namespace TOne.WhS.Routing.BP.Activities
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(this.RoutingDatabaseId.Get(context));
 
             ConfigManager routingConfigManager = new ConfigManager();
-            int commandTimeoutInSeconds = routingConfigManager.GetCustomerRouteIndexesCommandTimeoutInSeconds();
+            int commandTimeoutInSeconds = routingConfigManager.GetProductRouteIndexesCommandTimeoutInSeconds();
+            int? maxDOP = routingConfigManager.GetProductRouteMaxDOP();
 
             dataManager.FinalizeProductRoute((message) => 
             {
                 context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
-            }, commandTimeoutInSeconds);
+            }, commandTimeoutInSeconds, maxDOP);
         }
     }
 }

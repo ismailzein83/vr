@@ -32,11 +32,12 @@ namespace TOne.WhS.Routing.BP.Activities
 
             ConfigManager routingConfigManager = new ConfigManager();
             int commandTimeoutInSeconds = routingConfigManager.GetCustomerRouteIndexesCommandTimeoutInSeconds();
+            int? maxDOP = routingConfigManager.GetCustomerRouteMaxDOP();
 
             dataManager.FinalizeCustomerRouteDatabase((message) =>
             {
                 handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
-            }, commandTimeoutInSeconds);
+            }, commandTimeoutInSeconds, maxDOP);
             return new FinalizeCustomerRouteDatabaseOutput();
         }
 

@@ -128,9 +128,9 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         }
         public void PrepareTables()
         {
-            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManagers, dataManagerIndex) =>
+            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManager, dataManagerIndex) =>
             {
-                mvtsRadiusSQLDataManagers.PrepareTables();
+                mvtsRadiusSQLDataManager.PrepareTables();
             });
         }
 
@@ -147,14 +147,17 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             ApplyRadiusRoutesForDB(preparedItemsForApply);
         }
 
-        public void SwapTables()
+        public void SwapTables(ISwapTableContext context)
         {
-            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManagers, dataManagerIndex) =>
+            ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManager, dataManagerIndex) =>
             {
-                mvtsRadiusSQLDataManagers.SwapTables();
+                string[] args = new string[] { (dataManagerIndex + 1).ToString(), context.SwitchName };
+
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finalizing Database {0} for Switch '{1}'...", args);
+                mvtsRadiusSQLDataManager.SwapTables(context.IndexesCommandTimeoutInSeconds);
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Database {0} for Switch '{1}' is finalized", args);
             });
         }
-
 
         #endregion
 
@@ -240,7 +243,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             query.AppendLine(query_CreateRadiusRoutePercentageTempTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
-        public void SwapTables()
+        public void SwapTables(int indexesCommandTimeoutInSeconds)
         {
             StringBuilder query = new StringBuilder();
 
@@ -248,7 +251,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             query.AppendLine(query_SwapRadiusRouteTable);
             query.AppendLine(query_SwapRadiusRoutePercentageTable);
 
-            ExecuteNonQueryText(query.ToString(), null);
+            ExecuteNonQueryText(query.ToString(), null, indexesCommandTimeoutInSeconds);
         }
 
         #region Constants
@@ -337,6 +340,5 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 	                            ) WITH(STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON {0}) ON [PRIMARY]";
 
         #endregion
-
     }
 }

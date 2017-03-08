@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.Entities
 {
@@ -55,6 +56,12 @@ namespace TOne.WhS.RouteSync.Entities
         RouteRangeType? RouteRangeType { get; }
 
         SwitchRouteSyncInitializationData InitializationData { get; }
+
+        void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args);
+
+        string SwitchName { get; }
+
+        int IndexesCommandTimeoutInSeconds { get; }
     }
 
     public interface ISwitchRouteSynchronizerPrepareDataForApplyContext

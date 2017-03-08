@@ -56,6 +56,7 @@
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="BusinessManagers\IRouteSyncDefinitionManager.cs" />
+    <Compile Include="ISwapTableContext.cs" />
     <Compile Include="RouteEntities\ConvertedRoute.cs" />
     <Compile Include="RouteEntities\ConvertedRouteBatch.cs" />
     <Compile Include="RouteEntities\RouteBatch.cs" />

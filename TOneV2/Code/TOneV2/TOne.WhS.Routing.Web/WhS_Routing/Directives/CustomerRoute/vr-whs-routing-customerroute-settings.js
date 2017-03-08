@@ -39,11 +39,13 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                         ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
                         ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.AddBlockedOptions;
                         ctrl.customerRouteIndexCommandTimeout = payload.CustomerRoute.IndexesCommandTimeoutInMinutes;
+                        ctrl.customerRouteMaxDOP = payload.CustomerRoute.MaxDOP;
                     }
 
                     if (payload.ProductRoute != undefined) {
                         ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
                         ctrl.productRouteIndexCommandTimeout = payload.ProductRoute.IndexesCommandTimeoutInMinutes;
+                        ctrl.productRouteMaxDOP = payload.ProductRoute.MaxDOP;
                     }
 
                     if (payload.IncludedRules != undefined) {
@@ -61,12 +63,14 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                         $type: "TOne.WhS.Routing.Entities.CustomerRouteBuildConfiguration, TOne.WhS.Routing.Entities",
                         NumberOfOptions: ctrl.customerRouteNumberOfOptions,
                         AddBlockedOptions: ctrl.customerRouteAddBlockedOptions,
-                        IndexesCommandTimeoutInMinutes: ctrl.customerRouteIndexCommandTimeout
+                        IndexesCommandTimeoutInMinutes: ctrl.customerRouteIndexCommandTimeout,
+                        MaxDOP: ctrl.customerRouteMaxDOP
                     },
                     ProductRoute: {
                         $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
                         AddBlockedOptions: ctrl.productRouteAddBlockedOptions,
-                        IndexesCommandTimeoutInMinutes: ctrl.productRouteIndexCommandTimeout
+                        IndexesCommandTimeoutInMinutes: ctrl.productRouteIndexCommandTimeout,
+                        MaxDOP: ctrl.productRouteMaxDOP
                     },
                     IncludedRules: {
                         $type: "TOne.WhS.Routing.Entities.IncludedRulesConfiguration, TOne.WhS.Routing.Entities",

@@ -35,13 +35,17 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.routeBatchSize = payload.data.RouteSyncProcess.RouteBatchSize;
+                        $scope.scopeModel.indexCommandTimeoutInMinutes = payload.data.RouteSyncProcess.IndexCommandTimeoutInMinutes;
                     }
                 };
 
                 api.getData = function () {
                     var data = {
                         $type: "TOne.WhS.RouteSync.Entities.RouteSyncSettings, TOne.WhS.RouteSync.Entities",
-                        RouteSyncProcess: { RouteBatchSize: $scope.scopeModel.routeBatchSize }
+                        RouteSyncProcess: {
+                            RouteBatchSize: $scope.scopeModel.routeBatchSize,
+                            IndexCommandTimeoutInMinutes: $scope.scopeModel.indexCommandTimeoutInMinutes
+                        }
                     };
                     return data;
                 };

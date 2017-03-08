@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Entities
         public int NumberOfOptions { get; set; }
 
         public int IndexesCommandTimeoutInMinutes { get; set; }
+
+        public int? MaxDOP { get; set; }
     }
 
     public class ProductRouteBuildConfiguration
@@ -25,6 +27,8 @@ namespace TOne.WhS.Routing.Entities
         public bool AddBlockedOptions { get; set; }
 
         public int IndexesCommandTimeoutInMinutes { get; set; }
+
+        public int? MaxDOP { get; set; }
     }
 
     public class IncludedRulesConfiguration

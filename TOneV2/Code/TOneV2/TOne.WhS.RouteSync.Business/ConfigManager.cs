@@ -5,6 +5,11 @@ namespace TOne.WhS.RouteSync.Business
 {
     public class ConfigManager
     {
+        public int GetRouteSyncProcessIndexesCommandTimeoutInSeconds()
+        {
+            RouteSyncProcess routeSyncProcess = GetRouteSyncProcessSettings();
+            return routeSyncProcess.IndexCommandTimeoutInMinutes * 60;
+        }
         public SwitchInfoGetter GetSwitchInfoGetter()
         {
             Vanrise.Common.Business.SettingManager settingManager = new Vanrise.Common.Business.SettingManager();

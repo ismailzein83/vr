@@ -149,7 +149,8 @@ namespace TOne.WhS.RouteSync.MVTSRadius
 
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
-            this.DataManager.SwapTables();
+            SwapTableContext swapTableContext = new SwapTableContext() { WriteTrackingMessage = context.WriteTrackingMessage, SwitchName = context.SwitchName, IndexesCommandTimeoutInSeconds = context.IndexesCommandTimeoutInSeconds };
+            this.DataManager.SwapTables(swapTableContext);
         }
 
         public class CarrierMapping

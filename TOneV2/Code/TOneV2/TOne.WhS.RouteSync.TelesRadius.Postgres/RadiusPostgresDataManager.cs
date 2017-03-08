@@ -20,7 +20,7 @@ namespace TOne.WhS.RouteSync.TelesRadius.Postgres
             throw new NotImplementedException();
         }
 
-        public void SwapTables()
+        public void SwapTables(ISwapTableContext context)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(""))
             {

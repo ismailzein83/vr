@@ -48,10 +48,10 @@ namespace TOne.WhS.Routing.Data.SQL
 		}
 
 
-		public void FinalizeCustomerRouteDatabase(Action<string> trackStep, int commandTimeoutInSeconds)
+        public void FinalizeCustomerRouteDatabase(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP)
 		{
 			CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager() { RoutingDatabase = this.RoutingDatabase };
-            customerRouteDataManager.FinalizeCurstomerRoute(trackStep, commandTimeoutInSeconds);
+            customerRouteDataManager.FinalizeCurstomerRoute(trackStep, commandTimeoutInSeconds, maxDOP);
 		}
 
 		/// <summary>
