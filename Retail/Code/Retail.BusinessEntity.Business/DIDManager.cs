@@ -177,6 +177,7 @@ namespace Retail.BusinessEntity.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
+                    SheetName = "DIDs",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
