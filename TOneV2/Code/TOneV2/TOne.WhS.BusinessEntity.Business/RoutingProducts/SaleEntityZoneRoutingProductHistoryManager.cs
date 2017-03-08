@@ -54,7 +54,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
                     return GetSPZoneRPHistoryRecords(input.Query.OwnerId, zoneIds);
                 else
-                    return GetCustomerZoneRPHistoryRecords(input.Query.OwnerId, zoneIds);
+                    return GetCustomerZoneRPHistoryRecords(input.Query.OwnerId, zoneIds, input.Query.CountryId);
             }
 
             public override SaleEntityZoneRoutingProductHistoryRecordDetail EntityDetailMapper(SaleEntityZoneRoutingProductHistoryRecord entity)
@@ -113,10 +113,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             #region Customer Methods
 
-            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetCustomerZoneRPHistoryRecords(int customerId, IEnumerable<long> zoneIds)
+            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetCustomerZoneRPHistoryRecords(int customerId, IEnumerable<long> zoneIds, int countryId)
             {
                 IEnumerable<int> spIds;
                 Dictionary<int, List<ProcessedCustomerSellingProduct>> spAssignmentsBySP = GetSPAssignmentsBySP(customerId, out spIds);
+                IEnumerable<CustomerCountry2> countries = GetCustomerCountries(customerId, countryId);
 
                 var rpListsBySource = new Dictionary<SaleEntityZoneRoutingProductSource, IEnumerable<SaleEntityZoneRoutingProductHistoryRecord>>();
                 ISaleEntityRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
@@ -124,15 +125,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (_orderedRPSources.Contains(SaleEntityZoneRoutingProductSource.ProductDefault))
                 {
                     Dictionary<int, List<DefaultRoutingProduct>> spDefaultRPsBySP = GetAllSPDefaultRPsBySP(dataManager, spIds);
-                    IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> intersectedSPDefaultRPs = GetIntersectedSPDefaultRPs(spIds, spAssignmentsBySP, spDefaultRPsBySP);
-                    rpListsBySource.Add(SaleEntityZoneRoutingProductSource.ProductDefault, intersectedSPDefaultRPs);
+                    IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> spIntersectedDefaultRPs = GetSPIntersectedDefaultRPs(spIds, spAssignmentsBySP, spDefaultRPsBySP);
+                    IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> countryIntersectedDefaultRPs = GetCountryIntersectedRPs(countries, spIntersectedDefaultRPs);
+                    rpListsBySource.Add(SaleEntityZoneRoutingProductSource.ProductDefault, countryIntersectedDefaultRPs);
                 }
 
                 if (_orderedRPSources.Contains(SaleEntityZoneRoutingProductSource.ProductZone))
                 {
                     Dictionary<int, List<SaleZoneRoutingProduct>> spZoneRPsBySP = GetAllZoneRPsBySP(dataManager, spIds, zoneIds);
-                    IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> intersectedSPZoneRPs = GetIntersectedSPZoneRPs(spIds, spAssignmentsBySP, spZoneRPsBySP);
-                    rpListsBySource.Add(SaleEntityZoneRoutingProductSource.ProductZone, intersectedSPZoneRPs);
+                    IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> spIntersectedZoneRPs = GetSPIntersectedZoneRPs(spIds, spAssignmentsBySP, spZoneRPsBySP);
+                    IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> countryIntersectedZoneRPs = GetCountryIntersectedRPs(countries, spIntersectedZoneRPs);
+                    rpListsBySource.Add(SaleEntityZoneRoutingProductSource.ProductZone, countryIntersectedZoneRPs);
                 }
 
                 if (_orderedRPSources.Contains(SaleEntityZoneRoutingProductSource.CustomerDefault))
@@ -181,6 +184,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 return spAssignmentsBySP;
             }
 
+            private IEnumerable<CustomerCountry2> GetCustomerCountries(int customerId, int countryId)
+            {
+                IEnumerable<CustomerCountry2> allCountries = new CustomerCountryManager().GetCustomerCountries(customerId);
+
+                if (allCountries == null || allCountries.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("No Countries have ever been sold to Customer '{0}'", customerId));
+
+                IEnumerable<CustomerCountry2> targetCountries = allCountries.FindAllRecords(x => x.CountryId == countryId);
+
+                if (targetCountries == null || targetCountries.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Country '{0}' has never been sold to Customer '{0}'", countryId, customerId));
+
+                return targetCountries;
+            }
+
             private Dictionary<int, List<DefaultRoutingProduct>> GetAllSPDefaultRPsBySP(ISaleEntityRoutingProductDataManager dataManager, IEnumerable<int> spIds)
             {
                 IEnumerable<DefaultRoutingProduct> spDefaultRPs = dataManager.GetAllDefaultRoutingProductsBySellingProducts(spIds);
@@ -206,7 +224,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return spDefaultRPsBySP;
             }
 
-            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetIntersectedSPDefaultRPs(IEnumerable<int> spIds, Dictionary<int, List<ProcessedCustomerSellingProduct>> spAssignmentsBySP, Dictionary<int, List<DefaultRoutingProduct>> spDefaultRPsBySP)
+            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetSPIntersectedDefaultRPs(IEnumerable<int> spIds, Dictionary<int, List<ProcessedCustomerSellingProduct>> spAssignmentsBySP, Dictionary<int, List<DefaultRoutingProduct>> spDefaultRPsBySP)
             {
                 if (spDefaultRPsBySP == null || spDefaultRPsBySP.Count == 0)
                     return null;
@@ -256,7 +274,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return spZoneRPsBySP;
             }
 
-            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetIntersectedSPZoneRPs(IEnumerable<int> spIds, Dictionary<int, List<ProcessedCustomerSellingProduct>> spAssignmentsBySP, Dictionary<int, List<SaleZoneRoutingProduct>> spZoneRPsBySP)
+            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetSPIntersectedZoneRPs(IEnumerable<int> spIds, Dictionary<int, List<ProcessedCustomerSellingProduct>> spAssignmentsBySP, Dictionary<int, List<SaleZoneRoutingProduct>> spZoneRPsBySP)
             {
                 if (spZoneRPsBySP == null || spZoneRPsBySP.Count == 0)
                     return null;
@@ -279,6 +297,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
 
                 return allIntersectedSPZoneRPs.OrderBy(x => x.BED);
+            }
+
+            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetCountryIntersectedRPs(IEnumerable<CustomerCountry2> countries, IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> spIntersectedRPs)
+            {
+                if (spIntersectedRPs == null || spIntersectedRPs.Count() == 0)
+                    return null;
+
+                List<CustomerCountry2> countriesAsList = countries.ToList();
+                List<SaleEntityZoneRoutingProductHistoryRecord> spIntersectedRPsAsList = spIntersectedRPs.ToList();
+
+                return Vanrise.Common.Utilities.GetQIntersectT<CustomerCountry2, SaleEntityZoneRoutingProductHistoryRecord, SaleEntityZoneRoutingProductHistoryRecord>(countriesAsList, spIntersectedRPsAsList, RecordMapperAction);
             }
 
             private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetAllCustomerDefaultRPs(ISaleEntityRoutingProductDataManager dataManager, int customerId)
