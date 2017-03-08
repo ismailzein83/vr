@@ -36,10 +36,15 @@ namespace Vanrise.Invoice.BP.Activities
 
                 var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
                 var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
-                
                 PartnerManager partnerManager = new PartnerManager();
                 var partnerSetting = partnerManager.GetInvoicePartnerSetting(invoiceTypeId, partnerId);
-                AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceSettingManager.GetInvoiceSettingDetailByType<AutomaticInvoiceSettingPart>(partnerSetting.InvoiceSetting.InvoiceSettingId);
+                AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceSettingPart>(
+                    new InvoicePartnerSettingPartContext
+                    {
+                        InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId,
+                        InvoiceTypeId = invoiceTypeId,
+                        PartnerId = partnerId
+                    });
                 if (automaticInvoiceSettingPart.IsEnabled)
                 {
 

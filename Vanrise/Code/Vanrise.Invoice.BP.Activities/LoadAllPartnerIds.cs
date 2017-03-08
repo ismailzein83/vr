@@ -23,7 +23,7 @@ namespace Vanrise.Invoice.BP.Activities
         {
             var invoiceTypeId = context.ActivityContext.GetValue(this.InvoiceTypeId);
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
-            var partnerIds = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext());
+            var partnerIds = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext { PartnerRetrievalType = Entities.PartnerRetrievalType.GetActive });
             this.PartnerIds.Set(context.ActivityContext, partnerIds);
         }
     }
