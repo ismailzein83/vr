@@ -107,6 +107,12 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                         }
                     },
                 };
+                if (sDef.label != undefined)
+                {
+                    serie.dataLabels = {
+                        format: '<span style="font-size:11px;color:black">{y} ' + sDef.label + '</span>'
+                    };
+                }
                 series.push(serie);
             });
 
@@ -189,6 +195,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                     align: 'center',
                     style: {
                         color: '#666',
+                       // format: '{value} %',
                         // fontWeight: 'bold',
                         fontSize: '9px',
                     }

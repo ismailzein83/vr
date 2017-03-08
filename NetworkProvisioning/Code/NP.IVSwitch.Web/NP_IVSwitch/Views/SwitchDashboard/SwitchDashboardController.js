@@ -354,8 +354,9 @@
                     title: "ASR",
                     valuePath: "PercConnected",
                     tooltip: {
-                        valueSuffix: ' '
+                        valueSuffix: '%'
                     },
+                    label:"%"
                 });
 
                 var yAxisDefinition = {
