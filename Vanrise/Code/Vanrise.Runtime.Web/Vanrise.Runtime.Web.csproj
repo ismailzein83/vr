@@ -102,6 +102,7 @@
   <ItemGroup>
     <Content Include="Runtime\Constants\IntervalTimeTypeEnum.js" />
     <Content Include="Runtime\Constants\ModuleConfig.js" />
+    <Content Include="Runtime\Constants\SchedulerTaskStatusEnum.js" />
     <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
     <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
     <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-selector.js" />

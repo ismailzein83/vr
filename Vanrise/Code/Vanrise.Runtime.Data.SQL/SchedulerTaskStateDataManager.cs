@@ -82,6 +82,11 @@ namespace Vanrise.Runtime.Data.SQL
             return ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_Delete", taskId) > 0;
         }
 
+        public void RunSchedulerTask(Guid taskId)
+        {
+            ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_RunSchedulerTask", taskId, DateTime.Now);
+        }
+
         #endregion
 
         #region mapper
@@ -89,7 +94,7 @@ namespace Vanrise.Runtime.Data.SQL
         {
             return new SchedulerTaskState
             {
-                TaskId = GetReaderValue<Guid>(reader,"TaskId"),
+                TaskId = GetReaderValue<Guid>(reader, "TaskId"),
                 Status = (SchedulerTaskStatus)int.Parse(reader["Status"].ToString()),
                 LastRunTime = GetReaderValue<DateTime?>(reader, "LastRunTime"),
                 NextRunTime = GetReaderValue<DateTime?>(reader, "NextRunTime"),

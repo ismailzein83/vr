@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationService", "SchedulerTaskAPIService", "VR_Runtime_SchedulerTaskService", "VRTimerService",
-    function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runtime_SchedulerTaskService, VRTimerService) {
+app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationService", "SchedulerTaskAPIService", "VR_Runtime_SchedulerTaskService", "VRTimerService", "VR_Runtime_SchedulerTaskStatusEnum",
+    function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runtime_SchedulerTaskService, VRTimerService, VR_Runtime_SchedulerTaskStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -92,7 +92,53 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                     }
                 };
 
-                defineMenuActions();
+                $scope.gridMenuActions = function (dataItem) {
+                    var menuActions = [];
+
+                    //Static Menu Actions
+                    var staticMenuActions = defineStaticMenuActions();
+                    if (staticMenuActions != undefined) {
+                        for (var index = 0; index < staticMenuActions.length; index++) {
+                            menuActions.push(staticMenuActions[index]);
+                        }
+                    }
+
+                    if (dataItem != undefined) {
+                        var entity = dataItem.Entity;
+
+                        if (entity.IsEnabled == true && entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription)) {
+                            menuActions.push({
+                                name: "Run",
+                                clicked: runSchedulerTask,
+                                haspermission: hasRunSchedulerTaskPermission
+                            })
+                        }
+                    }
+
+                    return menuActions;
+                }
+            }
+
+            function runSchedulerTask(dataItem) {
+                return SchedulerTaskAPIService.RunSchedulerTask(dataItem.Entity.TaskId);
+            }
+
+            function hasRunSchedulerTaskPermission() {
+                return SchedulerTaskAPIService.HasRunSchedulerTaskPermission();
+            }
+
+            function isSchedulerTaskRunning(statusDescription) {
+
+                switch (statusDescription) {
+                    case VR_Runtime_SchedulerTaskStatusEnum.NotStarted.description:
+                    case VR_Runtime_SchedulerTaskStatusEnum.Completed.description:
+                    case VR_Runtime_SchedulerTaskStatusEnum.Failed.description: return false;
+
+                    case undefined:
+                    case VR_Runtime_SchedulerTaskStatusEnum.InProgress.description:
+                    case VR_Runtime_SchedulerTaskStatusEnum.WaitingEvent.description:
+                    default: return true;
+                }
             }
 
             function createTimer() {
@@ -149,12 +195,15 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                 }
             }
 
-            function defineMenuActions() {
-                $scope.gridMenuActions = [{
+            function defineStaticMenuActions() {
+
+                var staticMenuActions = [{
                     name: "Edit",
                     clicked: editTask,
                     haspermission: hasUpdateSchedulerTaskPermission
                 }];
+
+                return staticMenuActions;
             }
             function editTask(task) {
                 var onTaskUpdated = function (updatedItem) {

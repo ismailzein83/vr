@@ -8,6 +8,7 @@ namespace Vanrise.Runtime.Business
 {
     public class SchedulerTaskStateManager
     {
+        #region Public Methods
 
         public Vanrise.Entities.UpdateOperationOutput<SchedulerTaskState> UpdateTaskState(SchedulerTaskState taskStateObject)
         {
@@ -26,6 +27,7 @@ namespace Vanrise.Runtime.Business
             }
             return updateOperationOutput;
         }
+
         public List<SchedulerTaskState> GetDueTasks()
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
@@ -101,15 +103,25 @@ namespace Vanrise.Runtime.Business
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
             }
             return deleteOperationOutput;
-        } 
+        }
+
+        public void RunSchedulerTask(Guid taskId)
+        {
+            ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
+            dataManager.RunSchedulerTask(taskId);
+        }
+
+        #endregion
+
         #region private methods
-        
+
         private SchedulerTaskStateDetail SchedulerTaskStateDetailMapper(SchedulerTaskState task)
         {
             if (task == null)
                 return null;
             return new SchedulerTaskStateDetail() { Entity = task };
         }
+
         #endregion
     }
 }

@@ -9,7 +9,9 @@ namespace Vanrise.Runtime.Data
         List<SchedulerTaskState> GetSchedulerTaskStateByTaskIds(List<Guid> taskIds);
 
         SchedulerTaskState GetSchedulerTaskStateByTaskId(Guid taskId);
+
         List<SchedulerTaskState> GetDueTasks();
+
         void UnlockTask(Guid taskId);
 
         bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds);
@@ -21,5 +23,7 @@ namespace Vanrise.Runtime.Data
         void InsertSchedulerTaskState(Guid taskId);
 
         bool DeleteTaskState(Guid taskId);
+
+        void RunSchedulerTask(Guid taskId);
     }
 }

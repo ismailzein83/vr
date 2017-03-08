@@ -101,5 +101,12 @@ namespace Vanrise.Runtime.Web.Controllers
             return manager.GetUpdated(input.Filter.TaskIds);
         }
 
+        [HttpGet]
+        [Route("RunSchedulerTask")]
+        public void RunSchedulerTask(Guid taskId)
+        {
+            SchedulerTaskStateManager manager = new SchedulerTaskStateManager();
+            manager.RunSchedulerTask(taskId);
+        }
     }
 }

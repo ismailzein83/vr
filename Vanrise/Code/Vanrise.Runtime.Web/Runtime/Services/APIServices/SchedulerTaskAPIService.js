@@ -7,22 +7,6 @@
     function SchedulerTaskAPIService(BaseAPIService, UtilsService, VR_Runtime_ModuleConfig, SecurityService) {
         var controllerName = 'SchedulerTask';
 
-        return ({
-            GetMySchedulesInfo: GetMySchedulesInfo,
-            GetFilteredTasks: GetFilteredTasks,
-            GetTask: GetTask,
-            GetSchedulerTaskTriggerTypes: GetSchedulerTaskTriggerTypes,
-            GetSchedulerTaskActionTypes: GetSchedulerTaskActionTypes,
-            AddTask: AddTask,
-            UpdateTask: UpdateTask,
-            DeleteTask: DeleteTask,
-            GetSchedulesInfo: GetSchedulesInfo,
-            HasAddSchedulerTaskPermission: HasAddSchedulerTaskPermission,
-            HasUpdateSchedulerTaskPermission: HasUpdateSchedulerTaskPermission,
-            GetUpdated: GetUpdated,
-            GetFilteredMyTasks: GetFilteredMyTasks
-        });
-
         function GetFilteredTasks(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetFilteredTasks'), input);
         }
@@ -78,6 +62,35 @@
         function GetUpdated(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetUpdated'), input);
         }
+
+        function RunSchedulerTask(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'RunSchedulerTask'), {
+                taskId: taskId
+            });
+        }
+
+        function HasRunSchedulerTaskPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Runtime_ModuleConfig.moduleName, controllerName, ['RunSchedulerTask']));
+        }
+
+
+        return ({
+            GetMySchedulesInfo: GetMySchedulesInfo,
+            GetFilteredTasks: GetFilteredTasks,
+            GetTask: GetTask,
+            GetSchedulerTaskTriggerTypes: GetSchedulerTaskTriggerTypes,
+            GetSchedulerTaskActionTypes: GetSchedulerTaskActionTypes,
+            AddTask: AddTask,
+            UpdateTask: UpdateTask,
+            DeleteTask: DeleteTask,
+            GetSchedulesInfo: GetSchedulesInfo,
+            HasAddSchedulerTaskPermission: HasAddSchedulerTaskPermission,
+            HasUpdateSchedulerTaskPermission: HasUpdateSchedulerTaskPermission,
+            GetUpdated: GetUpdated,
+            GetFilteredMyTasks: GetFilteredMyTasks,
+            RunSchedulerTask: RunSchedulerTask,
+            HasRunSchedulerTaskPermission: HasRunSchedulerTaskPermission
+        });
     }
 
     appControllers.service('SchedulerTaskAPIService', SchedulerTaskAPIService);
