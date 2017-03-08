@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE logging.sp_ObjectTracking_Insert
+CREATE PROCEDURE [logging].[sp_ObjectTracking_Insert]
 	@UserID int,
-	@LoggableEntityID int,
+	@LoggableEntityID uniqueidentifier,
 	@ObjectID varchar(255),
 	@ObjectDetails nvarchar(max),
 	@ActionID int,

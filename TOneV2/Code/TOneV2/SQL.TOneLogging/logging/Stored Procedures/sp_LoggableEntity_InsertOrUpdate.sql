@@ -3,18 +3,18 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE logging.sp_LoggableEntity_InsertOrUpdate 
+CREATE PROCEDURE [logging].[sp_LoggableEntity_InsertOrUpdate] 
 	@UniqueName varchar(255),
 	@Settings nvarchar(max)
 AS
 BEGIN
-	DECLARE @ID INT = (SELECT ID FROM [logging].[LoggableEntity] WITH(NOLOCK) WHERE [UniqueName] = @UniqueName)
+	DECLARE @ID uniqueidentifier = (SELECT ID FROM [logging].[LoggableEntity] WITH(NOLOCK) WHERE [UniqueName] = @UniqueName)
 	
 	IF @ID IS NULL
 	BEGIN
 		INSERT INTO [logging].[LoggableEntity]
-		([UniqueName], [Settings])
-		SELECT @UniqueName, @Settings WHERE NOT EXISTS (SELECT TOP 1 NULL FROM [logging].[LoggableEntity] WHERE [UniqueName] = @UniqueName)
+		(ID, [UniqueName], [Settings])
+		SELECT newid(), @UniqueName, @Settings WHERE NOT EXISTS (SELECT TOP 1 NULL FROM [logging].[LoggableEntity] WHERE [UniqueName] = @UniqueName)
 
 		SET @ID = (SELECT ID FROM [logging].[LoggableEntity] WITH(NOLOCK) WHERE [UniqueName] = @UniqueName)
 	END

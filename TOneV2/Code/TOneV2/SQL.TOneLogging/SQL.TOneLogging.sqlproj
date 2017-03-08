@@ -121,6 +121,7 @@
     <Build Include="logging\Stored Procedures\sp_ObjectTracking_Insert.sql" />
     <Build Include="logging\Stored Procedures\sp_LoggableEntity_InsertOrUpdate.sql" />
     <Build Include="logging\Stored Procedures\sp_LoggableEntity_GetAll.sql" />
+    <Build Include="logging\Stored Procedures\sp_ActionAudit_GetFilterd.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
