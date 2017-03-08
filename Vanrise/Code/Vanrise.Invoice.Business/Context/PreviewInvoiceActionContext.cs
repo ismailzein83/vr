@@ -26,14 +26,16 @@ namespace Vanrise.Invoice.Business
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(this.InvoiceTypeId);
             string offset = null;
+            DateTime fromDate = this.FromDate;
+            DateTime toDate = this.ToDate;
             if (this.TimeZoneId.HasValue)
             {
                 VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(this.TimeZoneId.Value);
                 if (timeZone != null)
                 {
                     offset = timeZone.Settings.Offset.ToString();
-                    this.FromDate = this.FromDate.Add(-timeZone.Settings.Offset);
-                    this.ToDate = this.ToDate.Add(-timeZone.Settings.Offset);
+                    fromDate = this.FromDate.Add(-timeZone.Settings.Offset);
+                    toDate = this.ToDate.Add(-timeZone.Settings.Offset);
                 }
             }
 
@@ -41,9 +43,9 @@ namespace Vanrise.Invoice.Business
             {
                 InvoiceTypeId = this.InvoiceTypeId,
                 CustomSectionPayload = CustomSectionPayload,
-                FromDate = this.FromDate,
+                FromDate = fromDate,
                 PartnerId = this.PartnerId,
-                ToDate = this.ToDate,
+                ToDate = toDate,
                 GeneratedToDate = this.ToDate,
             };
             var invoiceGenerator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();

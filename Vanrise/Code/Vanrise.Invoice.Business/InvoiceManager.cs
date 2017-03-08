@@ -151,18 +151,20 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeManager manager = new InvoiceTypeManager();
                 var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
                 string offset = null;
+                DateTime fromDate = createInvoiceInput.FromDate;
+                DateTime toDate = createInvoiceInput.ToDate;
                 if (createInvoiceInput.TimeZoneId.HasValue)
                 {
                     VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(createInvoiceInput.TimeZoneId.Value);
                     if (timeZone != null)
                     {
                         offset = timeZone.Settings.Offset.ToString();
-                        createInvoiceInput.FromDate = createInvoiceInput.FromDate.Add(-timeZone.Settings.Offset);
-                        createInvoiceInput.ToDate = createInvoiceInput.ToDate.Add(-timeZone.Settings.Offset);
+                        fromDate = createInvoiceInput.FromDate.Add(-timeZone.Settings.Offset);
+                        toDate = createInvoiceInput.ToDate.Add(-timeZone.Settings.Offset);
                     }
                 }
 
-                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId);
+                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId);
 
 
                 if(generatedInvoice.InvoiceDetails == null)
@@ -324,15 +326,16 @@ namespace Vanrise.Invoice.Business
             {
                 invoiceEditorRuntime = new InvoiceEditorRuntime();
                 invoiceEditorRuntime.Invoice = invoice;
-                if(invoice.TimeZoneOffset != null)
-                {
-                    TimeSpan invoiceTimeOffset;
-                    if(TimeSpan.TryParse(invoice.TimeZoneOffset, out invoiceTimeOffset))
-                    {
-                        invoiceEditorRuntime.FromDate = invoice.FromDate.Add(invoiceTimeOffset);
-                        invoiceEditorRuntime.ToDate = invoice.ToDate.Add(invoiceTimeOffset);
-                    }
-                }
+                //if(invoice.TimeZoneOffset != null)
+                //{
+                //    //TimeSpan invoiceTimeOffset;
+                //    //if(TimeSpan.TryParse(invoice.TimeZoneOffset, out invoiceTimeOffset))
+                //    //{
+                        
+                //    //}
+                //}
+                //invoiceEditorRuntime.FromDate = invoice.FromDate;
+                //invoiceEditorRuntime.ToDate = invoice.ToDate;
             }
             return invoiceEditorRuntime;
         }
@@ -381,6 +384,7 @@ namespace Vanrise.Invoice.Business
                 partnerName = partnerSettings.GetPartnerName(context);
             }
             UserManager userManager = new UserManager();
+            VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
             InvoiceDetail invoiceDetail = new InvoiceDetail
             {
                 Entity = invoice,
@@ -388,8 +392,10 @@ namespace Vanrise.Invoice.Business
                 Paid = invoice.PaidDate.HasValue,
                 Lock = invoice.LockDate.HasValue,
                 UserName = userManager.GetUserName(invoice.UserId),
-                HasNote = invoice.Note != null
+                HasNote = invoice.Note != null,
             };
+            if (invoice.TimeZoneId.HasValue)
+                invoiceDetail.TimeZoneName = timeZoneManager.GetVRTimeZoneName(invoice.TimeZoneId.Value);
             FillNeededDetailData(invoiceDetail, invoiceType);
 
 

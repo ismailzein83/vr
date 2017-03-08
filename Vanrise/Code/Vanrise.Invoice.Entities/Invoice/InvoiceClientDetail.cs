@@ -13,6 +13,7 @@ namespace Vanrise.Invoice.Entities
         public Boolean Lock { get; set; }
         public Boolean HasNote { get; set; }
         public string UserName { get; set; }
+        public string TimeZoneName { get; set; }
         public List<InvoiceDetailObject> Items { get; set; }
         public string PartnerName { get; set; }
 

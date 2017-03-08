@@ -36,7 +36,11 @@ namespace Vanrise.Common.Business
             return this.GetCachedVRTimeZones().MapRecords(VRTimeZoneInfoMapper).OrderBy(timeZone => timeZone.Name);
         }
 
-       
+        public string GetVRTimeZoneName(int timeZoneId)
+        {
+            var timeZone =  GetVRTimeZone(timeZoneId);
+            return (timeZone != null) ? timeZone.Name : null ;
+        }
         public VRTimeZone GetVRTimeZone(int timeZoneId)
         {
             var TimeZones = GetCachedVRTimeZones();
@@ -112,6 +116,7 @@ namespace Vanrise.Common.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
+                    SheetName = "Time Zones",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 

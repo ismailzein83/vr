@@ -101,8 +101,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             customerInvoiceDetails.OriginalSaleCurrencyId = invoiceBillingRecord.OriginalSaleCurrencyId;
                             customerInvoiceDetails.SaleCurrencyId = invoiceBillingRecord.SaleCurrencyId;
                         }
-                        customerInvoiceDetails.ToDate = toDate;
-                        customerInvoiceDetails.FromDate = fromDate;
                     };
                 }
             }

@@ -195,18 +195,14 @@
                 if(invoiceEntity != undefined)
                 {
                     
-                    if (invoiceEntity.ToDate != undefined)
-                    {
-                        var toDate = UtilsService.createDateFromString(invoiceEntity.ToDate);
-                        $scope.scopeModel.toDate = new Date(toDate.setHours(23, 59, 59, 998));
-                      
-                    }
-                    if (invoiceEntity.FromDate != undefined) {
-                        var fromDate = UtilsService.createDateFromString(invoiceEntity.FromDate);
-                        $scope.scopeModel.fromDate = new Date(fromDate.setHours(0, 0, 0, 0));
-                    }
                     if (invoiceEntity.Invoice != undefined)
                     {
+                        var toDate = UtilsService.createDateFromString(invoiceEntity.Invoice.ToDate);
+                        $scope.scopeModel.toDate = new Date(toDate.setHours(23, 59, 59, 998));
+                  
+                        var fromDate = UtilsService.createDateFromString(invoiceEntity.Invoice.FromDate);
+                        $scope.scopeModel.fromDate = new Date(fromDate.setHours(0, 0, 0, 0));
+                   
                         $scope.scopeModel.issueDate = invoiceEntity.Invoice.IssueDate;
                     }
                 }
