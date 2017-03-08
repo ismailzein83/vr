@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [logging].[sp_ActionAudit_GetFilterd]
+CREATE PROCEDURE [logging].[sp_ActionAudit_GetFilterd]
 		@Top INT ,
 	@UserIds nvarchar(max),
 	@ModuleIds nvarchar(max),
@@ -43,6 +43,7 @@ SET NOCOUNT ON;
 		  ,[ObjectID]
 		  ,[UrlID]	  
 		  ,[LogTime]
+		  ,[ActionDescription]
 	  FROM [logging].[ActionAudit] as ac
 
 	  where (@UserIds is null   or ac.UserID in (select UserId from @UserIDsTable))
@@ -50,7 +51,7 @@ SET NOCOUNT ON;
 	  AND(@ActionIds is null   or ac.ActionID in (select ActionID from @ActionIDsTable))
 	  AND (@EntityIds is null   or ac.EntityID in (select EntityID from @EntityIDsTable))
 	  AND   (@objName is null or ac.ObjectName like '%'+ @objName + '%')
-	  AND   (@objId is null or ac.ObjectID like '%'+ @objId + '%')
+	  AND   (@objId is null or ac.ObjectID= @objId)
 	  AND  (ac.LogTime >= @FromTime AND (@ToTime  IS NULL OR  ac.LogTime <=  @ToTime))
 	END
 SET NOCOUNT OFF
