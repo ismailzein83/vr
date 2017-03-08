@@ -10,12 +10,18 @@ namespace Vanrise.Runtime.Data.SQL
 {
     public class SchedulerTaskStateDataManager : BaseSQLDataManager, ISchedulerTaskStateDataManager
     {
+        #region Ctor/Properties
+
         public SchedulerTaskStateDataManager()
             : base(GetConnectionStringName("RuntimeConnStringKey", "RuntimeDBConnString"))
         {
 
         }
+
+        #endregion
+
         #region public methods
+
         public List<SchedulerTaskState> GetSchedulerTaskStateByTaskIds(List<Guid> taskIds)
         {
             string taskIdsAsString = null;
@@ -75,6 +81,7 @@ namespace Vanrise.Runtime.Data.SQL
         {
             return ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_Delete", taskId) > 0;
         }
+
         #endregion
 
         #region mapper
