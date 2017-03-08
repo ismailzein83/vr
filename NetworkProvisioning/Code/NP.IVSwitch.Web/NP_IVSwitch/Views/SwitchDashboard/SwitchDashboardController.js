@@ -329,7 +329,7 @@
             guageChartReadyDeferred.promise.then(function () {
                 var chartDefinition = {
                     type: "gauge",
-                    title: "% Connected",
+                    title: "ASR",
                     ranges: [{
                         from: 0,
                         to: 50,
@@ -351,7 +351,7 @@
 
                 var seriesDefinitions = [];
                 seriesDefinitions.push({
-                    title: "% Connected",
+                    title: "ASR",
                     valuePath: "PercConnected",
                     tooltip: {
                         valueSuffix: ' '
