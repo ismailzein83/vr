@@ -63,6 +63,7 @@ namespace Vanrise.Common.Data.SQL
                 UrlId = GetReaderValue<int>(reader, "URLID") ,
                 ObjectId = GetReaderValue<string>(reader, "ObjectID"),
                 ObjectName = GetReaderValue<string>(reader, "ObjectName"),
+                ActionDescription = GetReaderValue<string>(reader, "ActionDescription"),
                 LogTime = GetReaderValue<DateTime>(reader, "LogTime")
 
             };
