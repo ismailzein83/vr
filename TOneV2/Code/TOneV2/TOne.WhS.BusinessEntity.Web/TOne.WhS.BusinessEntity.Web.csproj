@@ -301,6 +301,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerobjecttype.js" />
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleRate\History\Template\SaleRateHistoryGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SaleRate\History\vr-whs-be-salerate-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\Templates\SaleEntityZoneRoutingProductHistoryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\vr-whs-be-saleentityzoneroutingproduct-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
