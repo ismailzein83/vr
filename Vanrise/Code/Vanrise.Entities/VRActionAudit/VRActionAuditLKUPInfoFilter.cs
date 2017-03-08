@@ -8,6 +8,6 @@ namespace Vanrise.Entities
 {
     public class VRActionAuditLKUPInfoFilter
     {
-        public VRActionAuditLKUPType Type { get; set; }
+        public VRActionAuditLKUPType? Type { get; set; }
     }
 }

@@ -14,9 +14,9 @@ namespace Vanrise.Common.Data.SQL
         {
 
         }
-        public int AddOrUpdateLoggableEntity(string entityUniqueName, VRLoggableEntitySettings loggableEntitySettings)
+        public Guid AddOrUpdateLoggableEntity(string entityUniqueName, VRLoggableEntitySettings loggableEntitySettings)
         {
-            return (int)ExecuteScalarSP("[logging].[sp_LoggableEntity_InsertOrUpdate]", entityUniqueName, Vanrise.Common.Serializer.Serialize(loggableEntitySettings));
+            return (Guid)ExecuteScalarSP("[logging].[sp_LoggableEntity_InsertOrUpdate]", entityUniqueName, Vanrise.Common.Serializer.Serialize(loggableEntitySettings));
         }
 
         public List<VRLoggableEntity> GetAll()
@@ -26,7 +26,7 @@ namespace Vanrise.Common.Data.SQL
                 {
                     return new VRLoggableEntity
                     {
-                        VRLoggableEntityId = (int)reader["ID"],
+                        VRLoggableEntityId = (Guid)reader["ID"],
                         UniqueName = reader["UniqueName"] as string,
                         Settings = Vanrise.Common.Serializer.Deserialize<VRLoggableEntitySettings>(reader["Settings"] as string)
                     };

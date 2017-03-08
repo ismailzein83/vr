@@ -14,7 +14,7 @@ namespace Vanrise.Common.Data.SQL
 
         }
 
-        public long Insert(int userId, int loggableEntityId, string objectId, object obj, int actionId, string actionDescription)
+        public long Insert(int userId, Guid loggableEntityId, string objectId, object obj, int actionId, string actionDescription)
         {
             object objectTrackingId;
             ExecuteNonQuerySP("logging.sp_ObjectTracking_Insert", out objectTrackingId, userId, loggableEntityId, objectId, obj != null ? Vanrise.Common.Serializer.Serialize(obj) : null, actionId, actionDescription);

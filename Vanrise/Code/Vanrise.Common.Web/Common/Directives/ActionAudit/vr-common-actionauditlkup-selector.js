@@ -43,9 +43,9 @@ app.directive('vrCommonActionauditlkupSelector', ['VRCommon_ActionAuditLKUPAPISe
     function getSelectorTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "ActionAuditType";
+        var label = "Action Type";
         if (attrs.ismultipleselection != undefined) {
-            label = "ActionAuditTypes";
+            label = "Action Types";
             multipleselection = "ismultipleselection";
         }
 
@@ -55,7 +55,7 @@ app.directive('vrCommonActionauditlkupSelector', ['VRCommon_ActionAuditLKUPAPISe
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired"'
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="VRActionAuditLKUPId" isrequired="ctrl.isrequired"'
             + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="VRActionAuditLKUP" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select></vr-columns>';
     }
 
@@ -92,7 +92,9 @@ app.directive('vrCommonActionauditlkupSelector', ['VRCommon_ActionAuditLKUPAPISe
             };
 
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
+                var id = VRUIUtilsService.getIdSelectedIds('VRActionAuditLKUPId', attrs, ctrl);
+                alert(id);
+                return id;
             };
 
             if (ctrl.onReady != null)
@@ -103,14 +105,15 @@ app.directive('vrCommonActionauditlkupSelector', ['VRCommon_ActionAuditLKUPAPISe
     }
 
     function getSelectorInfo(attrs, ctrl, selectedIds, filter) {
-        return VRCommon_ActionAuditLKUPAPIService.GetSelectorInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+        return VRCommon_ActionAuditLKUPAPIService.GetVRActionAuditLKUPInfo(UtilsService.serializetoJson(filter)).then(function (response) {
             ctrl.datasource.length = 0;
             angular.forEach(response, function (itm) {
+                
                 ctrl.datasource.push(itm);
             });
 
             if (selectedIds != undefined) {
-                VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
+                VRUIUtilsService.setSelectedValues(selectedIds, 'VRActionAuditLKUPId', attrs, ctrl);
 
             }
         });

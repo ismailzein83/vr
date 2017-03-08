@@ -12,5 +12,6 @@ namespace Vanrise.Common.Data
         int AddLKUPIfNotExists(VRActionAuditLKUPType lkupType, string name);
 
         List<VRActionAuditLKUP> GetAll();
+        bool AreVRActionAuditLKUPUpdated(ref object updateHandle);
     }
 }

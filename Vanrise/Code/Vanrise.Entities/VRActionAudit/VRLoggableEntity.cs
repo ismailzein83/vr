@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public class VRLoggableEntity
     {
-        public int VRLoggableEntityId { get; set; }
+        public Guid VRLoggableEntityId { get; set; }
 
         public string UniqueName { get; set; }
 

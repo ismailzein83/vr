@@ -9,13 +9,13 @@ using Vanrise.Entities;
 namespace Vanrise.Common.Data.SQL
 {
     public class VRActionAuditLKUPDataManager : BaseSQLDataManager, IVRActionAuditLKUPDataManager
-    {
+    { 
         public VRActionAuditLKUPDataManager()
             : base(GetConnectionStringName("LoggingDBConnStringKey", "LogDBConnString"))
         {
 
         }
-
+        #region public Methods
         public int AddLKUPIfNotExists(Entities.VRActionAuditLKUPType lkupType, string name)
         {
             return (int)ExecuteScalarSP("logging.sp_ActionAuditLKUP_InsertIfNotExists", (int)lkupType, name);
@@ -34,5 +34,11 @@ namespace Vanrise.Common.Data.SQL
                     };
                 });
         }
+
+        public bool AreVRActionAuditLKUPUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[logging].[ActionAuditLKUP]", ref updateHandle);
+        }
+        #endregion
     }
 }

@@ -10,9 +10,9 @@ namespace Vanrise.Common.Business
 {
     public class VRLoggableEntityManager
     {
-        internal int GetLoggableEntityId(VRLoggableEntityBase loggableEntity)
+        internal Guid GetLoggableEntityId(VRLoggableEntityBase loggableEntity)
         {
-            int id;
+            Guid id;
             if(!s_loggableEntityIds.TryGetValue(loggableEntity.EntityUniqueName, out id))
             {
                 lock (s_loggableEntityIds)
@@ -43,6 +43,6 @@ namespace Vanrise.Common.Business
             }
         }
 
-        static Dictionary<string, int> s_loggableEntityIds = new Dictionary<string, int>();
+        static Dictionary<string, Guid> s_loggableEntityIds = new Dictionary<string, Guid>();
     }
 }

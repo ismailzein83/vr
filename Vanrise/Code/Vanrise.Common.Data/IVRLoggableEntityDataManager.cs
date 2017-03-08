@@ -9,7 +9,7 @@ namespace Vanrise.Common.Data
 {
     public interface IVRLoggableEntityDataManager : IDataManager
     {
-        int AddOrUpdateLoggableEntity(string entityUniqueName, VRLoggableEntitySettings loggableEntitySettings);
+        Guid AddOrUpdateLoggableEntity( string entityUniqueName, VRLoggableEntitySettings loggableEntitySettings);
 
         List<VRLoggableEntity> GetAll();
     }

@@ -28,4 +28,6 @@ namespace Vanrise.Entities
 
         public DateTime LogTime { get; set; }
     }
+   
+    
 }

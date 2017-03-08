@@ -67,6 +67,8 @@
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
     <Compile Include="UISettingData.cs" />
+    <Compile Include="VRActionAudit\VRActionAuditDetail.cs" />
+    <Compile Include="VRActionAudit\VRActionAuditQuery.cs" />
     <Compile Include="VRActionAudit\VRLoggableEntity.cs" />
     <Compile Include="VRActionAudit\VRActionAudit.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUP.cs" />

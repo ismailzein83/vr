@@ -5,11 +5,38 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
-    internal class VRActionAuditLKUPManager
+    public class VRActionAuditLKUPManager
     {
+        #region public Methods
+        public IEnumerable<VRActionAuditLKUPInfo> GetVRActionAuditLKUPInfo(VRActionAuditLKUPInfoFilter filter)
+        {
+            IEnumerable<VRActionAuditLKUP> vrActionAuditLKUPs = GetCachedvrActionAuditLKUPs().Values;
+            Func<VRActionAuditLKUP, bool> filterFunc = (vrActionAuditLKUP) =>
+            {
+                if (filter != null)
+                {
+                    if (filter.Type.HasValue && filter.Type != vrActionAuditLKUP.Type)
+                        return false;
+                }
+                return true;
+            };
+            return vrActionAuditLKUPs.MapRecords(VRActionAuditLKUPInfoMapper, filterFunc).OrderBy(x => x.Name);
+        }
+
+        public string GetVRActionAuditLKUPName(int vrActionAuditLKUPId)
+        {
+            var vrActionAuditLKUP = GetVRActionAuditLKUP(vrActionAuditLKUPId);
+            return (vrActionAuditLKUP != null) ? vrActionAuditLKUP.Name : null;
+        }
+        public VRActionAuditLKUP GetVRActionAuditLKUP(int vrActionAuditLKUPId)
+        {
+            var vrActionAuditLKUPs = GetCachedvrActionAuditLKUPs();
+            return vrActionAuditLKUPs.GetRecord(vrActionAuditLKUPId);
+        }
         public int GetLKUPId(VRActionAuditLKUPType lkupType, string name)
         {
             int id;
@@ -34,7 +61,54 @@ namespace Vanrise.Common.Business
             }
             return id;
         }
+        #endregion
 
+       
+       
+       
+        private struct LKUPDictKey
+        {
+            public VRActionAuditLKUPType Type { get; set; }
+
+            public string Name { get; set; }
+        }
+
+        static Dictionary<LKUPDictKey, int> s_lkupIds = new Dictionary<LKUPDictKey, int>();
+        #region private Class
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IVRActionAuditLKUPDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRActionAuditLKUPDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreVRActionAuditLKUPUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+
+         #region private Methods
+        private Dictionary<int, VRActionAuditLKUP> GetCachedvrActionAuditLKUPs()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedvrActionAuditLKUPs",
+              () =>
+              {
+                  IVRActionAuditLKUPDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRActionAuditLKUPDataManager>();
+                  IEnumerable<VRActionAuditLKUP> vrActionAuditLKUPs = dataManager.GetAll();
+                  return vrActionAuditLKUPs.ToDictionary(a => a.VRActionAuditLKUPId, a => a);
+              });
+        }
+
+
+        private VRActionAuditLKUPInfo VRActionAuditLKUPInfoMapper(VRActionAuditLKUP vrActionAuditLKUP)
+        {
+            return new VRActionAuditLKUPInfo
+            {
+                Name = vrActionAuditLKUP.Name,
+                VRActionAuditLKUPId = vrActionAuditLKUP.VRActionAuditLKUPId
+            };
+        }
         private static void LoadAllLKUPs()
         {
             IVRActionAuditLKUPDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRActionAuditLKUPDataManager>();
@@ -53,14 +127,6 @@ namespace Vanrise.Common.Business
                 }
             }
         }
-
-        private struct LKUPDictKey
-        {
-            public VRActionAuditLKUPType Type { get; set; }
-
-            public string Name { get; set; }
-        }
-
-        static Dictionary<LKUPDictKey, int> s_lkupIds = new Dictionary<LKUPDictKey, int>();
+         #endregion
     }
 }
