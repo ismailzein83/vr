@@ -469,28 +469,32 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CustomerSellingProductDetail> context)
             {
-                if (context.BigResult == null || context.BigResult.Data == null)
-                    return;
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Selling Products",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
-                var sheet = new ExportExcelSheet();
-                sheet.SheetName = "Selling Products";
-
-                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer name", Width = 60 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Product Name", Width = 60 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Effective On", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
-
-                sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SellingProductId });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.CustomerName });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.SellingProductName });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
-                    sheet.Rows.Add(row);
+                    sheet.Rows = new List<ExportExcelRow>();
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SellingProductId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CustomerName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.SellingProductName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
+                            sheet.Rows.Add(row);
+                        }
+                    }
                 }
 
                 context.MainSheet = sheet;

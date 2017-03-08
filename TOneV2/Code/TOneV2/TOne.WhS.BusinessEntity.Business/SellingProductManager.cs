@@ -27,50 +27,14 @@ namespace TOne.WhS.BusinessEntity.Business
                  (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(prod.SellingNumberPlanId))
                  ;
 
-            SellingProductExcelExportHandler sellingProductExcel = new SellingProductExcelExportHandler(input.Query);
             ResultProcessingHandler<SellingProductDetail> handler = new ResultProcessingHandler<SellingProductDetail>()
             {
-                ExportExcelHandler = sellingProductExcel
+                ExportExcelHandler = new SellingProductExcelExportHandler()
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingProducts.ToBigResult(input, filterExpression, SellingProductDetailMapper), handler);
         }
 
-        private class SellingProductExcelExportHandler : ExcelExportHandler<SellingProductDetail>
-        {
-            private SellingProductQuery _query;
-            public SellingProductExcelExportHandler(SellingProductQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SellingProductDetail> context)
-            {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Selling Number Plan" });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record.Entity != null)
-                        {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SellingProductId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SellingNumberPlanName });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
-        }
         public IEnumerable<SellingProductInfo> GetSellingProductsInfo(SellingProductInfoFilter filter)
         {
             Func<SellingProduct, bool> filterPredicate = null;
@@ -241,6 +205,40 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
+
+        private class SellingProductExcelExportHandler : ExcelExportHandler<SellingProductDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SellingProductDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Selling Products",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Selling Number Plan" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SellingProductId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SellingNumberPlanName });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISellingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();

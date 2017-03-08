@@ -328,27 +328,32 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CarrierProfileDetail> context)
             {
-                if (context.BigResult == null || context.BigResult.Data == null)
-                    return;
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Carrier Profiles",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
-                var sheet = new ExportExcelSheet();
-                sheet.SheetName = "Carrier Profiles";
-
-                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Carrier Profile Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Company" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Country" });
 
                 sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CarrierProfileId });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Settings.Company });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.CountryName });
-                    sheet.Rows.Add(row);
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CarrierProfileId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Settings.Company });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CountryName });
+                            sheet.Rows.Add(row);
+                        }
+                    }
                 }
 
                 context.MainSheet = sheet;

@@ -38,10 +38,9 @@ namespace TOne.WhS.BusinessEntity.Business
                   && ((prod.BED <= input.Query.EffectiveOn))
                   && ((!prod.EED.HasValue || (prod.EED > input.Query.EffectiveOn)));
 
-            SupplierZoneExcelExportHandler supplierZoneExcel = new SupplierZoneExcelExportHandler(input.Query);
             ResultProcessingHandler<SupplierZoneDetails> handler = new ResultProcessingHandler<SupplierZoneDetails>()
             {
-                ExportExcelHandler = supplierZoneExcel
+                ExportExcelHandler = new SupplierZoneExcelExportHandler()
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper), handler);
@@ -166,17 +165,14 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Private Members
         private class SupplierZoneExcelExportHandler : ExcelExportHandler<SupplierZoneDetails>
         {
-            private SupplierZoneQuery _query;
-            public SupplierZoneExcelExportHandler(SupplierZoneQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierZoneDetails> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Supplier Zones",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });

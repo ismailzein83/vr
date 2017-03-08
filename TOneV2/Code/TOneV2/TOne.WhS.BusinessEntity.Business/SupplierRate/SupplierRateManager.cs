@@ -170,24 +170,21 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return new ResultProcessingHandler<SupplierRateDetail>
                 {
-                    ExportExcelHandler = new SupplierRateExcelExportHandler(input.Query)
+                    ExportExcelHandler = new SupplierRateExcelExportHandler()
                 };
             }
         }
 
         private class SupplierRateExcelExportHandler : ExcelExportHandler<SupplierRateDetail>
         {
-            BaseSupplierRateQueryHandler _query;
-            public SupplierRateExcelExportHandler(BaseSupplierRateQueryHandler query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierRateDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Supplier Rates",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate" });

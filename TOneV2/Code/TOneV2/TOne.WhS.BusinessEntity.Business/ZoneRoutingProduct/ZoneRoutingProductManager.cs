@@ -109,7 +109,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return new ResultProcessingHandler<ZoneRoutingProductDetail>
                 {
-                    ExportExcelHandler = new ZoneRoutingProductExcelExportHandler(input.Query)
+                    ExportExcelHandler = new ZoneRoutingProductExcelExportHandler()
                 };
             }
             #endregion
@@ -117,19 +117,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class ZoneRoutingProductExcelExportHandler : ExcelExportHandler<ZoneRoutingProductDetail>
         {
-            private ZoneRoutingProductQuery _query;
-            public ZoneRoutingProductExcelExportHandler(ZoneRoutingProductQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<ZoneRoutingProductDetail> context)
             {
                 ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
 
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Zone Routing Products",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Routing Product" });

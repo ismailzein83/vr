@@ -119,26 +119,23 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return new ResultProcessingHandler<SupplierEntityServiceDetail>
                 {
-                    ExportExcelHandler = new SupplierEntityServiceExcelExportHandler(input.Query)
+                    ExportExcelHandler = new SupplierEntityServiceExcelExportHandler()
                 };
             }
         }
 
         private class SupplierEntityServiceExcelExportHandler : ExcelExportHandler<SupplierEntityServiceDetail>
-{
-            SupplierZoneServiceQuery _query;
-            public SupplierEntityServiceExcelExportHandler(SupplierZoneServiceQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
+        {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierEntityServiceDetail> context)
             {
                 ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
 
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Supplier Zone Services",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });

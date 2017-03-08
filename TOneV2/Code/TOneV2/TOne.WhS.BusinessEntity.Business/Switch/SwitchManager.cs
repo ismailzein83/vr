@@ -23,27 +23,23 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<Switch, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
-            SwitchExcelExportHandler switchExcel = new SwitchExcelExportHandler(input.Query);
             ResultProcessingHandler<SwitchDetail> handler = new ResultProcessingHandler<SwitchDetail>()
             {
-                ExportExcelHandler = switchExcel
+                ExportExcelHandler = new SwitchExcelExportHandler()
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper), handler);
         }
         private class SwitchExcelExportHandler : ExcelExportHandler<SwitchDetail>
         {
-            private SwitchQuery _query;
-            public SwitchExcelExportHandler(SwitchQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SwitchDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Switches",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch Name" });
                 

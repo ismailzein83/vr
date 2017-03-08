@@ -329,6 +329,7 @@ namespace TOne.WhS.Routing.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
+                    SheetName = "Routes",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 

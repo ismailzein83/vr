@@ -461,13 +461,12 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SaleRateDetail> context)
             {
-                if (context.BigResult == null || context.BigResult.Data == null)
-                    return;
-
-                var sheet = new ExportExcelSheet();
-                sheet.SheetName = "Sales Rates";
-
-                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Sales Rates",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
@@ -475,15 +474,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
                 sheet.Rows = new List<ExportExcelRow>();
-                foreach (var record in context.BigResult.Data)
+                if (context.BigResult != null && context.BigResult.Data != null)
                 {
-                    var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                    row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Rate });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
-                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
-                    sheet.Rows.Add(row);
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Rate });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
+                            sheet.Rows.Add(row);
+                        }
+                    }
                 }
 
                 context.MainSheet = sheet;

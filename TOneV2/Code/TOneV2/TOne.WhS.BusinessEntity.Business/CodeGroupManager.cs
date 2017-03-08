@@ -67,10 +67,9 @@ namespace TOne.WhS.BusinessEntity.Business
                   &&
                  (input.Query.CountriesIds == null || input.Query.CountriesIds.Count() == 0 || input.Query.CountriesIds.Contains(prod.CountryId));
 
-            CodeGroupExcelExportHandler codeGroupExcel = new CodeGroupExcelExportHandler(input.Query);
             ResultProcessingHandler<CodeGroupDetail> handler = new ResultProcessingHandler<CodeGroupDetail>()
             {
-                ExportExcelHandler = codeGroupExcel
+                ExportExcelHandler = new CodeGroupExcelExportHandler()
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper), handler);
@@ -78,17 +77,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class CodeGroupExcelExportHandler : ExcelExportHandler<CodeGroupDetail>
         {
-            private CodeGroupQuery _query;
-            public CodeGroupExcelExportHandler(CodeGroupQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CodeGroupDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Code Groups",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code Group" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });

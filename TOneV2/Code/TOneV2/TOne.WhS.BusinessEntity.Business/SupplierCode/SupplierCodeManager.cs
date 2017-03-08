@@ -99,24 +99,21 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return new ResultProcessingHandler<SupplierCodeDetail>
                 {
-                    ExportExcelHandler = new SupplierCodeExcelExportHandler(input.Query)
+                    ExportExcelHandler = new SupplierCodeExcelExportHandler()
                 };
             }
         }
 
         private class SupplierCodeExcelExportHandler : ExcelExportHandler<SupplierCodeDetail>
         {
-            SupplierCodeQuery _query;
-            public SupplierCodeExcelExportHandler(SupplierCodeQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierCodeDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Supplier Codes",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });

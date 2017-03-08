@@ -317,10 +317,11 @@ namespace TOne.WhS.Analytics.Business
                 if (context.BigResult == null || context.BigResult.Data == null)
                     return;
 
-                var sheet = new ExportExcelSheet();
-                sheet.SheetName = "Variation Report";
-
-                sheet.Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() };
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Variation Report",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
                 var result = context.BigResult as VariationReportBigResult;
 

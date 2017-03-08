@@ -23,10 +23,9 @@ namespace TOne.WhS.BusinessEntity.Business
 			Dictionary<int, SalePriceListTemplate> cachedSalePriceListTemplates = GetCachedSalePriceListTemplates();
 			Func<SalePriceListTemplate, bool> filterFunc = (salePriceListTemplate) => (input.Query.Name == null || salePriceListTemplate.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
-            SalePriceListTemplateExcelExportHandler salePriceListTemplateExcel = new SalePriceListTemplateExcelExportHandler(input.Query);
             ResultProcessingHandler<SalePriceListTemplateDetail> handler = new ResultProcessingHandler<SalePriceListTemplateDetail>()
             {
-                ExportExcelHandler = salePriceListTemplateExcel
+                ExportExcelHandler = new SalePriceListTemplateExcelExportHandler()
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceListTemplates.ToBigResult(input, filterFunc, SalePriceListTemplateDetailMapper), handler);
@@ -111,17 +110,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class SalePriceListTemplateExcelExportHandler : ExcelExportHandler<SalePriceListTemplateDetail>
         {
-            private SalePriceListTemplateQuery _query;
-            public SalePriceListTemplateExcelExportHandler(SalePriceListTemplateQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SalePriceListTemplateDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Sale Pricelist",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
 
                 sheet.Rows = new List<ExportExcelRow>();

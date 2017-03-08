@@ -64,24 +64,21 @@ namespace TOne.WhS.Analytics.Business
             {
                 return new ResultProcessingHandler<RepeatedNumberDetail>
                 {
-                    ExportExcelHandler = new RepeatedNumberExcelExportHandler(input.Query)
+                    ExportExcelHandler = new RepeatedNumberExcelExportHandler()
                 };
             }
         }
 
         private class RepeatedNumberExcelExportHandler : ExcelExportHandler<RepeatedNumberDetail>
         {
-            RepeatedNumberQuery _query;
-            public RepeatedNumberExcelExportHandler(RepeatedNumberQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RepeatedNumberDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Repeated Numbers",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });

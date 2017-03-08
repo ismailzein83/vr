@@ -40,58 +40,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 return true;
             };
 
-            ZoneServiceConfigExcelExportHandler zoneServiceConfigExcel = new ZoneServiceConfigExcelExportHandler(input.Query);
             ResultProcessingHandler<ZoneServiceConfigDetail> handler = new ResultProcessingHandler<ZoneServiceConfigDetail>()
             {
-                ExportExcelHandler = zoneServiceConfigExcel
+                ExportExcelHandler = new ZoneServiceConfigExcelExportHandler()
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allZoneServiceConfigs.ToBigResult(input, filterExpression, ZoneServiceConfigDetailMapper), handler);
         }
 
-        private class ZoneServiceConfigExcelExportHandler : ExcelExportHandler<ZoneServiceConfigDetail>
-        {
-            private ZoneServiceConfigQuery _query;
-            public ZoneServiceConfigExcelExportHandler(ZoneServiceConfigQuery query)
-            {
-                if (query == null)
-                    throw new ArgumentNullException("query");
-                _query = query;
-            }
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<ZoneServiceConfigDetail> context)
-            {
-                ExportExcelSheet sheet = new ExportExcelSheet();
-                sheet.Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Weight" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Flag" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ParentName" });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record.Entity != null)
-                        {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ZoneServiceConfigId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Symbol });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Name });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Weight });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Description });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Color });
-                            row.Cells.Add(new ExportExcelCell { Value = record.ParentName });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
-        }
         public Dictionary<int, ZoneServiceConfig> GetCachedZoneServiceConfigs()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetZoneServiceConfigs",
@@ -344,6 +300,47 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 childrenServiceIds.Add(child.ZoneServiceConfigId);
                 GetChildServices(child.ZoneServiceConfigId, childrenServiceIds);
+            }
+        }
+
+        private class ZoneServiceConfigExcelExportHandler : ExcelExportHandler<ZoneServiceConfigDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<ZoneServiceConfigDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Zone Service Configuration",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Weight" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Flag" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ParentName" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ZoneServiceConfigId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Symbol });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Weight });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Description });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Color });
+                            row.Cells.Add(new ExportExcelCell { Value = record.ParentName });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
             }
         }
 
