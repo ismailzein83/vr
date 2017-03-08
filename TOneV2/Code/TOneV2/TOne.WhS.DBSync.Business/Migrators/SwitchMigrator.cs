@@ -5,6 +5,7 @@ using TOne.WhS.DBSync.Business.SwitchMigration;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using TOne.WhS.RouteSync.Entities;
+using System.Linq;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -31,7 +32,10 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<Switch> itemsToAdd)
         {
-            dbSyncDataManager.ApplySwitchesToTemp(itemsToAdd);
+            dbSyncDataManager.ApplySwitchesToTemp(itemsToAdd.OrderBy(s => s.SourceId));
+            if (Context.UseTempTables)
+                dbSyncDataManager.FixSwitchIds();
+
             TotalRowsSuccess = itemsToAdd.Count;
         }
 

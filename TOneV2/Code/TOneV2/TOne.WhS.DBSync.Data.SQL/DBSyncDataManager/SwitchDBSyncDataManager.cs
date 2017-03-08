@@ -19,7 +19,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplySwitchesToTemp(List<Switch> switches)
+        public void ApplySwitchesToTemp(IEnumerable<Switch> switches)
         {
             DataTable dt = new DataTable();
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
@@ -44,6 +44,11 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             return GetItemsText("SELECT [ID]  ,[Name], [SourceID], [Settings] FROM "
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SwitchMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
+
+        public void FixSwitchIds()
+        {
+            ExecuteNonQueryText(query_FixSwitchIds, null);
         }
 
         public Switch SwitchMapper(IDataReader reader)
@@ -73,5 +78,43 @@ namespace TOne.WhS.DBSync.Data.SQL
             return _Schema;
         }
 
+        #region queries
+        const string query_FixSwitchIds = @"
+                                            select    st.ID newID
+                                                                ,s.ID
+                                                                ,st.[Name]
+                                                                ,st.[SourceID]
+                                                                ,st.[Settings] 
+                                into        #TempSwitches_ToUpdate 
+                                FROM   [TOneWhS_BE].[Switch] s 
+                                join        [TOneWhS_BE].[Switch_Temp] st on s.SourceID = st.SourceID
+
+                                select    st.ID
+                                                                ,st.[Name]
+                                                                ,st.[SourceID]
+                                                                ,st.[Settings] 
+                                into        #TempSwitches_New 
+                                FROM   [TOneWhS_BE].[Switch] s 
+                                right join [TOneWhS_BE].[Switch_Temp] st on s.SourceID = st.SourceID 
+                                where   s.ID is null
+
+                                if exists(SELECT * from #TempSwitches_ToUpdate WHERE newID != ID)
+                                begin
+                                                truncate table [TOneWhS_BE].[Switch_Temp]
+
+                                                ---Fix IDs
+                                                set identity_insert [TOneWhS_BE].[Switch_Temp] ON
+
+                                                insert into [TOneWhS_BE].[Switch_Temp](ID,[Name],[SourceID],[Settings] )
+                                                select    ID,[Name],[SourceID],[Settings] 
+                                                from      #TempSwitches_ToUpdate 
+
+                                               set identity_insert [TOneWhS_BE].[Switch_Temp] OFF
+                
+                                                insert into [TOneWhS_BE].[Switch_Temp]([Name],[SourceID],[Settings] )
+
+                                                select [Name],[SourceID],[Settings] from #TempSwitches_New               
+                                end";
+        #endregion
     }
 }
