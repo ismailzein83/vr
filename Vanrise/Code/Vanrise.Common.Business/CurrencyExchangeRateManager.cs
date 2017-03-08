@@ -314,6 +314,7 @@ namespace Vanrise.Common.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
+                    SheetName = "Currency Exchange Rates",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 

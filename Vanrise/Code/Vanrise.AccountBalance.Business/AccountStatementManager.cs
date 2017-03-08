@@ -198,6 +198,7 @@ namespace Vanrise.AccountBalance.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
+                    SheetName = "Account Statement",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 

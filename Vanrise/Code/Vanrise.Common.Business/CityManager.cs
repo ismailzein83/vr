@@ -113,6 +113,7 @@ namespace Vanrise.Common.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
+                    SheetName = "Cities",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
