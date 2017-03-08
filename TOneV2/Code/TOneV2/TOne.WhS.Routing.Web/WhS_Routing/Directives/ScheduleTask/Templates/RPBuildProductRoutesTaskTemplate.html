@@ -1,12 +1,15 @@
 ﻿<vr-row >
     <vr-columns width="1/2row">
         <vr-select datatextfield="description" datavaluefield="value" label="Routing Database Type" datasource="routingDatabaseTypes"
-                    selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingProductDatabaseTypeSelectionChanged" hideremoveicon />
+                    selectedvalues="selectedRoutingDatabaseType" onselectionchanged="onRoutingProductDatabaseTypeSelectionChanged" hideremoveicon>
+        </vr-select>
     </vr-columns>
-    <!--<vr-columns width="1/2row" ng-show="!isFuture">
-        <vr-datetimepicker type="dateTime" value="effectiveOn" label="Effective On" isrequired="!isFuture"></vr-datetimepicker>
-    </vr-columns>-->
-
+    <vr-columns width="1/2row">
+        <vr-textbox value="effectiveAfterInMinutes"
+                    label="Effective After (Min)" type="number"
+                    minvalue="0" decimalprecision="0" isrequired="true">
+        </vr-textbox>
+    </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns width="1/2row">

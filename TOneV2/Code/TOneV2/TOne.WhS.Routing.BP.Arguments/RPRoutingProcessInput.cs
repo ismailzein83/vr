@@ -16,6 +16,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public int SaleZoneRange { get; set; }
         public List<SupplierZoneToRPOptionPolicy> SupplierZoneRPOptionPolicies { get; set; }
         public bool IncludeBlockedSupplierZones { get; set; }
+        public int EffectiveAfterInMinutes { get; set; }
 
         public override string GetTitle()
         {
@@ -29,7 +30,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         {
             if (!IsFuture && evaluatedExpressions.ContainsKey("ScheduleTime"))
             {
-                EffectiveOn = (DateTime)evaluatedExpressions["ScheduleTime"];
+                EffectiveOn = DateTime.Now.AddMinutes(EffectiveAfterInMinutes);
             }
         }
     }

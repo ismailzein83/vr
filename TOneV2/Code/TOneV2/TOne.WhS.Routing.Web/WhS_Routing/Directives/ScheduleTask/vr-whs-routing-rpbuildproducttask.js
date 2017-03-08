@@ -32,7 +32,7 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
             var defaultPolicy = null;
 
             var rpSettingsAddBlockedOptions;
-
+             
             function initializeController() {
                 $scope.supplierZoneRPOptionPolicies = [];
 
@@ -85,13 +85,13 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput, TOne.WhS.Routing.BP.Arguments",
-                        //EffectiveOn: !$scope.isFuture ? $scope.effectiveOn : null,
                         IsFuture: $scope.isFuture,
                         RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
                         RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.RoutingProductRoute.value,
                         SaleZoneRange: $scope.selectedSaleZoneRange,
                         SupplierZoneRPOptionPolicies: GetSelectedSupplierPolicies(),
-                        IncludeBlockedSupplierZones: $scope.includeBlockedSupplierZones
+                        IncludeBlockedSupplierZones: $scope.includeBlockedSupplierZones,
+                        EffectiveAfterInMinutes: $scope.effectiveAfterInMinutes
                     };
                 };
 
@@ -105,6 +105,7 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                         $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', payload.data.RoutingDatabaseType);
                         $scope.selectedSaleZoneRange = payload.data.SaleZoneRange;
                         $scope.includeBlockedSupplierZones = payload.data.IncludeBlockedSupplierZones;
+                        $scope.effectiveAfterInMinutes = payload.data.EffectiveAfterInMinutes;
                     }
                     else {
                         $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
