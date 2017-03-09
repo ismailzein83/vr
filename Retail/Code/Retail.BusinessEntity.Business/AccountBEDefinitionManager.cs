@@ -252,15 +252,18 @@ namespace Retail.BusinessEntity.Business
 
             return GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
         }
-        public AccountViewDefinition GetAccountViewDefinition(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
+        public AccountViewDefinitionSettings GetAccountViewDefinitionSettings(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
         {
             List<AccountViewDefinition> accountViewDefinitions = GetAccountViewDefinitions(accountBEDefinitionId);
 
-            AccountViewDefinition accountViewDefinition = accountViewDefinitions.FindRecord(itm => itm.AccountViewDefinitionId == accountBEDefinitionId);
+            AccountViewDefinition accountViewDefinition = accountViewDefinitions.FindRecord(itm => itm.AccountViewDefinitionId == accountViewDefinitionId);
             if (accountViewDefinition == null)
                 throw new NullReferenceException(string.Format("AccountViewDefinition of AccountViewDefinitionId: {0} and BusinessEntityDefinitionId: {1}", accountViewDefinitionId, accountBEDefinitionId));
 
-            return accountViewDefinition;
+            if (accountViewDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("AccountViewDefinition.Settings of AccountViewDefinitionId: {0} and BusinessEntityDefinitionId: {1}", accountViewDefinitionId, accountBEDefinitionId));
+
+            return accountViewDefinition.Settings;
         }
 
         public List<AccountActionDefinition> GetAccountActionDefinitions(Guid accountBEDefinitionId)
