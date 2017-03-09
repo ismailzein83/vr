@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common", "Vanrise.Common\Vanrise.Common.csproj", "{1A350B7C-28EA-4824-B9A0-C60AD25F0EA9}"
 EndProject
@@ -342,9 +342,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments", "Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments\Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments.csproj", "{39FFC05B-1C3C-46C7-A961-E54AB259AF8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Notification", "Vanrise.GenericData.Notification\Vanrise.GenericData.Notification.csproj", "{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 146
+		SccNumberOfProjects = 147
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -928,6 +930,10 @@ Global
 		SccProjectTopLevelParentUniqueName145 = Vanrise.sln
 		SccProjectName145 = Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments
 		SccLocalPath145 = Vanrise.Integration.Adapters.MySQLReceiveAdapter.Arguments
+		SccProjectUniqueName146 = Vanrise.GenericData.Notification\\Vanrise.GenericData.Notification.csproj
+		SccProjectTopLevelParentUniqueName146 = Vanrise.sln
+		SccProjectName146 = Vanrise.GenericData.Notification
+		SccLocalPath146 = Vanrise.GenericData.Notification
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2118,6 +2124,14 @@ Global
 		{39FFC05B-1C3C-46C7-A961-E54AB259AF8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39FFC05B-1C3C-46C7-A961-E54AB259AF8E}.Release|x64.ActiveCfg = Release|Any CPU
 		{39FFC05B-1C3C-46C7-A961-E54AB259AF8E}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}.Release|x64.ActiveCfg = Release|Any CPU
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2273,5 +2287,6 @@ Global
 		{E820F143-F40E-4465-A14C-270EDEB8A6B3} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
 		{0F3AE743-A034-406D-A341-021029B8EF1B} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
 		{39FFC05B-1C3C-46C7-A961-E54AB259AF8E} = {E799A8A6-EAD5-42B5-9A6D-ED1CE18BAF56}
+		{BDDD1FAC-EA45-4291-9F64-D749D47A97BA} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 	EndGlobalSection
 EndGlobal
