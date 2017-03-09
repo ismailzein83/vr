@@ -559,9 +559,7 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Templates\CodeGroupTemplate.xlsx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\Directives\SaleRate\History\Template\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
