@@ -36,6 +36,10 @@ namespace TOne.WhS.Sales.Entities
 
         Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; }
 
+        SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId);
+
+        SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId);
+
         SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
 
         SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
@@ -63,6 +67,10 @@ namespace TOne.WhS.Sales.Entities
         SaleZone SaleZone { get; }
 
         ZoneChanges ZoneDraft { get; }
+
+        SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId);
+
+        SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId);
 
         SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
 

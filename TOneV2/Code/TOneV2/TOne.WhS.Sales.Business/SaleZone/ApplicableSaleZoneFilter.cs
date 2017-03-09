@@ -32,13 +32,15 @@ namespace TOne.WhS.Sales.Business
 
             CustomData customData = context.CustomData as CustomData;
 
-            var IsActionApplicableToZoneInput = new IsActionApplicableToZoneInput()
+            var IsActionApplicableToZoneInput = new BulkActionApplicableToZoneInput()
             {
                 OwnerType = OwnerType,
                 OwnerId = OwnerId,
                 SaleZone = context.SaleZone,
                 BulkAction = ActionType,
                 Draft = customData.Draft,
+                GetCurrentSellingProductZoneRP = customData.GetCurrentSellingProductZoneRP,
+                GetCurrentCustomerZoneRP = customData.GetCurrentCustomerZoneRP,
                 GetSellingProductZoneRate = customData.GetSellingProductZoneRate,
                 GetCustomerZoneRate = customData.GetCustomerZoneRate,
                 GetRateBED = customData.GetRateBED
@@ -47,9 +49,12 @@ namespace TOne.WhS.Sales.Business
             return !UtilitiesManager.IsActionApplicableToZone(IsActionApplicableToZoneInput);
         }
 
+        #region Private Classes
+
         private class CustomData
         {
             private SaleEntityZoneRateLocator _futureRateLocator;
+            private SaleEntityZoneRoutingProductLocator _routingProductLocator;
 
             private DateTime _newRateBED;
             private DateTime _increasedRateBED;
@@ -62,9 +67,20 @@ namespace TOne.WhS.Sales.Business
             public CustomData(SalePriceListOwnerType ownerType, int ownerId)
             {
                 _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
+                _routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Today));
                 Draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
                 SetRateBEDs();
                 SetRPRouteDetails();
+            }
+
+            public SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId)
+            {
+                return _routingProductLocator.GetSellingProductZoneRoutingProduct(sellingProductId, saleZoneId);
+            }
+
+            public SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId)
+            {
+                return _routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZoneId);
             }
 
             public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate)
@@ -107,5 +123,7 @@ namespace TOne.WhS.Sales.Business
 
             }
         }
+
+        #endregion
     }
 }

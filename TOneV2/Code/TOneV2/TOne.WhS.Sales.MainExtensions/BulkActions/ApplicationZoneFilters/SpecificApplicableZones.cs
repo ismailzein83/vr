@@ -30,8 +30,20 @@ namespace TOne.WhS.Sales.MainExtensions
 
                 if (ownerSaleZones != null)
                 {
-                    var currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Today));
+                    DateTime today = DateTime.Today;
+                    var currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(today));
                     var futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
+                    var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(today));
+
+                    Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP = (sellingProductId, saleZoneId) =>
+                    {
+                        return routingProductLocator.GetSellingProductZoneRoutingProduct(sellingProductId, saleZoneId);
+                    };
+
+                    Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP = (customerId, sellingProductId, saleZoneId) =>
+                    {
+                        return routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZoneId);
+                    };
 
                     Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate = (sellingProductId, zoneId, getFutureRate) =>
                     {
@@ -59,13 +71,15 @@ namespace TOne.WhS.Sales.MainExtensions
                     });
                     foreach (SaleZone saleZone in saleZonesByCountryIds)
                     {
-                        var isActionApplicableToZoneInput = new IsActionApplicableToZoneInput()
+                        var isActionApplicableToZoneInput = new BulkActionApplicableToZoneInput()
                         {
                             OwnerType = context.OwnerType,
                             OwnerId = context.OwnerId,
                             SaleZone = saleZone,
                             BulkAction = context.BulkAction,
                             Draft = context.DraftData,
+                            GetCurrentSellingProductZoneRP = getCurrentSellingProductZoneRP,
+                            GetCurrentCustomerZoneRP = getCurrentCustomerZoneRP,
                             GetSellingProductZoneRate = getSellingProductZoneRate,
                             GetCustomerZoneRate = getCustomerZoneRate
                         };

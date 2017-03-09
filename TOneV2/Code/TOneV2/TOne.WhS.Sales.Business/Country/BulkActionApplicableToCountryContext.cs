@@ -13,14 +13,20 @@ namespace TOne.WhS.Sales.Business
     {
         #region Fields / Constructors
 
+        private Func<int, long, SaleEntityZoneRoutingProduct> _getCurrentSellingProductZoneRP;
+
+        private Func<int, int, long, SaleEntityZoneRoutingProduct> _getCurrentCustomerZoneRP;
+
         private Func<int, long, bool, SaleEntityZoneRate> _getSellingProudctZoneRate;
 
         private Func<int, int, long, bool, SaleEntityZoneRate> _getCustomerZoneRate;
 
         private Func<decimal?, decimal, DateTime> _getRateBED;
 
-        public BulkActionApplicableToCountryContext(Func<int, long, bool, SaleEntityZoneRate> getSellingProudctZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED)
+        public BulkActionApplicableToCountryContext(Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP, Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP, Func<int, long, bool, SaleEntityZoneRate> getSellingProudctZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED)
         {
+            _getCurrentSellingProductZoneRP = getCurrentSellingProductZoneRP;
+            _getCurrentCustomerZoneRP = getCurrentCustomerZoneRP;
             _getSellingProudctZoneRate = getSellingProudctZoneRate;
             _getCustomerZoneRate = getCustomerZoneRate;
             _getRateBED = getRateBED;
@@ -37,6 +43,16 @@ namespace TOne.WhS.Sales.Business
         public int OwnerId { get; set; }
 
         public Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; set; }
+
+        public SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId)
+        {
+            return _getCurrentSellingProductZoneRP(sellingProductId, saleZoneId);
+        }
+
+        public SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId)
+        {
+            return _getCurrentCustomerZoneRP(customerId, sellingProductId, saleZoneId);
+        }
 
         public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate)
         {

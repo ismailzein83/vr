@@ -46,15 +46,27 @@ namespace TOne.WhS.Sales.MainExtensions
             if (context.SaleZone.EED.HasValue)
                 return false;
 
+            SaleEntityZoneRoutingProduct currentZoneRP;
+
             if (context.OwnerType == SalePriceListOwnerType.Customer)
             {
                 if (!_sellingProductId.HasValue)
                 {
                     _sellingProductId = new RatePlanManager().GetSellingProductId(context.OwnerId, DateTime.Today, false);
                 }
+
                 if (UtilitiesManager.CustomerZoneHasPendingClosedNormalRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, context.GetCustomerZoneRate))
                     return false;
+
+                currentZoneRP = context.GetCurrentCustomerZoneRP(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId);
             }
+            else
+            {
+                currentZoneRP = context.GetCurrentSellingProductZoneRP(context.OwnerId, context.SaleZone.SaleZoneId);
+            }
+
+            if (IsDuplicateRoutingProduct(currentZoneRP))
+                return false;
 
             if (!_rpZoneRelationType.HasValue)
                 SetRoutingProductFields();
@@ -133,6 +145,11 @@ namespace TOne.WhS.Sales.MainExtensions
                     return newNormalRate.BED;
             }
             return null;
+        }
+
+        private bool IsDuplicateRoutingProduct(SaleEntityZoneRoutingProduct currentZoneRP)
+        {
+            return (currentZoneRP != null && currentZoneRP.RoutingProductId == RoutingProductId);
         }
 
         #endregion
