@@ -2281,7 +2281,15 @@ vr-label[postspace] .vr-control-label {
 vr-label[prespace] .vr-control-label {
     margin-left:10px;
 } 
-
+vr-label[smallsize] .vr-control-label {
+    font-size: 9px;
+} 
+vr-label[mediumsize] .vr-control-label {
+    font-size: 12px;
+}
+vr-label[largesize] .vr-control-label {
+    font-size: 14px;
+}
 vr-label[breakline] .vr-control-label {   
     white-space: normal !important;
     word-wrap: break-word;
