@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Business.Extensions
 {
     public class BalanceAlertAccountAction : BaseAccountBalanceAlertVRAction
     {
-        public override Guid ConfigId { get { return new Guid("a8e093f4-f9c3-420b-99b7-32eea2c1df78"); } }
+        //public override Guid ConfigId { get { return new Guid("a8e093f4-f9c3-420b-99b7-32eea2c1df78"); } }
 
         public AccountActionBackendExecutor ActionExecutor { get; set; }
 

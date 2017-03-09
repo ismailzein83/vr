@@ -13,10 +13,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
     public class SendEmailAction : BaseAccountBalanceAlertVRAction
     {
         public Guid MailMessageTemplateId { get; set; }
-        public override Guid ConfigId
-        {
-            get { return new Guid("BE74A60E-D312-4B4F-BD76-5B7BE81ABE62"); }
-        }
+        //public override Guid ConfigId
+        //{
+        //    get { return new Guid("BE74A60E-D312-4B4F-BD76-5B7BE81ABE62"); }
+        //}
 
         public override void Execute(IVRActionExecutionContext context)
         {
