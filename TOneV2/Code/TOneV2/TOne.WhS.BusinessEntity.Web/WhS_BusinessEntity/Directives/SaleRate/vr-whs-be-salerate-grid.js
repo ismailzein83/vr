@@ -24,49 +24,20 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
     };
 
     function SaleRateGrid($scope, ctrl, $attrs) {
+        this.initializeController = initializeController;
 
         var gridAPI;
         var gridQuery;
-        this.initializeController = initializeController;
 
         function initializeController() {
             $scope.showGrid = false;
-            var gridDrillDownTabsObj;
             $scope.salerates = [];
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
-                var drillDownDefinitions = [];
-                var drillDownDefinition = {};
-
-                drillDownDefinition.title = "Other Rates";
-                drillDownDefinition.directive = "vr-whs-be-saleotherrate-grid";
-
-                drillDownDefinition.loadDirective = function (directiveAPI, rateItem) {
-                    rateItem.otherRateGridAPI = directiveAPI;
-                    rateItem.otherRateGridAPI.loadGrid(rateItem.OtherRates);
-                };
-                drillDownDefinitions.push(drillDownDefinition);
-                gridDrillDownTabsObj = vruiUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-                function getDirectiveAPI() {
-
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-
-                        return gridAPI.retrieveData(query);
-                    };
-
-                    return directiveAPI;
-                }
-            };
-            $scope.isExpandable = function (dataItem) {
-                return (dataItem.OtherRates != null && dataItem.OtherRates.length > 0);
+                defineAPI();
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                gridQuery = dataRetrievalInput.Query;
                 return whSBeSaleRateApiService.GetFilteredSaleRate(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
@@ -74,6 +45,9 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                                 var item = response.Data[i];
                                 setNormalRateIconProperties(item);
                                 SetRateChangeIcon(item);
+
+                                var drillDownDefinitions = getDrillDownDefinitions(item);
+                                var gridDrillDownTabsObj = vruiUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(item);
                             }
                         }
@@ -85,6 +59,51 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                     });
             };
         }
+        function defineAPI() {
+            var api = {};
+
+            api.loadGrid = function (query) {
+                gridQuery = query;
+                return gridAPI.retrieveData(query);
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
+
+        function getDrillDownDefinitions(dataItem) {
+
+            var drillDownDefinitions = [];
+
+            if (dataItem.OtherRates != null && dataItem.OtherRates.length > 0) {
+                drillDownDefinitions.push({
+                    title: 'Other Rates',
+                    directive: 'vr-whs-be-saleotherrate-grid',
+                    loadDirective: function (directiveAPI, rateItem) {
+                        rateItem.otherRateGridAPI = directiveAPI;
+                        rateItem.otherRateGridAPI.loadGrid(rateItem.OtherRates);
+                    }
+                });
+            }
+
+            drillDownDefinitions.push({
+                title: 'History',
+                directive: 'vr-whs-be-sale-rate-history-grid',
+                loadDirective: function (directiveAPI, dataItem) {
+                    var directivePayload = {
+                        OwnerType: gridQuery.OwnerType,
+                        OwnerId: gridQuery.OwnerId,
+                        SellingNumberPlanId: gridQuery.SellingNumberPlanId,
+                        ZoneName: dataItem.ZoneName,
+                        CountryId: dataItem.CountryId
+                    };
+                    return directiveAPI.load(directivePayload);
+                }
+            });
+
+            return drillDownDefinitions;
+        }
+
         function setNormalRateIconProperties(dataItem) {
             if (gridQuery.OwnerType === whSBeSalePriceListOwnerTypeEnum.SellingProduct.value)
                 return;

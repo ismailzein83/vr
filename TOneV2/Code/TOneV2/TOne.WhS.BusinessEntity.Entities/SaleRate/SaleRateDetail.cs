@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public SaleRate Entity { get; set; }
         public string ZoneName { get; set; }
+        public int CountryId { get; set; }
         public string CurrencyName { get; set; }
         public decimal ConvertedRate { get; set; }
         public List<SaleOtherRateDetail> OtherRates { set; get; }

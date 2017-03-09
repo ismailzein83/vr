@@ -32,20 +32,21 @@ function (UtilsService, VRNotificationService) {
             $scope.saleOtherRates = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
-                   
+
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (data) {
-                        $scope.saleOtherRates = data;
+                        if (data != undefined)
+                            $scope.saleOtherRates = data;
                     };
-                   
+
                     return directiveAPI;
                 }
             };
-            
+
         }
 
     }
