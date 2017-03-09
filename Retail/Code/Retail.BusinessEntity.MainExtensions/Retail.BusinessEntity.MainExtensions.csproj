@@ -41,6 +41,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -121,6 +125,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Web.Base">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceAlertRule\PercentageBalanceAlertThreshold.cs" />
@@ -134,7 +141,7 @@
     <Compile Include="AccountViews\AccountIdentificationRules.cs" />
     <Compile Include="AccountViews\AccountInfo.cs" />
     <Compile Include="AccountViews\AccountPackages.cs" />
-    <Compile Include="AccountViews\PortalAccount.cs" />
+    <Compile Include="PortalAccount\PortalAccount.cs" />
     <Compile Include="AccountViews\AccountServices.cs" />
     <Compile Include="AccountViews\Actions.cs" />
     <Compile Include="AccountViews\ChildBERelation.cs" />
@@ -159,6 +166,9 @@
     <Compile Include="ChargingPolicyParts\RateValues\GenericRuleRateValueDefinition.cs" />
     <Compile Include="ChargingPolicyParts\RateValues\SingleRateValue.cs" />
     <Compile Include="ChargingPolicyParts\RateValues\SingleRateValueDefinition.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="PortalAccount\PortalAccountController.cs" />
+    <Compile Include="PortalAccount\PortalAccountManager.cs" />
     <Compile Include="ProductTypes\PostPaid\PostPaidDefinitionSettings.cs" />
     <Compile Include="ProductTypes\PostPaid\PostPaidSettings.cs" />
     <Compile Include="ProductTypes\PrePaid\PrePaidDefinitionSettings.cs" />
