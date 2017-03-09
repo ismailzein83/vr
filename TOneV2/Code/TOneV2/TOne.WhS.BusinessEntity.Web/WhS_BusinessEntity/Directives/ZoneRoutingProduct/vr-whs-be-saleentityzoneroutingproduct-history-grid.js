@@ -89,7 +89,7 @@ app.directive('vrWhsBeSaleentityzoneroutingproductHistoryGrid', ['WhS_BE_SaleEnt
         function extendRecord(record) {
 
             setServiceViewerMembers();
-            setSourceDescription();
+            setSourceIconProperties();
 
             function setServiceViewerMembers() {
                 record.serviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
@@ -98,6 +98,14 @@ app.directive('vrWhsBeSaleentityzoneroutingproductHistoryGrid', ['WhS_BE_SaleEnt
                     var serviceViewerPayload = { selectedIds: record.ServiceIds };
                     VRUIUtilsService.callDirectiveLoad(api, serviceViewerPayload, record.serviceViewerLoadDeferred);
                 };
+            }
+            function setSourceIconProperties() {
+                if (record.SaleEntityName != undefined) {
+                    record.sourceIconType = 'inherited';
+                }
+                else {
+                    record.sourceIconType = 'explicit';
+                }
             }
             function setSourceDescription() {
                 switch (record.Entity.Source) {

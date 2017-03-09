@@ -9,8 +9,10 @@
     <vr-datagridcolumn headertext="'Services'">
         <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Source'" field="'sourceDescription'" type="'Text'" disablesorting></vr-datagridcolumn>
-    <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" headertext="'Sale Entity'" field="'SaleEntityName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" widthfactor="3">
+        <vr-icon icontype="dataItem.sourceIconType" inline></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" headertext="'Selling Product'" field="'SaleEntityName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

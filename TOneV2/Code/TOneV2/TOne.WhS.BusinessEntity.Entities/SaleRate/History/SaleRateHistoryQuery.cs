@@ -8,5 +8,14 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SaleRateHistoryQuery
     {
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public int? SellingNumberPlanId { get; set; }
+
+        public string ZoneName { get; set; }
+
+        public int CountryId { get; set; }
     }
 }

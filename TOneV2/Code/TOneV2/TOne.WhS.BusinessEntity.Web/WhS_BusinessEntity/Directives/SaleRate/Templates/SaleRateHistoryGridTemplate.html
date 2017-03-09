@@ -5,12 +5,15 @@
              defaultsortdirection="'DESC'"
              pagingtype="'PagingOnScroll'"
              hidegridmenu>
-    <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-    <vr-datagridcolumn widthfactor="5"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Change Type'">
-        <vr-icon icontype="dataItem.iconType" iconurl="dataItem.iconUrl"></vr-icon>
+    <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn widthfactor="3">
+        <vr-icon icontype="dataItem.changeTypeIconType" iconurl="dataItem.changeTypeIconUrl" tooltip="dataItem.changeTypeIconDescription" inline></vr-icon>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" widthfactor="3">
+        <vr-icon icontype="dataItem.sourceIconType" inline></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" headertext="'Selling Product'" field="'SellingProductName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

@@ -10,232 +10,275 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SaleRateHistoryManager
     {
-        #region Selling Product Members
-
-        public Vanrise.Entities.IDataRetrievalResult<SellingProductZoneRateHistoryRecordDetail> GetFilteredSellingProductZoneRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SellingProductZoneRateHistoryQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SaleRateHistoryRecordDetail> GetFilteredSaleRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
         {
-            return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, new SellingProductZoneRateHistoryRequestHandler());
+            return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, new SaleRateHistoryRequestHandler());
         }
 
-        private class SellingProductZoneRateHistoryRequestHandler : Vanrise.Common.Business.BigDataRequestHandler<SellingProductZoneRateHistoryQuery, SellingProductZoneRateHistoryRecord, SellingProductZoneRateHistoryRecordDetail>
+        private class SaleRateHistoryRequestHandler : Vanrise.Common.Business.BigDataRequestHandler<SaleRateHistoryQuery, SaleRateHistoryRecord, SaleRateHistoryRecordDetail>
         {
-            private Vanrise.Common.Business.CurrencyManager _currencyManager = new Vanrise.Common.Business.CurrencyManager();
+            #region Fields
 
-            public override SellingProductZoneRateHistoryRecordDetail EntityDetailMapper(SellingProductZoneRateHistoryRecord entity)
+            private SaleRateManager _saleRateManager = new SaleRateManager();
+            private Vanrise.Common.Business.CurrencyManager _currencyManager = new Vanrise.Common.Business.CurrencyManager();
+            private SellingProductManager _sellingProductManager = new SellingProductManager();
+
+            #endregion
+
+            public override IEnumerable<SaleRateHistoryRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
             {
-                return new SellingProductZoneRateHistoryRecordDetail()
+                IEnumerable<long> zoneIds = GetZoneIds(input.Query.OwnerType, input.Query.OwnerId, input.Query.SellingNumberPlanId, input.Query.CountryId, input.Query.ZoneName);
+
+                if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
+                    return GetSellingProductZoneRateHistoryRecords(input.Query.OwnerId, zoneIds);
+                else
+                    return GetCustomerZoneRateHistoryRecords(input.Query.OwnerId, zoneIds, input.Query.CountryId);
+            }
+
+            public override SaleRateHistoryRecordDetail EntityDetailMapper(SaleRateHistoryRecord entity)
+            {
+                return new SaleRateHistoryRecordDetail()
                 {
                     Entity = entity,
-                    CurrencySymbol = _currencyManager.GetCurrencySymbol(entity.CurrencyId)
+                    CurrencySymbol = _currencyManager.GetCurrencySymbol(entity.CurrencyId),
+                    SellingProductName = (entity.SellingProductId.HasValue) ? _sellingProductManager.GetSellingProductName(entity.SellingProductId.Value) : null
                 };
             }
 
-            public override IEnumerable<SellingProductZoneRateHistoryRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SellingProductZoneRateHistoryQuery> input)
+            #region Selling Product Methods
+
+            private IEnumerable<SaleRateHistoryRecord> GetSellingProductZoneRateHistoryRecords(int sellingProductId, IEnumerable<long> zoneIds)
             {
-                int? sellingNumberPlanId = new SellingProductManager().GetSellingNumberPlanId(input.Query.SellingProductId);
-                if (!sellingNumberPlanId.HasValue)
-                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SellingNumberPlanId of SellingProduct '{0}' was not found", input.Query.SellingProductId));
+                IEnumerable<SaleRate> spRates = _saleRateManager.GetAllSaleRatesByOwner(SalePriceListOwnerType.SellingProduct, sellingProductId, zoneIds);
+                return (spRates != null && spRates.Count() > 0) ? PrepareSellingProductZoneRateHistoryRecords(spRates) : null;
+            }
 
-                IEnumerable<long> zoneIds = new SaleZoneManager().GetSaleZoneIdsBySaleZoneName(sellingNumberPlanId.Value, input.Query.CountryId, input.Query.ZoneName);
-                if (zoneIds == null || zoneIds.Count() == 0)
-                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZoneIds of SaleZone '{0}' were not found", input.Query.ZoneName));
+            private IEnumerable<SaleRateHistoryRecord> PrepareSellingProductZoneRateHistoryRecords(IEnumerable<SaleRate> spRates)
+            {
+                var records = new List<SaleRateHistoryRecord>();
+                IEnumerable<SaleRate> orderedSPRates = spRates.OrderBy(x => x.BED);
 
-                var saleRateManager = new SaleRateManager();
-                IEnumerable<SaleRate> saleRates = saleRateManager.GetAllSaleRatesByOwner(SalePriceListOwnerType.SellingProduct, input.Query.SellingProductId, zoneIds);
-
-                if (saleRates == null)
-                    return null;
-
-                var records = new List<SellingProductZoneRateHistoryRecord>();
-                IEnumerable<SaleRate> orderedRates = saleRates.OrderBy(x => x.BED);
-
-                for (int i = 0; i < orderedRates.Count(); i++)
+                for (int i = 0; i < orderedSPRates.Count(); i++)
                 {
-                    SaleRate rate = saleRates.ElementAt(i);
+                    SaleRate rate = orderedSPRates.ElementAt(i);
 
-                    var record = new SellingProductZoneRateHistoryRecord()
+                    decimal? previousRateValue = null;
+                    if (i > 0) previousRateValue = orderedSPRates.ElementAt(i - 1).Rate;
+
+                    var record = new SaleRateHistoryRecord()
                     {
                         Rate = rate.Rate,
+                        ChangeType = GetSaleRateChangeType(rate.Rate, previousRateValue),
+                        CurrencyId = _saleRateManager.GetCurrencyId(rate),
                         BED = rate.BED,
-                        EED = rate.EED,
-                        CurrencyId = saleRateManager.GetCurrencyId(rate),
-                        ChangeType = RateChangeType.New
+                        EED = rate.EED
                     };
-
-                    if (i == 0)
-                        record.ChangeType = RateChangeType.New;
-                    else
-                    {
-                        SaleRate previousRate = saleRates.ElementAt(i - 1);
-
-                        if (rate.Rate > previousRate.Rate)
-                            record.ChangeType = RateChangeType.Increase;
-                        else if (rate.Rate < previousRate.Rate)
-                            record.ChangeType = RateChangeType.Decrease;
-                    }
 
                     records.Add(record);
                 }
 
                 return records;
             }
-        }
 
-        #endregion
+            #endregion
 
-        #region Customer Members
+            #region Customer Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<CustomerZoneRateHistoryRecordDetail> GetFilteredCustomerZoneRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<CustomerZoneRateHistoryQuery> input)
-        {
-            return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, new CustomerZoneRateHistoryRequestHandler());
-        }
-
-        private class CustomerZoneRateHistoryRequestHandler : Vanrise.Common.Business.BigDataRequestHandler<CustomerZoneRateHistoryQuery, CustomerZoneRateHistoryRecord, CustomerZoneRateHistoryRecordDetail>
-        {
-            private SellingProductManager _sellingProductManager = new SellingProductManager();
-            private Vanrise.Common.Business.CurrencyManager _currencyManager = new Vanrise.Common.Business.CurrencyManager();
-            private SaleRateManager _saleRateManager = new SaleRateManager();
-
-            public override CustomerZoneRateHistoryRecordDetail EntityDetailMapper(CustomerZoneRateHistoryRecord entity)
+            private IEnumerable<SaleRateHistoryRecord> GetCustomerZoneRateHistoryRecords(int customerId, IEnumerable<long> zoneIds, int countryId)
             {
-                return new CustomerZoneRateHistoryRecordDetail()
-                {
-                    Entity = entity,
-                    SellingProductName = entity.SellingProductId.HasValue ? _sellingProductManager.GetSellingProductName(entity.SellingProductId.Value) : null,
-                    CurrencySymbol = _currencyManager.GetCurrencySymbol(entity.CurrencyId)
-                };
+                IEnumerable<SaleRateHistoryRecord> spIntersectedRates = GetSPIntersectedRates(customerId, zoneIds);
+                if (spIntersectedRates == null || spIntersectedRates.Count() == 0)
+                    return null;
+
+                IEnumerable<SaleRateHistoryRecord> countryIntersectedRates = GetCountryIntersectedRates(customerId, countryId, spIntersectedRates);
+                if (countryIntersectedRates == null || countryIntersectedRates.Count() == 0)
+                    return null;
+
+                IEnumerable<SaleRateHistoryRecord> customerIntersectedRates = GetCustomerIntersectedRates(customerId, zoneIds, countryIntersectedRates);
+                if (customerIntersectedRates == null || customerIntersectedRates.Count() == 0)
+                    return null;
+
+                List<SaleRateHistoryRecord> customerIntersectedRatesAsList = customerIntersectedRates.ToList();
+                PrepareCustomerZoneRateHistoryRecords(customerIntersectedRatesAsList);
+
+                return customerIntersectedRatesAsList;
             }
 
-            public override IEnumerable<CustomerZoneRateHistoryRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerZoneRateHistoryQuery> input)
+            private Dictionary<int, List<ProcessedCustomerSellingProduct>> GetSPAssignmentsBySP(int customerId, out IEnumerable<int> spIds)
             {
-                int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(input.Query.CustomerId, CarrierAccountType.Customer);
-                IEnumerable<long> zoneIds = new SaleZoneManager().GetSaleZoneIdsBySaleZoneName(sellingNumberPlanId, input.Query.CountryId, input.Query.ZoneName);
+                IEnumerable<ProcessedCustomerSellingProduct> spAssignments = new CustomerSellingProductManager().GetProcessedCustomerSellingProducts(customerId);
 
-                if (zoneIds == null || zoneIds.Count() == 0)
-                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZoneIds of SaleZone '{0}' were not found", input.Query.ZoneName));
+                if (spAssignments == null || spAssignments.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' has never been assigned to a SellingProduct", customerId));
 
-                IEnumerable<CustomerZoneRateHistoryRecord> recordsIntersectedWithProducts = GetRecordsIntersectedWithProducts(input.Query.CustomerId, zoneIds);
-                if (recordsIntersectedWithProducts == null || recordsIntersectedWithProducts.Count() == 0)
-                    return null;
+                var spAssignmentsBySP = new Dictionary<int, List<ProcessedCustomerSellingProduct>>();
+                var distinctSPIds = new List<int>();
 
-                IEnumerable<CustomerZoneRateHistoryRecord> recordsIntersectedWithCountry = GetRecordsIntersectedWithCountry(input.Query.CustomerId, input.Query.CountryId, recordsIntersectedWithProducts);
-                if (recordsIntersectedWithCountry == null || recordsIntersectedWithCountry.Count() == 0)
-                    return null;
-
-                IEnumerable<CustomerZoneRateHistoryRecord> recordsMergedWithCustomer = GetRecordsMergedWithCustomer(input.Query.CustomerId, zoneIds, recordsIntersectedWithCountry);
-
-                if (recordsMergedWithCustomer == null || recordsMergedWithCustomer.Count() == 0)
-                    return null;
-
-                var records = new List<CustomerZoneRateHistoryRecord>();
-                List<CustomerZoneRateHistoryRecord> orderedRecords = recordsMergedWithCustomer.OrderBy(x => x.BED).ToList();
-
-                var saleRateManager = new SaleRateManager();
-
-                for (int i = 0; i < orderedRecords.Count(); i++)
+                foreach (ProcessedCustomerSellingProduct spAssignment in spAssignments.OrderBy(x => x.BED))
                 {
-                    CustomerZoneRateHistoryRecord record = orderedRecords.ElementAt(i);
+                    List<ProcessedCustomerSellingProduct> value;
 
-                    if (i == 0)
-                        record.ChangeType = RateChangeType.New;
-                    else
+                    if (!spAssignmentsBySP.TryGetValue(spAssignment.SellingProductId, out value))
                     {
-                        CustomerZoneRateHistoryRecord previousRecord = orderedRecords.ElementAt(i - 1);
-
-                        if (record.Rate > previousRecord.Rate)
-                            record.ChangeType = RateChangeType.Increase;
-                        else if (record.Rate < previousRecord.Rate)
-                            record.ChangeType = RateChangeType.Decrease;
+                        value = new List<ProcessedCustomerSellingProduct>();
+                        spAssignmentsBySP.Add(spAssignment.SellingProductId, value);
                     }
+
+                    if (!distinctSPIds.Contains(spAssignment.SellingProductId))
+                        distinctSPIds.Add(spAssignment.SellingProductId);
+
+                    value.Add(spAssignment);
                 }
 
-                return orderedRecords;
+                spIds = distinctSPIds;
+                return spAssignmentsBySP;
             }
 
-            #region Private Methods
-
-            private IEnumerable<CustomerZoneRateHistoryRecord> GetRecordsIntersectedWithProducts(int customerId, IEnumerable<long> zoneIds)
+            private IEnumerable<SaleRateHistoryRecord> GetSPIntersectedRates(int customerId, IEnumerable<long> zoneIds)
             {
-                IEnumerable<ProcessedCustomerSellingProduct> processedEntities = new CustomerSellingProductManager().GetProcessedCustomerSellingProducts(customerId);
-                if (processedEntities == null || processedEntities.Count() == 0)
-                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' has not been assigned to any SellingProduct", customerId));
+                IEnumerable<int> spIds;
+                Dictionary<int, List<ProcessedCustomerSellingProduct>> spAssignmentsBySP = GetSPAssignmentsBySP(customerId, out spIds);
+                Dictionary<int, List<SaleRate>> spRatesBySP = new SaleRateManager().GetZoneRatesBySellingProducts(zoneIds, spIds);
 
-                IEnumerable<int> productIds = processedEntities.MapRecords(x => x.SellingProductId).Distinct();
-                Dictionary<int, List<SaleRate>> ratesByProduct = new SaleRateManager().GetZoneRatesBySellingProducts(zoneIds, productIds);
+                var allIntersectedRecords = new List<SaleRateHistoryRecord>();
 
-                var allRecords = new List<CustomerZoneRateHistoryRecord>();
-
-                foreach (ProcessedCustomerSellingProduct processedEntity in processedEntities)
+                foreach (int spId in spIds)
                 {
-                    List<SaleRate> productRates = ratesByProduct.GetRecord(processedEntity.SellingProductId);
+                    List<ProcessedCustomerSellingProduct> spAssignments = spAssignmentsBySP.GetRecord(spId);
+                    List<SaleRate> spRates = spRatesBySP.GetRecord(spId);
 
-                    if (productRates == null || productRates.Count() == 0)
+                    if (spRates == null || spRates.Count == 0)
                         continue;
 
-                    var processedEntityAsList = new List<ProcessedCustomerSellingProduct>() { processedEntity };
-                    Action<SaleRate, CustomerZoneRateHistoryRecord> mapRateToRecord = (rate, record) =>
+                    Action<SaleRate, SaleRateHistoryRecord> SaleRateMapperAction = (saleRate, saleRateHistoryRecord) =>
                     {
-                        record.Rate = rate.Rate;
-                        record.SellingProductId = processedEntity.SellingProductId;
-                        record.CurrencyId = _saleRateManager.GetCurrencyId(rate);
+                        saleRateHistoryRecord.Rate = saleRate.Rate;
+                        saleRateHistoryRecord.CurrencyId = _saleRateManager.GetCurrencyId(saleRate);
+                        saleRateHistoryRecord.SellingProductId = spId;
                     };
 
-                    IEnumerable<CustomerZoneRateHistoryRecord> records =
-                        Vanrise.Common.Utilities.GetQIntersectT<ProcessedCustomerSellingProduct, SaleRate, CustomerZoneRateHistoryRecord>(processedEntityAsList, productRates, mapRateToRecord);
+                    IEnumerable<SaleRateHistoryRecord> intersectedRecords = Vanrise.Common.Utilities.GetQIntersectT(spAssignments, spRates, SaleRateMapperAction);
 
-                    if (records != null && records.Count() > 0)
-                        allRecords.AddRange(records);
+                    if (intersectedRecords != null && intersectedRecords.Count() > 0)
+                        allIntersectedRecords.AddRange(intersectedRecords);
                 }
 
-                return allRecords;
+                return allIntersectedRecords.OrderBy(x => x.BED);
             }
 
-            private IEnumerable<CustomerZoneRateHistoryRecord> GetRecordsIntersectedWithCountry(int customerId, int countryId, IEnumerable<CustomerZoneRateHistoryRecord> recordsIntersectedWithProducts)
+            private IEnumerable<CustomerCountry2> GetCustomerCountries(int customerId, int countryId)
             {
-                IEnumerable<CustomerCountry2> countries = new CustomerCountryManager().GetCustomerCountries(customerId);
-                IEnumerable<CustomerCountry2> filteredCountries = countries.FindAllRecords(x => x.CountryId == countryId);
+                IEnumerable<CustomerCountry2> allCountries = new CustomerCountryManager().GetCustomerCountries(customerId);
 
-                if (filteredCountries == null || filteredCountries.Count() == 0)
-                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Country '{0}' has never been sold to Customer '{1}'", countryId, customerId));
+                if (allCountries == null || allCountries.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("No Countries have ever been sold to Customer '{0}'", customerId));
 
-                IEnumerable<CustomerCountry2> orderedCountries = filteredCountries.OrderBy(x => x.BED);
-                Action<CustomerZoneRateHistoryRecord, CustomerZoneRateHistoryRecord> mapRecordToRecord = (record, targetRecord) =>
-                {
-                    targetRecord.Rate = record.Rate;
-                    targetRecord.SellingProductId = record.SellingProductId;
-                    targetRecord.CurrencyId = record.CurrencyId;
-                };
+                IEnumerable<CustomerCountry2> targetCountries = allCountries.FindAllRecords(x => x.CountryId == countryId);
 
-                return Vanrise.Common.Utilities.GetQIntersectT<CustomerCountry2, CustomerZoneRateHistoryRecord, CustomerZoneRateHistoryRecord>(orderedCountries.ToList(), recordsIntersectedWithProducts.ToList(), mapRecordToRecord);
+                if (targetCountries == null || targetCountries.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Country '{0}' has never been sold to Customer '{0}'", countryId, customerId));
+
+                return targetCountries.OrderBy(x => x.BED);
             }
 
-            private IEnumerable<CustomerZoneRateHistoryRecord> GetRecordsMergedWithCustomer(int customerId, IEnumerable<long> zoneIds, IEnumerable<CustomerZoneRateHistoryRecord> recordsIntersectedWithCountry)
+            private IEnumerable<SaleRateHistoryRecord> GetCountryIntersectedRates(int customerId, int countryId, IEnumerable<SaleRateHistoryRecord> spIntersectedRates)
+            {
+                IEnumerable<CustomerCountry2> countries = GetCustomerCountries(customerId, countryId);
+
+                List<CustomerCountry2> countriesAsList = countries.ToList();
+                List<SaleRateHistoryRecord> spIntersectedRatesAsList = spIntersectedRates.ToList();
+
+                return Vanrise.Common.Utilities.GetQIntersectT(countriesAsList, spIntersectedRatesAsList, MapSaleRateHistoryRecordAction);
+            }
+
+            private IEnumerable<SaleRateHistoryRecord> GetCustomerIntersectedRates(int customerId, IEnumerable<long> zoneIds, IEnumerable<SaleRateHistoryRecord> countryIntersectedRates)
             {
                 IEnumerable<SaleRate> customerRates = new SaleRateManager().GetAllSaleRatesByOwner(SalePriceListOwnerType.Customer, customerId, zoneIds);
+
                 if (customerRates == null || customerRates.Count() == 0)
-                    return recordsIntersectedWithCountry;
+                    return countryIntersectedRates;
 
-                Dictionary<int, SalePriceList> priceListsById = new SalePriceListManager().GetCachedSalePriceLists();
+                List<SaleRate> customerRatesAsList = customerRates.OrderBy(x => x.BED).ToList();
+                List<SaleRateHistoryRecord> countryIntersectedRatesAsList = countryIntersectedRates.ToList();
 
-                Action<CustomerZoneRateHistoryRecord, CustomerZoneRateHistoryRecord> mapRecordToRecord = (record, targetRecord) =>
-                {
-                    targetRecord.Rate = record.Rate;
-                    targetRecord.SellingProductId = record.SellingProductId;
-                    targetRecord.CurrencyId = record.CurrencyId;
-                };
-
-                Action<SaleRate, CustomerZoneRateHistoryRecord> mapRateToRecord = (rate, record) =>
+                Action<SaleRate, SaleRateHistoryRecord> mapSaleRateAction = (rate, record) =>
                 {
                     record.Rate = rate.Rate;
                     record.CurrencyId = _saleRateManager.GetCurrencyId(rate);
+                    record.SellingProductId = null;
                 };
 
-                return Vanrise.Common.Utilities.MergeUnionWithQForce<CustomerZoneRateHistoryRecord, SaleRate, CustomerZoneRateHistoryRecord>(recordsIntersectedWithCountry.ToList(), customerRates.ToList(), mapRecordToRecord, mapRateToRecord);
+                return Vanrise.Common.Utilities.MergeUnionWithQForce(customerRatesAsList, countryIntersectedRatesAsList, mapSaleRateAction, MapSaleRateHistoryRecordAction);
+            }
+
+            private void PrepareCustomerZoneRateHistoryRecords(List<SaleRateHistoryRecord> records)
+            {
+                for (int i = 0; i < records.Count; i++)
+                {
+                    SaleRateHistoryRecord record = records.ElementAt(i);
+
+                    decimal? previousRateValue = null;
+                    if (i > 0) previousRateValue = records.ElementAt(i - 1).Rate;
+
+                    record.ChangeType = GetSaleRateChangeType(record.Rate, previousRateValue);
+                }
             }
 
             #endregion
-        }
 
-        #endregion
+            #region Common Methods
+
+            private IEnumerable<long> GetZoneIds(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, int countryId, string zoneName)
+            {
+                int ownerSellingNumberPlanId = (sellingNumberPlanId.HasValue) ? sellingNumberPlanId.Value : GetOwnerSellingNumberPlanId(ownerType, ownerId);
+                IEnumerable<long> zoneIds = new SaleZoneManager().GetSaleZoneIdsBySaleZoneName(ownerSellingNumberPlanId, countryId, zoneName);
+
+                if (zoneIds == null || zoneIds.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZoneIds of Zone '{0}' were not found", zoneName));
+
+                return zoneIds;
+            }
+
+            private int GetOwnerSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
+            {
+                if (ownerType == SalePriceListOwnerType.SellingProduct)
+                {
+                    int? sellingNumberPlanId = new SellingProductManager().GetSellingNumberPlanId(ownerId);
+                    if (!sellingNumberPlanId.HasValue)
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SellingNumberPlanId of SellingProduct '{0}' was not found", ownerId));
+                    return sellingNumberPlanId.Value;
+                }
+                else
+                {
+                    return new CarrierAccountManager().GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
+                }
+            }
+
+            private RateChangeType GetSaleRateChangeType(decimal rateValue, decimal? previousRateValue)
+            {
+                if (!previousRateValue.HasValue)
+                    return RateChangeType.New;
+                else if (rateValue > previousRateValue.Value)
+                    return RateChangeType.Increase;
+                else if (rateValue < previousRateValue.Value)
+                    return RateChangeType.Decrease;
+                else
+                    return RateChangeType.NotChanged;
+            }
+
+            #endregion
+
+            #region Mappers
+
+            private Action<SaleRateHistoryRecord, SaleRateHistoryRecord> MapSaleRateHistoryRecordAction = (record, targetRecord) =>
+            {
+                targetRecord.Rate = record.Rate;
+                targetRecord.ChangeType = record.ChangeType;
+                targetRecord.CurrencyId = record.CurrencyId;
+                targetRecord.SellingProductId = record.SellingProductId;
+            };
+
+            #endregion
+        }
     }
 }

@@ -14,17 +14,10 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class SaleRateHistoryController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        [Route("GetFilteredSellingProductZoneRateHistoryRecords")]
-        public object GetFilteredSellingProductZoneRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SellingProductZoneRateHistoryQuery> input)
+        [Route("GetFilteredSaleRateHistoryRecords")]
+        public object GetFilteredSaleRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
         {
-            return GetWebResponse(input, new SaleRateHistoryManager().GetFilteredSellingProductZoneRateHistoryRecords(input));
-        }
-
-        [HttpPost]
-        [Route("GetFilteredCustomerZoneRateHistoryRecords")]
-        public object GetFilteredCustomerZoneRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<CustomerZoneRateHistoryQuery> input)
-        {
-            return GetWebResponse(input, new SaleRateHistoryManager().GetFilteredCustomerZoneRateHistoryRecords(input));
+            return GetWebResponse(input, new SaleRateHistoryManager().GetFilteredSaleRateHistoryRecords(input));
         }
     }
 }

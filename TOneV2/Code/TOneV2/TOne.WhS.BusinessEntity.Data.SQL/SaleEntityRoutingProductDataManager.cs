@@ -103,6 +103,24 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             string saleZoneIdsAsString = string.Join(",", saleZoneIds);
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwner", SaleZoneRoutingProductMapper, ownerType, ownerId, saleZoneIdsAsString);
         }
+        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsBySellingProductsAndCustomer(IEnumerable<int> sellingProductIds, int customerId)
+        {
+            if (sellingProductIds == null || sellingProductIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("sellingProductIds were not passed");
+            string sellingProductIdsAsString = string.Join(",", sellingProductIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllDefaultRPsBySellingProductsAndCustomer", DefaultRoutingProductMapper, sellingProductIdsAsString, customerId);
+        }
+        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsBySellingProductsAndCustomer(IEnumerable<int> sellingProductIds, int customerId, IEnumerable<long> saleZoneIds)
+        {
+            if (sellingProductIds == null || sellingProductIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("sellingProductIds were not passed");
+            if (saleZoneIds == null || saleZoneIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds were not passed");
+
+            string sellingProductIdsAsString = string.Join(",", sellingProductIds);
+            string saleZoneIdsAsString = string.Join(",", saleZoneIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllZoneRPsBySellingProductsAndCustomer", SaleZoneRoutingProductMapper, sellingProductIdsAsString, customerId, saleZoneIdsAsString);
+        }
         #endregion
 
         #region Private Methods
