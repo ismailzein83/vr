@@ -48,20 +48,23 @@ namespace Vanrise.Runtime.Business
 
         public SchedulerTaskStateUpdateOutput GetUpdated(List<Guid> taskIds)
         {
-            SchedulerTaskStateUpdateOutput bpInstanceUpdateOutput = new SchedulerTaskStateUpdateOutput();
-            IEnumerable<SchedulerTaskState> taskStates = GetSchedulerTaskStateByTaskIds(taskIds);
-
+            SchedulerTaskManager schedulerTaskManager = new SchedulerTaskManager();
             List<SchedulerTaskStateDetail> schedulerTaskStateDetails = new List<SchedulerTaskStateDetail>();
+            
+            IEnumerable<SchedulerTaskState> taskStates = GetSchedulerTaskStateByTaskIds(taskIds);
 
             if (taskStates != null)
             {
                 foreach (SchedulerTaskState schedulerTaskState in taskStates)
                 {
-                    schedulerTaskStateDetails.Add(SchedulerTaskStateDetailMapper(schedulerTaskState));
+                    var schedulerTask = schedulerTaskManager.GetTask(schedulerTaskState.TaskId);
+                    schedulerTaskStateDetails.Add(SchedulerTaskStateDetailMapper(schedulerTaskState, schedulerTask.IsEnabled));
                 }
             }
 
+            SchedulerTaskStateUpdateOutput bpInstanceUpdateOutput = new SchedulerTaskStateUpdateOutput();
             bpInstanceUpdateOutput.ListSchedulerTaskStateDetails = schedulerTaskStateDetails;
+
             return bpInstanceUpdateOutput;
         }
 
@@ -115,11 +118,18 @@ namespace Vanrise.Runtime.Business
 
         #region private methods
 
-        private SchedulerTaskStateDetail SchedulerTaskStateDetailMapper(SchedulerTaskState task)
+        private SchedulerTaskStateDetail SchedulerTaskStateDetailMapper(SchedulerTaskState task, bool isEnabled)
         {
             if (task == null)
                 return null;
-            return new SchedulerTaskStateDetail() { Entity = task };
+
+            SchedulerTaskStateDetail schedulerTaskStateDetail = new SchedulerTaskStateDetail()
+            {
+                Entity = task,
+                IsEnabled = isEnabled
+            };
+
+            return schedulerTaskStateDetail;
         }
 
         #endregion

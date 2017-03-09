@@ -120,7 +120,12 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
             }
 
             function runSchedulerTask(dataItem) {
-                return SchedulerTaskAPIService.RunSchedulerTask(dataItem.Entity.TaskId);
+                $scope.showLoader = true;
+                return SchedulerTaskAPIService.RunSchedulerTask(dataItem.Entity.TaskId).then(function () {
+                    setTimeout(function () { $scope.showLoader = false; }, 5000);
+                }).catch(function (error) {
+                    $scope.showLoader = false;
+                });
             }
 
             function hasRunSchedulerTaskPermission() {
@@ -180,13 +185,17 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                                 var Entity = {
                                     TaskId: $scope.schedulerTasks[j].Entity.TaskId,
                                     Name: $scope.schedulerTasks[j].Entity.Name,
-                                    IsEnabled: $scope.schedulerTasks[j].Entity.IsEnabled,
+                                    IsEnabled: schedulerTaskState.IsEnabled,
                                     LastRunTime: schedulerTaskState.Entity.LastRunTime,
                                     NextRunTime: schedulerTaskState.Entity.NextRunTime,
                                     StatusDescription: schedulerTaskState.StatusDescription
                                 };
                                 var obj = { Entity: Entity };
                                 $scope.schedulerTasks[j] = obj;
+
+                                if (schedulerTaskState.StatusDescription == VR_Runtime_SchedulerTaskStatusEnum.InProgress.description)
+                                    $scope.showLoader = false;
+
                                 continue;
                             }
                         }

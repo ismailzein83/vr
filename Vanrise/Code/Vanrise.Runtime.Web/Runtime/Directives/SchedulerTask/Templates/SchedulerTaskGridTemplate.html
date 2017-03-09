@@ -1,16 +1,20 @@
-﻿<vr-datagrid datasource="schedulerTasks"
-             dataretrievalfunction="dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             on-ready="onGridReady"
-             menuactions="gridMenuActions"
-             idfield="Entity.TaskId">
+﻿<span vr-loader="showLoader">
+    <vr-datagrid datasource="schedulerTasks"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="onGridReady"
+                 menuactions="gridMenuActions"
+                 idfield="Entity.TaskId">
 
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.TaskId'" widthfactor="1" ></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Enabled'" field="'Entity.IsEnabled'" disablesorting="true" >
-        <vr-icon icontype="dataItem.Entity.IsEnabled"></vr-icon>
-    </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Status'" field="'Entity.StatusDescription'" disablesorting="true"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Last Run Time'" field="'Entity.LastRunTime'" type="'LongDatetime'" widthfactor="5" disablesorting="true" ></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Next Run Time'" field="'Entity.NextRunTime'" type="'LongDatetime'" widthfactor="5" disablesorting="true" ></vr-datagridcolumn>
-</vr-datagrid>
+        <vr-datagridcolumn headertext="'ID'" field="'Entity.TaskId'" widthfactor="1"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Enabled'" field="'Entity.IsEnabled'" disablesorting="true">
+            <vr-icon icontype="dataItem.Entity.IsEnabled"></vr-icon>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Status'" field="'Entity.StatusDescription'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Last Run Time'" field="'Entity.LastRunTime'" type="'LongDatetime'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Next Run Time'" field="'Entity.NextRunTime'" type="'LongDatetime'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+    </vr-datagrid>
+</span>
+
+
