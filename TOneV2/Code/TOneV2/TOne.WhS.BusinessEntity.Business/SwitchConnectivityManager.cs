@@ -33,7 +33,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 (input.Query.SwitchIds == null || input.Query.SwitchIds.Contains(itm.SwitchId)) &&
                 (input.Query.ConnectionTypes == null || input.Query.ConnectionTypes.Contains(itm.Settings.ConnectionType));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, SwitchConnectivityDetailMapper));
+            var resultProcessingHandler = new ResultProcessingHandler<SwitchConnectivityDetail>()
+            {
+                ExportExcelHandler = new SwitchConnectivityExportExcelHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, SwitchConnectivityDetailMapper), resultProcessingHandler);
         }
 
         public SwitchConnectivity GetSwitchConnectivity(int switchConnectivityId)
@@ -204,6 +209,46 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Classes
+
+        private class SwitchConnectivityExportExcelHandler : ExcelExportHandler<SwitchConnectivityDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SwitchConnectivityDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Switch Connectivity",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Carrier Account Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Switch Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SwitchConnectivityId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CarrierAccountName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.SwitchName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
