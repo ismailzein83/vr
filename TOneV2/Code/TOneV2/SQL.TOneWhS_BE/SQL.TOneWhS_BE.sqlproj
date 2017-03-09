@@ -450,5 +450,13 @@
     <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_Update_1.sql" />
     <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_Insert_1.sql" />
     <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_GetAll_1.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SalePricelistRateChange.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SalePricelistCustomerChange.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SalePricelistCodeChange.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_UpdatePriceListNotification_1.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPsBySellingProductsAndCustomer.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwner.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsBySellingProductsAndCustomer.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwner.sql" />
   </ItemGroup>
 </Project>
