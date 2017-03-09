@@ -252,7 +252,7 @@ namespace Retail.BusinessEntity.Business
 
             return GetAccountViewDefinitionsByAccount(accountBEDefinitionId, account);
         }
-        public AccountViewDefinitionSettings GetAccountViewDefinitionSettings(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
+        public T GetAccountViewDefinitionSettings<T>(Guid accountBEDefinitionId, Guid accountViewDefinitionId) where T: AccountViewDefinitionSettings
         {
             List<AccountViewDefinition> accountViewDefinitions = GetAccountViewDefinitions(accountBEDefinitionId);
 
@@ -263,7 +263,11 @@ namespace Retail.BusinessEntity.Business
             if (accountViewDefinition.Settings == null)
                 throw new NullReferenceException(string.Format("AccountViewDefinition.Settings of AccountViewDefinitionId: {0} and BusinessEntityDefinitionId: {1}", accountViewDefinitionId, accountBEDefinitionId));
 
-            return accountViewDefinition.Settings;
+            T accountViewDefinitionSettings = accountViewDefinition.Settings as T;
+            if (accountViewDefinitionSettings == null)
+                throw new Exception(String.Format("accountViewDefinitionSettings should be of type '{0}'. it is of type '{1}'", typeof(T), accountViewDefinitionSettings.GetType()));
+
+            return accountViewDefinitionSettings;
         }
 
         public List<AccountActionDefinition> GetAccountActionDefinitions(Guid accountBEDefinitionId)

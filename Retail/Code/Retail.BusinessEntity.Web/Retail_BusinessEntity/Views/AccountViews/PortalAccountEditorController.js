@@ -8,10 +8,9 @@
 
         var accountBEDefinitionId;
         var parentAccountId;
+        var accountViewDefinitionId;
         var name;
         var email;
-        var connectionId;
-        var tenantId;
         var accountGenericFieldValuesByName;
 
         loadParameters();
@@ -27,10 +26,9 @@
 
                 var context = parameters.context;
                 if (context != undefined) {
+                    accountViewDefinitionId = context.getAccountViewDefinitionId();
                     name = context.getName();
                     email = context.getEmail();
-                    connectionId = context.getConnectionId();
-                    tenantId = context.getTenantId();
                 }
             }
         }
@@ -111,10 +109,9 @@
             var obj = {
                 AccountBEDefinitionId: accountBEDefinitionId,
                 AccountId: parentAccountId,
+                AccountViewDefinitionId: accountViewDefinitionId,
                 Name: $scope.scopeModel.name,
-                Email: $scope.scopeModel.email,
-                ConnectionId: connectionId,
-                TenantId: tenantId
+                Email: $scope.scopeModel.email
             };
             return obj;
         }

@@ -167,7 +167,6 @@
     <Compile Include="Controllers\CreditClassController.cs" />
     <Compile Include="Controllers\DIDController.cs" />
     <Compile Include="Controllers\PopController.cs" />
-    <Compile Include="Controllers\PortalAccountController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProductFamilyController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />

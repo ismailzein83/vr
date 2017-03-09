@@ -49,7 +49,7 @@
                         $scope.scopeModel.sectionMenuActions.push({
                             name: 'Reset Password',
                             clicked: function () {
-                                Retail_BE_PortalAccountService.resetPassword(addedPortalAccount.UserId, buildContext());
+                                Retail_BE_PortalAccountService.resetPassword(accountBEDefinitionId, parentAccountId, buildContext());
                             }
                         });
                     };
@@ -64,14 +64,11 @@
 
                 api.load = function (payload) {
 
-                    $scope.scopeModel.isGridLoading = true;
-
                     if (payload != undefined) {
                         accountViewDefinition = payload.accountViewDefinition;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
                     }
-
 
                     Retail_BE_PortalAccountAPIService.GetPortalAccountSettings(accountBEDefinitionId, parentAccountId).then(function (response) {
                         if (response != undefined) {
@@ -83,7 +80,7 @@
                             $scope.scopeModel.sectionMenuActions.push({
                                 name: 'Reset Password',
                                 clicked: function () {
-                                    Retail_BE_PortalAccountService.resetPassword(portalAccountSettings.UserId, buildContext());
+                                    Retail_BE_PortalAccountService.resetPassword(accountBEDefinitionId, parentAccountId, buildContext());
                                 }
                             });
                         }
@@ -103,6 +100,12 @@
 
             function buildContext() {
                 var context = {
+                    getAccountViewDefinitionId: function () {
+                        if (accountViewDefinition == undefined)
+                            return;
+
+                        return accountViewDefinition.AccountViewDefinitionId;
+                    },
                     getName: function () {
                         if (accountViewDefinition == undefined || accountViewDefinition.Settings == undefined)
                             return;
@@ -114,18 +117,6 @@
                             return;
 
                         return accountViewDefinition.Settings.AccountEmailMappingField;
-                    },
-                    getConnectionId: function () {
-                        if (accountViewDefinition == undefined || accountViewDefinition.Settings == undefined)
-                            return;
-
-                        return accountViewDefinition.Settings.ConnectionId;
-                    },
-                    getTenantId: function () {
-                        if (accountViewDefinition == undefined || accountViewDefinition.Settings == undefined)
-                            return;
-
-                        return accountViewDefinition.Settings.TenantId;
                     }
                 };
                 return context;
@@ -135,4 +126,4 @@
 
     app.directive('retailBePortalaccountView', PortalAccountViewDirective);
 
-})(app);
+}) (app);

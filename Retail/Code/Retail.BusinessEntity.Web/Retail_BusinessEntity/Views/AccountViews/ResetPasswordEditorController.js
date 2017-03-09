@@ -5,8 +5,9 @@
 
     function ResetPasswordEditorController($scope, VRNavigationService, VRNotificationService, Retail_BE_PortalAccountAPIService) {
 
-        var userId;
-        var connectionId;
+        var accountBEDefinitionId;
+        var parentAccountId;
+        var accountViewDefinitionId
 
         loadParameters();
         defineScope();
@@ -16,11 +17,12 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters) {
-                userId = parameters.userId;
-                var context = parameters.context;
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
+                parentAccountId = parameters.parentAccountId;
 
+                var context = parameters.context;
                 if (context != undefined) {
-                    connectionId = context.getConnectionId();
+                    accountViewDefinitionId = context.getAccountViewDefinitionId();
                 }
             }
         }
@@ -34,8 +36,9 @@
 
             $scope.save = function () {
                 var resetPasswordInput = {
-                    UserId: userId,
-                    ConnectionId: connectionId,
+                    AccountBEDefinitionId: accountBEDefinitionId,
+                    AccountId: parentAccountId,
+                    AccountViewDefinitionId: accountViewDefinitionId,
                     Password: $scope.scopeModel.password
                 };
 

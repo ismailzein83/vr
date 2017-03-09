@@ -16,7 +16,7 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
         public string AccountEmailMappingField { get; set; }
         public Guid ConnectionId { get; set; }
         public int TenantId { get; set; }
-
+         
         public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
         {
             return base.DoesUserHaveAccess(context);

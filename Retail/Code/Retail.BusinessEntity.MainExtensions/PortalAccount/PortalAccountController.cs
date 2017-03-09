@@ -35,7 +35,7 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(ResetPasswordInput resetPasswordInput)
         {
             return _manager.ResetPassword(resetPasswordInput.AccountBEDefinitionId, resetPasswordInput.AccountId, resetPasswordInput.AccountViewDefinitionId, resetPasswordInput.Password);
-        }
+        } 
     }
 
     public class PortalAccountEditorObject

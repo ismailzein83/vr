@@ -153,7 +153,7 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                     var emailAccountGenericField = emailAccountGenericFieldDefinitionSelectorAPI.getData();
 
                     var obj = {
-                        $type: "Retail.BusinessEntity.MainExtensions.AccountViews.PortalAccount, Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.PortalAccount.PortalAccount, Retail.BusinessEntity.MainExtensions",
                         AccountNameMappingField: nameAccountGenericField != undefined ? nameAccountGenericField.Name : undefined,
                         AccountEmailMappingField: emailAccountGenericField != undefined ? emailAccountGenericField.Name : undefined,
                         ConnectionId: connectionSelectorAPI.getSelectedIds(),

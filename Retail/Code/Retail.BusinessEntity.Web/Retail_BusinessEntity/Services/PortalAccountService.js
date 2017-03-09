@@ -23,10 +23,11 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountViews/PortalAccountEditor.html', parameters, settings);
         };
 
-        function resetPassword(userId, context) {
+        function resetPassword(accountBEDefinitionId, parentAccountId, context) {
 
             var parameters = {
-                userId: userId,
+                accountBEDefinitionId: accountBEDefinitionId,
+                parentAccountId: parentAccountId,
                 context: context
             };
 

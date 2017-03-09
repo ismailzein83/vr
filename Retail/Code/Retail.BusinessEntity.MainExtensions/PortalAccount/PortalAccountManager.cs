@@ -20,13 +20,10 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 
         public Vanrise.Entities.InsertOperationOutput<PortalAccountSettings> AddPortalAccount(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId, string name, string email)
         {
-            AccountViewDefinitionSettings accountViewDefinitionSettings = new AccountBEDefinitionManager().GetAccountViewDefinitionSettings(accountBEDefinitionId, accountViewDefinitionId);
-            PortalAccount portalAccount = accountViewDefinitionSettings as PortalAccount;
-            if(portalAccount == null)
-                throw new Exception(String.Format("accountViewDefinitionSettings should be of type '{0}'. it is of type '{1}'", typeof(PortalAccount), accountViewDefinitionSettings.GetType()));
-
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PortalAccountSettings>();
             insertOperationOutput.InsertedObject = null;
+            
+            PortalAccount portalAccount = new AccountBEDefinitionManager().GetAccountViewDefinitionSettings<PortalAccount>(accountBEDefinitionId, accountViewDefinitionId);
 
             var retailAccount = new PartnerPortal.CustomerAccess.Entities.RetailAccount()
             {
@@ -81,12 +78,11 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId, string password)
         {
-            AccountViewDefinitionSettings accountViewDefinitionSettings = new AccountBEDefinitionManager().GetAccountViewDefinitionSettings(accountBEDefinitionId, accountViewDefinitionId);
-            PortalAccount portalAccount = accountViewDefinitionSettings as PortalAccount;
-            if (portalAccount == null)
-                throw new Exception(String.Format("accountViewDefinitionSettings should be of type '{0}'. it is of type '{1}'", typeof(PortalAccount), accountViewDefinitionSettings.GetType()));
+            PortalAccount portalAccount = new AccountBEDefinitionManager().GetAccountViewDefinitionSettings<PortalAccount>(accountBEDefinitionId, accountViewDefinitionId);
 
             var portalAccountSettings = new AccountBEManager().GetExtendedSettings<PortalAccountSettings>(accountBEDefinitionId, accountId);
+            if (portalAccountSettings == null)
+                throw new NullReferenceException(String.Format("portalAccountSettings of accountBEDefinitionId '{0}' and accountId '{1}'", accountBEDefinitionId, accountId));
 
             var resetPasswordInput = new Vanrise.Security.Entities.ResetPasswordInput()
             {
