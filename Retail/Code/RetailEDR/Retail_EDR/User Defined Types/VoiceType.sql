@@ -39,7 +39,12 @@
     [SaleRate]            DECIMAL (20, 10) NULL,
     [SaleAmount]          DECIMAL (20, 10) NULL,
     [Credit]              DECIMAL (20, 10) NULL,
-    [OneShot]             DECIMAL (20, 10) NULL);
+    [OneShot]             DECIMAL (20, 10) NULL,
+    [MTRate]              DECIMAL (20, 10) NULL,
+    [MTAmount]            DECIMAL (20, 10) NULL,
+    [Profit]              DECIMAL (20, 10) NULL);
+
+
 
 
 
