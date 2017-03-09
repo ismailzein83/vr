@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 {
     public class PortalAccountManager
     {
-        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId)
+        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId)
         {
             return new AccountBEManager().GetExtendedSettings<PortalAccountSettings>(accountBEDefinitionId, accountId);
         }

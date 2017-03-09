@@ -64,13 +64,19 @@
 
                 api.load = function (payload) {
 
+                    var accountViewDefinitionId;
+
                     if (payload != undefined) {
-                        accountViewDefinition = payload.accountViewDefinition;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
+                        accountViewDefinition = payload.accountViewDefinition;
+
+                        if (accountViewDefinition != undefined) {
+                            accountViewDefinitionId = accountViewDefinition.AccountViewDefinitionId;
+                        }
                     }
 
-                    Retail_BE_PortalAccountAPIService.GetPortalAccountSettings(accountBEDefinitionId, parentAccountId).then(function (response) {
+                    Retail_BE_PortalAccountAPIService.GetPortalAccountSettings(accountBEDefinitionId, parentAccountId, accountViewDefinitionId).then(function (response) {
                         if (response != undefined) {
                             var portalAccountSettings = response;
                             $scope.scopeModel.isPortalUserAccountCreated = true;
@@ -126,4 +132,4 @@
 
     app.directive('retailBePortalaccountView', PortalAccountViewDirective);
 
-}) (app);
+})(app);

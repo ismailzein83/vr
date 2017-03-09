@@ -8,10 +8,11 @@
 
         var controllerName = "PortalAccount";
 
-        function GetPortalAccountSettings(accountBEDefinitionId, accountId) {
+        function GetPortalAccountSettings(accountBEDefinitionId, accountId, accountViewDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetPortalAccountSettings'), {
                 accountBEDefinitionId: accountBEDefinitionId,
-                accountId: accountId
+                accountId: accountId,
+                accountViewDefinitionId: accountViewDefinitionId
             });
         }
 

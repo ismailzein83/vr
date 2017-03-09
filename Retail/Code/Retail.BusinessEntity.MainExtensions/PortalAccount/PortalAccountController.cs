@@ -17,9 +17,9 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 
         [HttpGet]
         [Route("GetPortalAccountSettings")]
-        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId)
+        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId)
         {
-            return _manager.GetPortalAccountSettings(accountBEDefinitionId, accountId);
+            return _manager.GetPortalAccountSettings(accountBEDefinitionId, accountId, accountViewDefinitionId);
         }
 
         [HttpPost]
