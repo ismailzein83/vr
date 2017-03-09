@@ -16,39 +16,25 @@ namespace Vanrise.Invoice.MainExtensions
         {
 
             BillingInterval perviousBillingInterval = new Entities.BillingInterval();
-            IEnumerable<MonthlyPeriod> ascMonthlyPeriods = this.MonthlyPeriods.OrderBy(x => !x.SpecificDay.HasValue).ThenBy(x => x.SpecificDay.HasValue);
             if (context.PreviousPeriodEndDate.HasValue)
             {
              
-                BillingInterval nextBillingInterval = new Entities.BillingInterval();
-                nextBillingInterval.FromDate = context.PreviousPeriodEndDate.Value;
-                MonthlyPeriod firstMonthlyPeriod = ascMonthlyPeriods.ElementAt(0);
-                DateTime firstDate;
-                if (firstMonthlyPeriod.MonthlyType == MonthlyType.SpecificDay)
-                    firstDate = new DateTime(nextBillingInterval.FromDate.Year, nextBillingInterval.FromDate.Month, firstMonthlyPeriod.SpecificDay.Value);
-                else
+                DateTime nextFromDate = context.PreviousPeriodEndDate.Value;
+                DateTime nextToDate = GetNextPeriodDate(nextFromDate, nextFromDate);
+                do
                 {
-                    firstDate = nextBillingInterval.FromDate.GetLastDayOfMonth();
-                }
-                nextBillingInterval.ToDate = GetNextPeriodDate(nextBillingInterval.FromDate, ascMonthlyPeriods, firstDate);
+                    perviousBillingInterval.FromDate = nextFromDate;
+                    perviousBillingInterval.ToDate = nextToDate;
 
-                if (nextBillingInterval.ToDate > context.IssueDate)
-                {
+                    nextFromDate = perviousBillingInterval.ToDate.AddDays(1);
+                    nextToDate = GetNextPeriodDate(nextFromDate, nextFromDate);
+
+                } while (nextToDate < context.IssueDate);
+                
+               if (perviousBillingInterval.ToDate > context.IssueDate)
+               {
                     perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
-                }
-                else
-                {
-
-                    perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
-                    perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                    while (nextBillingInterval.ToDate < context.IssueDate)
-                    {
-                        perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
-                        perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                        nextBillingInterval.FromDate = nextBillingInterval.ToDate.AddDays(1);
-                        nextBillingInterval.ToDate = GetNextPeriodDate(nextBillingInterval.FromDate, ascMonthlyPeriods, firstDate);
-                    }
-                }
+               }
             }
             else
             {
@@ -56,48 +42,37 @@ namespace Vanrise.Invoice.MainExtensions
             }
             return perviousBillingInterval;
         }
-        private DateTime GetNextPeriodDate(DateTime fromDate, IEnumerable<MonthlyPeriod> monthlyPeriods, DateTime firstDate)
+        private DateTime GetNextPeriodDate(DateTime fromDate, DateTime month)
         {
-            foreach(var item in monthlyPeriods)
+            foreach(var item in this.MonthlyPeriods)
             {
-                if (item.MonthlyType == MonthlyType.SpecificDay)
-                {
-                    var date = new DateTime(firstDate.Year, firstDate.Month, item.SpecificDay.Value);
-                    if (date > fromDate)
-                        return date.AddDays(-1);
-                }else if(item.MonthlyType == MonthlyType.LastDay)
-                {
-                    var date = new DateTime(firstDate.Year, firstDate.Month, firstDate.GetLastDayOfMonth().Day);
-                    if (date > fromDate)
-                        return date.GetLastDayOfMonth().AddDays(-1);
-                }
+                var date = item.MonthlyType == MonthlyType.SpecificDay ?
+                  new DateTime(month.Year, month.Month, item.SpecificDay.Value) : month.GetLastDayOfMonth();
+                if (date > fromDate)
+                    return date.AddDays(-1);
             }
-            return GetNextPeriodDate(fromDate, monthlyPeriods, firstDate.AddMonths(1));
+            return GetNextPeriodDate(fromDate, month.AddMonths(1));
         }
-        private DateTime GetPreviousPeriodDate(DateTime fromDate, IEnumerable<MonthlyPeriod> monthlyPeriods, DateTime calculatedFromDate)
+        private DateTime GetPreviousPeriodDate(DateTime fromDate, DateTime month, bool isFromtheIssueDate)
         {
-            foreach (var item in monthlyPeriods)
+            DateTime? maxDate = null;
+            foreach (var item in this.MonthlyPeriods)
             {
-                if (item.MonthlyType == MonthlyType.SpecificDay)
-                {
-                    var date = new DateTime(calculatedFromDate.Year, calculatedFromDate.Month, item.SpecificDay.Value);
-                    if (date < fromDate)
-                        return date;
-                }
-                else if (item.MonthlyType == MonthlyType.LastDay)
-                {
-                    return calculatedFromDate.AddMonths(-1).GetLastDayOfMonth();
-                }
+                var date = item.MonthlyType == MonthlyType.SpecificDay ? 
+                    new DateTime(month.Year, month.Month, item.SpecificDay.Value) : month.GetLastDayOfMonth();
+                if ((date < fromDate || (isFromtheIssueDate && date == fromDate)) && (!maxDate.HasValue || date > maxDate.Value))
+                    maxDate = date;
             }
-            return GetPreviousPeriodDate(fromDate, monthlyPeriods, calculatedFromDate.AddMonths(-1));
+            if (maxDate.HasValue)
+                return maxDate.Value;
+           return GetPreviousPeriodDate(fromDate, month.AddMonths(-1), false);
         }
-
         private BillingInterval GetIntervalIfPreviousPeriodNotValid(DateTime issueDate)
         {
             BillingInterval perviousBillingInterval = new BillingInterval();
-            IEnumerable<MonthlyPeriod> descMonthlyPeriods = this.MonthlyPeriods.OrderByDescending(x => x.SpecificDay);
-            perviousBillingInterval.ToDate = GetPreviousPeriodDate(issueDate, descMonthlyPeriods, issueDate).AddDays(-1);
-            perviousBillingInterval.FromDate = GetPreviousPeriodDate(perviousBillingInterval.ToDate, descMonthlyPeriods, perviousBillingInterval.ToDate);
+            var toDate = GetPreviousPeriodDate(issueDate, issueDate, true);
+            perviousBillingInterval.ToDate = toDate.AddDays(-1);
+            perviousBillingInterval.FromDate = GetPreviousPeriodDate(toDate, toDate, false);
             return perviousBillingInterval;
         }
 
