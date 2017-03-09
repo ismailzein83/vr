@@ -41,4 +41,9 @@ namespace Vanrise.AccountBalance.Business.Extensions
             set { }
         }
     }
+
+    public class AccountBalanceTargetType : VRActionTargetType
+    {
+
+    }
 }

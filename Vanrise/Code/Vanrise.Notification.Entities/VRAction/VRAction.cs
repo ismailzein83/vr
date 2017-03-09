@@ -8,7 +8,7 @@ namespace Vanrise.Notification.Entities
 {
     public abstract class VRAction
     {
-        public abstract Guid ConfigId { get; }
+        //public abstract Guid ConfigId { get; }
         public string ActionName { get; set; }
         public virtual void Execute(IVRActionExecutionContext context)
         {
@@ -19,6 +19,8 @@ namespace Vanrise.Notification.Entities
         {
             return false;
         }
+
+        public VRActionSettings Settings { get; set; }
     }
 
     public interface IVRActionExecutionContext
@@ -35,8 +37,8 @@ namespace Vanrise.Notification.Entities
 
     public interface IVRActionConvertToBPInputArgumentContext
     {
-        IVRActionEventPayload EventPayload { get; }   
-        
+        IVRActionEventPayload EventPayload { get; }
+
         int NumberOfExecutions { get; }
 
         DateTime? NextExecutionTime { set; }

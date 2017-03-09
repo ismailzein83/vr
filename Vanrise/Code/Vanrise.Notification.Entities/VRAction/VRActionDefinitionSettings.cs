@@ -18,5 +18,17 @@ namespace Vanrise.Notification.Entities
         public abstract Guid ConfigId { get; }
 
         public virtual string RuntimeEditor { get; set; }
+
+        public abstract bool IsApplicable(IVRActionDefinitionIsApplicableContext context);
+    }
+
+    public interface IVRActionDefinitionIsApplicableContext
+    {
+        VRActionTargetType Target { get; }
+    }
+
+    public class VRActionDefinitionIsApplicableContext : IVRActionDefinitionIsApplicableContext
+    {
+        public VRActionTargetType Target { get; set; }
     }
 }

@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using Vanrise.Notification.Entities;
 using Vanrise.Common.Business;
-using Vanrise.Analytic.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Notification;
 
-namespace Vanrise.Analytic.MainExtensions.VRActions
+namespace Vanrise.GenericData.MainExtensions.VRActions
 {
-    public class DAProfCalcAlertRuleSendEmailAction : VRAction
+    public class DataRecordAlertRuleSendEmailAction : VRAction
     {
-        public override Guid ConfigId { get { return new Guid("EED64841-21FE-4AA1-996F-0415C9412427"); } }
         public Guid MailMessageTemplateId { get; set; }
         const string MAILTEMPLATE_USEROBJECTNAME = "User";
         const string MAILTEMPLATE_ACCOUNTOBJECTNAME = "Account";
 
         public override void Execute(IVRActionExecutionContext context)
         {
-            DAProfCalcAlertRuleActionEventPayload payload = context.EventPayload as DAProfCalcAlertRuleActionEventPayload;
+            DataRecordAlertRuleActionEventPayload payload = context.EventPayload as DataRecordAlertRuleActionEventPayload;
             UserManager userManager = new UserManager();
             User user = userManager.GetUserbyId(payload.UserId);
 

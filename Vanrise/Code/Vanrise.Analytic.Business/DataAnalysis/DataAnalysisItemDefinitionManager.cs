@@ -44,6 +44,22 @@ namespace Vanrise.Analytic.Business
                });
         }
 
+        public T GetDataAnalysisItemDefinitionSettings<T>(Guid dataAnalysisDefinitionId) where T : DataAnalysisItemDefinitionSettings
+        {
+            DataAnalysisItemDefinition dataAnalysisItemDefinition = GetDataAnalysisItemDefinition(dataAnalysisDefinitionId);
+            if (dataAnalysisItemDefinition == null)
+                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition. OutputItemDefinitionId: {0}", dataAnalysisDefinitionId));
+
+            if (dataAnalysisItemDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition.Settings. OutputItemDefinitionId: {0}", dataAnalysisDefinitionId));
+
+            T daProfCalcOutputSettings = dataAnalysisItemDefinition.Settings as T;
+            if (daProfCalcOutputSettings == null)
+                throw new Exception(String.Format("dataAnalysisItemDefinition.Settings is not of type {0}. it is of type {1}", typeof(T), dataAnalysisItemDefinition.Settings.GetType()));
+
+            return daProfCalcOutputSettings;
+        }
+
         public IDataRetrievalResult<DataAnalysisItemDefinitionDetail> GetFilteredDataAnalysisItemDefinitions(DataRetrievalInput<DataAnalysisItemDefinitionQuery> input)
         {
             var allDataAnalysisItemDefinitions = GetCachedDataAnalysisItemDefinitions();

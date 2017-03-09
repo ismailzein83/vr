@@ -191,6 +191,7 @@
             return {
                 alertTypeSettings: vrAlertRuleTypeEntity.Settings,
                 alertExtendedSettings: vrAlertRuleEntity != undefined ? vrAlertRuleEntity.Settings.ExtendedSettings : undefined,
+                vrAlertRuleTypeId:vrAlertRuleTypeId,
                 context:getContext()
             };
         }

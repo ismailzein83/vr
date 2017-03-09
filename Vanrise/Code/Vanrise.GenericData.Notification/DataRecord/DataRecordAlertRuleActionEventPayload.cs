@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
-namespace Vanrise.Analytic.Entities
+namespace Vanrise.GenericData.Notification
 {
-    public class DAProfCalcAlertRuleActionEventPayload : IVRActionEventPayload
+    public class DataRecordAlertRuleActionEventPayload : IVRActionEventPayload
     {
         public Guid AlertRuleTypeId { get; set; }
 

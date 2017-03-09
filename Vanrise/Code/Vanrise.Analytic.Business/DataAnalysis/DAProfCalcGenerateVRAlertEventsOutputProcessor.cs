@@ -6,6 +6,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using System.Linq;
+using Vanrise.GenericData.Notification;
 
 namespace Vanrise.Analytic.Business
 {
@@ -64,7 +65,7 @@ namespace Vanrise.Analytic.Business
                             AlertRuleTypeId = alertRule.RuleTypeId,
                             Description = "This is the description",
                             EventKey = outputRecord.GroupingKey,
-                            EventPayload = new DAProfCalcAlertRuleActionEventPayload()
+                            EventPayload = new DataRecordAlertRuleActionEventPayload()
                             {
                                 AlertRuleId = alertRuleId,
                                 AlertRuleTypeId = alertRule.RuleTypeId,

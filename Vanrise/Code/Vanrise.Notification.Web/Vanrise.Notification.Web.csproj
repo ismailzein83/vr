@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRActionDefinitionController.cs" />
     <Compile Include="Controllers\VRNotificationController.cs" />
     <Compile Include="Controllers\VRActionController.cs" />
     <Compile Include="Controllers\VRAlertRuleController.cs" />
@@ -150,8 +151,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_Notification\Constants\ModuleConfig.js" />
+    <Content Include="VR_Notification\Directives\VRActions\vr-notification-vractiondefinitionconfig-selector.js" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRNotificationType\vr-notification-vrnotifivationtype-settings.js" />
+    <Content Include="VR_Notification\Directives\VRActions\Templates\VRActionDefinitionSettingsTemplate.html" />
     <Content Include="VR_Notification\Directives\VRActions\Templates\VRActionsManagementTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRActions\vr-notification-vractiondefinition-settings.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction-management.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction.js" />
     <Content Include="VR_Notification\Directives\VRAlertRuleSettings\Templates\VRAlertRuleSettingsTemplate.html" />
@@ -177,6 +181,7 @@
     <Content Include="VR_Notification\Directives\VRNotificationViewDefinition\Templates\VRNotificationViewEditor.html" />
     <Content Include="VR_Notification\Directives\VRNotification\Templates\VRNotificationComponentTypeSettingsTemplate.html" />
     <Content Include="VR_Notification\Directives\VRNotification\vr-notification-vrnotification-componentsettings.js" />
+    <Content Include="VR_Notification\Services\APIServices\VRActionDefinitionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleTypeAPIService.js" />
@@ -205,6 +210,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_Notification\Directives\MainExtensions\VRNotificationType\Templates\" />
+    <Folder Include="VR_Notification\Directives\VRActions\VRActionDefinition\MainExtensions\ExtendedSettings\Templates\" />
+    <Folder Include="VR_Notification\Directives\VRActions\VRActionRuntime\MainExtensions\Settings\Templates\" />
     <Folder Include="VR_Notification\Directives\VRBalanceAlertRule\Templates\" />
     <Folder Include="VR_Notification\Directives\VRNotificationType\Templates\" />
   </ItemGroup>

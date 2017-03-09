@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VRActionDirective.$inject = ['VR_Notification_VRActionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    VRActionDirective.$inject = ['VR_Notification_VRActionAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_Notification_VRActionDefinitionAPIService'];
 
-   function VRActionDirective(VR_Notification_VRActionAPIService, UtilsService, VRUIUtilsService) {
+    function VRActionDirective(VR_Notification_VRActionAPIService, UtilsService, VRUIUtilsService, VR_Notification_VRActionDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -35,6 +35,7 @@
             var directivePayload;
 
             var context;
+            var vrActionEntity;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -48,13 +49,31 @@
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
-                    };
-                    var directivePayload = {
-                        context: getContext()
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+                    VR_Notification_VRActionDefinitionAPIService.GetVRActionDefinition($scope.scopeModel.selectedTemplateConfig.VRActionDefinitionId).then(function (response) {
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingDirective = value;
+                        };
+                        var directivePayload = {
+                            context: getContext(),
+                            selectedVRActionDefinition: response
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+                    });
+                };
+
+                $scope.scopeModel.onActionDefinitionChanged = function (selectedItem) {
+                    if (directiveAPI != undefined) {
+                        VR_Notification_VRActionDefinitionAPIService.GetVRActionDefinition(selectedItem.VRActionDefinitionId).then(function (response) {
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isLoadingDirective = value;
+                            };
+                            var directivePayload = {
+                                context: getContext(),
+                                selectedVRActionDefinition: response
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+                        });
+                    }
                 };
             }
 
@@ -64,9 +83,8 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-                   
                     var promises = [];
-                    var vrActionEntity;
+
                     var extensionType;
                     if (payload != undefined) {
                         context = payload.context;
@@ -78,39 +96,12 @@
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
-                    if (extensionType != undefined)
-                    {
-                        var getVRActionTemplateConfigsPromise = getVRActionTemplateConfigs(extensionType);
-                        promises.push(getVRActionTemplateConfigsPromise);
-
+                    var filter = {};
+                    if (payload.vrActionTargetType != undefined) {
+                        filter.VRActionTargetType = payload.vrActionTargetType;
                     }
-                  
-                    function getVRActionTemplateConfigs(extensionType) {
-                        return VR_Notification_VRActionAPIService.GetVRActionConfigs(extensionType).then(function (response) {
-                            if (response != null) {
-                                for (var i = 0; i < response.length; i++) {
-                                    $scope.scopeModel.templateConfigs.push(response[i]);
-                                }
-                                if (vrActionEntity != undefined) {
-                                    $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrActionEntity.ConfigId, 'ExtensionConfigurationId');
-                                }
-                            }
-                        });
-                    }
-                    function loadDirective() {
-                        directiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        directiveReadyDeferred.promise.then(function () {
-                            directiveReadyDeferred = undefined;
-                            var directivePayload = {context: getContext(), vrActionEntity: vrActionEntity };
-                            VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-                        });
-
-                        return directiveLoadDeferred.promise;
-                    }
+                    var getVRActionTemplateConfigsPromise = getVRActionTemplateConfigs(filter);
+                    promises.push(getVRActionTemplateConfigsPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -121,7 +112,7 @@
 
                         data = directiveAPI.getData();
                         if (data != undefined) {
-                            data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                            data.Settings.DefinitionId = $scope.scopeModel.selectedTemplateConfig.VRActionDefinitionId;
                         }
                     }
                     return data;
@@ -130,7 +121,37 @@
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
-            }
+            };
+
+            function getVRActionTemplateConfigs(filter) {
+                return VR_Notification_VRActionDefinitionAPIService.GetVRActionDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    if (response != null) {
+                        for (var i = 0; i < response.length; i++) {
+                            $scope.scopeModel.templateConfigs.push(response[i]);
+                        }
+
+                        if (vrActionEntity != undefined) {
+                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrActionEntity.Settings.DefinitionId, 'VRActionDefinitionId');
+                        }
+                    }
+                });
+            };
+
+            function loadDirective() {
+                directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                VR_Notification_VRActionDefinitionAPIService.GetVRActionDefinition(vrActionEntity.Settings.DefinitionId).then(function (response) {
+                    directiveReadyDeferred.promise.then(function () {
+                        directiveReadyDeferred = undefined;
+                        var directivePayload = { context: getContext(), vrActionEntity: vrActionEntity, selectedVRActionDefinition: response };
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                    });
+                });
+
+                return directiveLoadDeferred.promise;
+            };
             function getContext() {
                 var currentContext = context;
                 if (currentContext == undefined)
@@ -147,21 +168,21 @@
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
-                            + ' datavaluefield="ExtensionConfigurationId"'
-                            + ' datatextfield="Title"'
-                            + 'label="Action Type"'
-                            + ' isrequired="true"'
+                            + ' datavaluefield="VRActionDefinitionId"'
+                            + ' datatextfield="Name"'
+                            + 'label="Action Definition"'
+                            + ' isrequired="true" onselectionchanged="scopeModel.onActionDefinitionChanged"'
                             + 'hideremoveicon>'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
-                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
+                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.RuntimeEditor"'
                         + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }
     }
 
-   app.directive('vrNotificationVraction', VRActionDirective);
+    app.directive('vrNotificationVraction', VRActionDirective);
 
 })(app);

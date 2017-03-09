@@ -1,0 +1,18 @@
+﻿<vr-tabs>
+    <vr-tab header="'Definition'">
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Settings'">
+        <vr-row>
+            <vr-notification-vractiondefinitionconfig-selector on-ready="scopeModel.onActionDefinitionConfigSelectorReady" selectedvalues="scopeModel.selectedActionDefintionConfig"
+                                                               isrequired="true" hideremoveicon normal-col-num="6"></vr-notification-vractiondefinitionconfig-selector>
+            <vr-directivewrapper ng-if="scopeModel.selectedActionDefintionConfig != undefined" directive="scopeModel.selectedActionDefintionConfig.Editor"
+                                 on-ready="scopeModel.onDirectiveReady" normal-col-num="6" vr-loader="scopeModel.isDirectiveLoading">
+            </vr-directivewrapper>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>

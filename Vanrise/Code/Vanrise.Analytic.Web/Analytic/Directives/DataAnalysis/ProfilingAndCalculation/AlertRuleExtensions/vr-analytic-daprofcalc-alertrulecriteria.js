@@ -9,6 +9,7 @@
             restrict: "E",
             scope: {
                 onReady: "=",
+                onCriteriaSelectionChanged: "=",
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -43,7 +44,7 @@
                     dataAnalysisItemDefinitionSelectorAPI = api;
                     dataAnalysisItemDefinitionSelectoReadyDeferred.resolve();
                 };
-                $scope.scopeModel.onDataAnalysisItemDefinitionSelectionChanged = function (api) {
+                $scope.scopeModel.onDataAnalysisItemDefinitionSelectionChanged = function (selectedItem) {
                     daProfCalcOutputItemDefinitionId = dataAnalysisItemDefinitionSelectorAPI.getSelectedIds();
 
                     if (daProfCalcOutputItemDefinitionId != undefined) {
@@ -55,6 +56,9 @@
                                 dataAnalysisItemDefinitionSelectionChangedDeferred.resolve();
                             }
                             else {
+                                if (ctrl.onCriteriaSelectionChanged != undefined && typeof (ctrl.onCriteriaSelectionChanged) == 'function') {
+                                    ctrl.onCriteriaSelectionChanged(selectedItem);
+                                }
                                 var recordFilterDirectivePayload = {};
                                 recordFilterDirectivePayload.context = buildContext();
                                 var setLoader = function (value) {

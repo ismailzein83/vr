@@ -12,6 +12,8 @@
         var actionDirectiveApi;
         var actionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var context;
+        var vrAlertRuleTypeId;
+        var vrActionTargetType;
 
         loadParameters();
         defineScope();
@@ -25,6 +27,8 @@
                 actionEntity = parameters.vrActionEntity;
                 extensionType = parameters.extensionType;
                 context = parameters.context;
+                vrAlertRuleTypeId = parameters.vrAlertRuleTypeId;
+                vrActionTargetType = parameters.vrActionTargetType;
             }
             isEditMode = (actionEntity != undefined);
         }
@@ -84,7 +88,7 @@
             var actionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             actionReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = {context: getContext() , extensionType: extensionType, vrActionEntity : actionEntity };
+                    var directivePayload = { context: getContext(), extensionType: extensionType, vrActionEntity: actionEntity, vrAlertRuleTypeId: vrAlertRuleTypeId, vrActionTargetType: vrActionTargetType };
                     VRUIUtilsService.callDirectiveLoad(actionDirectiveApi, directivePayload, actionLoadPromiseDeferred);
                 });
             return actionLoadPromiseDeferred.promise;

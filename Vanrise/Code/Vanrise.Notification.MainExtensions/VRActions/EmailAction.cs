@@ -12,7 +12,7 @@ namespace Vanrise.Notification.MainExtensions.VRActions
 {
     public class EmailAction : VRAction
     {
-        public override Guid ConfigId { get { return new Guid("be74a60e-d312-4b4f-bd76-5b7be81abe62"); } }
+        //public override Guid ConfigId { get { return new Guid("be74a60e-d312-4b4f-bd76-5b7be81abe62"); } }
 
         public List<VRObjectPropertyVariable> Variables { get; set; }
 

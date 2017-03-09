@@ -53,6 +53,7 @@
     <Compile Include="DataAnalysis\DAProfCalcStoreEventsOutputProcessor.cs" />
     <Compile Include="DataAnalysis\DAProfCalcGenerateVRAlertEventsOutputProcessor.cs" />
     <Compile Include="DataAnalysis\DAProfCalcOutputSettingsManager.cs" />
+    <Compile Include="DataAnalysis\DAProfCalcActionTargetType.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinitionManager.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinitionManager.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemExtraFields.cs" />
@@ -102,6 +103,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.MainExtensions\Vanrise.GenericData.MainExtensions.csproj">
       <Project>{9fba4641-edd5-4a59-a053-ce879f31ad14}</Project>
       <Name>Vanrise.GenericData.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Notification\Vanrise.GenericData.Notification.csproj">
+      <Project>{bddd1fac-ea45-4291-9f64-d749d47a97ba}</Project>
+      <Name>Vanrise.GenericData.Notification</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Business\Vanrise.Notification.Business.csproj">
       <Project>{918ce99a-576c-49f0-897e-07817959e79c}</Project>

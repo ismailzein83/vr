@@ -27,6 +27,8 @@ function (UtilsService, VR_Notification_VRActionService) {
         var extensionType;
         var isRequired;
         var context;
+        var vrAlertRuleTypeId;
+        var vrActionTargetType;
 
         function initializeController() {
 
@@ -44,7 +46,7 @@ function (UtilsService, VR_Notification_VRActionService) {
                 var onVRActionAdded = function (action) {
                     ctrl.datasource.push({ Entity: action });
                 };
-                VR_Notification_VRActionService.addVRAction(onVRActionAdded, extensionType, getContext());
+                VR_Notification_VRActionService.addVRAction(onVRActionAdded, extensionType, getContext(), vrAlertRuleTypeId, vrActionTargetType);
 
             };
 
@@ -78,6 +80,8 @@ function (UtilsService, VR_Notification_VRActionService) {
                     context = payload.context;
                     isRequired = payload.isRequired;
                     extensionType = payload.extensionType;
+                    vrAlertRuleTypeId = payload.vrAlertRuleTypeId;
+                    vrActionTargetType = payload.vrActionTargetType;
                 }
 
                 ctrl.datasource.length = 0;
@@ -103,7 +107,7 @@ function (UtilsService, VR_Notification_VRActionService) {
             var onVRActionUpdated = function (vrActionObj) {
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: vrActionObj };
             };
-            VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated, extensionType, getContext());
+            VR_Notification_VRActionService.editVRAction(dataItem.Entity, onVRActionUpdated, extensionType, getContext(), vrAlertRuleTypeId, vrActionTargetType);
         }
         function getContext() {
             var currentContext = context;

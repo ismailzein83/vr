@@ -1,32 +1,28 @@
 ﻿'use strict';
 
-app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDatarecordVractionSendemail', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
-
         return {
             restrict: 'E',
             scope: {
                 onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var mailMessageTemplateSettings = new MailMessageTemplateSettings(ctrl, $scope, $attrs);
-                mailMessageTemplateSettings.initializeController();
+                var ctor = new sendEmailActionDefinition($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
-            templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/VRActions/Templates/DAProfCalcAlertRuleActionTemplate.html"
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecord/VRActionRuntime/Templates/SendEmail.html'
         };
 
-        function MailMessageTemplateSettings(ctrl, $scope, $attrs) {
+        function sendEmailActionDefinition($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var mailMessageTemplateSelectorReadyAPI;
             var mailMessageTemplateSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -36,7 +32,6 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                     mailMessageTemplateSelectorReadyPromiseDeferred.resolve();
                 };
 
-
                 var promises = [mailMessageTemplateSelectorReadyPromiseDeferred.promise];
 
                 UtilsService.waitMultiplePromises(promises).then(function () {
@@ -45,9 +40,8 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
             }
             function defineAPI() {
                 var api = {};
-
+                var actionDefinitionId;
                 api.load = function (payload) {
-
                     var promises = [];
                     var mailMessageTemplate;
 
@@ -59,18 +53,24 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                     var mailMessageTemplateSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     var mailMessageTemplatePayload = {
                         selectedIds: mailMessageTemplate,
-                        filter: { VRMailMessageTypeId: '570B33AF-C33F-4143-ACFA-8A34E2CB71BA' }
+                        filter: { VRMailMessageTypeId: payload.selectedVRActionDefinition.Settings.ExtendedSettings.MailMessageTypeId }
                     };
                     VRUIUtilsService.callDirectiveLoad(mailMessageTemplateSelectorReadyAPI, mailMessageTemplatePayload, mailMessageTemplateSelectorLoadPromiseDeferred);
+                    promises.push(mailMessageTemplateSelectorLoadPromiseDeferred.promise);
 
-                    return mailMessageTemplateSelectorLoadPromiseDeferred.promise;
+                    return UtilsService.waitMultiplePromises(promises); 
                 };
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Analytic.MainExtensions.VRActions.DAProfCalcAlertRuleAction, Vanrise.Analytic.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.VRActions.DataRecordAlertRuleSendEmailAction,Vanrise.GenericData.MainExtensions",
                         ActionName: "Send Email",
-                        MailMessageTemplateId: mailMessageTemplateSelectorReadyAPI.getSelectedIds()
+                        MailMessageTemplateId: mailMessageTemplateSelectorReadyAPI.getSelectedIds(),
+                        Settings: {
+                            ExtendedSettings: {
+                                $type: "Vanrise.GenericData.Notification.DataRecordSendEmailExtendedSettings, Vanrise.GenericData.Notification",
+                            }
+                        }
                     };
                 };
 
@@ -78,5 +78,4 @@ app.directive('vrAnalyticDaprofcalcAlertruleaction', ['UtilsService', 'VRUIUtils
                     ctrl.onReady(api);
             }
         }
-
-}]);
+    }]);

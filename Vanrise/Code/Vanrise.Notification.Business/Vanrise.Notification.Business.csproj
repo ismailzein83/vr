@@ -53,6 +53,7 @@
     <Compile Include="Filters\IVRNotificationViewFilter\VRNotificationTypeViewFilter.cs" />
     <Compile Include="Filters\IVRNotificationViewFilter\VRNotificationViewFilterContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VRActionDefinitionManager.cs" />
     <Compile Include="VRActionManager.cs" />
     <Compile Include="VRAlertRuleManager.cs" />
     <Compile Include="VRAlertRuleNotificationManager.cs" />

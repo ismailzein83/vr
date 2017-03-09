@@ -68,6 +68,7 @@
     <Compile Include="MappingSteps\LoadBEByIDMappingStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SummaryTransformationBatchRangeRetrievals\SummaryBatchTimeIntervalRange.cs" />
+    <Compile Include="VRActions\DataRecordAlertRuleSendEmailAction.cs" />
     <Compile Include="VRObjectTypes\VRDataRecordFieldPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\VRDataRecordObjectType.cs" />
   </ItemGroup>
@@ -96,9 +97,17 @@
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Notification\Vanrise.GenericData.Notification.csproj">
+      <Project>{bddd1fac-ea45-4291-9f64-d749d47a97ba}</Project>
+      <Name>Vanrise.GenericData.Notification</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Transformation.Entities\Vanrise.GenericData.Transformation.Entities.csproj">
       <Project>{e8b1931e-f1f5-4937-9cb0-a7d0cf5edcb1}</Project>
       <Name>Vanrise.GenericData.Transformation.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
+      <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>
+      <Name>Vanrise.Notification.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
       <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
@@ -112,6 +121,9 @@
       <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataRecord\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

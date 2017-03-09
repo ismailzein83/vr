@@ -7,12 +7,14 @@
 
     function VRActionService(VRModalService) {
 
-        function addVRAction(onVRActionAdded, extensionType,context) {
+        function addVRAction(onVRActionAdded, extensionType, context, vrAlertRuleTypeId, vrActionTargetType) {
             var settings = {};
 
             var parameters = {
                 extensionType: extensionType,
-                context: context
+                context: context,
+                vrAlertRuleTypeId: vrAlertRuleTypeId,
+                vrActionTargetType: vrActionTargetType
             };
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRActionAdded = onVRActionAdded
@@ -20,13 +22,15 @@
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRActions/VRActionEditor.html', parameters, settings);
         };
 
-        function editVRAction(vrActionEntity, onVRActionUpdated, extensionType, context) {
+        function editVRAction(vrActionEntity, onVRActionUpdated, extensionType, context, vrAlertRuleTypeId, vrActionTargetType) {
             var settings = {};
 
             var parameters = {
                 vrActionEntity: vrActionEntity,
                 extensionType: extensionType,
-                context: context
+                context: context,
+                vrAlertRuleTypeId: vrAlertRuleTypeId,
+                vrActionTargetType: vrActionTargetType
             };
 
             settings.onScopeReady = function (modalScope) {

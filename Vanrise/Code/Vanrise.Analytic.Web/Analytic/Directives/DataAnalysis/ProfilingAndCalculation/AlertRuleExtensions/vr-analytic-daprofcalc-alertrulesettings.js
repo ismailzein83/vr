@@ -29,6 +29,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
             var alertExtendedSettings;
             var alertTypeSettings;
+            var vrAlertRuleTypeId;
 
             this.initializeController = initializeController;
 
@@ -46,6 +47,10 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     vRActionManagementReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.onCriteriaSelectionChanged = function (daProfCalcOutputItemDefinition) {
+                    $scope.scopeModel.selectedAnalysisTypeId = daProfCalcOutputItemDefinition.DataAnalysisItemDefinitionId;
+                    loadVRActionManagement($scope.scopeModel.selectedAnalysisTypeId, undefined);
+                };
                 defineAPI();
             };
 
@@ -58,6 +63,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     if (payload != undefined) {
                         alertTypeSettings = payload.alertTypeSettings;
                         alertExtendedSettings = payload.alertExtendedSettings;
+                        vrAlertRuleTypeId = payload.vrAlertRuleTypeId;
 
                         var loadCriteriaSectionPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadCriteriaSectionPromiseDeferred.promise);
@@ -67,13 +73,16 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                             if (alertExtendedSettings != undefined) {
                                 criteriapayload.criteria = { DAProfCalcOutputItemDefinitionId: alertExtendedSettings.OutputItemDefinitionId, FilterGroup: alertExtendedSettings.FilterGroup };
+                                $scope.scopeModel.selectedAnalysisTypeId = alertExtendedSettings.OutputItemDefinitionId;
                             }
 
                             VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriapayload, loadCriteriaSectionPromiseDeferred);
                         });
 
-                        var loadVRActionManagementLoadDeferred = loadVRActionManagement();
-                        promises.push(loadVRActionManagementLoadDeferred.promise);
+                        if (alertExtendedSettings != undefined) {
+                            var loadVRActionManagementLoadDeferred = loadVRActionManagement(alertExtendedSettings.OutputItemDefinitionId, alertExtendedSettings.Actions);
+                            promises.push(loadVRActionManagementLoadDeferred.promise);
+                        }
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -92,13 +101,26 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     ctrl.onReady(api);
             };
 
-            function loadVRActionManagement() {
+            function loadVRActionManagement(analysisTypeId, actions) {
                 var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
                 vRActionManagementReadyDeferred.promise.then(function () {
-                    var vrActionPayload = { extensionType: alertTypeSettings.VRActionExtensionType, actions: alertExtendedSettings != undefined ? alertExtendedSettings.Actions : undefined, isRequired: true };
+                    var vrActionPayload = {
+                        extensionType: alertTypeSettings.VRActionExtensionType,
+                        actions: actions,
+                        isRequired: true,
+                        vrAlertRuleTypeId: vrAlertRuleTypeId,
+                        vrActionTargetType: buildDAProfCalcTargetType(analysisTypeId)
+                    };
                     VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
                 });
                 return vRActionManagementLoadDeferred;
+            };
+
+            function buildDAProfCalcTargetType(selectedAnalysisTypeId) {
+                return {
+                    $type: "Vanrise.Analytic.Business.DAProfCalcActionTargetType,Vanrise.Analytic.Business",
+                    DataAnalysisItemDefinitionId: selectedAnalysisTypeId
+                };
             };
         }
     }]);
