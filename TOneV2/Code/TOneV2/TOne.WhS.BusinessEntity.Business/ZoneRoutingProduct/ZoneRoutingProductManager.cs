@@ -84,7 +84,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         customerSellingProductManager.GetEffectiveSellingProductId(input.Query.OwnerId,
                             input.Query.EffectiveOn, false);
                     if (!sellingProductId.HasValue)
-                        throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to any selling product", input.Query.OwnerId));
+                        return zoneRoutingProducts;
 
                     foreach (SaleZone saleZone in filteredSaleZone)
                     {
@@ -126,7 +126,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Zone Routing Products",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Routing Product" });

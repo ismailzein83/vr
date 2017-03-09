@@ -232,7 +232,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             IEnumerable<SaleRate> saleRates = dataManager.GetZoneRatesBySellingProducts(sellingProductIds, saleZoneIds);
-            
+
             if (saleRates == null || saleRates.Count() == 0)
                 return null;
 
@@ -326,7 +326,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         var customerSellingProductManager = new CustomerSellingProductManager();
                         sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(input.Query.OwnerId, input.Query.EffectiveOn, false);
                         if (!sellingProductId.HasValue)
-                            throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to any selling product", input.Query.OwnerId));
+                            return ratesFormatted;
 
                         foreach (SaleZone saleZone in filteredSaleZone)
                         {
