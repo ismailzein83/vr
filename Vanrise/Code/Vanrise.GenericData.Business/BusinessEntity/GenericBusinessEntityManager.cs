@@ -38,8 +38,15 @@ namespace Vanrise.GenericData.Business
             IEnumerable<GenericFilterRuntimeField> runtimeFilters = GetGenericFilterRuntimeFields(input.Query.BusinessEntityDefinitionId);
 
             Func<GenericBusinessEntity, bool> filterExpression = (itm) => (input.Query.BusinessEntityDefinitionId == itm.BusinessEntityDefinitionId && (input.Query.FilterValuesByFieldPath == null || MatchGenericBusinessEntity(runtimeFilters, input.Query.FilterValuesByFieldPath, itm)));
-            
-            return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericBusinessEntities.ToBigResult(input, filterExpression, GenericBusinessEntityDetailMapper));
+
+            GenericBEDefinitionSettings definitionSettings = GetGenericBEDefinitionSettings(input.Query.BusinessEntityDefinitionId);
+
+            var resultProcessingHandler = new ResultProcessingHandler<GenericBusinessEntityDetail>()
+            {
+                ExportExcelHandler = new GenericBusinessEntityExportExcelHandler(definitionSettings)
+            };
+
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericBusinessEntities.ToBigResult(input, filterExpression, GenericBusinessEntityDetailMapper), resultProcessingHandler);
         }
         public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
@@ -374,6 +381,56 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Classes
+
+        private class GenericBusinessEntityExportExcelHandler : ExcelExportHandler<GenericBusinessEntityDetail>
+        {
+            private GenericBEDefinitionSettings _definitionSettings;
+
+            public GenericBusinessEntityExportExcelHandler(GenericBEDefinitionSettings definitionSettings)
+            {
+                if (definitionSettings == null)
+                    throw new ArgumentNullException("definitionSettings");
+                _definitionSettings = definitionSettings;
+            }
+
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<GenericBusinessEntityDetail> context)
+            {
+                GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+
+                var sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                foreach (var columnConfig in _definitionSettings.ManagementDesign.GridDesign.Columns)
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = columnConfig.FieldTitle });
+                }
+                
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null && record.Entity.Details != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            foreach (var columnConfig in _definitionSettings.ManagementDesign.GridDesign.Columns)
+                            {
+                                row.Cells.Add(new ExportExcelCell()
+                                {
+                                    Value = manager.GetFieldDescription(record.Entity, columnConfig.FieldPath,
+                                        _definitionSettings.DataRecordTypeId)
+                                });
+                            }
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
