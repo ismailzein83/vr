@@ -10,7 +10,9 @@ namespace Vanrise.Common.Data
     public interface IVRLoggableEntityDataManager : IDataManager
     {
         Guid AddOrUpdateLoggableEntity( string entityUniqueName, VRLoggableEntitySettings loggableEntitySettings);
+        bool AreVRObjectTrackingUpdated(ref object updateHandle);
 
+ 
         List<VRLoggableEntity> GetAll();
     }
 }

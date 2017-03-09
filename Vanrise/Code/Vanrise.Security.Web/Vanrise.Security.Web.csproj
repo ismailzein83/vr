@@ -164,6 +164,7 @@
     <Content Include="Security\Directives\Widget\Templates\WidgetsGrid.html" />
     <Content Include="Security\Directives\Widget\vr-sec-widget-grid.js" />
     <Content Include="Security\Directives\Widget\vr-sec-widgetpreview.js" />
+    <Content Include="Security\ModuleInitialization.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityModuleAPIService.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityNodeAPIService.js" />

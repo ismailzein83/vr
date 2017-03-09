@@ -32,5 +32,10 @@ namespace Vanrise.Common.Data.SQL
                     };
                 });
         }
+
+        public bool AreVRObjectTrackingUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[logging].[LoggableEntity]", ref updateHandle);
+        }
     }
 }

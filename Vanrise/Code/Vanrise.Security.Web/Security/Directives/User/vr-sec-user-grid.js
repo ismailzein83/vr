@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", 'VR_Sec_PermissionAPIService', "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_SecurityAPIService',
-    function (VR_Sec_UserAPIService, VR_Sec_UserService, VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_SecurityAPIService) {
+app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", 'VRUIUtilsService', 'VR_Sec_PermissionAPIService', "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_SecurityAPIService',
+    function (VR_Sec_UserAPIService, VR_Sec_UserService, VRUIUtilsService, VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_SecurityAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -24,7 +24,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
         };
 
         function UsersGrid($scope, ctrl, $attrs) {
-
+            var gridDrillDownTabsObj;
             var gridAPI;
             var gridQuery;
             var hasAuthServer;
@@ -36,6 +36,9 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_Sec_UserService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
 
@@ -62,6 +65,11 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_Sec_UserAPIService.GetFilteredUsers(dataRetrievalInput)
                         .then(function (response) {
+                            if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                }
+                            }
                             onResponseReady(response);
                         })
                         .catch(function (error) {
@@ -132,6 +140,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
             function editUser(userObj) {
                 var onUserUpdated = function (userObj) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(userObj);
                     gridAPI.itemUpdated(userObj);
                 };
 
@@ -154,6 +163,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                 var onPermissionDisabled = function (entity) {
                     var gridDataItem = { Entity: entity };
                     gridDataItem.Status = false;
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
                     $scope.gridMenuActions(gridDataItem);
                     gridAPI.itemUpdated(gridDataItem);
                 };
@@ -176,6 +186,8 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                 var onPermissionEnabled = function (entity) {
                     var gridDataItem = { Entity: entity };
                     gridDataItem.Status = true;
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
+
                     $scope.gridMenuActions(gridDataItem);
                     gridAPI.itemUpdated(gridDataItem);
                 };

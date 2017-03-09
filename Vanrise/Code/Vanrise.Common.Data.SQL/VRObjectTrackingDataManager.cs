@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Vanrise.Data.SQL;
+using Vanrise.Entities;
 namespace Vanrise.Common.Data.SQL
 {
     public class VRObjectTrackingDataManager : Vanrise.Data.SQL.BaseSQLDataManager, IVRObjectTrackingDataManager
@@ -20,5 +22,33 @@ namespace Vanrise.Common.Data.SQL
             ExecuteNonQuerySP("logging.sp_ObjectTracking_Insert", out objectTrackingId, userId, loggableEntityId, objectId, obj != null ? Vanrise.Common.Serializer.Serialize(obj) : null, actionId, actionDescription);
             return (long)objectTrackingId;
         }
+
+        public List<VRObjectTrackingMetaData> GetAll(Guid loggableEntityId, string objectId)
+        {
+
+            return GetItemsSP("[logging].[sp_ObjectTracking_GetFiltered]", ObjectTrackingMapper,
+                    loggableEntityId,
+                    objectId
+                );
+        }
+
+        private VRObjectTrackingMetaData ObjectTrackingMapper(IDataReader reader)
+        {
+            VRObjectTrackingMetaData ObjectTracking = new VRObjectTrackingMetaData
+            {
+                VRObjectTrackingId = (long)reader["ID"],
+                Time = GetReaderValue<DateTime>(reader, "LogTime"),
+                UserId = GetReaderValue<int>(reader, "UserID"),
+                ActionId = GetReaderValue<int>(reader, "ActionID"),
+               
+             
+            };
+
+            return ObjectTracking;
+        }
+
+
+
+        
     }
 }

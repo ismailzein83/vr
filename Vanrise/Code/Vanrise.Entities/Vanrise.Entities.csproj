@@ -76,7 +76,9 @@
     <Compile Include="VRActionAudit\VRActionAuditLKUPInfo.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPType.cs" />
     <Compile Include="VRActionAudit\VRLoggableEntityBase.cs" />
+    <Compile Include="VRActionAudit\VRLoggableEntityQeury.cs" />
     <Compile Include="VRActionAudit\VRObjectTracking.cs" />
+    <Compile Include="VRActionAudit\VRObjectTrackingMetaDataDetail.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibility.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityDetail.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityFilter.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentPDF.cs" />
     <Compile Include="VRMail\VRMailEvaluatedTemplate.cs" />
+    <Compile Include="VRActionAudit\VRObjectTrackingMetaData.cs" />
     <Compile Include="VRObject\VRRazorCompilationOutput.cs" />
     <Compile Include="VRTax\VRTaxDetail.cs" />
     <Compile Include="VRTax\VRTaxesDefinition.cs" />

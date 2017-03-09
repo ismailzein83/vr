@@ -2,16 +2,20 @@
 
     'use strict';
 
-    UserService.$inject = ['VRModalService', 'VR_Sec_UserAPIService', 'VRNotificationService'];
+    UserService.$inject = ['VRModalService', 'VR_Sec_UserAPIService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
 
-    function UserService(VRModalService, VR_Sec_UserAPIService, VRNotificationService) {
+    function UserService(VRModalService, VR_Sec_UserAPIService, VRNotificationService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addUser: addUser,
             editUser: editUser,
             resetPassword: resetPassword,
             resetAuthServerPassword: resetAuthServerPassword,
             activatePassword: activatePassword,
-            forgotPassword: forgotPassword
+            forgotPassword: forgotPassword,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToUser: registerObjectTrackingDrillDownToUser,
+            getEntityUniqueName:getEntityUniqueName
         });
 
         function addUser(onUserAdded) {
@@ -89,7 +93,40 @@
 
             VRModalService.showModal('/Client/Modules/Security/Views/User/ForgotPasswordEditor.html', modalParameters, undefined);
         }
-        
+
+        function getEntityUniqueName()
+        {
+            return "VR_Security_User";
+        }
+
+        function registerObjectTrackingDrillDownToUser() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+            
+
+            drillDownDefinition.loadDirective = function (directiveAPI, userItem) {
+                userItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: userItem.Entity.UserId,
+                    EntityUniqueName: getEntityUniqueName(),
+                    
+                };
+                return userItem.objectTrackingGridAPI.load(query);
+            };
+            
+            addDrillDownDefinition(drillDownDefinition);
+           
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+          
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
     };
 
     appControllers.service('VR_Sec_UserService', UserService);
