@@ -32,32 +32,25 @@
             }
         }
         function defineScope() {
-            $scope.title = 'Zone Info';
-            if (zoneName != undefined)
-                $scope.title += ': ' + zoneName;
-
+            $scope.title = 'History';
             $scope.scopeModel = {};
 
             if (zoneBED != undefined)
                 $scope.scopeModel.zoneBED = UtilsService.getShortDate(new Date(zoneBED));
 
-            $scope.scopeModel.zoneEED = (zoneEED != undefined) ? UtilsService.getShortDate(new Date(zoneEED)) : 'NULL';
-
-            var saleRateHistoryGridDirectiveName = (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ?
-                'vr-whs-be-salerate-history-sellingproduct-grid' : 'vr-whs-be-salerate-history-customer-grid';
+            $scope.scopeModel.sectionHeader = (zoneName != undefined) ? ('Zone: ' + zoneName) : 'Zone';
+            $scope.scopeModel.zoneEED = (zoneEED != undefined) ? UtilsService.getShortDate(new Date(zoneEED)) : undefined;
 
             $scope.scopeModel.directiveTabs = [{
                 title: 'Rate History',
-                directive: saleRateHistoryGridDirectiveName,
+                directive: 'vr-whs-be-sale-rate-history-grid',
                 loadDirective: function (directiveAPI) {
                     var payload = {
+                        OwnerType: ownerType,
+                        OwnerId: ownerId,
                         ZoneName: zoneName,
                         CountryId: countryId
                     };
-
-                    var ownerIdPropertyName = (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? 'SellingProductId' : 'CustomerId';
-                    payload[ownerIdPropertyName] = ownerId;
-
                     return directiveAPI.load(payload);
                 }
             }, {

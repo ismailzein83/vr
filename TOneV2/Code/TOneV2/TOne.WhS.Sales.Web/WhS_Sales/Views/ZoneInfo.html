@@ -1,20 +1,23 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Sales_ZoneInfoController" width="'60%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formZoneInfo">
-            
             <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-label>Zone BED:</vr-label>
-                    <vr-label isvalue="true">{{scopeModel.zoneBED}}</vr-label>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-label>Zone EED:</vr-label>
-                    <vr-label isvalue="true">{{scopeModel.zoneEED}}</vr-label>
+                <vr-columns width="fullrow">
+                    <vr-section header="{{scopeModel.sectionHeader}}">
+                        <vr-row>
+                            <vr-columns width="1/2row">
+                                <vr-label><span style="font-size: 12px;">BED:</span></vr-label>
+                                <vr-label isvalue="true"><span style="font-size: 12px;">{{scopeModel.zoneBED}}</span></vr-label>
+                            </vr-columns>
+                            <vr-columns width="1/2row" ng-show="scopeModel.zoneEED != undefined">
+                                <vr-label><span style="font-size: 12px;">EED:</span></vr-label>
+                                <vr-label isvalue="true"><span style="font-size: 12px;">{{scopeModel.zoneEED}}</span></vr-label>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
                 </vr-columns>
             </vr-row>
-
             <vr-directivetabs tabitems="scopeModel.directiveTabs"></vr-directivetabs>
-
         </vr-form>
     </vr-modalbody>
     <div>
