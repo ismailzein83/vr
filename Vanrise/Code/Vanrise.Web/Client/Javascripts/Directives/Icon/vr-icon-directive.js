@@ -3,21 +3,21 @@
 
 app.directive('vrIcon', ['$compile', function ($compile) {
     var option = {
-        true: { value: "Client/Images/true.png", isimage: true },
-        false: { value: "Client/Images/onebit_33.png", isimage: true },
-        'Y': { value: "Client/Images/true.png", isimage: true },
-        'N': { value: "Client/Images/onebit_33.png", isimage: true },
-        'Enabled': { value: "Client/Images/true.png", isimage: true },
-        'Disabled': { value: "Client/Images/onebit_33.png", isimage: true },
-        '1': { value: "Client/Images/true.png", isimage: true },
-        '0': { value: "Client/Images/onebit_33.png", isimage: true },
-        'music': { value: "glyphicon-music", isimage: false },
-        'above': { value: "glyphicon-arrow-up arrow-above", isimage: false },//#37c737
-        'below': { value: "glyphicon-arrow-down arrow-below", isimage: false },//#ff1111
-        'increase': { value: "glyphicon-arrow-up arrow-below", isimage: false },
-        'decrease': { value: "glyphicon-arrow-down arrow-above", isimage: false }, //#37c737
-        'explicit': { value: 'Client/Images/explicit.png', isimage: true },
-        'inherited': { value: 'Client/Images/inherited.png', isimage: true }
+        true: { value: "Client/Images/true.png", isimage: true, tooltip: 'True' },
+        false: { value: "Client/Images/onebit_33.png", isimage: true, tooltip: 'False' },
+        'Y': { value: "Client/Images/true.png", isimage: true, tooltip: 'Y' },
+        'N': { value: "Client/Images/onebit_33.png", isimage: true, tooltip: 'N' },
+        'Enabled': { value: "Client/Images/true.png", isimage: true, tooltip: 'Enabled' },
+        'Disabled': { value: "Client/Images/onebit_33.png", isimage: true, tooltip: 'Disabled' },
+        '1': { value: "Client/Images/true.png", isimage: true, tooltip: '1' },
+        '0': { value: "Client/Images/onebit_33.png", isimage: true, tooltip: '0' },
+        'music': { value: "glyphicon-music", isimage: false, tooltip: 'Music' },
+        'above': { value: "glyphicon-arrow-up arrow-above", isimage: false, tooltip: 'Above' },//#37c737
+        'below': { value: "glyphicon-arrow-down arrow-below", isimage: false, tooltip: 'Below' },//#ff1111
+        'increase': { value: "glyphicon-arrow-up arrow-below", isimage: false, tooltip: 'Increase' },
+        'decrease': { value: "glyphicon-arrow-down arrow-above", isimage: false, tooltip: 'Decrease' }, //#37c737
+        'explicit': { value: 'Client/Images/explicit.png', isimage: true, tooltip: 'Explicit' },
+        'inherited': { value: 'Client/Images/inherited.png', isimage: true, tooltip: 'Inherited' }
     };
 
     var directiveDefinitionObject = {
@@ -35,7 +35,7 @@ app.directive('vrIcon', ['$compile', function ($compile) {
             ctrl.class = "";
             if (ctrl.icontype != undefined) {
                 var value = ctrl.icontype;
-                ctrl.icon = option[value] != undefined ? option[value] : { value: "Client/Images/true.png", isimage: true };
+                ctrl.icon = option[value] != undefined ? option[value] : { value: "Client/Images/true.png", isimage: true, tooltip: 'True' };
             }
             else if (ctrl.iconurl != undefined) {
                 ctrl.icon = { value: ctrl.iconurl, isimage: true };
@@ -63,7 +63,7 @@ app.directive('vrIcon', ['$compile', function ($compile) {
         var containerstyle = "";
         if (attr.inline != undefined)
             containerstyle = "display:inline-block";
-        var tooltip = ctrl.tooltip != undefined ? ctrl.tooltip : ctrl.icontype;
+        var tooltip = ctrl.tooltip != undefined ? ctrl.tooltip : ctrl.icon.tooltip;
 
         var template = '';
         if (ctrl.icon.isimage) {
