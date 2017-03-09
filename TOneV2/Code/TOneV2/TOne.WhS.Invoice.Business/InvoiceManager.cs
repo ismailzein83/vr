@@ -47,12 +47,15 @@ namespace TOne.WhS.Invoice.Business
             var carrierProfiles = carrierProfileManager.GetCarrierProfiles();
             foreach (var carrierProfile in carrierProfiles)
             {
+
+                var accounts = carrierAccountManager.GetCarriersByProfileId(carrierProfile.CarrierProfileId, getCustomers, getSuppliers);
+
                 if (!carrierProfile.IsDeleted && carrierProfile.Settings.CustomerInvoiceByProfile)
                 {
                     if (getProfiles)
                     {
                         var invoiceCarrierId = string.Format("Profile_{0}", carrierProfile.CarrierProfileId);
-                        if (CheckIfPartnerMatched(filters, invoiceCarrierId))
+                        if (CheckIfPartnerMatched(filters, invoiceCarrierId) && CheckIfShouldGetCarrierProfile(accounts, activationStatus))
                         {
 
                             var invoiceCarrier = new InvoiceCarrier
@@ -71,7 +74,6 @@ namespace TOne.WhS.Invoice.Business
                 {
                     if (getAccounts)
                     {
-                        var accounts = carrierAccountManager.GetCarriersByProfileId(carrierProfile.CarrierProfileId, getCustomers, getSuppliers);
                         if (accounts != null)
                         {
                             foreach (var account in accounts)
@@ -113,6 +115,24 @@ namespace TOne.WhS.Invoice.Business
                     if (!filter.IsMatched(context))
                         return false;
                 }
+            }
+            return true;
+        }
+
+        bool CheckIfShouldGetCarrierProfile(IEnumerable<CarrierAccount> accounts, ActivationStatus? activationStatus)
+        {
+
+            bool hasActiveCustomers = accounts != null ? accounts.Any(x => x.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active || x.CarrierAccountSettings.ActivationStatus == ActivationStatus.Testing) : false;
+
+            if (!activationStatus.HasValue && !hasActiveCustomers)
+                return false;
+            else if (activationStatus.HasValue && activationStatus.Value != ActivationStatus.Inactive && !hasActiveCustomers)
+            {
+                return false;
+            }
+            else if (activationStatus.HasValue && activationStatus.Value == ActivationStatus.Inactive && hasActiveCustomers)
+            {
+                return false;
             }
             return true;
         }
