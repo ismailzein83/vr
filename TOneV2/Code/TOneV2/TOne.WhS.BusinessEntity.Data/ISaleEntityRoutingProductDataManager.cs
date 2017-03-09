@@ -24,10 +24,6 @@ namespace TOne.WhS.BusinessEntity.Data
 
         IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate);
 
-        IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsBySellingProducts(IEnumerable<int> sellingProductIds);
-
-        IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsBySellingProducts(IEnumerable<int> sellingProductIds, IEnumerable<long> saleZoneIds);
-
         IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId);
 
         IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds);
