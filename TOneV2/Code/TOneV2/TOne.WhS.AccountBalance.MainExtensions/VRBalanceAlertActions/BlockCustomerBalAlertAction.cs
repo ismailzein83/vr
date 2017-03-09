@@ -9,10 +9,10 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
     public class BlockCustomerBalAlertAction : VRAction
     {
-        public override Guid ConfigId
-        {
-            get { throw new NotImplementedException(); }
-        }
+        //public override Guid ConfigId
+        //{
+        //    get { throw new NotImplementedException(); }
+        //}
 
         public override void Execute(IVRActionExecutionContext context)
         {
