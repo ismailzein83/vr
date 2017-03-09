@@ -99,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var supplierPriceListManager = new SupplierPriceListManager();
             SupplierPriceList supplierPriceList = supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
             if (supplierPriceList == null)
-                throw new NullReferenceException(String.Format("supplierPriceList (Id: {0}) does not exist for supplierRate (Id: {1})", supplierRate.SupplierRateId, supplierPriceList.PriceListId));
+                throw new NullReferenceException(String.Format("supplierPriceList (Id: {0}) does not exist for supplierRate (Id: {1})", supplierRate.SupplierRateId, supplierRate.PriceListId));
             return supplierPriceList.CurrencyId;
         }
 
@@ -190,8 +190,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Begin Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "End Effective Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
