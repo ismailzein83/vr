@@ -34,7 +34,7 @@ namespace Vanrise.Common.Business
             LogAction(loggableEntity, action, null, null, null, null);
         }
 
-        public void LogObjectCustomAction(VRLoggableEntityBase loggableEntity, string action, bool isObjectUpdated, Object obj, string actionDescription)
+        public void LogObjectCustomAction(VRLoggableEntityBase loggableEntity, string action, bool isObjectUpdated, Object obj, string actionDescription = null)
         {
             if(isObjectUpdated)
             {
