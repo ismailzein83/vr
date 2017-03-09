@@ -131,7 +131,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var salePriceListManager = new SalePriceListManager();
             SalePriceList salePriceList = salePriceListManager.GetPriceList(saleRate.PriceListId);
             if (salePriceList == null)
-                throw new NullReferenceException(String.Format("salePriceList (Id: {0}) does not exist for saleRate (Id: {1})", saleRate.SaleRateId, salePriceList.PriceListId));
+                throw new NullReferenceException(String.Format("salePriceList (Id: {0}) does not exist for saleRate (Id: {1})", saleRate.SaleRateId, saleRate.PriceListId));
             return salePriceList.CurrencyId;
         }
 
@@ -466,7 +466,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Sales Rates",
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
