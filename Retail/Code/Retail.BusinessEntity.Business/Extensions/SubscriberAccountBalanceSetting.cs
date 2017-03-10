@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Notification.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -25,5 +26,15 @@ namespace Retail.BusinessEntity.Business
         {
             return new SubscriberAccountBalanceManager(this.AccountBEDefinitionId);
         }
+
+        public override VRActionTargetType GetActionTargetType()
+        {
+            return new RetailAccountBalanceRuleTargetType { AccountBEDefinitionId = this.AccountBEDefinitionId };
+        }
+    }
+
+    public class RetailAccountBalanceRuleTargetType : VRActionTargetType
+    {
+        public Guid AccountBEDefinitionId { get; set; }
     }
 }

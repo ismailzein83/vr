@@ -60,7 +60,7 @@ app.directive('retailBeAccountactionEmail', ['UtilsService', 'VRUIUtilsService',
 
                     var mailMessageTemplatePayload = {
                         selectedIds: mailTemplateId,
-                        filter: { VRMailMessageTypeId: '8F8E37C5-DBBF-4720-895A-63C9F35501B0' }
+                        filter: { VRMailMessageTypeId: payload.selectedVRActionDefinition.Settings.ExtendedSettings.MailMessageTypeId }
                     };
 
                     var promises = [];
@@ -78,7 +78,12 @@ app.directive('retailBeAccountactionEmail', ['UtilsService', 'VRUIUtilsService',
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.AccountActions.SendEmailAction, Retail.BusinessEntity.MainExtensions",
                         ActionName: "Email (" + $scope.scopeModel.selectedEmailTemplate.Name + " )",
-                        MailMessageTemplateId: mailTemplateSelectorReadyAPI.getSelectedIds()
+                        MailMessageTemplateId: mailTemplateSelectorReadyAPI.getSelectedIds(),
+                        Settings: {
+                            ExtendedSettings: {
+                                $type: "Retail.BusinessEntity.MainExtensions.AccountActions.SendEmailActionDefinitionSettings, Retail.BusinessEntity.MainExtensions",
+                            }
+                        }
                     };
                 };
 

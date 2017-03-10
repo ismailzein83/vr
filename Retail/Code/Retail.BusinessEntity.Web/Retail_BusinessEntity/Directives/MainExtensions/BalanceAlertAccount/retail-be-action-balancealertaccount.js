@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsService','Retail_BE_VRAccountBalanceAPIService',
+app.directive('retailBeActionBalancealertaccount', ['UtilsService', 'VRUIUtilsService', 'Retail_BE_VRAccountBalanceAPIService',
     function (UtilsService, VRUIUtilsService, Retail_BE_VRAccountBalanceAPIService) {
 
         var directiveDefinitionObject = {
@@ -35,7 +35,7 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
 
             var actionBackendExecutorEditorAPI;
             var actionBackendExecutorEditorReadyDeferred = UtilsService.createPromiseDeferred();
-           
+
             var actionDefinitionEntity;
             var context;
             var accountBEDefinitionId;
@@ -58,25 +58,24 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                     var promises = [];
                     if (payload != undefined) {
                         vrActionEntity = payload.vrActionEntity;
-                        if (payload.context != undefined)
-                        {
+                        if (payload.context != undefined) {
                             context = payload.context;
                             var actionBackendExecutorEditorLoadDeferred = UtilsService.createPromiseDeferred();
                             promises.push(actionBackendExecutorEditorLoadDeferred.promise);
                             var alertRuleTypeSettings = context.getAlertRuleTypeSettings();
-                            var promise = Retail_BE_VRAccountBalanceAPIService.GetAccountBEDefinitionIdByAccountTypeId(alertRuleTypeSettings.AccountTypeId).then(function (repsponse) {
-                                accountBEDefinitionId = repsponse;
-                                actionBackendExecutorEditorReadyDeferred.promise.then(function () {
-                                    var actionDefinitionSelectorPayload = {
-                                        accountBEDefinitionId: accountBEDefinitionId,
-                                    };
+                            //var promise = Retail_BE_VRAccountBalanceAPIService.GetAccountBEDefinitionIdByAccountTypeId(alertRuleTypeSettings.AccountTypeId).then(function (repsponse) {
+                            //accountBEDefinitionId = repsponse;
+                            //actionBackendExecutorEditorReadyDeferred.promise.then(function () {
+                            var actionDefinitionSelectorPayload = {
+                                accountBEDefinitionId: payload.selectedVRActionDefinition.Settings.ExtendedSettings.AccountBEDefinitionId,
+                            };
 
-                                    if (vrActionEntity != undefined) {
-                                        actionDefinitionSelectorPayload.accountActionBackendExecutorEntity = vrActionEntity.ActionExecutor;
-                                    }
-                                    VRUIUtilsService.callDirectiveLoad(actionBackendExecutorEditorAPI, actionDefinitionSelectorPayload, actionBackendExecutorEditorLoadDeferred);
-                                });
-                            });
+                            if (vrActionEntity != undefined) {
+                                actionDefinitionSelectorPayload.accountActionBackendExecutorEntity = vrActionEntity.ActionExecutor;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(actionBackendExecutorEditorAPI, actionDefinitionSelectorPayload, actionBackendExecutorEditorLoadDeferred);
+                            //});
+                            //});
                         }
                     }
                     return UtilsService.waitMultiplePromises(promises);
@@ -88,7 +87,12 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService','VRUIUtilsSer
                     return {
                         $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertAccountAction, Retail.BusinessEntity.Business",
                         ActionExecutor: actionExecutor,
-                        ActionName: actionExecutor.ActionName
+                        ActionName: actionExecutor.ActionName,
+                        Settings: {
+                            ExtendedSettings: {
+                                $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertActionDefinitionSettings, Retail.BusinessEntity.Business",
+                            }
+                        }
                     };
                 };
 

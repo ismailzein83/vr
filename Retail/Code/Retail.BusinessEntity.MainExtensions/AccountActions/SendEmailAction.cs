@@ -43,4 +43,32 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
 
         }
     }
+
+    public class SendEmailActionDefinitionSettings : VRActionDefinitionExtendedSettings
+    {
+        public Guid AccountBEDefinitionId { get; set; }
+        public Guid MailMessageTypeId { get; set; }
+        public override Guid ConfigId
+        {
+            get { return new Guid("1BDACFE6-F050-4187-9E96-9647049605D3"); }
+        }
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "retail-be-accountaction-email";
+            }
+        }
+
+        public override bool IsApplicable(IVRActionDefinitionIsApplicableContext context)
+        {
+            RetailAccountBalanceRuleTargetType targetType = context.Target as RetailAccountBalanceRuleTargetType;
+            if (targetType == null)
+                return false;
+            if (targetType.AccountBEDefinitionId != this.AccountBEDefinitionId)
+                return false;
+
+            return true;
+        }
+    }
 }
