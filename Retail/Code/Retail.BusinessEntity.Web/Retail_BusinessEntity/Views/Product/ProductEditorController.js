@@ -37,9 +37,6 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
-            console.log(parameters);
-
             if (parameters != undefined) {
                 productId = parameters.productId;
                 productFamilyId = parameters.productFamilyId;
