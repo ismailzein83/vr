@@ -179,10 +179,9 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                 initializeChartSettings();
                 renderChart(currentChartSource);
             };
-            api.updateValue = function(value)
-            {
+            api.updateValue = function (value) {
                 newValue = value;
-            }
+            };
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);
         }

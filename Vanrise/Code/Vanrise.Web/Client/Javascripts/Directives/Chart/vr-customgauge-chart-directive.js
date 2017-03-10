@@ -252,7 +252,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
             };
             api.updateValue = function (value) {
                 chartAPI.series[0].addPoint(value, true, true);
-            }
+            };
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);
         }

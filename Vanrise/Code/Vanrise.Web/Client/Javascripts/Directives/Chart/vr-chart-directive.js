@@ -489,7 +489,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                         if (s == undefined)
                             s = '';
                         else
-                            s += '<br/>'
+                            s += '<br/>';
                         s += '<span style="color:' + point.series.color + '">\u25CF</span> ' + point.series.name + ': ' + formatValue(point.y);
                     });
 
@@ -573,8 +573,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     
                 }
             };
-            api.updateValues = function(items)
-            {
+            api.updateValues = function (items) {
                 if (currentChartSource != undefined) {
                     if (items != undefined && items.length > 0) {
                         if (currentChartSource.isSingleDimension) {
@@ -588,14 +587,13 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                                     var item = items[j];
                                     addToYValue(item);
                                 }
-                                function addToYValue(dataItem)
-                                {
+                                function addToYValue(dataItem) {
                                     var titleValue = eval('dataItem.' + sDef.titlePath);
                                     var yValue = getYValue(sDef, dataItem);
                                     yValues.push({
                                         name: titleValue,
                                         y: yValue,
-                                        id:counter++
+                                        id: counter++
                                     });
                                 }
                                 serie.update({
@@ -606,32 +604,32 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                         else {
                             var axis = chartAPI.axes;
                             var series = chartAPI.series;
-                                for (var i = 0; i < series.length; i++) {
-                                    var serie = series[i];
-                                    var sDef = currentChartSource.seriesDefinitions[i];
+                            for (var i = 0; i < series.length; i++) {
+                                var serie = series[i];
+                                var sDef = currentChartSource.seriesDefinitions[i];
 
-                                    var yValues = [];
-                                    for (var j = 0; j < items.length; j++) {
-                                        var updatedValue = items[j];
-                                        var yValue = getYValue(sDef, updatedValue);
-                                        yValues.push(yValue);
-                                    }
-                                    serie.update({
-                                        data: yValues
-                                    }, true);
-                                    //series[i].setData(yValues, true, true, true);
-                                }
-                                var ax = axis[0];
-                                var xValues = [];
+                                var yValues = [];
                                 for (var j = 0; j < items.length; j++) {
                                     var updatedValue = items[j];
-                                    xValues.push(getXValue(updatedValue));
+                                    var yValue = getYValue(sDef, updatedValue);
+                                    yValues.push(yValue);
                                 }
-                                ax.setCategories(xValues,true);
+                                serie.update({
+                                    data: yValues
+                                }, true);
+                                //series[i].setData(yValues, true, true, true);
+                            }
+                            var ax = axis[0];
+                            var xValues = [];
+                            for (var j = 0; j < items.length; j++) {
+                                var updatedValue = items[j];
+                                xValues.push(getXValue(updatedValue));
+                            }
+                            ax.setCategories(xValues, true);
                         }
                     }
                 }
-            }
+            };
             api.renderSingleDimensionChart = function (chartData, chartDefinition, seriesDefinitions) {
                 currentChartSource = {
                     isSingleDimension: true,
