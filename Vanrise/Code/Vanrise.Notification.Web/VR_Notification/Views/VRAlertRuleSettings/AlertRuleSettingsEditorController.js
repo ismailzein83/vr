@@ -24,7 +24,6 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-            console.log(parameters);
             if (parameters != undefined) {
 
                 thresholdEntity = parameters.thresholdActionEntity;
