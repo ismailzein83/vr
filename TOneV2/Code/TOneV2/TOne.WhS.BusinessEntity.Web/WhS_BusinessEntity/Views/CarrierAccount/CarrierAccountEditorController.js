@@ -73,7 +73,7 @@
                     }
                 }
                 carrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
-                
+
                 if (carrierProfileId != undefined) {
 
                     getCarrierProfile()
@@ -86,7 +86,7 @@
                             }
                         });
                 }
-            }
+            };
 
             function getCarrierProfile() {
                 return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId)
@@ -197,7 +197,7 @@
             };
             $scope.scopeModel.onCarrierProfileSelectionChanged = function () {
                 $scope.scopeModel.showInvoiceSetting();
-            }
+            };
             $scope.scopeModel.onCarrierTypeSelectionChanged = function () {
                 $scope.scopeModel.showInvoiceSetting();
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {

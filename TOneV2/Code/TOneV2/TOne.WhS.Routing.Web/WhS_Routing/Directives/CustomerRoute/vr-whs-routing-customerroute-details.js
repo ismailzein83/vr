@@ -49,7 +49,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                 };
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-                }
+                };
                 $scope.getMenuActions = function (dataItem) {
                     var menuActions = [];
 

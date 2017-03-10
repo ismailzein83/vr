@@ -92,7 +92,7 @@
                 };
 
                 VRUIUtilsService.callDirectiveLoad(rpRouteOptionGridAPI, payload, loadRpRouteOptionGridPromiseDeferred);
-            })
+            });
 
             return loadRpRouteOptionGridPromiseDeferred.promise;
         }

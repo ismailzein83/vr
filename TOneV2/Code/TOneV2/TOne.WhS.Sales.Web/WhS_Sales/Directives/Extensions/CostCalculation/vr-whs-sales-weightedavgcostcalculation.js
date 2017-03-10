@@ -25,7 +25,7 @@ app.directive("vrWhsSalesWeightedavgcostcalculation", ['WhS_Sales_PeriodTypesEnu
             ctrl.title;
 
             $scope.onPeriodTypeSelectorReady = function (api) {
-                $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum)
+                $scope.periodTypes = UtilsService.getArrayEnum(WhS_Sales_PeriodTypesEnum);
                 periodTypesReadyPromiseDeferred.resolve();
                 defineAPI();
             };

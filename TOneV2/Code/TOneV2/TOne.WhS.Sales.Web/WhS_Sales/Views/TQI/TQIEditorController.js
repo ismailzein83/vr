@@ -62,7 +62,7 @@
 
             $scope.disableSaveBtn = function () {
                 return $scope.calculatedRate == undefined;
-            }
+            };
 
             $scope.evaluate = function () {
                 return WhS_Sales_RatePlanAPIService.GetTQIEvaluatedRate(buildTQIEvaluatedRateObjFromScope()).then(function (response) {
@@ -121,7 +121,7 @@
 
             if (zoneItem != undefined) {
                 $scope.zoneName = zoneItem.ZoneName;
-                $scope.rate = getRoundedNumber(zoneItem.CurrentRate)
+                $scope.rate = getRoundedNumber(zoneItem.CurrentRate);
                 $scope.rateBED = zoneItem.CurrentRateBED;
                 $scope.newRate = zoneItem.NewRate;
             }

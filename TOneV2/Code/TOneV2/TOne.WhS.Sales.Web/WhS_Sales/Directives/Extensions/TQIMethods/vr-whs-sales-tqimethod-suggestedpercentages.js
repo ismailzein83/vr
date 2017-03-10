@@ -33,7 +33,7 @@ app.directive("vrWhsSalesTqimethodSuggestedpercentages", [function () {
             if (totalSuggestedPercentages != 100)
                 return "The sum of suggested percentages must be equal to 100";
             return null;
-        }
+        };
 
         function initializeController() {
             defineAPI();
