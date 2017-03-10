@@ -33,6 +33,15 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
             var connectionSelectorAPI;
             var connectionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var viewPermissionAPI;
+            var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var configurePermissionAPI;
+            var configurePermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var resetPasswordPermissionAPI;
+            var resetPasswordPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -48,7 +57,19 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                     connectionSelectorAPI = api;
                     connectionSelectorPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                    viewPermissionAPI = api;
+                    viewPermissionReadyDeferred.resolve();
+                };
 
+                $scope.scopeModel.onConfigureRequiredPermissionReady = function (api) {
+                    configurePermissionAPI = api;
+                    configurePermissionReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onResetPasswordRequiredPermissionReady = function (api) {
+                    resetPasswordPermissionAPI = api;
+                    resetPasswordPermissionReadyDeferred.resolve();
+                };
                 defineAPI();
             }
             function defineAPI() {
@@ -62,6 +83,7 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                     var email;
                     var connectionId;
                     var tenantId;
+                    var security;
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
@@ -71,6 +93,7 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                             email = payload.accountViewDefinitionSettings.AccountEmailMappingField;
                             connectionId = payload.accountViewDefinitionSettings.ConnectionId;
                             tenantId = payload.accountViewDefinitionSettings.TenantId;
+                            security = payload.accountViewDefinitionSettings.Security || undefined;
                         }
                     }
 
@@ -85,6 +108,16 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                     //Loading ConnectionId selector
                     var connectionSelectorLoadPromise = getConnectionSelectorLoadPromise();
                     promises.push(connectionSelectorLoadPromise);
+
+                    var loadViewRequiredPermissionPromise = loadViewRequiredPermission();
+                    promises.push(loadViewRequiredPermissionPromise);
+
+                    var loadConfigureRequiredPermissionPromise = loadConfigureRequiredPermission();
+                    promises.push(loadConfigureRequiredPermissionPromise);
+
+                    var loadResetPasswordRequiredPermissionPromise = loadResetPasswordRequiredPermission();
+                    promises.push(loadResetPasswordRequiredPermissionPromise);
+
 
                     //Loading TenantId
                     $scope.scopeModel.tenantId = tenantId != undefined ? tenantId : 1;
@@ -143,7 +176,41 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
 
                         return connectionSelectorLoadDeferred.promise;
                     }
+                    function loadViewRequiredPermission() {
+                        var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        viewPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: security &&  security.ViewRequiredPermission || undefined
+                            };
 
+                            VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, dataPayload, viewSettingPermissionLoadDeferred);
+                        });
+                        return viewSettingPermissionLoadDeferred.promise;
+                    }
+
+
+                    function loadConfigureRequiredPermission() {
+                        var congfigurePermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        configurePermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: security && security.ConfigureRequiredPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(configurePermissionAPI, dataPayload, congfigurePermissionLoadDeferred);
+                        });
+                        return congfigurePermissionLoadDeferred.promise;
+                    }
+
+                    function loadResetPasswordRequiredPermission() {
+                        var resetPasswordPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        resetPasswordPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: security &&  security.ResetPasswordRequiredPermission || undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(resetPasswordPermissionAPI, dataPayload, resetPasswordPermissionLoadDeferred);
+                        });
+                        return resetPasswordPermissionLoadDeferred.promise;
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -157,7 +224,12 @@ app.directive("retailBeAccountviewdefinitionsettingsPortalaccount", ["UtilsServi
                         AccountNameMappingField: nameAccountGenericField != undefined ? nameAccountGenericField.Name : undefined,
                         AccountEmailMappingField: emailAccountGenericField != undefined ? emailAccountGenericField.Name : undefined,
                         ConnectionId: connectionSelectorAPI.getSelectedIds(),
-                        TenantId: $scope.scopeModel.tenantId
+                        TenantId: $scope.scopeModel.tenantId,
+                        Security: {
+                            ViewRequiredPermission :viewPermissionAPI.getData(),
+                            ConfigureRequiredPermission: configurePermissionAPI.getData(),
+                            ResetPasswordRequiredPermission: resetPasswordPermissionAPI.getData()
+                        }
                     };
                     return obj;
                 };

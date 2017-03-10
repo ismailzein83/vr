@@ -7,12 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 {
     public class PortalAccountManager
     {
+        static SecurityManager sManager = new SecurityManager();
         public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId)
         {
             return new AccountBEManager().GetExtendedSettings<PortalAccountSettings>(accountBEDefinitionId, accountId);
@@ -96,5 +98,39 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 
             return connectionSettings.Post<Vanrise.Security.Entities.ResetPasswordInput, Vanrise.Entities.UpdateOperationOutput<object>>("/api/PartnerPortal_CustomerAccess/RetailAccountUser/ResetPassword", resetPasswordInput);
         }
+
+        #region Security
+        public bool DosesUserHaveViewAccess( Guid accountBEDefinitionId,Guid accountViewDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, accountBEDefinitionId, accountViewDefinitionId, (sec) => sec.ViewRequiredPermission);
+
+        }
+        public bool DosesUserHaveConfigureAccess(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, accountBEDefinitionId, accountViewDefinitionId, (sec) => sec.ConfigureRequiredPermission);
+
+        }
+        public bool DosesUserHaveResetPasswordAccess(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, accountBEDefinitionId, accountViewDefinitionId, (sec) => sec.ResetPasswordRequiredPermission);
+
+        }
+
+        #endregion
+
+        #region Private Methods
+        private bool DoesUserHaveAccess(int userId, Guid accountBEDefinitionId, Guid accountViewDefinitionId, Func<AccountViewDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            var accountViewDefinitionSettings = new AccountBEDefinitionManager().GetAccountViewDefinitionSettings<PortalAccount>(accountBEDefinitionId, accountViewDefinitionId);
+            if (accountViewDefinitionSettings != null && accountViewDefinitionSettings.Security != null && getRequiredPermissionSetting(accountViewDefinitionSettings.Security) != null)
+                return sManager.IsAllowed(getRequiredPermissionSetting(accountViewDefinitionSettings.Security), userId);
+            else
+                return true;
+        }
+
+        #endregion
     }
 }

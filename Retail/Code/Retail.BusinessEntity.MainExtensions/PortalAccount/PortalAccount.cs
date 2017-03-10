@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 {
@@ -16,10 +18,20 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
         public string AccountEmailMappingField { get; set; }
         public Guid ConnectionId { get; set; }
         public int TenantId { get; set; }
-         
+        public AccountViewDefinitionSecurity Security { get; set; }         
         public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
         {
-            return base.DoesUserHaveAccess(context);
+            if (this.Security != null && this.Security.ViewRequiredPermission != null)
+                return new SecurityManager().IsAllowed(this.Security.ViewRequiredPermission, SecurityContext.Current.GetLoggedInUserId());
+            else
+                return true;
         }
+    }
+
+    public class AccountViewDefinitionSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { get; set; }
+        public RequiredPermissionSettings ConfigureRequiredPermission { get; set; }
+        public RequiredPermissionSettings ResetPasswordRequiredPermission { get; set; }
     }
 }

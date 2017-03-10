@@ -17,25 +17,42 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 
         [HttpGet]
         [Route("GetPortalAccountSettings")]
-        public PortalAccountSettings GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId)
+        public object GetPortalAccountSettings(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId)
         {
+            if (!_manager.DosesUserHaveViewAccess(accountBEDefinitionId, accountViewDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.GetPortalAccountSettings(accountBEDefinitionId, accountId, accountViewDefinitionId);
+        }
+        [HttpGet]
+        [Route("DosesUserHaveConfigureAccess")]
+        public bool DosesUserHaveConfigureAccess(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
+        {
+            return _manager.DosesUserHaveConfigureAccess(accountBEDefinitionId, accountViewDefinitionId);
         }
 
         [HttpPost]
         [Route("AddPortalAccount")]
-        public Vanrise.Entities.InsertOperationOutput<PortalAccountSettings> AddPortalAccount(PortalAccountEditorObject portalAccountEditorObject)
+        public object AddPortalAccount(PortalAccountEditorObject portalAccountEditorObject)
         {
+            if (!DosesUserHaveConfigureAccess(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountViewDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.AddPortalAccount(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountId, portalAccountEditorObject.AccountViewDefinitionId,
                                              portalAccountEditorObject.Name, portalAccountEditorObject.Email);
         }
-
+        [HttpGet]
+        [Route("DosesUserHaveResetPasswordAccess")]
+        public bool DosesUserHaveAccess(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
+        {
+            return _manager.DosesUserHaveResetPasswordAccess(accountBEDefinitionId, accountViewDefinitionId);
+        }
         [HttpPost]
         [Route("ResetPassword")]
-        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(ResetPasswordInput resetPasswordInput)
+        public object ResetPassword(ResetPasswordInput resetPasswordInput)
         {
+            if (!_manager.DosesUserHaveResetPasswordAccess(resetPasswordInput.AccountBEDefinitionId, resetPasswordInput.AccountViewDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.ResetPassword(resetPasswordInput.AccountBEDefinitionId, resetPasswordInput.AccountId, resetPasswordInput.AccountViewDefinitionId, resetPasswordInput.Password);
-        } 
+        }
     }
 
     public class PortalAccountEditorObject

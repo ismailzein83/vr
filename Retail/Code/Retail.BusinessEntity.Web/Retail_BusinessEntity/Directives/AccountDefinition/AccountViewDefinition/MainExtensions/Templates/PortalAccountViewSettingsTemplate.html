@@ -21,4 +21,27 @@
         <vr-textbox value="scopeModel.tenantId" label="Tenant Id" type="number" decimalprecision="0" isrequired></vr-textbox>
     </vr-columns>
 </vr-row>
+<vr-section header="Security">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-section header="View">
+                <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-section header="Configure">
+                <vr-sec-requiredpermission-grid on-ready="scopeModel.onConfigureRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-section header="Reset Password">
+                <vr-sec-requiredpermission-grid on-ready="scopeModel.onResetPasswordRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+</vr-section>
 

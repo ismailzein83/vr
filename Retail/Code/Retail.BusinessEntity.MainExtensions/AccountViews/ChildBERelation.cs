@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Business;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountViews
 {
@@ -26,7 +27,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
 
         public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
         {
-            return base.DoesUserHaveAccess(context);
+            BEParentChildRelationDefinitionManager beParentChildManager = new BEParentChildRelationDefinitionManager();
+            return beParentChildManager.DoesUserHaveViewAccess(this.BEParentChildRelationDefinitionId);
         }
     }
 }

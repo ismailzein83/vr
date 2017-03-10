@@ -38,6 +38,7 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.sectionMenuActions = [];
                 $scope.scopeModel.isPortalUserAccountCreated = false;
+                $scope.scopeModel.showAddProtalAccount = false;
 
                 $scope.scopeModel.addPortalAccount = function () {
                     var onPortalAccountAdded = function (addedPortalAccount) {
@@ -87,13 +88,22 @@
                                 name: 'Reset Password',
                                 clicked: function () {
                                     Retail_BE_PortalAccountService.resetPassword(accountBEDefinitionId, parentAccountId, buildContext());
+                                },
+                                haspermission: function () {
+                                    return Retail_BE_PortalAccountAPIService.DosesUserHaveResetPasswordAccess(accountBEDefinitionId, accountViewDefinitionId);
                                 }
+                                
                             });
                         }
                         else {
                             $scope.scopeModel.sectionMenuActions.push({
                                 name: 'Add Portal Account',
-                                clicked: $scope.scopeModel.addPortalAccount
+                                clicked: $scope.scopeModel.addPortalAccount,
+                                haspermission: function () {
+                                    return Retail_BE_PortalAccountAPIService.DosesUserHaveConfigureAccess(accountBEDefinitionId, accountViewDefinitionId).then(function (response) {
+                                        return  $scope.scopeModel.showAddProtalAccount = response;
+                                    });
+                                }
                             });
                         }
                     });

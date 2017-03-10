@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ChildBERelationsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'VR_GenericData_BEParentChildRelationService'];
+    ChildBERelationsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'VR_GenericData_BEParentChildRelationService', 'VR_GenericData_BEParentChildRelationAPIService'];
 
-    function ChildBERelationsViewDirective(UtilsService, VRNotificationService, VR_GenericData_BEParentChildRelationService) {
+    function ChildBERelationsViewDirective(UtilsService, VRNotificationService, VR_GenericData_BEParentChildRelationService, VR_GenericData_BEParentChildRelationAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -33,12 +33,12 @@
             var accountViewDefinition;
             var accountBEDefinitionId;
             var parentAccountId;
-
+            var relationDefinitionId;
             var gridAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.hasAddPermission = false;
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -63,8 +63,10 @@
                         accountViewDefinition = payload.accountViewDefinition;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
+                        relationDefinitionId = accountViewDefinition != undefined && accountViewDefinition.Settings != undefined && accountViewDefinition.Settings.BEParentChildRelationDefinitionId || undefined;
                     }
-
+                    if (relationDefinitionId != undefined)
+                        checkHasAddChildBERelationPermission(relationDefinitionId);
                     return gridAPI.load(buildGridPayload(payload)).then(function () {
                         $scope.scopeModel.isGridLoading = false;
                     });
@@ -82,6 +84,12 @@
                     ParentBEId: parentAccountId
                 };
                 return payload;
+            }
+
+            function checkHasAddChildBERelationPermission(relationDefinitionId) {
+                VR_GenericData_BEParentChildRelationAPIService.HasAddChildRelationPermission(relationDefinitionId).then(function (response) {
+                    $scope.scopeModel.hasAddPermission = response;
+                });
             }
         }
     }
