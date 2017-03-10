@@ -73,7 +73,7 @@ namespace Retail.BusinessEntity.Business
             {
                 ExportExcelHandler = new AccountExcelExportHandler(input.Query)
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(new AccountBELoggableEntity(input.Query.AccountBEDefinitionId), input);
             return DataRetrievalManager.Instance.ProcessResult(input, bigResult, handler);
         }
         public Account GetAccount(Guid accountBEDefinitionId, long accountId)
@@ -184,14 +184,16 @@ namespace Retail.BusinessEntity.Business
             if (TryUpdateAccount(accountToEdit))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToEdit.AccountBEDefinitionId);
+                var account = GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountBELoggableEntity(accountToEdit.AccountBEDefinitionId), account);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = AccountDetailMapper(this.GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId));
+                updateOperationOutput.UpdatedObject = AccountDetailMapper(account);
             }
             else
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
-
+           
             return updateOperationOutput;
         }
         public IEnumerable<AccountInfo> GetAccountsInfo(Guid accountBEDefinitionId, string nameFilter, AccountFilter filter)
@@ -685,6 +687,50 @@ namespace Retail.BusinessEntity.Business
                     }
                 }
                 context.MainSheet = sheet;
+            }
+        }
+
+        private class AccountBELoggableEntity : VRLoggableEntityBase
+        {
+            Guid _accountBEDefinitionId;
+            static AccountBEDefinitionManager s_accountBEDefinitionManager = new AccountBEDefinitionManager();
+
+            public AccountBELoggableEntity(Guid accountBEDefinitionId)
+            {
+                _accountBEDefinitionId = accountBEDefinitionId;
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return String.Format("Retail_BusinessEntity_AccountBE_{0}", _accountBEDefinitionId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return s_accountBEDefinitionManager.GetAccountBEDefinitionName(_accountBEDefinitionId); }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "Retail_BusinessEntity_AccountBE_ViewHistoryItem"; }
+            }
+
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Account account = context.Object.CastWithValidate<Account>("context.Object");
+                return account.AccountId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Account account = context.Object.CastWithValidate<Account>("context.Object");
+                return !String.IsNullOrWhiteSpace(account.Name) ? account.Name : account.Name.ToString();
+            }
+
+            public override string ModuleName
+            {
+                get { return "Account"; }
             }
         }
         #endregion

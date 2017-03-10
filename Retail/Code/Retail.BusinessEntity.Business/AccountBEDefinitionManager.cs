@@ -23,7 +23,11 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Public Methods
+        public string GetAccountBEDefinitionName(Guid accountBEDefinitionId)
+        {
 
+            return s_businessEntityDefinitionManager.GetBusinessEntityDefinitionName(accountBEDefinitionId);
+        }
         public AccountBEDefinitionSettings GetAccountBEDefinitionSettingsWithHidden(Guid accountBEDefinitionId)
         {
             var businessEntityDefinition = s_businessEntityDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);

@@ -142,6 +142,7 @@
     <Compile Include="AccountViews\AccountIdentificationRules.cs" />
     <Compile Include="AccountViews\AccountInfo.cs" />
     <Compile Include="AccountViews\AccountPackages.cs" />
+    <Compile Include="AccountViews\AccountHistoryView.cs" />
     <Compile Include="PortalAccount\PortalAccount.cs" />
     <Compile Include="AccountViews\AccountServices.cs" />
     <Compile Include="AccountViews\Actions.cs" />

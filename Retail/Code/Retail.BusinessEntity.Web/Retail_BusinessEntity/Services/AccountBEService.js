@@ -38,12 +38,15 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
+        function getEntityUniqueName(definitionId) {
+            return "Retail_BusinessEntity_AccountBE_" + definitionId;
+        }
 
         function defineAccountViewTabs(accountBEDefinitionId, account, gridAPI, accountViewDefinitions) {
             if (accountBEDefinitionId == undefined || account == undefined || account.AvailableAccountViews == undefined || account.AvailableAccountViews.length == 0)
                 return;
 
-            var drillDownTabs = [];
+           var drillDownTabs = [];
 
             for (var index = 0; index < account.AvailableAccountViews.length; index++) {
 
@@ -107,7 +110,8 @@
             addAccount: addAccount,
             editAccount: editAccount,
             defineAccountViewTabs: defineAccountViewTabs,
-            openAccount360DegreeEditor: openAccount360DegreeEditor
+            openAccount360DegreeEditor: openAccount360DegreeEditor,
+            getEntityUniqueName: getEntityUniqueName
         };
 
     }
