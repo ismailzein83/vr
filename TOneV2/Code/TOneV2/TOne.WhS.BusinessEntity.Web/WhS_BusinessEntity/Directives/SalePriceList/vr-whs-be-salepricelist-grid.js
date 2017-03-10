@@ -86,7 +86,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, F
 
         }
         function PreviewPriceList(priceListObj) {
-            console.log(priceListObj);
             whSBeSalePriceListPreviewService.previewPriceList(priceListObj.Entity.PriceListId);
         }
         function downloadPriceList(priceListObj) {
