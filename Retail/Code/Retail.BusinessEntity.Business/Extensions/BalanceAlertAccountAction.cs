@@ -46,6 +46,11 @@ namespace Retail.BusinessEntity.Business.Extensions
             s_accountActionManager.Execute(accountDefinitionId, accountId, this.ActionExecutor);
         }
     }
+
+    public class BalanceAlertExtendedSettings : VRActionExtendedSettings
+    {
+
+    }
     public class BalanceAlertActionDefinitionSettings : VRActionDefinitionExtendedSettings
     {
         public Guid AccountBEDefinitionId { get; set; }

@@ -81,7 +81,7 @@ app.directive('retailBeAccountactionEmail', ['UtilsService', 'VRUIUtilsService',
                         MailMessageTemplateId: mailTemplateSelectorReadyAPI.getSelectedIds(),
                         Settings: {
                             ExtendedSettings: {
-                                $type: "Retail.BusinessEntity.MainExtensions.AccountActions.SendEmailActionDefinitionSettings, Retail.BusinessEntity.MainExtensions",
+                                $type: "Retail.BusinessEntity.MainExtensions.AccountActions.BalanceSendEmailExtendedSettings, Retail.BusinessEntity.MainExtensions",
                             }
                         }
                     };

@@ -43,7 +43,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
 
         }
     }
+    public class BalanceSendEmailExtendedSettings : VRActionExtendedSettings
+    {
 
+    }
     public class SendEmailActionDefinitionSettings : VRActionDefinitionExtendedSettings
     {
         public Guid AccountBEDefinitionId { get; set; }
