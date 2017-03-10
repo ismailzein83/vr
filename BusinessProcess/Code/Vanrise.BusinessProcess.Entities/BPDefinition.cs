@@ -29,7 +29,43 @@ namespace Vanrise.BusinessProcess.Entities
         public bool HasChildProcesses { get; set; }
         public bool HasBusinessRules { get; set; }
         public bool NotVisibleInManagementScreen { get; set; }
+
+        public BPDefinitionExtendedSettings ExtendedSettings { get; set; }
+
         public BPDefinitionSecurity Security { get; set; }
+    }
+
+    public abstract class BPDefinitionExtendedSettings
+    {
+        public abstract bool DoesUserHaveViewAccess(IBPDefinitionDoesUserHaveViewAccessContext context);
+
+        public abstract bool DoesUserHaveStartAccess(IBPDefinitionDoesUserHaveStartAccessContext context);
+
+        public virtual bool DoesUserHaveStartSpecificInstanceAccess(IBPDefinitionDoesUserHaveStartSpecificInstanceAccessContext context)
+        {
+            return DoesUserHaveStartAccess(context.DefinitionContext);
+        }
+    }
+
+    public interface IBPDefinitionDoesUserHaveViewAccessContext
+    {
+        int UserId { get; }
+
+        BPDefinition BPDefinition { get; }
+    }
+
+    public interface IBPDefinitionDoesUserHaveStartAccessContext
+    {
+        int UserId { get; }
+
+        BPDefinition BPDefinition { get; }
+    }
+
+    public interface IBPDefinitionDoesUserHaveStartSpecificInstanceAccessContext
+    {
+        IBPDefinitionDoesUserHaveStartAccessContext DefinitionContext { get; }
+
+        BaseProcessInputArgument InputArg { get; }
     }
 
     public class BPDefinitionSecurity

@@ -74,6 +74,7 @@
     <Compile Include="BPInstanceTrackingManager.cs" />
     <Compile Include="BPInstanceManager.cs" />
     <Compile Include="BPDefinitionManager.cs" />
+    <Compile Include="DefaultBPDefinitionExtendedSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BPValidationMessageManager.cs" />
   </ItemGroup>
