@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleGridDirective.$inject = ['VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRule', 'UtilsService', 'VRNotificationService'];
+    GenericRuleGridDirective.$inject = ['VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRule', 'VRUIUtilsService', 'UtilsService', 'VRNotificationService'];
 
-    function GenericRuleGridDirective(VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRule, UtilsService, VRNotificationService) {
+    function GenericRuleGridDirective(VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRule, VRUIUtilsService, UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,7 +25,7 @@
 
         function GenericRuleGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var gridDrillDownTabsObj;
             var gridAPI;
             var accessibility;
             var criteriaFieldsToHide;
@@ -35,6 +35,8 @@
                 $scope.genericRules = [];
 
                 $scope.onGridReady = function (api) {
+                    var drillDownDefinitions = VR_GenericData_GenericRule.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     gridAPI = api;
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -44,6 +46,11 @@
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_GenericRuleAPIService.GetFilteredGenericRules(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
@@ -128,6 +135,7 @@
 
             function editGenericRule(genericRule) {
                 var onGenericRuleUpdated = function (updatedGenericRule) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedGenericRule);
                     gridAPI.itemUpdated(updatedGenericRule);
                 };
                 VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated, accessibility);

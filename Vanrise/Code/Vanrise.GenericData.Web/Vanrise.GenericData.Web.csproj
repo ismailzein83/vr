@@ -457,6 +457,7 @@
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarygroupingcolumns-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-selector.js" />
+    <Content Include="VR_GenericData\ModuleInitialization.js" />
     <Content Include="VR_GenericData\Services\APIServices\BELookupRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationDefinitionAPIService.js" />

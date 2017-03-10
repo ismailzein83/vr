@@ -2,14 +2,18 @@
 
     'use strict';
 
-    genericRule.$inject = ['VRModalService', 'VRNotificationService', 'VR_GenericData_GenericRuleAPIService', 'UtilsService'];
+    genericRule.$inject = ['VRModalService', 'VRNotificationService', 'VR_GenericData_GenericRuleAPIService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-    function genericRule(VRModalService, VRNotificationService, VR_GenericData_GenericRuleAPIService, UtilsService) {
+    function genericRule(VRModalService, VRNotificationService, VR_GenericData_GenericRuleAPIService, UtilsService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addGenericRule: addGenericRule,
             editGenericRule: editGenericRule,
             deleteGenericRule: deleteGenericRule,            
-            viewGenericRule: viewGenericRule
+            viewGenericRule: viewGenericRule,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToGenericRule: registerObjectTrackingDrillDownToGenericRule,
+            getEntityUniqueName: getEntityUniqueName
         });
 
         function addGenericRule(genericRuleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility) {
@@ -75,6 +79,38 @@
                     });
                 }
             });
+        }
+        function getEntityUniqueName(definitionId) {
+            return "VR_GenericData_GenericRule_" + definitionId;
+        }
+        function registerObjectTrackingDrillDownToGenericRule() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, ruleItem) {
+                ruleItem.objectTrackingGridAPI = directiveAPI;
+               
+                var query = {
+                    ObjectId: ruleItem.Entity.RuleId,
+                    EntityUniqueName: getEntityUniqueName(ruleItem.Entity.DefinitionId),
+
+                };
+                return ruleItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
     };
 
