@@ -10,6 +10,8 @@ namespace Vanrise.Notification.Entities
     {
         public abstract string VRActionExtensionType { get; set; }
 
+        public abstract VRActionTargetType GetActionTargetType();
+
         public abstract string ThresholdExtensionType { get; set; }
 
         public abstract VRBalanceAlertRuleBehavior Behavior { get; set; }

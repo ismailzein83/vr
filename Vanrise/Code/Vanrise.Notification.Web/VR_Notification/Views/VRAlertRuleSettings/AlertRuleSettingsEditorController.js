@@ -24,8 +24,9 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
+            console.log(parameters);
             if (parameters != undefined) {
+
                 thresholdEntity = parameters.thresholdActionEntity;
                 balanceAlertActionExtensionType = parameters.actionExtensionType;
                 thresholdActionExtensionType = parameters.thresholdExtensionType;
@@ -90,7 +91,7 @@
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             vRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload = {context:getContext(), extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined, isRequired: true };
+                var vrActionPayload = { context: getContext(), extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined, isRequired: true };
                 VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
             });
             return vRActionManagementLoadDeferred.promises;
@@ -138,8 +139,7 @@
             };
             return obj;
         }
-        function getContext()
-        {
+        function getContext() {
             var currentContext = context;
             if (currentContext == undefined)
                 currentContext = {};

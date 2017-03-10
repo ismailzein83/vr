@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Entities;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.Business.Extensions
@@ -40,10 +41,11 @@ namespace Vanrise.AccountBalance.Business.Extensions
             get { return _behavior; }
             set { }
         }
-    }
 
-    public class AccountBalanceTargetType : VRActionTargetType
-    {
-
+        public override VRActionTargetType GetActionTargetType()
+        {
+            var accountTypeManager = new AccountTypeManager();
+            return accountTypeManager.GetAccountTypeExtendedSettings<AccountTypeExtendedSettings>(this.AccountTypeId).GetActionTargetType();
+        }
     }
 }

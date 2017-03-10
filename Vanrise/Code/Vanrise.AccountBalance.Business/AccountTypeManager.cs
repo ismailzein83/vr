@@ -93,6 +93,13 @@ namespace Vanrise.AccountBalance.Business
             return _vrComponentTypeManager.GetComponentTypeSettings<AccountTypeSettings>(accountTypeId);
         }
 
+        public T GetAccountTypeExtendedSettings<T>(Guid accountTypeId) where T : AccountTypeExtendedSettings
+        {
+            AccountTypeSettings accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
+            return accountTypeSettings.ExtendedSettings.CastWithValidate<T>("accountTypeSettings.ExtendedSettings", accountTypeId);
+        }
+
         public bool DoesUserHaveViewAccess(int userId, List<Guid> AccountTypeIds)
         {
             foreach (var a in AccountTypeIds)

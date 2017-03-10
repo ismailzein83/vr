@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrNotificationAlertrulesettings', ['UtilsService', 'VR_Notification_AlertRuleSettingsService','VR_Notification_VRBalanceAlertRuleAPIService',
+app.directive('vrNotificationAlertrulesettings', ['UtilsService', 'VR_Notification_AlertRuleSettingsService', 'VR_Notification_VRBalanceAlertRuleAPIService',
 function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notification_VRBalanceAlertRuleAPIService) {
 
     var directiveDefinitionObject = {
@@ -135,8 +135,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
             VR_Notification_AlertRuleSettingsService.editAlertRuleThreshold(dataItem.Entity, onThresholdActionUpdated, actionExtensionType, thresholdExtensionType, getContext());
         }
 
-        function getVRBalanceAlertThresholdConfigs()
-        {
+        function getVRBalanceAlertThresholdConfigs() {
             return VR_Notification_VRBalanceAlertRuleAPIService.GetVRBalanceAlertThresholdConfigs(thresholdExtensionType).then(function (response) {
                 if (response != null) {
                     for (var i = 0; i < response.length; i++) {
@@ -146,8 +145,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
             });
         }
 
-        function getContext()
-        {
+        function getContext() {
             var currentContext = context;
             if (currentContext == undefined)
                 currentContext = {};

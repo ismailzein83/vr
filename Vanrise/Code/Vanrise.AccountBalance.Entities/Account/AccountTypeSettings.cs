@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Notification.Entities;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.AccountBalance.Entities
@@ -27,6 +28,12 @@ namespace Vanrise.AccountBalance.Entities
     {
         public abstract Guid ConfigId { get;}
         public abstract string AccountSelector { get;}
+
+        public virtual VRActionTargetType GetActionTargetType()
+        {
+            return null;
+        }
+
         public abstract IAccountManager GetAccountManager();
     }
     public interface IAccountManager

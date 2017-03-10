@@ -197,6 +197,8 @@
         }
 
         function insert() {
+            var obj = buildVRAlertRuleObjFromScope();
+            console.log(UtilsService.serializetoJson(obj));
             $scope.scopeModel.isLoading = true;
             return VR_Notification_VRAlertRuleAPIService.AddVRAlertRule(buildVRAlertRuleObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('VRAlertRule', response, 'Name')) {
