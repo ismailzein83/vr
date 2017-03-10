@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Security.Business;
 
 namespace Vanrise.GenericData.Business
 {
     public class BEParentChildRelationDefinitionManager
     {
+        static SecurityManager s_securityManager = new SecurityManager();
         #region Public Methods
 
         public BEParentChildRelationDefinition GetBEParentChildRelationDefinition(Guid beParentChildRelationDefinitionId)
@@ -68,6 +70,15 @@ namespace Vanrise.GenericData.Business
             return vrComponentTypeManager.GetCachedComponentTypes<BEParentChildRelationDefinitionSettings, BEParentChildRelationDefinition>();
         }
 
+        private bool DoesUserHaveAccess(int userId, Guid beParentChildRelationDefinitionId, Func<BEParentChildRelationDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            var beParentChildRelationDefinition = GetBEParentChildRelationDefinition(beParentChildRelationDefinitionId);
+            if (beParentChildRelationDefinition != null && beParentChildRelationDefinition.Settings != null && beParentChildRelationDefinition.Settings.Security != null && getRequiredPermissionSetting(beParentChildRelationDefinition.Settings.Security) != null)
+                return s_securityManager.IsAllowed(getRequiredPermissionSetting(beParentChildRelationDefinition.Settings.Security), userId);
+            else
+                return true;
+        }
+
         #endregion
 
         #region Mapper
@@ -81,6 +92,21 @@ namespace Vanrise.GenericData.Business
                 ParentBEDefinitionId = beParentChildRelationDefinition.Settings.ParentBEDefinitionId,
                 ChildBEDefinitionId = beParentChildRelationDefinition.Settings.ChildBEDefinitionId
             };
+        }
+
+        #endregion
+
+        #region Security
+
+        public bool DoesUserHaveViewAccess(Guid beParentChildRelationDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, beParentChildRelationDefinitionId, (sec) => sec.ViewRequiredPermission);
+        }
+        public bool DoesUserHaveAddAccess(Guid beParentChildRelationDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, beParentChildRelationDefinitionId, (sec) => sec.AddRequiredPermission);
         }
 
         #endregion

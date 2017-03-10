@@ -95,7 +95,6 @@
                 function loadSettingDirectiveSection() {
                     if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) {
                         settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                        console.log(businessEntityDefinitionEntity);
                         $scope.scopeModel.selectedSetingsTypeConfig = UtilsService.getItemByVal($scope.scopeModel.bEDefinitionSettingConfigs, businessEntityDefinitionEntity.Settings.ConfigId, "ExtensionConfigurationId");
 
                         var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -105,7 +104,6 @@
                                     businessEntityDefinitionId: businessEntityDefinitionId,
                                     businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
                                 };
-                                console.log(directivePayload);
                                 VRUIUtilsService.callDirectiveLoad(settingDirectiveAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                             });
 

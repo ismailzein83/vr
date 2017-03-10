@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -18,5 +19,14 @@ namespace Vanrise.GenericData.Entities
         public Guid ChildBEDefinitionId { get; set; }
 
         public string ChildFilterFQTN { get; set; }
+
+        public BEParentChildRelationDefinitionSecurity Security { get; set; }
+
+    }
+
+    public class BEParentChildRelationDefinitionSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { get; set; }
+        public RequiredPermissionSettings AddRequiredPermission { get; set; }
     }
 }

@@ -14,11 +14,14 @@ namespace Vanrise.GenericData.Web.Controllers
     public class BEParentChildRelationController : BaseAPIController
     {
         BEParentChildRelationManager _manager = new BEParentChildRelationManager();
+        BEParentChildRelationDefinitionManager _defManager = new BEParentChildRelationDefinitionManager();
 
         [HttpPost]
         [Route("GetFilteredBEParentChildRelations")]
         public object GetFilteredBEParentChildRelations(Vanrise.Entities.DataRetrievalInput<BEParentChildRelationQuery> input)
         {
+            if (!_defManager.DoesUserHaveViewAccess(input.Query.RelationDefinitionId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredBEParentChildRelations(input));
         }
 
@@ -28,18 +31,27 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetBEParentChildRelation(beParentChildRelationDefinitionId, beParentChildRelationId);
         }
-
+        [HttpGet]
+        [Route("DoesUserHaveAddccess")]
+        public bool DoesUserHaveAddccess(Guid beParentChildRelationDefinitionId)
+        {
+            return _defManager.DoesUserHaveAddAccess(beParentChildRelationDefinitionId);
+        }
         [HttpPost]
         [Route("AddBEParentChildRelation")]
-        public Vanrise.Entities.InsertOperationOutput<BEParentChildRelationDetail> AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
+        public object AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
+            if (DoesUserHaveAddccess(beParentChildRelationItem.RelationDefinitionId))
+                return GetUnauthorizedResponse();
+
             return _manager.AddBEParentChildRelation(beParentChildRelationItem);
         }
-
         [HttpPost]
         [Route("UpdateBEParentChildRelation")]
-        public Vanrise.Entities.UpdateOperationOutput<BEParentChildRelationDetail> UpdateBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
+        public object UpdateBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
+            if (DoesUserHaveAddccess(beParentChildRelationItem.RelationDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.UpdateBEParentChildRelation(beParentChildRelationItem);
         }
 

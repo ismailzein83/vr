@@ -19,6 +19,13 @@
             });
         }
 
+        function HasAddChildRelationPermission(beParentChildRelationDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddccess'), {
+                beParentChildRelationDefinitionId: beParentChildRelationDefinitionId
+            });
+        }
+
+
         function AddBEParentChildRelation(beParentChildRelationItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddBEParentChildRelation'), beParentChildRelationItem);
         }
@@ -38,6 +45,7 @@
             GetBEParentChildRelation: GetBEParentChildRelation,
             AddBEParentChildRelation: AddBEParentChildRelation,
             UpdateBEParentChildRelation: UpdateBEParentChildRelation,
+            HasAddChildRelationPermission: HasAddChildRelationPermission
             //GetBEParentChildRelationsInfo: GetBEParentChildRelationsInfo
         };
     }

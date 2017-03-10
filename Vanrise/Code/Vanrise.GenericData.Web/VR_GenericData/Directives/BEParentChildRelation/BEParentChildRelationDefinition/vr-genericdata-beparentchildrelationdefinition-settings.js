@@ -26,6 +26,12 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
             var childBEDefinitionSelectorAPI;
             var childBEDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var viewPermissionAPI;
+            var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var addPermissionAPI;
+            var addPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -38,6 +44,16 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                     childBEDefinitionSelectorReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                    viewPermissionAPI = api;
+                    viewPermissionReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onAddRequiredPermissionReady = function (api) {
+                    addPermissionAPI = api;
+                    addPermissionReadyDeferred.resolve();
+                };
+
                 defineAPI();
             }
             function defineAPI() {
@@ -47,6 +63,7 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                     var promises = [];
 
                     var beParentChildRelationDefinitionSettings;
+                    var security;
 
                     if (payload != undefined) {
                         var beParentChildRelationDefinitionEntity = payload.componentType;
@@ -54,6 +71,7 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                         if (beParentChildRelationDefinitionEntity != undefined) {
                             $scope.scopeModel.name = beParentChildRelationDefinitionEntity.Name;
                             beParentChildRelationDefinitionSettings = beParentChildRelationDefinitionEntity.Settings;
+                            security = beParentChildRelationDefinitionSettings && beParentChildRelationDefinitionSettings.Security || undefined;
                         }
                     }
 
@@ -64,6 +82,12 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                     //Loading ChildBEDefinition selector
                     var childBEDefinitionSelectorLoadPromise = getChildBEDefinitionSelectorLoadPromise();
                     promises.push(childBEDefinitionSelectorLoadPromise);
+
+                    var loadViewRequiredPermissionPromise = loadViewRequiredPermission();
+                    promises.push(loadViewRequiredPermissionPromise);
+
+                    var loadAddRequiredPermissionPromise = loadAddRequiredPermission();
+                    promises.push(loadAddRequiredPermissionPromise);
 
                     //Loading ChildFilterFQTN
                     $scope.scopeModel.childFilterFQTN = beParentChildRelationDefinitionSettings ? beParentChildRelationDefinitionSettings.ChildFilterFQTN : undefined;
@@ -94,6 +118,32 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                         return childBEDefinitionSelectorLoadDeferred.promise;
                     }
 
+                    function loadViewRequiredPermission() {
+                        var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        viewPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: security && security.ViewRequiredPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, dataPayload, viewSettingPermissionLoadDeferred);
+                        });
+                        return viewSettingPermissionLoadDeferred.promise;
+                    }
+
+
+                    function loadAddRequiredPermission() {
+                        var addPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        addPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: security && security.AddRequiredPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(addPermissionAPI, dataPayload, addPermissionLoadDeferred);
+                        });
+                        return addPermissionLoadDeferred.promise;
+                    }
+
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -105,7 +155,11 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                             $type: "Vanrise.GenericData.Entities.BEParentChildRelationDefinitionSettings, Vanrise.GenericData.Entities",
                             ParentBEDefinitionId: parentBEDefinitionSelectorAPI.getSelectedIds(),
                             ChildBEDefinitionId: childBEDefinitionSelectorAPI.getSelectedIds(),
-                            ChildFilterFQTN: $scope.scopeModel.childFilterFQTN
+                            ChildFilterFQTN: $scope.scopeModel.childFilterFQTN,
+                            Security: {
+                                ViewRequiredPermission: viewPermissionAPI.getData(),
+                                AddRequiredPermission: addPermissionAPI.getData()
+                            }
                         }
                     };
                 };
