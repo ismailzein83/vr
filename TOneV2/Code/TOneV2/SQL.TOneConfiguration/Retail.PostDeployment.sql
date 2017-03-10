@@ -156,9 +156,10 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('9F5B379C-1576-4078-9999-3218B329FEAC','Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement'									,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/Package/GetFilteredPackages',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,3,null),
+('9F5B379C-1576-4078-9999-3218B329FEAC','Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement'									,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B',null,null,null,'{"$type":"Retail.BusinessEntity.Business.PackageViewSettings, Retail.BusinessEntity.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,4,null),
+
 ('E68EFF9C-879E-4A6C-B412-8E225A966571','Charging Policies','Charging Policies Management','#/view/Retail_BusinessEntity/Views/ChargingPolicy/ChargingPolicyManagement'	,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/ChargingPolicy/GetFilteredChargingPolicies',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
-('D3799B4D-5B86-4665-BF03-94AFF7F00E21','Product Families','Product Families','#/view/Retail_BusinessEntity/Views/ProductFamily/ProductFamilyManagement'				,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/ProductFamily/GetFilteredProductFamilies',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
+('D3799B4D-5B86-4665-BF03-94AFF7F00E21','Product Families','Product Families','#/view/Retail_BusinessEntity/Views/ProductFamily/ProductFamilyManagement'				,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B',null,null,null,'{"$type":"Retail.BusinessEntity.Business.ProductViewSettings, Retail.BusinessEntity.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,2,null),
 
 ('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":[{"PermissionName":"VRCommon_System_Log: View","Directive":"vr-log-entry-search","Title":"General"},{"PermissionName":"VR_Integration_DataSource: Log","Directive":"vr-integration-log-search","Title":"Data Source"},{"PermissionName":"VR_Integration_DataSource: ImportedBatch","Directive":"vr-integration-importedbatch-search","Title":"Imported Batch"},{"PermissionName":"BusinessProcess_BP_BPInstance_Log: Log","Directive":"bp-instance-log-search","Title":"Business Process"},{"PermissionName":"VRCommon_UserActionAudit: View","Directive":"vr-useractionaudit-search","Title":"User Action Audit"}]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5,null),
 
@@ -215,9 +216,9 @@ as (select * from (values
 ('A2DE8C67-B8AE-4520-BB48-448EE98B7251',null,'Retail_BE_Dealer','Dealer'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
 ('0E89CCF7-9240-4D1B-8A01-F91957ECA321',null,'Retail_BE_Operator','Operator'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
 
-('4218FCD0-466A-47A9-80DC-3BA20BCF56C4',5405,'Retail_BE_AccountPackage','Account Package'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+--('4218FCD0-466A-47A9-80DC-3BA20BCF56C4',5405,'Retail_BE_AccountPackage','Account Package'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
 ('2045E39B-B9AA-4720-AD1E-7DEF11985335',5406,'Retail_BE_ChargingPolicy','Charging Policy'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
-('BE4E62AA-CCE6-48AD-94ED-87D54A605D35',5403,'Retail_BE_Package','Retail_BE_Package'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+('BE4E62AA-CCE6-48AD-94ED-87D54A605D35',5403,'Retail_BE_Package','Retail_BE_Package'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
 
 ('3ABA6D5B-03AC-4EE5-A3EC-AAC6D9C55621',null,'Retail_BE_Switches','Switches'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
 
@@ -244,7 +245,7 @@ as (select * from (values
 ('B5634DD0-11C7-4074-B902-8A7C0B68E5AC',null,'Retail_Identification_Rule','Identification'				,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',null,0,'["View","Add","Edit"]'),
 
 ('C0C98E3B-12C8-4805-93D4-F4289C21C6B8',null,'VRCommon_ApplicationVisibility','Application Visibility'	,'7913ACD9-38C5-43B3-9612-BEFF66606F22',null,0,'["View","Add","Edit"]'),
-('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C',null,'Retail_BE_ProductFamilies','Product Families'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]')
+('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C',null,'Retail_BE_Product','Product'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -265,19 +266,22 @@ set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('Retail_BE/Package/GetFilteredPackages','Retail_BE_Package:View'),
-('Retail_BE/Package/GetPackage','Retail_BE_Package:Edit'),
-('Retail_BE/Package/GetPackagesInfo','Retail_BE_Package:View'),
-('Retail_BE/Package/AddPackage','Retail_BE_Package:Add'),
-('Retail_BE/Package/UpdatePackage','Retail_BE_Package:Edit'),
-('Retail_BE/Account/GetFilteredAccounts','Retail_BE_Account: View'),
+('Retail_BE/Package/GetFilteredPackages',null),
+('Retail_BE/Package/GetPackage',null),
+('Retail_BE/Package/GetPackagesInfo',null),
+('Retail_BE/Package/AddPackage',null),
+('Retail_BE/Package/UpdatePackage',null),
+
+('Retail_BE/Account/GetFilteredAccounts',null),
 ('Retail_BE/Account/GetAccount',null),
 ('Retail_BE/Account/GetAccountName',null),
-('Retail_BE/Account/AddAccount','Retail_BE_Account: Add'),
-('Retail_BE/Account/UpdateAccount','Retail_BE_Account: Edit'),
-('Retail_BE/AccountPackage/GetFilteredAccountPackages','Retail_BE_AccountPackage: View'),
+('Retail_BE/Account/AddAccount',null),
+('Retail_BE/Account/UpdateAccount',null),
+
+('Retail_BE/AccountPackage/GetFilteredAccountPackages',null),
 ('Retail_BE/AccountPackage/GetAccountPackage',null),
-('Retail_BE/AccountPackage/AddAccountPackage','Retail_BE_AccountPackage: Add'),
+('Retail_BE/AccountPackage/AddAccountPackage',null),
+
 ('Retail_BE/ChargingPolicy/GetFilteredChargingPolicies','Retail_BE_ChargingPolicy: View'),
 ('Retail_BE/ChargingPolicy/GetChargingPolicy',null),
 ('Retail_BE/ChargingPolicy/AddChargingPolicy','Retail_BE_ChargingPolicy: Add'),
@@ -328,7 +332,7 @@ as (select * from (values
 
 ('VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities','VRCommon_ApplicationVisibility: View'),('VRCommon/VRApplicationVisibility/GetVRApplicationVisibilityEditorRuntime',null),('VRCommon/VRApplicationVisibility/AddVRApplicationVisibility','VRCommon_ApplicationVisibility: Add'),('VRCommon/VRApplicationVisibility/UpdateVRApplicationVisibility','VRCommon_ApplicationVisibility: Edit'),('VRCommon/VRApplicationVisibility/GetVRApplicationVisibiltiesInfo',null),('VRCommon/VRApplicationVisibility/GetVRModuleVisibilityExtensionConfigs',null),('VRCommon/VRApplicationVisibility/GetVRApplicationVisibilitiesInfo',null),
 
-('Retail_BE/ProductFamily/GetFilteredProductFamilies','Retail_BE_ProductFamilies: View'),('Retail_BE/ProductFamily/GetProductFamilyEditorRuntime',null),('Retail_BE/ProductFamily/AddProductFamily','Retail_BE_ProductFamilies: Add'),('Retail_BE/ProductFamily/UpdateProductFamily','Retail_BE_ProductFamilies: Edit'),('Retail_BE/ProductFamily/GetProductFamiliesInfo',null)
+('Retail_BE/ProductFamily/GetFilteredProductFamilies',null),('Retail_BE/ProductFamily/GetProductFamilyEditorRuntime',null),('Retail_BE/ProductFamily/AddProductFamily',null),('Retail_BE/ProductFamily/UpdateProductFamily',null),('Retail_BE/ProductFamily/GetProductFamiliesInfo',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
