@@ -20,9 +20,7 @@ namespace NP.IVSwitch.Business
                 new Vanrise.Caching.TimeExpirableCacheExpirationChecker(TimeSpan.FromSeconds(2)),
                 () =>
             {
-                List<Action> actions = new List<Action>();
-                int? currentUserId;
-                Vanrise.Security.Entities.ContextFactory.GetContext().TryGetLoggedInUserId(out currentUserId);
+                List<Action> actions = new List<Action>();                
                 AnalyticSummaryBigResult<AnalyticRecord> lastDistributionRecords = null;
                 AnalyticSummaryBigResult<AnalyticRecord> topCustomersRecords = null;
                 AnalyticSummaryBigResult<AnalyticRecord> topSuppliersRecords = null;
@@ -33,8 +31,6 @@ namespace NP.IVSwitch.Business
                 actions.Add(() => topZonesRecords = QueryTopZones());
                 Parallel.ForEach(actions, (a) =>
                 {
-                    if (currentUserId.HasValue)
-                        Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(currentUserId.Value);
                     a();
                 });
                 LiveDashboardResult liveDashboardResult = new LiveDashboardResult();
