@@ -36,7 +36,7 @@ app.directive('vrInvoiceReaderDirective', ['VRUIUtilsService', 'UtilsService',
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
-                    var invoiceTypeId
+                    var invoiceTypeId;
 
                     if (payload != undefined && payload.Setting != undefined) {
                         invoiceTypeId = payload.Setting.InvoiceTypeId;

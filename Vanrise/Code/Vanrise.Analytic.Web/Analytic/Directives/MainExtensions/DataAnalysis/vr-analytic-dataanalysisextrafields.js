@@ -62,7 +62,7 @@ function (UtilsService, VRUIUtilsService) {
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataAnalysisDefinitionItemSelectorDirectiveApi, daPayload, setLoader, dataAnalysisDefinitionItemSelectorReadyPromiseDeferred);
                 }
-            }
+            };
             defineAPI();
         }
         function defineAPI() {
@@ -108,7 +108,7 @@ function (UtilsService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: 'Vanrise.Analytic.Business.DAProfCalcRecordTypeExtraFields,Vanrise.Analytic.Business',
+                    $type: 'Vanrise.Analytic.MainExtensions.DataAnalysis.RecordTypeExtraFields.DAProfCalcRecordTypeExtraFields,Vanrise.Analytic.MainExtensions',
                     DataAnalysisItemDefinitionId: dataAnalysisDefinitionItemSelectorDirectiveApi.getSelectedIds(),
                     DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorDirectiveApi.getSelectedIds(),
                 };

@@ -54,12 +54,11 @@
                         }
                     }
                 };
-                $scope.scopeModel.validateDateTime =function()
-                {
+                $scope.scopeModel.validateDateTime = function () {
                     if ($scope.scopeModel.fromdate > new Date())
                         return "The date should not be greater than date of today.";
                     return null;
-                }
+                };
 
                 $scope.scopeModel.addFilter = function () {
                     var onFilterAdded = function (filter, expression) {
@@ -131,7 +130,7 @@
                         var widget = $scope.scopeModel.widgets[i];
                         widget.promiseDeffer = UtilsService.createPromiseDeferred();
                         promises.push(widget.promiseDeffer.promise);
-                        loadWidgetDirective(widget)
+                        loadWidgetDirective(widget);
                     }
                 }
                 return UtilsService.waitMultiplePromises(promises);
@@ -335,23 +334,9 @@
                     FromTime: currentFromDate,
                     ToTime: new Date(),
                     FilterGroup: filterObj,
-                    TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit != undefined ? $scope.scopeModel.selectedTimeGroupingUnit.value : undefined,
-                    LastHours: getLastHours(),
+                    TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit != undefined ? $scope.scopeModel.selectedTimeGroupingUnit.value : undefined
                 };
                 return query;
-            }
-            function getLastHours()
-            {
-                if( $scope.scopeModel.showSinceLast)
-                {
-                    switch($scope.scopeModel.selectedTimeUnit.value)
-                    {
-                        case VR_Analytic_TimeUnitEnum.Days.value:
-                            return ($scope.scopeModel.last * 24);
-                        case VR_Analytic_TimeUnitEnum.Hours.value:
-                            return $scope.scopeModel.last;
-                    }
-                }
             }
         }
 

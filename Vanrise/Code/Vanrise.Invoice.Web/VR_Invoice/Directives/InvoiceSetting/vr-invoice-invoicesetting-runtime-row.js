@@ -37,13 +37,11 @@ app.directive('vrInvoiceInvoicesettingRuntimeRow', ['UtilsService', 'VRUIUtilsSe
             function initializeController() {
                 ctrl.parts = [];
 
-                ctrl.isValidate = function(part)
-                {
-                    if(context != undefined && context.setVisibility != undefined)
-                    {
+                ctrl.isValidate = function (part) {
+                    if (context != undefined && context.setVisibility != undefined) {
                         part.isVisible = context.setVisibility(part);
                     }
-                }
+                };
 
                 defineAPI();
             }

@@ -76,7 +76,7 @@ app.directive("vrGenericdataRestapibedefinitionsEditor", ["UtilsService", "VRNot
                             }
                         }
                     }
-                }
+                };
 
                 defineAPI();
             }

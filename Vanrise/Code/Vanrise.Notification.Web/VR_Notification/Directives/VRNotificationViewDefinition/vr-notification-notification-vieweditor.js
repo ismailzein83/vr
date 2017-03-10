@@ -84,7 +84,7 @@ app.directive("vrNotificationNotificationVieweditor", ["UtilsService", "VRNotifi
 
                     function buildNotificationViewSettingsObj() {
                         var settings = [];
-                        var notificationTypeIds = vrNotificationTypeSettingsSelectorAPI.getSelectedIds()
+                        var notificationTypeIds = vrNotificationTypeSettingsSelectorAPI.getSelectedIds();
                         if (notificationTypeIds != undefined) {
                             for (var index = 0; index < notificationTypeIds.length; index++) {
                                 settings.push({ VRNotificationTypeId: notificationTypeIds[index] })

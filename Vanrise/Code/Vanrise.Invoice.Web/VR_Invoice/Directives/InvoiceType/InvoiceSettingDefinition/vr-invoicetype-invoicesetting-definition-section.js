@@ -42,11 +42,10 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionSection', ['UtilsService', '
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                 };
-                ctrl.removeRow = function (dataItem)
-                {
+                ctrl.removeRow = function (dataItem) {
                     var index = ctrl.rows.indexOf(dataItem);
                     ctrl.rows.splice(index, 1);
-                }
+                };
                 defineGridRowsMenuAction();
                 defineAPI();
             }

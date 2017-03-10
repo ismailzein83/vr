@@ -104,7 +104,7 @@
 
         function buildVRModuleVisibilityFromScope() {
 
-            var vrModuleVisibility = vrModuleVisibilitySelectiveAPI.getData()
+            var vrModuleVisibility = vrModuleVisibilitySelectiveAPI.getData();
 
             return vrModuleVisibility;
         }

@@ -83,7 +83,7 @@ app.directive("vrInvoiceBillingperiodMonthly", ["UtilsService", "VR_Invoice_Invo
                         for (var i = 0; i < payload.MonthlyPeriods.length; i++)
                         {
                             var item = payload.MonthlyPeriods[i];
-                            var monthlyType = UtilsService.getItemByVal(ctrl.monthlyTypes, item.MonthlyType,"value")
+                            var monthlyType = UtilsService.getItemByVal(ctrl.monthlyTypes, item.MonthlyType, "value");
                             ctrl.data.push({
                                 Entity: {
                                     Id: counter++,

@@ -37,13 +37,11 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoicesettingpart', ['Uti
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onEnableAutomaticInvoiceChanged = function(value)
-                {
-                    if(currentContext != undefined && currentContext.setRequiredBillingPeriod != undefined)
-                    {
+                $scope.scopeModel.onEnableAutomaticInvoiceChanged = function (value) {
+                    if (currentContext != undefined && currentContext.setRequiredBillingPeriod != undefined) {
                         currentContext.setRequiredBillingPeriod($scope.scopeModel.enableAutomaticInvoice);
                     }
-                }
+                };
                 defineAPI();
             }
 

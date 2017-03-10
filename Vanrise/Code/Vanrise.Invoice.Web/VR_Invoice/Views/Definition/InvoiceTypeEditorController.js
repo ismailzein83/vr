@@ -113,11 +113,10 @@
                 }
             };
 
-            $scope.scopeModel.onInvoiceSettingDefinitionReady = function (api)
-            {
+            $scope.scopeModel.onInvoiceSettingDefinitionReady = function (api) {
                 invoiceSettingDefinitionDirectiveAPI = api;
                 invoiceSettingDefinitionReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onConcatenatedPartsReady = function (api) {
                 concatenatedPartsAPI = api;

@@ -55,7 +55,7 @@
                     });
                 }
 
-            }
+            };
 
             function sendEmail() {
                 $scope.scopeModel.isLoading = true;

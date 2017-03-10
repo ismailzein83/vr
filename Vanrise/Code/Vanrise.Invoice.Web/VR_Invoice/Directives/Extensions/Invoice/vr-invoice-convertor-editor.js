@@ -29,7 +29,7 @@ app.directive('vrInvoiceConvertorEditor', ['VRUIUtilsService', 'UtilsService',
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     gridDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.addPartnerinfo = function () {
                     var dataItem = {
@@ -39,7 +39,7 @@ app.directive('vrInvoiceConvertorEditor', ['VRUIUtilsService', 'UtilsService',
                     };
 
                     $scope.scopeModel.partnerInfoObjects.push(dataItem);
-                }
+                };
                 $scope.scopeModel.removePartnerInfo = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.partnerInfoObjects, dataItem.id, 'id');
                     $scope.scopeModel.partnerInfoObjects.splice(index, 1);

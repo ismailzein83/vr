@@ -7,7 +7,7 @@
     function partnerInvoiceSettingEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_PartnerInvoiceSettingAPIService, VR_Invoice_InvoiceSettingAPIService, VR_Invoice_InvoiceTypeConfigsAPIService) {
         var partnerInvoiceSettingId;
         var invoiceSettingId;
-        var invoiceSettingEntity
+        var invoiceSettingEntity;
 
         $scope.scopeModel = {};
 

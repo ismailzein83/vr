@@ -37,11 +37,10 @@
             $scope.scopeModel.actions = [];
             $scope.scopeModel.issueDate = new Date();
 
-            $scope.scopeModel.onTimeZoneSelectorReady = function(api)
-            {
+            $scope.scopeModel.onTimeZoneSelectorReady = function (api) {
                 timeZoneSelectorAPI = api;
                 timeZoneSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onPartnerSelectorReady = function (api) {
                 partnerSelectorAPI = api;
                 partnerSelectorReadyDeferred.resolve();

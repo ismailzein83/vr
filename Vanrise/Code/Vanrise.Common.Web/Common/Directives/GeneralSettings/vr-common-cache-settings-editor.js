@@ -47,8 +47,8 @@ app.directive('vrCommonCacheSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                 api.getData = function () {
                     return {
                         ClientCacheNumber: $scope.scopeModel.clientCacheNumber
-                    }
-                }
+                    };
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

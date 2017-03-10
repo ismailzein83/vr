@@ -57,7 +57,7 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                }
+                };
 
                 ctrl.validate = function () {
                     if (attrs.usevalidator == undefined || ctrl.selectedvalues == undefined)
@@ -70,7 +70,7 @@
                         }
                     }
                     return null;
-                }
+                };
             }
             function getDirectiveAPI() {
                 var api = {};

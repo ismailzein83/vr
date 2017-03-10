@@ -27,11 +27,10 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onGridWidthFactorEditorReady = function(api)
-            {
+            $scope.scopeModel.onGridWidthFactorEditorReady = function (api) {
                 gridWidthFactorEditorAPI = api;
                 gridWidthFactorEditorPromiseReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.invoiceFields = UtilsService.getArrayEnum(VR_Invoice_InvoiceFieldEnum);
             $scope.scopeModel.recordFields = context != undefined ? context.getFields() : [];
             $scope.scopeModel.isCustomFieldRequired = function () {

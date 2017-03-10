@@ -53,15 +53,15 @@
                 $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
                     dataRecordTypeSelectorReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onDataRecordStorageSelectorReady = function (api) {
                     dataRecordStorageSelectorAPI = api;
                     dataRecordStorageSelectorReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onVRRestAPIRecordQueryInterceptorSelectiveReady = function (api) {
                     vrRestAPIRecordQueryInterceptorSelectiveAPI = api;
                     vrRestAPIRecordQueryInterceptorSelectiveReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onDataRecordTypeSelectionChanged = function (selectedDataRecordType) {
 
@@ -95,7 +95,7 @@
                             }
                         }
                     }
-                }
+                };
 
                 UtilsService.waitMultiplePromises([dataRecordTypeSelectorReadyDeferred.promise, dataRecordStorageSelectorReadyDeferred.promise,
                     vrRestAPIRecordQueryInterceptorSelectiveReadyDeferred.promise]).then(function () {

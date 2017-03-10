@@ -52,14 +52,13 @@ app.directive('vrAnalyticOrdertypeSelective', ['VR_Analytic_OrderTypeEnum', 'Uti
                 };
                 var payload = {
                     tableIds: tableIds
-                }
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
             };
-            $scope.scopeModel.onSelectionChanged = function(value)
-            {
+            $scope.scopeModel.onSelectionChanged = function (value) {
                 if (value != undefined && value.directiveEditor == undefined)
                     directiveAPI = undefined;
-            }
+            };
            
         }
 

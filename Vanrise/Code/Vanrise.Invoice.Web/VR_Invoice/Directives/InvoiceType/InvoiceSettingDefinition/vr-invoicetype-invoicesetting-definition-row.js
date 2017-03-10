@@ -43,11 +43,10 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionRow', ['UtilsService', 'VRUI
                 ctrl.removePart = function (dataItem) {
                     var index = ctrl.parts.indexOf(dataItem);
                     ctrl.parts.splice(index, 1);
-                    if(context != undefined)
-                    {
+                    if (context != undefined) {
                         context.removePart(dataItem.Entity);
                     }
-                }
+                };
                 defineAPI();
                 defineGridRowsMenuAction();
             }
