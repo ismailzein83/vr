@@ -34,7 +34,7 @@ namespace Vanrise.Common.Business
         {
             var vrLoggableEntity = GetLoggableEntity(uniqueName);
             if (vrLoggableEntity == null)
-                throw new NullReferenceException(uniqueName);
+                return Guid.Empty;
             return vrLoggableEntity.VRLoggableEntityId;
         }
         public VRLoggableEntity GetLoggableEntity(string uniqueName)
