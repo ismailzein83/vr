@@ -35,6 +35,23 @@ namespace TOne.WhS.Sales.MainExtensions
             _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<ImportBulkActionValidationCacheManager>();
         }
 
+        public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
+        {
+            var bulkActionApplicableToAnyCountryZoneInput = new BulkActionApplicableToAnyCountryZoneInput()
+            {
+                CountryId = context.Country.CountryId,
+                OwnerSellingNumberPlanId = context.OwnerSellingNumberPlanId,
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                ZoneDraftsByZoneId = context.ZoneDraftsByZoneId,
+                GetSellingProductZoneRate = context.GetSellingProductZoneRate,
+                GetCustomerZoneRate = context.GetCustomerZoneRate,
+                GetRateBED = context.GetRateBED,
+                IsBulkActionApplicableToZone = IsApplicableToZone
+            };
+            return UtilitiesManager.IsBulkActionApplicableToAnyCountryZone(bulkActionApplicableToAnyCountryZoneInput);
+        }
+
         public override void ValidateZone(IZoneValidationContext context)
         {
             if (context.ValidationResult == null)
@@ -119,11 +136,6 @@ namespace TOne.WhS.Sales.MainExtensions
                     OwnerId = OwnerId
                 });
             });
-        }
-
-        public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
-        {
-            return true;
         }
     }
 }
