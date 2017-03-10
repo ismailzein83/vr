@@ -101,7 +101,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         var customerSellingProductManager = new CustomerSellingProductManager();
                         sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(input.Query.OwnerId, input.Query.EffectiveOn, false);
                         if (!sellingProductId.HasValue)
-                            throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to any selling product", input.Query.OwnerId));
+                            return saleServiceDetails;
                         foreach (SaleZone saleZone in filteredSaleZone)
                         {
                             SaleEntityService service = serviceLocator.GetCustomerZoneService(input.Query.OwnerId, sellingProductId.Value, saleZone.SaleZoneId);
