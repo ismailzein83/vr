@@ -670,8 +670,13 @@ namespace TOne.WhS.Sales.Business
             Dictionary<string, ZoneChanges> zoneDraftsByZoneName = GetZoneDraftsByZoneName(input.OwnerType, input.OwnerId);
 
             var countryBEDsByCountry = new Dictionary<int, DateTime>();
+            IEnumerable<int> closedCountryIds = new List<int>();
+
             if (input.OwnerType == SalePriceListOwnerType.Customer)
+            {
                 countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, false);
+                closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, null, DateTime.Today);
+            }
 
             var result = new ImportedDataValidationResult();
             var validator = new ImportedRowValidator();
@@ -706,7 +711,8 @@ namespace TOne.WhS.Sales.Business
                     ImportedRow = importedRow,
                     ExistingZone = saleZonesByName.GetRecord(zoneName),
                     ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
-                    CountryBEDsByCountry = countryBEDsByCountry
+                    CountryBEDsByCountry = countryBEDsByCountry,
+                    ClosedCountryIds = closedCountryIds
                 };
 
                 if (validator.IsImportedRowValid(context))
@@ -733,7 +739,7 @@ namespace TOne.WhS.Sales.Business
 
             var zoneDraftsByZone = new Dictionary<long, ZoneChanges>();
             IEnumerable<int> newCountryIds = new List<int>();
-            IEnumerable<int> closedCountryIds = (ownerType == SalePriceListOwnerType.Customer) ? GetClosedCountryIds(ownerId, draft, effectiveOn) : new List<int>();
+            IEnumerable<int> closedCountryIds = (ownerType == SalePriceListOwnerType.Customer) ? UtilitiesManager.GetClosedCountryIds(ownerId, draft, effectiveOn) : new List<int>();
 
             if (draft != null)
             {
@@ -921,24 +927,6 @@ namespace TOne.WhS.Sales.Business
                 }
             }
             return zoneDraftsByZone;
-        }
-
-        private IEnumerable<int> GetClosedCountryIds(int customerId, Changes draft, DateTime effectiveOn)
-        {
-            var closedCountryIds = new List<int>();
-
-            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
-                closedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
-
-            IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetSoldCountries(customerId, effectiveOn);
-            if (soldCountries != null)
-            {
-                IEnumerable<int> closedSoldCountryIds = soldCountries.MapRecords(x => x.CountryId, x => x.EED.HasValue);
-                if (closedSoldCountryIds != null)
-                    closedCountryIds.AddRange(closedSoldCountryIds);
-            }
-
-            return closedCountryIds;
         }
 
         #endregion

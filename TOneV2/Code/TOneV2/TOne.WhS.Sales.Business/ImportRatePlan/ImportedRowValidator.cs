@@ -18,11 +18,12 @@ namespace TOne.WhS.Sales.Business
         public ImportedRowValidator()
         {
             _validators = new List<IImportedRowValidator>()
-			{
-				new ZoneValidator(),
-				new RateValidator(),
-				new EffectiveDateValidator()
-			};
+			      {
+                new CountryValidator(),
+				        new ZoneValidator(),
+				        new RateValidator(),
+				        new EffectiveDateValidator()
+			      };
         }
 
         #endregion
@@ -97,7 +98,8 @@ namespace TOne.WhS.Sales.Business
                     ImportedRow = context.ImportedRow,
                     ZoneDraft = context.ZoneDraft,
                     ExistingZone = context.ExistingZone,
-                    CountryBEDsByCountry = context.CountryBEDsByCountry
+                    CountryBEDsByCountry = context.CountryBEDsByCountry,
+                    ClosedCountryIds = context.ClosedCountryIds
                 };
 
                 if (!validator.IsValid(isValidContext))
@@ -160,6 +162,27 @@ namespace TOne.WhS.Sales.Business
         public Dictionary<string, SaleZone> SaleZonesByZoneName { get; set; }
 
         public IEnumerable<InvalidImportedRow> InvalidImportedRows { get; set; }
+    }
+
+    public class CountryValidator : IImportedRowValidator
+    {
+        public bool IsValid(IIsValidContext context)
+        {
+            if (context.ExistingZone == null)
+            {
+                context.ErrorMessage = null;
+                return true;
+            }
+
+            if (context.ClosedCountryIds.Contains(context.ExistingZone.CountryId))
+            {
+                context.ErrorMessage = "Country is closed";
+                return false;
+            }
+
+            context.ErrorMessage = null;
+            return true;
+        }
     }
 
     public class ZoneValidator : IImportedRowValidator

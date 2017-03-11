@@ -20,6 +20,8 @@ namespace TOne.WhS.Sales.Business
 
         public Dictionary<int, DateTime> CountryBEDsByCountry { get; set; }
 
+        public IEnumerable<int> ClosedCountryIds { get; set; }
+
         public ImportedRowStatus Status { get; set; }
 
         public string ErrorMessage { get; set; }
@@ -36,6 +38,8 @@ namespace TOne.WhS.Sales.Business
         public SaleZone ExistingZone { get; set; }
 
         public Dictionary<int, DateTime> CountryBEDsByCountry { get; set; }
+
+        public IEnumerable<int> ClosedCountryIds { get; set; }
 
         public string ErrorMessage { get; set; }
     }

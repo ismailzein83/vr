@@ -7,23 +7,25 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-	public interface IImportedRowValidator
-	{
-		bool IsValid(IIsValidContext context);
-	}
+    public interface IImportedRowValidator
+    {
+        bool IsValid(IIsValidContext context);
+    }
 
-	public interface IIsValidContext
-	{
+    public interface IIsValidContext
+    {
         SalePriceListOwnerType OwnerType { get; }
 
-		ImportedRow ImportedRow { get; }
+        ImportedRow ImportedRow { get; }
 
-		ZoneChanges ZoneDraft { get; }
+        ZoneChanges ZoneDraft { get; }
 
-		SaleZone ExistingZone { get; }
+        SaleZone ExistingZone { get; }
 
         Dictionary<int, DateTime> CountryBEDsByCountry { get; }
 
-		string ErrorMessage { set; }
-	}
+        IEnumerable<int> ClosedCountryIds { get; }
+
+        string ErrorMessage { set; }
+    }
 }

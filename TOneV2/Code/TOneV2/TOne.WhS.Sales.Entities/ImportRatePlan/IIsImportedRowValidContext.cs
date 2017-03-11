@@ -19,6 +19,8 @@ namespace TOne.WhS.Sales.Entities
 
         Dictionary<int, DateTime> CountryBEDsByCountry { get; }
 
+        IEnumerable<int> ClosedCountryIds { get; }
+
         ImportedRowStatus Status { set; }
 
         string ErrorMessage { set; }

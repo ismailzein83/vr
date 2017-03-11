@@ -183,6 +183,24 @@ namespace TOne.WhS.Sales.Business
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The current Rate '{0}' is the same as the new Rate", currentRateValue.Value));
         }
 
+        public static IEnumerable<int> GetClosedCountryIds(int customerId, Changes draft, DateTime effectiveOn)
+        {
+            var closedCountryIds = new List<int>();
+
+            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
+                closedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+
+            IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetSoldCountries(customerId, effectiveOn);
+            if (soldCountries != null)
+            {
+                IEnumerable<int> closedSoldCountryIds = soldCountries.MapRecords(x => x.CountryId, x => x.EED.HasValue);
+                if (closedSoldCountryIds != null)
+                    closedCountryIds.AddRange(closedSoldCountryIds);
+            }
+
+            return closedCountryIds;
+        }
+
         #region Private Methods
         private static DateTime? GetFirstDate(IEnumerable<DateTime?> dates, out int count)
         {

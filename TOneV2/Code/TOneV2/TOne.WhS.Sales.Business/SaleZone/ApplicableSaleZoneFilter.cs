@@ -26,11 +26,12 @@ namespace TOne.WhS.Sales.Business
                 throw new ArgumentNullException("SaleZone");
 
             if (context.CustomData == null)
-            {
-                context.CustomData = (object)new CustomData(this.OwnerType, this.OwnerId);
-            }
+                context.CustomData = (object)new CustomData(this.OwnerType, this.OwnerId, DateTime.Today);
 
             CustomData customData = context.CustomData as CustomData;
+
+            if (customData.ClosedCountryIds.Contains(context.SaleZone.CountryId))
+                return true;
 
             var IsActionApplicableToZoneInput = new BulkActionApplicableToZoneInput()
             {
@@ -64,14 +65,17 @@ namespace TOne.WhS.Sales.Business
 
             public Changes Draft { get; set; }
 
-            public CustomData(SalePriceListOwnerType ownerType, int ownerId)
+            public CustomData(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
             {
                 _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
                 _routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Today));
                 Draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
                 SetRateBEDs();
                 SetRPRouteDetails();
+                SetClosedCountryIds(ownerType, ownerId, effectiveOn);
             }
+
+            public IEnumerable<int> ClosedCountryIds { get; set; }
 
             public SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId)
             {
@@ -121,6 +125,17 @@ namespace TOne.WhS.Sales.Business
             private void SetRPRouteDetails()
             {
 
+            }
+
+            private void SetClosedCountryIds(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
+            {
+                if (ownerType == SalePriceListOwnerType.SellingProduct)
+                    ClosedCountryIds = new List<int>();
+                else
+                {
+                    Changes draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
+                    ClosedCountryIds = UtilitiesManager.GetClosedCountryIds(ownerId, draft, effectiveOn);
+                }
             }
         }
 
