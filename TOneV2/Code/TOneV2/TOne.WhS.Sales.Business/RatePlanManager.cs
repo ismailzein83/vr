@@ -933,7 +933,7 @@ namespace TOne.WhS.Sales.Business
             IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetSoldCountries(customerId, effectiveOn);
             if (soldCountries != null)
             {
-                IEnumerable<int> closedSoldCountryIds = soldCountries.MapRecords(x => x.CountryId, x => x.EED.HasValue && x.EED.Value >= effectiveOn);
+                IEnumerable<int> closedSoldCountryIds = soldCountries.MapRecords(x => x.CountryId, x => x.EED.HasValue);
                 if (closedSoldCountryIds != null)
                     closedCountryIds.AddRange(closedSoldCountryIds);
             }
