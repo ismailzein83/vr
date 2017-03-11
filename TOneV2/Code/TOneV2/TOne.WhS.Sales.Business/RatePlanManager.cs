@@ -733,7 +733,7 @@ namespace TOne.WhS.Sales.Business
 
             var zoneDraftsByZone = new Dictionary<long, ZoneChanges>();
             IEnumerable<int> newCountryIds = new List<int>();
-            var changedCountryIds = new List<int>();
+            IEnumerable<int> closedCountryIds = (ownerType == SalePriceListOwnerType.Customer) ? GetClosedCountryIds(ownerId, draft, effectiveOn) : new List<int>();
 
             if (draft != null)
             {
@@ -743,9 +743,6 @@ namespace TOne.WhS.Sales.Business
                 {
                     if (draft.CountryChanges.NewCountries != null)
                         newCountryIds = draft.CountryChanges.NewCountries.MapRecords(x => x.CountryId);
-
-                    if (draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
-                        changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
                 }
             }
 
@@ -775,7 +772,7 @@ namespace TOne.WhS.Sales.Business
                         Draft = draft,
                         ZoneDraftsByZoneId = zoneDraftsByZone,
                         SellingProductId = sellingProductId.Value,
-                        ChangedCountryIds = changedCountryIds,
+                        ChangedCountryIds = closedCountryIds,
                         EffectiveOn = effectiveOn,
                         RoutingDatabaseId = routingDatabaseId,
                         PolicyConfigId = policyConfigId,
@@ -830,7 +827,7 @@ namespace TOne.WhS.Sales.Business
                 }
 
                 zoneItem.IsCountryNew = newCountryIds.Contains(zoneItem.CountryId);
-                zoneItem.IsCountryEnded = changedCountryIds.Contains(zoneItem.CountryId);
+                zoneItem.IsCountryEnded = closedCountryIds.Contains(zoneItem.CountryId);
 
                 zoneItems.Add(zoneItem);
             }
@@ -924,6 +921,24 @@ namespace TOne.WhS.Sales.Business
                 }
             }
             return zoneDraftsByZone;
+        }
+
+        private IEnumerable<int> GetClosedCountryIds(int customerId, Changes draft, DateTime effectiveOn)
+        {
+            var closedCountryIds = new List<int>();
+
+            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
+                closedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+
+            IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetSoldCountries(customerId, effectiveOn);
+            if (soldCountries != null)
+            {
+                IEnumerable<int> closedSoldCountryIds = soldCountries.MapRecords(x => x.CountryId, x => x.EED.HasValue && x.EED.Value >= effectiveOn);
+                if (closedSoldCountryIds != null)
+                    closedCountryIds.AddRange(closedSoldCountryIds);
+            }
+
+            return closedCountryIds;
         }
 
         #endregion
