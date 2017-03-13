@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using Vanrise.Common;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
-using System.Drawing;
-using System.IO;
 
 namespace Vanrise.Common.Business
 {
@@ -32,10 +33,10 @@ namespace Vanrise.Common.Business
         public IEnumerable<CountryInfo> GeCountriesInfo(CountryFilter filter)
         {
             IEnumerable<Country> allCountries = GetCachedCountries().Values;
-            
+
             Func<Country, bool> filterFunc = null;
             List<object> customObjects = null;
-            
+
             if (filter != null)
             {
                 if (filter.Filters != null)
@@ -329,6 +330,25 @@ namespace Vanrise.Common.Business
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(fileID);
             return file.Content;
+        }
+
+        public IEnumerable<int> GetCountryIdsBySubstring(string substring)
+        {
+            if (string.IsNullOrWhiteSpace(substring))
+                throw new Vanrise.Entities.MissingArgumentValidationException("substring");
+
+            Dictionary<int, Country> countriesById = GetCachedCountries();
+
+            if (countriesById == null || countriesById.Count == 0)
+                return null;
+
+            string targetSubstring = substring.Trim().ToLower();
+            IEnumerable<Country> countries = countriesById.Values.FindAllRecords(x => !string.IsNullOrWhiteSpace(x.Name) && x.Name.Trim().ToLower().Contains(targetSubstring));
+
+            if (countries == null || countries.Count() == 0)
+                return null;
+
+            return countries.MapRecords(x => x.CountryId);
         }
 
         #endregion

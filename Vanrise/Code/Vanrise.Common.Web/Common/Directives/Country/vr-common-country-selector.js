@@ -110,6 +110,18 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                 return VRUIUtilsService.getIdSelectedIds('CountryId', attrs, ctrl);
             };
 
+            api.getAllCountries = function () {
+                var allCountries;
+                if (ctrl.datasource != undefined) {
+                    allCountries = [];
+                    for (var i = 0; i < ctrl.datasource.length; i++) {
+                        var country = ctrl.datasource[i];
+                        allCountries.push(country);
+                    }
+                }
+                return allCountries;
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
