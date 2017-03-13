@@ -307,6 +307,7 @@
                 function clearFilter(e) {
                     muteAction(e);
                     controller.filtername = '';
+                    fillEffectiveDataSourceFromItems(getdatasource());
                 }
 
                 function selectFirstItem() {

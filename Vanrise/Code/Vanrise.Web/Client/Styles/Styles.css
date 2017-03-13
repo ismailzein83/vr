@@ -2808,6 +2808,11 @@ vr-validator .panel-vr {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+vr-validator[default] .panel-vr {
+    margin-left:0px;
+    margin-right: 0px;
+}
 vr-validator > div[validator-section] >div:nth-child(1){
    min-height:28px;
    overflow:hidden;
