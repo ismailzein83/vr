@@ -1,0 +1,38 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_AddCountriesController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formAddCountries">
+            <vr-row removeline>
+                <vr-columns width="1/3row">
+                    <vr-select on-ready="scopeModel.onCountrySelectionTypeSelectorReady"
+                               label="Country Selection Type"
+                               datasource="scopeModel.countrySelectionTypes"
+                               selectedvalues="scopeModel.selectedCountrySelectionType"
+                               onselectitem="scopeModel.onCountrySelectionTypeSelected"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               isrequired="true"
+                               hideremoveicon="true">
+                    </vr-select>
+                </vr-columns>
+                <vr-common-country-selector ng-show="scopeModel.isCountrySelectorShown"
+                                            on-ready="scopeModel.onCountrySelectorReady"
+                                            selectedvalues="scopeModel.selectedCountries"
+                                            normal-col-num="4"
+                                            isrequired="scopeModel.isCountrySelectorShown"
+                                            ismultipleselection>
+                </vr-common-country-selector>
+                <vr-columns width="1/3row">
+                    <vr-datetimepicker type="date" label="BED" value="scopeModel.beginEffectiveDate" customvalidate="scopeModel.isBEDValid()" isrequired></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Ok" formname="formAddCountries" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

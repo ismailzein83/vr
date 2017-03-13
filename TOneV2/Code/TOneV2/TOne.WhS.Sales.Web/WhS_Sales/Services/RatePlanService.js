@@ -14,7 +14,8 @@
             viewZoneInfo: viewZoneInfo,
             openBulkActionWizard: openBulkActionWizard,
             openTQIEditor: openTQIEditor,
-            importRatePlan: importRatePlan
+            importRatePlan: importRatePlan,
+            addCountries: addCountries
         };
 
         function sellNewCountries(customerId, countryChanges, saleAreaSettings, ratePlanSettings, onCountryChangesUpdated) {
@@ -153,6 +154,24 @@
                 }
             };
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ImportRatePlan/ImportRatePlan.html", parameters, modalSettings);
+        }
+
+        function addCountries(input) {
+
+            var parameters = {
+                customerId: input.customerId,
+                retroactiveDate: input.retroactiveDate,
+                newRateDate: input.newRateDate,
+                excludedCountryIds: input.excludedCountryIds
+            };
+
+            var settings = {
+                onScopeReady: function (modalScope) {
+                    modalScope.onCountriesAdded = input.onCountriesAdded;
+                }
+            };
+
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/AddCountries.html", parameters, settings);
         }
     }
 

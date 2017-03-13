@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-	public class SoldCountryQuery
-	{
-		public int CustomerId { get; set; }
+    public class SoldCountryQuery
+    {
+        public int CustomerId { get; set; }
 
-		public DateTime EffectiveOn { get; set; }
-	}
+        public DateTime EffectiveOn { get; set; }
+
+        public string CountryName { get; set; }
+    }
 }
