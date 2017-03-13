@@ -13,6 +13,14 @@ namespace Vanrise.Security.Business
 {
     public class SecurityManager
     {
+        static TimeSpan s_tokenExpirationInterval;
+
+        static SecurityManager()
+        {
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Security_TokenExpirationInterval"], out s_tokenExpirationInterval))
+                s_tokenExpirationInterval = TimeSpan.FromDays(1);
+        }
+
         #region Public Methods
 
         public AuthenticateOperationOutput<AuthenticationToken> Authenticate(string email, string password)
@@ -30,14 +38,12 @@ namespace Vanrise.Security.Business
             {
                 authenticationOperationOutput.LoggedInUser = user;
 
-                int expirationPeriodInMinutes = 1440;
-
                 AuthenticationToken authToken = new AuthenticationToken();
                 authToken.TokenName = SecurityContext.SECURITY_TOKEN_NAME;
                 authToken.Token = null;
                 authToken.UserName = user.Email;
                 authToken.UserDisplayName = user.Name;
-                authToken.ExpirationIntervalInMinutes = expirationPeriodInMinutes;
+                authToken.ExpirationIntervalInMinutes = (int)Math.Ceiling(s_tokenExpirationInterval.TotalMinutes);
 
                 if (!manager.IsUserEnable(user))
                 {
@@ -53,7 +59,7 @@ namespace Vanrise.Security.Business
                         {
                             UserId = user.UserId,
                             IssuedAt = DateTime.Now,
-                            ExpiresAt = DateTime.Now.AddMinutes(expirationPeriodInMinutes)
+                            ExpiresAt = DateTime.Now.Add(s_tokenExpirationInterval)
                         };
                         AddTokenExtensions(securityToken);
 
