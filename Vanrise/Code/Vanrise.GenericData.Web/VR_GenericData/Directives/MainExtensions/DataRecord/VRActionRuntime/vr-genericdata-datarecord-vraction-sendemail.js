@@ -65,12 +65,7 @@ app.directive('vrGenericdataDatarecordVractionSendemail', ['UtilsService', 'VRUI
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.VRActions.DataRecordAlertRuleSendEmailAction,Vanrise.GenericData.MainExtensions",
                         ActionName: "Send Email",
-                        MailMessageTemplateId: mailMessageTemplateSelectorReadyAPI.getSelectedIds(),
-                        Settings: {
-                            ExtendedSettings: {
-                                $type: "Vanrise.GenericData.Notification.DataRecordSendEmailExtendedSettings, Vanrise.GenericData.Notification",
-                            }
-                        }
+                        MailMessageTemplateId: mailMessageTemplateSelectorReadyAPI.getSelectedIds()
                     };
                 };
 
