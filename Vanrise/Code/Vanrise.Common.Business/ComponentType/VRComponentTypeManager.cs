@@ -99,6 +99,16 @@ namespace Vanrise.Common.Business
             return manager.GetExtensionConfiguration<VRComponentTypeConfig>(configId, VRComponentTypeConfig.EXTENSION_TYPE);
         }
 
+
+        private struct GetComponentTypeCacheName
+        {
+            public Guid ComponentTypeId { get; set; }
+
+            public string VRComponentTypeFQTN { get; set; }
+
+            public string VRComponentTypeSettingsFQTN { get; set; }
+        }
+
         public Q GetComponentType<T, Q>(Guid componentTypeId)
             where T : VRComponentTypeSettings
             where Q : VRComponentType<T>
@@ -106,8 +116,10 @@ namespace Vanrise.Common.Business
             var cacheName = new GetComponentTypeCacheName
             {
                 ComponentTypeId = componentTypeId,
-                CLRType = typeof(T)
+                VRComponentTypeFQTN = typeof(Q).AssemblyQualifiedName,
+                VRComponentTypeSettingsFQTN = typeof(T).AssemblyQualifiedName
             };
+
             return s_cacheManager.GetOrCreateObject(cacheName, () =>
             {
                 var componentTypeEntity = GetCachedComponentTypes().GetRecord(componentTypeId);
@@ -152,11 +164,24 @@ namespace Vanrise.Common.Business
                 }).ToList();
         }
 
+        private struct GetCachedComponentTypesCacheName
+        {
+            public string VRComponentTypeFQTN { get; set; }
+
+            public string VRComponentTypeSettingsFQTN { get; set; }
+        }
+
         public Dictionary<Guid, Q> GetCachedComponentTypes<T, Q>()
             where T : VRComponentTypeSettings
             where Q : VRComponentType<T>
         {
-            return s_cacheManager.GetOrCreateObject(string.Format("GetCachedComponentTypes_{0}", typeof(T).AssemblyQualifiedName), () =>
+            var cacheName = new GetCachedComponentTypesCacheName
+            {
+                VRComponentTypeFQTN = typeof(Q).AssemblyQualifiedName,
+                VRComponentTypeSettingsFQTN = typeof(T).AssemblyQualifiedName
+            };
+
+            return s_cacheManager.GetOrCreateObject(cacheName, () =>
             {
                 return GetCachedComponentTypes().FindAllRecords(itm => itm.Settings is T).Select(
                    itm =>
@@ -212,14 +237,6 @@ namespace Vanrise.Common.Business
                 return _dataManager.AreVRComponentTypeUpdated(ref _updateHandle);
             }
         }
-
-        private struct GetComponentTypeCacheName
-        {
-            public Guid ComponentTypeId { get; set; }
-
-            public Type CLRType { get; set; }
-        }
-
         #endregion
 
         #region Mappers
