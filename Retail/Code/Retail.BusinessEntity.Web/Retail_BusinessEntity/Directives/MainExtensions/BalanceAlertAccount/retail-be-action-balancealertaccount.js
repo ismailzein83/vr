@@ -87,12 +87,7 @@ app.directive('retailBeActionBalancealertaccount', ['UtilsService', 'VRUIUtilsSe
                     return {
                         $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertAccountAction, Retail.BusinessEntity.Business",
                         ActionExecutor: actionExecutor,
-                        ActionName: actionExecutor.ActionName,
-                        Settings: {
-                            ExtendedSettings: {
-                                $type: "Retail.BusinessEntity.Business.Extensions.BalanceAlertExtendedSettings, Retail.BusinessEntity.Business",
-                            }
-                        }
+                        ActionName: actionExecutor.ActionName
                     };
                 };
 

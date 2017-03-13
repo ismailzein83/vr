@@ -47,14 +47,11 @@ namespace Retail.BusinessEntity.Business.Extensions
         }
     }
 
-    public class BalanceAlertExtendedSettings : VRActionExtendedSettings
-    {
 
-    }
     public class BalanceAlertActionDefinitionSettings : VRActionDefinitionExtendedSettings
     {
+
         public Guid AccountBEDefinitionId { get; set; }
-        public AccountActionBackendExecutor ActionExecutor { get; set; }
         public override Guid ConfigId
         {
             get { return new Guid("820856B8-C29D-43D9-9950-18AE7AF22BB9"); }
