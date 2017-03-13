@@ -202,7 +202,7 @@
                     }
                     return fields;
                 }
-            }
+            };
             return context;
         };
         function buildGridQuery() {

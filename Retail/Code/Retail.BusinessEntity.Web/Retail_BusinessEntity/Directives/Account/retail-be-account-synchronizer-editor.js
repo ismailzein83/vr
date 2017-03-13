@@ -43,7 +43,7 @@ app.directive('retailBeAccountSynchronizerEditor', ['UtilsService', 'VRUIUtilsSe
             $scope.scopeModel.onAccountSynchronizerHandlerGridReady = function (api) {
                 accountSynchronizerHandlersGridApi = api;
                 accountSynchronizerHandlersGridPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (selectedItem) {
                 if (selectedItem != undefined && businessEntityDefinitionSelectionChangedDeferred == undefined) {

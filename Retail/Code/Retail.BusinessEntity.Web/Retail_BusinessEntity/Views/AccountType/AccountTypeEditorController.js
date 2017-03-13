@@ -68,8 +68,7 @@
                     $scope.scopeModel.showSettings = true;
                     var businessEntityDefinitionForAccountTypeDeferred;
                     var businessEntityDefinitionForStatusDefinitionDeferred;
-                    if (businessEntityDefinitionSelectionChangedDeferred != undefined)
-                    {
+                    if (businessEntityDefinitionSelectionChangedDeferred != undefined) {
                         businessEntityDefinitionForAccountTypeDeferred = UtilsService.createPromiseDeferred();
                         businessEntityDefinitionForStatusDefinitionDeferred = UtilsService.createPromiseDeferred();
 
@@ -105,10 +104,10 @@
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, setLoader, businessEntityDefinitionForStatusDefinitionDeferred);
 
 
-                   
-                   
+
+
                 }
-            }
+            };
 
             $scope.scopeModel.onSelectItem = function (dataItem) {
                 addAccountPart(dataItem);

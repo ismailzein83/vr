@@ -104,7 +104,7 @@ app.directive("retailBeAccountbedefinitionVieweditor", ["UtilsService", "VRNotif
                     function buildAccountBEDefinitionViewSettingsObj() {
                         var accountBEDefinitionSettings = [];
 
-                        var accountBEDefinitionIds = beDefinitionSelectorApi.getSelectedIds()
+                        var accountBEDefinitionIds = beDefinitionSelectorApi.getSelectedIds();
                         if (accountBEDefinitionIds != undefined) {
                             for (var index = 0; index < accountBEDefinitionIds.length; index++) {
                                 accountBEDefinitionSettings.push({ BusinessEntityId: accountBEDefinitionIds[index] })

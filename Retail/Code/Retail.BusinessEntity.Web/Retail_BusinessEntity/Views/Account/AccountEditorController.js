@@ -23,7 +23,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                accountBEDefinitionId = parameters.accountBEDefinitionId
+                accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountId = parameters.accountId;
                 parentAccountId = parameters.parentAccountId;
             }
@@ -138,7 +138,7 @@
             var onAccountLoaded = function (accountEntityFromAccountEditor) {
                 accountEntity = accountEntityFromAccountEditor;
                 setTitle();
-            }
+            };
             return onAccountLoaded;
         }
     }

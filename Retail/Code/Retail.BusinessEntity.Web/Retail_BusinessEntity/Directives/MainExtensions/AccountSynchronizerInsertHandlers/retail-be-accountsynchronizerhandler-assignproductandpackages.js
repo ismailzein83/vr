@@ -58,7 +58,7 @@ app.directive('retailBeAccountsynchronizerhandlerAssignproductandpackages', ['Ut
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, packageSelectorAPI, selectorPayload, setLoader, productSelectorSelectionChangedDeferred);
 
                     }
-                }
+                };
 
                 defineAPI();
             }

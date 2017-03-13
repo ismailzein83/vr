@@ -197,7 +197,7 @@
                         $scope.scopeModel.isLoading = false;
                     });
                 }
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)

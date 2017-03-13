@@ -10,7 +10,7 @@
 
         var productId;
         var productEntity;
-        var productEditorRuntime
+        var productEditorRuntime;
         var productFamilyId;
         var productFamilyInfo;
 

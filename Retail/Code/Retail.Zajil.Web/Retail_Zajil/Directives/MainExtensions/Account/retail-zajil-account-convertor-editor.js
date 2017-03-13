@@ -152,7 +152,7 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 api.load = function (payload) {
                     var promises = [];
                     var accountTypeSelectorPayload;
-                    var siteAccountTypeSelectorPayload
+                    var siteAccountTypeSelectorPayload;
                     var statusDefinitionSelectorPayload;
 
                     promises.push(loadAccountDefinitionSelectorLoad());

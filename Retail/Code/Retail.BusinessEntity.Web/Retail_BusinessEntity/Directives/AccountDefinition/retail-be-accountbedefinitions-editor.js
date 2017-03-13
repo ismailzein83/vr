@@ -63,19 +63,19 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                 $scope.scopeModel.onAccountViewDefinitionsReady = function (api) {
                     accountViewDefinitionDirectiveAPI = api;
                     accountViewDefinitionDirectiveDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onAccountActionDefinitionsReady = function (api) {
                     accountActionDefinitionDirectiveAPI = api;
                     accountActionDefinitionDirectiveDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onAccountExtraFieldDefinitionsReady = function (api) {
                     accountExtraFieldDefinitionsDirectiveAPI = api;
                     accountExtraFieldDefinitionsDirectiveDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onAccountSecurityDefinitionsReady = function (api) {
                     securityDefinitionsDirectiveAPI = api;
                     securityDefinitionsDirectiveDeferred.resolve();
-                }
+                };
                 UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 });
@@ -235,7 +235,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var gridDefinition = {
                         ColumnDefinitions: accountGridDefinitionDirectiveAPI.getData(),
                         ExportColumnDefinitions: accountGridDefinitionExportExcelDirectiveAPI.getData()
-                    }
+                    };
 
                     var obj = {
                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionSettings, Retail.BusinessEntity.Entities",

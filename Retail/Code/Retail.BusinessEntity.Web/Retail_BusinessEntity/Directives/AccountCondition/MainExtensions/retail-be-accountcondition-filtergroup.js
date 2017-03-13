@@ -99,7 +99,7 @@
                                 }
                                 return fields;
                             }
-                        }
+                        };
                         return context;
                     };
 

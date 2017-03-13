@@ -35,7 +35,7 @@ function (UtilsService, VRUIUtilsService) {
             $scope.scopeModel.onGenericRuleDefinitionSelectorDirectiveReady = function (api) {
                 genericRuleDefinitionSelectorDirectiveApi = api;
                 genericRuleDefinitionSelectorReadyPromiseDeferred.resolve();
-            }
+            };
             defineAPI();
         }
         function defineAPI() {

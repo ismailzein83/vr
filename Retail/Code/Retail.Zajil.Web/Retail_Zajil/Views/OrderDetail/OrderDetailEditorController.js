@@ -65,7 +65,7 @@
                     $scope.scopeModel.charges = orderDetailObj.Charges;
                     $scope.scopeModel.payment = orderDetailObj.Payment;
                     $scope.scopeModel.contractPeriod = orderDetailObj.ContractPeriod;
-                    $scope.scopeModel.contractRemain = orderDetailObj.ContractRemain
+                    $scope.scopeModel.contractRemain = orderDetailObj.ContractRemain;
                     $scope.scopeModel.contractDays = orderDetailObj.ContractDays;
                     $scope.scopeModel.totalContract = orderDetailObj.TotalContract;
                     $scope.scopeModel.chargesYear1 = orderDetailObj.ChargesYear1;

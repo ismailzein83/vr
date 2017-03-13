@@ -96,7 +96,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, ruleDefinitionSelectorAPI, ruleDefinitionPayload, setLoader, businessEntityDefinitionSelectionChangedDeferred);
                 }
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateServiceType() : insertServiceType();

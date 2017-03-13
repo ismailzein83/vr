@@ -7,7 +7,7 @@
 
         var accountBEDefinitionId;
         var parentAccountId;
-        var accountViewDefinitionId
+        var accountViewDefinitionId;
 
         loadParameters();
         defineScope();

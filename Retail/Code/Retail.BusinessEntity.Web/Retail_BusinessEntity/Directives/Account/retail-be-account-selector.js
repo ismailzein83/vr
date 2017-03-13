@@ -95,7 +95,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                         if (payload.businessEntityDefinitionId != undefined)
                             accountBeDefinitionId = payload.businessEntityDefinitionId;
                         else
-                            accountBeDefinitionId = payload.AccountBEDefinitionId
+                            accountBeDefinitionId = payload.AccountBEDefinitionId;
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                         if (payload.beFilter != undefined) {
