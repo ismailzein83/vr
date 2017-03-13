@@ -54,15 +54,15 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('VR_Queueing/ExecutionFlow/GetExecutionFlows',null),
-('VR_Queueing/ExecutionFlow/GetExecutionFlow',null),
-('VR_Queueing/ExecutionFlow/UpdateExecutionFlow','VR_Queueing_ExecutionFlow: Edit'),
-('VR_Queueing/ExecutionFlow/AddExecutionFlow','VR_Queueing_ExecutionFlow: Add'),
-('VR_Queueing/ExecutionFlow/GetFilteredExecutionFlows','VR_Queueing_ExecutionFlow: View'),
+('VR_Queueing/ExecutionFlow/GetExecutionFlow','VR_SystemConfiguration: View'),
+('VR_Queueing/ExecutionFlow/UpdateExecutionFlow','VR_SystemConfiguration: Edit'),
+('VR_Queueing/ExecutionFlow/AddExecutionFlow','VR_SystemConfiguration: Add'),
+('VR_Queueing/ExecutionFlow/GetFilteredExecutionFlows','VR_Integration_DataProcesses: View Logs'),
 ('VR_Queueing/ExecutionFlowDefinition/GetExecutionFlowDefinitions',null),
-('VR_Queueing/ExecutionFlowDefinition/GetFilteredExecutionFlowDefinitions','VR_Queueing_ExecutionFlowDefinition: View'),
-('VR_Queueing/ExecutionFlowDefinition/GetExecutionFlowDefinition',null),
-('VR_Queueing/ExecutionFlowDefinition/UpdateExecutionFlowDefinition','VR_Queueing_ExecutionFlowDefinition: Edit'),
-('VR_Queueing/ExecutionFlowDefinition/AddExecutionFlowDefinition','VR_Queueing_ExecutionFlowDefinition: Add'),
+('VR_Queueing/ExecutionFlowDefinition/GetFilteredExecutionFlowDefinitions','VR_SystemConfiguration: View'),
+('VR_Queueing/ExecutionFlowDefinition/GetExecutionFlowDefinition','VR_SystemConfiguration: View'),
+('VR_Queueing/ExecutionFlowDefinition/UpdateExecutionFlowDefinition','VR_SystemConfiguration: Edit'),
+('VR_Queueing/ExecutionFlowDefinition/AddExecutionFlowDefinition','VR_SystemConfiguration: Add'),
 ('VR_Queueing/QueueActivatorConfig/GetQueueActivatorsConfig',null),
 ('VR_Queueing/Queueing/GetQueueItemTypes',null),
 ('VR_Queueing/Queueing/GetItemStatusList',null),
@@ -70,11 +70,11 @@ as (select * from (values
 ('VR_Queueing/Queueing/GetHeaders',null),
 ('VR_Queueing/Queueing/GetQueueItemHeaders',null),
 ('VR_Queueing/QueueInstance/GetItemTypes',null),
-('VR_Queueing/QueueInstance/GetFilteredQueueInstances','VR_Queueing_ExecutionFlow: QueueInstance'),
+('VR_Queueing/QueueInstance/GetFilteredQueueInstances','VR_Integration_DataProcesses: View Logs'),
 ('VR_Queueing/QueueInstance/GetQueueInstances',null),
-('VR_Queueing/QueueItemHeader/GetFilteredQueueItemHeader','VR_Queueing_ExecutionFlow: QueueItemHeader'),
-('VR_Queueing/QueueItemHeader/GetItemStatusSummary',null),
-('VR_Queueing/QueueItemHeader/GetExecutionFlowStatusSummary',null),
+('VR_Queueing/QueueItemHeader/GetFilteredQueueItemHeader','VR_Integration_DataProcesses: View Logs'),
+('VR_Queueing/QueueItemHeader/GetItemStatusSummary','VR_Integration_DataProcesses: View Logs'),
+('VR_Queueing/QueueItemHeader/GetExecutionFlowStatusSummary','VR_Integration_DataProcesses: View Logs'),
 ('VR_Queueing/QueueItemType/GetItemTypes',null),
 ('VR_Queueing/QueueStage/GetStageNames',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -92,16 +92,3 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
-DELETE FROM [sec].[BusinessEntityModule] WHERE [ID] = '24779963-F541-4692-BF0D-E4C058C8F9C0'
---[sec].[BusinessEntityModule]--------------------701 to 800----------------------------------------
-begin
-set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B21654DA-1A2F-4E5A-887C-865FD9320807',701,'Queueing','B6B8F582-4759-43FB-9220-AA7662C366EA',2,0)--,--('24779963-F541-4692-BF0D-E4C058C8F9C0',null,'Queueing','954705D8-ABC5-41AB-BDB2-FEC686C7BE09',2,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
-----------------------------------------------------------------------------------------------------
-end
-
-Delete from [sec].[BusinessEntity] where [Id] in ('8BA2172B-744A-4142-A50F-5335ECD22EBA','09FB693B-8B12-4233-ABF8-5B66FA60CC2B')
---[sec].[BusinessEntity]----------------------------------------------------------------------------
-begin
-set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('824BDDC8-7D9E-4D8C-AD24-F0492900B88A',1801,'VR_Queueing_ExecutionFlow','Execution Flow'						,'B0326663-9249-445B-B561-9D65B44919BC',701,0,'["View","Add","Edit","QueueInstance","QueueItemHeader"]'),('CD23900F-BDC6-4AF5-9DD2-5A6CE011B20A',1802,'VR_Queueing_ExecutionFlowDefinition','Execution Flow Definition'	,'954705D8-ABC5-41AB-BDB2-FEC686C7BE09',701,0,'["View","Add","Edit"]')--('8BA2172B-744A-4142-A50F-5335ECD22EBA',1803,'VR_Queueing_QueueInstance','Queue Instance'						,'B21654DA-1A2F-4E5A-887C-865FD9320807',701,0,'["View"]'),--('09FB693B-8B12-4233-ABF8-5B66FA60CC2B',1804,'VR_Queueing_QueueItemHeader','Queue Item'						,'B21654DA-1A2F-4E5A-887C-865FD9320807',701,0,'["View"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-----------------------------------------------------------------------------------------------------
-end

@@ -60,8 +60,6 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('1D10975D-5B1D-4DDC-BBF2-F8F9BA89FF5A','Management','Business Processes Management','#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B',null,null,null,'{"$type":"Vanrise.BusinessProcess.Entities.BPViewSettings, Vanrise.BusinessProcess.Entities"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,2),
---('AA0B6783-ED68-41E8-B7C9-99BE96672476','Monitor','Monitor','#/view/BusinessProcess/Views/BPInstance/BPInstanceMonitor','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/BPInstance/GetUpdated',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,3),
---('79E759A9-3324-4B82-87E3-2065CD86C3F7','Log','Log History','#/view/BusinessProcess/Views/BPInstance/BPInstanceHistory','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/BPInstance/GetFilteredBPInstances',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,4),
 --('B23B61C1-D5AE-44A9-BD6E-F3009166395B','My Tasks','Tasks','#/view/BusinessProcess/Views/BPTask/BPTaskMonitor','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/BPTask/GetMyUpdatedTasks',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5),
 --('3C53D6DC-BBE7-49CA-A222-8211AF25DD31','Business Rules','Business Rules','#/view/BusinessProcess/Views/BPBusinessRule/BPBusinessRuleSetManagement','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,6),
 ('BEEEEB03-8CB2-44F4-9769-A95B46D4F40D','BP Technical Definition','BP Technical Definition','#/view/BusinessProcess/Views/BPDefinition/BPTechnicalDefinitionManagement','FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,1)
@@ -70,16 +68,9 @@ set nocount on;
 --------------------------------------------------------------------------------------------------------------
 end
 
-DELETE FROM [sec].[BusinessEntityModule] WHERE [ID] = 'E53820F4-9736-4202-970F-F40C660EC08E'
 --[sec].[BusinessEntityModule]-------------601 to 700---------------------------------------------------------
 begin
-set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('0C719C34-F553-4B90-8013-D967A57FAB14',601,'Business Process','B6B8F582-4759-43FB-9220-AA7662C366EA',2,0),('04493174-83F0-44D6-BBE4-DBEB8B57875A',602,'WorkFlows','B6B8F582-4759-43FB-9220-AA7662C366EA',601,0)--,--('E53820F4-9736-4202-970F-F40C660EC08E',603,'Business Process','954705D8-ABC5-41AB-BDB2-FEC686C7BE09',-1,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
---------------------------------------------------------------------------------------------------------------
-end
-
---[sec].[BusinessEntity]-------------------1501 to 1800---------------------------------------------------------
-begin
-set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('E1A6D6CB-0433-4B82-9945-A25887700823',1501,'BusinessProcess_BP_BPDefinition','Management'							,'0C719C34-F553-4B90-8013-D967A57FAB14',601,0,'["View"]'),('5658DA29-1AAC-4CC2-A621-BD96816E933E',1502,'BusinessProcess_BP_BPTask','BPTask'									,'0C719C34-F553-4B90-8013-D967A57FAB14',601,0,'["View"]'),('6EAFABC4-BDB8-469E-B215-C1D82B1BEA47',1503,'BusinessProcess_BP_BPInstance_Log','BPInstance Tracking'				,'0C719C34-F553-4B90-8013-D967A57FAB14',601,0,'["View","Monitor"]'),('F6A8698F-6056-4CD5-BE9F-EA34BF6B8716',1504,'BusinessProcess_BP_BusinessRuleSet','Business Rule Set'				,'0C719C34-F553-4B90-8013-D967A57FAB14',601,0,'["View", "Add", "Edit"]'),('2BD8386C-5ADB-4E80-83A3-740C19F042F2',1505,'BusinessProcess_BP_BPTechnicalDefinition','BP Technical Definition'	,'954705D8-ABC5-41AB-BDB2-FEC686C7BE09',603,0,'["View", "Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('04493174-83F0-44D6-BBE4-DBEB8B57875A',602,'WorkFlows','B6B8F582-4759-43FB-9220-AA7662C366EA',601,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
 --------------------------------------------------------------------------------------------------------------
 end
 
@@ -93,9 +84,9 @@ as (select * from (values
 ('BusinessProcess_BP/BPDefinition/GetBPDefinitionsInfo',null),
 ('BusinessProcess_BP/BPDefinition/GetBPDefintion',null),
 ('BusinessProcess_BP/BPDefinition/GetDefinitions',null),
-('BusinessProcess_BP/BPInstance/GetUpdated','BusinessProcess_BP_BPInstance_Log: Monitor'),
+('BusinessProcess_BP/BPInstance/GetUpdated',null),
 ('BusinessProcess_BP/BPInstance/GetBeforeId',null),
-('BusinessProcess_BP/BPInstance/GetFilteredBPInstances','BusinessProcess_BP_BPInstance_Log: View'),
+('BusinessProcess_BP/BPInstance/GetFilteredBPInstances',null),
 ('BusinessProcess_BP/BPInstance/GetBPInstance',null),
 ('BusinessProcess_BP/BPInstance/CreateNewProcess',null),
 ('BusinessProcess_BP/BPInstanceTracking/GetFilteredBPInstanceTracking',null),
@@ -103,7 +94,7 @@ as (select * from (values
 ('BusinessProcess_BP/BPInstanceTracking/GetBeforeId',null),
 ('BusinessProcess_BP/BPTask/GetProcessTaskUpdated',null),
 ('BusinessProcess_BP/BPTask/GetProcessTaskBeforeId',null),
-('BusinessProcess_BP/BPTask/GetMyUpdatedTasks','BusinessProcess_BP_BPTask: View'),
+('BusinessProcess_BP/BPTask/GetMyUpdatedTasks',null),
 ('BusinessProcess_BP/BPTask/GetMyTasksBeforeId',null),
 ('BusinessProcess_BP/BPTask/ExecuteTask',null),
 ('BusinessProcess_BP/BPTask/GetTask',null),
@@ -111,11 +102,11 @@ as (select * from (values
 ('BusinessProcess_BP/BPValidationMessage/GetUpdated',null),
 ('BusinessProcess_BP/BPValidationMessage/GetBeforeId',null),
 ('BusinessProcess_BP/BPValidationMessage/GetFilteredBPValidationMessage',null),
-('BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets','BusinessProcess_BP_BusinessRuleSet: View'),
-('BusinessProcess_BP/BPBusinessRuleSet/UpdateBusinessRuleSet','BusinessProcess_BP_BusinessRuleSet: Edit'),
-('BusinessProcess_BP/BPBusinessRuleSet/AddBusinessRuleSet','BusinessProcess_BP_BusinessRuleSet: Add'),
-('BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical','BusinessProcess_BP_BPTechnicalDefinition: View'),
-('BusinessProcess_BP/BPDefinition/UpdateBPDefinition','BusinessProcess_BP_BPTechnicalDefinition: Edit')
+('BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null),
+('BusinessProcess_BP/BPBusinessRuleSet/UpdateBusinessRuleSet',null),
+('BusinessProcess_BP/BPBusinessRuleSet/AddBusinessRuleSet',null),
+('BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical','VR_SystemConfiguration: View'),
+('BusinessProcess_BP/BPDefinition/UpdateBPDefinition','VR_SystemConfiguration: Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t

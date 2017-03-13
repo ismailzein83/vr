@@ -88,64 +88,52 @@ set nocount on;
 --------------------------------------------------------------------------------------------------------------
 end
 
---[sec].[BusinessEntityModule]-------------301 to 400---------------------------------------------------------
-begin
-set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('311764A7-07D6-4615-801B-D83A6EBA7930',301,'Generic Data','7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
---------------------------------------------------------------------------------------------------------------
-end
-
---[sec].[BusinessEntity]-------------------601 to 900--------------------------------------------------------
-begin
-set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('4F413B73-7FB2-45A9-8EE2-699B5E7DDD24',601,'VR_GenericData_BusinessEntityDefinition','Business Entity Definitions','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('3AD389CC-BED9-49A1-99D6-9666A3E30EC8',602,'VR_GenericData_GenericRuleDefinition','Generic Rule Definition','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('5B3742FE-0CF7-46FC-B1DE-77753F0F28D7',603,'VR_GenericData_DataTransformationDefinition','Data Transformation Definition','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit","Compile"]'),('22ADAE7B-3EE5-418E-A361-BEE72CDDC48A',604,'VR_GenericData_ExtensibleBEItem','Extensible BE Item','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["Add","Edit"]'),('ABEAD8FB-8301-45AE-AB09-01F4DC73F51D',605,'VR_GenericData_DataRecordType','Data Record Type','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('D915CBAE-F56F-41FE-84A5-40829361803A',606,'VR_GenericData_DataStore','Data Store','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('82D96F7A-C7B3-4D8E-B991-28F97EB959FC',607,'VR_GenericData_DataRecordStorage','Data Record Storage','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('D709A1DD-EEDF-47EE-B7D8-5E02253A99F6',608,'VR_GenericData_SummaryTransformationDefinition','Summary Transformation Definition','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('CECB0A6C-1B05-410B-9C45-4651759C7A8C',609,'VR_GenericData_BELookupRuleDefinition','BE Lookup Rule Definition','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]'),('221708DC-4A56-431B-9C0B-A868118BA215',610,'VR_GenericData_DataRecordFieldChoice','DataRecord Field Choice','311764A7-07D6-4615-801B-D83A6EBA7930',301,0,'["View","Add","Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
---------------------------------------------------------------------------------------------------------------
-end
-
 --[sec].[SystemAction]----------------------------------------------------------------------------------------
 begin
 set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions','VR_GenericData_BusinessEntityDefinition: View'),
+('VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions','VR_SystemConfiguration: View'),
 ('VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinition',null),
 ('VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinitionsInfo',null),
-('VR_GenericData/BusinessEntityDefinition/UpdateBusinessEntityDefinition','VR_GenericData_BusinessEntityDefinition: Edit'),
-('VR_GenericData/BusinessEntityDefinition/AddBusinessEntityDefinition','VR_GenericData_BusinessEntityDefinition: Add'),
+('VR_GenericData/BusinessEntityDefinition/UpdateBusinessEntityDefinition','VR_SystemConfiguration: Edit'),
+('VR_GenericData/BusinessEntityDefinition/AddBusinessEntityDefinition','VR_SystemConfiguration: Add'),
 ('VR_GenericData/BusinessEntityDefinition/GetGenericBEDefinitionView',null),
 ('VR_GenericData/DataRecordFieldTypeConfig/GetDataRecordFieldTypes',null),
 ('VR_GenericData/DataRecordFieldTypeConfig/GetDataRecordFieldTypeConfig',null),
-('VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages','VR_GenericData_DataRecordStorage: View'),
+('VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages','VR_SystemConfiguration: View'),
 ('VR_GenericData/DataRecordStorage/GetDataRecordsStorageInfo',null),
-('VR_GenericData/DataRecordStorage/GetDataRecordStorage',null),
-('VR_GenericData/DataRecordStorage/AddDataRecordStorage','VR_GenericData_DataRecordStorage: Add'),
-('VR_GenericData/DataRecordStorage/UpdateDataRecordStorage','VR_GenericData_DataRecordStorage: Edit'),
+('VR_GenericData/DataRecordStorage/GetDataRecordStorage','VR_SystemConfiguration: View'),
+('VR_GenericData/DataRecordStorage/AddDataRecordStorage','VR_SystemConfiguration: Add'),
+('VR_GenericData/DataRecordStorage/UpdateDataRecordStorage','VR_SystemConfiguration: Edit'),
 ('VR_GenericData/DataRecordType/GetDataRecordType',null),
-('VR_GenericData/DataRecordType/GetFilteredDataRecordTypes','VR_GenericData_DataRecordType: View'),
-('VR_GenericData/DataRecordType/UpdateDataRecordType','VR_GenericData_DataRecordType: Edit'),
-('VR_GenericData/DataRecordType/AddDataRecordType','VR_GenericData_DataRecordType: Add'),
+('VR_GenericData/DataRecordType/GetFilteredDataRecordTypes','VR_SystemConfiguration: View'),
+('VR_GenericData/DataRecordType/UpdateDataRecordType','VR_SystemConfiguration: Edit'),
+('VR_GenericData/DataRecordType/AddDataRecordType','VR_SystemConfiguration: Add'),
 ('VR_GenericData/DataRecordType/GetDataRecordFieldTypeTemplates',null),
 ('VR_GenericData/DataRecordType/GetDataRecordTypeInfo',null),
 ('VR_GenericData/DataStoreConfig/GetDataStoreConfigs',null),
 ('VR_GenericData/DataStoreConfig/GetDataStoreConfig',null),
-('VR_GenericData/DataStore/GetFilteredDataStores','VR_GenericData_DataStore: View'),
+('VR_GenericData/DataStore/GetFilteredDataStores','VR_SystemConfiguration: View'),
 ('VR_GenericData/DataStore/GetDataStoresInfo',null),
-('VR_GenericData/DataStore/GetDataStore',null),
-('VR_GenericData/DataStore/AddDataStore','VR_GenericData_DataStore: Add'),
-('VR_GenericData/DataStore/UpdateDataStore','VR_GenericData_DataStore: Edit'),
-('VR_GenericData/DataTransformationDefinition/GetDataTransformationDefinition',null),
+('VR_GenericData/DataStore/GetDataStore','VR_SystemConfiguration: View'),
+('VR_GenericData/DataStore/AddDataStore','VR_SystemConfiguration: Add'),
+('VR_GenericData/DataStore/UpdateDataStore','VR_SystemConfiguration: Edit'),
+('VR_GenericData/DataTransformationDefinition/GetDataTransformationDefinition','VR_SystemConfiguration: View'),
 ('VR_GenericData/DataTransformationDefinition/GetDataTransformationDefinitionRecords',null),
-('VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions','VR_GenericData_DataTransformationDefinition: View'),
-('VR_GenericData/DataTransformationDefinition/UpdateDataTransformationDefinition','VR_GenericData_DataTransformationDefinition: Edit'),
-('VR_GenericData/DataTransformationDefinition/AddDataTransformationDefinition','VR_GenericData_DataTransformationDefinition: Add'),
+('VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions','VR_SystemConfiguration: View'),
+('VR_GenericData/DataTransformationDefinition/UpdateDataTransformationDefinition','VR_SystemConfiguration: Edit'),
+('VR_GenericData/DataTransformationDefinition/AddDataTransformationDefinition','VR_SystemConfiguration: Add'),
 ('VR_GenericData/DataTransformationDefinition/GetDataTransformationDefinitions',null),
-('VR_GenericData/DataTransformationDefinition/TryCompileSteps','VR_GenericData_DataTransformationDefinition: Compile'),
-('VR_GenericData/DataTransformationDefinition/ExportCompilationResult','VR_GenericData_DataTransformationDefinition: Compile'),
+('VR_GenericData/DataTransformationDefinition/TryCompileSteps','VR_SystemConfiguration: Edit'),
+('VR_GenericData/DataTransformationDefinition/ExportCompilationResult','VR_SystemConfiguration: Edit'),
 ('VR_GenericData/DataTransformationStepConfig/GetDataTransformationSteps',null),
 ('VR_GenericData/ExpressionBuilderConfig/GetExpressionBuilderTemplates',null),
-('VR_GenericData/ExtensibleBEItem/GetExtensibleBEItem',null),
-('VR_GenericData/ExtensibleBEItem/UpdateExtensibleBEItem','VR_GenericData_ExtensibleBEItem: Edit'),
-('VR_GenericData/ExtensibleBEItem/AddExtensibleBEItem','VR_GenericData_ExtensibleBEItem: Add'),
-('VR_GenericData/ExtensibleBEItem/GetFilteredExtensibleBEItems',null),
+('VR_GenericData/ExtensibleBEItem/GetExtensibleBEItem','VR_SystemConfiguration: View'),
+('VR_GenericData/ExtensibleBEItem/UpdateExtensibleBEItem','VR_SystemConfiguration: Edit'),
+('VR_GenericData/ExtensibleBEItem/AddExtensibleBEItem','VR_SystemConfiguration: Add'),
+('VR_GenericData/ExtensibleBEItem/GetFilteredExtensibleBEItems','VR_SystemConfiguration: View'),
 ('VR_GenericData/GenericBusinessEntity/GetFilteredGenericBusinessEntities',null),
 ('VR_GenericData/GenericBusinessEntity/GetGenericBusinessEntity',null),
 ('VR_GenericData/GenericBusinessEntity/AddGenericBusinessEntity',null),
@@ -157,10 +145,10 @@ as (select * from (values
 ('VR_GenericData/GenericRule/GetGenericRule',null),
 ('VR_GenericData/GenericRule/AddGenericRule',null),
 ('VR_GenericData/GenericRule/UpdateGenericRule',null),
-('VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions','VR_GenericData_GenericRuleDefinition: View '),
+('VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions','VR_SystemConfiguration: View '),
 ('VR_GenericData/GenericRuleDefinition/GetGenericRuleDefinition',null),
-('VR_GenericData/GenericRuleDefinition/AddGenericRuleDefinition','VR_GenericData_GenericRuleDefinition: Add'),
-('VR_GenericData/GenericRuleDefinition/UpdateGenericRuleDefinition','VR_GenericData_GenericRuleDefinition: Edit'),
+('VR_GenericData/GenericRuleDefinition/AddGenericRuleDefinition','VR_SystemConfiguration: Add'),
+('VR_GenericData/GenericRuleDefinition/UpdateGenericRuleDefinition','VR_SystemConfiguration: Edit'),
 ('VR_GenericData/GenericRuleDefinition/GetGenericRuleDefinitionsInfo',null),
 ('VR_GenericData/GenericRuleDefinition/GetGenericRuleDefinitionView',null),
 ('VR_GenericData/GenericRuleTypeConfig/GetGenericRuleTypes',null),
@@ -170,24 +158,24 @@ as (select * from (values
 ('VR_GenericData/GenericUIRuntime/GetGenericManagementRuntime',null),
 ('VR_GenericData/GenericUIRuntime/GetGenericEditorRuntime',null),
 ('VR_GenericData/GenericUIRuntime/GetDataRecordTypesInfo',null),
-('VR_GenericData/SummaryTransformationDefinition/GetSummaryTransformationDefinition',null),
-('VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions','VR_GenericData_SummaryTransformationDefinition: View'),
-('VR_GenericData/SummaryTransformationDefinition/AddSummaryTransformationDefinition','VR_GenericData_SummaryTransformationDefinition: Add'),
-('VR_GenericData/SummaryTransformationDefinition/UpdateSummaryTransformationDefinition','VR_GenericData_SummaryTransformationDefinition: Edit'),
+('VR_GenericData/SummaryTransformationDefinition/GetSummaryTransformationDefinition','VR_SystemConfiguration: View'),
+('VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions','VR_SystemConfiguration: View'),
+('VR_GenericData/SummaryTransformationDefinition/AddSummaryTransformationDefinition','VR_SystemConfiguration: Add'),
+('VR_GenericData/SummaryTransformationDefinition/UpdateSummaryTransformationDefinition','VR_SystemConfiguration: Edit'),
 ('VR_GenericData/SummaryTransformationDefinition/GetSummaryTransformationDefinitionInfo',null),
 ('VR_GenericData/SummaryTransformationDefinition/GetSummaryBatchIntervalSourceTemplates',null),
 
-('VR_GenericData/BELookupRuleDefinition/GetFilteredBELookupRuleDefinitions','VR_GenericData_BELookupRuleDefinition: View'),
-('VR_GenericData/BELookupRuleDefinition/GetBELookupRuleDefinitionsInfo','VR_GenericData_BELookupRuleDefinition: View'),
-('VR_GenericData/BELookupRuleDefinition/GetBELookupRuleDefinition','VR_GenericData_BELookupRuleDefinition: View'),
-('VR_GenericData/BELookupRuleDefinition/AddBELookupRuleDefinition','VR_GenericData_BELookupRuleDefinition: Add'),
-('VR_GenericData/BELookupRuleDefinition/UpdateBELookupRuleDefinition','VR_GenericData_BELookupRuleDefinition: Edit'),
+('VR_GenericData/BELookupRuleDefinition/GetFilteredBELookupRuleDefinitions','VR_SystemConfiguration: View'),
+('VR_GenericData/BELookupRuleDefinition/GetBELookupRuleDefinitionsInfo','VR_SystemConfiguration: View'),
+('VR_GenericData/BELookupRuleDefinition/GetBELookupRuleDefinition','VR_SystemConfiguration: View'),
+('VR_GenericData/BELookupRuleDefinition/AddBELookupRuleDefinition','VR_SystemConfiguration: Add'),
+('VR_GenericData/BELookupRuleDefinition/UpdateBELookupRuleDefinition','VR_SystemConfiguration: Edit'),
 
-('VR_GenericData/DataRecordFieldChoice/GetFilteredDataRecordFieldChoices','VR_GenericData_DataRecordFieldChoice: View'),
-('VR_GenericData/DataRecordFieldChoice/GetDataRecordFieldChoicesInfo','VR_GenericData_DataRecordFieldChoice: View'),
-('VR_GenericData/DataRecordFieldChoice/GetDataRecordFieldChoice','VR_GenericData_DataRecordFieldChoice: View'),
-('VR_GenericData/DataRecordFieldChoice/AddDataRecordFieldChoice','VR_GenericData_DataRecordFieldChoice: Add'),
-('VR_GenericData/DataRecordFieldChoice/UpdateDataRecordFieldChoice','VR_GenericData_DataRecordFieldChoice: Edit')
+('VR_GenericData/DataRecordFieldChoice/GetFilteredDataRecordFieldChoices','VR_SystemConfiguration: View'),
+('VR_GenericData/DataRecordFieldChoice/GetDataRecordFieldChoicesInfo','VR_SystemConfiguration: View'),
+('VR_GenericData/DataRecordFieldChoice/GetDataRecordFieldChoice','VR_SystemConfiguration: View'),
+('VR_GenericData/DataRecordFieldChoice/AddDataRecordFieldChoice','VR_SystemConfiguration: Add'),
+('VR_GenericData/DataRecordFieldChoice/UpdateDataRecordFieldChoice','VR_SystemConfiguration: Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -254,9 +242,4 @@ when not matched by target then
 set identity_insert [queue].[QueueActivatorConfig] off;
 ----------------------------------------------------------------------------------------------------
 end
-
---[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
-begin
-set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('DF5CDC08-DDF1-4D4E-B1F6-D17B3833452F',16,'VR_Common_Country','Country'			,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"vr-common-country-selector","ManagerFQTN":"Vanrise.Common.Business.CountryManager,Vanrise.Common.Business", "IdType": "System.Int32"}'),('E522907C-AEBD-48B6-82F4-FE55238942F2',20,'VR_Integration_DataSource','Data Source','{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"vr-integration-datasource-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Integration.Business.DataSourceManager,Vanrise.Integration.Business","IdType":"System.Int32"}'),('D41EA344-C3C0-4203-8583-019B6B3EDB76',26,'VR_Common_Currency','Currency'			,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"vr-common-currency-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Common.Business.CurrencyManager,Vanrise.Common.Business","IdType":"System.Int32"}'),('C4140358-D1C4-4630-B688-25FE027E448C',27,'VR_Common_RateType','Rate Type'			,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"vr-common-ratetype-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Common.Business.RateTypeManager,Vanrise.Common.Business","IdType":"System.Int32","NullDisplayText":"Normal"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Title],[Settings]))merge	[genericdata].[BusinessEntityDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]when not matched by target then	insert([ID],[OldID],[Name],[Title],[Settings])	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[Settings]);
-----------------------------------------------------------------------------------------------------
-end
+

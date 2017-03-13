@@ -66,8 +66,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('VR_Sec/Users/GetFilteredUsers','VR_Sec_Users: View'),
 ('VR_Sec/Users/GetUsersInfo',null),
-('VR_Sec/Users/GetMembers',null),
-('VR_Sec/Users/GetUserbyId',null),
+('VR_Sec/Users/GetUserbyId','VR_Sec_Users: View'),
 ('VR_Sec/Users/UpdateUser','VR_Sec_Users: Edit'),
 ('VR_Sec/Users/AddUser','VR_Sec_Users: Add'),
 ('VR_Sec/Users/CheckUserName',null),
@@ -77,13 +76,13 @@ as (select * from (values
 
 ('VR_Sec/Group/GetFilteredGroups','VR_Sec_Group: View'),
 ('VR_Sec/Group/GetGroupInfo',null),
-('VR_Sec/Group/GetGroup',null),
+('VR_Sec/Group/GetGroup','VR_Sec_Group: View'),
 ('VR_Sec/Group/AddGroup','VR_Sec_Group: Add'),
 ('VR_Sec/Group/UpdateGroup','VR_Sec_Group: Edit'),
 
 ('VR_Sec/View/AddView','VR_Sec_View: Add'),
 ('VR_Sec/View/UpdateView','VR_Sec_View: Edit'),
-('VR_Sec/View/GetView',null),
+('VR_Sec/View/GetView','VR_Sec_View: View'),
 ('VR_Sec/View/DeleteView','VR_Sec_View: Delete'),
 ('VR_Sec/View/GetFilteredViews','VR_Sec_View: View'),
 ('VR_Sec/View/GetFilteredDynamicViews','VR_Sec_View: View'),
@@ -92,37 +91,37 @@ as (select * from (values
 ('VR_Sec/Menu/GetMenuItems',null),
 ('VR_Sec/Menu/GetAllMenuItems','VR_Sec_View: Edit'),
 
-('VR_Sec/Module/AddModule','VR_Sec_View: AddModule'),
-('VR_Sec/Module/UpdateModule','VR_Sec_View: EditModule'),
+('VR_Sec/Module/AddModule','VR_Sec_View: Add'),
+('VR_Sec/Module/UpdateModule','VR_Sec_View: Edit'),
 ('VR_Sec/Module/GetModule',null),
 ('VR_Sec/Module/GetModules',null),
 
-('VR_Sec/BusinessEntity/UpdateBusinessEntity','VR_Sec_BusinessEntity: EditEntity'),
-('VR_Sec/BusinessEntity/AddBusinessEntity','VR_Sec_BusinessEntity: AddEntity'),
+('VR_Sec/BusinessEntity/UpdateBusinessEntity','VR_Sec_SystemEntitiesDefinition: Edit'),
+('VR_Sec/BusinessEntity/AddBusinessEntity','VR_Sec_SystemEntitiesDefinition: Add'),
 ('VR_Sec/BusinessEntity/GetFilteredBusinessEntities',null),
 ('VR_Sec/BusinessEntity/GetBusinessEntity',null),
 
-('VR_Sec/BusinessEntityModule/UpdateBusinessEntityModule','VR_Sec_BusinessEntity: EditModule'),
-('VR_Sec/BusinessEntityModule/AddBusinessEntityModule','VR_Sec_BusinessEntity: AddModule'),
-('VR_Sec/BusinessEntityModule/GetBusinessEntityModuleById',null),
+('VR_Sec/BusinessEntityModule/UpdateBusinessEntityModule','VR_Sec_SystemEntitiesDefinition: Edit'),
+('VR_Sec/BusinessEntityModule/AddBusinessEntityModule','VR_Sec_SystemEntitiesDefinition: Add'),
+('VR_Sec/BusinessEntityModule/GetBusinessEntityModuleById','VR_Sec_SystemEntitiesDefinition: View'),
 
-('VR_Sec/BusinessEntityNode/UpdateEntityNodesRank','VR_Sec_BusinessEntity: Ranking'),
+('VR_Sec/BusinessEntityNode/UpdateEntityNodesRank','VR_Sec_SystemEntitiesDefinition: Edit'),
 ('VR_Sec/BusinessEntityNode/GetEntityNodes','VR_Sec_Permission: View'),
 ('VR_Sec/BusinessEntityNode/ToggleBreakInheritance','VR_Sec_Permission: AllowInheritance'),
-('VR_Sec/BusinessEntityNode/GetEntityModules','VR_Sec_BusinessEntity: View'),
+('VR_Sec/BusinessEntityNode/GetEntityModules','VR_Sec_SystemEntitiesDefinition: View'),
 
 
 ('VR_Sec/Permission/GetFilteredEntityPermissions','VR_Sec_Permission: View'),
 ('VR_Sec/Permission/GetHolderPermissions',null),
 ('VR_Sec/Permission/GetEffectivePermissions',null),
 ('VR_Sec/Permission/UpdatePermissions','VR_Sec_Permission: Edit'),
-('VR_Sec/Permission/DeletePermissions','VR_Sec_Permission: Delete'),
+('VR_Sec/Permission/DeletePermissions','VR_Sec_Permission: Edit')
 
-('VR_Sec/Tenants/GetFilteredTenants','VR_Sec_Tenants:View'),
-('VR_Sec/Tenants/GetTenantsInfo',null),
-('VR_Sec/Tenants/GetTenantbyId',null),
-('VR_Sec/Tenants/UpdateTenant','VR_Sec_Tenants:Edit'),
-('VR_Sec/Tenants/AddTenant','VR_Sec_Tenants:Add')
+--('VR_Sec/Tenants/GetFilteredTenants','VR_Sec_Tenants:View'),
+--('VR_Sec/Tenants/GetTenantsInfo',null),
+--('VR_Sec/Tenants/GetTenantbyId',null),
+--('VR_Sec/Tenants/UpdateTenant','VR_Sec_Tenants:Edit'),
+--('VR_Sec/Tenants/AddTenant','VR_Sec_Tenants:Add')
 
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -139,64 +138,31 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
---[sec].[BusinessEntityModule]------------------------1 to 100----------------------------------------------
-begin
-set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('5A9E78AE-229E-41B9-9DBF-492997B42B61',1,'Root',null,null,0),('7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,'Configuration'	,'5A9E78AE-229E-41B9-9DBF-492997B42B61',1,0),('61451603-E7B9-40C6-AE27-6CBA974E1B3B',2,'Administration'	,'5A9E78AE-229E-41B9-9DBF-492997B42B61',1,0),('5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,'Security'		,'61451603-E7B9-40C6-AE27-6CBA974E1B3B',2,0),('4C9719E3-F818-454D-9977-01A9668E7ABA',null,'System'		,'7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
-------------------------------------------------------------------------------------------------------------
-end
-
 --[sec].[BusinessEntity]------------------1 to 300----------------------------------------------------------
 begin
-set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B4158657-230E-40BF-B88C-F2B2CA8835DE',1,'VR_Sec_Users','Users'					,'5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Add", "Edit", "Reset Password"]'),('720069F9-753C-45E3-BF31-EC3C5AA1DD33',2,'VR_Sec_Group','Groups'					,'5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Add", "Edit"]'),('102B6C02-7D5D-4768-B65B-87BB141EAADC',3,'VR_Sec_View','Menus and Views'				,'4C9719E3-F818-454D-9977-01A9668E7ABA',3,0,'["View", "Add", "Edit"]'),('92E7AFD2-02F5-4C55-91A6-18D4051C4F6C',5,'VR_Sec_BusinessEntity','Business Entity'		,'4C9719E3-F818-454D-9977-01A9668E7ABA',3,0,'["View","Ranking","AddEntity","AddModule","EditEntity","EditModule"]'),('0FC55A70-CA73-426C-AFB1-6F5A72004926',4,'VR_Sec_Permission','Permission'			,'5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Edit", "Delete", "AllowInheritance"]'),('CBF75F7A-DD92-46C2-B4B2-422B309E4B68',6,'VR_Sec_Tenants','Tenants'				,'7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0,'["View", "Add", "Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-------------------------------------------------------------------------------------------------------------
-end
-
---[sec].[Module]------------------------------1 to 100------------------------------------------------------
-begin
-set nocount on;
-;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','Configuration'	,null,null,'/Client/Images/menu-icons/Administration.png',1,0),
-('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration',null	,null,'/Client/Images/menu-icons/admin.png',5,0),
-('BAAF681E-AB1C-4A64-9A35-3F3951398881','System',null			,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,1,0),
-('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null			,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,5,0),
-
-('A28351BA-A5D7-4651-913C-6C9E09B92AC1','System',null			,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,1,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
-merge	[sec].[Module] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
-when not matched by target then
-	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
-
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B4158657-230E-40BF-B88C-F2B2CA8835DE',1,'VR_Sec_Users','Users'					,'5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Add", "Edit", "Reset Password"]'),('720069F9-753C-45E3-BF31-EC3C5AA1DD33',2,'VR_Sec_Group','Groups'					,'5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Add", "Edit"]'),('102B6C02-7D5D-4768-B65B-87BB141EAADC',3,'VR_Sec_View','Menus and Views'				,'7913ACD9-38C5-43B3-9612-BEFF66606F22',3,0,'["View", "Add", "Edit"]'),('92E7AFD2-02F5-4C55-91A6-18D4051C4F6C',5,'VR_Sec_SystemEntitiesDefinition','System Entities Definition'		,'7913ACD9-38C5-43B3-9612-BEFF66606F22',3,0,'["View","Add","Edit"]'),('0FC55A70-CA73-426C-AFB1-6F5A72004926',4,'VR_Sec_Permission','Permission'			,'5B13C15E-C118-41DC-A2D4-437C9E93F13B',3,0,'["View", "Edit", "AllowInheritance"]')--('CBF75F7A-DD92-46C2-B4B2-422B309E4B68',6,'VR_Sec_Tenants','Tenants'				,'7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0,'["View", "Add", "Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 ------------------------------------------------------------------------------------------------------------
 end
 
 --[sec].[View]-----------------------------1 to 1000---------------------------------------------------------
 begin
 set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])as (select * from (values
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank],IsDeleted)as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('17B7D7F7-0A1E-4AC1-B2A9-CC71755E3216','Users','Users','#/view/Security/Views/User/UserManagement'																			,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Users/GetFilteredUsers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,1),
-('6D39DDC2-E5EB-46C3-A926-37D59A9FD1AD','Groups','Groups','#/view/Security/Views/Group/GroupManagement'																		,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Group/GetFilteredGroups',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5),
-('147C1862-9B0C-4285-B415-00C9210FC691','System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement'										,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,10),
+('17B7D7F7-0A1E-4AC1-B2A9-CC71755E3216','Users','Users','#/view/Security/Views/User/UserManagement'																			,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Users/GetFilteredUsers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,1,0),
+('6D39DDC2-E5EB-46C3-A926-37D59A9FD1AD','Groups','Groups','#/view/Security/Views/Group/GroupManagement'																		,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Group/GetFilteredGroups',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5,0),
+('147C1862-9B0C-4285-B415-00C9210FC691','System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement'										,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,10,0),
 
-('241540BF-51E5-4D63-9806-EB212DADC3B3','Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement'																	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Sec/Tenants/GetFilteredTenants',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,50),
+('241540BF-51E5-4D63-9806-EB212DADC3B3','Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement'																	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Sec/Tenants/GetFilteredTenants',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,50,1),
 
-('5B11405B-F0E1-408C-BCF5-0AB328955B12','Views','Views','#/view/Security/Views/View/ViewManagement'																			,'A28351BA-A5D7-4651-913C-6C9E09B92AC1','VR_Sec/View/GetFilteredViews',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,1),
-('E4101095-F599-414F-8E8C-4790E9FF00FA','Menus','Menus','#/view/Security/Views/Menu/MenuManagement'																			,'A28351BA-A5D7-4651-913C-6C9E09B92AC1','VR_Sec/View/UpdateViewsRank',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5),
-('7AFED44F-6470-47C7-B6E8-B1652D17EB6D','Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement'		,'A28351BA-A5D7-4651-913C-6C9E09B92AC1','VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,15),
+('5B11405B-F0E1-408C-BCF5-0AB328955B12','Views','Views','#/view/Security/Views/View/ViewManagement'																			,'A28351BA-A5D7-4651-913C-6C9E09B92AC1','VR_Sec/View/GetFilteredViews',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,1,0),
+('E4101095-F599-414F-8E8C-4790E9FF00FA','Menus','Menus','#/view/Security/Views/Menu/MenuManagement'																			,'A28351BA-A5D7-4651-913C-6C9E09B92AC1','VR_Sec/View/UpdateViewsRank',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5,0),
+('7AFED44F-6470-47C7-B6E8-B1652D17EB6D','Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement'		,'A28351BA-A5D7-4651-913C-6C9E09B92AC1','VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,15,0),
 
-('DCF8CA21-852C-41B9-9101-6990E545509D','Organizational Charts','Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'									,'BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Sec/Users/GetFilteredUsers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,25)
+('DCF8CA21-852C-41B9-9101-6990E545509D','Organizational Charts','Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'									,'BAAF681E-AB1C-4A64-9A35-3F3951398881','VR_Sec/Users/GetFilteredUsers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,25,0)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[OldType] = s.[OldType],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[OldType],s.[Rank]);
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank],IsDeleted))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],	[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[OldType] = s.[OldType],[Rank] = s.[Rank], [IsDeleted] = s.[IsDeleted]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank], [IsDeleted])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[OldType],s.[Rank],s.[IsDeleted]);
 -------------------------------------------------------------------------------------------------------------
 end
 

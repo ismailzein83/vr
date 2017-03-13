@@ -88,12 +88,6 @@ set nocount on;
 ---------------------------------------------------------------------------------------------------------------
 end
 
---[sec].[BusinessEntity]------------------3601 to 3900----------------------------------------------------------
-begin
-
-set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('38630117-4929-42D1-8685-5F5AE815DFE1',3601,'VR_Sec_Widget','BI Widget','4C9719E3-F818-454D-9977-01A9668E7ABA',3,0,'["View","Add","Edit","Delete"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
-----------------------------------------------------------------------------------------------------------------
-end
 
 --[sec].[systemaction]------------------------------------------------------------------------------
 begin
@@ -102,10 +96,10 @@ set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('VR_Sec/Widget/GetFilteredWidgets','VR_Sec_Widget:View'),
-('VR_Sec/Widget/AddWidget','VR_Sec_Widget:Add'),
-('VR_Sec/Widget/UpdateWidget','VR_Sec_Widget:Edit'),
-('VR_Sec/Widget/DeleteWidget','VR_Sec_Widget:Delete')
+('VR_Sec/Widget/GetFilteredWidgets','VR_SystemConfiguration:View'),
+('VR_Sec/Widget/AddWidget','VR_SystemConfiguration:Add'),
+('VR_Sec/Widget/UpdateWidget','VR_SystemConfiguration:Edit'),
+('VR_Sec/Widget/DeleteWidget','VR_SystemConfiguration:Delete')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[systemaction] as t

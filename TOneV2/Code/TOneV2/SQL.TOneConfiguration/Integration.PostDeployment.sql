@@ -69,16 +69,10 @@ set nocount on;
 
 END
 
---[sec].[BusinessEntityModule]-------------401 to 500---------------------------------------------------------
-BEGIN
-set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('7CC991E0-A37A-4BE7-A310-B72FB2292914',401,'CDR processing','61451603-E7B9-40C6-AE27-6CBA974E1B3B',2,0),('B0326663-9249-445B-B561-9D65B44919BC',402,'Datasource','B6B8F582-4759-43FB-9220-AA7662C366EA',401,0),('AD4DAF11-F476-4D15-9FF4-98D1A9639111',403,'Configuration rules','7CC991E0-A37A-4BE7-A310-B72FB2292914',401,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
---------------------------------------------------------------------------------------------------------------
-END
 
-Delete from [sec].[BusinessEntity] where [Id] in ('4C07BCD1-BBB0-4ABE-A055-B375950ABB59','560F893F-C03F-4DF1-A300-A499ACA3E75A') 
 --[sec].[BusinessEntity]-------------------901 to 1200--------------------------------------------------------
 BEGIN
-set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('CCD65B5B-53BB-4816-B7EA-D8DC58AA513E',901,'VR_Integration_DataSource','Datasource','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View","Add","Edit","Delete","ImportedBatch","Log"]')--('4C07BCD1-BBB0-4ABE-A055-B375950ABB59',902,'VR_Integration_DataSource_ImportedBatch','Imported Batches','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View"]'),--('560F893F-C03F-4DF1-A300-A499ACA3E75A',903,'VR_Integration_DataSource_Log','Log','B0326663-9249-445B-B561-9D65B44919BC',402,0,'["View"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('CCD65B5B-53BB-4816-B7EA-D8DC58AA513E',901,'VR_Integration_DataProcesses','Data Processes','B6B8F582-4759-43FB-9220-AA7662C366EA',402,0,'["View Data Sources","Add Data Sources","Edit Data Sources","View Logs","View Reprocess Logs","Start Reprocess"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 END
 
@@ -90,17 +84,16 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('VR_Integration/DataSource/GetDataSources',null),
-('VR_Integration/DataSource/GetFilteredDataSources','VR_Integration_DataSource: View'),
-('VR_Integration/DataSource/GetDataSource',null),
+('VR_Integration/DataSource/GetFilteredDataSources','VR_Integration_DataProcesses: View Data Sources'),
+('VR_Integration/DataSource/GetDataSource','VR_Integration_DataProcesses: View Data Sources'),
 ('VR_Integration/DataSource/GetDataSourceAdapterTypes',null),
 ('VR_Integration/DataSource/GetExecutionFlows',null),
 ('VR_Integration/DataSource/AddExecutionFlow',null),
 ('VR_Integration/DataSource/GetExecutionFlowDefinitions',null),
-('VR_Integration/DataSource/AddDataSource','VR_Integration_DataSource: Add'),
-('VR_Integration/DataSource/UpdateDataSource','VR_Integration_DataSource: Edit'),
-('VR_Integration/DataSource/DeleteDataSource','VR_Integration_DataSource: Delete'),
-('VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches','VR_Integration_DataSource: ImportedBatch'),
-('VR_Integration/DataSourceLog/GetFilteredDataSourceLogs','VR_Integration_DataSource: Log')
+('VR_Integration/DataSource/AddDataSource','VR_Integration_DataProcesses: Add Data Sources'),
+('VR_Integration/DataSource/UpdateDataSource','VR_Integration_DataProcesses: Edit Data Sources'),
+('VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches','VR_Integration_DataProcesses: View Logs'),
+('VR_Integration/DataSourceLog/GetFilteredDataSourceLogs','VR_Integration_DataProcesses: View Logs')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -115,4 +108,8 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
---[runtime].[SchedulerTaskActionType]-------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[OldID],[Name],[ActionTypeInfo])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'Data Source','{"URL":"", "SystemType":true, "FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[ActionTypeInfo]))merge	[runtime].[SchedulerTaskActionType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[ActionTypeInfo] = s.[ActionTypeInfo]when not matched by target then	insert([ID],[OldID],[Name],[ActionTypeInfo])	values(s.[ID],s.[OldID],s.[Name],s.[ActionTypeInfo]);
+--[runtime].[SchedulerTaskActionType]-------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[OldID],[Name],[ActionTypeInfo])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68',1,'Data Source','{"URL":"", "SystemType":true, "FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[ActionTypeInfo]))merge	[runtime].[SchedulerTaskActionType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[ActionTypeInfo] = s.[ActionTypeInfo]when not matched by target then	insert([ID],[OldID],[Name],[ActionTypeInfo])	values(s.[ID],s.[OldID],s.[Name],s.[ActionTypeInfo]);--[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
+begin
+set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('E522907C-AEBD-48B6-82F4-FE55238942F2',20,'VR_Integration_DataSource','Data Source','{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"vr-integration-datasource-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Integration.Business.DataSourceManager,Vanrise.Integration.Business","IdType":"System.Int32"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Title],[Settings]))merge	[genericdata].[BusinessEntityDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]when not matched by target then	insert([ID],[OldID],[Name],[Title],[Settings])	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end

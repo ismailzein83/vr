@@ -76,15 +76,10 @@ set nocount on;
 -------------------------------------------------------------------------------------------------------------
 end
 
---[sec].[BusinessEntityModule]----------1401 to 1500------------------------------------------------
-begin
-set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('74E4A73C-328E-4707-AE1E-E7396BC16AF2',1401,'Analytics','7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
-----------------------------------------------------------------------------------------------------
-end
 
 --[sec].[BusinessEntity]----------------4201 to 4500------------------------------------------------
 begin
-set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('97051F1F-43DB-48DB-8EAF-4E7E773E8F8C',4201,'VR_Analytic_AnalyticTable','Analytic Table','74E4A73C-328E-4707-AE1E-E7396BC16AF2',1401,0,'["View","Add","Edit"]'),('6FDD628E-C876-4DBF-92BF-77225A88C3B9',4202,'VR_Analytic_AnalyticReport','Analytic Report','74E4A73C-328E-4707-AE1E-E7396BC16AF2',1401,0,'["View","Add","Edit"]'),('8A955CC4-930D-436F-8295-B34AECC1345D',4203,'VR_Analytic_DataAnalysisDefinition','Data Analysis Definition','74E4A73C-328E-4707-AE1E-E7396BC16AF2',1401,0,'["View","Add","Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set nocount on;;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('6FDD628E-C876-4DBF-92BF-77225A88C3B9',4202,'VR_Analytic_AnalyticReport','Analytic Reports','7913ACD9-38C5-43B3-9612-BEFF66606F22',1401,0,'["View","Add","Edit"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 ----------------------------------------------------------------------------------------------------
 end
 
@@ -95,17 +90,17 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('VR_Analytic/AnalyticTable/GetAnalyticTablesInfo',null),
-('VR_Analytic/AnalyticTable/GetFilteredAnalyticTables','VR_Analytic_AnalyticTable: View'),
+('VR_Analytic/AnalyticTable/GetFilteredAnalyticTables','VR_SystemConfiguration: View'),
 ('VR_Analytic/AnalyticTable/GetTableById',null),
 ('VR_Analytic/AnalyticTable/UpdateAnalyticTable',null),
-('VR_Analytic/AnalyticTable/AddAnalyticTable','VR_Analytic_AnalyticTable: Add'),
+('VR_Analytic/AnalyticTable/AddAnalyticTable','VR_SystemConfiguration: Add'),
 
 ('VR_Analytic/AnalyticReport/GetAnalyticReportsInfo',null),
 ('VR_Analytic/AnalyticReport/GetAnalyticReportById',null),
 ('VR_Analytic/AnalyticReport/UpdateAnalyticReport','VR_Analytic_AnalyticReport: Edit'),
 ('VR_Analytic/AnalyticReport/AddAnalyticReport','VR_Analytic_AnalyticReport: Add'),
 ('VR_Analytic/AnalyticReport/GetFilteredAnalyticReports','VR_Analytic_AnalyticReport: View'),
-('VR_Analytic/AnalyticReport/GetAnalyticReportConfigTypes',null),('VR_Analytic/DataAnalysisDefinition/GetFilteredDataAnalysisDefinitions','VR_Analytic_DataAnalysisDefinition: View'),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinition',null),('VR_Analytic/DataAnalysisDefinition/AddDataAnalysisDefinition','VR_Analytic_DataAnalysisDefinition: Add'),('VR_Analytic/DataAnalysisDefinition/UpdateDataAnalysisDefinition','VR_Analytic_DataAnalysisDefinition: Edit'),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinitionSettingsExtensionConfigs',null),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinitionsInfo',null)
+('VR_Analytic/AnalyticReport/GetAnalyticReportConfigTypes',null),('VR_Analytic/DataAnalysisDefinition/GetFilteredDataAnalysisDefinitions','VR_SystemConfiguration: View'),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinition',null),('VR_Analytic/DataAnalysisDefinition/AddDataAnalysisDefinition','VR_SystemConfiguration: Add'),('VR_Analytic/DataAnalysisDefinition/UpdateDataAnalysisDefinition','VR_SystemConfiguration: Edit'),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinitionSettingsExtensionConfigs',null),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinitionsInfo',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
