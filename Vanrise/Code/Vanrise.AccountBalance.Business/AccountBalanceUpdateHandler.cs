@@ -154,10 +154,10 @@ namespace Vanrise.AccountBalance.Business
                      {
                          CorrectLiveBalanceAndAccountUsage(liveBalanceToUpdates, accountUsageToUpdates, item.AccountId, transactionType, 0, item.CurrencyId, item, periodDate);
                      }
-                     if (liveBalanceToUpdates.Count > 0 || accountUsageToUpdates.Count > 0)
-                     {
-                         UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalanceToUpdates, accountUsageToUpdates, correctionProcessId);
-                     }
+                     // if (liveBalanceToUpdates.Count > 0 || accountUsageToUpdates.Count > 0)
+                     // {
+                            UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalanceToUpdates, accountUsageToUpdates, correctionProcessId);
+                     // }
                  }
                 
             }
