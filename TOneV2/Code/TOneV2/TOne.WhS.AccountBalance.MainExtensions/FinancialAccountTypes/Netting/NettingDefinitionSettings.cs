@@ -21,11 +21,5 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.Netting
         public Guid CustomerUsageTransactionTypeId { get; set; }
 
         public Guid SupplierUsageTransactionTypeId { get; set; }
-
-
-        public override List<Guid> GetUsageTransactionTypes(IGetUsageTransactionTypesContext context)
-        {
-            return new List<Guid>() { this.CustomerUsageTransactionTypeId, this.SupplierUsageTransactionTypeId };
-        }
     }
 }

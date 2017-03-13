@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using TOne.WhS.AccountBalance.Business;
 using TOne.WhS.AccountBalance.Entities;
 using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
 {
@@ -23,8 +26,9 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
                 Decimal? saleAmount = mainCDR.SaleNet;
                 if (saleAmount.HasValue && saleAmount.Value > 0)
                 {
+                    int? saleCurrencyId = mainCDR.SaleCurrencyId;
                     CarrierFinancialAccountData customerFinancialAccountData = null;
-                    if (s_financialAccountManager.TryGetCustAccFinancialAccountData(customerId.Value, attemptTime, out customerFinancialAccountData))
+                    if (saleCurrencyId.HasValue && s_financialAccountManager.TryGetCustAccFinancialAccountData(customerId.Value, attemptTime, out customerFinancialAccountData))
                     {
                         context.SubmitBalanceUpdate(new BalanceUpdatePayload
                         {
@@ -33,7 +37,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
                             AccountId = customerFinancialAccountData.FinancialAccountId.ToString(),
                             Amount = saleAmount.Value,
                             EffectiveOn = attemptTime,
-                            CurrencyId = mainCDR.SaleCurrencyId.Value
+                            CurrencyId = saleCurrencyId.Value
                         });
                     }
                 }
@@ -45,8 +49,9 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
                 Decimal? costAmount = mainCDR.CostNet;
                 if (costAmount.HasValue && costAmount.Value > 0)
                 {
+                    int? costCurrencyId = mainCDR.CostCurrencyId;
                     CarrierFinancialAccountData supplierFinancialAccountData = null;
-                    if (s_financialAccountManager.TryGetSuppAccFinancialAccountData(supplierId.Value, attemptTime, out supplierFinancialAccountData))
+                    if (costCurrencyId.HasValue && s_financialAccountManager.TryGetSuppAccFinancialAccountData(supplierId.Value, attemptTime, out supplierFinancialAccountData))
                     {
                         context.SubmitBalanceUpdate(new BalanceUpdatePayload
                         {
@@ -55,7 +60,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
                             AccountId = supplierFinancialAccountData.FinancialAccountId.ToString(),
                             Amount = costAmount.Value,
                             EffectiveOn = attemptTime,
-                            CurrencyId = mainCDR.CostCurrencyId.Value
+                            CurrencyId = costCurrencyId.Value
                         });
                     }
                 }
@@ -64,31 +69,74 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
 
         protected override void FinalizeEmptyBatches(IFinalizeEmptyBatchesContext context)
         {
-            AccountTypeFilter accountTypeFilter = new AccountTypeFilter()
-            {
-                Filters = new List<IAccountTypeExtendedSettingsFilter>()
-                {
-                    new AccountTypeExtendedSettingsFilter<AccountBalanceSettings>()
-                }
-            };
+            IEnumerable<AccountBalanceType> unFinalizedAccountBalanceTypes;
+            List<AccountBalanceType> finalizedAccountBalanceTypes = context.FinalizedAccountBalanceTypes;
+            List<AccountBalanceType> allAccountBalanceTypeCombinations = this.GetCachedAccountBalanceTypeCombinations();
 
-            var accountTypes = new AccountTypeManager().GetAccountTypes(accountTypeFilter);
-            if (accountTypes != null)
-            {
-                foreach (var accountType in accountTypes)
-                {
-                    var accountBalanceSettings = accountType.Settings.ExtendedSettings as AccountBalanceSettings;
-                    var usageTransactionTypeIds = accountBalanceSettings.GetUsageTransactionTypes(new GetUsageTransactionTypesContext());
-                    if (usageTransactionTypeIds == null)
-                        throw new NullReferenceException(string.Format("usageTransactionTypeIds of accountTypeId {0}", accountType.VRComponentTypeId));
+            if (finalizedAccountBalanceTypes == null || finalizedAccountBalanceTypes.Count == 0)
+                unFinalizedAccountBalanceTypes = allAccountBalanceTypeCombinations;
+            else
+                unFinalizedAccountBalanceTypes = allAccountBalanceTypeCombinations.FindAllRecords(itm => !finalizedAccountBalanceTypes.Contains(itm));
 
-                    foreach (var usageTransactionTypeId in usageTransactionTypeIds)
-                    {
-                        AccountBalanceType accountBalanceType = new AccountBalanceType() { AccountTypeId = accountType.VRComponentTypeId, TransactionTypeId = usageTransactionTypeId };
-                        context.GenerateEmptyBatch(accountBalanceType);
-                    }
+            if (unFinalizedAccountBalanceTypes != null)
+            {
+                foreach (var unFinalizedAccountBalanceType in unFinalizedAccountBalanceTypes)
+                {
+                    AccountBalanceType accountBalanceType = new AccountBalanceType() { AccountTypeId = unFinalizedAccountBalanceType.AccountTypeId, TransactionTypeId = unFinalizedAccountBalanceType.TransactionTypeId };
+                    context.GenerateEmptyBatch(accountBalanceType);
                 }
             }
         }
+
+        private List<AccountBalanceType> GetCachedAccountBalanceTypeCombinations()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountBalanceTypeCombinations",
+            () =>
+            {
+                List<AccountBalanceType> accountBalanceTypeCombinations = new List<AccountBalanceType>();
+
+                AccountTypeFilter accountTypeFilter = new AccountTypeFilter()
+                {
+                    Filters = new List<IAccountTypeExtendedSettingsFilter>()
+                        {
+                            new AccountTypeExtendedSettingsFilter<AccountBalanceSettings>()
+                        }
+                };
+
+                IEnumerable<AccountType> accountTypes = new AccountTypeManager().GetAccountTypes(accountTypeFilter);
+                if (accountTypes == null)
+                    throw new NullReferenceException("accountTypes");
+
+                IEnumerable<BillingTransactionType> billingTransactionTypes = new BillingTransactionTypeManager().GetBillingTransactionTypes();
+                if (billingTransactionTypes == null)
+                    throw new NullReferenceException("billingTransactionTypes");
+
+                foreach (var accountType in accountTypes)
+                {
+                    foreach (var billingTransactionType in billingTransactionTypes)
+                    {
+                        accountBalanceTypeCombinations.Add(new AccountBalanceType()
+                        {
+                            AccountTypeId = accountType.VRComponentTypeId,
+                            TransactionTypeId = billingTransactionType.BillingTransactionTypeId
+                        });
+                    }
+                }
+
+                return accountBalanceTypeCombinations;
+            });
+        }
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            protected override bool IsTimeExpirable
+            {
+                get { return true; }
+            }
+        }
+
+        #endregion
     }
 }

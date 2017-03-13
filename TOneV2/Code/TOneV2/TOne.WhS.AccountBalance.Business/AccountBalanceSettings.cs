@@ -18,8 +18,6 @@ namespace TOne.WhS.AccountBalance.Business
 
         public virtual string RuntimeEditor { get; set; }
 
-        public override IAccountManager GetAccountManager() { return new AccountBalanceManager(); }
-
-        public abstract List<Guid> GetUsageTransactionTypes(IGetUsageTransactionTypesContext context);        
+        public override IAccountManager GetAccountManager() { return new AccountBalanceManager(); } 
     }
 }

@@ -19,11 +19,5 @@ namespace TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierP
         public override string RuntimeEditor { get { return "whs-accountbalance-runtime-supplierprepaid"; } }
 
         public Guid UsageTransactionTypeId { get; set; }
-
-
-        public override List<Guid> GetUsageTransactionTypes(IGetUsageTransactionTypesContext context)
-        {
-            return new List<Guid>() { this.UsageTransactionTypeId };
-        }
     }
 }

@@ -1506,3 +1506,23 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[MessageTypeID],[Settings])
 	values(s.[ID],s.[Name],s.[MessageTypeID],s.[Settings]);
+
+--[queue].[QueueActivatorConfig]--------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [queue].[QueueActivatorConfig] on;
+;with cte_data([ID],[Name],[Details])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(7,'Update WhS Balances Queue Activator','{"QueueActivatorConfigId": "7" ,"Name": "Update WhS Balances Queue Activator","Title": "Update WhS Balances Queue Activator", "Editor" :"whs-accountbalance-queueactivator-updatewhsbalances"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Details]))
+merge	[queue].[QueueActivatorConfig] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Details] = s.[Details]
+when not matched by target then
+	insert([ID],[Name],[Details])
+	values(s.[ID],s.[Name],s.[Details]);
