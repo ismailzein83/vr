@@ -44,20 +44,20 @@ namespace Vanrise.Analytic.Business
                });
         }
 
-        public T GetDataAnalysisItemDefinitionSettings<T>(Guid dataAnalysisDefinitionId) where T : DataAnalysisItemDefinitionSettings
+        public T GetDataAnalysisItemDefinitionSettings<T>(Guid dataAnalysisItemDefinitionId) where T : DataAnalysisItemDefinitionSettings
         {
-            DataAnalysisItemDefinition dataAnalysisItemDefinition = GetDataAnalysisItemDefinition(dataAnalysisDefinitionId);
+            DataAnalysisItemDefinition dataAnalysisItemDefinition = GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
             if (dataAnalysisItemDefinition == null)
-                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition. OutputItemDefinitionId: {0}", dataAnalysisDefinitionId));
+                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition. OutputItemDefinitionId: {0}", dataAnalysisItemDefinitionId));
 
             if (dataAnalysisItemDefinition.Settings == null)
-                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition.Settings. OutputItemDefinitionId: {0}", dataAnalysisDefinitionId));
+                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition.Settings. OutputItemDefinitionId: {0}", dataAnalysisItemDefinitionId));
 
-            T daProfCalcOutputSettings = dataAnalysisItemDefinition.Settings as T;
-            if (daProfCalcOutputSettings == null)
+            T settings = dataAnalysisItemDefinition.Settings as T;
+            if (settings == null)
                 throw new Exception(String.Format("dataAnalysisItemDefinition.Settings is not of type {0}. it is of type {1}", typeof(T), dataAnalysisItemDefinition.Settings.GetType()));
 
-            return daProfCalcOutputSettings;
+            return settings;
         }
 
         public IDataRetrievalResult<DataAnalysisItemDefinitionDetail> GetFilteredDataAnalysisItemDefinitions(DataRetrievalInput<DataAnalysisItemDefinitionQuery> input)

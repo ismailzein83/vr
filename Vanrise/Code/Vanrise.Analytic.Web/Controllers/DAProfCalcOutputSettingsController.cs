@@ -22,5 +22,11 @@ namespace Vanrise.Analytic.Web.Controllers
             return _manager.GetOutputFields(dataAnalysisItemDefinitionId);
         }
 
+        [HttpGet]
+        [Route("GetInputFields")]
+        public List<DataRecordField> GetInputFields(Guid dataAnalysisDefinitionId)
+        {
+            return _manager.GetInputFields(dataAnalysisDefinitionId);
+        }
     }
 }

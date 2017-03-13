@@ -13,11 +13,17 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetOutputFields'), {
                 dataAnalysisItemDefinitionId: dataAnalysisItemDefinitionId
             });
-        }
+        };
 
+        function GetInputFields(dataAnalysisDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetInputFields'), {
+                dataAnalysisDefinitionId: dataAnalysisDefinitionId
+            });
+        };
 
         return ({
             GetOutputFields: GetOutputFields,
+            GetInputFields: GetInputFields
         });
     }
 

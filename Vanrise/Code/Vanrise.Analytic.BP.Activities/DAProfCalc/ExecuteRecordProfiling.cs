@@ -10,8 +10,8 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions;
 using Vanrise.Common.Business;
-using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 {
@@ -20,13 +20,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
     public class ExecuteRecordProfilingInput
     {
         public Guid DAProfCalcDefinitionId { get; set; }
-
         public List<DAProfCalcExecInputDetail> DAProfCalcExecInputDetails { get; set; }
-
         public BaseQueue<RecordBatch> InputQueue { get; set; }
-
         public List<BaseQueue<DAProfCalcOutputRecordBatch>> OutputQueues { get; set; }
-
         public IDAProfCalcOutputRecordProcessor OutputRecordProcessor { get; set; }
     }
 
@@ -56,7 +52,11 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         protected override ExecuteRecordProfilingOutput DoWorkWithResult(ExecuteRecordProfilingInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
-            Guid daDataRecordTypeId = GetDADataRecordTypeId(inputArgument.DAProfCalcDefinitionId);
+
+            DataAnalysisDefinitionManager dataAnalysisDefinitionManager = new DataAnalysisDefinitionManager();
+            DAProfCalcSettings daProfCalcSettings = dataAnalysisDefinitionManager.GetDataAnalysisDefinitionSettings<DAProfCalcSettings>(inputArgument.DAProfCalcDefinitionId);
+
+            Guid daDataRecordTypeId = daProfCalcSettings.DataRecordTypeId;
 
             Dictionary<string, DataAnalysisInfo> dataAnalysisInfos = new Dictionary<string, DataAnalysisInfo>();
             Dictionary<Guid, RecordProfilingOutputSettings> daRecordProfilingOutputSettings = new Dictionary<Guid, RecordProfilingOutputSettings>();
@@ -65,6 +65,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             {
                 var outputItemDefinitionId = dAProfCalcExecInputItem.DAProfCalcExecInput.OutputItemDefinitionId;
                 var dataAnalysisUniqueName = dAProfCalcExecInputItem.DataAnalysisUniqueName;
+                var daProfCalcPayload = dAProfCalcExecInputItem.DAProfCalcExecInput.DAProfCalcPayload;
 
                 var dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(outputItemDefinitionId);
                 if (dataAnalysisItemDefinition == null)
@@ -76,10 +77,12 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
                 dataAnalysisInfos.Add(dataAnalysisUniqueName, new DataAnalysisInfo()
                 {
+                    DARecordFilterGroup = BuildDataAnalysisRecordFilter(daProfCalcPayload != null ? daProfCalcPayload.DataAnalysisRecordFilter : null, recordProfilingOutputSettings.RecordFilter),
                     DataAnalysisItemDefinition = dataAnalysisItemDefinition,
                     DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor })
                 });
             }
+            RecordFilterManager recordFilterManager = new RecordFilterManager();
 
             ExecuteRecordProfilingOutput output = new ExecuteRecordProfilingOutput();
             bool hasItem = false;
@@ -98,6 +101,13 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
                             foreach (dynamic cdr in recordBatch.Records)
                             {
+                                if (dataAnalysisInfo.Value.DARecordFilterGroup != null)
+                                {
+                                    DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, daDataRecordTypeId);
+                                    if (!recordFilterManager.IsFilterGroupMatch(dataAnalysisInfo.Value.DARecordFilterGroup, filterContext))
+                                        continue;
+                                }
+
                                 Dictionary<string, dynamic> groupingValues;
                                 string groupingKey = BuildGroupingKey(settings, cdr, out groupingValues);
                                 ProfilingDGItem profilingDGItem;
@@ -177,22 +187,6 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
             return recordProfilingOutputSettings;
         }
-        private Guid GetDADataRecordTypeId(Guid daProfCalcDefinitionId)
-        {
-            DataAnalysisDefinitionManager dataAnalysisDefinitionManager = new DataAnalysisDefinitionManager();
-            DataAnalysisDefinition dataAnalysisDefinition = dataAnalysisDefinitionManager.GetDataAnalysisDefinition(daProfCalcDefinitionId);
-            if (dataAnalysisDefinition == null)
-                throw new NullReferenceException(string.Format("dataAnalysisDefinition {0}", daProfCalcDefinitionId));
-
-            if (dataAnalysisDefinition.Settings == null)
-                throw new NullReferenceException(string.Format("dataAnalysisDefinition.Settings {0}", daProfCalcDefinitionId));
-
-            DAProfCalcSettings daProfCalcSettings = dataAnalysisDefinition.Settings as DAProfCalcSettings;
-            if (daProfCalcSettings == null)
-                throw new Exception(String.Format("dataAnalysisDefinition.Settings is not of type DAProfCalcSettings. It is of type '{0}'", dataAnalysisDefinition.Settings.GetType()));
-
-            return daProfCalcSettings.DataRecordTypeId;
-        }
 
         private string BuildGroupingKey(RecordProfilingOutputSettings settings, dynamic cdr, out Dictionary<string, dynamic> groupingValues)
         {
@@ -210,12 +204,27 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             return strBuilder.ToString();
         }
 
+        private RecordFilterGroup BuildDataAnalysisRecordFilter(RecordFilterGroup execInputDataRecordFilter, RecordFilterGroup dataAnlysisItemRecordFilter)
+        {
+            if (execInputDataRecordFilter == null)
+                return dataAnlysisItemRecordFilter;
+
+            if (dataAnlysisItemRecordFilter == null)
+                return execInputDataRecordFilter;
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup()
+            {
+                Filters = new List<RecordFilter>() { execInputDataRecordFilter, dataAnlysisItemRecordFilter },
+                LogicalOperator = RecordQueryLogicalOperator.And
+            };
+
+            return recordFilterGroup;
+        }
+
         private class DARecordAggregateEvaluationContext : IDARecordAggregateEvaluationContext
         {
             public Guid DataRecordTypeId { get; set; }
-
             public dynamic Record { get; set; }
-
             public DARecordAggregateState State { get; set; }
 
             public DARecordAggregateEvaluationContext(Guid dataRecordTypeId, dynamic record, DARecordAggregateState state)
@@ -233,10 +242,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 ProfilingDGItems = new Dictionary<string, ProfilingDGItem>();
             }
             public DataAnalysisItemDefinition DataAnalysisItemDefinition { get; set; }
-
             public DistributedDataGrouper DistributedDataGrouper { get; set; }
-
             public Dictionary<string, ProfilingDGItem> ProfilingDGItems { get; set; }
+            public RecordFilterGroup DARecordFilterGroup { get; set; }
         }
     }
 }

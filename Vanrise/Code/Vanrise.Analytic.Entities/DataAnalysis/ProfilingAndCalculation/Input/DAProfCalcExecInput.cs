@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -12,12 +13,10 @@ namespace Vanrise.Analytic.Entities
         public DAProfCalcExecPayload DAProfCalcPayload { get; set; }
     }
 
-
     public abstract class DAProfCalcExecPayload
     {
- 
+        public RecordFilterGroup DataAnalysisRecordFilter { get; set; }
     }
-
 
     public class DAProfCalcExecInputDetail
     {

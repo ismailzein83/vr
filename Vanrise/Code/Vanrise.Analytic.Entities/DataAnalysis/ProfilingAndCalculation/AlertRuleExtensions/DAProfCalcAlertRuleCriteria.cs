@@ -18,5 +18,7 @@ namespace Vanrise.Analytic.Entities
         public Guid DAProfCalcOutputItemDefinitionId { get; set; }
 
         public RecordFilterGroup FilterGroup { get; set; }
+
+        public RecordFilterGroup DataAnalysisFilterGroup { get; set; }
     }
 }

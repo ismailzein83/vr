@@ -63,7 +63,7 @@ namespace Vanrise.Analytic.Business
                             Actions = daProfCalcAlertRuleSettings.Actions,
                             AlertRuleId = alertRuleId,
                             AlertRuleTypeId = alertRule.RuleTypeId,
-                            Description = "This is the description",
+                            Description = string.Format("Alert Rule {0}, Data Analysis Item {1}", alertRule.Name, dataAnalysisItemDefinition.Name),
                             EventKey = outputRecord.GroupingKey,
                             EventPayload = new DataRecordAlertRuleActionEventPayload()
                             {

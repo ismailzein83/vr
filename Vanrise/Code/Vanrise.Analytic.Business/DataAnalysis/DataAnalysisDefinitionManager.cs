@@ -103,6 +103,21 @@ namespace Vanrise.Analytic.Business
             return this.GetCachedDataAnalysisDefinitions().MapRecords(DataAnalysisDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
+        public T GetDataAnalysisDefinitionSettings<T>(Guid dataAnalysisDefinitionId) where T : DataAnalysisDefinitionSettings
+        {
+            DataAnalysisDefinition dataAnalysisDefinition = GetDataAnalysisDefinition(dataAnalysisDefinitionId);
+            if (dataAnalysisDefinition == null)
+                throw new NullReferenceException(string.Format("dataAnalysisDefinition. DataAnalysisDefinitionId: {0}", dataAnalysisDefinitionId));
+
+            if (dataAnalysisDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("dataAnalysisDefinition.Settings. DataAnalysisDefinitionId: {0}", dataAnalysisDefinitionId));
+
+            T settings = dataAnalysisDefinition.Settings as T;
+            if (settings == null)
+                throw new Exception(String.Format("dataAnalysisDefinition.Settings is not of type {0}. it is of type {1}", typeof(T), dataAnalysisDefinition.Settings.GetType()));
+
+            return settings;
+        }
         #endregion
 
 
