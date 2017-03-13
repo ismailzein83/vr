@@ -349,7 +349,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CarrierProfileId });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Settings.Company });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Settings == null ? "" : record.Entity.Settings.Company });
                             row.Cells.Add(new ExportExcelCell() { Value = record.CountryName });
                             sheet.Rows.Add(row);
                         }
