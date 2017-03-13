@@ -182,6 +182,7 @@
     <Content Include="Security\Services\APIServices\WidgetDefinitionAPIService.js" />
     <Content Include="Security\Services\BusinessEntityDefinitionService.js" />
     <Content Include="Security\Services\BusinessEntityModuleService.js" />
+    <Content Include="Security\Services\CookieService.js" />
     <Content Include="Security\Services\MenuService.js" />
     <Content Include="Security\Services\RequiredPermissionService.js" />
     <Content Include="Security\Services\ModuleService.js" />

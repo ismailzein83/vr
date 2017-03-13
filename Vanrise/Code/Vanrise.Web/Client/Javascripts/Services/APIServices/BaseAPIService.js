@@ -9,7 +9,8 @@ app.config(['$httpProvider', function ($httpProvider) {
         };
     });
 }]);
-app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notify', 'DataRetrievalResultTypeEnum', '$injector', 'HttpStatusCodeEnum', 'UtilsService', function BaseAPIService($http, $q, $location,  $rootScope, notify, DataRetrievalResultTypeEnum, $injector, HttpStatusCodeEnum, UtilsService) {
+app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', '$rootScope', 'notify', 'DataRetrievalResultTypeEnum', '$injector', 'HttpStatusCodeEnum', 'UtilsService', 'VRModalService',
+    function BaseAPIService($http, $q, Sec_CookieService, $location, $rootScope, notify, DataRetrievalResultTypeEnum, $injector, HttpStatusCodeEnum, UtilsService, VRModalService) {
 
     var loginURL = '/Security/Login';
     var paymnetURL = '/Security/Payment';
@@ -26,21 +27,16 @@ app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notif
         }
     }
 
-    return ({
-        get: get,
-        post: post,
-        setLoginURL: setLoginURL
-    });
-
     function setLoginURL(value) {
         if (value != undefined && value != '')
             loginURL = value;
     }
 
+    var pendingWEBAPICallHandles = [];
 
-    function get(url, params, options) {
-        var deferred = $q.defer();
-
+    function get(url, params, options, originalDeferred) {
+        var deferred = originalDeferred != undefined ? originalDeferred : $q.defer();
+        var callHandle = createCallHandle();
         var urlParameters;
         if (params) 
             urlParameters = {
@@ -56,6 +52,7 @@ app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notif
         
         $http.get(url, urlParameters)
             .success(function (response, status, headers, config) {
+                removeCallHandle(callHandle);
                 var returnedResponse;
                 var headersTab = headers();
                 $rootScope.clock = UtilsService.dateToServerFormat(headersTab.serverdate);
@@ -72,28 +69,18 @@ app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notif
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
-                //if (status === 401)
-                //    redirectToLoginPage();
-               // checkHttpStatusCode(status);
-                if (!shouldRedirectTonAnotherPage(status)) {
-                    console.log('');
-                    console.log('Error Occured: ' + data.ExceptionMessage);
-                    console.log('');
-                    console.log(data);
-                    notify.closeAll();
-                    notify({ message: 'Error Occured while getting data!', classes: "alert alert-danger" });
-                    setTimeout(function () {
-                        notify.closeAll();
-                    }, 3000);
-                }
-               
-                deferred.reject(data);
+                var recallWebAPIFunction = function () {
+                    get(url, params, options, deferred);
+                };
+                handleAPIError(data, status, headers, config, deferred, callHandle, recallWebAPIFunction);
+                removeCallHandle(callHandle);
             });
         return deferred.promise;
     }
 
-    function post(url, dataToSend, options) {
-        var deferred = $q.defer();
+    function post(url, dataToSend, options, originalDeferred) {
+        var deferred = originalDeferred != undefined ? originalDeferred : $q.defer();
+        var callHandle = createCallHandle();
         var data;
         if (dataToSend)
             data = UtilsService.convertDatePropertiesToString(dataToSend);
@@ -114,6 +101,7 @@ app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notif
         };
         $http(req)
             .success(function (response, status, headers, config) {
+                removeCallHandle(callHandle);
                 var headersTab = headers();
                 $rootScope.clock = UtilsService.dateToServerFormat(headersTab.serverdate);
                 var returnedResponse;
@@ -130,30 +118,11 @@ app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notif
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
-              
-                //if (status === 401)
-                //    redirectToLoginPage();
-               // checkHttpStatusCode(status);
-                if (!shouldRedirectTonAnotherPage(status))
-                {
-                    console.log('');
-                    console.log('Error Occured: ' + data.ExceptionMessage);
-                    console.log('');
-                    console.log(data);
-                    notify.closeAll();
-
-                    var exceptionMessage = headers("ExceptionMessage");
-                    if (exceptionMessage != undefined) {
-                        showErrorMessage(exceptionMessage)
-                    } else {
-                        showErrorMessage('Error Occured while posting data!');
-                    }
-                    setTimeout(function () {
-                        notify.closeAll();
-                    }, 3000);
-                }
-
-                deferred.reject(data);
+                var recallWebAPIFunction = function () {
+                    post(url, dataToSend, options, deferred);
+                };
+                handleAPIError(data, status, headers, config, deferred, callHandle, recallWebAPIFunction);
+                removeCallHandle(callHandle);
             });
         return deferred.promise;
 
@@ -164,15 +133,116 @@ app.service('BaseAPIService', ['$http', '$q', '$location',  '$rootScope', 'notif
         notify({ message: message, classes: "alert alert-danger" });
     }
 
-    function shouldRedirectTonAnotherPage(status) {
+    function handleAPIError(data, status, headers, config, deferred, callHandle, recallWebAPIFunction) {
         if (HttpStatusCodeEnum.Unauthorized.value === status) {
-            redirectToLoginPage();
-            return true;
+            if (Sec_CookieService.isAccessCookieAvailable()) {
+                askForLoginPassword(callHandle).then(function () {
+                    recallWebAPIFunction();
+                }).catch(function () {
+                    redirectToLoginPage();
+                    deferred.reject(data);
+                });
+            }
+            else {
+                redirectToLoginPage();
+                deferred.reject(data);
+            }
         }
-        else if (HttpStatusCodeEnum.PaymentRequired.value === status) {
-            redirectToPaymentPage();
-            return true;
+        else {
+            if (HttpStatusCodeEnum.PaymentRequired.value === status) {
+                redirectToPaymentPage();
+            }
+            else {
+                console.log('');
+                console.log('Error Occured: ' + data.ExceptionMessage);
+                console.log('');
+                console.log(data);
+                notify.closeAll();
+
+                var exceptionMessage = headers("ExceptionMessage");
+                if (exceptionMessage != undefined) {
+                    showErrorMessage(exceptionMessage)
+                } else {
+                    showErrorMessage('Error Occured while posting data!');
+                }
+                setTimeout(function () {
+                    notify.closeAll();
+                }, 3000);
+            }
+
+            deferred.reject(data);
         }
-        return false;
     }
+
+    function createCallHandle() {
+        var callHandle = {};
+        pendingWEBAPICallHandles.push(callHandle);
+        if (isAskingForLoginPassword)
+            pendingCallsAfterLastAskForLogin.push(callHandle)
+        return callHandle;
+    }
+
+    function removeCallHandle(callHandle) {
+        pendingWEBAPICallHandles.splice(pendingWEBAPICallHandles.indexOf(callHandle), 1);
+        var indexInAfterLastAskForLogin = pendingCallsAfterLastAskForLogin.indexOf(callHandle);
+        if (indexInAfterLastAskForLogin >= 0)
+            pendingCallsAfterLastAskForLogin.splice(indexInAfterLastAskForLogin, 1);
+    }
+
+    var askForLoginPasswordDeferred;
+    var pendingCallsAfterLastAskForLogin = [];
+    var isAskingForLoginPassword;
+    function askForLoginPassword(callHandle) {
+        if (!isAskingForLoginPassword) {
+            if (pendingCallsAfterLastAskForLogin.length > 0) {
+                var quickDeferred = $q.defer();
+                var callHandleIndex = pendingCallsAfterLastAskForLogin.indexOf(callHandle);
+                if (callHandleIndex >= 0) {
+                    pendingCallsAfterLastAskForLogin.splice(callHandleIndex, 1);
+                    quickDeferred.resolve();
+                }
+                else {
+                    quickDeferred.reject();
+                }
+                return quickDeferred.promise;
+            }
+            else {
+                askForLoginPasswordDeferred = $q.defer();
+                for (var i = 0; i < pendingWEBAPICallHandles.length; i++) {
+                    pendingCallsAfterLastAskForLogin.push(pendingWEBAPICallHandles[i]);
+                }
+
+                var modalSettings = {};
+
+                modalSettings.onScopeReady = function (modalScope) {
+                    modalScope.onAuthenticated = function () {
+                        isAskingForLoginPassword = false;
+                        askForLoginPasswordDeferred.resolve();
+                        askForLoginPasswordDeferred = undefined;
+                    };
+                };
+
+                isAskingForLoginPassword = true;
+                VRModalService.showModal('/Client/Javascripts/Services/APIServices/ReenterPasswordModal.html', null, modalSettings).finally(
+                    function () {
+                        isAskingForLoginPassword = false;
+                        if (askForLoginPasswordDeferred != undefined) {
+                            askForLoginPasswordDeferred.reject();
+                            askForLoginPasswordDeferred = undefined;
+                        }
+                });
+
+            }
+        }
+        pendingCallsAfterLastAskForLogin.splice(pendingCallsAfterLastAskForLogin.indexOf(callHandle), 1);
+        return askForLoginPasswordDeferred.promise;
+    }
+
+
+    return ({
+        get: get,
+        post: post,
+        setLoginURL: setLoginURL
+    });
+
 }]);

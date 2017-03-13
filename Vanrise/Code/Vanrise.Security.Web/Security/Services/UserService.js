@@ -11,7 +11,6 @@
             editUser: editUser,
             resetPassword: resetPassword,
             resetAuthServerPassword: resetAuthServerPassword,
-            activatePassword: activatePassword,
             forgotPassword: forgotPassword,
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToUser: registerObjectTrackingDrillDownToUser,
@@ -68,24 +67,7 @@
                     }
                 });
         }
-
-
-
-        function activatePassword(email, userObj, tempPassword, onPasswordActivated) {
-            var modalParameters = {
-                email: email,
-                userObj: userObj,
-                tempPassword: tempPassword
-            };
-
-            var modalSettings = {};
-            modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onPasswordActivated = onPasswordActivated;
-            };
-
-            VRModalService.showModal('/Client/Modules/Security/Views/User/ActivatePasswordEditor.html', modalParameters, modalSettings);
-        }
-
+        
         function forgotPassword(email) {
             var modalParameters = {
                 email: email

@@ -1,8 +1,55 @@
 ﻿'use strict';
 
-app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_PermissionFlagEnum', '$cookies', 'VR_Sec_SecurityAPIService', function ($rootScope, UtilsService, VR_Sec_PermissionFlagEnum, $cookies, VR_Sec_SecurityAPIService) {
+app.service('SecurityService', ['$rootScope', 'Sec_CookieService', 'UtilsService', 'VR_Sec_PermissionFlagEnum', '$cookies', 'VR_Sec_SecurityAPIService', '$q', 'VRNotificationService', 'VRModalService',
+function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum, $cookies, VR_Sec_SecurityAPIService,  $q, VRNotificationService, VRModalService) {
 
-   
+    function authenticate(email, password, reloginAfterPasswordActivation) {
+        var deferred = $q.defer();
+        var credentialsObject = {
+            Email: email,
+            Password: password
+        };
+        VR_Sec_SecurityAPIService.Authenticate(credentialsObject).then(function (response) {
+            if (VRNotificationService.notifyOnUserAuthenticated(response, onValidationNeeded)) {
+
+                var userInfo = JSON.stringify(response.AuthenticationObject);
+                Sec_CookieService.createAccessCookie(userInfo);
+                deferred.resolve();
+            }
+            else {
+                deferred.reject();
+            }
+        }).catch(function () {
+            deferred.reject();
+        });
+
+
+        function onValidationNeeded(userObj) {
+            var onPasswordActivated = function (passwordAfterActivation) {
+                if (reloginAfterPasswordActivation != undefined)
+                    reloginAfterPasswordActivation(passwordAfterActivation);
+            };
+            activatePassword(email, userObj, password, onPasswordActivated);
+        }
+
+
+        return deferred.promise;
+    }
+
+    function activatePassword(email, userObj, tempPassword, onPasswordActivated) {
+        var modalParameters = {
+            email: email,
+            userObj: userObj,
+            tempPassword: tempPassword
+        };
+
+        var modalSettings = {};
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.onPasswordActivated = onPasswordActivated;
+        };
+
+        VRModalService.showModal('/Client/Modules/Security/Views/User/ActivatePasswordEditor.html', modalParameters, modalSettings);
+    }
 
     function IsAllowed(requiredPermissions) {
         return VR_Sec_SecurityAPIService.IsAllowed(requiredPermissions);
@@ -10,7 +57,7 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
 
     function HasPermissionToActions(systemActionNames) {
         var dummyPromise = UtilsService.createPromiseDeferred();
-        if (getUserToken() && location.pathname != '' &&  location.pathname.indexOf('/Security/Login') < 0) {
+        if (Sec_CookieService.getUserToken() && location.pathname != '' && location.pathname.indexOf('/Security/Login') < 0) {
             return VR_Sec_SecurityAPIService.HasPermissionToActions(systemActionNames);
 
         }
@@ -27,7 +74,7 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
         var requiredPermissions = [];
 
         angular.forEach(arrayOfPermissions, function (perm) {
-            
+
             var keyValuesArray = perm.split(':');
 
             var flags = [];
@@ -41,14 +88,13 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
                 requiredFlags: flags
             };
 
-            requiredPermissions.push(singlePermission);            
+            requiredPermissions.push(singlePermission);
         });
 
         var result = true;
 
         //TODO: no need for this check and should be removed when the problem of synchronization is solved
-        if ($rootScope.effectivePermissionsWrapper != undefined)
-        {
+        if ($rootScope.effectivePermissionsWrapper != undefined) {
             for (var i = 0; i < requiredPermissions.length; i++) {
                 var allowedFlags = [];
                 result = checkPermissions(requiredPermissions[i].requiredPath, requiredPermissions[i].requiredFlags,
@@ -65,25 +111,20 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
         var result = true;
 
         var effectivePermissionFlag = UtilsService.getItemByVal(effectivePermissions, requiredPath, 'PermissionPath');
-        if(effectivePermissionFlag != null)
-        {
+        if (effectivePermissionFlag != null) {
             var fullControlFlag = UtilsService.getItemByVal(effectivePermissionFlag.PermissionFlags, 'Full Control', 'FlagName');
-            if (fullControlFlag != null)
-            {
+            if (fullControlFlag != null) {
                 if (fullControlFlag.FlagValue === VR_Sec_PermissionFlagEnum.Deny.value) {
                     return false;
                 }
-                else
-                {
+                else {
                     angular.forEach(requiredFlags, function (flag) {
                         allowedFlags.push(flag);
                     });
                 }
             }
-            else
-            {
-                for (var i = 0; i < requiredFlags.length; i++)
-                {
+            else {
+                for (var i = 0; i < requiredFlags.length; i++) {
                     var effectiveFlag = UtilsService.getItemByVal(effectivePermissionFlag.PermissionFlags, requiredFlags[i], 'FlagName');
                     if (effectiveFlag != null) {
                         if (effectiveFlag.FlagValue === VR_Sec_PermissionFlagEnum.Deny.value)
@@ -101,8 +142,7 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
             result = checkPermissions(oneLevelUp, requiredFlags, effectivePermissions, breakInheritanceEntities, allowedFlags);
         }
         else {
-            for(var j=0; j < requiredFlags.length; j++)
-            {
+            for (var j = 0; j < requiredFlags.length; j++) {
                 if (!UtilsService.contains(allowedFlags, requiredFlags[j]))
                     return false;
             }
@@ -111,33 +151,13 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
         return result;
     }
 
-    function createAccessCookie(userInfo) {      
-        $cookies.put(getAccessCookieName(), userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
-    }
-
-    function getAccessCookie() {
-        return $cookies.get(getAccessCookieName());
-    }
-
-    function getAccessCookieName() {
-        return cookieName;
-    }
-
-    var cookieName = 'Vanrise_AccessCookie-' + location.origin;
-    function setAccessCookieName(value) {
-        if (value != undefined && value != '')
-            cookieName = value;
-    }
-
     var loginURL = '/Security/Login';
-    function setLoginURL(value)
-    {
+    function setLoginURL(value) {
         if (value != undefined && value != '')
             loginURL = value;
     }
 
-    function redirectToLoginPage(withoutAutoRedirect)
-    {
+    function redirectToLoginPage(withoutAutoRedirect) {
         if (location.pathname.indexOf('/Security/Login') < 0) {
             var url = loginURL;
             if (!withoutAutoRedirect)
@@ -146,35 +166,16 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
         }
     }
 
-    function getLoggedInUserInfo() {
-        var accessCookie = getAccessCookie();
-        if (accessCookie != undefined)
-            return JSON.parse(accessCookie);
-        else
-            return undefined;
-    }
-
-    function getUserToken() {
-        var accessCookie = getAccessCookie();
-        if (accessCookie != undefined)
-            return JSON.parse(accessCookie).Token;
-        else
-            return undefined;
-    }
-
-    function deleteAccessCookie() {
-        $cookies.remove(getAccessCookieName());
-    }
-
     return ({
+        authenticate: authenticate,
         isAllowed: isAllowed,
-        createAccessCookie: createAccessCookie,
-        deleteAccessCookie: deleteAccessCookie,
-        getLoggedInUserInfo: getLoggedInUserInfo,
-        getUserToken: getUserToken,
+        createAccessCookie: Sec_CookieService.createAccessCookie,
+        deleteAccessCookie: Sec_CookieService.deleteAccessCookie,
+        getLoggedInUserInfo: Sec_CookieService.getLoggedInUserInfo,
+        getUserToken: Sec_CookieService.getUserToken,
         IsAllowed: IsAllowed,
         HasPermissionToActions: HasPermissionToActions,
-        setAccessCookieName: setAccessCookieName,
+        setAccessCookieName: Sec_CookieService.setAccessCookieName,
         setLoginURL: setLoginURL,
         redirectToLoginPage: redirectToLoginPage
     });

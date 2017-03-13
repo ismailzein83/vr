@@ -21,41 +21,20 @@
         }
 
         function login() {
-            var credentialsObject = {
-                Email: $scope.email,
-                Password: $scope.password
-            };
-            return authenticate(credentialsObject);
-        }
-
-        function onValidationNeeded(userObj) {
-            var onPasswordActivated = function (password) {
-                var credentialsObject = {
-                    Email: $scope.email,
-                    Password: password
-                };
-
-                authenticate(credentialsObject);
-            };
-            VR_Sec_UserService.activatePassword($scope.email, userObj, $scope.password, onPasswordActivated);
-        }
-
-        function authenticate(credentialsObject) {
-            return VR_Sec_SecurityAPIService.Authenticate(credentialsObject).then(function (response) {
-                if (VRNotificationService.notifyOnUserAuthenticated(response, onValidationNeeded)) {
-
-                    var userInfo = JSON.stringify(response.AuthenticationObject);
-                    SecurityService.createAccessCookie(userInfo);
-                      UISettingsService.loadUISettings().then(function () {
-                          if ($scope.redirectURL != undefined && $scope.redirectURL != '' && $scope.redirectURL.indexOf('default') ==-1 &&  $scope.redirectURL.indexOf('#') >-1) {
-                                window.location.href = $scope.redirectURL;
-                            }
-                            else if (UISettingsService.getDefaultPageURl() != undefined)
-                                window.location.href = UISettingsService.getDefaultPageURl();
-                            else
-                                window.location.href = '/';
-                      });
-                }
+            var reloginAfterPasswordActivation = function (passwordAfterActivation) {
+                $scope.password = passwordAfterActivation;
+                login();
+            }
+            return SecurityService.authenticate($scope.email, $scope.password, reloginAfterPasswordActivation).then(function () {
+                UISettingsService.loadUISettings().then(function () {
+                    if ($scope.redirectURL != undefined && $scope.redirectURL != '' && $scope.redirectURL.indexOf('default') == -1 && $scope.redirectURL.indexOf('#') > -1) {
+                        window.location.href = $scope.redirectURL;
+                    }
+                    else if (UISettingsService.getDefaultPageURl() != undefined)
+                        window.location.href = UISettingsService.getDefaultPageURl();
+                    else
+                        window.location.href = '/';
+                });
             });
         }
     }
