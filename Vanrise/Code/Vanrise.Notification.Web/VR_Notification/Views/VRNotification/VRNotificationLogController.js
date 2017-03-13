@@ -46,7 +46,7 @@
 
             $scope.scopeModel.searchClicked = function () {
                 var query = buildQuery();
-                console.log(query);
+             
                 bodyDirectiveAPI.load(query);
             };
         }
@@ -79,7 +79,7 @@
                         }]
                     }
                 }
-                console.log(selectorPayload);
+              
                 VRUIUtilsService.callDirectiveLoad(vrNotificationTypeSettingsSelectorAPI, selectorPayload, selectorLoadDeferred);
             });
 
