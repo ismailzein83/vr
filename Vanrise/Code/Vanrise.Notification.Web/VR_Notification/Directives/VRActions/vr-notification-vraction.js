@@ -112,7 +112,7 @@
 
                         data = directiveAPI.getData();
                         if (data != undefined) {
-                            data.Settings.DefinitionId = $scope.scopeModel.selectedTemplateConfig.VRActionDefinitionId;
+                            data.DefinitionId = $scope.scopeModel.selectedTemplateConfig.VRActionDefinitionId;
                         }
                     }
                     return data;
@@ -131,7 +131,7 @@
                         }
 
                         if (vrActionEntity != undefined) {
-                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrActionEntity.Settings.DefinitionId, 'VRActionDefinitionId');
+                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, vrActionEntity.DefinitionId, 'VRActionDefinitionId');
                         }
                     }
                 });
@@ -142,7 +142,7 @@
 
                 var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                VR_Notification_VRActionDefinitionAPIService.GetVRActionDefinition(vrActionEntity.Settings.DefinitionId).then(function (response) {
+                VR_Notification_VRActionDefinitionAPIService.GetVRActionDefinition(vrActionEntity.DefinitionId).then(function (response) {
                     directiveReadyDeferred.promise.then(function () {
                         directiveReadyDeferred = undefined;
                         var directivePayload = { context: getContext(), vrActionEntity: vrActionEntity, selectedVRActionDefinition: response };

@@ -19,8 +19,7 @@ namespace Vanrise.Notification.Entities
         {
             return false;
         }
-
-        public VRActionSettings Settings { get; set; }
+        public Guid DefinitionId { get; set; }
     }
 
     public interface IVRActionExecutionContext

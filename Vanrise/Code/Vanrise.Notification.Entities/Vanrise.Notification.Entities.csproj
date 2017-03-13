@@ -71,7 +71,6 @@
     <Compile Include="VRAction\VRActionDefinition.cs" />
     <Compile Include="VRAction\VRActionDefinitionInfo.cs" />
     <Compile Include="VRAction\VRActionDefinitionSettings.cs" />
-    <Compile Include="VRAction\VRActionSettings.cs" />
     <Compile Include="VRAction\VRActionTargetType.cs" />
     <Compile Include="VRAlertRuleType\IVRAlertRuleTypeFilter.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeConfig.cs" />

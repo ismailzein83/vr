@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="DataRecord\DataRecordActionTargetType.cs" />
     <Compile Include="DataRecord\DataRecordSendEmailDefinitionSettings.cs" />
-    <Compile Include="DataRecord\DataRecordSendEmailExtendedSettings.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleActionEventPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
