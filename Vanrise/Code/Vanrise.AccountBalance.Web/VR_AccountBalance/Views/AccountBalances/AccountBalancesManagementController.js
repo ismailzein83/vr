@@ -87,7 +87,7 @@
                         }]
                     },
                     selectfirstitem: true
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(accountTypeAPI, payLoad, loadAccountTypeSelectorPromiseDeferred);
             });
             return loadAccountTypeSelectorPromiseDeferred.promise.then(function () {

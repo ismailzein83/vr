@@ -47,7 +47,7 @@
             $scope.scopeModel.onAccountDirectiveReady = function (api) {
                 accountDirectiveAPI = api;
                 accountDirectiveReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return  insertBillingTransaction();
             };
@@ -110,7 +110,7 @@
                             $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
                         }]
                     }
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, payload, loadTransactionTypePromiseDeferred);
             });
             return loadTransactionTypePromiseDeferred.promise;

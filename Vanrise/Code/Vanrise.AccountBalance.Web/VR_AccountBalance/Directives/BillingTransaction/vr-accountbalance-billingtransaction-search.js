@@ -64,7 +64,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 var payload = {
                     query: getFilterObject(),
                     showAccount: false,
-                }
+                };
                 return gridAPI.loadGrid(payload).then(function () {
                     load();
                 });
@@ -74,7 +74,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     gridAPI.onBillingTransactionAdded(obj);
                 };
                 VR_AccountBalance_BillingTransactionService.addBillingTransaction(accountsIds[0], accountTypeId, onBillingTransacationAdded)
-            }
+            };
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.fromTime, $scope.toTime);
             };
@@ -83,7 +83,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 var payload = {
                     query: getFilterObject(),
                     showAccount: false,
-                }
+                };
                 gridAPI.loadGrid(payload);
             };
         }
@@ -98,7 +98,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
             }).finally(function () {
                 $scope.isLoading = false;
-            })
+            });
         }
         function getFilterObject() {
             var filter = {

@@ -78,7 +78,7 @@
                             ViewId: viewId
                         }]
                     }
-                }
+                };
               
                 VRUIUtilsService.callDirectiveLoad(vrNotificationTypeSettingsSelectorAPI, selectorPayload, selectorLoadDeferred);
             });

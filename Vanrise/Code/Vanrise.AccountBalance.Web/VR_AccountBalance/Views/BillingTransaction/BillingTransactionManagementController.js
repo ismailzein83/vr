@@ -63,7 +63,7 @@
             $scope.scopeModel.searchClicked = function (api) {
                 var payload = {
                     query: getFilterObject()
-                }
+                };
                 return gridAPI.loadGrid(payload);
             };
             $scope.validateDateTime = function () {
@@ -112,7 +112,7 @@
                         }]
                     },
                     selectfirstitem: true
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(accountTypeAPI, payLoad, loadAccountTypeSelectorPromiseDeferred);
             });
             return loadAccountTypeSelectorPromiseDeferred.promise.then(function () {

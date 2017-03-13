@@ -53,7 +53,7 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                 $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
                     criteriaDirectiveAPI = api;
                     criteriaDirectiveReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onObjectDirectiveReady = function (api) {
                     objectDirectiveAPI = api;
@@ -85,7 +85,7 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                     }).finally(function () {
                         $scope.isLoading = false;
                     });
-                }
+                };
 
                 api.getData = function () {
                     return {
@@ -96,7 +96,7 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                         ThresholdExtensionType: $scope.scopeModel.thresholdExtensionType,
                         VRActionExtensionType: $scope.scopeModel.actionExtensionType
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

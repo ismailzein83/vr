@@ -66,7 +66,7 @@
                     var promises = [];
 
                     var accountTypeId;
-                    var transactionTypeId
+                    var transactionTypeId;
                     var accountId;
                     var effectiveOn;
                     var amount;
@@ -147,7 +147,7 @@
                         ];
 
                         for (var index = 0; index < $scope.scopeModel.dataRecordFields.length; index++) {
-                            var currentItem = $scope.scopeModel.dataRecordFields[index]
+                            var currentItem = $scope.scopeModel.dataRecordFields[index];
                             extendDataRecordFieldObject(currentItem);
                             promises.push(currentItem.dataRecordFieldSelectorLoadDeferred.promise);
                         }
