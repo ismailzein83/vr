@@ -11,6 +11,11 @@ namespace Vanrise.AccountBalance.Business
     {
         #region Public Methods
 
+        public IEnumerable<BillingTransactionType> GetBillingTransactionTypes()
+        {
+            return this.GetCachedBillingTransactionTypes().Values;
+        }
+
         public BillingTransactionType GetBillingTransactionType(Guid billingTransactionTypeId)
         {
             Dictionary<Guid, BillingTransactionType> cachedBillingTransactionTypes = this.GetCachedBillingTransactionTypes();

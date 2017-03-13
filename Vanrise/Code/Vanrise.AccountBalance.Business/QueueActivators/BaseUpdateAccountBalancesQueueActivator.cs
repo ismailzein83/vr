@@ -73,7 +73,6 @@ namespace Vanrise.AccountBalance.Business
 
             foreach (var record in batchRecords)
             {
-
                 var convertToAccountBalanceContext = new ConvertToBalanceUpdateContext(submitBalanceUpdate) { Record = record };
                 ConvertToBalanceUpdate(convertToAccountBalanceContext);
             }
@@ -184,6 +183,7 @@ namespace Vanrise.AccountBalance.Business
                 runningTasks.Add(applyDataTask);
             }
 
+            //Finalized CorrectUsageBalanceItems
             if (finalizedCorrectUsageBalanceItemByTypeByBatchStart.Count > 0)
             {
                 foreach (var correctUsageBalanceItemByType in finalizedCorrectUsageBalanceItemByTypeByBatchStart)
@@ -202,28 +202,9 @@ namespace Vanrise.AccountBalance.Business
 
             if (stageBatchRecord.IsEmptyBatch)
             {
-                UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
-
-                FinalizeEmptyBatchesContext finalizeEmptyBatchesContext = new FinalizeEmptyBatchesContext((accountBalanceType) =>
-                {
-                    DateTime currentBatchStart = stageBatchRecord.BatchStart;
-                    do
-                    {
-                        Guid correctionProcessId = usageBalanceManager.InitializeUpdateUsageBalance();
-
-                        CorrectUsageBalancePayload correctUsageBalancePayload = new CorrectUsageBalancePayload()
-                        {
-                            CorrectUsageBalanceItems = null,
-                            PeriodDate = currentBatchStart,
-                            CorrectionProcessId = correctionProcessId,
-                            IsLastBatch = true,
-                            TransactionTypeId = accountBalanceType.TransactionTypeId
-                        };
-                        usageBalanceManager.CorrectUsageBalance(accountBalanceType.AccountTypeId, correctUsageBalancePayload);
-                        currentBatchStart = currentBatchStart.AddDays(1);
-                    } while (currentBatchStart < stageBatchRecord.BatchEnd);
-                });
-
+                //Finalizing EmptyBatches
+                FinalizeEmptyBatchesContext finalizeEmptyBatchesContext =
+                    new FinalizeEmptyBatchesContext((accountBalanceType) => { GenerateEmptyBatch(accountBalanceType, stageBatchRecord.BatchStart, stageBatchRecord.BatchEnd); }, null);
                 FinalizeEmptyBatches(finalizeEmptyBatchesContext);
             }
             else
@@ -244,7 +225,7 @@ namespace Vanrise.AccountBalance.Business
 
         protected abstract void FinalizeEmptyBatches(IFinalizeEmptyBatchesContext context);
 
-        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<CorrectUsageBalanceItemByType> queueLoadedBatches,
+        private void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<CorrectUsageBalanceItemByType> queueLoadedBatches,
             AsyncActivityStatus loadBatchStatus, StageBatchRecord stageBatchRecord)
         {
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
@@ -265,7 +246,7 @@ namespace Vanrise.AccountBalance.Business
             }
         }
 
-        private static void PrepareUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
+        private void PrepareUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
             Queueing.MemoryQueue<CorrectUsageBalanceItemByType> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, string currentStageName, CorrectUsageBalanceItemByType preparedCorrectUsageBalanceItems)
         {
             CorrectUsageBalanceItemByAccount correctUsageBalanceItemsByAccountId;
@@ -332,14 +313,16 @@ namespace Vanrise.AccountBalance.Business
             }
         }
 
-        private static void InsertUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, string currentStageName, DateTime batchStart, CorrectUsageBalanceItemByType preparedCorrectUsageBalanceItems)
+        private void InsertUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, string currentStageName, DateTime batchStart, CorrectUsageBalanceItemByType preparedCorrectUsageBalanceItems)
         {
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
 
             CorrectUsageBalancePayload correctUsageBalancePayload;
             UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
+            List<AccountBalanceType> finalizedAccountBalanceTypes = new List<AccountBalanceType>();
 
             decimal maxCount = 10000;
+            DateTime batchEnd = batchStart.AddDays(1);
 
             foreach (var usageBalanceItemByType in preparedCorrectUsageBalanceItems)
             {
@@ -380,7 +363,14 @@ namespace Vanrise.AccountBalance.Business
 
                 if (correctUsageBalancePayload.CorrectUsageBalanceItems.Count > 0)
                     usageBalanceManager.CorrectUsageBalance(accountBalanceType.AccountTypeId, correctUsageBalancePayload);
+
+                finalizedAccountBalanceTypes.Add(accountBalanceType);
             }
+
+            //Finalizing EmptyBatches
+            FinalizeEmptyBatchesContext finalizeEmptyBatchesContext =
+                new FinalizeEmptyBatchesContext((accountBalanceType) => { GenerateEmptyBatch(accountBalanceType, batchStart, batchEnd); }, finalizedAccountBalanceTypes);
+            FinalizeEmptyBatches(finalizeEmptyBatchesContext);
 
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Inserting Batches for Stage {0}", currentStageName));
         }
@@ -440,8 +430,33 @@ namespace Vanrise.AccountBalance.Business
             return stageBatchRecords;
         }
 
-        #region Private Classes
 
+        #region Private Method
+
+        private void GenerateEmptyBatch(AccountBalanceType accountBalanceType, DateTime batchStart, DateTime batchEnd)
+        {
+            UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
+
+            do
+            {
+                Guid correctionProcessId = usageBalanceManager.InitializeUpdateUsageBalance();
+
+                CorrectUsageBalancePayload correctUsageBalancePayload = new CorrectUsageBalancePayload()
+                {
+                    CorrectUsageBalanceItems = null,
+                    PeriodDate = batchStart,
+                    CorrectionProcessId = correctionProcessId,
+                    IsLastBatch = true,
+                    TransactionTypeId = accountBalanceType.TransactionTypeId
+                };
+                usageBalanceManager.CorrectUsageBalance(accountBalanceType.AccountTypeId, correctUsageBalancePayload);
+                batchStart = batchStart.AddDays(1);
+            } while (batchStart < batchEnd);
+        }
+
+        #endregion
+
+        #region Private Classes
 
         private class CorrectUsageBalanceItemByAccount : Dictionary<String, CorrectUsageBalanceItem>
         {
