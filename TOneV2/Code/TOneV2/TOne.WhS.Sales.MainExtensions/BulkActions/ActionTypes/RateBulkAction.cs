@@ -77,19 +77,19 @@ namespace TOne.WhS.Sales.MainExtensions
             }
             else
             {
-                if (rateCalculationContext.Rate.Value == 0)
+                decimal roundedCalculatedRate = GetRoundedRate(rateCalculationContext.Rate.Value);
+
+                if (roundedCalculatedRate == 0)
                 {
                     validationResultType = RateBulkActionValidationResultType.Zero;
                     targetInvlaidRates = validationResult.ZeroRates;
                 }
-
-                else if (rateCalculationContext.Rate.Value < 0)
+                else if (roundedCalculatedRate < 0)
                 {
                     validationResultType = RateBulkActionValidationResultType.Negative;
                     targetInvlaidRates = validationResult.NegativeRates;
                 }
-
-                else if (contextZoneItem.CurrentRate.HasValue && contextZoneItem.CurrentRate.Value == rateCalculationContext.Rate.Value)
+                else if (contextZoneItem.CurrentRate.HasValue && GetRoundedRate(contextZoneItem.CurrentRate.Value) == roundedCalculatedRate)
                 {
                     validationResultType = RateBulkActionValidationResultType.EqualsCurrentNormalRate;
                     targetInvlaidRates = validationResult.DuplicateRates;
