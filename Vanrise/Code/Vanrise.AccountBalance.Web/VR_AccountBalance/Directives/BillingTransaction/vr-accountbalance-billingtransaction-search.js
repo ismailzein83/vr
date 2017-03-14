@@ -45,10 +45,10 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                         accountsIds = payload.AccountsIds;
 
                     }
-                    console.log(payload);
+
                     if (accountTypeId)
                         checkHasAddBillingTransaction(accountTypeId);
-                    load();
+                    return load();
                 };
                 return directiveAPI;
             }
@@ -90,7 +90,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
         function load() {
             $scope.isLoading = true;
-            VR_AccountBalance_LiveBalanceAPIService.GetCurrentAccountBalance(accountsIds[0], accountTypeId).then(function (response) {
+            return VR_AccountBalance_LiveBalanceAPIService.GetCurrentAccountBalance(accountsIds[0], accountTypeId).then(function (response) {
                 if (response) {
                     $scope.balance = response.CurrentBalance;
                     $scope.currency = response.CurrencyDescription;
