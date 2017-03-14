@@ -102,7 +102,6 @@
             $scope.scopeModel.save = function () {
                 if ($scope.onCountryChangesUpdated != undefined) {
                     var updatedCountryChanges = buildCountryChanges();
-                    console.log(updatedCountryChanges);
                     $scope.onCountryChangesUpdated(updatedCountryChanges);
                 }
                 $scope.modalContext.closeModal();
