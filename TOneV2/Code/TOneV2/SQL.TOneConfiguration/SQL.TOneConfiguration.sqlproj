@@ -552,6 +552,8 @@
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceThresholdUpdateTable.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceTableType.sql" />
     <Build Include="Security\VR_AccountBalance.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_SetEnable.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_SetDisable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
