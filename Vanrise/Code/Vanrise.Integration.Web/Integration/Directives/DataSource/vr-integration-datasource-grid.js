@@ -135,7 +135,10 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
         function disableDataSource(dataItem) {
             var onPermissionDisabled = function (entity) {
-                var gridDataItem = { Entity: entity };
+                var gridDataItem = {
+                    Entity: entity,
+                    AdapterInfo: dataItem.AdapterInfo
+                };
                 gridDataItem.Entity.IsEnabled = false;
 
                 $scope.gridMenuActions(gridDataItem);
@@ -157,7 +160,10 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
         function enableDataSource(dataItem) {
             var onPermissionEnabled = function (entity) {
-                var gridDataItem = { Entity: entity };
+                var gridDataItem = {
+                    Entity: entity,
+                    AdapterInfo: dataItem.AdapterInfo
+                };
                 gridDataItem.Entity.IsEnabled = true;
 
                 $scope.gridMenuActions(gridDataItem);
