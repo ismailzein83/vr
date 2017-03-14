@@ -37,7 +37,6 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('57033E80-65CB-4359-95F6-22A57084D027','VR_Notification_VRAlertRuleTypeSettings_DAProfCalcAlertRuleTypeSettings','Profiling and Calculation Alert Rule Type','VR_Notification_VRAlertRuleTypeSettings'	,'{"Editor":"vr-analytic-daprofcalc-alertruletypesettings"}'),
 ('FDD73530-067F-4160-AB71-7852303C785C','VR_Notification_NotificationComponentType_Settings','Notification Component Type','VR_Common_VRComponentType'													,'{"Editor":"vr-notification-vrnotification-componentsettings"}'),
 ('A196C40A-30B5-4297-B7B0-4344C41CE5A2','VR_Notification_NotificationDefinition','Notification','VR_Security_ViewTypeConfig'																			,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-notification-notification-vieweditor"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
