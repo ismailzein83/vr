@@ -24,7 +24,7 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
             gridApi.loadGrid(getGridQuery());
         };
         $scope.AddNewDataSource = addNewDataSource;
-
+        $scope.DisableAllDataSources = disableAllDataSources;
         $scope.hasAddDataSource = function () {
             return VR_Integration_DataSourceAPIService.HasAddDataSource();
         };
@@ -68,6 +68,19 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
         VR_Integration_DataSourceService.addDataSource(onDataSourceAdded);
     }
 
+    function disableAllDataSources() {
+
+        VRNotificationService.showConfirmation().then(function (confirmed) {
+            if (confirmed) {
+                return VR_Integration_DataSourceAPIService.DisableAllDataSource().then(function (response) {
+                    if (response)
+                        $scope.searchClicked();
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, null);
+                });
+            }
+        });
+    }
   
 }
 

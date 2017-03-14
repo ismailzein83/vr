@@ -94,6 +94,30 @@ namespace Vanrise.Integration.Web.Controllers
             DataSourceManager manager = new DataSourceManager();
             return manager.DeleteDataSource(dataSourceId, taskId);
         }
+
+        [HttpGet]
+        [Route("DisableAllDataSource")]
+        public bool DisableAllDataSource()
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.DisableAllDataSource();
+        }
+
+        [HttpGet]
+        [Route("DisableDataSource")]
+        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> DisableDataSource(Guid dataSourceId)
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.DisableDataSource(dataSourceId);
+        }
+
+        [HttpGet]
+        [Route("EnableDataSource")]
+        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> EnableDataSource(Guid dataSourceId)
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.EnableDataSource(dataSourceId);
+        }
     }
 
     public class DataSourceWrapper

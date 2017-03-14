@@ -217,6 +217,63 @@ namespace Vanrise.Integration.Business
             return manager.UpdateAdapterState(dataSourceId, adapterState);
         }
 
+        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> DisableDataSource(Guid dataSourceId)
+        {
+            Vanrise.Runtime.Business.SchedulerTaskManager schedulerManager = new Runtime.Business.SchedulerTaskManager();
+
+            UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> updateOperationOutput = new UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail>()
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+
+            var dataSource = GetDataSource(dataSourceId);
+            var taskUpdated = schedulerManager.DisableTask(dataSource.TaskId);
+            
+            if (taskUpdated.Result == UpdateOperationResult.Succeeded)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceId);
+            }
+
+            return updateOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> EnableDataSource(Guid dataSourceId)
+        {
+            Vanrise.Runtime.Business.SchedulerTaskManager schedulerManager = new Runtime.Business.SchedulerTaskManager();
+
+            UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> updateOperationOutput = new UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail>()
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+
+            var dataSource = GetDataSource(dataSourceId);
+            var taskUpdated = schedulerManager.EnableTask(dataSource.TaskId);
+
+            if (taskUpdated.Result == UpdateOperationResult.Succeeded)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceId);
+            }
+
+            return updateOperationOutput;
+        }
+
+        public bool DisableAllDataSource()
+        {
+            var cachedDataSources = GetCachedDataSources();
+            foreach (KeyValuePair<Guid, DataSource> entry in cachedDataSources)
+            {
+                var output = DisableDataSource(entry.Value.DataSourceId);
+                if (output.Result != UpdateOperationResult.Succeeded)
+                    return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Private Methods

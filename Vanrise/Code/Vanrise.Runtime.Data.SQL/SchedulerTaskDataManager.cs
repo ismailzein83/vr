@@ -45,6 +45,19 @@ namespace Vanrise.Runtime.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Delete", taskId);
             return (recordsEffected > 0);
         }
+
+        public bool DisableTask(Guid taskId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_SetDisable", taskId);
+            return (recordesEffected > 0);
+        }
+
+        public bool EnableTask(Guid taskId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_SetEnable", taskId);
+            return (recordesEffected > 0);
+        }
+
         #endregion
 
         #region mapper

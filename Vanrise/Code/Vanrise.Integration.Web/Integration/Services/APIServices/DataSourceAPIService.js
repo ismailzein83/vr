@@ -18,7 +18,12 @@
             UpdateDataSource: UpdateDataSource,
             HasUpdateDataSource:HasUpdateDataSource,
             DeleteDataSource: DeleteDataSource,
-            HasDeleteDataSource: HasDeleteDataSource
+            HasDeleteDataSource: HasDeleteDataSource,
+            HasDisablePermission: HasDisablePermission,
+            HasEnablePermission: HasEnablePermission,
+            DisableDataSource: DisableDataSource,
+            EnableDataSource: EnableDataSource,
+            DisableAllDataSource: DisableAllDataSource
         });
         function GetDataSources(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, 'DataSource', 'GetDataSources'), { filter: filter });
@@ -68,8 +73,30 @@
         function HasDeleteDataSource() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Integration_ModuleConfig.moduleName, "DataSource", ['DeleteDataSource']));
         }
-        
 
+        function DisableDataSource(dataSourceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, "DataSource", 'DisableDataSource'), {
+                dataSourceId: dataSourceId
+            });
+        }
+
+        function EnableDataSource(dataSourceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, "DataSource", 'EnableDataSource'), {
+                dataSourceId: dataSourceId
+            });
+        }
+
+        function DisableAllDataSource() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, "DataSource", 'DisableAllDataSource'));
+        }
+
+        function HasDisablePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Integration_ModuleConfig.moduleName, "DataSource", ['DisableDataSource']));
+        }
+
+        function HasEnablePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Integration_ModuleConfig.moduleName, "DataSource", ['EnableDataSource']));
+        }
     }
 
     appControllers.service('VR_Integration_DataSourceAPIService', DataSourceAPIService);

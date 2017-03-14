@@ -207,6 +207,49 @@ namespace Vanrise.Runtime.Business
             return deleteOperationOutput;
         }
 
+        public Vanrise.Entities.UpdateOperationOutput<SchedulerTask> DisableTask(Guid taskId)
+        {
+            ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+            bool updateActionSucc = dataManager.DisableTask(taskId);
+            UpdateOperationOutput<SchedulerTask> updateOperationOutput = new UpdateOperationOutput<SchedulerTask>()
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+
+            if (updateActionSucc)
+            {
+                var taskObject = GetTask(taskId);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = taskObject;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<SchedulerTask> EnableTask(Guid taskId)
+        {
+            ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+            bool updateActionSucc = dataManager.EnableTask(taskId);
+            UpdateOperationOutput<SchedulerTask> updateOperationOutput = new UpdateOperationOutput<SchedulerTask>()
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+
+            if (updateActionSucc)
+            {
+                var taskObject = GetTask(taskId);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = taskObject;
+            }
+
+
+            return updateOperationOutput;
+        }
+
         #region private methods
         private Dictionary<Guid, SchedulerTask> GetCachedSchedulerTasks()
         {

@@ -18,5 +18,9 @@ namespace Vanrise.Runtime.Data
         bool UpdateTaskInfo(Guid taskId, string name, bool isEnabled, Guid triggerTypeId, Guid actionTypeId, SchedulerTaskSettings taskSettings);
 
         bool DeleteTask(Guid taskId);
+
+        bool DisableTask(Guid taskId);
+
+        bool EnableTask(Guid taskId);
     }
 }
