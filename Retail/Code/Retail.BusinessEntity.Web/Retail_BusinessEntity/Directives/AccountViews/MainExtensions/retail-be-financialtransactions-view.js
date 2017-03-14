@@ -2,7 +2,7 @@
 
     'use strict';
 
-    FinancialTransactionsViewDirective.$inject = ['UtilsService', 'VRNotificationService','Retail_BE_AccountBalanceTypeAPIService'];
+    FinancialTransactionsViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_AccountBalanceTypeAPIService'];
 
     function FinancialTransactionsViewDirective(UtilsService, VRNotificationService, Retail_BE_AccountBalanceTypeAPIService) {
         return {
@@ -54,33 +54,26 @@
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         parentAccountId = payload.parentAccountId;
                     }
-                     
-                    function getAccountTypeId()
-                    {
-                        return Retail_BE_AccountBalanceTypeAPIService.GetAccountBalanceTypeId(accountBEDefinitionId).then(function (response) {
-                            accountTypeId = response;
-                        });
-                    }
 
                     var promises = [];
 
                     var promiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(promiseDeferred.promise);
+
                     getAccountTypeId().then(function () {
-                        var promise =  gridAPI.loadDirective(buildGridPayload());
-                        if (promise != undefined)
-                        {
-                            promise.then(function () {
-                                promiseDeferred.resolve();
-                            }).catch(function (error) {
-                                promiseDeferred.reject(error);
-                            });
-                        }else
-                        {
+                        gridAPI.loadDirective(buildGridPayload()).then(function () {
                             promiseDeferred.resolve();
-                        }
-                          
+                        }).catch(function (error) {
+                            promiseDeferred.reject(error);
+                        });
                     });
+
+                    function getAccountTypeId() {
+                        return Retail_BE_AccountBalanceTypeAPIService.GetAccountBalanceTypeId(accountBEDefinitionId).then(function (response) {
+                            accountTypeId = response;
+                        });
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
