@@ -12,15 +12,27 @@ namespace TOne.WhS.Sales.Entities
     {
         public object Key
         {
-            get { return OwnerType;  }
+            get { return Guid.NewGuid(); }
         }
+
         public string TargetType
         {
             get { return "DefaultData"; }
         }
 
-        public SalePriceListOwnerType OwnerType { get; set; }
-        public IEnumerable<ZoneService> CurrentServices { get; set; }
-        public DefaultServiceToAdd DefaultServiceToAdd { get; set; }
+        public OwnerDefaultRP CurrentDefaultRoutingProduct { get; set; }
+
+        public DefaultRoutingProductToAdd DefaultRoutingProductToAdd { get; set; }
+    }
+
+    public class OwnerDefaultRP
+    {
+        public int RoutingProductId { get; set; }
+
+        public SaleEntityZoneRoutingProductSource Source { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
     }
 }

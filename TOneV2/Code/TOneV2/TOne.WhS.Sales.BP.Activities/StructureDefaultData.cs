@@ -25,7 +25,7 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<DateTime> EffectiveOn { get; set; }
 
         [RequiredArgument]
-        public InArgument<DefaultServiceToAdd> DefaultServiceToAdd { get; set; }
+        public InArgument<DefaultRoutingProductToAdd> DefaultRoutingProductToAdd { get; set; }
 
         #endregion
 
@@ -33,7 +33,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         [RequiredArgument]
         public OutArgument<DefaultData> DefaultData { get; set; }
-        
+
         #endregion
 
         protected override void Execute(CodeActivityContext context)
@@ -41,37 +41,34 @@ namespace TOne.WhS.Sales.BP.Activities
             SalePriceListOwnerType ownerType = OwnerType.Get(context);
             int ownerId = OwnerId.Get(context);
             DateTime effectiveOn = EffectiveOn.Get(context);
-            DefaultServiceToAdd defaultServiceToAdd = DefaultServiceToAdd.Get(context);
+            DefaultRoutingProductToAdd defaultRoutingProductToAdd = DefaultRoutingProductToAdd.Get(context);
 
-            var defaultData = new DefaultData()
-            {
-                OwnerType = ownerType,
-                DefaultServiceToAdd = defaultServiceToAdd
-            };
-
-            var serviceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadWithCache(effectiveOn));
-            SaleEntityService currentDefaultService;
-            SaleEntityServiceSource targetSource;
+            var rpLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(effectiveOn));
+            SaleEntityZoneRoutingProduct defaultRP;
 
             if (ownerType == SalePriceListOwnerType.SellingProduct)
-            {
-                targetSource = SaleEntityServiceSource.ProductDefault;
-                currentDefaultService = serviceLocator.GetSellingProductDefaultService(ownerId);
-            }
+                defaultRP = rpLocator.GetSellingProductDefaultRoutingProduct(ownerId);
             else
             {
-                targetSource = SaleEntityServiceSource.CustomerDefault;
-
-                var ratePlanManager = new RatePlanManager();
-                int? sellingProductId = ratePlanManager.GetSellingProductId(ownerType, ownerId, effectiveOn, false);
-                if (!sellingProductId.HasValue)
-                    throw new NullReferenceException("sellingProductId");
-                currentDefaultService = serviceLocator.GetCustomerDefaultService(ownerId, sellingProductId.Value);
+                int? sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(ownerId, effectiveOn, false);
+                if (!sellingProductId.HasValue) {
+                    string effectiveOnAsString = UtilitiesManager.GetDateTimeAsString(effectiveOn);
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a SellingProduct on '{1}'", ownerId, effectiveOnAsString));
+                }
+                defaultRP = rpLocator.GetCustomerDefaultRoutingProduct(ownerId, sellingProductId.Value);
             }
 
-            if (currentDefaultService != null && currentDefaultService.Source == targetSource)
+            var defaultData = new DefaultData() { DefaultRoutingProductToAdd = defaultRoutingProductToAdd };
+
+            if (defaultRP != null)
             {
-                defaultData.CurrentServices = currentDefaultService.Services;
+                defaultData.CurrentDefaultRoutingProduct = new OwnerDefaultRP()
+                {
+                    RoutingProductId = defaultRP.RoutingProductId,
+                    Source = (ownerType == SalePriceListOwnerType.SellingProduct) ? SaleEntityZoneRoutingProductSource.ProductDefault : SaleEntityZoneRoutingProductSource.CustomerDefault,
+                    BED = defaultRP.BED,
+                    EED = defaultRP.EED
+                };
             }
 
             DefaultData.Set(context, defaultData);

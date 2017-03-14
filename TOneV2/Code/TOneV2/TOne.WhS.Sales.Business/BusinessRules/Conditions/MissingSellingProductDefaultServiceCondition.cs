@@ -19,17 +19,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var defaultData = context.Target as DefaultData;
-
-            if (defaultData.OwnerType == SalePriceListOwnerType.SellingProduct)
-            {
-                if (defaultData.CurrentServices == null && defaultData.DefaultServiceToAdd == null)
-                {
-                    context.Message = String.Format("Missing default service");
-                    return false;
-                }
-            }
-
             return true;
         }
 

@@ -269,11 +269,11 @@
             <mca:CSharpReference x:TypeArguments="twse:DefaultData">DefaultData</mca:CSharpReference>
           </OutArgument>
         </twsba1:StructureDefaultData.DefaultData>
-        <twsba1:StructureDefaultData.DefaultServiceToAdd>
-          <InArgument x:TypeArguments="twse:DefaultServiceToAdd">
-            <mca:CSharpValue x:TypeArguments="twse:DefaultServiceToAdd">DefaultServiceToAdd</mca:CSharpValue>
+        <twsba1:StructureDefaultData.DefaultRoutingProductToAdd>
+          <InArgument x:TypeArguments="twse:DefaultRoutingProductToAdd">
+            <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToAdd">DefaultRoutingProductToAdd</mca:CSharpValue>
           </InArgument>
-        </twsba1:StructureDefaultData.DefaultServiceToAdd>
+        </twsba1:StructureDefaultData.DefaultRoutingProductToAdd>
         <twsba1:StructureDefaultData.EffectiveOn>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
@@ -829,13 +829,6 @@
         </InArgument>
       </twsba1:UpdateZonesData.ExistingZones>
     </twsba1:UpdateZonesData>
-    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_8">
-      <vbw:WriteTrackingMessage.Message>
-        <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">DefaultData.OwnerType.ToString()</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Message>
-    </vbw:WriteTrackingMessage>
     <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_1">
       <vbw:CombineLists.InputLists>
         <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
