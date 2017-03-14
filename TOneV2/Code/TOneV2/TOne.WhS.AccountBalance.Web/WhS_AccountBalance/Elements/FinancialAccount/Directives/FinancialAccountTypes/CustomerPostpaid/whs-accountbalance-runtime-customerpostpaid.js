@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsAccountbalanceRuntimeCustomerpostpaid", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("whsAccountbalanceRuntimeCustomerpostpaid", ["UtilsService", "VRNotificationService", "VRUIUtilsService","WhS_AccountBalance_FinancialAccountAPIService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_AccountBalance_FinancialAccountAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -27,7 +27,8 @@ app.directive("whsAccountbalanceRuntimeCustomerpostpaid", ["UtilsService", "VRNo
 
         function CustomerPostPaid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-      
+            var carrierAccountId;
+            var carrierProfileId;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.creditLimit = 0;
@@ -42,12 +43,19 @@ app.directive("whsAccountbalanceRuntimeCustomerpostpaid", ["UtilsService", "VRNo
                     var extendedSettings;
                     if (payload != undefined) {
                         extendedSettings = payload.extendedSettings;
+                        carrierAccountId = payload.carrierAccountId;
+                        carrierProfileId = payload.carrierProfileId;
                         if (extendedSettings != undefined) {
                             $scope.scopeModel.creditLimit = extendedSettings.CreditLimit;
                         }
                     }
                     var promises = [];
-                  
+                    promises.push(loadCurrencyName());
+                    function loadCurrencyName() {
+                        return WhS_AccountBalance_FinancialAccountAPIService.GetAccountCurrencyName(carrierProfileId, carrierAccountId).then(function (response) {
+                            $scope.scopeModel.currencyName = response;
+                        });
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 

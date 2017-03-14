@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Data;
 using TOne.WhS.AccountBalance.Entities;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.AccountBalance.Business;
+using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.AccountBalance.Business
@@ -40,76 +43,78 @@ namespace TOne.WhS.AccountBalance.Business
                 };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allFinancialAccounts.ToBigResult(input, filterExpression, FinancialAccountDetailMapper));
         }
-
         public Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail> AddFinancialAccount(FinancialAccount financialAccount)
         {
             Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-
-            int financialAccountId = -1;
-
-            IFinancialAccountDataManager dataManager = AccountBalanceManagerFactory.GetDataManager<IFinancialAccountDataManager>();
-            bool insertActionSucc = dataManager.Insert(financialAccount, out financialAccountId);
-            if (insertActionSucc)
+            string message = null;
+            if (CheckIsAllowToAddFinancialAccount(financialAccount, false, out message))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                financialAccount.FinancialAccountId = financialAccountId;
-                insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccount);
-            }
-            else
-            {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-            }
+                int financialAccountId = -1;
 
+                IFinancialAccountDataManager dataManager = AccountBalanceManagerFactory.GetDataManager<IFinancialAccountDataManager>();
+                bool insertActionSucc = dataManager.Insert(financialAccount, out financialAccountId);
+                if (insertActionSucc)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    financialAccount.FinancialAccountId = financialAccountId;
+                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccount);
+                }
+                else
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                }
+            }
+            insertOperationOutput.Message = message;
             return insertOperationOutput;
         }
-
         public Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> UpdateFinancialAccount(FinancialAccount financialAccount)
         {
             IFinancialAccountDataManager dataManager = AccountBalanceManagerFactory.GetDataManager<IFinancialAccountDataManager>();
 
-            bool updateActionSucc = dataManager.Update(financialAccount);
             Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+             string message = null;
 
-            if (updateActionSucc)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccount);
-            }
-            else
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-            }
+             if (CheckIsAllowToAddFinancialAccount(financialAccount, true, out message))
+             {
+                 bool updateActionSucc = dataManager.Update(financialAccount);
+                 if (updateActionSucc)
+                 {
+                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                     updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccount);
+                 }
+                 else
+                 {
+                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                 }
+             }
+             updateOperationOutput.Message = message;
             return updateOperationOutput;
         }
-
         public FinancialAccount GetFinancialAccount(int financialAccountId)
         {
             var allFinancialAccounts = GetCachedFinancialAccounts();
             return allFinancialAccounts.GetRecord(financialAccountId);
         }
-
         public CarrierFinancialAccountData GetCustCarrierFinancialByFinAccId(int financialAccountId)
         {
             CarrierFinancialAccountData carrierFinancialAccountData = GetCachedCustCarrierFinancialsByFinAccId().GetRecord(financialAccountId);
             carrierFinancialAccountData.ThrowIfNull("carrierFinancialAccountData", financialAccountId);
             return carrierFinancialAccountData;
         }
-
         public CarrierFinancialAccountData GetSuppCarrierFinancialByFinAccId(int financialAccountId)
         {
             CarrierFinancialAccountData carrierFinancialAccountData = GetCachedSuppCarrierFinancialsByFinAccId().GetRecord(financialAccountId);
             carrierFinancialAccountData.ThrowIfNull("carrierFinancialAccountData", financialAccountId);
             return carrierFinancialAccountData;
         }
-
         public bool TryGetCustAccFinancialAccountData(int customerAccountId, DateTime effectiveOn, out CarrierFinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<CarrierFinancialAccountData> carrierFinancialAccounts = GetCachedCustCarrierFinancialsByCarrAccId().GetRecord(customerAccountId);
@@ -127,7 +132,6 @@ namespace TOne.WhS.AccountBalance.Business
             financialAccountData = null;
             return false;
         }
-
         public bool TryGetSuppAccFinancialAccountData(int supplierAccountId, DateTime effectiveOn, out CarrierFinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<CarrierFinancialAccountData> carrierFinancialAccounts = GetCachedSuppCarrierFinancialsByCarrAccId().GetRecord(supplierAccountId);
@@ -145,7 +149,332 @@ namespace TOne.WhS.AccountBalance.Business
             financialAccountData = null;
             return false;
         }
+        public IEnumerable<FinancialAccount> GetFinancialAccountsByCarrierAccountId(int carrierAccountId)
+        {
+            var financialAccounts = GetCachedFinancialAccounts();
+            return financialAccounts.Values.FindAllRecords(x => x.CarrierAccountId.HasValue && x.CarrierAccountId.Value == carrierAccountId);
+        }
+        public IEnumerable<FinancialAccount> GetCarrierProfileFinancialAccounts(int carrierProfileId)
+        {
+            var financialAccounts = GetCachedFinancialAccounts();
+            return financialAccounts.Values.FindAllRecords(x => x.CarrierProfileId.HasValue && x.CarrierProfileId.Value == carrierProfileId);
+        }
 
+        public string GetAccountCurrencyName(int? carrierProfileId, int? carrierAccountId)
+        {
+            int currencyId = -1;
+            if (carrierProfileId.HasValue)
+                currencyId = new CarrierProfileManager().GetCarrierProfileCurrencyId(carrierProfileId.Value);
+            else
+               currencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(carrierAccountId.Value);
+            CurrencyManager currencyManager = new CurrencyManager();
+            return currencyManager.GetCurrencyName(currencyId);
+        }
+
+        #region Financial Accounts Validation
+        public bool CheckIsAllowToAddFinancialAccount(FinancialAccount financialAccount, bool isEditMode,out string message)
+        {
+            message = null;
+            FinancialValidationData financialValidationData = LoadFinancialValidationData(financialAccount.CarrierProfileId, financialAccount.CarrierAccountId, financialAccount.FinancialAccountId);
+            var financialAccountType = financialValidationData.FinancialAccountTypes.FirstOrDefault(x => x.VRComponentTypeId == financialAccount.Settings.AccountTypeId);
+            var accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
+            if (financialAccount.CarrierProfileId.HasValue)
+            {
+                if (!CheckFinancialCarrierProfileValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierProfile.ProfileCarrierAccounts, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, isEditMode))
+                    return false;
+            }
+            else
+            {
+                if (!CheckFinancialCarrierAccountValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierAccount.CarrierAccount, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierAccount.FinancialAccounts, isEditMode))
+                    return false;
+
+            }
+            ValidateFinancialAccount(financialAccount,financialValidationData,accountBalanceSettings, out message);
+            if (message != null)
+                return false;
+            return true;
+        }
+        public bool CheckFinancialCarrierAccountValidation(Guid accountTypeId, AccountBalanceSettings accountBalanceSetting, CarrierAccount carrierAccount, IEnumerable<FinancialAccountData> profileFinancialAccounts, IEnumerable<FinancialAccountData> carrierFinancialAccounts, bool isEditMode)
+        {
+            Func<FinancialAccountData, bool> filterExpression = GetFinancialAccountFilterExpression(accountTypeId, carrierAccount.AccountType, accountBalanceSetting, isEditMode);
+            switch (carrierAccount.AccountType)
+            {
+                case BusinessEntity.Entities.CarrierAccountType.Customer:
+                    if (!CheckApplicableAccountTypes(accountBalanceSetting, true, false))
+                        return false;
+                    break;
+                case BusinessEntity.Entities.CarrierAccountType.Supplier:
+                    if (!CheckApplicableAccountTypes(accountBalanceSetting, false, true))
+                        return false;
+                    break;
+                case BusinessEntity.Entities.CarrierAccountType.Exchange:
+                    if (CheckApplicableAccountTypes(accountBalanceSetting, false, false))
+                        return false;
+                    break;
+            }
+            if (carrierFinancialAccounts.Any(x => x.FinancialAccount.Settings.AccountTypeId == accountTypeId && !x.FinancialAccount.EED.HasValue))
+                return false;
+            if (profileFinancialAccounts.Any(x => !filterExpression(x)))
+                return false;
+            if (carrierFinancialAccounts.Any(x => !filterExpression(x)))
+                return false;
+            return true;
+        }
+        public bool CheckFinancialCarrierProfileValidation(Guid accountTypeId, AccountBalanceSettings accountBalanceSetting, IEnumerable<CarrierAccount> carrierAccounts, IEnumerable<FinancialAccountData> profileFinancialAccounts, Dictionary<int, IEnumerable<FinancialAccountData>> financialAccountsByAccount, bool isEditMode)
+        {
+            bool hasCustomers = false;
+            bool hasSuppliers = false;
+            bool hasExchanges = false;
+
+            foreach (var account in carrierAccounts)
+            {
+                if (account.AccountType == CarrierAccountType.Customer)
+                    hasCustomers = true;
+                else if (account.AccountType == CarrierAccountType.Supplier)
+                    hasSuppliers = true;
+                else if (account.AccountType == CarrierAccountType.Exchange)
+                    hasExchanges = true;
+            }
+
+            Func<FinancialAccountData, bool> filterExpression = null;
+
+            if (!CheckApplicableAccountTypes(accountBalanceSetting, false, false))
+            {
+                if (!hasExchanges && (!hasCustomers || !hasSuppliers))
+                {
+                    return false;
+                }
+                filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Exchange, accountBalanceSetting, isEditMode);
+            }
+            else if (CheckApplicableAccountTypes(accountBalanceSetting, true, false))
+            {
+                if (!hasExchanges && !hasCustomers)
+                    return false;
+
+                filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Customer, accountBalanceSetting, isEditMode);
+
+            }
+            else if (CheckApplicableAccountTypes(accountBalanceSetting, false, true))
+            {
+                if (!hasExchanges && !hasSuppliers)
+                    return false;
+                filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Supplier, accountBalanceSetting, isEditMode);
+            }
+
+            if (profileFinancialAccounts.Any(x => !filterExpression(x)))
+                return false;
+
+            if (financialAccountsByAccount.Values.Any(x => x.Any(y => !filterExpression(y))))
+                return false;
+
+            return true;
+        }
+        public Func<FinancialAccountData, bool> GetFinancialAccountFilterExpression(Guid accountTypeId, CarrierAccountType carrierAccountType, AccountBalanceSettings accountBalanceSetting, bool isEditMode)
+        {
+            Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
+            {
+                if (!isEditMode && financialAccountData.FinancialAccount.Settings.AccountTypeId == accountTypeId && !financialAccountData.FinancialAccount.EED.HasValue)
+                    return false;
+
+                switch (carrierAccountType)
+                {
+                    case BusinessEntity.Entities.CarrierAccountType.Customer:
+                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && accountBalanceSetting.IsApplicableToCustomer == financialAccountData.IsApplicableToCustomer)
+                            return false;
+                        break;
+                    case BusinessEntity.Entities.CarrierAccountType.Supplier:
+                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && accountBalanceSetting.IsApplicableToSupplier == financialAccountData.IsApplicableToSupplier)
+                            return false;
+                        break;
+                    case BusinessEntity.Entities.CarrierAccountType.Exchange:
+                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && (accountBalanceSetting.IsApplicableToSupplier == financialAccountData.IsApplicableToSupplier || accountBalanceSetting.IsApplicableToCustomer == financialAccountData.IsApplicableToCustomer))
+                            return false;
+                        break;
+                }
+                return true;
+            };
+
+            return filterExpression;
+        }
+
+        public bool CheckCarrierAllowAddFinancialAccounts(int? carrierProfileId, int? carrierAccountId)
+        {
+            FinancialValidationData financialValidationData = LoadFinancialValidationData(carrierProfileId, carrierAccountId, 0);
+            Func<AccountType, bool> filterExpression = (financialAccountType) =>
+            {
+                var accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
+                if (carrierProfileId.HasValue)
+                {
+                    if (!CheckFinancialCarrierProfileValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierProfile.ProfileCarrierAccounts, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, false))
+                        return false;
+                }
+                else
+                {
+                    if (!CheckFinancialCarrierAccountValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierAccount.CarrierAccount, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierAccount.FinancialAccounts, false))
+                        return false;
+                }
+                return true;
+            };
+            var applicableFinancialAccountTypes = financialValidationData.FinancialAccountTypes.FindAllRecords(filterExpression);
+            return applicableFinancialAccountTypes.Count() > 0;
+        }
+        private bool CheckApplicableAccountTypes(AccountBalanceSettings accountBalanceSettings, bool isApplicableToCustomer, bool isApplicableToSupplier)
+        {
+            if (accountBalanceSettings.IsApplicableToSupplier == isApplicableToSupplier && accountBalanceSettings.IsApplicableToCustomer == isApplicableToCustomer)
+                return true;
+            return false;
+        }
+        private bool ValidateFinancialAccount(FinancialAccount financialAccount, FinancialValidationData financialValidationData ,AccountBalanceSettings accountBalanceSettings, out string message)
+        {
+            bool result = true;
+            if (financialAccount.CarrierAccountId.HasValue)
+            {
+                ValidateFinancialAccountforCarrierAccount(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId,  financialAccount.BED, financialAccount.EED, financialValidationData.FinancialCarrierAccount.FinancialAccounts,accountBalanceSettings, out message, out result);
+                if (result)
+                {
+                   CheckFinancialAccountProfileOverlapping(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED,financialValidationData.ProfileFinancialAccounts,accountBalanceSettings, out  message, out result);
+                }
+            }
+            else
+            {
+                ValidateFinancialAccountforCarrierProfile(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED,financialValidationData.ProfileFinancialAccounts,financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount,accountBalanceSettings, out  message, out result);
+            }
+            return result;
+        }
+        private void ValidateFinancialAccountforCarrierAccount(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> carrierFinancialAccounts, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        {
+            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed,carrierFinancialAccounts,accountBalanceSettings, out message, out result);
+        }
+        private void ValidateFinancialAccountforCarrierProfile(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> profileFinancialAccounts, Dictionary<int, IEnumerable<FinancialAccountData>> financialAccountsByAccount, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        {
+            CheckFinancialAccountProfileOverlapping(accountTypeId, financialAccountId, bed, eed, profileFinancialAccounts,accountBalanceSettings, out message, out result);
+            if (!result)
+                return;
+            foreach (var carrierFinancialAccounts in financialAccountsByAccount.Values)
+            {
+                ValidateFinancialAccountforCarrierAccount(accountTypeId, financialAccountId, bed, eed, carrierFinancialAccounts,accountBalanceSettings, out message, out result);
+                if (!result)
+                    return;
+            }
+        }
+        public void CheckFinancialAccountProfileOverlapping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialCarrierProfiles, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        {
+            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed,financialCarrierProfiles,accountBalanceSettings, out message, out result);
+        }
+        public void CheckFinancialAccountOverlaping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialAccounts,AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        {
+            foreach (var financialAccount in financialAccounts)
+            {
+                if (financialAccount.FinancialAccount.FinancialAccountId != financialAccountId && accountBalanceSettings.IsApplicableToCustomer == financialAccount.IsApplicableToCustomer && accountBalanceSettings.IsApplicableToSupplier == financialAccount.IsApplicableToSupplier)
+                {
+                    if (eed.VRGreaterThan(financialAccount.FinancialAccount.BED) && financialAccount.FinancialAccount.EED.VRGreaterThan(bed))
+                    {
+                        message = string.Format("Financial account must not overlap.");
+                        result = false;
+                        return;
+                    }
+                }
+            }
+            message = null;
+            result = true;
+        }
+        #region LoadFinancialValidationData
+        public FinancialValidationData LoadFinancialValidationData(int? carrierProfileId, int? carrierAccountId, int financialAccountId)
+        {
+
+            FinancialValidationData financialValidationData = new FinancialValidationData();
+
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            financialValidationData.FinancialAccountTypes = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitions();
+
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            int carrierProfileID = -1;
+            if (carrierAccountId.HasValue)
+            {
+                var carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId.Value);
+                carrierProfileID = carrierAccount.CarrierProfileId;
+
+                financialValidationData.FinancialCarrierAccount = new FinancialCarrierAccount
+                {
+                    CarrierAccount = carrierAccount
+                };
+                var carrierFinancialAccounts = GetFinancialAccountsByCarrierAccountId(carrierAccountId.Value);
+                financialValidationData.FinancialCarrierAccount.FinancialAccounts = LoadFinancialAccountsForCarrierAccount(carrierAccountId.Value, financialValidationData.FinancialAccountTypes, financialAccountId);
+            }
+            else if (carrierProfileId.HasValue)
+            {
+                carrierProfileID = carrierProfileId.Value;
+
+                var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId.Value, true, true);
+                financialValidationData.FinancialCarrierProfile = new FinancialCarrierProfile
+                {
+                    ProfileCarrierAccounts = profileCarrierAccounts,
+                    FinancialAccountsByAccount = new Dictionary<int, IEnumerable<FinancialAccountData>>(),
+                };
+                foreach (var carrierAccount in profileCarrierAccounts)
+                {
+                    var financialAccounts = LoadFinancialAccountsForCarrierAccount(carrierAccount.CarrierAccountId, financialValidationData.FinancialAccountTypes, financialAccountId);
+                    if (financialAccounts != null && financialAccounts.Count() > 0)
+                    {
+                        financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount.Add(carrierAccount.CarrierAccountId, financialAccounts);
+                    }
+                }
+            }
+            financialValidationData.ProfileFinancialAccounts = LoadProfileFinancialAccounts(carrierProfileID, financialValidationData.FinancialAccountTypes, financialAccountId);
+            return financialValidationData;
+        }
+        private List<FinancialAccountData> LoadProfileFinancialAccounts(int carrierProfileId, IEnumerable<AccountType> financialAccountTypes, int financialAccountId)
+        {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var profileFinancialAccounts = financialAccountManager.GetCarrierProfileFinancialAccounts(carrierProfileId);
+            List<FinancialAccountData> profileFinancialAccountsData = new List<FinancialAccountData>();
+            foreach (var profileFinancialAccount in profileFinancialAccounts)
+            {
+                if (profileFinancialAccount.FinancialAccountId != financialAccountId)
+                {
+                    var financialAccountType = financialAccountTypes.FindRecord(x => x.VRComponentTypeId == profileFinancialAccount.Settings.AccountTypeId);
+                    AccountBalanceSettings accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
+                    profileFinancialAccountsData.Add(new FinancialAccountData
+                    {
+                        FinancialAccount = profileFinancialAccount,
+                        IsApplicableToSupplier = accountBalanceSettings.IsApplicableToSupplier,
+                        IsApplicableToCustomer = accountBalanceSettings.IsApplicableToCustomer
+                    });
+                }
+            }
+            return profileFinancialAccountsData;
+        }
+        private List<FinancialAccountData> LoadFinancialAccountsForCarrierAccount(int carrierAccountId, IEnumerable<AccountType> financialAccountTypes, int financialAccountId)
+        {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccounts = financialAccountManager.GetFinancialAccountsByCarrierAccountId(carrierAccountId);
+            List<FinancialAccountData> financialAccountsData = new List<FinancialAccountData>();
+            foreach (var financialAccount in financialAccounts)
+            {
+                if (financialAccount.FinancialAccountId != financialAccountId)
+                {
+                    var financialAccountType = financialAccountTypes.FindRecord(x => x.VRComponentTypeId == financialAccount.Settings.AccountTypeId);
+                    AccountBalanceSettings accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
+                    financialAccountsData.Add(new FinancialAccountData
+                    {
+                        FinancialAccount = financialAccount,
+                        IsApplicableToSupplier = accountBalanceSettings.IsApplicableToSupplier,
+                        IsApplicableToCustomer = accountBalanceSettings.IsApplicableToCustomer
+                    });
+                }
+
+            }
+            return financialAccountsData;
+        }
+        #endregion
+       
+        #endregion
+
+      
+      
+     
+      
         #endregion
 
         #region Private Classes
@@ -304,6 +633,7 @@ namespace TOne.WhS.AccountBalance.Business
             };
         }
 
+      
         #endregion
 
         #region Mapper

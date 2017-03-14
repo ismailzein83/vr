@@ -39,5 +39,17 @@ namespace TOne.WhS.AccountBalance.Web.Controllers
         {
             return _manager.GetFinancialAccount(financialAccountId);
         }
+        [HttpGet]
+        [Route("CheckCarrierAllowAddFinancialAccounts")]
+        public bool CheckCarrierAllowAddFinancialAccounts(int? carrierProfileId = null, int? carrierAccountId = null)
+        {
+            return _manager.CheckCarrierAllowAddFinancialAccounts(carrierProfileId, carrierAccountId);
+        }
+        [HttpGet]
+        [Route("GetAccountCurrencyName")]
+        public string GetAccountCurrencyName(int? carrierProfileId = null, int? carrierAccountId = null)
+        {
+            return _manager.GetAccountCurrencyName(carrierProfileId, carrierAccountId);
+        }
     }
 }

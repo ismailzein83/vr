@@ -72,6 +72,17 @@ namespace Vanrise.AccountBalance.Business
 
             return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings, AccountType>().Where(filterExpression);
         }
+        public IEnumerable<AccountType> GetAccountTypesByExtendedSettingsType<T>() where T : AccountTypeExtendedSettings
+        {
+            Func<AccountType, bool> filterExpression = (accountType) =>
+            {
+                var extendedSettings = accountType.Settings.ExtendedSettings as T;
+                if (extendedSettings == null)
+                    return false;
+                return true;
+            };
+            return _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings, AccountType>().Where(filterExpression);
+        }
 
         public BalancePeriodSettings GetBalancePeriodSettings(Guid accountTypeId)
         {

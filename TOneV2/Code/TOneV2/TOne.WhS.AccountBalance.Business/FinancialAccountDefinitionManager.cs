@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Entities;
+using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
 
 namespace TOne.WhS.AccountBalance.Business
@@ -16,6 +17,11 @@ namespace TOne.WhS.AccountBalance.Business
             var accountTypeSettings = s_accountTypeManager.GetAccountTypeSettings(accountTypeId);
             accountTypeSettings.ThrowIfNull("accountType", accountTypeId);
             return accountTypeSettings.ExtendedSettings.CastWithValidate<T>("accountTypeSettings.ExtendedSettings", accountTypeId);
+        }
+
+        public IEnumerable<AccountType> GetFinancialAccountDefinitions()
+        {
+            return s_accountTypeManager.GetAccountTypesByExtendedSettingsType<AccountBalanceSettings>();
         }
     }
 }

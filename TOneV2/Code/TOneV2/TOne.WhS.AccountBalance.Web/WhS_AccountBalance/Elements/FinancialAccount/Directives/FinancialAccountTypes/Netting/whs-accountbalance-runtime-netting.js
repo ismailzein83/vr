@@ -27,7 +27,8 @@ app.directive("whsAccountbalanceRuntimeNetting", ["UtilsService", "VRNotificatio
 
         function CustomerPostPaid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-          
+            var carrierAccountId;
+            var carrierProfileId;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.customerCreditLimit = 0;
@@ -44,6 +45,8 @@ app.directive("whsAccountbalanceRuntimeNetting", ["UtilsService", "VRNotificatio
                     var extendedSettings;
                     if (payload != undefined) {
                         extendedSettings = payload.extendedSettings;
+                        carrierAccountId = payload.carrierAccountId;
+                        carrierProfileId = payload.carrierProfileId;
                         if(extendedSettings != undefined)
                         {
                             $scope.scopeModel.customerCreditLimit = extendedSettings.CustomerCreditLimit;
@@ -51,7 +54,12 @@ app.directive("whsAccountbalanceRuntimeNetting", ["UtilsService", "VRNotificatio
                         }
                     }
                     var promises = [];
-                   
+                    promises.push(loadCurrencyName());
+                    function loadCurrencyName() {
+                        return WhS_AccountBalance_FinancialAccountAPIService.GetAccountCurrencyName(carrierProfileId, carrierAccountId).then(function (response) {
+                            $scope.scopeModel.currencyName = response;
+                        });
+                    }
                    
                     return UtilsService.waitMultiplePromises(promises);
                 };

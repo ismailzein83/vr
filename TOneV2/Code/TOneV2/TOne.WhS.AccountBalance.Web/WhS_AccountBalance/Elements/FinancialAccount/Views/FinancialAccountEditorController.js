@@ -11,8 +11,7 @@
         var financialAccountId;
         var financialAccountTypeSelectorDirectiveAPI;
         var financialAccountTypeSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var isEditMode;
+        $scope.scopeModel ={}
         var financialAccountEntity;
 
         var directiveAPI;
@@ -30,11 +29,10 @@
                 carrierProfileId = parameters.carrierProfileId;
                 financialAccountId = parameters.financialAccountId;
             }
-            isEditMode = (financialAccountId != undefined);
+            $scope.scopeModel.isEditMode = (financialAccountId != undefined);
 
         }
         function defineScope() {
-            $scope.scopeModel = {};
             $scope.scopeModel.beginEffectiveDate = new Date();
             $scope.scopeModel.onFinancialAccountTypeSelectorReady = function (api) {
                 financialAccountTypeSelectorDirectiveAPI = api;
@@ -57,11 +55,16 @@
                 var setLoader = function (value) {
                     $scope.scopeModel.isLoadingDirective = value;
                 };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                var directivePayload = { carrierProfileId: carrierProfileId, carrierAccountId: carrierAccountId };
+
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+            };
+            $scope.scopeModel.validateDates = function (date) {
+                return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
 
             $scope.scopeModel.save = function () {
-                if (isEditMode)
+                if ($scope.scopeModel.isEditMode)
                     return updateFinancialAccount();
                 else
                 {
@@ -75,7 +78,7 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            if (isEditMode)
+            if ($scope.scopeModel.isEditMode)
             {
                 getFinancialAccount().then(function () {
                     loadAllControls();
@@ -116,7 +119,7 @@
                     var payload = {
                         filter: {
                             Filters: [{
-                                $type: "TOne.WhS.AccountBalance.Business.AccountBalanceSettingsFilter, TOne.WhS.AccountBalance.Business",
+                                $type: "TOne.WhS.AccountBalance.Business.FinancialAccountTypeFilter, TOne.WhS.AccountBalance.Business",
                                 CarrierProfileId: carrierProfileId,
                                 CarrierAccountId:carrierAccountId
                             }]
@@ -127,7 +130,7 @@
                 });
                 return loadFinancialAccountTypeSelectorPromiseDeferred.promise;
             }
-
+            
             function loadDirective() {
                 if (financialAccountEntity != undefined && financialAccountEntity.Settings != undefined)
                 {
@@ -137,7 +140,7 @@
 
                     directiveReadyDeferred.promise.then(function () {
                         directiveReadyDeferred = undefined;
-                        var directivePayload = { extendedSettings: financialAccountEntity.Settings.ExtendedSettings };
+                        var directivePayload = { extendedSettings: financialAccountEntity.Settings.ExtendedSettings, carrierProfileId: financialAccountEntity.CarrierProfileId, carrierAccountId: financialAccountEntity.CarrierAccountId };
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                     });
 

@@ -81,9 +81,11 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public IEnumerable<CarrierAccount> GetCarriersByProfileId(int carrierProfileId, bool getCustomers, bool getSuppliers)
         {
-            if (getCustomers)
+            if (getCustomers && getSuppliers)
+                return GetCachedCarrierAccounts().Values.Where(x => x.CarrierProfileId == carrierProfileId);
+            else if (getCustomers)
                 return GetAllCustomers().Where(x => x.CarrierProfileId == carrierProfileId);
-            if (getSuppliers)
+            else if (getSuppliers)
                 return GetAllSuppliers().Where(x => x.CarrierProfileId == carrierProfileId);
             return null;
         }
@@ -390,7 +392,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("carrierAccount");
             if (carrierAccount.CarrierAccountSettings == null)
                 throw new NullReferenceException("carrierAccount.CarrierAccountSettings");
-            return carrierAccount.CarrierAccountSettings.CurrencyId;
+            if (carrierAccount.CarrierAccountSettings.CurrencyId != null)
+                return carrierAccount.CarrierAccountSettings.CurrencyId;
+            return new CarrierProfileManager().GetCarrierProfileCurrencyId(carrierAccount.CarrierProfileId);
         }
         public bool IsCarrierAccountDeleted(int carrierAccountId)
         {

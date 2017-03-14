@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsAccountbalanceFinancialaccountSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_AccountBalance_FinancialAccountService',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VR_AccountBalance_FinancialAccountService) {
+app.directive("whsAccountbalanceFinancialaccountSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_AccountBalance_FinancialAccountService','WhS_AccountBalance_FinancialAccountAPIService',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VR_AccountBalance_FinancialAccountService, WhS_AccountBalance_FinancialAccountAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -55,6 +55,13 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 {
                     carrierAccountId = payload.carrierAccountId;
                     carrierProfileId = payload.carrierProfileId;
+                }
+                checkAllowAddFinancialAccount();
+                function checkAllowAddFinancialAccount()
+                {
+                    return WhS_AccountBalance_FinancialAccountAPIService.CheckCarrierAllowAddFinancialAccounts(carrierProfileId, carrierAccountId).then(function (response) {
+                        $scope.showAddButton = response;
+                    });
                 }
                 return gridAPI.loadGrid(payload);
             };

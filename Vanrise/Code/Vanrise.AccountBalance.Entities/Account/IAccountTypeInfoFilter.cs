@@ -16,6 +16,7 @@ namespace Vanrise.AccountBalance.Entities
     public interface IAccountTypeInfoFilterContext
     {
         AccountType AccountType { get; }
+        Object CustomObject { get; set; }
     }
 
     public class AccountTypeInfoFilterContext : IAccountTypeInfoFilterContext
@@ -25,7 +26,7 @@ namespace Vanrise.AccountBalance.Entities
             get;
             set;
         }
-
+        public Object CustomObject { get; set; }
        
     }
 }

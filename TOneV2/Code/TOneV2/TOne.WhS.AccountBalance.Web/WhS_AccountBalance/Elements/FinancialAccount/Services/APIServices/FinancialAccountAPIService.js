@@ -22,11 +22,25 @@
                 financialAccountId: financialAccountId
             });
         }
+        function CheckCarrierAllowAddFinancialAccounts(carrierProfileId, carrierAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "CheckCarrierAllowAddFinancialAccounts"), {
+                carrierProfileId: carrierProfileId,
+                carrierAccountId: carrierAccountId
+            });
+        }
+        function GetAccountCurrencyName(carrierProfileId, carrierAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "GetAccountCurrencyName"), {
+                carrierProfileId: carrierProfileId,
+                carrierAccountId: carrierAccountId
+            });
+        }
         return {
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,
             UpdateFinancialAccount: UpdateFinancialAccount,
-            GetFinancialAccount: GetFinancialAccount
+            CheckCarrierAllowAddFinancialAccounts: CheckCarrierAllowAddFinancialAccounts,
+            GetFinancialAccount: GetFinancialAccount,
+            GetAccountCurrencyName: GetAccountCurrencyName
         };
     }
 
