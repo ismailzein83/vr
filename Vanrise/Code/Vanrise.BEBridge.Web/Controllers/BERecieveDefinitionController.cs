@@ -17,9 +17,10 @@ namespace Vanrise.BEBridge.Web.Controllers
         BEReceiveDefinitionManager _manager = new BEReceiveDefinitionManager();
         [HttpGet]
         [Route("GetBERecieveDefinitionsInfo")]
-        public object GetBERecieveDefinitionsInfo()
+        public object GetBERecieveDefinitionsInfo(string filter = null)
         {
-            return _manager.GetBEReceiveDefinitionsInfo();
+            BEReceiveDefinitionFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<BEReceiveDefinitionFilter>(filter) : null;
+            return _manager.GetBEReceiveDefinitionsInfo(deserializedFilter);
         }
         [HttpPost]
         [Route("GetFilteredBeReceiveDefinitions")]

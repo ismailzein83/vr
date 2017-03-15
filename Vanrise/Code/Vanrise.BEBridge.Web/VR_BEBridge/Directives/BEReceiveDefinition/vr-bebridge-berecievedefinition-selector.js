@@ -77,11 +77,6 @@ app.directive('vrBebridgeBerecievedefinitionSelector', ['VR_BEBridge_BERecieveDe
                     }
                 };
 
-
-                ctrl.search = function (nameFilter) {
-                    return VR_BEBridge_BERecieveDefinitionAPIService.GetBERecieveDefinitionsInfo(nameFilter);
-                };
-
             }
 
             function defineAPI() {
@@ -98,7 +93,7 @@ app.directive('vrBebridgeBerecievedefinitionSelector', ['VR_BEBridge_BERecieveDe
                         filter = payload.filter;
                     }
 
-                    return VR_BEBridge_BERecieveDefinitionAPIService.GetBERecieveDefinitionsInfo(undefined).then(function (response) {
+                    return VR_BEBridge_BERecieveDefinitionAPIService.GetBERecieveDefinitionsInfo(filter).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);

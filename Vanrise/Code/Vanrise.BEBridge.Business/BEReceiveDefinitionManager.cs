@@ -5,14 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BEBridge.Data;
 using Vanrise.BEBridge.Entities;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.BEBridge.Business
 {
     public class BEReceiveDefinitionManager : IBEReceiveDefinitionManager
     {
+        #region Ctor/Fields
+
+        static SecurityManager s_securityManager = new SecurityManager();
+
+        #endregion
         #region Public Methods
         public BEReceiveDefinition GetBEReceiveDefinition(Guid id)
         {
@@ -20,9 +28,23 @@ namespace Vanrise.BEBridge.Business
             return allBEReceiveDefinitions.GetRecord(id);
         }
 
-        public IEnumerable<BEReceiveDefinitionInfo> GetBEReceiveDefinitionsInfo()
+        public IEnumerable<BEReceiveDefinitionInfo> GetBEReceiveDefinitionsInfo(BEReceiveDefinitionFilter filter)
         {
-            return GetCachedBEReceiveDefinitions().MapRecords(BEReceiveDefinitionInfoMapper);
+            Func<BEReceiveDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+
+
+                filterExpression = (beReceiveDefinition) =>
+                {
+
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(beReceiveDefinition, filter.Filters))
+                        return false;
+
+                    return true;
+                };
+            }
+            return GetCachedBEReceiveDefinitions().MapRecords(BEReceiveDefinitionInfoMapper, filterExpression);
         }
         public IDataRetrievalResult<BEReceiveDefinitionDetail> GetFilteredBeReceiveDefinitions(DataRetrievalInput<BEReceiveDefinitionQuery> input)
         {
@@ -97,6 +119,9 @@ namespace Vanrise.BEBridge.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<TargetBESynchronizerConfig>(TargetBESynchronizerConfig.EXTENSION_TYPE);
         }
+       
+        
+
         #endregion
 
         #region Private Methods
@@ -131,7 +156,28 @@ namespace Vanrise.BEBridge.Business
             }
         }
 
+
+        private bool DoesUserHaveAccess(int userId, BEReceiveDefinition beReceiveDefinition, Func<BEReceiveDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            if (beReceiveDefinition != null && beReceiveDefinition.Settings.Security != null && beReceiveDefinition.Settings.Security != null)
+                return s_securityManager.IsAllowed(getRequiredPermissionSetting(beReceiveDefinition.Settings.Security), userId);
+            return true;
+            
+        }
+
+        private bool CheckIfFilterIsMatch(BEReceiveDefinition BEReceiveDefinition, List<IBEReceiveDefinitionFilter> filters)
+        {
+            var context = new BEReceiveDefinitionFilterContext { BEReceiveDefinitionId = BEReceiveDefinition.BEReceiveDefinitionId };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
+
         #endregion
+
         #region DetailMappers
 
         public BEReceiveDefinitionDetail BeReceiveDefinitionDetailMapper(BEReceiveDefinition beReceiveDefinition)
@@ -143,6 +189,65 @@ namespace Vanrise.BEBridge.Business
             };
             return beReceiveDefinitionDetail;
         }
+        #endregion
+
+        #region Security
+        public bool DoesUserHaveStartInstanceAccess(Guid beRecieveDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var beRecieveDefinition =  GetBEReceiveDefinition(beRecieveDefinitionId);
+            return DoesUserHaveAccess(userId, beRecieveDefinition, (sec) => sec.StartInstancePermission);
+        }
+
+        public bool DoesUserHaveScheduleTaskAccess(Guid beRecieveDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var beRecieveDefinition = GetBEReceiveDefinition(beRecieveDefinitionId);
+            return DoesUserHaveAccess(userId, beRecieveDefinition, (sec) => sec.ScheduleTaskPermission);
+        }
+        public bool DoesUserHaveViewAccess(int userId)
+        {
+            var allBEdef = GetCachedBEReceiveDefinitions();
+            foreach (var beDef in allBEdef)
+            {
+                if (DoesUserHaveAccess(userId, beDef.Value, (sec) => sec.ViewPermission))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveStartNewInstanceAccess(int userId)
+        {
+            var allBEdef = GetCachedBEReceiveDefinitions();
+            foreach (var bedef in allBEdef)
+            {
+                if (DoesUserHaveAccess(userId, bedef.Value, (sec) => sec.StartInstancePermission))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveScheduleTaskAccess(int userId)
+        {
+            var allBEdef = GetCachedBEReceiveDefinitions();
+            foreach (var bedef in allBEdef)
+            {
+                if (DoesUserHaveAccess(userId, bedef.Value, (sec) => sec.ScheduleTaskPermission))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveStartSpecificInstanceAccess(int userId, List<Guid> beReceiveDefinitionIds)
+        {
+            foreach (var be in beReceiveDefinitionIds)
+            {
+                var beDef = GetBEReceiveDefinition(be);
+                if (!DoesUserHaveAccess(userId, beDef, (sec) => sec.StartInstancePermission))
+                    return false;
+            }
+            return true;
+        }
+
         #endregion
     }
 

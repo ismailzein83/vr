@@ -46,10 +46,8 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                 var api = {};
                 api.getData = function () {
                     return {
-                        InputArguments: {
-                            $type: "Vanrise.BEBridge.BP.Arguments.SourceBESyncProcessInput, Vanrise.BEBridge.BP.Arguments",
-                            BEReceiveDefinitionIds: beRecieveDefinitionSelectorAPI.getSelectedIds()
-                        }
+                        $type: "Vanrise.BEBridge.BP.Arguments.SourceBESyncProcessInput, Vanrise.BEBridge.BP.Arguments",
+                        BEReceiveDefinitionIds: beRecieveDefinitionSelectorAPI.getSelectedIds()
                     };
                 };
 
@@ -58,8 +56,9 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                 };
 
                 api.load = function (payload) {
+                    var beReceiveDefinitionIds = payload && payload.data && payload.data.BEReceiveDefinitionIds || undefined;
                     var promises = [];
-                    promises.push(loadRouteSyncDefinitionSelector());
+                    promises.push(loadRouteSyncDefinitionSelector(beReceiveDefinitionIds));
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -67,10 +66,18 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                     ctrl.onReady(api);
             }
 
-            function loadRouteSyncDefinitionSelector() {
+            function loadRouteSyncDefinitionSelector(beReceiveDefinitionIds) {
                 var beRecieveDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 beRecieveDefinitionSelectorAPIReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(beRecieveDefinitionSelectorAPI, undefined, beRecieveDefinitionSelectorLoadDeferred);
+                    var payload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Vanrise.BEBridge.Business.BEReceiveDefinitionScheduleTaskFilter, Vanrise.BEBridge.Business",
+                            }]
+                        },
+                        selectedIds: beReceiveDefinitionIds
+                    }
+                    VRUIUtilsService.callDirectiveLoad(beRecieveDefinitionSelectorAPI, payload, beRecieveDefinitionSelectorLoadDeferred);
                 });
 
                 return beRecieveDefinitionSelectorLoadDeferred.promise;

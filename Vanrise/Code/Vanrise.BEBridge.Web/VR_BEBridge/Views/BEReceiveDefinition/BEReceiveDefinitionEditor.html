@@ -15,6 +15,29 @@
                 <vr-tab header="'Settings'">
                     <vr-bebridge-bedefinition-settings-grid on-ready="scopeModel.onBESyncSettingsDirectiveReady"></vr-bebridge-bedefinition-settings-grid>
                 </vr-tab>
+                <vr-tab header="'Security'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section header="View"  >
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section header="Start Instance"  >
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onStartInstanceRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section header="Schedule Task">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onScheduleTaskRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

@@ -45,12 +45,29 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BEReceiveDefinitionManager.cs" />
+    <Compile Include="BEReceiveDefinitionScheduleTaskFilter.cs" />
+    <Compile Include="BEReceiveDefinitionStartInstanceFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceBEDefinitionExtentedSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.BEBridge.BP.Arguments\Vanrise.BEBridge.BP.Arguments.csproj">
+      <Project>{2ed20cc8-051a-4741-929b-8a395e1fe508}</Project>
+      <Name>Vanrise.BEBridge.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.BEBridge.Data\Vanrise.BEBridge.Data.csproj">
       <Project>{a79af111-5831-41c7-bac8-e31fb96c3a0f}</Project>
       <Name>Vanrise.BEBridge.Data</Name>

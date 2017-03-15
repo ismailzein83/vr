@@ -7,7 +7,7 @@
         var controllerName = 'BERecieveDefinition';
 
         function GetBERecieveDefinitionsInfo(filter) {
-            return baseApiService.get(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, "GetBERecieveDefinitionsInfo"));
+            return baseApiService.get(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, "GetBERecieveDefinitionsInfo"), { filter: filter });
         }
         function GetFilteredBeReceiveDefinitions(input) {
             return baseApiService.post(utilsService.getServiceURL(vrBeBridgeModuleConfig.moduleName, controllerName, 'GetFilteredBeReceiveDefinitions'), input);

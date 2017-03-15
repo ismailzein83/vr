@@ -11,5 +11,7 @@ namespace Vanrise.BEBridge.Entities
         public SourceBEReader SourceBEReader { get; set; }
         public List<EntitySyncDefinition> EntitySyncDefinitions { get; set; }
 
+        public BEReceiveDefinitionSecurity Security { get; set; }
+
     }
 }
