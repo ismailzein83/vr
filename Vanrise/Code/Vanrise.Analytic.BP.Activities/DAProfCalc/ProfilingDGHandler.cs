@@ -50,40 +50,44 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         {
             //Evaluate the Calculated Fields, generate the DAProfCalcOutputRecord. and call ProcessOutputRecord of the OutputRecordProcessor if available. or set it to FinalResult if not
             DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
-            var dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(DAProfCalcExecInput.OutputItemDefinitionId);
-            RecordProfilingOutputSettings recordProfilingOutputSettings = (dataAnalysisItemDefinition.Settings as RecordProfilingOutputSettings);
+            RecordProfilingOutputSettings recordProfilingOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<RecordProfilingOutputSettings>(DAProfCalcExecInput.OutputItemDefinitionId);
 
             DAProfCalcOutputRecordProcessorProcessContext daProfCalcOutputRecordProcessorProcessContext = new DAProfCalcOutputRecordProcessorProcessContext()
             {
                 OutputRecords = new List<DAProfCalcOutputRecord>()
             };
+
+            RecordProfilingOutputSettingsManager recordProfilingOutputSettingsManager = new RecordProfilingOutputSettingsManager();
+            Dictionary<string, DAProfCalcCalculationFieldDetail> daProfCalcCalculationFieldDetailDict = recordProfilingOutputSettingsManager.GetRecordProfilingCalculationFields(DAProfCalcExecInput.OutputItemDefinitionId);
+
             foreach (IDataGroupingItem item in context.GroupedItems)
             {
                 ProfilingDGItem profilingDGItem = item as ProfilingDGItem;
                 Dictionary<string, dynamic> groupingValues = new Dictionary<string, dynamic>(profilingDGItem.GroupingValues);
 
+                Dictionary<string, dynamic> aggregationValues = new Dictionary<string, dynamic>(profilingDGItem.GroupingValues);
+
                 for (var index = 0; index < recordProfilingOutputSettings.AggregationFields.Count; index++)
                 {
                     var aggregationField = recordProfilingOutputSettings.AggregationFields[index];
                     var profilingDGItemAggregateState = profilingDGItem.AggregateStates[index];
-                    groupingValues.Add(aggregationField.FieldName, aggregationField.RecordAggregate.GetResult(new DARecordAggregateGetResultContext(profilingDGItemAggregateState)));
+                    var aggregateResult =  aggregationField.RecordAggregate.GetResult(new DARecordAggregateGetResultContext(profilingDGItemAggregateState));
+                    aggregationValues.Add(aggregationField.FieldName, aggregateResult);
+                    groupingValues.Add(aggregationField.FieldName, aggregateResult);
                 }
+
+                if (daProfCalcCalculationFieldDetailDict != null && daProfCalcCalculationFieldDetailDict.Count > 0)
+                {
+                    DAProfCalcGetMeasureValueContext daProfCalcGetMeasureValueContext = new DAProfCalcGetMeasureValueContext(profilingDGItem.GroupingValues, aggregationValues);
+                    foreach (var daProfCalcCalculationFieldDetail in daProfCalcCalculationFieldDetailDict)
+                    {
+                        groupingValues.Add(daProfCalcCalculationFieldDetail.Value.Entity.FieldName, daProfCalcCalculationFieldDetail.Value.Evaluator.GetCalculationValue(daProfCalcGetMeasureValueContext));
+                    }
+                }
+
                 DAProfCalcOutputRecord record = new DAProfCalcOutputRecord() { DAProfCalcExecInput = this.DAProfCalcExecInput, Records = groupingValues, GroupingKey = profilingDGItem.GroupingKey };
                 daProfCalcOutputRecordProcessorProcessContext.OutputRecords.Add(record);
             }
-
-            //if (recordProfilingOutputSettings.CalculationFields != null && recordProfilingOutputSettings.CalculationFields.Count > 0)
-            //{
-            //    foreach (IDataGroupingItem item in context.GroupedItems)
-            //    {
-            //        var profilingDGItem = item as ProfilingDGItem;
-
-            //        //foreach (DAProfCalcCalculationField calculationField in recordProfilingOutputSettings.CalculationFields)
-            //        //{
-            //            //calculationField.Expression
-            //        //}
-            //    }
-            //}
 
             OutputRecordProcessor.ProcessOutputRecords(daProfCalcOutputRecordProcessorProcessContext);
         }

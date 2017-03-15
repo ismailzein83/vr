@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.GenericData.Entities;
+﻿using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -14,5 +9,12 @@ namespace Vanrise.Analytic.Entities
         public DataRecordFieldType FieldType { get; set; }
 
         public string Expression { get; set; }
+    }
+
+    public class DAProfCalcCalculationFieldDetail
+    {
+        public DAProfCalcCalculationField Entity { get; set; }
+
+        public IDAProfCalcCalculationEvaluator Evaluator { get; set; }
     }
 }

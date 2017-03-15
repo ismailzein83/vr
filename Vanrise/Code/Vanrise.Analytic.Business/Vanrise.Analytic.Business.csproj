@@ -49,6 +49,8 @@
     <Compile Include="AnalyticReportManager.cs" />
     <Compile Include="AnalyticTableManager.cs" />
     <Compile Include="AnalyticTableQueryContext.cs" />
+    <Compile Include="DataAnalysis\DADynamicTypeGenerator.cs" />
+    <Compile Include="DataAnalysis\DAGetMeasureValueContext.cs" />
     <Compile Include="DataAnalysis\DAProfCalcDataRecordStorageFilter.cs" />
     <Compile Include="DataAnalysis\DAProfCalcStoreEventsOutputProcessor.cs" />
     <Compile Include="DataAnalysis\DAProfCalcGenerateVRAlertEventsOutputProcessor.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="DataAnalysis\DataAnalysisItemDefinitionManager.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinitionManager.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemExtraFields.cs" />
+    <Compile Include="DataAnalysis\RecordProfiling\RecordProfilingOutputSettingsManager.cs" />
     <Compile Include="DynamicTypeGenerator.cs" />
     <Compile Include="GetDimensionValueContext.cs" />
     <Compile Include="GetMeasureValueContext.cs" />
