@@ -178,7 +178,7 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
         var callHandle = {};
         pendingWEBAPICallHandles.push(callHandle);
         if (isAskingForLoginPassword)
-            pendingCallsAfterLastAskForLogin.push(callHandle)
+            pendingCallsAfterLastAskForLogin.push(callHandle);
         return callHandle;
     }
 

@@ -24,7 +24,7 @@
             var reloginAfterPasswordActivation = function (passwordAfterActivation) {
                 $scope.password = passwordAfterActivation;
                 login();
-            }
+            };
             return SecurityService.authenticate($scope.email, $scope.password, reloginAfterPasswordActivation).then(function () {
                 UISettingsService.loadUISettings().then(function () {
                     if ($scope.redirectURL != undefined && $scope.redirectURL != '' && $scope.redirectURL.indexOf('default') == -1 && $scope.redirectURL.indexOf('#') > -1) {
