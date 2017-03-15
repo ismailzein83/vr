@@ -15,7 +15,7 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Caching Runtime service used as centralized memory cache for business entities. nbOfRuntimeInstances depended on available resources-->
-      <runtimeServiceGroup name="groupA2" nbOfRuntimeInstances="2">
+      <runtimeServiceGroup name="groupA2" nbOfRuntimeInstances="1">
         <runtimeServices>
           <runtimeService name="CachingRuntimeService" type="Vanrise.Caching.Runtime.CachingRuntimeService,Vanrise.Caching.Runtime" interval="00:00:01"></runtimeService>
         </runtimeServices>
@@ -27,7 +27,7 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Used for Business Process (Reprocess, Route build, Product Cost Generation, etc...). nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="5">
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="3">
         <runtimeServices>
           <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
         </runtimeServices>
