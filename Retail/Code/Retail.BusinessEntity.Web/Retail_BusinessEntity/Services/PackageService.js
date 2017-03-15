@@ -2,11 +2,12 @@
 
     'use stict';
 
-    PackageService.$inject = ['VRModalService'];
+    PackageService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function PackageService(VRModalService) {
+    function PackageService(VRModalService, VRCommon_ObjectTrackingService) {
 
 
+        var drillDownDefinitions = [];
         function addPackage(onPackageAdded) {
             var settings = {};
 
@@ -83,6 +84,40 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageItemEditor.html', parameters, modalSettings);
         }
 
+        function getEntityUniqueName(accountBEDefinitionId) {
+            return "Retail_BusinessEntity_Package_" + accountBEDefinitionId;
+        }
+
+        function registerObjectTrackingDrillDownToPackage() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, packageItem) {
+              
+                packageItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: packageItem.Entity.PackageId,
+                    EntityUniqueName: getEntityUniqueName(packageItem.AccountBEDefinitionId),
+
+                };
+                return packageItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            
+            return drillDownDefinitions;
+        }
 
         return ({
             addPackage: addPackage,
@@ -90,7 +125,9 @@
             addService: addService,
             editService: editService,
             addPackageItem: addPackageItem,
-            editPackageItem: editPackageItem
+            editPackageItem: editPackageItem,
+            registerObjectTrackingDrillDownToPackage: registerObjectTrackingDrillDownToPackage,
+            getDrillDownDefinition:getDrillDownDefinition
         });
     }
 

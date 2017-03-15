@@ -165,6 +165,7 @@ namespace Retail.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 accountToInsert.AccountId = accountId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(new AccountBELoggableEntity(accountToInsert.AccountBEDefinitionId), accountToInsert);
                 insertOperationOutput.InsertedObject = AccountDetailMapper(this.GetAccount(accountToInsert.AccountBEDefinitionId, accountToInsert.AccountId));
             }
             else
@@ -694,7 +695,7 @@ namespace Retail.BusinessEntity.Business
         {
             Guid _accountBEDefinitionId;
             static AccountBEDefinitionManager s_accountBEDefinitionManager = new AccountBEDefinitionManager();
-
+          
             public AccountBELoggableEntity(Guid accountBEDefinitionId)
             {
                 _accountBEDefinitionId = accountBEDefinitionId;

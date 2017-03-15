@@ -101,6 +101,7 @@ namespace Retail.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 package.PackageId = packageId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(new PackageLoggableEntity(_packageDefinitionManager.GetPackageDefinitionAccountBEDefId(package.Settings.PackageDefinitionId)), package);
                 insertOperationOutput.InsertedObject = PackageDetailMapper(package);
             }
             else
@@ -123,6 +124,7 @@ namespace Retail.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new PackageLoggableEntity(_packageDefinitionManager.GetPackageDefinitionAccountBEDefId(package.Settings.PackageDefinitionId)), package);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = PackageDetailMapper(package);
             }
@@ -224,6 +226,50 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        private class PackageLoggableEntity : VRLoggableEntityBase
+        {
+            Guid _accountDefinitionId;
+            static AccountBEDefinitionManager _accountBEDefintionManager = new AccountBEDefinitionManager();
+           
+            public PackageLoggableEntity(Guid acountDefinitionId)
+            {
+                _accountDefinitionId = acountDefinitionId;
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return String.Format("Retail_BusinessEntity_Package_{0}", _accountDefinitionId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return String.Format(_accountBEDefintionManager.GetAccountBEDefinitionName(_accountDefinitionId), "_Packges"); }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "Retail_BusinessEntity_Package_ViewHistoryItem"; }
+            }
+
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Package package = context.Object.CastWithValidate<Package>("context.Object");
+                return package.PackageId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Package package = context.Object.CastWithValidate<Package>("context.Object");
+                return s_packageManager.GetPackageName(package.PackageId);
+               
+            }
+
+            public override string ModuleName
+            {
+                get { return "package"; }
+            }
+        }
         #endregion
 
         #region  Mappers
@@ -239,7 +285,10 @@ namespace Retail.BusinessEntity.Business
 
         private PackageDetail PackageDetailMapper(Package package)
         {
+            
+            
             PackageDetail packageDetail = new PackageDetail();
+            packageDetail.AccountBEDefinitionId = _packageDefinitionManager.GetPackageDefinitionAccountBEDefId(package.Settings.PackageDefinitionId);
             packageDetail.Entity = package;
             packageDetail.AllowEdit = _packageDefinitionManager.DoesUserHaveEditPackageDefinitions(package.Settings.PackageDefinitionId);
             return packageDetail;

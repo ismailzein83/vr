@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBePackageGrid', ['VRNotificationService', 'Retail_BE_PackageAPIService', 'Retail_BE_PackageService',
-    function (VRNotificationService, Retail_BE_PackageAPIService, Retail_BE_PackageService) {
+app.directive('retailBePackageGrid', ['VRNotificationService', 'Retail_BE_PackageAPIService', 'Retail_BE_PackageService','VRUIUtilsService',
+function (VRNotificationService, Retail_BE_PackageAPIService, Retail_BE_PackageService,VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,7 +20,7 @@ app.directive('retailBePackageGrid', ['VRNotificationService', 'Retail_BE_Packag
 
         function PackageGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var gridDrillDownTabsObj;
             var gridAPI;
 
             function initializeController() {
@@ -29,12 +29,20 @@ app.directive('retailBePackageGrid', ['VRNotificationService', 'Retail_BE_Packag
                 $scope.scopeModel.menuActions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
+
                     gridAPI = api;
+                    var drillDownDefinitions = Retail_BE_PackageService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return Retail_BE_PackageAPIService.GetFilteredPackages(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +59,7 @@ app.directive('retailBePackageGrid', ['VRNotificationService', 'Retail_BE_Packag
                 };
 
                 api.onPackageAdded = function (addedPackage) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedPackage);
                     gridAPI.itemAdded(addedPackage);
                 };
 
@@ -75,8 +84,9 @@ app.directive('retailBePackageGrid', ['VRNotificationService', 'Retail_BE_Packag
                
             }
             function editPackage(packageItem) {
-                var onPackageUpdated = function (updatedPackage) {
-                    gridAPI.itemUpdated(updatedPackage);
+                var onPackageUpdated = function (packageItem) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(packageItem);
+                    gridAPI.itemUpdated(packageItem);
                 };
 
                 Retail_BE_PackageService.editPackage(packageItem.Entity.PackageId, onPackageUpdated);

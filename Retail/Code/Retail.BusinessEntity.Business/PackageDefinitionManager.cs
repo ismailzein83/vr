@@ -22,6 +22,11 @@ namespace Retail.BusinessEntity.Business
             return packageDefinitions.FindRecord(x => x.VRComponentTypeId == packageDefinitionId);
         }
 
+        public string GetPackageDefinitionName(Guid packageDefinitionId)
+        {
+            var packageDefinition = GetPackageDefinitionById(packageDefinitionId);
+            return packageDefinition != null ? packageDefinition.Name : null;
+        }
         public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo(PackageDefinitionFilter filter)
         {
             Dictionary<Guid, PackageDefinition> cachedPackageDefinitions = null;
