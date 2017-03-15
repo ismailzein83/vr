@@ -128,6 +128,9 @@
     <Folder Include="VR_AccountBalance\Functions\" />
     <Folder Include="VR_AccountBalance\Stored Procedures\" />
     <Folder Include="VR_AccountBalance\User Defined Types\" />
+    <Folder Include="logging\" />
+    <Folder Include="logging\Tables\" />
+    <Folder Include="logging\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -554,6 +557,10 @@
     <Build Include="Security\VR_AccountBalance.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_SetEnable.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_SetDisable.sql" />
+    <Build Include="logging\Tables\LoggableEntity.sql" />
+    <Build Include="logging\Stored Procedures\sp_LoggableEntity_InsertOrUpdate.sql" />
+    <Build Include="logging\Stored Procedures\sp_LoggableEntity_GetAll.sql" />
+    <Build Include="Security\logging.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
