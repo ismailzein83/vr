@@ -40,7 +40,7 @@
                     $scope.scopeModal.isLoadingSystemMissingCDRDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, systemMissingCDRGridAPI, payload, setLoader);
-            }
+            };
             $scope.scopeModal.onPartnerMissingCDRDirectiveReady = function (api) {
                 partnerMissingCDRGridAPI = api;
                 var payload = {
@@ -51,7 +51,7 @@
                     $scope.scopeModal.isLoadingPartnerMissingCDRDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerMissingCDRGridAPI, payload, setLoader);
-            }
+            };
             $scope.scopeModal.onPartialMatchCDRDirectiveReady = function (api) {
                 var payload = {
                     TableKey: tableKey
@@ -61,8 +61,8 @@
                     $scope.scopeModal.isLoadingPartialMatchCDRDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partialMatchCDRGridAPI, payload, setLoader);
-             
-            }
+
+            };
 
             $scope.scopeModal.onDisputeCDRGridReady = function (api) {
                 disputeCDRGridAPI = api;
@@ -73,11 +73,11 @@
                     $scope.scopeModal.isLoadingDisputeCDRDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, disputeCDRGridAPI, payload, setLoader);
-            }
+            };
 
             $scope.scopeModal.continueTask = function () {
                 return executeTask(true);
-            }
+            };
         }
 
         function executeTask(taskAction) {

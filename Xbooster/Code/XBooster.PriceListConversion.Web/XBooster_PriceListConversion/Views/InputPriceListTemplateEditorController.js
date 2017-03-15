@@ -18,7 +18,7 @@
 
             if (parameters != undefined && parameters != null)
             {
-                configDetails = parameters.ConfigDetails
+                configDetails = parameters.ConfigDetails;
                 priceListTemplateId = parameters.PriceListTemplateId;
 
             }

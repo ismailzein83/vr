@@ -21,32 +21,30 @@
 
                 $scope.scopeModel.onReadyWoorkBook = function (api) {
                     inputWorkBookApi = api;
-                }
+                };
 
                 $scope.scopeModel.onInputConfigurationSelectiveReady = function (api) {
                     inputConfigurationAPI = api;
                     inputConfigurationReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.startConvertAndDownload = function () {
 
                     var onOutputPriceListTemplateChoosen = function (choosenPriceListTemplateObj) {
-                        if (choosenPriceListTemplateObj != undefined && choosenPriceListTemplateObj.pricelistTemplateIds != undefined)
-                        {
+                        if (choosenPriceListTemplateObj != undefined && choosenPriceListTemplateObj.pricelistTemplateIds != undefined) {
                             $scope.scopeModel.isLoading = true;
                             var promises = [];
                             var requests = [];
-                            for (var i = 0; i < choosenPriceListTemplateObj.pricelistTemplateIds.length; i++)
-                            {
-                                
-                                var fileName = UtilsService.getUploadedFileName( $scope.scopeModel.inPutFile.fileName);
-              
+                            for (var i = 0; i < choosenPriceListTemplateObj.pricelistTemplateIds.length; i++) {
+
+                                var fileName = UtilsService.getUploadedFileName($scope.scopeModel.inPutFile.fileName);
+
                                 var priceListConversion = {
                                     InputPriceListName: fileName,
                                     InputFileId: $scope.scopeModel.inPutFile.fileId,
                                     InputPriceListSettings: buildInputConfigurationObj(),
                                     OutputPriceListTemplateId: choosenPriceListTemplateObj.pricelistTemplateIds[i]
-                                }
+                                };
                                 promises.push(convert(priceListConversion));
                             }
                             return UtilsService.waitMultiplePromises(promises).finally(function () {
@@ -54,34 +52,30 @@
                             }).catch(function (error) {
                             });
                         }
-                       
-                        
+
+
                     };
                     XBooster_PriceListConversion_PriceListTemplateService.openOutputPriceListTemplates(onOutputPriceListTemplateChoosen);
-                }
+                };
 
-                $scope.scopeModel.saveInputConfiguration = function ()
-                {
-                   return saveInputConfiguration();
-                }
+                $scope.scopeModel.saveInputConfiguration = function () {
+                    return saveInputConfiguration();
+                };
 
                 $scope.scopeModel.onInputPriceListTemplateSelectorReady = function (api) {
                     inputPriceListTemplateAPI = api;
                     inputPriceListTemplateReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onInputPriceListTemplateSelectionChanged = function (api) {
-                    if (inputPriceListTemplateAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() ==undefined)
-                    {
+                    if (inputPriceListTemplateAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() == undefined) {
                         inputPriceListName = undefined;
                     }
-                    if (inputPriceListTemplateAPI != undefined && !$scope.scopeModel.isLoading && inputConfigurationAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() !=undefined)
-                    {
+                    if (inputPriceListTemplateAPI != undefined && !$scope.scopeModel.isLoading && inputConfigurationAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() != undefined) {
                         $scope.scopeModel.isLoading = true;
                         getPriceListTemplate(inputPriceListTemplateAPI.getSelectedIds()).then(function (response) {
-                           
-                            if (response)
-                            {
+
+                            if (response) {
                                 inputPriceListName = response.Name;
                                 var payload = {
                                     context: buildContext(),
@@ -92,15 +86,15 @@
                                 };
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, inputConfigurationAPI, payload, setLoader, inputConfigurationReadyPromiseDeferred);
                             }
-                           
+
 
                         }).finally(function () {
                             $scope.scopeModel.isLoading = false;
                         });
-                        
+
                     }
-                    
-                }
+
+                };
 
                 function hassaveInputConfigurationPermission() {
                     return XBooster_PriceListConversion_PriceListTemplateAPIService.HassaveInputConfigurationPermission();
@@ -159,7 +153,7 @@
                     getSelectedCell: getSelectedCell,
                     setSelectedCell: selectCellAtSheet,
                     getSelectedSheet: getSelectedSheet
-                }
+                };
                 function selectCellAtSheet(row, col, s) {
                     var a = parseInt(row);
                     var b = parseInt(col);

@@ -61,7 +61,7 @@
                     var data = {
                         $type: " XBooster.PriceListConversion.MainExtensions.OutputFieldValue.Constant, XBooster.PriceListConversion.MainExtensions ",
                         Value: ctrl.constant
-                    }
+                    };
                     return data;
                 }
             }

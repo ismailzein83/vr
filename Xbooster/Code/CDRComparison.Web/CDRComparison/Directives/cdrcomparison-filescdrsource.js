@@ -35,7 +35,7 @@
                 $scope.scopeModel.validateFile = function (fileName, fileSizeInBytes) {
 
                     var fileSizeInMegaBytes = fileSizeInBytes * 0.000001;
-                    var maxSize = (sizeInMegaBytes != null) ? sizeInMegaBytes : 5
+                    var maxSize = (sizeInMegaBytes != null) ? sizeInMegaBytes : 5;
                     
                     if (fileSizeInMegaBytes <= maxSize)
                         return true;

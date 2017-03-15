@@ -47,7 +47,7 @@
               + 'hideremoveicon>'
           + '</vr-select></vr-columns> '
           + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" vr-loader="isLoadingDirective" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>';
-           + '</vr-row>'
+            + '</vr-row>';
             return template;
 
         }
@@ -121,13 +121,11 @@
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
-                api.isDateTime = function()
-                {
-                    if(directiveAPI != undefined && directiveAPI.isDateTime !=undefined)
-                    {
+                api.isDateTime = function () {
+                    if (directiveAPI != undefined && directiveAPI.isDateTime != undefined) {
                         return directiveAPI.isDateTime();
                     }
-                }
+                };
                 api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

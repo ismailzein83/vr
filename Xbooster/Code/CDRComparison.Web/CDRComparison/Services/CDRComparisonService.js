@@ -14,15 +14,15 @@
             };
             var parameters = {
                 tableKey: tableKey
-            }
+            };
 
             VRModalService.showModal("/Client/Modules/CDRComparison/Views/TimeOffsetHelper.html", parameters, settings);
         }
 
 
         return ({
-            openTimeOffsetHelper: openTimeOffsetHelper,
-        })
+            openTimeOffsetHelper: openTimeOffsetHelper
+        });
     }
 
     appControllers.service('CDRComparison_CDRComparisonService', CDRComparisonService);

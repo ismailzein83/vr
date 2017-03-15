@@ -22,7 +22,7 @@
             };
             $scope.hasaddPriceListTemplatePermission = function () {
                 return XBooster_PriceListConversion_PriceListTemplateAPIService.HasaddOutputPriceListTemplatePermission();
-            }
+            };
             $scope.addPriceListTemplate = function () {
                 var onPriceListTemplateAdded = function (priceListTemplateObj) {
                     priceListTemplateGridAPI.onPriceListTemplateAdded(priceListTemplateObj);

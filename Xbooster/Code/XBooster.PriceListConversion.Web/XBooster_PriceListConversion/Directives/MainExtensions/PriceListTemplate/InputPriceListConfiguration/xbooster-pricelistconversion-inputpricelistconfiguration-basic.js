@@ -36,60 +36,48 @@
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.validate = function()
-                {
-                    if($scope.scopeModel.delimiterValue == $scope.scopeModel.rangeSeparator)
-                    {
+                $scope.scopeModel.validate = function () {
+                    if ($scope.scopeModel.delimiterValue == $scope.scopeModel.rangeSeparator) {
 
                         return "Range separator should not be the same as delimiter.";
                     }
                     return null;
-                }
+                };
 
                $scope.scopeModel.codeLayouts=UtilsService.getArrayEnum(XBooster_PriceListConversion_CodeLayoutEnum);
                 $scope.scopeModel.dateTimeFormat = "yyyy/MM/dd";
                 $scope.scopeModel.onCodeListMappingReady = function (api) {
                     codeListAPI = api;
                     codeListMappingReadyPromiseDeferred.resolve();
-                }
-                $scope.scopeModel.onCodeLayoutSelectionChanged= function()
-                {
-                    if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.Delimitedcode.value)
-                    {
-                      //  if ($scope.scopeModel.delimiterValue == undefined)
+                };
+                $scope.scopeModel.onCodeLayoutSelectionChanged = function () {
+                    if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.Delimitedcode.value) {
+                        //  if ($scope.scopeModel.delimiterValue == undefined)
                         $scope.scopeModel.delimiterValue = ',';
                         $scope.scopeModel.showDelimiter = true;
                     }
-                    else
-                    {
-                        $scope.scopeModel.hasCodeRange =false;
+                    else {
+                        $scope.scopeModel.hasCodeRange = false;
                         $scope.scopeModel.delimiterValue = undefined;
                         $scope.scopeModel.showDelimiter = false;
                     }
-                }
+                };
                 $scope.scopeModel.onRateListMappingReady = function (api) {
                     rateListAPI = api;
                     rateListMappingReadyPromiseDeferred.resolve();
-                }
-                $scope.scopeModel.onCodeRangeValueChanged = function()
-                {
-                    if ($scope.scopeModel.hasCodeRange)
-                    {
+                };
+                $scope.scopeModel.onCodeRangeValueChanged = function () {
+                    if ($scope.scopeModel.hasCodeRange) {
                         $scope.scopeModel.rangeSeparator = '-';
-                    }else
-                    {
+                    } else {
                         $scope.scopeModel.rangeSeparator = undefined;
                     }
-                }
-                $scope.scopeModel.checkUsesOfEffectiveDate = function ()
-                {
-                    if(codeListAPI !=undefined)
-                    {
+                };
+                $scope.scopeModel.checkUsesOfEffectiveDate = function () {
+                    if (codeListAPI != undefined) {
                         var codeListData = codeListAPI.getData();
-                        if(codeListData !=undefined && codeListData.FieldMappings !=undefined)
-                        {
-                            for(var i=0 ;i<codeListData.FieldMappings.length;i++)
-                            {
+                        if (codeListData != undefined && codeListData.FieldMappings != undefined) {
+                            for (var i = 0 ; i < codeListData.FieldMappings.length; i++) {
                                 var fieldMappingForCodeList = codeListData.FieldMappings[i];
                                 if (fieldMappingForCodeList.FieldType == VR_ExcelConversion_FieldTypeEnum.DateTime.value) {
                                     return true;
@@ -97,22 +85,20 @@
                             }
                         }
                     }
-                    if(rateListAPI !=undefined)
-                    {
+                    if (rateListAPI != undefined) {
                         var rateListData = rateListAPI.getData();
                         if (rateListData != undefined && rateListData.FieldMappings != undefined) {
                             for (var i = 0 ; i < rateListData.FieldMappings.length; i++) {
                                 var fieldMappingForRateList = rateListData.FieldMappings[i];
-                                if (fieldMappingForRateList.FieldType == VR_ExcelConversion_FieldTypeEnum.DateTime.value)
-                                {
+                                if (fieldMappingForRateList.FieldType == VR_ExcelConversion_FieldTypeEnum.DateTime.value) {
                                     return true;
                                 }
-                                
+
                             }
                         }
                     }
                     return false;
-                }
+                };
                 defineAPI();
             }
 
@@ -123,7 +109,7 @@
                     var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
-                        configDetails = payload.configDetails
+                        configDetails = payload.configDetails;
                         if (configDetails != undefined && configDetails.ExcelConversionSettings !=undefined)
                         {
                             $scope.scopeModel.dateTimeFormat = configDetails.ExcelConversionSettings.DateTimeFormat;
@@ -131,7 +117,7 @@
                             $scope.scopeModel.rangeSeparator = configDetails.RangeSeparator;
                             $scope.scopeModel.delimiterValue = configDetails.Delimiter;
                             $scope.scopeModel.isCommaDecimalSeparator =   configDetails.IsCommaDecimalSeparator;
-                            $scope.scopeModel.selectedCodeLayout = UtilsService.getItemByVal($scope.scopeModel.codeLayouts, configDetails.CodeLayout, "value")
+                            $scope.scopeModel.selectedCodeLayout = UtilsService.getItemByVal($scope.scopeModel.codeLayouts, configDetails.CodeLayout, "value");
                         }
                      
                     }
@@ -193,14 +179,14 @@
                         ListMappings: listMappings,
                         FieldMappings: null,
                         DateTimeFormat: $scope.scopeModel.dateTimeFormat
-                    }
+                    };
                     var basicConfiguration = {
                         $type: "XBooster.PriceListConversion.MainExtensions.InputPriceListSettings.BasicInputPriceListSettings,XBooster.PriceListConversion.MainExtensions",
                         ExcelConversionSettings: obj,
                         CodeLayout: $scope.scopeModel.selectedCodeLayout != undefined ? $scope.scopeModel.selectedCodeLayout.value : undefined,
                         HasCodeRange: $scope.scopeModel.hasCodeRange,
                         IsCommaDecimalSeparator: $scope.scopeModel.isCommaDecimalSeparator
-                    }
+                    };
                    
                     if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.Delimitedcode.value)
                     {

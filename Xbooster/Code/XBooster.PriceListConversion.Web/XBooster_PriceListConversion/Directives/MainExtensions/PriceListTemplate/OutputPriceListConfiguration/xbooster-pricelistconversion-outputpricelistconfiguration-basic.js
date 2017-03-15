@@ -39,7 +39,7 @@
                     if (ctrl.datasource.length > 0)
                         return null;
                     return "At least one field type should be selected.";
-                }
+                };
 
                 ctrl.addFilter = function () {
                     var dataItem = {
@@ -73,31 +73,28 @@
                     ctrl.datasource.splice(index, 1);
                 };
 
-                $scope.onFirstRowReady = function(api)
-                {
+                $scope.onFirstRowReady = function (api) {
                     firstRowAPI = api;
                     firstRowReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.onOutPutReadyWoorkBook = function (api) {
                     outPutWorkBookAPI = api;
-                }
+                };
 
                 $scope.checkUsesOfEffectiveDate = function () {
-                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
-                    {
-                       
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
+
                         for (var i = 0 ; i < ctrl.datasource.length; i++) {
                             var item = ctrl.datasource[i];
-                            if (item.fieldMappingAPI != undefined && item.fieldMappingAPI.isDateTime != undefined && item.fieldMappingAPI.isDateTime())
-                            {
-                                    return true;
+                            if (item.fieldMappingAPI != undefined && item.fieldMappingAPI.isDateTime != undefined && item.fieldMappingAPI.isDateTime()) {
+                                return true;
                             }
                         }
                     }
 
                     return false;
-                }
+                };
 
                 defineAPI();
             }
@@ -113,7 +110,7 @@
                         {
                             $scope.outPutFile = {
                                 fileId: payload.configDetails.TemplateFileId
-                            }
+                            };
                             if (payload.configDetails.Tables != undefined && payload.configDetails.Tables.length > 0)
                                 table = payload.configDetails.Tables[0];
                             
@@ -192,22 +189,22 @@
                                     SheetIndex: table.SheetIndex,
                                     RowIndex: table.RowIndex,
                                     CellIndex: item.CellIndex
-                                }
+                                };
                             }
                             
                             if (item.FieldValue != undefined)
                             {
                                 directivePayload = {
                                     outputFieldValue: item.FieldValue
-                                }
+                                };
                             }
                         }
                         dataItem.onFieldReady = function (api) {
-                            
+
                             dataItem.fieldAPI = api;
 
                             dataItem.fieldReadyPromiseDeferred.resolve();
-                        }
+                        };
 
                         dataItem.fieldReadyPromiseDeferred.promise
                               .then(function () {
@@ -219,7 +216,7 @@
                             dataItem.fieldMappingAPI = api;
 
                             dataItem.readyPromiseDeferred.resolve();
-                        }
+                        };
 
                         dataItem.readyPromiseDeferred.promise
                               .then(function () {
@@ -297,7 +294,7 @@
                         Tables: tables,
                         DateTimeFormat: $scope.dateTimeFormat,
                         RepeatOtherValues: $scope.repeatOtherValues
-                    }
+                    };
                         return data;
                 }
 
@@ -320,7 +317,7 @@
                     setSelectedCell: selectCellAtSheet,
                     getSelectedSheet: getSelectedSheet,
                     getFirstRowIndex: getFirstRowIndex
-                }
+                };
                 function selectCellAtSheet(row, col, s) {
                     var a = parseInt(row);
                     var b = parseInt(col);

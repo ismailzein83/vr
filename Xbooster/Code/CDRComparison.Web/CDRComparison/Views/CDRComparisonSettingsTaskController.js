@@ -33,21 +33,20 @@
             $scope.scopeModal.selectedDurationMarginTimeUnit = CDRComparison_TimeUnitEnum.Seconds;
             $scope.scopeModal.timeOffset = '00:00:00';
             $scope.scopeModal.compareCGPN = false;
-            $scope.scopeModal.openHelper = function()
-            {
+            $scope.scopeModal.openHelper = function () {
                 var onTimeOffsetSelected = function (timeOffset) {
                     $scope.scopeModal.timeOffset = timeOffset;
                 };
                 CDRComparison_CDRComparisonService.openTimeOffsetHelper(onTimeOffsetSelected, tableKey);
-            }
+            };
 
             $scope.scopeModal.validateTimeOffset = function (value) {
-               return UtilsService.validateTimeOffset(value);
-            }
+                return UtilsService.validateTimeOffset(value);
+            };
 
             $scope.scopeModal.continueTask = function () {
                 return executeTask(true);
-            }
+            };
         }
 
         function load() {
@@ -59,7 +58,7 @@
                     partnerCDRSourceConfigId = response.TaskData.PartnerCDRSourceConfigId;
                 }
                 loadAllControls();
-            })
+            });
         }
 
         function loadAllControls() {

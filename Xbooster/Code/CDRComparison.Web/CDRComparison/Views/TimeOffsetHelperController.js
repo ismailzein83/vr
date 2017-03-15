@@ -64,11 +64,9 @@
 
             };
 
-            $scope.onClickedCDPN = function(dataItem)
-            {
+            $scope.onClickedCDPN = function (dataItem) {
                 selectedSystemCDR = dataItem;
-                if (partnerCDRGridAPI != undefined)
-                {
+                if (partnerCDRGridAPI != undefined) {
                     var query = {
                         IsPartnerCDRs: true,
                         CDPN: dataItem.CDPN,
@@ -77,18 +75,17 @@
                     partnerCDRGridAPI.retrieveData(query);
                 }
                 $scope.showPartnerGrid = true;
-            }
+            };
 
-            $scope.onSelectedRow = function (dataItem)
-            {
-                if (selectedPartnerCDR !=undefined)
-                  selectedPartnerCDR.IsSelected = false;
+            $scope.onSelectedRow = function (dataItem) {
+                if (selectedPartnerCDR != undefined)
+                    selectedPartnerCDR.IsSelected = false;
                 selectedPartnerCDR = dataItem;
-            }
+            };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
-            }
+                $scope.modalContext.closeModal();
+            };
 
             $scope.scopeModal.onPartnerCDRDirectiveReady = function (api) {
                 partnerCDRGridAPI = api;
@@ -99,11 +96,11 @@
                     $scope.scopeModal.isLoadingPartnerCDRDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerCDRGridAPI, payload, setLoader);
-            }
+            };
            
             $scope.scopeModal.save = function () {
                 return save();
-            }
+            };
 
         }
 

@@ -125,8 +125,8 @@
 
                         if (payload.DateTimeFormat != undefined)
                             $scope.scopeModel.dateTimeFormat = payload.DateTimeFormat;
-                        if (payload.FirstRowIndex !=undefined)
-                        $scope.scopeModel.firstRowHeader = payload.FirstRowIndex != 0
+                        if (payload.FirstRowIndex != undefined)
+                            $scope.scopeModel.firstRowHeader = payload.FirstRowIndex != 0;
                       
                         flatFileId = payload.fileId;
                         fieldMappings = payload.FieldMappings;

@@ -42,10 +42,10 @@ app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsS
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
                         directiveAPI.onPriceListTemplateAdded = function (priceListTemplateObj) {
                             gridAPI.itemAdded(priceListTemplateObj);
-                        }
+                        };
                         return directiveAPI;
                     }
                 };
@@ -76,7 +76,7 @@ app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsS
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function hasUpdateOutputPriceListTemplatePermission() {
@@ -85,7 +85,7 @@ app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsS
             function editPriceListTemplate(dataItem) {
                 var onPriceListTemplateUpdated = function (priceListTemplateObj) {
                     gridAPI.itemUpdated(priceListTemplateObj);
-                }
+                };
                 XBooster_PriceListConversion_PriceListTemplateService.editOutputPriceListTemplate(dataItem.Entity.PriceListTemplateId, onPriceListTemplateUpdated);
             }
         }

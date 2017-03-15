@@ -66,8 +66,8 @@
                 var obj =
                {
                    pricelistTemplateIds: outputTemplateSelectorAPI.getSelectedIds()
-               }
-                return obj
+               };
+                return obj;
             }
            
         }
