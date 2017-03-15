@@ -156,6 +156,7 @@
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\Templates\SupplierPrepaidDefinitionSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\whs-accountbalance-runtime-supplierprepaid.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\SupplierPrepaid\whs-accountbalance-definition-supplierprepaid.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccount\whs-accountbalance-account-selector.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\FinancialAccountGridTemplate.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\FinancialAccountSearch.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\whs-accountbalance-financialaccount-grid.js" />
