@@ -54,7 +54,8 @@
     <add key="CDRComparisonDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="IntegrationConfigDBConnStringKey"                 value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
-
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    
     <add key="CDRComparisonOutputDBConnStringKey"                 value="CDRComparisonOutputDBConnString"/>
     <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>
 
