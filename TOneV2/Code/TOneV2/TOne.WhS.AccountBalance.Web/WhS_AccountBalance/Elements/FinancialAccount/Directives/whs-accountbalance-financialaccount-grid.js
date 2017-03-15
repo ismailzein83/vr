@@ -53,7 +53,9 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
                         return gridAPI.retrieveData(payload.query);
                     }
                 };
-          
+                api.onFinancialAccountAdded = function (financialAccount) {
+                    return gridAPI.itemAdded(financialAccount);
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
