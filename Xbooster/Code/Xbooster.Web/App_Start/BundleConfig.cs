@@ -9,8 +9,7 @@ namespace Xbooster.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
-
-            bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+            var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
@@ -19,7 +18,9 @@ namespace Xbooster.Web
                 "~/Client/Modules/CDRComparison", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/ExcelConversion", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/XBooster_PriceListConversion", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_GenericData", "*.js", true));
+                "~/Client/Modules/VR_GenericData", "*.js", true);
+
+            bundles.Add(modulesJSBundle);
         }
     }
 }
