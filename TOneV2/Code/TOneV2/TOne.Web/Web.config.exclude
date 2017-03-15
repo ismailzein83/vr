@@ -89,6 +89,9 @@
     <add key="DownloadCodeGroupTemplatePath" value="/Client/Modules/WhS_BusinessEntity/Templates/CodeGroupTemplate.xlsx"/>    
     
     <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString"/>
+
+    <add key="LoggingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+
   </appSettings>
   <system.web>
     <httpHandlers>

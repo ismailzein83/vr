@@ -10,7 +10,7 @@ namespace Vanrise.Common.Data.SQL
     public class VRLoggableEntityDataManager : Vanrise.Data.SQL.BaseSQLDataManager, IVRLoggableEntityDataManager
     {
         public VRLoggableEntityDataManager()
-            : base(GetConnectionStringName("LoggingDBConnStringKey", "LogDBConnString"))
+            : base(GetConnectionStringName("LoggingConfigDBConnStringKey", "LogConfigDBConnString"))
         {
 
         }
