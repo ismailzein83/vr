@@ -29,21 +29,26 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         var carrierAccountId;
         var carrierProfileId;
         this.initializeController = initializeController;
-
+        var context;
         function initializeController() {
+            $scope.scopeModel = {};
 
-            $scope.addFinancialAccount = function () {
+            $scope.scopeModel.addFinancialAccount = function () {
                 var onFinancialAccountAdded = function (obj) {
+                    if (context != undefined)
+                    {
+                        context.checkAllowAddFinancialAccount();
+                    }
                     gridAPI.onFinancialAccountAdded(obj);
                 };
                 VR_AccountBalance_FinancialAccountService.addFinancialAccount(carrierAccountId, carrierProfileId, onFinancialAccountAdded)
             }
 
-            $scope.onGridReady = function (api) {
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 defineAPI();
             };
-
+            defineContext();
         }
 
         function defineAPI() {
@@ -59,13 +64,6 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 promises.push(checkAllowAddFinancialAccount());
                 promises.push(gridAPI.loadGrid(getGridQuery()));
 
-                function checkAllowAddFinancialAccount()
-                {
-                    return WhS_AccountBalance_FinancialAccountAPIService.CheckCarrierAllowAddFinancialAccounts(carrierProfileId, carrierAccountId).then(function (response) {
-                        $scope.showAddButton = response;
-                    });
-                }
-
                 return UtilsService.waitMultiplePromises(promises);
                
             };
@@ -73,16 +71,32 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                 ctrl.onReady(api);
         }
-
+        function checkAllowAddFinancialAccount() {
+            return WhS_AccountBalance_FinancialAccountAPIService.CheckCarrierAllowAddFinancialAccounts(carrierProfileId, carrierAccountId).then(function (response) {
+                $scope.scopeModel.showAddButton = response;
+            });
+        }
         function getGridQuery() {
 
             var filter = {
                 query:{
                     CarrierAccountId: carrierAccountId,
                     CarrierProfileId: carrierProfileId
-                }
+                },
+                context: context
             };
             return filter;
+        }
+        function defineContext()
+        {
+            context = {
+                checkAllowAddFinancialAccount: function () {
+                    $scope.scopeModel.isLoading = true;
+                    return checkAllowAddFinancialAccount().finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
+                }
+            };
         }
     }
 

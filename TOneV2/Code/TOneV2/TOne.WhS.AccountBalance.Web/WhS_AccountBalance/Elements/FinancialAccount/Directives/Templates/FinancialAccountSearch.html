@@ -1,10 +1,12 @@
-﻿<vr-row removeline vr-loader="isLoading">
-    <vr-columns width="normal" >
-        <vr-button type="Add" standalone data-onclick="addFinancialAccount" vr-disabled="!showAddButton"></vr-button>
-    </vr-columns>
-</vr-row>
-<vr-row removeline>
-    <vr-columns width="fullrow">
-        <whs-accountbalance-financialaccount-grid on-ready="onGridReady"></whs-accountbalance-financialaccount-grid>
-    </vr-columns>
-</vr-row>
+﻿<span vr-loader="scopeModel.isLoading">
+    <vr-row removeline>
+        <vr-columns width="normal">
+            <vr-button type="Add" standalone data-onclick="scopeModel.addFinancialAccount" vr-disabled="!scopeModel.showAddButton"></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row removeline>
+        <vr-columns width="fullrow">
+            <whs-accountbalance-financialaccount-grid on-ready="scopeModel.onGridReady"></whs-accountbalance-financialaccount-grid>
+        </vr-columns>
+    </vr-row>
+</span>

@@ -22,7 +22,7 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var context;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.financialAccounts = [];
@@ -50,10 +50,12 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
                 api.loadGrid = function (payload) {
                     if (payload != undefined)
                     {
+                        context = payload.context;
                         return gridAPI.retrieveData(payload.query);
                     }
                 };
                 api.onFinancialAccountAdded = function (financialAccount) {
+                   
                     return gridAPI.itemAdded(financialAccount);
                 };
                 if (ctrl.onReady != null)
@@ -70,6 +72,8 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
 
             function editFinancialAccount(dataItem) {
                 var onFinancialAccountUpdated = function (financialAccount) {
+                    if (context != undefined && context.checkAllowAddFinancialAccount != undefined)
+                        context.checkAllowAddFinancialAccount();
                     gridAPI.itemUpdated(financialAccount);
                 };
                 VR_AccountBalance_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated, dataItem.Entity.FinancialAccountId);
