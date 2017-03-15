@@ -22,6 +22,12 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
             BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments;
             inputArguments.UserId = task.OwnerId;
 
+            //bool haveScheduleAccess = new BPDefinitionManager().DoesUserHaveScheduleSpecificTaskAccess(inputArguments.UserId, inputArguments);
+
+            //if (!haveScheduleAccess)
+            //    throw new Exception(); 
+           
+
             var createProcessOutput = bpInstanceManager.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = inputArguments

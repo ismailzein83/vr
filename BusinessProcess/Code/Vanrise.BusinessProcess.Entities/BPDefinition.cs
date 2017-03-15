@@ -41,9 +41,16 @@ namespace Vanrise.BusinessProcess.Entities
 
         public abstract bool DoesUserHaveStartAccess(IBPDefinitionDoesUserHaveStartAccessContext context);
 
+        public abstract bool DoesUserHaveScheduleTaskAccess(IBPDefinitionDoesUserHaveScheduleTaskContext context);
+
         public virtual bool DoesUserHaveStartSpecificInstanceAccess(IBPDefinitionDoesUserHaveStartSpecificInstanceAccessContext context)
         {
             return DoesUserHaveStartAccess(context.DefinitionContext);
+        }
+
+        public virtual bool DoesUserHaveScheduleSpecificTaskAccess(IBPDefinitionDoesUserHaveScheduleSpecificTaskAccessContext context)
+        {
+            return DoesUserHaveScheduleTaskAccess(context.DefinitionContext);
         }
     }
 
@@ -54,11 +61,39 @@ namespace Vanrise.BusinessProcess.Entities
         BPDefinition BPDefinition { get; }
     }
 
+    public class BPDefinitionDoesUserHaveViewAccessContext : IBPDefinitionDoesUserHaveViewAccessContext
+    {
+        public int UserId { get; set; }
+
+        public BPDefinition BPDefinition { get; set; }
+    }
+
     public interface IBPDefinitionDoesUserHaveStartAccessContext
     {
         int UserId { get; }
 
         BPDefinition BPDefinition { get; }
+    }
+
+    public class BPDefinitionDoesUserHaveStartAccessContext : IBPDefinitionDoesUserHaveStartAccessContext
+    {
+        public int UserId { get; set; }
+
+        public BPDefinition BPDefinition { get; set; }
+    }
+
+    public interface IBPDefinitionDoesUserHaveScheduleTaskContext
+    {
+        int UserId { get; }
+
+        BPDefinition BPDefinition { get; }
+    }
+
+    public class BPDefinitionDoesUserHaveScheduleTaskContext : IBPDefinitionDoesUserHaveScheduleTaskContext
+    {
+        public int UserId { get; set; }
+
+        public BPDefinition BPDefinition { get; set; }
     }
 
     public interface IBPDefinitionDoesUserHaveStartSpecificInstanceAccessContext
@@ -67,6 +102,28 @@ namespace Vanrise.BusinessProcess.Entities
 
         BaseProcessInputArgument InputArg { get; }
     }
+
+    public class BPDefinitionDoesUserHaveStartSpecificInstanceAccessContext : IBPDefinitionDoesUserHaveStartSpecificInstanceAccessContext
+    {
+        public IBPDefinitionDoesUserHaveStartAccessContext DefinitionContext { get; set; }
+
+        public BaseProcessInputArgument InputArg { get; set; }
+    }
+
+    public interface IBPDefinitionDoesUserHaveScheduleSpecificTaskAccessContext
+    {
+        IBPDefinitionDoesUserHaveScheduleTaskContext DefinitionContext { get; }
+
+        BaseProcessInputArgument InputArg { get; }
+    }
+
+    public class BPDefinitionDoesUserHaveScheduleSpecificTaskAccessContext : IBPDefinitionDoesUserHaveScheduleSpecificTaskAccessContext
+    {
+        public IBPDefinitionDoesUserHaveScheduleTaskContext DefinitionContext { get; set; }
+
+        public BaseProcessInputArgument InputArg { get; set; }
+    }
+
 
     public class BPDefinitionSecurity
     {

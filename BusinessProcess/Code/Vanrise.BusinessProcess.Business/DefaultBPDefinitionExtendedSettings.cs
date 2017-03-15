@@ -26,12 +26,19 @@ namespace Vanrise.BusinessProcess.Business
                 return false;
             return true;
         }
-
+        public override bool DoesUserHaveScheduleTaskAccess(IBPDefinitionDoesUserHaveScheduleTaskContext context)
+        {
+            var bpDefinition = context.BPDefinition;
+            if (bpDefinition.Configuration.Security != null && bpDefinition.Configuration.Security.ScheduleTask != null && !DoesUserHaveBPPermission(context.UserId, bpDefinition.Configuration.Security.ScheduleTask))
+                return false;
+            return true;
+        }
 
         private bool DoesUserHaveBPPermission(int userId, RequiredPermissionSettings permission)
         {
             SecurityManager secManager = new SecurityManager();
             return secManager.IsAllowed(permission, userId);
         }
+       
     }
 }

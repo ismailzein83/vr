@@ -29,5 +29,10 @@ namespace Vanrise.BusinessProcess.Entities
         {
 
         }
+
+        public virtual bool DosesUserHaveViewAccess()
+        {
+            return BusinessManagerFactory.GetManager<IBPDefinitionManager>().DoesUserHaveViewAccess(this.ProcessName);
+        }
     }
 }

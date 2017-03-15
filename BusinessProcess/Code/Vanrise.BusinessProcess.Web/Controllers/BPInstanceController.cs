@@ -50,7 +50,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         [Route("CreateNewProcess")]
         public object CreateNewProcess(CreateProcessInput createProcessInput)
         {
-            if (!_bpManager.DoesUserHaveStartNewInstanceAccess(Security.Entities.ContextFactory.GetContext().GetLoggedInUserId(),createProcessInput.InputArguments.ProcessName))
+            if (!_bpManager.DoesUserHaveStartNewInstanceAccess(Security.Entities.ContextFactory.GetContext().GetLoggedInUserId(),createProcessInput))
                 return GetUnauthorizedResponse();
 
             BPInstanceManager manager = new BPInstanceManager();
