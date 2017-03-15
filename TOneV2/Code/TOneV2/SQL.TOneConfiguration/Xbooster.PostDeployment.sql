@@ -15,17 +15,16 @@ set nocount on;;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[Allow
 --------------------------------------------------------------------------------------------------------------
 end
 
-GO--delete useless views from ClearVoice product such 'My Scheduler Service', 'Style Definitions', 'Organizational Charts', Lookups, etc...
+GO--delete useless views from Xbooster product such 'My Scheduler Service', 'Style Definitions', 'Organizational Charts', Lookups, etc...
 delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308',--'My Scheduler Service'
 										'66DE2441-8A96-41E7-94EA-9F8AF38A3515',--'Style Definitions'
 										'DCF8CA21-852C-41B9-9101-6990E545509D',--'Organizational Charts'
-										'604B2CB5-B839-4E51-8D13-3C1C84D05DEE',--'Countries'
 										'52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD',--'Component Types'
 										'8AC4B99E-01A0-41D1-AE54-09E679309086',--'Status Definitions'
 										'25994374-CB99-475B-8047-3CDB7474A083',--'Cities'
 										'9F691B87-4936-4C4C-A757-4B3E12F7E1D9', --'Currencies'
 										'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9', --'Exchange Rates'
-										'0F111ADC-B7F6-46A4-81BC-72FFDEB305EB', --
+										'0F111ADC-B7F6-46A4-81BC-72FFDEB305EB', --'Time Zone'
 										'4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712'--'Rate Types'
 										)
 GO
@@ -35,7 +34,12 @@ set nocount on;;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],
 --------------------------------------------------------------------------------------------------------------
 end
 
-DELETE FROM [sec].[BusinessEntityModule] WHERE [ID] IN ('16419FE1-ED56-49BA-B609-284A5E21FC07','520558FA-CF2F-440B-9B58-09C23B6A2E9B','D9666AEA-9517-4DC5-A3D2-D074B2B99A1C','9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF','8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493','B6B8F582-4759-43FB-9220-AA7662C366EA')--'Traffic', 'Billing','Business Entities','Rules','Lookups','System Processes'
+DELETE FROM [sec].[BusinessEntityModule] WHERE [ID] IN ('16419FE1-ED56-49BA-B609-284A5E21FC07',--'Traffic'
+														'520558FA-CF2F-440B-9B58-09C23B6A2E9B',--'Billing'
+														'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',--'Business Entities'
+														'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',--'Rules'
+														'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',--'Lookups'
+														'B6B8F582-4759-43FB-9220-AA7662C366EA')--'System Processes'
 --[sec].[BusinessEntityModule]------------------------201 to 300----------------------------------------------
 begin
 set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('6BA2809F-2CE7-4C14-B336-BD6B6B2DC463',null,'CDR Tools'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',null,0),('BD245ACC-C39B-4A48-91C5-E4F2AFEF68A9',null,'Supplier Rate'			,'5A9E78AE-229E-41B9-9DBF-492997B42B61',null,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
@@ -93,7 +97,9 @@ set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[FQTN],[Config])as (
 ----------------------------------------------------------------------------------------------------
 end
 
-Delete from [common].[Setting] where [ID] in ('1CB20F2C-A835-4320-AEC7-E034C5A756E9','1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE','81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Bank Details', 'System Currency', 'Company Setting'
+Delete from [common].[Setting] where [ID] in (	'1CB20F2C-A835-4320-AEC7-E034C5A756E9',--'Bank Details'
+												'1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE',--'System Currency'
+												'81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Company Setting'
 --[common].[Setting]---------------------------401 to 500-------------------------------------------
 begin
 set nocount on;;with cte_data([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('509E467B-4562-4CA6-A32E-E50473B74D2C',108,'Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"XBooster","VersionNumber":"version 0.9 ~ 2017-03-15"}}',1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))merge	[common].[Setting] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]when not matched by target then	insert([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])	values(s.[ID],s.[OldID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
