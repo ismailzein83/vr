@@ -14,26 +14,31 @@
         function AddFinancialAccount(financialAccountObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "AddFinancialAccount"), financialAccountObject);
         }
+
         function UpdateFinancialAccount(financialAccountObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "UpdateFinancialAccount"), financialAccountObject);
         }
+
         function GetFinancialAccount(financialAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "GetFinancialAccount"), {
                 financialAccountId: financialAccountId
             });
         }
+
         function CheckCarrierAllowAddFinancialAccounts(carrierProfileId, carrierAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "CheckCarrierAllowAddFinancialAccounts"), {
                 carrierProfileId: carrierProfileId,
                 carrierAccountId: carrierAccountId
             });
         }
+
         function GetAccountCurrencyName(carrierProfileId, carrierAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "GetAccountCurrencyName"), {
                 carrierProfileId: carrierProfileId,
                 carrierAccountId: carrierAccountId
             });
         }
+
         return {
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,

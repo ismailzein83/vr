@@ -11,7 +11,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var logSearch = new LogSearch($scope, ctrl, $attrs);
+            var logSearch = new FinancialAccountSearch($scope, ctrl, $attrs);
             logSearch.initializeController();
         },
         controllerAs: "ctrl",
@@ -23,7 +23,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
     };
 
-    function LogSearch($scope, ctrl, $attrs) {
+    function FinancialAccountSearch($scope, ctrl, $attrs) {
 
         var gridAPI;
         var carrierAccountId;
@@ -44,7 +44,6 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 defineAPI();
             };
 
-          
         }
 
         function defineAPI() {
@@ -56,26 +55,32 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     carrierAccountId = payload.carrierAccountId;
                     carrierProfileId = payload.carrierProfileId;
                 }
-                checkAllowAddFinancialAccount();
+                var promises = [];
+                promises.push(checkAllowAddFinancialAccount());
+                promises.push(gridAPI.loadGrid(getGridQuery()));
+
                 function checkAllowAddFinancialAccount()
                 {
                     return WhS_AccountBalance_FinancialAccountAPIService.CheckCarrierAllowAddFinancialAccounts(carrierProfileId, carrierAccountId).then(function (response) {
                         $scope.showAddButton = response;
                     });
                 }
-                return gridAPI.loadGrid(payload);
+
+                return UtilsService.waitMultiplePromises(promises);
+               
             };
-            api.onFnancialAccountAdded = function (financialAccount) {
-                return gridAPI.itemAdded(financialAccount);
-            };
+            
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                 ctrl.onReady(api);
         }
 
-        function getFilterObject() {
+        function getGridQuery() {
+
             var filter = {
-                CarrierAccountId: carrierAccountId,
-                CarrierProfileId: carrierProfileId
+                query:{
+                    CarrierAccountId: carrierAccountId,
+                    CarrierProfileId: carrierProfileId
+                }
             };
             return filter;
         }

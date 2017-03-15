@@ -48,11 +48,12 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
                 var api = {};
 
                 api.loadGrid = function (payload) {
-                    return gridAPI.retrieveData(payload.query);
+                    if (payload != undefined)
+                    {
+                        return gridAPI.retrieveData(payload.query);
+                    }
                 };
-                api.onFinancialAccountAdded = function (financialAccount) {
-                    return gridAPI.itemAdded(financialAccount);
-                };
+          
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
@@ -64,6 +65,7 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
                     clicked: editFinancialAccount,
                 }];
             }
+
             function editFinancialAccount(dataItem) {
                 var onFinancialAccountUpdated = function (financialAccount) {
                     gridAPI.itemUpdated(financialAccount);

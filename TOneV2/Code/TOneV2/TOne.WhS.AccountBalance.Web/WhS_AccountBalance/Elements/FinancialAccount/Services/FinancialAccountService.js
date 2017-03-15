@@ -5,6 +5,7 @@
     FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService','WhS_BE_CarrierAccountService','WhS_BE_CarrierProfileService'];
 
     function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService) {
+
         function addFinancialAccount(carrierAccountId, carrierProfileId, onFinancialAccountAdded) {
             var parameters = {
                 carrierAccountId: carrierAccountId,
@@ -17,6 +18,7 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_AccountBalance/Elements/FinancialAccount/Views/FinancialAccountEditor.html', parameters, settings);
         };
+
         function editFinancialAccount(onFinancialAccountUpdated, financialAccountId) {
             var parameters = {
                 financialAccountId: financialAccountId,
@@ -28,6 +30,7 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_AccountBalance/Elements/FinancialAccount/Views/FinancialAccountEditor.html', parameters, settings);
         };
+
         function registerDrillDownToCarrierAccount() {
             var drillDownDefinition = {};
 
@@ -48,6 +51,7 @@
 
             WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
         }
+
         function registerDrillDownToCarrierProfile() {
             var drillDownDefinition = {};
 
@@ -68,6 +72,7 @@
 
             WhS_BE_CarrierProfileService.addDrillDownDefinition(drillDownDefinition);
         }
+
         return {
             addFinancialAccount: addFinancialAccount,
             editFinancialAccount:editFinancialAccount,

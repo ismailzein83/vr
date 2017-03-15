@@ -32,12 +32,15 @@
             $scope.scopeModel.isEditMode = (financialAccountId != undefined);
 
         }
+
         function defineScope() {
             $scope.scopeModel.beginEffectiveDate = new Date();
+
             $scope.scopeModel.onFinancialAccountTypeSelectorReady = function (api) {
                 financialAccountTypeSelectorDirectiveAPI = api;
                 financialAccountTypeSelectorDirectiveReadyDeferred.resolve();
             };
+
             $scope.scopeModel.onFinancialAccountTypeSelectionChanged = function (value) {
                 if(value != undefined)
                 {
@@ -50,6 +53,7 @@
                     $scope.scopeModel.financialAccountTypeRuntimeDirective = undefined;
                 }
             };
+
             $scope.scopeModel.onDirectiveReady = function (api) {
                 directiveAPI = api;
                 var setLoader = function (value) {
@@ -59,6 +63,7 @@
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
+
             $scope.scopeModel.validateDates = function (date) {
                 return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
@@ -76,8 +81,10 @@
                 $scope.modalContext.closeModal()
             };
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
+
             if ($scope.scopeModel.isEditMode)
             {
                 getFinancialAccount().then(function () {
@@ -99,6 +106,7 @@
         }
 
         function loadAllControls() {
+
             function setTitle() {
                 //if (isEditMode)
                 //    $scope.title = UtilsService.buildTitleForUpdateEditor(response, 'Financial Account', $scope);
@@ -106,6 +114,7 @@
                 //    $scope.title = UtilsService.buildTitleForAddEditor('Financial Account');
                 $scope.title = 'Financial Account';
             }
+
             function loadStaticData() {
                 if(financialAccountEntity != undefined)
                 {
@@ -113,6 +122,7 @@
                     $scope.scopeModel.endEffectiveDate = financialAccountEntity.EED;
                 }
             }
+
             function loadFinancialAccountTypeSelectorSelector() {
                 var loadFinancialAccountTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 financialAccountTypeSelectorDirectiveReadyDeferred.promise.then(function () {
@@ -182,6 +192,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function updateFinancialAccount() {
             $scope.scopeModel.isLoading = true;
 
@@ -199,6 +210,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function buildFinancialAccountObjFromScope() {
             var obj = {
                 FinancialAccountId:financialAccountId,
