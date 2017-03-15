@@ -69,7 +69,8 @@
     <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>    
     <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>    
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
-    <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>    
+    <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     
     <add key="TOneWhS_BE_DBConnStringKey"                       value="ConfigurationDBConnString"/>
     <add key="TOneWhS_SPL_DBConnStringKey"                      value="ConfigurationDBConnString"/>
@@ -89,9 +90,6 @@
     <add key="DownloadCodeGroupTemplatePath" value="/Client/Modules/WhS_BusinessEntity/Templates/CodeGroupTemplate.xlsx"/>    
     
     <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString"/>
-
-    <add key="LoggingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
-
   </appSettings>
   <system.web>
     <httpHandlers>
