@@ -36,10 +36,5 @@ namespace Vanrise.BEBridge.BP.Arguments
             }
             return String.Join(",", bpDefinitionNames);
         }
-
-        public override bool DosesUserHaveViewAccess()
-        {
-            return false;// base.DosesUserHaveViewAccess();
-        }
     }
 }
