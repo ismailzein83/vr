@@ -33,7 +33,8 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Disable All" data-onclick="DisableAllDataSources"></vr-button>
+                    <vr-button type="Disable All" ng-if="viewAll" data-onclick="DisableAllDataSources"></vr-button>
+                    <vr-button type="Enable All" ng-if="!viewAll" data-onclick="EnableAllDataSources"></vr-button>
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
                     <vr-button type="Add" data-onclick="AddNewDataSource" haspermission="hasAddDataSource"></vr-button>
                 </div>

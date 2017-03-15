@@ -26,6 +26,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
     function DataSourceGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var context;
         this.initializeController = initializeController;
         function initializeController() {
 
@@ -43,9 +44,9 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                 function getDirectiveAPI() {
 
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-
-                        return gridAPI.retrieveData(query);
+                    directiveAPI.loadGrid = function (payload) {
+                        context = payload.context;
+                        return gridAPI.retrieveData(payload.query);
                     };
                     directiveAPI.onDataSourceAdded = function (dataSource) {
 
@@ -59,6 +60,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
                 return VR_Integration_DataSourceAPIService.GetFilteredDataSources(dataRetrievalInput)
                     .then(function (response) {
+                        enableDisableAll(response.Data);
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -148,8 +150,10 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             VRNotificationService.showConfirmation().then(function (confirmed) {
                 if (confirmed) {
                     return VR_Integration_DataSourceAPIService.DisableDataSource(dataItem.Entity.DataSourceId).then(function () {
+                        
                         if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
                             onPermissionDisabled(dataItem.Entity);
+                            enableDisableAll($scope.dataSources);
                         }
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, scope);
@@ -173,14 +177,34 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             VRNotificationService.showConfirmation().then(function (confirmed) {
                 if (confirmed) {
                     return VR_Integration_DataSourceAPIService.EnableDataSource(dataItem.Entity.DataSourceId).then(function () {
+                        
                         if (onPermissionEnabled && typeof onPermissionEnabled == 'function') {
                             onPermissionEnabled(dataItem.Entity);
+                            enableDisableAll($scope.dataSources);
                         }
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, scope);
                     });
                 }
             });
+        }
+
+        function enableDisableAll(dataItems) {
+            if (context != undefined && typeof (context.showDisableAll) == "function" && typeof (context.showEnableAll) == "function") {
+                var isExistDisabled = false;
+                var isExistEnabled = false;
+                angular.forEach(dataItems, function (item) {
+                    if (item.Entity.IsEnabled === false)
+                        isExistDisabled = true;
+                    if (item.Entity.IsEnabled === true)
+                        isExistEnabled = true;
+                });
+
+                if ((isExistDisabled && isExistEnabled) || !isExistDisabled)
+                    context.showDisableAll();
+                else
+                    context.showEnableAll();
+            }
         }
                
     }

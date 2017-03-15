@@ -123,6 +123,12 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     class: "glyphicon  glyphicon-remove-circle"
                 };
 
+            case "Enable All":
+                return {
+                    text: "Enable All",
+                    class: "glyphicon  glyphicon-play"
+                };
+
             case "Cancel Selected":
                 return {
                     text: "Cancel Selected",

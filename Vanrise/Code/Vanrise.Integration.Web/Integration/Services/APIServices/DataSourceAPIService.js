@@ -23,7 +23,8 @@
             HasEnablePermission: HasEnablePermission,
             DisableDataSource: DisableDataSource,
             EnableDataSource: EnableDataSource,
-            DisableAllDataSource: DisableAllDataSource
+            DisableAllDataSource: DisableAllDataSource,
+            EnableAllDataSource: EnableAllDataSource
         });
         function GetDataSources(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, 'DataSource', 'GetDataSources'), { filter: filter });
@@ -88,6 +89,10 @@
 
         function DisableAllDataSource() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, "DataSource", 'DisableAllDataSource'));
+        }
+
+        function EnableAllDataSource() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, "DataSource", 'EnableAllDataSource'));
         }
 
         function HasDisablePermission() {

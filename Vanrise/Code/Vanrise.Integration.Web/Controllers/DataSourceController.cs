@@ -104,6 +104,14 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
+        [Route("EnableAllDataSource")]
+        public bool EnableAllDataSource()
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.EnableAllDataSource();
+        }
+
+        [HttpGet]
         [Route("DisableDataSource")]
         public Vanrise.Entities.UpdateOperationOutput<Vanrise.Integration.Entities.DataSourceDetail> DisableDataSource(Guid dataSourceId)
         {

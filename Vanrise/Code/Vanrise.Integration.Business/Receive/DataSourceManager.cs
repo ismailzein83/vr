@@ -274,6 +274,18 @@ namespace Vanrise.Integration.Business
             }
             return true;
         }
+
+        public bool EnableAllDataSource()
+        {
+            var cachedDataSources = GetCachedDataSources();
+            foreach (KeyValuePair<Guid, DataSource> entry in cachedDataSources)
+            {
+                var output = EnableDataSource(entry.Value.DataSourceId);
+                if (output.Result != UpdateOperationResult.Succeeded)
+                    return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Private Methods
