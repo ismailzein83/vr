@@ -9,14 +9,14 @@ namespace QualityMeasurement.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
-
-            bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+            var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/QM_CLITester", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/QM_BusinessEntity", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/BI", "*.js", true));
+                "~/Client/Modules/QM_BusinessEntity", "*.js", true);
+
+            bundles.Add(modulesJSBundle);
         }
     }
 }

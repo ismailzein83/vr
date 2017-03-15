@@ -31,6 +31,7 @@
     <add name="BIConnectionString" connectionString="Provider=MSOLAP;Data Source = http://192.168.110.185:1214/msmdpump.dll; Initial Catalog = QualityMeasurementBI; User Id = vanrise\olap.access; Password = " />
   </connectionStrings>
   <appSettings>
+    <add key="Web_ExtendedModulesNames" value=""/>
     <add key="webpages:Version" value="2.0.0.0" />
     <add key="webpages:Enabled" value="false" />
     <add key="PreserveLoginUrl" value="true" />
