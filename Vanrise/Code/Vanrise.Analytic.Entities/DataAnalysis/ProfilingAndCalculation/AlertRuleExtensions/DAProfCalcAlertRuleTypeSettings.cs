@@ -37,6 +37,14 @@ namespace Vanrise.Analytic.Entities
 
         #endregion
 
+        public override Guid ConfigId { get { return new Guid("57033e80-65cb-4359-95f6-22a57084d027"); } }
+
+        public override Guid NotificationTypeId { get { return new Guid("6BB06963-AC64-4827-A7FC-EB6892057AD7"); } }
+
+        public Guid DataAnalysisDefinitionId { get; set; }
+
+        public List<DAProfCalcAlertRuleRecordStorage> SourceRecordStorages { get; set; }
+
         public override string SettingEditor
         {
             get
@@ -48,13 +56,6 @@ namespace Vanrise.Analytic.Entities
                 base.SettingEditor = value;
             }
         }
-        public override Guid NotificationTypeId { get { return new Guid("6BB06963-AC64-4827-A7FC-EB6892057AD7"); } }
-
-        public Guid DataAnalysisDefinitionId { get; set; }
-
-        public List<DAProfCalcAlertRuleRecordStorage> SourceRecordStorages { get; set; }
-
-        public override Guid ConfigId { get { return new Guid("57033e80-65cb-4359-95f6-22a57084d027"); } }
     }
 
     public class DAProfCalcAlertRuleRecordStorage
