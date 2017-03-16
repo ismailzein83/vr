@@ -11,8 +11,11 @@
     [timestamp]             ROWVERSION      NULL,
     [EnabledTill]           DATETIME        NULL,
     [ExtendedSettings]      NVARCHAR (MAX)  NULL,
+    [CreatedTime]           DATETIME        CONSTRAINT [DF_User_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
