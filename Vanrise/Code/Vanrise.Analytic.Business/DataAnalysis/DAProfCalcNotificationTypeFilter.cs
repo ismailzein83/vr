@@ -1,6 +1,6 @@
 ﻿using System;
 using Vanrise.Analytic.Entities;
-using Vanrise.GenericData.Notification.DataRecord;
+using Vanrise.GenericData.Notification;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.Analytic.Business
