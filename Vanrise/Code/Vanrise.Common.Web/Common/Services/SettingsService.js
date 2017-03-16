@@ -22,7 +22,7 @@ app.service('VRCommon_SettingsService', ['VRModalService','UtilsService',
 
             };
             settings.onScopeReady = function (modalScope) {
-                UtilsService.setContextReadOnly(modalScope)
+                UtilsService.setContextReadOnly(modalScope);
             };
             var parameters = {
                 settingsId: settingsId
