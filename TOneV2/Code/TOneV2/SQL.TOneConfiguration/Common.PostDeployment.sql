@@ -56,7 +56,7 @@ as (select * from (values
 ('VRCommon/VRObjectTypeDefinition/UpdateVRObjectTypeDefinition','VR_SystemConfiguration: Edit'),
 ('VRCommon/VRObjectTypeDefinition/GetVRObjectTypeDefinitionsInfo',null),
 ('VRCommon/VRMailMessageType/GetFilteredMailMessageTypes','VR_SystemConfiguration: View'),
-('VRCommon/VRMailMessageType/GetMailMessageType','VR_SystemConfiguration: View'),
+('VRCommon/VRMailMessageType/GetMailMessageType',null),
 ('VRCommon/VRMailMessageType/AddMailMessageType','VR_SystemConfiguration: Add'),
 ('VRCommon/VRMailMessageType/UpdateMailMessageType','VR_SystemConfiguration: Edit'),
 ('VRCommon/VRMailMessageType/GetMailMessageTypesInfo',null),
