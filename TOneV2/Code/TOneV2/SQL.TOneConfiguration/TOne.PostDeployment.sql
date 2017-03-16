@@ -406,8 +406,8 @@ as (select * from (values
 ('C7596EEC-E524-4E50-8668-7E2A606C75F6',null,'WhS_BE_StateBackup','State Backup'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Restore"]'),
 
 ('FE79D4D7-2351-4B74-B2AB-3E1AAD43908B',3450,'WhS_Routing_RoutingRule','Route Rule'							,'B6B8F582-4759-43FB-9220-AA7662C366EA',1204,0,'["View","Add","Edit"]'),
-('A596599B-1BAE-4698-827E-E2F5AFD8CF4C',3454,'WhS_Routing_RoutingProcess','Routing Process'					,'B6B8F582-4759-43FB-9220-AA7662C366EA',1207,0,'["View Process Logs", "Start Process", "View Routes"]'),
-('986C3FC1-2FCE-4966-ABF6-900EBCB6306B',3455,'WhS_Routing_CostGenerationProcess','Cost Generation process'	,'B6B8F582-4759-43FB-9220-AA7662C366EA',1207,0,'["View Process Logs", "Start Process", "View Costs"]'),
+('A596599B-1BAE-4698-827E-E2F5AFD8CF4C',3454,'WhS_Routing_RoutingProcess','Build Route'						,'B6B8F582-4759-43FB-9220-AA7662C366EA',1207,0,'["View Process Logs", "Start Process", "View Routes"]'),
+('986C3FC1-2FCE-4966-ABF6-900EBCB6306B',3455,'WhS_Routing_CostGenerationProcess','Cost Generation'			,'B6B8F582-4759-43FB-9220-AA7662C366EA',1207,0,'["View Process Logs", "Start Process", "View Costs"]'),
 ('86699A30-0F8C-4F23-8CFC-9EA19297B06B',null,'VR_Invoice_Customer','Customer Invoice'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',null,0,'["View","Generate","Set_Paid","Set_Unpaid","Set_Lock","Set_UnLock","Recreate","Send Email"]'),('B8074080-DEA8-4BA2-BD13-0620083EA740',null,'VR_Invoice_Supplier','Supplier Invoice'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',null,0,'["View","Generate"]'),('DC03506D-42A6-46E1-977B-EF781D8941E6',null,'VR_Invoice_Settings','Invoice Settings'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',null,0,'["View","Add","Edit","Delete","ManagePartner"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
