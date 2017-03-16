@@ -8,6 +8,6 @@ namespace Vanrise.Notification.Entities
 {
     public class VRNotificationTypeSettingsFilter
     {
-        public List<IVRNotificationViewFilter> Filters { get; set; }
+        public List<IVRNotificationTypeFilter> Filters { get; set; }
     }
 }

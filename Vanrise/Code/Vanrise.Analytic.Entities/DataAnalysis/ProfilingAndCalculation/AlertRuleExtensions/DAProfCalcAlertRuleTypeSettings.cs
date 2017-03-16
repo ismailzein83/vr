@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.Analytic.Entities
@@ -45,6 +42,8 @@ namespace Vanrise.Analytic.Entities
 
         public List<DAProfCalcAlertRuleRecordStorage> SourceRecordStorages { get; set; }
 
+        public List<DAProfCalcItemNotification> DAProfCalcItemNotifications { get; set; }
+
         public override string SettingEditor
         {
             get
@@ -61,5 +60,12 @@ namespace Vanrise.Analytic.Entities
     public class DAProfCalcAlertRuleRecordStorage
     {
         public Guid DataRecordStorageId { get; set; }
+    }
+
+    public class DAProfCalcItemNotification
+    {
+        public Guid DataAnalysisItemDefinitionId { get; set; }
+ 
+        public Guid NotificationTypeId { get; set; }
     }
 }

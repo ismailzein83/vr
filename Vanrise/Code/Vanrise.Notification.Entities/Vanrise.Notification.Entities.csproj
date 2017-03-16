@@ -90,7 +90,7 @@
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeSettings.cs" />
     <Compile Include="VRNotificationType\VRNotificationTypeSettingsFilter.cs" />
     <Compile Include="VRNotificationType\VRNotificationTypeSettingsInfo.cs" />
-    <Compile Include="VRNotificationView\IVRNotificationViewFilter.cs" />
+    <Compile Include="VRNotificationType\IVRNotificationTypeFilter.cs" />
     <Compile Include="VRNotification\VRNotificationDetail.cs" />
     <Compile Include="VRNotification\ClearVRNotificationInput.cs" />
     <Compile Include="VRNotification\CreateVRNotificationInput.cs" />

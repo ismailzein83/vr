@@ -16,6 +16,8 @@ namespace Vanrise.Notification.Entities
 
         public Guid AlertRuleTypeId { get; set; }
 
+        public Guid NotificationTypeId { get; set; }
+
         public long AlertRuleId { get; set; }
 
         public string EventKey { get; set; }

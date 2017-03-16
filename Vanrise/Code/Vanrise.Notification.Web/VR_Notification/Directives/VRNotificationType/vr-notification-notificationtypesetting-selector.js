@@ -99,11 +99,17 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                        '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
+            var htmlLabel;
+            if (attrs.hidelabel == undefined)
+                htmlLabel = "label = '" + label + "' ";
+
+            var haschildcolumns = attrs.haschildcolumns != undefined ? " haschildcolumns " : "";
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + ' >' +
+                        '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
                             + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '
-                            + ' hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
-                        '</vr-select>' +
-                    '</vr-columns>';
+                            + ' hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate" ' + htmlLabel + ' >'
+            '</vr-select>' +
+        '</vr-columns>';
         }
     }]);

@@ -29,6 +29,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 
         protected override void DoWork(CreateAlertsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            VRAlertRuleTypeManager alertRuleTypeManager = new VRAlertRuleTypeManager();
             int totalNotificationsCreated = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
@@ -68,7 +69,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                     decimal ruleThresholdValue = balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext);
                                     thresholdsInfos.Add(new AlertThresholdInfo { Threshold = ruleThresholdValue, ThresholdAction = balanceAlertThresholdAction });
                                 }
-                                
+
                                 foreach (var thresholdInfo in thresholdsInfos.OrderByDescending(itm => itm.Threshold))
                                 {
                                     var currentThreshold = thresholdInfo.Threshold;
@@ -88,10 +89,11 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                             CurrentBalance = entityBalanceInfo.CurrentBalance,
                                             EntityId = entityBalanceInfo.EntityId,
                                             Threshold = currentThreshold
-                                        },                                        
+                                        },
                                         AlertRuleTypeId = inputArgument.AlertTypeId,
                                         UserId = handle.SharedInstanceData.InstanceInfo.InitiatorUserId,
-                                        Description = string.Format("Executing balance actions for '{0}' (threshold '{1}')", entityBalanceInfo.EntityName, currentThreshold)
+                                        Description = string.Format("Executing balance actions for '{0}' (threshold '{1}')", entityBalanceInfo.EntityName, currentThreshold),
+                                        NotificationTypeId = alertRuleTypeManager.GetVRAlertRuleTypeSettings<VRAlertRuleTypeSettings>(inputArgument.AlertTypeId).NotificationTypeId
                                     };
 
                                     activeAlertsInfo.ActiveAlertsThersholds.Add(new VRBalanceActiveAlertThreshold
@@ -109,7 +111,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                 balanceUpdateLastAlertInfoPayloadBatch.Items.Add(new VRBalanceUpdateLastAlertInfoPayload
                                 {
                                     EntityBalanceInfo = entityBalanceInfo,
-                                    LastExecutedAlertThreshold = activeAlertsInfo.ActiveAlertsThersholds.Count > 0 ? activeAlertsInfo.ActiveAlertsThersholds.Min(a => a.Threshold) : null,                                    
+                                    LastExecutedAlertThreshold = activeAlertsInfo.ActiveAlertsThersholds.Count > 0 ? activeAlertsInfo.ActiveAlertsThersholds.Min(a => a.Threshold) : null,
                                     ActiveAlertsInfo = activeAlertsInfo
                                 });
                             }

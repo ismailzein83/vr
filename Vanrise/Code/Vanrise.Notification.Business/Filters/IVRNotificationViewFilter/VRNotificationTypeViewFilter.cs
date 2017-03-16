@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Notification.Business
 {
-    public class VRNotificationTypeViewFilter : IVRNotificationViewFilter
+    public class VRNotificationTypeViewFilter : IVRNotificationTypeFilter
     {
         public Guid ViewId { get; set; }
-        public bool IsMatched(IVRNotificationViewFilterContext context)
+        public bool IsMatched(IVRNotificationTypeFilterContext context)
         {
             if (this.ViewId != Guid.Empty)
             {
@@ -21,7 +18,7 @@ namespace Vanrise.Notification.Business
                 View vrNotificationView = viewManager.GetView(this.ViewId);
                 var settings = vrNotificationView.Settings as VRNotificationViewSettings;
 
-                if (!settings.Settings.Any(s => s.VRNotificationTypeId == context.VRNotificationTypeId))
+                if (!settings.Settings.Any(s => s.VRNotificationTypeId == context.VRNotificationType.VRComponentTypeId))
                     return false;
             }
             return true;

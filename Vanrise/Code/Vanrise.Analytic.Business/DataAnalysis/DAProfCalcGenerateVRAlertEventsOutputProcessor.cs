@@ -7,6 +7,7 @@ using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using System.Linq;
 using Vanrise.GenericData.Notification;
+using Vanrise.Common;
 
 namespace Vanrise.Analytic.Business
 {
@@ -32,21 +33,13 @@ namespace Vanrise.Analytic.Business
                 VRAlertRuleNotificationManager alertRuleNotificationManager = new VRAlertRuleNotificationManager();
 
                 DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
+                VRAlertRuleTypeManager vrAlertRuleTypeManager = new VRAlertRuleTypeManager();
 
                 foreach (DAProfCalcOutputRecord outputRecord in context.OutputRecords)
                 {
                     Guid dataAnalysisItemDefinitionId = outputRecord.DAProfCalcExecInput.OutputItemDefinitionId;
 
-                    DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
-                    if (dataAnalysisItemDefinition == null)
-                        throw new NullReferenceException(string.Format("dataAnalysisItemDefinition. OutputItemDefinitionId: {0}", dataAnalysisItemDefinitionId));
-
-                    if (dataAnalysisItemDefinition.Settings == null)
-                        throw new NullReferenceException(string.Format("dataAnalysisItemDefinition.Settings. OutputItemDefinitionId: {0}", dataAnalysisItemDefinitionId));
-
-                    DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinition.Settings as DAProfCalcOutputSettings;
-                    if (daProfCalcOutputSettings == null)
-                        throw new Exception(String.Format("dataAnalysisItemDefinition.Settings is not of type DAProfCalcOutputSettings. it is of type {0}", dataAnalysisItemDefinition.Settings.GetType()));
+                    DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(dataAnalysisItemDefinitionId);
 
                     DAProfCalcAlertRuleExecPayload payload = outputRecord.DAProfCalcExecInput.DAProfCalcPayload as DAProfCalcAlertRuleExecPayload;
                     long alertRuleId = payload.AlertRuleId;
@@ -58,6 +51,7 @@ namespace Vanrise.Analytic.Business
 
                     if (recordFilterManager.IsFilterGroupMatch(daProfCalcAlertRuleSettings.FilterGroup, new DAProfCalcRecordFilterGenericFieldMatchContext(outputRecord.Records, dataRecordFields)))
                     {
+                        DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
                         CreateAlertRuleNotificationInput notificationInput = new CreateAlertRuleNotificationInput()
                         {
                             Actions = daProfCalcAlertRuleSettings.Actions,
@@ -74,12 +68,30 @@ namespace Vanrise.Analytic.Business
                                 DataRecordTypeId = daProfCalcOutputSettings.RecordTypeId,
                                 OutputRecords = outputRecord.Records
                             },
-                            UserId = UserId
+                            UserId = UserId,
+                            NotificationTypeId = GetNotificationTypeId(vrAlertRuleTypeManager, alertRule.RuleTypeId, dataAnalysisItemDefinitionId)
                         };
                         alertRuleNotificationManager.CreateNotification(notificationInput);
                     }
                 }
             }
+        }
+
+        private Guid GetNotificationTypeId(VRAlertRuleTypeManager vrAlertRuleTypeManager, Guid alertRuleTypeId, Guid dataAnalysisItemDefinitionId)
+        {
+            VRAlertRuleType alertRuleType = vrAlertRuleTypeManager.GetVRAlertRuleType(alertRuleTypeId);
+            DAProfCalcAlertRuleTypeSettings alertRuleSettings = alertRuleType.Settings as DAProfCalcAlertRuleTypeSettings;
+            if (alertRuleSettings == null)
+                throw new Exception(String.Format("alertRuleType.Settings is not of type DAProfCalcAlertRuleTypeSettings. it is of type '0'", alertRuleSettings.GetType()));
+
+            if (alertRuleSettings.DAProfCalcItemNotifications == null)
+                throw new NullReferenceException(string.Format("alertRuleSettings.DAProfCalcItemNotifications is null for alertRuleTypeId:{0}", alertRuleTypeId));
+
+            DAProfCalcItemNotification daProfCalcItemNotification = alertRuleSettings.DAProfCalcItemNotifications.FindRecord(itm => itm.DataAnalysisItemDefinitionId == dataAnalysisItemDefinitionId);
+            if (daProfCalcItemNotification == null)
+                throw new NullReferenceException(string.Format("daProfCalcItemNotification is null for alertRuleTypeId:{0} and dataAnalysisItemDefinitionId:{1}", alertRuleTypeId, dataAnalysisItemDefinitionId));
+
+            return daProfCalcItemNotification.NotificationTypeId;
         }
 
         public void Finalize(IDAProfCalcOutputRecordProcessorFinalizeContext context)

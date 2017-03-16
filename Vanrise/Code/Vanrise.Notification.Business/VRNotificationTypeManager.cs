@@ -42,9 +42,9 @@ namespace Vanrise.Notification.Business
             }
             return vrNotificationTypeSettings.MapRecords(VRNotificationTypeSettingInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
-        bool CheckIfFilterIsMatch(VRNotificationType notificationType, List<IVRNotificationViewFilter> filters)
+        bool CheckIfFilterIsMatch(VRNotificationType notificationType, List<IVRNotificationTypeFilter> filters)
         {
-            VRNotificationViewFilterContext context = new VRNotificationViewFilterContext { VRNotificationTypeId = notificationType.VRComponentTypeId };
+            VRNotificationTypeFilterContext context = new VRNotificationTypeFilterContext { VRNotificationType = notificationType };
             foreach (var filter in filters)
             {
                 if (!filter.IsMatched(context))

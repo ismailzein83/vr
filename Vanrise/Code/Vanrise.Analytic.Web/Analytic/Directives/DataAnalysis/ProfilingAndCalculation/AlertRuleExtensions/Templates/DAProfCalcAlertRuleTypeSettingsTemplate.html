@@ -2,11 +2,26 @@
     <vr-row>
         <vr-columns width="1/2row">
             <vr-analytic-dataanalysisdefinition-selector on-ready="scopeModel.onDataAnalysisDefinitionSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedDataAnalysisDefinition"
-                                                         onselectionchanged="onDataAnalysisDefinitionSelectionChanged"></vr-analytic-dataanalysisdefinition-selector>
+                                                         onselectionchanged="scopeModel.onDataAnalysisDefinitionSelectionChanged"></vr-analytic-dataanalysisdefinition-selector>
         </vr-columns>
-        <vr-columns width="1/2row" ng-show="scopeModel.selectedDataAnalysisDefinition!=undefined">
+        <vr-columns width="1/2row" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined">
             <vr-genericdata-datarecordstorage-selector on-ready="onSourceDataRecordStorageSelectorReady" selectedvalues="selectedSourceDataRecordStorages" isrequired="true"
-                                                       customlabel="Source Record Storages" ismultipleselection="true"></vr-genericdata-datarecordstorage-selector>
+                                                       customlabel="Source Record Storages" ismultipleselection="true" vr-loader="scopeModel.isLoadingSourceDataRecordStorage"></vr-genericdata-datarecordstorage-selector>
+        </vr-columns>
+    </vr-row>
+
+    <vr-row>
+        <vr-columns width="fullrow" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined">
+            <vr-datagrid datasource="scopeModel.daProfCalcItemNotifications"
+                         hidegridmenu on-ready="scopeModel.onDAProfCalcGridReady">
+
+                <vr-datagridcolumn headertext="'Analaysis Type'" field="'Name'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Notification Type'">
+                    <vr-notification-notificationtypesetting-selector on-ready="dataItem.onVRNotificationTypeSettingsSelectorReady" hidelabel haschildcolumns
+                                                                      isrequired="true" selectedvalues="dataItem.selectedNotificationType">
+                    </vr-notification-notificationtypesetting-selector>
+                </vr-datagridcolumn>
+            </vr-datagrid>
         </vr-columns>
     </vr-row>
 </vr-tab>

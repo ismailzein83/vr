@@ -28,6 +28,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
         public InOutArgument<BaseQueue<VRBalanceUpdateLastAlertInfoPayloadBatch>> OutputQueue { get; set; }
         protected override void DoWork(ClearAlertsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            VRAlertRuleTypeManager alertRuleTypeManager = new VRAlertRuleTypeManager();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItems = false;
@@ -63,7 +64,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                         EventKey = string.Format("{0}_{1}", entityBalanceInfo.EntityId, activeThreshold.Threshold),
                                         AlertRuleId = activeThreshold.AlertRuleId,
                                         RuleTypeId = alertRule.RuleTypeId,
-                                        Description = string.Format("Rolling back balance actions for '{0}' (threshold '{1}')", entityBalanceInfo.EntityName, activeThreshold.Threshold)
+                                        Description = string.Format("Rolling back balance actions for '{0}' (threshold '{1}')", entityBalanceInfo.EntityName, activeThreshold.Threshold),
+                                        NotificationTypeId = alertRuleTypeManager.GetVRAlertRuleTypeSettings<VRAlertRuleTypeSettings>(alertRule.RuleTypeId).NotificationTypeId
                                     };
                                     alertRuleNotificationManager.ClearNotifications(notificationInput);
                                     activeAlertThresholds.ActiveAlertsThersholds.Remove(activeThreshold);
