@@ -75,7 +75,8 @@ app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUti
                     var dataRecordTypeField = selectedItem;
 
                     $scope.scopeModel.gridColumnDefinitions.push({
-                        FieldName: dataRecordTypeField.Name
+                        FieldName: dataRecordTypeField.Name,
+                        Header: dataRecordTypeField.Title
                     });
                 };
                 $scope.scopeModel.onDeselectDataRecordTypeField = function (deselectedItem) {
