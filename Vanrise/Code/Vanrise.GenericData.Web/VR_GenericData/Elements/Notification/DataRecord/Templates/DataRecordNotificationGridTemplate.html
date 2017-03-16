@@ -1,0 +1,16 @@
+﻿
+
+<vr-row vr-loader="scopeModel.isLoading">
+    <vr-columns width="fullrow">
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.vrNotifications"
+                     pagingtype="'PagingOnScroll'"
+                     loadmoredata="scopeModel.loadMoreData"
+                     idfield="Entity.VRNotificationId"
+                     hidepaginginfo>
+
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.VRNotificationId'" disablesorting="true" fixedwidth="'200'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" disablesorting="true"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

@@ -457,6 +457,14 @@
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarygroupingcolumns-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-selector.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Templates\DataRecordNotificationGridTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Templates\NotificationTypeSettingsBodyEditorTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Templates\NotificationTypeSettingsSearchEditorTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Templates\NotificationTypeSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\vr-genericdata-datarecordnotification-grid.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\vr-genericdata-notificationtypesettings-bodyeditor.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\vr-genericdata-notificationtypesettings-searcheditor.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\vr-genericdata-notificationtype-settings.js" />
     <Content Include="VR_GenericData\ModuleInitialization.js" />
     <Content Include="VR_GenericData\Services\APIServices\BELookupRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationAPIService.js" />

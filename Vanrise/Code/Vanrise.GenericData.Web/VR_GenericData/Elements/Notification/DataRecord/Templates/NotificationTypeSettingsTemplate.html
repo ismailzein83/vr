@@ -1,0 +1,35 @@
+﻿
+
+<vr-columns width="1/2row">
+    <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                            onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
+                                            isrequired="true"
+                                            label="Record Type"
+                                            hideremoveicon>
+    </vr-genericdata-datarecordtype-selector>
+</vr-columns>
+
+
+<vr-span ng-show="scopeModel.showDataRecordFieldsGrid">
+    <vr-columns width="1/4row">
+        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
+                                                      selectedvalues="scopeModel.selectedDataRecordFields"
+                                                      onselectitem="scopeModel.onSelectDataRecordTypeField"
+                                                      ondeselectitem="scopeModel.onDeselectDataRecordTypeField"
+                                                      ismultipleselection hideremoveicon>
+        </vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+    <vr-columns width="3/4row">
+        <vr-label></vr-label>
+        <vr-datagrid datasource="scopeModel.gridColumnDefinitions"
+                     ondeleterow="scopeModel.onDeleteRow"
+                     hidegridmenu>
+
+            <vr-datagridcolumn field="'FieldName'" headertext="'Grid Column Name'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Grid Column Header'" disablesorting>
+                <vr-textbox value="dataItem.Header" isrequired="true"></vr-textbox>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-span>
+
