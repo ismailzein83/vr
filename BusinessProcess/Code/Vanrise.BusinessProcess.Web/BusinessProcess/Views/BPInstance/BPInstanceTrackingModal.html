@@ -9,10 +9,10 @@
 
             <vr-row>
                 <vr-columns colnum="1"><vr-label>Created On:</vr-label></vr-columns>
-                <vr-columns colnum="3"><vr-label isvalue>{{process.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-label></vr-columns>
+                <vr-columns colnum="3"><vr-label isvalue>{{process.CreatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
 
                 <vr-columns colnum="1"><vr-label>Updated On:</vr-label></vr-columns>
-                <vr-columns colnum="3"><vr-label isvalue>{{process.StatusUpdatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-label></vr-columns>
+                <vr-columns colnum="3"><vr-label isvalue>{{process.StatusUpdatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
 
                 <vr-columns colnum="1"><vr-label>Status</vr-label></vr-columns>
                 <vr-columns colnum="3"><span ng-class="getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{process.Status}}</vr-label></span></vr-columns>
