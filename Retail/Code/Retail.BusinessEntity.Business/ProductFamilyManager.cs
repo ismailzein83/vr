@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
@@ -40,20 +42,25 @@ namespace Retail.BusinessEntity.Business
 
                     return true;
                 };
-
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allProductFamilies.ToBigResult(input, filterExpression, ProductFamilyDetailMapper));
         }
 
-        public ProductFamily GetProductFamily(int productFamilyId)
+        public ProductFamily GetProductFamily(int productFamilyId, bool isViewedFromUI)
         {
             Dictionary<int, ProductFamily> cachedProductFamilies = this.GetCachedProductFamilies();
-            return cachedProductFamilies.GetRecord(productFamilyId);
+            var productFamily = cachedProductFamilies.GetRecord(productFamilyId);
+            if (productFamily != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(new ProductFamilyLoggableEntity(GetProductFamilyAccountBEDefinitionId(productFamily)), productFamily);
+            return productFamily;
         }
-
+        public ProductFamily GetProductFamily(int productFamilyId)
+        {
+            return GetProductFamily(productFamilyId, false);
+        }
         public ProductFamilyEditorRuntime GetProductFamilyEditorRuntime(int productFamilyId)
         {
             var packageNameByIds = new Dictionary<int, string>();
-            var productFamily = GetProductFamily(productFamilyId);
+            var productFamily = GetProductFamily(productFamilyId,true);
 
             PackageManager packageManager = new PackageManager();
 
@@ -74,6 +81,23 @@ namespace Retail.BusinessEntity.Business
             return editorRuntime;
         }
 
+        public string GetProductFamilyName(ProductFamily productFamily)
+        {
+            if (productFamily != null)
+                return productFamily.Name;
+            else
+                return null;
+        }
+        public Guid GetProductFamilyAccountBEDefinitionId(ProductFamily productFamily)
+        {
+            return new ProductDefinitionManager().GetProductDefinitionAccountBEDefinitionId(productFamily.Settings.ProductDefinitionId);
+        }
+
+        public Guid GetProductFamilyAccountBEDefinitionId(int productFamilyId)
+        {
+            ProductFamily productFamily = this.GetProductFamily(productFamilyId);
+            return GetProductFamilyAccountBEDefinitionId(productFamily);
+        }
         public Vanrise.Entities.InsertOperationOutput<ProductFamilyDetail> AddProductFamily(ProductFamily productFamily)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<ProductFamilyDetail>();
@@ -89,6 +113,7 @@ namespace Retail.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 productFamily.ProductFamilyId = productFamilyId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(new ProductFamilyLoggableEntity(GetProductFamilyAccountBEDefinitionId(productFamily)), productFamily);
                 insertOperationOutput.InsertedObject = ProductFamilyDetailMapper(productFamily);
             }
             else
@@ -111,6 +136,7 @@ namespace Retail.BusinessEntity.Business
             if (dataManager.Update(productFamily))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new ProductFamilyLoggableEntity(GetProductFamilyAccountBEDefinitionId(productFamily)), productFamily);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = ProductFamilyDetailMapper(this.GetProductFamily(productFamily.ProductFamilyId));
             }
@@ -167,6 +193,53 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        private class ProductFamilyLoggableEntity : VRLoggableEntityBase
+        {
+          
+            static ProductFamilyManager s_productFamilyManager = new ProductFamilyManager();
+            static AccountBEDefinitionManager _accountBEDefintionManager = new AccountBEDefinitionManager();
+            Guid _accountBEDefinitionId;
+           
+           
+            public ProductFamilyLoggableEntity(Guid accountBEDefinitionId)
+            {
+                _accountBEDefinitionId = accountBEDefinitionId;
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return String.Format("Retail_BusinessEntity_ProductFamily_{0}", _accountBEDefinitionId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return String.Format(_accountBEDefintionManager.GetAccountBEDefinitionName(_accountBEDefinitionId), "_ProductFamilies"); }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "Retail_BusinessEntity_ProductFamily_ViewHistoryItem"; }
+            }
+
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                ProductFamily product = context.Object.CastWithValidate<ProductFamily>("context.Object");
+                return product.ProductFamilyId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                ProductFamily product = context.Object.CastWithValidate<ProductFamily>("context.Object");
+                return s_productFamilyManager.GetProductFamilyName(product);
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -199,8 +272,10 @@ namespace Retail.BusinessEntity.Business
 
         public ProductFamilyDetail ProductFamilyDetailMapper(ProductFamily productFamily)
         {
+           
             ProductFamilyDetail productFamilyDetail = new ProductFamilyDetail()
             {
+                AccountBEDefinitionId = GetProductFamilyAccountBEDefinitionId(productFamily),
                 Entity = productFamily
             };
             productFamilyDetail.AllowEdit = _productDefinitionManager.DoesUserHaveEditProductDefinitions(productFamily.Settings.ProductDefinitionId);

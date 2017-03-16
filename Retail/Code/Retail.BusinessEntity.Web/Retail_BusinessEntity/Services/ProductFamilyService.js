@@ -62,13 +62,16 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/ProductFamily/Templates/ProductFamilyPackageItemEditor.html', parameters, settings);
         }
-
+        function getEntityUniqueName(accountBEDefinitionId) {
+            return "Retail_BusinessEntity_ProductFamily_" + accountBEDefinitionId;
+        }
 
         return {
             addProductFamily: addProductFamily,
             editProductFamily: editProductFamily,
             addProductFamilyPackageItem: addProductFamilyPackageItem,
-            editProductFamilyPackageItem: editProductFamilyPackageItem
+            editProductFamilyPackageItem: editProductFamilyPackageItem,
+            getEntityUniqueName: getEntityUniqueName
         };
     }
 

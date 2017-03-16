@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsService', 'Retail_BE_ProductFamilyAPIService', 'Retail_BE_ProductFamilyService', 'Retail_BE_ProductService','Retail_BE_ProductAPIService','UtilsService',
-    function (VRNotificationService, VRUIUtilsService, Retail_BE_ProductFamilyAPIService, Retail_BE_ProductFamilyService, Retail_BE_ProductService, Retail_BE_ProductAPIService, UtilsService) {
+app.directive('retailBeProductfamilyGrid', ['VRCommon_ObjectTrackingService', 'VRNotificationService', 'VRUIUtilsService', 'Retail_BE_ProductFamilyAPIService', 'Retail_BE_ProductFamilyService', 'Retail_BE_ProductService', 'Retail_BE_ProductAPIService', 'UtilsService',
+    function (VRCommon_ObjectTrackingService,VRNotificationService, VRUIUtilsService, Retail_BE_ProductFamilyAPIService, Retail_BE_ProductFamilyService, Retail_BE_ProductService, Retail_BE_ProductAPIService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -65,12 +65,12 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
+           
             function buildDrillDownTabs() {
                 var drillDownTabs = [];
 
                 drillDownTabs.push(buildProductTab());
-
+                drillDownTabs.push(buildHistoryTab());
                 function buildProductTab() {
                     var productsTab = {};
 
@@ -79,7 +79,7 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
 
                     productsTab.loadDirective = function (productGridAPI, productFamily) {
                         productFamily.productGridAPI = productGridAPI;
-
+                        
                         var productGridPayload = {
                             productFamilyId: productFamily.Entity != undefined ? productFamily.Entity.ProductFamilyId : undefined
                         };
@@ -102,7 +102,23 @@ app.directive('retailBeProductfamilyGrid', ['VRNotificationService', 'VRUIUtilsS
 
                     return productsTab;
                 }
+                function buildHistoryTab() {
+                    var historyTab = {};
+                    historyTab.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    historyTab.directive = 'vr-common-objecttracking-grid';
 
+                    historyTab.loadDirective = function (directiveAPI, productFamilyItem) {
+                        
+                        productFamilyItem.objectTrackingGridAPI = directiveAPI;
+                        var query = {
+                            ObjectId: productFamilyItem.Entity.ProductFamilyId,
+                            EntityUniqueName:Retail_BE_ProductFamilyService.getEntityUniqueName(productFamilyItem.AccountBEDefinitionId),
+                        };
+
+                        return productFamilyItem.objectTrackingGridAPI.load(query);
+                    };
+                    return historyTab;
+                }
                 return drillDownTabs;
             }
 

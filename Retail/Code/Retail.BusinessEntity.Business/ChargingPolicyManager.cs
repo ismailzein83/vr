@@ -20,7 +20,7 @@ namespace Retail.BusinessEntity.Business
         ServiceTypeManager _serviceTypeManager = new ServiceTypeManager();
 
         #endregion
-
+       
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<ChargingPolicyDetail> GetFilteredChargingPolicies(Vanrise.Entities.DataRetrievalInput<ChargingPolicyQuery> input)
@@ -44,9 +44,16 @@ namespace Retail.BusinessEntity.Business
             }
             return this.GetCachedChargingPolicies().MapRecords(ChargingPolicyInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
+        public ChargingPolicy GetChargingPolicy(int chargingPolicyId, bool isViewedFromUI)
+        {
+            var chargingPolicy= this.GetCachedChargingPolicies().GetRecord(chargingPolicyId);
+            if (chargingPolicy != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(new ChargingPolicyLoggableEntity(_serviceTypeManager.GetServiceType(chargingPolicy.ServiceTypeId).AccountBEDefinitionId), chargingPolicy);
+            return chargingPolicy;
+        }
         public ChargingPolicy GetChargingPolicy(int chargingPolicyId)
         {
-            return this.GetCachedChargingPolicies().GetRecord(chargingPolicyId);
+            return GetChargingPolicy(chargingPolicyId,false);
         }
 
         public string GetChargingPolicyName(int chargingPolicyId)
@@ -69,9 +76,10 @@ namespace Retail.BusinessEntity.Business
 
             if (dataManager.Insert(chargingPolicy, out chargingPolicyId))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 chargingPolicy.ChargingPolicyId = chargingPolicyId;
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(new ChargingPolicyLoggableEntity(_serviceTypeManager.GetServiceType(this.GetChargingPolicy(chargingPolicy.ChargingPolicyId).ServiceTypeId).AccountBEDefinitionId), this.GetChargingPolicy(chargingPolicy.ChargingPolicyId));
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = ChargingPolicyDetailMapper(chargingPolicy);
             }
             else
@@ -96,6 +104,7 @@ namespace Retail.BusinessEntity.Business
             if (dataManager.Update(chargingPolicy))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new ChargingPolicyLoggableEntity(_serviceTypeManager.GetServiceType(this.GetChargingPolicy(chargingPolicy.ChargingPolicyId).ServiceTypeId).AccountBEDefinitionId), this.GetChargingPolicy(chargingPolicy.ChargingPolicyId));
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = ChargingPolicyDetailMapper(this.GetChargingPolicy(chargingPolicy.ChargingPolicyId));
             }
@@ -175,6 +184,56 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        private class ChargingPolicyLoggableEntity : VRLoggableEntityBase
+        {
+            static AccountBEDefinitionManager _accountBEDefintionManager = new AccountBEDefinitionManager();
+           
+            Guid _accountBEDefinitionId;
+
+           
+            static ChargingPolicyManager s_userManager = new ChargingPolicyManager();
+            public ChargingPolicyLoggableEntity(Guid accountBEDefinitionId)
+            {
+                _accountBEDefinitionId = accountBEDefinitionId;
+            }
+
+           
+            public override string EntityUniqueName
+            {
+                get { return String.Format("Retail_BusinessEntity_ChargingPolicy_{0}", _accountBEDefinitionId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return String.Format(_accountBEDefintionManager.GetAccountBEDefinitionName(_accountBEDefinitionId), "_ChargingPolicies"); }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "Retail_BusinessEntity_ChargingPolicy_ViewHistoryItem"; }
+            }
+
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                ChargingPolicy chargingPolicy = context.Object.CastWithValidate<ChargingPolicy>("context.Object");
+                return chargingPolicy.ChargingPolicyId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                ChargingPolicy chargingPolicy = context.Object.CastWithValidate<ChargingPolicy>("context.Object");
+                return s_userManager.GetChargingPolicyName(chargingPolicy.ChargingPolicyId);
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+           
+        }
+
         #endregion
 
         #region Private Methods
@@ -199,7 +258,8 @@ namespace Retail.BusinessEntity.Business
             {
                 Entity = chargingPolicy,
                 ServiceTypeName = _serviceTypeManager.GetServiceTypeName(chargingPolicy.ServiceTypeId),
-                RuleDefinitions = this.GetChargingPolicyRuleDefinitions(chargingPolicy.ServiceTypeId)
+                RuleDefinitions = this.GetChargingPolicyRuleDefinitions(chargingPolicy.ServiceTypeId),
+                AccountBEDefinitionId = _serviceTypeManager.GetServiceType(chargingPolicy.ServiceTypeId).AccountBEDefinitionId,
             };
         }
         private ChargingPolicyInfo ChargingPolicyInfoMapper(ChargingPolicy chargingPolicy)

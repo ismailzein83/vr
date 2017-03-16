@@ -12,6 +12,7 @@ namespace Retail.BusinessEntity.Entities
 
         public string ServiceTypeName { get; set; }
 
+        public Guid AccountBEDefinitionId { get; set; }
         public IEnumerable<ChargingPolicyRuleDefinition> RuleDefinitions { get; set; }
     }
 }

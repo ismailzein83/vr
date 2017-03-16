@@ -2,10 +2,10 @@
 
     'use stict';
 
-    ProductService.$inject = ['VRModalService'];
+    ProductService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function ProductService(VRModalService) {
-
+    function ProductService(VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         function addProduct(onProductAdded, productFamilyId) {
 
             var parameters = {
@@ -95,15 +95,51 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Product/ProductRuntime/Templates/RecurringChargeRuleSetEditor.html', parameters, settings);
         }
+        function getEntityUniqueName(accountBEDefinitionId) {
+            return "Retail_BusinessEntity_Product_" + accountBEDefinitionId;
+        }
+
+        function registerObjectTrackingDrillDownToProduct() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
 
 
+            drillDownDefinition.loadDirective = function (directiveAPI, productItem) {
+
+                productItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: productItem.Entity.ProductId,
+                    EntityUniqueName: getEntityUniqueName(productItem.AccountBEDefinitionId),
+
+                };
+                return productItem.objectTrackingGridAPI.load(query);
+            };
+                
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+
+            return drillDownDefinitions;
+        }
         return {
             addProduct: addProduct,
             editProduct: editProduct,
             addProductPackageItem: addProductPackageItem,
             editProductPackageItem: editProductPackageItem,
             addRecurringChargeRuleSet: addRecurringChargeRuleSet,
-            editRecurringChargeRuleSet: editRecurringChargeRuleSet
+            editRecurringChargeRuleSet: editRecurringChargeRuleSet,
+            getEntityUniqueName: getEntityUniqueName,
+            registerObjectTrackingDrillDownToProduct: registerObjectTrackingDrillDownToProduct,
+            getDrillDownDefinition: getDrillDownDefinition
         };
     }
 

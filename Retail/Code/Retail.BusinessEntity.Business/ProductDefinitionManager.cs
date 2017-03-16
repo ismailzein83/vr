@@ -20,6 +20,12 @@ namespace Retail.BusinessEntity.Business
             return productDefinitions.FindRecord(x => x.VRComponentTypeId == productDefinitionId);
         }
 
+        public string GetProductDefinitionName(Guid productDefinitionId)
+        {
+            var productDefinition = GetProductDefinition(productDefinitionId);
+            return productDefinition != null ? productDefinition.Name : null;
+        }
+
         public ProductDefinitionSettings GetProductDefinitionSettings(Guid productDefinitionId)
         {
             var productDefinition = GetProductDefinition(productDefinitionId);
@@ -28,6 +34,11 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("productDefinition.Settings of productDefinitionId {0}", productDefinitionId));
 
             return productDefinition.Settings;
+        }
+        public Guid GetProductDefinitionAccountBEDefinitionId(Guid productDefinitionId)
+        {
+            ProductDefinitionSettings productDefinitionSettings = GetProductDefinitionSettings(productDefinitionId);
+            return productDefinitionSettings.AccountBEDefinitionId;
         }
 
         public IEnumerable<ProductDefinitionInfo> GetProductDefinitionsInfo(ProductDefinitionFilter filter)

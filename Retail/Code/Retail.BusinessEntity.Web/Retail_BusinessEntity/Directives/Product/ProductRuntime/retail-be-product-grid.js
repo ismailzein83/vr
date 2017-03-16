@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_ProductAPIService', 'Retail_BE_ProductService',
-    function (VRNotificationService, Retail_BE_ProductAPIService, Retail_BE_ProductService) {
+app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_ProductAPIService', 'Retail_BE_ProductService', 'VRUIUtilsService', 'VRCommon_ObjectTrackingService',
+    function (VRNotificationService, Retail_BE_ProductAPIService, Retail_BE_ProductService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
         return {
             restrict: 'E',
             scope: {
@@ -19,9 +19,9 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
 
         function ProductGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var gridDrillDownTabsObj;
             var productFamilyId;
-
+         
             var gridAPI;
 
             function initializeController() {
@@ -31,11 +31,18 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = Retail_BE_ProductService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return Retail_BE_ProductAPIService.GetFilteredProducts(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -47,7 +54,7 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
 
             function defineAPI() {
                 var api = {};
-
+                
                 api.load = function (payload) {
 
                     if (payload != undefined) {
@@ -56,7 +63,7 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
 
                     function buildGridQuery(payload) {
                         var query = {
-                            ProductFamilyId: productFamilyId
+                            ProductFamilyId: productFamilyId,
                         };
 
                         return query;
@@ -66,6 +73,7 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
                 };
 
                 api.onProductAdded = function (addedProduct) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedProduct);
                     gridAPI.itemAdded(addedProduct);
                 };
 
@@ -76,6 +84,9 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            
+           
 
             function defineMenuActions() {
                 $scope.scopeModel.menuActions = function (dataItem) {
@@ -90,6 +101,7 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
             }
             function editProduct(productItem) {
                 var onProductUpdated = function (updatedProduct) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedProduct);
                     gridAPI.itemUpdated(updatedProduct);
                 };
 

@@ -10,6 +10,8 @@ namespace Retail.BusinessEntity.Entities
     {
         public ProductFamily Entity { get; set; }
 
+        public Guid AccountBEDefinitionId { get; set; }
+        
         public bool AllowEdit { get; set; }
     }
 }

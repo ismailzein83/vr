@@ -8,6 +8,7 @@ using Retail.BusinessEntity.Data;
 using Retail.BusinessEntity.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Business;
+using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -35,16 +36,23 @@ namespace Retail.BusinessEntity.Business
             {
                 ExportExcelHandler = new DIDExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(DIDLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDIDs.ToBigResult(input, filterExpression, DIDDetailMapper), handler);
         }
 
+        public DID GetDID(int didId, bool isViewedFromUI)
+        {
+            var dids = GetCachedDIDs();
+            var did = dids.GetRecord(didId);
+           if (did != null && isViewedFromUI)
+               VRActionLogger.Current.LogObjectViewed(DIDLoggableEntity.Instance, did);
+           return did;
+        }
         public DID GetDID(int didId)
         {
-            var DIDs = GetCachedDIDs();
-            return DIDs.GetRecord(didId);
+            return  GetDID(didId,false);
         }
-
+       
         public string GetDIDNumber(int didId)
         {
             var DIDs = GetCachedDIDs();
@@ -81,6 +89,7 @@ namespace Retail.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 did.DIDId = didId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(DIDLoggableEntity.Instance, did);
                 insertOperationOutput.InsertedObject = DIDDetailMapper(did);
             }
             else
@@ -104,6 +113,7 @@ namespace Retail.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(DIDLoggableEntity.Instance, did);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DIDDetailMapper(did);
             }
@@ -213,6 +223,45 @@ namespace Retail.BusinessEntity.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreDIDsUpdated(ref _updateHandle);
+            }
+        }
+
+
+        private class DIDLoggableEntity : VRLoggableEntityBase
+        {
+            public static DIDLoggableEntity Instance = new DIDLoggableEntity();
+            static DIDManager s_didManager = new DIDManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "Retail_BusinessEntity_DID"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "DID"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "Retail_BusinessEntity_DID_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DID did = context.Object.CastWithValidate<DID>("context.Object");
+                return did.DIDId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DID did = context.Object.CastWithValidate<DID>("context.Object");
+                return (s_didManager.GetDIDNumber(did.DIDId) != null) ? s_didManager.GetDIDNumber(did.DIDId) : did.DIDId.ToString();
             }
         }
 

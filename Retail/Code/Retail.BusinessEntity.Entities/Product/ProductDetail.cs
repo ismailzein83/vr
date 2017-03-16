@@ -11,5 +11,7 @@ namespace Retail.BusinessEntity.Entities
         public Product Entity { get; set; }
 
         public bool AllowEdit { get; set; }
+
+        public Guid AccountBEDefinitionId { get; set; }
     }
 }

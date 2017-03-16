@@ -68,6 +68,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
             };
 
             api.onChargingPolicyAdded = function (addedChargingPolicy) {
+                Retail_BE_ServiceTypeService.defineServiceTypeRuleTabsAndMenuActions(addedChargingPolicy, gridAPI, buildCriteriaFieldValues(addedChargingPolicy));
                 gridAPI.itemAdded(addedChargingPolicy);
             };
 
@@ -92,6 +93,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
         function editChargingPolicy(chargingPolicy)
         {
             var onChargingPolicyUpdated = function (updatedChargingPolicy) {
+                Retail_BE_ServiceTypeService.defineServiceTypeRuleTabsAndMenuActions(updatedChargingPolicy, gridAPI, buildCriteriaFieldValues(updatedChargingPolicy));
                 gridAPI.itemUpdated(updatedChargingPolicy);
             };
 

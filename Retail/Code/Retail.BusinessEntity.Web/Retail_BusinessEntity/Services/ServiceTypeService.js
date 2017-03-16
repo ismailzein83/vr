@@ -2,9 +2,9 @@
 
     'use stict';
 
-    ServiceTypeService.$inject = ['VRModalService', 'VRNotificationService', 'VRUIUtilsService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService'];
+    ServiceTypeService.$inject = ['VRModalService', 'VRNotificationService', 'VRUIUtilsService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService', 'VRCommon_ObjectTrackingService'];
 
-    function ServiceTypeService(VRModalService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService) {
+    function ServiceTypeService(VRModalService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService, VRCommon_ObjectTrackingService) {
 
         function editServiceType(serviceTypeId, parentServiceTypeId, onServiceTypeUpdated) {
             var parameters = {
@@ -50,8 +50,10 @@
         };
 
         function defineServiceTypeRuleTabsAndMenuActions(dataItem, gridAPI, criteriaFieldValues) {
-            if (dataItem.RuleDefinitions == null)
+            if (dataItem.RuleDefinitions == null) {
+              
                 return;
+            }
 
             var drillDownTabs = [];
             var menuActions = [];
@@ -61,10 +63,33 @@
                 addDrillDownTab(ruleDefinition);
                 addMenuAction(ruleDefinition, i);
             }
-
+            addDrillDownHistoryTab();
             setDrillDownTabs();
             setMenuActions();
+            function addDrillDownHistoryTab()
+            {
+                var drillDownDefinition = {};
 
+                drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+                drillDownDefinition.loadDirective = function (directiveAPI,chargingPolicyItem) {
+                   
+                    chargingPolicyItem.objectTrackingGridAPI = directiveAPI;
+                    var query = {
+                        ObjectId: chargingPolicyItem.Entity.ChargingPolicyId,
+                        EntityUniqueName: getEntityUniqueName(chargingPolicyItem.AccountBEDefinitionId),
+
+                    };
+                    return chargingPolicyItem.objectTrackingGridAPI.load(query);
+                };
+                drillDownTabs.push(drillDownDefinition);
+            }
+
+            function getEntityUniqueName(accountBEDefinitionId) {
+                return "Retail_BusinessEntity_ChargingPolicy_" + accountBEDefinitionId;
+            }
             function addDrillDownTab(ruleDefinition) {
                 var drillDownTab = {};
 
@@ -104,7 +129,7 @@
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, undefined);
                 drillDownManager.setDrillDownExtensionObject(dataItem);
             }
-
+           
             function addMenuAction(ruleDefinition, ruleDefinitionIndex)
             {
                 var menuAction = {};
@@ -148,12 +173,13 @@
                 };
             }
         }
-
+      
         return {
             editServiceType: editServiceType,
             addPartType: addPartType,
             editPartType: editPartType,
             defineServiceTypeRuleTabsAndMenuActions: defineServiceTypeRuleTabsAndMenuActions
+            
         };
     }
 

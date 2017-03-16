@@ -27,7 +27,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetDID")]
         public DID GetDID(int dIDId)
         {
-            return manager.GetDID(dIDId);
+            return manager.GetDID(dIDId,true);
         }
 
         [HttpPost]

@@ -41,16 +41,24 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPackages.ToBigResult(input, filterExpression, PackageDetailMapper));
         }
 
-        public Package GetPackage(int packageId)
+        public Package GetPackage(int packageId, bool isViewedFromUI)
         {
             var packages = GetCachedPackages();
-            return packages.GetRecord(packageId);
+            var package = packages.GetRecord(packageId);
+            if (package != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(new PackageLoggableEntity(_packageDefinitionManager.GetPackageDefinitionAccountBEDefId(package.Settings.PackageDefinitionId)), package);
+            return package;
         }
+        public Package GetPackage(int packageId)
+        { 
+            return GetPackage(packageId, false);
+        }
+
         public PackageEditorRuntime GetPackageEditorRuntime(int packageId)
         {
             PackageEditorRuntime packageEditorRuntime = new PackageEditorRuntime();
 
-            packageEditorRuntime.Entity = GetPackage(packageId);
+            packageEditorRuntime.Entity = GetPackage(packageId,true);
             if (packageEditorRuntime.Entity == null)
                 throw new NullReferenceException(string.Format("packageEditorRuntime.Entity for Package ID: {0} is null", packageId));
 
@@ -267,7 +275,7 @@ namespace Retail.BusinessEntity.Business
 
             public override string ModuleName
             {
-                get { return "package"; }
+                get { return "Business Entity"; }
             }
         }
         #endregion

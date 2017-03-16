@@ -32,7 +32,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetChargingPolicy")]
         public ChargingPolicy GetChargingPolicy(int chargingPolicyId)
         {
-            return _manager.GetChargingPolicy(chargingPolicyId);
+            return _manager.GetChargingPolicy(chargingPolicyId,true);
         }
 
         [HttpPost]
