@@ -29,7 +29,6 @@
             }
         }
         function defineScope() {
-
             $scope.scopeModel = {};
 
             $scope.scopeModel.onVRNotificationTypeSettingsSelectorReady = function (api) {
@@ -54,7 +53,7 @@
             };
         }
         function load() {
-            loadAllControls()
+            loadAllControls();
         }
 
         function loadAllControls() {
@@ -81,7 +80,6 @@
                         }]
                     }
                 };
-              
                 VRUIUtilsService.callDirectiveLoad(vrNotificationTypeSettingsSelectorAPI, selectorPayload, selectorLoadDeferred);
             });
 
@@ -92,7 +90,6 @@
             var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             searchDirectiveAPIReadyDeferred.promise.then(function () {
-
                 var selectorPayload;
                 VRUIUtilsService.callDirectiveLoad(searchDirectiveAPI, selectorPayload, selectorLoadDeferred);
             });
@@ -104,7 +101,6 @@
             var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             bodyDirectiveAPIReadyDeferred.promise.then(function () {
-
                 var selectorPayload;
                 VRUIUtilsService.callDirectiveLoad(bodyDirectiveAPI, selectorPayload, selectorLoadDeferred);
             });
