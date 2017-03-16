@@ -38,7 +38,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
-                var drillDownDefinitions = WhS_BE_CarrierProfileService.getDrillDownDefinition();
+                var drillDownDefinitions = UtilsService.cloneObject(WhS_BE_CarrierProfileService.getDrillDownDefinition(),true);
 
                 var drillDownDefinition = {};
 
@@ -56,7 +56,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                     return carrierProfileItem.carrierAccountGridAPI.loadGrid(payload);
                 };
                 drillDownDefinitions.push(drillDownDefinition);
-
+            
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")

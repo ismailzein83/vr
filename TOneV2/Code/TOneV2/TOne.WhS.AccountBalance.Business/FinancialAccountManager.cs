@@ -237,16 +237,7 @@ namespace TOne.WhS.AccountBalance.Business
             }
 
             Func<FinancialAccountData, bool> filterExpression = null;
-
-            if (!CheckApplicableAccountTypes(accountBalanceSetting, false, false))
-            {
-                if (!hasExchanges && (!hasCustomers || !hasSuppliers))
-                {
-                    return false;
-                }
-                filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Exchange, accountBalanceSetting, isEditMode);
-            }
-            else if (CheckApplicableAccountTypes(accountBalanceSetting, true, false))
+            if (CheckApplicableAccountTypes(accountBalanceSetting, true, false))
             {
                 if (!hasExchanges && !hasCustomers)
                     return false;
@@ -260,6 +251,15 @@ namespace TOne.WhS.AccountBalance.Business
                     return false;
                 filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Supplier, accountBalanceSetting, isEditMode);
             }
+            else if (!CheckApplicableAccountTypes(accountBalanceSetting, false, false))
+            {
+                if (!hasExchanges && (!hasCustomers || !hasSuppliers))
+                {
+                    return false;
+                }
+                filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Exchange, accountBalanceSetting, isEditMode);
+            }
+           
 
             if (profileFinancialAccounts.Any(x => !filterExpression(x)))
                 return false;

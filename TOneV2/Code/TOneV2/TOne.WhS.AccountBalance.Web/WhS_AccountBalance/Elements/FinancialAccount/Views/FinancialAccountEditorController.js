@@ -34,7 +34,7 @@
         }
 
         function defineScope() {
-            $scope.scopeModel.beginEffectiveDate = new Date();
+            $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(new Date());
 
             $scope.scopeModel.onFinancialAccountTypeSelectorReady = function (api) {
                 financialAccountTypeSelectorDirectiveAPI = api;
