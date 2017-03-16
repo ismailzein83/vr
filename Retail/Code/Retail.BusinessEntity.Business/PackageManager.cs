@@ -230,7 +230,7 @@ namespace Retail.BusinessEntity.Business
         {
             Guid _accountDefinitionId;
             static AccountBEDefinitionManager _accountBEDefintionManager = new AccountBEDefinitionManager();
-           
+            static PackageManager s_packageManager = new PackageManager();
             public PackageLoggableEntity(Guid acountDefinitionId)
             {
                 _accountDefinitionId = acountDefinitionId;
