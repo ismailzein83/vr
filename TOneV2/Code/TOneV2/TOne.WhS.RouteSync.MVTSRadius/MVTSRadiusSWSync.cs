@@ -129,8 +129,9 @@ namespace TOne.WhS.RouteSync.MVTSRadius
             }
             if (roundedPercentages > 0 && roundedPercentages < 100)
             {
-                var firstItem = mvtsRouteSyncOptions.First();
-                mvtsRouteSyncOptions[firstItem.Key] = firstItem.Value.Value + (100 - roundedPercentages);
+                var firstItemHasPercentage = mvtsRouteSyncOptions.FirstOrDefault(itm => itm.Value.HasValue);
+                if (!firstItemHasPercentage.Equals(default(KeyValuePair<string, int?>)))
+                    mvtsRouteSyncOptions[firstItemHasPercentage.Key] = firstItemHasPercentage.Value.Value + (100 - roundedPercentages);
             }
 
             return mvtsRouteSyncOptions;
