@@ -68,7 +68,7 @@ GO--delete useless views from ClearVoice product such 'My Scheduler Service' sin
 delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308',--'My Scheduler Service'
 										'66DE2441-8A96-41E7-94EA-9F8AF38A3515',--'Style Definitions'
 										'DCF8CA21-852C-41B9-9101-6990E545509D',--'Organizational Charts'
-										'604B2CB5-B839-4E51-8D13-3C1C84D05DEE',--'Countries'
+										--'604B2CB5-B839-4E51-8D13-3C1C84D05DEE',--'Countries'
 										'52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD',--'Component Types'
 										'8AC4B99E-01A0-41D1-AE54-09E679309086',--'Status Definitions'
 										'25994374-CB99-475B-8047-3CDB7474A083',--'Cities'
@@ -119,7 +119,7 @@ begin
 set nocount on;;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('1D503EF4-1682-4BC3-8A78-721DE7398FA5',null,'Quality Measurement'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',null,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
 --------------------------------------------------------------------------------------------------------------
 end
-DELETE FROM [sec].[BusinessEntity] WHERE [ID] IN (	'9A285D4E-D4A6-4ABA-A5DA-22E7E237E808',--'City'
+DELETE FROM [sec].[BusinessEntity] WHERE [ID] IN (	--'9A285D4E-D4A6-4ABA-A5DA-22E7E237E808',--'City'
 													'92EA996E-C5E9-4937-9157-7CD36EF0DA37',--'Currency'
 													'8BE95D10-688E-40F3-99C1-86397A51AE9B',--'Rate Type'
 													'A1DBA375-456A-4769-AD55-CC12C61C721F')--'Time Zone'
