@@ -6,6 +6,8 @@
 
     function VRNotificationLogController($scope, VRCommon_MasterLogAPIService, UtilsService, VRNavigationService, VRUIUtilsService) {
 
+        var viewId;
+
         var vrNotificationTypeSettingsSelectorAPI;
         var vrNotificationTypeSettingsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -18,9 +20,10 @@
         loadParameters();
         defineScope();
         load();
-        var viewId;
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
             if (parameters != null) {
                 viewId = parameters.viewId;
             }
@@ -50,7 +53,6 @@
                 bodyDirectiveAPI.load(query);
             };
         }
-
         function load() {
             loadAllControls()
         }
@@ -83,7 +85,6 @@
                 VRUIUtilsService.callDirectiveLoad(vrNotificationTypeSettingsSelectorAPI, selectorPayload, selectorLoadDeferred);
             });
 
-
             return selectorLoadDeferred.promise;
         }
 
@@ -95,7 +96,6 @@
                 var selectorPayload;
                 VRUIUtilsService.callDirectiveLoad(searchDirectiveAPI, selectorPayload, selectorLoadDeferred);
             });
-
 
             return selectorLoadDeferred.promise;
         }
@@ -109,7 +109,6 @@
                 VRUIUtilsService.callDirectiveLoad(bodyDirectiveAPI, selectorPayload, selectorLoadDeferred);
             });
 
-
             return selectorLoadDeferred.promise;
         }
 
@@ -122,4 +121,5 @@
     }
 
     appControllers.controller('VR_Notification_VRNotificationLogController', VRNotificationLogController);
+
 })(appControllers);
