@@ -208,7 +208,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     record.SellingProductId = null;
                 };
 
-                return Vanrise.Common.Utilities.MergeUnionWithQForce(customerRatesAsList, countryIntersectedRatesAsList, mapSaleRateAction, MapSaleRateHistoryRecordAction);
+                return Vanrise.Common.Utilities.MergeUnionWithQForce(countryIntersectedRatesAsList, customerRatesAsList, MapSaleRateHistoryRecordAction, mapSaleRateAction);
             }
 
             private void PrepareCustomerZoneRateHistoryRecords(List<SaleRateHistoryRecord> records)
