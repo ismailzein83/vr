@@ -53,6 +53,7 @@
       <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.DurableInstancing</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
@@ -62,7 +63,6 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
@@ -70,12 +70,12 @@
       <AssemblyReference>Vanrise.Analytic.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
-      <AssemblyReference>System.Runtime.DurableInstancing</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
     </sco:Collection>
@@ -192,7 +192,7 @@
           <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
             <vbw:WriteTrackingMessage.Message>
               <InArgument x:TypeArguments="x:String">
-                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Starting Range From {0}, To {1}", timeRange.From, timeRange.To)</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Starting Range From {0}, To {1}", timeRange.From.ToString("yyyy-MM-dd HH:mm:ss"), timeRange.To.ToString("yyyy-MM-dd HH:mm:ss"))</mca:CSharpValue>
               </InArgument>
             </vbw:WriteTrackingMessage.Message>
             <vbw:WriteTrackingMessage.Severity>
@@ -201,7 +201,7 @@
               </InArgument>
             </vbw:WriteTrackingMessage.Severity>
           </vbw:WriteTrackingMessage>
-          <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+          <vbw:RunProcess ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
             <vbw:RunProcess.Input>
               <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                 <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new Vanrise.Analytic.BP.Arguments.DAProfCalcForRangeProcessInput
@@ -289,7 +289,7 @@
                 <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished Range From {0}, To {1}. Remaining Ranges: {2}. Range Event Count : {3}. Total Event Count: {4}.", timeRange.From, timeRange.To, TotalRangesCount - ProcessedRangesCount, RangeEventCount, TotalEventCount)</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished Range From {0}, To {1}. Remaining Ranges: {2}. Range Event Count : {3}. Total Event Count: {4}.", timeRange.From.ToString("yyyy-MM-dd HH:mm:ss"), timeRange.To.ToString("yyyy-MM-dd HH:mm:ss"), TotalRangesCount - ProcessedRangesCount, RangeEventCount, TotalEventCount)</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                 </vbw:WriteTrackingMessage>
@@ -323,7 +323,7 @@
         </vabad:FinaliseRecordProfiling>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N1YlByb2Nlc3MueGFtbDxTA8cCDgIBAVcLV7YBAgEVXAtcvAECAQVhM2E2AgEEYjNiNgIBA2MzYzYCAQJlBW4XAwHYBG8FgQEKAwGmBIIBBZcBIgMB5QOYAQWjAQ4DAcQDpAEFrwEwAwGjA7ABBa0CFwIBWa4CBcUCFwIBJWwJbJgBAwHpBGgLaIkBAwHZBHILcmQDAacEdgl/GwMBtwSUAQuUAVEDAZYEigELigFTAwGGBIUBC4UBfgMB9gOPAQuPAdYBAwHmA6ABC6ABZAMB1QObAQubAWADAcUDrAELrAF2AwG0A6cBC6cBigEDAaQDswELswGAAQMBkwO6AQmrAhQCAVqxAguxAokBAgFJuAIJwwIpAgEmfQ19nAEDAcgEeQ95hAEDAbgEvQE5vQE8AgFbwAELywEmAwHqAswBC98BHAMBwALgAQvrARQDAZcC7AELqgIQAgFcuwIPuwJ7AgE4wAIPwAJ+AgEnyAERyAGLAQMB/wLDARHDAZ0BAwHrAs8BEdcBIAMB1gLcARHcAYQBAwHCAswBfMwBggEDAcEC6AER6AFmAwGsAuMBEeMBagMBmALvARHvAbMBAgFd8wEP+QEjAwGCAvwBD6gCGgIBcfYBFfYB5wEDAYMC/QERiAIaAwHZAYkCEZQCGgMBsAGVAhGgAhoDAYcBoQIRpwIsAgFyhQIXhQKsAQMB7gGAAheAAo4BAwHaAZECF5ECeQMBxQGMAheMAmsDAbEBnQIXnQJ1AwGcAZgCF5gCawMBiAGkAhekArcCAgFz</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N1YlByb2Nlc3MueGFtbDxTA8cCDgIBAVcLV7YBAgEVXAtcvAECAQVhM2E2AgEEYjNiNgIBA2MzYzYCAQJlBW4XAwHYBG8FgQEKAwGmBIIBBZcBIgMB5QOYAQWjAQ4DAcQDpAEFrwEwAwGjA7ABBa0CFwIBWa4CBcUCFwIBJWwJbJgBAwHpBGgLaIkBAwHZBHILcmQDAacEdgl/GwMBtwSUAQuUAVEDAZYEigELigFTAwGGBIUBC4UBfgMB9gOPAQuPAdYBAwHmA6ABC6ABZAMB1QObAQubAWADAcUDrAELrAF2AwG0A6cBC6cBigEDAaQDswELswGAAQMBkwO6AQmrAhQCAVqxAguxAokBAgFJuAIJwwIpAgEmfQ19nAEDAcgEeQ95hAEDAbgEvQE5vQE8AgFbwAELywEmAwHqAswBC98BHAMBwALgAQvrARQDAZcC7AELqgIQAgFcuwIPuwJ7AgE4wAIPwAJ+AgEnyAERyAGLAQMB/wLDARHDAd0BAwHrAs8BEdcBIAMB1gLcARHcAYQBAwHCAswBtwHMAb0BAwHBAugBEegBZgMBrALjARHjAWoDAZgC7wER7wGzAQIBXfMBD/kBIwMBggL8AQ+oAhoCAXH2ARX2AecBAwGDAv0BEYgCGgMB2QGJAhGUAhoDAbABlQIRoAIaAwGHAaECEacCLAIBcoUCF4UCrAEDAe4BgAIXgAKOAQMB2gGRAheRAnkDAcUBjAIXjAJrAwGxAZ0CF50CdQMBnAGYAheYAmsDAYgBpAIXpAL3AgIBcw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

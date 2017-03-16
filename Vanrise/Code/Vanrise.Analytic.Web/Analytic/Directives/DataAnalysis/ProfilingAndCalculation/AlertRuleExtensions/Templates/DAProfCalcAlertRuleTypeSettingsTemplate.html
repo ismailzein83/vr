@@ -1,10 +1,13 @@
 ﻿<vr-tab header="'Settings'">
     <vr-row>
-        <vr-columns width="1/2row">
+        <vr-columns width="1/3row">
             <vr-analytic-dataanalysisdefinition-selector on-ready="scopeModel.onDataAnalysisDefinitionSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedDataAnalysisDefinition"
                                                          onselectionchanged="scopeModel.onDataAnalysisDefinitionSelectionChanged"></vr-analytic-dataanalysisdefinition-selector>
         </vr-columns>
-        <vr-columns width="1/2row" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined">
+        <vr-columns width="1/3row">
+            <vr-textbox value="scopeModel.rawRecordFilterLabel" type="text" label="Raw Record Filter Label" isrequired="true"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/3row" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined">
             <vr-genericdata-datarecordstorage-selector on-ready="onSourceDataRecordStorageSelectorReady" selectedvalues="selectedSourceDataRecordStorages" isrequired="true"
                                                        customlabel="Source Record Storages" ismultipleselection="true" vr-loader="scopeModel.isLoadingSourceDataRecordStorage"></vr-genericdata-datarecordstorage-selector>
         </vr-columns>

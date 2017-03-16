@@ -44,6 +44,8 @@ namespace Vanrise.Analytic.Entities
 
         public List<DAProfCalcItemNotification> DAProfCalcItemNotifications { get; set; }
 
+        public string RawRecordFilterLabel { get; set; }
+
         public override string SettingEditor
         {
             get

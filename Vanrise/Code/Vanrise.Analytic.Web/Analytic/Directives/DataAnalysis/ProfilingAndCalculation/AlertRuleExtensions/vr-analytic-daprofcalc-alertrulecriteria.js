@@ -113,6 +113,7 @@
 
                     if (payload != undefined) {
                         dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
+                        $scope.scopeModel.rawRecordFilterLabel = payload.rawRecordFilterLabel;
                         criteria = payload.criteria;
 
                         if (criteria != undefined) {

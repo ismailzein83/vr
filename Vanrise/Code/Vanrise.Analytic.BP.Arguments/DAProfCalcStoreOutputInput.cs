@@ -21,7 +21,7 @@ namespace Vanrise.Analytic.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Data Analysis Profiling And Calculation Store Output Process from {0} to {1}", FromTime, ToTime);
+            return String.Format("Data Analysis Profiling And Calculation Store Output Process from {0} to {1}", FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
 }

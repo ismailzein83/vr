@@ -55,7 +55,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 
                             $type: "Vanrise.Analytic.BP.Arguments.DAProfCalcGenerateAlertInput, Vanrise.Analytic.BP.Arguments",
                             AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
                             FromTime: $scope.fromDate,
-                            ToTime: new Date($scope.toDate.setDate($scope.toDate.getDate() + 1)),
+                            ToTime: $scope.toDate,
                             ChunkTime: $scope.selectedChunkTime.value
                         }
                     };

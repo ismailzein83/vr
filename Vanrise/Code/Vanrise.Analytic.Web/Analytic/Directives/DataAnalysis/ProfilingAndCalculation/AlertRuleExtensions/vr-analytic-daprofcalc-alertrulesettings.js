@@ -69,7 +69,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         promises.push(loadCriteriaSectionPromiseDeferred.promise);
 
                         criteriaDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var criteriapayload = { dataAnalysisDefinitionId: alertTypeSettings.DataAnalysisDefinitionId };
+                            var criteriapayload = { dataAnalysisDefinitionId: alertTypeSettings.DataAnalysisDefinitionId, rawRecordFilterLabel: alertTypeSettings.RawRecordFilterLabel };
 
                             if (alertExtendedSettings != undefined) {
                                 criteriapayload.criteria = {

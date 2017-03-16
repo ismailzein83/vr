@@ -23,7 +23,7 @@ namespace Vanrise.Analytic.BP.Arguments
 
         public override string GetTitle()
         {
-            return string.Format("From {0} To {1}", FromTime, ToTime);
+            return string.Format("From {0} To {1}", FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
 }

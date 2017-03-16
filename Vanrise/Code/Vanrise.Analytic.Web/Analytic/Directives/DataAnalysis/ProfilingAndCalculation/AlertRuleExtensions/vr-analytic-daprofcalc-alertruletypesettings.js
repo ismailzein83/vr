@@ -158,6 +158,7 @@
                         vrAlertRuleTypeSettings = payload.settings;
 
                     if (vrAlertRuleTypeSettings != undefined) {
+                        $scope.scopeModel.rawRecordFilterLabel = vrAlertRuleTypeSettings.RawRecordFilterLabel;
                         selectedDataAnalysisDefinitionSelectoReadyDeferred = UtilsService.createPromiseDeferred();
                         promises.push(selectedDataAnalysisDefinitionSelectoReadyDeferred.promise);
                     }
@@ -246,7 +247,8 @@
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleTypeSettings, Vanrise.Analytic.Entities",
                         DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds(),
                         SourceRecordStorages: buildSourceRecordStorages(),
-                        DAProfCalcItemNotifications: buildDAProfCalcItemNotifications()
+                        DAProfCalcItemNotifications: buildDAProfCalcItemNotifications(),
+                        RawRecordFilterLabel: $scope.scopeModel.rawRecordFilterLabel
                     };
                     return data;
                 };
